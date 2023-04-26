@@ -48,7 +48,7 @@ public class App extends Application {
             return;
         }
         final MainComponent component = DaggerMainComponent.builder().mainApp(this).build();
-        // controller = component.loginController();
+        // controller = component.login....
         // initAndRender(controller);
     }
 
