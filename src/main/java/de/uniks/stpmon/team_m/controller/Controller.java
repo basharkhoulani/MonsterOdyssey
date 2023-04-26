@@ -6,14 +6,14 @@ import javafx.scene.Parent;
 
 import java.io.IOException;
 
-public abstract class Controller  {
-    public void init(){
+public abstract class Controller {
+    public void init() {
     }
 
-    public void destroy(){
+    public void destroy() {
     }
 
-    public Parent render(){
+    public Parent render() {
         return load(getClass().getSimpleName().replace("Controller", ""));
     }
 
@@ -23,7 +23,7 @@ public abstract class Controller  {
         // loader.setResources(resources);
         try {
             return loader.load();
-        } catch ( IOException exception){
+        } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
     }

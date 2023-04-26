@@ -16,7 +16,7 @@ public class App extends Application {
     private Stage stage;
     private Controller controller;
 
-    public App(){
+    public App() {
 
     }
 
@@ -43,11 +43,11 @@ public class App extends Application {
 
         stage.show();
 
-        if(controller != null) {
+        if (controller != null) {
             initAndRender(controller);
             return;
         }
-
+        final MainComponent component = DaggerMainComponent.builder().mainApp(this).build();
         // controller = new ....
         // initAndRender(controller);
     }
@@ -57,13 +57,13 @@ public class App extends Application {
         cleanup();
     }
 
-    private void  setAppIcon(Stage stage){
+    private void setAppIcon(Stage stage) {
         final Image image = new Image(Objects.requireNonNull(App.class.getResource("icon.png")).toString());
         stage.getIcons().add(image);
     }
 
-    private void setTaskbarIcon(){
-        if (GraphicsEnvironment.isHeadless()){
+    private void setTaskbarIcon() {
+        if (GraphicsEnvironment.isHeadless()) {
             return;
         }
 
@@ -71,7 +71,7 @@ public class App extends Application {
             final Taskbar taskbar = Taskbar.getTaskbar();
             final java.awt.Image image = ImageIO.read(Objects.requireNonNull(Main.class.getResource("icon.png")));
             taskbar.setIconImage(image);
-        } catch (Exception ignored){
+        } catch (Exception ignored) {
 
         }
     }
@@ -82,13 +82,13 @@ public class App extends Application {
         initAndRender(controller);
     }
 
-    private void initAndRender(Controller controller){
+    private void initAndRender(Controller controller) {
         controller.init();
         stage.getScene().setRoot(controller.render());
     }
 
     private void cleanup() {
-        if (controller != null){
+        if (controller != null) {
             controller.destroy();
             controller = null;
         }

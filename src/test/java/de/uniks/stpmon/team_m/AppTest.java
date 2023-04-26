@@ -17,10 +17,10 @@ class AppTest extends ApplicationTest {
         new App().start(stage);
     }
 
-     @Test
-    void testLoading(){
+    @Test
+    void testLoading() {
         final Label loading = lookup("Loading...").query();
         assertNotNull(loading);
-     }
+    }
 
 }
