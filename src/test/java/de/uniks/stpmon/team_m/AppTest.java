@@ -19,8 +19,8 @@ class AppTest extends ApplicationTest {
 
     @Test
     void testLoading() {
-        final Label loading = lookup("Welcome to").query();
-        assertNotNull(loading);
+        final Label welcomeLabel = lookup("Welcome to").query();
+        assertNotNull(welcomeLabel);
     }
 
 }
