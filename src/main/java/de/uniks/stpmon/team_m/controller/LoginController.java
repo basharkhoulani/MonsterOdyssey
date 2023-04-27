@@ -14,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 public class LoginController extends Controller{
 
@@ -26,6 +27,9 @@ public class LoginController extends Controller{
     @FXML public CheckBox rememberMeCheckbox;
     @FXML public Button signUpButton;
     @FXML public Button signInButton;
+
+    @Inject
+    Provider<MainMenuController> mainMenuControllerProvider;
 
     @Inject
     public LoginController(){
