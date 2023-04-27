@@ -13,10 +13,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest extends ApplicationTest {
 
+    private Stage stage;
 
     @Override
     public void start(Stage stage) throws Exception {
-        new App().start(stage);
+        this.stage = stage;
+        new App().start(this.stage);
     }
 
     @Test
@@ -46,6 +48,7 @@ class AppTest extends ApplicationTest {
         write("testtest");
         clickOn(signInButton);
 
+        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
     }
 
 }
