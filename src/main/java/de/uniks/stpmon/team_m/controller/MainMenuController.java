@@ -6,6 +6,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
+import javax.inject.Inject;
+
 public class MainMenuController extends Controller {
 
 
@@ -23,6 +25,10 @@ public class MainMenuController extends Controller {
     public Button startGameButton;
     @FXML
     public VBox regionRadioButtonList;
+
+    @Inject
+    public MainMenuController() {
+    }
 
     @Override
     public Parent render() {
