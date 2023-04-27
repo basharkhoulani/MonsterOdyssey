@@ -1,4 +1,4 @@
-#settingsSymbol {
+.settingsSymbol {
 	-fx-background-image: url("settingsSymbol.png");
 	-fx-background-size: 60px;
 	-fx-background-repeat: no-repeat;
