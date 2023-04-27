@@ -31,6 +31,11 @@ public class MainMenuController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
+        initRadioButtons();
+        return parent;
+    }
+
+    private void initRadioButtons() {
         ToggleGroup group = addAllRadioButtonsToGroup(new ToggleGroup());
         BooleanBinding booleanBinding = new BooleanBinding() {
             {
@@ -43,7 +48,6 @@ public class MainMenuController extends Controller {
             }
         };
         startGameButton.disableProperty().bind(booleanBinding);
-        return parent;
     }
 
     private ToggleGroup addAllRadioButtonsToGroup(ToggleGroup group) {
