@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.LoginController">
    <children>
       <Label fx:id="welcomeLabel" alignment="CENTER" layoutY="41.0" prefHeight="25.0" prefWidth="600.0" text="Welcome to" textOverrun="CLIP" AnchorPane.bottomAnchor="334.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="41.0">
          <font>
@@ -23,7 +23,7 @@
             <Font size="42.0" />
          </font>
       </Label>
-      <Label fx:id="infotmationLabel" alignment="CENTER" layoutX="109.0" layoutY="140.0" prefHeight="17.0" prefWidth="206.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" />
+      <Label fx:id="informationLabel" alignment="CENTER" layoutX="109.0" layoutY="140.0" prefHeight="17.0" prefWidth="206.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" />
       <HBox alignment="CENTER" layoutX="100.0" layoutY="170.0" prefHeight="36.0" prefWidth="400.0" AnchorPane.bottomAnchor="194.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="170.0">
          <children>
             <TextField fx:id="usernameField" prefHeight="25.0" prefWidth="356.0" promptText="Username" />
@@ -46,7 +46,7 @@
          <children>
             <Button fx:id="signUpButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="106.0" text="Sign Up" />
             <SplitPane prefHeight="200.0" prefWidth="200.0" visible="false" />
-            <Button fx:id="signInBotton" mnemonicParsing="false" prefHeight="36.0" prefWidth="106.0" text="Sign In" />
+            <Button fx:id="signInButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="106.0" text="Sign In" />
          </children>
       </HBox>
    </children>
