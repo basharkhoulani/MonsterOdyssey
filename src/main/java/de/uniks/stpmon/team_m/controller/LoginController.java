@@ -1,10 +1,16 @@
 package de.uniks.stpmon.team_m.controller;
 
 
+import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Main;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
@@ -29,8 +35,14 @@ public class LoginController extends Controller{
     public Parent render() {
         final Parent parent = super.render();
 
+        Image hideEye = new Image(getClass().getResource("../views/hideEye.png").toString());
+        hideImage.setImage(hideEye);
+
+
         return parent;
     }
+
+
 
     public void signIn(){
 
