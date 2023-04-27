@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m;
 
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.LoginController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -48,8 +49,8 @@ public class App extends Application {
             return;
         }
         final MainComponent component = DaggerMainComponent.builder().mainApp(this).build();
-        // controller = component.login....
-        // initAndRender(controller);
+        controller = new LoginController();
+        initAndRender(controller);
     }
 
     @Override
