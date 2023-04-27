@@ -7,9 +7,8 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import java.util.concurrent.ExecutionException;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AppTest extends ApplicationTest {
 
@@ -34,7 +33,7 @@ class AppTest extends ApplicationTest {
     }
 
     @Test
-    void testSigninToMainMenu () {
+    void testSigninToMainMenu() {
         final TextField usernameField = lookup("#usernameField").query();
         assertNotNull(usernameField);
         final TextField passwordField = lookup("#passwordField").query();
