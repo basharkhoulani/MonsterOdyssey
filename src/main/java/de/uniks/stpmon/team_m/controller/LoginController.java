@@ -49,11 +49,11 @@ public class LoginController extends Controller{
 
 
     public void signIn(){
-
+        app.show(mainMenuControllerProvider.get());
     }
 
     public void signUp(){
-
+        app.show(mainMenuControllerProvider.get());
     }
 
 }
