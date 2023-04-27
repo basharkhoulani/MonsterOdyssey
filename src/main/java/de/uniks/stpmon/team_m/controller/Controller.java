@@ -16,6 +16,10 @@ public abstract class Controller {
     public void init() {
     }
 
+    public String getTitle() {
+        return "";
+    }
+
     public void destroy() {
     }
 

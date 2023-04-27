@@ -45,7 +45,7 @@ class AppTest extends ApplicationTest {
         clickOn(passwordField);
         write("testtest");
         clickOn(signInButton);
-        
+
     }
 
 }

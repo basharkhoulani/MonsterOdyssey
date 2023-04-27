@@ -31,6 +31,11 @@ public class MainMenuController extends Controller {
     }
 
     @Override
+    public String getTitle() {
+        return "Main Menu";
+    }
+
+    @Override
     public Parent render() {
         final Parent parent = super.render();
         return parent;

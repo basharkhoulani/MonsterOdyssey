@@ -36,6 +36,11 @@ public class LoginController extends Controller{
     }
 
     @Override
+    public String getTitle(){
+        return "Sign Up & In";
+    }
+
+    @Override
     public Parent render() {
         final Parent parent = super.render();
 

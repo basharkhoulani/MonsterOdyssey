@@ -86,6 +86,7 @@ public class App extends Application {
     private void initAndRender(Controller controller) {
         controller.init();
         stage.getScene().setRoot(controller.render());
+        stage.setTitle("Monster Odyssey - " + controller.getTitle());
     }
 
     private void cleanup() {
