@@ -20,7 +20,7 @@ class AppTest extends ApplicationTest {
     }
 
     @Test
-    void testLoading() {
+    void testLoginScreen() {
         final Label welcomeLabel = lookup("Welcome to").query();
         final Button signUpButton = lookup("Sign Up").query();
         final Button signInButton = lookup("Sign In").query();
@@ -29,6 +29,23 @@ class AppTest extends ApplicationTest {
         assertNotNull(signUpButton);
         assertNotNull(signInButton);
 
+    }
+
+    @Test
+    void testSigninToMainMenu () {
+        final TextField usernameField = lookup("#usernameField").query();
+        assertNotNull(usernameField);
+        final TextField passwordField = lookup("#passwordField").query();
+        assertNotNull(passwordField);
+        final Button signInButton = lookup("Sign In").query();
+        assertNotNull(signInButton);
+
+        clickOn(usernameField);
+        write("testtest");
+        clickOn(passwordField);
+        write("testtest");
+        clickOn(signInButton);
+        
     }
 
 }
