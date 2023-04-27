@@ -13,10 +13,13 @@ public interface UserApiService {
     // For all users pass null for both parameters. Also only one parameter can be null.
     @GET("users")
     Observable<User[]> getUsers(@Query("ids") String[] ids, @Query("status") String status);
+
     @GET("users/{id}")
     Observable<User> getUser(@Path("id") String id);
+
     @PATCH("users/{id")
     Observable<User> update(@Body UpdateUserDto dto);
+
     @DELETE("users/{id}")
     Observable<User> delete(@Path("id") String id);
 }
