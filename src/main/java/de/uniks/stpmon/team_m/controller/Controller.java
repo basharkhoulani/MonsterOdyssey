@@ -1,12 +1,18 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
+import javax.inject.Inject;
 import java.io.IOException;
 
 public abstract class Controller {
+
+    @Inject
+    protected App app;
+
     public void init() {
     }
 
