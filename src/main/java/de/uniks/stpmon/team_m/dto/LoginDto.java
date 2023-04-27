@@ -1,7 +1,7 @@
 package de.uniks.stpmon.team_m.dto;
 
 public record LoginDto(
-        String username,
+        String name,
         String password
 ) {
 }
