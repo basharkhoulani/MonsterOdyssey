@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 public class MainMenuController extends Controller {
 
@@ -29,6 +30,9 @@ public class MainMenuController extends Controller {
     public Button startGameButton;
     @FXML
     public VBox regionRadioButtonList;
+
+    @Inject
+    Provider<LoginController> loginControllerProvider;
 
     @Inject
     public MainMenuController() {
@@ -79,7 +83,7 @@ public class MainMenuController extends Controller {
     }
 
     public void changeToLogin() {
-
+        app.show(loginControllerProvider.get());
     }
 
     public void changeToSettings() {

@@ -76,4 +76,15 @@ class AppTest extends ApplicationTest {
         clickOn(signInButton);
     }
 
+    @Test
+    void testMainMenuToLoginScreen() {
+        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
+        signInBasicFn();
+        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
+        final Button logoutButton = lookup("#logoutButton").query();
+        assertNotNull(logoutButton);
+        clickOn(logoutButton);
+        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
+    }
+
 }
