@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m;
 
 import dagger.BindsInstance;
 import dagger.Component;
+import de.uniks.stpmon.team_m.controller.LoginController;
 
 import javax.inject.Singleton;
 
@@ -9,7 +10,7 @@ import javax.inject.Singleton;
 @Singleton
 public interface MainComponent {
     // LoginService loginService();
-    // LoginController loginController();
+    LoginController loginController();
     // LobbyController lobbyController();
 
     @Component.Builder

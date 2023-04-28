@@ -2,43 +2,48 @@ package de.uniks.stpmon.team_m;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AppTest extends ApplicationTest {
 
+    private Stage stage;
 
     @Override
     public void start(Stage stage) throws Exception {
-        new App().start(stage);
+        this.stage = stage;
+        new App().start(this.stage);
     }
 
     @Test
-    void testLoading() {
-        final Label loading = lookup("Loading...").query();
-        assertNotNull(loading);
+    void testLoginScreen() {
+        final Label welcomeLabel = lookup("Welcome to").query();
+        final Button signUpButton = lookup("Sign Up").query();
+        final Button signInButton = lookup("Sign In").query();
+
+        assertNotNull(welcomeLabel);
+        assertNotNull(signUpButton);
+        assertNotNull(signInButton);
+
     }
 
     @Test
-    void testMainMenuStartGameButton() {
-        final Button startGameButton = lookup("#startGameButton").query();
-        assertNotNull(startGameButton);
-        assertTrue(startGameButton.isDisabled());
-        final VBox regionRadioButtonList = lookup("#regionRadioButtonList").query();
-        assertNotNull(regionRadioButtonList);
-        final RadioButton radioButton = regionRadioButtonList.getChildren().stream()
-                .filter(node -> node instanceof RadioButton)
-                .map(node -> (RadioButton) node)
-                .findFirst()
-                .orElse(null);
-        assertNotNull(radioButton);
-        clickOn(radioButton);
-        assertFalse(startGameButton.isDisabled());
+    void testSigninToMainMenu() {
+        final TextField usernameField = lookup("#usernameField").query();
+        assertNotNull(usernameField);
+        final TextField passwordField = lookup("#passwordField").query();
+        assertNotNull(passwordField);
+        final Button signInButton = lookup("Sign In").query();
+        assertNotNull(signInButton);
+
+        clickOn(signInButton);
+
+        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
     }
 
 }

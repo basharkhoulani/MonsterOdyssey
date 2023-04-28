@@ -48,8 +48,8 @@ public class App extends Application {
             return;
         }
         final MainComponent component = DaggerMainComponent.builder().mainApp(this).build();
-        // controller = component.login....
-        // initAndRender(controller);
+        controller = component.loginController();
+        initAndRender(controller);
     }
 
     @Override
@@ -85,6 +85,7 @@ public class App extends Application {
     private void initAndRender(Controller controller) {
         controller.init();
         stage.getScene().setRoot(controller.render());
+        stage.setTitle("Monster Odyssey - " + controller.getTitle());
     }
 
     private void cleanup() {

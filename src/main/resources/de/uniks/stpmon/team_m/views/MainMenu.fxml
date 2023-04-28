@@ -64,7 +64,7 @@
                <children>
                   <VBox alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="400.0">
                      <children>
-                        <Button id="settingsSymbol" fx:id="settingsButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#changeToSettings" prefHeight="37.0" prefWidth="38.0" stylesheets="@../mainMenuRessources/settingsButton/settingsButtonStyle.css" />
+                        <Button fx:id="settingsButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#changeToSettings" prefHeight="37.0" prefWidth="38.0" styleClass="settingsSymbol" stylesheets="@../mainMenuRessources/settingsButton/settingsButtonStyle.css" />
                      </children>
                   </VBox>
                   <VBox prefHeight="366.0" prefWidth="400.0">
