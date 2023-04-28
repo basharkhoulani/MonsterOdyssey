@@ -6,7 +6,7 @@ import de.uniks.stpmon.team_m.dto.User;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.*;
 
-public interface UserApiService {
+public interface UsersApiService {
     @POST("users")
     Observable<User> create(@Body CreateUserDto dto);
 
