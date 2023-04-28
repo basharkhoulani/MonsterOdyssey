@@ -9,8 +9,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
-import javax.inject.Inject;
-import javax.inject.Provider;
 import java.awt.*;
 import java.util.Objects;
 
@@ -18,9 +16,6 @@ import java.util.Objects;
 public class App extends Application {
     private Stage stage;
     private Controller controller;
-
-    @Inject
-    Provider<AccountSettingController> accountSettingControllerProvider;
 
     public App() {
 
