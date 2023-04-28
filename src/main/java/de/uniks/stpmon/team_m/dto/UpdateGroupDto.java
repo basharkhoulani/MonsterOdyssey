@@ -1,7 +1,9 @@
 package de.uniks.stpmon.team_m.dto;
 
+import java.util.List;
+
 public record UpdateGroupDto(
         String name,
-        String[] members
+        List<String> members
 ) {
 }
