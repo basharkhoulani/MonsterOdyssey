@@ -35,6 +35,9 @@ public class MainMenuController extends Controller {
     Provider<LoginController> loginControllerProvider;
 
     @Inject
+    Provider<IngameController> ingameControllerProvider;
+
+    @Inject
     public MainMenuController() {
     }
 
@@ -91,6 +94,6 @@ public class MainMenuController extends Controller {
     }
 
     public void changeToIngame() {
-
+        app.show(ingameControllerProvider.get());
     }
 }
