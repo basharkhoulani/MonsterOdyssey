@@ -82,4 +82,15 @@ class AppTest extends ApplicationTest {
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
     }
 
+    @Test
+    void testMainMenuToIngame() {
+        signInThenChooseRegion();
+        final Button startGameButton = lookup("Start Game").query();
+        assertNotNull(startGameButton);
+        clickOn(startGameButton);
+        assertEquals("Monster Odyssey - Ingame", stage.getTitle());
+        final Button helpSymbol = lookup("#helpSymbol").query();
+        assertNotNull(helpSymbol);
+    }
+
 }
