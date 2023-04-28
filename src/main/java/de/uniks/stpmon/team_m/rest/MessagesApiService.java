@@ -1,8 +1,6 @@
 package de.uniks.stpmon.team_m.rest;
 
-import de.uniks.stpmon.team_m.dto.CreateGroupDto;
-import de.uniks.stpmon.team_m.dto.Group;
-import de.uniks.stpmon.team_m.dto.UpdateGroupDto;
+import de.uniks.stpmon.team_m.dto.*;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.*;
 
