@@ -2,10 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin;
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableBooleanValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -72,11 +69,7 @@ public class LoginController extends Controller {
     }
 
     public void showPassword(ActionEvent mouseEvent) {
-        if(skin.getMask()){
-            skin.setMask(false);
-        } else {
-            skin.setMask(true);
-        }
+        skin.setMask(!skin.getMask());
         passwordField.setText(passwordField.getText());
 
     }
