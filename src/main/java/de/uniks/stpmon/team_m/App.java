@@ -1,7 +1,6 @@
 package de.uniks.stpmon.team_m;
 
 import de.uniks.stpmon.team_m.controller.Controller;
-import de.uniks.stpmon.team_m.controller.LoginController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -49,7 +48,7 @@ public class App extends Application {
             return;
         }
         final MainComponent component = DaggerMainComponent.builder().mainApp(this).build();
-        controller = new LoginController();
+        controller = component.loginController();
         initAndRender(controller);
     }
 
@@ -86,6 +85,7 @@ public class App extends Application {
     private void initAndRender(Controller controller) {
         controller.init();
         stage.getScene().setRoot(controller.render());
+        stage.setTitle("Monster Odyssey - " + controller.getTitle());
     }
 
     private void cleanup() {
