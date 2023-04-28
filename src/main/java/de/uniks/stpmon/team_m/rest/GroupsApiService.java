@@ -12,7 +12,7 @@ public interface GroupsApiService {
 
     // For all groups the current user is member of, pass null as the parameter.
     @GET("groups")
-    Observable<Group[]> getGroups(@Query("ids") List<String> ids);
+    Observable<List<Group>> getGroups(@Query("ids") List<String> ids);
 
     @GET("groups/{id}")
     Observable<Group> getUser(@Path("id") String id);
