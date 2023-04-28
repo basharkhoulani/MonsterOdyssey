@@ -87,4 +87,33 @@ class AppTest extends ApplicationTest {
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
     }
 
+    @Test
+    void testMainMenuToSetting(){
+        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
+        signInBasicFn();
+        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
+        final Button settingButton = lookup("#settingsButton").query();
+        assertNotNull(settingButton);
+        clickOn(settingButton);
+        assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
+    }
+
+    @Test
+    void testSettingToMainMenu(){
+        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
+        signInBasicFn();
+        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
+        final Button settingButton = lookup("#settingsButton").query();
+        assertNotNull(settingButton);
+        clickOn(settingButton);
+        assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
+        assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
+        final Button cancelButton = lookup("Cancel").query();
+        assertNotNull(cancelButton);
+        clickOn(cancelButton);
+        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
+    }
+
+
+
 }

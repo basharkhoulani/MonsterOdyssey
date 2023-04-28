@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m;
 
+import de.uniks.stpmon.team_m.controller.AccountSettingController;
 import de.uniks.stpmon.team_m.controller.Controller;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -8,6 +9,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
+import javax.inject.Inject;
+import javax.inject.Provider;
 import java.awt.*;
 import java.util.Objects;
 
@@ -15,6 +18,9 @@ import java.util.Objects;
 public class App extends Application {
     private Stage stage;
     private Controller controller;
+
+    @Inject
+    Provider<AccountSettingController> accountSettingControllerProvider;
 
     public App() {
 
