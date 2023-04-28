@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m;
 
-import de.uniks.stpmon.team_m.controller.AccountSettingController;
 import de.uniks.stpmon.team_m.controller.Controller;
 import javafx.application.Application;
 import javafx.scene.Scene;
