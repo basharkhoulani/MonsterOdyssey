@@ -7,3 +7,13 @@
 	-fx-border-radius: 15;
 	-fx-border-width: 5;
 }
+
+.hideSymbol {
+	-fx-background-image: url("hideEye.png");
+	-fx-background-size: 50px;
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: 50%;
+	-fx-background-radius: 0;
+	-fx-border-radius: 15;
+	-fx-border-width: 5;
+}

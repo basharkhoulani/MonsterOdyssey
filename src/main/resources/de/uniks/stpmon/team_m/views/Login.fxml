@@ -33,7 +33,7 @@
       <HBox alignment="CENTER" prefHeight="36.0" prefWidth="400.0">
          <children>
             <PasswordField fx:id="passwordField" prefHeight="25.0" prefWidth="356.0" promptText="Password" />
-            <ImageView fx:id="hideImage" fitHeight="34.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true" />
+            <Button fx:id="hideButton" mnemonicParsing="false" onAction="#showPassword" prefHeight="25.0" prefWidth="36.0" styleClass="hideSymbol" stylesheets="@../mainMenuRessources/settingsButton/settingsButtonStyle.css" />
          </children>
       </HBox>
       <Label fx:id="errorLabel" alignment="CENTER" styleClass="errorLabel" />

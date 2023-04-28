@@ -1,17 +1,17 @@
 package de.uniks.stpmon.team_m.controller;
 
 
+import de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 
 public class LoginController extends Controller {
-
 
     @FXML
     public Label informationLabel;
@@ -20,8 +20,6 @@ public class LoginController extends Controller {
     @FXML
     public PasswordField passwordField;
     @FXML
-    public ImageView hideImage;
-    @FXML
     public Label errorLabel;
     @FXML
     public CheckBox rememberMeCheckbox;
@@ -29,9 +27,15 @@ public class LoginController extends Controller {
     public Button signUpButton;
     @FXML
     public Button signInButton;
+    public Button hideButton;
+
+    private PasswordFieldSkin skin;
+    private SimpleStringProperty username = new SimpleStringProperty();
+    private SimpleStringProperty password = new SimpleStringProperty();
 
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
+
 
     @Inject
     public LoginController() {
@@ -46,9 +50,11 @@ public class LoginController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
 
-        Image hideEye = new Image(getClass().getResource("../views/hideEye.png").toString());
-        hideImage.setImage(hideEye);
+        skin = new PasswordFieldSkin(passwordField);
+        passwordField.setSkin(skin);
 
+        usernameField.textProperty().bindBidirectional(username);
+        passwordField.textProperty().bindBidirectional(password);
 
         return parent;
     }
@@ -60,6 +66,12 @@ public class LoginController extends Controller {
 
     public void signUp() {
         app.show(mainMenuControllerProvider.get());
+    }
+
+    public void showPassword(ActionEvent mouseEvent) {
+        skin.setMask(!skin.getMask());
+        passwordField.setText(passwordField.getText());
+
     }
 
 }
