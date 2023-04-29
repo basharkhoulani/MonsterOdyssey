@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="100.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.IngameHelpController">
+<BorderPane prefHeight="100.0" prefWidth="350.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.IngameHelpController">
     <bottom>
         <VBox alignment="CENTER" prefHeight="33.0" prefWidth="138.0" BorderPane.alignment="CENTER">
             <children>
