@@ -43,7 +43,7 @@ class AppTest extends ApplicationTest {
 
     @Test
     void testMainMenuStartGameButton() {
-        testSigninToMainMenu();
+        testSignInToMainMenu();
         final Button startGameButton = lookup("Start Game").query();
         assertNotNull(startGameButton);
         assertTrue(startGameButton.isDisabled());
@@ -62,7 +62,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testMainMenuToLoginScreen() {
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        testSigninToMainMenu();
+        testSignInToMainMenu();
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
         final Button logoutButton = lookup("#logoutButton").query();
         assertNotNull(logoutButton);
@@ -73,7 +73,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testMainMenuToSetting(){
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        signInBasicFn();
+        testSignInToMainMenu();
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
         final Button settingButton = lookup("#settingsButton").query();
         assertNotNull(settingButton);
@@ -84,7 +84,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testSettingToMainMenu(){
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        signInBasicFn();
+        testSignInToMainMenu();
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
         final Button settingButton = lookup("#settingsButton").query();
         assertNotNull(settingButton);
@@ -110,7 +110,7 @@ class AppTest extends ApplicationTest {
     
     @Test
     void testMainMenuToNewFriend() {
-        signInBasicFn();
+        testSignInToMainMenu();
         clickOn("Find New Friends");
         assertEquals("Monster Odyssey - Add a new friend", stage.getTitle());
         final Button mainMenuButton = lookup("#mainMenuButton").query();
