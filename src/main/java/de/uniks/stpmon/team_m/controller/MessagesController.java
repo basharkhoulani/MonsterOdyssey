@@ -62,7 +62,7 @@ public class MessagesController extends Controller{
 
     @Override
     public String getTitle() {
-        return "Monster Odyssey - Messages";
+        return "Messages";
     }
 
     @Override
