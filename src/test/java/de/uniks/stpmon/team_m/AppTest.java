@@ -35,17 +35,19 @@ class AppTest extends ApplicationTest {
 
     @Test
     void testSigninToMainMenu() {
-        signInBasicFn();
+        final TextField usernameField = lookup("#usernameField").query();
+        assertNotNull(usernameField);
+        final TextField passwordField = lookup("#passwordField").query();
+        assertNotNull(passwordField);
+        final Button signInButton = lookup("Sign In").query();
+        assertNotNull(signInButton);
+        clickOn(signInButton);
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
     }
 
     @Test
     void testMainMenuStartGameButton() {
-        signInThenChooseRegion();
-    }
-
-    private void signInThenChooseRegion() {
-        signInBasicFn();
+        testSigninToMainMenu();
         final Button startGameButton = lookup("Start Game").query();
         assertNotNull(startGameButton);
         assertTrue(startGameButton.isDisabled());
@@ -61,20 +63,10 @@ class AppTest extends ApplicationTest {
         assertFalse(startGameButton.isDisabled());
     }
 
-    private void signInBasicFn() {
-        final TextField usernameField = lookup("#usernameField").query();
-        assertNotNull(usernameField);
-        final TextField passwordField = lookup("#passwordField").query();
-        assertNotNull(passwordField);
-        final Button signInButton = lookup("Sign In").query();
-        assertNotNull(signInButton);
-        clickOn(signInButton);
-    }
-
     @Test
     void testMainMenuToLoginScreen() {
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        signInBasicFn();
+        testSigninToMainMenu();
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
         final Button logoutButton = lookup("#logoutButton").query();
         assertNotNull(logoutButton);
@@ -84,7 +76,7 @@ class AppTest extends ApplicationTest {
 
     @Test
     void testMainMenuToIngame() {
-        signInThenChooseRegion();
+        testMainMenuStartGameButton();
         final Button startGameButton = lookup("Start Game").query();
         assertNotNull(startGameButton);
         clickOn(startGameButton);
