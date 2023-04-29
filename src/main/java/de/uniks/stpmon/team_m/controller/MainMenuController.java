@@ -38,6 +38,9 @@ public class MainMenuController extends Controller {
     Provider<IngameController> ingameControllerProvider;
 
     @Inject
+    Provider<NewFriendController> newFriendControllerProvider;
+
+    @Inject
     public MainMenuController() {
     }
 
@@ -78,7 +81,7 @@ public class MainMenuController extends Controller {
     }
 
     public void changeToFindNewFriends() {
-
+        app.show(newFriendControllerProvider.get());
     }
 
     public void changeToMessages() {
