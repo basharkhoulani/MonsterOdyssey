@@ -49,7 +49,7 @@
                         <Font size="25.0" />
                      </font>
                   </Text>
-                  <Button layoutX="325.0" layoutY="9.0" mnemonicParsing="false" text="Settings" />
+                  <Button fx:id="chatSettingsButton" layoutX="325.0" layoutY="9.0" mnemonicParsing="false" text="Settings" stylesheets="@../messagesRessources.settingsButton/settingsButtonStyle.css" />
                </children>
             </Pane>
             <ScrollPane fx:id="chatScrollPane" prefHeight="423.0" prefWidth="396.0" style="-fx-border-color: black;">
