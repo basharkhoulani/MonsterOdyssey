@@ -2,10 +2,9 @@ package de.uniks.stpmon.team_m.dto;
 
 import java.util.List;
 
-public record User(
+public record Group(
         String _id,
         String name,
-        String status,
-        List<String> friends
+        List<String> members
 ) {
 }

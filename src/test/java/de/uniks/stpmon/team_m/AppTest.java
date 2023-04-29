@@ -35,20 +35,16 @@ class AppTest extends ApplicationTest {
 
     @Test
     void testSigninToMainMenu() {
-        final TextField usernameField = lookup("#usernameField").query();
-        assertNotNull(usernameField);
-        final TextField passwordField = lookup("#passwordField").query();
-        assertNotNull(passwordField);
-        final Button signInButton = lookup("Sign In").query();
-        assertNotNull(signInButton);
-
-        clickOn(signInButton);
-
+        signInBasicFn();
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
     }
 
     @Test
     void testMainMenuStartGameButton() {
+        signInThenChooseRegion();
+    }
+
+    private void signInThenChooseRegion() {
         signInBasicFn();
         final Button startGameButton = lookup("Start Game").query();
         assertNotNull(startGameButton);
@@ -65,14 +61,13 @@ class AppTest extends ApplicationTest {
         assertFalse(startGameButton.isDisabled());
     }
 
-    void signInBasicFn() {
+    private void signInBasicFn() {
         final TextField usernameField = lookup("#usernameField").query();
         assertNotNull(usernameField);
         final TextField passwordField = lookup("#passwordField").query();
         assertNotNull(passwordField);
         final Button signInButton = lookup("Sign In").query();
         assertNotNull(signInButton);
-
         clickOn(signInButton);
     }
 
@@ -114,6 +109,15 @@ class AppTest extends ApplicationTest {
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
     }
 
-
+    @Test
+    void testMainMenuToIngame() {
+        signInThenChooseRegion();
+        final Button startGameButton = lookup("Start Game").query();
+        assertNotNull(startGameButton);
+        clickOn(startGameButton);
+        assertEquals("Monster Odyssey - Ingame", stage.getTitle());
+        final Button helpSymbol = lookup("#helpSymbol").query();
+        assertNotNull(helpSymbol);
+    }
 
 }

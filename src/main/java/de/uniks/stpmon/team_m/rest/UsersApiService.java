@@ -6,18 +6,20 @@ import de.uniks.stpmon.team_m.dto.User;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.*;
 
-public interface UserApiService {
+import java.util.List;
+
+public interface UsersApiService {
     @POST("users")
     Observable<User> create(@Body CreateUserDto dto);
 
     // For all users pass null for both parameters. Also only one parameter can be null.
     @GET("users")
-    Observable<User[]> getUsers(@Query("ids") String[] ids, @Query("status") String status);
+    Observable<List<User>> getUsers(@Query("ids") List<String> ids, @Query("status") String status);
 
     @GET("users/{id}")
     Observable<User> getUser(@Path("id") String id);
 
-    @PATCH("users/{id")
+    @PATCH("users/{id}")
     Observable<User> update(@Body UpdateUserDto dto);
 
     @DELETE("users/{id}")
