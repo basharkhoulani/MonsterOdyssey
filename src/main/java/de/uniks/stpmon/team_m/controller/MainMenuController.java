@@ -38,6 +38,9 @@ public class MainMenuController extends Controller {
     Provider<IngameController> ingameControllerProvider;
 
     @Inject
+    Provider<MessagesController> messagesControllerProvider;
+
+    @Inject
     public MainMenuController() {
     }
 
@@ -82,7 +85,7 @@ public class MainMenuController extends Controller {
     }
 
     public void changeToMessages() {
-
+        app.show(messagesControllerProvider.get());
     }
 
     public void changeToLogin() {
