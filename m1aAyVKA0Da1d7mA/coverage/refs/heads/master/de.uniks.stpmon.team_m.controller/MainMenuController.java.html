@@ -41,61 +41,64 @@ public class MainMenuController extends Controller {
     Provider&lt;AccountSettingController&gt; accountSettingControllerProvider;
 
     @Inject
-<span class="fc" id="L44">    public MainMenuController() {</span>
-<span class="fc" id="L45">    }</span>
+    Provider&lt;NewFriendController&gt; newFriendControllerProvider;
+
+    @Inject
+<span class="fc" id="L47">    public MainMenuController() {</span>
+<span class="fc" id="L48">    }</span>
 
     @Override
     public String getTitle() {
-<span class="fc" id="L49">        return &quot;Main Menu&quot;;</span>
+<span class="fc" id="L52">        return &quot;Main Menu&quot;;</span>
     }
 
     @Override
     public Parent render() {
-<span class="fc" id="L54">        final Parent parent = super.render();</span>
-<span class="fc" id="L55">        initRadioButtons();</span>
-<span class="fc" id="L56">        return parent;</span>
+<span class="fc" id="L57">        final Parent parent = super.render();</span>
+<span class="fc" id="L58">        initRadioButtons();</span>
+<span class="fc" id="L59">        return parent;</span>
     }
 
     private void initRadioButtons() {
-<span class="fc" id="L60">        ToggleGroup group = addAllRadioButtonsToGroup(new ToggleGroup());</span>
-<span class="fc" id="L61">        BooleanBinding booleanBinding = new BooleanBinding() {</span>
+<span class="fc" id="L63">        ToggleGroup group = addAllRadioButtonsToGroup(new ToggleGroup());</span>
+<span class="fc" id="L64">        BooleanBinding booleanBinding = new BooleanBinding() {</span>
             {
-<span class="fc" id="L63">                super.bind(group.selectedToggleProperty());</span>
-<span class="fc" id="L64">            }</span>
+<span class="fc" id="L66">                super.bind(group.selectedToggleProperty());</span>
+<span class="fc" id="L67">            }</span>
 
             @Override
             protected boolean computeValue() {
-<span class="fc bfc" id="L68" title="All 2 branches covered.">                return group.getSelectedToggle() == null;</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">                return group.getSelectedToggle() == null;</span>
             }
         };
-<span class="fc" id="L71">        startGameButton.disableProperty().bind(booleanBinding);</span>
-<span class="fc" id="L72">    }</span>
+<span class="fc" id="L74">        startGameButton.disableProperty().bind(booleanBinding);</span>
+<span class="fc" id="L75">    }</span>
 
     private ToggleGroup addAllRadioButtonsToGroup(ToggleGroup group) {
-<span class="fc bfc" id="L75" title="All 2 branches covered.">        for (Node node : regionRadioButtonList.getChildren()) {</span>
-<span class="pc bpc" id="L76" title="1 of 2 branches missed.">            if (node instanceof RadioButton) {</span>
-<span class="fc" id="L77">                ((RadioButton) node).setToggleGroup(group);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        for (Node node : regionRadioButtonList.getChildren()) {</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">            if (node instanceof RadioButton) {</span>
+<span class="fc" id="L80">                ((RadioButton) node).setToggleGroup(group);</span>
             }
-<span class="fc" id="L79">        }</span>
-<span class="fc" id="L80">        return group;</span>
+<span class="fc" id="L82">        }</span>
+<span class="fc" id="L83">        return group;</span>
     }
 
     public void changeToFindNewFriends() {
-
-<span class="nc" id="L85">    }</span>
+<span class="fc" id="L87">        app.show(newFriendControllerProvider.get());</span>
+<span class="fc" id="L88">    }</span>
 
     public void changeToMessages() {
 
-<span class="nc" id="L89">    }</span>
+<span class="nc" id="L92">    }</span>
 
     public void changeToLogin() {
-<span class="fc" id="L92">        app.show(loginControllerProvider.get());</span>
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L95">        app.show(loginControllerProvider.get());</span>
+<span class="fc" id="L96">    }</span>
 
-<span class="fc" id="L95">    public void changeToSettings() { app.show(accountSettingControllerProvider.get()); }</span>
+<span class="fc" id="L98">    public void changeToSettings() { app.show(accountSettingControllerProvider.get()); }</span>
 
     public void changeToIngame() {
-<span class="fc" id="L98">        app.show(ingameControllerProvider.get());</span>
-<span class="fc" id="L99">    }</span>
+<span class="fc" id="L101">        app.show(ingameControllerProvider.get());</span>
+<span class="fc" id="L102">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
