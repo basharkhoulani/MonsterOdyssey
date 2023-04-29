@@ -93,4 +93,19 @@ class AppTest extends ApplicationTest {
         assertNotNull(helpSymbol);
     }
 
+    @Test
+    void testMainMenuToNewFriend() {
+        signInBasicFn();
+        clickOn("Find New Friends");
+        assertEquals("Monster Odyssey - Add a new friend", stage.getTitle());
+        final Button mainMenuButton = lookup("#mainMenuButton").query();
+        assertNotNull(mainMenuButton);
+        final Button addFriendButton = lookup("#addFriendButton").query();
+        assertNotNull(addFriendButton);
+        final Button messageButton = lookup("#messageButton").query();
+        assertNotNull(messageButton);
+        final TextField searchTextField = lookup("#searchTextField").query();
+        assertNotNull(searchTextField);
+    }
+
 }
