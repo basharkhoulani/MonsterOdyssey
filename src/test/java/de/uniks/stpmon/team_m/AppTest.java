@@ -1,9 +1,6 @@
 package de.uniks.stpmon.team_m;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -83,6 +80,33 @@ class AppTest extends ApplicationTest {
         assertEquals("Monster Odyssey - Ingame", stage.getTitle());
         final Button helpSymbol = lookup("#helpSymbol").query();
         assertNotNull(helpSymbol);
+    }
+
+    @Test
+    void testIngameHelpSymbol() {
+        testMainMenuToIngame();
+        final Button helpSymbol = lookup("#helpSymbol").query();
+        assertNotNull(helpSymbol);
+        clickOn(helpSymbol);
+        final DialogPane dialogPane = lookup(".dialog-pane").query();
+        assertNotNull(dialogPane);
+        final Label helpLabel = dialogPane.getChildren().stream()
+                .filter(node -> node instanceof Label)
+                .map(node -> (Label) node)
+                .findFirst()
+                .orElse(null);
+        assertNotNull(helpLabel);
+        assertEquals("Click 'p' on your keyboard for pause menu.", helpLabel.getText());
+        final ButtonType buttonType = dialogPane.getButtonTypes().stream()
+                .filter(type -> type.getButtonData() == ButtonBar.ButtonData.OK_DONE)
+                .findFirst()
+                .orElse(null);
+        assertNotNull(buttonType);
+        final Button button = (Button) dialogPane.lookupButton(buttonType);
+        assertNotNull(button);
+        clickOn(button);
+        final Label gameTitle = lookup("Monster Odyssey").query();
+        assertNotNull(gameTitle);
     }
 
 }
