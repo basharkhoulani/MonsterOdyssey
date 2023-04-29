@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="756.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="756.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MessagesController">
    <children>
       <VBox prefHeight="438.0" prefWidth="362.0" style="-fx-border-color: black; -fx-border-width: 2px; -fx-border-style: solid none solid solid;">
          <children>
@@ -34,12 +34,12 @@
             </ScrollPane>
          </children>
       </VBox>
-      <Button fx:id="findNewFriendsButton" layoutX="119.0" layoutY="446.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="125.0" text="Find New Friends">
+      <Button fx:id="findNewFriendsButton" layoutX="119.0" layoutY="446.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="125.0" text="Find New Friends" onAction="#changeToFindNewFriends">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="newGroupButton" layoutX="248.0" layoutY="483.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="101.0" text="New Group" />
+      <Button fx:id="newGroupButton" layoutX="248.0" layoutY="483.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="101.0" text="New Group" onAction="#changeToNewGroup"/>
       <VBox  layoutX="356.0" prefHeight="469.0" prefWidth="400.0" style="-fx-border-color: black; -fx-border-width: 2px; -fx-border-style: solid solid solid solid;">
          <children>
             <Pane prefHeight="43.0" prefWidth="338.0" style="-fx-border-color: black; -fx-border-width: 1px;">
@@ -70,9 +70,9 @@
                   <Font size="14.0" />
                </font>
             </TextArea>
-            <Button fx:id="sendButton" layoutX="317.0" layoutY="11.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="75.0" text="Send" />
+            <Button fx:id="sendButton" layoutX="317.0" layoutY="11.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="75.0" text="Send" onAction="#sendMessage"/>
          </children>
       </Pane>
-      <Button fx:id="mainMenuButton" layoutX="14.0" layoutY="483.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="101.0" text="Main Menu" />
+      <Button fx:id="mainMenuButton" layoutX="14.0" layoutY="483.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="101.0" text="Main Menu" onAction="#changeToMainMenu"/>
    </children>
 </AnchorPane>
