@@ -27,11 +27,10 @@ class AppTest extends ApplicationTest {
         assertNotNull(welcomeLabel);
         assertNotNull(signUpButton);
         assertNotNull(signInButton);
-
     }
 
     @Test
-    void testSigninToMainMenu() {
+    void testSignInToMainMenu() {
         final TextField usernameField = lookup("#usernameField").query();
         assertNotNull(usernameField);
         final TextField passwordField = lookup("#passwordField").query();
@@ -72,6 +71,33 @@ class AppTest extends ApplicationTest {
     }
 
     @Test
+    void testMainMenuToSetting(){
+        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
+        signInBasicFn();
+        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
+        final Button settingButton = lookup("#settingsButton").query();
+        assertNotNull(settingButton);
+        clickOn(settingButton);
+        assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
+    }
+
+    @Test
+    void testSettingToMainMenu(){
+        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
+        signInBasicFn();
+        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
+        final Button settingButton = lookup("#settingsButton").query();
+        assertNotNull(settingButton);
+        clickOn(settingButton);
+        assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
+        assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
+        final Button cancelButton = lookup("Cancel").query();
+        assertNotNull(cancelButton);
+        clickOn(cancelButton);
+        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
+    }
+
+    @Test
     void testMainMenuToIngame() {
         testMainMenuStartGameButton();
         final Button startGameButton = lookup("Start Game").query();
@@ -81,7 +107,22 @@ class AppTest extends ApplicationTest {
         final Button helpSymbol = lookup("#helpSymbol").query();
         assertNotNull(helpSymbol);
     }
-
+    
+    @Test
+    void testMainMenuToNewFriend() {
+        signInBasicFn();
+        clickOn("Find New Friends");
+        assertEquals("Monster Odyssey - Add a new friend", stage.getTitle());
+        final Button mainMenuButton = lookup("#mainMenuButton").query();
+        assertNotNull(mainMenuButton);
+        final Button addFriendButton = lookup("#addFriendButton").query();
+        assertNotNull(addFriendButton);
+        final Button messageButton = lookup("#messageButton").query();
+        assertNotNull(messageButton);
+        final TextField searchTextField = lookup("#searchTextField").query();
+        assertNotNull(searchTextField);
+    }
+    
     @Test
     void testIngameHelpSymbol() {
         testMainMenuToIngame();
@@ -107,6 +148,6 @@ class AppTest extends ApplicationTest {
         clickOn(button);
         final Label gameTitle = lookup("Monster Odyssey").query();
         assertNotNull(gameTitle);
-    }
+     }
 
 }

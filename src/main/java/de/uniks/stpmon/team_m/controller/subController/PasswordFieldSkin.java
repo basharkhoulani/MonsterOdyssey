@@ -13,6 +13,7 @@ public class PasswordFieldSkin extends TextFieldSkin {
         super(control);
     }
 
+
     @Override
     protected String maskText(String txt) {
         if (getSkinnable() instanceof PasswordField && mask) {
