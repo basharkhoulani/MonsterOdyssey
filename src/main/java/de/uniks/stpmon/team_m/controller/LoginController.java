@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,6 +31,8 @@ public class LoginController extends Controller {
     public Button hideButton;
 
     private PasswordFieldSkin skin;
+
+    private BooleanBinding isInvalid;
     private SimpleStringProperty username = new SimpleStringProperty();
     private SimpleStringProperty password = new SimpleStringProperty();
 
@@ -55,6 +58,10 @@ public class LoginController extends Controller {
 
         usernameField.textProperty().bindBidirectional(username);
         passwordField.textProperty().bindBidirectional(password);
+
+        isInvalid = username.isEmpty().or(password.length().lessThan(8));
+        signInButton.disableProperty().bind(isInvalid);
+        signUpButton.disableProperty().bind(isInvalid);
 
         return parent;
     }

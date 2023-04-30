@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -28,6 +29,9 @@ public class AccountSettingController extends Controller{
     private SimpleStringProperty username = new SimpleStringProperty();
     private SimpleStringProperty password = new SimpleStringProperty();
 
+    private BooleanBinding isInvalidUsername;
+    private BooleanBinding isInvalidPassword;
+
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
 
@@ -54,6 +58,14 @@ public class AccountSettingController extends Controller{
         //Thirdly bind the username and password
         usernameField.textProperty().bindBidirectional(username);
         passwordField.textProperty().bindBidirectional(password);
+
+        isInvalidUsername = username.isEmpty();
+        saveUsernameButton.disableProperty().bind(isInvalidUsername);
+
+        isInvalidPassword = password.length().lessThan(8);
+        savePasswordButton.disableProperty().bind(isInvalidPassword);
+
+
 
         return parent;
     }
