@@ -36,6 +36,12 @@ public class MainMenuController extends Controller {
 
     @Inject
     Provider<IngameController> ingameControllerProvider;
+    
+    @Inject
+    Provider<AccountSettingController> accountSettingControllerProvider;
+
+    @Inject
+    Provider<NewFriendController> newFriendControllerProvider;
 
     @Inject
     Provider<MessagesController> messagesControllerProvider;
@@ -81,7 +87,7 @@ public class MainMenuController extends Controller {
     }
 
     public void changeToFindNewFriends() {
-
+        app.show(newFriendControllerProvider.get());
     }
 
     public void changeToMessages() {
@@ -92,9 +98,7 @@ public class MainMenuController extends Controller {
         app.show(loginControllerProvider.get());
     }
 
-    public void changeToSettings() {
-
-    }
+    public void changeToSettings() { app.show(accountSettingControllerProvider.get()); }
 
     public void changeToIngame() {
         app.show(ingameControllerProvider.get());
