@@ -18,6 +18,11 @@ class AppTest extends ApplicationTest {
         new App().start(this.stage);
     }
 
+    void writeUsernameAndPassword(){
+        write("Username\t");
+        write("Username123");
+    }
+
     @Test
     void testLoginScreen() {
         final Label welcomeLabel = lookup("Welcome to").query();
@@ -37,6 +42,7 @@ class AppTest extends ApplicationTest {
         assertNotNull(passwordField);
         final Button signInButton = lookup("Sign In").query();
         assertNotNull(signInButton);
+        writeUsernameAndPassword();
         clickOn(signInButton);
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
     }
