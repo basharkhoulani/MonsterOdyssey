@@ -3,7 +3,11 @@
 
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
+import javafx.stage.Modality;
+import javafx.stage.StageStyle;
 
 import javax.inject.Inject;
 
@@ -13,21 +17,32 @@ public class IngameController extends Controller {
     public Button helpSymbol;
 
     @Inject
-<span class="fc" id="L16">    public IngameController() {</span>
-<span class="fc" id="L17">    }</span>
+<span class="fc" id="L20">    public IngameController() {</span>
+<span class="fc" id="L21">    }</span>
 
     @Override
     public String getTitle() {
-<span class="fc" id="L21">        return &quot;Ingame&quot;;</span>
+<span class="fc" id="L25">        return &quot;Ingame&quot;;</span>
     }
 
     @Override
     public Parent render() {
-<span class="fc" id="L26">        final Parent parent = super.render();</span>
-<span class="fc" id="L27">        return parent;</span>
+<span class="fc" id="L30">        final Parent parent = super.render();</span>
+<span class="fc" id="L31">        return parent;</span>
     }
 
     public void showHelp() {
-<span class="nc" id="L31">    }</span>
+<span class="fc" id="L35">        Alert alert = new Alert(Alert.AlertType.INFORMATION);</span>
+<span class="fc" id="L36">        alert.setTitle(null);</span>
+<span class="fc" id="L37">        alert.setHeaderText(null);</span>
+<span class="fc" id="L38">        alert.setGraphic(null);</span>
+<span class="fc" id="L39">        alert.initOwner(app.getStage());</span>
+<span class="fc" id="L40">        alert.initModality(Modality.APPLICATION_MODAL);</span>
+<span class="fc" id="L41">        alert.initStyle(StageStyle.UNDECORATED);</span>
+<span class="fc" id="L42">        alert.setContentText(&quot;Click 'p' on your keyboard for pause menu.&quot;);</span>
+<span class="fc" id="L43">        final DialogPane dialogPane = alert.getDialogPane();</span>
+<span class="fc" id="L44">        dialogPane.setStyle(&quot;-fx-border-color: black&quot;);</span>
+<span class="fc" id="L45">        alert.showAndWait();</span>
+<span class="fc" id="L46">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
