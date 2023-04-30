@@ -16,6 +16,7 @@ class AppTest extends ApplicationTest {
     public void start(Stage stage) throws Exception {
         this.stage = stage;
         new App().start(this.stage);
+        stage.requestFocus();
     }
 
     void writeUsernameAndPassword(){
