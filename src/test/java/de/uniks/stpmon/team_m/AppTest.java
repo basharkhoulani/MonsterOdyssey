@@ -17,6 +17,7 @@ class AppTest extends ApplicationTest {
     public void start(Stage stage) throws Exception {
         this.stage = stage;
         new App().start(this.stage);
+        stage.requestFocus();
     }
 
     @Test
@@ -38,6 +39,10 @@ class AppTest extends ApplicationTest {
         assertNotNull(passwordField);
         final Button signInButton = lookup("Sign In").query();
         assertNotNull(signInButton);
+        clickOn(usernameField);
+        write("testtestlongusername");
+        clickOn(passwordField);
+        write("testtesttestt");
         clickOn(signInButton);
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
     }
