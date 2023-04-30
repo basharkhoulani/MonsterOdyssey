@@ -1,9 +1,6 @@
 package de.uniks.stpmon.team_m;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -30,22 +27,23 @@ class AppTest extends ApplicationTest {
         assertNotNull(welcomeLabel);
         assertNotNull(signUpButton);
         assertNotNull(signInButton);
-
     }
 
     @Test
-    void testSigninToMainMenu() {
-        signInBasicFn();
+    void testSignInToMainMenu() {
+        final TextField usernameField = lookup("#usernameField").query();
+        assertNotNull(usernameField);
+        final TextField passwordField = lookup("#passwordField").query();
+        assertNotNull(passwordField);
+        final Button signInButton = lookup("Sign In").query();
+        assertNotNull(signInButton);
+        clickOn(signInButton);
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
     }
 
     @Test
     void testMainMenuStartGameButton() {
-        signInThenChooseRegion();
-    }
-
-    private void signInThenChooseRegion() {
-        signInBasicFn();
+        testSignInToMainMenu();
         final Button startGameButton = lookup("Start Game").query();
         assertNotNull(startGameButton);
         assertTrue(startGameButton.isDisabled());
@@ -61,20 +59,10 @@ class AppTest extends ApplicationTest {
         assertFalse(startGameButton.isDisabled());
     }
 
-    private void signInBasicFn() {
-        final TextField usernameField = lookup("#usernameField").query();
-        assertNotNull(usernameField);
-        final TextField passwordField = lookup("#passwordField").query();
-        assertNotNull(passwordField);
-        final Button signInButton = lookup("Sign In").query();
-        assertNotNull(signInButton);
-        clickOn(signInButton);
-    }
-
     @Test
     void testMainMenuToLoginScreen() {
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        signInBasicFn();
+        testSignInToMainMenu();
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
         final Button logoutButton = lookup("#logoutButton").query();
         assertNotNull(logoutButton);
@@ -85,7 +73,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testMainMenuToSetting(){
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        signInBasicFn();
+        testSignInToMainMenu();
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
         final Button settingButton = lookup("#settingsButton").query();
         assertNotNull(settingButton);
@@ -96,7 +84,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testSettingToMainMenu(){
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        signInBasicFn();
+        testSignInToMainMenu();
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
         final Button settingButton = lookup("#settingsButton").query();
         assertNotNull(settingButton);
@@ -111,7 +99,7 @@ class AppTest extends ApplicationTest {
 
     @Test
     void testMainMenuToIngame() {
-        signInThenChooseRegion();
+        testMainMenuStartGameButton();
         final Button startGameButton = lookup("Start Game").query();
         assertNotNull(startGameButton);
         clickOn(startGameButton);
@@ -119,10 +107,10 @@ class AppTest extends ApplicationTest {
         final Button helpSymbol = lookup("#helpSymbol").query();
         assertNotNull(helpSymbol);
     }
-
+    
     @Test
     void testMainMenuToNewFriend() {
-        signInBasicFn();
+        testSignInToMainMenu();
         clickOn("Find New Friends");
         assertEquals("Monster Odyssey - Add a new friend", stage.getTitle());
         final Button mainMenuButton = lookup("#mainMenuButton").query();
@@ -134,5 +122,32 @@ class AppTest extends ApplicationTest {
         final TextField searchTextField = lookup("#searchTextField").query();
         assertNotNull(searchTextField);
     }
+    
+    @Test
+    void testIngameHelpSymbol() {
+        testMainMenuToIngame();
+        final Button helpSymbol = lookup("#helpSymbol").query();
+        assertNotNull(helpSymbol);
+        clickOn(helpSymbol);
+        final DialogPane dialogPane = lookup(".dialog-pane").query();
+        assertNotNull(dialogPane);
+        final Label helpLabel = dialogPane.getChildren().stream()
+                .filter(node -> node instanceof Label)
+                .map(node -> (Label) node)
+                .findFirst()
+                .orElse(null);
+        assertNotNull(helpLabel);
+        assertEquals("Click 'p' on your keyboard for pause menu.", helpLabel.getText());
+        final ButtonType buttonType = dialogPane.getButtonTypes().stream()
+                .filter(type -> type.getButtonData() == ButtonBar.ButtonData.OK_DONE)
+                .findFirst()
+                .orElse(null);
+        assertNotNull(buttonType);
+        final Button button = (Button) dialogPane.lookupButton(buttonType);
+        assertNotNull(button);
+        clickOn(button);
+        final Label gameTitle = lookup("Monster Odyssey").query();
+        assertNotNull(gameTitle);
+     }
 
 }
