@@ -71,7 +71,7 @@ class AppTest extends ApplicationTest {
     }
 
     @Test
-    void testMainMenuToSetting(){
+    void testMainMenuToSetting() {
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
         testSignInToMainMenu();
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
@@ -82,7 +82,7 @@ class AppTest extends ApplicationTest {
     }
 
     @Test
-    void testSettingToMainMenu(){
+    void testSettingToMainMenu() {
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
         testSignInToMainMenu();
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
@@ -107,7 +107,7 @@ class AppTest extends ApplicationTest {
         final Button helpSymbol = lookup("#helpSymbol").query();
         assertNotNull(helpSymbol);
     }
-    
+
     @Test
     void testMainMenuToNewFriend() {
         testSignInToMainMenu();
@@ -122,7 +122,7 @@ class AppTest extends ApplicationTest {
         final TextField searchTextField = lookup("#searchTextField").query();
         assertNotNull(searchTextField);
     }
-    
+
     @Test
     void testIngameHelpSymbol() {
         testMainMenuToIngame();
@@ -148,6 +148,6 @@ class AppTest extends ApplicationTest {
         clickOn(button);
         final Label gameTitle = lookup("Monster Odyssey").query();
         assertNotNull(gameTitle);
-     }
+    }
 
 }
