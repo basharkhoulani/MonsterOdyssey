@@ -57,6 +57,7 @@ public class IngameController extends Controller {
         alert.setTitle("Pause Menu");
         alert.setHeaderText(null);
         alert.setGraphic(null);
+        alert.setContentText("What do you want to do?");
         alert.initOwner(app.getStage());
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.initStyle(StageStyle.UNDECORATED);
