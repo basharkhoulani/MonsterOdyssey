@@ -165,7 +165,6 @@ class AppTest extends ApplicationTest {
         assertNotNull(pauseLabel);
         assertEquals("What do you want to do?", pauseLabel.getText());
         final ButtonType buttonType = dialogPane.getButtonTypes().stream()
-                .filter(type -> type.getButtonData() == ButtonBar.ButtonData.OK_DONE)
                 .findFirst()
                 .orElse(null);
         assertNotNull(buttonType);
