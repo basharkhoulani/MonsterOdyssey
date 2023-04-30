@@ -30,13 +30,14 @@
             <ImageView fitHeight="34.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </HBox>
+      <Label fx:id="usernameErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="575.0" styleClass="errorLabel" stylesheets="@../mainMenuRessources/settingsButton/settingsButtonStyle.css" />
       <HBox alignment="CENTER" prefHeight="36.0" prefWidth="400.0">
          <children>
             <PasswordField fx:id="passwordField" prefHeight="25.0" prefWidth="356.0" promptText="Password" />
             <Button fx:id="hideButton" mnemonicParsing="false" onAction="#showPassword" prefHeight="25.0" prefWidth="36.0" styleClass="hideSymbol" stylesheets="@../mainMenuRessources/settingsButton/settingsButtonStyle.css" />
          </children>
       </HBox>
-      <Label fx:id="errorLabel" alignment="CENTER" styleClass="errorLabel" />
+      <Label fx:id="passwordErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="581.0" styleClass="errorLabel" stylesheets="@../mainMenuRessources/settingsButton/settingsButtonStyle.css" />
       <HBox alignment="CENTER" prefHeight="36.0" prefWidth="400.0">
          <children>
             <CheckBox fx:id="rememberMeCheckbox" mnemonicParsing="false" prefHeight="18.0" prefWidth="109.0" text="Remember Me" />
