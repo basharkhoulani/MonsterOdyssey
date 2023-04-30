@@ -153,7 +153,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testMainMenuToMessages() {
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        signInBasicFn();
+        testSignInToMainMenu();
         final Button messagesButton = lookup("Messages").query();
         assertNotNull(messagesButton);
         clickOn(messagesButton);
