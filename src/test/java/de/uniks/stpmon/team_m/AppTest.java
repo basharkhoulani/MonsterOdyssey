@@ -176,6 +176,10 @@ class AppTest extends ApplicationTest {
         assertEquals("Monster Odyssey - Messages", stage.getTitle());
 
         // messages -> main menu
+        final Button mainMenuButton = lookup("#mainMenuButton").query();
+        assertNotNull(mainMenuButton);
+        clickOn(mainMenuButton);
+
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
         final Button logoutButton = lookup("#logoutButton").query();
         assertNotNull(logoutButton);
