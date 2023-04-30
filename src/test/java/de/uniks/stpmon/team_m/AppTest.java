@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m;
 
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -138,6 +139,31 @@ class AppTest extends ApplicationTest {
                 .orElse(null);
         assertNotNull(helpLabel);
         assertEquals("Click 'p' on your keyboard for pause menu.", helpLabel.getText());
+        final ButtonType buttonType = dialogPane.getButtonTypes().stream()
+                .filter(type -> type.getButtonData() == ButtonBar.ButtonData.OK_DONE)
+                .findFirst()
+                .orElse(null);
+        assertNotNull(buttonType);
+        final Button button = (Button) dialogPane.lookupButton(buttonType);
+        assertNotNull(button);
+        clickOn(button);
+        final Label gameTitle = lookup("Monster Odyssey").query();
+        assertNotNull(gameTitle);
+    }
+
+    @Test
+    void testIngamePause() {
+        testMainMenuToIngame();
+        type(KeyCode.P);
+        final DialogPane dialogPane = lookup(".dialog-pane").query();
+        assertNotNull(dialogPane);
+        final Label pauseLabel = dialogPane.getChildren().stream()
+                .filter(node -> node instanceof Label)
+                .map(node -> (Label) node)
+                .findFirst()
+                .orElse(null);
+        assertNotNull(pauseLabel);
+        assertEquals("What do you want to do?", pauseLabel.getText());
         final ButtonType buttonType = dialogPane.getButtonTypes().stream()
                 .filter(type -> type.getButtonData() == ButtonBar.ButtonData.OK_DONE)
                 .findFirst()
