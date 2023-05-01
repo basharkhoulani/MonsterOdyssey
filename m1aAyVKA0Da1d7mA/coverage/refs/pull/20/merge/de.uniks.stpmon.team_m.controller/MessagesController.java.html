@@ -56,35 +56,36 @@ public class MessagesController extends Controller{
     Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
 
     @Inject
-<span class="fc" id="L59">    public MessagesController() {</span>
+    Provider&lt;NewFriendController&gt; newFriendControllerProvider;
 
-<span class="fc" id="L61">    }</span>
+    @Inject
+<span class="fc" id="L62">    public MessagesController() {</span>
+
+<span class="fc" id="L64">    }</span>
 
     @Override
     public String getTitle() {
-<span class="fc" id="L65">        return &quot;Messages&quot;;</span>
+<span class="fc" id="L68">        return &quot;Messages&quot;;</span>
     }
 
     @Override
     public Parent render() {
-<span class="fc" id="L70">        final Parent parent = super.render();</span>
-<span class="fc" id="L71">        return parent;</span>
+<span class="fc" id="L73">        final Parent parent = super.render();</span>
+<span class="fc" id="L74">        return parent;</span>
     }
 
     public void changeToMainMenu() {
-        // TO DO
-        // button fx:id: '#mainMenuButton'
-<span class="nc" id="L77">    }</span>
+<span class="fc" id="L78">        app.show(mainMenuControllerProvider.get());</span>
+<span class="fc" id="L79">    }</span>
 
     public void changeToFindNewFriends() {
-        // TO DO
-        // button fx:id: '#findNewFriendsButton'
-<span class="nc" id="L82">    }</span>
+<span class="fc" id="L82">        app.show(newFriendControllerProvider.get());</span>
+<span class="fc" id="L83">    }</span>
 
     public void changeToNewGroup() {
         // TO DO
         // button fx:id: '#newGroupButton'
-<span class="nc" id="L87">    }</span>
+<span class="nc" id="L88">    }</span>
 
     public void createFriendNode() {
         // TO DO
@@ -93,18 +94,18 @@ public class MessagesController extends Controller{
         * The Pane should be a new fxml fragment that gets loaded into one of
         * the VBoxs' children.
         * */
-<span class="nc" id="L96">    }</span>
+<span class="nc" id="L97">    }</span>
 
     public void creteMessageNode() {
         // TO DO
         /*
         * This will probably work similiar to the 'createFriendNode()' method.
         * */
-<span class="nc" id="L103">    }</span>
+<span class="nc" id="L104">    }</span>
 
     public void sendMessage() {
         // TO DO
         // button fx:id: '#sendButton'
-<span class="nc" id="L108">    }</span>
+<span class="nc" id="L109">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
