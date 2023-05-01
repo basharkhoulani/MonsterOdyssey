@@ -283,7 +283,7 @@ class AppTest extends ApplicationTest {
         clickOn(newGroupButton);
 
         // new group -> messages
-        final Button goBackToMessagesButton = lookup("#goBackToMessagesButton").query();
+        final Button goBackToMessagesButton = lookup("#backToMessagesButton").query();
         assertNotNull(goBackToMessagesButton);
         clickOn(goBackToMessagesButton);
 
