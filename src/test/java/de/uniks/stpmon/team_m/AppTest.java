@@ -256,10 +256,10 @@ class AppTest extends ApplicationTest {
         clickOn(messagesButton);
         assertEquals("Monster Odyssey - Messages", stage.getTitle());
 
-        // messages -> new friends
-        final Button findNewFriendsButton = lookup("#newGroupButton").query();
-        assertNotNull(findNewFriendsButton);
-        clickOn(findNewFriendsButton);
+        // messages -> new group
+        final Button newGroupButton = lookup("#newGroupButton").query();
+        assertNotNull(newGroupButton);
+        clickOn(newGroupButton);
 
         assertEquals("Monster Odyssey - New Group", stage.getTitle());
     }
