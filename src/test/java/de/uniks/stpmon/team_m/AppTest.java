@@ -243,4 +243,25 @@ class AppTest extends ApplicationTest {
         assertEquals("Monster Odyssey - Add a new friend", stage.getTitle());
     }
 
+    @Test
+    void testMessagesToNewGroup() {
+        // login -> main menu
+        final Button signInButton = lookup("Sign In").query();
+        assertNotNull(signInButton);
+        clickOn(signInButton);
+
+        // main menu -> messages
+        final Button messagesButton = lookup("Messages").query();
+        assertNotNull(messagesButton);
+        clickOn(messagesButton);
+        assertEquals("Monster Odyssey - Messages", stage.getTitle());
+
+        // messages -> new friends
+        final Button findNewFriendsButton = lookup("#newGroupButton").query();
+        assertNotNull(findNewFriendsButton);
+        clickOn(findNewFriendsButton);
+
+        assertEquals("Monster Odyssey - New Group", stage.getTitle());
+    }
+
 }
