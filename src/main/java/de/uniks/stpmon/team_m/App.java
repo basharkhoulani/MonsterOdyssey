@@ -31,8 +31,8 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
-        stage.setWidth(640);
-        stage.setHeight(480);
+        stage.setWidth(770);
+        stage.setHeight(565);
         stage.setTitle("Monster Odyssey");
 
         final Scene scene = new Scene(new Label("Loading..."));

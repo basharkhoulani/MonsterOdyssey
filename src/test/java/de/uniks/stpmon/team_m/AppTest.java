@@ -149,5 +149,67 @@ class AppTest extends ApplicationTest {
         final Label gameTitle = lookup("Monster Odyssey").query();
         assertNotNull(gameTitle);
      }
+    @Test
+    void testNewFriendToMainMenu(){
+        testMainMenuToNewFriend();
+        clickOn("Main Menu");
+        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
+    }
+
+    @Test
+    void testMainMenuToMessages() {
+        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
+        testSignInToMainMenu();
+        final Button messagesButton = lookup("Messages").query();
+        assertNotNull(messagesButton);
+        clickOn(messagesButton);
+        assertEquals("Monster Odyssey - Messages", stage.getTitle());
+        final Button sendButton = lookup("#sendButton").query();
+        assertNotNull(sendButton);
+    }
+
+    @Test
+    void testMessagesToMainMenu() {
+        // login -> main menu
+        final Button signInButton = lookup("Sign In").query();
+        assertNotNull(signInButton);
+        clickOn(signInButton);
+
+        // main menu -> messages
+        final Button messagesButton = lookup("Messages").query();
+        assertNotNull(messagesButton);
+        clickOn(messagesButton);
+        assertEquals("Monster Odyssey - Messages", stage.getTitle());
+
+        // messages -> main menu
+        final Button mainMenuButton = lookup("#mainMenuButton").query();
+        assertNotNull(mainMenuButton);
+        clickOn(mainMenuButton);
+
+        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
+        final Button logoutButton = lookup("#logoutButton").query();
+        assertNotNull(logoutButton);
+    }
+
+    @Test
+    void testMessagesToNewFriends() {
+        // login -> main menu
+        final Button signInButton = lookup("Sign In").query();
+        assertNotNull(signInButton);
+        clickOn(signInButton);
+
+        // main menu -> messages
+        final Button messagesButton = lookup("Messages").query();
+        assertNotNull(messagesButton);
+        clickOn(messagesButton);
+        assertEquals("Monster Odyssey - Messages", stage.getTitle());
+
+        // messages -> new friends
+        final Button findNewFriendsButton = lookup("#findNewFriendsButton").query();
+        assertNotNull(findNewFriendsButton);
+        clickOn(findNewFriendsButton);
+
+        assertEquals("Monster Odyssey - Add a new friend", stage.getTitle());
+    }
 
 }
