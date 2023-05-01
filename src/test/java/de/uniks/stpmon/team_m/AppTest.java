@@ -156,4 +156,16 @@ class AppTest extends ApplicationTest {
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
     }
 
+    @Test
+    void testMainMenuToMessages() {
+        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
+        testSignInToMainMenu();
+        final Button messagesButton = lookup("Messages").query();
+        assertNotNull(messagesButton);
+        clickOn(messagesButton);
+        assertEquals("Monster Odyssey - Messages", stage.getTitle());
+        final Button sendButton = lookup("#sendButton").query();
+        assertNotNull(sendButton);
+    }
+
 }
