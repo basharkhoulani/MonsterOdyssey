@@ -56,6 +56,9 @@ public class MessagesController extends Controller{
     Provider<MainMenuController> mainMenuControllerProvider;
 
     @Inject
+    Provider<NewFriendController> newFriendControllerProvider;
+
+    @Inject
     public MessagesController() {
 
     }
@@ -72,13 +75,11 @@ public class MessagesController extends Controller{
     }
 
     public void changeToMainMenu() {
-        // TO DO
-        // button fx:id: '#mainMenuButton'
+        app.show(mainMenuControllerProvider.get());
     }
 
     public void changeToFindNewFriends() {
-        // TO DO
-        // button fx:id: '#findNewFriendsButton'
+        app.show(newFriendControllerProvider.get());
     }
 
     public void changeToNewGroup() {
