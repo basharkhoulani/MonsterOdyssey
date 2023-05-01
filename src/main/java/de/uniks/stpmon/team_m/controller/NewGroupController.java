@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -47,5 +48,13 @@ public class NewGroupController extends Controller{
     public Parent render() {
         final Parent parent = super.render();
         return parent;
+    }
+
+    public void changeToMessages() {
+        app.show(messagesControllerProvider.get());
+    }
+
+    public void createGroup() {
+        // onAction from createGroupButton
     }
 }
