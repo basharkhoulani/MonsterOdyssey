@@ -16,7 +16,7 @@
          <children>
             <Pane prefHeight="60.0" prefWidth="300.0">
                <children>
-                  <Text id="selectGroupMembersText" layoutX="42.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Groupmembers">
+                  <Text fx:id="selectGroupMembersText" layoutX="42.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Groupmembers">
                      <font>
                         <Font size="22.0" />
                      </font>
@@ -25,12 +25,12 @@
             </Pane>
             <ScrollPane prefHeight="275.0" prefWidth="300.0" style="-fx-border-color: black; -fx-border-style: solid none none none;">
                <content>
-                  <VBox id="groupMembersVBox" prefHeight="271.0" prefWidth="294.0" />
+                  <VBox fx:id="groupMembersVBox" prefHeight="271.0" prefWidth="294.0" />
                </content>
             </ScrollPane>
             <Pane prefHeight="63.0" prefWidth="298.0" style="-fx-border-color: black; -fx-border-style: solid none none none;">
                <children>
-                  <Button id="backToMessagesButton" layoutX="112.0" layoutY="15.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="75.0" text="Go back" onAction="#changeToMessages" />
+                  <Button fx:id="backToMessagesButton" layoutX="112.0" layoutY="15.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="75.0" text="Go back" onAction="#changeToMessages" />
                </children>
             </Pane>
          </children>
@@ -39,7 +39,7 @@
          <children>
             <Pane prefHeight="302.0" prefWidth="298.0">
                <children>
-                  <TextField id="searchFieldGroupMembers" layoutX="36.0" layoutY="34.0" prefHeight="25.0" prefWidth="226.0" promptText="Search for Groupmembers" style="-fx-border-color: black;">
+                  <TextField fx:id="searchFieldGroupMembers" layoutX="36.0" layoutY="34.0" prefHeight="25.0" prefWidth="226.0" promptText="Search for Groupmembers" style="-fx-border-color: black;">
                      <font>
                         <Font size="13.0" />
                      </font>
@@ -48,12 +48,12 @@
             </Pane>
             <Pane prefHeight="34.0" prefWidth="298.0" style="-fx-border-color: black; -fx-border-style: solid none solid none;">
                <children>
-                  <TextField id="groupNameInput" layoutX="14.0" layoutY="4.0" prefHeight="25.0" prefWidth="271.0" promptText="New Group Name" />
+                  <TextField fx:id="groupNameInput" layoutX="14.0" layoutY="4.0" prefHeight="25.0" prefWidth="271.0" promptText="New Group Name" />
                </children>
             </Pane>
             <Pane prefHeight="62.0" prefWidth="298.0">
                <children>
-                  <Button id="createGroupButton" layoutX="99.0" layoutY="14.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="100.0" text="Create Group" onAction="#createGroup" />
+                  <Button id="createGroupButton" layoutX="99.0" layoutY="14.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="100.0" text="Create Group" />
                </children>
             </Pane>
          </children>
