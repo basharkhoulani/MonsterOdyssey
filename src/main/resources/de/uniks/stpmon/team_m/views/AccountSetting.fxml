@@ -26,6 +26,7 @@
             <Button fx:id="saveUsernameButton" mnemonicParsing="false" onAction="#saveUsername" prefHeight="34.0" prefWidth="123.0" text="Save Username" />
          </children>
       </HBox>
+      <Label fx:id="usernameErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel" stylesheets="@../mainMenuRessources/settingsButton/settingsButtonStyle.css" />
       <HBox alignment="CENTER" prefHeight="74.0" prefWidth="311.0">
          <children>
             <PasswordField fx:id="passwordField" prefHeight="34.0" prefWidth="257.0" promptText="New Password" />
@@ -36,6 +37,7 @@
             <Button fx:id="savePasswordButton" mnemonicParsing="false" onAction="#savePassword" prefHeight="34.0" prefWidth="123.0" text="Save Password" />
          </children>
       </HBox>
+      <Label fx:id="passwordErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="509.0" styleClass="errorLabel" stylesheets="@../mainMenuRessources/settingsButton/settingsButtonStyle.css" />
       <HBox alignment="CENTER" prefHeight="52.0" prefWidth="490.0">
          <children>
             <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancel" prefHeight="34.0" prefWidth="123.0" text="Cancel" />
