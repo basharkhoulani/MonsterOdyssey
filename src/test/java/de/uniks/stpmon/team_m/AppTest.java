@@ -155,7 +155,7 @@ class AppTest extends ApplicationTest {
         final Label gameTitle = lookup("Monster Odyssey").query();
         assertNotNull(gameTitle);
     }
-
+    
     @Test
     void testIngamePause() {
         testMainMenuToIngame();
@@ -178,6 +178,13 @@ class AppTest extends ApplicationTest {
         clickOn(button);
         final Label gameTitle = lookup("Monster Odyssey").query();
         assertNotNull(gameTitle);
+     }
+     
+    @Test
+    void testNewFriendToMainMenu(){
+        testMainMenuToNewFriend();
+        clickOn("Main Menu");
+        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
     }
 
 }
