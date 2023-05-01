@@ -175,9 +175,6 @@ class AppTest extends ApplicationTest {
         assertNotNull(buttonType);
         final Button button = (Button) dialogPane.lookupButton(buttonType);
         assertNotNull(button);
-        clickOn(button);
-        final Label gameTitle = lookup("Monster Odyssey").query();
-        assertNotNull(gameTitle);
      }
      
     @Test
@@ -237,6 +234,30 @@ class AppTest extends ApplicationTest {
         clickOn(findNewFriendsButton);
 
         assertEquals("Monster Odyssey - Add a new friend", stage.getTitle());
+    }
+
+    @Test
+    void testIngameUnpauseWithKeyCodeP() {
+        testIngamePause();
+        type(KeyCode.P);
+        final Label gameTitle = lookup("Monster Odyssey").query();
+        assertNotNull(gameTitle);
+    }
+
+    @Test
+    void testIngameUnpauseWithButton() {
+        testIngamePause();
+        final DialogPane dialogPane = lookup(".dialog-pane").query();
+        assertNotNull(dialogPane);
+        final ButtonType buttonType = dialogPane.getButtonTypes().stream()
+                .findFirst()
+                .orElse(null);
+        assertNotNull(buttonType);
+        final Button button = (Button) dialogPane.lookupButton(buttonType);
+        assertNotNull(button);
+        clickOn(button);
+        final Label gameTitle = lookup("Monster Odyssey").query();
+        assertNotNull(gameTitle);
     }
 
 }
