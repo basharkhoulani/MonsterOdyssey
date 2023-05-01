@@ -263,9 +263,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testMessagesToNewGroup() {
         // login -> main menu
-        final Button signInButton = lookup("Sign In").query();
-        assertNotNull(signInButton);
-        clickOn(signInButton);
+        testSignInToMainMenu();
 
         // main menu -> messages
         final Button messagesButton = lookup("Messages").query();
@@ -284,9 +282,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testNewGroupToMessages() {
         // login -> main menu
-        final Button signInButton = lookup("Sign In").query();
-        assertNotNull(signInButton);
-        clickOn(signInButton);
+        testSignInToMainMenu();
 
         // main menu -> messages
         final Button messagesButton = lookup("Messages").query();
