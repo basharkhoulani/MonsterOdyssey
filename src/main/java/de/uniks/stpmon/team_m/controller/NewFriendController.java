@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 public class NewFriendController extends Controller {
 
@@ -17,6 +18,8 @@ public class NewFriendController extends Controller {
     public Button messageButton;
     @FXML
     public TextField searchTextField;
+    @Inject
+    Provider<MainMenuController> mainMenuControllerProvider;
 
     @Inject
     public NewFriendController() {
@@ -34,6 +37,7 @@ public class NewFriendController extends Controller {
     }
 
     public void changeToMainMenu() {
+        app.show(mainMenuControllerProvider.get());
     }
 
     public void addAsAFriend() {
