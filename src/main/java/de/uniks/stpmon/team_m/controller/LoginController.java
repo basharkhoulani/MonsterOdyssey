@@ -2,6 +2,8 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,16 +22,20 @@ public class LoginController extends Controller {
     @FXML
     public PasswordField passwordField;
     @FXML
-    public Label errorLabel;
-    @FXML
     public CheckBox rememberMeCheckbox;
     @FXML
     public Button signUpButton;
     @FXML
     public Button signInButton;
     public Button hideButton;
+    public Label usernameErrorLabel;
+    public Label passwordErrorLabel;
 
     private PasswordFieldSkin skin;
+
+    private BooleanBinding isInvalidUsername;
+    private BooleanBinding isInvalidPassword;
+
     private SimpleStringProperty username = new SimpleStringProperty();
     private SimpleStringProperty password = new SimpleStringProperty();
 
@@ -56,6 +62,13 @@ public class LoginController extends Controller {
         usernameField.textProperty().bindBidirectional(username);
         passwordField.textProperty().bindBidirectional(password);
 
+        isInvalidUsername = username.isEmpty();
+        isInvalidPassword = password.length().lessThan(8);
+        signInButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));
+        signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));
+
+        usernameErrorLabel.textProperty().bind(Bindings.when(isInvalidUsername).then("Username must not be empty.").otherwise(""));
+        passwordErrorLabel.textProperty().bind(Bindings.when(isInvalidPassword).then("Password must have at least 8 characters.").otherwise(""));
         return parent;
     }
 

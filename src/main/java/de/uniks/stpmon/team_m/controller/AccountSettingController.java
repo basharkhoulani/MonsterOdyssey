@@ -1,5 +1,9 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -21,6 +25,15 @@ public class AccountSettingController extends Controller{
     public Button savePasswordButton;
     public Button cancelButton;
     public Button deleteAccountButton;
+    public Label passwordErrorLabel;
+    public Label usernameErrorLabel;
+
+    private PasswordFieldSkin skin;
+    private SimpleStringProperty username = new SimpleStringProperty();
+    private SimpleStringProperty password = new SimpleStringProperty();
+
+    private BooleanBinding isInvalidUsername;
+    private BooleanBinding isInvalidPassword;
 
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -36,20 +49,49 @@ public class AccountSettingController extends Controller{
     @Override
     public Parent render() {
         final Parent parent = super.render();
+
+        // Firstly disable the editfield
         usernameField.setDisable(true);
         passwordField.setDisable(true);
+
+        // Secondly show password
+        skin = new PasswordFieldSkin(passwordField);
+        passwordField.setSkin(skin);
+
+        //Thirdly bind the username and password
+        usernameField.textProperty().bindBidirectional(username);
+        passwordField.textProperty().bindBidirectional(password);
+
+        isInvalidUsername = username.isEmpty();
+        saveUsernameButton.disableProperty().bind(isInvalidUsername);
+
+        isInvalidPassword = password.length().lessThan(8);
+        savePasswordButton.disableProperty().bind(isInvalidPassword);
+
+        usernameErrorLabel.textProperty().bind(Bindings.when(isInvalidUsername).then("Username must not be empty").otherwise(""));
+        passwordErrorLabel.textProperty().bind(Bindings.when(isInvalidPassword).then("password must have at least 8 characters.").otherwise(""));
+
         return parent;
     }
 
-    public void editUsername(){ }
+    public void editUsername(){ usernameField.setDisable(false); }
 
-    public void saveUsername(){ }
+    public void saveUsername(){
+        usernameField.setDisable(true);
+        //TODO functionally implement
+    }
 
-    public void showPassword(){ }
+    public void showPassword(){
+        skin.setMask(!skin.getMask());
+        passwordField.setText(passwordField.getText());
+    }
 
-    public void editPassword(){ }
+    public void editPassword(){ passwordField.setDisable(false);}
 
-    public void savePassword(){ }
+    public void savePassword(){
+        passwordField.setDisable(true);
+        //TODO functionally implement
+    }
 
     public void deleteAccount(){ }
 
