@@ -33,6 +33,16 @@ class AppTest extends ApplicationTest {
     }
 
     @Test
+    void testShowPasswordInSignIn() {
+        final PasswordField passwordField = lookup("#passwordField").query();
+        clickOn(passwordField);
+        write("password123");
+        final Button showPasswordBtn = lookup("#hideButton").query();
+        clickOn(showPasswordBtn);
+        assertEquals("class de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin",passwordField.getSkin().getClass().toString());
+    }
+
+    @Test
     void testSignInToMainMenu() {
         final TextField usernameField = lookup("#usernameField").query();
         assertNotNull(usernameField);
@@ -86,6 +96,19 @@ class AppTest extends ApplicationTest {
         assertNotNull(settingButton);
         clickOn(settingButton);
         assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
+    }
+
+    @Test
+    void testShowPasswordInSetting(){
+        testMainMenuToSetting();
+        final Button passwordEditBtn = lookup("#passwordEditButton").query();
+        clickOn(passwordEditBtn);
+        final PasswordField passwordField = lookup("#passwordField").query();
+        clickOn(passwordField);
+        write("password123");
+        final Button showPasswordBtn = lookup("#showPasswordButton").query();
+        clickOn(showPasswordBtn);
+        assertEquals("class de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin",passwordField.getSkin().getClass().toString());
     }
 
     @Test

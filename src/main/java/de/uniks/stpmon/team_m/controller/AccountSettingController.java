@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
@@ -70,6 +71,7 @@ public class AccountSettingController extends Controller{
 
         usernameErrorLabel.textProperty().bind(Bindings.when(isInvalidUsername).then("Username must not be empty").otherwise(""));
         passwordErrorLabel.textProperty().bind(Bindings.when(isInvalidPassword).then("password must have at least 8 characters.").otherwise(""));
+
 
         return parent;
     }
