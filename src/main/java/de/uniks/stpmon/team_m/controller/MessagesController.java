@@ -11,6 +11,8 @@ import javafx.scene.text.Text;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import static de.uniks.stpmon.team_m.Constants.*;
+
 public class MessagesController extends Controller{
 
     @FXML
@@ -75,6 +77,14 @@ public class MessagesController extends Controller{
     public Parent render() {
         final Parent parent = super.render();
         return parent;
+    }
+    @Override
+    public int getHeight(){
+        return MESSAGES_HEIGHT;
+    }
+    @Override
+    public int getWidth(){
+        return MESSAGES_WIDTH;
     }
 
     public void changeToMainMenu() {
