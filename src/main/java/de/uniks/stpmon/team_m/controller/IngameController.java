@@ -14,6 +14,8 @@ import javafx.stage.StageStyle;
 import javax.inject.Inject;
 import java.util.Optional;
 
+import static de.uniks.stpmon.team_m.Constants.INGAME_TITLE;
+
 public class IngameController extends Controller {
 
     @FXML
@@ -25,7 +27,7 @@ public class IngameController extends Controller {
 
     @Override
     public String getTitle() {
-        return "Ingame";
+        return INGAME_TITLE;
     }
 
     @Override

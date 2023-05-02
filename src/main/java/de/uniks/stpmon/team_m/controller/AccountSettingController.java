@@ -14,6 +14,8 @@ import javafx.scene.control.TextField;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import static de.uniks.stpmon.team_m.Constants.ACCOUNT_SETTINGS_TITLE;
+
 public class AccountSettingController extends Controller{
 
     public Label informationLabel;
@@ -44,7 +46,7 @@ public class AccountSettingController extends Controller{
     }
     @Override
     public String getTitle() {
-        return "Account Setting";
+        return ACCOUNT_SETTINGS_TITLE;
     }
 
     @Override

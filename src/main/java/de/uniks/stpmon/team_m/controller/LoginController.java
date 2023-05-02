@@ -13,6 +13,8 @@ import javafx.scene.control.*;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import static de.uniks.stpmon.team_m.Constants.LOGIN_TITLE;
+
 public class LoginController extends Controller {
 
     @FXML
@@ -49,7 +51,7 @@ public class LoginController extends Controller {
 
     @Override
     public String getTitle() {
-        return "Sign Up & In";
+        return LOGIN_TITLE;
     }
 
     @Override

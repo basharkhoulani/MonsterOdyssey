@@ -13,6 +13,8 @@ import javafx.scene.layout.VBox;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import static de.uniks.stpmon.team_m.Constants.MAIN_MENU_TITLE;
+
 public class MainMenuController extends Controller {
 
 
@@ -52,7 +54,7 @@ public class MainMenuController extends Controller {
 
     @Override
     public String getTitle() {
-        return "Main Menu";
+        return MAIN_MENU_TITLE;
     }
 
     @Override
