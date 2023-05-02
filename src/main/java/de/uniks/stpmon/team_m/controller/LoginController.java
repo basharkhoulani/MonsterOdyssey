@@ -30,6 +30,7 @@ public class LoginController extends Controller {
     public Button hideButton;
     public Label usernameErrorLabel;
     public Label passwordErrorLabel;
+    public Label passwordInfoLabel;
 
     private PasswordFieldSkin skin;
 
@@ -67,8 +68,8 @@ public class LoginController extends Controller {
         signInButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));
         signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));
 
-        usernameErrorLabel.textProperty().bind(Bindings.when(isInvalidUsername).then("Username must not be empty.").otherwise(""));
-        passwordErrorLabel.textProperty().bind(Bindings.when(isInvalidPassword).then("Password must have at least 8 characters.").otherwise(""));
+        passwordInfoLabel.setText("Password must have at least 8 character.");
+
         return parent;
     }
 

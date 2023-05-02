@@ -69,10 +69,6 @@ public class AccountSettingController extends Controller{
         isInvalidPassword = password.length().lessThan(8);
         savePasswordButton.disableProperty().bind(isInvalidPassword);
 
-        usernameErrorLabel.textProperty().bind(Bindings.when(isInvalidUsername).then("Username must not be empty").otherwise(""));
-        passwordErrorLabel.textProperty().bind(Bindings.when(isInvalidPassword).then("password must have at least 8 characters.").otherwise(""));
-
-
         return parent;
     }
 
