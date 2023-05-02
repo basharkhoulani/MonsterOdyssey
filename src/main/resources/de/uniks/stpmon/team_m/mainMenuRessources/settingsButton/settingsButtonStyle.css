@@ -27,3 +27,7 @@
 	-fx-border-radius: 15;
 	-fx-border-width: 5;
 }
+
+.errorLabel {
+	-fx-text-fill: red;
+}

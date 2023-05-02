@@ -198,9 +198,6 @@ class AppTest extends ApplicationTest {
         assertNotNull(buttonType);
         final Button button = (Button) dialogPane.lookupButton(buttonType);
         assertNotNull(button);
-        clickOn(button);
-        final Label gameTitle = lookup("Monster Odyssey").query();
-        assertNotNull(gameTitle);
      }
      
     @Test
@@ -225,9 +222,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testMessagesToMainMenu() {
         // login -> main menu
-        final Button signInButton = lookup("Sign In").query();
-        assertNotNull(signInButton);
-        clickOn(signInButton);
+        testSignInToMainMenu();
 
         // main menu -> messages
         final Button messagesButton = lookup("Messages").query();
@@ -248,9 +243,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testMessagesToNewFriends() {
         // login -> main menu
-        final Button signInButton = lookup("Sign In").query();
-        assertNotNull(signInButton);
-        clickOn(signInButton);
+        testSignInToMainMenu();
 
         // main menu -> messages
         final Button messagesButton = lookup("Messages").query();
@@ -264,6 +257,30 @@ class AppTest extends ApplicationTest {
         clickOn(findNewFriendsButton);
 
         assertEquals("Monster Odyssey - Add a new friend", stage.getTitle());
+    }
+
+    @Test
+    void testIngameUnpauseWithKeyCodeP() {
+        testIngamePause();
+        type(KeyCode.P);
+        final Label gameTitle = lookup("Monster Odyssey").query();
+        assertNotNull(gameTitle);
+    }
+
+    @Test
+    void testIngameUnpauseWithButton() {
+        testIngamePause();
+        final DialogPane dialogPane = lookup(".dialog-pane").query();
+        assertNotNull(dialogPane);
+        final ButtonType buttonType = dialogPane.getButtonTypes().stream()
+                .findFirst()
+                .orElse(null);
+        assertNotNull(buttonType);
+        final Button button = (Button) dialogPane.lookupButton(buttonType);
+        assertNotNull(button);
+        clickOn(button);
+        final Label gameTitle = lookup("Monster Odyssey").query();
+        assertNotNull(gameTitle);
     }
 
 }

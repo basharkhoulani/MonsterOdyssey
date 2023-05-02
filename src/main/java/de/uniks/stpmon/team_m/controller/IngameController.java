@@ -12,6 +12,7 @@ import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 
 import javax.inject.Inject;
+import java.util.Optional;
 
 public class IngameController extends Controller {
 
@@ -54,6 +55,17 @@ public class IngameController extends Controller {
 
     public void pauseGame() {
         final Alert alert = new Alert(Alert.AlertType.NONE);
+        final DialogPane dialogPane = alert.getDialogPane();
+        final ButtonType resume = new ButtonType("Resume Game");
+        final ButtonType saveAndExit = new ButtonType("Save Game & Leave");
+        dialogPane.getButtonTypes().addAll(resume, saveAndExit);
+        final Button resumeButton = (Button) dialogPane.lookupButton(resume);
+        resumeButton.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.P) {
+                alert.setResult(resume);
+            }
+        });
+
         alert.setTitle("Pause Menu");
         alert.setHeaderText(null);
         alert.setGraphic(null);
@@ -61,11 +73,13 @@ public class IngameController extends Controller {
         alert.initOwner(app.getStage());
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.initStyle(StageStyle.UNDECORATED);
-        final DialogPane dialogPane = alert.getDialogPane();
         dialogPane.setStyle("-fx-border-color: black");
-        final ButtonType resume = new ButtonType("Resume Game");
-        final ButtonType saveAndExit = new ButtonType("Save Game & Leave");
-        dialogPane.getButtonTypes().addAll(resume, saveAndExit);
-        alert.showAndWait();
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == resume) {
+            alert.close();
+        } else if (result.isPresent() && result.get() == saveAndExit) {
+            // TODO: Save Game, https://jira.uniks.de/browse/STP23M-51
+        }
     }
 }
