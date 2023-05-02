@@ -59,6 +59,9 @@ public class MessagesController extends Controller{
     Provider<NewFriendController> newFriendControllerProvider;
 
     @Inject
+    Provider<NewGroupController> newGroupControllerProvider;
+
+    @Inject
     public MessagesController() {
 
     }
@@ -83,8 +86,7 @@ public class MessagesController extends Controller{
     }
 
     public void changeToNewGroup() {
-        // TO DO
-        // button fx:id: '#newGroupButton'
+        app.show(newGroupControllerProvider.get());
     }
 
     public void createFriendNode() {

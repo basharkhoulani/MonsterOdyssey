@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -281,6 +282,29 @@ class AppTest extends ApplicationTest {
         clickOn(button);
         final Label gameTitle = lookup("Monster Odyssey").query();
         assertNotNull(gameTitle);
+    }
+
+    @Test
+    void testMessagesToNewGroup() {
+        // login -> main menu
+        testSignInToMainMenu();
+
+        // main menu -> messages
+        final Button messagesButton = lookup("Messages").query();
+        assertNotNull(messagesButton);
+        clickOn(messagesButton);
+        assertEquals("Monster Odyssey - Messages", stage.getTitle());
+
+        // messages -> new friends
+        final Button findNewFriendsButton = lookup("#newGroupButton").query();
+        assertNotNull(findNewFriendsButton);
+        clickOn(findNewFriendsButton);
+
+        assertEquals("Monster Odyssey - New Group", stage.getTitle());
+        final Button createGroupButton = lookup("Create Group").query();
+        assertNotNull(createGroupButton);
+        final Text selectGroupMembersText = lookup("Select Groupmembers").queryText();
+        assertNotNull(selectGroupMembersText);
     }
 
 }
