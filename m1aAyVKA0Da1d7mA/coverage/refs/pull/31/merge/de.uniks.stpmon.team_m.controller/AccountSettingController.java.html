@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccountSettingController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller</a> &gt; <span class="el_source">AccountSettingController.java</span></div><h1>AccountSettingController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller;
+
+import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
+
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+
+import static de.uniks.stpmon.team_m.Constants.ACCOUNT_SETTINGS_TITLE;
+
+public class AccountSettingController extends Controller{
+
+    public Label informationLabel;
+    public TextField usernameField;
+    public Button usernameEditButton;
+    public Button saveUsernameButton;
+    public PasswordField passwordField;
+    public Button showPasswordButton;
+    public Button passwordEditButton;
+    public Button savePasswordButton;
+    public Button cancelButton;
+    public Button deleteAccountButton;
+    public Label passwordErrorLabel;
+    public Label usernameErrorLabel;
+
+    private PasswordFieldSkin skin;
+<span class="fc" id="L34">    private SimpleStringProperty username = new SimpleStringProperty();</span>
+<span class="fc" id="L35">    private SimpleStringProperty password = new SimpleStringProperty();</span>
+
+    private BooleanBinding isInvalidUsername;
+    private BooleanBinding isInvalidPassword;
+
+    @Inject
+    Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
+
+    @Inject
+<span class="fc" id="L44">    AccountSettingController(){</span>
+<span class="fc" id="L45">    }</span>
+    @Override
+    public String getTitle() {
+<span class="fc" id="L48">        return ACCOUNT_SETTINGS_TITLE;</span>
+    }
+
+    @Override
+    public Parent render() {
+<span class="fc" id="L53">        final Parent parent = super.render();</span>
+
+        // Firstly disable the editfield
+<span class="fc" id="L56">        usernameField.setDisable(true);</span>
+<span class="fc" id="L57">        passwordField.setDisable(true);</span>
+
+        // Secondly show password
+<span class="fc" id="L60">        skin = new PasswordFieldSkin(passwordField);</span>
+<span class="fc" id="L61">        passwordField.setSkin(skin);</span>
+
+        //Thirdly bind the username and password
+<span class="fc" id="L64">        usernameField.textProperty().bindBidirectional(username);</span>
+<span class="fc" id="L65">        passwordField.textProperty().bindBidirectional(password);</span>
+
+<span class="fc" id="L67">        isInvalidUsername = username.isEmpty();</span>
+<span class="fc" id="L68">        saveUsernameButton.disableProperty().bind(isInvalidUsername);</span>
+
+<span class="fc" id="L70">        isInvalidPassword = password.length().lessThan(8);</span>
+<span class="fc" id="L71">        savePasswordButton.disableProperty().bind(isInvalidPassword);</span>
+
+<span class="fc" id="L73">        passwordField.setPromptText(&quot;Password must have at least 8 character.&quot;);</span>
+
+<span class="fc" id="L75">        return parent;</span>
+    }
+
+<span class="nc" id="L78">    public void editUsername(){ usernameField.setDisable(false); }</span>
+
+    public void saveUsername(){
+<span class="nc" id="L81">        usernameField.setDisable(true);</span>
+        //TODO functionally implement
+<span class="nc" id="L83">    }</span>
+
+    public void showPassword(){
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        skin.setMask(!skin.getMask());</span>
+<span class="fc" id="L87">        passwordField.setText(passwordField.getText());</span>
+<span class="fc" id="L88">    }</span>
+
+<span class="fc" id="L90">    public void editPassword(){ passwordField.setDisable(false);}</span>
+
+    public void savePassword(){
+<span class="nc" id="L93">        passwordField.setDisable(true);</span>
+        //TODO functionally implement
+<span class="nc" id="L95">    }</span>
+
+<span class="nc" id="L97">    public void deleteAccount(){ }</span>
+
+<span class="fc" id="L99">    public void cancel(){ app.show(mainMenuControllerProvider.get()); }</span>
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
