@@ -301,6 +301,10 @@ class AppTest extends ApplicationTest {
         clickOn(newGroupButton);
 
         assertEquals("Monster Odyssey - New Group", stage.getTitle());
+        final Button createGroupButton = lookup("Create Group").query();
+        assertNotNull(createGroupButton);
+        final Text selectGroupMembersText = lookup("Select Groupmembers").queryText();
+        assertNotNull(selectGroupMembersText);
     }
 
     @Test
@@ -326,9 +330,4 @@ class AppTest extends ApplicationTest {
 
         assertEquals("Monster Odyssey - Messages", stage.getTitle());
     }
-
-        final Button createGroupButton = lookup("Create Group").query();
-        assertNotNull(createGroupButton);
-        final Text selectGroupMembersText = lookup("Select Groupmembers").queryText();
-        assertNotNull(selectGroupMembersText);
 }
