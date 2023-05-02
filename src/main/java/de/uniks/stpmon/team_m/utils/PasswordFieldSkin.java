@@ -1,4 +1,4 @@
-package de.uniks.stpmon.team_m.controller.subController;
+package de.uniks.stpmon.team_m.utils;
 
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;

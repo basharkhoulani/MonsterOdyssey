@@ -39,7 +39,7 @@ class AppTest extends ApplicationTest {
         write("password123");
         final Button showPasswordBtn = lookup("#hideButton").query();
         clickOn(showPasswordBtn);
-        assertEquals("class de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin",passwordField.getSkin().getClass().toString());
+        assertEquals("class de.uniks.stpmon.team_m.utils.PasswordFieldSkin",passwordField.getSkin().getClass().toString());
     }
 
     @Test
@@ -108,7 +108,7 @@ class AppTest extends ApplicationTest {
         write("password123");
         final Button showPasswordBtn = lookup("#showPasswordButton").query();
         clickOn(showPasswordBtn);
-        assertEquals("class de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin",passwordField.getSkin().getClass().toString());
+        assertEquals("class de.uniks.stpmon.team_m.utils.PasswordFieldSkin",passwordField.getSkin().getClass().toString());
     }
 
     @Test

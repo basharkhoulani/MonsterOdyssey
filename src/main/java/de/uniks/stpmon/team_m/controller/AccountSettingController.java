@@ -1,8 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin;
+import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Parent;
