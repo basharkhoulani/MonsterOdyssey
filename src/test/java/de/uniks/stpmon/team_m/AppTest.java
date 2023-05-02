@@ -295,10 +295,10 @@ class AppTest extends ApplicationTest {
         clickOn(messagesButton);
         assertEquals("Monster Odyssey - Messages", stage.getTitle());
 
-        // messages -> new friends
-        final Button findNewFriendsButton = lookup("#newGroupButton").query();
-        assertNotNull(findNewFriendsButton);
-        clickOn(findNewFriendsButton);
+        // messages -> new group
+        final Button newGroupButton = lookup("#newGroupButton").query();
+        assertNotNull(newGroupButton);
+        clickOn(newGroupButton);
 
         assertEquals("Monster Odyssey - New Group", stage.getTitle());
         final Button createGroupButton = lookup("Create Group").query();
@@ -307,4 +307,27 @@ class AppTest extends ApplicationTest {
         assertNotNull(selectGroupMembersText);
     }
 
+    @Test
+    void testNewGroupToMessages() {
+        // login -> main menu
+        testSignInToMainMenu();
+
+        // main menu -> messages
+        final Button messagesButton = lookup("Messages").query();
+        assertNotNull(messagesButton);
+        clickOn(messagesButton);
+        assertEquals("Monster Odyssey - Messages", stage.getTitle());
+
+        // messages -> new group
+        final Button newGroupButton = lookup("#newGroupButton").query();
+        assertNotNull(newGroupButton);
+        clickOn(newGroupButton);
+
+        // new group -> messages
+        final Button goBackToMessagesButton = lookup("#backToMessagesButton").query();
+        assertNotNull(goBackToMessagesButton);
+        clickOn(goBackToMessagesButton);
+
+        assertEquals("Monster Odyssey - Messages", stage.getTitle());
+    }
 }
