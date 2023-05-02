@@ -87,7 +87,7 @@ public class App extends Application {
     private void initAndRender(Controller controller) {
         controller.init();
         stage.getScene().setRoot(controller.render());
-        stage.setTitle(GAME_NAME + controller.getTitle());
+        stage.setTitle(GAME_NAME + " - " + controller.getTitle());
         stage.setWidth(controller.getWidth());
         stage.setHeight(controller.getHeight());
     }
