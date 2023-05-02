@@ -22,22 +22,22 @@
             <TextField fx:id="usernameField" prefHeight="34.0" prefWidth="261.0" promptText="Current Username" />
             <SplitPane prefHeight="74.0" prefWidth="88.0" visible="false" />
             <SplitPane layoutX="277.0" layoutY="10.0" prefHeight="74.0" prefWidth="10.0" visible="false" />
-            <Button fx:id="usernameEditButton" mnemonicParsing="false" onAction="#editUsername" prefHeight="25.0" prefWidth="26.0" styleClass="editSymbol" stylesheets="@../mainMenuRessources/settingsButton/settingsButtonStyle.css" />
+            <Button fx:id="usernameEditButton" mnemonicParsing="false" onAction="#editUsername" prefHeight="25.0" prefWidth="26.0" styleClass="editSymbol" stylesheets="@../styles.css" />
             <Button fx:id="saveUsernameButton" mnemonicParsing="false" onAction="#saveUsername" prefHeight="34.0" prefWidth="123.0" text="Save Username" />
          </children>
       </HBox>
-      <Label fx:id="usernameErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel" stylesheets="@../mainMenuRessources/settingsButton/settingsButtonStyle.css" />
+      <Label fx:id="usernameErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel" stylesheets="@../styles.css" />
       <HBox alignment="CENTER" prefHeight="74.0" prefWidth="311.0">
          <children>
             <PasswordField fx:id="passwordField" prefHeight="34.0" prefWidth="257.0" promptText="New Password" />
-            <Button fx:id="showPasswordButton" mnemonicParsing="false" onAction="#showPassword" prefHeight="34.0" prefWidth="49.0" styleClass="hideSymbol" stylesheets="@../mainMenuRessources/settingsButton/settingsButtonStyle.css" />
+            <Button fx:id="showPasswordButton" mnemonicParsing="false" onAction="#showPassword" prefHeight="34.0" prefWidth="49.0" styleClass="hideSymbol" stylesheets="@../styles.css" />
             <SplitPane prefHeight="74.0" prefWidth="28.0" visible="false" />
             <SplitPane layoutX="233.0" layoutY="10.0" prefHeight="74.0" prefWidth="34.0" visible="false" />
-            <Button fx:id="passwordEditButton" alignment="CENTER" mnemonicParsing="false" onAction="#editPassword" styleClass="editSymbol" stylesheets="@../mainMenuRessources/settingsButton/settingsButtonStyle.css" />
+            <Button fx:id="passwordEditButton" alignment="CENTER" mnemonicParsing="false" onAction="#editPassword" styleClass="editSymbol" stylesheets="@../styles.css" />
             <Button fx:id="savePasswordButton" mnemonicParsing="false" onAction="#savePassword" prefHeight="34.0" prefWidth="123.0" text="Save Password" />
          </children>
       </HBox>
-      <Label fx:id="passwordErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="509.0" styleClass="errorLabel" stylesheets="@../mainMenuRessources/settingsButton/settingsButtonStyle.css" />
+      <Label fx:id="passwordErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="509.0" styleClass="errorLabel" stylesheets="@../styles.css" />
       <HBox alignment="CENTER" prefHeight="52.0" prefWidth="490.0">
          <children>
             <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancel" prefHeight="34.0" prefWidth="123.0" text="Cancel" />

@@ -1,8 +1,0 @@
-.helpSymbol {
-	-fx-background-image: url("../../images/ingameHelpSymbol.png");
-	-fx-background-size: 35px;
-	-fx-background-repeat: no-repeat;
-	-fx-background-radius: 17;
-	-fx-border-radius: 17;
-	-fx-border-width: 5;
-}
