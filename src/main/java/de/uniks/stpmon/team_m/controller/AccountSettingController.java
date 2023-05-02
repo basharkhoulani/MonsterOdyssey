@@ -36,10 +36,6 @@ public class AccountSettingController extends Controller{
     private BooleanBinding isInvalidUsername;
     private BooleanBinding isInvalidPassword;
 
-    private PasswordFieldSkin skin;
-    private SimpleStringProperty username = new SimpleStringProperty();
-    private SimpleStringProperty password = new SimpleStringProperty();
-
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
 
