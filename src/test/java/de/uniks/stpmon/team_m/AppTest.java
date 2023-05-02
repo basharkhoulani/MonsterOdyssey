@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -326,4 +327,8 @@ class AppTest extends ApplicationTest {
         assertEquals("Monster Odyssey - Messages", stage.getTitle());
     }
 
+        final Button createGroupButton = lookup("Create Group").query();
+        assertNotNull(createGroupButton);
+        final Text selectGroupMembersText = lookup("Select Groupmembers").queryText();
+        assertNotNull(selectGroupMembersText);
 }
