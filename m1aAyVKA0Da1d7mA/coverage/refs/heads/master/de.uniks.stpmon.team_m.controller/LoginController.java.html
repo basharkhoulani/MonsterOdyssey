@@ -67,8 +67,8 @@ public class LoginController extends Controller {
 <span class="fc" id="L67">        signInButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
 <span class="fc" id="L68">        signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
 
-<span class="fc" id="L70">        usernameErrorLabel.textProperty().bind(Bindings.when(isInvalidUsername).then(&quot;Username must not be empty.&quot;).otherwise(&quot;&quot;));</span>
-<span class="fc" id="L71">        passwordErrorLabel.textProperty().bind(Bindings.when(isInvalidPassword).then(&quot;Password must have at least 8 characters.&quot;).otherwise(&quot;&quot;));</span>
+<span class="fc" id="L70">        passwordField.setPromptText(&quot;Password must have at least 8 character.&quot;);</span>
+
 <span class="fc" id="L72">        return parent;</span>
     }
 
