@@ -70,7 +70,7 @@ public class MessagesController extends Controller{
 
     @Override
     public String getTitle() {
-        return "Messages";
+        return MESSAGES_TITLE;
     }
 
     @Override

@@ -60,7 +60,7 @@ public class App extends Application {
     }
 
     private void setAppIcon(Stage stage) {
-        final Image image = new Image(Objects.requireNonNull(App.class.getResource("images/icon.png")).toString());
+        final Image image = new Image(Objects.requireNonNull(App.class.getResource(APP_ICON)).toString());
         stage.getIcons().add(image);
     }
 
@@ -71,7 +71,7 @@ public class App extends Application {
 
         try {
             final Taskbar taskbar = Taskbar.getTaskbar();
-            final java.awt.Image image = ImageIO.read(Objects.requireNonNull(Main.class.getResource("images/icon.png")));
+            final java.awt.Image image = ImageIO.read(Objects.requireNonNull(Main.class.getResource(TASKBAR_ICON)));
             taskbar.setIconImage(image);
         } catch (Exception ignored) {
 
