@@ -34,8 +34,7 @@ public class NewFriendController extends Controller {
 
     @Override
     public Parent render() {
-        final Parent parent = super.render();
-        return parent;
+        return super.render();
     }
 
     public void changeToMainMenu() {

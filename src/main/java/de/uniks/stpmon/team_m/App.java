@@ -37,7 +37,7 @@ public class App extends Application {
         stage.setHeight(STANDARD_HEIGHT);
         stage.setTitle(GAME_NAME);
 
-        final Scene scene = new Scene(new Label("Loading..."));
+        final Scene scene = new Scene(new Label(LOADING));
         stage.setScene(scene);
 
         setAppIcon(stage);

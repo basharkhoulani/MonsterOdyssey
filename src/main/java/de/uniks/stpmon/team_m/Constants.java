@@ -7,6 +7,7 @@ public class Constants {
     public static final int STANDARD_WIDTH = 640;
     public static final String APP_ICON = "images/icon.png";
     public static final String TASKBAR_ICON = "images/icon.png";
+    public static final String LOADING = "Loading...";
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
