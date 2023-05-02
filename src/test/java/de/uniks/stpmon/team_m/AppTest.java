@@ -32,6 +32,16 @@ class AppTest extends ApplicationTest {
     }
 
     @Test
+    void testShowPasswordInSignIn() {
+        final PasswordField passwordField = lookup("#passwordField").query();
+        clickOn(passwordField);
+        write("password123");
+        final Button showPasswordBtn = lookup("#hideButton").query();
+        clickOn(showPasswordBtn);
+        assertEquals("class de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin",passwordField.getSkin().getClass().toString());
+    }
+
+    @Test
     void testSignInToMainMenu() {
         final TextField usernameField = lookup("#usernameField").query();
         assertNotNull(usernameField);
@@ -85,6 +95,19 @@ class AppTest extends ApplicationTest {
         assertNotNull(settingButton);
         clickOn(settingButton);
         assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
+    }
+
+    @Test
+    void testShowPasswordInSetting(){
+        testMainMenuToSetting();
+        final Button passwordEditBtn = lookup("#passwordEditButton").query();
+        clickOn(passwordEditBtn);
+        final PasswordField passwordField = lookup("#passwordField").query();
+        clickOn(passwordField);
+        write("password123");
+        final Button showPasswordBtn = lookup("#showPasswordButton").query();
+        clickOn(showPasswordBtn);
+        assertEquals("class de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin",passwordField.getSkin().getClass().toString());
     }
 
     @Test
@@ -175,9 +198,6 @@ class AppTest extends ApplicationTest {
         assertNotNull(buttonType);
         final Button button = (Button) dialogPane.lookupButton(buttonType);
         assertNotNull(button);
-        clickOn(button);
-        final Label gameTitle = lookup("Monster Odyssey").query();
-        assertNotNull(gameTitle);
      }
      
     @Test
@@ -202,9 +222,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testMessagesToMainMenu() {
         // login -> main menu
-        final Button signInButton = lookup("Sign In").query();
-        assertNotNull(signInButton);
-        clickOn(signInButton);
+        testSignInToMainMenu();
 
         // main menu -> messages
         final Button messagesButton = lookup("Messages").query();
@@ -225,9 +243,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testMessagesToNewFriends() {
         // login -> main menu
-        final Button signInButton = lookup("Sign In").query();
-        assertNotNull(signInButton);
-        clickOn(signInButton);
+        testSignInToMainMenu();
 
         // main menu -> messages
         final Button messagesButton = lookup("Messages").query();
@@ -241,6 +257,30 @@ class AppTest extends ApplicationTest {
         clickOn(findNewFriendsButton);
 
         assertEquals("Monster Odyssey - Add a new friend", stage.getTitle());
+    }
+
+    @Test
+    void testIngameUnpauseWithKeyCodeP() {
+        testIngamePause();
+        type(KeyCode.P);
+        final Label gameTitle = lookup("Monster Odyssey").query();
+        assertNotNull(gameTitle);
+    }
+
+    @Test
+    void testIngameUnpauseWithButton() {
+        testIngamePause();
+        final DialogPane dialogPane = lookup(".dialog-pane").query();
+        assertNotNull(dialogPane);
+        final ButtonType buttonType = dialogPane.getButtonTypes().stream()
+                .findFirst()
+                .orElse(null);
+        assertNotNull(buttonType);
+        final Button button = (Button) dialogPane.lookupButton(buttonType);
+        assertNotNull(button);
+        clickOn(button);
+        final Label gameTitle = lookup("Monster Odyssey").query();
+        assertNotNull(gameTitle);
     }
 
 }
