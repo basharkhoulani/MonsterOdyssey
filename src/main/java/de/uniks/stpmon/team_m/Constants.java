@@ -1,6 +1,9 @@
 package de.uniks.stpmon.team_m;
 
 public class Constants {
+    // SERVER
+    public static final String API_URL = "https://stpmon.uniks.de/api/v1";
+
     // GENERAL
     public static final String GAME_NAME = "Monster Odyssey";
     public static final int STANDARD_HEIGHT = 480;
@@ -31,7 +34,4 @@ public class Constants {
 
     // INGAME
     public static final String INGAME_TITLE = "Ingame";
-
-    // SERVER
-    public static final String API_URL = "https://stpmon.uniks.de/api/v1";
 }
