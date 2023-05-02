@@ -8,6 +8,9 @@ import javafx.scene.Parent;
 import javax.inject.Inject;
 import java.io.IOException;
 
+import static de.uniks.stpmon.team_m.Constants.STANDARD_HEIGHT;
+import static de.uniks.stpmon.team_m.Constants.STANDARD_WIDTH;
+
 public abstract class Controller {
 
     @Inject
@@ -36,5 +39,13 @@ public abstract class Controller {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
+    }
+
+    public int getHeight() {
+        return STANDARD_HEIGHT;
+    }
+
+    public int getWidth() {
+        return STANDARD_WIDTH;
     }
 }

@@ -1,5 +1,5 @@
 .settingsSymbol {
-	-fx-background-image: url("settingsSymbol.png");
+	-fx-background-image: url("../images/settingsSymbol.png");
 	-fx-background-size: 60px;
 	-fx-background-repeat: no-repeat;
 	-fx-background-position: 50%;
