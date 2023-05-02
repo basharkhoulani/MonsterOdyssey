@@ -69,6 +69,8 @@ public class AccountSettingController extends Controller{
         isInvalidPassword = password.length().lessThan(8);
         savePasswordButton.disableProperty().bind(isInvalidPassword);
 
+        passwordField.setPromptText("Password must have at least 8 character.");
+
         return parent;
     }
 

@@ -37,7 +37,6 @@
             <Button fx:id="hideButton" mnemonicParsing="false" onAction="#showPassword" prefHeight="25.0" prefWidth="36.0" styleClass="hideSymbol" stylesheets="@../mainMenuRessources/settingsButton/settingsButtonStyle.css" />
          </children>
       </HBox>
-      <Label fx:id="passwordInfoLabel" alignment="CENTER" layoutX="20.0" layoutY="212.0" prefHeight="17.0" prefWidth="581.0" />
       <Label fx:id="passwordErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="581.0" styleClass="errorLabel" stylesheets="@../mainMenuRessources/settingsButton/settingsButtonStyle.css" />
       <HBox alignment="CENTER" prefHeight="36.0" prefWidth="400.0">
          <children>
