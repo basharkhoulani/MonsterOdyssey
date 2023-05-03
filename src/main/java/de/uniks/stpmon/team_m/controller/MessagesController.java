@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.service.GroupStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -53,6 +54,8 @@ public class MessagesController extends Controller{
 
     @FXML
     public Button sendButton;
+    @FXML
+    public Button settingsButton;
 
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -61,11 +64,13 @@ public class MessagesController extends Controller{
     Provider<NewFriendController> newFriendControllerProvider;
 
     @Inject
-    Provider<NewGroupController> newGroupControllerProvider;
+    Provider<GroupController> groupControllerProvider;
+    private final GroupStorage groupStorage;
 
     @Inject
-    public MessagesController() {
+    public MessagesController(GroupStorage groupStorage) {
 
+        this.groupStorage = groupStorage;
     }
 
     @Override
@@ -96,7 +101,8 @@ public class MessagesController extends Controller{
     }
 
     public void changeToNewGroup() {
-        app.show(newGroupControllerProvider.get());
+        groupStorage.set_id(EMPTY_STRING);
+        app.show(groupControllerProvider.get());
     }
 
     public void createFriendNode() {
@@ -118,5 +124,10 @@ public class MessagesController extends Controller{
     public void sendMessage() {
         // TO DO
         // button fx:id: '#sendButton'
+    }
+
+    public void changeToSettings() {
+        groupStorage.set_id(LOADING);
+        app.show(groupControllerProvider.get());
     }
 }
