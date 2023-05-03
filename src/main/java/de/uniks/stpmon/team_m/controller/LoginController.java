@@ -85,7 +85,7 @@ public class LoginController extends Controller {
             return;
         }
 
-        disposables.add(authenticationService
+        /* disposables.add(authenticationService
                 .login(username.get(), password.get())
                 .observeOn(FX_SCHEDULER)
                 .subscribe(lr -> {
@@ -93,7 +93,7 @@ public class LoginController extends Controller {
                 //TODO: test müssen auch ohne Serververbindung laufen. Wirkliche Funktionalität kommt später.
                 }, error ->{
                     //passwordErrorLabel.setText(error.getMessage());
-                }));
+                })); */
 
         app.show(mainMenuControllerProvider.get());
     }
