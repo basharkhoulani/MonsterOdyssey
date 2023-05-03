@@ -8,12 +8,39 @@ import de.uniks.stpmon.team_m.rest.MessagesApiService;
 import io.reactivex.rxjava3.core.Observable;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MessageService {
     private final MessagesApiService messagesApiService;
 
     public MessageService(MessagesApiService messagesApiService) {
         this.messagesApiService = messagesApiService;
+    }
+
+    // General message methods
+    /**
+     * Gets all the messages of two users. Messages will be sorted after property "createdAt".
+     *
+     * @return an observable list of all messages between two users (sorted after "createdAt")
+     */
+    public Observable<List<Message>> getPrivateChatMessages(String friendUserID, String ownUserID) {
+        // these are the messages from the friend to the user (these need to be displayed on the right)
+        Observable<List<Message>> messagesFriendUser = this.getMessagesOfUser(ownUserID).map(messages -> {
+            messages.stream().filter( message -> message.sender().equals(friendUserID));
+            return messages;
+        });
+
+        // these are the messages from the user to the friend
+        Observable<List<Message>> messagesUserFriend = this.getMessagesOfUser(friendUserID).map(messages -> {
+            messages.stream().filter( message -> message.sender().equals(ownUserID));
+            messages.sort((message1, message2) -> {
+                System.out.println(message1.createdAt());
+                return 0;
+            });
+            return messages;
+        });
+
+        return messagesFriendUser.mergeWith(messagesUserFriend);
     }
 
     // Private messages
@@ -36,7 +63,7 @@ public class MessageService {
      * @param receiverID the ID of the user who received the messages
      * @return an observable list of message records
      */
-    public Observable<List<Message>> getMessagesOfUser(String receiverID, String senderID) {
+    public Observable<List<Message>> getMessagesOfUser(String receiverID) {
         return messagesApiService.getMessages(Constants.MESSAGE_NAMESPACE_GLOBAL, receiverID);
     }
 
