@@ -11,6 +11,8 @@ import javafx.scene.text.Text;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import static de.uniks.stpmon.team_m.Constants.NEW_GROUP_TITLE;
+
 public class NewGroupController extends Controller{
 
     @FXML
@@ -35,27 +37,27 @@ public class NewGroupController extends Controller{
     Provider&lt;MessagesController&gt; messagesControllerProvider;
 
     @Inject
-<span class="fc" id="L38">    public NewGroupController() {</span>
+<span class="fc" id="L40">    public NewGroupController() {</span>
 
-<span class="fc" id="L40">    }</span>
+<span class="fc" id="L42">    }</span>
 
     @Override
     public String getTitle() {
-<span class="fc" id="L44">        return &quot;New Group&quot;;</span>
+<span class="fc" id="L46">        return NEW_GROUP_TITLE;</span>
     }
 
     @Override
     public Parent render() {
-<span class="fc" id="L49">        final Parent parent = super.render();</span>
-<span class="fc" id="L50">        return parent;</span>
+<span class="fc" id="L51">        final Parent parent = super.render();</span>
+<span class="fc" id="L52">        return parent;</span>
     }
 
     public void changeToMessages() {
-<span class="fc" id="L54">        app.show(messagesControllerProvider.get());</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L56">        app.show(messagesControllerProvider.get());</span>
+<span class="fc" id="L57">    }</span>
 
     public void createGroup() {
         // onAction from createGroupButton
-<span class="nc" id="L59">    }</span>
+<span class="nc" id="L61">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

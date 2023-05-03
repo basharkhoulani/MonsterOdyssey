@@ -8,6 +8,8 @@ import javafx.scene.control.TextField;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import static de.uniks.stpmon.team_m.Constants.NEW_FRIEND_TITLE;
+
 public class NewFriendController extends Controller {
 
     @FXML
@@ -22,28 +24,27 @@ public class NewFriendController extends Controller {
     Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
 
     @Inject
-<span class="fc" id="L25">    public NewFriendController() {</span>
-<span class="fc" id="L26">    }</span>
+<span class="fc" id="L27">    public NewFriendController() {</span>
+<span class="fc" id="L28">    }</span>
 
     @Override
     public String getTitle() {
-<span class="fc" id="L30">        return &quot;Add a new friend&quot;;</span>
+<span class="fc" id="L32">        return NEW_FRIEND_TITLE;</span>
     }
 
     @Override
     public Parent render() {
-<span class="fc" id="L35">        final Parent parent = super.render();</span>
-<span class="fc" id="L36">        return parent;</span>
+<span class="fc" id="L37">        return super.render();</span>
     }
 
     public void changeToMainMenu() {
-<span class="fc" id="L40">        app.show(mainMenuControllerProvider.get());</span>
-<span class="fc" id="L41">    }</span>
+<span class="fc" id="L41">        app.show(mainMenuControllerProvider.get());</span>
+<span class="fc" id="L42">    }</span>
 
     public void addAsAFriend() {
-<span class="nc" id="L44">    }</span>
+<span class="nc" id="L45">    }</span>
 
     public void sendMessage() {
-<span class="nc" id="L47">    }</span>
+<span class="nc" id="L48">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

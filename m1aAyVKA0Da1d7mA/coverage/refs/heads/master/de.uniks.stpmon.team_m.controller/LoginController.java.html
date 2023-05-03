@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoginController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller</a> &gt; <span class="el_source">LoginController.java</span></div><h1>LoginController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller;
 
 
-import de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin;
-import javafx.beans.binding.Bindings;
+import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -12,6 +11,8 @@ import javafx.scene.control.*;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import static de.uniks.stpmon.team_m.Constants.LOGIN_TITLE;
 
 public class LoginController extends Controller {
 
@@ -36,56 +37,56 @@ public class LoginController extends Controller {
     private BooleanBinding isInvalidUsername;
     private BooleanBinding isInvalidPassword;
 
-<span class="fc" id="L39">    private SimpleStringProperty username = new SimpleStringProperty();</span>
-<span class="fc" id="L40">    private SimpleStringProperty password = new SimpleStringProperty();</span>
+<span class="fc" id="L40">    private SimpleStringProperty username = new SimpleStringProperty();</span>
+<span class="fc" id="L41">    private SimpleStringProperty password = new SimpleStringProperty();</span>
 
     @Inject
     Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
 
 
     @Inject
-<span class="fc" id="L47">    public LoginController() {</span>
-<span class="fc" id="L48">    }</span>
+<span class="fc" id="L48">    public LoginController() {</span>
+<span class="fc" id="L49">    }</span>
 
     @Override
     public String getTitle() {
-<span class="fc" id="L52">        return &quot;Sign Up &amp; In&quot;;</span>
+<span class="fc" id="L53">        return LOGIN_TITLE;</span>
     }
 
     @Override
     public Parent render() {
-<span class="fc" id="L57">        final Parent parent = super.render();</span>
+<span class="fc" id="L58">        final Parent parent = super.render();</span>
 
-<span class="fc" id="L59">        skin = new PasswordFieldSkin(passwordField);</span>
-<span class="fc" id="L60">        passwordField.setSkin(skin);</span>
+<span class="fc" id="L60">        skin = new PasswordFieldSkin(passwordField);</span>
+<span class="fc" id="L61">        passwordField.setSkin(skin);</span>
 
-<span class="fc" id="L62">        usernameField.textProperty().bindBidirectional(username);</span>
-<span class="fc" id="L63">        passwordField.textProperty().bindBidirectional(password);</span>
+<span class="fc" id="L63">        usernameField.textProperty().bindBidirectional(username);</span>
+<span class="fc" id="L64">        passwordField.textProperty().bindBidirectional(password);</span>
 
-<span class="fc" id="L65">        isInvalidUsername = username.isEmpty();</span>
-<span class="fc" id="L66">        isInvalidPassword = password.length().lessThan(8);</span>
-<span class="fc" id="L67">        signInButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
-<span class="fc" id="L68">        signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
+<span class="fc" id="L66">        isInvalidUsername = username.isEmpty();</span>
+<span class="fc" id="L67">        isInvalidPassword = password.length().lessThan(8);</span>
+<span class="fc" id="L68">        signInButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
+<span class="fc" id="L69">        signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
 
-<span class="fc" id="L70">        passwordField.setPromptText(&quot;Password must have at least 8 character.&quot;);</span>
+<span class="fc" id="L71">        passwordField.setPromptText(&quot;Password must have at least 8 character.&quot;);</span>
 
-<span class="fc" id="L72">        return parent;</span>
+<span class="fc" id="L73">        return parent;</span>
     }
 
 
     public void signIn() {
-<span class="fc" id="L77">        app.show(mainMenuControllerProvider.get());</span>
-<span class="fc" id="L78">    }</span>
+<span class="fc" id="L78">        app.show(mainMenuControllerProvider.get());</span>
+<span class="fc" id="L79">    }</span>
 
     public void signUp() {
-<span class="nc" id="L81">        app.show(mainMenuControllerProvider.get());</span>
-<span class="nc" id="L82">    }</span>
+<span class="nc" id="L82">        app.show(mainMenuControllerProvider.get());</span>
+<span class="nc" id="L83">    }</span>
 
     public void showPassword(ActionEvent mouseEvent) {
-<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        skin.setMask(!skin.getMask());</span>
-<span class="fc" id="L86">        passwordField.setText(passwordField.getText());</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        skin.setMask(!skin.getMask());</span>
+<span class="fc" id="L87">        passwordField.setText(passwordField.getText());</span>
 
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L89">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

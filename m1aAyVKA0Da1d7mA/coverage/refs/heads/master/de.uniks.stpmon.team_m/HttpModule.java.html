@@ -3,7 +3,7 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Module;
 import dagger.Provides;
-import de.uniks.stpmon.team_m.rest.AuthApiService;
+import de.uniks.stpmon.team_m.rest.*;
 import de.uniks.stpmon.team_m.service.TokenStorage;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -47,6 +47,26 @@ import javax.inject.Singleton;
     @Singleton
     AuthApiService auth(Retrofit retrofit) {
 <span class="nc" id="L49">        return retrofit.create(AuthApiService.class);</span>
+    }
+    @Provides
+    @Singleton
+    UsersApiService users(Retrofit retrofit) {
+<span class="nc" id="L54">        return retrofit.create(UsersApiService.class);</span>
+    }
+    @Provides
+    @Singleton
+    GroupsApiService groups(Retrofit retrofit) {
+<span class="nc" id="L59">        return retrofit.create(GroupsApiService.class);</span>
+    }
+    @Provides
+    @Singleton
+    MessagesApiService messages(Retrofit retrofit) {
+<span class="nc" id="L64">        return retrofit.create(MessagesApiService.class);</span>
+    }
+    @Provides
+    @Singleton
+    RegionsApiService regions(Retrofit retrofit) {
+<span class="nc" id="L69">        return retrofit.create(RegionsApiService.class);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
