@@ -16,21 +16,21 @@ public class MessageService {
         this.messagesApiService = messagesApiService;
     }
 
-    public Observable<Message> getMessageOfUserByID(String userID, String messageID) {
-        return messagesApiService.getMessage(Constants.API_URL, userID, messageID);
+    public Observable<Message> getMessageOfUserByID(String receiverID, String messageID) {
+        return messagesApiService.getMessage(Constants.MESSAGE_NAMESPACE_GLOBAL, receiverID, messageID);
     }
 
-    public Observable<List<Message>> getMessagesOfUser(String userID) {
-        return messagesApiService.getMessages(Constants.API_URL, userID);
+    public Observable<List<Message>> getMessagesOfUser(String receiverID) {
+        return messagesApiService.getMessages(Constants.MESSAGE_NAMESPACE_GLOBAL, receiverID);
     }
 
-    public Observable<Message> newMessage(String userID, String message) {
+    public Observable<Message> newPrivateMessage(String receiverID, String message) {
         CreateMessageDto createMessageDto = new CreateMessageDto(message);
-        return messagesApiService.create(Constants.API_URL, userID, createMessageDto);
+        return messagesApiService.create(Constants.MESSAGE_NAMESPACE_GLOBAL, receiverID, createMessageDto);
     }
 
-    public Observable<Message> updateMessage(String userID, String messageID, String updatedMessage) {
+    public Observable<Message> updatePrivateMessage(String receiverID, String messageID, String updatedMessage) {
         UpdateMessageDto updateMessageDto = new UpdateMessageDto(updatedMessage);
-        return messagesApiService.update(Constants.API_URL, userID, messageID, updateMessageDto);
+        return messagesApiService.update(Constants.MESSAGE_NAMESPACE_GLOBAL, receiverID, messageID, updateMessageDto);
     }
 }
