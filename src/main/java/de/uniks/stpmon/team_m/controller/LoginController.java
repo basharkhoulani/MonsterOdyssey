@@ -85,6 +85,7 @@ public class LoginController extends Controller {
             return;
         }
 
+        //HTTP Request
         /* disposables.add(authenticationService
                 .login(username.get(), password.get())
                 .observeOn(FX_SCHEDULER)
