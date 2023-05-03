@@ -139,7 +139,7 @@ class AppTest extends ApplicationTest {
     }
 
     @Test
-    void testMainMenuToNewFriend() {
+    void testMainMenuToNewFriendAndBack() {
         signInToMainMenu();
         clickOn("Find New Friends");
         assertEquals("Monster Odyssey - Add a new friend", stage.getTitle());
@@ -151,6 +151,8 @@ class AppTest extends ApplicationTest {
         assertNotNull(messageButton);
         final TextField searchTextField = lookup("#searchTextField").query();
         assertNotNull(searchTextField);
+        clickOn("Main Menu");
+        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
     }
 
     @Test
@@ -199,13 +201,6 @@ class AppTest extends ApplicationTest {
         assertNotNull(buttonType);
         final Button button = (Button) dialogPane.lookupButton(buttonType);
         assertNotNull(button);
-     }
-     
-    @Test
-    void testNewFriendToMainMenu(){
-        testMainMenuToNewFriend();
-        clickOn("Main Menu");
-        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
     }
 
     @Test
