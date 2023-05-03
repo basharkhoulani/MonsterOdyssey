@@ -8,6 +8,8 @@ import javafx.scene.control.TextField;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import static de.uniks.stpmon.team_m.Constants.NEW_FRIEND_TITLE;
+
 public class NewFriendController extends Controller {
 
     @FXML
@@ -27,13 +29,12 @@ public class NewFriendController extends Controller {
 
     @Override
     public String getTitle() {
-        return "Add a new friend";
+        return NEW_FRIEND_TITLE;
     }
 
     @Override
     public Parent render() {
-        final Parent parent = super.render();
-        return parent;
+        return super.render();
     }
 
     public void changeToMainMenu() {

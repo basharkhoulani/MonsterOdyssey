@@ -1,8 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin;
+import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Parent;
@@ -13,6 +12,8 @@ import javafx.scene.control.TextField;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import static de.uniks.stpmon.team_m.Constants.ACCOUNT_SETTINGS_TITLE;
 
 public class AccountSettingController extends Controller{
 
@@ -44,7 +45,7 @@ public class AccountSettingController extends Controller{
     }
     @Override
     public String getTitle() {
-        return "Account Setting";
+        return ACCOUNT_SETTINGS_TITLE;
     }
 
     @Override

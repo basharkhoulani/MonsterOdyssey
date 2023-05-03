@@ -11,6 +11,8 @@ import javafx.scene.text.Text;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import static de.uniks.stpmon.team_m.Constants.NEW_GROUP_TITLE;
+
 public class NewGroupController extends Controller{
 
     @FXML
@@ -41,7 +43,7 @@ public class NewGroupController extends Controller{
 
     @Override
     public String getTitle() {
-        return "New Group";
+        return NEW_GROUP_TITLE;
     }
 
     @Override

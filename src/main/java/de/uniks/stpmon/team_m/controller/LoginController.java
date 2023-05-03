@@ -1,8 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 
-import de.uniks.stpmon.team_m.controller.subController.PasswordFieldSkin;
-import javafx.beans.binding.Bindings;
+import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -12,6 +11,8 @@ import javafx.scene.control.*;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import static de.uniks.stpmon.team_m.Constants.LOGIN_TITLE;
 
 public class LoginController extends Controller {
 
@@ -49,7 +50,7 @@ public class LoginController extends Controller {
 
     @Override
     public String getTitle() {
-        return "Sign Up & In";
+        return LOGIN_TITLE;
     }
 
     @Override
