@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.service;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.dto.CreateMessageDto;
 import de.uniks.stpmon.team_m.dto.Message;
+import de.uniks.stpmon.team_m.dto.UpdateMessageDto;
 import de.uniks.stpmon.team_m.rest.MessagesApiService;
 import io.reactivex.rxjava3.core.Observable;
 
@@ -26,5 +27,10 @@ public class MessageService {
     public Observable<Message> newMessage(String userID, String message) {
         CreateMessageDto createMessageDto = new CreateMessageDto(message);
         return messagesApiService.create(Constants.API_URL, userID, createMessageDto);
+    }
+
+    public Observable<Message> updateMessage(String userID, String messageID, String updatedMessage) {
+        UpdateMessageDto updateMessageDto = new UpdateMessageDto(updatedMessage);
+        return messagesApiService.update(Constants.API_URL, userID, messageID, updateMessageDto);
     }
 }
