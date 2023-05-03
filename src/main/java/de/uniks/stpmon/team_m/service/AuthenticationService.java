@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.service;
 
 import de.uniks.stpmon.team_m.dto.LoginDto;
 import de.uniks.stpmon.team_m.dto.LoginResult;
+import de.uniks.stpmon.team_m.dto.LogoutResult;
 import de.uniks.stpmon.team_m.rest.AuthApiService;
 import io.reactivex.rxjava3.core.Observable;
 
@@ -20,10 +21,16 @@ public class AuthenticationService {
         this.authApiService = authApiService;
     }
 
-    public Observable<LoginResult> signIn(String username, String password){
+    public Observable<LoginResult> login(String username, String password){
         return authApiService.login(new LoginDto(username, password)).map(lr -> {
             tokenStorage.setToken(lr.accessToken());
             return lr;
         });
     }
+
+    public Observable<LogoutResult> logout(){
+        return authApiService.logout().map(lr -> lr);
+    }
+
+    //TODO: Remember me (refresh)
 }

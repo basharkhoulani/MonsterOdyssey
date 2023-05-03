@@ -51,9 +51,9 @@ class AppTest extends ApplicationTest {
         final Button signInButton = lookup("Sign In").query();
         assertNotNull(signInButton);
         clickOn(usernameField);
-        write("testtestlongusername");
+        write("string");
         clickOn(passwordField);
-        write("testtesttestt");
+        write("stringst");
         clickOn(signInButton);
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
     }

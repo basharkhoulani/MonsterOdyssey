@@ -85,9 +85,15 @@ public class LoginController extends Controller {
             return;
         }
 
-        disposables.add(authenticationService.signIn(username.get(), password.get()).subscribe(lr -> {
-        }, error -> {
-        }));
+        disposables.add(authenticationService
+                .login(username.get(), password.get())
+                .observeOn(FX_SCHEDULER)
+                .subscribe(lr -> {
+                //app.show(mainMenuControllerProvider.get());
+                //TODO: test müssen auch ohne Serververbindung laufen. Wirkliche Funktionalität kommt später.
+                }, error ->{
+                    //passwordErrorLabel.setText(error.getMessage());
+                }));
 
         app.show(mainMenuControllerProvider.get());
     }
@@ -101,7 +107,6 @@ public class LoginController extends Controller {
     public void showPassword() {
         skin.setMask(!skin.getMask());
         passwordField.setText(passwordField.getText());
-
     }
 
 }
