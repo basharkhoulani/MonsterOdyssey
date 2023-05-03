@@ -1,6 +1,8 @@
 package de.uniks.stpmon.team_m.controller;
 
 
+import de.uniks.stpmon.team_m.service.AuthenticationService;
+import de.uniks.stpmon.team_m.service.TokenStorage;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
@@ -30,6 +32,11 @@ public class LoginController extends Controller {
     public Button hideButton;
     public Label usernameErrorLabel;
     public Label passwordErrorLabel;
+
+    @Inject
+    AuthenticationService authenticationService;
+    @Inject
+    TokenStorage tokenStorage;
 
     private PasswordFieldSkin skin;
 
@@ -74,10 +81,20 @@ public class LoginController extends Controller {
 
 
     public void signIn() {
+        if (isInvalidPassword.or(isInvalidUsername).get()){
+            return;
+        }
+
+        disposables.add(authenticationService.signIn(username.get(), password.get()).subscribe(lr -> {
+        }, error -> {
+        }));
+
         app.show(mainMenuControllerProvider.get());
     }
 
     public void signUp() {
+        // TODO: from UsersService
+
         app.show(mainMenuControllerProvider.get());
     }
 

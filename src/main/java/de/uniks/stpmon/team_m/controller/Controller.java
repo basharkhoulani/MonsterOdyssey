@@ -2,6 +2,8 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
@@ -12,6 +14,8 @@ import static de.uniks.stpmon.team_m.Constants.STANDARD_HEIGHT;
 import static de.uniks.stpmon.team_m.Constants.STANDARD_WIDTH;
 
 public abstract class Controller {
+
+    protected final CompositeDisposable disposables = new CompositeDisposable();
 
     @Inject
     protected App app;
@@ -24,7 +28,10 @@ public abstract class Controller {
     }
 
     public void destroy() {
+        disposables.dispose();
     }
+
+    public void onDestroy(Runnable action) { disposables.add(Disposable.fromRunnable(action)); }
 
     public Parent render() {
         return load(getClass().getSimpleName().replace("Controller", ""));
