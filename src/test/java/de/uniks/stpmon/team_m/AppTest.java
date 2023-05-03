@@ -60,7 +60,7 @@ class AppTest extends ApplicationTest {
 
     @Test
     void testMainMenuStartGameButton() {
-        testSignInToMainMenu();
+        signInToMainMenu();
         final Button startGameButton = lookup("Start Game").query();
         assertNotNull(startGameButton);
         assertTrue(startGameButton.isDisabled());
@@ -79,7 +79,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testMainMenuToLoginScreen() {
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        testSignInToMainMenu();
+        signInToMainMenu();
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
         final Button logoutButton = lookup("#logoutButton").query();
         assertNotNull(logoutButton);
@@ -90,7 +90,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testMainMenuToSetting() {
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        testSignInToMainMenu();
+        signInToMainMenu();
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
         final Button settingButton = lookup("#settingsButton").query();
         assertNotNull(settingButton);
@@ -114,7 +114,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testSettingToMainMenu() {
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        testSignInToMainMenu();
+        signInToMainMenu();
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
         final Button settingButton = lookup("#settingsButton").query();
         assertNotNull(settingButton);
@@ -140,7 +140,7 @@ class AppTest extends ApplicationTest {
 
     @Test
     void testMainMenuToNewFriend() {
-        testSignInToMainMenu();
+        signInToMainMenu();
         clickOn("Find New Friends");
         assertEquals("Monster Odyssey - Add a new friend", stage.getTitle());
         final Button mainMenuButton = lookup("#mainMenuButton").query();
@@ -211,7 +211,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testMainMenuToMessages() {
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        testSignInToMainMenu();
+        signInToMainMenu();
         final Button messagesButton = lookup("Messages").query();
         assertNotNull(messagesButton);
         clickOn(messagesButton);
@@ -223,7 +223,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testMessagesToMainMenu() {
         // login -> main menu
-        testSignInToMainMenu();
+        signInToMainMenu();
 
         // main menu -> messages
         final Button messagesButton = lookup("Messages").query();
@@ -244,7 +244,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testMessagesToNewFriends() {
         // login -> main menu
-        testSignInToMainMenu();
+        signInToMainMenu();
 
         // main menu -> messages
         final Button messagesButton = lookup("Messages").query();
@@ -287,7 +287,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testMessagesToNewGroup() {
         // login -> main menu
-        testSignInToMainMenu();
+        signInToMainMenu();
 
         // main menu -> messages
         final Button messagesButton = lookup("Messages").query();
@@ -333,7 +333,7 @@ class AppTest extends ApplicationTest {
     @Test
     void testNewGroupToMessages() {
         // login -> main menu
-        testSignInToMainMenu();
+        signInToMainMenu();
 
         // main menu -> messages
         final Button messagesButton = lookup("Messages").query();
@@ -352,5 +352,16 @@ class AppTest extends ApplicationTest {
         clickOn(goBackToMessagesButton);
 
         assertEquals("Monster Odyssey - Messages", stage.getTitle());
+    }
+
+    private void signInToMainMenu(){
+        final TextField usernameField = lookup("#usernameField").query();
+        final TextField passwordField = lookup("#passwordField").query();
+        final Button signInButton = lookup("Sign In").query();
+        clickOn(usernameField);
+        write("t");
+        clickOn(passwordField);
+        write("testtest");
+        clickOn(signInButton);
     }
 }
