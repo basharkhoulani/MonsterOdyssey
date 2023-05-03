@@ -14,5 +14,11 @@ public class MessageService {
         this.messagesApiService = messagesApiService;
     }
 
-    
+    public Observable<Message> getMessageOfUserByID(String userID, String messageID) {
+        return messagesApiService.getMessage(Constants.API_URL, userID, messageID);
+    }
+
+    public Observable<List<Message>> getMessagesOfUser(String userID) {
+        return messagesApiService.getMessages(Constants.API_URL, userID);
+    }
 }
