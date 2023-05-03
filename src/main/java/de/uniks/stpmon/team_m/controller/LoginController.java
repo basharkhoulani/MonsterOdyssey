@@ -4,7 +4,6 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -82,7 +81,7 @@ public class LoginController extends Controller {
         app.show(mainMenuControllerProvider.get());
     }
 
-    public void showPassword(ActionEvent mouseEvent) {
+    public void showPassword() {
         skin.setMask(!skin.getMask());
         passwordField.setText(passwordField.getText());
 
