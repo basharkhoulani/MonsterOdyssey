@@ -301,8 +301,31 @@ class AppTest extends ApplicationTest {
         clickOn(newGroupButton);
 
         assertEquals("Monster Odyssey - New Group", stage.getTitle());
-        final Button createGroupButton = lookup("Create Group").query();
-        assertNotNull(createGroupButton);
+        final Button saveGroupButton = lookup("Save Group").query();
+        assertNotNull(saveGroupButton);
+        final Text selectGroupMembersText = lookup("Select Groupmembers").queryText();
+        assertNotNull(selectGroupMembersText);
+    }
+
+    @Test
+    void testMessagesToEditGroup() {
+        // login -> main menu
+        testSignInToMainMenu();
+
+        // main menu -> messages
+        final Button messagesButton = lookup("Messages").query();
+        assertNotNull(messagesButton);
+        clickOn(messagesButton);
+        assertEquals("Monster Odyssey - Messages", stage.getTitle());
+
+        // messages -> edit group
+        final Button settingsButton = lookup("#settingsButton").query();
+        assertNotNull(settingsButton);
+        clickOn(settingsButton);
+
+        assertEquals("Monster Odyssey - Edit Group", stage.getTitle());
+        final Button saveGroupButton = lookup("Save Group").query();
+        assertNotNull(saveGroupButton);
         final Text selectGroupMembersText = lookup("Select Groupmembers").queryText();
         assertNotNull(selectGroupMembersText);
     }
