@@ -11,6 +11,7 @@ public class Constants {
     public static final String APP_ICON = "images/icon.png";
     public static final String TASKBAR_ICON = "images/icon.png";
     public static final String LOADING = "Loading...";
+    public static final String EMPTY_STRING = "";
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
@@ -28,6 +29,8 @@ public class Constants {
 
     // GROUPS
     public static final String NEW_GROUP_TITLE = "New Group";
+    public static final String EDIT_GROUP_TITLE = "Edit Group";
+    public static final String CHANGE_GROUP = "Change Group Name";
 
     // ACCOUNT SETTINGS
     public static final String ACCOUNT_SETTINGS_TITLE = "Account Setting";
