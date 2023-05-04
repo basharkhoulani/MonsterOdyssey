@@ -18,8 +18,8 @@ public class UsersService {
         this.usersApiService = usersApiService;
     }
 
-    public Observable<User> createUser(String username, String password) {
-        return usersApiService.createUser(new CreateUserDto(username, password));
+    public Observable<User> createUser(String username, String avatar, String password) {
+        return usersApiService.createUser(new CreateUserDto(username, avatar, password));
     }
 
     public Observable<User> getUser(String id) {
@@ -31,8 +31,8 @@ public class UsersService {
         return usersApiService.getUsers(ids, status);
     }
 
-    public Observable<User> updateUser(User user, String name, String status, List<String> friends, String password) {
-        return usersApiService.updateUser(user._id(), new UpdateUserDto(name, status, friends, password));
+    public Observable<User> updateUser(User user, String name, String status, String avatar, List<String> friends, String password) {
+        return usersApiService.updateUser(user._id(), new UpdateUserDto(name, status, avatar, friends, password));
     }
 
     public Observable<User> deleteUSer(User user) {
