@@ -19,7 +19,7 @@ public class UsersService {
     }
 
     public Observable<User> createUser(String username, String password) {
-        return usersApiService.create(new CreateUserDto(username, password));
+        return usersApiService.createUser(new CreateUserDto(username, password));
     }
 
     public Observable<User> getUser(String id) {
@@ -31,11 +31,11 @@ public class UsersService {
         return usersApiService.getUsers(ids, status);
     }
 
-    public Observable<User> updateUser(String name, String status, List<String> friends, String password) {
-        return usersApiService.update(new UpdateUserDto(name, status, friends, password));
+    public Observable<User> updateUser(User user, String name, String status, List<String> friends, String password) {
+        return usersApiService.updateUser(user._id(), new UpdateUserDto(name, status, friends, password));
     }
 
     public Observable<User> deleteUSer(User user) {
-        return usersApiService.delete(user._id());
+        return usersApiService.deleteUser(user._id());
     }
 }
