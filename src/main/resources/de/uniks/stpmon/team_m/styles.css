@@ -41,3 +41,7 @@
     -fx-text-fill: red;
 }
 
+.informationLabel {
+    -fx-text-fill: #25c625;
+}
+
