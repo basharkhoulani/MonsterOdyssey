@@ -167,11 +167,46 @@ class AppTest extends ApplicationTest {
         clickOn(showPasswordBtn);
         assertEquals("class de.uniks.stpmon.team_m.utils.PasswordFieldSkin", passwordField.getSkin().getClass().toString());
 
+        // test delete Account and the cancel Button
+        final Button deleteAccBtn = lookup("#deleteAccountButton").query();
+        clickOn(deleteAccBtn);
+        final DialogPane dialogPaneDelete = lookup(".dialog-pane").query();
+        assertNotNull(dialogPaneDelete);
+        final Label deleteLabel = dialogPaneDelete.getChildren().stream()
+                .filter(node -> node instanceof Label)
+                .map(node -> (Label) node)
+                .findFirst()
+                .orElse(null);
+        assertNotNull(deleteLabel);
+        assertEquals("Are you sure?", deleteLabel.getText());
+
+        final Button cancelBtn = from(dialogPaneDelete).lookup("Cancel").query();
+        assertNotNull(cancelBtn);
+        clickOn(cancelBtn);
+        assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
+
         // test Setting To Main Menu
         final Button cancelButton = lookup("Cancel").query();
         assertNotNull(cancelButton);
         clickOn(cancelButton);
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
+
+        //test Delete Account Popup to Login screen
+        final Button setBtn = lookup("#settingsButton").query();
+        assertNotNull(setBtn);
+        clickOn(setBtn);
+        assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
+        final Button delAccBtn = lookup("#deleteAccountButton").query();
+        clickOn(delAccBtn);
+
+        final DialogPane dlgPaneDelete = lookup(".dialog-pane").query();
+        assertNotNull(dlgPaneDelete);
+        final Button oKBtn = from(dlgPaneDelete).lookup("OK").query();
+        assertNotNull(oKBtn);
+        clickOn(oKBtn);
+        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
+        final Label infoLabel = lookup("#informationLabel").query();
+        assertEquals("Account successfully deleted", infoLabel.getText());
     }
 
     @Test
