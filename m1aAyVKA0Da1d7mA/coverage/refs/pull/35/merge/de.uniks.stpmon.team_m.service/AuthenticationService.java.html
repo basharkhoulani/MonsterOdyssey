@@ -14,24 +14,24 @@ public class AuthenticationService {
 
     @Inject
     public AuthenticationService(
-        TokenStorage tokenStorage,
-        AuthApiService authApiService
-<span class="fc" id="L19">    ) {</span>
-<span class="fc" id="L20">        this.tokenStorage = tokenStorage;</span>
-<span class="fc" id="L21">        this.authApiService = authApiService;</span>
-<span class="fc" id="L22">    }</span>
+            TokenStorage tokenStorage,
+            AuthApiService authApiService
+<span class="nc" id="L19">    ) {</span>
+<span class="nc" id="L20">        this.tokenStorage = tokenStorage;</span>
+<span class="nc" id="L21">        this.authApiService = authApiService;</span>
+<span class="nc" id="L22">    }</span>
 
-    public Observable&lt;LoginResult&gt; login(String username, String password){
+    public Observable&lt;LoginResult&gt; login(String username, String password) {
 <span class="nc" id="L25">        return authApiService.login(new LoginDto(username, password)).map(lr -&gt; {</span>
 <span class="nc" id="L26">            tokenStorage.setToken(lr.accessToken());</span>
 <span class="nc" id="L27">            return lr;</span>
         });
     }
 
-    public Observable&lt;LogoutResult&gt; logout(){
+    public Observable&lt;LogoutResult&gt; logout() {
 <span class="nc" id="L32">        return authApiService.logout().map(lr -&gt; lr);</span>
     }
 
-    //TODO: Remember me (refresh)
+    // TODO: Remember me (refresh)
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

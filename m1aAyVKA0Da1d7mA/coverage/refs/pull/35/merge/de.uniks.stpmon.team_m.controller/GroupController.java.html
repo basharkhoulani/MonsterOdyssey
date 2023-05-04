@@ -14,28 +14,24 @@ import javax.inject.Provider;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
-public class GroupController extends Controller{
+public class GroupController extends Controller {
 
     private String TITLE;
     @FXML
     public Text selectGroupMembersText;
-
     @FXML
     public VBox groupMembersVBox;
-
     @FXML
     public Button backToMessagesButton;
-
     @FXML
     public TextField searchFieldGroupMembers;
-
     @FXML
     public TextField groupNameInput;
-
     @FXML
     public Button saveGroupButton;
     @FXML
     public Button deleteGroupButton;
+    @FXML
     public Pane buttonPane;
 
     @Inject
@@ -43,49 +39,49 @@ public class GroupController extends Controller{
     private final GroupStorage groupStorage;
 
     @Inject
-<span class="fc" id="L46">    public GroupController(GroupStorage groupStorage) {</span>
+<span class="fc" id="L42">    public GroupController(GroupStorage groupStorage) {</span>
 
-<span class="fc" id="L48">        this.groupStorage = groupStorage;</span>
-<span class="fc" id="L49">    }</span>
+<span class="fc" id="L44">        this.groupStorage = groupStorage;</span>
+<span class="fc" id="L45">    }</span>
 
     @Override
     public String getTitle() {
-<span class="fc" id="L53">        return TITLE;</span>
+<span class="fc" id="L49">        return TITLE;</span>
     }
 
     @Override
     public Parent render() {
-<span class="fc" id="L58">        final Parent parent = super.render();</span>
-<span class="fc bfc" id="L59" title="All 2 branches covered.">        if(groupStorage.get_id().equals(EMPTY_STRING)){</span>
-<span class="fc" id="L60">            newGroup();</span>
+<span class="fc" id="L54">        final Parent parent = super.render();</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (groupStorage.get_id().equals(EMPTY_STRING)) {</span>
+<span class="fc" id="L56">            newGroup();</span>
         } else {
-<span class="fc" id="L62">            editGroup();</span>
+<span class="fc" id="L58">            editGroup();</span>
         }
-<span class="fc" id="L64">        return parent;</span>
+<span class="fc" id="L60">        return parent;</span>
     }
 
     private void newGroup() {
-<span class="fc" id="L68">        TITLE = NEW_GROUP_TITLE;</span>
-<span class="fc" id="L69">        buttonPane.getChildren().remove(deleteGroupButton);</span>
-<span class="fc" id="L70">    }</span>
+<span class="fc" id="L64">        TITLE = NEW_GROUP_TITLE;</span>
+<span class="fc" id="L65">        buttonPane.getChildren().remove(deleteGroupButton);</span>
+<span class="fc" id="L66">    }</span>
 
     private void editGroup() {
-<span class="fc" id="L73">        TITLE = EDIT_GROUP_TITLE;</span>
-<span class="fc" id="L74">        groupNameInput.setPromptText(CHANGE_GROUP);</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L69">        TITLE = EDIT_GROUP_TITLE;</span>
+<span class="fc" id="L70">        groupNameInput.setPromptText(CHANGE_GROUP);</span>
+<span class="fc" id="L71">    }</span>
 
     public void changeToMessages() {
-<span class="fc" id="L78">        app.show(messagesControllerProvider.get());</span>
-<span class="fc" id="L79">    }</span>
+<span class="fc" id="L74">        app.show(messagesControllerProvider.get());</span>
+<span class="fc" id="L75">    }</span>
 
     public void deleteGroup() {
         //TODO server communication
-<span class="nc" id="L83">        app.show(messagesControllerProvider.get());</span>
-<span class="nc" id="L84">    }</span>
+<span class="nc" id="L79">        app.show(messagesControllerProvider.get());</span>
+<span class="nc" id="L80">    }</span>
 
     public void saveGroup() {
         //TODO server communication
-<span class="nc" id="L88">        app.show(messagesControllerProvider.get());</span>
-<span class="nc" id="L89">    }</span>
+<span class="nc" id="L84">        app.show(messagesControllerProvider.get());</span>
+<span class="nc" id="L85">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
