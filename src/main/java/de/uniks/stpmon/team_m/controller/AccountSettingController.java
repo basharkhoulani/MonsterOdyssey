@@ -5,15 +5,15 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import java.util.Optional;
+
 import static de.uniks.stpmon.team_m.Constants.*;
+
 
 public class AccountSettingController extends Controller {
 
@@ -50,6 +50,8 @@ public class AccountSettingController extends Controller {
 
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
+    @Inject
+    Provider<LoginController> loginControllerProvider;
 
     @Inject
     AccountSettingController() {
@@ -67,6 +69,7 @@ public class AccountSettingController extends Controller {
         // Firstly disable the editfield
         usernameField.setDisable(true);
         passwordField.setDisable(true);
+        showPasswordButton.setDisable(true);
 
         // Secondly show password
         skin = new PasswordFieldSkin(passwordField);
@@ -93,7 +96,12 @@ public class AccountSettingController extends Controller {
 
     public void saveUsername() {
         usernameField.setDisable(true);
-        // TODO functionally implement
+
+        //TODO functionally implement
+
+        //username has been changed successfully
+        usernameErrorLabel.setText("");
+        informationLabel.setText("Your username has been changed successfully.");
     }
 
     public void showPassword() {
@@ -101,21 +109,39 @@ public class AccountSettingController extends Controller {
         passwordField.setText(passwordField.getText());
     }
 
-    public void editPassword() {
+
+    public void editPassword(){
         passwordField.setDisable(false);
+        showPasswordButton.setDisable(false);
     }
 
     public void savePassword() {
         passwordField.setDisable(true);
-        // TODO functionally implement
+        showPasswordButton.setDisable(true);
+        //TODO functionally implement
+
+        //password has been changed successfully
+        passwordErrorLabel.setText("");
+        informationLabel.setText("Your Password has been changed successfully.");
     }
 
-    public void deleteAccount() {
+    public void deleteAccount(){
+        LoginController loginController = loginControllerProvider.get();
+        loginController.setInformation("Account successfully deleted");
+        app.show(loginController);
     }
 
-    public void cancel() {
-        app.show(mainMenuControllerProvider.get());
+    public void cancel(){ app.show(mainMenuControllerProvider.get()); }
+
+    public void showDeletePopUp() {
+        Alert alert = new Alert(Alert.AlertType.WARNING, "Are you sure?", ButtonType.OK, ButtonType.CANCEL);
+        alert.setTitle("Delete Account");
+        alert.setHeaderText(null);
+        alert.initOwner(app.getStage());
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK){
+            deleteAccount();
+        }
     }
-
-
 }
