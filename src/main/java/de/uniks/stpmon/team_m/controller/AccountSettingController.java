@@ -56,6 +56,7 @@ public class AccountSettingController extends Controller{
         // Firstly disable the editfield
         usernameField.setDisable(true);
         passwordField.setDisable(true);
+        showPasswordButton.setDisable(true);
 
         // Secondly show password
         skin = new PasswordFieldSkin(passwordField);
@@ -92,10 +93,14 @@ public class AccountSettingController extends Controller{
         passwordField.setText(passwordField.getText());
     }
 
-    public void editPassword(){ passwordField.setDisable(false);}
+    public void editPassword(){
+        passwordField.setDisable(false);
+        showPasswordButton.setDisable(false);
+    }
 
     public void savePassword(){
         passwordField.setDisable(true);
+        showPasswordButton.setDisable(true);
         //TODO functionally implement
 
         //password has been changed successfully
@@ -110,13 +115,7 @@ public class AccountSettingController extends Controller{
         System.out.println("Your Account is deleted successfully.");
     }
 
-    public void cancel(){
-        informationLabel.setText("");
-        usernameErrorLabel.setText("");
-        passwordField.setText("");
-
-        app.show(mainMenuControllerProvider.get());
-    }
+    public void cancel(){ app.show(mainMenuControllerProvider.get()); }
 
 
     public void showDeletePopUp() {
