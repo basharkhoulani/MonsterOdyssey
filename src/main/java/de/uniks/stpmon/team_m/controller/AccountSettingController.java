@@ -125,7 +125,7 @@ public class AccountSettingController extends Controller{
         alert.initOwner(app.getStage());
         Optional<ButtonType> result = alert.showAndWait();
 
-        if (result.get() == ButtonType.OK){
+        if (result.isPresent() && result.get() == ButtonType.OK){
             deleteAccount();
         }
     }
