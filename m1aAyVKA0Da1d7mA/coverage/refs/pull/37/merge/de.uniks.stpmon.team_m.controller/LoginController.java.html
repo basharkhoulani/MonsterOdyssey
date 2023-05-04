@@ -43,62 +43,74 @@ public class LoginController extends Controller {
     private BooleanBinding isInvalidUsername;
     private BooleanBinding isInvalidPassword;
 
-<span class="fc" id="L46">    private final SimpleStringProperty username = new SimpleStringProperty();</span>
-<span class="fc" id="L47">    private final SimpleStringProperty password = new SimpleStringProperty();</span>
+
+<span class="fc" id="L47">    private SimpleStringProperty username = new SimpleStringProperty();</span>
+<span class="fc" id="L48">    private SimpleStringProperty password = new SimpleStringProperty();</span>
+<span class="fc" id="L49">    private String information = &quot;&quot;;</span>
+
 
     @Inject
     Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
 
 
     @Inject
-<span class="fc" id="L54">    public LoginController() {</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L57">    public LoginController() {</span>
+<span class="fc" id="L58">    }</span>
 
     @Override
     public String getTitle() {
-<span class="fc" id="L59">        return LOGIN_TITLE;</span>
+<span class="fc" id="L62">        return LOGIN_TITLE;</span>
     }
 
     @Override
     public Parent render() {
-<span class="fc" id="L64">        final Parent parent = super.render();</span>
+<span class="fc" id="L67">        final Parent parent = super.render();</span>
 
-<span class="fc" id="L66">        skin = new PasswordFieldSkin(passwordField);</span>
-<span class="fc" id="L67">        passwordField.setSkin(skin);</span>
+<span class="fc" id="L69">        skin = new PasswordFieldSkin(passwordField);</span>
+<span class="fc" id="L70">        passwordField.setSkin(skin);</span>
 
-<span class="fc" id="L69">        usernameField.textProperty().bindBidirectional(username);</span>
-<span class="fc" id="L70">        passwordField.textProperty().bindBidirectional(password);</span>
+<span class="fc" id="L72">        usernameField.textProperty().bindBidirectional(username);</span>
+<span class="fc" id="L73">        passwordField.textProperty().bindBidirectional(password);</span>
 
-<span class="fc" id="L72">        isInvalidUsername = username.isEmpty();</span>
-<span class="fc" id="L73">        isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);</span>
-<span class="fc" id="L74">        signInButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
-<span class="fc" id="L75">        signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
+<span class="fc" id="L75">        isInvalidUsername = username.isEmpty();</span>
+<span class="fc" id="L76">        isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);</span>
+<span class="fc" id="L77">        signInButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
+<span class="fc" id="L78">        signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
 
-<span class="fc" id="L77">        passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);</span>
+<span class="fc" id="L80">        passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);</span>
 
-<span class="fc" id="L79">        return parent;</span>
+<span class="fc" id="L82">        showInformation();</span>
+
+<span class="fc" id="L84">        return parent;</span>
     }
 
-
     public void signIn() {
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        if (isInvalidPassword.or(isInvalidUsername).get()) {</span>
-<span class="nc" id="L85">            return;</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (isInvalidPassword.or(isInvalidUsername).get()) {</span>
+<span class="nc" id="L89">            return;</span>
         }
         // TODO: test müssen auch ohne Serververbindung laufen. Wirkliche Funktionalität kommt später.
 
-<span class="fc" id="L89">        app.show(mainMenuControllerProvider.get());</span>
-<span class="fc" id="L90">    }</span>
+<span class="fc" id="L93">        app.show(mainMenuControllerProvider.get());</span>
+<span class="fc" id="L94">    }</span>
 
     public void signUp() {
         // TODO: from UsersService
 
-<span class="nc" id="L95">        app.show(mainMenuControllerProvider.get());</span>
-<span class="nc" id="L96">    }</span>
+<span class="nc" id="L99">        app.show(mainMenuControllerProvider.get());</span>
+<span class="nc" id="L100">    }</span>
 
     public void showPassword() {
-<span class="fc" id="L99">        skin.setMask(skin.getMask());</span>
-<span class="fc" id="L100">        passwordField.setText(passwordField.getText());</span>
-<span class="fc" id="L101">    }</span>
+<span class="fc" id="L103">        skin.setMask(skin.getMask());</span>
+<span class="fc" id="L104">        passwordField.setText(passwordField.getText());</span>
+<span class="fc" id="L105">    }</span>
+
+    public void showInformation() {
+<span class="fc" id="L108">        informationLabel.setText(this.information);</span>
+<span class="fc" id="L109">    }</span>
+
+    public void setInformation(String information){
+<span class="fc" id="L112">        this.information = information;</span>
+<span class="fc" id="L113">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
