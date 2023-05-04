@@ -112,7 +112,6 @@ public class AccountSettingController extends Controller{
         LoginController loginController = loginControllerProvider.get();
         loginController.setInformation("Account successfully deleted");
         app.show(loginController);
-        System.out.println("Your Account is deleted successfully.");
     }
 
     public void cancel(){ app.show(mainMenuControllerProvider.get()); }
