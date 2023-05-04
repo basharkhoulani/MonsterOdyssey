@@ -85,6 +85,7 @@ public class LoginController extends Controller {
 <span class="nc" id="L85">            return;</span>
         }
 
+        //HTTP Request
         /* disposables.add(authenticationService
                 .login(username.get(), password.get())
                 .observeOn(FX_SCHEDULER)
@@ -95,19 +96,19 @@ public class LoginController extends Controller {
                     //passwordErrorLabel.setText(error.getMessage());
                 })); */
 
-<span class="fc" id="L98">        app.show(mainMenuControllerProvider.get());</span>
-<span class="fc" id="L99">    }</span>
+<span class="fc" id="L99">        app.show(mainMenuControllerProvider.get());</span>
+<span class="fc" id="L100">    }</span>
 
     public void signUp() {
         // TODO: from UsersService
 
-<span class="nc" id="L104">        app.show(mainMenuControllerProvider.get());</span>
-<span class="nc" id="L105">    }</span>
+<span class="nc" id="L105">        app.show(mainMenuControllerProvider.get());</span>
+<span class="nc" id="L106">    }</span>
 
     public void showPassword() {
-<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        skin.setMask(!skin.getMask());</span>
-<span class="fc" id="L109">        passwordField.setText(passwordField.getText());</span>
-<span class="fc" id="L110">    }</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">        skin.setMask(!skin.getMask());</span>
+<span class="fc" id="L110">        passwordField.setText(passwordField.getText());</span>
+<span class="fc" id="L111">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
