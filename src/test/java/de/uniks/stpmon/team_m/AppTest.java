@@ -15,7 +15,7 @@ class AppTest extends ApplicationTest {
     private Stage stage;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         this.stage = stage;
         new App().start(this.stage);
         stage.requestFocus();

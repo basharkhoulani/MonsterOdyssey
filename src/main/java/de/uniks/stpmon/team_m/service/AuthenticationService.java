@@ -14,23 +14,23 @@ public class AuthenticationService {
 
     @Inject
     public AuthenticationService(
-        TokenStorage tokenStorage,
-        AuthApiService authApiService
+            TokenStorage tokenStorage,
+            AuthApiService authApiService
     ) {
         this.tokenStorage = tokenStorage;
         this.authApiService = authApiService;
     }
 
-    public Observable<LoginResult> login(String username, String password){
+    public Observable<LoginResult> login(String username, String password) {
         return authApiService.login(new LoginDto(username, password)).map(lr -> {
             tokenStorage.setToken(lr.accessToken());
             return lr;
         });
     }
 
-    public Observable<LogoutResult> logout(){
+    public Observable<LogoutResult> logout() {
         return authApiService.logout().map(lr -> lr);
     }
 
-    //TODO: Remember me (refresh)
+    // TODO: Remember me (refresh)
 }

@@ -13,8 +13,7 @@ import javafx.scene.Parent;
 import javax.inject.Inject;
 import java.io.IOException;
 
-import static de.uniks.stpmon.team_m.Constants.STANDARD_HEIGHT;
-import static de.uniks.stpmon.team_m.Constants.STANDARD_WIDTH;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public abstract class Controller {
 
@@ -22,18 +21,21 @@ public abstract class Controller {
     protected App app;
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
     protected final CompositeDisposable disposables = new CompositeDisposable();
+
     public void init() {
     }
 
     public String getTitle() {
-        return "";
+        return EMPTY_STRING;
     }
 
     public void destroy() {
         disposables.dispose();
     }
 
-    public void onDestroy(Runnable action) { disposables.add(Disposable.fromRunnable(action)); }
+    public void onDestroy(Runnable action) {
+        disposables.add(Disposable.fromRunnable(action));
+    }
 
     public Parent render() {
         return load(getClass().getSimpleName().replace("Controller", ""));
