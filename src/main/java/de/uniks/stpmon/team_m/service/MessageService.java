@@ -9,6 +9,7 @@ import io.reactivex.rxjava3.core.Observable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class MessageService {
     private final MessagesApiService messagesApiService;
@@ -26,8 +27,7 @@ public class MessageService {
     public Observable<List<Message>> getPrivateChatMessages(String friendUserID, String ownUserID) {
         // these are the messages from the friend to the user (these need to be displayed on the right)
         Observable<List<Message>> messagesFriendUser = this.getMessagesOfUser(ownUserID).map(messages -> {
-            messages.stream().filter( message -> message.sender().equals(friendUserID));
-            return messages;
+            return messages.stream().filter( message -> message.sender().equals(friendUserID)).collect(Collectors.toList());
         });
 
         // these are the messages from the user to the friend
