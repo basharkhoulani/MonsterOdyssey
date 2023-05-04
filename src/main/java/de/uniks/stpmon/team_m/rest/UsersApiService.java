@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface UsersApiService {
     @POST("users")
-    Observable<User> create(@Body CreateUserDto dto);
+    Observable<User> createUser(@Body CreateUserDto dto);
 
     // For all users pass null for both parameters. Also only one parameter can be null.
     @GET("users")
@@ -20,8 +20,8 @@ public interface UsersApiService {
     Observable<User> getUser(@Path("id") String id);
 
     @PATCH("users/{id}")
-    Observable<User> update(@Body UpdateUserDto dto);
+    Observable<User> updateUser(@Path("id") String id, @Body UpdateUserDto dto);
 
     @DELETE("users/{id}")
-    Observable<User> delete(@Path("id") String id);
+    Observable<User> deleteUser(@Path("id") String id);
 }

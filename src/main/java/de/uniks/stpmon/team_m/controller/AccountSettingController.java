@@ -1,9 +1,9 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
-
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 
@@ -12,29 +12,41 @@ import javax.inject.Provider;
 
 import java.util.Optional;
 
-import static de.uniks.stpmon.team_m.Constants.ACCOUNT_SETTINGS_TITLE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
-public class AccountSettingController extends Controller{
 
+public class AccountSettingController extends Controller {
+
+    @FXML
     public Label informationLabel;
+    @FXML
     public TextField usernameField;
+    @FXML
     public Button usernameEditButton;
+    @FXML
     public Button saveUsernameButton;
+    @FXML
     public PasswordField passwordField;
+    @FXML
     public Button showPasswordButton;
+    @FXML
     public Button passwordEditButton;
+    @FXML
     public Button savePasswordButton;
+    @FXML
     public Button cancelButton;
+    @FXML
     public Button deleteAccountButton;
+    @FXML
     public Label passwordErrorLabel;
+    @FXML
     public Label usernameErrorLabel;
+    @FXML
+    public Label titleLabel;
 
     private PasswordFieldSkin skin;
-    private SimpleStringProperty username = new SimpleStringProperty();
-    private SimpleStringProperty password = new SimpleStringProperty();
-
-    private BooleanBinding isInvalidUsername;
-    private BooleanBinding isInvalidPassword;
+    private final SimpleStringProperty username = new SimpleStringProperty();
+    private final SimpleStringProperty password = new SimpleStringProperty();
 
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -42,8 +54,9 @@ public class AccountSettingController extends Controller{
     Provider<LoginController> loginControllerProvider;
 
     @Inject
-    AccountSettingController(){
+    AccountSettingController() {
     }
+
     @Override
     public String getTitle() {
         return ACCOUNT_SETTINGS_TITLE;
@@ -66,21 +79,24 @@ public class AccountSettingController extends Controller{
         usernameField.textProperty().bindBidirectional(username);
         passwordField.textProperty().bindBidirectional(password);
 
-        isInvalidUsername = username.isEmpty();
+        BooleanBinding isInvalidUsername = username.isEmpty();
         saveUsernameButton.disableProperty().bind(isInvalidUsername);
 
-        isInvalidPassword = password.length().lessThan(8);
+        BooleanBinding isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);
         savePasswordButton.disableProperty().bind(isInvalidPassword);
 
-        passwordField.setPromptText("Password must have at least 8 character.");
+        passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);
 
         return parent;
     }
 
-    public void editUsername(){ usernameField.setDisable(false); }
+    public void editUsername() {
+        usernameField.setDisable(false);
+    }
 
-    public void saveUsername(){
+    public void saveUsername() {
         usernameField.setDisable(true);
+
         //TODO functionally implement
 
         //username has been changed successfully
@@ -88,17 +104,18 @@ public class AccountSettingController extends Controller{
         informationLabel.setText("Your username has been changed successfully.");
     }
 
-    public void showPassword(){
-        skin.setMask(!skin.getMask());
+    public void showPassword() {
+        skin.setMask(skin.getMask());
         passwordField.setText(passwordField.getText());
     }
+
 
     public void editPassword(){
         passwordField.setDisable(false);
         showPasswordButton.setDisable(false);
     }
 
-    public void savePassword(){
+    public void savePassword() {
         passwordField.setDisable(true);
         showPasswordButton.setDisable(true);
         //TODO functionally implement
@@ -115,7 +132,6 @@ public class AccountSettingController extends Controller{
     }
 
     public void cancel(){ app.show(mainMenuControllerProvider.get()); }
-
 
     public void showDeletePopUp() {
         Alert alert = new Alert(Alert.AlertType.WARNING, "Are you sure?", ButtonType.OK, ButtonType.CANCEL);

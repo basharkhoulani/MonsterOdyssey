@@ -14,28 +14,24 @@ import javax.inject.Provider;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
-public class GroupController extends Controller{
+public class GroupController extends Controller {
 
     private String TITLE;
     @FXML
     public Text selectGroupMembersText;
-
     @FXML
     public VBox groupMembersVBox;
-
     @FXML
     public Button backToMessagesButton;
-
     @FXML
     public TextField searchFieldGroupMembers;
-
     @FXML
     public TextField groupNameInput;
-
     @FXML
     public Button saveGroupButton;
     @FXML
     public Button deleteGroupButton;
+    @FXML
     public Pane buttonPane;
 
     @Inject
@@ -56,7 +52,7 @@ public class GroupController extends Controller{
     @Override
     public Parent render() {
         final Parent parent = super.render();
-        if(groupStorage.get_id().equals(EMPTY_STRING)){
+        if (groupStorage.get_id().equals(EMPTY_STRING)) {
             newGroup();
         } else {
             editGroup();
