@@ -7,14 +7,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 
 import javax.inject.Inject;
 import java.util.Optional;
 
-import static de.uniks.stpmon.team_m.Constants.INGAME_TITLE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class IngameController extends Controller {
 
@@ -34,7 +33,7 @@ public class IngameController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
         app.getStage().getScene().setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.P) {
+            if (event.getCode() == PAUSE_MENU_KEY) {
                 pauseGame();
             }
         });
@@ -49,39 +48,37 @@ public class IngameController extends Controller {
         alert.initOwner(app.getStage());
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.initStyle(StageStyle.UNDECORATED);
-        alert.setContentText("Click 'p' on your keyboard for pause menu.");
+        alert.setContentText(HELP_LABEL);
         final DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.setStyle("-fx-border-color: black");
+        dialogPane.setStyle(FX_STYLE_BLACK);
         alert.showAndWait();
     }
 
     public void pauseGame() {
         final Alert alert = new Alert(Alert.AlertType.NONE);
         final DialogPane dialogPane = alert.getDialogPane();
-        final ButtonType resume = new ButtonType("Resume Game");
-        final ButtonType saveAndExit = new ButtonType("Save Game & Leave");
+        final ButtonType resume = new ButtonType(RESUME_BUTTON_LABEL);
+        final ButtonType saveAndExit = new ButtonType(SAVE_GAME_AND_LEAVE_BUTTON_LABEL);
         dialogPane.getButtonTypes().addAll(resume, saveAndExit);
         final Button resumeButton = (Button) dialogPane.lookupButton(resume);
         resumeButton.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.P) {
+            if (event.getCode() == PAUSE_MENU_KEY) {
                 alert.setResult(resume);
             }
         });
 
-        alert.setTitle("Pause Menu");
+        alert.setTitle(PAUSE_MENU_TITLE);
         alert.setHeaderText(null);
         alert.setGraphic(null);
-        alert.setContentText("What do you want to do?");
+        alert.setContentText(PAUSE_MENU_LABEL);
         alert.initOwner(app.getStage());
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.initStyle(StageStyle.UNDECORATED);
-        dialogPane.setStyle("-fx-border-color: black");
+        dialogPane.setStyle(FX_STYLE_BLACK);
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == resume) {
             alert.close();
-        } else if (result.isPresent() && result.get() == saveAndExit) {
-            // TODO: Save Game, https://jira.uniks.de/browse/STP23M-51
         }
     }
 }

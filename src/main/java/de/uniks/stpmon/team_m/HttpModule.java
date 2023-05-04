@@ -48,21 +48,25 @@ public class HttpModule {
     AuthApiService auth(Retrofit retrofit) {
         return retrofit.create(AuthApiService.class);
     }
+
     @Provides
     @Singleton
     UsersApiService users(Retrofit retrofit) {
         return retrofit.create(UsersApiService.class);
     }
+
     @Provides
     @Singleton
     GroupsApiService groups(Retrofit retrofit) {
         return retrofit.create(GroupsApiService.class);
     }
+
     @Provides
     @Singleton
     MessagesApiService messages(Retrofit retrofit) {
         return retrofit.create(MessagesApiService.class);
     }
+
     @Provides
     @Singleton
     RegionsApiService regions(Retrofit retrofit) {
