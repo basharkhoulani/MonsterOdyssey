@@ -1,10 +1,11 @@
 package de.uniks.stpmon.team_m.controller;
 
 
+import de.uniks.stpmon.team_m.service.AuthenticationService;
+import de.uniks.stpmon.team_m.service.TokenStorage;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -31,6 +32,11 @@ public class LoginController extends Controller {
     public Button hideButton;
     public Label usernameErrorLabel;
     public Label passwordErrorLabel;
+
+    @Inject
+    AuthenticationService authenticationService;
+    @Inject
+    TokenStorage tokenStorage;
 
     private PasswordFieldSkin skin;
 
@@ -75,17 +81,33 @@ public class LoginController extends Controller {
 
 
     public void signIn() {
+        if (isInvalidPassword.or(isInvalidUsername).get()){
+            return;
+        }
+
+        //HTTP Request
+        /* disposables.add(authenticationService
+                .login(username.get(), password.get())
+                .observeOn(FX_SCHEDULER)
+                .subscribe(lr -> {
+                //app.show(mainMenuControllerProvider.get());
+                //TODO: test müssen auch ohne Serververbindung laufen. Wirkliche Funktionalität kommt später.
+                }, error ->{
+                    //passwordErrorLabel.setText(error.getMessage());
+                })); */
+
         app.show(mainMenuControllerProvider.get());
     }
 
     public void signUp() {
+        // TODO: from UsersService
+
         app.show(mainMenuControllerProvider.get());
     }
 
-    public void showPassword(ActionEvent mouseEvent) {
+    public void showPassword() {
         skin.setMask(!skin.getMask());
         passwordField.setText(passwordField.getText());
-
     }
 
 }
