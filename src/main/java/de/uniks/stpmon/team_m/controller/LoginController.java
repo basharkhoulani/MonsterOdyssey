@@ -45,6 +45,7 @@ public class LoginController extends Controller {
 
     private SimpleStringProperty username = new SimpleStringProperty();
     private SimpleStringProperty password = new SimpleStringProperty();
+    private String information = "";
 
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -76,9 +77,10 @@ public class LoginController extends Controller {
 
         passwordField.setPromptText("Password must have at least 8 character.");
 
+        showInformation();
+
         return parent;
     }
-
 
     public void signIn() {
         if (isInvalidPassword.or(isInvalidUsername).get()){
@@ -108,6 +110,14 @@ public class LoginController extends Controller {
     public void showPassword() {
         skin.setMask(!skin.getMask());
         passwordField.setText(passwordField.getText());
+    }
+
+    public void showInformation() {
+        informationLabel.setText(this.information);
+    }
+
+    public void setInformation(String information){
+        this.information = information;
     }
 
 }
