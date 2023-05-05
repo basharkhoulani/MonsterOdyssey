@@ -7,10 +7,8 @@ import de.uniks.stpmon.team_m.dto.UpdateMessageDto;
 import de.uniks.stpmon.team_m.rest.MessagesApiService;
 import io.reactivex.rxjava3.core.Observable;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MessageService {
@@ -112,7 +110,7 @@ public class MessageService {
      * Gets all the messages from a group and returns them sorted after createdAt
      *
      * @param groupID the ID of the group which messages you need
-     * @return an sorted observable of a sorted message list
+     * @return a sorted observable of a sorted message list
      */
     public Observable<List<Message>> getGroupMessages(String groupID) {
         return this.getMessagesByNamespace(groupID, Constants.MESSAGE_NAMESPACE_GROUPS)
@@ -122,11 +120,15 @@ public class MessageService {
                 });
     }
 
+    //TODO: maybe you can refactor this function out, since it's basically the same code as the getGroupMessages
+    // method, but maybe it will be better for readability and usability if we keep them separate.
+    // We also could create a helper method and just make one line calls in the getGroupMessages and getRegionMessages
+    // methods.
     /**
      * Gets all the messages from a region and returns them sorted after createdAt
      *
      * @param regionID the ID of the group which messages you need
-     * @return an sorted observable of a sorted message list
+     * @return a sorted observable of a sorted message list
      */
     public Observable<List<Message>> getRegionMessages(String regionID) {
         return this.getMessagesByNamespace(regionID, Constants.MESSAGE_NAMESPACE_REGIONS)
