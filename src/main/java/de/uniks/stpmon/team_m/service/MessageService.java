@@ -111,11 +111,25 @@ public class MessageService {
     /**
      * Gets all the messages from a group and returns them sorted after createdAt
      *
-     * @param groupID the ID of the group which messagse you need
+     * @param groupID the ID of the group which messages you need
      * @return an sorted observable of a sorted message list
      */
     public Observable<List<Message>> getGroupMessages(String groupID) {
         return this.getMessagesByNamespace(groupID, Constants.MESSAGE_NAMESPACE_GROUPS)
+                .map(messages -> {
+                    messages.sort(Comparator.comparing(Message::createdAt));
+                    return messages;
+                });
+    }
+
+    /**
+     * Gets all the messages from a region and returns them sorted after createdAt
+     *
+     * @param regionID the ID of the group which messages you need
+     * @return an sorted observable of a sorted message list
+     */
+    public Observable<List<Message>> getRegionMessages(String regionID) {
+        return this.getMessagesByNamespace(regionID, Constants.MESSAGE_NAMESPACE_REGIONS)
                 .map(messages -> {
                     messages.sort(Comparator.comparing(Message::createdAt));
                     return messages;
