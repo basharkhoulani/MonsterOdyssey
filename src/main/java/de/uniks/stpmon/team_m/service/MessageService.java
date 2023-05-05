@@ -14,6 +14,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MessageService {
+
+    /*
+    * TODO: Tests still have to be implemented, but we need mocking to realize this
+    * */
     private final MessagesApiService messagesApiService;
 
     public MessageService(MessagesApiService messagesApiService) {
@@ -50,52 +54,56 @@ public class MessageService {
         return allMessages;
     }
 
-    // Private messages
+    // Base api communication
     /**
-     * Gets a singular private message. Important to note is that the first parameter needs to be the ID of
+     * Gets a singular message. Important to note is that the first parameter needs to be the ID of
      * the user the message is directed to, not the sender!
      *
      * @param receiverID the ID of the user who received the message
      * @param messageID the ID of the message
+     * @param namespace the namespace used for api communication. Allowed values are CONSTANTS_NAMESPACE constants
      * @return an observable record of message
      */
-    public Observable<Message> getMessageOfUserByID(String receiverID, String messageID) {
-        return messagesApiService.getMessage(Constants.MESSAGE_NAMESPACE_GLOBAL, receiverID, messageID);
+    public Observable<Message> getMessageOfUserByID(String receiverID, String messageID, String namespace) {
+        return messagesApiService.getMessage(namespace, receiverID, messageID);
     }
 
     /**
-     * Works similar to the "getMessageOfUserID" method, but instead returns a list of private messages. Again, important
+     * Works similar to the "getMessageOfUserID" method, but instead returns a list of messages. Again, important
      * to note is, that the first parameter needs to be the ID of the user who received the messages, not the sender!
      *
      * @param receiverID the ID of the user who received the messages
+     * @param namespace the namespace used for api communication
      * @return an observable list of message records
      */
-    public Observable<List<Message>> getMessagesOfUser(String receiverID) {
-        return messagesApiService.getMessages(Constants.MESSAGE_NAMESPACE_GLOBAL, receiverID);
+    public Observable<List<Message>> getMessagesOfUser(String receiverID, String namespace) {
+        return messagesApiService.getMessages(namespace, receiverID);
     }
 
     /**
-     * Creates a message that is directed to one user (private chat).
+     * Creates a message that is directed to one user/group/region.
      *
      * @param receiverID the ID of the receiver
      * @param message the body of the message
+     * @param namespace the namespace used for api communication
      * @return the created message as an observable
      */
-    public Observable<Message> newPrivateMessage(String receiverID, String message) {
+    public Observable<Message> newPrivateMessage(String receiverID, String message, String namespace) {
         CreateMessageDto createMessageDto = new CreateMessageDto(message);
-        return messagesApiService.create(Constants.MESSAGE_NAMESPACE_GLOBAL, receiverID, createMessageDto);
+        return messagesApiService.create(namespace, receiverID, createMessageDto);
     }
 
     /**
-     * Updates a private message.
+     * Updates a message.
      *
      * @param receiverID the ID of the receiver
      * @param messageID the message ID
      * @param updatedMessage the body of the updated message
+     * @param namespace the namespace used for api communication
      * @return the updated message as an observable
      */
-    public Observable<Message> updatePrivateMessage(String receiverID, String messageID, String updatedMessage) {
+    public Observable<Message> updatePrivateMessage(String receiverID, String messageID, String updatedMessage, String namespace) {
         UpdateMessageDto updateMessageDto = new UpdateMessageDto(updatedMessage);
-        return messagesApiService.update(Constants.MESSAGE_NAMESPACE_GLOBAL, receiverID, messageID, updateMessageDto);
+        return messagesApiService.update(namespace, receiverID, messageID, updateMessageDto);
     }
 }
