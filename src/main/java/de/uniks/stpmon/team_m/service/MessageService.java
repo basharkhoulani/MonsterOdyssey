@@ -44,7 +44,7 @@ public class MessageService {
      * @param namespace the namespace used for api communication
      * @return an observable list of message records
      */
-    public Observable<List<Message>> getMessagesByNamespace(String receiverID, String namespace) {
+    private Observable<List<Message>> getMessagesByNamespace(String receiverID, String namespace) {
         return messagesApiService.getMessages(namespace, receiverID);
     }
 
@@ -70,7 +70,7 @@ public class MessageService {
      * @param namespace the namespace used for api communication
      * @return the updated message as an observable
      */
-    public Observable<Message> updatePrivateMessage(String receiverID, String messageID, String updatedMessage, String namespace) {
+    public Observable<Message> updateMessage(String receiverID, String messageID, String updatedMessage, String namespace) {
         UpdateMessageDto updateMessageDto = new UpdateMessageDto(updatedMessage);
         return messagesApiService.update(namespace, receiverID, messageID, updateMessageDto);
     }
