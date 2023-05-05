@@ -4,7 +4,6 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -12,7 +11,7 @@ import javafx.scene.control.*;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import static de.uniks.stpmon.team_m.Constants.LOGIN_TITLE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class LoginController extends Controller {
 
@@ -28,17 +27,27 @@ public class LoginController extends Controller {
     public Button signUpButton;
     @FXML
     public Button signInButton;
+    @FXML
     public Button hideButton;
+    @FXML
     public Label usernameErrorLabel;
+    @FXML
     public Label passwordErrorLabel;
+    @FXML
+    public Label welcomeLabel;
+    @FXML
+    public Label gameNameLabel;
 
     private PasswordFieldSkin skin;
 
     private BooleanBinding isInvalidUsername;
     private BooleanBinding isInvalidPassword;
 
+
     private SimpleStringProperty username = new SimpleStringProperty();
     private SimpleStringProperty password = new SimpleStringProperty();
+    private String information = "";
+
 
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -64,28 +73,43 @@ public class LoginController extends Controller {
         passwordField.textProperty().bindBidirectional(password);
 
         isInvalidUsername = username.isEmpty();
-        isInvalidPassword = password.length().lessThan(8);
+        isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);
         signInButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));
         signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));
 
-        passwordField.setPromptText("Password must have at least 8 character.");
+        passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);
+
+        showInformation();
 
         return parent;
     }
 
-
     public void signIn() {
+        if (isInvalidPassword.or(isInvalidUsername).get()) {
+            return;
+        }
+        // TODO: test müssen auch ohne Serververbindung laufen. Wirkliche Funktionalität kommt später.
+
         app.show(mainMenuControllerProvider.get());
     }
 
     public void signUp() {
+        // TODO: from UsersService
+
         app.show(mainMenuControllerProvider.get());
     }
 
-    public void showPassword(ActionEvent mouseEvent) {
-        skin.setMask(!skin.getMask());
+    public void showPassword() {
+        skin.setMask(skin.getMask());
         passwordField.setText(passwordField.getText());
+    }
 
+    public void showInformation() {
+        informationLabel.setText(this.information);
+    }
+
+    public void setInformation(String information){
+        this.information = information;
     }
 
 }

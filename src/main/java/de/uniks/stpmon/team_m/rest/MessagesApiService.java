@@ -1,6 +1,8 @@
 package de.uniks.stpmon.team_m.rest;
 
-import de.uniks.stpmon.team_m.dto.*;
+import de.uniks.stpmon.team_m.dto.CreateMessageDto;
+import de.uniks.stpmon.team_m.dto.Message;
+import de.uniks.stpmon.team_m.dto.UpdateMessageDto;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.*;
 
@@ -18,8 +20,8 @@ public interface MessagesApiService {
     Observable<Message> getMessage(@Path("namespace") String namespace, @Path("parent") String parent, @Path("id") String id);
 
     @PATCH("{namespace}/{parent}/messages/{id}")
-    Observable<Message> update(@Path("namespace") String namespace, @Path("parent") String parent,@Path("id") String id, @Body UpdateMessageDto dto);
+    Observable<Message> update(@Path("namespace") String namespace, @Path("parent") String parent, @Path("id") String id, @Body UpdateMessageDto dto);
 
     @DELETE("{namespace}/{parent}/messages/{id}")
-    Observable<Message> delete(@Path("namespace") String namespace, @Path("parent") String parent,@Path("id") String id);
+    Observable<Message> delete(@Path("namespace") String namespace, @Path("parent") String parent, @Path("id") String id);
 }

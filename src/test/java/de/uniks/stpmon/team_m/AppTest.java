@@ -15,52 +15,49 @@ class AppTest extends ApplicationTest {
     private Stage stage;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         this.stage = stage;
         new App().start(this.stage);
         stage.requestFocus();
     }
 
     @Test
-    void testLoginScreen() {
+    void testLoginView() {
+
+        // test Login Screen
+        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
         final Label welcomeLabel = lookup("Welcome to").query();
         final Button signUpButton = lookup("Sign Up").query();
         final Button signInButton = lookup("Sign In").query();
-
         assertNotNull(welcomeLabel);
         assertNotNull(signUpButton);
         assertNotNull(signInButton);
-    }
 
-    @Test
-    void testShowPasswordInSignIn() {
+        assertTrue(signInButton.isDisabled());
+        assertTrue(signUpButton.isDisabled());
+
+        // test Show Password In SignIn
         final PasswordField passwordField = lookup("#passwordField").query();
         clickOn(passwordField);
-        write("password123");
+        write("password");
         final Button showPasswordBtn = lookup("#hideButton").query();
         clickOn(showPasswordBtn);
-        assertEquals("class de.uniks.stpmon.team_m.utils.PasswordFieldSkin",passwordField.getSkin().getClass().toString());
-    }
+        assertEquals("class de.uniks.stpmon.team_m.utils.PasswordFieldSkin", passwordField.getSkin().getClass().toString());
 
-    @Test
-    void testSignInToMainMenu() {
+        // test Sign In To MainMenu
         final TextField usernameField = lookup("#usernameField").query();
-        assertNotNull(usernameField);
-        final TextField passwordField = lookup("#passwordField").query();
-        assertNotNull(passwordField);
-        final Button signInButton = lookup("Sign In").query();
-        assertNotNull(signInButton);
         clickOn(usernameField);
-        write("testtestlongusername");
-        clickOn(passwordField);
-        write("testtesttestt");
+        write("t");
         clickOn(signInButton);
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
+
     }
 
     @Test
-    void testMainMenuStartGameButton() {
-        testSignInToMainMenu();
+    void testMainMenuView() {
+        signInToMainMenu();
+
+        // test Main Menu start game button
         final Button startGameButton = lookup("Start Game").query();
         assertNotNull(startGameButton);
         assertTrue(startGameButton.isDisabled());
@@ -74,90 +71,31 @@ class AppTest extends ApplicationTest {
         assertNotNull(radioButton);
         clickOn(radioButton);
         assertFalse(startGameButton.isDisabled());
-    }
 
-    @Test
-    void testMainMenuToLoginScreen() {
-        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        testSignInToMainMenu();
-        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
-        final Button logoutButton = lookup("#logoutButton").query();
-        assertNotNull(logoutButton);
-        clickOn(logoutButton);
+        // test back to Sign In
+        clickOn("Logout");
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
     }
 
     @Test
-    void testMainMenuToSetting() {
-        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        testSignInToMainMenu();
-        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
-        final Button settingButton = lookup("#settingsButton").query();
-        assertNotNull(settingButton);
-        clickOn(settingButton);
-        assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
-    }
+    void testIngameView() {
+        signInToMainMenu();
 
-    @Test
-    void testShowPasswordInSetting(){
-        testMainMenuToSetting();
-        final Button passwordEditBtn = lookup("#passwordEditButton").query();
-        clickOn(passwordEditBtn);
-        final PasswordField passwordField = lookup("#passwordField").query();
-        clickOn(passwordField);
-        write("password123");
-        final Button showPasswordBtn = lookup("#showPasswordButton").query();
-        clickOn(showPasswordBtn);
-        assertEquals("class de.uniks.stpmon.team_m.utils.PasswordFieldSkin",passwordField.getSkin().getClass().toString());
-    }
-
-    @Test
-    void testSettingToMainMenu() {
-        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        testSignInToMainMenu();
-        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
-        final Button settingButton = lookup("#settingsButton").query();
-        assertNotNull(settingButton);
-        clickOn(settingButton);
-        assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
-        assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
-        final Button cancelButton = lookup("Cancel").query();
-        assertNotNull(cancelButton);
-        clickOn(cancelButton);
-        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
-    }
-
-    @Test
-    void testMainMenuToIngame() {
-        testMainMenuStartGameButton();
-        final Button startGameButton = lookup("Start Game").query();
-        assertNotNull(startGameButton);
-        clickOn(startGameButton);
+        // Main Menu to Ingame
+        final VBox regionRadioButtonList = lookup("#regionRadioButtonList").query();
+        final RadioButton radioButton = regionRadioButtonList.getChildren().stream()
+                .filter(node -> node instanceof RadioButton)
+                .map(node -> (RadioButton) node)
+                .findFirst()
+                .orElse(null);
+        assertNotNull(radioButton);
+        clickOn(radioButton);
+        clickOn("Start Game");
         assertEquals("Monster Odyssey - Ingame", stage.getTitle());
         final Button helpSymbol = lookup("#helpSymbol").query();
         assertNotNull(helpSymbol);
-    }
 
-    @Test
-    void testMainMenuToNewFriend() {
-        testSignInToMainMenu();
-        clickOn("Find New Friends");
-        assertEquals("Monster Odyssey - Add a new friend", stage.getTitle());
-        final Button mainMenuButton = lookup("#mainMenuButton").query();
-        assertNotNull(mainMenuButton);
-        final Button addFriendButton = lookup("#addFriendButton").query();
-        assertNotNull(addFriendButton);
-        final Button messageButton = lookup("#messageButton").query();
-        assertNotNull(messageButton);
-        final TextField searchTextField = lookup("#searchTextField").query();
-        assertNotNull(searchTextField);
-    }
-
-    @Test
-    void testIngameHelpSymbol() {
-        testMainMenuToIngame();
-        final Button helpSymbol = lookup("#helpSymbol").query();
-        assertNotNull(helpSymbol);
+        // test Ingame Help Symbol
         clickOn(helpSymbol);
         final DialogPane dialogPane = lookup(".dialog-pane").query();
         assertNotNull(dialogPane);
@@ -178,156 +116,178 @@ class AppTest extends ApplicationTest {
         clickOn(button);
         final Label gameTitle = lookup("Monster Odyssey").query();
         assertNotNull(gameTitle);
-    }
-    
-    @Test
-    void testIngamePause() {
-        testMainMenuToIngame();
+
+        // test Ingame Pause
         type(KeyCode.P);
-        final DialogPane dialogPane = lookup(".dialog-pane").query();
-        assertNotNull(dialogPane);
-        final Label pauseLabel = dialogPane.getChildren().stream()
+        final DialogPane dialogPanePause = lookup(".dialog-pane").query();
+        assertNotNull(dialogPanePause);
+        final Label pauseLabel = dialogPanePause.getChildren().stream()
                 .filter(node -> node instanceof Label)
                 .map(node -> (Label) node)
                 .findFirst()
                 .orElse(null);
         assertNotNull(pauseLabel);
         assertEquals("What do you want to do?", pauseLabel.getText());
-        final ButtonType buttonType = dialogPane.getButtonTypes().stream()
+        final ButtonType buttonTypePause = dialogPanePause.getButtonTypes().stream()
                 .findFirst()
                 .orElse(null);
-        assertNotNull(buttonType);
-        final Button button = (Button) dialogPane.lookupButton(buttonType);
-        assertNotNull(button);
-     }
-     
+        assertNotNull(buttonTypePause);
+        final Button buttonPause = (Button) dialogPanePause.lookupButton(buttonTypePause);
+        assertNotNull(buttonPause);
+
+        // test Ingame Unpause With Key Code P
+        type(KeyCode.P);
+        final Label gameTitleUnpauseP = lookup("Monster Odyssey").query();
+        assertNotNull(gameTitleUnpauseP);
+
+        // test Ingame Unpause With Button
+        type(KeyCode.P);
+        clickOn("Resume Game");
+        final Label gameTitleUnpauseButton = lookup("Monster Odyssey").query();
+        assertNotNull(gameTitleUnpauseButton);
+    }
+
     @Test
-    void testNewFriendToMainMenu(){
-        testMainMenuToNewFriend();
+    void testSettingsView() {
+        signInToMainMenu();
+
+        // test Main Menu to Settings
+        final Button settingButton = lookup("#settingsButton").query();
+        assertNotNull(settingButton);
+        clickOn(settingButton);
+        assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
+
+        // test Show Password In Setting
+        final Button passwordEditBtn = lookup("#passwordEditButton").query();
+        clickOn(passwordEditBtn);
+        final PasswordField passwordField = lookup("#passwordField").query();
+        clickOn(passwordField);
+        write("password");
+        final Button showPasswordBtn = lookup("#showPasswordButton").query();
+        clickOn(showPasswordBtn);
+        assertEquals("class de.uniks.stpmon.team_m.utils.PasswordFieldSkin", passwordField.getSkin().getClass().toString());
+
+        // test delete Account and the cancel Button
+        final Button deleteAccBtn = lookup("#deleteAccountButton").query();
+        clickOn(deleteAccBtn);
+        final DialogPane dialogPaneDelete = lookup(".dialog-pane").query();
+        assertNotNull(dialogPaneDelete);
+        final Label deleteLabel = dialogPaneDelete.getChildren().stream()
+                .filter(node -> node instanceof Label)
+                .map(node -> (Label) node)
+                .findFirst()
+                .orElse(null);
+        assertNotNull(deleteLabel);
+        assertEquals("Are you sure?", deleteLabel.getText());
+
+        final Button cancelBtn = from(dialogPaneDelete).lookup("Cancel").query();
+        assertNotNull(cancelBtn);
+        clickOn(cancelBtn);
+        assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
+
+        // test Setting To Main Menu
+        final Button cancelButton = lookup("Cancel").query();
+        assertNotNull(cancelButton);
+        clickOn(cancelButton);
+        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
+
+        //test Delete Account Popup to Login screen
+        final Button setBtn = lookup("#settingsButton").query();
+        assertNotNull(setBtn);
+        clickOn(setBtn);
+        assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
+        final Button delAccBtn = lookup("#deleteAccountButton").query();
+        clickOn(delAccBtn);
+
+        final DialogPane dlgPaneDelete = lookup(".dialog-pane").query();
+        assertNotNull(dlgPaneDelete);
+        final Button oKBtn = from(dlgPaneDelete).lookup("OK").query();
+        assertNotNull(oKBtn);
+        clickOn(oKBtn);
+        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
+        final Label infoLabel = lookup("#informationLabel").query();
+        assertEquals("Account successfully deleted", infoLabel.getText());
+    }
+
+    @Test
+    void testNewFriendView() {
+        signInToMainMenu();
+        clickOn("Find New Friends");
+        assertEquals("Monster Odyssey - Add a new friend", stage.getTitle());
+        final Button mainMenuButton = lookup("#mainMenuButton").query();
+        assertNotNull(mainMenuButton);
+        final Button addFriendButton = lookup("#addFriendButton").query();
+        assertNotNull(addFriendButton);
+        final Button messageButton = lookup("#messageButton").query();
+        assertNotNull(messageButton);
+        final TextField searchTextField = lookup("#searchTextField").query();
+        assertNotNull(searchTextField);
         clickOn("Main Menu");
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
     }
 
     @Test
-    void testMainMenuToMessages() {
-        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        testSignInToMainMenu();
+    void testMessagesView() {
+        signInToMainMenu();
+
+        // test Main Menu to Messages
         final Button messagesButton = lookup("Messages").query();
         assertNotNull(messagesButton);
         clickOn(messagesButton);
         assertEquals("Monster Odyssey - Messages", stage.getTitle());
         final Button sendButton = lookup("#sendButton").query();
         assertNotNull(sendButton);
-    }
 
-    @Test
-    void testMessagesToMainMenu() {
-        // login -> main menu
-        testSignInToMainMenu();
-
-        // main menu -> messages
-        final Button messagesButton = lookup("Messages").query();
-        assertNotNull(messagesButton);
-        clickOn(messagesButton);
-        assertEquals("Monster Odyssey - Messages", stage.getTitle());
-
-        // messages -> main menu
+        // test Messages To Main Menu
         final Button mainMenuButton = lookup("#mainMenuButton").query();
         assertNotNull(mainMenuButton);
         clickOn(mainMenuButton);
-
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
-        final Button logoutButton = lookup("#logoutButton").query();
-        assertNotNull(logoutButton);
-    }
+        clickOn("Messages");
 
-    @Test
-    void testMessagesToNewFriends() {
-        // login -> main menu
-        testSignInToMainMenu();
-
-        // main menu -> messages
-        final Button messagesButton = lookup("Messages").query();
-        assertNotNull(messagesButton);
-        clickOn(messagesButton);
-        assertEquals("Monster Odyssey - Messages", stage.getTitle());
-
-        // messages -> new friends
+        // test Messages To New Friends
         final Button findNewFriendsButton = lookup("#findNewFriendsButton").query();
         assertNotNull(findNewFriendsButton);
         clickOn(findNewFriendsButton);
-
         assertEquals("Monster Odyssey - Add a new friend", stage.getTitle());
+
     }
 
     @Test
-    void testIngameUnpauseWithKeyCodeP() {
-        testIngamePause();
-        type(KeyCode.P);
-        final Label gameTitle = lookup("Monster Odyssey").query();
-        assertNotNull(gameTitle);
-    }
+    void testGroupView() {
+        signInToMainMenu();
+        clickOn("Messages");
 
-    @Test
-    void testIngameUnpauseWithButton() {
-        testIngamePause();
-        final DialogPane dialogPane = lookup(".dialog-pane").query();
-        assertNotNull(dialogPane);
-        final ButtonType buttonType = dialogPane.getButtonTypes().stream()
-                .findFirst()
-                .orElse(null);
-        assertNotNull(buttonType);
-        final Button button = (Button) dialogPane.lookupButton(buttonType);
-        assertNotNull(button);
-        clickOn(button);
-        final Label gameTitle = lookup("Monster Odyssey").query();
-        assertNotNull(gameTitle);
-    }
-
-    @Test
-    void testMessagesToNewGroup() {
-        // login -> main menu
-        testSignInToMainMenu();
-
-        // main menu -> messages
-        final Button messagesButton = lookup("Messages").query();
-        assertNotNull(messagesButton);
-        clickOn(messagesButton);
-        assertEquals("Monster Odyssey - Messages", stage.getTitle());
-
-        // messages -> new group
+        // test Messages to New Group
         final Button newGroupButton = lookup("#newGroupButton").query();
         assertNotNull(newGroupButton);
         clickOn(newGroupButton);
 
+        // test New Group
         assertEquals("Monster Odyssey - New Group", stage.getTitle());
-        final Button createGroupButton = lookup("Create Group").query();
-        assertNotNull(createGroupButton);
+        final Button saveGroupButton = lookup("Save Group").query();
+        assertNotNull(saveGroupButton);
         final Text selectGroupMembersText = lookup("Select Groupmembers").queryText();
         assertNotNull(selectGroupMembersText);
+        clickOn("Go back");
+        assertEquals("Monster Odyssey - Messages", stage.getTitle());
+
+        // test Edit Group
+        final Button settingsButton = lookup("#settingsButton").query();
+        clickOn(settingsButton);
+        assertEquals("Monster Odyssey - Edit Group", stage.getTitle());
+        final Button deleteButton = lookup("#deleteGroupButton").query();
+        assertNotNull(deleteButton);
     }
 
-    @Test
-    void testNewGroupToMessages() {
-        // login -> main menu
-        testSignInToMainMenu();
-
-        // main menu -> messages
-        final Button messagesButton = lookup("Messages").query();
-        assertNotNull(messagesButton);
-        clickOn(messagesButton);
-        assertEquals("Monster Odyssey - Messages", stage.getTitle());
-
-        // messages -> new group
-        final Button newGroupButton = lookup("#newGroupButton").query();
-        assertNotNull(newGroupButton);
-        clickOn(newGroupButton);
-
-        // new group -> messages
-        final Button goBackToMessagesButton = lookup("#backToMessagesButton").query();
-        assertNotNull(goBackToMessagesButton);
-        clickOn(goBackToMessagesButton);
-
-        assertEquals("Monster Odyssey - Messages", stage.getTitle());
+    private void signInToMainMenu() {
+        final TextField usernameField = lookup("#usernameField").query();
+        final TextField passwordField = lookup("#passwordField").query();
+        final Button signInButton = lookup("Sign In").query();
+        clickOn(usernameField);
+        write("t");
+        clickOn(passwordField);
+        write("testtest");
+        clickOn(signInButton);
     }
 }

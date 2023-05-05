@@ -2,28 +2,39 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
 import javax.inject.Inject;
 import java.io.IOException;
 
-import static de.uniks.stpmon.team_m.Constants.STANDARD_HEIGHT;
-import static de.uniks.stpmon.team_m.Constants.STANDARD_WIDTH;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public abstract class Controller {
 
     @Inject
     protected App app;
+    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
+    protected final CompositeDisposable disposables = new CompositeDisposable();
 
     public void init() {
     }
 
     public String getTitle() {
-        return "";
+        return EMPTY_STRING;
     }
 
     public void destroy() {
+        disposables.dispose();
+    }
+
+    public void onDestroy(Runnable action) {
+        disposables.add(Disposable.fromRunnable(action));
     }
 
     public Parent render() {
