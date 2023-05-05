@@ -7,6 +7,8 @@ import de.uniks.stpmon.team_m.dto.UpdateMessageDto;
 import de.uniks.stpmon.team_m.rest.MessagesApiService;
 import io.reactivex.rxjava3.core.Observable;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -26,21 +28,26 @@ public class MessageService {
      */
     public Observable<List<Message>> getPrivateChatMessages(String friendUserID, String ownUserID) {
         // these are the messages from the friend to the user (these need to be displayed on the right)
-        Observable<List<Message>> messagesFriendUser = this.getMessagesOfUser(ownUserID).map(messages -> {
-            return messages.stream().filter( message -> message.sender().equals(friendUserID)).collect(Collectors.toList());
-        });
+        Observable<List<Message>> messagesFriendUser = this.getMessagesOfUser(ownUserID)
+                .map(messages -> messages
+                        .stream()
+                        .filter(message -> message.sender().equals(friendUserID)).collect(Collectors.toList())
+                );
 
         // these are the messages from the user to the friend
-        Observable<List<Message>> messagesUserFriend = this.getMessagesOfUser(friendUserID).map(messages -> {
-            messages.stream().filter( message -> message.sender().equals(ownUserID));
-            messages.sort((message1, message2) -> {
-                System.out.println(message1.createdAt());
-                return 0;
-            });
+        Observable<List<Message>> messagesUserFriend = this.getMessagesOfUser(friendUserID)
+                .map(messages -> messages
+                        .stream()
+                        .filter(message -> message.sender().equals(ownUserID)).collect(Collectors.toList()));
+
+        // sorts the messages after createdAt property (don't quite know yet if it's ascending or descending rn)
+        Observable<List<Message>> allMessages = messagesFriendUser.mergeWith(messagesUserFriend);
+        allMessages = allMessages.map(messages -> {
+            messages.sort(Comparator.comparing(Message::createdAt));
             return messages;
         });
 
-        return messagesFriendUser.mergeWith(messagesUserFriend);
+        return allMessages;
     }
 
     // Private messages
