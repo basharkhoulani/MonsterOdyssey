@@ -46,7 +46,7 @@ public class MessageService {
      * @param namespace the namespace used for api communication
      * @return an observable list of message records
      */
-    public Observable<List<Message>> getMessagesOfUser(String receiverID, String namespace) {
+    public Observable<List<Message>> getMessagesByNamespace(String receiverID, String namespace) {
         return messagesApiService.getMessages(namespace, receiverID);
     }
 
@@ -58,7 +58,7 @@ public class MessageService {
      * @param namespace the namespace used for api communication
      * @return the created message as an observable
      */
-    public Observable<Message> newPrivateMessage(String receiverID, String message, String namespace) {
+    public Observable<Message> newMessage(String receiverID, String message, String namespace) {
         CreateMessageDto createMessageDto = new CreateMessageDto(message);
         return messagesApiService.create(namespace, receiverID, createMessageDto);
     }
@@ -86,14 +86,14 @@ public class MessageService {
      */
     public Observable<List<Message>> getPrivateChatMessages(String friendUserID, String ownUserID) {
         // these are the messages from the friend to the user (these need to be displayed on the right)
-        Observable<List<Message>> messagesFriendUser = this.getMessagesOfUser(ownUserID, Constants.MESSAGE_NAMESPACE_GLOBAL)
+        Observable<List<Message>> messagesFriendUser = this.getMessagesByNamespace(ownUserID, Constants.MESSAGE_NAMESPACE_GLOBAL)
                 .map(messages -> messages
                         .stream()
                         .filter(message -> message.sender().equals(friendUserID)).collect(Collectors.toList())
                 );
 
         // these are the messages from the user to the friend
-        Observable<List<Message>> messagesUserFriend = this.getMessagesOfUser(friendUserID, Constants.MESSAGE_NAMESPACE_GLOBAL)
+        Observable<List<Message>> messagesUserFriend = this.getMessagesByNamespace(friendUserID, Constants.MESSAGE_NAMESPACE_GLOBAL)
                 .map(messages -> messages
                         .stream()
                         .filter(message -> message.sender().equals(ownUserID)).collect(Collectors.toList()));
