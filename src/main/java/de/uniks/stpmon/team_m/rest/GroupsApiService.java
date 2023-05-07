@@ -17,11 +17,11 @@ public interface GroupsApiService {
     Observable<List<Group>> getGroups(@Query("ids") List<String> ids);
 
     @GET("groups/{id}")
-    Observable<Group> getUser(@Path("id") String id);
+    Observable<Group> getGroup(@Path("id") String id);
 
     @PATCH("groups/{id}")
-    Observable<Group> update(@Body UpdateGroupDto dto);
+    Observable<Group> update(@Path("id") String _id, @Body UpdateGroupDto dto);
 
     @DELETE("groups/{id}")
-    Observable<Group> delete(@Path("id") String id);
+    Observable<Group> delete(@Path("id") String _id);
 }
