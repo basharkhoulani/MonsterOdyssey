@@ -44,9 +44,7 @@ public class UserStorage {
     }
 
     public void deleteFriend(User friend) {
-        if(this.friends.contains(friend)){
-            this.friends.remove(friend);
-        }
+        this.friends.remove(friend);
     }
 
     public void setFriends(List<User> friends) {
