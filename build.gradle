@@ -48,6 +48,10 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/adapter-rxjava3
     implementation group: 'com.squareup.retrofit2', name: 'adapter-rxjava3', version: '2.9.0'
+
+    // -------------------- ControlFX --------------------
+    // https://mvnrepository.com/artifact/org.controlsfx/controlsfx
+    implementation group: 'org.controlsfx', name: 'controlsfx', version: '11.1.0'
 }
 
 javafx {
