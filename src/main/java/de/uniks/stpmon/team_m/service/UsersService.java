@@ -12,6 +12,8 @@ import java.util.List;
 public class UsersService {
 
     private final UsersApiService usersApiService;
+    @Inject
+    UserStorage userStorage;
 
     @Inject
     public UsersService(UsersApiService usersApiService) {
@@ -31,11 +33,11 @@ public class UsersService {
         return usersApiService.getUsers(ids, status);
     }
 
-    public Observable<User> updateUser(User user, String name, String status, String avatar, List<String> friends, String password) {
-        return usersApiService.updateUser(user._id(), new UpdateUserDto(name, status, avatar, friends, password));
+    public Observable<User> updateUser(String name, String status, String avatar, List<String> friends, String password) {
+        return usersApiService.updateUser(userStorage.get_id(), new UpdateUserDto(name, status, avatar, friends, password));
     }
 
-    public Observable<User> deleteUSer(User user) {
-        return usersApiService.deleteUser(user._id());
+    public Observable<User> deleteUser() {
+        return usersApiService.deleteUser(userStorage.get_id());
     }
 }
