@@ -79,7 +79,9 @@ public class GroupController extends Controller {
     }
 
     public void deleteGroup() {
-        Alert alert = new Alert(Alert.AlertType.WARNING, "Are you sure you want to delete this group?", ButtonType.YES, ButtonType.NO);
+        Alert alert = new Alert(Alert.AlertType.WARNING, DELETE_WARNING, ButtonType.YES, ButtonType.NO);
+        alert.setTitle(SURE);
+        alert.setHeaderText(null);
         Optional<ButtonType> result = alert.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.YES) {
             app.show(messagesControllerProvider.get());

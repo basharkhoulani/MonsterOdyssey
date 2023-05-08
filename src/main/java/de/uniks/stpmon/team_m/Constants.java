@@ -16,6 +16,7 @@ public class Constants {
     public static final String APP_ICON = "images/icon.png";
     public static final String TASKBAR_ICON = "images/icon.png";
     public static final String LOADING = "Loading...";
+    public static final String SURE = "Are you sure?";
     public static final String EMPTY_STRING = "";
     public static final String FX_STYLE_BLACK = "-fx-border-color: black";
 
@@ -41,6 +42,7 @@ public class Constants {
     public static final String NEW_GROUP_TITLE = "New Group";
     public static final String EDIT_GROUP_TITLE = "Edit Group";
     public static final String CHANGE_GROUP = "Change Group Name";
+    public static final String DELETE_WARNING = "Are you sure you want to delete this group?";
 
     // ACCOUNT SETTINGS
     public static final String ACCOUNT_SETTINGS_TITLE = "Account Setting";
