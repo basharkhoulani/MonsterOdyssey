@@ -86,19 +86,10 @@ public class GroupController extends Controller {
         alert.setHeaderText(null);
         Optional<ButtonType> result = alert.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.YES) {
-            disposables.add(groupService.delete(groupStorage.get_id()).subscribe(lr-> app.show(messagesControllerProvider.get()), error -> {
-                alert.close();
-            }));
+            disposables.add(groupService.delete(groupStorage.get_id()).subscribe(lr-> app.show(messagesControllerProvider.get()), error -> alert.close()));
         } else {
             alert.close();
         }
-    }
-
-    private void errorAlert() {
-        Alert alert = new Alert(Alert.AlertType.ERROR, DELETE_ERROR_403, ButtonType.OK);
-        alert.setTitle(null);
-        alert.setHeaderText(null);
-        alert.showAndWait();
     }
 
     public void saveGroup() {
