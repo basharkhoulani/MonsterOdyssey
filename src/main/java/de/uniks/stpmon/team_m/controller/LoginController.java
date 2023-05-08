@@ -1,8 +1,13 @@
 package de.uniks.stpmon.team_m.controller;
 
 
+import de.uniks.stpmon.team_m.service.AuthenticationService;
+import de.uniks.stpmon.team_m.service.TokenStorage;
+import de.uniks.stpmon.team_m.service.UserStorage;
+import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -46,11 +51,20 @@ public class LoginController extends Controller {
 
     private SimpleStringProperty username = new SimpleStringProperty();
     private SimpleStringProperty password = new SimpleStringProperty();
-    private String information = "";
+    private SimpleBooleanProperty rememberMe = new SimpleBooleanProperty();
+    private String information = EMPTY_STRING;
 
 
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
+    @Inject
+    AuthenticationService authenticationService;
+    @Inject
+    TokenStorage tokenStorage;
+    @Inject
+    UserStorage user;
+    @Inject
+    UsersService usersService;
 
 
     @Inject
@@ -71,6 +85,7 @@ public class LoginController extends Controller {
 
         usernameField.textProperty().bindBidirectional(username);
         passwordField.textProperty().bindBidirectional(password);
+        rememberMeCheckbox.selectedProperty().bindBidirectional(rememberMe);
 
         isInvalidUsername = username.isEmpty();
         isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);
@@ -85,13 +100,20 @@ public class LoginController extends Controller {
     }
 
     public void signIn() {
+        passwordErrorLabel.setText(EMPTY_STRING);
+
         if (isInvalidPassword.or(isInvalidUsername).get()) {
             return;
         }
-        // TODO: test müssen auch ohne Serververbindung laufen. Wirkliche Funktionalität kommt später.
 
-
-        app.show(mainMenuControllerProvider.get());
+        disposables.add(authenticationService
+                .login(username.get(), password.get(), rememberMe.get())
+                .observeOn(FX_SCHEDULER)
+                .subscribe(loginResult -> {
+                app.show(mainMenuControllerProvider.get());
+            }, error -> {
+            passwordErrorLabel.setText(error.getMessage());
+            }));
     }
 
     public void signUp() {
