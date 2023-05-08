@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -41,10 +42,12 @@ public class GroupController extends Controller {
     @Inject
     Provider<MessagesController> messagesControllerProvider;
     private final GroupStorage groupStorage;
+    private final GroupService groupService;
 
     @Inject
-    public GroupController(GroupStorage groupStorage) {
+    public GroupController(GroupStorage groupStorage, GroupService groupService) {
 
+        this.groupService = groupService;
         this.groupStorage = groupStorage;
     }
 
@@ -84,6 +87,7 @@ public class GroupController extends Controller {
         alert.setHeaderText(null);
         Optional<ButtonType> result = alert.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.YES) {
+            groupService.delete(groupStorage.get_id()).subscribe();
             app.show(messagesControllerProvider.get());
         } else {
             alert.close();
