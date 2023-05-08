@@ -8,10 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.Mockito.*;
-
-import java.util.*;
-import java.util.prefs.Preferences;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,8 +20,6 @@ class AuthenticationServiceTest {
     UserStorage userStorage;
     @Mock
     AuthApiService authApiService;
-    @Mock
-    Preferences preferences;
 
     @InjectMocks
     AuthenticationService authenticationService;
