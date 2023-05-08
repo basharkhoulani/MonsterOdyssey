@@ -18,7 +18,7 @@ import static de.uniks.stpmon.team_m.Constants.*;
 public class App extends Application {
     private Stage stage;
     private Controller controller;
-    private MainComponent component;
+    private final MainComponent component;
 
     public App() {
         component = DaggerMainComponent.builder().mainApp(this).build();
