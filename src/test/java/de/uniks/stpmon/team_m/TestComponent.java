@@ -10,6 +10,7 @@ public interface TestComponent extends MainComponent{
 
     @Component.Builder
     interface Builder extends MainComponent.Builder{
-
+        @Override
+        TestComponent build();
     }
 }
