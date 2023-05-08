@@ -48,9 +48,7 @@ public class NewFriendController extends Controller {
     @Override
     public void init() {
         super.init();
-        disposables.add(usersService.getUsers(null, null).subscribe(users -> {
-            allUsers = users;
-        }));
+        disposables.add(usersService.getUsers(null, null).subscribe(users -> allUsers = users));
     }
 
 
