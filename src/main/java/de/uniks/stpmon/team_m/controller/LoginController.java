@@ -90,6 +90,7 @@ public class LoginController extends Controller {
         }
         // TODO: test müssen auch ohne Serververbindung laufen. Wirkliche Funktionalität kommt später.
 
+
         app.show(mainMenuControllerProvider.get());
     }
 
