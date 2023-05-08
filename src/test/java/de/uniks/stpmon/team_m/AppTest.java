@@ -13,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class AppTest extends ApplicationTest {
 
     private Stage stage;
-    private App app = new App(null);
-    private TestComponent component = (TestComponent) DaggerTestComponent.builder().mainApp(app).build();
+    private final App app = new App(null);
+    private final TestComponent component = (TestComponent) DaggerTestComponent.builder().mainApp(app).build();
 
     @Override
     public void start(Stage stage) {

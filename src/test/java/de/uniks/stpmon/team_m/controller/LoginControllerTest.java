@@ -27,12 +27,6 @@ class LoginControllerTest extends ApplicationTest {
     Provider<MainMenuController> mainMenuControllerProvider;
     @Mock
     AuthenticationService authenticationService;
-    @Mock
-    TokenStorage tokenStorage;
-    @Mock
-    UserStorage user;
-    @Mock
-    UsersService usersService;
 
     @Spy
     App app = new App(null);

@@ -49,9 +49,9 @@ public class LoginController extends Controller {
     private BooleanBinding isInvalidPassword;
 
 
-    private SimpleStringProperty username = new SimpleStringProperty();
-    private SimpleStringProperty password = new SimpleStringProperty();
-    private SimpleBooleanProperty rememberMe = new SimpleBooleanProperty();
+    private final SimpleStringProperty username = new SimpleStringProperty();
+    private final SimpleStringProperty password = new SimpleStringProperty();
+    private final SimpleBooleanProperty rememberMe = new SimpleBooleanProperty();
     private String information = EMPTY_STRING;
 
 
