@@ -3,7 +3,9 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.service.GroupStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -11,6 +13,8 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -75,8 +79,13 @@ public class GroupController extends Controller {
     }
 
     public void deleteGroup() {
-        //TODO server communication
-        app.show(messagesControllerProvider.get());
+        Alert alert = new Alert(Alert.AlertType.WARNING, "Are you sure you want to delete this group?", ButtonType.YES, ButtonType.NO);
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.YES) {
+            app.show(messagesControllerProvider.get());
+        } else {
+            alert.close();
+        }
     }
 
     public void saveGroup() {
