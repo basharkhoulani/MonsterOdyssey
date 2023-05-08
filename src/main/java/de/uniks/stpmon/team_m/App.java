@@ -18,13 +18,14 @@ import static de.uniks.stpmon.team_m.Constants.*;
 public class App extends Application {
     private Stage stage;
     private Controller controller;
+    private MainComponent component;
 
     public App() {
-
+        component = DaggerMainComponent.builder().mainApp(this).build();
     }
 
-    public App(Controller controller) {
-        this.controller = controller;
+    public App(MainComponent component) {
+        this.component = component;
     }
 
     public Stage getStage() {
@@ -46,11 +47,10 @@ public class App extends Application {
 
         stage.show();
 
-        if (controller != null) {
-            initAndRender(controller);
+        if (component == null) {
             return;
         }
-        final MainComponent component = DaggerMainComponent.builder().mainApp(this).build();
+
         final AuthenticationService authenticationService = component.authenticationService();
 
         if (authenticationService.isRememberMe()) {
