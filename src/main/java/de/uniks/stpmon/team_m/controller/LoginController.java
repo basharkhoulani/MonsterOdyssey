@@ -90,6 +90,7 @@ public class LoginController extends Controller {
         }
         // TODO: test müssen auch ohne Serververbindung laufen. Wirkliche Funktionalität kommt später.
 
+
         app.show(mainMenuControllerProvider.get());
     }
 
@@ -100,7 +101,7 @@ public class LoginController extends Controller {
     }
 
     public void showPassword() {
-        skin.setMask(skin.getMask());
+        skin.setMask(skin.getNotMask());
         passwordField.setText(passwordField.getText());
     }
 

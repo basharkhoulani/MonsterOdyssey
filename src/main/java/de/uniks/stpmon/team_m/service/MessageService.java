@@ -7,9 +7,9 @@ import de.uniks.stpmon.team_m.dto.UpdateMessageDto;
 import de.uniks.stpmon.team_m.rest.MessagesApiService;
 import io.reactivex.rxjava3.core.Observable;
 
+import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MessageService {
 
@@ -18,6 +18,7 @@ public class MessageService {
     * */
     private final MessagesApiService messagesApiService;
 
+    @Inject
     public MessageService(MessagesApiService messagesApiService) {
         this.messagesApiService = messagesApiService;
     }
@@ -78,36 +79,8 @@ public class MessageService {
 
     // General message methods
     /**
-     * Gets all the messages of two users. Messages will be sorted after property "createdAt".
-     *
-     * @return an observable list of all messages between two users (sorted after "createdAt")
-     */
-    public Observable<List<Message>> getPrivateChatMessages(String friendUserID, String ownUserID) {
-        // these are the messages from the friend to the user (these need to be displayed on the right)
-        Observable<List<Message>> messagesFriendUser = this.getMessagesByNamespace(ownUserID, Constants.MESSAGE_NAMESPACE_GLOBAL)
-                .map(messages -> messages
-                        .stream()
-                        .filter(message -> message.sender().equals(friendUserID)).collect(Collectors.toList())
-                );
-
-        // these are the messages from the user to the friend
-        Observable<List<Message>> messagesUserFriend = this.getMessagesByNamespace(friendUserID, Constants.MESSAGE_NAMESPACE_GLOBAL)
-                .map(messages -> messages
-                        .stream()
-                        .filter(message -> message.sender().equals(ownUserID)).collect(Collectors.toList()));
-
-        // sorts the messages after createdAt property (don't quite know yet if it's ascending or descending rn)
-        Observable<List<Message>> allMessages = messagesFriendUser.mergeWith(messagesUserFriend);
-        allMessages = allMessages.map(messages -> {
-            messages.sort(Comparator.comparing(Message::createdAt));
-            return messages;
-        });
-
-        return allMessages;
-    }
-
-    /**
-     * Gets all the messages from a group and returns them sorted after createdAt
+     * Gets all the messages from a group and returns them sorted after createdAt. This also includes private chat
+     * messages, since private messages are realized via a group of two persons.
      *
      * @param groupID the ID of the group which messages you need
      * @return a sorted observable of a sorted message list
@@ -132,6 +105,14 @@ public class MessageService {
      */
     public Observable<List<Message>> getRegionMessages(String regionID) {
         return this.getMessagesByNamespace(regionID, Constants.MESSAGE_NAMESPACE_REGIONS)
+                .map(messages -> {
+                    messages.sort(Comparator.comparing(Message::createdAt));
+                    return messages;
+                });
+    }
+
+    public Observable<List<Message>> getGlobalMessages(String parentID) {
+        return this.getMessagesByNamespace(parentID, Constants.MESSAGE_NAMESPACE_GLOBAL)
                 .map(messages -> {
                     messages.sort(Comparator.comparing(Message::createdAt));
                     return messages;
