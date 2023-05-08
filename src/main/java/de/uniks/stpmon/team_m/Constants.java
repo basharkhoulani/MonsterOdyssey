@@ -36,6 +36,7 @@ public class Constants {
 
     // NEW FRIEND
     public static final String NEW_FRIEND_TITLE = "Add a new friend";
+    public static final String FRIEND_ADDED = "Friend added. You can add more friends or go back to the main menu.";
 
     // GROUPS
     public static final String NEW_GROUP_TITLE = "New Group";

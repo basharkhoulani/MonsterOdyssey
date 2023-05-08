@@ -15,10 +15,9 @@ import org.controlsfx.control.textfield.*;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static de.uniks.stpmon.team_m.Constants.NEW_FRIEND_TITLE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class NewFriendController extends Controller {
 
@@ -79,7 +78,14 @@ public class NewFriendController extends Controller {
                 userStorage.addFriend(user._id());
             }
         }
-
+        disposables.add(usersService.updateUser(
+                null,
+                null,
+                null,
+                userStorage.getFriends(),
+                null).subscribe());
+        searchTextField.clear();
+        searchTextField.setPromptText(FRIEND_ADDED);
     }
 
     public void sendMessage() {
