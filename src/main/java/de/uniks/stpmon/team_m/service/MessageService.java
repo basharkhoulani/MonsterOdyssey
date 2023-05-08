@@ -7,9 +7,9 @@ import de.uniks.stpmon.team_m.dto.UpdateMessageDto;
 import de.uniks.stpmon.team_m.rest.MessagesApiService;
 import io.reactivex.rxjava3.core.Observable;
 
+import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MessageService {
 
@@ -18,6 +18,7 @@ public class MessageService {
     * */
     private final MessagesApiService messagesApiService;
 
+    @Inject
     public MessageService(MessagesApiService messagesApiService) {
         this.messagesApiService = messagesApiService;
     }
