@@ -24,7 +24,7 @@ public class PasswordFieldSkin extends TextFieldSkin {
         }
     }
 
-    public boolean getMask() {
+    public boolean getNotMask() {
         return !this.mask;
     }
 

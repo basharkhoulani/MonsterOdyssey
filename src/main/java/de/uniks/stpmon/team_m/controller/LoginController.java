@@ -101,7 +101,7 @@ public class LoginController extends Controller {
     }
 
     public void showPassword() {
-        skin.setMask(skin.getMask());
+        skin.setMask(skin.getNotMask());
         passwordField.setText(passwordField.getText());
     }
 
