@@ -42,12 +42,11 @@ public class GroupController extends Controller {
     @Inject
     Provider<MessagesController> messagesControllerProvider;
     private final GroupStorage groupStorage;
-    private final GroupService groupService;
+    @Inject
+    GroupService groupService;
 
     @Inject
-    public GroupController(GroupStorage groupStorage, GroupService groupService) {
-
-        this.groupService = groupService;
+    public GroupController(GroupStorage groupStorage) {
         this.groupStorage = groupStorage;
     }
 
@@ -87,8 +86,10 @@ public class GroupController extends Controller {
         alert.setHeaderText(null);
         Optional<ButtonType> result = alert.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.YES) {
-            groupService.delete(groupStorage.get_id()).subscribe();
-            app.show(messagesControllerProvider.get());
+            disposables.add(groupService.delete(groupStorage.get_id()).subscribe(lr-> app.show(messagesControllerProvider.get()), error -> {
+                alert.setContentText(DELETE_ERROR_403);
+                alert.getButtonTypes().remove(ButtonType.YES);
+            }));
         } else {
             alert.close();
         }
