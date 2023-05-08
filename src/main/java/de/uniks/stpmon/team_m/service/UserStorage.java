@@ -12,7 +12,7 @@ public class UserStorage {
     private String name;
     private String status;
     private String avatar;
-    private List<User> friends;
+    private List<String> friends;
 
     @Inject
     public UserStorage(){
@@ -35,19 +35,19 @@ public class UserStorage {
 
     public void setAvatar(String avatar) { this.avatar = avatar; }
 
-    public List<User> getFriends() { return this.friends; }
+    public List<String> getFriends() { return this.friends; }
 
-    public void addFriend(User newFriend) {
+    public void addFriend(String newFriend) {
         if(!this.friends.contains(newFriend)){
             this.friends.add(newFriend);
         }
     }
 
-    public void deleteFriend(User friend) {
+    public void deleteFriend(String friend) {
         this.friends.remove(friend);
     }
 
-    public void setFriends(List<User> friends) {
+    public void setFriends(List<String> friends) {
         this.friends = friends;
     }
 }
