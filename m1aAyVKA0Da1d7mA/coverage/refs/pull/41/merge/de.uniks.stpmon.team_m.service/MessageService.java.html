@@ -7,9 +7,9 @@ import de.uniks.stpmon.team_m.dto.UpdateMessageDto;
 import de.uniks.stpmon.team_m.rest.MessagesApiService;
 import io.reactivex.rxjava3.core.Observable;
 
+import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MessageService {
 
@@ -18,9 +18,10 @@ public class MessageService {
     * */
     private final MessagesApiService messagesApiService;
 
-<span class="nc" id="L21">    public MessageService(MessagesApiService messagesApiService) {</span>
-<span class="nc" id="L22">        this.messagesApiService = messagesApiService;</span>
-<span class="nc" id="L23">    }</span>
+    @Inject
+<span class="nc" id="L22">    public MessageService(MessagesApiService messagesApiService) {</span>
+<span class="nc" id="L23">        this.messagesApiService = messagesApiService;</span>
+<span class="nc" id="L24">    }</span>
 
     // Base api communication
     /**
@@ -33,7 +34,7 @@ public class MessageService {
      * @return an observable record of message
      */
     public Observable&lt;Message&gt; getMessageOfUserByID(String receiverID, String messageID, String namespace) {
-<span class="nc" id="L36">        return messagesApiService.getMessage(namespace, receiverID, messageID);</span>
+<span class="nc" id="L37">        return messagesApiService.getMessage(namespace, receiverID, messageID);</span>
     }
 
     /**
@@ -45,7 +46,7 @@ public class MessageService {
      * @return an observable list of message records
      */
     private Observable&lt;List&lt;Message&gt;&gt; getMessagesByNamespace(String receiverID, String namespace) {
-<span class="nc" id="L48">        return messagesApiService.getMessages(namespace, receiverID);</span>
+<span class="nc" id="L49">        return messagesApiService.getMessages(namespace, receiverID);</span>
     }
 
     /**
@@ -57,8 +58,8 @@ public class MessageService {
      * @return the created message as an observable
      */
     public Observable&lt;Message&gt; newMessage(String receiverID, String message, String namespace) {
-<span class="nc" id="L60">        CreateMessageDto createMessageDto = new CreateMessageDto(message);</span>
-<span class="nc" id="L61">        return messagesApiService.create(namespace, receiverID, createMessageDto);</span>
+<span class="nc" id="L61">        CreateMessageDto createMessageDto = new CreateMessageDto(message);</span>
+<span class="nc" id="L62">        return messagesApiService.create(namespace, receiverID, createMessageDto);</span>
     }
 
     /**
@@ -71,8 +72,8 @@ public class MessageService {
      * @return the updated message as an observable
      */
     public Observable&lt;Message&gt; updateMessage(String receiverID, String messageID, String updatedMessage, String namespace) {
-<span class="nc" id="L74">        UpdateMessageDto updateMessageDto = new UpdateMessageDto(updatedMessage);</span>
-<span class="nc" id="L75">        return messagesApiService.update(namespace, receiverID, messageID, updateMessageDto);</span>
+<span class="nc" id="L75">        UpdateMessageDto updateMessageDto = new UpdateMessageDto(updatedMessage);</span>
+<span class="nc" id="L76">        return messagesApiService.update(namespace, receiverID, messageID, updateMessageDto);</span>
     }
 
 
@@ -85,10 +86,10 @@ public class MessageService {
      * @return a sorted observable of a sorted message list
      */
     public Observable&lt;List&lt;Message&gt;&gt; getGroupMessages(String groupID) {
-<span class="nc" id="L88">        return this.getMessagesByNamespace(groupID, Constants.MESSAGE_NAMESPACE_GROUPS)</span>
-<span class="nc" id="L89">                .map(messages -&gt; {</span>
-<span class="nc" id="L90">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
-<span class="nc" id="L91">                    return messages;</span>
+<span class="nc" id="L89">        return this.getMessagesByNamespace(groupID, Constants.MESSAGE_NAMESPACE_GROUPS)</span>
+<span class="nc" id="L90">                .map(messages -&gt; {</span>
+<span class="nc" id="L91">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
+<span class="nc" id="L92">                    return messages;</span>
                 });
     }
 
@@ -103,18 +104,18 @@ public class MessageService {
      * @return a sorted observable of a sorted message list
      */
     public Observable&lt;List&lt;Message&gt;&gt; getRegionMessages(String regionID) {
-<span class="nc" id="L106">        return this.getMessagesByNamespace(regionID, Constants.MESSAGE_NAMESPACE_REGIONS)</span>
-<span class="nc" id="L107">                .map(messages -&gt; {</span>
-<span class="nc" id="L108">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
-<span class="nc" id="L109">                    return messages;</span>
+<span class="nc" id="L107">        return this.getMessagesByNamespace(regionID, Constants.MESSAGE_NAMESPACE_REGIONS)</span>
+<span class="nc" id="L108">                .map(messages -&gt; {</span>
+<span class="nc" id="L109">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
+<span class="nc" id="L110">                    return messages;</span>
                 });
     }
 
     public Observable&lt;List&lt;Message&gt;&gt; getGlobalMessages(String parentID) {
-<span class="nc" id="L114">        return this.getMessagesByNamespace(parentID, Constants.MESSAGE_NAMESPACE_GLOBAL)</span>
-<span class="nc" id="L115">                .map(messages -&gt; {</span>
-<span class="nc" id="L116">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
-<span class="nc" id="L117">                    return messages;</span>
+<span class="nc" id="L115">        return this.getMessagesByNamespace(parentID, Constants.MESSAGE_NAMESPACE_GLOBAL)</span>
+<span class="nc" id="L116">                .map(messages -&gt; {</span>
+<span class="nc" id="L117">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
+<span class="nc" id="L118">                    return messages;</span>
                 });
     }
 }
