@@ -109,9 +109,8 @@ public class LoginController extends Controller {
         disposables.add(authenticationService
                 .login(username.get(), password.get(), rememberMe.get())
                 .observeOn(FX_SCHEDULER)
-                .subscribe(loginResult -> {
-                app.show(mainMenuControllerProvider.get());
-            }, error -> {
+                .subscribe(loginResult -> app.show(mainMenuControllerProvider.get()),
+                        error -> {
             passwordErrorLabel.setText(error.getMessage());
             }));
     }
