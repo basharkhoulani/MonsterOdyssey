@@ -4,10 +4,14 @@ import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupStorage;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
@@ -18,17 +22,21 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
 public class MessagesController extends Controller {
 
+    @FXML
+    public HBox rootHBox;
     @FXML
     public VBox leftSideVBox;
     @FXML
@@ -57,6 +65,14 @@ public class MessagesController extends Controller {
     public Button settingsButton;
     @FXML
     public VBox friendsAndGroupsVBox;
+    @FXML
+    public Pane buttonPane;
+    @FXML
+    public Pane friendsAndGroupTextPane;
+    @FXML
+    public Pane chatPaneHeaderText;
+    @FXML
+    public Pane chatPaneInputArea;
 
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -111,7 +127,44 @@ public class MessagesController extends Controller {
         app.show(groupControllerProvider.get());
     }
 
-    public void createFriendNode() {
+    public HBox createFriendNode(User user) {
+        HBox friendHBox = new HBox();
+
+        friendHBox.setPrefHeight(50);
+        friendHBox.setMinHeight(50);
+        friendHBox.setPadding(new Insets(9, 0, 11, 0));
+
+        friendHBox.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            friendHBox.getStyleClass().clear();
+
+            if (newValue) {
+                friendHBox.getStyleClass().add("onHoverFriendHBox");
+            } else {
+                friendHBox.getStyleClass().add("normalFriendHBox");
+            }
+        });
+        friendHBox.setOnMouseClicked((event -> {
+            friendHBox.requestFocus();
+        }));
+
+        Circle status = new Circle();
+        status.setRadius(15);
+        status.setStroke(Color.BLACK);
+        status.setStrokeWidth(1);
+        status.setFill(Objects.equals(user.status(), "online") ? Color.LIGHTGREEN : Color.RED);
+
+        Text friendName = new Text();
+        friendName.setTextAlignment(TextAlignment.CENTER);
+        friendName.setStyle("-fx-font-size: 20");
+        friendName.setText(user.name());
+
+        friendHBox.getChildren().add(status);
+        friendHBox.getChildren().add(friendName);
+
+        return friendHBox;
+    }
+
+    public void createFriendNodeeeeeee() {
         // TODO:
         /*
          * I imagined this to be a new Pane that gets inserted in the #chatVBox.
@@ -120,7 +173,7 @@ public class MessagesController extends Controller {
          * */
         System.out.println(friendsAndGroupsVBox);
         HBox testHbox = new HBox();
-        testHbox.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-border-style: solid none none none;");
+        testHbox.getStyleClass().add("normalFriendHBox");
         Text testText = new Text();
         testText.setText("HALLO");
         testText.setStyle("-fx-background-color: green");
@@ -128,19 +181,41 @@ public class MessagesController extends Controller {
 
         for (int i = 0; i < 20; i++) {
             HBox testi = new HBox();
-            testi.setPadding(new Insets(5));
+            testi.setPadding(new Insets(9, 0, 11, 0));
+            testi.hoverProperty().addListener((observable, oldValue, newValue) -> {
+                testi.getStyleClass().clear();
+
+                if (newValue) {
+                    testi.getStyleClass().add("onHoverFriendHBox");
+                } else {
+                    testi.getStyleClass().add("normalFriendHBox");
+                }
+            });
+
+            testi.setOnMouseClicked((event -> {
+                testi.requestFocus();
+            }));
+
             Text wombat = new Text();
-            wombat.setText(Integer.toString(i));
+            wombat.setTextAlignment(TextAlignment.CENTER);
+            wombat.setStyle("-fx-font-size: 20");
+            wombat.setText(i + "Oskar :))))))))))))))");
             testi.setPrefHeight(50);
             Circle status = new Circle();
-            status.setRadius(20);
-            status.setFill(Color.LIGHTGREEN);
+            status.setRadius(15);
+            if (i % 2 == 0) {
+                status.setFill(Color.LIGHTGREEN);
+            } else {
+                status.setFill(Color.RED);
+            }
             status.setStroke(Color.BLACK);
             status.setStrokeWidth(1);
+            status.setStyle("-fx-padding: 0 20 0 0");
             testi.getChildren().add(status);
             testi.getChildren().add(wombat);
             testi.setMinHeight(50);
-            testi.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-border-style: solid none none none;");
+            testi.getStyleClass().add("normalFriendHBox");
+            testi.applyCss();
             friendsAndGroupsVBox.getChildren().add(testi);
             VBox.setVgrow(friendsAndGroupsScrollPane, Priority.ALWAYS);
         }
