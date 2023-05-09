@@ -26,7 +26,7 @@ class AuthenticationServiceTest {
     AuthenticationService authenticationService;
 
     @Test
-    void signIn() {
+    void login() {
         // Successful login of user
 
         //define mocks
