@@ -10,6 +10,7 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AuthenticationServiceTest {
@@ -25,11 +26,11 @@ class AuthenticationServiceTest {
     AuthenticationService authenticationService;
 
     @Test
-    void login() {
+    void signIn() {
         // Successful login of user
 
         //define mocks
-        Mockito.when(authApiService.login(ArgumentMatchers.any()))
+        when(authApiService.login(ArgumentMatchers.any()))
                 .thenReturn(Observable.just(new LoginResult("1", "t", "online", null, null, "a1a2", "a3a4")));
 
         // Login of a User
@@ -44,7 +45,6 @@ class AuthenticationServiceTest {
         assertEquals("1", userStorage.get_id());
 
         //check mocks
-        Mockito.verify(authApiService).login(new LoginDto("t", "12345678"));
-
+        verify(authApiService).login(new LoginDto("t", "12345678"));
     }
 }
