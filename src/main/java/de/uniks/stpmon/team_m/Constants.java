@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m;
 
+import javafx.geometry.Insets;
 import javafx.scene.input.KeyCode;
 
 public class Constants {
@@ -19,6 +20,8 @@ public class Constants {
     public static final String LOADING = "Loading...";
     public static final String EMPTY_STRING = "";
     public static final String FX_STYLE_BLACK = "-fx-border-color: black";
+    public static final String USER_STATUS_OFFLINE = "offline";
+    public static final String USER_STATUS_ONLINE = "online";
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
@@ -34,6 +37,9 @@ public class Constants {
     public static final int MESSAGES_HEIGHT = 640;
     public static final int MESSAGES_WIDTH = 840;
     public static final String MESSAGES_TITLE = "Messages";
+    public static final int MESSAGES_FRIEND_NODE_HEIGHT = 50;
+    public static final Insets MESSAGES_FRIEND_NODE_PADDING = new Insets(9, 0, 11, 0);
+    public static final int MESSAGES_FRIEND_NODE_STATUS_RADIUS = 15;
 
     // NEW FRIEND
     public static final String NEW_FRIEND_TITLE = "Add a new friend";
