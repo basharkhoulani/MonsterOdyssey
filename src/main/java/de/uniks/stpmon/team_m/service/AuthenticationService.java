@@ -15,21 +15,25 @@ public class AuthenticationService {
     private final TokenStorage tokenStorage;
     private final AuthApiService authApiService;
     private final Preferences preferences;
+    private final UserStorage userStorage;
 
     @Inject
     public AuthenticationService(
             TokenStorage tokenStorage,
             AuthApiService authApiService,
-            Preferences preferences
+            Preferences preferences,
+            UserStorage userStorage
     ) {
         this.tokenStorage = tokenStorage;
         this.authApiService = authApiService;
         this.preferences = preferences;
+        this.userStorage = userStorage;
     }
 
     public Observable<LoginResult> login(String username, String password, boolean rememberMe) {
         return authApiService.login(new LoginDto(username, password)).map(lr -> {
             tokenStorage.setToken(lr.accessToken());
+            userStorage.setUser(lr);
             if (rememberMe) {
                 preferences.put(Constants.REFRESH_TOKEN_PREF, lr.refreshToken());
             }
