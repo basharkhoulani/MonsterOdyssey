@@ -192,65 +192,6 @@ public class MessagesController extends Controller {
         return friendHBox;
     }
 
-    public void createFriendNodeeeeeee() {
-        // TODO:
-        /*
-         * I imagined this to be a new Pane that gets inserted in the #chatVBox.
-         * The Pane should be a new fxml fragment that gets loaded into one of
-         * the VBoxs' children.
-         * */
-        System.out.println(friendsAndGroupsVBox);
-        HBox testHbox = new HBox();
-        testHbox.getStyleClass().add("normalFriendHBox");
-        Text testText = new Text();
-        testText.setText("HALLO");
-        testText.setStyle("-fx-background-color: green");
-        testHbox.getChildren().add(testText);
-
-        for (int i = 0; i < 20; i++) {
-            HBox testi = new HBox();
-            testi.setPadding(new Insets(9, 0, 11, 0));
-            testi.hoverProperty().addListener((observable, oldValue, newValue) -> {
-                testi.getStyleClass().clear();
-
-                if (newValue) {
-                    testi.getStyleClass().add("onHoverFriendHBox");
-                } else {
-                    testi.getStyleClass().add("normalFriendHBox");
-                }
-            });
-
-            testi.setOnMouseClicked((event -> {
-                testi.requestFocus();
-            }));
-
-            Text wombat = new Text();
-            wombat.setTextAlignment(TextAlignment.CENTER);
-            wombat.setStyle("-fx-font-size: 20");
-            wombat.setText(i + "Oskar :))))))))))))))");
-            testi.setPrefHeight(50);
-            Circle status = new Circle();
-            status.setRadius(15);
-            if (i % 2 == 0) {
-                status.setFill(Color.LIGHTGREEN);
-            } else {
-                status.setFill(Color.RED);
-            }
-            status.setStroke(Color.BLACK);
-            status.setStrokeWidth(1);
-            status.setStyle("-fx-padding: 0 20 0 0");
-            testi.getChildren().add(status);
-            testi.getChildren().add(wombat);
-            testi.setMinHeight(50);
-            testi.getStyleClass().add("normalFriendHBox");
-            testi.applyCss();
-            friendsAndGroupsVBox.getChildren().add(testi);
-            VBox.setVgrow(friendsAndGroupsScrollPane, Priority.ALWAYS);
-        }
-
-        System.out.println(friendsAndGroupsScrollPane.getContent());
-    }
-
     public void creteMessageNode() {
         // TODO:
         /*
