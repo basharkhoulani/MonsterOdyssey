@@ -1,6 +1,6 @@
 package de.uniks.stpmon.team_m.service;
 
-import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.dto.LoginResult;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -12,7 +12,7 @@ public class UserStorage {
     private String name;
     private String status;
     private String avatar;
-    private List<User> friends;
+    private List<String> friends;
 
     @Inject
     public UserStorage(){
@@ -35,19 +35,27 @@ public class UserStorage {
 
     public void setAvatar(String avatar) { this.avatar = avatar; }
 
-    public List<User> getFriends() { return this.friends; }
+    public List<String> getFriends() { return this.friends; }
 
-    public void addFriend(User newFriend) {
+    public void addFriend(String newFriend) {
         if(!this.friends.contains(newFriend)){
             this.friends.add(newFriend);
         }
     }
 
-    public void deleteFriend(User friend) {
+    public void deleteFriend(String friend) {
         this.friends.remove(friend);
     }
 
-    public void setFriends(List<User> friends) {
+    public void setFriends(List<String> friends) {
         this.friends = friends;
+    }
+
+    public void setUser(LoginResult loginResult){
+        this._id = loginResult._id();
+        this.name = loginResult.name();
+        this.status = loginResult.status();
+        this.avatar = loginResult.avatar();
+        this.friends = loginResult.friends();
     }
 }
