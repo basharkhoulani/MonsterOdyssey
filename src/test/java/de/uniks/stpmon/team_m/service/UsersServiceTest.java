@@ -9,18 +9,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UsersServiceTest {
 
-    @Spy
-    TokenStorage tokenStorage;
-    @Spy
-    UserStorage userStorage;
     @Mock
     UsersApiService usersApiService;
     @InjectMocks
