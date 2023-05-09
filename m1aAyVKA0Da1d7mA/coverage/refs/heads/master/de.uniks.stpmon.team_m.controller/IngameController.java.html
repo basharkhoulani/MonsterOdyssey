@@ -11,6 +11,7 @@ import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -21,65 +22,72 @@ public class IngameController extends Controller {
     public Button helpSymbol;
 
     @Inject
-<span class="fc" id="L24">    public IngameController() {</span>
-<span class="fc" id="L25">    }</span>
+    Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
+
+    @Inject
+<span class="fc" id="L28">    public IngameController() {</span>
+<span class="fc" id="L29">    }</span>
 
     @Override
     public String getTitle() {
-<span class="fc" id="L29">        return INGAME_TITLE;</span>
+<span class="fc" id="L33">        return INGAME_TITLE;</span>
     }
 
     @Override
     public Parent render() {
-<span class="fc" id="L34">        final Parent parent = super.render();</span>
-<span class="fc" id="L35">        app.getStage().getScene().setOnKeyPressed(event -&gt; {</span>
-<span class="pc bpc" id="L36" title="1 of 2 branches missed.">            if (event.getCode() == PAUSE_MENU_KEY) {</span>
-<span class="fc" id="L37">                pauseGame();</span>
+<span class="fc" id="L38">        final Parent parent = super.render();</span>
+<span class="fc" id="L39">        app.getStage().getScene().setOnKeyPressed(event -&gt; {</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">            if (event.getCode() == PAUSE_MENU_KEY) {</span>
+<span class="fc" id="L41">                pauseGame();</span>
             }
-<span class="fc" id="L39">        });</span>
-<span class="fc" id="L40">        return parent;</span>
+<span class="fc" id="L43">        });</span>
+<span class="fc" id="L44">        return parent;</span>
     }
 
     public void showHelp() {
-<span class="fc" id="L44">        Alert alert = new Alert(Alert.AlertType.INFORMATION);</span>
-<span class="fc" id="L45">        alert.setTitle(null);</span>
-<span class="fc" id="L46">        alert.setHeaderText(null);</span>
-<span class="fc" id="L47">        alert.setGraphic(null);</span>
-<span class="fc" id="L48">        alert.initOwner(app.getStage());</span>
-<span class="fc" id="L49">        alert.initModality(Modality.APPLICATION_MODAL);</span>
-<span class="fc" id="L50">        alert.initStyle(StageStyle.UNDECORATED);</span>
-<span class="fc" id="L51">        alert.setContentText(HELP_LABEL);</span>
-<span class="fc" id="L52">        final DialogPane dialogPane = alert.getDialogPane();</span>
-<span class="fc" id="L53">        dialogPane.setStyle(FX_STYLE_BLACK);</span>
-<span class="fc" id="L54">        alert.showAndWait();</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L48">        Alert alert = new Alert(Alert.AlertType.INFORMATION);</span>
+<span class="fc" id="L49">        alert.setTitle(null);</span>
+<span class="fc" id="L50">        alert.setHeaderText(null);</span>
+<span class="fc" id="L51">        alert.setGraphic(null);</span>
+<span class="fc" id="L52">        alert.initOwner(app.getStage());</span>
+<span class="fc" id="L53">        alert.initModality(Modality.APPLICATION_MODAL);</span>
+<span class="fc" id="L54">        alert.initStyle(StageStyle.UNDECORATED);</span>
+<span class="fc" id="L55">        alert.setContentText(HELP_LABEL);</span>
+<span class="fc" id="L56">        final DialogPane dialogPane = alert.getDialogPane();</span>
+<span class="fc" id="L57">        dialogPane.setStyle(FX_STYLE_BLACK);</span>
+<span class="fc" id="L58">        alert.showAndWait();</span>
+<span class="fc" id="L59">    }</span>
 
     public void pauseGame() {
-<span class="fc" id="L58">        final Alert alert = new Alert(Alert.AlertType.NONE);</span>
-<span class="fc" id="L59">        final DialogPane dialogPane = alert.getDialogPane();</span>
-<span class="fc" id="L60">        final ButtonType resume = new ButtonType(RESUME_BUTTON_LABEL);</span>
-<span class="fc" id="L61">        final ButtonType saveAndExit = new ButtonType(SAVE_GAME_AND_LEAVE_BUTTON_LABEL);</span>
-<span class="fc" id="L62">        dialogPane.getButtonTypes().addAll(resume, saveAndExit);</span>
-<span class="fc" id="L63">        final Button resumeButton = (Button) dialogPane.lookupButton(resume);</span>
-<span class="fc" id="L64">        resumeButton.setOnKeyPressed(event -&gt; {</span>
-<span class="nc bnc" id="L65" title="All 2 branches missed.">            if (event.getCode() == PAUSE_MENU_KEY) {</span>
-<span class="nc" id="L66">                alert.setResult(resume);</span>
+<span class="fc" id="L62">        final Alert alert = new Alert(Alert.AlertType.NONE);</span>
+<span class="fc" id="L63">        final DialogPane dialogPane = alert.getDialogPane();</span>
+<span class="fc" id="L64">        final ButtonType resume = new ButtonType(RESUME_BUTTON_LABEL);</span>
+<span class="fc" id="L65">        final ButtonType saveAndExit = new ButtonType(SAVE_GAME_AND_LEAVE_BUTTON_LABEL);</span>
+<span class="fc" id="L66">        dialogPane.getButtonTypes().addAll(resume, saveAndExit);</span>
+<span class="fc" id="L67">        final Button resumeButton = (Button) dialogPane.lookupButton(resume);</span>
+<span class="fc" id="L68">        resumeButton.setOnKeyPressed(event -&gt; {</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            if (event.getCode() == PAUSE_MENU_KEY) {</span>
+<span class="nc" id="L70">                alert.setResult(resume);</span>
             }
-<span class="nc" id="L68">        });</span>
+<span class="nc" id="L72">        });</span>
 
-<span class="fc" id="L70">        alert.setTitle(PAUSE_MENU_TITLE);</span>
-<span class="fc" id="L71">        alert.setHeaderText(null);</span>
-<span class="fc" id="L72">        alert.setGraphic(null);</span>
-<span class="fc" id="L73">        alert.setContentText(PAUSE_MENU_LABEL);</span>
-<span class="fc" id="L74">        alert.initOwner(app.getStage());</span>
-<span class="fc" id="L75">        alert.initModality(Modality.APPLICATION_MODAL);</span>
-<span class="fc" id="L76">        alert.initStyle(StageStyle.UNDECORATED);</span>
-<span class="fc" id="L77">        dialogPane.setStyle(FX_STYLE_BLACK);</span>
+<span class="fc" id="L74">        alert.setTitle(PAUSE_MENU_TITLE);</span>
+<span class="fc" id="L75">        alert.setHeaderText(null);</span>
+<span class="fc" id="L76">        alert.setGraphic(null);</span>
+<span class="fc" id="L77">        alert.setContentText(PAUSE_MENU_LABEL);</span>
+<span class="fc" id="L78">        alert.initOwner(app.getStage());</span>
+<span class="fc" id="L79">        alert.initModality(Modality.APPLICATION_MODAL);</span>
+<span class="fc" id="L80">        alert.initStyle(StageStyle.UNDECORATED);</span>
+<span class="fc" id="L81">        dialogPane.setStyle(FX_STYLE_BLACK);</span>
 
-<span class="fc" id="L79">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
-<span class="pc bpc" id="L80" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == resume) {</span>
-<span class="fc" id="L81">            alert.close();</span>
+<span class="fc" id="L83">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+<span class="fc bfc" id="L84" title="All 4 branches covered.">        if (result.isPresent() &amp;&amp; result.get() == resume) {</span>
+<span class="fc" id="L85">            alert.close();</span>
+<span class="pc bpc" id="L86" title="1 of 4 branches missed.">        } else if (result.isPresent() &amp;&amp; result.get() == saveAndExit) {</span>
+<span class="fc" id="L87">            alert.close();</span>
+<span class="fc" id="L88">            app.getStage().getScene().setOnKeyPressed(null);</span>
+<span class="fc" id="L89">            app.show(mainMenuControllerProvider.get());</span>
         }
-<span class="fc" id="L83">    }</span>
+<span class="fc" id="L91">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

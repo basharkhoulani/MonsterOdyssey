@@ -35,7 +35,7 @@ public class UsersService {
 <span class="nc" id="L35">        return usersApiService.updateUser(user._id(), new UpdateUserDto(name, status, avatar, friends, password));</span>
     }
 
-    public Observable&lt;User&gt; deleteUSer(User user) {
+    public Observable&lt;User&gt; deleteUser(User user) {
 <span class="nc" id="L39">        return usersApiService.deleteUser(user._id());</span>
     }
 }
