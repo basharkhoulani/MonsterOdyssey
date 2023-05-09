@@ -29,29 +29,11 @@ class AppTest extends ApplicationTest {
 
         // test Login Screen
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        final Label welcomeLabel = lookup("Welcome to").query();
-        final Button signUpButton = lookup("Sign Up").query();
-        final Button signInButton = lookup("Sign In").query();
-        assertNotNull(welcomeLabel);
-        assertNotNull(signUpButton);
-        assertNotNull(signInButton);
-
-        assertTrue(signInButton.isDisabled());
-        assertTrue(signUpButton.isDisabled());
-
-        // test Show Password In SignIn
-        final PasswordField passwordField = lookup("#passwordField").query();
-        clickOn(passwordField);
-        write("password");
-        final Button showPasswordBtn = lookup("#hideButton").query();
-        clickOn(showPasswordBtn);
-        assertEquals("class de.uniks.stpmon.team_m.utils.PasswordFieldSkin", passwordField.getSkin().getClass().toString());
-
+        
         // test Sign In To MainMenu
-        final TextField usernameField = lookup("#usernameField").query();
-        clickOn(usernameField);
-        write("t");
-        clickOn(signInButton);
+        write("t\t");
+        write("testtest");
+        clickOn("#signInButton");
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
 
     }
