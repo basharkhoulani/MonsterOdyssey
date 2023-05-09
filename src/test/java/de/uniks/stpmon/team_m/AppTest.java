@@ -148,6 +148,11 @@ class AppTest extends ApplicationTest {
         clickOn("Resume Game");
         final Label gameTitleUnpauseButton = lookup("Monster Odyssey").query();
         assertNotNull(gameTitleUnpauseButton);
+
+        // test Ingame Back To Main Menu
+        type(KeyCode.P);
+        clickOn("Save Game & Leave");
+        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
     }
 
     @Test

@@ -35,7 +35,7 @@ public class UsersService {
         return usersApiService.updateUser(user._id(), new UpdateUserDto(name, status, avatar, friends, password));
     }
 
-    public Observable<User> deleteUSer(User user) {
+    public Observable<User> deleteUser(User user) {
         return usersApiService.deleteUser(user._id());
     }
 }
