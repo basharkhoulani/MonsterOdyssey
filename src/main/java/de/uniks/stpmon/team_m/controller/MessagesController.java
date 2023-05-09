@@ -97,9 +97,35 @@ public class MessagesController extends Controller {
 
     @Override
     public Parent render() {
-        //final Parent parent = FXMLLoader.load(Main.class.getResource("view/Monster.fxml"))
         Parent parent = super.render();
-        createFriendNode();
+        Scene scene = app.getStage().getScene();
+        scene.setRoot(rootHBox);
+        System.out.println(rootHBox.getScene());
+        rootHBox.prefWidthProperty().bind(scene.widthProperty());
+        rootHBox.prefHeightProperty().bind(scene.heightProperty());
+
+        leftSideVBox.maxHeightProperty().bind(rootHBox.prefHeightProperty());
+        rightSideVBox.maxHeightProperty().bind(rootHBox.prefHeightProperty());
+        rightSideVBox.maxWidthProperty().bind(rootHBox.prefWidthProperty().map(number -> number.intValue() - leftSideVBox.getPrefWidth()));
+
+        leftSideVBox.prefHeightProperty().bind(rootHBox.prefHeightProperty());
+        rightSideVBox.prefHeightProperty().bind(rootHBox.prefHeightProperty());
+        rightSideVBox.prefWidthProperty().bind(rootHBox.prefWidthProperty().map(number -> number.intValue() - leftSideVBox.getPrefWidth()));
+
+        messageTextArea.prefWidthProperty().bind(rightSideVBox.prefWidthProperty().map(number -> number.intValue() - sendButton.getPrefWidth() - 7));
+        sendButton.layoutXProperty().bind(messageTextArea.prefWidthProperty().map(number -> number.intValue() + 2));
+
+        for (Node child : leftSideVBox.getChildren()) {
+            VBox.setVgrow(child, Priority.NEVER);
+        }
+        VBox.setVgrow(friendsAndGroupsScrollPane, Priority.ALWAYS);
+
+        for (Node child : rightSideVBox.getChildren()) {
+            VBox.setVgrow(child, Priority.NEVER);
+        }
+        VBox.setVgrow(chatScrollPane, Priority.ALWAYS);
+        createFriendNodeeeeeee();
+
 
         return parent;
     }
