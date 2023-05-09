@@ -102,37 +102,45 @@ public class LoginController extends Controller {
     public void signIn() {
 <span class="fc" id="L103">        passwordErrorLabel.setText(EMPTY_STRING);</span>
 
-<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (isInvalidPassword.or(isInvalidUsername).get()) {</span>
-<span class="nc" id="L106">            return;</span>
-        }
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (isInvalidPassword.or(isInvalidUsername).get()) { return; }</span>
 
-<span class="fc" id="L109">        disposables.add(authenticationService</span>
-<span class="fc" id="L110">                .login(username.get(), password.get(), rememberMe.get())</span>
-<span class="fc" id="L111">                .observeOn(FX_SCHEDULER)</span>
-<span class="fc" id="L112">                .subscribe(loginResult -&gt; app.show(mainMenuControllerProvider.get()),</span>
-                        error -&gt; {
-<span class="nc" id="L114">            passwordErrorLabel.setText(error.getMessage());</span>
-<span class="nc" id="L115">            }));</span>
-<span class="fc" id="L116">    }</span>
+<span class="fc" id="L107">        disposables.add(authenticationService</span>
+<span class="fc" id="L108">                .login(username.get(), password.get(), rememberMe.get())</span>
+<span class="fc" id="L109">                .observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L110">                .subscribe(loginResult -&gt; {</span>
+<span class="fc" id="L111">                    app.show(mainMenuControllerProvider.get());</span>
+<span class="fc" id="L112">                    }, error -&gt; {</span>
+<span class="nc" id="L113">                    passwordErrorLabel.setText(error.getMessage());</span>
+<span class="nc" id="L114">            }));</span>
+<span class="fc" id="L115">    }</span>
 
     public void signUp() {
-        // TODO: from UsersService
+<span class="fc" id="L118">        passwordErrorLabel.setText(EMPTY_STRING);</span>
 
-<span class="nc" id="L121">        app.show(mainMenuControllerProvider.get());</span>
-<span class="nc" id="L122">    }</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        if(isInvalidPassword.or(isInvalidUsername).get()){ return; }</span>
+
+<span class="fc" id="L122">        disposables.add(usersService</span>
+<span class="fc" id="L123">                .createUser(username.get(), null, password.get())</span>
+<span class="fc" id="L124">                .observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L125">                .subscribe(userResult -&gt; {</span>
+<span class="fc" id="L126">                    signIn();</span>
+<span class="fc" id="L127">                    }, error -&gt;{</span>
+<span class="nc" id="L128">                    passwordErrorLabel.setText(error.getMessage());</span>
+<span class="nc" id="L129">                }));</span>
+<span class="fc" id="L130">    }</span>
 
     public void showPassword() {
-<span class="fc" id="L125">        skin.setMask(skin.getNotMask());</span>
-<span class="fc" id="L126">        passwordField.setText(passwordField.getText());</span>
-<span class="fc" id="L127">    }</span>
+<span class="fc" id="L133">        skin.setMask(skin.getNotMask());</span>
+<span class="fc" id="L134">        passwordField.setText(passwordField.getText());</span>
+<span class="fc" id="L135">    }</span>
 
     public void showInformation() {
-<span class="fc" id="L130">        informationLabel.setText(this.information);</span>
-<span class="fc" id="L131">    }</span>
+<span class="fc" id="L138">        informationLabel.setText(this.information);</span>
+<span class="fc" id="L139">    }</span>
 
     public void setInformation(String information){
-<span class="fc" id="L134">        this.information = information;</span>
-<span class="fc" id="L135">    }</span>
+<span class="fc" id="L142">        this.information = information;</span>
+<span class="fc" id="L143">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
