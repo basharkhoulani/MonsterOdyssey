@@ -18,51 +18,51 @@ import static de.uniks.stpmon.team_m.Constants.*;
 public class App extends Application {
     private Stage stage;
     private Controller controller;
+    private final MainComponent component;
 
-<span class="fc" id="L22">    public App() {</span>
+<span class="nc" id="L23">    public App() {</span>
+<span class="nc" id="L24">        component = DaggerMainComponent.builder().mainApp(this).build();</span>
+<span class="nc" id="L25">    }</span>
 
-<span class="fc" id="L24">    }</span>
-
-<span class="nc" id="L26">    public App(Controller controller) {</span>
-<span class="nc" id="L27">        this.controller = controller;</span>
-<span class="nc" id="L28">    }</span>
+<span class="fc" id="L27">    public App(MainComponent component) {</span>
+<span class="fc" id="L28">        this.component = component;</span>
+<span class="fc" id="L29">    }</span>
 
     public Stage getStage() {
-<span class="fc" id="L31">        return stage;</span>
+<span class="fc" id="L32">        return stage;</span>
     }
 
     @Override
     public void start(Stage primaryStage) {
-<span class="fc" id="L36">        stage = primaryStage;</span>
-<span class="fc" id="L37">        stage.setWidth(STANDARD_WIDTH);</span>
-<span class="fc" id="L38">        stage.setHeight(STANDARD_HEIGHT);</span>
-<span class="fc" id="L39">        stage.setTitle(GAME_NAME);</span>
+<span class="fc" id="L37">        stage = primaryStage;</span>
+<span class="fc" id="L38">        stage.setWidth(STANDARD_WIDTH);</span>
+<span class="fc" id="L39">        stage.setHeight(STANDARD_HEIGHT);</span>
+<span class="fc" id="L40">        stage.setTitle(GAME_NAME);</span>
 
-<span class="fc" id="L41">        final Scene scene = new Scene(new Label(LOADING));</span>
-<span class="fc" id="L42">        stage.setScene(scene);</span>
+<span class="fc" id="L42">        final Scene scene = new Scene(new Label(LOADING));</span>
+<span class="fc" id="L43">        stage.setScene(scene);</span>
 
-<span class="fc" id="L44">        setAppIcon(stage);</span>
-<span class="fc" id="L45">        setTaskbarIcon();</span>
+<span class="fc" id="L45">        setAppIcon(stage);</span>
+<span class="fc" id="L46">        setTaskbarIcon();</span>
 
-<span class="fc" id="L47">        stage.show();</span>
+<span class="fc" id="L48">        stage.show();</span>
 
-<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (controller != null) {</span>
-<span class="nc" id="L50">            initAndRender(controller);</span>
-<span class="nc" id="L51">            return;</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if (component == null) {</span>
+<span class="fc" id="L51">            return;</span>
         }
-<span class="fc" id="L53">        final MainComponent component = DaggerMainComponent.builder().mainApp(this).build();</span>
-<span class="fc" id="L54">        final AuthenticationService authenticationService = component.authenticationService();</span>
 
-<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if (authenticationService.isRememberMe()) {</span>
+<span class="nc" id="L54">        final AuthenticationService authenticationService = component.authenticationService();</span>
+
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if (authenticationService.isRememberMe()) {</span>
 <span class="nc" id="L57">            authenticationService.refresh().subscribe(lr -&gt; {</span>
 <span class="nc" id="L58">                show(component.mainMenuController());</span>
 <span class="nc" id="L59">            }, err -&gt; {</span>
 <span class="nc" id="L60">                show(component.loginController());</span>
 <span class="nc" id="L61">            });</span>
         } else {
-<span class="fc" id="L63">            show(component.loginController());</span>
+<span class="nc" id="L63">            show(component.loginController());</span>
         }
-<span class="fc" id="L65">    }</span>
+<span class="nc" id="L65">    }</span>
 
     @Override
     public void stop() {

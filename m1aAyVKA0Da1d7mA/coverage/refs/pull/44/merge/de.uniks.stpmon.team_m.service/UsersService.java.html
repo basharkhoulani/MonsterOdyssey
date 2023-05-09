@@ -14,9 +14,9 @@ public class UsersService {
     private final UsersApiService usersApiService;
 
     @Inject
-<span class="nc" id="L17">    public UsersService(UsersApiService usersApiService) {</span>
-<span class="nc" id="L18">        this.usersApiService = usersApiService;</span>
-<span class="nc" id="L19">    }</span>
+<span class="fc" id="L17">    public UsersService(UsersApiService usersApiService) {</span>
+<span class="fc" id="L18">        this.usersApiService = usersApiService;</span>
+<span class="fc" id="L19">    }</span>
 
     public Observable&lt;User&gt; createUser(String username, String avatar, String password) {
 <span class="nc" id="L22">        return usersApiService.createUser(new CreateUserDto(username, avatar, password));</span>
