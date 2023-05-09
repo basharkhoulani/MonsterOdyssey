@@ -9,6 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.layout.StackPane?>
 <HBox fx:id="rootHBox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MessagesController" stylesheets="@../styles.css">
    <VBox fx:id="leftSideVBox" maxHeight="530" prefHeight="530.0" prefWidth="357.0" style="-fx-border-color: black; -fx-border-width: 2px; -fx-border-style: solid none solid solid;">
          <Pane fx:id="friendsAndGroupTextPane" prefHeight="43.0" prefWidth="338.0" minHeight="43.0" style="-fx-background-color: lightgray">

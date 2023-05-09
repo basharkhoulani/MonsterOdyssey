@@ -3,18 +3,22 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupStorage;
+import de.uniks.stpmon.team_m.service.UserStorage;
+import de.uniks.stpmon.team_m.service.UsersService;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -23,6 +27,7 @@ import javafx.scene.text.TextAlignment;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import java.util.List;
 import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -76,6 +81,11 @@ public class MessagesController extends Controller {
 
     @Inject
     Provider<GroupController> groupControllerProvider;
+
+    @Inject
+    Provider<UserStorage> userStorageProvider;
+    @Inject
+    Provider<UsersService> usersServiceProvider;
     private final GroupStorage groupStorage;
 
     @Inject
@@ -93,8 +103,37 @@ public class MessagesController extends Controller {
     public Parent render() {
         Parent parent = super.render();
         this.setupWindowScalingCompatibility();
+        this.initializeFriendNodes();
 
         return parent;
+    }
+
+    private void initializeFriendNodes() {
+        List<String> friends = userStorageProvider.get().getFriends();
+        usersServiceProvider.get().getUsers(friends, null).subscribe(new Observer<>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@NonNull List<User> users) {
+                for (User friend : users) {
+                    HBox newFriendNode = createFriendNode(friend);
+                    friendsAndGroupsVBox.getChildren().add(newFriendNode);
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     @Override
@@ -110,7 +149,6 @@ public class MessagesController extends Controller {
     private void setupWindowScalingCompatibility() {
         Scene scene = app.getStage().getScene();
         scene.setRoot(rootHBox);
-        System.out.println(rootHBox.getScene());
 
         // base window
         rootHBox.prefWidthProperty().bind(scene.widthProperty());
@@ -119,11 +157,13 @@ public class MessagesController extends Controller {
         // left and right vBoxes
         leftSideVBox.maxHeightProperty().bind(rootHBox.prefHeightProperty());
         rightSideVBox.maxHeightProperty().bind(rootHBox.prefHeightProperty());
-        rightSideVBox.maxWidthProperty().bind(rootHBox.prefWidthProperty().map(number -> number.intValue() - leftSideVBox.getPrefWidth()));
+        rightSideVBox.maxWidthProperty().bind(rootHBox.prefWidthProperty().map(number ->
+                number.intValue() - leftSideVBox.getPrefWidth()));
 
         leftSideVBox.prefHeightProperty().bind(rootHBox.prefHeightProperty());
         rightSideVBox.prefHeightProperty().bind(rootHBox.prefHeightProperty());
-        rightSideVBox.prefWidthProperty().bind(rootHBox.prefWidthProperty().map(number -> number.intValue() - leftSideVBox.getPrefWidth()));
+        rightSideVBox.prefWidthProperty().bind(rootHBox.prefWidthProperty().map(number ->
+                number.intValue() - leftSideVBox.getPrefWidth()));
 
         for (Node child : leftSideVBox.getChildren()) {
             VBox.setVgrow(child, Priority.NEVER);
@@ -135,9 +175,18 @@ public class MessagesController extends Controller {
         }
         VBox.setVgrow(chatScrollPane, Priority.ALWAYS);
 
+        // messageHeaderArea
+        currentFriendOrGroupText.layoutXProperty().bind(rightSideVBox.prefWidthProperty().map(number ->
+                (number.intValue() - chatPaneHeaderText.getPrefWidth()) / 2));
+
+        settingsButton.layoutXProperty().bind(currentFriendOrGroupText.layoutXProperty().map(number ->
+                number.intValue() + currentFriendOrGroupText.getWrappingWidth() + 3));
+
         // message input area
-        messageTextArea.prefWidthProperty().bind(rightSideVBox.prefWidthProperty().map(number -> number.intValue() - sendButton.getPrefWidth() - 7));
-        sendButton.layoutXProperty().bind(messageTextArea.prefWidthProperty().map(number -> number.intValue() + 2));
+        messageTextArea.prefWidthProperty().bind(rightSideVBox.prefWidthProperty().map(number ->
+                number.intValue() - sendButton.getPrefWidth() - 7));
+        sendButton.layoutXProperty().bind(messageTextArea.prefWidthProperty().map(number ->
+                number.intValue() + 2));
     }
 
     public void changeToMainMenu() {
