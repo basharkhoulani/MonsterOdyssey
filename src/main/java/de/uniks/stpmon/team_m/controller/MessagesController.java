@@ -93,8 +93,6 @@ public class MessagesController extends Controller {
     public Parent render() {
         Parent parent = super.render();
         this.setupWindowScalingCompatibility();
-        createFriendNodeeeeeee();
-
 
         return parent;
     }
