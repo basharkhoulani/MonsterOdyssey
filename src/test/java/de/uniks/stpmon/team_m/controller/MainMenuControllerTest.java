@@ -15,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
-
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -47,11 +46,12 @@ class MainMenuControllerTest extends ApplicationTest {
     MainMenuController mainMenuController;
 
     @Override
-    public void start (Stage stage) {
+    public void start(Stage stage) {
         when(regionsApiService.getRegions())
                 .thenReturn(Observable.just(List.of(new Region("TestRegion", "NamedRegion"))));
         app.start(stage);
         app.show(mainMenuController);
+        stage.requestFocus();
     }
 
     @Test
@@ -60,7 +60,7 @@ class MainMenuControllerTest extends ApplicationTest {
         when(newFriendControllerProvider.get()).thenReturn(newFriendController);
         doNothing().when(app).show(newFriendController);
         clickOn("#findNewFriendsButton");
-        verify(app, times(1)).show(newFriendController);
+        verify(app).show(newFriendController);
     }
 
     @Test
@@ -69,7 +69,7 @@ class MainMenuControllerTest extends ApplicationTest {
         when(messagesControllerProvider.get()).thenReturn(messagesController);
         doNothing().when(app).show(messagesController);
         clickOn("#messagesButton");
-        verify(app, times(1)).show(messagesController);
+        verify(app).show(messagesController);
     }
 
     @Test
@@ -78,7 +78,7 @@ class MainMenuControllerTest extends ApplicationTest {
         when(loginControllerProvider.get()).thenReturn(loginController);
         doNothing().when(app).show(loginController);
         clickOn("#logoutButton");
-        verify(app, times(1)).show(loginController);
+        verify(app).show(loginController);
     }
 
     @Test
@@ -87,7 +87,7 @@ class MainMenuControllerTest extends ApplicationTest {
         when(accountSettingControllerProvider.get()).thenReturn(accountSettingController);
         doNothing().when(app).show(accountSettingController);
         clickOn("#settingsButton");
-        verify(app, times(1)).show(accountSettingController);
+        verify(app).show(accountSettingController);
     }
 
     @Test
@@ -98,6 +98,6 @@ class MainMenuControllerTest extends ApplicationTest {
         final ListView<Region> regionListView = lookup("#regionListView").query();
         clickOn(regionListView.getItems().get(0).name());
         clickOn("#startGameButton");
-        verify(app, times(1)).show(ingameController);
+        verify(app).show(ingameController);
     }
 }
