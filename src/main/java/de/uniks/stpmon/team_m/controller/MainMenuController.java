@@ -1,11 +1,15 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.controller.views.RegionCell;
+import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.rest.RegionsApiService;
 import javafx.beans.binding.BooleanBinding;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -13,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import static de.uniks.stpmon.team_m.Constants.FX_SCHEDULER;
 import static de.uniks.stpmon.team_m.Constants.MAIN_MENU_TITLE;
 
 public class MainMenuController extends Controller {
@@ -47,6 +52,17 @@ public class MainMenuController extends Controller {
 
     @Inject
     Provider<MessagesController> messagesControllerProvider;
+    @Inject
+    RegionsApiService regionsApiService;
+    private final ObservableList<Region> regions = FXCollections.observableArrayList();
+    private final ListView<Region> regionListView = new ListView<>(regions);
+    private final ToggleGroup regionToggleGroup = new ToggleGroup();
+
+
+    @Override
+    public void init() {
+        disposables.add(regionsApiService.getRegions().observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));
+    }
 
     @Inject
     public MainMenuController() {
@@ -65,27 +81,12 @@ public class MainMenuController extends Controller {
     }
 
     private void initRadioButtons() {
-        ToggleGroup group = addAllRadioButtonsToGroup(new ToggleGroup());
-        BooleanBinding booleanBinding = new BooleanBinding() {
-            {
-                super.bind(group.selectedToggleProperty());
-            }
-
-            @Override
-            protected boolean computeValue() {
-                return group.getSelectedToggle() == null;
-            }
-        };
-        startGameButton.disableProperty().bind(booleanBinding);
-    }
-
-    private ToggleGroup addAllRadioButtonsToGroup(ToggleGroup group) {
-        for (Node node : regionRadioButtonList.getChildren()) {
-            if (node instanceof RadioButton) {
-                ((RadioButton) node).setToggleGroup(group);
-            }
-        }
-        return group;
+        regionListView.setCellFactory(param -> new RegionCell(regionToggleGroup));
+        regionListView.setFocusModel(null);
+        regionListView.setItems(regions);
+        regionRadioButtonList.getChildren().add(regionListView);
+        final BooleanBinding regionSelected = regionToggleGroup.selectedToggleProperty().isNull();
+        startGameButton.disableProperty().bind(regionSelected);
     }
 
     public void changeToFindNewFriends() {
