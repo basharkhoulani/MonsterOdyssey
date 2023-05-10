@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -81,13 +82,12 @@ public class MainMenuController extends Controller {
 
     private void initRadioButtons() {
         ListView<Region> regionListView = new ListView<>();
+        regionListView.setId("regionListView");
         regionToggleGroup = new ToggleGroup();
         regionListView.setCellFactory(param -> new RegionCell(regionToggleGroup));
-        regionListView.setFocusModel(null);
         regionListView.setItems(regions);
         regionRadioButtonList.getChildren().add(regionListView);
-        final BooleanBinding regionSelected = regionToggleGroup.selectedToggleProperty().isNull();
-        startGameButton.disableProperty().bind(regionSelected);
+        startGameButton.disableProperty().bind(regionToggleGroup.selectedToggleProperty().isNull());
     }
 
     public void changeToFindNewFriends() {

@@ -23,6 +23,9 @@ public class RegionCell extends ListCell<Region> {
             setGraphic(radioButton);
             radioButton.setTextAlignment(TextAlignment.CENTER);
             radioButton.setUserData(item);
+            if (this.isSelected()) {
+                radioButton.setSelected(true);
+            }
         } else {
             setGraphic(null);
             setText(null);

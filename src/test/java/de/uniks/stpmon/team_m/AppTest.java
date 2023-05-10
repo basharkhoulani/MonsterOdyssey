@@ -1,8 +1,10 @@
 package de.uniks.stpmon.team_m;
 
+import de.uniks.stpmon.team_m.dto.Region;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -39,23 +41,8 @@ class AppTest extends ApplicationTest {
     }
 
     @Test
-    void testMainMenuView() {
+    void testMainMenuViewLogout() {
         signInToMainMenu();
-
-        // test Main Menu start game button
-        final Button startGameButton = lookup("Start Game").query();
-        assertNotNull(startGameButton);
-        assertTrue(startGameButton.isDisabled());
-        final VBox regionRadioButtonList = lookup("#regionRadioButtonList").query();
-        assertNotNull(regionRadioButtonList);
-        final RadioButton radioButton = regionRadioButtonList.getChildren().stream()
-                .filter(node -> node instanceof RadioButton)
-                .map(node -> (RadioButton) node)
-                .findFirst()
-                .orElse(null);
-        assertNotNull(radioButton);
-        clickOn(radioButton);
-        assertFalse(startGameButton.isDisabled());
 
         // test back to Sign In
         clickOn("Logout");
@@ -67,15 +54,19 @@ class AppTest extends ApplicationTest {
         signInToMainMenu();
 
         // Main Menu to Ingame
-        final VBox regionRadioButtonList = lookup("#regionRadioButtonList").query();
-        final RadioButton radioButton = regionRadioButtonList.getChildren().stream()
-                .filter(node -> node instanceof RadioButton)
-                .map(node -> (RadioButton) node)
-                .findFirst()
-                .orElse(null);
-        assertNotNull(radioButton);
-        clickOn(radioButton);
-        clickOn("Start Game");
+        final Button startGameButton = lookup("Start Game").query();
+        assertNotNull(startGameButton);
+        assertTrue(startGameButton.isDisabled());
+        final ObservableList<Region> items = FXCollections
+                .observableArrayList(new Region("TestRegion", "NamedRegion"));
+        final ListView<Region> regionListView = lookup("#regionListView").query();
+        regionListView.setItems(items);
+        assertNotNull(regionListView);
+        sleep(1000);
+        regionListView.getSelectionModel().select(0);
+        sleep(1000);
+        assertFalse(startGameButton.isDisabled());
+        clickOn(startGameButton);
         assertEquals("Monster Odyssey - Ingame", stage.getTitle());
         final Button helpSymbol = lookup("#helpSymbol").query();
         assertNotNull(helpSymbol);
