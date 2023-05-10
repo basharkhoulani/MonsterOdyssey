@@ -106,6 +106,8 @@ public class MainMenuController extends Controller {
     }
 
     public void changeToIngame() {
+        Region selectedRegion = (Region) regionToggleGroup.getSelectedToggle().getUserData();
+        System.out.println(selectedRegion);
         app.show(ingameControllerProvider.get());
     }
 }

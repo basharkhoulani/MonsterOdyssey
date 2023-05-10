@@ -22,6 +22,7 @@ public class RegionCell extends ListCell<Region> {
             radioButton.setToggleGroup(regionToggleGroup);
             setGraphic(radioButton);
             radioButton.setTextAlignment(TextAlignment.CENTER);
+            radioButton.setUserData(item);
         } else {
             setGraphic(null);
             setText(null);
