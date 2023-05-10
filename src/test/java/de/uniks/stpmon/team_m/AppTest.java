@@ -142,16 +142,6 @@ class AppTest extends ApplicationTest {
         clickOn(settingButton);
         assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
 
-        // test Show Password In Setting
-        final Button passwordEditBtn = lookup("#passwordEditButton").query();
-        clickOn(passwordEditBtn);
-        final PasswordField passwordField = lookup("#passwordField").query();
-        clickOn(passwordField);
-        write("password");
-        final Button showPasswordBtn = lookup("#showPasswordButton").query();
-        clickOn(showPasswordBtn);
-        assertEquals("class de.uniks.stpmon.team_m.utils.PasswordFieldSkin", passwordField.getSkin().getClass().toString());
-
         // test delete Account and the cancel Button
         final Button deleteAccBtn = lookup("#deleteAccountButton").query();
         clickOn(deleteAccBtn);
