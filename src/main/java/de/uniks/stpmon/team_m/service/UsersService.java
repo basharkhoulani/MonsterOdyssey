@@ -12,12 +12,12 @@ import java.util.List;
 public class UsersService {
 
     private final UsersApiService usersApiService;
-    @Inject
-    UserStorage userStorage;
+    private final UserStorage userStorage;
 
     @Inject
-    public UsersService(UsersApiService usersApiService) {
+    public UsersService(UsersApiService usersApiService, UserStorage userStorage) {
         this.usersApiService = usersApiService;
+        this.userStorage = userStorage;
     }
 
     public Observable<User> createUser(String username, String avatar, String password) {

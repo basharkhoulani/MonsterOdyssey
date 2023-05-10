@@ -1,6 +1,6 @@
 package de.uniks.stpmon.team_m.service;
 
-import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.dto.LoginResult;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -49,5 +49,13 @@ public class UserStorage {
 
     public void setFriends(List<String> friends) {
         this.friends = friends;
+    }
+
+    public void setUser(LoginResult loginResult){
+        this._id = loginResult._id();
+        this.name = loginResult.name();
+        this.status = loginResult.status();
+        this.avatar = loginResult.avatar();
+        this.friends = loginResult.friends();
     }
 }

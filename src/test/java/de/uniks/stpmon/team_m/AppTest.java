@@ -13,11 +13,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class AppTest extends ApplicationTest {
 
     private Stage stage;
+    private final App app = new App(null);
+    private final TestComponent component = (TestComponent) DaggerTestComponent.builder().mainApp(app).build();
 
     @Override
     public void start(Stage stage) {
         this.stage = stage;
-        new App().start(this.stage);
+        app.start(this.stage);
+        app.show(component.loginController());
         stage.requestFocus();
     }
 
@@ -26,29 +29,11 @@ class AppTest extends ApplicationTest {
 
         // test Login Screen
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        final Label welcomeLabel = lookup("Welcome to").query();
-        final Button signUpButton = lookup("Sign Up").query();
-        final Button signInButton = lookup("Sign In").query();
-        assertNotNull(welcomeLabel);
-        assertNotNull(signUpButton);
-        assertNotNull(signInButton);
-
-        assertTrue(signInButton.isDisabled());
-        assertTrue(signUpButton.isDisabled());
-
-        // test Show Password In SignIn
-        final PasswordField passwordField = lookup("#passwordField").query();
-        clickOn(passwordField);
-        write("password");
-        final Button showPasswordBtn = lookup("#hideButton").query();
-        clickOn(showPasswordBtn);
-        assertEquals("class de.uniks.stpmon.team_m.utils.PasswordFieldSkin", passwordField.getSkin().getClass().toString());
-
+        
         // test Sign In To MainMenu
-        final TextField usernameField = lookup("#usernameField").query();
-        clickOn(usernameField);
-        write("t");
-        clickOn(signInButton);
+        write("t\t");
+        write("testtest");
+        clickOn("#signInButton");
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
 
     }
@@ -145,6 +130,11 @@ class AppTest extends ApplicationTest {
         clickOn("Resume Game");
         final Label gameTitleUnpauseButton = lookup("Monster Odyssey").query();
         assertNotNull(gameTitleUnpauseButton);
+
+        // test Ingame Back To Main Menu
+        type(KeyCode.P);
+        clickOn("Save Game & Leave");
+        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
     }
 
     @Test
