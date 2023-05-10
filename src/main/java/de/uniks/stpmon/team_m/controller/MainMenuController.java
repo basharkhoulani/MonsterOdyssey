@@ -55,8 +55,7 @@ public class MainMenuController extends Controller {
     @Inject
     RegionsApiService regionsApiService;
     private final ObservableList<Region> regions = FXCollections.observableArrayList();
-    private ListView<Region> regionListView;
-    private final ToggleGroup regionToggleGroup = new ToggleGroup();
+    private ToggleGroup regionToggleGroup;
 
 
     @Override
@@ -81,7 +80,8 @@ public class MainMenuController extends Controller {
     }
 
     private void initRadioButtons() {
-        regionListView = new ListView<>();
+        ListView<Region> regionListView = new ListView<>();
+        regionToggleGroup = new ToggleGroup();
         regionListView.setCellFactory(param -> new RegionCell(regionToggleGroup));
         regionListView.setFocusModel(null);
         regionListView.setItems(regions);
