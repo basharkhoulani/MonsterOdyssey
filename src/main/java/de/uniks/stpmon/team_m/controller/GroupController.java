@@ -86,11 +86,22 @@ public class GroupController extends Controller {
         alert.setHeaderText(null);
         Optional<ButtonType> result = alert.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.YES) {
-            disposables.add(groupService.delete(groupStorage.get_id()).subscribe(lr-> app.show(messagesControllerProvider.get()), error -> alert.close()));
+            disposables.add(groupService.delete(groupStorage.get_id()).observeOn(FX_SCHEDULER).subscribe(lr-> app.show(messagesControllerProvider.get()), error -> {
+                if (error.getMessage().equals("HTTP 403"))  {
+                    alert.setContentText("Group could not be deleted\n" +
+                            "You are not the last member of this group");
+                    alert.setTitle("Error");
+                    alert.getButtonTypes().remove(ButtonType.NO);
+                    alert.getButtonTypes().remove(ButtonType.YES);
+                    alert.getButtonTypes().add(ButtonType.OK);
+                    alert.showAndWait();
+                }
+            }));
         } else {
             alert.close();
         }
     }
+
 
     public void saveGroup() {
         //TODO server communication
