@@ -62,9 +62,8 @@ class AppTest extends ApplicationTest {
         final ListView<Region> regionListView = lookup("#regionListView").query();
         regionListView.setItems(items);
         assertNotNull(regionListView);
-        sleep(1000);
         regionListView.getSelectionModel().select(0);
-        sleep(1000);
+        sleep(40);
         assertFalse(startGameButton.isDisabled());
         clickOn(startGameButton);
         assertEquals("Monster Odyssey - Ingame", stage.getTitle());
