@@ -22,6 +22,7 @@ import javax.inject.Provider;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 @ExtendWith(MockitoExtension.class)
 class LoginControllerTest extends ApplicationTest {
@@ -76,7 +77,7 @@ class LoginControllerTest extends ApplicationTest {
         when(usersService.createUser(anyString(), isNull(), anyString())).thenReturn(Observable.just(new User(
                 "1",
                 "1",
-                "online",
+                STATUS_ONLINE,
                 null,
                 null
         )));
@@ -84,7 +85,7 @@ class LoginControllerTest extends ApplicationTest {
         when(authenticationService.login(anyString(), anyString(), eq(false))).thenReturn(Observable.just(new LoginResult(
                 "1",
                 "1",
-                "online",
+                STATUS_ONLINE,
                 null,
                 null,
                 "a1a2",
