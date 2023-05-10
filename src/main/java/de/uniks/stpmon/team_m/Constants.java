@@ -18,7 +18,7 @@ public class Constants {
     public static final String TASKBAR_ICON = "images/icon.png";
     public static final String LOADING = "Loading...";
     public static final String EMPTY_STRING = "";
-    public static final String FX_STYLE_BLACK = "-fx-border-color: black";
+    public static final String FX_STYLE_BORDER_COLOR_BLACK = "-fx-border-color: black";
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
