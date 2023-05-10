@@ -19,7 +19,6 @@ public abstract class Controller {
 
     @Inject
     protected App app;
-    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
     protected final CompositeDisposable disposables = new CompositeDisposable();
 
     public void init() {

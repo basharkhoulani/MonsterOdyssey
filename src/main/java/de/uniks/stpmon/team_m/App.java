@@ -54,7 +54,7 @@ public class App extends Application {
         final AuthenticationService authenticationService = component.authenticationService();
 
         if (authenticationService.isRememberMe()) {
-            authenticationService.refresh().subscribe(lr -> {
+            authenticationService.refresh().observeOn(FX_SCHEDULER).subscribe(lr -> {
                 show(component.mainMenuController());
             }, err -> {
                 show(component.loginController());
