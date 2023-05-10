@@ -2,7 +2,10 @@ package de.uniks.stpmon.team_m;
 
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -19,6 +22,7 @@ public class App extends Application {
     private Stage stage;
     private Controller controller;
     private final MainComponent component;
+    protected final CompositeDisposable disposables = new CompositeDisposable();
 
     public App() {
         component = DaggerMainComponent.builder().mainApp(this).build();
@@ -54,11 +58,11 @@ public class App extends Application {
         final AuthenticationService authenticationService = component.authenticationService();
 
         if (authenticationService.isRememberMe()) {
-            authenticationService.refresh().subscribe(lr -> {
+            disposables.add(authenticationService.refresh().observeOn(Schedulers.from(Platform::runLater)).subscribe(lr -> {
                 show(component.mainMenuController());
             }, err -> {
                 show(component.loginController());
-            });
+            }));
         } else {
             show(component.loginController());
         }
@@ -66,6 +70,7 @@ public class App extends Application {
 
     @Override
     public void stop() {
+        disposables.dispose();
         cleanup();
     }
 

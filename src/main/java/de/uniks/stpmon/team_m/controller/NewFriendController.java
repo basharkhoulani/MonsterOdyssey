@@ -34,34 +34,31 @@ public class NewFriendController extends Controller {
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
     UsersService usersService;
-    @Inject
     UserStorage userStorage;
 
     @Inject
-    public NewFriendController() {
+    public NewFriendController(UserStorage userStorage) {
+        this.userStorage = userStorage;
     }
 
     @Override
     public String getTitle() {
         return NEW_FRIEND_TITLE;
     }
-    @Override
-    public void init() {
-        super.init();
-        disposables.add(usersService.getUsers(null, null).subscribe(users -> allUsers = users));
-    }
-
 
     @Override
     public Parent render() {
         final Parent parent = super.render();
+        disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER).subscribe(users -> {
+            allUsers = users;
+            List<String> names = new ArrayList<>();
+            for (User user : allUsers) {
+                names.add(user.name());
+            }
+            AutoCompletionBinding<String> autoCompletionBinding = TextFields.bindAutoCompletion(searchTextField, names);
+            autoCompletionBinding.setPrefWidth(searchTextField.getPrefWidth());
+        }));
 
-        List<String> names = new ArrayList<>();
-        for (User user : allUsers) {
-            names.add(user.name());
-        }
-        AutoCompletionBinding<String> autoCompletionBinding = TextFields.bindAutoCompletion(searchTextField, names);
-        autoCompletionBinding.setPrefWidth(searchTextField.getPrefWidth());
 
         return parent;
     }
@@ -71,9 +68,11 @@ public class NewFriendController extends Controller {
     }
 
     public void addAsAFriend() {
-        for (User user: allUsers) {
+
+        for (User user : allUsers) {
             if (user.name().equals(searchTextField.getText())) {
-                userStorage.addFriend(user._id());
+                final String newFriend = user._id();
+                userStorage.addFriend(newFriend);
             }
         }
         disposables.add(usersService.updateUser(
@@ -82,6 +81,8 @@ public class NewFriendController extends Controller {
                 null,
                 userStorage.getFriends(),
                 null).subscribe());
+
+
         searchTextField.clear();
         searchTextField.setPromptText(FRIEND_ADDED);
     }
