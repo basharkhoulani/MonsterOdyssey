@@ -1,7 +1,10 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
+import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,10 +14,10 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,6 +48,8 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Override
     public void start (Stage stage) {
+        when(regionsApiService.getRegions())
+                .thenReturn(Observable.just(List.of(new Region("TestRegion", "NamedRegion"))));
         app.start(stage);
         app.show(mainMenuController);
     }
@@ -60,17 +65,39 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Test
     void changeToMessages() {
+        final MessagesController messagesController = mock(MessagesController.class);
+        when(messagesControllerProvider.get()).thenReturn(messagesController);
+        doNothing().when(app).show(messagesController);
+        clickOn("#messagesButton");
+        verify(app, times(1)).show(messagesController);
     }
 
     @Test
     void changeToLogin() {
+        final LoginController loginController = mock(LoginController.class);
+        when(loginControllerProvider.get()).thenReturn(loginController);
+        doNothing().when(app).show(loginController);
+        clickOn("#logoutButton");
+        verify(app, times(1)).show(loginController);
     }
 
     @Test
     void changeToSettings() {
+        final AccountSettingController accountSettingController = mock(AccountSettingController.class);
+        when(accountSettingControllerProvider.get()).thenReturn(accountSettingController);
+        doNothing().when(app).show(accountSettingController);
+        clickOn("#settingsButton");
+        verify(app, times(1)).show(accountSettingController);
     }
 
     @Test
     void changeToIngame() {
+        final IngameController ingameController = mock(IngameController.class);
+        when(ingameControllerProvider.get()).thenReturn(ingameController);
+        doNothing().when(app).show(ingameController);
+        final ListView<Region> regionListView = lookup("#regionListView").query();
+        clickOn(regionListView.getItems().get(0).name());
+        clickOn("#startGameButton");
+        verify(app, times(1)).show(ingameController);
     }
 }
