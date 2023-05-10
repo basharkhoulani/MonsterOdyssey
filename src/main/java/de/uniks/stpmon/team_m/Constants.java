@@ -30,9 +30,12 @@ public class Constants {
     public static final int PASSWORD_CHARACTER_LIMIT = 8;
     public static final char BULLET = '\u25cf';
     public static final String REFRESH_TOKEN_PREF = "refreshToken";
+    public static final String DELETE_SUCCESS = "Account successfully deleted";
 
     // MAIN MENU
     public static final String MAIN_MENU_TITLE = "Main Menu";
+    public static final String STATUS_ONLINE = "online";
+    public static final String STATUS_OFFLINE = "offline";
 
     // MESSAGES
     public static final int MESSAGES_HEIGHT = 640;
@@ -49,6 +52,8 @@ public class Constants {
 
     // ACCOUNT SETTINGS
     public static final String ACCOUNT_SETTINGS_TITLE = "Account Setting";
+    public static final String USERNAME_SUCCESS_CHANGED = "Your username has been changed successfully.";
+    public static final String PASSWORD_SUCCESS_CHANGED = "Your Password has been changed successfully.";
 
     // INGAME
     public static final String INGAME_TITLE = "Ingame";
