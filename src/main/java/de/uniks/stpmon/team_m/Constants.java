@@ -5,6 +5,7 @@ import javafx.scene.input.KeyCode;
 public class Constants {
     // SERVER
     public static final String API_URL = "https://stpmon.uniks.de/api/v1";
+    public static final String WS_URL = "wss://stpmon.uniks.de/ws/v1";
     public static final String MESSAGE_NAMESPACE_GROUPS = "groups";
     public static final String MESSAGE_NAMESPACE_REGIONS = "regions";
     public static final String MESSAGE_NAMESPACE_GLOBAL = "global";

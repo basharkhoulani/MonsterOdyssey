@@ -12,10 +12,12 @@ import java.util.List;
 public class UsersService {
 
     private final UsersApiService usersApiService;
+    private final UserStorage userStorage;
 
     @Inject
-    public UsersService(UsersApiService usersApiService) {
+    public UsersService(UsersApiService usersApiService, UserStorage userStorage) {
         this.usersApiService = usersApiService;
+        this.userStorage = userStorage;
     }
 
     public Observable<User> createUser(String username, String avatar, String password) {
@@ -35,7 +37,7 @@ public class UsersService {
         return usersApiService.updateUser(user._id(), new UpdateUserDto(name, status, avatar, friends, password));
     }
 
-    public Observable<User> deleteUSer(User user) {
+    public Observable<User> deleteUser(User user) {
         return usersApiService.deleteUser(user._id());
     }
 }

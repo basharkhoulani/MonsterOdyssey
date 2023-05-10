@@ -11,6 +11,7 @@ import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -19,6 +20,9 @@ public class IngameController extends Controller {
 
     @FXML
     public Button helpSymbol;
+
+    @Inject
+    Provider<MainMenuController> mainMenuControllerProvider;
 
     @Inject
     public IngameController() {
@@ -79,6 +83,10 @@ public class IngameController extends Controller {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == resume) {
             alert.close();
+        } else if (result.isPresent() && result.get() == saveAndExit) {
+            alert.close();
+            app.getStage().getScene().setOnKeyPressed(null);
+            app.show(mainMenuControllerProvider.get());
         }
     }
 }
