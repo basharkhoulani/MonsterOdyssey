@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccountSettingController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller</a> &gt; <span class="el_source">AccountSettingController.java</span></div><h1>AccountSettingController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.service.UserStorage;
+import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
@@ -45,104 +47,126 @@ public class AccountSettingController extends Controller {
     public Label titleLabel;
 
     private PasswordFieldSkin skin;
-<span class="fc" id="L48">    private final SimpleStringProperty username = new SimpleStringProperty();</span>
-<span class="fc" id="L49">    private final SimpleStringProperty password = new SimpleStringProperty();</span>
+<span class="fc" id="L50">    private final SimpleStringProperty username = new SimpleStringProperty();</span>
+<span class="fc" id="L51">    private final SimpleStringProperty password = new SimpleStringProperty();</span>
 
     @Inject
     Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
     @Inject
     Provider&lt;LoginController&gt; loginControllerProvider;
+    @Inject
+    UserStorage user;
+    @Inject
+    UsersService usersService;
 
     @Inject
-<span class="fc" id="L57">    AccountSettingController() {</span>
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L63">    AccountSettingController() {</span>
+<span class="fc" id="L64">    }</span>
 
     @Override
     public String getTitle() {
-<span class="fc" id="L62">        return ACCOUNT_SETTINGS_TITLE;</span>
+<span class="fc" id="L68">        return ACCOUNT_SETTINGS_TITLE;</span>
     }
 
     @Override
     public Parent render() {
-<span class="fc" id="L67">        final Parent parent = super.render();</span>
+<span class="fc" id="L73">        final Parent parent = super.render();</span>
 
         // Firstly disable the editfield
-<span class="fc" id="L70">        usernameField.setDisable(true);</span>
-<span class="fc" id="L71">        passwordField.setDisable(true);</span>
-<span class="fc" id="L72">        showPasswordButton.setDisable(true);</span>
+<span class="fc" id="L76">        usernameField.setDisable(true);</span>
+<span class="fc" id="L77">        passwordField.setDisable(true);</span>
+<span class="fc" id="L78">        showPasswordButton.setDisable(true);</span>
 
-        // Secondly show password
-<span class="fc" id="L75">        skin = new PasswordFieldSkin(passwordField);</span>
-<span class="fc" id="L76">        passwordField.setSkin(skin);</span>
+        // Show the Current UserName
+<span class="fc" id="L81">        usernameField.setPromptText(user.getName());</span>
 
-        //Thirdly bind the username and password
-<span class="fc" id="L79">        usernameField.textProperty().bindBidirectional(username);</span>
-<span class="fc" id="L80">        passwordField.textProperty().bindBidirectional(password);</span>
+        // show password
+<span class="fc" id="L84">        skin = new PasswordFieldSkin(passwordField);</span>
+<span class="fc" id="L85">        passwordField.setSkin(skin);</span>
 
-<span class="fc" id="L82">        BooleanBinding isInvalidUsername = username.isEmpty();</span>
-<span class="fc" id="L83">        saveUsernameButton.disableProperty().bind(isInvalidUsername);</span>
+        // bind the username and password
+<span class="fc" id="L88">        usernameField.textProperty().bindBidirectional(username);</span>
+<span class="fc" id="L89">        passwordField.textProperty().bindBidirectional(password);</span>
 
-<span class="fc" id="L85">        BooleanBinding isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);</span>
-<span class="fc" id="L86">        savePasswordButton.disableProperty().bind(isInvalidPassword);</span>
+<span class="fc" id="L91">        BooleanBinding isInvalidUsername = username.isEmpty();</span>
+<span class="fc" id="L92">        saveUsernameButton.disableProperty().bind(isInvalidUsername);</span>
 
-<span class="fc" id="L88">        passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);</span>
+<span class="fc" id="L94">        BooleanBinding isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);</span>
+<span class="fc" id="L95">        savePasswordButton.disableProperty().bind(isInvalidPassword);</span>
 
-<span class="fc" id="L90">        return parent;</span>
+<span class="fc" id="L97">        passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);</span>
+
+<span class="fc" id="L99">        return parent;</span>
     }
 
-    public void editUsername() {
-<span class="nc" id="L94">        usernameField.setDisable(false);</span>
-<span class="nc" id="L95">    }</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">    public void editUsername() { usernameField.setDisable(!usernameField.isDisabled()); }</span>
 
     public void saveUsername() {
-<span class="nc" id="L98">        usernameField.setDisable(true);</span>
+<span class="fc" id="L105">        informationLabel.setText(EMPTY_STRING);</span>
+<span class="fc" id="L106">        usernameErrorLabel.setText(EMPTY_STRING);</span>
 
-        //TODO functionally implement
+<span class="fc" id="L108">        disposables.add(usersService</span>
+<span class="fc" id="L109">                .updateUser(user.get_id(), username.get(),null, null, null, null)</span>
+<span class="fc" id="L110">                .observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L111">                .subscribe(userResult -&gt; {</span>
+<span class="fc" id="L112">                    user.setName(userResult.name());</span>
+<span class="fc" id="L113">                    informationLabel.setText(&quot;Your username has been changed successfully.&quot;);</span>
+<span class="fc" id="L114">                    usernameField.setDisable(true);</span>
+<span class="fc" id="L115">                    usernameField.setText(EMPTY_STRING);</span>
+<span class="fc" id="L116">                    usernameField.setPromptText(user.getName());</span>
+<span class="fc" id="L117">                    }, error -&gt; {</span>
+<span class="nc" id="L118">                    usernameErrorLabel.setText(error.getMessage());</span>
+<span class="nc" id="L119">                    }));</span>
 
-        //username has been changed successfully
-<span class="nc" id="L103">        usernameErrorLabel.setText(&quot;&quot;);</span>
-<span class="nc" id="L104">        informationLabel.setText(&quot;Your username has been changed successfully.&quot;);</span>
-<span class="nc" id="L105">    }</span>
+<span class="fc" id="L121">    }</span>
 
     public void showPassword() {
-<span class="fc" id="L108">        skin.setMask(skin.getNotMask());</span>
-<span class="fc" id="L109">        passwordField.setText(passwordField.getText());</span>
-<span class="fc" id="L110">    }</span>
+<span class="nc" id="L124">        skin.setMask(skin.getNotMask());</span>
+<span class="nc" id="L125">        passwordField.setText(passwordField.getText());</span>
+<span class="nc" id="L126">    }</span>
 
 
     public void editPassword(){
-<span class="fc" id="L114">        passwordField.setDisable(false);</span>
-<span class="fc" id="L115">        showPasswordButton.setDisable(false);</span>
-<span class="fc" id="L116">    }</span>
-
-    public void savePassword() {
-<span class="nc" id="L119">        passwordField.setDisable(true);</span>
-<span class="nc" id="L120">        showPasswordButton.setDisable(true);</span>
-        //TODO functionally implement
-
-        //password has been changed successfully
-<span class="nc" id="L124">        passwordErrorLabel.setText(&quot;&quot;);</span>
-<span class="nc" id="L125">        informationLabel.setText(&quot;Your Password has been changed successfully.&quot;);</span>
-<span class="nc" id="L126">    }</span>
-
-    public void deleteAccount(){
-<span class="fc" id="L129">        LoginController loginController = loginControllerProvider.get();</span>
-<span class="fc" id="L130">        loginController.setInformation(&quot;Account successfully deleted&quot;);</span>
-<span class="fc" id="L131">        app.show(loginController);</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        passwordField.setDisable(!passwordField.isDisabled());</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        showPasswordButton.setDisable(!showPasswordButton.isDisabled());</span>
 <span class="fc" id="L132">    }</span>
 
-<span class="fc" id="L134">    public void cancel(){ app.show(mainMenuControllerProvider.get()); }</span>
+    public void savePassword() {
+<span class="fc" id="L135">        informationLabel.setText(EMPTY_STRING);</span>
+<span class="fc" id="L136">        passwordErrorLabel.setText(EMPTY_STRING);</span>
+
+<span class="fc" id="L138">        disposables.add(usersService</span>
+<span class="fc" id="L139">                .updateUser(user.get_id(), null,null,null,null, password.get())</span>
+<span class="fc" id="L140">                .observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L141">                .subscribe(userResult -&gt; {</span>
+<span class="fc" id="L142">                    passwordField.setText(EMPTY_STRING);</span>
+<span class="fc" id="L143">                    passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);</span>
+<span class="fc" id="L144">                    passwordField.setDisable(true);</span>
+<span class="fc" id="L145">                    showPasswordButton.setDisable(true);</span>
+<span class="fc" id="L146">                    informationLabel.setText(&quot;Your Password has been changed successfully.&quot;);</span>
+<span class="fc" id="L147">                }, error -&gt; {</span>
+<span class="nc" id="L148">                    passwordErrorLabel.setText(error.getMessage());</span>
+<span class="nc" id="L149">                }));</span>
+<span class="fc" id="L150">    }</span>
+
+    public void deleteAccount(){
+<span class="fc" id="L153">        LoginController loginController = loginControllerProvider.get();</span>
+<span class="fc" id="L154">        loginController.setInformation(&quot;Account successfully deleted&quot;);</span>
+<span class="fc" id="L155">        app.show(loginController);</span>
+<span class="fc" id="L156">    }</span>
+
+<span class="fc" id="L158">    public void cancel(){ app.show(mainMenuControllerProvider.get()); }</span>
 
     public void showDeletePopUp() {
-<span class="fc" id="L137">        Alert alert = new Alert(Alert.AlertType.WARNING, &quot;Are you sure?&quot;, ButtonType.OK, ButtonType.CANCEL);</span>
-<span class="fc" id="L138">        alert.setTitle(&quot;Delete Account&quot;);</span>
-<span class="fc" id="L139">        alert.setHeaderText(null);</span>
-<span class="fc" id="L140">        alert.initOwner(app.getStage());</span>
-<span class="fc" id="L141">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+<span class="fc" id="L161">        Alert alert = new Alert(Alert.AlertType.WARNING, &quot;Are you sure?&quot;, ButtonType.OK, ButtonType.CANCEL);</span>
+<span class="fc" id="L162">        alert.setTitle(&quot;Delete Account&quot;);</span>
+<span class="fc" id="L163">        alert.setHeaderText(null);</span>
+<span class="fc" id="L164">        alert.initOwner(app.getStage());</span>
+<span class="fc" id="L165">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
 
-<span class="pc bpc" id="L143" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK){</span>
-<span class="fc" id="L144">            deleteAccount();</span>
+<span class="pc bpc" id="L167" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK){</span>
+<span class="fc" id="L168">            deleteAccount();</span>
         }
-<span class="fc" id="L146">    }</span>
+<span class="fc" id="L170">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
