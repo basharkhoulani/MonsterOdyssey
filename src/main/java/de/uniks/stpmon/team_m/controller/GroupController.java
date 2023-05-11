@@ -46,6 +46,7 @@ public class GroupController extends Controller {
     @Inject
     GroupService groupService;
 
+    @Inject
     public GroupController() {
     }
 
@@ -85,20 +86,23 @@ public class GroupController extends Controller {
         alert.setHeaderText(null);
         Optional<ButtonType> result = alert.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.YES) {
-            disposables.add(groupService.delete(groupStorageProvider.get().get_id()).observeOn(FX_SCHEDULER).subscribe(lr-> app.show(messagesControllerProvider.get()), error -> {
-                if (error.getMessage().equals("HTTP 403"))  {
-                    alert.setContentText("Group could not be deleted\n" +
-                            "You are not the last member of this group");
-                    alert.setTitle("Error");
-                    alert.getButtonTypes().remove(ButtonType.NO);
-                    alert.getButtonTypes().remove(ButtonType.YES);
-                    alert.getButtonTypes().add(ButtonType.OK);
-                    alert.showAndWait();
-                }
-            }));
+            disposables.add(groupService.delete(groupStorageProvider.get().get_id()).observeOn(FX_SCHEDULER).subscribe(deleted -> app.show(messagesControllerProvider.get()), error -> errorAlert(error.getMessage(), alert)));
         } else {
             alert.close();
         }
+    }
+
+    private void errorAlert(String error, Alert alert) {
+        if(error.equals(HTTP_403)){
+            alert.setContentText(DELETE_ERROR_403);
+        } else {
+            alert.setContentText(GENERIC_ERROR);
+        }
+        alert.setTitle(ERROR);
+        alert.getButtonTypes().remove(ButtonType.NO);
+        alert.getButtonTypes().remove(ButtonType.YES);
+        alert.getButtonTypes().add(ButtonType.OK);
+        alert.showAndWait();
     }
 
 
