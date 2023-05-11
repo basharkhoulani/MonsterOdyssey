@@ -57,7 +57,7 @@ public class MessagesController extends Controller {
     Provider<GroupStorage> groupStorageProvider;
 
     @Inject
-    public MessagesController( {
+    public MessagesController() {
     }
 
     @Override
