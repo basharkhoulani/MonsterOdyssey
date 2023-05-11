@@ -71,7 +71,6 @@ class AccountSettingControllerTest extends ApplicationTest {
                 )));
 
         when(userStorage.getName()).thenReturn("UserPatch");
-        when(userStorage.get_id()).thenReturn("1");
 
         clickOn("#usernameEditButton");
         clickOn(usernameField);
@@ -122,8 +121,6 @@ class AccountSettingControllerTest extends ApplicationTest {
                         null,
                         null
                 )));
-
-        when(userStorage.get_id()).thenReturn("1");
 
         clickOn("#passwordEditButton");
         clickOn(passwordField);
