@@ -1,8 +1,5 @@
 package de.uniks.stpmon.team_m;
 
-import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 
 public class Constants {

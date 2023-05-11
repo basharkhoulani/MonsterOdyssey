@@ -5,11 +5,13 @@ import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
