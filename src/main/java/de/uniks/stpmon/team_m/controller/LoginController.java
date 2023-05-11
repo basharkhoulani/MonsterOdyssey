@@ -110,7 +110,7 @@ public class LoginController extends Controller {
                 .subscribe(loginResult -> {
                     app.show(mainMenuControllerProvider.get());
                     }, error -> {
-                    passwordErrorLabel.setText(error.getMessage());
+                    passwordErrorLabel.setText(authenticationService.errorHandler(error.getMessage(), LOGIN_FUNC));
             }));
     }
 

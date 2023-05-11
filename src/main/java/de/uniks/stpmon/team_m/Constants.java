@@ -1,8 +1,5 @@
 package de.uniks.stpmon.team_m;
 
-import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 
 public class Constants {
@@ -30,6 +27,9 @@ public class Constants {
     public static final int PASSWORD_CHARACTER_LIMIT = 8;
     public static final char BULLET = '\u25cf';
     public static final String REFRESH_TOKEN_PREF = "refreshToken";
+    public static final String LOGIN_FUNC = "login";
+    public static final String REFRESH_FUNC = "refresh";
+    public static final String LOGOUT_FUNC = "logout";
     public static final String DELETE_SUCCESS = "Account successfully deleted";
 
     // MAIN MENU
@@ -63,4 +63,15 @@ public class Constants {
     public static final String SAVE_GAME_AND_LEAVE_BUTTON_LABEL = "Save Game & Leave";
     public static final String PAUSE_MENU_TITLE = "Pause Menu";
     public static final String PAUSE_MENU_LABEL = "What do you want to do?";
+
+    // Error messages
+    public static final String CUSTOM_ERROR = "Something went terribly wrong";
+    public static final String HTTP_400 = "HTTP 400";
+    public static final String HTTP_401 = "HTTP 401";
+    public static final String HTTP_404 = "HTTP 404";
+    public static final String HTTP_409 = "HTTP 409";
+    public static final String HTTP_429 = "HTTP 429";
+    public static final String VALIDATION_FAIL = "Validation failed";
+    public static final String INVALID_BEARER = "Missing or invalid Bearer token";
+    public static final String RATE_LIMIT = "Rate limit reaches";
 }
