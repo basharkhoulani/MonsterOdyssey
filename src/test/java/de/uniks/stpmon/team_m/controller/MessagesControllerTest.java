@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.rest.UsersApiService;
+import de.uniks.stpmon.team_m.service.GroupStorage;
 import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import io.reactivex.rxjava3.core.Observable;
@@ -36,6 +37,8 @@ public class MessagesControllerTest extends ApplicationTest {
 
     @Mock
     Provider<UserStorage> userStorageProvider;
+    @Mock
+    GroupStorage groupStorage;
 
     @Mock
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -100,6 +103,9 @@ public class MessagesControllerTest extends ApplicationTest {
 
     @Test
     void changeToNewGroup() {
+        GroupStorage mockedGroupStorage = mock(GroupStorage.class);
+        Mockito.doNothing().when(groupStorage).set_id(Mockito.anyString());
+        
         final GroupController groupController = mock(GroupController.class);
         when(groupControllerProvider.get()).thenReturn(groupController);
         doNothing().when(app).show(groupController);
