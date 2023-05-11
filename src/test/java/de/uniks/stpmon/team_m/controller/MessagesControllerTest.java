@@ -23,14 +23,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 
 import java.util.List;
 import java.util.concurrent.TimeoutException;
-
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class MessagesControllerTest extends ApplicationTest {
@@ -62,10 +61,10 @@ public class MessagesControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
-        UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
+        UserStorage mockUserStorage = mock(UserStorage.class);
         Mockito.when(userStorageProvider.get()).thenReturn(mockUserStorage);
 
-        UsersService mockUsersService = Mockito.mock(UsersService.class);
+        UsersService mockUsersService = mock(UsersService.class);
         Mockito.when(usersServiceProvider.get()).thenReturn(mockUsersService);
 
         when(mockUsersService.getUsers(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"), null))
@@ -79,6 +78,38 @@ public class MessagesControllerTest extends ApplicationTest {
         app.start(stage);
         app.show(messagesController);
         stage.requestFocus();
+    }
+
+    @Test
+    void changeToMainMenu() {
+        final MainMenuController mainMenuController = mock(MainMenuController.class);
+        when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
+        doNothing().when(app).show(mainMenuController);
+        clickOn("#mainMenuButton");
+        verify(app).show(mainMenuController);
+    }
+
+    @Test
+    void changeToFindNewFriends() {
+        final NewFriendController newFriendController = mock(NewFriendController.class);
+        when(newFriendControllerProvider.get()).thenReturn(newFriendController);
+        doNothing().when(app).show(newFriendController);
+        clickOn("#findNewFriendsButton");
+        verify(app).show(newFriendController);
+    }
+
+    @Test
+    void changeToNewGroup() {
+        final GroupController groupController = mock(GroupController.class);
+        when(groupControllerProvider.get()).thenReturn(groupController);
+        doNothing().when(app).show(groupController);
+        clickOn("#newGroupButton");
+        verify(app).show(groupController);
+    }
+
+    @Test
+    void changeToSettings() {
+        // TODO, first needs to be correctly implemented in the MessagesController.java
     }
 
     @Test
