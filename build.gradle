@@ -83,7 +83,7 @@ test {
         showStackTraces = true
     }
 
-    if (getProperty('headless')=="true" || System.getenv('CI')) {
+    if (getProperty('headless') || System.getenv('CI')) {
 		systemProperties = [
 				'java.awt.headless': 'true',
 				'testfx.robot': 'glass',
