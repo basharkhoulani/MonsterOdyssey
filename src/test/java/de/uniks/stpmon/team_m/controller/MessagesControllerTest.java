@@ -7,6 +7,11 @@ import de.uniks.stpmon.team_m.rest.UsersApiService;
 import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +22,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
+import static org.junit.jupiter.api.Assertions.*;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -76,8 +82,17 @@ public class MessagesControllerTest extends ApplicationTest {
     }
 
     @Test
-    void displayFriends() throws InterruptedException {
+    void displayFriends() {
+        VBox friendsAndGroupsVBox = lookup("#friendsAndGroupsVBox").query();
+        ObservableList<Node> friendsAndGroupNodes = friendsAndGroupsVBox.getChildren();
+
+        assertEquals(3, friendsAndGroupNodes.size());
+
+        HBox firstFriend = (HBox) friendsAndGroupNodes.get(0);
+        Text nameText = (Text) firstFriend.getChildren().get(1);
+
+        assertEquals("Rick", nameText.getText());
+
         clickOn("Morty");
-        Thread.sleep(100000);
     }
 }
