@@ -67,4 +67,5 @@ class UsersServiceTest {
 
         verify(usersApiService).updateUser(null, new UpdateUserDto(null, "online", null, null, null));
     }
+
 }

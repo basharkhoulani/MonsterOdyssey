@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -48,17 +49,7 @@ public class NewFriendController extends Controller {
 
     @Override
     public Parent render() {
-        final Parent parent = super.render();
-        disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER).subscribe(users -> {
-            allUsers = users;
-            List<String> names = new ArrayList<>();
-            for (User user : allUsers) {
-                names.add(user.name());
-            }
-            AutoCompletionBinding<String> autoCompletionBinding = TextFields.bindAutoCompletion(searchTextField, names);
-            autoCompletionBinding.setPrefWidth(searchTextField.getPrefWidth());
-        }));
-        return parent;
+        return super.render();
     }
 
     public void changeToMainMenu() {
@@ -66,7 +57,12 @@ public class NewFriendController extends Controller {
     }
 
     public void addAsAFriend() {
-
+        if (searchTextField.getText().equals("")) {
+            return;
+        }
+        if (allUsers.isEmpty()) {
+            return;
+        }
         for (User user : allUsers) {
             if (user.name().equals(searchTextField.getText())) {
                 final String newFriend = user._id();
@@ -86,5 +82,17 @@ public class NewFriendController extends Controller {
     }
 
     public void sendMessage() {
+    }
+
+    public void clickSearchField() {
+        disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER).subscribe(users -> {
+            allUsers = users;
+            List<String> names = new ArrayList<>();
+            for (User user : allUsers) {
+                names.add(user.name());
+            }
+            AutoCompletionBinding<String> autoCompletionBinding = TextFields.bindAutoCompletion(searchTextField, names);
+            autoCompletionBinding.setPrefWidth(searchTextField.getPrefWidth());
+        }));
     }
 }
