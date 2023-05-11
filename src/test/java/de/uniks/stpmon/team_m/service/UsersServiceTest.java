@@ -7,11 +7,17 @@ import de.uniks.stpmon.team_m.rest.UsersApiService;
 import io.reactivex.rxjava3.core.Observable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static de.uniks.stpmon.team_m.Constants.*;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+import java.util.List;
+
+import static de.uniks.stpmon.team_m.Constants.STATUS_ONLINE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -21,6 +27,8 @@ class UsersServiceTest {
     UsersApiService usersApiService;
     @InjectMocks
     UsersService usersService;
+    @Spy
+    UserStorage userStorage;
 
     @Test
     void createUser() {
@@ -37,7 +45,7 @@ class UsersServiceTest {
                 )));
 
         //Sign Up of User
-        final User user = usersService.createUser("1",null,"12345678").blockingFirst();
+        final User user = usersService.createUser("1", null, "12345678").blockingFirst();
 
         //Check for successful Sign Up
         assertEquals("1", user._id());
@@ -46,7 +54,46 @@ class UsersServiceTest {
     }
 
     @Test
-    void updateUsername(){
+    void updateUserTest() {
+        // define mock
+        when(usersApiService.updateUser(ArgumentMatchers.any(), ArgumentMatchers.any()))
+                .thenReturn(Observable.just(new User(
+                        null,
+                        null,
+                        "online",
+                        null,
+                        null
+                )));
+
+        // update user
+        final User user = usersService.updateUser(null, "online", null, null, null).blockingFirst();
+
+        // check for successful update
+        assertEquals("online", user.status());
+
+        verify(usersApiService).updateUser(null, new UpdateUserDto(null, "online", null, null, null));
+    }
+
+    @Test
+    void getUsersTest() {
+        // define mock
+        when(usersApiService.getUsers(ArgumentMatchers.any(), ArgumentMatchers.any()))
+                .thenReturn(Observable.just(Arrays.asList(
+                        new User("1", "11", "1", "1", null),
+                        new User("2", "22", "2", "2", null),
+                        new User("3", "33", "3", "3", null)
+                )));
+
+        // get users
+        final List<User> users = usersApiService.getUsers(ArgumentMatchers.any(), ArgumentMatchers.any()).blockingFirst();
+
+        // check for successful get
+        assertEquals("1", users.get(0)._id());
+
+        verify(usersApiService).getUsers(ArgumentMatchers.any(), ArgumentMatchers.any());
+    }
+
+    void updateUsername() {
         //Successful change the Username of user
 
         //define mocks
@@ -57,7 +104,7 @@ class UsersServiceTest {
                         STATUS_ONLINE,
                         null,
                         null)));
-        final User user = usersService.updateUser("1", "UserPatch", null, null, null,null).blockingFirst();
+        final User user = usersService.updateUser("UserPatch", null, null, null, null).blockingFirst();
 
         assertEquals(user.name(), "UserPatch");
 
@@ -65,21 +112,21 @@ class UsersServiceTest {
     }
 
     @Test
-    void updatePassword(){
+    void updatePassword() {
         //Successful change the Username of user
 
         //define mocks
-        when(usersApiService.updateUser(anyString(), any()))
+        when(usersApiService.updateUser(any(), any()))
                 .thenReturn(Observable.just(new User(
                         "1",
                         "UserPatch",
                         STATUS_ONLINE,
                         null,
                         null)));
-        final User user = usersService.updateUser("1", null, null, null, null,"12345678").blockingFirst();
+        final User user = usersService.updateUser(null, null, null, null, "12345678").blockingFirst();
 
         assertEquals(user.name(), "UserPatch");
 
-        verify(usersApiService).updateUser("1", new UpdateUserDto(null, null, null, null, "12345678"));
+        verify(usersApiService).updateUser(ArgumentMatchers.any(), ArgumentMatchers.any());
     }
 }
