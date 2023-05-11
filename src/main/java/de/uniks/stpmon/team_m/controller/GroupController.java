@@ -41,13 +41,12 @@ public class GroupController extends Controller {
 
     @Inject
     Provider<MessagesController> messagesControllerProvider;
-    private final GroupStorage groupStorage;
+    @Inject
+    Provider<GroupStorage> groupStorageProvider;
     @Inject
     GroupService groupService;
 
-    @Inject
-    public GroupController(GroupStorage groupStorage) {
-        this.groupStorage = groupStorage;
+    public GroupController() {
     }
 
     @Override
@@ -58,7 +57,7 @@ public class GroupController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
-        if (groupStorage.get_id().equals(EMPTY_STRING)) {
+        if (groupStorageProvider.get().get_id().equals(EMPTY_STRING)) {
             newGroup();
         } else {
             editGroup();
@@ -86,7 +85,7 @@ public class GroupController extends Controller {
         alert.setHeaderText(null);
         Optional<ButtonType> result = alert.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.YES) {
-            disposables.add(groupService.delete(groupStorage.get_id()).observeOn(FX_SCHEDULER).subscribe(lr-> app.show(messagesControllerProvider.get()), error -> {
+            disposables.add(groupService.delete(groupStorageProvider.get().get_id()).observeOn(FX_SCHEDULER).subscribe(lr-> app.show(messagesControllerProvider.get()), error -> {
                 if (error.getMessage().equals("HTTP 403"))  {
                     alert.setContentText("Group could not be deleted\n" +
                             "You are not the last member of this group");
