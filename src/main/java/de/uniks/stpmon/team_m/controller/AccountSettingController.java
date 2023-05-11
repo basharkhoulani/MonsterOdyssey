@@ -11,7 +11,6 @@ import javafx.scene.control.*;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -99,14 +98,16 @@ public class AccountSettingController extends Controller {
         return parent;
     }
 
-    public void editUsername() { usernameField.setDisable(!usernameField.isDisabled()); }
+    public void editUsername() {
+        usernameField.setDisable(!usernameField.isDisabled());
+    }
 
     public void saveUsername() {
         informationLabel.setText(EMPTY_STRING);
         usernameErrorLabel.setText(EMPTY_STRING);
 
         disposables.add(usersService
-                .updateUser(username.get(),null, null, null, null)
+                .updateUser(username.get(), null, null, null, null)
                 .observeOn(FX_SCHEDULER)
                 .subscribe(userResult -> {
                     user.setName(userResult.name());
@@ -114,9 +115,9 @@ public class AccountSettingController extends Controller {
                     usernameField.setDisable(true);
                     usernameField.setText(EMPTY_STRING);
                     usernameField.setPromptText(user.getName());
-                    }, error -> {
+                }, error -> {
                     usernameErrorLabel.setText(error.getMessage());
-                    }));
+                }));
 
     }
 
@@ -126,7 +127,7 @@ public class AccountSettingController extends Controller {
     }
 
 
-    public void editPassword(){
+    public void editPassword() {
         passwordField.setDisable(!passwordField.isDisabled());
         showPasswordButton.setDisable(!showPasswordButton.isDisabled());
     }
@@ -136,7 +137,7 @@ public class AccountSettingController extends Controller {
         passwordErrorLabel.setText(EMPTY_STRING);
 
         disposables.add(usersService
-                .updateUser(null,null,null,null, password.get())
+                .updateUser(null, null, null, null, password.get())
                 .observeOn(FX_SCHEDULER)
                 .subscribe(userResult -> {
                     passwordField.setText(EMPTY_STRING);
@@ -149,13 +150,15 @@ public class AccountSettingController extends Controller {
                 }));
     }
 
-    public void deleteAccount(){
+    public void deleteAccount() {
         LoginController loginController = loginControllerProvider.get();
         loginController.setInformation("Account successfully deleted");
         app.show(loginController);
     }
 
-    public void cancel(){ app.show(mainMenuControllerProvider.get()); }
+    public void cancel() {
+        app.show(mainMenuControllerProvider.get());
+    }
 
     public void showDeletePopUp() {
         Alert alert = new Alert(Alert.AlertType.WARNING, "Are you sure?", ButtonType.OK, ButtonType.CANCEL);
@@ -164,7 +167,7 @@ public class AccountSettingController extends Controller {
         alert.initOwner(app.getStage());
         Optional<ButtonType> result = alert.showAndWait();
 
-        if (result.isPresent() && result.get() == ButtonType.OK){
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             deleteAccount();
         }
     }

@@ -102,29 +102,33 @@ public class LoginController extends Controller {
     public void signIn() {
         passwordErrorLabel.setText(EMPTY_STRING);
 
-        if (isInvalidPassword.or(isInvalidUsername).get()) { return; }
+        if (isInvalidPassword.or(isInvalidUsername).get()) {
+            return;
+        }
 
         disposables.add(authenticationService
                 .login(username.get(), password.get(), rememberMe.get())
                 .observeOn(FX_SCHEDULER)
                 .subscribe(loginResult -> {
                     app.show(mainMenuControllerProvider.get());
-                    }, error -> {
+                }, error -> {
                     passwordErrorLabel.setText(error.getMessage());
-            }));
+                }));
     }
 
     public void signUp() {
         passwordErrorLabel.setText(EMPTY_STRING);
 
-        if(isInvalidPassword.or(isInvalidUsername).get()){ return; }
+        if (isInvalidPassword.or(isInvalidUsername).get()) {
+            return;
+        }
 
         disposables.add(usersService
                 .createUser(username.get(), null, password.get())
                 .observeOn(FX_SCHEDULER)
                 .subscribe(userResult -> {
                     signIn();
-                    }, error ->{
+                }, error -> {
                     passwordErrorLabel.setText(error.getMessage());
                 }));
     }
@@ -138,7 +142,7 @@ public class LoginController extends Controller {
         informationLabel.setText(this.information);
     }
 
-    public void setInformation(String information){
+    public void setInformation(String information) {
         this.information = information;
     }
 

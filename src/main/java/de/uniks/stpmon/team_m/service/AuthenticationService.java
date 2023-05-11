@@ -46,7 +46,7 @@ public class AuthenticationService {
     }
 
     public Observable<LoginResult> refresh() {
-        return  authApiService.refresh(new RefreshDto(preferences.get(Constants.REFRESH_TOKEN_PREF, null))).map(lr -> {
+        return authApiService.refresh(new RefreshDto(preferences.get(Constants.REFRESH_TOKEN_PREF, null))).map(lr -> {
             userStorage.setUser(lr);
             tokenStorage.setToken(lr.accessToken());
             return lr;

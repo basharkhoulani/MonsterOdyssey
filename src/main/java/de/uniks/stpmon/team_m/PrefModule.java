@@ -11,6 +11,6 @@ public class PrefModule {
     @Provides
     @Singleton
     Preferences prefs() {
-        return  Preferences.userNodeForPackage(Main.class);
+        return Preferences.userNodeForPackage(Main.class);
     }
 }

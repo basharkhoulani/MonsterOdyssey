@@ -4,7 +4,6 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +20,7 @@ public abstract class Controller {
     protected App app;
     protected final CompositeDisposable disposables = new CompositeDisposable();
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
+
     public void init() {
     }
 
@@ -30,10 +30,6 @@ public abstract class Controller {
 
     public void destroy() {
         disposables.dispose();
-    }
-
-    public void onDestroy(Runnable action) {
-        disposables.add(Disposable.fromRunnable(action));
     }
 
     public Parent render() {
