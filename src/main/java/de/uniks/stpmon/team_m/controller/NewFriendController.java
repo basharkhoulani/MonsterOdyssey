@@ -3,22 +3,20 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import org.controlsfx.control.textfield.AutoCompletionBinding;
+import org.controlsfx.control.textfield.TextFields;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
-import org.controlsfx.control.textfield.*;
-
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.FRIEND_ADDED;
+import static de.uniks.stpmon.team_m.Constants.NEW_FRIEND_TITLE;
 
 public class NewFriendController extends Controller {
 
@@ -35,11 +33,11 @@ public class NewFriendController extends Controller {
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
     UsersService usersService;
-    UserStorage userStorage;
+    @Inject
+    Provider<UserStorage> userStorage;
 
     @Inject
-    public NewFriendController(UserStorage userStorage) {
-        this.userStorage = userStorage;
+    public NewFriendController() {
     }
 
     @Override
@@ -66,24 +64,15 @@ public class NewFriendController extends Controller {
         for (User user : allUsers) {
             if (user.name().equals(searchTextField.getText())) {
                 final String newFriend = user._id();
-                userStorage.addFriend(newFriend);
+                userStorage.get().addFriend(newFriend);
             }
         }
-        disposables.add(usersService.updateUser(
-                null,
-                null,
-                null,
-                userStorage.getFriends(),
-                null).subscribe());
-
-
+        disposables.add(usersService.updateUser(null, null, null, userStorage.get().getFriends(), null).subscribe());
         searchTextField.clear();
         searchTextField.setPromptText(FRIEND_ADDED);
     }
-
     public void sendMessage() {
     }
-
     public void clickSearchField() {
         disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER).subscribe(users -> {
             allUsers = users;
