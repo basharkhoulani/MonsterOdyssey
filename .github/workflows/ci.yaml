@@ -24,7 +24,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: -Xmx2g build test jacocoTestReport
+          arguments: build test jacocoTestReport
       - name: Publish Coverage to Pages
         if: github.event_name != 'workflow_dispatch'
         uses: peaceiris/actions-gh-pages@v3
