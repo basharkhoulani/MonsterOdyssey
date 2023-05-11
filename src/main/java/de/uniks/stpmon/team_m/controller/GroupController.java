@@ -1,6 +1,9 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
+import de.uniks.stpmon.team_m.service.UsersService;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -8,9 +11,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import org.controlsfx.control.textfield.AutoCompletionBinding;
+import org.controlsfx.control.textfield.TextFields;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -33,15 +41,19 @@ public class GroupController extends Controller {
     public Button deleteGroupButton;
     @FXML
     public Pane buttonPane;
-
+    @Inject
+    UsersService usersService;
+    @Inject
+    GroupService groupService;
     @Inject
     Provider<MessagesController> messagesControllerProvider;
-    private final GroupStorage groupStorage;
+    @Inject
+    Provider<GroupStorage> groupStorageProvider;
+    private List<User> allUsers;
+
 
     @Inject
-    public GroupController(GroupStorage groupStorage) {
-
-        this.groupStorage = groupStorage;
+    public GroupController() {
     }
 
     @Override
@@ -52,7 +64,7 @@ public class GroupController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
-        if (groupStorage.get_id().equals(EMPTY_STRING)) {
+        if (groupStorageProvider.get().get_id().equals(EMPTY_STRING)) {
             newGroup();
         } else {
             editGroup();
@@ -75,12 +87,21 @@ public class GroupController extends Controller {
     }
 
     public void deleteGroup() {
-        //TODO server communication
         app.show(messagesControllerProvider.get());
     }
 
     public void saveGroup() {
-        //TODO server communication
         app.show(messagesControllerProvider.get());
+    }
+
+    public void searchForGroupMembers() {
+        disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER).subscribe(users -> {
+            allUsers = users;
+            List<String> usersNames = new ArrayList<>();
+            allUsers.forEach(user -> usersNames.add(user.name()));
+            AutoCompletionBinding<String> autoCompletionBinding = TextFields
+                    .bindAutoCompletion(searchFieldGroupMembers, usersNames);
+            autoCompletionBinding.setPrefWidth(searchFieldGroupMembers.getPrefWidth());
+        }));
     }
 }
