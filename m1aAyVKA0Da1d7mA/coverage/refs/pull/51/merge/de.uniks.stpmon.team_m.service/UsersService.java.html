@@ -33,13 +33,12 @@ public class UsersService {
 <span class="fc" id="L33">        return usersApiService.getUsers(ids, status);</span>
     }
 
-    public Observable&lt;User&gt; updateUser(String id, String name, String status, String avatar, List&lt;String&gt; friends, String password) {
-<span class="fc" id="L37">        return usersApiService.updateUser(id, new UpdateUserDto(name, status, avatar, friends, password));</span>
+    public Observable&lt;User&gt; updateUser(String name, String status, String avatar, List&lt;String&gt; friends, String password) {
+<span class="fc" id="L37">        return usersApiService.updateUser(userStorage.get_id(), new UpdateUserDto(name, status, avatar, friends, password));</span>
     }
 
-
-    public Observable&lt;User&gt; deleteUser(String id) {
-<span class="nc" id="L42">        return usersApiService.deleteUser(id);</span>
+    public Observable&lt;User&gt; deleteUser() {
+<span class="nc" id="L41">        return usersApiService.deleteUser(userStorage.get_id());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

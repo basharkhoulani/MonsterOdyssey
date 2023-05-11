@@ -47,13 +47,14 @@ public class AuthenticationService {
 
     public Observable&lt;LoginResult&gt; refresh() {
 <span class="nc" id="L49">        return  authApiService.refresh(new RefreshDto(preferences.get(Constants.REFRESH_TOKEN_PREF, null))).map(lr -&gt; {</span>
-<span class="nc" id="L50">            tokenStorage.setToken(lr.accessToken());</span>
-<span class="nc" id="L51">            return lr;</span>
+<span class="nc" id="L50">            userStorage.setUser(lr);</span>
+<span class="nc" id="L51">            tokenStorage.setToken(lr.accessToken());</span>
+<span class="nc" id="L52">            return lr;</span>
         });
     }
 
     public Observable&lt;LogoutResult&gt; logout() {
-<span class="nc" id="L56">        return authApiService.logout().map(lr -&gt; lr);</span>
+<span class="nc" id="L57">        return authApiService.logout().map(lr -&gt; lr);</span>
     }
 
     // TODO: Remember me (refresh)
