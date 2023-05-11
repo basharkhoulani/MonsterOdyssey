@@ -208,6 +208,7 @@ public class MessagesController extends Controller {
         friendHBox.setPrefHeight(Constants.MESSAGES_FRIEND_NODE_HEIGHT);
         friendHBox.setMinHeight(Constants.MESSAGES_FRIEND_NODE_HEIGHT);
         friendHBox.setPadding(Constants.MESSAGES_FRIEND_NODE_PADDING);
+        friendHBox.getStyleClass().add("normalFriendHBox");
 
         friendHBox.hoverProperty().addListener((observable, oldValue, newValue) -> {
             friendHBox.getStyleClass().clear();
