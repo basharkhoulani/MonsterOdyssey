@@ -49,7 +49,7 @@ public class EventListener {
     public <T> Observable<Event<T>> listen(String pattern, Class<T> type) {
         return Observable.create(emitter -> {
             this.ensureOpen();
-            send(Map.of("event", "subscribe", "data", pattern));
+            send(new Event<>("subscribe", pattern));
             final Consumer<String> handler = createPatternHandler(mapper, pattern, type, emitter);
             endpoint.addMessageHandler(handler);
             emitter.setCancellable(() -> removeEventHandler(pattern, handler));
@@ -79,7 +79,7 @@ public class EventListener {
             return;
         }
 
-        send(Map.of("event", "unsubscribe", "data", pattern));
+        send(new Event<>("unsubscribe", pattern));
         endpoint.removeMessageHandler(handler);
         if (!endpoint.hasMessageHandler()) {
             close();

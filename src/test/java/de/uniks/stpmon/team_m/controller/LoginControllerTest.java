@@ -19,10 +19,9 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
 
+import static de.uniks.stpmon.team_m.Constants.STATUS_ONLINE;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
-import static de.uniks.stpmon.team_m.Constants.*;
 
 @ExtendWith(MockitoExtension.class)
 class LoginControllerTest extends ApplicationTest {
@@ -41,7 +40,7 @@ class LoginControllerTest extends ApplicationTest {
     LoginController loginController;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         app.start(stage);
         app.show(loginController);
         stage.requestFocus();
@@ -72,7 +71,7 @@ class LoginControllerTest extends ApplicationTest {
     }
 
     @Test
-    void signUp(){
+    void signUp() {
         //successfully Sign Up
         when(usersService.createUser(anyString(), isNull(), anyString())).thenReturn(Observable.just(new User(
                 "1",
@@ -99,13 +98,13 @@ class LoginControllerTest extends ApplicationTest {
         write("12345678");
         clickOn("#signUpButton");
 
-        verify(usersService).createUser("1",null, "12345678");
+        verify(usersService).createUser("1", null, "12345678");
         verify(authenticationService).login("1", "12345678", false);
         verify(app).show(mainMenuController);
     }
 
     @Test
-    void showHidePassword(){
+    void showHidePassword() {
         final PasswordField passwordField = lookup("#passwordField").query();
         write("\t");
         write("password");
@@ -114,7 +113,7 @@ class LoginControllerTest extends ApplicationTest {
     }
 
     @Test
-    void disableButton(){
+    void disableButton() {
         final Button signUpButton = lookup("Sign Up").query();
         final Button signInButton = lookup("Sign In").query();
         assertNotNull(signUpButton);

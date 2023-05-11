@@ -1,5 +1,8 @@
 package de.uniks.stpmon.team_m;
 
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 
 public class Constants {
@@ -18,7 +21,8 @@ public class Constants {
     public static final String TASKBAR_ICON = "images/icon.png";
     public static final String LOADING = "Loading...";
     public static final String EMPTY_STRING = "";
-    public static final String FX_STYLE_BLACK = "-fx-border-color: black";
+    public static final String FX_STYLE_BORDER_COLOR_BLACK = "-fx-border-color: black";
+    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
