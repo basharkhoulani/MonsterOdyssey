@@ -54,7 +54,7 @@ public class IngameController extends Controller {
 <span class="fc" id="L54">        alert.initStyle(StageStyle.UNDECORATED);</span>
 <span class="fc" id="L55">        alert.setContentText(HELP_LABEL);</span>
 <span class="fc" id="L56">        final DialogPane dialogPane = alert.getDialogPane();</span>
-<span class="fc" id="L57">        dialogPane.setStyle(FX_STYLE_BLACK);</span>
+<span class="fc" id="L57">        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);</span>
 <span class="fc" id="L58">        alert.showAndWait();</span>
 <span class="fc" id="L59">    }</span>
 
@@ -78,7 +78,7 @@ public class IngameController extends Controller {
 <span class="fc" id="L78">        alert.initOwner(app.getStage());</span>
 <span class="fc" id="L79">        alert.initModality(Modality.APPLICATION_MODAL);</span>
 <span class="fc" id="L80">        alert.initStyle(StageStyle.UNDECORATED);</span>
-<span class="fc" id="L81">        dialogPane.setStyle(FX_STYLE_BLACK);</span>
+<span class="fc" id="L81">        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);</span>
 
 <span class="fc" id="L83">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
 <span class="fc bfc" id="L84" title="All 4 branches covered.">        if (result.isPresent() &amp;&amp; result.get() == resume) {</span>

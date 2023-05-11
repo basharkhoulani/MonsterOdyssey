@@ -54,7 +54,7 @@ public class App extends Application {
 <span class="nc" id="L54">        final AuthenticationService authenticationService = component.authenticationService();</span>
 
 <span class="nc bnc" id="L56" title="All 2 branches missed.">        if (authenticationService.isRememberMe()) {</span>
-<span class="nc" id="L57">            authenticationService.refresh().subscribe(lr -&gt; {</span>
+<span class="nc" id="L57">            authenticationService.refresh().observeOn(FX_SCHEDULER).subscribe(lr -&gt; {</span>
 <span class="nc" id="L58">                show(component.mainMenuController());</span>
 <span class="nc" id="L59">            }, err -&gt; {</span>
 <span class="nc" id="L60">                show(component.loginController());</span>

@@ -2,11 +2,8 @@
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
-import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
@@ -15,49 +12,48 @@ import java.io.IOException;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
-<span class="fc" id="L18">public abstract class Controller {</span>
+<span class="fc" id="L15">public abstract class Controller {</span>
 
     @Inject
     protected App app;
-<span class="fc" id="L22">    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);</span>
-<span class="fc" id="L23">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
+<span class="fc" id="L19">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
 
     public void init() {
-<span class="fc" id="L26">    }</span>
+<span class="fc" id="L22">    }</span>
 
     public String getTitle() {
-<span class="nc" id="L29">        return EMPTY_STRING;</span>
+<span class="nc" id="L25">        return EMPTY_STRING;</span>
     }
 
     public void destroy() {
-<span class="fc" id="L33">        disposables.dispose();</span>
-<span class="fc" id="L34">    }</span>
+<span class="fc" id="L29">        disposables.dispose();</span>
+<span class="fc" id="L30">    }</span>
 
     public void onDestroy(Runnable action) {
-<span class="nc" id="L37">        disposables.add(Disposable.fromRunnable(action));</span>
-<span class="nc" id="L38">    }</span>
+<span class="nc" id="L33">        disposables.add(Disposable.fromRunnable(action));</span>
+<span class="nc" id="L34">    }</span>
 
     public Parent render() {
-<span class="fc" id="L41">        return load(getClass().getSimpleName().replace(&quot;Controller&quot;, &quot;&quot;));</span>
+<span class="fc" id="L37">        return load(getClass().getSimpleName().replace(&quot;Controller&quot;, &quot;&quot;));</span>
     }
 
     protected Parent load(String view) {
-<span class="fc" id="L45">        final FXMLLoader loader = new FXMLLoader((Main.class.getResource(&quot;views/&quot; + view + &quot;.fxml&quot;)));</span>
-<span class="fc" id="L46">        loader.setControllerFactory(c -&gt; this);</span>
+<span class="fc" id="L41">        final FXMLLoader loader = new FXMLLoader((Main.class.getResource(&quot;views/&quot; + view + &quot;.fxml&quot;)));</span>
+<span class="fc" id="L42">        loader.setControllerFactory(c -&gt; this);</span>
         // loader.setResources(resources);
         try {
-<span class="fc" id="L49">            return loader.load();</span>
-<span class="nc" id="L50">        } catch (IOException exception) {</span>
-<span class="nc" id="L51">            throw new RuntimeException(exception);</span>
+<span class="fc" id="L45">            return loader.load();</span>
+<span class="nc" id="L46">        } catch (IOException exception) {</span>
+<span class="nc" id="L47">            throw new RuntimeException(exception);</span>
         }
     }
 
     public int getHeight() {
-<span class="fc" id="L56">        return STANDARD_HEIGHT;</span>
+<span class="fc" id="L52">        return STANDARD_HEIGHT;</span>
     }
 
     public int getWidth() {
-<span class="fc" id="L60">        return STANDARD_WIDTH;</span>
+<span class="fc" id="L56">        return STANDARD_WIDTH;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
