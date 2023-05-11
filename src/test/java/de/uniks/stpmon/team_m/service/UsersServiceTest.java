@@ -11,6 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -48,7 +51,7 @@ class UsersServiceTest {
     }
 
     @Test
-    void updateUser() {
+    void updateUserTest() {
         // define mock
         when(usersApiService.updateUser(ArgumentMatchers.any(), ArgumentMatchers.any()))
                 .thenReturn(Observable.just(new User(
@@ -68,4 +71,22 @@ class UsersServiceTest {
         verify(usersApiService).updateUser(null, new UpdateUserDto(null, "online", null, null, null));
     }
 
+    @Test
+    void getUsersTest() {
+        // define mock
+        when(usersApiService.getUsers(ArgumentMatchers.any(), ArgumentMatchers.any()))
+                .thenReturn(Observable.just(Arrays.asList(
+                        new User("1", "11", "1", "1", null),
+                        new User("2", "22", "2", "2", null),
+                        new User("3", "33", "3", "3", null)
+                )));
+
+        // get users
+        final List<User> users = usersApiService.getUsers(ArgumentMatchers.any(), ArgumentMatchers.any()).blockingFirst();
+
+        // check for successful get
+        assertEquals("1", users.get(0)._id());
+
+        verify(usersApiService).getUsers(ArgumentMatchers.any(), ArgumentMatchers.any());
+    }
 }
