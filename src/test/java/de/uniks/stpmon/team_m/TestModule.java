@@ -9,15 +9,17 @@ import io.reactivex.rxjava3.core.Observable;
 import java.util.List;
 import java.util.prefs.Preferences;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 @Module
 public class TestModule {
     @Provides
-    static Preferences prefs(){ return mock(Preferences.class);}
+    static Preferences prefs() {
+        return mock(Preferences.class);
+    }
 
     @Provides
-    static AuthApiService authApiService(){
+    static AuthApiService authApiService() {
         return new AuthApiService() {
             @Override
             public Observable<LoginResult> login(LoginDto dto) {
@@ -43,7 +45,7 @@ public class TestModule {
     }
 
     @Provides
-    static GroupsApiService groupsApiService(){
+    static GroupsApiService groupsApiService() {
         return new GroupsApiService() {
             @Override
             public Observable<Group> create(CreateGroupDto dto) {
@@ -73,7 +75,7 @@ public class TestModule {
     }
 
     @Provides
-    static MessagesApiService messagesApiService(){
+    static MessagesApiService messagesApiService() {
         return new MessagesApiService() {
             @Override
             public Observable<Message> create(String namespace, String parent, CreateMessageDto dto) {
@@ -103,7 +105,7 @@ public class TestModule {
     }
 
     @Provides
-    static RegionsApiService regionsApiService(){
+    static RegionsApiService regionsApiService() {
         return new RegionsApiService() {
             @Override
             public Observable<List<Region>> getRegions() {
@@ -118,7 +120,7 @@ public class TestModule {
     }
 
     @Provides
-    static UsersApiService usersApiService(){
+    static UsersApiService usersApiService() {
         return new UsersApiService() {
             @Override
             public Observable<User> createUser(CreateUserDto dto) {
