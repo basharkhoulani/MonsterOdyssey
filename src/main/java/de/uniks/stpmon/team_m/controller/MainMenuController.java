@@ -16,7 +16,6 @@ import javafx.scene.layout.VBox;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import static de.uniks.stpmon.team_m.Constants.FX_SCHEDULER;
 import static de.uniks.stpmon.team_m.Constants.MAIN_MENU_TITLE;
 
 public class MainMenuController extends Controller {

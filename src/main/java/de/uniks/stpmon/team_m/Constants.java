@@ -22,13 +22,12 @@ public class Constants {
     public static final String LOADING = "Loading...";
     public static final String EMPTY_STRING = "";
     public static final String FX_STYLE_BORDER_COLOR_BLACK = "-fx-border-color: black";
-    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
     public static final String PASSWORD_LESS_THAN_8_CHARACTERS = "Password must have at least 8 characters.";
     public static final int PASSWORD_CHARACTER_LIMIT = 8;
-    public static final char BULLET = '\u25cf';
+    public static final char BULLET = '●';
     public static final String REFRESH_TOKEN_PREF = "refreshToken";
     public static final String DELETE_SUCCESS = "Account successfully deleted";
 
@@ -44,6 +43,7 @@ public class Constants {
 
     // NEW FRIEND
     public static final String NEW_FRIEND_TITLE = "Add a new friend";
+    public static final String FRIEND_ADDED = "Friend added. You can add more friends or go back to the main menu.";
 
     // GROUPS
     public static final String NEW_GROUP_TITLE = "New Group";
