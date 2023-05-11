@@ -1,5 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.service.UserStorage;
+import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
@@ -52,6 +54,10 @@ public class AccountSettingController extends Controller {
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
     Provider<LoginController> loginControllerProvider;
+    @Inject
+    UserStorage user;
+    @Inject
+    UsersService usersService;
 
     @Inject
     AccountSettingController() {
@@ -71,11 +77,14 @@ public class AccountSettingController extends Controller {
         passwordField.setDisable(true);
         showPasswordButton.setDisable(true);
 
-        // Secondly show password
+        // Show the Current UserName
+        usernameField.setPromptText(user.getName());
+
+        // show password
         skin = new PasswordFieldSkin(passwordField);
         passwordField.setSkin(skin);
 
-        //Thirdly bind the username and password
+        // bind the username and password
         usernameField.textProperty().bindBidirectional(username);
         passwordField.textProperty().bindBidirectional(password);
 
@@ -90,18 +99,25 @@ public class AccountSettingController extends Controller {
         return parent;
     }
 
-    public void editUsername() {
-        usernameField.setDisable(false);
-    }
+    public void editUsername() { usernameField.setDisable(!usernameField.isDisabled()); }
 
     public void saveUsername() {
-        usernameField.setDisable(true);
+        informationLabel.setText(EMPTY_STRING);
+        usernameErrorLabel.setText(EMPTY_STRING);
 
-        //TODO functionally implement
+        disposables.add(usersService
+                .updateUser(username.get(),null, null, null, null)
+                .observeOn(FX_SCHEDULER)
+                .subscribe(userResult -> {
+                    user.setName(userResult.name());
+                    informationLabel.setText("Your username has been changed successfully.");
+                    usernameField.setDisable(true);
+                    usernameField.setText(EMPTY_STRING);
+                    usernameField.setPromptText(user.getName());
+                    }, error -> {
+                    usernameErrorLabel.setText(error.getMessage());
+                    }));
 
-        //username has been changed successfully
-        usernameErrorLabel.setText("");
-        informationLabel.setText("Your username has been changed successfully.");
     }
 
     public void showPassword() {
@@ -111,18 +127,26 @@ public class AccountSettingController extends Controller {
 
 
     public void editPassword(){
-        passwordField.setDisable(false);
-        showPasswordButton.setDisable(false);
+        passwordField.setDisable(!passwordField.isDisabled());
+        showPasswordButton.setDisable(!showPasswordButton.isDisabled());
     }
 
     public void savePassword() {
-        passwordField.setDisable(true);
-        showPasswordButton.setDisable(true);
-        //TODO functionally implement
+        informationLabel.setText(EMPTY_STRING);
+        passwordErrorLabel.setText(EMPTY_STRING);
 
-        //password has been changed successfully
-        passwordErrorLabel.setText("");
-        informationLabel.setText("Your Password has been changed successfully.");
+        disposables.add(usersService
+                .updateUser(null,null,null,null, password.get())
+                .observeOn(FX_SCHEDULER)
+                .subscribe(userResult -> {
+                    passwordField.setText(EMPTY_STRING);
+                    passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);
+                    passwordField.setDisable(true);
+                    showPasswordButton.setDisable(true);
+                    informationLabel.setText("Your Password has been changed successfully.");
+                }, error -> {
+                    passwordErrorLabel.setText(error.getMessage());
+                }));
     }
 
     public void deleteAccount(){
