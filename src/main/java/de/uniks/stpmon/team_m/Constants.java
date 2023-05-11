@@ -1,5 +1,8 @@
 package de.uniks.stpmon.team_m;
 
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 
 public class Constants {
@@ -18,7 +21,8 @@ public class Constants {
     public static final String TASKBAR_ICON = "images/icon.png";
     public static final String LOADING = "Loading...";
     public static final String EMPTY_STRING = "";
-    public static final String FX_STYLE_BLACK = "-fx-border-color: black";
+    public static final String FX_STYLE_BORDER_COLOR_BLACK = "-fx-border-color: black";
+    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
@@ -26,9 +30,12 @@ public class Constants {
     public static final int PASSWORD_CHARACTER_LIMIT = 8;
     public static final char BULLET = '●';
     public static final String REFRESH_TOKEN_PREF = "refreshToken";
+    public static final String DELETE_SUCCESS = "Account successfully deleted";
 
     // MAIN MENU
     public static final String MAIN_MENU_TITLE = "Main Menu";
+    public static final String STATUS_ONLINE = "online";
+    public static final String STATUS_OFFLINE = "offline";
 
     // MESSAGES
     public static final int MESSAGES_HEIGHT = 640;
@@ -46,6 +53,8 @@ public class Constants {
 
     // ACCOUNT SETTINGS
     public static final String ACCOUNT_SETTINGS_TITLE = "Account Setting";
+    public static final String USERNAME_SUCCESS_CHANGED = "Your username has been changed successfully.";
+    public static final String PASSWORD_SUCCESS_CHANGED = "Your Password has been changed successfully.";
 
     // INGAME
     public static final String INGAME_TITLE = "Ingame";

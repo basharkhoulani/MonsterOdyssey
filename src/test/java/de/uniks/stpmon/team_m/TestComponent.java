@@ -6,10 +6,10 @@ import javax.inject.Singleton;
 
 @Component(modules = {TestModule.class})
 @Singleton
-public interface TestComponent extends MainComponent{
+public interface TestComponent extends MainComponent {
 
     @Component.Builder
-    interface Builder extends MainComponent.Builder{
+    interface Builder extends MainComponent.Builder {
         @Override
         TestComponent build();
     }

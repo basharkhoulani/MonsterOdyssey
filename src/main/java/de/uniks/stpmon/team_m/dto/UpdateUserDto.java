@@ -1,6 +1,9 @@
 package de.uniks.stpmon.team_m.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.List;
+
 public record UpdateUserDto(
         String name,
         String status,

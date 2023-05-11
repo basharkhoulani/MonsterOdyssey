@@ -58,6 +58,7 @@ public class App extends Application {
         final AuthenticationService authenticationService = component.authenticationService();
 
         if (authenticationService.isRememberMe()) {
+
             disposables.add(authenticationService.refresh().observeOn(Schedulers.from(Platform::runLater)).subscribe(lr -> {
                 show(component.mainMenuController());
             }, err -> {

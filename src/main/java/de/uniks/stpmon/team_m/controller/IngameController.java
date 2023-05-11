@@ -54,7 +54,7 @@ public class IngameController extends Controller {
         alert.initStyle(StageStyle.UNDECORATED);
         alert.setContentText(HELP_LABEL);
         final DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.setStyle(FX_STYLE_BLACK);
+        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);
         alert.showAndWait();
     }
 
@@ -78,7 +78,7 @@ public class IngameController extends Controller {
         alert.initOwner(app.getStage());
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.initStyle(StageStyle.UNDECORATED);
-        dialogPane.setStyle(FX_STYLE_BLACK);
+        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == resume) {
