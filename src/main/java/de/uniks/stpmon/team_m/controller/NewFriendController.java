@@ -58,8 +58,6 @@ public class NewFriendController extends Controller {
             AutoCompletionBinding<String> autoCompletionBinding = TextFields.bindAutoCompletion(searchTextField, names);
             autoCompletionBinding.setPrefWidth(searchTextField.getPrefWidth());
         }));
-
-
         return parent;
     }
 

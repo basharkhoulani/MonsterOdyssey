@@ -1,6 +1,8 @@
 package de.uniks.stpmon.team_m.service;
 
 import de.uniks.stpmon.team_m.dto.CreateUserDto;
+import de.uniks.stpmon.team_m.dto.LoginResult;
+import de.uniks.stpmon.team_m.dto.UpdateUserDto;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.rest.UsersApiService;
 import io.reactivex.rxjava3.core.Observable;
@@ -19,6 +21,8 @@ class UsersServiceTest {
     UsersApiService usersApiService;
     @InjectMocks
     UsersService usersService;
+    @Spy
+    UserStorage userStorage;
 
     @Test
     void createUser() {
@@ -41,5 +45,26 @@ class UsersServiceTest {
         assertEquals("1", user._id());
 
         verify(usersApiService).createUser(new CreateUserDto("1", null, "12345678"));
+    }
+
+    @Test
+    void updateUser() {
+        // define mock
+        when(usersApiService.updateUser(ArgumentMatchers.any(), ArgumentMatchers.any()))
+                .thenReturn(Observable.just(new User(
+                        null,
+                        null,
+                        "online",
+                        null,
+                        null
+                )));
+
+        // update user
+        final User user = usersService.updateUser(null, "online", null, null, null).blockingFirst();
+
+        // check for successful update
+        assertEquals("online", user.status());
+
+        verify(usersApiService).updateUser(null, new UpdateUserDto(null, "online", null, null, null));
     }
 }
