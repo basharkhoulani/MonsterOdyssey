@@ -106,7 +106,7 @@ public class AccountSettingController extends Controller {
 <span class="fc" id="L106">        usernameErrorLabel.setText(EMPTY_STRING);</span>
 
 <span class="fc" id="L108">        disposables.add(usersService</span>
-<span class="fc" id="L109">                .updateUser(user.get_id(), username.get(),null, null, null, null)</span>
+<span class="fc" id="L109">                .updateUser(username.get(),null, null, null, null)</span>
 <span class="fc" id="L110">                .observeOn(FX_SCHEDULER)</span>
 <span class="fc" id="L111">                .subscribe(userResult -&gt; {</span>
 <span class="fc" id="L112">                    user.setName(userResult.name());</span>
@@ -136,7 +136,7 @@ public class AccountSettingController extends Controller {
 <span class="fc" id="L136">        passwordErrorLabel.setText(EMPTY_STRING);</span>
 
 <span class="fc" id="L138">        disposables.add(usersService</span>
-<span class="fc" id="L139">                .updateUser(user.get_id(), null,null,null,null, password.get())</span>
+<span class="fc" id="L139">                .updateUser(null,null,null,null, password.get())</span>
 <span class="fc" id="L140">                .observeOn(FX_SCHEDULER)</span>
 <span class="fc" id="L141">                .subscribe(userResult -&gt; {</span>
 <span class="fc" id="L142">                    passwordField.setText(EMPTY_STRING);</span>
