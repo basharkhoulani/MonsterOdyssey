@@ -106,7 +106,7 @@ public class AccountSettingController extends Controller {
         usernameErrorLabel.setText(EMPTY_STRING);
 
         disposables.add(usersService
-                .updateUser(user.get_id(), username.get(),null, null, null, null)
+                .updateUser(username.get(),null, null, null, null)
                 .observeOn(FX_SCHEDULER)
                 .subscribe(userResult -> {
                     user.setName(userResult.name());
@@ -136,7 +136,7 @@ public class AccountSettingController extends Controller {
         passwordErrorLabel.setText(EMPTY_STRING);
 
         disposables.add(usersService
-                .updateUser(user.get_id(), null,null,null,null, password.get())
+                .updateUser(null,null,null,null, password.get())
                 .observeOn(FX_SCHEDULER)
                 .subscribe(userResult -> {
                     passwordField.setText(EMPTY_STRING);
