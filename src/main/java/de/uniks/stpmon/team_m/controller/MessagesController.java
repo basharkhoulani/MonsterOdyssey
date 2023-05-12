@@ -45,6 +45,8 @@ public class MessagesController extends Controller {
     @FXML
     public ScrollPane friendsAndGroupsScrollPane;
     @FXML
+    public VBox friendsAndGroupsVBox;
+    @FXML
     public Button findNewFriendsButton;
     @FXML
     public Button newGroupButton;
@@ -62,8 +64,6 @@ public class MessagesController extends Controller {
     public Button sendButton;
     @FXML
     public Button settingsButton;
-    @FXML
-    public VBox friendsAndGroupsVBox;
     @FXML
     public Pane buttonPane;
     @FXML
@@ -86,12 +86,11 @@ public class MessagesController extends Controller {
     Provider<UserStorage> userStorageProvider;
     @Inject
     Provider<UsersService> usersServiceProvider;
-    private final GroupStorage groupStorage;
+    @Inject
+    Provider<GroupStorage> groupStorageProvider;
 
     @Inject
-    public MessagesController(GroupStorage groupStorage) {
-
-        this.groupStorage = groupStorage;
+    public MessagesController() {
     }
 
     @Override
@@ -198,7 +197,7 @@ public class MessagesController extends Controller {
     }
 
     public void changeToNewGroup() {
-        groupStorage.set_id(EMPTY_STRING);
+        groupStorageProvider.get().set_id(EMPTY_STRING);
         app.show(groupControllerProvider.get());
     }
 
@@ -253,7 +252,7 @@ public class MessagesController extends Controller {
     }
 
     public void changeToSettings() {
-        groupStorage.set_id(LOADING);
+        groupStorageProvider.get().set_id(LOADING);
         app.show(groupControllerProvider.get());
     }
 }

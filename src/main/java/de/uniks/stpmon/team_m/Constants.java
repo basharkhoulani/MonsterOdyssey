@@ -13,6 +13,12 @@ public class Constants {
     public static final String MESSAGE_NAMESPACE_GROUPS = "groups";
     public static final String MESSAGE_NAMESPACE_REGIONS = "regions";
     public static final String MESSAGE_NAMESPACE_GLOBAL = "global";
+    public static final String HTTP_403 = "HTTP 403";
+    public static final String GENERIC_ERROR = """
+                                        Group could not be deleted!
+                                        Something went wrong!
+                                        Please try again later!""";
+    public static final String ERROR = "Error";
 
     // GENERAL
     public static final String GAME_NAME = "Monster Odyssey";
@@ -21,6 +27,7 @@ public class Constants {
     public static final String APP_ICON = "images/icon.png";
     public static final String TASKBAR_ICON = "images/icon.png";
     public static final String LOADING = "Loading...";
+    public static final String SURE = "Are you sure?";
     public static final String EMPTY_STRING = "";
     public static final String FX_STYLE_BORDER_COLOR_BLACK = "-fx-border-color: black";
     public static final String LOADING_ANIMATION = "images/loading.gif";
@@ -57,6 +64,8 @@ public class Constants {
     public static final String NEW_GROUP_TITLE = "New Group";
     public static final String EDIT_GROUP_TITLE = "Edit Group";
     public static final String CHANGE_GROUP = "Change Group Name";
+    public static final String DELETE_WARNING = "Are you sure you want to delete this group?";
+    public static final String DELETE_ERROR_403 = "You are not the last member of this group. You can't delete it.";
 
     // ACCOUNT SETTINGS
     public static final String ACCOUNT_SETTINGS_TITLE = "Account Setting";
