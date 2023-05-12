@@ -65,8 +65,6 @@ public class MessagesController extends Controller {
     @FXML
     public Button settingsButton;
     @FXML
-    public VBox friendsAndGroupsVBox;
-    @FXML
     public Pane buttonPane;
     @FXML
     public Pane friendsAndGroupTextPane;
