@@ -47,6 +47,7 @@ public class UserCell extends ListCell<User> {
             final Text text = new Text(getItem().name());
             final Button removeButton = new Button();
             removeButton.setText("\u2713");
+            removeButton.setOnAction(event -> removeFromSelectGroupMembers());
             final HBox hBox = new HBox(text, removeButton);
             hBox.setSpacing(10);
             hBox.setId(getItem().name());
@@ -56,6 +57,11 @@ public class UserCell extends ListCell<User> {
             chosenUsers.remove(getItem());
             groupMembersVBox.getChildren().removeIf(node -> node.getId().equals(getItem().name()));
         }
+    }
+
+    private void removeFromSelectGroupMembers() {
+        chosenUsers.remove(getItem());
+        groupMembersVBox.getChildren().removeIf(node -> node.getId().equals(getItem().name()));
     }
 
 }
