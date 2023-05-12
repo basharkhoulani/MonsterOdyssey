@@ -93,6 +93,7 @@ public class App extends Application {
 
     private void setAppIcon(Stage stage) {
         final Image image = new Image(Objects.requireNonNull(App.class.getResource(APP_ICON)).toString());
+        stage.getIcons().clear();
         stage.getIcons().add(image);
     }
 

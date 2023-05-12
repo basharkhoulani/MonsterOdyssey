@@ -45,3 +45,15 @@
     -fx-text-fill: #25c625;
 }
 
+/* Friend list */
+.normalFriendHBox {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-style: solid none none none;
+}
+.onHoverFriendHBox {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-style: solid none none none;
+    -fx-background-color: lightblue;
+}
