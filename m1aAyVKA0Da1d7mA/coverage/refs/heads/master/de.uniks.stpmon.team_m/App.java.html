@@ -93,42 +93,43 @@ public class App extends Application {
 
     private void setAppIcon(Stage stage) {
 <span class="fc" id="L95">        final Image image = new Image(Objects.requireNonNull(App.class.getResource(APP_ICON)).toString());</span>
-<span class="fc" id="L96">        stage.getIcons().add(image);</span>
-<span class="fc" id="L97">    }</span>
+<span class="fc" id="L96">        stage.getIcons().clear();</span>
+<span class="fc" id="L97">        stage.getIcons().add(image);</span>
+<span class="fc" id="L98">    }</span>
 
     private void setTaskbarIcon() {
-<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if (GraphicsEnvironment.isHeadless()) {</span>
-<span class="fc" id="L101">            return;</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        if (GraphicsEnvironment.isHeadless()) {</span>
+<span class="fc" id="L102">            return;</span>
         }
 
         try {
-<span class="nc" id="L105">            final Taskbar taskbar = Taskbar.getTaskbar();</span>
-<span class="nc" id="L106">            final java.awt.Image image = ImageIO.read(Objects.requireNonNull(Main.class.getResource(TASKBAR_ICON)));</span>
-<span class="nc" id="L107">            taskbar.setIconImage(image);</span>
-<span class="nc" id="L108">        } catch (Exception ignored) {</span>
+<span class="nc" id="L106">            final Taskbar taskbar = Taskbar.getTaskbar();</span>
+<span class="nc" id="L107">            final java.awt.Image image = ImageIO.read(Objects.requireNonNull(Main.class.getResource(TASKBAR_ICON)));</span>
+<span class="nc" id="L108">            taskbar.setIconImage(image);</span>
+<span class="nc" id="L109">        } catch (Exception ignored) {</span>
 
-<span class="nc" id="L110">        }</span>
-<span class="nc" id="L111">    }</span>
+<span class="nc" id="L111">        }</span>
+<span class="nc" id="L112">    }</span>
 
     public void show(Controller controller) {
-<span class="fc" id="L114">        cleanup();</span>
-<span class="fc" id="L115">        this.controller = controller;</span>
-<span class="fc" id="L116">        initAndRender(controller);</span>
-<span class="fc" id="L117">    }</span>
+<span class="fc" id="L115">        cleanup();</span>
+<span class="fc" id="L116">        this.controller = controller;</span>
+<span class="fc" id="L117">        initAndRender(controller);</span>
+<span class="fc" id="L118">    }</span>
 
     private void initAndRender(Controller controller) {
-<span class="fc" id="L120">        controller.init();</span>
-<span class="fc" id="L121">        stage.getScene().setRoot(controller.render());</span>
-<span class="fc" id="L122">        stage.setTitle(GAME_NAME + &quot; - &quot; + controller.getTitle());</span>
-<span class="fc" id="L123">        stage.setWidth(controller.getWidth());</span>
-<span class="fc" id="L124">        stage.setHeight(controller.getHeight());</span>
-<span class="fc" id="L125">    }</span>
+<span class="fc" id="L121">        controller.init();</span>
+<span class="fc" id="L122">        stage.getScene().setRoot(controller.render());</span>
+<span class="fc" id="L123">        stage.setTitle(GAME_NAME + &quot; - &quot; + controller.getTitle());</span>
+<span class="fc" id="L124">        stage.setWidth(controller.getWidth());</span>
+<span class="fc" id="L125">        stage.setHeight(controller.getHeight());</span>
+<span class="fc" id="L126">    }</span>
 
     private void cleanup() {
-<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (controller != null) {</span>
-<span class="fc" id="L129">            controller.destroy();</span>
-<span class="fc" id="L130">            controller = null;</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (controller != null) {</span>
+<span class="fc" id="L130">            controller.destroy();</span>
+<span class="fc" id="L131">            controller = null;</span>
         }
-<span class="fc" id="L132">    }</span>
+<span class="fc" id="L133">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
