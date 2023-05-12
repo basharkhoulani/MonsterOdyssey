@@ -61,7 +61,7 @@ class AccountSettingControllerTest extends ApplicationTest {
         final Label infoLabel = lookup("#informationLabel").query();
         final TextField usernameField = lookup("#usernameField").query();
 
-        when(usersService.updateUser(anyString(), anyString(), isNull(), isNull(), isNull(), isNull()))
+        when(usersService.updateUser(anyString(), isNull(), isNull(), isNull(), isNull()))
                 .thenReturn(Observable.just(new User(
                         "1",
                         "UserPatch",
@@ -71,14 +71,13 @@ class AccountSettingControllerTest extends ApplicationTest {
                 )));
 
         when(userStorage.getName()).thenReturn("UserPatch");
-        when(userStorage.get_id()).thenReturn("1");
 
         clickOn("#usernameEditButton");
         clickOn(usernameField);
         write("UserPatch");
         clickOn("#saveUsernameButton");
 
-        verify(usersService).updateUser("1", "UserPatch", null, null, null, null);
+        verify(usersService).updateUser("UserPatch", null, null, null, null);
         assertEquals(USERNAME_SUCCESS_CHANGED, infoLabel.getText());
         assertEquals("UserPatch", usernameField.getPromptText());
     }
@@ -114,7 +113,7 @@ class AccountSettingControllerTest extends ApplicationTest {
         final Label infoLabel = lookup("#informationLabel").query();
         final PasswordField passwordField = lookup("#passwordField").query();
 
-        when(usersService.updateUser(anyString(), isNull(), isNull(), isNull(), isNull(), anyString()))
+        when(usersService.updateUser(isNull(), isNull(), isNull(), isNull(), anyString()))
                 .thenReturn(Observable.just(new User(
                         "1",
                         "UserPatch",
@@ -123,14 +122,12 @@ class AccountSettingControllerTest extends ApplicationTest {
                         null
                 )));
 
-        when(userStorage.get_id()).thenReturn("1");
-
         clickOn("#passwordEditButton");
         clickOn(passwordField);
         write("UserPatch");
         clickOn("#savePasswordButton");
 
-        verify(usersService).updateUser("1", null, null, null, null, "UserPatch");
+        verify(usersService).updateUser(null, null, null, null, "UserPatch");
         assertEquals(PASSWORD_SUCCESS_CHANGED, infoLabel.getText());
     }
 

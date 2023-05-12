@@ -53,7 +53,7 @@ class AppTest extends ApplicationTest {
         assertNotNull(deleteLabel);
         assertEquals("Are you sure?", deleteLabel.getText());
 
-        final Button cancelBtn = from(dialogPaneDelete).lookup("Cancel").query();
+        final Button cancelBtn = (Button) dialogPaneDelete.lookupButton(ButtonType.CANCEL);
         assertNotNull(cancelBtn);
         clickOn(cancelBtn);
         assertEquals("Monster Odyssey - Account Setting", stage.getTitle());
@@ -69,7 +69,8 @@ class AppTest extends ApplicationTest {
 
         final DialogPane dlgPaneDelete = lookup(".dialog-pane").query();
         assertNotNull(dlgPaneDelete);
-        clickOn("OK");
+        final Button okButton = (Button) dlgPaneDelete.lookupButton(ButtonType.OK);
+        clickOn(okButton);
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
         final Label infoLabel = lookup("#informationLabel").query();
         assertEquals("Account successfully deleted", infoLabel.getText());

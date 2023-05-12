@@ -1,13 +1,21 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.service.UserStorage;
+import de.uniks.stpmon.team_m.service.UsersService;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import org.controlsfx.control.textfield.AutoCompletionBinding;
+import org.controlsfx.control.textfield.TextFields;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.ArrayList;
+import java.util.List;
 
+import static de.uniks.stpmon.team_m.Constants.FRIEND_ADDED;
 import static de.uniks.stpmon.team_m.Constants.NEW_FRIEND_TITLE;
 
 public class NewFriendController extends Controller {
@@ -20,8 +28,13 @@ public class NewFriendController extends Controller {
     public Button messageButton;
     @FXML
     public TextField searchTextField;
+    List<User> allUsers;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
+    @Inject
+    UsersService usersService;
+    @Inject
+    Provider<UserStorage> userStorage;
 
     @Inject
     public NewFriendController() {
@@ -42,8 +55,33 @@ public class NewFriendController extends Controller {
     }
 
     public void addAsAFriend() {
+        if (searchTextField.getText().equals("")) {
+            return;
+        }
+        if (allUsers.isEmpty()) {
+            return;
+        }
+        for (User user : allUsers) {
+            if (user.name().equals(searchTextField.getText())) {
+                final String newFriend = user._id();
+                userStorage.get().addFriend(newFriend);
+            }
+        }
+        disposables.add(usersService.updateUser(null, null, null, userStorage.get().getFriends(), null).subscribe());
+        searchTextField.clear();
+        searchTextField.setPromptText(FRIEND_ADDED);
     }
-
     public void sendMessage() {
+    }
+    public void clickSearchField() {
+        disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER).subscribe(users -> {
+            allUsers = users;
+            List<String> names = new ArrayList<>();
+            for (User user : allUsers) {
+                names.add(user.name());
+            }
+            AutoCompletionBinding<String> autoCompletionBinding = TextFields.bindAutoCompletion(searchTextField, names);
+            autoCompletionBinding.setPrefWidth(searchTextField.getPrefWidth());
+        }));
     }
 }
