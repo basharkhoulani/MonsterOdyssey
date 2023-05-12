@@ -14,9 +14,9 @@ public class GroupService {
     private final GroupsApiService groupsApiService;
 
     @Inject
-<span class="nc" id="L17">    public GroupService(GroupsApiService groupsApiService) {</span>
-<span class="nc" id="L18">        this.groupsApiService = groupsApiService;</span>
-<span class="nc" id="L19">    }</span>
+<span class="fc" id="L17">    public GroupService(GroupsApiService groupsApiService) {</span>
+<span class="fc" id="L18">        this.groupsApiService = groupsApiService;</span>
+<span class="fc" id="L19">    }</span>
 
     public Observable&lt;Group&gt; create(String name, List&lt;String&gt; members) {
 <span class="nc" id="L22">        return groupsApiService.create(new CreateGroupDto(name, members));</span>
