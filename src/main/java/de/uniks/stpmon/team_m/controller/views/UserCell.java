@@ -1,0 +1,61 @@
+package de.uniks.stpmon.team_m.controller.views;
+
+import de.uniks.stpmon.team_m.dto.User;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+
+
+public class UserCell extends ListCell<User> {
+    private final ObservableList<User> chosenUsers;
+    private final VBox groupMembersVBox;
+
+    public UserCell(ObservableList<User> chosenUsers, VBox groupMembersVBox) {
+        this.chosenUsers = chosenUsers;
+        this.groupMembersVBox = groupMembersVBox;
+    }
+
+    @Override
+    protected void updateItem(User item, boolean empty) {
+        super.updateItem(item, empty);
+        if (item == null || empty) {
+            setText(null);
+            setGraphic(null);
+        } else {
+            final Text text = new Text(item.name());
+            final Button button = new Button();
+            button.setOnAction(event -> addOrRemoveUserToNewGroup(button));
+            HBox hBox = new HBox(text, button);
+            hBox.setSpacing(10);
+            hBox.setId(item.name());
+            setGraphic(hBox);
+            if (chosenUsers.contains(item)) {
+                button.setText("\u2713");
+            } else {
+                button.setText("+");
+            }
+        }
+    }
+
+    private void addOrRemoveUserToNewGroup(Button button) {
+        if (button.getText().equals("+")) {
+            button.setText("\u2713");
+            chosenUsers.add(getItem());
+            final Text text = new Text(getItem().name());
+            final Button removeButton = new Button();
+            removeButton.setText("\u2713");
+            final HBox hBox = new HBox(text, removeButton);
+            hBox.setSpacing(10);
+            hBox.setId(getItem().name());
+            groupMembersVBox.getChildren().add(hBox);
+        } else {
+            button.setText("+");
+            chosenUsers.remove(getItem());
+            groupMembersVBox.getChildren().removeIf(node -> node.getId().equals(getItem().name()));
+        }
+    }
+
+}

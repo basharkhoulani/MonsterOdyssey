@@ -1,10 +1,13 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.controller.views.UserCell;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import impl.org.controlsfx.skin.AutoCompletePopup;
+import impl.org.controlsfx.skin.AutoCompletePopupSkin;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,14 +16,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import org.controlsfx.control.textfield.AutoCompletionBinding;
-import org.controlsfx.control.textfield.TextFields;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -50,7 +48,7 @@ public class GroupController extends Controller {
     @Inject
     Provider<GroupStorage> groupStorageProvider;
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
-
+    private final ObservableList<User> newGroupMembers = FXCollections.observableArrayList();
 
     @Inject
     public GroupController() {
@@ -97,20 +95,21 @@ public class GroupController extends Controller {
     public void searchForGroupMembers() {
         disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER).subscribe(users -> {
             allUsers.setAll(users);
-            final List<String> userNames = new ArrayList<>();
-            for (final User user : users) {
-                userNames.add(user.name());
-            }
-            final AutoCompletePopup<String> autoCompletePopup = new AutoCompletePopup<>();
-            autoCompletePopup.getSuggestions().addAll(userNames);
-            autoCompletePopup.show(searchFieldGroupMembers);
-            final AutoCompletionBinding<String> autoCompletionBinding = TextFields.bindAutoCompletion(searchFieldGroupMembers, userNames);
-            autoCompletionBinding.setOnAutoCompleted(event -> {
-                final User user = users.get(userNames.indexOf(event.getCompletion()));
-                final Text text = new Text(user.name());
-                groupMembersVBox.getChildren().add(text);
-                searchFieldGroupMembers.clear();
-            });
+            final AutoCompletePopup<User> autoCompletePopup = new AutoCompletePopup<>();
+            ChangeListener<String> changeListener = (observable, oldValue, newValue) -> {
+                autoCompletePopup.getSuggestions().clear();
+                autoCompletePopup.hide();
+                autoCompletePopup.setHideOnEscape(true);
+                autoCompletePopup.setVisibleRowCount(10);
+                autoCompletePopup.setSkin(new AutoCompletePopupSkin<>(autoCompletePopup,
+                        param -> new UserCell(newGroupMembers, groupMembersVBox)));
+                allUsers.stream()
+                        .filter(user -> user.name().contains(searchFieldGroupMembers.getText()))
+                        .forEach(autoCompletePopup.getSuggestions()::add);
+                autoCompletePopup.show(searchFieldGroupMembers);
+            };
+            searchFieldGroupMembers.textProperty().addListener(changeListener);
         }));
     }
 }
+
