@@ -4,11 +4,13 @@ import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
+import impl.org.controlsfx.skin.AutoCompletePopup;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
@@ -39,8 +41,6 @@ public class GroupController extends Controller {
     public Button saveGroupButton;
     @FXML
     public Button deleteGroupButton;
-    @FXML
-    public Pane buttonPane;
     @Inject
     UsersService usersService;
     @Inject
@@ -49,7 +49,7 @@ public class GroupController extends Controller {
     Provider<MessagesController> messagesControllerProvider;
     @Inject
     Provider<GroupStorage> groupStorageProvider;
-    private List<User> allUsers;
+    private final ObservableList<User> allUsers = FXCollections.observableArrayList();
 
 
     @Inject
@@ -74,7 +74,7 @@ public class GroupController extends Controller {
 
     private void newGroup() {
         TITLE = NEW_GROUP_TITLE;
-        buttonPane.getChildren().remove(deleteGroupButton);
+        deleteGroupButton.setVisible(false);
     }
 
     private void editGroup() {
@@ -96,12 +96,21 @@ public class GroupController extends Controller {
 
     public void searchForGroupMembers() {
         disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER).subscribe(users -> {
-            allUsers = users;
-            List<String> usersNames = new ArrayList<>();
-            allUsers.forEach(user -> usersNames.add(user.name()));
-            AutoCompletionBinding<String> autoCompletionBinding = TextFields
-                    .bindAutoCompletion(searchFieldGroupMembers, usersNames);
-            autoCompletionBinding.setPrefWidth(searchFieldGroupMembers.getPrefWidth());
+            allUsers.setAll(users);
+            final List<String> userNames = new ArrayList<>();
+            for (final User user : users) {
+                userNames.add(user.name());
+            }
+            final AutoCompletePopup<String> autoCompletePopup = new AutoCompletePopup<>();
+            autoCompletePopup.getSuggestions().addAll(userNames);
+            autoCompletePopup.show(searchFieldGroupMembers);
+            final AutoCompletionBinding<String> autoCompletionBinding = TextFields.bindAutoCompletion(searchFieldGroupMembers, userNames);
+            autoCompletionBinding.setOnAutoCompleted(event -> {
+                final User user = users.get(userNames.indexOf(event.getCompletion()));
+                final Text text = new Text(user.name());
+                groupMembersVBox.getChildren().add(text);
+                searchFieldGroupMembers.clear();
+            });
         }));
     }
 }
