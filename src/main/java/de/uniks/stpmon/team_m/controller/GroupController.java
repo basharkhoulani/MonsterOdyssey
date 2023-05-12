@@ -1,26 +1,20 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.controller.views.UserCell;
-import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
-import de.uniks.stpmon.team_m.service.UserStorage;
-import de.uniks.stpmon.team_m.service.UsersService;
-import impl.org.controlsfx.skin.AutoCompletePopup;
-import impl.org.controlsfx.skin.AutoCompletePopupSkin;
-import javafx.beans.value.ChangeListener;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import java.util.Optional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +46,8 @@ public class GroupController extends Controller {
     GroupService groupService;
     @Inject
     Provider<MessagesController> messagesControllerProvider;
+    @Inject
+    Provider<GroupStorage> groupStorageProvider;
     @Inject
     Provider<GroupStorage> groupStorageProvider;
     @Inject
@@ -94,8 +90,30 @@ public class GroupController extends Controller {
     }
 
     public void deleteGroup() {
-        app.show(messagesControllerProvider.get());
+        Alert alert = new Alert(Alert.AlertType.WARNING, DELETE_WARNING, ButtonType.YES, ButtonType.NO);
+        alert.setTitle(SURE);
+        alert.setHeaderText(null);
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.YES) {
+            disposables.add(groupService.delete(groupStorageProvider.get().get_id()).observeOn(FX_SCHEDULER).subscribe(deleted -> app.show(messagesControllerProvider.get()), error -> errorAlert(error.getMessage(), alert)));
+        } else {
+            alert.close();
+        }
     }
+
+    private void errorAlert(String error, Alert alert) {
+        if(error.equals(HTTP_403)){
+            alert.setContentText(DELETE_ERROR_403);
+        } else {
+            alert.setContentText(GENERIC_ERROR);
+        }
+        alert.setTitle(ERROR);
+        alert.getButtonTypes().remove(ButtonType.NO);
+        alert.getButtonTypes().remove(ButtonType.YES);
+        alert.getButtonTypes().add(ButtonType.OK);
+        alert.showAndWait();
+    }
+
 
     public void saveGroup() {
         List<String> newGroupMembersIDs = new ArrayList<>();
@@ -128,4 +146,3 @@ public class GroupController extends Controller {
         }));
     }
 }
-
