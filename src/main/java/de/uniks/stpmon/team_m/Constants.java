@@ -37,6 +37,11 @@ public class Constants {
     public static final String STATUS_ONLINE = "online";
     public static final String STATUS_OFFLINE = "offline";
 
+    // NEW GROUP
+    public static final String CHECK_MARK = "\u2713";
+    public static final String ADD_MARK = "+";
+    public static final int SPACING_BETWEEN_BUTTON_NAME_GROUP = 10;
+
     // MESSAGES
     public static final int MESSAGES_HEIGHT = 640;
     public static final int MESSAGES_WIDTH = 840;

@@ -118,7 +118,6 @@ public class GroupController extends Controller {
                 autoCompletePopup.getSuggestions().clear();
                 autoCompletePopup.hide();
                 autoCompletePopup.setHideOnEscape(true);
-                autoCompletePopup.setVisibleRowCount(10);
                 autoCompletePopup.setSkin(new AutoCompletePopupSkin<>(autoCompletePopup,
                         param -> new UserCell(newGroupMembers, groupMembersVBox)));
                 allUsers.stream()
