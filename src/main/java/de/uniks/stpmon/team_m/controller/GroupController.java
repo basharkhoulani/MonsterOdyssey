@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -29,6 +30,8 @@ import static de.uniks.stpmon.team_m.Constants.*;
 public class GroupController extends Controller {
 
     private String TITLE;
+    @FXML
+    public Label errorMessage;
     @FXML
     public Text selectGroupMembersText;
     @FXML
@@ -104,7 +107,7 @@ public class GroupController extends Controller {
             groupStorageProvider.get().setName(group.name());
             groupStorageProvider.get().setMembers(group.members());
             app.show(messagesControllerProvider.get());
-        }));
+        }, error -> errorMessage.setText(error.getMessage())));
     }
 
     public void searchForGroupMembers() {
