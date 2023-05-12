@@ -115,9 +115,7 @@ public class AccountSettingController extends Controller {
                     usernameField.setDisable(true);
                     usernameField.setText(EMPTY_STRING);
                     usernameField.setPromptText(user.getName());
-                }, error -> {
-                    usernameErrorLabel.setText(error.getMessage());
-                }));
+                }, error -> usernameErrorLabel.setText(error.getMessage())));
 
     }
 
@@ -145,9 +143,7 @@ public class AccountSettingController extends Controller {
                     passwordField.setDisable(true);
                     showPasswordButton.setDisable(true);
                     informationLabel.setText("Your Password has been changed successfully.");
-                }, error -> {
-                    passwordErrorLabel.setText(error.getMessage());
-                }));
+                }, error -> passwordErrorLabel.setText(error.getMessage())));
     }
 
     public void deleteAccount() {

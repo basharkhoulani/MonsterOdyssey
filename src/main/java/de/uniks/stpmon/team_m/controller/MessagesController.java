@@ -6,19 +6,19 @@ import de.uniks.stpmon.team_m.service.GroupStorage;
 import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -26,7 +26,6 @@ import javafx.scene.text.TextAlignment;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -219,9 +218,7 @@ public class MessagesController extends Controller {
                 friendHBox.getStyleClass().add("normalFriendHBox");
             }
         });
-        friendHBox.setOnMouseClicked((event -> {
-            friendHBox.requestFocus();
-        }));
+        friendHBox.setOnMouseClicked((event -> friendHBox.requestFocus()));
 
         Circle status = new Circle();
         status.setRadius(Constants.MESSAGES_FRIEND_NODE_STATUS_RADIUS);
