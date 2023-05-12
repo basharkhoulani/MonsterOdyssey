@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GroupService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.service</a> &gt; <span class="el_source">GroupService.java</span></div><h1>GroupService.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.service;
+
+import de.uniks.stpmon.team_m.dto.CreateGroupDto;
+import de.uniks.stpmon.team_m.dto.Group;
+import de.uniks.stpmon.team_m.dto.UpdateGroupDto;
+import de.uniks.stpmon.team_m.rest.GroupsApiService;
+import io.reactivex.rxjava3.core.Observable;
+
+import javax.inject.Inject;
+import java.util.List;
+
+public class GroupService {
+
+    private final GroupsApiService groupsApiService;
+
+    @Inject
+<span class="fc" id="L17">    public GroupService(GroupsApiService groupsApiService) {</span>
+<span class="fc" id="L18">        this.groupsApiService = groupsApiService;</span>
+<span class="fc" id="L19">    }</span>
+
+    public Observable&lt;Group&gt; create(String name, List&lt;String&gt; members) {
+<span class="nc" id="L22">        return groupsApiService.create(new CreateGroupDto(name, members));</span>
+    }
+
+    // For all groups the current user is member of, pass null as the parameter.
+    public Observable&lt;List&lt;Group&gt;&gt; getGroups(List&lt;String&gt; _ids) {
+<span class="nc" id="L27">        return groupsApiService.getGroups(_ids);</span>
+    }
+
+    public Observable&lt;Group&gt; getGroup(String _id) {
+<span class="nc" id="L31">        return groupsApiService.getGroup(_id);</span>
+    }
+
+    public Observable&lt;Group&gt; update(String _id, String name, List&lt;String&gt; members) {
+<span class="nc" id="L35">        return groupsApiService.update(_id, new UpdateGroupDto(name, members));</span>
+    }
+
+    public Observable&lt;Group&gt; delete(String _id) {
+<span class="nc" id="L39">        return groupsApiService.delete(_id);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
