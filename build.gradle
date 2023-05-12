@@ -99,3 +99,16 @@ test {
 		]
 	}
 }
+
+tasks.withType(Jar).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.register('fatJar', Jar) {
+    manifest {
+        attributes 'Main-Class': "de.uniks.stpmon.team_m.Main"
+    }
+    archiveBaseName = "${rootProject.name}"
+    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
