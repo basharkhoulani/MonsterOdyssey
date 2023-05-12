@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.controller.views.UserCell;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
+import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import impl.org.controlsfx.skin.AutoCompletePopup;
 import impl.org.controlsfx.skin.AutoCompletePopupSkin;
@@ -19,6 +20,9 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -47,6 +51,8 @@ public class GroupController extends Controller {
     Provider<MessagesController> messagesControllerProvider;
     @Inject
     Provider<GroupStorage> groupStorageProvider;
+    @Inject
+    UserStorage userStorage;
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
     private final ObservableList<User> newGroupMembers = FXCollections.observableArrayList();
 
@@ -89,7 +95,16 @@ public class GroupController extends Controller {
     }
 
     public void saveGroup() {
-        app.show(messagesControllerProvider.get());
+        List<String> newGroupMembersIDs = new ArrayList<>();
+        newGroupMembersIDs.add(userStorage.get_id());
+        newGroupMembers.forEach(user -> newGroupMembersIDs.add(user._id()));
+        disposables.add(groupService.create(groupNameInput.getText(), newGroupMembersIDs)
+                .observeOn(FX_SCHEDULER).subscribe(group -> {
+            groupStorageProvider.get().set_id(group._id());
+            groupStorageProvider.get().setName(group.name());
+            groupStorageProvider.get().setMembers(group.members());
+            app.show(messagesControllerProvider.get());
+        }));
     }
 
     public void searchForGroupMembers() {
