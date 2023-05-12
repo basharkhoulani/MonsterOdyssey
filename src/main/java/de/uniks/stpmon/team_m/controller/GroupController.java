@@ -1,6 +1,16 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.controller.views.UserCell;
+import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
+import de.uniks.stpmon.team_m.service.UserStorage;
+import de.uniks.stpmon.team_m.service.UsersService;
+import impl.org.controlsfx.skin.AutoCompletePopup;
+import impl.org.controlsfx.skin.AutoCompletePopupSkin;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
@@ -46,8 +56,6 @@ public class GroupController extends Controller {
     GroupService groupService;
     @Inject
     Provider<MessagesController> messagesControllerProvider;
-    @Inject
-    Provider<GroupStorage> groupStorageProvider;
     @Inject
     Provider<GroupStorage> groupStorageProvider;
     @Inject
