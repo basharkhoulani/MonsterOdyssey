@@ -4,12 +4,15 @@ import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -43,30 +46,43 @@ public class App extends Application {
         stage.setHeight(STANDARD_HEIGHT);
         stage.setTitle(GAME_NAME);
 
-        final Scene scene = new Scene(new Label(LOADING));
-        stage.setScene(scene);
-
+        stage.setScene(loadingscreen());
         setAppIcon(stage);
         setTaskbarIcon();
 
+        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+        pause.setOnFinished(event ->{
+            if (component == null) {
+                return;
+            }
+
+            final AuthenticationService authenticationService = component.authenticationService();
+
+            if (authenticationService.isRememberMe()) {
+
+                disposables.add(authenticationService.refresh().observeOn(Schedulers.from(Platform::runLater)).subscribe(lr -> {
+                    show(component.mainMenuController());
+                }, err -> {
+                    show(component.loginController());
+                }));
+            } else {
+                show(component.loginController());
+            }
+                }
+        );
+        pause.play();
         stage.show();
 
-        if (component == null) {
-            return;
-        }
 
-        final AuthenticationService authenticationService = component.authenticationService();
+    }
 
-        if (authenticationService.isRememberMe()) {
-
-            disposables.add(authenticationService.refresh().observeOn(Schedulers.from(Platform::runLater)).subscribe(lr -> {
-                show(component.mainMenuController());
-            }, err -> {
-                show(component.loginController());
-            }));
-        } else {
-            show(component.loginController());
-        }
+    private Scene loadingscreen() {
+        final ImageView loading = new ImageView(new Image(Objects.requireNonNull(App.class.getResource(LOADING_ANIMATION)).toString()));
+        loading.setFitHeight(250);
+        loading.setPreserveRatio(true);
+        final FlowPane loadingPane = new FlowPane(loading);
+        loadingPane.setAlignment(javafx.geometry.Pos.CENTER);
+        return new Scene(loadingPane);
     }
 
     @Override
