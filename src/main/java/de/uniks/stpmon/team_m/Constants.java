@@ -23,6 +23,7 @@ public class Constants {
     public static final String LOADING = "Loading...";
     public static final String EMPTY_STRING = "";
     public static final String FX_STYLE_BORDER_COLOR_BLACK = "-fx-border-color: black";
+    public static final String LOADING_ANIMATION = "images/loading.gif";
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
     public static final String USER_STATUS_OFFLINE = "offline";
     public static final String USER_STATUS_ONLINE = "online";
