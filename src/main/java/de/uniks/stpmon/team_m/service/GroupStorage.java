@@ -2,7 +2,6 @@ package de.uniks.stpmon.team_m.service;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
@@ -37,35 +36,6 @@ public class GroupStorage {
 
     public void setMembers(List<String> members) {
         this.members = members;
-    }
-
-    public void addMember(String newMember) {
-        if (this.members == null) {
-            this.members = new ArrayList<>();
-        }
-        if (!this.members.contains(newMember)) {
-            this.members.add(newMember);
-        }
-    }
-
-    public void removeMember(String member) {
-        this.members.remove(member);
-    }
-
-    public void clearMembers() {
-        this.members.clear();
-    }
-
-    public boolean hasMember(String member) {
-        return this.members.contains(member);
-    }
-
-    public boolean hasMembers() {
-        return !this.members.isEmpty();
-    }
-
-    public boolean hasNoMembers() {
-        return this.members.isEmpty();
     }
 
 }

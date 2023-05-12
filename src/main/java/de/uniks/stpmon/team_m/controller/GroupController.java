@@ -55,7 +55,7 @@ public class GroupController extends Controller {
     @Inject
     Provider<GroupStorage> groupStorageProvider;
     @Inject
-    UserStorage userStorage;
+    Provider<UserStorage> userStorage;
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
     private final ObservableList<User> newGroupMembers = FXCollections.observableArrayList();
 
@@ -99,7 +99,7 @@ public class GroupController extends Controller {
 
     public void saveGroup() {
         List<String> newGroupMembersIDs = new ArrayList<>();
-        newGroupMembersIDs.add(userStorage.get_id());
+        newGroupMembersIDs.add(userStorage.get().get_id());
         newGroupMembers.forEach(user -> newGroupMembersIDs.add(user._id()));
         disposables.add(groupService.create(groupNameInput.getText(), newGroupMembersIDs)
                 .observeOn(FX_SCHEDULER).subscribe(group -> {
@@ -117,7 +117,6 @@ public class GroupController extends Controller {
             ChangeListener<String> changeListener = (observable, oldValue, newValue) -> {
                 autoCompletePopup.getSuggestions().clear();
                 autoCompletePopup.hide();
-                autoCompletePopup.setHideOnEscape(true);
                 autoCompletePopup.setSkin(new AutoCompletePopupSkin<>(autoCompletePopup,
                         param -> new UserCell(newGroupMembers, groupMembersVBox)));
                 allUsers.stream()

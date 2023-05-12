@@ -33,6 +33,7 @@ public class UserCell extends ListCell<User> {
             HBox hBox = new HBox(text, button);
             hBox.setSpacing(SPACING_BETWEEN_BUTTON_NAME_GROUP);
             hBox.setId(item.name());
+            hBox.setUserData(item.name());
             setGraphic(hBox);
             if (chosenUsers.contains(item)) {
                 button.setText(CHECK_MARK);
@@ -49,21 +50,27 @@ public class UserCell extends ListCell<User> {
             final Text text = new Text(getItem().name());
             final Button removeButton = new Button();
             removeButton.setText(CHECK_MARK);
-            removeButton.setOnAction(event -> removeFromSelectGroupMembers());
             final HBox hBox = new HBox(text, removeButton);
             hBox.setSpacing(SPACING_BETWEEN_BUTTON_NAME_GROUP);
-            hBox.setId(getItem().name());
+            hBox.setId(getItem().name() + "Other");
+            hBox.setUserData(getItem().name());
             groupMembersVBox.getChildren().add(hBox);
+            removeButton.setOnAction(event -> removeFromSelectGroupMembers(hBox));
         } else {
             button.setText(ADD_MARK);
             chosenUsers.remove(getItem());
-            groupMembersVBox.getChildren().removeIf(node -> node.getId().equals(getItem().name()));
+            groupMembersVBox.getChildren().removeIf(node -> node.getId().equals(getItem().name() + "Other"));
         }
     }
 
-    private void removeFromSelectGroupMembers() {
-        chosenUsers.remove(getItem());
-        groupMembersVBox.getChildren().removeIf(node -> node.getId().equals(getItem().name()));
+    private void removeFromSelectGroupMembers(HBox hBox) {
+        if (getItem() != null && chosenUsers.contains(getItem())) {
+            chosenUsers.remove(getItem());
+            groupMembersVBox.getChildren().removeIf(node -> node.getId().equals(getItem().name() + "Other"));
+        } else {
+            chosenUsers.removeIf(user -> (user.name() + "Other").equals(hBox.getId()));
+            groupMembersVBox.getChildren().removeIf(node -> node.getId().equals(hBox.getId()));
+        }
     }
 
 }
