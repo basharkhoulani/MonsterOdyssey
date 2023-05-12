@@ -30,7 +30,7 @@ public class UsersService {
 
     // For all users pass null for both parameters. Also only one parameter can be null.
     public Observable&lt;List&lt;User&gt;&gt; getUsers(List&lt;String&gt; ids, String status) {
-<span class="nc" id="L33">        return usersApiService.getUsers(ids, status);</span>
+<span class="fc" id="L33">        return usersApiService.getUsers(ids, status);</span>
     }
 
     public Observable&lt;User&gt; updateUser(String name, String status, String avatar, List&lt;String&gt; friends, String password) {
