@@ -4,6 +4,7 @@ import dagger.Module;
 import dagger.Provides;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.rest.*;
+import de.uniks.stpmon.team_m.service.UserStorage;
 import io.reactivex.rxjava3.core.Observable;
 
 import java.util.List;
@@ -161,5 +162,14 @@ public class TestModule {
         };
     }
 
+    @Provides
+    static UserStorage userStorage() {
+        return new UserStorage() {
+            @Override
+            public List<String> getFriends() {
+                return List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64");
+            }
+        };
+    }
 
 }
