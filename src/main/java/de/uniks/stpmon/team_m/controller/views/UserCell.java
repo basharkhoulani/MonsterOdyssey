@@ -14,8 +14,7 @@ import javafx.scene.shape.Circle;
 import java.util.List;
 import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.ADD_MARK;
-import static de.uniks.stpmon.team_m.Constants.CHECK_MARK;
+import static de.uniks.stpmon.team_m.Constants.*;
 import static javafx.geometry.Pos.*;
 
 
@@ -53,7 +52,7 @@ public class UserCell extends ListCell<User> {
             HBox.setHgrow(nameHBox, Priority.ALWAYS);
             HBox.setHgrow(buttonHBox, Priority.ALWAYS);
             HBox.setHgrow(rootHBox, Priority.ALWAYS);
-            circle.setFill(Objects.equals(item.status(), "online") ? Color.GREEN : Color.RED);
+            circle.setFill(Objects.equals(item.status(), USER_STATUS_ONLINE) ? Color.LIGHTGREEN : Color.RED);
             rootHBox.setId(item.name());
             rootHBox.setUserData(item);
             setGraphic(rootHBox);

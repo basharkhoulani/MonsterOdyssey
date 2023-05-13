@@ -84,9 +84,6 @@ public class GroupController extends Controller {
                     }
                 }
             }));
-        } else {
-            disposables.add(groupService.getGroup(groupId).observeOn(FX_SCHEDULER)
-                    .subscribe(group -> groupNameInput.setText(group.name())));
         }
     }
 
