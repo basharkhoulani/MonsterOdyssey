@@ -1,8 +1,5 @@
 package de.uniks.stpmon.team_m;
 
-import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.input.KeyCode;
 
@@ -31,7 +28,6 @@ public class Constants {
     public static final String EMPTY_STRING = "";
     public static final String FX_STYLE_BORDER_COLOR_BLACK = "-fx-border-color: black";
     public static final String LOADING_ANIMATION = "images/loading.gif";
-    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
     public static final String USER_STATUS_OFFLINE = "offline";
     public static final String USER_STATUS_ONLINE = "online";
 
@@ -39,7 +35,7 @@ public class Constants {
     public static final String LOGIN_TITLE = "Sign Up & In";
     public static final String PASSWORD_LESS_THAN_8_CHARACTERS = "Password must have at least 8 characters.";
     public static final int PASSWORD_CHARACTER_LIMIT = 8;
-    public static final char BULLET = '●';
+    public static final char BULLET = '\u25cf';
     public static final String REFRESH_TOKEN_PREF = "refreshToken";
     public static final String DELETE_SUCCESS = "Account successfully deleted";
 
@@ -47,6 +43,11 @@ public class Constants {
     public static final String MAIN_MENU_TITLE = "Main Menu";
     public static final String STATUS_ONLINE = "online";
     public static final String STATUS_OFFLINE = "offline";
+
+    // NEW GROUP
+    public static final String CHECK_MARK = "\u2713";
+    public static final String ADD_MARK = "+";
+    public static final int SPACING_BETWEEN_BUTTON_NAME_GROUP = 10;
 
     // MESSAGES
     public static final int MESSAGES_HEIGHT = 640;

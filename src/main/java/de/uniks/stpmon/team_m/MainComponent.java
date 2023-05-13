@@ -12,7 +12,9 @@ import javax.inject.Singleton;
 @Singleton
 public interface MainComponent {
     AuthenticationService authenticationService();
+
     LoginController loginController();
+
     MainMenuController mainMenuController();
 
     @Component.Builder

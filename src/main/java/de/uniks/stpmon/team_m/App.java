@@ -60,11 +60,10 @@ public class App extends Application {
 
             if (authenticationService.isRememberMe()) {
 
-                disposables.add(authenticationService.refresh().observeOn(Schedulers.from(Platform::runLater)).subscribe(lr -> {
-                    show(component.mainMenuController());
-                }, err -> {
-                    show(component.loginController());
-                }));
+                disposables.add(authenticationService.refresh()
+                        .observeOn(Schedulers.from(Platform::runLater))
+                        .subscribe(lr -> show(component.mainMenuController()),
+                                err -> show(component.loginController())));
             } else {
                 show(component.loginController());
             }
