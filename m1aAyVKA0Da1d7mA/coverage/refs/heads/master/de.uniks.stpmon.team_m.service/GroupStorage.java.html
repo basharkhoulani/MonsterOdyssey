@@ -2,21 +2,41 @@
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.List;
 
 @Singleton
 public class GroupStorage {
     private String _id;
+    private String name;
+    private List&lt;String&gt; members;
 
     @Inject
-<span class="fc" id="L11">    public GroupStorage() {</span>
-<span class="fc" id="L12">    }</span>
+<span class="fc" id="L14">    public GroupStorage() {</span>
+<span class="fc" id="L15">    }</span>
 
     public String get_id() {
-<span class="fc" id="L15">        return _id;</span>
+<span class="fc" id="L18">        return _id;</span>
     }
 
     public void set_id(String _id) {
-<span class="fc" id="L19">        this._id = _id;</span>
-<span class="fc" id="L20">    }</span>
+<span class="fc" id="L22">        this._id = _id;</span>
+<span class="fc" id="L23">    }</span>
+
+    public String getName() {
+<span class="fc" id="L26">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="fc" id="L30">        this.name = name;</span>
+<span class="fc" id="L31">    }</span>
+
+    public List&lt;String&gt; getMembers() {
+<span class="fc" id="L34">        return this.members;</span>
+    }
+
+    public void setMembers(List&lt;String&gt; members) {
+<span class="fc" id="L38">        this.members = members;</span>
+<span class="fc" id="L39">    }</span>
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

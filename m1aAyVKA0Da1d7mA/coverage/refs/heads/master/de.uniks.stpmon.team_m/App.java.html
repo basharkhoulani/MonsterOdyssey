@@ -60,76 +60,75 @@ public class App extends Application {
 
 <span class="nc bnc" id="L61" title="All 2 branches missed.">            if (authenticationService.isRememberMe()) {</span>
 
-<span class="nc" id="L63">                disposables.add(authenticationService.refresh().observeOn(Schedulers.from(Platform::runLater)).subscribe(lr -&gt; {</span>
-<span class="nc" id="L64">                    show(component.mainMenuController());</span>
-<span class="nc" id="L65">                }, err -&gt; {</span>
-<span class="nc" id="L66">                    show(component.loginController());</span>
-<span class="nc" id="L67">                }));</span>
+<span class="nc" id="L63">                disposables.add(authenticationService.refresh()</span>
+<span class="nc" id="L64">                        .observeOn(Schedulers.from(Platform::runLater))</span>
+<span class="nc" id="L65">                        .subscribe(lr -&gt; show(component.mainMenuController()),</span>
+<span class="nc" id="L66">                                err -&gt; show(component.loginController())));</span>
             } else {
-<span class="nc" id="L69">                show(component.loginController());</span>
+<span class="nc" id="L68">                show(component.loginController());</span>
             }
-<span class="nc" id="L71">                }</span>
+<span class="nc" id="L70">                }</span>
         );
-<span class="fc" id="L73">        pause.play();</span>
-<span class="fc" id="L74">        stage.show();</span>
+<span class="fc" id="L72">        pause.play();</span>
+<span class="fc" id="L73">        stage.show();</span>
 
 
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L76">    }</span>
 
     private Scene loadingscreen() {
-<span class="fc" id="L80">        final ImageView loading = new ImageView(new Image(Objects.requireNonNull(App.class.getResource(LOADING_ANIMATION)).toString()));</span>
-<span class="fc" id="L81">        loading.setFitHeight(250);</span>
-<span class="fc" id="L82">        loading.setPreserveRatio(true);</span>
-<span class="fc" id="L83">        final FlowPane loadingPane = new FlowPane(loading);</span>
-<span class="fc" id="L84">        loadingPane.setAlignment(javafx.geometry.Pos.CENTER);</span>
-<span class="fc" id="L85">        return new Scene(loadingPane);</span>
+<span class="fc" id="L79">        final ImageView loading = new ImageView(new Image(Objects.requireNonNull(App.class.getResource(LOADING_ANIMATION)).toString()));</span>
+<span class="fc" id="L80">        loading.setFitHeight(250);</span>
+<span class="fc" id="L81">        loading.setPreserveRatio(true);</span>
+<span class="fc" id="L82">        final FlowPane loadingPane = new FlowPane(loading);</span>
+<span class="fc" id="L83">        loadingPane.setAlignment(javafx.geometry.Pos.CENTER);</span>
+<span class="fc" id="L84">        return new Scene(loadingPane);</span>
     }
 
     @Override
     public void stop() {
-<span class="nc" id="L90">        disposables.dispose();</span>
-<span class="nc" id="L91">        cleanup();</span>
-<span class="nc" id="L92">    }</span>
+<span class="nc" id="L89">        disposables.dispose();</span>
+<span class="nc" id="L90">        cleanup();</span>
+<span class="nc" id="L91">    }</span>
 
     private void setAppIcon(Stage stage) {
-<span class="fc" id="L95">        final Image image = new Image(Objects.requireNonNull(App.class.getResource(APP_ICON)).toString());</span>
-<span class="fc" id="L96">        stage.getIcons().clear();</span>
-<span class="fc" id="L97">        stage.getIcons().add(image);</span>
-<span class="fc" id="L98">    }</span>
+<span class="fc" id="L94">        final Image image = new Image(Objects.requireNonNull(App.class.getResource(APP_ICON)).toString());</span>
+<span class="fc" id="L95">        stage.getIcons().clear();</span>
+<span class="fc" id="L96">        stage.getIcons().add(image);</span>
+<span class="fc" id="L97">    }</span>
 
     private void setTaskbarIcon() {
-<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        if (GraphicsEnvironment.isHeadless()) {</span>
-<span class="fc" id="L102">            return;</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if (GraphicsEnvironment.isHeadless()) {</span>
+<span class="fc" id="L101">            return;</span>
         }
 
         try {
-<span class="nc" id="L106">            final Taskbar taskbar = Taskbar.getTaskbar();</span>
-<span class="nc" id="L107">            final java.awt.Image image = ImageIO.read(Objects.requireNonNull(Main.class.getResource(TASKBAR_ICON)));</span>
-<span class="nc" id="L108">            taskbar.setIconImage(image);</span>
-<span class="nc" id="L109">        } catch (Exception ignored) {</span>
+<span class="nc" id="L105">            final Taskbar taskbar = Taskbar.getTaskbar();</span>
+<span class="nc" id="L106">            final java.awt.Image image = ImageIO.read(Objects.requireNonNull(Main.class.getResource(TASKBAR_ICON)));</span>
+<span class="nc" id="L107">            taskbar.setIconImage(image);</span>
+<span class="nc" id="L108">        } catch (Exception ignored) {</span>
 
-<span class="nc" id="L111">        }</span>
-<span class="nc" id="L112">    }</span>
+<span class="nc" id="L110">        }</span>
+<span class="nc" id="L111">    }</span>
 
     public void show(Controller controller) {
-<span class="fc" id="L115">        cleanup();</span>
-<span class="fc" id="L116">        this.controller = controller;</span>
-<span class="fc" id="L117">        initAndRender(controller);</span>
-<span class="fc" id="L118">    }</span>
+<span class="fc" id="L114">        cleanup();</span>
+<span class="fc" id="L115">        this.controller = controller;</span>
+<span class="fc" id="L116">        initAndRender(controller);</span>
+<span class="fc" id="L117">    }</span>
 
     private void initAndRender(Controller controller) {
-<span class="fc" id="L121">        controller.init();</span>
-<span class="fc" id="L122">        stage.getScene().setRoot(controller.render());</span>
-<span class="fc" id="L123">        stage.setTitle(GAME_NAME + &quot; - &quot; + controller.getTitle());</span>
-<span class="fc" id="L124">        stage.setWidth(controller.getWidth());</span>
-<span class="fc" id="L125">        stage.setHeight(controller.getHeight());</span>
-<span class="fc" id="L126">    }</span>
+<span class="fc" id="L120">        controller.init();</span>
+<span class="fc" id="L121">        stage.getScene().setRoot(controller.render());</span>
+<span class="fc" id="L122">        stage.setTitle(GAME_NAME + &quot; - &quot; + controller.getTitle());</span>
+<span class="fc" id="L123">        stage.setWidth(controller.getWidth());</span>
+<span class="fc" id="L124">        stage.setHeight(controller.getHeight());</span>
+<span class="fc" id="L125">    }</span>
 
     private void cleanup() {
-<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (controller != null) {</span>
-<span class="fc" id="L130">            controller.destroy();</span>
-<span class="fc" id="L131">            controller = null;</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (controller != null) {</span>
+<span class="fc" id="L129">            controller.destroy();</span>
+<span class="fc" id="L130">            controller = null;</span>
         }
-<span class="fc" id="L133">    }</span>
+<span class="fc" id="L132">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
