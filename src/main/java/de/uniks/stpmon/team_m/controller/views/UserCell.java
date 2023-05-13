@@ -7,22 +7,29 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 import java.util.List;
+import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.ADD_MARK;
 import static de.uniks.stpmon.team_m.Constants.CHECK_MARK;
+import static javafx.geometry.Pos.*;
 
 
 public class UserCell extends ListCell<User> {
     private final ObservableList<User> chosenUsers;
     private final ListView<User> listView;
-    private final List<String> friends;
+    private final List<User> friends;
+    private final List<String> friendsIds;
 
-    public UserCell(ObservableList<User> chosenUsers, ListView<User> listView, List<String> friends) {
+    public UserCell(ObservableList<User> chosenUsers, ListView<User> listView, List<User> friends, List<String> friendsIds) {
         this.chosenUsers = chosenUsers;
         this.listView = listView;
         this.friends = friends;
+        this.friendsIds = friendsIds;
     }
 
     @Override
@@ -34,11 +41,21 @@ public class UserCell extends ListCell<User> {
         } else {
             final Label usernameLabel = new Label(item.name());
             final Button addOrRemoveButton = new Button();
-            final HBox leftSideHBox = new HBox(usernameLabel);
-            final HBox rightSideHBox = new HBox(addOrRemoveButton);
-            final HBox rootHBox = new HBox(leftSideHBox, rightSideHBox);
+            final Circle circle = new Circle(5);
+            final HBox statusHBox = new HBox(circle);
+            final HBox nameHBox = new HBox(usernameLabel);
+            final HBox buttonHBox = new HBox(addOrRemoveButton);
+            final HBox rootHBox = new HBox(statusHBox, nameHBox, buttonHBox);
+            statusHBox.setAlignment(CENTER_LEFT);
+            nameHBox.setAlignment(CENTER);
+            buttonHBox.setAlignment(CENTER_RIGHT);
+            HBox.setHgrow(statusHBox, Priority.ALWAYS);
+            HBox.setHgrow(nameHBox, Priority.ALWAYS);
+            HBox.setHgrow(buttonHBox, Priority.ALWAYS);
+            HBox.setHgrow(rootHBox, Priority.ALWAYS);
+            circle.setFill(Objects.equals(item.status(), "online") ? Color.GREEN : Color.RED);
             rootHBox.setId(item.name());
-            usernameLabel.setUserData(item);
+            rootHBox.setUserData(item);
             setGraphic(rootHBox);
             setText(null);
             addOrRemoveButton.setOnAction(event -> addOrRemoveToGroup(item, addOrRemoveButton));
@@ -55,7 +72,7 @@ public class UserCell extends ListCell<User> {
             chosenUsers.remove(item);
             addOrRemoveButton.setText(ADD_MARK);
             listView.getItems().remove(item);
-            if (friends.contains(item._id())) {
+            if (friendsIds.contains(item._id())) {
                 addUserAndSort(item);
             }
         } else {
@@ -72,7 +89,17 @@ public class UserCell extends ListCell<User> {
 
     private void addUserAndSort(User item) {
         listView.getItems().add(item);
-        listView.getItems().sort((o1, o2) -> o1.name().compareToIgnoreCase(o2.name()));
+        listView.getItems().sort((o1, o2) -> {
+            if (friends.contains(o1) && friends.contains(o2)) {
+                return o1.name().compareTo(o2.name());
+            } else if (friends.contains(o1)) {
+                return -1;
+            } else if (friends.contains(o2)) {
+                return 1;
+            } else {
+                return o1.name().compareTo(o2.name());
+            }
+        });
     }
 
 }

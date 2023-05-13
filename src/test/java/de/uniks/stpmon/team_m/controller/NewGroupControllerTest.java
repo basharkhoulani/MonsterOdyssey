@@ -104,7 +104,7 @@ public class NewGroupControllerTest extends ApplicationTest {
         clickOn(searchFieldGroupMembers);
         write("F");
         HBox rootHBox = lookup("#NotFriend").query();
-        HBox buttonHBox = (HBox) rootHBox.getChildren().get(1);
+        HBox buttonHBox = (HBox) rootHBox.getChildren().get(2);
         Button button = (Button) buttonHBox.getChildren().get(0);
         String buttonText = button.getText();
         assertEquals(ADD_MARK, buttonText);
@@ -114,7 +114,7 @@ public class NewGroupControllerTest extends ApplicationTest {
         clickOn(CHECK_MARK);
         clickOn(ADD_MARK);
         HBox rootHBox2 = lookup("#Friend").query();
-        HBox buttonHBox2 = (HBox) rootHBox2.getChildren().get(1);
+        HBox buttonHBox2 = (HBox) rootHBox2.getChildren().get(2);
         Button button2 = (Button) buttonHBox2.getChildren().get(0);
         String buttonText2 = button2.getText();
         assertEquals(CHECK_MARK, buttonText2);

@@ -73,11 +73,13 @@ public class GroupController extends Controller {
         listView.setSelectionModel(null);
         listView.setFocusModel(null);
         if (groupId.equals(EMPTY_STRING)) {
-            final List<String> friends = userStorage.get().getFriends();
-            listView.setCellFactory(param -> new UserCell(newGroupMembers, listView, friends));
-            disposables.add(usersService.getUsers(friends, null).observeOn(FX_SCHEDULER).subscribe(users -> {
+            final List<String> friendsByID = userStorage.get().getFriends();
+            final List<User> friendsByUserObject = new ArrayList<>();
+            disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
+                friendsByUserObject.addAll(users);
+                listView.setCellFactory(param -> new UserCell(newGroupMembers, listView, friendsByUserObject, friendsByID));
                 for (User user : users) {
-                    if (friends.contains(user._id())) {
+                    if (friendsByID.contains(user._id())) {
                         listView.getItems().add(user);
                     }
                 }
