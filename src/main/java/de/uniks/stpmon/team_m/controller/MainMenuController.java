@@ -80,8 +80,6 @@ public class MainMenuController extends Controller {
     private void initRadioButtons() {
         ListView<Region> regionListView = new ListView<>();
         regionToggleGroup = new ToggleGroup();
-        regionListView.setSelectionModel(null);
-        regionListView.setFocusModel(null);
         regionListView.setId("regionListView");
         regionListView.setCellFactory(param -> new RegionCell(regionToggleGroup));
         regionListView.setItems(regions);
