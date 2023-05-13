@@ -1,14 +1,23 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.controller.views.UserCell;
+import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
+import de.uniks.stpmon.team_m.service.UserStorage;
+import de.uniks.stpmon.team_m.service.UsersService;
+import impl.org.controlsfx.skin.AutoCompletePopup;
+import impl.org.controlsfx.skin.AutoCompletePopupSkin;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -17,11 +26,16 @@ import javax.inject.Provider;
 
 import java.util.Optional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static de.uniks.stpmon.team_m.Constants.*;
 
 public class GroupController extends Controller {
 
     private String TITLE;
+    @FXML
+    public Label errorMessage;
     @FXML
     public Text selectGroupMembersText;
     @FXML
@@ -36,15 +50,18 @@ public class GroupController extends Controller {
     public Button saveGroupButton;
     @FXML
     public Button deleteGroupButton;
-    @FXML
-    public Pane buttonPane;
-
+    @Inject
+    UsersService usersService;
+    @Inject
+    GroupService groupService;
     @Inject
     Provider<MessagesController> messagesControllerProvider;
     @Inject
     Provider<GroupStorage> groupStorageProvider;
     @Inject
-    GroupService groupService;
+    Provider<UserStorage> userStorage;
+    private final ObservableList<User> allUsers = FXCollections.observableArrayList();
+    private final ObservableList<User> newGroupMembers = FXCollections.observableArrayList();
 
     @Inject
     public GroupController() {
@@ -68,7 +85,7 @@ public class GroupController extends Controller {
 
     private void newGroup() {
         TITLE = NEW_GROUP_TITLE;
-        buttonPane.getChildren().remove(deleteGroupButton);
+        deleteGroupButton.setVisible(false);
     }
 
     private void editGroup() {
@@ -107,7 +124,33 @@ public class GroupController extends Controller {
 
 
     public void saveGroup() {
-        //TODO server communication
-        app.show(messagesControllerProvider.get());
+        List<String> newGroupMembersIDs = new ArrayList<>();
+        newGroupMembersIDs.add(userStorage.get().get_id());
+        newGroupMembers.forEach(user -> newGroupMembersIDs.add(user._id()));
+        disposables.add(groupService.create(groupNameInput.getText(), newGroupMembersIDs)
+                .observeOn(FX_SCHEDULER).subscribe(group -> {
+            groupStorageProvider.get().set_id(group._id());
+            groupStorageProvider.get().setName(group.name());
+            groupStorageProvider.get().setMembers(group.members());
+            app.show(messagesControllerProvider.get());
+        }, error -> errorMessage.setText(error.getMessage())));
+    }
+
+    public void searchForGroupMembers() {
+        disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER).subscribe(users -> {
+            allUsers.setAll(users);
+            final AutoCompletePopup<User> autoCompletePopup = new AutoCompletePopup<>();
+            ChangeListener<String> changeListener = (observable, oldValue, newValue) -> {
+                autoCompletePopup.getSuggestions().clear();
+                autoCompletePopup.hide();
+                autoCompletePopup.setSkin(new AutoCompletePopupSkin<>(autoCompletePopup,
+                        param -> new UserCell(newGroupMembers, groupMembersVBox)));
+                allUsers.stream()
+                        .filter(user -> user.name().contains(searchFieldGroupMembers.getText()))
+                        .forEach(autoCompletePopup.getSuggestions()::add);
+                autoCompletePopup.show(searchFieldGroupMembers);
+            };
+            searchFieldGroupMembers.textProperty().addListener(changeListener);
+        }));
     }
 }

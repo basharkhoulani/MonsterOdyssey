@@ -71,8 +71,10 @@ public class NewFriendController extends Controller {
         searchTextField.clear();
         searchTextField.setPromptText(FRIEND_ADDED);
     }
+
     public void sendMessage() {
     }
+
     public void clickSearchField() {
         disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER).subscribe(users -> {
             allUsers = users;
