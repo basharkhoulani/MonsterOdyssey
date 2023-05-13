@@ -14,8 +14,8 @@ import java.util.List;
 public class MessageService {
 
     /*
-    * TODO: Tests still have to be implemented, but we need mocking to realize this
-    * */
+     * TODO: Tests still have to be implemented, but we need mocking to realize this
+     * */
     private final MessagesApiService messagesApiService;
 
     @Inject
@@ -24,17 +24,18 @@ public class MessageService {
 <span class="nc" id="L24">    }</span>
 
     // Base api communication
+
     /**
      * Gets a singular message. Important to note is that the first parameter needs to be the ID of
      * the user the message is directed to, not the sender!
      *
      * @param receiverID the ID of the user who received the message
-     * @param messageID the ID of the message
-     * @param namespace the namespace used for api communication. Allowed values are CONSTANTS_NAMESPACE constants
+     * @param messageID  the ID of the message
+     * @param namespace  the namespace used for api communication. Allowed values are CONSTANTS_NAMESPACE constants
      * @return an observable record of message
      */
     public Observable&lt;Message&gt; getMessageOfUserByID(String receiverID, String messageID, String namespace) {
-<span class="nc" id="L37">        return messagesApiService.getMessage(namespace, receiverID, messageID);</span>
+<span class="nc" id="L38">        return messagesApiService.getMessage(namespace, receiverID, messageID);</span>
     }
 
     /**
@@ -42,42 +43,43 @@ public class MessageService {
      * to note is, that the first parameter needs to be the ID of the user who received the messages, not the sender!
      *
      * @param receiverID the ID of the user who received the messages
-     * @param namespace the namespace used for api communication
+     * @param namespace  the namespace used for api communication
      * @return an observable list of message records
      */
     private Observable&lt;List&lt;Message&gt;&gt; getMessagesByNamespace(String receiverID, String namespace) {
-<span class="nc" id="L49">        return messagesApiService.getMessages(namespace, receiverID);</span>
+<span class="nc" id="L50">        return messagesApiService.getMessages(namespace, receiverID);</span>
     }
 
     /**
      * Creates a message that is directed to one user/group/region.
      *
      * @param receiverID the ID of the receiver
-     * @param message the body of the message
-     * @param namespace the namespace used for api communication
+     * @param message    the body of the message
+     * @param namespace  the namespace used for api communication
      * @return the created message as an observable
      */
     public Observable&lt;Message&gt; newMessage(String receiverID, String message, String namespace) {
-<span class="nc" id="L61">        CreateMessageDto createMessageDto = new CreateMessageDto(message);</span>
-<span class="nc" id="L62">        return messagesApiService.create(namespace, receiverID, createMessageDto);</span>
+<span class="nc" id="L62">        CreateMessageDto createMessageDto = new CreateMessageDto(message);</span>
+<span class="nc" id="L63">        return messagesApiService.create(namespace, receiverID, createMessageDto);</span>
     }
 
     /**
      * Updates a message.
      *
-     * @param receiverID the ID of the receiver
-     * @param messageID the message ID
+     * @param receiverID     the ID of the receiver
+     * @param messageID      the message ID
      * @param updatedMessage the body of the updated message
-     * @param namespace the namespace used for api communication
+     * @param namespace      the namespace used for api communication
      * @return the updated message as an observable
      */
     public Observable&lt;Message&gt; updateMessage(String receiverID, String messageID, String updatedMessage, String namespace) {
-<span class="nc" id="L75">        UpdateMessageDto updateMessageDto = new UpdateMessageDto(updatedMessage);</span>
-<span class="nc" id="L76">        return messagesApiService.update(namespace, receiverID, messageID, updateMessageDto);</span>
+<span class="nc" id="L76">        UpdateMessageDto updateMessageDto = new UpdateMessageDto(updatedMessage);</span>
+<span class="nc" id="L77">        return messagesApiService.update(namespace, receiverID, messageID, updateMessageDto);</span>
     }
 
 
     // General message methods
+
     /**
      * Gets all the messages from a group and returns them sorted after createdAt. This also includes private chat
      * messages, since private messages are realized via a group of two persons.
@@ -86,10 +88,10 @@ public class MessageService {
      * @return a sorted observable of a sorted message list
      */
     public Observable&lt;List&lt;Message&gt;&gt; getGroupMessages(String groupID) {
-<span class="nc" id="L89">        return this.getMessagesByNamespace(groupID, Constants.MESSAGE_NAMESPACE_GROUPS)</span>
-<span class="nc" id="L90">                .map(messages -&gt; {</span>
-<span class="nc" id="L91">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
-<span class="nc" id="L92">                    return messages;</span>
+<span class="nc" id="L91">        return this.getMessagesByNamespace(groupID, Constants.MESSAGE_NAMESPACE_GROUPS)</span>
+<span class="nc" id="L92">                .map(messages -&gt; {</span>
+<span class="nc" id="L93">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
+<span class="nc" id="L94">                    return messages;</span>
                 });
     }
 
@@ -97,6 +99,7 @@ public class MessageService {
     // method, but maybe it will be better for readability and usability if we keep them separate.
     // We also could create a helper method and just make one line calls in the getGroupMessages and getRegionMessages
     // methods.
+
     /**
      * Gets all the messages from a region and returns them sorted after createdAt
      *
@@ -104,18 +107,18 @@ public class MessageService {
      * @return a sorted observable of a sorted message list
      */
     public Observable&lt;List&lt;Message&gt;&gt; getRegionMessages(String regionID) {
-<span class="nc" id="L107">        return this.getMessagesByNamespace(regionID, Constants.MESSAGE_NAMESPACE_REGIONS)</span>
-<span class="nc" id="L108">                .map(messages -&gt; {</span>
-<span class="nc" id="L109">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
-<span class="nc" id="L110">                    return messages;</span>
+<span class="nc" id="L110">        return this.getMessagesByNamespace(regionID, Constants.MESSAGE_NAMESPACE_REGIONS)</span>
+<span class="nc" id="L111">                .map(messages -&gt; {</span>
+<span class="nc" id="L112">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
+<span class="nc" id="L113">                    return messages;</span>
                 });
     }
 
     public Observable&lt;List&lt;Message&gt;&gt; getGlobalMessages(String parentID) {
-<span class="nc" id="L115">        return this.getMessagesByNamespace(parentID, Constants.MESSAGE_NAMESPACE_GLOBAL)</span>
-<span class="nc" id="L116">                .map(messages -&gt; {</span>
-<span class="nc" id="L117">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
-<span class="nc" id="L118">                    return messages;</span>
+<span class="nc" id="L118">        return this.getMessagesByNamespace(parentID, Constants.MESSAGE_NAMESPACE_GLOBAL)</span>
+<span class="nc" id="L119">                .map(messages -&gt; {</span>
+<span class="nc" id="L120">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
+<span class="nc" id="L121">                    return messages;</span>
                 });
     }
 }
