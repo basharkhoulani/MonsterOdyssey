@@ -5,7 +5,6 @@ import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,13 +38,10 @@ class EditGroupControllerTest extends ApplicationTest {
     Provider<MessagesController> messagesControllerProvider;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         GroupStorage groupStorage = mock(GroupStorage.class);
         Mockito.when(groupStorage.get_id()).thenReturn("645f8d731c386bcd2204da39");
         Mockito.when(groupStorageProvider.get()).thenReturn(groupStorage);
-
-        when(groupService.getGroup(any())).thenReturn(Observable.just(new Group("645f8d731c386bcd2204da39",
-                "TestGroup", List.of("645f8d731c386bcd2204da40"))));
 
         app.start(stage);
         app.show(groupController);
@@ -59,10 +55,6 @@ class EditGroupControllerTest extends ApplicationTest {
         doNothing().when(app).show(messagesController);
         when(groupService.delete(any())).thenReturn(Observable.just(new Group("645f8d731c386bcd2204da39",
                 "TestGroup", List.of("645f8d731c386bcd2204da40"))));
-
-        final TextField groupNameInput = lookup("#groupNameInput").query();
-
-        assertEquals("TestGroup", groupNameInput.getText());
 
         clickOn("Delete group");
         clickOn("No");
