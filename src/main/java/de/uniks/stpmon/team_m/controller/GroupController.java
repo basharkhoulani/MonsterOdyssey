@@ -75,7 +75,6 @@ public class GroupController extends Controller {
         if (groupId.equals(EMPTY_STRING)) {
             final List<String> friends = userStorage.get().getFriends();
             listView.setCellFactory(param -> new UserCell(newGroupMembers, listView, friends));
-            System.out.println(friends);
             disposables.add(usersService.getUsers(friends, null).observeOn(FX_SCHEDULER).subscribe(users -> {
                 for (User user : users) {
                     if (friends.contains(user._id())) {

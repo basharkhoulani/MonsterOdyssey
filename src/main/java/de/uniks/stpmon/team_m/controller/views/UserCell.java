@@ -68,7 +68,6 @@ public class UserCell extends ListCell<User> {
                 addUserAndSort(item);
             }
         }
-        System.out.println(chosenUsers);
     }
 
     private void addUserAndSort(User item) {
