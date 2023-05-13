@@ -8,26 +8,19 @@ import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import impl.org.controlsfx.skin.AutoCompletePopup;
 import impl.org.controlsfx.skin.AutoCompletePopupSkin;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
-import java.util.Optional;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -60,6 +53,7 @@ public class GroupController extends Controller {
     Provider<GroupStorage> groupStorageProvider;
     @Inject
     Provider<UserStorage> userStorage;
+    private ListView<User> listView;
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
     private final ObservableList<User> newGroupMembers = FXCollections.observableArrayList();
 
@@ -73,6 +67,27 @@ public class GroupController extends Controller {
     }
 
     @Override
+    public void init() {
+        final String groupId = groupStorageProvider.get().get_id();
+        listView = new ListView<>();
+        if (groupId.equals(EMPTY_STRING)) {
+            final List<String> friends = userStorage.get().getFriends();
+            listView.setCellFactory(param -> new UserCell(newGroupMembers, listView, friends));
+            System.out.println(friends);
+            disposables.add(usersService.getUsers(friends, null).observeOn(FX_SCHEDULER).subscribe(users -> {
+                for (User user : users) {
+                    if (friends.contains(user._id())) {
+                        listView.getItems().add(user);
+                    }
+                }
+            }));
+        } else {
+            disposables.add(groupService.getGroup(groupId).observeOn(FX_SCHEDULER)
+                    .subscribe(group -> groupNameInput.setText(group.name())));
+        }
+    }
+
+    @Override
     public Parent render() {
         final Parent parent = super.render();
         if (groupStorageProvider.get().get_id().equals(EMPTY_STRING)) {
@@ -80,6 +95,7 @@ public class GroupController extends Controller {
         } else {
             editGroup();
         }
+        groupMembersVBox.getChildren().add(listView);
         return parent;
     }
 
@@ -102,15 +118,18 @@ public class GroupController extends Controller {
         alert.setTitle(SURE);
         alert.setHeaderText(null);
         Optional<ButtonType> result = alert.showAndWait();
-        if(result.isPresent() && result.get() == ButtonType.YES) {
-            disposables.add(groupService.delete(groupStorageProvider.get().get_id()).observeOn(FX_SCHEDULER).subscribe(deleted -> app.show(messagesControllerProvider.get()), error -> errorAlert(error.getMessage(), alert)));
+        if (result.isPresent() && result.get() == ButtonType.YES) {
+            disposables.add(groupService.delete(groupStorageProvider.get().get_id())
+                    .observeOn(FX_SCHEDULER)
+                    .subscribe(deleted -> app.show(messagesControllerProvider.get()),
+                            error -> errorAlert(error.getMessage(), alert)));
         } else {
             alert.close();
         }
     }
 
     private void errorAlert(String error, Alert alert) {
-        if(error.equals(HTTP_403)){
+        if (error.equals(HTTP_403)) {
             alert.setContentText(DELETE_ERROR_403);
         } else {
             alert.setContentText(GENERIC_ERROR);
@@ -129,28 +148,25 @@ public class GroupController extends Controller {
         newGroupMembers.forEach(user -> newGroupMembersIDs.add(user._id()));
         disposables.add(groupService.create(groupNameInput.getText(), newGroupMembersIDs)
                 .observeOn(FX_SCHEDULER).subscribe(group -> {
-            groupStorageProvider.get().set_id(group._id());
-            groupStorageProvider.get().setName(group.name());
-            groupStorageProvider.get().setMembers(group.members());
-            app.show(messagesControllerProvider.get());
-        }, error -> errorMessage.setText(error.getMessage())));
+                    groupStorageProvider.get().set_id(group._id());
+                    groupStorageProvider.get().setName(group.name());
+                    groupStorageProvider.get().setMembers(group.members());
+                    app.show(messagesControllerProvider.get());
+                }, error -> errorMessage.setText(error.getMessage())));
     }
 
     public void searchForGroupMembers() {
         disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER).subscribe(users -> {
             allUsers.setAll(users);
             final AutoCompletePopup<User> autoCompletePopup = new AutoCompletePopup<>();
-            ChangeListener<String> changeListener = (observable, oldValue, newValue) -> {
+            searchFieldGroupMembers.textProperty().addListener((observable, oldValue, newValue) -> {
                 autoCompletePopup.getSuggestions().clear();
                 autoCompletePopup.hide();
-                autoCompletePopup.setSkin(new AutoCompletePopupSkin<>(autoCompletePopup,
-                        param -> new UserCell(newGroupMembers, groupMembersVBox)));
-                allUsers.stream()
-                        .filter(user -> user.name().contains(searchFieldGroupMembers.getText()))
+                autoCompletePopup.setSkin(new AutoCompletePopupSkin<>(autoCompletePopup, listView.getCellFactory()));
+                allUsers.stream().filter(user -> user.name().contains(searchFieldGroupMembers.getText()))
                         .forEach(autoCompletePopup.getSuggestions()::add);
                 autoCompletePopup.show(searchFieldGroupMembers);
-            };
-            searchFieldGroupMembers.textProperty().addListener(changeListener);
+            });
         }));
     }
 }
