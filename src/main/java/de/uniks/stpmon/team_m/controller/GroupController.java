@@ -70,6 +70,8 @@ public class GroupController extends Controller {
     public void init() {
         final String groupId = groupStorageProvider.get().get_id();
         listView = new ListView<>();
+        listView.setSelectionModel(null);
+        listView.setFocusModel(null);
         if (groupId.equals(EMPTY_STRING)) {
             final List<String> friends = userStorage.get().getFriends();
             listView.setCellFactory(param -> new UserCell(newGroupMembers, listView, friends));
