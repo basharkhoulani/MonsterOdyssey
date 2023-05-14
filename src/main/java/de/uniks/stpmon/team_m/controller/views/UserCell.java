@@ -11,6 +11,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,13 +23,11 @@ public class UserCell extends ListCell<User> {
     private final ObservableList<User> chosenUsers;
     private final ListView<User> listView;
     private final List<User> friends;
-    private final List<String> friendsIds;
 
-    public UserCell(ObservableList<User> chosenUsers, ListView<User> listView, List<User> friends, List<String> friendsIds) {
+    public UserCell(ObservableList<User> chosenUsers, ListView<User> listView, List<User> friends) {
         this.chosenUsers = chosenUsers;
         this.listView = listView;
         this.friends = friends;
-        this.friendsIds = friendsIds;
     }
 
     @Override
@@ -67,6 +66,8 @@ public class UserCell extends ListCell<User> {
     }
 
     private void addOrRemoveToGroup(User item, Button addOrRemoveButton) {
+        List<String> friendsIds = new ArrayList<>();
+        friends.forEach(friend -> friendsIds.add(friend._id()));
         if (chosenUsers.contains(item)) {
             chosenUsers.remove(item);
             addOrRemoveButton.setText(ADD_MARK);

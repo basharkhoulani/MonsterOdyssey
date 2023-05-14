@@ -74,10 +74,8 @@ public class GroupController extends Controller {
         listView.setFocusModel(null);
         final List<String> friendsByID = userStorage.get().getFriends();
         if (groupId.equals(EMPTY_STRING)) {
-            final List<User> friendsByUserObject = new ArrayList<>();
             disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
-                friendsByUserObject.addAll(users);
-                listView.setCellFactory(param -> new UserCell(newGroupMembers, listView, friendsByUserObject, friendsByID));
+                listView.setCellFactory(param -> new UserCell(newGroupMembers, listView, users));
                 for (User user : users) {
                     if (friendsByID.contains(user._id())) {
                         listView.getItems().add(user);
@@ -90,7 +88,7 @@ public class GroupController extends Controller {
                 groupMembers.removeAll(friendsByID);
                 friendsByID.addAll(groupMembers);
                 disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
-                    listView.setCellFactory(param -> new UserCell(newGroupMembers, listView, users, friendsByID));
+                    listView.setCellFactory(param -> new UserCell(newGroupMembers, listView, users));
                     listView.getItems().addAll(users);
                 }));
             }));
@@ -117,6 +115,7 @@ public class GroupController extends Controller {
     private void editGroup() {
         TITLE = EDIT_GROUP_TITLE;
         groupNameInput.setPromptText(CHANGE_GROUP);
+        groupNameInput.setText(groupStorageProvider.get().getName());
     }
 
     public void changeToMessages() {
@@ -161,7 +160,10 @@ public class GroupController extends Controller {
     }
 
     private void updateGroup() {
-        disposables.add(groupService.update(groupStorageProvider.get().get_id(), groupNameInput.getText(), List.of())
+        // 6460ad8248f4d49dcfaa4206
+        List<String> newGroupMembersIDs = new ArrayList<>();
+        newGroupMembers.forEach(user -> newGroupMembersIDs.add(user._id()));
+        disposables.add(groupService.update(groupStorageProvider.get().get_id(), groupNameInput.getText(), newGroupMembersIDs)
                 .observeOn(FX_SCHEDULER).subscribe(group -> {
                     groupStorageProvider.get().setName(group.name());
                     groupStorageProvider.get().setMembers(group.members());
