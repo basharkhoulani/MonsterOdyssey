@@ -32,7 +32,6 @@ import javax.inject.Provider;
 import java.util.List;
 import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.FX_SCHEDULER;
 import static de.uniks.stpmon.team_m.Constants.MAIN_MENU_TITLE;
 
 public class MainMenuController extends Controller {

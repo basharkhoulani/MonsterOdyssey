@@ -86,7 +86,6 @@ public class MessagesController extends Controller {
     Provider<UserStorage> userStorageProvider;
     @Inject
     Provider<UsersService> usersServiceProvider;
-    private final GroupStorage groupStorage;
     private Disposable disposable;
 
     @Inject
