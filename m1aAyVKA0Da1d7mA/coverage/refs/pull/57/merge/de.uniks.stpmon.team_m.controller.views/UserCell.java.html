@@ -3,75 +3,103 @@
 import de.uniks.stpmon.team_m.dto.User;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+
+import java.util.List;
+import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
+import static javafx.geometry.Pos.*;
 
 
 public class UserCell extends ListCell&lt;User&gt; {
     private final ObservableList&lt;User&gt; chosenUsers;
-    private final VBox groupMembersVBox;
+    private final ListView&lt;User&gt; listView;
+    private final List&lt;User&gt; friends;
+    private final List&lt;String&gt; friendsIds;
 
-<span class="fc" id="L18">    public UserCell(ObservableList&lt;User&gt; chosenUsers, VBox groupMembersVBox) {</span>
-<span class="fc" id="L19">        this.chosenUsers = chosenUsers;</span>
-<span class="fc" id="L20">        this.groupMembersVBox = groupMembersVBox;</span>
-<span class="fc" id="L21">    }</span>
+<span class="fc" id="L27">    public UserCell(ObservableList&lt;User&gt; chosenUsers, ListView&lt;User&gt; listView, List&lt;User&gt; friends, List&lt;String&gt; friendsIds) {</span>
+<span class="fc" id="L28">        this.chosenUsers = chosenUsers;</span>
+<span class="fc" id="L29">        this.listView = listView;</span>
+<span class="fc" id="L30">        this.friends = friends;</span>
+<span class="fc" id="L31">        this.friendsIds = friendsIds;</span>
+<span class="fc" id="L32">    }</span>
 
     @Override
     protected void updateItem(User item, boolean empty) {
-<span class="fc" id="L25">        super.updateItem(item, empty);</span>
-<span class="pc bpc" id="L26" title="1 of 4 branches missed.">        if (item == null || empty) {</span>
-<span class="fc" id="L27">            setText(null);</span>
-<span class="fc" id="L28">            setGraphic(null);</span>
+<span class="fc" id="L36">        super.updateItem(item, empty);</span>
+<span class="pc bpc" id="L37" title="1 of 4 branches missed.">        if (item == null || empty) {</span>
+<span class="fc" id="L38">            setText(null);</span>
+<span class="fc" id="L39">            setGraphic(null);</span>
         } else {
-<span class="fc" id="L30">            final Text text = new Text(item.name());</span>
-<span class="fc" id="L31">            final Button button = new Button();</span>
-<span class="fc" id="L32">            button.setOnAction(event -&gt; addOrRemoveUserToNewGroup(button));</span>
-<span class="fc" id="L33">            HBox hBox = new HBox(text, button);</span>
-<span class="fc" id="L34">            hBox.setSpacing(SPACING_BETWEEN_BUTTON_NAME_GROUP);</span>
-<span class="fc" id="L35">            hBox.setId(item.name());</span>
-<span class="fc" id="L36">            hBox.setUserData(item.name());</span>
-<span class="fc" id="L37">            setGraphic(hBox);</span>
-<span class="fc bfc" id="L38" title="All 2 branches covered.">            if (chosenUsers.contains(item)) {</span>
-<span class="fc" id="L39">                button.setText(CHECK_MARK);</span>
+<span class="fc" id="L41">            final Label usernameLabel = new Label(item.name());</span>
+<span class="fc" id="L42">            final Button addOrRemoveButton = new Button();</span>
+<span class="fc" id="L43">            final Circle circle = new Circle(5);</span>
+<span class="fc" id="L44">            final HBox statusHBox = new HBox(circle);</span>
+<span class="fc" id="L45">            final HBox nameHBox = new HBox(usernameLabel);</span>
+<span class="fc" id="L46">            final HBox buttonHBox = new HBox(addOrRemoveButton);</span>
+<span class="fc" id="L47">            final HBox rootHBox = new HBox(statusHBox, nameHBox, buttonHBox);</span>
+<span class="fc" id="L48">            statusHBox.setAlignment(CENTER_LEFT);</span>
+<span class="fc" id="L49">            nameHBox.setAlignment(CENTER);</span>
+<span class="fc" id="L50">            buttonHBox.setAlignment(CENTER_RIGHT);</span>
+<span class="fc" id="L51">            HBox.setHgrow(statusHBox, Priority.ALWAYS);</span>
+<span class="fc" id="L52">            HBox.setHgrow(nameHBox, Priority.ALWAYS);</span>
+<span class="fc" id="L53">            HBox.setHgrow(buttonHBox, Priority.ALWAYS);</span>
+<span class="fc" id="L54">            HBox.setHgrow(rootHBox, Priority.ALWAYS);</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">            circle.setFill(Objects.equals(item.status(), USER_STATUS_ONLINE) ? Color.LIGHTGREEN : Color.RED);</span>
+<span class="fc" id="L56">            rootHBox.setId(item.name());</span>
+<span class="fc" id="L57">            rootHBox.setUserData(item);</span>
+<span class="fc" id="L58">            setGraphic(rootHBox);</span>
+<span class="fc" id="L59">            setText(null);</span>
+<span class="fc" id="L60">            addOrRemoveButton.setOnAction(event -&gt; addOrRemoveToGroup(item, addOrRemoveButton));</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">            if (chosenUsers.contains(item)) {</span>
+<span class="fc" id="L62">                addOrRemoveButton.setText(CHECK_MARK);</span>
             } else {
-<span class="fc" id="L41">                button.setText(ADD_MARK);</span>
+<span class="fc" id="L64">                addOrRemoveButton.setText(ADD_MARK);</span>
             }
         }
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L67">    }</span>
 
-    private void addOrRemoveUserToNewGroup(Button button) {
-<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (button.getText().equals(ADD_MARK)) {</span>
-<span class="fc" id="L48">            button.setText(CHECK_MARK);</span>
-<span class="fc" id="L49">            chosenUsers.add(getItem());</span>
-<span class="fc" id="L50">            final Text text = new Text(getItem().name());</span>
-<span class="fc" id="L51">            final Button removeButton = new Button();</span>
-<span class="fc" id="L52">            removeButton.setText(CHECK_MARK);</span>
-<span class="fc" id="L53">            final HBox hBox = new HBox(text, removeButton);</span>
-<span class="fc" id="L54">            hBox.setSpacing(SPACING_BETWEEN_BUTTON_NAME_GROUP);</span>
-<span class="fc" id="L55">            hBox.setId(getItem().name() + &quot;Other&quot;);</span>
-<span class="fc" id="L56">            hBox.setUserData(getItem().name());</span>
-<span class="fc" id="L57">            groupMembersVBox.getChildren().add(hBox);</span>
-<span class="fc" id="L58">            removeButton.setOnAction(event -&gt; removeFromSelectGroupMembers(hBox));</span>
-<span class="fc" id="L59">        } else {</span>
-<span class="fc" id="L60">            button.setText(ADD_MARK);</span>
-<span class="fc" id="L61">            chosenUsers.remove(getItem());</span>
-<span class="fc" id="L62">            groupMembersVBox.getChildren().removeIf(node -&gt; node.getId().equals(getItem().name() + &quot;Other&quot;));</span>
-        }
-<span class="fc" id="L64">    }</span>
-
-    private void removeFromSelectGroupMembers(HBox hBox) {
-<span class="pc bpc" id="L67" title="1 of 4 branches missed.">        if (getItem() != null &amp;&amp; chosenUsers.contains(getItem())) {</span>
-<span class="fc" id="L68">            chosenUsers.remove(getItem());</span>
-<span class="fc" id="L69">            groupMembersVBox.getChildren().removeIf(node -&gt; node.getId().equals(getItem().name() + &quot;Other&quot;));</span>
+    private void addOrRemoveToGroup(User item, Button addOrRemoveButton) {
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (chosenUsers.contains(item)) {</span>
+<span class="fc" id="L71">            chosenUsers.remove(item);</span>
+<span class="fc" id="L72">            addOrRemoveButton.setText(ADD_MARK);</span>
+<span class="fc" id="L73">            listView.getItems().remove(item);</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">            if (friendsIds.contains(item._id())) {</span>
+<span class="fc" id="L75">                addUserAndSort(item);</span>
+            }
         } else {
-<span class="fc" id="L71">            chosenUsers.removeIf(user -&gt; (user.name() + &quot;Other&quot;).equals(hBox.getId()));</span>
-<span class="fc" id="L72">            groupMembersVBox.getChildren().removeIf(node -&gt; node.getId().equals(hBox.getId()));</span>
+<span class="fc" id="L78">            chosenUsers.add(item);</span>
+<span class="fc" id="L79">            addOrRemoveButton.setText(CHECK_MARK);</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            if (!listView.getItems().contains(item)) {</span>
+<span class="fc" id="L81">                listView.getItems().add(item);</span>
+            } else {
+<span class="fc" id="L83">                listView.getItems().remove(item);</span>
+<span class="fc" id="L84">                addUserAndSort(item);</span>
+            }
         }
-<span class="fc" id="L74">    }</span>
+<span class="fc" id="L87">    }</span>
+
+    private void addUserAndSort(User item) {
+<span class="fc" id="L90">        listView.getItems().add(item);</span>
+<span class="fc" id="L91">        listView.getItems().sort((o1, o2) -&gt; {</span>
+<span class="nc bnc" id="L92" title="All 4 branches missed.">            if (friends.contains(o1) &amp;&amp; friends.contains(o2)) {</span>
+<span class="nc" id="L93">                return o1.name().compareTo(o2.name());</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            } else if (friends.contains(o1)) {</span>
+<span class="nc" id="L95">                return -1;</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">            } else if (friends.contains(o2)) {</span>
+<span class="nc" id="L97">                return 1;</span>
+            } else {
+<span class="nc" id="L99">                return o1.name().compareTo(o2.name());</span>
+            }
+        });
+<span class="fc" id="L102">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
