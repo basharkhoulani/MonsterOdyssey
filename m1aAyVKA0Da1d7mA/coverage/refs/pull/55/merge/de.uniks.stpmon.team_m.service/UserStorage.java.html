@@ -15,48 +15,66 @@ public class UserStorage {
     private List&lt;String&gt; friends;
 
     @Inject
-<span class="fc" id="L18">    public UserStorage(){</span>
+<span class="fc" id="L18">    public UserStorage() {</span>
 
 <span class="fc" id="L20">    }</span>
 
-<span class="fc" id="L22">    public String get_id(){ return _id; }</span>
+    public String get_id() {
+<span class="fc" id="L23">        return _id;</span>
+    }
 
-<span class="nc" id="L24">    public void set_id(String _id) { this._id = _id; }</span>
+    public void set_id(String _id) {
+<span class="nc" id="L27">        this._id = _id;</span>
+<span class="nc" id="L28">    }</span>
 
-<span class="fc" id="L26">    public String getName(){ return name; }</span>
+    public String getName() {
+<span class="fc" id="L31">        return name;</span>
+    }
 
-<span class="nc" id="L28">    public void setName(String name) { this.name = name; }</span>
+    public void setName(String name) {
+<span class="nc" id="L35">        this.name = name;</span>
+<span class="nc" id="L36">    }</span>
 
-<span class="nc" id="L30">    public String getStatus() { return status; }</span>
+    public String getStatus() {
+<span class="nc" id="L39">        return status;</span>
+    }
 
-<span class="nc" id="L32">    public void setStatus(String status){ this.status = status; }</span>
-
-<span class="nc" id="L34">    public String getAvatar() {return avatar; }</span>
-
-<span class="nc" id="L36">    public void setAvatar(String avatar) { this.avatar = avatar; }</span>
-
-<span class="nc" id="L38">    public List&lt;String&gt; getFriends() { return this.friends; }</span>
-
-    public void addFriend(String newFriend) {
-<span class="nc bnc" id="L41" title="All 2 branches missed.">        if(!this.friends.contains(newFriend)){</span>
-<span class="nc" id="L42">            this.friends.add(newFriend);</span>
-        }
+    public void setStatus(String status) {
+<span class="nc" id="L43">        this.status = status;</span>
 <span class="nc" id="L44">    }</span>
 
-    public void deleteFriend(String friend) {
-<span class="nc" id="L47">        this.friends.remove(friend);</span>
-<span class="nc" id="L48">    }</span>
+    public String getAvatar() {
+<span class="nc" id="L47">        return avatar;</span>
+    }
 
-    public void setFriends(List&lt;String&gt; friends) {
-<span class="nc" id="L51">        this.friends = friends;</span>
+    public void setAvatar(String avatar) {
+<span class="nc" id="L51">        this.avatar = avatar;</span>
 <span class="nc" id="L52">    }</span>
 
-    public void setUser(LoginResult loginResult){
-<span class="fc" id="L55">        this._id = loginResult._id();</span>
-<span class="fc" id="L56">        this.name = loginResult.name();</span>
-<span class="fc" id="L57">        this.status = loginResult.status();</span>
-<span class="fc" id="L58">        this.avatar = loginResult.avatar();</span>
-<span class="fc" id="L59">        this.friends = loginResult.friends();</span>
-<span class="fc" id="L60">    }</span>
+    public List&lt;String&gt; getFriends() {
+<span class="nc" id="L55">        return this.friends;</span>
+    }
+
+    public void addFriend(String newFriend) {
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (!this.friends.contains(newFriend)) {</span>
+<span class="nc" id="L60">            this.friends.add(newFriend);</span>
+        }
+<span class="nc" id="L62">    }</span>
+
+    public void deleteFriend(String friend) {
+<span class="nc" id="L65">        this.friends.remove(friend);</span>
+<span class="nc" id="L66">    }</span>
+
+    public void setFriends(List&lt;String&gt; friends) {
+<span class="nc" id="L69">        this.friends = friends;</span>
+<span class="nc" id="L70">    }</span>
+
+    public void setUser(LoginResult loginResult) {
+<span class="fc" id="L73">        this._id = loginResult._id();</span>
+<span class="fc" id="L74">        this.name = loginResult.name();</span>
+<span class="fc" id="L75">        this.status = loginResult.status();</span>
+<span class="fc" id="L76">        this.avatar = loginResult.avatar();</span>
+<span class="fc" id="L77">        this.friends = loginResult.friends();</span>
+<span class="fc" id="L78">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
