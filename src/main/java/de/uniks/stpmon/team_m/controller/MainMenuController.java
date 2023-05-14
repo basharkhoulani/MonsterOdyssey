@@ -114,6 +114,9 @@ public class MainMenuController extends Controller {
 
     private void initFriendNodes() {
         List<String> friends = userStorageProvider.get().getFriends();
+        if (friends.isEmpty()) {
+            return;
+        }
 
         usersServiceProvider.get().getUsers(friends, null).subscribe(new Observer<>() {
             @Override

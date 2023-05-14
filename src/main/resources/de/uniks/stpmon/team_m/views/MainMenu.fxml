@@ -4,36 +4,35 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" fillWidth="false" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MainMenuController">
-   <HBox prefHeight="612.0" prefWidth="800.0">
-      <VBox prefHeight="605.0" prefWidth="400.0">
-         <VBox alignment="CENTER" prefHeight="63.0" prefWidth="400.0">
-            <Label text="My Friends">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-            </Label>
-            <Separator prefWidth="200.0" />
-         </VBox>
-         <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="385.0" prefWidth="400.0">
-            <VBox fx:id="friendsListVBox" minHeight="0.0" minWidth="0.0" prefHeight="383.0" prefWidth="400.0" />
-         </ScrollPane>
-         <VBox prefHeight="200.0" prefWidth="100.0">
-            <VBox prefHeight="96.0" prefWidth="400.0">
-               <HBox prefHeight="100.0" prefWidth="400.0">
-                  <VBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                     <Button fx:id="findNewFriendsButton" mnemonicParsing="false" onAction="#changeToFindNewFriends" text="Find New Friends" />
-                  </VBox>
-                  <VBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                     <Button fx:id="messagesButton" mnemonicParsing="false" onAction="#changeToMessages" text="Messages" />
-                  </VBox>
-               </HBox>
+<VBox alignment="CENTER" fillWidth="false" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MainMenuController">
+    <HBox prefHeight="612.0" prefWidth="800.0">
+        <VBox prefHeight="605.0" prefWidth="400.0">
+            <VBox alignment="CENTER" prefHeight="63.0" prefWidth="400.0">
+                <Label text="My Friends">
+                    <font>
+                        <Font name="System Bold" size="17.0"/>
+                    </font>
+                </Label>
+                <Separator prefWidth="200.0"/>
             </VBox>
-            <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="385.0" prefWidth="400.0">
-                <AnchorPane fx:id="friendsListScrollPane" minHeight="0.0" minWidth="0.0" prefHeight="383.0"
+            <ScrollPane prefHeight="385.0" prefWidth="400.0">
+                <VBox fx:id="friendsListVBox" minHeight="0.0" minWidth="0.0" prefHeight="383.0"
                             prefWidth="400.0"/>
             </ScrollPane>
             <VBox prefHeight="200.0" prefWidth="100.0">
+                <VBox prefHeight="96.0" prefWidth="400.0">
+                    <HBox prefHeight="100.0" prefWidth="400.0">
+                        <VBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                            <Button fx:id="findNewFriendsButton" mnemonicParsing="false"
+                                    onAction="#changeToFindNewFriends" text="Find New Friends"/>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                            <Button fx:id="messagesButton" mnemonicParsing="false" onAction="#changeToMessages"
+                                    text="Messages"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="400.0">
                     <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#changeToLogin" text="Logout"/>
                 </HBox>

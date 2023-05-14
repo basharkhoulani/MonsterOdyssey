@@ -111,6 +111,10 @@ public class MessagesController extends Controller {
 
     private void initializeFriendNodes() {
         List<String> friends = userStorageProvider.get().getFriends();
+        System.out.println(friends);
+        if (friends.isEmpty()) {
+            return;
+        }
         usersServiceProvider.get().getUsers(friends, null).subscribe(new Observer<>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
