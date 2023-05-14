@@ -153,6 +153,23 @@ public class GroupController extends Controller {
 
 
     public void saveGroup() {
+        if (TITLE.equals(EDIT_GROUP_TITLE)) {
+            updateGroup();
+        } else {
+            createGroup();
+        }
+    }
+
+    private void updateGroup() {
+        disposables.add(groupService.update(groupStorageProvider.get().get_id(), groupNameInput.getText(), List.of())
+                .observeOn(FX_SCHEDULER).subscribe(group -> {
+                    groupStorageProvider.get().setName(group.name());
+                    groupStorageProvider.get().setMembers(group.members());
+                    app.show(messagesControllerProvider.get());
+                }, error -> errorMessage.setText(error.getMessage())));
+    }
+
+    private void createGroup() {
         List<String> newGroupMembersIDs = new ArrayList<>();
         newGroupMembersIDs.add(userStorage.get().get_id());
         newGroupMembers.forEach(user -> newGroupMembersIDs.add(user._id()));
