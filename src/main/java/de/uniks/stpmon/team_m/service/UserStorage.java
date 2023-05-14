@@ -15,30 +15,48 @@ public class UserStorage {
     private List<String> friends;
 
     @Inject
-    public UserStorage(){
+    public UserStorage() {
 
     }
 
-    public String get_id(){ return _id; }
+    public String get_id() {
+        return _id;
+    }
 
-    public void set_id(String _id) { this._id = _id; }
+    public void set_id(String _id) {
+        this._id = _id;
+    }
 
-    public String getName(){ return name; }
+    public String getName() {
+        return name;
+    }
 
-    public void setName(String name) { this.name = name; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getStatus() { return status; }
+    public String getStatus() {
+        return status;
+    }
 
-    public void setStatus(String status){ this.status = status; }
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-    public String getAvatar() {return avatar; }
+    public String getAvatar() {
+        return avatar;
+    }
 
-    public void setAvatar(String avatar) { this.avatar = avatar; }
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
-    public List<String> getFriends() { return this.friends; }
+    public List<String> getFriends() {
+        return this.friends;
+    }
 
     public void addFriend(String newFriend) {
-        if(!this.friends.contains(newFriend)){
+        if (!this.friends.contains(newFriend)) {
             this.friends.add(newFriend);
         }
     }
@@ -51,7 +69,7 @@ public class UserStorage {
         this.friends = friends;
     }
 
-    public void setUser(LoginResult loginResult){
+    public void setUser(LoginResult loginResult) {
         this._id = loginResult._id();
         this.name = loginResult.name();
         this.status = loginResult.status();

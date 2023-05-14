@@ -12,14 +12,21 @@ import java.util.List;
 public class GroupService {
 
     private final GroupsApiService groupsApiService;
+    private final GroupStorage groupStorage;
 
     @Inject
-    public GroupService(GroupsApiService groupsApiService) {
+    public GroupService(GroupsApiService groupsApiService, GroupStorage groupStorage) {
         this.groupsApiService = groupsApiService;
+        this.groupStorage = groupStorage;
     }
 
     public Observable<Group> create(String name, List<String> members) {
-        return groupsApiService.create(new CreateGroupDto(name, members));
+        return groupsApiService.create(new CreateGroupDto(name, members)).map(group -> {
+            groupStorage.set_id(group._id());
+            groupStorage.setName(group.name());
+            groupStorage.setMembers(group.members());
+            return group;
+        });
     }
 
     // For all groups the current user is member of, pass null as the parameter.
@@ -32,11 +39,21 @@ public class GroupService {
     }
 
     public Observable<Group> update(String _id, String name, List<String> members) {
-        return groupsApiService.update(_id, new UpdateGroupDto(name, members));
+        return groupsApiService.update(_id, new UpdateGroupDto(name, members)).map(group -> {
+            groupStorage.set_id(group._id());
+            groupStorage.setName(group.name());
+            groupStorage.setMembers(group.members());
+            return group;
+        });
     }
 
     public Observable<Group> delete(String _id) {
-        return groupsApiService.delete(_id);
+        return groupsApiService.delete(_id).map(group -> {
+            groupStorage.set_id(null);
+            groupStorage.setName(null);
+            groupStorage.setMembers(null);
+            return group;
+        });
     }
 
 }

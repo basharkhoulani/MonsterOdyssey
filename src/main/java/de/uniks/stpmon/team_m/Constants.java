@@ -1,8 +1,5 @@
 package de.uniks.stpmon.team_m;
 
-import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.input.KeyCode;
 
@@ -13,6 +10,12 @@ public class Constants {
     public static final String MESSAGE_NAMESPACE_GROUPS = "groups";
     public static final String MESSAGE_NAMESPACE_REGIONS = "regions";
     public static final String MESSAGE_NAMESPACE_GLOBAL = "global";
+    public static final String HTTP_403 = "HTTP 403";
+    public static final String GENERIC_ERROR = """
+                                        Group could not be deleted!
+                                        Something went wrong!
+                                        Please try again later!""";
+    public static final String ERROR = "Error";
 
     // GENERAL
     public static final String GAME_NAME = "Monster Odyssey";
@@ -21,10 +24,10 @@ public class Constants {
     public static final String APP_ICON = "images/icon.png";
     public static final String TASKBAR_ICON = "images/icon.png";
     public static final String LOADING = "Loading...";
+    public static final String SURE = "Are you sure?";
     public static final String EMPTY_STRING = "";
     public static final String FX_STYLE_BORDER_COLOR_BLACK = "-fx-border-color: black";
     public static final String LOADING_ANIMATION = "images/loading.gif";
-    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
     public static final String USER_STATUS_OFFLINE = "offline";
     public static final String USER_STATUS_ONLINE = "online";
 
@@ -40,6 +43,11 @@ public class Constants {
     public static final String MAIN_MENU_TITLE = "Main Menu";
     public static final String STATUS_ONLINE = "online";
     public static final String STATUS_OFFLINE = "offline";
+
+    // NEW GROUP
+    public static final String CHECK_MARK = "\u2713";
+    public static final String ADD_MARK = "+";
+    public static final int SPACING_BETWEEN_BUTTON_NAME_GROUP = 10;
 
     // MESSAGES
     public static final int MESSAGES_HEIGHT = 640;
@@ -57,6 +65,8 @@ public class Constants {
     public static final String NEW_GROUP_TITLE = "New Group";
     public static final String EDIT_GROUP_TITLE = "Edit Group";
     public static final String CHANGE_GROUP = "Change Group Name";
+    public static final String DELETE_WARNING = "Are you sure you want to delete this group?";
+    public static final String DELETE_ERROR_403 = "You are not the last member of this group. You can't delete it.";
 
     // ACCOUNT SETTINGS
     public static final String ACCOUNT_SETTINGS_TITLE = "Account Setting";

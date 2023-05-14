@@ -72,7 +72,7 @@ class NewFriendControllerTest extends ApplicationTest {
         when(usersService.updateUser(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Observable.just(new User(null, null, null, null, null)));
 
         UserStorage userStorage = mock(UserStorage.class);
-        Mockito.when(userStorage.getFriends()).thenReturn(new ArrayList<String>());
+        Mockito.when(userStorage.getFriends()).thenReturn(new ArrayList<>());
         Mockito.when(userStorageProvider.get()).thenReturn(userStorage);
 
         clickOn("#addFriendButton");
