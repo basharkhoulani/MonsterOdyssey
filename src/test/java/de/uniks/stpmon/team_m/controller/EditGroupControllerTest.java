@@ -5,7 +5,6 @@ import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
