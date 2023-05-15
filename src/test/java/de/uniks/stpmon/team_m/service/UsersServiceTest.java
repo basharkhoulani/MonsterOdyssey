@@ -24,6 +24,8 @@ class UsersServiceTest {
 
     @Mock
     UsersApiService usersApiService;
+    @Mock
+    UserStorage userStorage;
     @InjectMocks
     UsersService usersService;
 
@@ -53,6 +55,7 @@ class UsersServiceTest {
     @Test
     void updateUserTest() {
         // define mock
+        when(userStorage.get_id()).thenReturn("423f8d731c386bcd2204da39");
         when(usersApiService.updateUser(ArgumentMatchers.any(), ArgumentMatchers.any()))
                 .thenReturn(Observable.just(new User(
                         null,
@@ -68,7 +71,7 @@ class UsersServiceTest {
         // check for successful update
         assertEquals("online", user.status());
 
-        verify(usersApiService).updateUser(null, new UpdateUserDto(null, "online", null, null, null));
+        verify(usersApiService).updateUser("423f8d731c386bcd2204da39", new UpdateUserDto(null, "online", null, null, null));
     }
 
     @Test
@@ -95,6 +98,7 @@ class UsersServiceTest {
         //Successful change the Username of user
 
         //define mocks
+        when(userStorage.get_id()).thenReturn("423f8d731c386bcd2204da39");
         when(usersApiService.updateUser(any(), any()))
                 .thenReturn(Observable.just(new User(
                         "423f8d731c386bcd2204da39",
@@ -106,7 +110,7 @@ class UsersServiceTest {
 
         assertEquals(user.name(), "UserPatch");
 
-        verify(usersApiService).updateUser(null, new UpdateUserDto("UserPatch", null, null, null, null));
+        verify(usersApiService).updateUser("423f8d731c386bcd2204da39", new UpdateUserDto("UserPatch", null, null, null, null));
     }
 
     @Test
@@ -114,6 +118,7 @@ class UsersServiceTest {
         //Successful change the Username of user
 
         //define mocks
+        when(userStorage.get_id()).thenReturn("423f8d731c386bcd2204da39");
         when(usersApiService.updateUser(any(), any()))
                 .thenReturn(Observable.just(new User(
                         "1",
@@ -125,6 +130,6 @@ class UsersServiceTest {
 
         assertEquals(user.name(), "UserPatch");
 
-        verify(usersApiService).updateUser(null, new UpdateUserDto(null, null, null, null, "12345678"));
+        verify(usersApiService).updateUser("423f8d731c386bcd2204da39", new UpdateUserDto(null, null, null, null, "12345678"));
     }
 }
