@@ -34,8 +34,7 @@ class NewFriendControllerTest extends ApplicationTest {
     Provider<MessagesController> messageControllerProvider;
     @Mock
     Provider<UsersService> usersServiceProvider;
-    @Mock
-    GroupService groupService;
+
     @Spy
     App app = new App(null);
     @Mock
@@ -48,7 +47,7 @@ class NewFriendControllerTest extends ApplicationTest {
     Provider<GroupStorage> groupStorageProvider;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         app.start(stage);
         app.show(newFriendController);
         stage.requestFocus();
