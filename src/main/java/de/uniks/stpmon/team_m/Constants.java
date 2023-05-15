@@ -37,7 +37,7 @@ public class Constants {
     public static final char BULLET = '\u25cf';
     public static final String REFRESH_TOKEN_PREF = "refreshToken";
     public static final String DELETE_SUCCESS = "Account successfully deleted";
-    public static final String CUSTOM_ERROR = "Something went terribly wrong";
+    public static final String CUSTOM_ERROR = "Something went terribly wrong!";
     public static final String SIGNIN_ERROR = "Wrong Password or Username! Try again!";
     public static final String USERNAME_TAKEN = "Username is already taken!";
 

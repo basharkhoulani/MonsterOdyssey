@@ -147,7 +147,6 @@ public class LoginController extends Controller {
             passwordErrorLabel.setText(USERNAME_TAKEN);
         } else {
             passwordErrorLabel.setText(CUSTOM_ERROR);
-            System.out.println(error);
         }
     }
 }
