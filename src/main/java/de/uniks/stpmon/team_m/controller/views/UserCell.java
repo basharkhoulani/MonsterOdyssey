@@ -9,8 +9,7 @@ import javafx.scene.shape.Circle;
 
 import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.STATUS_CIRCLE_RADIUS;
-import static de.uniks.stpmon.team_m.Constants.USER_STATUS_ONLINE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class UserCell extends ListCell<User> {
 
@@ -27,7 +26,7 @@ public class UserCell extends ListCell<User> {
             final Circle circle = new Circle(STATUS_CIRCLE_RADIUS);
             final HBox statusHBox = new HBox(circle);
             final HBox nameHBox = new HBox(usernameLabel);
-            rootHBox = new HBox(15, statusHBox, nameHBox);
+            rootHBox = new HBox(HBOX_FRIENDS_SPACING, statusHBox, nameHBox);
             circle.setFill(Objects.equals(user.status(), USER_STATUS_ONLINE) ? Color.LIGHTGREEN : Color.RED);
             rootHBox.setId(user.name());
             rootHBox.setUserData(user);

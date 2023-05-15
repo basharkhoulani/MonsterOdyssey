@@ -32,6 +32,7 @@ public class Constants {
     public static final String USER_STATUS_OFFLINE = "offline";
     public static final String USER_STATUS_ONLINE = "online";
     public static final int STATUS_CIRCLE_RADIUS = 7;
+    public static final int HBOX_FRIENDS_SPACING = 15;
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
