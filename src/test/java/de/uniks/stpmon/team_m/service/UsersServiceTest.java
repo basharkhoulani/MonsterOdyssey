@@ -27,8 +27,6 @@ class UsersServiceTest {
     UsersApiService usersApiService;
     @InjectMocks
     UsersService usersService;
-    @Spy
-    UserStorage userStorage;
 
     @Test
     void createUser() {

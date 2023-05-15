@@ -11,8 +11,6 @@ import io.reactivex.rxjava3.core.Observable;
 import javax.inject.Inject;
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.*;
-
 public class AuthenticationService {
     private final TokenStorage tokenStorage;
     private final AuthApiService authApiService;
