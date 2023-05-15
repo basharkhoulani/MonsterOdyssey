@@ -33,7 +33,7 @@ public class NewFriendController extends Controller {
     @Inject
     UsersService usersService;
     @Inject
-    Provider<UserStorage> userStorage;
+    Provider<UserStorage> userStorageProvider;
 
     @Inject
     public NewFriendController() {
@@ -60,12 +60,15 @@ public class NewFriendController extends Controller {
         if (allUsers.isEmpty()) {
             return;
         }
-        searchTextField.clear();
+        if (searchTextField.getText().equals(userStorageProvider.get().getName())) {
+            searchTextField.setPromptText(YOURSELF);
+            return;
+        }
         for (User user : allUsers) {
             if (user.name().equals(searchTextField.getText())) {
                 final String newFriend = user._id();
-                userStorage.get().addFriend(newFriend);
-                disposables.add(usersService.updateUser(null, null, null, userStorage.get().getFriends(), null).subscribe());
+                userStorageProvider.get().addFriend(newFriend);
+                disposables.add(usersService.updateUser(null, null, null, userStorageProvider.get().getFriends(), null).subscribe());
                 searchTextField.setPromptText(FRIEND_ADDED);
             } else {
                 searchTextField.setPromptText(FRIEND_NOT_FOUND);

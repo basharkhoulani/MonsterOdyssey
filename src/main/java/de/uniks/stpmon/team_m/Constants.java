@@ -61,6 +61,8 @@ public class Constants {
     public static final String NEW_FRIEND_TITLE = "Add a new friend";
     public static final String FRIEND_ADDED = "Friend added. You can add more friends or go back to the main menu.";
     public static final String FRIEND_NOT_FOUND = "Friend not found. Please try again.";
+    public static final String FRIEND_ALREADY_ADDED = "You are already friends with this user.";
+    public static final String YOURSELF = "You can't add yourself as a friend.";
 
     // GROUPS
     public static final String NEW_GROUP_TITLE = "New Group";
