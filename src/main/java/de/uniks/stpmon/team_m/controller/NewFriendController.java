@@ -15,8 +15,7 @@ import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.List;
 
-import static de.uniks.stpmon.team_m.Constants.FRIEND_ADDED;
-import static de.uniks.stpmon.team_m.Constants.NEW_FRIEND_TITLE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class NewFriendController extends Controller {
 
@@ -61,15 +60,17 @@ public class NewFriendController extends Controller {
         if (allUsers.isEmpty()) {
             return;
         }
+        searchTextField.clear();
         for (User user : allUsers) {
             if (user.name().equals(searchTextField.getText())) {
                 final String newFriend = user._id();
                 userStorage.get().addFriend(newFriend);
+                disposables.add(usersService.updateUser(null, null, null, userStorage.get().getFriends(), null).subscribe());
+                searchTextField.setPromptText(FRIEND_ADDED);
+            } else {
+                searchTextField.setPromptText(FRIEND_NOT_FOUND);
             }
         }
-        disposables.add(usersService.updateUser(null, null, null, userStorage.get().getFriends(), null).subscribe());
-        searchTextField.clear();
-        searchTextField.setPromptText(FRIEND_ADDED);
     }
 
     public void sendMessage() {
