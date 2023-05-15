@@ -1,6 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.controller.views.UserCell;
+import de.uniks.stpmon.team_m.controller.views.GroupUserCell;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
@@ -77,7 +77,7 @@ public class GroupController extends Controller {
             final List<User> friendsByUserObject = new ArrayList<>();
             disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
                 friendsByUserObject.addAll(users);
-                listView.setCellFactory(param -> new UserCell(newGroupMembers, listView, friendsByUserObject, friendsByID));
+                listView.setCellFactory(param -> new GroupUserCell(newGroupMembers, listView, friendsByUserObject));
                 for (User user : users) {
                     if (friendsByID.contains(user._id())) {
                         listView.getItems().add(user);

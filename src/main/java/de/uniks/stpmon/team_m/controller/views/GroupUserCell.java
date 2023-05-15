@@ -3,18 +3,15 @@ package de.uniks.stpmon.team_m.controller.views;
 import de.uniks.stpmon.team_m.dto.User;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 import java.util.List;
-import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.*;
-import static javafx.geometry.Pos.*;
+import static de.uniks.stpmon.team_m.Constants.ADD_MARK;
+import static de.uniks.stpmon.team_m.Constants.CHECK_MARK;
+import static javafx.geometry.Pos.CENTER_RIGHT;
 
 public class GroupUserCell extends UserCell {
 
@@ -29,31 +26,17 @@ public class GroupUserCell extends UserCell {
     }
 
     @Override
-    protected void updateItem(de.uniks.stpmon.team_m.dto.User item, boolean empty) {
+    protected void updateItem(User item, boolean empty) {
         super.updateItem(item, empty);
         if (item == null || empty) {
             setText(null);
             setGraphic(null);
         } else {
-            final Label usernameLabel = new Label(item.name());
             final Button addOrRemoveButton = new Button();
-            final Circle circle = new Circle(5);
-            final HBox statusHBox = new HBox(circle);
-            final HBox nameHBox = new HBox(usernameLabel);
             final HBox buttonHBox = new HBox(addOrRemoveButton);
-            final HBox rootHBox = new HBox(statusHBox, nameHBox, buttonHBox);
-            statusHBox.setAlignment(CENTER_LEFT);
-            nameHBox.setAlignment(CENTER);
+            super.getRootHBox().getChildren().add(buttonHBox);
             buttonHBox.setAlignment(CENTER_RIGHT);
-            HBox.setHgrow(statusHBox, Priority.ALWAYS);
-            HBox.setHgrow(nameHBox, Priority.ALWAYS);
             HBox.setHgrow(buttonHBox, Priority.ALWAYS);
-            HBox.setHgrow(rootHBox, Priority.ALWAYS);
-            circle.setFill(Objects.equals(item.status(), USER_STATUS_ONLINE) ? Color.LIGHTGREEN : Color.RED);
-            rootHBox.setId(item.name());
-            rootHBox.setUserData(item);
-            setGraphic(rootHBox);
-            setText(null);
             addOrRemoveButton.setOnAction(event -> addOrRemoveToGroup(item, addOrRemoveButton));
             if (chosenUsers.contains(item)) {
                 addOrRemoveButton.setText(CHECK_MARK);
@@ -63,7 +46,7 @@ public class GroupUserCell extends UserCell {
         }
     }
 
-    private void addOrRemoveToGroup(de.uniks.stpmon.team_m.dto.User item, Button addOrRemoveButton) {
+    private void addOrRemoveToGroup(User item, Button addOrRemoveButton) {
         if (chosenUsers.contains(item)) {
             chosenUsers.remove(item);
             addOrRemoveButton.setText(ADD_MARK);
@@ -84,7 +67,7 @@ public class GroupUserCell extends UserCell {
         }
     }
 
-    private void addUserAndSort(de.uniks.stpmon.team_m.dto.User item) {
+    private void addUserAndSort(User item) {
         listView.getItems().add(item);
         listView.getItems().sort((o1, o2) -> {
             if (friends.contains(o1) && friends.contains(o2)) {

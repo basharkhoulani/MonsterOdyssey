@@ -1,12 +1,17 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.controller.views.UserCell;
+import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupStorage;
 import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -52,10 +57,20 @@ public class MessagesController extends Controller {
     @Inject
     Provider<GroupStorage> groupStorageProvider;
     @Inject
-    UsersService usersServiceProvider;
+    UsersService usersService;
+    private final ObservableList<User> friends = FXCollections.observableArrayList();
+    private ListView<User> listView;
 
     @Inject
     public MessagesController() {
+    }
+
+    @Override
+    public void init() {
+        listView = new ListView<>(friends);
+        listView.setCellFactory(param -> new UserCell());
+        disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
+                .observeOn(FX_SCHEDULER).subscribe(friends::setAll));
     }
 
     @Override
