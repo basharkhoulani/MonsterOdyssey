@@ -35,7 +35,7 @@ class UsersServiceTest {
         //define mocks
         when(usersApiService.createUser(ArgumentMatchers.any()))
                 .thenReturn(Observable.just(new User(
-                        "1",
+                        "423f8d731c386bcd2204da39",
                         "1",
                         "online",
                         null,
@@ -46,7 +46,7 @@ class UsersServiceTest {
         final User user = usersService.createUser("1", null, "12345678").blockingFirst();
 
         //Check for successful Sign Up
-        assertEquals("1", user._id());
+        assertEquals("423f8d731c386bcd2204da39", user._id());
 
         verify(usersApiService).createUser(new CreateUserDto("1", null, "12345678"));
     }
@@ -96,9 +96,9 @@ class UsersServiceTest {
         //Successful change the Username of user
 
         //define mocks
-        when(usersApiService.updateUser(anyString(), any()))
+        when(usersApiService.updateUser(any(), any()))
                 .thenReturn(Observable.just(new User(
-                        "1",
+                        "423f8d731c386bcd2204da39",
                         "UserPatch",
                         STATUS_ONLINE,
                         null,
@@ -107,7 +107,7 @@ class UsersServiceTest {
 
         assertEquals(user.name(), "UserPatch");
 
-        verify(usersApiService).updateUser("1", new UpdateUserDto("UserPatch", null, null, null, null));
+        verify(usersApiService).updateUser(null, new UpdateUserDto("UserPatch", null, null, null, null));
     }
 
     @Test
@@ -126,6 +126,6 @@ class UsersServiceTest {
 
         assertEquals(user.name(), "UserPatch");
 
-        verify(usersApiService).updateUser(ArgumentMatchers.any(), ArgumentMatchers.any());
+        verify(usersApiService).updateUser(null, new UpdateUserDto(null, null, null, null, "12345678"));
     }
 }
