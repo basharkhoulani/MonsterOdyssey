@@ -18,9 +18,8 @@ import org.testfx.framework.junit5.ApplicationTest;
 import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-import static de.uniks.stpmon.team_m.Constants.FRIEND_ADDED;
+import static de.uniks.stpmon.team_m.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -30,7 +29,9 @@ class NewFriendControllerTest extends ApplicationTest {
     @Mock
     Provider<MainMenuController> mainMenuControllerProvider;
     @Mock
-    UsersService usersService;
+    Provider<MessagesController> messageControllerProvider;
+    @Mock
+    Provider<UsersService> usersServiceProvider;
     @Mock
     GroupService groupService;
     @Spy
@@ -67,6 +68,8 @@ class NewFriendControllerTest extends ApplicationTest {
     @Test
     void addAsAFriendTest() {
         // define mock
+        final UsersService usersService = mock(UsersService.class);
+        Mockito.when(usersServiceProvider.get()).thenReturn(usersService);
         when(usersService.getUsers(ArgumentMatchers.any(), ArgumentMatchers.any()))
                 .thenReturn(Observable.just(Arrays.asList(
                         new User("1", "11", "1", "1", null),
@@ -75,29 +78,39 @@ class NewFriendControllerTest extends ApplicationTest {
                 )));
         when(usersService.updateUser(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Observable.just(new User(null, null, null, null, null)));
 
-        UserStorage userStorage = mock(UserStorage.class);
-        Mockito.when(userStorage.getFriends()).thenReturn(new ArrayList<>());
+        UserStorage userStorage = new UserStorage();
+        userStorage.set_id("1");
+        userStorage.setFriends(new ArrayList<>());
         Mockito.when(userStorageProvider.get()).thenReturn(userStorage);
-
+        // empty textfield
         clickOn("#addFriendButton");
         // click on searchbar
         final TextField searchTextField = lookup("#searchTextField").query();
         clickOn(searchTextField);
+        // write in searchbar
         write("11");
         clickOn("#addFriendButton");
         clickOn("#addFriendButton");
+
         assertEquals(FRIEND_ADDED, searchTextField.getPromptText());
     }
 
     @Test
     void sendMessageTest() {
         // define mock
+        final UsersService usersService = mock(UsersService.class);
+        Mockito.when(usersServiceProvider.get()).thenReturn(usersService);
+
+        final MessagesController messageController = mock(MessagesController.class);
+        when(messageControllerProvider.get()).thenReturn(messageController);
+
         when(usersService.getUsers(ArgumentMatchers.any(), ArgumentMatchers.any()))
                 .thenReturn(Observable.just(Arrays.asList(
                         new User("1", "11", "1", "1", null),
                         new User("2", "22", "2", "2", null),
                         new User("3", "33", "3", "3", null)
                 )));
+
         UserStorage userStorage = mock(UserStorage.class);
         Mockito.when(userStorage.getFriends()).thenReturn(new ArrayList<>());
         Mockito.when(userStorageProvider.get()).thenReturn(userStorage);
@@ -106,5 +119,15 @@ class NewFriendControllerTest extends ApplicationTest {
                 new Group("112345", "best", Arrays.asList("1", "2", "3")),
                 new Group("1124", null, Arrays.asList("1", "2")),
                 new Group("1151", "1", Arrays.asList("5","3","6")))));
+
+        when(groupService.create(any(), any())).thenReturn(Observable.just(new Group("123456", "best", Arrays.asList("1", "2", "3"))));
+        doNothing().when(app).show(messageController);
+
+        final TextField searchTextField = lookup("#searchTextField").query();
+        clickOn(searchTextField);
+        write("11");
+        clickOn("#messageButton");
+        clickOn("#messageButton");
+        assertEquals("Monster Odyssey - Add a new friend", app.getStage().getTitle());
     }
 }

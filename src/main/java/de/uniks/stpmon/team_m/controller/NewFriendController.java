@@ -74,17 +74,16 @@ public class NewFriendController extends Controller {
             searchTextField.setPromptText(YOURSELF);
             return;
         }
-        searchTextField.clear();
+        searchTextField.setPromptText(FRIEND_NOT_FOUND);
         for (User user : allUsers) {
             if (user.name().equals(searchTextField.getText())) {
                 userStorageProvider.get().addFriend(user._id());
-                disposables.add(usersServiceProvider.get().updateUser(null, null, null, userStorageProvider.get().getFriends(), null).subscribe());
+                disposables.add(usersServiceProvider.get().updateUser(null, null, null, userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER).subscribe());
                 searchTextField.setPromptText(FRIEND_ADDED);
-                return;
-            } else {
-                searchTextField.setPromptText(FRIEND_NOT_FOUND);
+                break;
             }
         }
+        searchTextField.clear();
     }
 
     public void sendMessage() {
@@ -97,7 +96,7 @@ public class NewFriendController extends Controller {
             List<String> privateGroup = Arrays.asList(user._id(), userStorageProvider.get().get_id());
             disposables.add(groupServiceProvider.get().getGroups(privateGroup).observeOn(FX_SCHEDULER).subscribe(groups -> {
                 for (Group group : groups) {
-                    if (groups.size() == privateGroup.size()) {
+                    if (group.members().size() == privateGroup.size() && group.name().isEmpty()) {
                         groupStorageProvider.get().set_id(group._id());
                     } else {
                         disposables.add(groupServiceProvider.get().create(null, privateGroup).observeOn(FX_SCHEDULER).subscribe(newGroup -> groupStorageProvider.get().set_id(newGroup._id())));
