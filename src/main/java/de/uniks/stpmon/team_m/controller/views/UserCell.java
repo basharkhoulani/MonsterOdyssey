@@ -10,6 +10,7 @@ import javafx.scene.shape.Circle;
 
 import java.util.Objects;
 
+import static de.uniks.stpmon.team_m.Constants.STATUS_CIRCLE_RADIUS;
 import static de.uniks.stpmon.team_m.Constants.USER_STATUS_ONLINE;
 import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.CENTER_LEFT;
@@ -26,7 +27,7 @@ public class UserCell extends ListCell<User> {
             setGraphic(null);
         } else {
             final Label usernameLabel = new Label(user.name());
-            final Circle circle = new Circle(5);
+            final Circle circle = new Circle(STATUS_CIRCLE_RADIUS);
             final HBox statusHBox = new HBox(circle);
             final HBox nameHBox = new HBox(usernameLabel);
             rootHBox = new HBox(statusHBox, nameHBox);

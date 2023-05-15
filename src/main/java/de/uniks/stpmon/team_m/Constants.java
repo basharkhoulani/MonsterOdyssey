@@ -31,6 +31,7 @@ public class Constants {
     public static final String LOADING_ANIMATION = "images/loading.gif";
     public static final String USER_STATUS_OFFLINE = "offline";
     public static final String USER_STATUS_ONLINE = "online";
+    public static final int STATUS_CIRCLE_RADIUS = 5;
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
