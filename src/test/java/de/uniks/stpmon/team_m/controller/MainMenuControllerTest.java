@@ -1,18 +1,30 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
+import de.uniks.stpmon.team_m.rest.UsersApiService;
+import de.uniks.stpmon.team_m.service.UserStorage;
+import de.uniks.stpmon.team_m.service.UsersService;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
+import static org.junit.jupiter.api.Assertions.*;
 
 import javax.inject.Provider;
 import java.util.List;
@@ -38,6 +50,12 @@ class MainMenuControllerTest extends ApplicationTest {
     Provider<MessagesController> messagesControllerProvider;
     @Mock
     RegionsApiService regionsApiService;
+    @Mock
+    UsersApiService usersApiService;
+    @Mock
+    Provider<UsersService> usersServiceProvider;
+    @Mock
+    Provider<UserStorage> userStorageProvider;
 
     @Spy
     App app = new App(null);
@@ -49,6 +67,22 @@ class MainMenuControllerTest extends ApplicationTest {
     public void start(Stage stage) {
         when(regionsApiService.getRegions())
                 .thenReturn(Observable.just(List.of(new Region("TestRegion", "NamedRegion"))));
+
+        UserStorage mockUserStorage = mock(UserStorage.class);
+        Mockito.when(userStorageProvider.get()).thenReturn(mockUserStorage);
+
+        UsersService mockUsersService = mock(UsersService.class);
+        Mockito.when(usersServiceProvider.get()).thenReturn(mockUsersService);
+
+        when(mockUsersService.getUsers(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"), null))
+                .thenReturn(Observable.just(List.of(
+                        new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
+                        new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
+                        new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
+        when(userStorageProvider.get().getFriends())
+                .thenReturn(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
+
+
         app.start(stage);
         app.show(mainMenuController);
         stage.requestFocus();
@@ -99,5 +133,20 @@ class MainMenuControllerTest extends ApplicationTest {
         clickOn(regionListView.getItems().get(0).name());
         clickOn("#startGameButton");
         verify(app).show(ingameController);
+    }
+
+    @Test
+    void displayFriends() {
+        VBox friendsListVBox = lookup("#friendsListVBox").query();
+        ObservableList<Node> friendNodes = friendsListVBox.getChildren();
+
+        assertEquals(3, friendNodes.size());
+
+        HBox firstFriend = (HBox) friendNodes.get(0);
+        Text nameText = (Text) firstFriend.getChildren().get(1);
+
+        assertEquals("Rick", nameText.getText());
+
+        clickOn("Morty");
     }
 }
