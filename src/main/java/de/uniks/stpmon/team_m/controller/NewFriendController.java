@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
@@ -16,6 +17,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -89,14 +91,22 @@ public class NewFriendController extends Controller {
     public void sendMessage() {
         searchTextField.clear();
         for (User user : allUsers) {
-            if (user.name().equals(searchTextField.getText())) {
-                disposables.add(groupServiceProvider.get().create(null, Arrays.asList(user._id(), userStorageProvider.get().get_id())).subscribe( group -> {
-                    groupStorageProvider.get().set_id(group._id());
-                    app.show(messageControllerProvider.get());
-                }));
-            } else {
+            if (!user.name().equals(searchTextField.getText())) {
                 searchTextField.setPromptText(FRIEND_NOT_FOUND);
+                return;
             }
+            List<String> privateGroup = Arrays.asList(user._id(), userStorageProvider.get().get_id());
+            disposables.add(groupServiceProvider.get().getGroups(privateGroup).observeOn(FX_SCHEDULER).subscribe(groups -> {
+                for (Group group: groups) {
+                    if (groups.size() == privateGroup.size()) {
+                        groupStorageProvider.get().set_id(group._id());
+                    } else {
+                        disposables.add(groupServiceProvider.get().create(null, privateGroup).observeOn(FX_SCHEDULER).subscribe( newGroup -> {
+                            groupStorageProvider.get().set_id(newGroup._id());
+                        }));
+                    }
+                    app.show(messageControllerProvider.get());
+                }}));
         }
     }
 
