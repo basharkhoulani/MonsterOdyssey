@@ -11,9 +11,9 @@ public class Constants {
     public static final String MESSAGE_NAMESPACE_GLOBAL = "global";
     public static final String HTTP_403 = "HTTP 403";
     public static final String GENERIC_ERROR = """
-                                        Group could not be deleted!
-                                        Something went wrong!
-                                        Please try again later!""";
+            Group could not be deleted!
+            Something went wrong!
+            Please try again later!""";
     public static final String ERROR = "Error";
 
     // GENERAL
