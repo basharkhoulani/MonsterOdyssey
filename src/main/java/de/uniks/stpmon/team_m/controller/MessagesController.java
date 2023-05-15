@@ -8,6 +8,7 @@ import de.uniks.stpmon.team_m.service.UsersService;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -85,6 +86,8 @@ public class MessagesController extends Controller {
     Provider<UserStorage> userStorageProvider;
     @Inject
     Provider<UsersService> usersServiceProvider;
+    private Disposable disposable;
+
     @Inject
     Provider<GroupStorage> groupStorageProvider;
 
@@ -108,28 +111,32 @@ public class MessagesController extends Controller {
 
     private void initializeFriendNodes() {
         List<String> friends = userStorageProvider.get().getFriends();
+        System.out.println(friends);
+        if (friends.isEmpty()) {
+            return;
+        }
         usersServiceProvider.get().getUsers(friends, null).subscribe(new Observer<>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
-
+                disposable = d;
             }
 
             @Override
             public void onNext(@NonNull List<User> users) {
                 for (User friend : users) {
                     HBox newFriendNode = createFriendNode(friend);
-                    friendsAndGroupsVBox.getChildren().add(newFriendNode);
+                    Platform.runLater(() -> friendsAndGroupsVBox.getChildren().add(newFriendNode));
                 }
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-
+                disposable.dispose();
             }
 
             @Override
             public void onComplete() {
-
+                disposable.dispose();
             }
         });
     }

@@ -21,16 +21,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 @ExtendWith(MockitoExtension.class)
 public class MessagesControllerTest extends ApplicationTest {

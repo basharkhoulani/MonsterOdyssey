@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
+
 <VBox alignment="CENTER" fillWidth="false" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MainMenuController">
     <HBox prefHeight="612.0" prefWidth="800.0">
@@ -15,8 +16,8 @@
                 </Label>
                 <Separator prefWidth="200.0"/>
             </VBox>
-            <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="385.0" prefWidth="400.0">
-                <AnchorPane fx:id="friendsListScrollPane" minHeight="0.0" minWidth="0.0" prefHeight="383.0"
+            <ScrollPane prefHeight="385.0" prefWidth="400.0">
+                <VBox fx:id="friendsListVBox" minHeight="0.0" minWidth="0.0" prefHeight="383.0"
                             prefWidth="400.0"/>
             </ScrollPane>
             <VBox prefHeight="200.0" prefWidth="100.0">
