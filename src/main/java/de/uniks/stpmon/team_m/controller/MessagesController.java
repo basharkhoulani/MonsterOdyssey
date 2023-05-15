@@ -5,6 +5,10 @@ import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
@@ -16,8 +20,24 @@ public class MessagesController extends Controller {
 
     @FXML
     public Text currentFriendOrGroupText; //needs to be set each time a different chat is selected
-
-
+    @FXML
+    public Label friendsAndGroupText;
+    @FXML
+    public VBox friendsListViewVBox;
+    @FXML
+    public Button findNewFriendsButton;
+    @FXML
+    public Button newGroupButton;
+    @FXML
+    public Button mainMenuButton;
+    @FXML
+    public Button settingsButton;
+    @FXML
+    public VBox messagesListViewVBox;
+    @FXML
+    public TextArea messageTextArea;
+    @FXML
+    public Button sendButton;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
 
