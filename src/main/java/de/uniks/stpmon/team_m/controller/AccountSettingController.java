@@ -148,7 +148,7 @@ public class AccountSettingController extends Controller {
 
     public void deleteAccount() {
         LoginController loginController = loginControllerProvider.get();
-        loginController.setInformation("Account successfully deleted");
+        loginController.setInformation(DELETE_SUCCESS);
         app.show(loginController);
     }
 
