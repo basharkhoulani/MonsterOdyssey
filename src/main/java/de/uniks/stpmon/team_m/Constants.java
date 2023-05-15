@@ -21,7 +21,7 @@ public class Constants {
     public static final int STANDARD_HEIGHT = 600;
     public static final int STANDARD_WIDTH = 800;
     public static final int MINIMUM_HEIGHT = 540;
-    public static final int MINIMUM_WIDTH = 600;
+    public static final int MINIMUM_WIDTH = 700;
     public static final String APP_ICON = "images/icon.png";
     public static final String TASKBAR_ICON = "images/icon.png";
     public static final String LOADING = "Loading...";
