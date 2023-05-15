@@ -5,6 +5,8 @@ import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,8 +21,7 @@ import javax.inject.Provider;
 
 import java.util.List;
 
-import static de.uniks.stpmon.team_m.Constants.DELETE_ERROR_403;
-import static de.uniks.stpmon.team_m.Constants.GENERIC_ERROR;
+import static de.uniks.stpmon.team_m.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -57,10 +58,10 @@ class EditGroupControllerTest extends ApplicationTest {
                 "TestGroup", List.of("645f8d731c386bcd2204da40"))));
 
         clickOn("Delete group");
-        clickOn("No");
+        clickOn(ButtonType.NO.getText());
         assertEquals("Monster Odyssey - Edit Group", app.getStage().getTitle());
         clickOn("Delete group");
-        clickOn("Yes");
+        clickOn(ButtonType.YES.getText());
         assertEquals("Monster Odyssey - Edit Group", app.getStage().getTitle());
     }
 
@@ -68,15 +69,15 @@ class EditGroupControllerTest extends ApplicationTest {
     void errorAlertTest() {
         when(groupService.delete(any())).thenReturn(Observable.error(new Exception("Test")));
         clickOn("Delete group");
-        clickOn("Yes");
+        clickOn(ButtonType.YES.getText());
         clickOn(GENERIC_ERROR);
-        clickOn("OK");
+        clickOn(ButtonType.OK.getText());
         assertEquals("Monster Odyssey - Edit Group", app.getStage().getTitle());
         when(groupService.delete(any())).thenReturn(Observable.error(new Exception("HTTP 403")));
         clickOn("Delete group");
-        clickOn("Yes");
+        clickOn(ButtonType.YES.getText());
         clickOn(DELETE_ERROR_403);
-        clickOn("OK");
+        clickOn(ButtonType.OK.getText());
         assertEquals("Monster Odyssey - Edit Group", app.getStage().getTitle());
     }
 }
