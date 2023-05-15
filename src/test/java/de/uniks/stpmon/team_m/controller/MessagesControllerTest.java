@@ -8,11 +8,7 @@ import de.uniks.stpmon.team_m.service.GroupStorage;
 import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,16 +17,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
-
 import java.util.List;
-import java.util.concurrent.TimeoutException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class MessagesControllerTest extends ApplicationTest {
@@ -50,7 +43,7 @@ public class MessagesControllerTest extends ApplicationTest {
     Provider<GroupController> groupControllerProvider;
 
     @Mock
-    Provider<UsersService> usersServiceProvider;
+    UsersService usersService;
 
     @Mock
     UsersApiService usersApiService;
@@ -67,10 +60,7 @@ public class MessagesControllerTest extends ApplicationTest {
         UserStorage mockUserStorage = mock(UserStorage.class);
         Mockito.when(userStorageProvider.get()).thenReturn(mockUserStorage);
 
-        UsersService mockUsersService = mock(UsersService.class);
-        Mockito.when(usersServiceProvider.get()).thenReturn(mockUsersService);
-
-        when(mockUsersService.getUsers(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"), null))
+        when(usersService.getUsers(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"), null))
                 .thenReturn(Observable.just(List.of(
                         new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
                         new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
@@ -121,15 +111,12 @@ public class MessagesControllerTest extends ApplicationTest {
 
     @Test
     void displayFriends() {
-        VBox friendsAndGroupsVBox = lookup("#friendsAndGroupsVBox").query();
-        ObservableList<Node> friendsAndGroupNodes = friendsAndGroupsVBox.getChildren();
+        ListView<User> friendsAndGroups = lookup("#friendsAndGroups").query();
 
-        assertEquals(3, friendsAndGroupNodes.size());
+        assertEquals(3, friendsAndGroups.getItems().size());
 
-        HBox firstFriend = (HBox) friendsAndGroupNodes.get(0);
-        Text nameText = (Text) firstFriend.getChildren().get(1);
-
-        assertEquals("Rick", nameText.getText());
+        User rick = friendsAndGroups.getItems().get(0);
+        assertEquals("Rick", rick.name());
 
         clickOn("Morty");
     }

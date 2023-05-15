@@ -68,6 +68,7 @@ public class MessagesController extends Controller {
     @Override
     public void init() {
         listView = new ListView<>(friends);
+        listView.setId("friendsAndGroups");
         listView.setCellFactory(param -> new UserCell());
         disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
                 .observeOn(FX_SCHEDULER).subscribe(friends::setAll));
