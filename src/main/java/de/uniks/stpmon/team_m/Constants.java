@@ -10,12 +10,6 @@ public class Constants {
     public static final String MESSAGE_NAMESPACE_GROUPS = "groups";
     public static final String MESSAGE_NAMESPACE_REGIONS = "regions";
     public static final String MESSAGE_NAMESPACE_GLOBAL = "global";
-    public static final String HTTP_403 = "HTTP 403";
-    public static final String GENERIC_ERROR = """
-                                        Group could not be deleted!
-                                        Something went wrong!
-                                        Please try again later!""";
-    public static final String ERROR = "Error";
 
     // GENERAL
     public static final String GAME_NAME = "Monster Odyssey";
@@ -86,9 +80,15 @@ public class Constants {
     public static final String PAUSE_MENU_LABEL = "What do you want to do?";
 
     // Error messages
+    public static final String GENERIC_ERROR = """
+                                        Group could not be deleted!
+                                        Something went wrong!
+                                        Please try again later!""";
+    public static final String ERROR = "Error";
     public static final String CUSTOM_ERROR = "Something went terribly wrong";
     public static final String HTTP_400 = "HTTP 400";
     public static final String HTTP_401 = "HTTP 401";
+    public static final String HTTP_403 = "HTTP 403";
     public static final String HTTP_404 = "HTTP 404";
     public static final String HTTP_409 = "HTTP 409";
     public static final String HTTP_429 = "HTTP 429";
