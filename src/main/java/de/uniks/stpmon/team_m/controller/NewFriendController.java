@@ -17,7 +17,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -78,10 +77,10 @@ public class NewFriendController extends Controller {
         searchTextField.clear();
         for (User user : allUsers) {
             if (user.name().equals(searchTextField.getText())) {
-                final String newFriend = user._id();
-                userStorageProvider.get().addFriend(newFriend);
+                userStorageProvider.get().addFriend(user._id());
                 disposables.add(usersServiceProvider.get().updateUser(null, null, null, userStorageProvider.get().getFriends(), null).subscribe());
                 searchTextField.setPromptText(FRIEND_ADDED);
+                return;
             } else {
                 searchTextField.setPromptText(FRIEND_NOT_FOUND);
             }
@@ -97,16 +96,15 @@ public class NewFriendController extends Controller {
             }
             List<String> privateGroup = Arrays.asList(user._id(), userStorageProvider.get().get_id());
             disposables.add(groupServiceProvider.get().getGroups(privateGroup).observeOn(FX_SCHEDULER).subscribe(groups -> {
-                for (Group group: groups) {
+                for (Group group : groups) {
                     if (groups.size() == privateGroup.size()) {
                         groupStorageProvider.get().set_id(group._id());
                     } else {
-                        disposables.add(groupServiceProvider.get().create(null, privateGroup).observeOn(FX_SCHEDULER).subscribe( newGroup -> {
-                            groupStorageProvider.get().set_id(newGroup._id());
-                        }));
+                        disposables.add(groupServiceProvider.get().create(null, privateGroup).observeOn(FX_SCHEDULER).subscribe(newGroup -> groupStorageProvider.get().set_id(newGroup._id())));
                     }
                     app.show(messageControllerProvider.get());
-                }}));
+                }
+            }));
         }
     }
 
