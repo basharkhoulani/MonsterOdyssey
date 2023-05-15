@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m;
 
-import javafx.geometry.Insets;
 import javafx.scene.input.KeyCode;
 
 public class Constants {
@@ -19,8 +18,10 @@ public class Constants {
 
     // GENERAL
     public static final String GAME_NAME = "Monster Odyssey";
-    public static final int STANDARD_HEIGHT = 480;
-    public static final int STANDARD_WIDTH = 640;
+    public static final int STANDARD_HEIGHT = 600;
+    public static final int STANDARD_WIDTH = 800;
+    public static final int MINIMUM_HEIGHT = 480;
+    public static final int MINIMUM_WIDTH = 640;
     public static final String APP_ICON = "images/icon.png";
     public static final String TASKBAR_ICON = "images/icon.png";
     public static final String LOADING = "Loading...";
@@ -47,15 +48,9 @@ public class Constants {
     // NEW GROUP
     public static final String CHECK_MARK = "\u2713";
     public static final String ADD_MARK = "+";
-    public static final int SPACING_BETWEEN_BUTTON_NAME_GROUP = 10;
 
     // MESSAGES
-    public static final int MESSAGES_HEIGHT = 640;
-    public static final int MESSAGES_WIDTH = 840;
     public static final String MESSAGES_TITLE = "Messages";
-    public static final int MESSAGES_FRIEND_NODE_HEIGHT = 50;
-    public static final Insets MESSAGES_FRIEND_NODE_PADDING = new Insets(9, 0, 11, 0);
-    public static final int MESSAGES_FRIEND_NODE_STATUS_RADIUS = 15;
 
     // NEW FRIEND
     public static final String NEW_FRIEND_TITLE = "Add a new friend";
