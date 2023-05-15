@@ -1,8 +1,12 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.views.RegionCell;
+import de.uniks.stpmon.team_m.controller.views.UserCell;
 import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
+import de.uniks.stpmon.team_m.service.UserStorage;
+import de.uniks.stpmon.team_m.service.UsersService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,7 +14,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
@@ -22,7 +25,7 @@ public class MainMenuController extends Controller {
 
 
     @FXML
-    public AnchorPane friendsListScrollPane;
+    public VBox friendsListVBox;
     @FXML
     public Button findNewFriendsButton;
     @FXML
@@ -35,30 +38,37 @@ public class MainMenuController extends Controller {
     public Button startGameButton;
     @FXML
     public VBox regionRadioButtonList;
-
     @Inject
     Provider<LoginController> loginControllerProvider;
-
     @Inject
     Provider<IngameController> ingameControllerProvider;
-
     @Inject
     Provider<AccountSettingController> accountSettingControllerProvider;
-
     @Inject
     Provider<NewFriendController> newFriendControllerProvider;
-
     @Inject
     Provider<MessagesController> messagesControllerProvider;
     @Inject
     RegionsApiService regionsApiService;
+    @Inject
+    UsersService usersService;
+    @Inject
+    UserStorage userStorage;
     private final ObservableList<Region> regions = FXCollections.observableArrayList();
+    private final ObservableList<User> friends = FXCollections.observableArrayList();
+    private ListView<User> friendsListView;
     private ToggleGroup regionToggleGroup;
 
 
     @Override
     public void init() {
-        disposables.add(regionsApiService.getRegions().observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));
+        friendsListView = new ListView<>(friends);
+        friendsListView.setId("friendsListView");
+        friendsListView.setCellFactory(param -> new UserCell());
+        disposables.add(regionsApiService.getRegions()
+                .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));
+        disposables.add(usersService.getUsers(userStorage.getFriends(), null)
+                .observeOn(FX_SCHEDULER).subscribe(this.friends::setAll));
     }
 
     @Inject
@@ -74,6 +84,7 @@ public class MainMenuController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
         initRadioButtons();
+        friendsListVBox.getChildren().add(friendsListView);
         return parent;
     }
 
@@ -104,6 +115,7 @@ public class MainMenuController extends Controller {
     }
 
     public void changeToIngame() {
+        System.out.println(regionToggleGroup.getSelectedToggle().getUserData());
         app.show(ingameControllerProvider.get());
     }
 }
