@@ -93,6 +93,7 @@ class UsersServiceTest {
         verify(usersApiService).getUsers(ArgumentMatchers.any(), ArgumentMatchers.any());
     }
 
+    @Test
     void updateUsername() {
         //Successful change the Username of user
 
