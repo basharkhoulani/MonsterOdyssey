@@ -1,8 +1,17 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
-import javafx.event.ActionEvent;
 
-public class FriendSettingsController {
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.dto.User;
+
+public class FriendSettingsController extends Controller {
+
+    private final User user;
+
+    public FriendSettingsController(User user) {
+        this.user = user;
+    }
+
     public void bestFriendAction() {
     }
 

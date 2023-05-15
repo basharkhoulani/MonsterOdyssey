@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.controller.subController.FriendSettingsController;
 import de.uniks.stpmon.team_m.controller.subController.RegionCell;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
@@ -14,16 +15,19 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import org.controlsfx.control.PopOver;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -162,6 +166,7 @@ public class MainMenuController extends Controller {
         });
         friendHBox.setOnMouseClicked((event -> {
             friendHBox.requestFocus();
+            showPopOver(event, user);
         }));
 
         Circle status = new Circle();
@@ -179,6 +184,13 @@ public class MainMenuController extends Controller {
         friendHBox.getChildren().add(friendName);
 
         return friendHBox;
+    }
+
+    private void showPopOver(MouseEvent event, User user) {
+        PopOver popOver = new PopOver();
+        popOver.setContentNode(new FriendSettingsController(user).render());
+        popOver.setDetachable(false);
+        popOver.show((Node) event.getSource());
     }
 
     public void changeToFindNewFriends() {
