@@ -162,12 +162,14 @@ public class GroupController extends Controller {
 <span class="fc" id="L162">            searchFieldGroupMembers.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
 <span class="fc" id="L163">                autoCompletePopup.getSuggestions().clear();</span>
 <span class="fc" id="L164">                autoCompletePopup.hide();</span>
-<span class="fc" id="L165">                autoCompletePopup.setSkin(new AutoCompletePopupSkin&lt;&gt;(autoCompletePopup, listView.getCellFactory()));</span>
-<span class="fc" id="L166">                allUsers.stream().filter(user -&gt; user.name().contains(searchFieldGroupMembers.getText()))</span>
-<span class="fc" id="L167">                        .forEach(autoCompletePopup.getSuggestions()::add);</span>
-<span class="fc" id="L168">                autoCompletePopup.show(searchFieldGroupMembers);</span>
-<span class="fc" id="L169">            });</span>
-<span class="fc" id="L170">        }));</span>
-<span class="fc" id="L171">    }</span>
+<span class="fc" id="L165">                autoCompletePopup.setVisibleRowCount(MAX_SUGGESTIONS_NEW_GROUP);</span>
+<span class="fc" id="L166">                autoCompletePopup.setPrefWidth(searchFieldGroupMembers.getWidth());</span>
+<span class="fc" id="L167">                autoCompletePopup.setSkin(new AutoCompletePopupSkin&lt;&gt;(autoCompletePopup, listView.getCellFactory()));</span>
+<span class="fc" id="L168">                allUsers.stream().filter(user -&gt; user.name().contains(searchFieldGroupMembers.getText()))</span>
+<span class="fc" id="L169">                        .forEach(autoCompletePopup.getSuggestions()::add);</span>
+<span class="fc" id="L170">                autoCompletePopup.show(searchFieldGroupMembers);</span>
+<span class="fc" id="L171">            });</span>
+<span class="fc" id="L172">        }));</span>
+<span class="fc" id="L173">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

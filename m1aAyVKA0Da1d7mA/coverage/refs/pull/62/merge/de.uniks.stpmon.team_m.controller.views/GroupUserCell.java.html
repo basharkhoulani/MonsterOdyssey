@@ -9,8 +9,7 @@ import javafx.scene.layout.Priority;
 
 import java.util.List;
 
-import static de.uniks.stpmon.team_m.Constants.ADD_MARK;
-import static de.uniks.stpmon.team_m.Constants.CHECK_MARK;
+import static de.uniks.stpmon.team_m.Constants.*;
 import static javafx.geometry.Pos.CENTER_RIGHT;
 
 public class GroupUserCell extends UserCell {
@@ -19,21 +18,22 @@ public class GroupUserCell extends UserCell {
     private final ListView&lt;User&gt; listView;
     private final List&lt;User&gt; friends;
 
-<span class="fc" id="L22">    public GroupUserCell(ObservableList&lt;User&gt; chosenUsers, ListView&lt;User&gt; listView, List&lt;User&gt; friends) {</span>
-<span class="fc" id="L23">        this.chosenUsers = chosenUsers;</span>
-<span class="fc" id="L24">        this.listView = listView;</span>
-<span class="fc" id="L25">        this.friends = friends;</span>
-<span class="fc" id="L26">    }</span>
+<span class="fc" id="L21">    public GroupUserCell(ObservableList&lt;User&gt; chosenUsers, ListView&lt;User&gt; listView, List&lt;User&gt; friends) {</span>
+<span class="fc" id="L22">        this.chosenUsers = chosenUsers;</span>
+<span class="fc" id="L23">        this.listView = listView;</span>
+<span class="fc" id="L24">        this.friends = friends;</span>
+<span class="fc" id="L25">    }</span>
 
     @Override
     protected void updateItem(User item, boolean empty) {
-<span class="fc" id="L30">        super.updateItem(item, empty);</span>
-<span class="pc bpc" id="L31" title="1 of 4 branches missed.">        if (item == null || empty) {</span>
-<span class="fc" id="L32">            setText(null);</span>
-<span class="fc" id="L33">            setGraphic(null);</span>
+<span class="fc" id="L29">        super.updateItem(item, empty);</span>
+<span class="pc bpc" id="L30" title="1 of 4 branches missed.">        if (item == null || empty) {</span>
+<span class="fc" id="L31">            setText(null);</span>
+<span class="fc" id="L32">            setGraphic(null);</span>
         } else {
-<span class="fc" id="L35">            final Button addOrRemoveButton = new Button();</span>
-<span class="fc" id="L36">            final HBox buttonHBox = new HBox(addOrRemoveButton);</span>
+<span class="fc" id="L34">            final Button addOrRemoveButton = new Button();</span>
+<span class="fc" id="L35">            final HBox buttonHBox = new HBox(addOrRemoveButton);</span>
+<span class="fc" id="L36">            addOrRemoveButton.setPrefSize(BUTTON_PREF_SIZE, BUTTON_PREF_SIZE);</span>
 <span class="fc" id="L37">            buttonHBox.setAlignment(CENTER_RIGHT);</span>
 <span class="fc" id="L38">            HBox.setHgrow(buttonHBox, Priority.ALWAYS);</span>
 <span class="fc" id="L39">            super.getRootHBox().getChildren().add(buttonHBox);</span>
