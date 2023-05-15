@@ -111,11 +111,11 @@ public class AccountSettingController extends Controller {
                 .observeOn(FX_SCHEDULER)
                 .subscribe(userResult -> {
                     user.setName(userResult.name());
-                    informationLabel.setText("Your username has been changed successfully.");
+                    informationLabel.setText(USERNAME_SUCCESS_CHANGED);
                     usernameField.setDisable(true);
                     usernameField.setText(EMPTY_STRING);
                     usernameField.setPromptText(user.getName());
-                }, error -> usernameErrorLabel.setText(error.getMessage())));
+                }, error -> usernameErrorLabel.setText(errorHandle(error.getMessage()))));
 
     }
 
@@ -142,8 +142,8 @@ public class AccountSettingController extends Controller {
                     passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);
                     passwordField.setDisable(true);
                     showPasswordButton.setDisable(true);
-                    informationLabel.setText("Your Password has been changed successfully.");
-                }, error -> passwordErrorLabel.setText(error.getMessage())));
+                    informationLabel.setText(PASSWORD_SUCCESS_CHANGED);
+                }, error -> passwordErrorLabel.setText(errorHandle(error.getMessage()))));
     }
 
     public void deleteAccount() {
@@ -165,6 +165,14 @@ public class AccountSettingController extends Controller {
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
             deleteAccount();
+        }
+    }
+
+    public String errorHandle(String error){
+        if(error.contains(HTTP_409)){
+            return USERNAME_TAKEN;
+        } else {
+            return CUSTOM_ERROR;
         }
     }
 }

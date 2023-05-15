@@ -59,22 +59,5 @@ public class AuthenticationService {
         return authApiService.logout().map(lr -> lr);
     }
 
-    public String errorHandler(String error, String function){
-        if(error.contains(HTTP_400)){
-            return VALIDATION_FAIL;
-        } else if(error.contains(HTTP_401)){
-            if(function.equals(LOGIN_FUNC)){
-                return "Invalid username or password";
-            } else if (function.equals(REFRESH_FUNC)) {
-                return "Invalid or expired refresh token";
-            } else if (function.equals(LOGOUT_FUNC)){
-                return "Missing or invalid Bearer token";
-            }
-            return CUSTOM_ERROR;
-        } else if (error.contains(HTTP_429)) {
-            return RATE_LIMIT;
-        }
-        return Constants.CUSTOM_ERROR;
-    }
 
 }
