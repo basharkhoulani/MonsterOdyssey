@@ -6,74 +6,80 @@
 <?import javafx.scene.text.Text?>
 <BorderPane minHeight="480.0" minWidth="640.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MessagesController">
    <left>
-      <HBox BorderPane.alignment="CENTER">
-         <VBox alignment="CENTER_LEFT">
-            <VBox alignment="CENTER" fillWidth="false" prefHeight="55.0" prefWidth="300.0">
-               <Label fx:id="friendsAndGroupText" text="My Friends &amp; My Groups" VBox.vgrow="ALWAYS">
-                  <font>
-                     <Font size="23.0"/>
-                  </font>
-               </Label>
-            </VBox>
-            <VBox fx:id="friendsListViewVBox" alignment="CENTER" prefHeight="450.0" prefWidth="300.0"/>
-            <VBox alignment="BOTTOM_CENTER" prefHeight="98.0" prefWidth="300.0">
-               <VBox prefHeight="100.0" prefWidth="300.0">
-                  <HBox alignment="CENTER" fillHeight="false" prefHeight="65.0" prefWidth="300.0">
-                     <Button fx:id="findNewFriendsButton" mnemonicParsing="false"
-                             onAction="#changeToFindNewFriends" text="Find New Friends"/>
-                  </HBox>
-                  <HBox fillHeight="false" prefHeight="65.0" prefWidth="300.0">
-                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="157.0" HBox.hgrow="SOMETIMES">
-                        <Button fx:id="newGroupButton" mnemonicParsing="false"
-                                onAction="#changeToNewGroup" text="New Group"/>
+      <HBox alignment="CENTER" fillHeight="false" BorderPane.alignment="CENTER_LEFT">
+         <HBox alignment="CENTER" fillHeight="false">
+            <children>
+               <VBox alignment="CENTER_LEFT" fillWidth="false" prefHeight="601.0" prefWidth="281.0">
+                  <VBox alignment="CENTER" fillWidth="false" prefHeight="0.0" prefWidth="281.0">
+                     <Label fx:id="friendsAndGroupText" prefHeight="35.0" prefWidth="270.0" text="My Friends &amp; My Groups">
+                        <font>
+                           <Font size="23.0" />
+                        </font>
+                     </Label>
+                  </VBox>
+                  <VBox fx:id="friendsListViewVBox" alignment="CENTER" fillWidth="false" prefHeight="268.0" prefWidth="309.0" VBox.vgrow="ALWAYS" />
+                  <VBox alignment="CENTER" fillWidth="false" prefHeight="76.0" prefWidth="281.0">
+                     <HBox alignment="CENTER" fillHeight="false" prefHeight="44.0" prefWidth="126.0">
+                        <Button fx:id="findNewFriendsButton" mnemonicParsing="false" onAction="#changeToFindNewFriends" prefHeight="30.0" prefWidth="109.0" text="Find New Friends" />
                      </HBox>
-                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="143.0" HBox.hgrow="SOMETIMES">
-                        <Button fx:id="mainMenuButton" mnemonicParsing="false"
-                                onAction="#changeToMainMenu" text="Main Menu"/>
+                     <HBox alignment="CENTER" fillHeight="false">
+                        <HBox alignment="CENTER" fillHeight="false" prefHeight="51.0" prefWidth="119.0">
+                           <Button fx:id="mainMenuButton" mnemonicParsing="false" onAction="#changeToMainMenu" prefHeight="30.0" prefWidth="90.0" text="Main Menu" />
+                        </HBox>
+                        <HBox alignment="CENTER" fillHeight="false" prefHeight="55.0" prefWidth="120.0">
+                           <Button fx:id="newGroupButton" mnemonicParsing="false" onAction="#changeToNewGroup" prefHeight="30.0" prefWidth="90.0" text="New Group" />
+                        </HBox>
+                     </HBox>
+                  </VBox>
+               </VBox>
+            </children>
+         </HBox>
+         <HBox alignment="CENTER" fillHeight="false">
+            <children>
+               <VBox alignment="CENTER" fillWidth="false">
+                  <children>
+                     <Separator orientation="VERTICAL" prefHeight="542.0" prefWidth="4.0" />
+                  </children>
+               </VBox>
+            </children>
+         </HBox>
+      </HBox>
+   </left>
+   <center>
+      <HBox fillHeight="false" BorderPane.alignment="CENTER">
+         <children>
+            <VBox fillWidth="false" prefHeight="600.0" prefWidth="565.0" HBox.hgrow="ALWAYS">
+               <VBox alignment="CENTER" fillWidth="false" prefHeight="80.0" prefWidth="538.0">
+                  <HBox alignment="CENTER" fillHeight="false" prefHeight="40.0" prefWidth="494.0">
+                     <HBox alignment="CENTER" fillHeight="false" prefHeight="50.0" prefWidth="500.0" HBox.hgrow="ALWAYS">
+                        <Text fx:id="currentFriendOrGroupText" strokeType="OUTSIDE" strokeWidth="0.0" text="Friends/Group Chat" textAlignment="CENTER" wrappingWidth="243.13671875">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Text>
+                     </HBox>
+                     <HBox alignment="CENTER" fillHeight="false" prefHeight="50.0" prefWidth="80.0">
+                        <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#changeToSettings" prefHeight="33.0" prefWidth="35.0" styleClass="settingsSymbol" stylesheets="@../styles.css" />
+                     </HBox>
+                  </HBox>
+               </VBox>
+               <VBox fx:id="messagesListViewVBox" fillWidth="false" minHeight="200.0" prefHeight="424.0" prefWidth="538.0" />
+               <VBox alignment="BOTTOM_CENTER" fillWidth="false" prefHeight="66.0" prefWidth="538.0">
+                  <HBox alignment="CENTER" fillHeight="false" prefHeight="62.0" prefWidth="494.0">
+                     <HBox alignment="CENTER" fillHeight="false" prefHeight="60.0" prefWidth="400.0">
+                        <TextArea fx:id="messageTextArea" prefHeight="50.0" prefWidth="380.0" promptText="Write your message here..." wrapText="true" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextArea>
+                     </HBox>
+                     <HBox alignment="CENTER" fillHeight="false" prefHeight="60.0" prefWidth="130.0">
+                        <Button fx:id="sendButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" text="Send" />
                      </HBox>
                   </HBox>
                </VBox>
             </VBox>
-         </VBox>
-         <Separator orientation="VERTICAL" prefHeight="200.0" style="-fx-background-color: gray;"/>
+         </children>
       </HBox>
-   </left>
-   <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-         <VBox alignment="CENTER" prefHeight="59.0" prefWidth="494.0">
-            <HBox alignment="CENTER" prefHeight="40.0" prefWidth="494.0" VBox.vgrow="ALWAYS">
-               <HBox alignment="CENTER" prefHeight="74.0" prefWidth="512.0">
-                  <Text fx:id="currentFriendOrGroupText" strokeType="OUTSIDE" strokeWidth="0.0"
-                        text="Friends/Group Chat" textAlignment="CENTER" wrappingWidth="243.13671875">
-                     <font>
-                        <Font size="25.0"/>
-                     </font>
-                  </Text>
-               </HBox>
-               <HBox alignment="CENTER_RIGHT" prefHeight="59.0" prefWidth="96.0">
-                  <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#changeToSettings"
-                          prefHeight="33.0" prefWidth="35.0" styleClass="settingsSymbol"
-                          stylesheets="@../styles.css"/>
-               </HBox>
-            </HBox>
-         </VBox>
-         <VBox fx:id="messagesListViewVBox" prefHeight="422.0" prefWidth="500.0" VBox.vgrow="ALWAYS"/>
-         <VBox prefHeight="64.0" prefWidth="494.0">
-            <HBox alignment="CENTER" fillHeight="false" prefHeight="62.0" prefWidth="494.0">
-               <HBox alignment="CENTER_LEFT" prefHeight="51.0" prefWidth="409.0">
-                  <TextArea fx:id="messageTextArea" prefHeight="51.0" prefWidth="381.0"
-                            promptText="Write your message here..." wrapText="true">
-                     <font>
-                        <Font size="14.0"/>
-                     </font>
-                  </TextArea>
-               </HBox>
-               <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="130.0">
-                  <Button fx:id="sendButton" mnemonicParsing="false" prefHeight="48.0" prefWidth="97.0"
-                          text="Send"/>
-               </HBox>
-            </HBox>
-         </VBox>
-      </VBox>
    </center>
 </BorderPane>

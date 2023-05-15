@@ -34,9 +34,9 @@ public class GroupUserCell extends UserCell {
         } else {
             final Button addOrRemoveButton = new Button();
             final HBox buttonHBox = new HBox(addOrRemoveButton);
-            super.getRootHBox().getChildren().add(buttonHBox);
             buttonHBox.setAlignment(CENTER_RIGHT);
             HBox.setHgrow(buttonHBox, Priority.ALWAYS);
+            super.getRootHBox().getChildren().add(buttonHBox);
             addOrRemoveButton.setOnAction(event -> addOrRemoveToGroup(item, addOrRemoveButton));
             if (chosenUsers.contains(item)) {
                 addOrRemoveButton.setText(CHECK_MARK);

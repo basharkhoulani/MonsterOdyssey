@@ -20,8 +20,8 @@ public class Constants {
     public static final String GAME_NAME = "Monster Odyssey";
     public static final int STANDARD_HEIGHT = 600;
     public static final int STANDARD_WIDTH = 800;
-    public static final int MINIMUM_HEIGHT = 480;
-    public static final int MINIMUM_WIDTH = 640;
+    public static final int MINIMUM_HEIGHT = 540;
+    public static final int MINIMUM_WIDTH = 600;
     public static final String APP_ICON = "images/icon.png";
     public static final String TASKBAR_ICON = "images/icon.png";
     public static final String LOADING = "Loading...";
@@ -31,7 +31,7 @@ public class Constants {
     public static final String LOADING_ANIMATION = "images/loading.gif";
     public static final String USER_STATUS_OFFLINE = "offline";
     public static final String USER_STATUS_ONLINE = "online";
-    public static final int STATUS_CIRCLE_RADIUS = 5;
+    public static final int STATUS_CIRCLE_RADIUS = 7;
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";

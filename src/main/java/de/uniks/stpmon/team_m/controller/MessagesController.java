@@ -81,6 +81,7 @@ public class MessagesController extends Controller {
     @Override
     public Parent render() {
         Parent parent = super.render();
+        friendsListViewVBox.getChildren().add(listView);
         return parent;
     }
 
