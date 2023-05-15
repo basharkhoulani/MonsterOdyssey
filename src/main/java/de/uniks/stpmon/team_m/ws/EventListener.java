@@ -12,7 +12,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 

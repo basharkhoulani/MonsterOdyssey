@@ -6,19 +6,20 @@ import de.uniks.stpmon.team_m.service.GroupStorage;
 import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -26,7 +27,6 @@ import javafx.scene.text.TextAlignment;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -45,6 +45,8 @@ public class MessagesController extends Controller {
     @FXML
     public ScrollPane friendsAndGroupsScrollPane;
     @FXML
+    public VBox friendsAndGroupsVBox;
+    @FXML
     public Button findNewFriendsButton;
     @FXML
     public Button newGroupButton;
@@ -62,8 +64,6 @@ public class MessagesController extends Controller {
     public Button sendButton;
     @FXML
     public Button settingsButton;
-    @FXML
-    public VBox friendsAndGroupsVBox;
     @FXML
     public Pane buttonPane;
     @FXML
@@ -86,12 +86,13 @@ public class MessagesController extends Controller {
     Provider<UserStorage> userStorageProvider;
     @Inject
     Provider<UsersService> usersServiceProvider;
-    private final GroupStorage groupStorage;
+    private Disposable disposable;
 
     @Inject
-    public MessagesController(GroupStorage groupStorage) {
+    Provider<GroupStorage> groupStorageProvider;
 
-        this.groupStorage = groupStorage;
+    @Inject
+    public MessagesController() {
     }
 
     @Override
@@ -110,28 +111,32 @@ public class MessagesController extends Controller {
 
     private void initializeFriendNodes() {
         List<String> friends = userStorageProvider.get().getFriends();
+        System.out.println(friends);
+        if (friends.isEmpty()) {
+            return;
+        }
         usersServiceProvider.get().getUsers(friends, null).subscribe(new Observer<>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
-
+                disposable = d;
             }
 
             @Override
             public void onNext(@NonNull List<User> users) {
                 for (User friend : users) {
                     HBox newFriendNode = createFriendNode(friend);
-                    friendsAndGroupsVBox.getChildren().add(newFriendNode);
+                    Platform.runLater(() -> friendsAndGroupsVBox.getChildren().add(newFriendNode));
                 }
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-
+                disposable.dispose();
             }
 
             @Override
             public void onComplete() {
-
+                disposable.dispose();
             }
         });
     }
@@ -198,7 +203,7 @@ public class MessagesController extends Controller {
     }
 
     public void changeToNewGroup() {
-        groupStorage.set_id(EMPTY_STRING);
+        groupStorageProvider.get().set_id(EMPTY_STRING);
         app.show(groupControllerProvider.get());
     }
 
@@ -219,9 +224,7 @@ public class MessagesController extends Controller {
                 friendHBox.getStyleClass().add("normalFriendHBox");
             }
         });
-        friendHBox.setOnMouseClicked((event -> {
-            friendHBox.requestFocus();
-        }));
+        friendHBox.setOnMouseClicked((event -> friendHBox.requestFocus()));
 
         Circle status = new Circle();
         status.setRadius(Constants.MESSAGES_FRIEND_NODE_STATUS_RADIUS);
@@ -253,7 +256,7 @@ public class MessagesController extends Controller {
     }
 
     public void changeToSettings() {
-        groupStorage.set_id(LOADING);
+        groupStorageProvider.get().set_id(LOADING);
         app.show(groupControllerProvider.get());
     }
 }

@@ -21,16 +21,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 @ExtendWith(MockitoExtension.class)
 public class MessagesControllerTest extends ApplicationTest {
@@ -38,7 +35,7 @@ public class MessagesControllerTest extends ApplicationTest {
     @Mock
     Provider<UserStorage> userStorageProvider;
     @Mock
-    GroupStorage groupStorage;
+    Provider<GroupStorage> groupStorageProvider;
 
     @Mock
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -104,7 +101,8 @@ public class MessagesControllerTest extends ApplicationTest {
     @Test
     void changeToNewGroup() {
         GroupStorage mockedGroupStorage = mock(GroupStorage.class);
-        Mockito.doNothing().when(groupStorage).set_id(Mockito.anyString());
+        Mockito.when(groupStorageProvider.get()).thenReturn(mockedGroupStorage);
+        Mockito.doNothing().when(mockedGroupStorage).set_id(Mockito.anyString());
         
         final GroupController groupController = mock(GroupController.class);
         when(groupControllerProvider.get()).thenReturn(groupController);

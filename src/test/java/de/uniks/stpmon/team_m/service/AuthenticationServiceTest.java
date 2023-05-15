@@ -9,13 +9,17 @@ import okhttp3.MediaType;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import retrofit2.HttpException;
 import retrofit2.Response;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AuthenticationServiceTest {
@@ -39,7 +43,7 @@ class AuthenticationServiceTest {
                 .thenReturn(Observable.just(new LoginResult("645ccafaaa5cd5e15e00f65f", "t", "online", null, null, "a1a2", "a3a4")));
 
         // Login of a User
-        final LoginResult result = authenticationService.login("t","12345678",false).blockingFirst();
+        final LoginResult result = authenticationService.login("t", "12345678", false).blockingFirst();
 
         // Check for existing token
         assertEquals("a1a2", result.accessToken());
