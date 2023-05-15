@@ -65,7 +65,7 @@ class AccountSettingControllerTest extends ApplicationTest {
                 .thenReturn(Observable.just(new User(
                         "1",
                         "UserPatch",
-                        STATUS_ONLINE,
+                        USER_STATUS_ONLINE,
                         null,
                         null
                 )));
@@ -117,7 +117,7 @@ class AccountSettingControllerTest extends ApplicationTest {
                 .thenReturn(Observable.just(new User(
                         "1",
                         "UserPatch",
-                        STATUS_ONLINE,
+                        USER_STATUS_ONLINE,
                         null,
                         null
                 )));

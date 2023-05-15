@@ -3,7 +3,6 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.rest.UsersApiService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
 import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
@@ -44,9 +43,6 @@ public class MessagesControllerTest extends ApplicationTest {
 
     @Mock
     UsersService usersService;
-
-    @Mock
-    UsersApiService usersApiService;
 
     @Spy
     App app = new App(null);

@@ -44,8 +44,6 @@ public class Constants {
 
     // MAIN MENU
     public static final String MAIN_MENU_TITLE = "Main Menu";
-    public static final String STATUS_ONLINE = "online";
-    public static final String STATUS_OFFLINE = "offline";
 
     // NEW GROUP
     public static final String CHECK_MARK = "\u2713";
