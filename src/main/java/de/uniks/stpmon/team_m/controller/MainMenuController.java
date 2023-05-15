@@ -53,12 +53,11 @@ public class MainMenuController extends Controller {
     @Inject
     UsersService usersService;
     @Inject
-    UserStorage userStorage;
+    Provider<UserStorage> userStorageProvider;
     private final ObservableList<Region> regions = FXCollections.observableArrayList();
     private final ObservableList<User> friends = FXCollections.observableArrayList();
     private ListView<User> friendsListView;
     private ToggleGroup regionToggleGroup;
-
 
     @Override
     public void init() {
@@ -67,7 +66,7 @@ public class MainMenuController extends Controller {
         friendsListView.setCellFactory(param -> new UserCell());
         disposables.add(regionsApiService.getRegions()
                 .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));
-        disposables.add(usersService.getUsers(userStorage.getFriends(), null)
+        disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
                 .observeOn(FX_SCHEDULER).subscribe(this.friends::setAll));
     }
 
@@ -115,7 +114,6 @@ public class MainMenuController extends Controller {
     }
 
     public void changeToIngame() {
-        System.out.println(regionToggleGroup.getSelectedToggle().getUserData());
         app.show(ingameControllerProvider.get());
     }
 }
