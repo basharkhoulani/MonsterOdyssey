@@ -157,7 +157,7 @@ public class AccountSettingController extends Controller {
     }
 
     public void showDeletePopUp() {
-        Alert alert = new Alert(Alert.AlertType.WARNING, "Are you sure?", ButtonType.OK, ButtonType.CANCEL);
+        Alert alert = new Alert(Alert.AlertType.WARNING, SURE, ButtonType.OK, ButtonType.CANCEL);
         alert.setTitle("Delete Account");
         alert.setHeaderText(null);
         alert.initOwner(app.getStage());
