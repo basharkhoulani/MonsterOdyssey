@@ -162,6 +162,8 @@ public class GroupController extends Controller {
             searchFieldGroupMembers.textProperty().addListener((observable, oldValue, newValue) -> {
                 autoCompletePopup.getSuggestions().clear();
                 autoCompletePopup.hide();
+                autoCompletePopup.setVisibleRowCount(MAX_SUGGESTIONS_NEW_GROUP);
+                autoCompletePopup.setPrefWidth(searchFieldGroupMembers.getWidth());
                 autoCompletePopup.setSkin(new AutoCompletePopupSkin<>(autoCompletePopup, listView.getCellFactory()));
                 allUsers.stream().filter(user -> user.name().contains(searchFieldGroupMembers.getText()))
                         .forEach(autoCompletePopup.getSuggestions()::add);

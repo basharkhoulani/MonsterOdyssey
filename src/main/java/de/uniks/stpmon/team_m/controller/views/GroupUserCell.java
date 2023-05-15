@@ -9,8 +9,7 @@ import javafx.scene.layout.Priority;
 
 import java.util.List;
 
-import static de.uniks.stpmon.team_m.Constants.ADD_MARK;
-import static de.uniks.stpmon.team_m.Constants.CHECK_MARK;
+import static de.uniks.stpmon.team_m.Constants.*;
 import static javafx.geometry.Pos.CENTER_RIGHT;
 
 public class GroupUserCell extends UserCell {
@@ -34,6 +33,7 @@ public class GroupUserCell extends UserCell {
         } else {
             final Button addOrRemoveButton = new Button();
             final HBox buttonHBox = new HBox(addOrRemoveButton);
+            addOrRemoveButton.setPrefSize(BUTTON_PREF_SIZE, BUTTON_PREF_SIZE);
             buttonHBox.setAlignment(CENTER_RIGHT);
             HBox.setHgrow(buttonHBox, Priority.ALWAYS);
             super.getRootHBox().getChildren().add(buttonHBox);
