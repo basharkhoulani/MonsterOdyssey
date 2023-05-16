@@ -66,8 +66,10 @@ public class MainMenuController extends Controller {
         friendsListView.setCellFactory(param -> new MainMenuUserCell());
         disposables.add(regionsApiService.getRegions()
                 .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));
-        disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
-                .observeOn(FX_SCHEDULER).subscribe(this.friends::setAll));
+        if (!userStorageProvider.get().getFriends().isEmpty()) {
+            disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
+                    .observeOn(FX_SCHEDULER).subscribe(this.friends::setAll));
+        }
     }
 
     @Inject

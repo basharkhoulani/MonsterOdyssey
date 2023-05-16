@@ -31,7 +31,7 @@ public class Constants {
     public static final String USER_STATUS_ONLINE = "online";
     public static final int STATUS_CIRCLE_RADIUS = 7;
     public static final int HBOX_FRIENDS_SPACING = 15;
-    public static final String THREE_DOTS = "●●●";
+    public static final String THREE_DOTS = "···";
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
@@ -48,10 +48,11 @@ public class Constants {
     public static final String MAIN_MENU_TITLE = "Main Menu";
 
     // NEW GROUP
-    public static final String CHECK_MARK = "\u2713";
+    public static final String CHECK_MARK = "✓";
     public static final String ADD_MARK = "+";
     public static final int BUTTON_PREF_SIZE = 30;
     public static final int MAX_SUGGESTIONS_NEW_GROUP = 20;
+
 
     // MESSAGES
     public static final String MESSAGES_TITLE = "Messages";

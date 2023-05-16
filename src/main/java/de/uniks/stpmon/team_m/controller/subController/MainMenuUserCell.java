@@ -21,9 +21,10 @@ public class MainMenuUserCell extends UserCell {
             final Button popOverButton = new Button();
             final HBox buttonHBox = new HBox(popOverButton);
             popOverButton.setPrefSize(BUTTON_PREF_SIZE, BUTTON_PREF_SIZE);
+            popOverButton.setText(THREE_DOTS);
+            popOverButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
             buttonHBox.setAlignment(CENTER_RIGHT);
             HBox.setHgrow(buttonHBox, Priority.ALWAYS);
-            popOverButton.setText(THREE_DOTS);
             super.getRootHBox().getChildren().add(buttonHBox);
             popOverButton.setOnAction(event -> showPopOver(popOverButton, item));
         }
