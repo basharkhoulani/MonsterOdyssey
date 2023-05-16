@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GroupController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller</a> &gt; <span class="el_source">GroupController.java</span></div><h1>GroupController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.controller.views.UserCell;
+import de.uniks.stpmon.team_m.controller.views.GroupUserCell;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
@@ -77,7 +77,7 @@ public class GroupController extends Controller {
 <span class="fc" id="L77">            final List&lt;User&gt; friendsByUserObject = new ArrayList&lt;&gt;();</span>
 <span class="fc" id="L78">            disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -&gt; {</span>
 <span class="fc" id="L79">                friendsByUserObject.addAll(users);</span>
-<span class="fc" id="L80">                listView.setCellFactory(param -&gt; new UserCell(newGroupMembers, listView, friendsByUserObject, friendsByID));</span>
+<span class="fc" id="L80">                listView.setCellFactory(param -&gt; new GroupUserCell(newGroupMembers, listView, friendsByUserObject));</span>
 <span class="fc bfc" id="L81" title="All 2 branches covered.">                for (User user : users) {</span>
 <span class="fc bfc" id="L82" title="All 2 branches covered.">                    if (friendsByID.contains(user._id())) {</span>
 <span class="fc" id="L83">                        listView.getItems().add(user);</span>
@@ -162,12 +162,14 @@ public class GroupController extends Controller {
 <span class="fc" id="L162">            searchFieldGroupMembers.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
 <span class="fc" id="L163">                autoCompletePopup.getSuggestions().clear();</span>
 <span class="fc" id="L164">                autoCompletePopup.hide();</span>
-<span class="fc" id="L165">                autoCompletePopup.setSkin(new AutoCompletePopupSkin&lt;&gt;(autoCompletePopup, listView.getCellFactory()));</span>
-<span class="fc" id="L166">                allUsers.stream().filter(user -&gt; user.name().contains(searchFieldGroupMembers.getText()))</span>
-<span class="fc" id="L167">                        .forEach(autoCompletePopup.getSuggestions()::add);</span>
-<span class="fc" id="L168">                autoCompletePopup.show(searchFieldGroupMembers);</span>
-<span class="fc" id="L169">            });</span>
-<span class="fc" id="L170">        }));</span>
-<span class="fc" id="L171">    }</span>
+<span class="fc" id="L165">                autoCompletePopup.setVisibleRowCount(MAX_SUGGESTIONS_NEW_GROUP);</span>
+<span class="fc" id="L166">                autoCompletePopup.setPrefWidth(searchFieldGroupMembers.getWidth());</span>
+<span class="fc" id="L167">                autoCompletePopup.setSkin(new AutoCompletePopupSkin&lt;&gt;(autoCompletePopup, listView.getCellFactory()));</span>
+<span class="fc" id="L168">                allUsers.stream().filter(user -&gt; user.name().contains(searchFieldGroupMembers.getText()))</span>
+<span class="fc" id="L169">                        .forEach(autoCompletePopup.getSuggestions()::add);</span>
+<span class="fc" id="L170">                autoCompletePopup.show(searchFieldGroupMembers);</span>
+<span class="fc" id="L171">            });</span>
+<span class="fc" id="L172">        }));</span>
+<span class="fc" id="L173">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
