@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 class AppTest extends ApplicationTest {
 
@@ -126,7 +127,7 @@ class AppTest extends ApplicationTest {
         regionListView.setItems(items);
         regionListView.getSelectionModel().selectFirst();
         assertNotNull(regionListView);
-        sleep(40);
+        waitForFxEvents();
         assertFalse(startGameButton.isDisabled());
         clickOn(startGameButton);
         assertEquals("Monster Odyssey - Ingame", stage.getTitle());

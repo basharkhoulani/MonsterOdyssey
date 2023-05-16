@@ -109,7 +109,8 @@ public class LoginController extends Controller {
         disposables.add(authenticationService
                 .login(username.get(), password.get(), rememberMe.get())
                 .observeOn(FX_SCHEDULER)
-                .subscribe(loginResult -> app.show(mainMenuControllerProvider.get()), error -> passwordErrorLabel.setText(error.getMessage())));
+                .subscribe(loginResult -> app.show(mainMenuControllerProvider.get()),
+                        error -> errorHandle(error.getMessage())));
     }
 
     public void signUp() {
@@ -122,7 +123,8 @@ public class LoginController extends Controller {
         disposables.add(usersService
                 .createUser(username.get(), null, password.get())
                 .observeOn(FX_SCHEDULER)
-                .subscribe(userResult -> signIn(), error -> passwordErrorLabel.setText(error.getMessage())));
+                .subscribe(userResult -> signIn(),
+                        error -> errorHandle(error.getMessage())));
     }
 
     public void showPassword() {
@@ -138,4 +140,13 @@ public class LoginController extends Controller {
         this.information = information;
     }
 
+    public void errorHandle(String error) {
+        if(error.contains(HTTP_401)){
+            passwordErrorLabel.setText(SIGNIN_ERROR);
+        } else if (error.contains(HTTP_409)) {
+            passwordErrorLabel.setText(USERNAME_TAKEN);
+        } else {
+            passwordErrorLabel.setText(CUSTOM_ERROR);
+        }
+    }
 }
