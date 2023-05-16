@@ -18,8 +18,8 @@
                       </VBox.margin>
                   </TextField>
               </VBox>
-              <HBox>
-                  <VBox alignment="CENTER" minHeight="100.0" prefHeight="448.0" prefWidth="523.0" />
+              <HBox VBox.vgrow="NEVER">
+                  <VBox alignment="CENTER" minHeight="100.0" prefHeight="448.0" prefWidth="523.0" HBox.hgrow="ALWAYS" />
               </HBox>
               <VBox alignment="BOTTOM_CENTER" fillWidth="false" prefHeight="119.0" prefWidth="513.0" VBox.vgrow="NEVER">
                   <VBox.margin>
@@ -35,30 +35,32 @@
                       <TextField fx:id="groupNameInput" prefHeight="25.0" prefWidth="300.0" promptText="New Group Name" />
                   </VBox>
                   <VBox alignment="CENTER" prefHeight="63.0" prefWidth="100.0">
-                      <Button fx:id="saveGroupButton" mnemonicParsing="false" onAction="#saveGroup" prefHeight="35.0" prefWidth="100.0" text="Save Group" />
+                      <Button fx:id="saveGroupButton" mnemonicParsing="false" onAction="#saveGroup" prefHeight="32.0" prefWidth="95.0" text="Save Group" />
                   </VBox>
               </VBox>
           </VBox>
    </center>
    <left>
           <VBox alignment="CENTER_LEFT" fillWidth="false" prefHeight="600.0" prefWidth="288.0" BorderPane.alignment="CENTER_LEFT">
-              <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="30.0" prefWidth="284.0" VBox.vgrow="NEVER">
-                  <Text fx:id="selectGroupMembersText" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Groupmembers" wrappingWidth="220.509765625" VBox.vgrow="NEVER">
+              <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="30.0" prefWidth="280.0" VBox.vgrow="NEVER">
+                  <Text fx:id="selectGroupMembersText" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Groupmembers" textAlignment="CENTER" wrappingWidth="233.509765625" VBox.vgrow="ALWAYS">
                       <font>
-                          <Font size="22.0" />
+                          <Font size="23.0" />
                       </font>
                   </Text>
               </VBox>
-              <HBox alignment="CENTER" prefHeight="322.0" prefWidth="290.0">
-                  <VBox fx:id="groupMembersVBox" alignment="CENTER" minHeight="150.0" prefHeight="322.0" prefWidth="285.0" HBox.hgrow="ALWAYS" />
-              </HBox>
+              <VBox alignment="CENTER" prefHeight="330.0" prefWidth="306.0" VBox.vgrow="NEVER">
+                  <HBox alignment="CENTER" prefHeight="330.0" prefWidth="271.0" VBox.vgrow="NEVER">
+                      <VBox fx:id="groupMembersVBox" alignment="CENTER" prefHeight="300.0" prefWidth="230.0"/>
+                  </HBox>
+              </VBox>
               <VBox alignment="CENTER" fillWidth="false" VBox.vgrow="NEVER">
-                  <HBox alignment="CENTER" fillHeight="false" prefHeight="75.0" prefWidth="320.0" VBox.vgrow="NEVER">
+                  <HBox alignment="CENTER" fillHeight="false" prefHeight="75.0" prefWidth="320.0" VBox.vgrow="ALWAYS">
                       <HBox alignment="CENTER" prefHeight="35.0" prefWidth="117.0" HBox.hgrow="NEVER">
-                          <Button fx:id="backToMessagesButton" mnemonicParsing="false" onAction="#changeToMessages" prefHeight="35.0" prefWidth="100.0" text="Go back" />
+                          <Button fx:id="backToMessagesButton" mnemonicParsing="false" onAction="#changeToMessages" prefHeight="29.0" prefWidth="92.0" text="Go back" />
                       </HBox>
                       <HBox alignment="CENTER" prefHeight="35.0" prefWidth="116.0" HBox.hgrow="NEVER">
-                          <Button fx:id="deleteGroupButton" mnemonicParsing="false" onAction="#deleteGroup" prefHeight="35.0" prefWidth="100.0" text="Delete group" />
+                          <Button fx:id="deleteGroupButton" mnemonicParsing="false" onAction="#deleteGroup" prefHeight="29.0" prefWidth="92.0" text="Delete group" />
                       </HBox>
                   </HBox>
               </VBox>

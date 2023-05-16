@@ -10,6 +10,7 @@ import javafx.scene.shape.Circle;
 import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
+import static javafx.geometry.Pos.CENTER;
 
 public class UserCell extends ListCell<User> {
 
@@ -27,6 +28,8 @@ public class UserCell extends ListCell<User> {
             final HBox statusHBox = new HBox(circle);
             final HBox nameHBox = new HBox(usernameLabel);
             rootHBox = new HBox(HBOX_FRIENDS_SPACING, statusHBox, nameHBox);
+            nameHBox.setAlignment(CENTER);
+            statusHBox.setAlignment(CENTER);
             circle.setFill(Objects.equals(user.status(), USER_STATUS_ONLINE) ? Color.LIGHTGREEN : Color.RED);
             rootHBox.setId(user.name());
             rootHBox.setUserData(user);
