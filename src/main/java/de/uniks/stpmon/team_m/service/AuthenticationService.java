@@ -57,5 +57,5 @@ public class AuthenticationService {
         return authApiService.logout().map(lr -> lr);
     }
 
-    // TODO: Remember me (refresh)
+
 }

@@ -9,7 +9,6 @@ public class Constants {
     public static final String MESSAGE_NAMESPACE_GROUPS = "groups";
     public static final String MESSAGE_NAMESPACE_REGIONS = "regions";
     public static final String MESSAGE_NAMESPACE_GLOBAL = "global";
-    public static final String HTTP_403 = "HTTP 403";
     public static final String GENERIC_ERROR = """
             Group could not be deleted!
             Something went wrong!
@@ -41,6 +40,9 @@ public class Constants {
     public static final char BULLET = '\u25cf';
     public static final String REFRESH_TOKEN_PREF = "refreshToken";
     public static final String DELETE_SUCCESS = "Account successfully deleted";
+    public static final String CUSTOM_ERROR = "Something went terribly wrong!";
+    public static final String SIGNIN_ERROR = "Wrong Password or Username! Try again!";
+    public static final String USERNAME_TAKEN = "Username is already taken!";
 
     // MAIN MENU
     public static final String MAIN_MENU_TITLE = "Main Menu";
@@ -78,4 +80,12 @@ public class Constants {
     public static final String SAVE_GAME_AND_LEAVE_BUTTON_LABEL = "Save Game & Leave";
     public static final String PAUSE_MENU_TITLE = "Pause Menu";
     public static final String PAUSE_MENU_LABEL = "What do you want to do?";
+
+    // Error messages
+    public static final String HTTP_400 = "HTTP 400";
+    public static final String HTTP_401 = "HTTP 401";
+    public static final String HTTP_403 = "HTTP 403";
+    public static final String HTTP_404 = "HTTP 404";
+    public static final String HTTP_409 = "HTTP 409";
+    public static final String HTTP_429 = "HTTP 429";
 }
