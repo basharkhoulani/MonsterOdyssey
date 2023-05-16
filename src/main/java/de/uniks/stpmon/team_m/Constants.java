@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m;
 
-import javafx.geometry.Insets;
 import javafx.scene.input.KeyCode;
 
 public class Constants {
@@ -10,7 +9,6 @@ public class Constants {
     public static final String MESSAGE_NAMESPACE_GROUPS = "groups";
     public static final String MESSAGE_NAMESPACE_REGIONS = "regions";
     public static final String MESSAGE_NAMESPACE_GLOBAL = "global";
-    public static final String HTTP_403 = "HTTP 403";
     public static final String GENERIC_ERROR = """
                                         Something went wrong!
                                         Please try again later!""";
@@ -18,8 +16,10 @@ public class Constants {
 
     // GENERAL
     public static final String GAME_NAME = "Monster Odyssey";
-    public static final int STANDARD_HEIGHT = 480;
-    public static final int STANDARD_WIDTH = 640;
+    public static final int STANDARD_HEIGHT = 600;
+    public static final int STANDARD_WIDTH = 800;
+    public static final int MINIMUM_HEIGHT = 540;
+    public static final int MINIMUM_WIDTH = 700;
     public static final String APP_ICON = "images/icon.png";
     public static final String TASKBAR_ICON = "images/icon.png";
     public static final String LOADING = "Loading...";
@@ -29,6 +29,8 @@ public class Constants {
     public static final String LOADING_ANIMATION = "images/loading.gif";
     public static final String USER_STATUS_OFFLINE = "offline";
     public static final String USER_STATUS_ONLINE = "online";
+    public static final int STATUS_CIRCLE_RADIUS = 7;
+    public static final int HBOX_FRIENDS_SPACING = 15;
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
@@ -37,24 +39,21 @@ public class Constants {
     public static final char BULLET = '\u25cf';
     public static final String REFRESH_TOKEN_PREF = "refreshToken";
     public static final String DELETE_SUCCESS = "Account successfully deleted";
+    public static final String CUSTOM_ERROR = "Something went terribly wrong!";
+    public static final String SIGNIN_ERROR = "Wrong Password or Username! Try again!";
+    public static final String USERNAME_TAKEN = "Username is already taken!";
 
     // MAIN MENU
     public static final String MAIN_MENU_TITLE = "Main Menu";
-    public static final String STATUS_ONLINE = "online";
-    public static final String STATUS_OFFLINE = "offline";
 
     // NEW GROUP
     public static final String CHECK_MARK = "\u2713";
     public static final String ADD_MARK = "+";
-    public static final int SPACING_BETWEEN_BUTTON_NAME_GROUP = 10;
+    public static final int BUTTON_PREF_SIZE = 30;
+    public static final int MAX_SUGGESTIONS_NEW_GROUP = 20;
 
     // MESSAGES
-    public static final int MESSAGES_HEIGHT = 640;
-    public static final int MESSAGES_WIDTH = 840;
     public static final String MESSAGES_TITLE = "Messages";
-    public static final int MESSAGES_FRIEND_NODE_HEIGHT = 50;
-    public static final Insets MESSAGES_FRIEND_NODE_PADDING = new Insets(9, 0, 11, 0);
-    public static final int MESSAGES_FRIEND_NODE_STATUS_RADIUS = 15;
 
     // NEW FRIEND
     public static final String NEW_FRIEND_TITLE = "Add a new friend";
@@ -83,4 +82,12 @@ public class Constants {
     public static final String SAVE_GAME_AND_LEAVE_BUTTON_LABEL = "Save Game & Leave";
     public static final String PAUSE_MENU_TITLE = "Pause Menu";
     public static final String PAUSE_MENU_LABEL = "What do you want to do?";
+
+    // Error messages
+    public static final String HTTP_400 = "HTTP 400";
+    public static final String HTTP_401 = "HTTP 401";
+    public static final String HTTP_403 = "HTTP 403";
+    public static final String HTTP_404 = "HTTP 404";
+    public static final String HTTP_409 = "HTTP 409";
+    public static final String HTTP_429 = "HTTP 429";
 }

@@ -7,6 +7,7 @@ import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.UsersService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
 
-import static de.uniks.stpmon.team_m.Constants.STATUS_ONLINE;
+import static de.uniks.stpmon.team_m.Constants.USER_STATUS_ONLINE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -47,10 +48,10 @@ class LoginControllerTest extends ApplicationTest {
     }
 
     @Test
-    void signIn() {
+    void signInSuccessful() {
         //successfully Sign In
         when(authenticationService.login(anyString(), anyString(), eq(false))).thenReturn(Observable.just(new LoginResult(
-                "1",
+                "423f8d731c386bcd2204da39",
                 "1",
                 "online",
                 null,
@@ -71,12 +72,34 @@ class LoginControllerTest extends ApplicationTest {
     }
 
     @Test
-    void signUp() {
+    void signInWrongUsername() {
+        //Sign In with incorrect username or password
+        when(authenticationService.login(anyString(), anyString(), anyBoolean())).thenReturn(Observable.error(new Exception("HTTP 401")));
+        write("Bob\t");
+        write("12345678");
+        clickOn("#signInButton");
+        final Label errorLabel = lookup("#passwordErrorLabel").query();
+        assertEquals("Wrong Password or Username! Try again!", errorLabel.getText());
+    }
+
+    @Test
+    void signInOtherError(){
+        //Sign In with other errors
+        when(authenticationService.login(anyString(),anyString(),anyBoolean())).thenReturn(Observable.error(new Exception("Test")));
+        write("Bob\t");
+        write("12345678");
+        clickOn("#signInButton");
+        final Label errorLabel = lookup("#passwordErrorLabel").query();
+        assertEquals("Something went terribly wrong!", errorLabel.getText());
+    }
+
+    @Test
+    void signUpSuccessful() {
         //successfully Sign Up
         when(usersService.createUser(anyString(), isNull(), anyString())).thenReturn(Observable.just(new User(
+                "423f8d731c386bcd2204da39",
                 "1",
-                "1",
-                STATUS_ONLINE,
+                USER_STATUS_ONLINE,
                 null,
                 null
         )));
@@ -84,7 +107,7 @@ class LoginControllerTest extends ApplicationTest {
         when(authenticationService.login(anyString(), anyString(), eq(false))).thenReturn(Observable.just(new LoginResult(
                 "1",
                 "1",
-                STATUS_ONLINE,
+                USER_STATUS_ONLINE,
                 null,
                 null,
                 "a1a2",
@@ -102,6 +125,30 @@ class LoginControllerTest extends ApplicationTest {
         verify(authenticationService).login("1", "12345678", false);
         verify(app).show(mainMenuController);
     }
+
+    @Test
+    void signUpUsernameTaken() {
+        when(usersService.createUser(anyString(),isNull(),anyString())).thenReturn(Observable.error(new Exception("HTTP 409")));
+
+        write("1\t");
+        write("12345678");
+        clickOn("#signUpButton");
+
+        final Label errorLabel = lookup("#passwordErrorLabel").query();
+        assertEquals("Username is already taken!", errorLabel.getText());
+    }
+
+    @Test
+    void signUpOtherError(){
+        //Sign In with other errors
+        when(usersService.createUser(anyString(),isNull(),anyString())).thenReturn(Observable.error(new Exception("Test")));
+        write("Bob\t");
+        write("12345678");
+        clickOn("#signUpButton");
+        final Label errorLabel = lookup("#passwordErrorLabel").query();
+        assertEquals("Something went terribly wrong!", errorLabel.getText());
+    }
+
 
     @Test
     void showHidePassword() {

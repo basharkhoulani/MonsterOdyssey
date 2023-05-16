@@ -1,69 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" fillWidth="false" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MainMenuController">
-    <HBox prefHeight="612.0" prefWidth="800.0">
-        <VBox prefHeight="605.0" prefWidth="400.0">
-            <VBox alignment="CENTER" prefHeight="63.0" prefWidth="400.0">
-                <Label text="My Friends">
+<BorderPane minHeight="540.0" minWidth="700.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MainMenuController">
+   <left>
+        <VBox alignment="CENTER_LEFT" fillWidth="false" prefHeight="605.0" prefWidth="315.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" fillWidth="false" prefHeight="18.0" prefWidth="315.0">
+                <Label text="My Friends" VBox.vgrow="ALWAYS">
                     <font>
-                        <Font name="System Bold" size="17.0"/>
+                        <Font name="System Bold" size="17.0" />
                     </font>
                 </Label>
-                <Separator prefWidth="200.0"/>
             </VBox>
-            <ScrollPane prefHeight="385.0" prefWidth="400.0">
-                <VBox fx:id="friendsListVBox" minHeight="0.0" minWidth="0.0" prefHeight="383.0"
-                            prefWidth="400.0"/>
-            </ScrollPane>
-            <VBox prefHeight="200.0" prefWidth="100.0">
-                <VBox prefHeight="96.0" prefWidth="400.0">
-                    <HBox prefHeight="100.0" prefWidth="400.0">
-                        <VBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                            <Button fx:id="findNewFriendsButton" mnemonicParsing="false"
-                                    onAction="#changeToFindNewFriends" text="Find New Friends"/>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                            <Button fx:id="messagesButton" mnemonicParsing="false" onAction="#changeToMessages"
-                                    text="Messages"/>
-                        </VBox>
-                    </HBox>
-                </VBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="400.0">
-                    <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#changeToLogin" text="Logout"/>
+         <VBox fx:id="friendsListVBox" alignment="CENTER" fillWidth="false" prefHeight="332.0" prefWidth="315.0" />
+             <HBox alignment="CENTER" fillHeight="false" prefHeight="0.0" prefWidth="315.0" VBox.vgrow="NEVER">
+                 <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#changeToLogin" prefHeight="25.0" prefWidth="64.0" text="Logout" HBox.hgrow="ALWAYS" />
+             </HBox>
+              <HBox alignment="CENTER" fillHeight="false" prefHeight="33.0" prefWidth="400.0" VBox.vgrow="NEVER">
+                  <HBox alignment="CENTER" fillHeight="false" prefHeight="33.0" prefWidth="80.0" HBox.hgrow="ALWAYS">
+                      <Button fx:id="findNewFriendsButton" mnemonicParsing="false" onAction="#changeToFindNewFriends" prefHeight="25.0" prefWidth="117.0" text="Find New Friends" HBox.hgrow="ALWAYS" />
+                  </HBox>
+                  <HBox alignment="CENTER" fillHeight="false" HBox.hgrow="ALWAYS">
+                      <Button fx:id="messagesButton" mnemonicParsing="false" onAction="#changeToMessages" prefHeight="25.0" prefWidth="91.0" text="Messages" HBox.hgrow="ALWAYS" />
+                  </HBox>
+              </HBox>
+        </VBox>
+   </left>
+   <center>
+        <VBox alignment="CENTER" fillWidth="false" prefHeight="600.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER" fillHeight="false" prefHeight="53.0" prefWidth="400.0" VBox.vgrow="NEVER">
+                <HBox alignment="CENTER" fillHeight="false" prefHeight="53.0" prefWidth="449.0" HBox.hgrow="ALWAYS">
+                    <Label text="Choose a Region">
+                        <font>
+                            <Font name="System Bold" size="20.0" />
+                        </font>
+                    </Label>
+                </HBox>
+            </HBox>
+            <VBox alignment="CENTER" prefHeight="269.0" prefWidth="232.0" VBox.vgrow="NEVER">
+                <VBox fx:id="regionRadioButtonList" alignment="CENTER" fillWidth="false"/>
+            </VBox>
+            <VBox alignment="CENTER" fillWidth="false" prefHeight="123.0" prefWidth="319.0" VBox.vgrow="NEVER">
+                <HBox alignment="CENTER" fillHeight="false" prefHeight="82.0" prefWidth="400.0">
+                    <Button fx:id="startGameButton" mnemonicParsing="false" onAction="#changeToIngame" text="Start Game" />
                 </HBox>
             </VBox>
         </VBox>
-        <VBox prefHeight="600.0" prefWidth="400.0">
-            <VBox alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="400.0">
-                <Button fx:id="settingsButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0"
-                        mnemonicParsing="false" onAction="#changeToSettings" prefHeight="37.0" prefWidth="38.0"
-                        styleClass="settingsSymbol" stylesheets="@../styles.css" text="settings"
-                        textFill="TRANSPARENT"/>
-            </VBox>
-            <VBox prefHeight="366.0" prefWidth="400.0">
-                <VBox alignment="CENTER" prefHeight="48.0" prefWidth="400.0">
-                    <Label text="Choose a Region">
-                        <font>
-                            <Font name="System Bold" size="20.0"/>
-                        </font>
-                    </Label>
-                </VBox>
-                <VBox prefHeight="320.0" prefWidth="400.0">
-                    <HBox prefHeight="320.0" prefWidth="400.0">
-                        <VBox prefHeight="200.0" prefWidth="100.0"/>
-                        <VBox fx:id="regionRadioButtonList" alignment="CENTER" prefHeight="320.0" prefWidth="200.0"/>
-                        <VBox prefHeight="200.0" prefWidth="100.0"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                <Button fx:id="startGameButton" mnemonicParsing="false" onAction="#changeToIngame" text="Start Game"/>
-            </VBox>
-        </VBox>
-    </HBox>
-</VBox>
+   </center>
+   <top>
+          <Button fx:id="settingsButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#changeToSettings" prefHeight="33.0" prefWidth="39.0" styleClass="settingsSymbol" stylesheets="@../styles.css" text="settings" textFill="TRANSPARENT" BorderPane.alignment="TOP_RIGHT" />
+   </top>
+</BorderPane>

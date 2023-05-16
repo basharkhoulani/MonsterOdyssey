@@ -1,56 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.layout.StackPane?>
-<HBox fx:id="rootHBox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MessagesController" stylesheets="@../styles.css">
-   <VBox fx:id="leftSideVBox" maxHeight="530" prefHeight="530.0" prefWidth="357.0" style="-fx-border-color: black; -fx-border-width: 2px; -fx-border-style: solid none solid solid;">
-         <Pane fx:id="friendsAndGroupTextPane" prefHeight="43.0" prefWidth="338.0" minHeight="43.0" style="-fx-background-color: lightgray">
-            <Text fx:id="friendsAndGroupText" layoutX="-2.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Friends &amp; My Groups" textAlignment="CENTER" wrappingWidth="341.13671875">
-               <font>
-                  <Font size="25.0" />
-               </font>
-            </Text>
-         </Pane>
-         <ScrollPane fx:id="friendsAndGroupsScrollPane" prefHeight="388.0" prefWidth="267.0">
-            <VBox fx:id="friendsAndGroupsVBox" prefHeight="384.0" prefWidth="335.0" />
-         </ScrollPane>
-         <Pane fx:id="buttonPane" prefHeight="94.0" prefWidth="353.0" minHeight="94.0" style="-fx-background-color: lightgray">
-            <Button fx:id="findNewFriendsButton" layoutX="114.0" layoutY="8.0" mnemonicParsing="false" onAction="#changeToFindNewFriends" prefHeight="33.0" prefWidth="125.0" text="Find New Friends">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="newGroupButton" layoutX="224.0" layoutY="47.0" mnemonicParsing="false" onAction="#changeToNewGroup" prefHeight="33.0" prefWidth="101.0" text="New Group" />
-            <Button fx:id="mainMenuButton" layoutX="26.0" layoutY="47.0" mnemonicParsing="false" onAction="#changeToMainMenu" prefHeight="33.0" prefWidth="101.0" text="Main Menu" />
-         </Pane>
-   </VBox>
-   <VBox fx:id="rightSideVBox" maxHeight="530" prefHeight="530.0" prefWidth="398.0" style="-fx-border-color: black; -fx-border-width: 2px;">
-         <Pane fx:id="chatPaneHeaderText" prefHeight="43.0" prefWidth="338.0" minHeight="43.0" style="-fx-background-color: lightgray">
-            <Text fx:id="currentFriendOrGroupText" layoutX="46.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Friends/Group Chat" textAlignment="CENTER" wrappingWidth="258.13671875">
-               <font>
-                  <Font size="25.0" />
-               </font>
-            </Text>
-            <Button fx:id="settingsButton" layoutX="332.0" layoutY="5.0" mnemonicParsing="false" onAction="#changeToSettings" prefHeight="33.0" prefWidth="35.0" styleClass="settingsSymbol" stylesheets="@../styles.css" />
-         </Pane>
-         <ScrollPane fx:id="chatScrollPane" prefHeight="423.0" prefWidth="396.0">
-            <VBox fx:id="chatVBox" prefHeight="421.0" prefWidth="384.0" />
-         </ScrollPane>
-         <Pane fx:id="chatPaneInputArea" prefHeight="58.0" prefWidth="398.0" minHeight="58.0" style="-fx-background-color: lightgray">
-            <TextArea fx:id="messageTextArea" layoutX="1.0" layoutY="2.0" prefHeight="51.0" prefWidth="305.0" promptText="Write your message here..." wrapText="true">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </TextArea>
-            <Button fx:id="sendButton" layoutY="6.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="75.0" text="Send" />
-         </Pane>
-   </VBox>
-</HBox>
+<BorderPane minHeight="480.0" minWidth="640.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MessagesController">
+   <left>
+      <HBox alignment="CENTER" fillHeight="false" BorderPane.alignment="CENTER_LEFT">
+         <HBox alignment="CENTER" fillHeight="false">
+            <VBox alignment="CENTER_LEFT" fillWidth="false" prefHeight="601.0" prefWidth="281.0">
+               <VBox alignment="CENTER" fillWidth="false" prefHeight="0.0" prefWidth="281.0">
+                  <Label fx:id="friendsAndGroupText" prefHeight="35.0" prefWidth="270.0" text="My Friends &amp; My Groups">
+                     <font>
+                        <Font size="23.0" />
+                     </font>
+                  </Label>
+               </VBox>
+               <VBox fx:id="friendsListViewVBox" alignment="CENTER" fillWidth="false" prefHeight="268.0" prefWidth="309.0" VBox.vgrow="ALWAYS" />
+               <VBox alignment="CENTER" fillWidth="false" prefHeight="76.0" prefWidth="281.0">
+                  <HBox alignment="CENTER" fillHeight="false" prefHeight="44.0" prefWidth="126.0">
+                     <Button fx:id="findNewFriendsButton" mnemonicParsing="false" onAction="#changeToFindNewFriends" prefHeight="30.0" prefWidth="109.0" text="Find New Friends" />
+                  </HBox>
+                  <HBox alignment="CENTER" fillHeight="false">
+                     <HBox alignment="CENTER" fillHeight="false" prefHeight="51.0" prefWidth="119.0">
+                        <Button fx:id="mainMenuButton" mnemonicParsing="false" onAction="#changeToMainMenu" prefHeight="30.0" prefWidth="90.0" text="Main Menu" />
+                     </HBox>
+                     <HBox alignment="CENTER" fillHeight="false" prefHeight="55.0" prefWidth="120.0">
+                        <Button fx:id="newGroupButton" mnemonicParsing="false" onAction="#changeToNewGroup" prefHeight="30.0" prefWidth="90.0" text="New Group" />
+                     </HBox>
+                  </HBox>
+               </VBox>
+            </VBox>
+         </HBox>
+         <HBox alignment="CENTER" fillHeight="false">
+            <VBox alignment="CENTER" fillWidth="false">
+               <Separator orientation="VERTICAL" prefHeight="542.0" prefWidth="4.0" />
+            </VBox>
+         </HBox>
+      </HBox>
+   </left>
+   <center>
+      <VBox BorderPane.alignment="CENTER">
+         <HBox alignment="TOP_CENTER" VBox.vgrow="NEVER">
+            <VBox alignment="CENTER" fillWidth="false">
+               <Text fx:id="currentFriendOrGroupText" strokeType="OUTSIDE" strokeWidth="0.0" text="Friends/Group Chat" textAlignment="CENTER" wrappingWidth="243.13671875" VBox.vgrow="ALWAYS">
+                  <font>
+                     <Font size="25.0" />
+                  </font>
+               </Text>
+            </VBox>
+         </HBox>
+         <VBox fx:id="messagesListViewVBox" alignment="CENTER" prefHeight="424.0" prefWidth="538.0" VBox.vgrow="ALWAYS" />
+         <HBox alignment="CENTER" VBox.vgrow="NEVER">
+            <VBox alignment="BOTTOM_CENTER" fillWidth="false" HBox.hgrow="NEVER">
+               <HBox alignment="CENTER" fillHeight="false" prefHeight="65.0" prefWidth="516.0" VBox.vgrow="NEVER">
+                  <HBox alignment="CENTER" fillHeight="false" prefHeight="65.0" prefWidth="314.0" HBox.hgrow="NEVER">
+                     <TextArea fx:id="messageTextArea" prefHeight="42.0" prefWidth="282.0" promptText="Write your message here..." wrapText="true" HBox.hgrow="NEVER">
+                        <font>
+                           <Font size="14.0" />
+                        </font>
+                     </TextArea>
+                  </HBox>
+                  <HBox alignment="CENTER" fillHeight="false" prefHeight="64.0" prefWidth="84.0" HBox.hgrow="NEVER">
+                     <Button fx:id="sendButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="84.0" text="Send" HBox.hgrow="NEVER" />
+                  </HBox>
+               </HBox>
+            </VBox>
+         </HBox>
+      </VBox>
+   </center>
+   <top>
+      <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#changeToSettings" prefHeight="33.0" prefWidth="35.0" styleClass="settingsSymbol" stylesheets="@../styles.css" BorderPane.alignment="TOP_RIGHT" />
+   </top>
+</BorderPane>
