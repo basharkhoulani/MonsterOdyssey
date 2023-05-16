@@ -1,6 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.controller.views.GroupUserCell;
+import de.uniks.stpmon.team_m.controller.subController.GroupUserCell;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;

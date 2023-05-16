@@ -20,8 +20,8 @@ public class Constants {
     public static final int STANDARD_WIDTH = 800;
     public static final int MINIMUM_HEIGHT = 540;
     public static final int MINIMUM_WIDTH = 700;
-    public static final String APP_ICON = "images/icon.png";
-    public static final String TASKBAR_ICON = "images/icon.png";
+    public static final String APP_ICON = "images/Monster-durchsichtig.png";
+    public static final String TASKBAR_ICON = "images/Monster-durchsichtig.png";
     public static final String LOADING = "Loading...";
     public static final String SURE = "Are you sure?";
     public static final String EMPTY_STRING = "";
@@ -31,12 +31,13 @@ public class Constants {
     public static final String USER_STATUS_ONLINE = "online";
     public static final int STATUS_CIRCLE_RADIUS = 7;
     public static final int HBOX_FRIENDS_SPACING = 15;
+    public static final String THREE_DOTS = "···";
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
     public static final String PASSWORD_LESS_THAN_8_CHARACTERS = "Password must have at least 8 characters.";
     public static final int PASSWORD_CHARACTER_LIMIT = 8;
-    public static final char BULLET = '\u25cf';
+    public static final char BULLET = '●';
     public static final String REFRESH_TOKEN_PREF = "refreshToken";
     public static final String DELETE_SUCCESS = "Account successfully deleted";
     public static final String CUSTOM_ERROR = "Something went terribly wrong!";
@@ -47,10 +48,11 @@ public class Constants {
     public static final String MAIN_MENU_TITLE = "Main Menu";
 
     // NEW GROUP
-    public static final String CHECK_MARK = "\u2713";
+    public static final String CHECK_MARK = "✓";
     public static final String ADD_MARK = "+";
     public static final int BUTTON_PREF_SIZE = 30;
     public static final int MAX_SUGGESTIONS_NEW_GROUP = 20;
+
 
     // MESSAGES
     public static final String MESSAGES_TITLE = "Messages";

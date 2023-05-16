@@ -1,7 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.controller.views.RegionCell;
-import de.uniks.stpmon.team_m.controller.views.UserCell;
+import de.uniks.stpmon.team_m.controller.subController.MainMenuUserCell;
+import de.uniks.stpmon.team_m.controller.subController.RegionCell;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
@@ -63,11 +63,13 @@ public class MainMenuController extends Controller {
     public void init() {
         friendsListView = new ListView<>(friends);
         friendsListView.setId("friendsListView");
-        friendsListView.setCellFactory(param -> new UserCell());
+        friendsListView.setCellFactory(param -> new MainMenuUserCell());
         disposables.add(regionsApiService.getRegions()
                 .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));
-        disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
-                .observeOn(FX_SCHEDULER).subscribe(this.friends::setAll));
+        if (!userStorageProvider.get().getFriends().isEmpty()) {
+            disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
+                    .observeOn(FX_SCHEDULER).subscribe(this.friends::setAll));
+        }
     }
 
     @Inject
