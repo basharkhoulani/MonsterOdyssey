@@ -44,35 +44,35 @@ public class App extends Application {
 <span class="fc" id="L44">        stage = primaryStage;</span>
 <span class="fc" id="L45">        stage.setWidth(STANDARD_WIDTH);</span>
 <span class="fc" id="L46">        stage.setHeight(STANDARD_HEIGHT);</span>
-<span class="fc" id="L47">        stage.setTitle(GAME_NAME);</span>
+<span class="fc" id="L47">        stage.setMinHeight(MINIMUM_HEIGHT);</span>
+<span class="fc" id="L48">        stage.setMinWidth(MINIMUM_WIDTH);</span>
+<span class="fc" id="L49">        stage.setTitle(GAME_NAME);</span>
 
-<span class="fc" id="L49">        stage.setScene(loadingscreen());</span>
-<span class="fc" id="L50">        setAppIcon(stage);</span>
-<span class="fc" id="L51">        setTaskbarIcon();</span>
+<span class="fc" id="L51">        stage.setScene(loadingscreen());</span>
+<span class="fc" id="L52">        setAppIcon(stage);</span>
+<span class="fc" id="L53">        setTaskbarIcon();</span>
 
-<span class="fc" id="L53">        PauseTransition pause = new PauseTransition(Duration.seconds(3));</span>
-<span class="fc" id="L54">        pause.setOnFinished(event -&gt;{</span>
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">            if (component == null) {</span>
-<span class="fc" id="L56">                return;</span>
-            }
+<span class="fc" id="L55">        PauseTransition pause = new PauseTransition(Duration.seconds(3));</span>
+<span class="fc" id="L56">        pause.setOnFinished(event -&gt; {</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">                    if (component == null) {</span>
+<span class="fc" id="L58">                        return;</span>
+                    }
 
-<span class="nc" id="L59">            final AuthenticationService authenticationService = component.authenticationService();</span>
+<span class="nc" id="L61">                    final AuthenticationService authenticationService = component.authenticationService();</span>
 
-<span class="nc bnc" id="L61" title="All 2 branches missed.">            if (authenticationService.isRememberMe()) {</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">                    if (authenticationService.isRememberMe()) {</span>
 
-<span class="nc" id="L63">                disposables.add(authenticationService.refresh()</span>
-<span class="nc" id="L64">                        .observeOn(Schedulers.from(Platform::runLater))</span>
-<span class="nc" id="L65">                        .subscribe(lr -&gt; show(component.mainMenuController()),</span>
-<span class="nc" id="L66">                                err -&gt; show(component.loginController())));</span>
-            } else {
-<span class="nc" id="L68">                show(component.loginController());</span>
-            }
-<span class="nc" id="L70">                }</span>
+<span class="nc" id="L65">                        disposables.add(authenticationService.refresh()</span>
+<span class="nc" id="L66">                                .observeOn(Schedulers.from(Platform::runLater))</span>
+<span class="nc" id="L67">                                .subscribe(lr -&gt; show(component.mainMenuController()),</span>
+<span class="nc" id="L68">                                        err -&gt; show(component.loginController())));</span>
+                    } else {
+<span class="nc" id="L70">                        show(component.loginController());</span>
+                    }
+<span class="nc" id="L72">                }</span>
         );
-<span class="fc" id="L72">        pause.play();</span>
-<span class="fc" id="L73">        stage.show();</span>
-
-
+<span class="fc" id="L74">        pause.play();</span>
+<span class="fc" id="L75">        stage.show();</span>
 <span class="fc" id="L76">    }</span>
 
     private Scene loadingscreen() {

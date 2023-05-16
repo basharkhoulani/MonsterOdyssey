@@ -109,34 +109,45 @@ public class LoginController extends Controller {
 <span class="fc" id="L109">        disposables.add(authenticationService</span>
 <span class="fc" id="L110">                .login(username.get(), password.get(), rememberMe.get())</span>
 <span class="fc" id="L111">                .observeOn(FX_SCHEDULER)</span>
-<span class="pc" id="L112">                .subscribe(loginResult -&gt; app.show(mainMenuControllerProvider.get()), error -&gt; passwordErrorLabel.setText(error.getMessage())));</span>
-<span class="fc" id="L113">    }</span>
+<span class="fc" id="L112">                .subscribe(loginResult -&gt; app.show(mainMenuControllerProvider.get()),</span>
+<span class="fc" id="L113">                        error -&gt; errorHandle(error.getMessage())));</span>
+<span class="fc" id="L114">    }</span>
 
     public void signUp() {
-<span class="fc" id="L116">        passwordErrorLabel.setText(EMPTY_STRING);</span>
+<span class="fc" id="L117">        passwordErrorLabel.setText(EMPTY_STRING);</span>
 
-<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        if (isInvalidPassword.or(isInvalidUsername).get()) {</span>
-<span class="nc" id="L119">            return;</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">        if (isInvalidPassword.or(isInvalidUsername).get()) {</span>
+<span class="nc" id="L120">            return;</span>
         }
 
-<span class="fc" id="L122">        disposables.add(usersService</span>
-<span class="fc" id="L123">                .createUser(username.get(), null, password.get())</span>
-<span class="fc" id="L124">                .observeOn(FX_SCHEDULER)</span>
-<span class="pc" id="L125">                .subscribe(userResult -&gt; signIn(), error -&gt; passwordErrorLabel.setText(error.getMessage())));</span>
-<span class="fc" id="L126">    }</span>
+<span class="fc" id="L123">        disposables.add(usersService</span>
+<span class="fc" id="L124">                .createUser(username.get(), null, password.get())</span>
+<span class="fc" id="L125">                .observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L126">                .subscribe(userResult -&gt; signIn(),</span>
+<span class="fc" id="L127">                        error -&gt; errorHandle(error.getMessage())));</span>
+<span class="fc" id="L128">    }</span>
 
     public void showPassword() {
-<span class="fc" id="L129">        skin.setMask(skin.getNotMask());</span>
-<span class="fc" id="L130">        passwordField.setText(passwordField.getText());</span>
-<span class="fc" id="L131">    }</span>
+<span class="fc" id="L131">        skin.setMask(skin.getNotMask());</span>
+<span class="fc" id="L132">        passwordField.setText(passwordField.getText());</span>
+<span class="fc" id="L133">    }</span>
 
     public void showInformation() {
-<span class="fc" id="L134">        informationLabel.setText(this.information);</span>
-<span class="fc" id="L135">    }</span>
+<span class="fc" id="L136">        informationLabel.setText(this.information);</span>
+<span class="fc" id="L137">    }</span>
 
     public void setInformation(String information) {
-<span class="fc" id="L138">        this.information = information;</span>
-<span class="fc" id="L139">    }</span>
+<span class="fc" id="L140">        this.information = information;</span>
+<span class="fc" id="L141">    }</span>
 
+    public void errorHandle(String error) {
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        if(error.contains(HTTP_401)){</span>
+<span class="fc" id="L145">            passwordErrorLabel.setText(SIGNIN_ERROR);</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        } else if (error.contains(HTTP_409)) {</span>
+<span class="fc" id="L147">            passwordErrorLabel.setText(USERNAME_TAKEN);</span>
+        } else {
+<span class="fc" id="L149">            passwordErrorLabel.setText(CUSTOM_ERROR);</span>
+        }
+<span class="fc" id="L151">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
