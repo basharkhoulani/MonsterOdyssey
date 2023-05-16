@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Arrays;
 import java.util.List;
 
-import static de.uniks.stpmon.team_m.Constants.STATUS_ONLINE;
+import static de.uniks.stpmon.team_m.Constants.USER_STATUS_ONLINE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -98,6 +98,7 @@ class UsersServiceTest {
         //Successful change the Username of user
 
         //define mocks
+
         when(userStorage.get_id()).thenReturn("423f8d731c386bcd2204da39");
         when(usersApiService.updateUser(any(), any()))
                 .thenReturn(Observable.just(new User(
@@ -123,7 +124,7 @@ class UsersServiceTest {
                 .thenReturn(Observable.just(new User(
                         "1",
                         "UserPatch",
-                        STATUS_ONLINE,
+                        USER_STATUS_ONLINE,
                         null,
                         null)));
         final User user = usersService.updateUser(null, null, null, null, "12345678").blockingFirst();
