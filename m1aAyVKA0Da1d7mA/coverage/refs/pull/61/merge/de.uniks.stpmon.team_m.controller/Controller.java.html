@@ -48,11 +48,11 @@ import static de.uniks.stpmon.team_m.Constants.*;
     }
 
     public int getHeight() {
-<span class="fc" id="L51">        return STANDARD_HEIGHT;</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        return STANDARD_HEIGHT != app.getStage().getHeight() ? (int) app.getStage().getHeight() : STANDARD_HEIGHT;</span>
     }
 
     public int getWidth() {
-<span class="fc" id="L55">        return STANDARD_WIDTH;</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        return STANDARD_WIDTH != app.getStage().getWidth() ? (int) app.getStage().getWidth() : STANDARD_WIDTH;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
