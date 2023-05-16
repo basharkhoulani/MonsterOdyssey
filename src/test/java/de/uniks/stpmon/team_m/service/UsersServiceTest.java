@@ -104,7 +104,7 @@ class UsersServiceTest {
                 .thenReturn(Observable.just(new User(
                         "423f8d731c386bcd2204da39",
                         "UserPatch",
-                        STATUS_ONLINE,
+                        "online",
                         null,
                         null)));
         final User user = usersService.updateUser("UserPatch", null, null, null, null).blockingFirst();
