@@ -19,7 +19,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
 
-import static de.uniks.stpmon.team_m.Constants.STATUS_ONLINE;
+import static de.uniks.stpmon.team_m.Constants.USER_STATUS_ONLINE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -76,7 +76,7 @@ class LoginControllerTest extends ApplicationTest {
         when(usersService.createUser(anyString(), isNull(), anyString())).thenReturn(Observable.just(new User(
                 "1",
                 "1",
-                STATUS_ONLINE,
+                USER_STATUS_ONLINE,
                 null,
                 null
         )));
@@ -84,7 +84,7 @@ class LoginControllerTest extends ApplicationTest {
         when(authenticationService.login(anyString(), anyString(), eq(false))).thenReturn(Observable.just(new LoginResult(
                 "1",
                 "1",
-                STATUS_ONLINE,
+                USER_STATUS_ONLINE,
                 null,
                 null,
                 "a1a2",

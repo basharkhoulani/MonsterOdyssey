@@ -48,10 +48,10 @@ public abstract class Controller {
     }
 
     public int getHeight() {
-        return STANDARD_HEIGHT;
+        return STANDARD_HEIGHT != app.getStage().getHeight() ? (int) app.getStage().getHeight() : STANDARD_HEIGHT;
     }
 
     public int getWidth() {
-        return STANDARD_WIDTH;
+        return STANDARD_WIDTH != app.getStage().getWidth() ? (int) app.getStage().getWidth() : STANDARD_WIDTH;
     }
 }
