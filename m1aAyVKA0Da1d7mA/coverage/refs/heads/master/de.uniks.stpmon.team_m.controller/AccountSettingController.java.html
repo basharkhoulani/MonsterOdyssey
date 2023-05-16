@@ -111,11 +111,11 @@ public class AccountSettingController extends Controller {
 <span class="fc" id="L111">                .observeOn(FX_SCHEDULER)</span>
 <span class="fc" id="L112">                .subscribe(userResult -&gt; {</span>
 <span class="fc" id="L113">                    user.setName(userResult.name());</span>
-<span class="fc" id="L114">                    informationLabel.setText(&quot;Your username has been changed successfully.&quot;);</span>
+<span class="fc" id="L114">                    informationLabel.setText(USERNAME_SUCCESS_CHANGED);</span>
 <span class="fc" id="L115">                    usernameField.setDisable(true);</span>
 <span class="fc" id="L116">                    usernameField.setText(EMPTY_STRING);</span>
 <span class="fc" id="L117">                    usernameField.setPromptText(user.getName());</span>
-<span class="pc" id="L118">                }, error -&gt; usernameErrorLabel.setText(error.getMessage())));</span>
+<span class="fc" id="L118">                }, error -&gt; usernameErrorLabel.setText(errorHandle(error.getMessage()))));</span>
 
 <span class="fc" id="L120">    }</span>
 
@@ -142,13 +142,13 @@ public class AccountSettingController extends Controller {
 <span class="fc" id="L142">                    passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);</span>
 <span class="fc" id="L143">                    passwordField.setDisable(true);</span>
 <span class="fc" id="L144">                    showPasswordButton.setDisable(true);</span>
-<span class="fc" id="L145">                    informationLabel.setText(&quot;Your Password has been changed successfully.&quot;);</span>
-<span class="pc" id="L146">                }, error -&gt; passwordErrorLabel.setText(error.getMessage())));</span>
+<span class="fc" id="L145">                    informationLabel.setText(PASSWORD_SUCCESS_CHANGED);</span>
+<span class="fc" id="L146">                }, error -&gt; passwordErrorLabel.setText(errorHandle(error.getMessage()))));</span>
 <span class="fc" id="L147">    }</span>
 
     public void deleteAccount() {
 <span class="fc" id="L150">        LoginController loginController = loginControllerProvider.get();</span>
-<span class="fc" id="L151">        loginController.setInformation(&quot;Account successfully deleted&quot;);</span>
+<span class="fc" id="L151">        loginController.setInformation(DELETE_SUCCESS);</span>
 <span class="fc" id="L152">        app.show(loginController);</span>
 <span class="fc" id="L153">    }</span>
 
@@ -157,7 +157,7 @@ public class AccountSettingController extends Controller {
 <span class="fc" id="L157">    }</span>
 
     public void showDeletePopUp() {
-<span class="fc" id="L160">        Alert alert = new Alert(Alert.AlertType.WARNING, &quot;Are you sure?&quot;, ButtonType.OK, ButtonType.CANCEL);</span>
+<span class="fc" id="L160">        Alert alert = new Alert(Alert.AlertType.WARNING, SURE, ButtonType.OK, ButtonType.CANCEL);</span>
 <span class="fc" id="L161">        alert.setTitle(&quot;Delete Account&quot;);</span>
 <span class="fc" id="L162">        alert.setHeaderText(null);</span>
 <span class="fc" id="L163">        alert.initOwner(app.getStage());</span>
@@ -167,5 +167,13 @@ public class AccountSettingController extends Controller {
 <span class="fc" id="L167">            deleteAccount();</span>
         }
 <span class="fc" id="L169">    }</span>
+
+    public String errorHandle(String error){
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        if(error.contains(HTTP_409)){</span>
+<span class="fc" id="L173">            return USERNAME_TAKEN;</span>
+        } else {
+<span class="fc" id="L175">            return CUSTOM_ERROR;</span>
+        }
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
