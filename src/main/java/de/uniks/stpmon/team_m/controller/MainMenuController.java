@@ -1,7 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.controller.views.RegionCell;
-import de.uniks.stpmon.team_m.controller.views.UserCell;
+import de.uniks.stpmon.team_m.controller.subController.RegionCell;
+import de.uniks.stpmon.team_m.controller.subController.UserCell;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
