@@ -43,6 +43,8 @@ public class MessagesController extends Controller {
     public TextArea messageTextArea;
     @FXML
     public Button sendButton;
+    @FXML
+    public VBox chatViewVBox;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
 
