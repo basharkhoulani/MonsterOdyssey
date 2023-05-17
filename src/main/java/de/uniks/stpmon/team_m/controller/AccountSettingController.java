@@ -175,10 +175,7 @@ public class AccountSettingController extends Controller {
     private void errorAlert(Alert alert) {
         alert.setContentText(CUSTOM_ERROR);
         alert.setTitle(ERROR);
-        alert.setTitle(ERROR);
-        alert.getButtonTypes().remove(ButtonType.NO);
-        alert.getButtonTypes().remove(ButtonType.YES);
-        alert.getButtonTypes().add(ButtonType.OK);
+        alert.getButtonTypes().remove(ButtonType.CANCEL);
         alert.showAndWait();
     }
 
