@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.utils.BestFriendUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -15,7 +16,7 @@ public class FriendSettingsController extends Controller {
 
     private final User user;
     private final Preferences preferences;
-    private final ListView<User> friensListView;
+    private final ListView<User> friendsListView;
     @FXML
     public Button bestFriendButton;
     @FXML
@@ -23,17 +24,18 @@ public class FriendSettingsController extends Controller {
 
     public FriendSettingsController(Preferences preferences, ListView<User> friendsListView, User user) {
         this.preferences = preferences;
-        this.friensListView = friendsListView;
+        this.friendsListView = friendsListView;
         this.user = user;
     }
 
     public void bestFriendAction() {
+        final BestFriendUtils bestFriendUtils = new BestFriendUtils(preferences);
         if (user._id().equals(preferences.get(BEST_FRIEND_PREF, null))) {
             preferences.put(BEST_FRIEND_PREF, "");
-            friensListView.refresh();
+            bestFriendUtils.sortBestFriendTop(friendsListView);
         } else {
             preferences.put(BEST_FRIEND_PREF, user._id());
-            friensListView.refresh();
+            bestFriendUtils.sortBestFriendTop(friendsListView);
         }
     }
 

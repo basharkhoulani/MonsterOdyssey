@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.utils.BestFriendUtils;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
@@ -41,7 +42,8 @@ public class UserCell extends ListCell<User> {
             final HBox nameHBox = new HBox(usernameLabel);
             nameHBox.setAlignment(CENTER);
             rootHBox = new HBox(HBOX_FRIENDS_SPACING, statusHBox, nameHBox);
-            if (isBestFriend(user)) {
+            final BestFriendUtils bestFriendUtils = new BestFriendUtils(preferences);
+            if (bestFriendUtils.isBestFriend(user)) {
                 statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineStar : offlineStar);
             } else {
                 statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineImage : offlineImage);
@@ -56,9 +58,4 @@ public class UserCell extends ListCell<User> {
     public HBox getRootHBox() {
         return rootHBox;
     }
-
-    public boolean isBestFriend(User user) {
-        return preferences.get(BEST_FRIEND_PREF, null).equals(user._id());
-    }
-
 }
