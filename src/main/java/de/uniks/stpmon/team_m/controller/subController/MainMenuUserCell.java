@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.dto.User;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.controlsfx.control.PopOver;
@@ -14,8 +15,11 @@ import static javafx.geometry.Pos.CENTER_RIGHT;
 
 public class MainMenuUserCell extends UserCell {
 
-    public MainMenuUserCell(Preferences preferences) {
+    private final ListView<User> friendsListView;
+
+    public MainMenuUserCell(Preferences preferences, ListView<User> friendsListView) {
         super(preferences);
+        this.friendsListView = friendsListView;
     }
 
     @Override
@@ -39,7 +43,7 @@ public class MainMenuUserCell extends UserCell {
 
     private void showPopOver(Button button, User user) {
         PopOver popOver = new PopOver();
-        popOver.setContentNode(new FriendSettingsController(preferences, user).render());
+        popOver.setContentNode(new FriendSettingsController(preferences, friendsListView, user).render());
         popOver.setDetachable(false);
         popOver.show(button);
     }
