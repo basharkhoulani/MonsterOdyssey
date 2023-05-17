@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Constants.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m</a> &gt; <span class="el_source">Constants.java</span></div><h1>Constants.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m;
+
+import javafx.scene.input.KeyCode;
+
+<span class="nc" id="L5">public class Constants {</span>
+    // SERVER
+    public static final String API_URL = &quot;https://stpmon.uniks.de/api/v1&quot;;
+    public static final String WS_URL = &quot;wss://stpmon.uniks.de/ws/v1&quot;;
+    public static final String MESSAGE_NAMESPACE_GROUPS = &quot;groups&quot;;
+    public static final String MESSAGE_NAMESPACE_REGIONS = &quot;regions&quot;;
+    public static final String MESSAGE_NAMESPACE_GLOBAL = &quot;global&quot;;
+    public static final String GENERIC_ERROR = &quot;&quot;&quot;
+                                        Something went wrong!
+                                        Please try again later!&quot;&quot;&quot;;
+    public static final String ERROR = &quot;Error&quot;;
+
+    // GENERAL
+    public static final String GAME_NAME = &quot;Monster Odyssey&quot;;
+    public static final int STANDARD_HEIGHT = 600;
+    public static final int STANDARD_WIDTH = 800;
+    public static final int MINIMUM_HEIGHT = 540;
+    public static final int MINIMUM_WIDTH = 700;
+    public static final String APP_ICON = &quot;images/Monster-durchsichtig.png&quot;;
+    public static final String TASKBAR_ICON = &quot;images/Monster-durchsichtig.png&quot;;
+    public static final String LOADING = &quot;Loading...&quot;;
+    public static final String SURE = &quot;Are you sure?&quot;;
+    public static final String EMPTY_STRING = &quot;&quot;;
+    public static final String FX_STYLE_BORDER_COLOR_BLACK = &quot;-fx-border-color: black&quot;;
+    public static final String LOADING_ANIMATION = &quot;images/loading.gif&quot;;
+    public static final String USER_STATUS_OFFLINE = &quot;offline&quot;;
+    public static final String USER_STATUS_ONLINE = &quot;online&quot;;
+    public static final int STATUS_CIRCLE_RADIUS = 7;
+    public static final int HBOX_FRIENDS_SPACING = 15;
+    public static final String THREE_DOTS = &quot;···&quot;;
+
+    // LOGIN &amp; SIGNUP
+    public static final String LOGIN_TITLE = &quot;Sign Up &amp; In&quot;;
+    public static final String PASSWORD_LESS_THAN_8_CHARACTERS = &quot;Password must have at least 8 characters.&quot;;
+    public static final int PASSWORD_CHARACTER_LIMIT = 8;
+    public static final char BULLET = '●';
+    public static final String REFRESH_TOKEN_PREF = &quot;refreshToken&quot;;
+    public static final String DELETE_SUCCESS = &quot;Account successfully deleted&quot;;
+    public static final String CUSTOM_ERROR = &quot;Something went terribly wrong!&quot;;
+    public static final String SIGNIN_ERROR = &quot;Wrong Password or Username! Try again!&quot;;
+    public static final String USERNAME_TAKEN = &quot;Username is already taken!&quot;;
+
+    // MAIN MENU
+    public static final String MAIN_MENU_TITLE = &quot;Main Menu&quot;;
+
+    // NEW GROUP
+    public static final String CHECK_MARK = &quot;✓&quot;;
+    public static final String ADD_MARK = &quot;+&quot;;
+    public static final int BUTTON_PREF_SIZE = 30;
+    public static final int MAX_SUGGESTIONS_NEW_GROUP = 20;
+
+
+    // MESSAGES
+    public static final String MESSAGES_TITLE = &quot;Messages&quot;;
+
+    // NEW FRIEND
+    public static final String NEW_FRIEND_TITLE = &quot;Add a new friend&quot;;
+    public static final String FRIEND_ADDED = &quot;Friend added. You can add more friends or go back to the main menu.&quot;;
+    public static final String FRIEND_NOT_FOUND = &quot;Friend not found. Please try again.&quot;;
+    public static final String FRIEND_ALREADY_ADDED = &quot;You are already friends with this user.&quot;;
+    public static final String YOURSELF = &quot;You can't add yourself as a friend.&quot;;
+
+    // GROUPS
+    public static final String NEW_GROUP_TITLE = &quot;New Group&quot;;
+    public static final String EDIT_GROUP_TITLE = &quot;Edit Group&quot;;
+    public static final String CHANGE_GROUP = &quot;Change Group Name&quot;;
+    public static final String DELETE_WARNING = &quot;Are you sure you want to delete this group?&quot;;
+    public static final String DELETE_ERROR_403 = &quot;You are not the last member of this group. You can't delete it.&quot;;
+
+    // ACCOUNT SETTINGS
+    public static final String ACCOUNT_SETTINGS_TITLE = &quot;Account Setting&quot;;
+    public static final String USERNAME_SUCCESS_CHANGED = &quot;Your username has been changed successfully.&quot;;
+    public static final String PASSWORD_SUCCESS_CHANGED = &quot;Your Password has been changed successfully.&quot;;
+
+    // INGAME
+    public static final String INGAME_TITLE = &quot;Ingame&quot;;
+<span class="fc" id="L81">    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;</span>
+    public static final String HELP_LABEL = &quot;Click 'p' on your keyboard for pause menu.&quot;;
+    public static final String RESUME_BUTTON_LABEL = &quot;Resume Game&quot;;
+    public static final String SAVE_GAME_AND_LEAVE_BUTTON_LABEL = &quot;Save Game &amp; Leave&quot;;
+    public static final String PAUSE_MENU_TITLE = &quot;Pause Menu&quot;;
+    public static final String PAUSE_MENU_LABEL = &quot;What do you want to do?&quot;;
+
+    // Error messages
+    public static final String HTTP_400 = &quot;HTTP 400&quot;;
+    public static final String HTTP_401 = &quot;HTTP 401&quot;;
+    public static final String HTTP_403 = &quot;HTTP 403&quot;;
+    public static final String HTTP_404 = &quot;HTTP 404&quot;;
+    public static final String HTTP_409 = &quot;HTTP 409&quot;;
+    public static final String HTTP_429 = &quot;HTTP 429&quot;;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
