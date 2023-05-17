@@ -27,6 +27,10 @@ public class Constants {
     public static final String EMPTY_STRING = "";
     public static final String FX_STYLE_BORDER_COLOR_BLACK = "-fx-border-color: black";
     public static final String LOADING_ANIMATION = "images/loading.gif";
+    public static final String ONLINE_IMG = "images/online.png";
+    public static final String OFFLINE_IMG = "images/offline.png";
+    public static final String ONLINE_STAR = "images/online_star.png";
+    public static final String OFFLINE_STAR = "images/offline_star.png";
     public static final String USER_STATUS_OFFLINE = "offline";
     public static final String USER_STATUS_ONLINE = "online";
     public static final int STATUS_CIRCLE_RADIUS = 7;
