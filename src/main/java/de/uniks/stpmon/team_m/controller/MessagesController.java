@@ -1,11 +1,10 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.controller.subController.MessagesUserCell;
 import de.uniks.stpmon.team_m.controller.subController.UserCell;
+import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.service.GroupStorage;
-import de.uniks.stpmon.team_m.service.UserStorage;
-import de.uniks.stpmon.team_m.service.UsersService;
-import javafx.application.Platform;
+import de.uniks.stpmon.team_m.service.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -46,8 +45,6 @@ public class MessagesController extends Controller {
     @FXML
     public Button settingsButton;
     @FXML
-    public VBox messagesListViewVBox;
-    @FXML
     public TextArea messageTextArea;
     @FXML
     public Button sendButton;
@@ -68,6 +65,10 @@ public class MessagesController extends Controller {
     Provider<GroupStorage> groupStorageProvider;
     @Inject
     UsersService usersService;
+    @Inject
+    MessageService messageService;
+    @Inject
+    GroupService groupService;
     private final ObservableList<User> friends = FXCollections.observableArrayList();
     private ListView<User> listView;
 
@@ -79,7 +80,14 @@ public class MessagesController extends Controller {
     public void init() {
         listView = new ListView<>(friends);
         listView.setId("friendsAndGroups");
-        listView.setCellFactory(param -> new UserCell());
+        listView.setCellFactory(param -> new MessagesUserCell(
+                chatViewVBox,
+                currentFriendOrGroupText,
+                userStorageProvider,
+                usersService,
+                messageService,
+                groupService
+        ));
         disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
                 .observeOn(FX_SCHEDULER).subscribe(friends::setAll));
     }
@@ -109,95 +117,6 @@ public class MessagesController extends Controller {
         app.show(groupControllerProvider.get());
     }
 
-    public VBox createMessageNode(Message message) {
-        VBox newMessageNode = new VBox();
-        HBox newMessageValueArea = new HBox();
-        HBox newMessageInfoArea = new HBox();
-
-        newMessageValueArea.maxWidthProperty().bind(chatViewVBox.widthProperty().map(number -> number.intValue() / 2 - 20));
-        newMessageInfoArea.maxWidthProperty().bind(chatViewVBox.widthProperty().map(number -> number.intValue() / 2 - 20));
-
-        boolean userIsSender = message.sender().equals(userStorageProvider.get().get_id());
-        // if user is sender: message is on the right, else on the left
-        newMessageNode.setAlignment(userIsSender ? Pos.TOP_RIGHT : Pos.TOP_LEFT);
-
-        newMessageValueArea.setBorder(new Border(
-                new BorderStroke(
-                        Color.BLACK,
-                        BorderStrokeStyle.SOLID,
-                        new CornerRadii(10),
-                        new BorderWidths(2)
-                )
-        ));
-
-        Text messageText = new Text();
-        messageText.setText(message.body());
-        messageText.wrappingWidthProperty().bind(chatViewVBox.widthProperty().map(number -> number.intValue() / 2 - 20));
-
-        VBox newMessageValueContainer = new VBox();
-        newMessageValueContainer.getChildren().add(messageText);
-        newMessageValueArea.getChildren().add(newMessageValueContainer);
-
-        newMessageValueArea.setPadding(new Insets(2));
-        newMessageValueContainer.setPadding(new Insets(5));
-
-        Label authorAndTime = new Label();
-        if (userIsSender) {
-            authorAndTime.setText(userStorageProvider.get().getName() +
-                    " " +
-                    formatTimeString(message.createdAt()) +
-                    " " +
-                    (message.updatedAt() == null ? "" : "\u270F"));
-
-
-            newMessageValueContainer.setBackground(Background.fill(Paint.valueOf("lightblue")));
-        } else {
-            final String[] senderName = {""};
-            System.out.println(message);
-            usersService.getUser(message.sender()).map(
-                    user -> {
-                        senderName[0] = user.name();
-                        return user;
-                    }
-            ).subscribe().dispose();
-
-            authorAndTime.setText(senderName[0] +
-                    " " +
-                    formatTimeString(message.createdAt()) +
-                    " " +
-                    (message.updatedAt() == null ? "" : "\u270F"));
-        }
-
-        newMessageInfoArea.getChildren().add(authorAndTime);
-
-        Button editButton = new Button("\u270F");
-        editButton.setOnAction(event -> {
-            // @Cheng
-        });
-
-        Button deleteButton = new Button("\uD83D\uDDD1");
-        deleteButton.setOnAction(event -> {
-            // @Cheng
-        });
-        newMessageInfoArea.getChildren().addAll(editButton, deleteButton);
-
-        newMessageInfoArea.setFillHeight(true);
-        HBox.setMargin(editButton, new Insets(0, 0, 0, 5));
-        HBox.setMargin(deleteButton, new Insets(0, 0, 0, 5));
-        editButton.setVisible(false);
-        deleteButton.setVisible(false);
-
-        newMessageNode.getChildren().add(newMessageValueArea);
-        newMessageNode.getChildren().add(newMessageInfoArea);
-
-        newMessageNode.hoverProperty().addListener((observable, oldValue, newValue) -> {
-            editButton.setVisible(newValue);
-            deleteButton.setVisible(newValue);
-        });
-
-        return newMessageNode;
-    }
-
     public void sendMessage() {
         // TODO:
         // button fx:id: '#sendButton'
@@ -206,14 +125,5 @@ public class MessagesController extends Controller {
     public void changeToSettings() {
         groupStorageProvider.get().set_id(LOADING);
         app.show(groupControllerProvider.get());
-    }
-
-    private String formatTimeString(String dateTime) {
-        DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-        System.out.println(dateTime);
-        LocalDateTime localDateTime = LocalDateTime.parse(dateTime, inputFormatter);
-
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("HH:mm, dd.MM.yy");
-        return localDateTime.format(outputFormatter);
     }
 }
