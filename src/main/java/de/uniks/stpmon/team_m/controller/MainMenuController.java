@@ -114,19 +114,7 @@ public class MainMenuController extends Controller {
         app.show(messagesControllerProvider.get());
     }
 
-    public void changeToLogin(ActionEvent actionEvent) {
-        if(userStorageProvider.get().get_id() == null) {
-            return;
-        }
-
-        if(actionEvent == null){
-            usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)
-                    .observeOn(FX_SCHEDULER)
-                    .subscribe();
-            authenticationService.logout().observeOn(FX_SCHEDULER).subscribe();
-            return;
-        }
-
+    public void changeToLogin() {
         authenticationService.removeRemember();
         usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)
                     .observeOn(FX_SCHEDULER)
@@ -137,14 +125,13 @@ public class MainMenuController extends Controller {
                                     errorAlert.setContentText(CUSTOM_ERROR);
                                     errorAlert.showAndWait();
                                 }
-                                app.show(loginControllerProvider.get());
                             }, error ->{
                                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                                 errorAlert.setContentText(CUSTOM_ERROR);
                                 errorAlert.showAndWait();
                             }
                     );
-
+        authenticationService.logout().observeOn(FX_SCHEDULER).subscribe(logoutResult -> app.show(loginControllerProvider.get()));
     }
 
     public void changeToSettings() {
