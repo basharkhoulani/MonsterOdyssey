@@ -159,7 +159,7 @@ public class TestModule {
 
             @Override
             public Observable<User> deleteUser(String id) {
-                return Observable.just(new User("42", "Rick", "offline", null, null));
+                return Observable.just(new User("423f8d731c386bcd2204da39", "Rick", "offline", null, null));
             }
         };
     }
