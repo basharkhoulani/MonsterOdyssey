@@ -38,6 +38,9 @@ public class UsersService {
     }
 
     public Observable<User> deleteUser() {
-        return usersApiService.deleteUser(userStorage.get_id());
+        return usersApiService.deleteUser(userStorage.get_id()).map(user -> {
+            userStorage.removeUser();
+            return user;
+        });
     }
 }
