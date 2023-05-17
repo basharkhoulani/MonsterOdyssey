@@ -76,4 +76,12 @@ public class UserStorage {
         this.avatar = loginResult.avatar();
         this.friends = loginResult.friends();
     }
+
+    public void removeUser(){
+        this._id = null;
+        this.name = null;
+        this.status = null;
+        this.avatar = null;
+        this.friends = null;
+    }
 }

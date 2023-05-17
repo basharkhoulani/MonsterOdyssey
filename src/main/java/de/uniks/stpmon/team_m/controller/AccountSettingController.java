@@ -146,10 +146,14 @@ public class AccountSettingController extends Controller {
                 }, error -> passwordErrorLabel.setText(errorHandle(error.getMessage()))));
     }
 
-    public void deleteAccount() {
-        LoginController loginController = loginControllerProvider.get();
-        loginController.setInformation(DELETE_SUCCESS);
-        app.show(loginController);
+    public void deleteAccount(Alert alert) {
+        disposables.add(usersService.deleteUser()
+                .observeOn(FX_SCHEDULER)
+                .subscribe(delete -> {
+                    LoginController loginController = loginControllerProvider.get();
+                    loginController.setInformation(DELETE_SUCCESS);
+                    app.show(loginController);
+                }, error -> errorAlert(alert)));
     }
 
     public void cancel() {
@@ -164,8 +168,18 @@ public class AccountSettingController extends Controller {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            deleteAccount();
+            deleteAccount(alert);
         }
+    }
+
+    private void errorAlert(Alert alert) {
+        alert.setContentText(CUSTOM_ERROR);
+        alert.setTitle(ERROR);
+        alert.setTitle(ERROR);
+        alert.getButtonTypes().remove(ButtonType.NO);
+        alert.getButtonTypes().remove(ButtonType.YES);
+        alert.getButtonTypes().add(ButtonType.OK);
+        alert.showAndWait();
     }
 
     public String errorHandle(String error){
