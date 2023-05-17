@@ -62,7 +62,7 @@ public class LoginController extends Controller {
     @Inject
     TokenStorage tokenStorage;
     @Inject
-    UserStorage user;
+    UserStorage userStorage;
     @Inject
     UsersService usersService;
 
@@ -109,8 +109,10 @@ public class LoginController extends Controller {
         disposables.add(authenticationService
                 .login(username.get(), password.get(), rememberMe.get())
                 .observeOn(FX_SCHEDULER)
-                .subscribe(loginResult -> app.show(mainMenuControllerProvider.get())
-                    , error -> errorHandle(error.getMessage())));
+                .subscribe(loginResult -> {
+                    userStatusUpdate();
+                    app.show(mainMenuControllerProvider.get());
+                    }, error -> errorHandle(error.getMessage())));
     }
 
     public void signUp() {
@@ -148,5 +150,10 @@ public class LoginController extends Controller {
         } else {
             passwordErrorLabel.setText(CUSTOM_ERROR);
         }
+    }
+
+    public void userStatusUpdate() {
+        disposables.add(usersService.updateUser(null, USER_STATUS_ONLINE, null, null, null)
+                .observeOn(FX_SCHEDULER).subscribe(user -> userStorage.setStatus(user.status())));
     }
 }

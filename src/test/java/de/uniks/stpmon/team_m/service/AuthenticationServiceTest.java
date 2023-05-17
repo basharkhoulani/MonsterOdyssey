@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.service;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.dto.LoginDto;
 import de.uniks.stpmon.team_m.dto.LoginResult;
+import de.uniks.stpmon.team_m.dto.LogoutResult;
 import de.uniks.stpmon.team_m.rest.AuthApiService;
 import io.reactivex.rxjava3.core.Observable;
 import okhttp3.MediaType;
@@ -57,5 +58,14 @@ class AuthenticationServiceTest {
         verify(authApiService).login(new LoginDto("t", "12345678"));
 
         // Service is not able to handle with Error, the error handling is at the
+    }
+
+    @Test
+    void logout(){
+        when(authApiService.logout()).thenReturn(Observable.just(new LogoutResult()));
+
+        authenticationService.logout().blockingFirst();
+
+        verify(authApiService).logout();
     }
 }

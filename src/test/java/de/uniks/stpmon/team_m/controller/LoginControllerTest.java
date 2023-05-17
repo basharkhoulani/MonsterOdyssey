@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.dto.LoginResult;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
+import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
@@ -18,6 +19,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import javax.inject.Inject;
 import javax.inject.Provider;
 
 import static de.uniks.stpmon.team_m.Constants.USER_STATUS_ONLINE;
@@ -33,6 +35,8 @@ class LoginControllerTest extends ApplicationTest {
     AuthenticationService authenticationService;
     @Mock
     UsersService usersService;
+    @Spy
+    UserStorage userStorage;
 
     @Spy
     App app = new App(null);
@@ -58,6 +62,14 @@ class LoginControllerTest extends ApplicationTest {
                 null,
                 "a1a2",
                 "a3a4")));
+
+        when(usersService.updateUser(isNull(),anyString(),isNull(),isNull(),isNull())).thenReturn(Observable.just(new User(
+                "423f8d731c386bcd2204da39",
+                "1",
+                USER_STATUS_ONLINE,
+                null,
+                null
+        )));
 
         final MainMenuController mainMenuController = mock(MainMenuController.class);
         when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
@@ -112,6 +124,14 @@ class LoginControllerTest extends ApplicationTest {
                 null,
                 "a1a2",
                 "a3a4")));
+
+        when(usersService.updateUser(isNull(),anyString(),isNull(),isNull(),isNull())).thenReturn(Observable.just(new User(
+                "423f8d731c386bcd2204da39",
+                "1",
+                USER_STATUS_ONLINE,
+                null,
+                null
+        )));
 
         final MainMenuController mainMenuController = mock(MainMenuController.class);
         when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
