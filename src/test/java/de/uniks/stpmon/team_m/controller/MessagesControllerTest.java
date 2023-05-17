@@ -2,11 +2,13 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.dto.Group;
+import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.service.GroupStorage;
-import de.uniks.stpmon.team_m.service.UserStorage;
-import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.service.*;
+import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -43,6 +45,12 @@ public class MessagesControllerTest extends ApplicationTest {
 
     @Mock
     UsersService usersService;
+    @Mock
+    Provider<UsersService> usersServiceProvider;
+    @Mock
+    Provider<GroupService> groupServiceProvider;
+    @Mock
+    Provider<MessageService> messageServiceProvider;
 
     @Spy
     App app = new App(null);
@@ -56,13 +64,53 @@ public class MessagesControllerTest extends ApplicationTest {
         UserStorage mockUserStorage = mock(UserStorage.class);
         Mockito.when(userStorageProvider.get()).thenReturn(mockUserStorage);
 
-        when(usersService.getUsers(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"), null))
+        UsersService mockUsersService = mock(UsersService.class);
+        Mockito.when(usersServiceProvider.get()).thenReturn(mockUsersService);
+
+        GroupService mockGroupService = mock(GroupService.class);
+        Mockito.when(groupServiceProvider.get()).thenReturn(mockGroupService);
+
+        MessageService mockMessageService = mock(MessageService.class);
+        Mockito.when(messageServiceProvider.get()).thenReturn(mockMessageService);
+
+        final User Rick = new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null);
+
+        when(mockUsersService.getUsers(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"), null))
                 .thenReturn(Observable.just(List.of(
-                        new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
+                        Rick,
                         new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
                         new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
+        when(mockUsersService.getUser("645cd04c11b590456276e9d9")).thenReturn(new Observable<User>() {
+            @Override
+            protected void subscribeActual(@NonNull Observer<? super User> observer) {
+                observer.onNext(Rick);
+            }
+        });
         when(userStorageProvider.get().getFriends())
                 .thenReturn(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
+        when(userStorageProvider.get().get_id())
+                .thenReturn("64610e7b82ca062bfa5b7231");
+        when(userStorageProvider.get().getName())
+                .thenReturn("Morty");
+
+        when(groupServiceProvider.get().getGroups(Mockito.anyList())).thenReturn(new Observable<>() {
+            @Override
+            protected void subscribeActual(@NonNull Observer<? super List<Group>> observer) {
+                observer.onNext(List.of(new Group("64610ec8420b3d786212aea7", "", List.of("64610e7b82ca062bfa5b7231", "645cd04c11b590456276e9d9"))));
+            }
+        });
+
+        when(messageServiceProvider.get().getGroupMessages("64610ec8420b3d786212aea7")).thenReturn(new Observable<>() {
+            @Override
+            protected void subscribeActual(@NonNull Observer<? super List<Message>> observer) {
+                observer.onNext(List.of(
+                        new Message("2023-05-15T09:30:00-05:00", null, "6461e15399e24fc86fa58097", "645cd04c11b590456276e9d9", "Get in the damn car Morty!"),
+                        new Message("2023-05-15T09:35:00-05:00", null, "6461e15399e24fc86fa58096", "64610e7b82ca062bfa5b7231", "Oh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez Rick"),
+                        new Message("2023-05-15T09:35:00-05:00", null, "6461e15399e24fc86fa58096", "64610e7b82ca062bfa5b7231", "Oh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez Rick"),
+                        new Message("2023-05-15T09:35:00-05:00", null, "6461e15399e24fc86fa58096", "64610e7b82ca062bfa5b7231", "Oh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez Rick")
+                ));
+            }
+        });
 
         app.start(stage);
         app.show(messagesController);
