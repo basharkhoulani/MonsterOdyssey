@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.PrefModule;
 import de.uniks.stpmon.team_m.controller.subController.MainMenuUserCell;
 import de.uniks.stpmon.team_m.controller.subController.RegionCell;
 import de.uniks.stpmon.team_m.dto.Region;
@@ -18,6 +19,8 @@ import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.MAIN_MENU_TITLE;
 
@@ -54,6 +57,8 @@ public class MainMenuController extends Controller {
     UsersService usersService;
     @Inject
     Provider<UserStorage> userStorageProvider;
+    @Inject
+    Provider<Preferences> preferencesProvider;
     private final ObservableList<Region> regions = FXCollections.observableArrayList();
     private final ObservableList<User> friends = FXCollections.observableArrayList();
     private ListView<User> friendsListView;
@@ -63,7 +68,7 @@ public class MainMenuController extends Controller {
     public void init() {
         friendsListView = new ListView<>(friends);
         friendsListView.setId("friendsListView");
-        friendsListView.setCellFactory(param -> new MainMenuUserCell());
+        friendsListView.setCellFactory(param -> new MainMenuUserCell(preferencesProvider.get()));
         disposables.add(regionsApiService.getRegions()
                 .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));
         if (!userStorageProvider.get().getFriends().isEmpty()) {

@@ -6,11 +6,18 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.controlsfx.control.PopOver;
 
+import java.util.prefs.Preferences;
+
 import static de.uniks.stpmon.team_m.Constants.BUTTON_PREF_SIZE;
 import static de.uniks.stpmon.team_m.Constants.THREE_DOTS;
 import static javafx.geometry.Pos.CENTER_RIGHT;
 
 public class MainMenuUserCell extends UserCell {
+
+    public MainMenuUserCell(Preferences preferences) {
+        super(preferences);
+    }
+
     @Override
     protected void updateItem(User item, boolean empty) {
         super.updateItem(item, empty);

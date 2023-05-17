@@ -21,6 +21,7 @@ import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -53,6 +54,8 @@ public class GroupController extends Controller {
     Provider<GroupStorage> groupStorageProvider;
     @Inject
     Provider<UserStorage> userStorage;
+    @Inject
+    Preferences preferences;
     private ListView<User> listView;
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
     private final ObservableList<User> newGroupMembers = FXCollections.observableArrayList();
@@ -77,7 +80,7 @@ public class GroupController extends Controller {
             final List<User> friendsByUserObject = new ArrayList<>();
             disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
                 friendsByUserObject.addAll(users);
-                listView.setCellFactory(param -> new GroupUserCell(newGroupMembers, listView, friendsByUserObject));
+                listView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, listView, friendsByUserObject));
                 for (User user : users) {
                     if (friendsByID.contains(user._id())) {
                         listView.getItems().add(user);

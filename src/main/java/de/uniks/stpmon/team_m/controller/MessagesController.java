@@ -22,6 +22,7 @@ import javax.inject.Provider;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -68,6 +69,8 @@ public class MessagesController extends Controller {
     MessageService messageService;
     @Inject
     GroupService groupService;
+    @Inject
+    Preferences preferences;
     private final ObservableList<User> friends = FXCollections.observableArrayList();
     private ListView<User> listView;
 
@@ -80,6 +83,7 @@ public class MessagesController extends Controller {
         listView = new ListView<>(friends);
         listView.setId("friendsAndGroups");
         listView.setCellFactory(param -> new MessagesUserCell(
+                preferences,
                 chatViewVBox,
                 currentFriendOrGroupText,
                 chatScrollPane,

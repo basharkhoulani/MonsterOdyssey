@@ -8,6 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 import static javafx.geometry.Pos.CENTER_RIGHT;
@@ -18,7 +19,8 @@ public class GroupUserCell extends UserCell {
     private final ListView<User> listView;
     private final List<User> friends;
 
-    public GroupUserCell(ObservableList<User> chosenUsers, ListView<User> listView, List<User> friends) {
+    public GroupUserCell(Preferences preferences, ObservableList<User> chosenUsers, ListView<User> listView, List<User> friends) {
+        super(preferences);
         this.chosenUsers = chosenUsers;
         this.listView = listView;
         this.friends = friends;
