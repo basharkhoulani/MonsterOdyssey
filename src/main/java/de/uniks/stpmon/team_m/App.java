@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m;
 
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.MainMenuController;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -86,6 +87,8 @@ public class App extends Application {
 
     @Override
     public void stop() {
+        final MainMenuController mainMenuController = component.mainMenuController();
+        mainMenuController.changeToLogin(null);
         disposables.dispose();
         cleanup();
     }

@@ -57,5 +57,7 @@ public class AuthenticationService {
         return authApiService.logout().map(lr -> lr);
     }
 
-
+    public void removeRemember() {
+        preferences.remove(Constants.REFRESH_TOKEN_PREF);
+    }
 }
