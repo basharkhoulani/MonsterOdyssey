@@ -19,7 +19,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 
 import static de.uniks.stpmon.team_m.Constants.USER_STATUS_ONLINE;
@@ -35,6 +34,7 @@ class LoginControllerTest extends ApplicationTest {
     AuthenticationService authenticationService;
     @Mock
     UsersService usersService;
+    // please don't delete this line. It's important fo the test. It will be indirect used
     @Spy
     UserStorage userStorage;
 

@@ -2,10 +2,8 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
-import de.uniks.stpmon.team_m.dto.LogoutResult;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.rest.AuthApiService;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.UserStorage;
@@ -43,8 +41,6 @@ class MainMenuControllerTest extends ApplicationTest {
     RegionsApiService regionsApiService;
     @Mock
     UsersService usersService;
-    @Mock
-    UserStorage userStorage;
     @Mock
     AuthenticationService authenticationService;
     @Mock

@@ -3,7 +3,6 @@ package de.uniks.stpmon.team_m.service;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.dto.LoginDto;
 import de.uniks.stpmon.team_m.dto.LoginResult;
-import de.uniks.stpmon.team_m.dto.LogoutResult;
 import de.uniks.stpmon.team_m.dto.RefreshDto;
 import de.uniks.stpmon.team_m.rest.AuthApiService;
 import io.reactivex.rxjava3.core.Observable;

@@ -1,13 +1,10 @@
 package de.uniks.stpmon.team_m.service;
 
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.dto.LoginDto;
 import de.uniks.stpmon.team_m.dto.LoginResult;
 import de.uniks.stpmon.team_m.dto.LogoutResult;
 import de.uniks.stpmon.team_m.rest.AuthApiService;
 import io.reactivex.rxjava3.core.Observable;
-import okhttp3.MediaType;
-import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -15,8 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import retrofit2.HttpException;
-import retrofit2.Response;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
