@@ -80,7 +80,7 @@ public class GroupController extends Controller {
             final List<User> friendsByUserObject = new ArrayList<>();
             disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
                 friendsByUserObject.addAll(users);
-                listView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, listView, friendsByUserObject));
+                listView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsByUserObject));
                 for (User user : users) {
                     if (friendsByID.contains(user._id())) {
                         listView.getItems().add(user);

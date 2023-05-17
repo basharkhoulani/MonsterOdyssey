@@ -15,11 +15,8 @@ import static javafx.geometry.Pos.CENTER_RIGHT;
 
 public class MainMenuUserCell extends UserCell {
 
-    private final ListView<User> friendsListView;
-
-    public MainMenuUserCell(Preferences preferences, ListView<User> friendsListView) {
+    public MainMenuUserCell(Preferences preferences) {
         super(preferences);
-        this.friendsListView = friendsListView;
     }
 
     @Override
@@ -43,7 +40,7 @@ public class MainMenuUserCell extends UserCell {
 
     private void showPopOver(Button button, User user) {
         PopOver popOver = new PopOver();
-        popOver.setContentNode(new FriendSettingsController(preferences, friendsListView, user).render());
+        popOver.setContentNode(new FriendSettingsController(preferences, getListView(), user).render());
         popOver.setDetachable(false);
         popOver.show(button);
     }

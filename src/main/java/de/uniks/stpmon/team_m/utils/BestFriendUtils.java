@@ -29,7 +29,7 @@ public class BestFriendUtils {
         } else if (isBestFriend(o2)) {
             return 1;
         } else {
-            return o1.name().compareTo(o2.name());
+            return 0;
         }
     }
 }

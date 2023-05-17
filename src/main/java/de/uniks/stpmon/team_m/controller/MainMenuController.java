@@ -7,6 +7,7 @@ import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
 import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.utils.BestFriendUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -66,7 +67,7 @@ public class MainMenuController extends Controller {
     public void init() {
         friendsListView = new ListView<>(friends);
         friendsListView.setId("friendsListView");
-        friendsListView.setCellFactory(param -> new MainMenuUserCell(preferencesProvider.get(), friendsListView));
+        friendsListView.setCellFactory(param -> new MainMenuUserCell(preferencesProvider.get()));
         disposables.add(regionsApiService.getRegions()
                 .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));
         if (!userStorageProvider.get().getFriends().isEmpty()) {

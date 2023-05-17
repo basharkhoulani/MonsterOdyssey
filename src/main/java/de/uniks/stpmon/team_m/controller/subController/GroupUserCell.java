@@ -16,13 +16,11 @@ import static javafx.geometry.Pos.CENTER_RIGHT;
 public class GroupUserCell extends UserCell {
 
     private final ObservableList<User> chosenUsers;
-    private final ListView<User> listView;
     private final List<User> friends;
 
-    public GroupUserCell(Preferences preferences, ObservableList<User> chosenUsers, ListView<User> listView, List<User> friends) {
+    public GroupUserCell(Preferences preferences, ObservableList<User> chosenUsers, List<User> friends) {
         super(preferences);
         this.chosenUsers = chosenUsers;
-        this.listView = listView;
         this.friends = friends;
     }
 
@@ -52,7 +50,7 @@ public class GroupUserCell extends UserCell {
         if (chosenUsers.contains(item)) {
             chosenUsers.remove(item);
             addOrRemoveButton.setText(ADD_MARK);
-            listView.getItems().remove(item);
+            getListView().getItems().remove(item);
             List<String> friendsIds = friends.stream().map(User::_id).toList();
             if (friendsIds.contains(item._id())) {
                 addUserAndSort(item);
@@ -60,18 +58,18 @@ public class GroupUserCell extends UserCell {
         } else {
             chosenUsers.add(item);
             addOrRemoveButton.setText(CHECK_MARK);
-            if (!listView.getItems().contains(item)) {
-                listView.getItems().add(item);
+            if (!getListView().getItems().contains(item)) {
+                getListView().getItems().add(item);
             } else {
-                listView.getItems().remove(item);
+                getListView().getItems().remove(item);
                 addUserAndSort(item);
             }
         }
     }
 
     private void addUserAndSort(User item) {
-        listView.getItems().add(item);
-        listView.getItems().sort((o1, o2) -> {
+        getListView().getItems().add(item);
+        getListView().getItems().sort((o1, o2) -> {
             if (friends.contains(o1) && friends.contains(o2)) {
                 return o1.name().compareTo(o2.name());
             } else if (friends.contains(o1)) {
