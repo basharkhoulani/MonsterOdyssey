@@ -53,11 +53,7 @@ public class AuthenticationService {
         });
     }
 
-    public Observable<LogoutResult> logout() {
-        return authApiService.logout().map(lr -> lr);
-    }
-
-    public void removeRemember() {
-        preferences.remove(Constants.REFRESH_TOKEN_PREF);
+    public Observable<String> logout() {
+        return authApiService.logout().map(lr -> "LogoutSuccess");
     }
 }

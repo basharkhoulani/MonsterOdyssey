@@ -112,23 +112,12 @@ public class MainMenuController extends Controller {
     }
 
     public void changeToLogin() {
-        authenticationService.removeRemember();
-        usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)
+        disposables.add(usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)
                     .observeOn(FX_SCHEDULER)
-                    .subscribe(
-                            user ->{
-                                if(!user.status().contains(USER_STATUS_OFFLINE)){
-                                    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                                    errorAlert.setContentText(CUSTOM_ERROR);
-                                    errorAlert.showAndWait();
-                                }
-                            }, error ->{
-                                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                                errorAlert.setContentText(CUSTOM_ERROR);
-                                errorAlert.showAndWait();
-                            }
-                    );
-        authenticationService.logout().observeOn(FX_SCHEDULER).subscribe(logoutResult -> app.show(loginControllerProvider.get()));
+                    .subscribe());
+        disposables.add(authenticationService.logout().observeOn(FX_SCHEDULER)
+                .subscribe(logoutResult -> app.show(loginControllerProvider.get())));
+
     }
 
     public void changeToSettings() {
