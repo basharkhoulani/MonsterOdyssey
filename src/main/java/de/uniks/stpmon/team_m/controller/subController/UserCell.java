@@ -8,7 +8,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
-import javax.inject.Inject;
 import java.util.Objects;
 import java.util.prefs.Preferences;
 
@@ -23,6 +22,7 @@ public class UserCell extends ListCell<User> {
     }
 
     private HBox rootHBox;
+
     @Override
     protected void updateItem(User user, boolean empty) {
         super.updateItem(user, empty);
@@ -41,7 +41,7 @@ public class UserCell extends ListCell<User> {
             final HBox nameHBox = new HBox(usernameLabel);
             nameHBox.setAlignment(CENTER);
             rootHBox = new HBox(HBOX_FRIENDS_SPACING, statusHBox, nameHBox);
-            if(isBestFriend()) {
+            if (isBestFriend(user)) {
                 statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineStar : offlineStar);
             } else {
                 statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineImage : offlineImage);
@@ -57,8 +57,8 @@ public class UserCell extends ListCell<User> {
         return rootHBox;
     }
 
-    public boolean isBestFriend() {
-        return preferences.get(BEST_FRIEND_PREF, null) != null;
+    public boolean isBestFriend(User user) {
+        return preferences.get(BEST_FRIEND_PREF, null).equals(user._id());
     }
 
 }

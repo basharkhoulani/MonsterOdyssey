@@ -39,7 +39,7 @@ public class MainMenuUserCell extends UserCell {
 
     private void showPopOver(Button button, User user) {
         PopOver popOver = new PopOver();
-        popOver.setContentNode(new FriendSettingsController(user).render());
+        popOver.setContentNode(new FriendSettingsController(preferences, user).render());
         popOver.setDetachable(false);
         popOver.show(button);
     }
