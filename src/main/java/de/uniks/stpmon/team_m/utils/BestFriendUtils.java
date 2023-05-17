@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.utils;
 import de.uniks.stpmon.team_m.dto.User;
 import javafx.scene.control.ListView;
 
+import java.util.Objects;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.BEST_FRIEND_PREF;
@@ -16,7 +17,7 @@ public class BestFriendUtils {
     }
 
     public boolean isBestFriend(User user) {
-        return preferences.get(BEST_FRIEND_PREF, null).equals(user._id());
+        return Objects.equals(preferences.get(BEST_FRIEND_PREF, null), user._id());
     }
 
     public void sortBestFriendTop(ListView<User> friendsListView) {
@@ -29,7 +30,7 @@ public class BestFriendUtils {
         } else if (isBestFriend(o2)) {
             return 1;
         } else {
-            return 0;
+            return o1.name().compareTo(o2.name());
         }
     }
 }

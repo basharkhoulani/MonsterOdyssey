@@ -21,6 +21,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -44,6 +45,8 @@ class MainMenuControllerTest extends ApplicationTest {
     UsersService usersService;
     @Mock
     Provider<UserStorage> userStorageProvider;
+    @Mock
+    Provider<Preferences> preferencesProvider;
     @Spy
     App app = new App(null);
     @InjectMocks
@@ -54,6 +57,8 @@ class MainMenuControllerTest extends ApplicationTest {
         when(regionsApiService.getRegions()).thenReturn(Observable.just(List.of(new Region("TestRegion", "NamedRegion"))));
         UserStorage mockUserStorage = mock(UserStorage.class);
         Mockito.when(userStorageProvider.get()).thenReturn(mockUserStorage);
+        Preferences preferences = mock(Preferences.class);
+        Mockito.when(preferencesProvider.get()).thenReturn(preferences);
         when(usersService.getUsers(any(), any())).thenReturn(Observable.just(List.of(
                         new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
                         new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),

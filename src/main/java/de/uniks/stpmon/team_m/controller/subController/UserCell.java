@@ -44,10 +44,11 @@ public class UserCell extends ListCell<User> {
             nameHBox.setAlignment(CENTER);
             rootHBox = new HBox(HBOX_FRIENDS_SPACING, statusHBox, nameHBox);
             final BestFriendUtils bestFriendUtils = new BestFriendUtils(preferences);
-            if (bestFriendUtils.isBestFriend(user)) {
-                statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineStar : offlineStar);
-            } else {
-                statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineImage : offlineImage);
+            statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineImage : offlineImage);
+            if (preferences != null) {
+                if (bestFriendUtils.isBestFriend(user)) {
+                    statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineStar : offlineStar);
+                }
             }
             rootHBox.setId(user.name());
             rootHBox.setUserData(user);
