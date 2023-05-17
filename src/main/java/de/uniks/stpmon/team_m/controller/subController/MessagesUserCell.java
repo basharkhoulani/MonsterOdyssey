@@ -8,12 +8,14 @@ import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -30,10 +32,11 @@ import static de.uniks.stpmon.team_m.controller.Controller.FX_SCHEDULER;
 
 public class MessagesUserCell extends UserCell{
     private final VBox chatVBox;
-    protected final CompositeDisposable disposables = new CompositeDisposable();
+    protected final CompositeDisposable disposables;
     private final ObservableList<Group> groups = FXCollections.observableArrayList();
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     private final Text currentFriendOrGroupText;
+    private final ScrollPane chatScrollPane;
     private Group privateChat;
 
     private final Provider<UserStorage> userStorageProvider;
@@ -44,16 +47,20 @@ public class MessagesUserCell extends UserCell{
     // Inject won't work, so I had to do it the old-fashioned way. Figured it would take too long to look for the problem
     public MessagesUserCell(VBox chatVbox,
                             Text currentFriendOrGroupText,
+                            ScrollPane chatScrollPane,
                             Provider<UserStorage> userStorageProvider,
                             UsersService usersService,
                             MessageService messageService,
-                            GroupService groupService) {
+                            GroupService groupService,
+                            CompositeDisposable disposable) {
         this.chatVBox = chatVbox;
         this.currentFriendOrGroupText = currentFriendOrGroupText;
         this.userStorageProvider = userStorageProvider;
         this.usersService = usersService;
         this.messageService = messageService;
         this.groupService = groupService;
+        this.chatScrollPane = chatScrollPane;
+        this.disposables = disposable;
     }
     @Override
     protected void updateItem(User item, boolean empty) {
@@ -64,17 +71,20 @@ public class MessagesUserCell extends UserCell{
             setText(null);
             setGraphic(null);
         } else {
-            disposables.add(groupService.getGroups(List.of(item._id(), "1"))
+            disposables.add(groupService.getGroups(List.of(item._id(), userStorageProvider.get().get_id()))
                     .observeOn(FX_SCHEDULER).subscribe(groups::setAll));
 
             for (Group group : groups) {
-                if (Objects.equals(group.name(), "")) {
+                if (Objects.equals(group.name(), "") || group.name() == null) {
                     this.privateChat = group;
+                    break;
                 }
+                this.privateChat = null;
             }
 
             friendNode.setOnMouseClicked(event -> {
                 this.currentFriendOrGroupText.setText(item.name());
+                chatVBox.getChildren().clear();
 
                 if (this.privateChat != null) {
                     disposables.add(messageService.getGroupMessages(privateChat._id())
@@ -83,10 +93,10 @@ public class MessagesUserCell extends UserCell{
                     for (Message message : messages) {
                         chatVBox.getChildren().add(this.createMessageNode(message));
                     }
+
+                    chatScrollPane.setVvalue(1.0);
                 }
             });
-
-            disposables.dispose();
         }
     }
 
@@ -137,7 +147,6 @@ public class MessagesUserCell extends UserCell{
             newMessageValueContainer.setBackground(Background.fill(Paint.valueOf("lightblue")));
         } else {
             final String[] senderName = {""};
-            System.out.println(message);
             usersService.getUser(message.sender()).map(
                     user -> {
                         senderName[0] = user.name();
@@ -184,7 +193,6 @@ public class MessagesUserCell extends UserCell{
 
     private String formatTimeString(String dateTime) {
         DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-        System.out.println(dateTime);
         LocalDateTime localDateTime = LocalDateTime.parse(dateTime, inputFormatter);
 
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("HH:mm, dd.MM.yy");

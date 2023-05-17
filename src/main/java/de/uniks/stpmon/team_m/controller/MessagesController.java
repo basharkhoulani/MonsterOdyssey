@@ -11,10 +11,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -50,6 +47,8 @@ public class MessagesController extends Controller {
     public Button sendButton;
     @FXML
     public VBox chatViewVBox;
+    @FXML
+    public ScrollPane chatScrollPane;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
 
@@ -83,10 +82,12 @@ public class MessagesController extends Controller {
         listView.setCellFactory(param -> new MessagesUserCell(
                 chatViewVBox,
                 currentFriendOrGroupText,
+                chatScrollPane,
                 userStorageProvider,
                 usersService,
                 messageService,
-                groupService
+                groupService,
+                disposables
         ));
         disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
                 .observeOn(FX_SCHEDULER).subscribe(friends::setAll));
