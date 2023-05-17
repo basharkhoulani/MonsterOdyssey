@@ -57,7 +57,7 @@
                </Text>
             </VBox>
          </HBox>
-            <ScrollPane prefHeight="424.0" prefWidth="538.0" VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true">
+            <ScrollPane fx:id="chatScrollPane" prefHeight="424.0" prefWidth="538.0" VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true">
                <VBox fx:id="chatViewVBox" VBox.vgrow="ALWAYS">
 
                </VBox>
