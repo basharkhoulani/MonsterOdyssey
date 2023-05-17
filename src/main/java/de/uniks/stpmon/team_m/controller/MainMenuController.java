@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.subController.MainMenuUserCell;
 import de.uniks.stpmon.team_m.controller.subController.RegionCell;
 import de.uniks.stpmon.team_m.dto.Region;
@@ -11,7 +10,6 @@ import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
