@@ -134,6 +134,18 @@ public class LoginController extends Controller {
         passwordField.setText(passwordField.getText());
     }
 
+    public void updateUserStatus(){
+        disposables.add(usersService
+                .updateUser(user.get_id(), null, STATUS_ONLINE,null,null,null)
+                .observeOn(FX_SCHEDULER)
+                .subscribe(userResult -> {
+                    user.setStatus(STATUS_ONLINE);
+                },error ->{
+                    passwordErrorLabel.setText("");
+                }));
+    }
+
+
     public void showInformation() {
         informationLabel.setText(this.information);
     }
