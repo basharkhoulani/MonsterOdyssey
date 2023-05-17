@@ -74,7 +74,6 @@ public class MainMenuController extends Controller {
             disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
                     .observeOn(FX_SCHEDULER).subscribe(this.friends::setAll));
         }
-        userStatusUpdate();
     }
 
     @Inject
@@ -138,10 +137,5 @@ public class MainMenuController extends Controller {
 
     public void changeToIngame() {
         app.show(ingameControllerProvider.get());
-    }
-
-    public void userStatusUpdate() {
-        disposables.add(usersService.updateUser(null, USER_STATUS_ONLINE, null, null, null)
-                .observeOn(FX_SCHEDULER).subscribe(user -> userStorageProvider.get().setStatus(user.status())));
     }
 }
