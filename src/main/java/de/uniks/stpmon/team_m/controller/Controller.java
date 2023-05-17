@@ -4,7 +4,6 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -19,8 +18,8 @@ public abstract class Controller {
 
     @Inject
     protected App app;
-    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
     protected final CompositeDisposable disposables = new CompositeDisposable();
+    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
 
     public void init() {
     }
@@ -31,10 +30,6 @@ public abstract class Controller {
 
     public void destroy() {
         disposables.dispose();
-    }
-
-    public void onDestroy(Runnable action) {
-        disposables.add(Disposable.fromRunnable(action));
     }
 
     public Parent render() {
@@ -53,10 +48,10 @@ public abstract class Controller {
     }
 
     public int getHeight() {
-        return STANDARD_HEIGHT;
+        return STANDARD_HEIGHT != app.getStage().getHeight() ? (int) app.getStage().getHeight() : STANDARD_HEIGHT;
     }
 
     public int getWidth() {
-        return STANDARD_WIDTH;
+        return STANDARD_WIDTH != app.getStage().getWidth() ? (int) app.getStage().getWidth() : STANDARD_WIDTH;
     }
 }

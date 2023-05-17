@@ -4,20 +4,23 @@ import dagger.Module;
 import dagger.Provides;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.rest.*;
+import de.uniks.stpmon.team_m.service.UserStorage;
 import io.reactivex.rxjava3.core.Observable;
 
 import java.util.List;
 import java.util.prefs.Preferences;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 @Module
 public class TestModule {
     @Provides
-    static Preferences prefs(){ return mock(Preferences.class);}
+    static Preferences prefs() {
+        return mock(Preferences.class);
+    }
 
     @Provides
-    static AuthApiService authApiService(){
+    static AuthApiService authApiService() {
         return new AuthApiService() {
             @Override
             public Observable<LoginResult> login(LoginDto dto) {
@@ -43,7 +46,7 @@ public class TestModule {
     }
 
     @Provides
-    static GroupsApiService groupsApiService(){
+    static GroupsApiService groupsApiService() {
         return new GroupsApiService() {
             @Override
             public Observable<Group> create(CreateGroupDto dto) {
@@ -52,7 +55,9 @@ public class TestModule {
 
             @Override
             public Observable<List<Group>> getGroups(List<String> ids) {
-                return Observable.empty();
+                return Observable.just(
+                        List.of(new Group("64610ec8420b3d786212aea8", "", List.of("64610e7b82ca062bfa5b7231", "64610e7b82ca062bfa5b7232")))
+                );
             }
 
             @Override
@@ -73,7 +78,7 @@ public class TestModule {
     }
 
     @Provides
-    static MessagesApiService messagesApiService(){
+    static MessagesApiService messagesApiService() {
         return new MessagesApiService() {
             @Override
             public Observable<Message> create(String namespace, String parent, CreateMessageDto dto) {
@@ -103,7 +108,7 @@ public class TestModule {
     }
 
     @Provides
-    static RegionsApiService regionsApiService(){
+    static RegionsApiService regionsApiService() {
         return new RegionsApiService() {
             @Override
             public Observable<List<Region>> getRegions() {
@@ -118,7 +123,7 @@ public class TestModule {
     }
 
     @Provides
-    static UsersApiService usersApiService(){
+    static UsersApiService usersApiService() {
         return new UsersApiService() {
             @Override
             public Observable<User> createUser(CreateUserDto dto) {
@@ -159,5 +164,19 @@ public class TestModule {
         };
     }
 
+    @Provides
+    static UserStorage userStorage() {
+        return new UserStorage() {
+            @Override
+            public List<String> getFriends() {
+                return List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64");
+            }
+
+            @Override
+            public String get_id() {
+                return "645cd04c11b590456276e9d6";
+            }
+        };
+    }
 
 }

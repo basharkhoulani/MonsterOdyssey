@@ -33,11 +33,11 @@ public class UsersService {
         return usersApiService.getUsers(ids, status);
     }
 
-    public Observable<User> updateUser(String id, String name, String status, String avatar, List<String> friends, String password) {
-        return usersApiService.updateUser(id, new UpdateUserDto(name, status, avatar, friends, password));
+    public Observable<User> updateUser(String name, String status, String avatar, List<String> friends, String password) {
+        return usersApiService.updateUser(userStorage.get_id(), new UpdateUserDto(name, status, avatar, friends, password));
     }
 
-    public Observable<User> deleteUSer(String id) {
-        return usersApiService.deleteUser(id);
+    public Observable<User> deleteUser() {
+        return usersApiService.deleteUser(userStorage.get_id());
     }
 }

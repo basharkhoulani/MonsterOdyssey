@@ -17,17 +17,15 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
 
+import static de.uniks.stpmon.team_m.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static de.uniks.stpmon.team_m.Constants.*;
 
 @ExtendWith(MockitoExtension.class)
 class AccountSettingControllerTest extends ApplicationTest {
 
     @Mock
     Provider<MainMenuController> mainMenuControllerProvider;
-    @Mock
-    Provider<LoginController> loginControllerProvider;
     @Mock
     UsersService usersService;
     @InjectMocks
@@ -39,7 +37,7 @@ class AccountSettingControllerTest extends ApplicationTest {
     App app = new App(null);
 
     @Override
-    public void start(Stage stage){
+    public void start(Stage stage) {
         app.start(stage);
         app.show(accountSettingController);
         stage.requestFocus();
@@ -59,30 +57,59 @@ class AccountSettingControllerTest extends ApplicationTest {
     }
 
     @Test
-    void saveUsername() {
+    void saveUsernameSuccessful() {
         final Label infoLabel = lookup("#informationLabel").query();
         final TextField usernameField = lookup("#usernameField").query();
 
-        when(usersService.updateUser(anyString(),anyString(),isNull(), isNull(),isNull(),isNull()))
+        when(usersService.updateUser(anyString(), isNull(), isNull(), isNull(), isNull()))
                 .thenReturn(Observable.just(new User(
-                        "1",
+                        "423f8d731c386bcd2204da39",
                         "UserPatch",
-                        STATUS_ONLINE,
+                        USER_STATUS_ONLINE,
                         null,
                         null
                 )));
 
         when(userStorage.getName()).thenReturn("UserPatch");
-        when(userStorage.get_id()).thenReturn("1");
 
         clickOn("#usernameEditButton");
         clickOn(usernameField);
         write("UserPatch");
         clickOn("#saveUsernameButton");
 
-        verify(usersService).updateUser("1", "UserPatch", null, null, null,null);
-        assertEquals(USERNAME_SUCCESS_CHANGED,infoLabel.getText());
+        verify(usersService).updateUser("UserPatch", null, null, null, null);
+        assertEquals(USERNAME_SUCCESS_CHANGED, infoLabel.getText());
         assertEquals("UserPatch", usernameField.getPromptText());
+    }
+
+    @Test
+    void changeUsernameTake() {
+        final TextField usernameField = lookup("#usernameField").query();
+        final Label usernameErrorLabel = lookup("#usernameErrorLabel").query();
+
+        when(usersService.updateUser(anyString(),isNull(),isNull(),isNull(),isNull())).thenReturn(Observable.error(new Exception("HTTP 409")));
+
+        clickOn("#usernameEditButton");
+        clickOn(usernameField);
+        write("UserPatch");
+        clickOn("#saveUsernameButton");
+
+        assertEquals("Username is already taken!", usernameErrorLabel.getText());
+    }
+
+    @Test
+    void changeUsernameOtherError() {
+        final TextField usernameField = lookup("#usernameField").query();
+        final Label usernameErrorLabel = lookup("#usernameErrorLabel").query();
+
+        when(usersService.updateUser(anyString(),isNull(),isNull(),isNull(),isNull())).thenReturn(Observable.error(new Exception("Test")));
+
+        clickOn("#usernameEditButton");
+        clickOn(usernameField);
+        write("UserPatch");
+        clickOn("#saveUsernameButton");
+
+        assertEquals("Something went terribly wrong!", usernameErrorLabel.getText());
     }
 
     @Test
@@ -116,24 +143,37 @@ class AccountSettingControllerTest extends ApplicationTest {
         final Label infoLabel = lookup("#informationLabel").query();
         final PasswordField passwordField = lookup("#passwordField").query();
 
-        when(usersService.updateUser(anyString(),isNull(),isNull(), isNull(),isNull(),anyString()))
+        when(usersService.updateUser(isNull(), isNull(), isNull(), isNull(), anyString()))
                 .thenReturn(Observable.just(new User(
                         "1",
                         "UserPatch",
-                        STATUS_ONLINE,
+                        USER_STATUS_ONLINE,
                         null,
                         null
                 )));
-
-        when(userStorage.get_id()).thenReturn("1");
 
         clickOn("#passwordEditButton");
         clickOn(passwordField);
         write("UserPatch");
         clickOn("#savePasswordButton");
 
-        verify(usersService).updateUser("1", null, null, null, null,"UserPatch");
-        assertEquals(PASSWORD_SUCCESS_CHANGED,infoLabel.getText());
+        verify(usersService).updateUser(null, null, null, null, "UserPatch");
+        assertEquals(PASSWORD_SUCCESS_CHANGED, infoLabel.getText());
+    }
+
+    @Test
+    void changePasswordOtherError() {
+        final TextField passwordField = lookup("#passwordField").query();
+        final Label passwordErrorLabel = lookup("#passwordErrorLabel").query();
+
+        when(usersService.updateUser(isNull(),isNull(),isNull(),isNull(),anyString())).thenReturn(Observable.error(new Exception("Test")));
+
+        clickOn("#passwordEditButton");
+        clickOn(passwordField);
+        write("UserPatch");
+        clickOn("#savePasswordButton");
+
+        assertEquals("Something went terribly wrong!", passwordErrorLabel.getText());
     }
 
     @Test

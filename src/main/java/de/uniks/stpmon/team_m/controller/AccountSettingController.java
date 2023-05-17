@@ -11,7 +11,6 @@ import javafx.scene.control.*;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -99,24 +98,24 @@ public class AccountSettingController extends Controller {
         return parent;
     }
 
-    public void editUsername() { usernameField.setDisable(!usernameField.isDisabled()); }
+    public void editUsername() {
+        usernameField.setDisable(!usernameField.isDisabled());
+    }
 
     public void saveUsername() {
         informationLabel.setText(EMPTY_STRING);
         usernameErrorLabel.setText(EMPTY_STRING);
 
         disposables.add(usersService
-                .updateUser(user.get_id(), username.get(),null, null, null, null)
+                .updateUser(username.get(), null, null, null, null)
                 .observeOn(FX_SCHEDULER)
                 .subscribe(userResult -> {
                     user.setName(userResult.name());
-                    informationLabel.setText("Your username has been changed successfully.");
+                    informationLabel.setText(USERNAME_SUCCESS_CHANGED);
                     usernameField.setDisable(true);
                     usernameField.setText(EMPTY_STRING);
                     usernameField.setPromptText(user.getName());
-                    }, error -> {
-                    usernameErrorLabel.setText(error.getMessage());
-                    }));
+                }, error -> usernameErrorLabel.setText(errorHandle(error.getMessage()))));
 
     }
 
@@ -126,7 +125,7 @@ public class AccountSettingController extends Controller {
     }
 
 
-    public void editPassword(){
+    public void editPassword() {
         passwordField.setDisable(!passwordField.isDisabled());
         showPasswordButton.setDisable(!showPasswordButton.isDisabled());
     }
@@ -136,36 +135,44 @@ public class AccountSettingController extends Controller {
         passwordErrorLabel.setText(EMPTY_STRING);
 
         disposables.add(usersService
-                .updateUser(user.get_id(), null,null,null,null, password.get())
+                .updateUser(null, null, null, null, password.get())
                 .observeOn(FX_SCHEDULER)
                 .subscribe(userResult -> {
                     passwordField.setText(EMPTY_STRING);
                     passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);
                     passwordField.setDisable(true);
                     showPasswordButton.setDisable(true);
-                    informationLabel.setText("Your Password has been changed successfully.");
-                }, error -> {
-                    passwordErrorLabel.setText(error.getMessage());
-                }));
+                    informationLabel.setText(PASSWORD_SUCCESS_CHANGED);
+                }, error -> passwordErrorLabel.setText(errorHandle(error.getMessage()))));
     }
 
-    public void deleteAccount(){
+    public void deleteAccount() {
         LoginController loginController = loginControllerProvider.get();
-        loginController.setInformation("Account successfully deleted");
+        loginController.setInformation(DELETE_SUCCESS);
         app.show(loginController);
     }
 
-    public void cancel(){ app.show(mainMenuControllerProvider.get()); }
+    public void cancel() {
+        app.show(mainMenuControllerProvider.get());
+    }
 
     public void showDeletePopUp() {
-        Alert alert = new Alert(Alert.AlertType.WARNING, "Are you sure?", ButtonType.OK, ButtonType.CANCEL);
+        Alert alert = new Alert(Alert.AlertType.WARNING, SURE, ButtonType.OK, ButtonType.CANCEL);
         alert.setTitle("Delete Account");
         alert.setHeaderText(null);
         alert.initOwner(app.getStage());
         Optional<ButtonType> result = alert.showAndWait();
 
-        if (result.isPresent() && result.get() == ButtonType.OK){
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             deleteAccount();
+        }
+    }
+
+    public String errorHandle(String error){
+        if(error.contains(HTTP_409)){
+            return USERNAME_TAKEN;
+        } else {
+            return CUSTOM_ERROR;
         }
     }
 }

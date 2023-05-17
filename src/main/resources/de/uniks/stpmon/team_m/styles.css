@@ -9,6 +9,8 @@
 
 .settingsSymbol {
     -fx-background-image: url("images/settingsSymbol.png");
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
     -fx-background-size: 60px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 50%;
@@ -45,3 +47,15 @@
     -fx-text-fill: #25c625;
 }
 
+/* Friend list */
+.normalFriendHBox {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-style: solid none none none;
+}
+.onHoverFriendHBox {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-style: solid none none none;
+    -fx-background-color: lightblue;
+}

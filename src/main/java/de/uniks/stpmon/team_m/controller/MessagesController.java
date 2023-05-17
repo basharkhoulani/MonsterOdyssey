@@ -1,31 +1,38 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.service.GroupStorage;
+import de.uniks.stpmon.team_m.controller.subController.MessagesUserCell;
+import de.uniks.stpmon.team_m.controller.subController.UserCell;
+import de.uniks.stpmon.team_m.dto.Message;
+import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.service.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
 public class MessagesController extends Controller {
 
     @FXML
-    public VBox leftSideVBox;
+    public Text currentFriendOrGroupText; //needs to be set each time a different chat is selected
     @FXML
-    public VBox rightSideVBox;
+    public Label friendsAndGroupText;
     @FXML
-    public Text friendsAndGroupText;
-    @FXML
-    public ScrollPane friendsAndGroupsScrollPane;
-    @FXML
-    public VBox friendsAndGroupsVBox;
+    public VBox friendsListViewVBox;
     @FXML
     public Button findNewFriendsButton;
     @FXML
@@ -33,18 +40,15 @@ public class MessagesController extends Controller {
     @FXML
     public Button mainMenuButton;
     @FXML
-    public Text currentFriendOrGroupText; //needs to be set each time a different chat is selected
-    @FXML
-    public ScrollPane chatScrollPane;
-    @FXML
-    public VBox chatVBox;
+    public Button settingsButton;
     @FXML
     public TextArea messageTextArea;
     @FXML
     public Button sendButton;
     @FXML
-    public Button settingsButton;
-
+    public VBox chatViewVBox;
+    @FXML
+    public ScrollPane chatScrollPane;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
 
@@ -53,12 +57,40 @@ public class MessagesController extends Controller {
 
     @Inject
     Provider<GroupController> groupControllerProvider;
-    private final GroupStorage groupStorage;
 
     @Inject
-    public MessagesController(GroupStorage groupStorage) {
+    Provider<UserStorage> userStorageProvider;
+    @Inject
+    Provider<GroupStorage> groupStorageProvider;
+    @Inject
+    UsersService usersService;
+    @Inject
+    MessageService messageService;
+    @Inject
+    GroupService groupService;
+    private final ObservableList<User> friends = FXCollections.observableArrayList();
+    private ListView<User> listView;
 
-        this.groupStorage = groupStorage;
+    @Inject
+    public MessagesController() {
+    }
+
+    @Override
+    public void init() {
+        listView = new ListView<>(friends);
+        listView.setId("friendsAndGroups");
+        listView.setCellFactory(param -> new MessagesUserCell(
+                chatViewVBox,
+                currentFriendOrGroupText,
+                chatScrollPane,
+                userStorageProvider,
+                usersService,
+                messageService,
+                groupService,
+                disposables
+        ));
+        disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
+                .observeOn(FX_SCHEDULER).subscribe(friends::setAll));
     }
 
     @Override
@@ -68,17 +100,9 @@ public class MessagesController extends Controller {
 
     @Override
     public Parent render() {
-        return super.render();
-    }
-
-    @Override
-    public int getHeight() {
-        return MESSAGES_HEIGHT;
-    }
-
-    @Override
-    public int getWidth() {
-        return MESSAGES_WIDTH;
+        Parent parent = super.render();
+        friendsListViewVBox.getChildren().add(listView);
+        return parent;
     }
 
     public void changeToMainMenu() {
@@ -90,24 +114,8 @@ public class MessagesController extends Controller {
     }
 
     public void changeToNewGroup() {
-        groupStorage.set_id(EMPTY_STRING);
+        groupStorageProvider.get().set_id(EMPTY_STRING);
         app.show(groupControllerProvider.get());
-    }
-
-    public void createFriendNode() {
-        // TODO:
-        /*
-         * I imagined this to be a new Pane that gets inserted in the #chatVBox.
-         * The Pane should be a new fxml fragment that gets loaded into one of
-         * the VBoxs' children.
-         * */
-    }
-
-    public void creteMessageNode() {
-        // TODO:
-        /*
-         * This will probably work similiar to the 'createFriendNode()' method.
-         * */
     }
 
     public void sendMessage() {
@@ -116,7 +124,7 @@ public class MessagesController extends Controller {
     }
 
     public void changeToSettings() {
-        groupStorage.set_id(LOADING);
+        groupStorageProvider.get().set_id(LOADING);
         app.show(groupControllerProvider.get());
     }
 }

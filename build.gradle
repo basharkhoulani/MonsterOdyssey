@@ -60,6 +60,10 @@ dependencies {
     implementation group: 'org.glassfish', name: 'javax.json', version: '1.1.4'
     implementation group: 'org.glassfish.tyrus', name: 'tyrus-client', version: '2.1.3'
     implementation group: 'org.glassfish.tyrus', name: 'tyrus-container-grizzly-client', version: '2.1.3'
+
+    // -------------------- ControlFX --------------------
+    // https://mvnrepository.com/artifact/org.controlsfx/controlsfx
+    implementation group: 'org.controlsfx', name: 'controlsfx', version: '11.1.0'
 }
 
 javafx {
@@ -83,7 +87,7 @@ test {
         showStackTraces = true
     }
 
-    if (getProperty('headless') || System.getenv('CI')) {
+    if (getProperty('headless') == "true" || System.getenv('CI')) {
 		systemProperties = [
 				'java.awt.headless': 'true',
 				'testfx.robot': 'glass',
@@ -94,4 +98,17 @@ test {
 				'prism.text': 't2k',
 		]
 	}
+}
+
+tasks.withType(Jar).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.register('fatJar', Jar) {
+    manifest {
+        attributes 'Main-Class': "de.uniks.stpmon.team_m.Main"
+    }
+    archiveBaseName = "${rootProject.name}"
+    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }

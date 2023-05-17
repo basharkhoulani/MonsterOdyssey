@@ -14,8 +14,8 @@ import java.util.List;
 public class MessageService {
 
     /*
-    * TODO: Tests still have to be implemented, but we need mocking to realize this
-    * */
+     * TODO: Tests still have to be implemented, but we need mocking to realize this
+     * */
     private final MessagesApiService messagesApiService;
 
     @Inject
@@ -24,13 +24,14 @@ public class MessageService {
     }
 
     // Base api communication
+
     /**
      * Gets a singular message. Important to note is that the first parameter needs to be the ID of
      * the user the message is directed to, not the sender!
      *
      * @param receiverID the ID of the user who received the message
-     * @param messageID the ID of the message
-     * @param namespace the namespace used for api communication. Allowed values are CONSTANTS_NAMESPACE constants
+     * @param messageID  the ID of the message
+     * @param namespace  the namespace used for api communication. Allowed values are CONSTANTS_NAMESPACE constants
      * @return an observable record of message
      */
     public Observable<Message> getMessageOfUserByID(String receiverID, String messageID, String namespace) {
@@ -42,7 +43,7 @@ public class MessageService {
      * to note is, that the first parameter needs to be the ID of the user who received the messages, not the sender!
      *
      * @param receiverID the ID of the user who received the messages
-     * @param namespace the namespace used for api communication
+     * @param namespace  the namespace used for api communication
      * @return an observable list of message records
      */
     private Observable<List<Message>> getMessagesByNamespace(String receiverID, String namespace) {
@@ -53,8 +54,8 @@ public class MessageService {
      * Creates a message that is directed to one user/group/region.
      *
      * @param receiverID the ID of the receiver
-     * @param message the body of the message
-     * @param namespace the namespace used for api communication
+     * @param message    the body of the message
+     * @param namespace  the namespace used for api communication
      * @return the created message as an observable
      */
     public Observable<Message> newMessage(String receiverID, String message, String namespace) {
@@ -65,10 +66,10 @@ public class MessageService {
     /**
      * Updates a message.
      *
-     * @param receiverID the ID of the receiver
-     * @param messageID the message ID
+     * @param receiverID     the ID of the receiver
+     * @param messageID      the message ID
      * @param updatedMessage the body of the updated message
-     * @param namespace the namespace used for api communication
+     * @param namespace      the namespace used for api communication
      * @return the updated message as an observable
      */
     public Observable<Message> updateMessage(String receiverID, String messageID, String updatedMessage, String namespace) {
@@ -78,6 +79,7 @@ public class MessageService {
 
 
     // General message methods
+
     /**
      * Gets all the messages from a group and returns them sorted after createdAt. This also includes private chat
      * messages, since private messages are realized via a group of two persons.
@@ -97,6 +99,7 @@ public class MessageService {
     // method, but maybe it will be better for readability and usability if we keep them separate.
     // We also could create a helper method and just make one line calls in the getGroupMessages and getRegionMessages
     // methods.
+
     /**
      * Gets all the messages from a region and returns them sorted after createdAt
      *
