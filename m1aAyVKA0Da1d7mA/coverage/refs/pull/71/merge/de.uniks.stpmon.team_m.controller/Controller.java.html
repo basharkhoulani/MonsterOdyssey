@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Controller.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller</a> &gt; <span class="el_source">Controller.java</span></div><h1>Controller.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller;
+
+import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.ws.EventListener;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.control.ListView;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import java.io.IOException;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+
+<span class="fc" id="L22">public abstract class Controller {</span>
+
+    @Inject
+    protected App app;
+    @Inject
+    Provider&lt;EventListener&gt; eventListener;
+<span class="fc" id="L28">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
+<span class="fc" id="L29">    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);</span>
+<span class="fc" id="L30">    public boolean isInitialized = false;</span>
+
+    public void init() {
+<span class="fc" id="L33">    }</span>
+
+    public String getTitle() {
+<span class="nc" id="L36">        return EMPTY_STRING;</span>
+    }
+
+    public void destroy() {
+<span class="nc" id="L40">        disposables.dispose();</span>
+<span class="nc" id="L41">    }</span>
+
+    public Parent render() {
+<span class="fc" id="L44">        return load(getClass().getSimpleName().replace(&quot;Controller&quot;, &quot;&quot;));</span>
+    }
+
+    protected Parent load(String view) {
+<span class="fc" id="L48">        final FXMLLoader loader = new FXMLLoader((Main.class.getResource(&quot;views/&quot; + view + &quot;.fxml&quot;)));</span>
+<span class="fc" id="L49">        loader.setControllerFactory(c -&gt; this);</span>
+        // loader.setResources(resources);
+        try {
+<span class="fc" id="L52">            return loader.load();</span>
+<span class="nc" id="L53">        } catch (IOException exception) {</span>
+<span class="nc" id="L54">            throw new RuntimeException(exception);</span>
+        }
+    }
+
+    public int getHeight() {
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        return STANDARD_HEIGHT != app.getStage().getHeight() ? (int) app.getStage().getHeight() : STANDARD_HEIGHT;</span>
+    }
+
+    public int getWidth() {
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        return STANDARD_WIDTH != app.getStage().getWidth() ? (int) app.getStage().getWidth() : STANDARD_WIDTH;</span>
+    }
+
+    public void sortListView(ListView&lt;User&gt; friendsListView) {
+<span class="fc" id="L67">        friendsListView.getItems().sort(Controller::sortByOnline);</span>
+<span class="fc" id="L68">    }</span>
+
+    public static int sortByOnline(User o1, User o2) {
+<span class="fc bfc" id="L71" title="All 4 branches covered.">        if (o1.status().equals(USER_STATUS_ONLINE) &amp;&amp; o2.status().equals(USER_STATUS_OFFLINE)) {</span>
+<span class="fc" id="L72">            return -1;</span>
+<span class="pc bpc" id="L73" title="1 of 4 branches missed.">        } else if (o1.status().equals(USER_STATUS_OFFLINE) &amp;&amp; o2.status().equals(USER_STATUS_ONLINE)) {</span>
+<span class="nc" id="L74">            return 1;</span>
+        } else {
+<span class="fc" id="L76">            return o1.name().compareTo(o2.name());</span>
+        }
+    }
+
+    public void listenToStatusUpdate(ObservableList&lt;User&gt; friends, ListView&lt;User&gt; friendsListView) {
+<span class="fc" id="L81">        disposables.add(eventListener.get().listen(&quot;users.*.updated&quot;, User.class).observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L82">                .subscribe(user -&gt; {</span>
+<span class="nc" id="L83">                    User userToUpdate = friends.stream()</span>
+<span class="nc" id="L84">                            .filter(friend -&gt; friend._id().equals(user.data()._id()))</span>
+<span class="nc" id="L85">                            .findFirst()</span>
+<span class="nc" id="L86">                            .orElse(null);</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">                    if (userToUpdate != null) {</span>
+<span class="nc" id="L88">                        friends.set(friends.indexOf(userToUpdate), user.data());</span>
+<span class="nc" id="L89">                        sortListView(friendsListView);</span>
+<span class="nc" id="L90">                        friendsListView.refresh();</span>
+                    }
+<span class="nc" id="L92">                }));</span>
+<span class="fc" id="L93">    }</span>
+
+    public boolean isInitialized() {
+<span class="nc" id="L96">        return isInitialized;</span>
+    }
+
+    public void setInitialized(boolean initialized) {
+<span class="fc" id="L100">        isInitialized = initialized;</span>
+<span class="fc" id="L101">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
