@@ -86,7 +86,6 @@ public class App extends Application {
 
     @Override
     public void stop() {
-        disposables.dispose();
         cleanup();
     }
 
@@ -111,7 +110,6 @@ public class App extends Application {
     }
 
     public void show(Controller controller) {
-        cleanup();
         this.controller = controller;
         initAndRender(controller);
     }
@@ -125,6 +123,8 @@ public class App extends Application {
     }
 
     private void cleanup() {
+        component.loginController().userStatusUpdate(USER_STATUS_OFFLINE);
+        disposables.dispose();
         if (controller != null) {
             controller.destroy();
             controller = null;
