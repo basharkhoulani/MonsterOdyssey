@@ -129,7 +129,7 @@ public class NewFriendController extends Controller {
                 }
             }
             if (groupStorageProvider.get().get_id() == null) {
-                disposables.add(groupServiceProvider.get().create("", privateGroup.members())
+                disposables.add(groupServiceProvider.get().create(null, privateGroup.members())
                         .observeOn(FX_SCHEDULER).subscribe());
             }
         }));
