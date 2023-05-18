@@ -24,10 +24,10 @@ public class EventListener {
     private ClientEndpoint endpoint;
 
     @Inject
-<span class="nc" id="L27">    public EventListener(TokenStorage tokenStorage, ObjectMapper mapper) {</span>
-<span class="nc" id="L28">        this.tokenStorage = tokenStorage;</span>
-<span class="nc" id="L29">        this.mapper = mapper;</span>
-<span class="nc" id="L30">    }</span>
+<span class="fc" id="L27">    public EventListener(TokenStorage tokenStorage, ObjectMapper mapper) {</span>
+<span class="fc" id="L28">        this.tokenStorage = tokenStorage;</span>
+<span class="fc" id="L29">        this.mapper = mapper;</span>
+<span class="fc" id="L30">    }</span>
 
     private void ensureOpen() {
 <span class="nc bnc" id="L33" title="All 4 branches missed.">        if (endpoint != null &amp;&amp; endpoint.isOpen()) {</span>
