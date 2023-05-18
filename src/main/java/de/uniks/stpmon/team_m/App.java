@@ -64,7 +64,10 @@ public class App extends Application {
 
                         disposables.add(authenticationService.refresh()
                                 .observeOn(Schedulers.from(Platform::runLater))
-                                .subscribe(lr -> show(component.mainMenuController()),
+                                .subscribe(lr -> {
+                                    component.loginController().userStatusUpdate(USER_STATUS_ONLINE);
+                                    show(component.mainMenuController());
+                                        },
                                         err -> show(component.loginController())));
                     } else {
                         show(component.loginController());
