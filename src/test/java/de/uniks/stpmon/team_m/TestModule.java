@@ -150,7 +150,7 @@ public class TestModule {
 
             @Override
             public Observable<User> updateUser(String id, UpdateUserDto dto) {
-                if (dto.status().equals("online")) {
+                if (dto.status().equals("offline")) {
                     return Observable.just(new User("42", "Rick", "online", null, null));
                 } else {
                     return Observable.just(new User("42", "Rick", "offline", null, null));
