@@ -2,12 +2,14 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.dto.User;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.ListView;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -53,5 +55,19 @@ public abstract class Controller {
 
     public int getWidth() {
         return STANDARD_WIDTH != app.getStage().getWidth() ? (int) app.getStage().getWidth() : STANDARD_WIDTH;
+    }
+
+    public void sortListView(ListView<User> friendsListView) {
+        friendsListView.getItems().sort(Controller::sortByOnline);
+    }
+
+    public static int sortByOnline(User o1, User o2) {
+        if (o1.status().equals(USER_STATUS_ONLINE) && o2.status().equals(USER_STATUS_OFFLINE)) {
+            return -1;
+        } else if (o1.status().equals(USER_STATUS_OFFLINE) && o2.status().equals(USER_STATUS_ONLINE)) {
+            return 1;
+        } else {
+            return o1.name().compareTo(o2.name());
+        }
     }
 }

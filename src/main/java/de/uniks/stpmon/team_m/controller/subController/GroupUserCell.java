@@ -10,6 +10,7 @@ import javafx.scene.layout.Priority;
 import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.controller.Controller.sortByOnline;
 import static javafx.geometry.Pos.CENTER_RIGHT;
 
 public class GroupUserCell extends UserCell {
@@ -34,7 +35,7 @@ public class GroupUserCell extends UserCell {
             final Button addOrRemoveButton = new Button();
             final HBox buttonHBox = new HBox(addOrRemoveButton);
             addOrRemoveButton.setPrefSize(BUTTON_PREF_SIZE, BUTTON_PREF_SIZE);
-            addOrRemoveButton.setStyle(BUTTON_TRANSPARENT_STYLE);
+            addOrRemoveButton.setStyle(BUTTON_TRANSPARENT_STYLE + BUTTON_BORDER_STYLE);
             buttonHBox.setAlignment(CENTER_RIGHT);
             HBox.setHgrow(buttonHBox, Priority.ALWAYS);
             super.getRootHBox().getChildren().add(buttonHBox);
@@ -72,7 +73,7 @@ public class GroupUserCell extends UserCell {
         listView.getItems().add(item);
         listView.getItems().sort((o1, o2) -> {
             if (friends.contains(o1) && friends.contains(o2)) {
-                return o1.name().compareTo(o2.name());
+                return sortByOnline(o1, o2);
             } else if (friends.contains(o1)) {
                 return -1;
             } else if (friends.contains(o2)) {

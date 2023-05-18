@@ -82,7 +82,11 @@ public class MessagesController extends Controller {
         ));
         if (!userStorageProvider.get().getFriends().isEmpty()) {
             disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
-                    .observeOn(FX_SCHEDULER).subscribe(friends::setAll));
+                    .observeOn(FX_SCHEDULER).subscribe(users -> {
+                        friends.setAll(users);
+                        sortListView(listView);
+                        listView.refresh();
+                    }));
         }
     }
 

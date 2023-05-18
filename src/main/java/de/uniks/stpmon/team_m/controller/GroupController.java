@@ -73,18 +73,28 @@ public class GroupController extends Controller {
         listView.setSelectionModel(null);
         listView.setFocusModel(null);
         if (groupId.equals(EMPTY_STRING)) {
-            final List<String> friendsByID = userStorage.get().getFriends();
-            final List<User> friendsByUserObject = new ArrayList<>();
-            disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
-                friendsByUserObject.addAll(users);
-                listView.setCellFactory(param -> new GroupUserCell(newGroupMembers, listView, friendsByUserObject));
-                for (User user : users) {
-                    if (friendsByID.contains(user._id())) {
-                        listView.getItems().add(user);
-                    }
-                }
-            }));
+            initNewGroupView();
+        } else {
+            initEditGroupView(groupId);
         }
+    }
+
+    private void initEditGroupView(String groupId) {
+    }
+
+    private void initNewGroupView() {
+        final List<String> friendsByID = userStorage.get().getFriends();
+        final List<User> friendsByUserObject = new ArrayList<>();
+        disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
+            friendsByUserObject.addAll(users);
+            listView.setCellFactory(param -> new GroupUserCell(newGroupMembers, listView, friendsByUserObject));
+            for (User user : users) {
+                if (friendsByID.contains(user._id())) {
+                    listView.getItems().add(user);
+                }
+            }
+            sortListView(listView);
+        }));
     }
 
     @Override

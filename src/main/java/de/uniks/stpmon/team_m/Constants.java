@@ -33,6 +33,7 @@ public class Constants {
     public static final int HBOX_FRIENDS_SPACING = 15;
     public static final String THREE_DOTS = "\u2026";
     public static final String BUTTON_TRANSPARENT_STYLE = "-fx-background-color: transparent; -fx-border-color: transparent;";
+    public static final String BUTTON_BORDER_STYLE = "-fx-border-color: black; -fx-border-width: 1px; -fx-border-radius: 20px;";
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";

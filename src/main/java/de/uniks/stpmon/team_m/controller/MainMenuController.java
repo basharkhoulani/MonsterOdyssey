@@ -20,7 +20,8 @@ import javafx.scene.layout.VBox;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.MAIN_MENU_TITLE;
+import static de.uniks.stpmon.team_m.Constants.USER_STATUS_OFFLINE;
 
 public class MainMenuController extends Controller {
 
@@ -71,7 +72,11 @@ public class MainMenuController extends Controller {
                 .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));
         if (!userStorageProvider.get().getFriends().isEmpty()) {
             disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
-                    .observeOn(FX_SCHEDULER).subscribe(this.friends::setAll));
+                    .observeOn(FX_SCHEDULER).subscribe(users -> {
+                        friends.setAll(users);
+                        sortListView(friendsListView);
+                        friendsListView.refresh();
+                    }));
         }
     }
 
