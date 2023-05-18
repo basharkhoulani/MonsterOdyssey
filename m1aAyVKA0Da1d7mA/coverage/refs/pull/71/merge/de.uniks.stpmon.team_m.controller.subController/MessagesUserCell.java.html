@@ -88,7 +88,7 @@ public class MessagesUserCell extends UserCell{
 <span class="fc" id="L88">                this.currentFriendOrGroupText.setText(item.name());</span>
 <span class="fc" id="L89">                chatVBox.getChildren().clear();</span>
 
-<span class="pc bpc" id="L91" title="1 of 2 branches missed.">                if (this.privateChat != null) {</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">                if (this.privateChat != null) {</span>
 <span class="fc" id="L92">                    disposables.add(messageService.getGroupMessages(privateChat._id())</span>
 <span class="fc" id="L93">                            .observeOn(FX_SCHEDULER).subscribe(messages::setAll));</span>
 
