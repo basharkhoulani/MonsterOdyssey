@@ -9,11 +9,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.controlsfx.control.PopOver;
 
+import static de.uniks.stpmon.team_m.Constants.*;
+import static javafx.geometry.Pos.CENTER_RIGHT;
+
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.BUTTON_PREF_SIZE;
-import static de.uniks.stpmon.team_m.Constants.THREE_DOTS;
-import static javafx.geometry.Pos.CENTER_RIGHT;
 
 public class MainMenuUserCell extends UserCell {
 
@@ -37,7 +37,7 @@ public class MainMenuUserCell extends UserCell {
 <span class="fc" id="L37">            final HBox buttonHBox = new HBox(popOverButton);</span>
 <span class="fc" id="L38">            popOverButton.setPrefSize(BUTTON_PREF_SIZE, BUTTON_PREF_SIZE);</span>
 <span class="fc" id="L39">            popOverButton.setText(THREE_DOTS);</span>
-<span class="fc" id="L40">            popOverButton.setStyle(&quot;-fx-background-color: transparent; -fx-border-color: transparent;&quot;);</span>
+<span class="fc" id="L40">            popOverButton.setStyle(BUTTON_TRANSPARENT_STYLE);</span>
 <span class="fc" id="L41">            buttonHBox.setAlignment(CENTER_RIGHT);</span>
 <span class="fc" id="L42">            HBox.setHgrow(buttonHBox, Priority.ALWAYS);</span>
 <span class="fc" id="L43">            super.getRootHBox().getChildren().add(buttonHBox);</span>
