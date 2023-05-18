@@ -31,7 +31,12 @@ public class Constants {
     public static final String USER_STATUS_ONLINE = "online";
     public static final int STATUS_CIRCLE_RADIUS = 7;
     public static final int HBOX_FRIENDS_SPACING = 15;
-    public static final String THREE_DOTS = "···";
+    public static final String THREE_DOTS = "\u2026";
+    public static final String BUTTON_TRANSPARENT_STYLE = "-fx-background-color: transparent; -fx-border-color: transparent;";
+    public static final String BUTTON_BORDER_STYLE = "-fx-border-color: black; -fx-border-width: 1px;";
+    public static final String NO_FRIENDS_FOUND = "No friends found";
+    public static final String NO_GROUPS_FOUND = "No groups found";
+    public static final String NO_USERS_ADDED_TO_GROUP = "No foreign users added to group yet";
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
@@ -48,7 +53,7 @@ public class Constants {
     public static final String MAIN_MENU_TITLE = "Main Menu";
 
     // NEW GROUP
-    public static final String CHECK_MARK = "✓";
+    public static final String CHECK_MARK = "\u2713";
     public static final String ADD_MARK = "+";
     public static final int BUTTON_PREF_SIZE = 30;
     public static final int MAX_SUGGESTIONS_NEW_GROUP = 20;
