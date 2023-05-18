@@ -78,6 +78,7 @@ public class MainMenuController extends Controller {
                         sortListView(friendsListView);
                         friendsListView.refresh();
                     }));
+            listenToStatusUpdate(friends, friendsListView);
         }
     }
 

@@ -55,6 +55,7 @@ public class GroupController extends Controller {
     Provider<GroupStorage> groupStorageProvider;
     @Inject
     Provider<UserStorage> userStorage;
+    private final ObservableList<User> friends = FXCollections.observableArrayList();
     private ListView<User> friendsListView;
     private ListView<User> foreignListView;
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
@@ -84,6 +85,8 @@ public class GroupController extends Controller {
         foreignListView.setId("foreignListView");
         foreignListView.setPlaceholder(new Label(NO_USERS_ADDED_TO_GROUP));
 
+        listenToStatusUpdate(friends, friendsListView);
+
         if (groupId.equals(EMPTY_STRING)) {
             initNewGroupView();
         } else {
@@ -96,17 +99,16 @@ public class GroupController extends Controller {
 
     private void initNewGroupView() {
         final List<String> friendsByID = userStorage.get().getFriends();
-        final List<User> friendsByUserObject = new ArrayList<>();
         if (!friendsByID.isEmpty()) {
             disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
-                friendsByUserObject.addAll(users);
+                friends.setAll(users);
 
                 friendsListView.setCellFactory(param -> new GroupUserCell(newGroupMembers, friendsListView,
-                        foreignListView, friendsByUserObject));
+                        foreignListView, friends));
                 foreignListView.setCellFactory(param -> new GroupUserCell(newGroupMembers, friendsListView,
-                        foreignListView, friendsByUserObject));
+                        foreignListView, friends));
 
-                friendsListView.setItems(FXCollections.observableArrayList(friendsByUserObject));
+                friendsListView.setItems(friends);
 
                 sortListView(friendsListView);
                 sortListView(foreignListView);

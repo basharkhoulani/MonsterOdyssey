@@ -5,6 +5,7 @@ import de.uniks.stpmon.team_m.controller.subController.MessagesUserCell;
 import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -62,6 +63,8 @@ public class MessagesController extends Controller {
     @Inject
     MessageService messageService;
     @Inject
+    Provider<EventListener> eventListener;
+    @Inject
     GroupService groupService;
     private final ObservableList<User> friends = FXCollections.observableArrayList();
     private final ObservableList<Group> groups = FXCollections.observableArrayList();
@@ -88,13 +91,16 @@ public class MessagesController extends Controller {
                 disposables
         ));
         if (!userStorageProvider.get().getFriends().isEmpty()) {
-            disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
-                    .observeOn(FX_SCHEDULER).subscribe(users -> {
+            disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER)
+                    .subscribe(users -> {
                         friends.setAll(users);
                         sortListView(userListView);
                         userListView.refresh();
                     }));
         }
+
+        listenToStatusUpdate(friends, userListView);
+        
         groupListView = new ListView<>(groups);
         groupListView.setId("groups");
         groupListView.setCellFactory(param -> new GroupCell());
