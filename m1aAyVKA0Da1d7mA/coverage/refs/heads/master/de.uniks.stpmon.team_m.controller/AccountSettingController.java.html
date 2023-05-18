@@ -146,33 +146,44 @@ public class AccountSettingController extends Controller {
 <span class="fc" id="L146">                }, error -&gt; passwordErrorLabel.setText(errorHandle(error.getMessage()))));</span>
 <span class="fc" id="L147">    }</span>
 
-    public void deleteAccount() {
-<span class="fc" id="L150">        LoginController loginController = loginControllerProvider.get();</span>
-<span class="fc" id="L151">        loginController.setInformation(DELETE_SUCCESS);</span>
-<span class="fc" id="L152">        app.show(loginController);</span>
-<span class="fc" id="L153">    }</span>
-
-    public void cancel() {
-<span class="fc" id="L156">        app.show(mainMenuControllerProvider.get());</span>
+    public void deleteAccount(Alert alert) {
+<span class="fc" id="L150">        disposables.add(usersService.deleteUser()</span>
+<span class="fc" id="L151">                .observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L152">                .subscribe(delete -&gt; {</span>
+<span class="fc" id="L153">                    LoginController loginController = loginControllerProvider.get();</span>
+<span class="fc" id="L154">                    loginController.setInformation(DELETE_SUCCESS);</span>
+<span class="fc" id="L155">                    app.show(loginController);</span>
+<span class="fc" id="L156">                }, error -&gt; errorAlert(alert)));</span>
 <span class="fc" id="L157">    }</span>
 
-    public void showDeletePopUp() {
-<span class="fc" id="L160">        Alert alert = new Alert(Alert.AlertType.WARNING, SURE, ButtonType.OK, ButtonType.CANCEL);</span>
-<span class="fc" id="L161">        alert.setTitle(&quot;Delete Account&quot;);</span>
-<span class="fc" id="L162">        alert.setHeaderText(null);</span>
-<span class="fc" id="L163">        alert.initOwner(app.getStage());</span>
-<span class="fc" id="L164">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+    public void cancel() {
+<span class="fc" id="L160">        app.show(mainMenuControllerProvider.get());</span>
+<span class="fc" id="L161">    }</span>
 
-<span class="pc bpc" id="L166" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK) {</span>
-<span class="fc" id="L167">            deleteAccount();</span>
+    public void showDeletePopUp() {
+<span class="fc" id="L164">        Alert alert = new Alert(Alert.AlertType.WARNING, SURE, ButtonType.OK, ButtonType.CANCEL);</span>
+<span class="fc" id="L165">        alert.setTitle(&quot;Delete Account&quot;);</span>
+<span class="fc" id="L166">        alert.setHeaderText(null);</span>
+<span class="fc" id="L167">        alert.initOwner(app.getStage());</span>
+<span class="fc" id="L168">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+
+<span class="pc bpc" id="L170" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK) {</span>
+<span class="fc" id="L171">            deleteAccount(alert);</span>
         }
-<span class="fc" id="L169">    }</span>
+<span class="fc" id="L173">    }</span>
+
+    private void errorAlert(Alert alert) {
+<span class="fc" id="L176">        alert.setContentText(CUSTOM_ERROR);</span>
+<span class="fc" id="L177">        alert.setTitle(ERROR);</span>
+<span class="fc" id="L178">        alert.getButtonTypes().remove(ButtonType.CANCEL);</span>
+<span class="fc" id="L179">        alert.showAndWait();</span>
+<span class="fc" id="L180">    }</span>
 
     public String errorHandle(String error){
-<span class="fc bfc" id="L172" title="All 2 branches covered.">        if(error.contains(HTTP_409)){</span>
-<span class="fc" id="L173">            return USERNAME_TAKEN;</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">        if(error.contains(HTTP_409)){</span>
+<span class="fc" id="L184">            return USERNAME_TAKEN;</span>
         } else {
-<span class="fc" id="L175">            return CUSTOM_ERROR;</span>
+<span class="fc" id="L186">            return CUSTOM_ERROR;</span>
         }
     }
 }

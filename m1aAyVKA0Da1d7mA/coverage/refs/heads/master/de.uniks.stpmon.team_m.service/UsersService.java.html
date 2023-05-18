@@ -38,7 +38,10 @@ public class UsersService {
     }
 
     public Observable&lt;User&gt; deleteUser() {
-<span class="nc" id="L41">        return usersApiService.deleteUser(userStorage.get_id());</span>
+<span class="fc" id="L41">        return usersApiService.deleteUser(userStorage.get_id()).map(user -&gt; {</span>
+<span class="fc" id="L42">            userStorage.removeUser();</span>
+<span class="fc" id="L43">            return user;</span>
+        });
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
