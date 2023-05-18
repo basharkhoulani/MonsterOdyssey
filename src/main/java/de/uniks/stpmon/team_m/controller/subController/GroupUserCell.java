@@ -34,6 +34,7 @@ public class GroupUserCell extends UserCell {
             final Button addOrRemoveButton = new Button();
             final HBox buttonHBox = new HBox(addOrRemoveButton);
             addOrRemoveButton.setPrefSize(BUTTON_PREF_SIZE, BUTTON_PREF_SIZE);
+            addOrRemoveButton.setStyle(BUTTON_TRANSPARENT_STYLE);
             buttonHBox.setAlignment(CENTER_RIGHT);
             HBox.setHgrow(buttonHBox, Priority.ALWAYS);
             super.getRootHBox().getChildren().add(buttonHBox);

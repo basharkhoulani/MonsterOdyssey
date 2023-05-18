@@ -1,27 +1,18 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.MessagesUserCell;
-import de.uniks.stpmon.team_m.controller.subController.UserCell;
-import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -89,8 +80,10 @@ public class MessagesController extends Controller {
                 groupService,
                 disposables
         ));
-        disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
-                .observeOn(FX_SCHEDULER).subscribe(friends::setAll));
+        if (!userStorageProvider.get().getFriends().isEmpty()) {
+            disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
+                    .observeOn(FX_SCHEDULER).subscribe(friends::setAll));
+        }
     }
 
     @Override

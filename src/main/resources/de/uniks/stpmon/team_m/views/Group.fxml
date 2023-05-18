@@ -51,7 +51,7 @@
               </VBox>
               <VBox alignment="CENTER" prefHeight="330.0" prefWidth="306.0" VBox.vgrow="NEVER">
                   <HBox alignment="CENTER" prefHeight="330.0" prefWidth="271.0" VBox.vgrow="NEVER">
-                      <VBox fx:id="groupMembersVBox" alignment="CENTER" prefHeight="300.0" prefWidth="230.0"/>
+                      <VBox fx:id="groupMembersVBox" alignment="CENTER" prefHeight="330.0" prefWidth="296.0" />
                   </HBox>
               </VBox>
               <VBox alignment="CENTER" fillWidth="false" VBox.vgrow="NEVER">
