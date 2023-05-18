@@ -119,6 +119,9 @@ public class NewFriendController extends Controller {
         List<String> privateGroup = Arrays.asList(user._id(), userStorageProvider.get().get_id());
         disposables.add(groupServiceProvider.get().getGroups(privateGroup).observeOn(FX_SCHEDULER).subscribe(groups -> {
             for (Group group : groups) {
+                if (group.members() == null) {
+                    break;
+                }
                 if (group.members().size() == privateGroup.size() && group.name() == null) {
                     groupStorageProvider.get().set_id(group._id());
                 } else {
