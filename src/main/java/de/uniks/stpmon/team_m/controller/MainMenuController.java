@@ -2,13 +2,11 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.MainMenuUserCell;
 import de.uniks.stpmon.team_m.controller.subController.RegionCell;
+import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
-import de.uniks.stpmon.team_m.service.AuthenticationService;
-import de.uniks.stpmon.team_m.service.UserStorage;
-import de.uniks.stpmon.team_m.service.UsersService;
-import de.uniks.stpmon.team_m.utils.BestFriendUtils;
+import de.uniks.stpmon.team_m.service.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,9 +18,12 @@ import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Arrays;
+import java.util.List;
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.MAIN_MENU_TITLE;
+import static de.uniks.stpmon.team_m.Constants.USER_STATUS_OFFLINE;
 
 public class MainMenuController extends Controller {
 
@@ -61,6 +62,10 @@ public class MainMenuController extends Controller {
     Provider<UserStorage> userStorageProvider;
     @Inject
     Provider<Preferences> preferencesProvider;
+    @Inject
+    Provider<GroupService> groupServiceProvider;
+    @Inject
+    Provider<GroupStorage> groupStorageProvider;
     private final ObservableList<Region> regions = FXCollections.observableArrayList();
     private final ObservableList<User> friends = FXCollections.observableArrayList();
     private ListView<User> friendsListView;
@@ -93,6 +98,17 @@ public class MainMenuController extends Controller {
         final Parent parent = super.render();
         initRadioButtons();
         friendsListVBox.getChildren().add(friendsListView);
+        friendsListView.setOnMouseClicked(event -> {
+            List<String> privateGroup = Arrays.asList(friendsListView.getSelectionModel().getSelectedItem()._id(), userStorageProvider.get().get_id());
+            disposables.add(groupServiceProvider.get().getGroups(privateGroup).observeOn(FX_SCHEDULER).subscribe(groups -> {
+                for (Group group : groups) {
+                    if (group.members().size() == privateGroup.size() && group.name() == null) {
+                        groupStorageProvider.get().set_id(group._id());
+                        app.show(messagesControllerProvider.get());
+                    }
+                }
+            }));
+        });
         return parent;
     }
 
