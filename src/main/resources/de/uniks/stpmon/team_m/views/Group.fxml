@@ -49,9 +49,14 @@
                       </font>
                   </Text>
               </VBox>
-              <VBox alignment="CENTER" prefHeight="330.0" prefWidth="306.0" VBox.vgrow="NEVER">
-                  <HBox alignment="CENTER" prefHeight="330.0" prefWidth="271.0" VBox.vgrow="NEVER">
-                      <VBox fx:id="groupMembersVBox" alignment="CENTER" prefHeight="330.0" prefWidth="296.0" />
+              <VBox alignment="CENTER" prefHeight="384.0" prefWidth="288.0" VBox.vgrow="NEVER">
+                  <HBox alignment="CENTER" prefHeight="389.0" prefWidth="288.0" VBox.vgrow="NEVER">
+               <VBox>
+                  <children>
+                            <VBox fx:id="friendsUsers" alignment="CENTER" prefHeight="330.0" prefWidth="296.0" />
+                     <VBox fx:id="foreignUsers" alignment="CENTER" prefHeight="330.0" prefWidth="296.0" />
+                  </children>
+               </VBox>
                   </HBox>
               </VBox>
               <VBox alignment="CENTER" fillWidth="false" VBox.vgrow="NEVER">

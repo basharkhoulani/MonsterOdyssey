@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.User;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -10,18 +11,22 @@ import javafx.scene.layout.Priority;
 import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.*;
-import static de.uniks.stpmon.team_m.controller.Controller.sortByOnline;
 import static javafx.geometry.Pos.CENTER_RIGHT;
 
 public class GroupUserCell extends UserCell {
 
+    private final ListView<User> friendsListView;
+    private final ListView<User> foreignListView;
     private final ObservableList<User> chosenUsers;
-    private final ListView<User> listView;
     private final List<User> friends;
+    private final List<User> foreignUsers;
 
-    public GroupUserCell(ObservableList<User> chosenUsers, ListView<User> listView, List<User> friends) {
+    public GroupUserCell(ObservableList<User> chosenUsers, List<User> foreignUsers, ListView<User> friendsListView,
+                         ListView<User> foreignListView, List<User> friends) {
         this.chosenUsers = chosenUsers;
-        this.listView = listView;
+        this.friendsListView = friendsListView;
+        this.foreignListView = foreignListView;
+        this.foreignUsers = foreignUsers;
         this.friends = friends;
     }
 
@@ -52,36 +57,29 @@ public class GroupUserCell extends UserCell {
         if (chosenUsers.contains(item)) {
             chosenUsers.remove(item);
             addOrRemoveButton.setText(ADD_MARK);
-            listView.getItems().remove(item);
-            List<String> friendsIds = friends.stream().map(User::_id).toList();
-            if (friendsIds.contains(item._id())) {
-                addUserAndSort(item);
+            if (friends.contains(item)) {
+                friendsListView.getItems().remove(item);
+                addUserAndSort(foreignListView, item);
+            } else {
+                foreignListView.getItems().remove(item);
+                addUserAndSort(friendsListView, item);
             }
         } else {
             chosenUsers.add(item);
             addOrRemoveButton.setText(CHECK_MARK);
-            if (!listView.getItems().contains(item)) {
-                listView.getItems().add(item);
+            if (friends.contains(item)) {
+                friendsListView.getItems().remove(item);
+                addUserAndSort(friendsListView, item);
             } else {
-                listView.getItems().remove(item);
-                addUserAndSort(item);
+                foreignListView.getItems().remove(item);
+                addUserAndSort(foreignListView, item);
             }
         }
     }
 
-    private void addUserAndSort(User item) {
+    private void addUserAndSort(ListView<User> listView, User item) {
         listView.getItems().add(item);
-        listView.getItems().sort((o1, o2) -> {
-            if (friends.contains(o1) && friends.contains(o2)) {
-                return sortByOnline(o1, o2);
-            } else if (friends.contains(o1)) {
-                return -1;
-            } else if (friends.contains(o2)) {
-                return 1;
-            } else {
-                return o1.name().compareTo(o2.name());
-            }
-        });
+        listView.getItems().sort(Controller::sortByOnline);
     }
 
 }

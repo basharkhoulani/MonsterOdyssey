@@ -32,7 +32,9 @@ public class GroupController extends Controller {
     @FXML
     public Text selectGroupMembersText;
     @FXML
-    public VBox groupMembersVBox;
+    public VBox friendsUsers;
+    @FXML
+    public VBox foreignUsers;
     @FXML
     public Button backToMessagesButton;
     @FXML
@@ -53,7 +55,8 @@ public class GroupController extends Controller {
     Provider<GroupStorage> groupStorageProvider;
     @Inject
     Provider<UserStorage> userStorage;
-    private ListView<User> listView;
+    private ListView<User> friendsListView;
+    private ListView<User> foreignListView;
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
     private final ObservableList<User> newGroupMembers = FXCollections.observableArrayList();
 
@@ -69,9 +72,14 @@ public class GroupController extends Controller {
     @Override
     public void init() {
         final String groupId = groupStorageProvider.get().get_id();
-        listView = new ListView<>();
-        listView.setSelectionModel(null);
-        listView.setFocusModel(null);
+        friendsListView = new ListView<>();
+        friendsListView.setSelectionModel(null);
+        friendsListView.setFocusModel(null);
+
+        foreignListView = new ListView<>();
+        foreignListView.setSelectionModel(null);
+        foreignListView.setFocusModel(null);
+
         if (groupId.equals(EMPTY_STRING)) {
             initNewGroupView();
         } else {
@@ -85,15 +93,20 @@ public class GroupController extends Controller {
     private void initNewGroupView() {
         final List<String> friendsByID = userStorage.get().getFriends();
         final List<User> friendsByUserObject = new ArrayList<>();
+        final List<User> foreignByUserObject = new ArrayList<>();
         disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
             friendsByUserObject.addAll(users);
-            listView.setCellFactory(param -> new GroupUserCell(newGroupMembers, listView, friendsByUserObject));
-            for (User user : users) {
-                if (friendsByID.contains(user._id())) {
-                    listView.getItems().add(user);
-                }
-            }
-            sortListView(listView);
+
+            friendsListView.setCellFactory(param -> new GroupUserCell(newGroupMembers, foreignByUserObject, friendsListView,
+                    foreignListView, friendsByUserObject));
+            foreignListView.setCellFactory(param -> new GroupUserCell(newGroupMembers, foreignByUserObject, friendsListView,
+                    foreignListView, friendsByUserObject));
+
+            friendsListView.setItems(FXCollections.observableArrayList(friendsByUserObject));
+            foreignListView.setItems(FXCollections.observableArrayList(foreignByUserObject));
+
+            sortListView(friendsListView);
+            sortListView(foreignListView);
         }));
     }
 
@@ -105,7 +118,8 @@ public class GroupController extends Controller {
         } else {
             editGroup();
         }
-        groupMembersVBox.getChildren().add(listView);
+        friendsUsers.getChildren().add(friendsListView);
+        foreignUsers.getChildren().add(foreignListView);
         return parent;
     }
 
@@ -174,7 +188,7 @@ public class GroupController extends Controller {
                 autoCompletePopup.hide();
                 autoCompletePopup.setVisibleRowCount(MAX_SUGGESTIONS_NEW_GROUP);
                 autoCompletePopup.setPrefWidth(searchFieldGroupMembers.getWidth());
-                autoCompletePopup.setSkin(new AutoCompletePopupSkin<>(autoCompletePopup, listView.getCellFactory()));
+                autoCompletePopup.setSkin(new AutoCompletePopupSkin<>(autoCompletePopup, friendsListView.getCellFactory()));
                 allUsers.stream().filter(user -> user.name().contains(searchFieldGroupMembers.getText()))
                         .forEach(autoCompletePopup.getSuggestions()::add);
                 autoCompletePopup.show(searchFieldGroupMembers);
