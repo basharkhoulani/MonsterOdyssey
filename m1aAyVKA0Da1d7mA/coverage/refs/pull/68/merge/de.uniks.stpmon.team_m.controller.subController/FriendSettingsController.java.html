@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FriendSettingsController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">FriendSettingsController.java</span></div><h1>FriendSettingsController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.utils.BestFriendUtils;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+
+import java.util.prefs.Preferences;
+
+import static de.uniks.stpmon.team_m.Constants.BEST_FRIEND_PREF;
+
+public class FriendSettingsController extends Controller {
+
+    private final User user;
+    private final Preferences preferences;
+    private final ListView&lt;User&gt; friendsListView;
+    @FXML
+    public Button bestFriendButton;
+    @FXML
+    public Button deleteFriendButton;
+
+<span class="nc" id="L25">    public FriendSettingsController(Preferences preferences, ListView&lt;User&gt; friendsListView, User user) {</span>
+<span class="nc" id="L26">        this.preferences = preferences;</span>
+<span class="nc" id="L27">        this.friendsListView = friendsListView;</span>
+<span class="nc" id="L28">        this.user = user;</span>
+<span class="nc" id="L29">    }</span>
+
+    public void bestFriendAction() {
+<span class="nc" id="L32">        final BestFriendUtils bestFriendUtils = new BestFriendUtils(preferences);</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        if (user._id().equals(preferences.get(BEST_FRIEND_PREF, null))) {</span>
+<span class="nc" id="L34">            preferences.put(BEST_FRIEND_PREF, &quot;&quot;);</span>
+<span class="nc" id="L35">            bestFriendUtils.sortBestFriendTop(friendsListView);</span>
+        } else {
+<span class="nc" id="L37">            preferences.put(BEST_FRIEND_PREF, user._id());</span>
+<span class="nc" id="L38">            bestFriendUtils.sortBestFriendTop(friendsListView);</span>
+        }
+<span class="nc" id="L40">    }</span>
+
+    public void deleteFriendAction() {
+<span class="nc" id="L43">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
