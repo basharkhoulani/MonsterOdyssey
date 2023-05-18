@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
@@ -64,14 +65,26 @@ public class MainMenuController extends Controller {
 
     @Override
     public void init() {
+        if (!isInitialized()) {
+            disposables.add(usersService.updateUser(userStorageProvider.get().get_id(), USER_STATUS_ONLINE, null, null, null)
+                    .observeOn(FX_SCHEDULER).subscribe());
+            isInitialized = true;
+        }
+
         friendsListView = new ListView<>(friends);
         friendsListView.setId("friendsListView");
         friendsListView.setCellFactory(param -> new MainMenuUserCell());
+        friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
         disposables.add(regionsApiService.getRegions()
                 .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));
         if (!userStorageProvider.get().getFriends().isEmpty()) {
             disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
-                    .observeOn(FX_SCHEDULER).subscribe(this.friends::setAll));
+                    .observeOn(FX_SCHEDULER).subscribe(users -> {
+                        friends.setAll(users);
+                        sortListView(friendsListView);
+                        friendsListView.refresh();
+                    }));
+            listenToStatusUpdate(friends, friendsListView);
         }
     }
 

@@ -1,10 +1,14 @@
 package de.uniks.stpmon.team_m;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Module;
 import dagger.Provides;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.rest.*;
 import de.uniks.stpmon.team_m.service.UserStorage;
+import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 
 import java.util.List;
@@ -17,6 +21,27 @@ public class TestModule {
     @Provides
     static Preferences prefs() {
         return mock(Preferences.class);
+    }
+
+    @Provides
+    ObjectMapper mapper() {
+        return new ObjectMapper()
+                .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .setSerializationInclusion(JsonInclude.Include.NON_ABSENT);
+    }
+
+    @Provides
+    static EventListener eventListener() {
+        return new EventListener(null, null) {
+            @Override
+            public <T> Observable<Event<T>> listen(String pattern, Class<T> type) {
+                return Observable.empty();
+            }
+            @Override
+            public void send(Object object) {
+            }
+        };
     }
 
     @Provides
