@@ -115,7 +115,6 @@ public class LoginController extends Controller {
                 .login(username.get(), password.get(), rememberMe.get())
                 .observeOn(FX_SCHEDULER)
                 .subscribe(loginResult -> {
-                    userStatusUpdate(USER_STATUS_ONLINE);
                     app.show(mainMenuControllerProvider.get());
                     }, error -> errorHandle(error.getMessage())));
     }

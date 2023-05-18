@@ -74,7 +74,7 @@ public class MainMenuController extends Controller {
 
     @Override
     public void init() {
-
+        loginControllerProvider.get().userStatusUpdate(USER_STATUS_ONLINE);
         friendsListView = new ListView<>(friends);
         friendsListView.setId("friendsListView");
         friendsListView.setCellFactory(param -> new MainMenuUserCell(preferencesProvider.get(), userStorageProvider.get(), usersService));
