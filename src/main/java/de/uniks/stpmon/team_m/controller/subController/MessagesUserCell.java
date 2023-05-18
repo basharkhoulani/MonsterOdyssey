@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.User;
@@ -12,9 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -168,7 +167,20 @@ public class MessagesUserCell extends UserCell{
 
         Button deleteButton = new Button("\uD83D\uDDD1");
         deleteButton.setOnAction(event -> {
-            // @Cheng
+            Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            deleteAlert.setTitle("Confirm delete");
+            deleteAlert.setHeaderText(null);
+            deleteAlert.setContentText("Do you really want to delete this message?");
+
+            deleteAlert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+
+            deleteAlert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.YES) {
+                    disposables.add(messageService.deleteMessage(message._id(), this.privateChat._id(), Constants.MESSAGE_NAMESPACE_GROUPS)
+                            .observeOn(FX_SCHEDULER).subscribe());
+                }
+                deleteAlert.close();
+            });
         });
         newMessageInfoArea.getChildren().addAll(editButton, deleteButton);
 
