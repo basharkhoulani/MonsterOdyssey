@@ -21,6 +21,7 @@ import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -55,151 +56,153 @@ public class GroupController extends Controller {
     Provider&lt;GroupStorage&gt; groupStorageProvider;
     @Inject
     Provider&lt;UserStorage&gt; userStorage;
-<span class="fc" id="L58">    private final ObservableList&lt;User&gt; friends = FXCollections.observableArrayList();</span>
+    @Inject
+    Preferences preferences;
+<span class="fc" id="L61">    private final ObservableList&lt;User&gt; friends = FXCollections.observableArrayList();</span>
     private ListView&lt;User&gt; friendsListView;
     private ListView&lt;User&gt; foreignListView;
-<span class="fc" id="L61">    private final ObservableList&lt;User&gt; allUsers = FXCollections.observableArrayList();</span>
-<span class="fc" id="L62">    private final ObservableList&lt;User&gt; newGroupMembers = FXCollections.observableArrayList();</span>
+<span class="fc" id="L64">    private final ObservableList&lt;User&gt; allUsers = FXCollections.observableArrayList();</span>
+<span class="fc" id="L65">    private final ObservableList&lt;User&gt; newGroupMembers = FXCollections.observableArrayList();</span>
 
     @Inject
-<span class="fc" id="L65">    public GroupController() {</span>
-<span class="fc" id="L66">    }</span>
+<span class="fc" id="L68">    public GroupController() {</span>
+<span class="fc" id="L69">    }</span>
 
     @Override
     public String getTitle() {
-<span class="fc" id="L70">        return TITLE;</span>
+<span class="fc" id="L73">        return TITLE;</span>
     }
 
     @Override
     public void init() {
-<span class="fc" id="L75">        final String groupId = groupStorageProvider.get().get_id();</span>
-<span class="fc" id="L76">        friendsListView = new ListView&lt;&gt;();</span>
-<span class="fc" id="L77">        friendsListView.setSelectionModel(null);</span>
-<span class="fc" id="L78">        friendsListView.setFocusModel(null);</span>
-<span class="fc" id="L79">        friendsListView.setId(&quot;friendsListView&quot;);</span>
-<span class="fc" id="L80">        friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));</span>
+<span class="fc" id="L78">        final String groupId = groupStorageProvider.get().get_id();</span>
+<span class="fc" id="L79">        friendsListView = new ListView&lt;&gt;();</span>
+<span class="fc" id="L80">        friendsListView.setSelectionModel(null);</span>
+<span class="fc" id="L81">        friendsListView.setFocusModel(null);</span>
+<span class="fc" id="L82">        friendsListView.setId(&quot;friendsListView&quot;);</span>
+<span class="fc" id="L83">        friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));</span>
 
-<span class="fc" id="L82">        foreignListView = new ListView&lt;&gt;();</span>
-<span class="fc" id="L83">        foreignListView.setSelectionModel(null);</span>
-<span class="fc" id="L84">        foreignListView.setFocusModel(null);</span>
-<span class="fc" id="L85">        foreignListView.setId(&quot;foreignListView&quot;);</span>
-<span class="fc" id="L86">        foreignListView.setPlaceholder(new Label(NO_USERS_ADDED_TO_GROUP));</span>
+<span class="fc" id="L85">        foreignListView = new ListView&lt;&gt;();</span>
+<span class="fc" id="L86">        foreignListView.setSelectionModel(null);</span>
+<span class="fc" id="L87">        foreignListView.setFocusModel(null);</span>
+<span class="fc" id="L88">        foreignListView.setId(&quot;foreignListView&quot;);</span>
+<span class="fc" id="L89">        foreignListView.setPlaceholder(new Label(NO_USERS_ADDED_TO_GROUP));</span>
 
-<span class="fc" id="L88">        listenToStatusUpdate(friends, friendsListView);</span>
+<span class="fc" id="L91">        listenToStatusUpdate(friends, friendsListView);</span>
 
-<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (groupId.equals(EMPTY_STRING)) {</span>
-<span class="fc" id="L91">            initNewGroupView();</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (groupId.equals(EMPTY_STRING)) {</span>
+<span class="fc" id="L94">            initNewGroupView();</span>
         } else {
-<span class="fc" id="L93">            initEditGroupView(groupId);</span>
+<span class="fc" id="L96">            initEditGroupView(groupId);</span>
         }
-<span class="fc" id="L95">    }</span>
-
-    private void initEditGroupView(String groupId) {
 <span class="fc" id="L98">    }</span>
 
+    private void initEditGroupView(String groupId) {
+<span class="fc" id="L101">    }</span>
+
     private void initNewGroupView() {
-<span class="fc" id="L101">        final List&lt;String&gt; friendsByID = userStorage.get().getFriends();</span>
-<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (!friendsByID.isEmpty()) {</span>
-<span class="fc" id="L103">            disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -&gt; {</span>
-<span class="fc" id="L104">                friends.setAll(users);</span>
+<span class="fc" id="L104">        final List&lt;String&gt; friendsByID = userStorage.get().getFriends();</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (!friendsByID.isEmpty()) {</span>
+<span class="fc" id="L106">            disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -&gt; {</span>
+<span class="fc" id="L107">                friends.setAll(users);</span>
 
-<span class="fc" id="L106">                friendsListView.setCellFactory(param -&gt; new GroupUserCell(newGroupMembers, friendsListView,</span>
+<span class="fc" id="L109">                friendsListView.setCellFactory(param -&gt; new GroupUserCell(preferences, newGroupMembers, friendsListView,</span>
                         foreignListView, friends));
-<span class="fc" id="L108">                foreignListView.setCellFactory(param -&gt; new GroupUserCell(newGroupMembers, friendsListView,</span>
+<span class="fc" id="L111">                foreignListView.setCellFactory(param -&gt; new GroupUserCell(preferences,newGroupMembers, friendsListView,</span>
                         foreignListView, friends));
 
-<span class="fc" id="L111">                friendsListView.setItems(friends);</span>
+<span class="fc" id="L114">                friendsListView.setItems(friends);</span>
 
-<span class="fc" id="L113">                sortListView(friendsListView);</span>
-<span class="fc" id="L114">                sortListView(foreignListView);</span>
-<span class="fc" id="L115">            }));</span>
+<span class="fc" id="L116">                sortListView(friendsListView);</span>
+<span class="fc" id="L117">                sortListView(foreignListView);</span>
+<span class="fc" id="L118">            }));</span>
         }
-<span class="fc" id="L117">    }</span>
+<span class="fc" id="L120">    }</span>
 
     @Override
     public Parent render() {
-<span class="fc" id="L121">        final Parent parent = super.render();</span>
-<span class="fc bfc" id="L122" title="All 2 branches covered.">        if (groupStorageProvider.get().get_id().equals(EMPTY_STRING)) {</span>
-<span class="fc" id="L123">            newGroup();</span>
+<span class="fc" id="L124">        final Parent parent = super.render();</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        if (groupStorageProvider.get().get_id().equals(EMPTY_STRING)) {</span>
+<span class="fc" id="L126">            newGroup();</span>
         } else {
-<span class="fc" id="L125">            editGroup();</span>
+<span class="fc" id="L128">            editGroup();</span>
         }
-<span class="fc" id="L127">        friendsUsers.getChildren().add(friendsListView);</span>
-<span class="fc" id="L128">        foreignUsers.getChildren().add(foreignListView);</span>
-<span class="fc" id="L129">        return parent;</span>
+<span class="fc" id="L130">        friendsUsers.getChildren().add(friendsListView);</span>
+<span class="fc" id="L131">        foreignUsers.getChildren().add(foreignListView);</span>
+<span class="fc" id="L132">        return parent;</span>
     }
 
     private void newGroup() {
-<span class="fc" id="L133">        TITLE = NEW_GROUP_TITLE;</span>
-<span class="fc" id="L134">        deleteGroupButton.setVisible(false);</span>
-<span class="fc" id="L135">    }</span>
+<span class="fc" id="L136">        TITLE = NEW_GROUP_TITLE;</span>
+<span class="fc" id="L137">        deleteGroupButton.setVisible(false);</span>
+<span class="fc" id="L138">    }</span>
 
     private void editGroup() {
-<span class="fc" id="L138">        TITLE = EDIT_GROUP_TITLE;</span>
-<span class="fc" id="L139">        groupNameInput.setPromptText(CHANGE_GROUP);</span>
-<span class="fc" id="L140">    }</span>
+<span class="fc" id="L141">        TITLE = EDIT_GROUP_TITLE;</span>
+<span class="fc" id="L142">        groupNameInput.setPromptText(CHANGE_GROUP);</span>
+<span class="fc" id="L143">    }</span>
 
     public void changeToMessages() {
-<span class="fc" id="L143">        app.show(messagesControllerProvider.get());</span>
-<span class="fc" id="L144">    }</span>
+<span class="fc" id="L146">        app.show(messagesControllerProvider.get());</span>
+<span class="fc" id="L147">    }</span>
 
     public void deleteGroup() {
-<span class="fc" id="L147">        Alert alert = new Alert(Alert.AlertType.WARNING, DELETE_WARNING, ButtonType.YES, ButtonType.NO);</span>
-<span class="fc" id="L148">        alert.setTitle(SURE);</span>
-<span class="fc" id="L149">        alert.setHeaderText(null);</span>
-<span class="fc" id="L150">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
-<span class="pc bpc" id="L151" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.YES) {</span>
-<span class="fc" id="L152">            disposables.add(groupService.delete(groupStorageProvider.get().get_id())</span>
-<span class="fc" id="L153">                    .observeOn(FX_SCHEDULER)</span>
-<span class="fc" id="L154">                    .subscribe(deleted -&gt; app.show(messagesControllerProvider.get()),</span>
-<span class="fc" id="L155">                            error -&gt; errorAlert(error.getMessage(), alert)));</span>
+<span class="fc" id="L150">        Alert alert = new Alert(Alert.AlertType.WARNING, DELETE_WARNING, ButtonType.YES, ButtonType.NO);</span>
+<span class="fc" id="L151">        alert.setTitle(SURE);</span>
+<span class="fc" id="L152">        alert.setHeaderText(null);</span>
+<span class="fc" id="L153">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+<span class="pc bpc" id="L154" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.YES) {</span>
+<span class="fc" id="L155">            disposables.add(groupService.delete(groupStorageProvider.get().get_id())</span>
+<span class="fc" id="L156">                    .observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L157">                    .subscribe(deleted -&gt; app.show(messagesControllerProvider.get()),</span>
+<span class="fc" id="L158">                            error -&gt; errorAlert(error.getMessage(), alert)));</span>
         } else {
-<span class="fc" id="L157">            alert.close();</span>
+<span class="fc" id="L160">            alert.close();</span>
         }
-<span class="fc" id="L159">    }</span>
+<span class="fc" id="L162">    }</span>
 
     private void errorAlert(String error, Alert alert) {
-<span class="fc bfc" id="L162" title="All 2 branches covered.">        if (error.equals(HTTP_403)) {</span>
-<span class="fc" id="L163">            alert.setContentText(DELETE_ERROR_403);</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">        if (error.equals(HTTP_403)) {</span>
+<span class="fc" id="L166">            alert.setContentText(DELETE_ERROR_403);</span>
         } else {
-<span class="fc" id="L165">            alert.setContentText(GENERIC_ERROR);</span>
+<span class="fc" id="L168">            alert.setContentText(GENERIC_ERROR);</span>
         }
-<span class="fc" id="L167">        alert.setTitle(ERROR);</span>
-<span class="fc" id="L168">        alert.getButtonTypes().remove(ButtonType.NO);</span>
-<span class="fc" id="L169">        alert.getButtonTypes().remove(ButtonType.YES);</span>
-<span class="fc" id="L170">        alert.getButtonTypes().add(ButtonType.OK);</span>
-<span class="fc" id="L171">        alert.showAndWait();</span>
-<span class="fc" id="L172">    }</span>
+<span class="fc" id="L170">        alert.setTitle(ERROR);</span>
+<span class="fc" id="L171">        alert.getButtonTypes().remove(ButtonType.NO);</span>
+<span class="fc" id="L172">        alert.getButtonTypes().remove(ButtonType.YES);</span>
+<span class="fc" id="L173">        alert.getButtonTypes().add(ButtonType.OK);</span>
+<span class="fc" id="L174">        alert.showAndWait();</span>
+<span class="fc" id="L175">    }</span>
 
 
     public void saveGroup() {
-<span class="fc" id="L176">        List&lt;String&gt; newGroupMembersIDs = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L177">        newGroupMembersIDs.add(userStorage.get().get_id());</span>
-<span class="pc" id="L178">        newGroupMembers.forEach(user -&gt; newGroupMembersIDs.add(user._id()));</span>
-<span class="fc" id="L179">        disposables.add(groupService.create(groupNameInput.getText(), newGroupMembersIDs)</span>
-<span class="fc" id="L180">                .observeOn(FX_SCHEDULER).subscribe(group -&gt; {</span>
-<span class="fc" id="L181">                    groupStorageProvider.get().set_id(group._id());</span>
-<span class="fc" id="L182">                    groupStorageProvider.get().setName(group.name());</span>
-<span class="fc" id="L183">                    groupStorageProvider.get().setMembers(group.members());</span>
-<span class="fc" id="L184">                    app.show(messagesControllerProvider.get());</span>
-<span class="pc" id="L185">                }, error -&gt; errorMessage.setText(error.getMessage())));</span>
-<span class="fc" id="L186">    }</span>
+<span class="fc" id="L179">        List&lt;String&gt; newGroupMembersIDs = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L180">        newGroupMembersIDs.add(userStorage.get().get_id());</span>
+<span class="pc" id="L181">        newGroupMembers.forEach(user -&gt; newGroupMembersIDs.add(user._id()));</span>
+<span class="fc" id="L182">        disposables.add(groupService.create(groupNameInput.getText(), newGroupMembersIDs)</span>
+<span class="fc" id="L183">                .observeOn(FX_SCHEDULER).subscribe(group -&gt; {</span>
+<span class="fc" id="L184">                    groupStorageProvider.get().set_id(group._id());</span>
+<span class="fc" id="L185">                    groupStorageProvider.get().setName(group.name());</span>
+<span class="fc" id="L186">                    groupStorageProvider.get().setMembers(group.members());</span>
+<span class="fc" id="L187">                    app.show(messagesControllerProvider.get());</span>
+<span class="pc" id="L188">                }, error -&gt; errorMessage.setText(error.getMessage())));</span>
+<span class="fc" id="L189">    }</span>
 
     public void searchForGroupMembers() {
-<span class="fc" id="L189">        disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER).subscribe(users -&gt; {</span>
-<span class="fc" id="L190">            allUsers.setAll(users);</span>
-<span class="fc" id="L191">            final AutoCompletePopup&lt;User&gt; autoCompletePopup = new AutoCompletePopup&lt;&gt;();</span>
-<span class="fc" id="L192">            searchFieldGroupMembers.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
-<span class="fc" id="L193">                autoCompletePopup.getSuggestions().clear();</span>
-<span class="fc" id="L194">                autoCompletePopup.hide();</span>
-<span class="fc" id="L195">                autoCompletePopup.setVisibleRowCount(MAX_SUGGESTIONS_NEW_GROUP);</span>
-<span class="fc" id="L196">                autoCompletePopup.setPrefWidth(searchFieldGroupMembers.getWidth());</span>
-<span class="fc" id="L197">                autoCompletePopup.setSkin(new AutoCompletePopupSkin&lt;&gt;(autoCompletePopup, friendsListView.getCellFactory()));</span>
-<span class="fc" id="L198">                allUsers.stream().filter(user -&gt; user.name().contains(searchFieldGroupMembers.getText()))</span>
-<span class="fc" id="L199">                        .forEach(autoCompletePopup.getSuggestions()::add);</span>
-<span class="fc" id="L200">                autoCompletePopup.show(searchFieldGroupMembers);</span>
-<span class="fc" id="L201">            });</span>
-<span class="fc" id="L202">        }));</span>
-<span class="fc" id="L203">    }</span>
+<span class="fc" id="L192">        disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER).subscribe(users -&gt; {</span>
+<span class="fc" id="L193">            allUsers.setAll(users);</span>
+<span class="fc" id="L194">            final AutoCompletePopup&lt;User&gt; autoCompletePopup = new AutoCompletePopup&lt;&gt;();</span>
+<span class="fc" id="L195">            searchFieldGroupMembers.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
+<span class="fc" id="L196">                autoCompletePopup.getSuggestions().clear();</span>
+<span class="fc" id="L197">                autoCompletePopup.hide();</span>
+<span class="fc" id="L198">                autoCompletePopup.setVisibleRowCount(MAX_SUGGESTIONS_NEW_GROUP);</span>
+<span class="fc" id="L199">                autoCompletePopup.setPrefWidth(searchFieldGroupMembers.getWidth());</span>
+<span class="fc" id="L200">                autoCompletePopup.setSkin(new AutoCompletePopupSkin&lt;&gt;(autoCompletePopup, friendsListView.getCellFactory()));</span>
+<span class="fc" id="L201">                allUsers.stream().filter(user -&gt; user.name().contains(searchFieldGroupMembers.getText()))</span>
+<span class="fc" id="L202">                        .forEach(autoCompletePopup.getSuggestions()::add);</span>
+<span class="fc" id="L203">                autoCompletePopup.show(searchFieldGroupMembers);</span>
+<span class="fc" id="L204">            });</span>
+<span class="fc" id="L205">        }));</span>
+<span class="fc" id="L206">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

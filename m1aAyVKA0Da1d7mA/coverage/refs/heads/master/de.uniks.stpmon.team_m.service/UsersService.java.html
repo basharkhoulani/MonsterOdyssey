@@ -28,7 +28,7 @@ public class UsersService {
 <span class="nc" id="L28">        return usersApiService.getUser(id);</span>
     }
 
-    // For all users pass null for both parameters. Also only one parameter can be null.
+    // For all users pass null for both parameters. Also, only one parameter can be null.
     public Observable&lt;List&lt;User&gt;&gt; getUsers(List&lt;String&gt; ids, String status) {
 <span class="fc" id="L33">        return usersApiService.getUsers(ids, status);</span>
     }

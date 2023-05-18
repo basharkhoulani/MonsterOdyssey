@@ -3,25 +3,74 @@
 
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.service.UserStorage;
+import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.utils.BestFriendUtils;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ListView;
+
+import java.util.Optional;
+import java.util.prefs.Preferences;
+
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class FriendSettingsController extends Controller {
 
     private final User user;
+    private final Preferences preferences;
+    private final ListView&lt;User&gt; friendsListView;
+    private final UserStorage userStorage;
+    private final UsersService usersService;
     @FXML
     public Button bestFriendButton;
     @FXML
     public Button deleteFriendButton;
 
-<span class="nc" id="L17">    public FriendSettingsController(User user) {</span>
-<span class="nc" id="L18">        this.user = user;</span>
-<span class="nc" id="L19">    }</span>
+<span class="nc" id="L32">    public FriendSettingsController(Preferences preferences, UserStorage userStorage, UsersService usersService, ListView&lt;User&gt; friendsListView, User user) {</span>
+<span class="nc" id="L33">        this.preferences = preferences;</span>
+<span class="nc" id="L34">        this.userStorage = userStorage;</span>
+<span class="nc" id="L35">        this.usersService = usersService;</span>
+<span class="nc" id="L36">        this.friendsListView = friendsListView;</span>
+<span class="nc" id="L37">        this.user = user;</span>
+<span class="nc" id="L38">    }</span>
 
     public void bestFriendAction() {
-<span class="nc" id="L22">    }</span>
+<span class="nc" id="L41">        final BestFriendUtils bestFriendUtils = new BestFriendUtils(preferences);</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (user._id().equals(preferences.get(BEST_FRIEND_PREF, null))) {</span>
+<span class="nc" id="L43">            preferences.put(BEST_FRIEND_PREF, &quot;&quot;);</span>
+<span class="nc" id="L44">            bestFriendUtils.sortBestFriendTop(friendsListView);</span>
+        } else {
+<span class="nc" id="L46">            preferences.put(BEST_FRIEND_PREF, user._id());</span>
+<span class="nc" id="L47">            bestFriendUtils.sortBestFriendTop(friendsListView);</span>
+        }
+<span class="nc" id="L49">    }</span>
 
     public void deleteFriendAction() {
-<span class="nc" id="L25">    }</span>
+<span class="nc" id="L52">        deleteAlert();</span>
+<span class="nc" id="L53">    }</span>
+    private void deleteAlert() {
+<span class="nc" id="L55">        Alert alert = new Alert(Alert.AlertType.WARNING, DELETE_FRIEND_WARNING, ButtonType.YES, ButtonType.NO);</span>
+<span class="nc" id="L56">        alert.setTitle(SURE);</span>
+<span class="nc" id="L57">        alert.setHeaderText(null);</span>
+<span class="nc" id="L58">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+<span class="nc bnc" id="L59" title="All 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.YES) {</span>
+<span class="nc" id="L60">            userStorage.deleteFriend(user._id());</span>
+<span class="nc" id="L61">            disposables.add(usersService.updateUser(null, null, null, userStorage.getFriends(), null).observeOn(FX_SCHEDULER).subscribe(updatedUser -&gt; friendsListView.getItems().remove(user), error -&gt; {</span>
+<span class="nc" id="L62">                userStorage.addFriend(user._id());</span>
+<span class="nc" id="L63">                alert.setContentText(GENERIC_ERROR);</span>
+<span class="nc" id="L64">                alert.setTitle(error.getMessage());</span>
+<span class="nc" id="L65">                alert.getButtonTypes().remove(ButtonType.NO);</span>
+<span class="nc" id="L66">                alert.getButtonTypes().remove(ButtonType.YES);</span>
+<span class="nc" id="L67">                alert.getButtonTypes().add(ButtonType.OK);</span>
+<span class="nc" id="L68">                alert.showAndWait();</span>
+<span class="nc" id="L69">            }));</span>
+
+        } else {
+<span class="nc" id="L72">            alert.close();</span>
+        }
+<span class="nc" id="L74">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
