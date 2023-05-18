@@ -28,7 +28,7 @@ public class UsersService {
         return usersApiService.getUser(id);
     }
 
-    // For all users pass null for both parameters. Also only one parameter can be null.
+    // For all users pass null for both parameters. Also, only one parameter can be null.
     public Observable<List<User>> getUsers(List<String> ids, String status) {
         return usersApiService.getUsers(ids, status);
     }

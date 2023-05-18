@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.controller.Controller.FX_SCHEDULER;
 
@@ -42,7 +43,8 @@ public class MessagesUserCell extends UserCell{
     private final GroupService groupService;
 
     // Inject won't work, so I had to do it the old-fashioned way. Figured it would take too long to look for the problem
-    public MessagesUserCell(VBox chatVbox,
+    public MessagesUserCell(Preferences preferences,
+                            VBox chatVbox,
                             Text currentFriendOrGroupText,
                             ScrollPane chatScrollPane,
                             Provider<UserStorage> userStorageProvider,
@@ -50,6 +52,7 @@ public class MessagesUserCell extends UserCell{
                             MessageService messageService,
                             GroupService groupService,
                             CompositeDisposable disposable) {
+        super(preferences);
         this.chatVBox = chatVbox;
         this.currentFriendOrGroupText = currentFriendOrGroupText;
         this.userStorageProvider = userStorageProvider;

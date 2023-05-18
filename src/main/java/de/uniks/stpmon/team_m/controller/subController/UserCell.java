@@ -1,18 +1,28 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.utils.BestFriendUtils;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.util.Objects;
+import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 import static javafx.geometry.Pos.CENTER;
 
 public class UserCell extends ListCell<User> {
+    Preferences preferences;
+
+    public UserCell(Preferences preferences) {
+        this.preferences = preferences;
+    }
 
     private HBox rootHBox;
 
@@ -24,13 +34,23 @@ public class UserCell extends ListCell<User> {
             setGraphic(null);
         } else {
             final Label usernameLabel = new Label(user.name());
-            final Circle circle = new Circle(STATUS_CIRCLE_RADIUS);
-            final HBox statusHBox = new HBox(circle);
-            final HBox nameHBox = new HBox(usernameLabel);
-            rootHBox = new HBox(HBOX_FRIENDS_SPACING, statusHBox, nameHBox);
-            nameHBox.setAlignment(CENTER);
+            final Image onlineImage = new Image(Objects.requireNonNull(App.class.getResource(ONLINE_IMG)).toString());
+            final Image offlineImage = new Image(Objects.requireNonNull(App.class.getResource(OFFLINE_IMG)).toString());
+            final Image onlineStar = new Image(Objects.requireNonNull(App.class.getResource(ONLINE_STAR)).toString());
+            final Image offlineStar = new Image(Objects.requireNonNull(App.class.getResource(OFFLINE_STAR)).toString());
+            ImageView statusImageView = new ImageView();
+            final HBox statusHBox = new HBox(statusImageView);
             statusHBox.setAlignment(CENTER);
-            circle.setFill(Objects.equals(user.status(), USER_STATUS_ONLINE) ? Color.LIGHTGREEN : Color.RED);
+            final HBox nameHBox = new HBox(usernameLabel);
+            nameHBox.setAlignment(CENTER);
+            rootHBox = new HBox(HBOX_FRIENDS_SPACING, statusHBox, nameHBox);
+            final BestFriendUtils bestFriendUtils = new BestFriendUtils(preferences);
+            statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineImage : offlineImage);
+            if (preferences != null) {
+                if (bestFriendUtils.isBestFriend(user)) {
+                    statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineStar : offlineStar);
+                }
+            }
             rootHBox.setId(user.name());
             rootHBox.setUserData(user);
             setGraphic(rootHBox);

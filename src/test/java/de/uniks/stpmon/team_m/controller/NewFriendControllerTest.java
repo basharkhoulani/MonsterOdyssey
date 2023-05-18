@@ -64,6 +64,8 @@ class NewFriendControllerTest extends ApplicationTest {
         final MainMenuController mainMenuController = mock(MainMenuController.class);
         when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
         doNothing().when(app).show(mainMenuController);
+        final GroupStorage groupStorage = mock(GroupStorage.class);
+        Mockito.when(groupStorageProvider.get()).thenReturn(groupStorage);
 
         clickOn("#mainMenuButton");
 
@@ -87,6 +89,14 @@ class NewFriendControllerTest extends ApplicationTest {
         userStorage.set_id("1");
         userStorage.setFriends(new ArrayList<>());
         Mockito.when(userStorageProvider.get()).thenReturn(userStorage);
+        GroupService groupService = mock(GroupService.class);
+        when(groupServiceProvider.get()).thenReturn(groupService);
+        when(groupService.getGroups(ArgumentMatchers.any())).thenReturn(Observable.just(Arrays.asList(
+                new Group("1", "11", null),
+                new Group("2", "22", null),
+                new Group("3", "33",  null)
+        )));
+        when(groupServiceProvider.get()).thenReturn(groupService);
         // empty textfield
         clickOn("#addFriendButton");
         // click on searchbar
