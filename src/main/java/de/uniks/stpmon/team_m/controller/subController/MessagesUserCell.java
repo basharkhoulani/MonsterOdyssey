@@ -8,7 +8,6 @@ import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -22,7 +21,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
