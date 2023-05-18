@@ -75,10 +75,14 @@ public class GroupController extends Controller {
         friendsListView = new ListView<>();
         friendsListView.setSelectionModel(null);
         friendsListView.setFocusModel(null);
+        friendsListView.setId("friendsListView");
+        friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
 
         foreignListView = new ListView<>();
         foreignListView.setSelectionModel(null);
         foreignListView.setFocusModel(null);
+        foreignListView.setId("foreignListView");
+        foreignListView.setPlaceholder(new Label(NO_USERS_ADDED_TO_GROUP));
 
         if (groupId.equals(EMPTY_STRING)) {
             initNewGroupView();
@@ -93,21 +97,21 @@ public class GroupController extends Controller {
     private void initNewGroupView() {
         final List<String> friendsByID = userStorage.get().getFriends();
         final List<User> friendsByUserObject = new ArrayList<>();
-        final List<User> foreignByUserObject = new ArrayList<>();
-        disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
-            friendsByUserObject.addAll(users);
+        if (!friendsByID.isEmpty()) {
+            disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
+                friendsByUserObject.addAll(users);
 
-            friendsListView.setCellFactory(param -> new GroupUserCell(newGroupMembers, foreignByUserObject, friendsListView,
-                    foreignListView, friendsByUserObject));
-            foreignListView.setCellFactory(param -> new GroupUserCell(newGroupMembers, foreignByUserObject, friendsListView,
-                    foreignListView, friendsByUserObject));
+                friendsListView.setCellFactory(param -> new GroupUserCell(newGroupMembers, friendsListView,
+                        foreignListView, friendsByUserObject));
+                foreignListView.setCellFactory(param -> new GroupUserCell(newGroupMembers, friendsListView,
+                        foreignListView, friendsByUserObject));
 
-            friendsListView.setItems(FXCollections.observableArrayList(friendsByUserObject));
-            foreignListView.setItems(FXCollections.observableArrayList(foreignByUserObject));
+                friendsListView.setItems(FXCollections.observableArrayList(friendsByUserObject));
 
-            sortListView(friendsListView);
-            sortListView(foreignListView);
-        }));
+                sortListView(friendsListView);
+                sortListView(foreignListView);
+            }));
+        }
     }
 
     @Override

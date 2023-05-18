@@ -76,6 +76,7 @@ public class MessagesController extends Controller {
     public void init() {
         userListView = new ListView<>(friends);
         userListView.setId("friends");
+        userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
         userListView.setCellFactory(param -> new MessagesUserCell(
                 chatViewVBox,
                 currentFriendOrGroupText,
@@ -97,6 +98,7 @@ public class MessagesController extends Controller {
         groupListView = new ListView<>(groups);
         groupListView.setId("groups");
         groupListView.setCellFactory(param -> new GroupCell());
+        groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
         disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> {
             this.groups.setAll(groups);
             groupListView.refresh();

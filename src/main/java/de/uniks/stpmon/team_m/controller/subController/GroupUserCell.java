@@ -19,14 +19,12 @@ public class GroupUserCell extends UserCell {
     private final ListView<User> foreignListView;
     private final ObservableList<User> chosenUsers;
     private final List<User> friends;
-    private final List<User> foreignUsers;
 
-    public GroupUserCell(ObservableList<User> chosenUsers, List<User> foreignUsers, ListView<User> friendsListView,
+    public GroupUserCell(ObservableList<User> chosenUsers, ListView<User> friendsListView,
                          ListView<User> foreignListView, List<User> friends) {
         this.chosenUsers = chosenUsers;
         this.friendsListView = friendsListView;
         this.foreignListView = foreignListView;
-        this.foreignUsers = foreignUsers;
         this.friends = friends;
     }
 

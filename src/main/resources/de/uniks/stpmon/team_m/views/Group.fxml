@@ -18,7 +18,7 @@
                       </VBox.margin>
                   </TextField>
               </VBox>
-              <HBox VBox.vgrow="NEVER">
+              <HBox prefHeight="262.0" prefWidth="512.0" VBox.vgrow="NEVER">
                   <VBox alignment="CENTER" minHeight="100.0" prefHeight="448.0" prefWidth="523.0" HBox.hgrow="ALWAYS" />
               </HBox>
               <VBox alignment="BOTTOM_CENTER" fillWidth="false" prefHeight="119.0" prefWidth="513.0" VBox.vgrow="NEVER">
