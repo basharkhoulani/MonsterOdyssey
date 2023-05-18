@@ -3,7 +3,6 @@ package de.uniks.stpmon.team_m.service;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.dto.LoginDto;
 import de.uniks.stpmon.team_m.dto.LoginResult;
-import de.uniks.stpmon.team_m.dto.LogoutResult;
 import de.uniks.stpmon.team_m.dto.RefreshDto;
 import de.uniks.stpmon.team_m.rest.AuthApiService;
 import io.reactivex.rxjava3.core.Observable;
@@ -53,9 +52,7 @@ public class AuthenticationService {
         });
     }
 
-    public Observable<LogoutResult> logout() {
-        return authApiService.logout().map(lr -> lr);
+    public Observable<String> logout() {
+        return authApiService.logout().map(lr -> "LogoutSuccess");
     }
-
-    // TODO: Remember me (refresh)
 }

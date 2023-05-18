@@ -44,6 +44,8 @@ public class App extends Application {
         stage = primaryStage;
         stage.setWidth(STANDARD_WIDTH);
         stage.setHeight(STANDARD_HEIGHT);
+        stage.setMinHeight(MINIMUM_HEIGHT);
+        stage.setMinWidth(MINIMUM_WIDTH);
         stage.setTitle(GAME_NAME);
 
         stage.setScene(loadingscreen());
@@ -51,28 +53,29 @@ public class App extends Application {
         setTaskbarIcon();
 
         PauseTransition pause = new PauseTransition(Duration.seconds(3));
-        pause.setOnFinished(event ->{
-            if (component == null) {
-                return;
-            }
+        pause.setOnFinished(event -> {
+                    if (component == null) {
+                        return;
+                    }
 
-            final AuthenticationService authenticationService = component.authenticationService();
+                    final AuthenticationService authenticationService = component.authenticationService();
 
-            if (authenticationService.isRememberMe()) {
+                    if (authenticationService.isRememberMe()) {
 
-                disposables.add(authenticationService.refresh()
-                        .observeOn(Schedulers.from(Platform::runLater))
-                        .subscribe(lr -> show(component.mainMenuController()),
-                                err -> show(component.loginController())));
-            } else {
-                show(component.loginController());
-            }
+                        disposables.add(authenticationService.refresh()
+                                .observeOn(Schedulers.from(Platform::runLater))
+                                .subscribe(lr -> {
+                                    component.loginController().userStatusUpdate(USER_STATUS_ONLINE);
+                                    show(component.mainMenuController());
+                                        },
+                                        err -> show(component.loginController())));
+                    } else {
+                        show(component.loginController());
+                    }
                 }
         );
         pause.play();
         stage.show();
-
-
     }
 
     private Scene loadingscreen() {
@@ -86,7 +89,6 @@ public class App extends Application {
 
     @Override
     public void stop() {
-        disposables.dispose();
         cleanup();
     }
 
@@ -111,7 +113,6 @@ public class App extends Application {
     }
 
     public void show(Controller controller) {
-        cleanup();
         this.controller = controller;
         initAndRender(controller);
     }
@@ -123,8 +124,13 @@ public class App extends Application {
         stage.setWidth(controller.getWidth());
         stage.setHeight(controller.getHeight());
     }
+    public Controller getController(){
+        return controller;
+    }
 
     private void cleanup() {
+        component.loginController().userStatusUpdate(USER_STATUS_OFFLINE);
+        disposables.dispose();
         if (controller != null) {
             controller.destroy();
             controller = null;

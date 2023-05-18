@@ -27,6 +27,8 @@ class AccountSettingControllerTest extends ApplicationTest {
     @Mock
     Provider<MainMenuController> mainMenuControllerProvider;
     @Mock
+    Provider<LoginController> loginControllerProvider;
+    @Mock
     UsersService usersService;
     @InjectMocks
     AccountSettingController accountSettingController;
@@ -57,15 +59,15 @@ class AccountSettingControllerTest extends ApplicationTest {
     }
 
     @Test
-    void saveUsername() {
+    void saveUsernameSuccessful() {
         final Label infoLabel = lookup("#informationLabel").query();
         final TextField usernameField = lookup("#usernameField").query();
 
         when(usersService.updateUser(anyString(), isNull(), isNull(), isNull(), isNull()))
                 .thenReturn(Observable.just(new User(
-                        "1",
+                        "423f8d731c386bcd2204da39",
                         "UserPatch",
-                        STATUS_ONLINE,
+                        USER_STATUS_ONLINE,
                         null,
                         null
                 )));
@@ -80,6 +82,36 @@ class AccountSettingControllerTest extends ApplicationTest {
         verify(usersService).updateUser("UserPatch", null, null, null, null);
         assertEquals(USERNAME_SUCCESS_CHANGED, infoLabel.getText());
         assertEquals("UserPatch", usernameField.getPromptText());
+    }
+
+    @Test
+    void changeUsernameTake() {
+        final TextField usernameField = lookup("#usernameField").query();
+        final Label usernameErrorLabel = lookup("#usernameErrorLabel").query();
+
+        when(usersService.updateUser(anyString(),isNull(),isNull(),isNull(),isNull())).thenReturn(Observable.error(new Exception("HTTP 409")));
+
+        clickOn("#usernameEditButton");
+        clickOn(usernameField);
+        write("UserPatch");
+        clickOn("#saveUsernameButton");
+
+        assertEquals("Username is already taken!", usernameErrorLabel.getText());
+    }
+
+    @Test
+    void changeUsernameOtherError() {
+        final TextField usernameField = lookup("#usernameField").query();
+        final Label usernameErrorLabel = lookup("#usernameErrorLabel").query();
+
+        when(usersService.updateUser(anyString(),isNull(),isNull(),isNull(),isNull())).thenReturn(Observable.error(new Exception("Test")));
+
+        clickOn("#usernameEditButton");
+        clickOn(usernameField);
+        write("UserPatch");
+        clickOn("#saveUsernameButton");
+
+        assertEquals("Something went terribly wrong!", usernameErrorLabel.getText());
     }
 
     @Test
@@ -117,7 +149,7 @@ class AccountSettingControllerTest extends ApplicationTest {
                 .thenReturn(Observable.just(new User(
                         "1",
                         "UserPatch",
-                        STATUS_ONLINE,
+                        USER_STATUS_ONLINE,
                         null,
                         null
                 )));
@@ -132,7 +164,47 @@ class AccountSettingControllerTest extends ApplicationTest {
     }
 
     @Test
+    void changePasswordOtherError() {
+        final TextField passwordField = lookup("#passwordField").query();
+        final Label passwordErrorLabel = lookup("#passwordErrorLabel").query();
+
+        when(usersService.updateUser(isNull(),isNull(),isNull(),isNull(),anyString())).thenReturn(Observable.error(new Exception("Test")));
+
+        clickOn("#passwordEditButton");
+        clickOn(passwordField);
+        write("UserPatch");
+        clickOn("#savePasswordButton");
+
+        assertEquals("Something went terribly wrong!", passwordErrorLabel.getText());
+    }
+
+    @Test
     void deleteAccount() {
+        final LoginController loginController = mock(LoginController.class);
+        when(loginControllerProvider.get()).thenReturn(loginController);
+        doNothing().when(app).show(loginController);
+        when(usersService.deleteUser())
+                .thenReturn(Observable.just(new User(
+                        "423f8d731c386bcd2204da39",
+                        "UserDelete",
+                        USER_STATUS_ONLINE,
+                        null,
+                        null)));
+
+        clickOn("#deleteAccountButton");
+        clickOn(ButtonType.OK.getText());
+        verify(usersService).deleteUser();
+        verify(loginController).setInformation("Account successfully deleted");
+        verify(app).show(loginController);
+    }
+
+    @Test
+    void deleteAccountError() {
+        when(usersService.deleteUser()).thenReturn(Observable.error(new Exception("Test")));
+        clickOn("#deleteAccountButton");
+        clickOn(ButtonType.OK.getText());
+        clickOn(ButtonType.OK.getText());
+        assertEquals("Monster Odyssey - Account Setting", app.getStage().getTitle());
     }
 
     @Test

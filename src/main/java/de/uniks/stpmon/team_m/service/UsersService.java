@@ -28,7 +28,7 @@ public class UsersService {
         return usersApiService.getUser(id);
     }
 
-    // For all users pass null for both parameters. Also only one parameter can be null.
+    // For all users pass null for both parameters. Also, only one parameter can be null.
     public Observable<List<User>> getUsers(List<String> ids, String status) {
         return usersApiService.getUsers(ids, status);
     }
@@ -38,6 +38,9 @@ public class UsersService {
     }
 
     public Observable<User> deleteUser() {
-        return usersApiService.deleteUser(userStorage.get_id());
+        return usersApiService.deleteUser(userStorage.get_id()).map(user -> {
+            userStorage.removeUser();
+            return user;
+        });
     }
 }

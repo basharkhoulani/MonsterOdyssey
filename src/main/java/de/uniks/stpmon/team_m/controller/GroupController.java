@@ -1,6 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.controller.views.UserCell;
+import de.uniks.stpmon.team_m.controller.subController.GroupUserCell;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
@@ -21,6 +21,7 @@ import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -32,7 +33,9 @@ public class GroupController extends Controller {
     @FXML
     public Text selectGroupMembersText;
     @FXML
-    public VBox groupMembersVBox;
+    public VBox friendsUsers;
+    @FXML
+    public VBox foreignUsers;
     @FXML
     public Button backToMessagesButton;
     @FXML
@@ -53,7 +56,11 @@ public class GroupController extends Controller {
     Provider<GroupStorage> groupStorageProvider;
     @Inject
     Provider<UserStorage> userStorage;
-    private ListView<User> listView;
+    @Inject
+    Preferences preferences;
+    private final ObservableList<User> friends = FXCollections.observableArrayList();
+    private ListView<User> friendsListView;
+    private ListView<User> foreignListView;
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
     private final ObservableList<User> newGroupMembers = FXCollections.observableArrayList();
 
@@ -69,28 +76,45 @@ public class GroupController extends Controller {
     @Override
     public void init() {
         final String groupId = groupStorageProvider.get().get_id();
-        listView = new ListView<>();
-        listView.setSelectionModel(null);
-        listView.setFocusModel(null);
-        final List<String> friendsByID = userStorage.get().getFriends();
+        friendsListView = new ListView<>();
+        friendsListView.setSelectionModel(null);
+        friendsListView.setFocusModel(null);
+        friendsListView.setId("friendsListView");
+        friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
+
+        foreignListView = new ListView<>();
+        foreignListView.setSelectionModel(null);
+        foreignListView.setFocusModel(null);
+        foreignListView.setId("foreignListView");
+        foreignListView.setPlaceholder(new Label(NO_USERS_ADDED_TO_GROUP));
+
+        listenToStatusUpdate(friends, friendsListView);
+
         if (groupId.equals(EMPTY_STRING)) {
-            disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
-                listView.setCellFactory(param -> new UserCell(newGroupMembers, listView, users));
-                for (User user : users) {
-                    if (friendsByID.contains(user._id())) {
-                        listView.getItems().add(user);
-                    }
-                }
-            }));
+            initNewGroupView();
         } else {
-            disposables.add(groupService.getGroup(groupId).observeOn(FX_SCHEDULER).subscribe(group -> {
-                final List<String> groupMembers = group.members();
-                groupMembers.removeAll(friendsByID);
-                friendsByID.addAll(groupMembers);
-                disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
-                    listView.setCellFactory(param -> new UserCell(newGroupMembers, listView, users));
-                    listView.getItems().addAll(users);
-                }));
+            initEditGroupView(groupId);
+        }
+    }
+
+    private void initEditGroupView(String groupId) {
+    }
+
+    private void initNewGroupView() {
+        final List<String> friendsByID = userStorage.get().getFriends();
+        if (!friendsByID.isEmpty()) {
+            disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
+                friends.setAll(users);
+
+                friendsListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
+                        foreignListView, friends));
+                foreignListView.setCellFactory(param -> new GroupUserCell(preferences,newGroupMembers, friendsListView,
+                        foreignListView, friends));
+
+                friendsListView.setItems(friends);
+
+                sortListView(friendsListView);
+                sortListView(foreignListView);
             }));
         }
     }
@@ -103,7 +127,8 @@ public class GroupController extends Controller {
         } else {
             editGroup();
         }
-        groupMembersVBox.getChildren().add(listView);
+        friendsUsers.getChildren().add(friendsListView);
+        foreignUsers.getChildren().add(foreignListView);
         return parent;
     }
 
@@ -115,7 +140,6 @@ public class GroupController extends Controller {
     private void editGroup() {
         TITLE = EDIT_GROUP_TITLE;
         groupNameInput.setPromptText(CHANGE_GROUP);
-        groupNameInput.setText(groupStorageProvider.get().getName());
     }
 
     public void changeToMessages() {
@@ -152,26 +176,6 @@ public class GroupController extends Controller {
 
 
     public void saveGroup() {
-        if (TITLE.equals(EDIT_GROUP_TITLE)) {
-            updateGroup();
-        } else {
-            createGroup();
-        }
-    }
-
-    private void updateGroup() {
-        // 6460ad8248f4d49dcfaa4206
-        List<String> newGroupMembersIDs = new ArrayList<>();
-        newGroupMembers.forEach(user -> newGroupMembersIDs.add(user._id()));
-        disposables.add(groupService.update(groupStorageProvider.get().get_id(), groupNameInput.getText(), newGroupMembersIDs)
-                .observeOn(FX_SCHEDULER).subscribe(group -> {
-                    groupStorageProvider.get().setName(group.name());
-                    groupStorageProvider.get().setMembers(group.members());
-                    app.show(messagesControllerProvider.get());
-                }, error -> errorMessage.setText(error.getMessage())));
-    }
-
-    private void createGroup() {
         List<String> newGroupMembersIDs = new ArrayList<>();
         newGroupMembersIDs.add(userStorage.get().get_id());
         newGroupMembers.forEach(user -> newGroupMembersIDs.add(user._id()));
@@ -191,7 +195,9 @@ public class GroupController extends Controller {
             searchFieldGroupMembers.textProperty().addListener((observable, oldValue, newValue) -> {
                 autoCompletePopup.getSuggestions().clear();
                 autoCompletePopup.hide();
-                autoCompletePopup.setSkin(new AutoCompletePopupSkin<>(autoCompletePopup, listView.getCellFactory()));
+                autoCompletePopup.setVisibleRowCount(MAX_SUGGESTIONS_NEW_GROUP);
+                autoCompletePopup.setPrefWidth(searchFieldGroupMembers.getWidth());
+                autoCompletePopup.setSkin(new AutoCompletePopupSkin<>(autoCompletePopup, friendsListView.getCellFactory()));
                 allUsers.stream().filter(user -> user.name().contains(searchFieldGroupMembers.getText()))
                         .forEach(autoCompletePopup.getSuggestions()::add);
                 autoCompletePopup.show(searchFieldGroupMembers);

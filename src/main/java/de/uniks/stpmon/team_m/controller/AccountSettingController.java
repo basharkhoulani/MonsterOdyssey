@@ -111,11 +111,11 @@ public class AccountSettingController extends Controller {
                 .observeOn(FX_SCHEDULER)
                 .subscribe(userResult -> {
                     user.setName(userResult.name());
-                    informationLabel.setText("Your username has been changed successfully.");
+                    informationLabel.setText(USERNAME_SUCCESS_CHANGED);
                     usernameField.setDisable(true);
                     usernameField.setText(EMPTY_STRING);
                     usernameField.setPromptText(user.getName());
-                }, error -> usernameErrorLabel.setText(error.getMessage())));
+                }, error -> usernameErrorLabel.setText(errorHandle(error.getMessage()))));
 
     }
 
@@ -142,14 +142,18 @@ public class AccountSettingController extends Controller {
                     passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);
                     passwordField.setDisable(true);
                     showPasswordButton.setDisable(true);
-                    informationLabel.setText("Your Password has been changed successfully.");
-                }, error -> passwordErrorLabel.setText(error.getMessage())));
+                    informationLabel.setText(PASSWORD_SUCCESS_CHANGED);
+                }, error -> passwordErrorLabel.setText(errorHandle(error.getMessage()))));
     }
 
-    public void deleteAccount() {
-        LoginController loginController = loginControllerProvider.get();
-        loginController.setInformation("Account successfully deleted");
-        app.show(loginController);
+    public void deleteAccount(Alert alert) {
+        disposables.add(usersService.deleteUser()
+                .observeOn(FX_SCHEDULER)
+                .subscribe(delete -> {
+                    LoginController loginController = loginControllerProvider.get();
+                    loginController.setInformation(DELETE_SUCCESS);
+                    app.show(loginController);
+                }, error -> errorAlert(alert)));
     }
 
     public void cancel() {
@@ -157,14 +161,29 @@ public class AccountSettingController extends Controller {
     }
 
     public void showDeletePopUp() {
-        Alert alert = new Alert(Alert.AlertType.WARNING, "Are you sure?", ButtonType.OK, ButtonType.CANCEL);
+        Alert alert = new Alert(Alert.AlertType.WARNING, SURE, ButtonType.OK, ButtonType.CANCEL);
         alert.setTitle("Delete Account");
         alert.setHeaderText(null);
         alert.initOwner(app.getStage());
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            deleteAccount();
+            deleteAccount(alert);
+        }
+    }
+
+    private void errorAlert(Alert alert) {
+        alert.setContentText(CUSTOM_ERROR);
+        alert.setTitle(ERROR);
+        alert.getButtonTypes().remove(ButtonType.CANCEL);
+        alert.showAndWait();
+    }
+
+    public String errorHandle(String error){
+        if(error.contains(HTTP_409)){
+            return USERNAME_TAKEN;
+        } else {
+            return CUSTOM_ERROR;
         }
     }
 }
