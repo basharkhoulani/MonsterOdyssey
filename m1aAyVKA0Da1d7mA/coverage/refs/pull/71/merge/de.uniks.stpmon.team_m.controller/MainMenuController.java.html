@@ -74,88 +74,87 @@ public class MainMenuController extends Controller {
 
     @Override
     public void init() {
-
-<span class="fc" id="L78">        friendsListView = new ListView&lt;&gt;(friends);</span>
-<span class="fc" id="L79">        friendsListView.setId(&quot;friendsListView&quot;);</span>
-<span class="fc" id="L80">        friendsListView.setCellFactory(param -&gt; new MainMenuUserCell(preferencesProvider.get(), userStorageProvider.get(), usersService));</span>
-<span class="fc" id="L81">        friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));</span>
-<span class="fc" id="L82">        disposables.add(regionsApiService.getRegions()</span>
-<span class="fc" id="L83">                .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));</span>
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        if (!userStorageProvider.get().getFriends().isEmpty()) {</span>
-<span class="fc" id="L85">            disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)</span>
-<span class="fc" id="L86">                    .observeOn(FX_SCHEDULER).subscribe(users -&gt; {</span>
-<span class="fc" id="L87">                        friends.setAll(users);</span>
-<span class="fc" id="L88">                        sortListView(friendsListView);</span>
-<span class="fc" id="L89">                        new BestFriendUtils(preferencesProvider.get()).sortBestFriendTop(friendsListView);</span>
-<span class="fc" id="L90">                    }));</span>
-<span class="fc" id="L91">            listenToStatusUpdate(friends, friendsListView);</span>
+<span class="fc" id="L77">        friendsListView = new ListView&lt;&gt;(friends);</span>
+<span class="fc" id="L78">        friendsListView.setId(&quot;friendsListView&quot;);</span>
+<span class="fc" id="L79">        friendsListView.setCellFactory(param -&gt; new MainMenuUserCell(preferencesProvider.get(), userStorageProvider.get(), usersService));</span>
+<span class="fc" id="L80">        friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));</span>
+<span class="fc" id="L81">        disposables.add(regionsApiService.getRegions()</span>
+<span class="fc" id="L82">                .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (!userStorageProvider.get().getFriends().isEmpty()) {</span>
+<span class="fc" id="L84">            disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)</span>
+<span class="fc" id="L85">                    .observeOn(FX_SCHEDULER).subscribe(users -&gt; {</span>
+<span class="fc" id="L86">                        friends.setAll(users);</span>
+<span class="fc" id="L87">                        sortListView(friendsListView);</span>
+<span class="fc" id="L88">                        new BestFriendUtils(preferencesProvider.get()).sortBestFriendTop(friendsListView);</span>
+<span class="fc" id="L89">                    }));</span>
+<span class="fc" id="L90">            listenToStatusUpdate(friends, friendsListView);</span>
         }
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L92">    }</span>
 
     @Inject
-<span class="fc" id="L96">    public MainMenuController() {</span>
-<span class="fc" id="L97">    }</span>
+<span class="fc" id="L95">    public MainMenuController() {</span>
+<span class="fc" id="L96">    }</span>
 
     @Override
     public String getTitle() {
-<span class="fc" id="L101">        return MAIN_MENU_TITLE;</span>
+<span class="fc" id="L100">        return MAIN_MENU_TITLE;</span>
     }
 
     @Override
     public Parent render() {
-<span class="fc" id="L106">        final Parent parent = super.render();</span>
-<span class="fc" id="L107">        initRadioButtons();</span>
-<span class="fc" id="L108">        friendsListVBox.getChildren().add(friendsListView);</span>
-<span class="fc" id="L109">        friendsListView.setOnMouseClicked(event -&gt; switchToMessageScreen());</span>
-<span class="fc" id="L110">        return parent;</span>
+<span class="fc" id="L105">        final Parent parent = super.render();</span>
+<span class="fc" id="L106">        initRadioButtons();</span>
+<span class="fc" id="L107">        friendsListVBox.getChildren().add(friendsListView);</span>
+<span class="fc" id="L108">        friendsListView.setOnMouseClicked(event -&gt; switchToMessageScreen());</span>
+<span class="fc" id="L109">        return parent;</span>
     }
 
     private void switchToMessageScreen() {
-<span class="fc" id="L114">        List&lt;String&gt; privateGroup = Arrays.asList(friendsListView.getSelectionModel().getSelectedItem()._id(), userStorageProvider.get().get_id());</span>
-<span class="fc" id="L115">        disposables.add(groupServiceProvider.get().getGroups(privateGroup).observeOn(FX_SCHEDULER).subscribe(groups -&gt; {</span>
-<span class="fc bfc" id="L116" title="All 2 branches covered.">            for (Group group : groups) {</span>
-<span class="pc bpc" id="L117" title="2 of 4 branches missed.">                if (group.members().size() == privateGroup.size() &amp;&amp; group.name() == null) {</span>
-<span class="nc" id="L118">                    groupStorageProvider.get().set_id(group._id());</span>
-<span class="nc" id="L119">                    app.show(messagesControllerProvider.get());</span>
+<span class="fc" id="L113">        List&lt;String&gt; privateGroup = Arrays.asList(friendsListView.getSelectionModel().getSelectedItem()._id(), userStorageProvider.get().get_id());</span>
+<span class="fc" id="L114">        disposables.add(groupServiceProvider.get().getGroups(privateGroup).observeOn(FX_SCHEDULER).subscribe(groups -&gt; {</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">            for (Group group : groups) {</span>
+<span class="pc bpc" id="L116" title="2 of 4 branches missed.">                if (group.members().size() == privateGroup.size() &amp;&amp; group.name() == null) {</span>
+<span class="nc" id="L117">                    groupStorageProvider.get().set_id(group._id());</span>
+<span class="nc" id="L118">                    app.show(messagesControllerProvider.get());</span>
                 }
-<span class="fc" id="L121">            }</span>
-<span class="fc" id="L122">        }));</span>
-<span class="fc" id="L123">    }</span>
+<span class="fc" id="L120">            }</span>
+<span class="fc" id="L121">        }));</span>
+<span class="fc" id="L122">    }</span>
 
     private void initRadioButtons() {
-<span class="fc" id="L126">        ListView&lt;Region&gt; regionListView = new ListView&lt;&gt;();</span>
-<span class="fc" id="L127">        regionToggleGroup = new ToggleGroup();</span>
-<span class="fc" id="L128">        regionListView.setId(&quot;regionListView&quot;);</span>
-<span class="fc" id="L129">        regionListView.setCellFactory(param -&gt; new RegionCell(regionToggleGroup));</span>
-<span class="fc" id="L130">        regionListView.setItems(regions);</span>
-<span class="fc" id="L131">        regionRadioButtonList.getChildren().add(regionListView);</span>
-<span class="fc" id="L132">        startGameButton.disableProperty().bind(regionToggleGroup.selectedToggleProperty().isNull());</span>
-<span class="fc" id="L133">    }</span>
+<span class="fc" id="L125">        ListView&lt;Region&gt; regionListView = new ListView&lt;&gt;();</span>
+<span class="fc" id="L126">        regionToggleGroup = new ToggleGroup();</span>
+<span class="fc" id="L127">        regionListView.setId(&quot;regionListView&quot;);</span>
+<span class="fc" id="L128">        regionListView.setCellFactory(param -&gt; new RegionCell(regionToggleGroup));</span>
+<span class="fc" id="L129">        regionListView.setItems(regions);</span>
+<span class="fc" id="L130">        regionRadioButtonList.getChildren().add(regionListView);</span>
+<span class="fc" id="L131">        startGameButton.disableProperty().bind(regionToggleGroup.selectedToggleProperty().isNull());</span>
+<span class="fc" id="L132">    }</span>
 
     public void changeToFindNewFriends() {
-<span class="fc" id="L136">        app.show(newFriendControllerProvider.get());</span>
-<span class="fc" id="L137">    }</span>
+<span class="fc" id="L135">        app.show(newFriendControllerProvider.get());</span>
+<span class="fc" id="L136">    }</span>
 
     public void changeToMessages() {
-<span class="fc" id="L140">        groupStorageProvider.get().set_id(&quot;&quot;);</span>
-<span class="fc" id="L141">        app.show(messagesControllerProvider.get());</span>
-<span class="fc" id="L142">    }</span>
+<span class="fc" id="L139">        groupStorageProvider.get().set_id(&quot;&quot;);</span>
+<span class="fc" id="L140">        app.show(messagesControllerProvider.get());</span>
+<span class="fc" id="L141">    }</span>
 
     public void changeToLogin() {
-<span class="fc" id="L145">        disposables.add(usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)</span>
-<span class="fc" id="L146">                    .observeOn(FX_SCHEDULER)</span>
-<span class="fc" id="L147">                    .subscribe());</span>
-<span class="fc" id="L148">        disposables.add(authenticationService.logout().observeOn(FX_SCHEDULER)</span>
-<span class="fc" id="L149">                .subscribe(logoutResult -&gt; app.show(loginControllerProvider.get())));</span>
+<span class="fc" id="L144">        disposables.add(usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)</span>
+<span class="fc" id="L145">                    .observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L146">                    .subscribe());</span>
+<span class="fc" id="L147">        disposables.add(authenticationService.logout().observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L148">                .subscribe(logoutResult -&gt; app.show(loginControllerProvider.get())));</span>
 
-<span class="fc" id="L151">    }</span>
+<span class="fc" id="L150">    }</span>
 
     public void changeToSettings() {
-<span class="fc" id="L154">        app.show(accountSettingControllerProvider.get());</span>
-<span class="fc" id="L155">    }</span>
+<span class="fc" id="L153">        app.show(accountSettingControllerProvider.get());</span>
+<span class="fc" id="L154">    }</span>
 
     public void changeToIngame() {
-<span class="fc" id="L158">        app.show(ingameControllerProvider.get());</span>
-<span class="fc" id="L159">    }</span>
+<span class="fc" id="L157">        app.show(ingameControllerProvider.get());</span>
+<span class="fc" id="L158">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
