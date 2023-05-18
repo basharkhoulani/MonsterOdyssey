@@ -61,8 +61,7 @@ public class NewFriendController extends Controller {
     }
 
     public void changeToMainMenu() {
-        groupStorageProvider.get().set_id(null);
-        groupStorageProvider.get().setName(null);
+        groupStorageProvider.get().set_id("");
         app.show(mainMenuControllerProvider.get());
     }
 
@@ -92,9 +91,9 @@ public class NewFriendController extends Controller {
 
     public void sendMessage() {
         for (User user : allUsers) {
+            System.out.println(user.name());
             if (!user.name().equals(searchTextField.getText())) {
                 searchTextField.setPromptText(FRIEND_NOT_FOUND);
-                return;
             }
             if (user.name().equals(searchTextField.getText())) {
                 createPrivateGroup(user);
@@ -102,7 +101,6 @@ public class NewFriendController extends Controller {
                 break;
             }
         }
-        app.show(messageControllerProvider.get());
         searchTextField.clear();
     }
 

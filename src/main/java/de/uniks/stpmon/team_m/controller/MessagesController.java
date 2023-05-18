@@ -144,12 +144,6 @@ public class MessagesController extends Controller {
             openFriendChat("groupListView");
         });
         if (groupStorageProvider.get().get_id() != null) {
-            for (User user: friends) {
-                if (user._id().equals(groupStorageProvider.get().get_id())){
-                    userListView.getSelectionModel().select(user);
-                    break;
-                }
-            }
             openFriendChat("other");
         }
 
@@ -159,18 +153,18 @@ public class MessagesController extends Controller {
     }
 
     private void openFriendChat(String origin) {
-        final Group[] chat = new Group[1];
+        final Group chat;
         if (origin.equals("userListView")) {
-            chat[0] = new Group(null, null, List.of(userListView.getSelectionModel().getSelectedItem()._id(), userStorageProvider.get().get_id()));
+            chat = new Group(null, null, List.of(userListView.getSelectionModel().getSelectedItem()._id(), userStorageProvider.get().get_id()));
         } else if (origin.equals("groupListView")) {
-            chat[0] = groupListView.getSelectionModel().getSelectedItem();
+            chat = groupListView.getSelectionModel().getSelectedItem();
         } else {
-            chat[0] = new Group(null, null, List.of(groupStorageProvider.get().get_id(), userStorageProvider.get().get_id()));
+            chat = new Group(null, null, List.of(groupStorageProvider.get().get_id(), userStorageProvider.get().get_id()));
         }
 
-        disposables.add(groupService.getGroups(chat[0].membersToString())
+        disposables.add(groupService.getGroups(chat.membersToString())
                 .observeOn(FX_SCHEDULER).subscribe(gotGroups -> {
-                    if (chat[0].name() == null) {
+                    if (chat.name() == null) {
                         for (Group group : gotGroups) {
                             if (group.name() == null) {
                                 chatID = group._id();
@@ -179,13 +173,13 @@ public class MessagesController extends Controller {
                             chatID = null;
                         }
                     } else {
-                        chatID = chat[0]._id();
+                        chatID = chat._id();
                     }
 
                     if (origin.equals("userListView")) {
                         this.currentFriendOrGroupText.setText(userListView.getSelectionModel().getSelectedItem().name());
                     } else if (origin.equals("groupListView")) {
-                        this.currentFriendOrGroupText.setText(chat[0].name());
+                        this.currentFriendOrGroupText.setText(chat.name());
                     } else {
                         this.currentFriendOrGroupText.setText(groupStorageProvider.get().getName());
                     }
