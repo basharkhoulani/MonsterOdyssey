@@ -7,6 +7,7 @@ import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.utils.BestFriendUtils;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -102,6 +103,7 @@ public class MessagesController extends Controller {
                     .subscribe(users -> {
                         friends.setAll(users);
                         sortListView(userListView);
+                        new BestFriendUtils(preferences).sortBestFriendTop(userListView);
                         userListView.refresh();
                     }));
         }

@@ -61,7 +61,8 @@ public class NewFriendController extends Controller {
     }
 
     public void changeToMainMenu() {
-        groupStorageProvider.get().set_id("");
+        groupStorageProvider.get().set_id(null);
+        groupStorageProvider.get().setName(null);
         app.show(mainMenuControllerProvider.get());
     }
 
@@ -124,7 +125,8 @@ public class NewFriendController extends Controller {
                     break;
                 }
                 if (group.members().size() == 2 && group.name() == null) {
-                    groupStorageProvider.get().set_id(group._id());
+                    groupStorageProvider.get().set_id(user._id());
+                    groupStorageProvider.get().setName(user.name());
                     break;
                 }
             }
