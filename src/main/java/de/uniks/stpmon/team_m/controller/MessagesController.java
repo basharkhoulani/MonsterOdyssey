@@ -115,7 +115,9 @@ public class MessagesController extends Controller {
         groupListView.setCellFactory(param -> new GroupCell());
         groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
         disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> {
-            this.groups.setAll(groups);
+            groups.stream().filter(group -> group.name() != null).forEach(group -> {
+                this.groups.add(group);
+            });
             groupListView.refresh();
         }));
     }
@@ -138,10 +140,14 @@ public class MessagesController extends Controller {
         });
 
         userListView.setOnMouseClicked(event -> {
-            openFriendChat("userListView");
+            if (userListView.getSelectionModel().getSelectedItem() != null) {
+                openFriendChat("userListView");
+            }
         });
         groupListView.setOnMouseClicked(event -> {
-            openFriendChat("groupListView");
+            if (groupListView.getSelectionModel().getSelectedItem() != null) {
+                openFriendChat("groupListView");
+            }
         });
         if (groupStorageProvider.get().get_id() != null) {
             openFriendChat("other");
