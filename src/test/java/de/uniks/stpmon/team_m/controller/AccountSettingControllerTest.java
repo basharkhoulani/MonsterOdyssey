@@ -27,6 +27,8 @@ class AccountSettingControllerTest extends ApplicationTest {
     @Mock
     Provider<MainMenuController> mainMenuControllerProvider;
     @Mock
+    Provider<LoginController> loginControllerProvider;
+    @Mock
     UsersService usersService;
     @InjectMocks
     AccountSettingController accountSettingController;
@@ -178,6 +180,31 @@ class AccountSettingControllerTest extends ApplicationTest {
 
     @Test
     void deleteAccount() {
+        final LoginController loginController = mock(LoginController.class);
+        when(loginControllerProvider.get()).thenReturn(loginController);
+        doNothing().when(app).show(loginController);
+        when(usersService.deleteUser())
+                .thenReturn(Observable.just(new User(
+                        "423f8d731c386bcd2204da39",
+                        "UserDelete",
+                        USER_STATUS_ONLINE,
+                        null,
+                        null)));
+
+        clickOn("#deleteAccountButton");
+        clickOn(ButtonType.OK.getText());
+        verify(usersService).deleteUser();
+        verify(loginController).setInformation("Account successfully deleted");
+        verify(app).show(loginController);
+    }
+
+    @Test
+    void deleteAccountError() {
+        when(usersService.deleteUser()).thenReturn(Observable.error(new Exception("Test")));
+        clickOn("#deleteAccountButton");
+        clickOn(ButtonType.OK.getText());
+        clickOn(ButtonType.OK.getText());
+        assertEquals("Monster Odyssey - Account Setting", app.getStage().getTitle());
     }
 
     @Test

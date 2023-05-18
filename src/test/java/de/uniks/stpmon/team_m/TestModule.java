@@ -150,7 +150,7 @@ public class TestModule {
 
             @Override
             public Observable<User> updateUser(String id, UpdateUserDto dto) {
-                if (dto.status().equals("online")) {
+                if (dto.status().equals("offline")) {
                     return Observable.just(new User("42", "Rick", "online", null, null));
                 } else {
                     return Observable.just(new User("42", "Rick", "offline", null, null));
@@ -159,7 +159,7 @@ public class TestModule {
 
             @Override
             public Observable<User> deleteUser(String id) {
-                return Observable.just(new User("42", "Rick", "offline", null, null));
+                return Observable.just(new User("423f8d731c386bcd2204da39", "Rick", "offline", null, null));
             }
         };
     }

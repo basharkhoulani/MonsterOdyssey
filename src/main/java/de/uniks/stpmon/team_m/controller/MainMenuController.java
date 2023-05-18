@@ -5,6 +5,7 @@ import de.uniks.stpmon.team_m.controller.subController.RegionCell;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
+import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.BestFriendUtils;
@@ -21,7 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.MAIN_MENU_TITLE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class MainMenuController extends Controller {
 
@@ -54,6 +55,8 @@ public class MainMenuController extends Controller {
     RegionsApiService regionsApiService;
     @Inject
     UsersService usersService;
+    @Inject
+    AuthenticationService authenticationService;
     @Inject
     Provider<UserStorage> userStorageProvider;
     @Inject
@@ -112,7 +115,12 @@ public class MainMenuController extends Controller {
     }
 
     public void changeToLogin() {
-        app.show(loginControllerProvider.get());
+        disposables.add(usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)
+                    .observeOn(FX_SCHEDULER)
+                    .subscribe());
+        disposables.add(authenticationService.logout().observeOn(FX_SCHEDULER)
+                .subscribe(logoutResult -> app.show(loginControllerProvider.get())));
+
     }
 
     public void changeToSettings() {

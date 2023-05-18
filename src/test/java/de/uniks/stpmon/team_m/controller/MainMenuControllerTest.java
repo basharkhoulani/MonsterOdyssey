@@ -5,6 +5,7 @@ import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
+import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import io.reactivex.rxjava3.core.Observable;
@@ -12,10 +13,7 @@ import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
@@ -23,6 +21,7 @@ import javax.inject.Provider;
 import java.util.List;
 import java.util.prefs.Preferences;
 
+import static de.uniks.stpmon.team_m.Constants.USER_STATUS_OFFLINE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -43,6 +42,8 @@ class MainMenuControllerTest extends ApplicationTest {
     RegionsApiService regionsApiService;
     @Mock
     UsersService usersService;
+    @Mock
+    AuthenticationService authenticationService;
     @Mock
     Provider<UserStorage> userStorageProvider;
     @Mock
@@ -90,10 +91,25 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Test
     void changeToLogin() {
+        when(usersService.updateUser(isNull(),anyString(),isNull(),isNull(),isNull()))
+                .thenReturn(Observable.just(new User(
+                        "423f8d731c386bcd2204da39",
+                        "UserPatch",
+                        USER_STATUS_OFFLINE,
+                        null,
+                        null
+                )));
+
+        when(authenticationService.logout())
+                .thenReturn(Observable.just("Successful"));
+
         final LoginController loginController = mock(LoginController.class);
         when(loginControllerProvider.get()).thenReturn(loginController);
         doNothing().when(app).show(loginController);
+
         clickOn("#logoutButton");
+        verify(usersService).updateUser(null,"offline", null, null,null);
+        verify(authenticationService).logout();
         verify(app).show(loginController);
     }
 

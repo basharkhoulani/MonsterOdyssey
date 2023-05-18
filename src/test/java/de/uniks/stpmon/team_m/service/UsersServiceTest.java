@@ -37,7 +37,7 @@ class UsersServiceTest {
         when(usersApiService.createUser(ArgumentMatchers.any()))
                 .thenReturn(Observable.just(new User(
                         "423f8d731c386bcd2204da39",
-                        "1",
+                        "UserCreate",
                         "online",
                         null,
                         null
@@ -109,7 +109,7 @@ class UsersServiceTest {
                         null)));
         final User user = usersService.updateUser("UserPatch", null, null, null, null).blockingFirst();
 
-        assertEquals(user.name(), "UserPatch");
+        assertEquals("UserPatch", user.name());
 
         verify(usersApiService).updateUser("423f8d731c386bcd2204da39", new UpdateUserDto("UserPatch", null, null, null, null));
     }
@@ -122,15 +122,36 @@ class UsersServiceTest {
         when(userStorage.get_id()).thenReturn("423f8d731c386bcd2204da39");
         when(usersApiService.updateUser(any(), any()))
                 .thenReturn(Observable.just(new User(
-                        "1",
+                        "423f8d731c386bcd2204da39",
                         "UserPatch",
                         USER_STATUS_ONLINE,
                         null,
                         null)));
         final User user = usersService.updateUser(null, null, null, null, "12345678").blockingFirst();
 
-        assertEquals(user.name(), "UserPatch");
+        assertEquals("UserPatch", user.name());
 
         verify(usersApiService).updateUser("423f8d731c386bcd2204da39", new UpdateUserDto(null, null, null, null, "12345678"));
+    }
+
+    @Test
+    void deletePassword() {
+        //Successful delete the user
+
+        //define mocks
+        when(userStorage.get_id()).thenReturn("423f8d731c386bcd2204da39");
+        when(usersApiService.deleteUser(anyString()))
+                .thenReturn(Observable.just(new User(
+                        "423f8d731c386bcd2204da39",
+                        "UserDelete",
+                        USER_STATUS_ONLINE,
+                        null,
+                        null)));
+
+        final User user = usersService.deleteUser().blockingFirst();
+
+        assertEquals("UserDelete", user.name());
+
+        verify(usersApiService).deleteUser("423f8d731c386bcd2204da39");
     }
 }
