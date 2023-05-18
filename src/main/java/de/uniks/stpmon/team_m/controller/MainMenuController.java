@@ -80,7 +80,10 @@ public class MainMenuController extends Controller {
                 .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));
         if (!userStorageProvider.get().getFriends().isEmpty()) {
             disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
-                    .observeOn(FX_SCHEDULER).subscribe(this.friends::setAll));
+                    .observeOn(FX_SCHEDULER).subscribe(users -> {
+                        this.friends.addAll(users);
+                        new BestFriendUtils(preferencesProvider.get()).sortBestFriendTop(friendsListView);
+                    }));
         }
     }
 

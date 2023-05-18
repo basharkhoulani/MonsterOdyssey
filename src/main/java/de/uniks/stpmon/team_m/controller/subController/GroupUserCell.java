@@ -17,9 +17,11 @@ public class GroupUserCell extends UserCell {
 
     private final ObservableList<User> chosenUsers;
     private final List<User> friends;
+    private final ListView<User> listView;
 
-    public GroupUserCell(Preferences preferences, ObservableList<User> chosenUsers, List<User> friends) {
+    public GroupUserCell(Preferences preferences, ListView<User> listView, ObservableList<User> chosenUsers, List<User> friends) {
         super(preferences);
+        this.listView = listView;
         this.chosenUsers = chosenUsers;
         this.friends = friends;
     }
@@ -50,7 +52,7 @@ public class GroupUserCell extends UserCell {
         if (chosenUsers.contains(item)) {
             chosenUsers.remove(item);
             addOrRemoveButton.setText(ADD_MARK);
-            getListView().getItems().remove(item);
+            listView.getItems().remove(item);
             List<String> friendsIds = friends.stream().map(User::_id).toList();
             if (friendsIds.contains(item._id())) {
                 addUserAndSort(item);
@@ -58,10 +60,10 @@ public class GroupUserCell extends UserCell {
         } else {
             chosenUsers.add(item);
             addOrRemoveButton.setText(CHECK_MARK);
-            if (!getListView().getItems().contains(item)) {
-                getListView().getItems().add(item);
+            if (!listView.getItems().contains(item)) {
+                listView.getItems().add(item);
             } else {
-                getListView().getItems().remove(item);
+                listView.getItems().remove(item);
                 addUserAndSort(item);
             }
         }
