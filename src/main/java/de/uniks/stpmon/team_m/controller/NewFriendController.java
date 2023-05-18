@@ -60,6 +60,7 @@ public class NewFriendController extends Controller {
     }
 
     public void changeToMainMenu() {
+        groupStorageProvider.get().set_id("");
         app.show(mainMenuControllerProvider.get());
     }
 
@@ -79,6 +80,7 @@ public class NewFriendController extends Controller {
             if (user.name().equals(searchTextField.getText())) {
                 userStorageProvider.get().addFriend(user._id());
                 disposables.add(usersServiceProvider.get().updateUser(null, null, null, userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER).subscribe());
+                createPrivateGroup(user);
                 searchTextField.setPromptText(FRIEND_ADDED);
                 break;
             }
@@ -92,18 +94,13 @@ public class NewFriendController extends Controller {
                 searchTextField.setPromptText(FRIEND_NOT_FOUND);
                 return;
             }
-            List<String> privateGroup = Arrays.asList(user._id(), userStorageProvider.get().get_id());
-            disposables.add(groupServiceProvider.get().getGroups(privateGroup).observeOn(FX_SCHEDULER).subscribe(groups -> {
-                for (Group group : groups) {
-                    if (group.members().size() == privateGroup.size() && group.name() == null) {
-                        groupStorageProvider.get().set_id(group._id());
-                    } else {
-                        disposables.add(groupServiceProvider.get().create(null, privateGroup).observeOn(FX_SCHEDULER).subscribe(newGroup -> groupStorageProvider.get().set_id(newGroup._id())));
-                    }
-                    app.show(messageControllerProvider.get());
-                }
-            }));
+            if (user.name().equals(searchTextField.getText())) {
+                createPrivateGroup(user);
+                app.show(messageControllerProvider.get());
+                break;
+            }
         }
+        app.show(messageControllerProvider.get());
         searchTextField.clear();
     }
 
@@ -116,6 +113,19 @@ public class NewFriendController extends Controller {
             }
             AutoCompletionBinding<String> autoCompletionBinding = TextFields.bindAutoCompletion(searchTextField, names);
             autoCompletionBinding.setPrefWidth(searchTextField.getPrefWidth());
+        }));
+    }
+    private void createPrivateGroup(User user) {
+        List<String> privateGroup = Arrays.asList(user._id(), userStorageProvider.get().get_id());
+        disposables.add(groupServiceProvider.get().getGroups(privateGroup).observeOn(FX_SCHEDULER).subscribe(groups -> {
+            for (Group group : groups) {
+                if (group.members().size() == privateGroup.size() && group.name() == null) {
+                    groupStorageProvider.get().set_id(group._id());
+                } else {
+                    disposables.add(groupServiceProvider.get().create(null, privateGroup).observeOn(FX_SCHEDULER).subscribe(newGroup -> groupStorageProvider.get().set_id(newGroup._id())));
+                }
+
+            }
         }));
     }
 }
