@@ -71,7 +71,9 @@ public class MessagesUserCell extends UserCell{
             setText(null);
             setGraphic(null);
         } else {
-            disposables.add(groupService.getGroups(List.of(item._id(), userStorageProvider.get().get_id()))
+            Group privateGroup = new Group(null, null, List.of(item._id(), userStorageProvider.get().get_id()));
+
+            disposables.add(groupService.getGroups(privateGroup.membersToString())
                     .observeOn(FX_SCHEDULER).subscribe(groups::setAll));
 
             for (Group group : groups) {

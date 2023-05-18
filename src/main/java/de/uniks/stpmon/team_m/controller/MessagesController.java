@@ -165,16 +165,21 @@ public class MessagesController extends Controller {
     }
 
     public void onSendMessage() {
-//        String groupID = groupStorageProvider.get().get_id();
-//
-//        if (groupID == null) {
-//            return;
-//        }
-//
-//        String messageBody = messageTextArea.getText();
-//
-//        disposables.add(messageService.newMessage(groupID, messageBody, MESSAGE_NAMESPACE_GROUPS)
-//                .observeOn(FX_SCHEDULER).subscribe());
+        String groupID = groupStorageProvider.get().get_id();
+        System.out.println(groupID);
+
+        if (groupID == null) {
+            return;
+        }
+
+        String messageBody = messageTextArea.getText();
+
+        disposables.add(messageService.newMessage(groupID, messageBody, MESSAGE_NAMESPACE_GROUPS)
+                .observeOn(FX_SCHEDULER).subscribe(
+                        message -> {
+                            //
+                        }, Throwable::printStackTrace
+                ));
         System.out.println(messageTextArea.getText());
         messageTextArea.setText("");
     }

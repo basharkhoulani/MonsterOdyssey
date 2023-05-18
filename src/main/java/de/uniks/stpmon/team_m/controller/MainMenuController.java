@@ -116,10 +116,10 @@ public class MainMenuController extends Controller {
     }
 
     private void switchToMessageScreen() {
-        List<String> privateGroup = Arrays.asList(friendsListView.getSelectionModel().getSelectedItem()._id(), userStorageProvider.get().get_id());
-        disposables.add(groupServiceProvider.get().getGroups(privateGroup).observeOn(FX_SCHEDULER).subscribe(groups -> {
+        Group privateGroup = new Group(null, null, List.of(friendsListView.getSelectionModel().getSelectedItem()._id(), userStorageProvider.get().get_id()));
+        disposables.add(groupServiceProvider.get().getGroups(privateGroup.membersToString()).observeOn(FX_SCHEDULER).subscribe(groups -> {
             for (Group group : groups) {
-                if (group.members().size() == privateGroup.size() && group.name() == null) {
+                if (group.members().size() == 2 && group.name() == null) {
                     groupStorageProvider.get().set_id(group._id());
                     app.show(messagesControllerProvider.get());
                 }
