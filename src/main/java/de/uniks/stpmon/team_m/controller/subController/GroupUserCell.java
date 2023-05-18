@@ -57,10 +57,9 @@ public class GroupUserCell extends UserCell {
             addOrRemoveButton.setText(ADD_MARK);
             if (friends.contains(item)) {
                 friendsListView.getItems().remove(item);
-                addUserAndSort(foreignListView, item);
+                addUserAndSort(friendsListView, item);
             } else {
                 foreignListView.getItems().remove(item);
-                addUserAndSort(friendsListView, item);
             }
         } else {
             chosenUsers.add(item);

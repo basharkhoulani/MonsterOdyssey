@@ -33,7 +33,7 @@ public class Constants {
     public static final int HBOX_FRIENDS_SPACING = 15;
     public static final String THREE_DOTS = "\u2026";
     public static final String BUTTON_TRANSPARENT_STYLE = "-fx-background-color: transparent; -fx-border-color: transparent;";
-    public static final String BUTTON_BORDER_STYLE = "-fx-border-color: black; -fx-border-width: 1px; -fx-border-radius: 20px;";
+    public static final String BUTTON_BORDER_STYLE = "-fx-border-color: black; -fx-border-width: 1px;";
     public static final String NO_FRIENDS_FOUND = "No friends found";
     public static final String NO_GROUPS_FOUND = "No groups found";
     public static final String NO_USERS_ADDED_TO_GROUP = "No foreign users added to group yet";
