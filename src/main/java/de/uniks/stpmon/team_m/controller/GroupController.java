@@ -102,21 +102,29 @@ public class GroupController extends Controller {
         disposables.add(groupService.getGroup(groupId).observeOn(FX_SCHEDULER).subscribe(group -> {
             groupNameInput.setText(group.name());
             final List<String> groupMembers = group.members();
-            if (!groupMembers.isEmpty()) {
-                disposables.add(usersService.getUsers(groupMembers, null).observeOn(FX_SCHEDULER).subscribe(users -> {
-                    friends.setAll(users);
-                    friendsListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
-                            foreignListView, friends));
-                    foreignListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
-                            foreignListView, friends));
+            final List<String> friendsByID = userStorage.get().getFriends();
+            disposables.add(usersService.getUsers(groupMembers, null).observeOn(FX_SCHEDULER).subscribe(users -> {
+                newGroupMembers.setAll(users);
+                for (User user : users) {
+                    if (user._id().equals(userStorage.get().get_id())) {
+                        continue;
+                    } else if (friendsByID.contains(user._id())) {
+                        friends.add(user);
+                    } else {
+                        foreign.add(user);
+                    }
+                }
+                friendsListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
+                        foreignListView, friends));
+                foreignListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
+                        foreignListView, friends));
 
-                    friendsListView.setItems(friends);
-                    foreignListView.setItems(foreign);
+                friendsListView.setItems(friends);
+                foreignListView.setItems(foreign);
 
-                    sortListView(friendsListView);
-                    sortListView(foreignListView);
-                }));
-            }
+                sortListView(friendsListView);
+                sortListView(foreignListView);
+            }));
         }));
     }
 
@@ -196,6 +204,27 @@ public class GroupController extends Controller {
 
 
     public void saveGroup() {
+        final String groupId = groupStorageProvider.get().get_id();
+        if (groupId.equals(EMPTY_STRING)) {
+            createGroup();
+        } else {
+            updateGroup(groupId);
+        }
+    }
+
+    private void updateGroup(String groupId) {
+        List<String> newGroupMembersIDs = new ArrayList<>();
+        newGroupMembers.forEach(user -> newGroupMembersIDs.add(user._id()));
+        disposables.add(groupService.update(groupId, groupNameInput.getText(), newGroupMembersIDs)
+                .observeOn(FX_SCHEDULER).subscribe(group -> {
+                    groupStorageProvider.get().set_id(group._id());
+                    groupStorageProvider.get().setName(group.name());
+                    groupStorageProvider.get().setMembers(group.members());
+                    app.show(messagesControllerProvider.get());
+                }, error -> errorMessage.setText(error.getMessage())));
+    }
+
+    private void createGroup() {
         List<String> newGroupMembersIDs = new ArrayList<>();
         newGroupMembersIDs.add(userStorage.get().get_id());
         newGroupMembers.forEach(user -> newGroupMembersIDs.add(user._id()));
