@@ -57,7 +57,19 @@ public class FriendSettingsController extends Controller {
         alert.setHeaderText(null);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.YES) {
-            alert.close();
+            userStorage.deleteFriend(user._id());
+            disposables.add(usersService.updateUser(null, null, null, userStorage.getFriends(), null).observeOn(FX_SCHEDULER).subscribe(updatedUser -> {
+                friendsListView.getItems().remove(user);
+            }, error -> {
+                userStorage.addFriend(user._id());
+                alert.setContentText(GENERIC_ERROR);
+                alert.setTitle(error.getMessage());
+                alert.getButtonTypes().remove(ButtonType.NO);
+                alert.getButtonTypes().remove(ButtonType.YES);
+                alert.getButtonTypes().add(ButtonType.OK);
+                alert.showAndWait();
+            }));
+
         } else {
             alert.close();
         }
