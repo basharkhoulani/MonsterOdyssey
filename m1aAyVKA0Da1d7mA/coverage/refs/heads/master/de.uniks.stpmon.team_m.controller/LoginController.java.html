@@ -115,7 +115,7 @@ public class LoginController extends Controller {
 <span class="fc" id="L115">                .login(username.get(), password.get(), rememberMe.get())</span>
 <span class="fc" id="L116">                .observeOn(FX_SCHEDULER)</span>
 <span class="fc" id="L117">                .subscribe(loginResult -&gt; {</span>
-<span class="fc" id="L118">                    userStatusUpdate();</span>
+<span class="fc" id="L118">                    userStatusUpdate(USER_STATUS_ONLINE);</span>
 <span class="fc" id="L119">                    app.show(mainMenuControllerProvider.get());</span>
 <span class="fc" id="L120">                    }, error -&gt; errorHandle(error.getMessage())));</span>
 <span class="fc" id="L121">    }</span>
@@ -157,9 +157,11 @@ public class LoginController extends Controller {
         }
 <span class="fc" id="L158">    }</span>
 
-    public void userStatusUpdate() {
-<span class="fc" id="L161">        disposables.add(usersService.updateUser(null, USER_STATUS_ONLINE, null, null, null)</span>
-<span class="fc" id="L162">                .observeOn(FX_SCHEDULER).subscribe(user -&gt; userStorage.setStatus(user.status())));</span>
-<span class="fc" id="L163">    }</span>
+    public void userStatusUpdate(String status) {
+<span class="fc" id="L161">        disposables.add(usersService.updateUser(null, status, null, null, null)</span>
+<span class="fc" id="L162">                .observeOn(FX_SCHEDULER).subscribe(user -&gt; {</span>
+<span class="fc" id="L163">                    userStorage.setStatus(user.status());</span>
+<span class="fc" id="L164">        }));</span>
+<span class="fc" id="L165">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
