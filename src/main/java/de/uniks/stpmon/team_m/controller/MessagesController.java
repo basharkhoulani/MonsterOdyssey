@@ -1,6 +1,8 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.controller.subController.GroupCell;
 import de.uniks.stpmon.team_m.controller.subController.MessagesUserCell;
+import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.*;
 import javafx.collections.FXCollections;
@@ -24,6 +26,8 @@ public class MessagesController extends Controller {
     public Label friendsAndGroupText;
     @FXML
     public VBox friendsListViewVBox;
+    @FXML
+    public VBox groupsListViewVBox;
     @FXML
     public Button findNewFriendsButton;
     @FXML
@@ -60,7 +64,9 @@ public class MessagesController extends Controller {
     @Inject
     GroupService groupService;
     private final ObservableList<User> friends = FXCollections.observableArrayList();
-    private ListView<User> listView;
+    private final ObservableList<Group> groups = FXCollections.observableArrayList();
+    private ListView<User> userListView;
+    private ListView<Group> groupListView;
 
     @Inject
     public MessagesController() {
@@ -68,9 +74,9 @@ public class MessagesController extends Controller {
 
     @Override
     public void init() {
-        listView = new ListView<>(friends);
-        listView.setId("friendsAndGroups");
-        listView.setCellFactory(param -> new MessagesUserCell(
+        userListView = new ListView<>(friends);
+        userListView.setId("friends");
+        userListView.setCellFactory(param -> new MessagesUserCell(
                 chatViewVBox,
                 currentFriendOrGroupText,
                 chatScrollPane,
@@ -84,10 +90,17 @@ public class MessagesController extends Controller {
             disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
                     .observeOn(FX_SCHEDULER).subscribe(users -> {
                         friends.setAll(users);
-                        sortListView(listView);
-                        listView.refresh();
+                        sortListView(userListView);
+                        userListView.refresh();
                     }));
         }
+        groupListView = new ListView<>(groups);
+        groupListView.setId("groups");
+        groupListView.setCellFactory(param -> new GroupCell());
+        disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> {
+            this.groups.setAll(groups);
+            groupListView.refresh();
+        }));
     }
 
     @Override
@@ -98,7 +111,8 @@ public class MessagesController extends Controller {
     @Override
     public Parent render() {
         Parent parent = super.render();
-        friendsListViewVBox.getChildren().add(listView);
+        friendsListViewVBox.getChildren().add(userListView);
+        groupsListViewVBox.getChildren().add(groupListView);
         return parent;
     }
 

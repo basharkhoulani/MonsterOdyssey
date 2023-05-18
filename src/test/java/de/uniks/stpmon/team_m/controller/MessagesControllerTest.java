@@ -2,7 +2,6 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
-import de.uniks.stpmon.team_m.controller.subController.MessagesUserCell;
 import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.User;
@@ -13,7 +12,6 @@ import io.reactivex.rxjava3.core.Observer;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -148,7 +146,7 @@ public class MessagesControllerTest extends ApplicationTest {
 
     @Test
     void displayFriends() {
-        ListView<User> friendsAndGroups = lookup("#friendsAndGroups").query();
+        ListView<User> friendsAndGroups = lookup("#friends").query();
 
         assertEquals(3, friendsAndGroups.getItems().size());
 
@@ -160,7 +158,7 @@ public class MessagesControllerTest extends ApplicationTest {
     void displayMessages() throws InterruptedException {
         VBox friendsListViewVBox = lookup("#friendsListViewVBox").query();
         ObservableList<Node> friendsAndGroupNodes = friendsListViewVBox.getChildren();
-        ListView<User> listView = lookup("#friendsAndGroups").query();
+        ListView<User> listView = lookup("#friends").query();
 
         User user = listView.getItems().get(0);
         assertEquals("Rick", user.name());
@@ -170,7 +168,6 @@ public class MessagesControllerTest extends ApplicationTest {
         clickOn("Rick");
 
         clickOn("Get in the damn car Morty!");
-
 
     }
 }
