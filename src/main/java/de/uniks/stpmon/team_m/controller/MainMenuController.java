@@ -2,23 +2,27 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.MainMenuUserCell;
 import de.uniks.stpmon.team_m.controller.subController.RegionCell;
+import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
-import de.uniks.stpmon.team_m.service.AuthenticationService;
-import de.uniks.stpmon.team_m.service.UserStorage;
-import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.utils.BestFriendUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Arrays;
+import java.util.List;
+import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -57,6 +61,12 @@ public class MainMenuController extends Controller {
     AuthenticationService authenticationService;
     @Inject
     Provider<UserStorage> userStorageProvider;
+    @Inject
+    Provider<Preferences> preferencesProvider;
+    @Inject
+    Provider<GroupService> groupServiceProvider;
+    @Inject
+    Provider<GroupStorage> groupStorageProvider;
     private final ObservableList<Region> regions = FXCollections.observableArrayList();
     private final ObservableList<User> friends = FXCollections.observableArrayList();
     private ListView<User> friendsListView;
@@ -64,14 +74,26 @@ public class MainMenuController extends Controller {
 
     @Override
     public void init() {
+        if (!isInitialized()) {
+            disposables.add(usersService.updateUser(userStorageProvider.get().get_id(), USER_STATUS_ONLINE, null, null, null)
+                    .observeOn(FX_SCHEDULER).subscribe());
+            isInitialized = true;
+        }
+
         friendsListView = new ListView<>(friends);
         friendsListView.setId("friendsListView");
-        friendsListView.setCellFactory(param -> new MainMenuUserCell());
+        friendsListView.setCellFactory(param -> new MainMenuUserCell(preferencesProvider.get(), userStorageProvider.get(), usersService));
+        friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
         disposables.add(regionsApiService.getRegions()
                 .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));
         if (!userStorageProvider.get().getFriends().isEmpty()) {
             disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
-                    .observeOn(FX_SCHEDULER).subscribe(this.friends::setAll));
+                    .observeOn(FX_SCHEDULER).subscribe(users -> {
+                        friends.setAll(users);
+                        sortListView(friendsListView);
+                        new BestFriendUtils(preferencesProvider.get()).sortBestFriendTop(friendsListView);
+                    }));
+            listenToStatusUpdate(friends, friendsListView);
         }
     }
 
@@ -89,7 +111,20 @@ public class MainMenuController extends Controller {
         final Parent parent = super.render();
         initRadioButtons();
         friendsListVBox.getChildren().add(friendsListView);
+        friendsListView.setOnMouseClicked(event -> switchToMessageScreen());
         return parent;
+    }
+
+    private void switchToMessageScreen() {
+        List<String> privateGroup = Arrays.asList(friendsListView.getSelectionModel().getSelectedItem()._id(), userStorageProvider.get().get_id());
+        disposables.add(groupServiceProvider.get().getGroups(privateGroup).observeOn(FX_SCHEDULER).subscribe(groups -> {
+            for (Group group : groups) {
+                if (group.members().size() == privateGroup.size() && group.name() == null) {
+                    groupStorageProvider.get().set_id(group._id());
+                    app.show(messagesControllerProvider.get());
+                }
+            }
+        }));
     }
 
     private void initRadioButtons() {
@@ -107,6 +142,7 @@ public class MainMenuController extends Controller {
     }
 
     public void changeToMessages() {
+        groupStorageProvider.get().set_id("");
         app.show(messagesControllerProvider.get());
     }
 

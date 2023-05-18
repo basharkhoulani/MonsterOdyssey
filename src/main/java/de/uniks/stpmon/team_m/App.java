@@ -121,6 +121,9 @@ public class App extends Application {
         stage.setWidth(controller.getWidth());
         stage.setHeight(controller.getHeight());
     }
+    public Controller getController(){
+        return controller;
+    }
 
     private void cleanup() {
         component.loginController().userStatusUpdate(USER_STATUS_OFFLINE);
