@@ -106,9 +106,9 @@ public class GroupController extends Controller {
             disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
                 friends.setAll(users);
 
-                friendsListView.setCellFactory(param -> new GroupUserCell(newGroupMembers, friendsListView,
+                friendsListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
                         foreignListView, friends));
-                foreignListView.setCellFactory(param -> new GroupUserCell(newGroupMembers, friendsListView,
+                foreignListView.setCellFactory(param -> new GroupUserCell(preferences,newGroupMembers, friendsListView,
                         foreignListView, friends));
 
                 friendsListView.setItems(friends);

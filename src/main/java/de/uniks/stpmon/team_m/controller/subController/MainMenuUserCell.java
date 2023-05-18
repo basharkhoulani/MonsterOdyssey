@@ -8,6 +8,8 @@ import javafx.scene.layout.Priority;
 import org.controlsfx.control.PopOver;
 
 import static de.uniks.stpmon.team_m.Constants.*;
+import static javafx.geometry.Pos.CENTER_RIGHT;
+
 import java.util.prefs.Preferences;
 
 
