@@ -27,6 +27,7 @@ public abstract class Controller {
     Provider<EventListener> eventListener;
     protected final CompositeDisposable disposables = new CompositeDisposable();
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
+    public boolean isInitialized = false;
 
     public void init() {
     }
@@ -89,5 +90,13 @@ public abstract class Controller {
                         friendsListView.refresh();
                     }
                 }));
+    }
+
+    public boolean isInitialized() {
+        return isInitialized;
+    }
+
+    public void setInitialized(boolean initialized) {
+        isInitialized = initialized;
     }
 }
