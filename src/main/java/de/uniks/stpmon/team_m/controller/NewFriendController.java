@@ -91,7 +91,6 @@ public class NewFriendController extends Controller {
 
     public void sendMessage() {
         for (User user : allUsers) {
-            System.out.println(user.name());
             if (!user.name().equals(searchTextField.getText())) {
                 searchTextField.setPromptText(FRIEND_NOT_FOUND);
             }
