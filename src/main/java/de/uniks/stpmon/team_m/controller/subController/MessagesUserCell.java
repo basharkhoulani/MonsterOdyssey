@@ -3,10 +3,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.service.GroupService;
-import de.uniks.stpmon.team_m.service.MessageService;
-import de.uniks.stpmon.team_m.service.UserStorage;
-import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.service.*;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import javafx.collections.FXCollections;
@@ -37,6 +34,7 @@ public class MessagesUserCell extends UserCell{
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     private final Text currentFriendOrGroupText;
     private final ScrollPane chatScrollPane;
+    private final Provider<GroupStorage> groupStorageProvider;
     private Group privateChat;
 
     private final Provider<UserStorage> userStorageProvider;
@@ -49,6 +47,7 @@ public class MessagesUserCell extends UserCell{
                             Text currentFriendOrGroupText,
                             ScrollPane chatScrollPane,
                             Provider<UserStorage> userStorageProvider,
+                            Provider<GroupStorage> groupStorageProvider,
                             UsersService usersService,
                             MessageService messageService,
                             GroupService groupService,
@@ -61,6 +60,7 @@ public class MessagesUserCell extends UserCell{
         this.groupService = groupService;
         this.chatScrollPane = chatScrollPane;
         this.disposables = disposable;
+        this.groupStorageProvider = groupStorageProvider;
     }
     @Override
     protected void updateItem(User item, boolean empty) {
@@ -87,6 +87,8 @@ public class MessagesUserCell extends UserCell{
                 chatVBox.getChildren().clear();
 
                 if (this.privateChat != null) {
+                    groupStorageProvider.get().set_id(privateChat._id());
+
                     disposables.add(messageService.getGroupMessages(privateChat._id())
                             .observeOn(FX_SCHEDULER).subscribe(messages::setAll));
 
