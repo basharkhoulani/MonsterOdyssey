@@ -179,10 +179,8 @@ public class MessagesUserCell extends UserCell{
             deleteAlert.setHeaderText(null);
             deleteAlert.setContentText("Do you really want to delete this message?");
 
-            deleteAlert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
-
             deleteAlert.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.YES) {
+                if (response == ButtonType.OK) {
                     disposables.add(messageService.deleteMessage(message._id(), this.privateChat._id(), Constants.MESSAGE_NAMESPACE_GROUPS)
                             .observeOn(FX_SCHEDULER).subscribe());
                 }
