@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GroupUserCell.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">GroupUserCell.java</span></div><h1>GroupUserCell.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.User;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -14,73 +15,69 @@ import static javafx.geometry.Pos.CENTER_RIGHT;
 
 public class GroupUserCell extends UserCell {
 
+    private final ListView&lt;User&gt; friendsListView;
+    private final ListView&lt;User&gt; foreignListView;
     private final ObservableList&lt;User&gt; chosenUsers;
-    private final ListView&lt;User&gt; listView;
     private final List&lt;User&gt; friends;
 
-<span class="fc" id="L21">    public GroupUserCell(ObservableList&lt;User&gt; chosenUsers, ListView&lt;User&gt; listView, List&lt;User&gt; friends) {</span>
-<span class="fc" id="L22">        this.chosenUsers = chosenUsers;</span>
-<span class="fc" id="L23">        this.listView = listView;</span>
-<span class="fc" id="L24">        this.friends = friends;</span>
-<span class="fc" id="L25">    }</span>
+    public GroupUserCell(ObservableList&lt;User&gt; chosenUsers, ListView&lt;User&gt; friendsListView,
+<span class="fc" id="L24">                         ListView&lt;User&gt; foreignListView, List&lt;User&gt; friends) {</span>
+<span class="fc" id="L25">        this.chosenUsers = chosenUsers;</span>
+<span class="fc" id="L26">        this.friendsListView = friendsListView;</span>
+<span class="fc" id="L27">        this.foreignListView = foreignListView;</span>
+<span class="fc" id="L28">        this.friends = friends;</span>
+<span class="fc" id="L29">    }</span>
 
     @Override
     protected void updateItem(User item, boolean empty) {
-<span class="fc" id="L29">        super.updateItem(item, empty);</span>
-<span class="pc bpc" id="L30" title="1 of 4 branches missed.">        if (item == null || empty) {</span>
-<span class="fc" id="L31">            setText(null);</span>
-<span class="fc" id="L32">            setGraphic(null);</span>
+<span class="fc" id="L33">        super.updateItem(item, empty);</span>
+<span class="pc bpc" id="L34" title="1 of 4 branches missed.">        if (item == null || empty) {</span>
+<span class="fc" id="L35">            setText(null);</span>
+<span class="fc" id="L36">            setGraphic(null);</span>
         } else {
-<span class="fc" id="L34">            final Button addOrRemoveButton = new Button();</span>
-<span class="fc" id="L35">            final HBox buttonHBox = new HBox(addOrRemoveButton);</span>
-<span class="fc" id="L36">            addOrRemoveButton.setPrefSize(BUTTON_PREF_SIZE, BUTTON_PREF_SIZE);</span>
-<span class="fc" id="L37">            buttonHBox.setAlignment(CENTER_RIGHT);</span>
-<span class="fc" id="L38">            HBox.setHgrow(buttonHBox, Priority.ALWAYS);</span>
-<span class="fc" id="L39">            super.getRootHBox().getChildren().add(buttonHBox);</span>
-<span class="fc" id="L40">            addOrRemoveButton.setOnAction(event -&gt; addOrRemoveToGroup(item, addOrRemoveButton));</span>
-<span class="fc bfc" id="L41" title="All 2 branches covered.">            if (chosenUsers.contains(item)) {</span>
-<span class="fc" id="L42">                addOrRemoveButton.setText(CHECK_MARK);</span>
+<span class="fc" id="L38">            final Button addOrRemoveButton = new Button();</span>
+<span class="fc" id="L39">            final HBox buttonHBox = new HBox(addOrRemoveButton);</span>
+<span class="fc" id="L40">            addOrRemoveButton.setPrefSize(BUTTON_PREF_SIZE, BUTTON_PREF_SIZE);</span>
+<span class="fc" id="L41">            addOrRemoveButton.setStyle(BUTTON_TRANSPARENT_STYLE + BUTTON_BORDER_STYLE);</span>
+<span class="fc" id="L42">            buttonHBox.setAlignment(CENTER_RIGHT);</span>
+<span class="fc" id="L43">            HBox.setHgrow(buttonHBox, Priority.ALWAYS);</span>
+<span class="fc" id="L44">            super.getRootHBox().getChildren().add(buttonHBox);</span>
+<span class="fc" id="L45">            addOrRemoveButton.setOnAction(event -&gt; addOrRemoveToGroup(item, addOrRemoveButton));</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">            if (chosenUsers.contains(item)) {</span>
+<span class="fc" id="L47">                addOrRemoveButton.setText(CHECK_MARK);</span>
             } else {
-<span class="fc" id="L44">                addOrRemoveButton.setText(ADD_MARK);</span>
+<span class="fc" id="L49">                addOrRemoveButton.setText(ADD_MARK);</span>
             }
         }
-<span class="fc" id="L47">    }</span>
+<span class="fc" id="L52">    }</span>
 
     private void addOrRemoveToGroup(User item, Button addOrRemoveButton) {
-<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (chosenUsers.contains(item)) {</span>
-<span class="fc" id="L51">            chosenUsers.remove(item);</span>
-<span class="fc" id="L52">            addOrRemoveButton.setText(ADD_MARK);</span>
-<span class="fc" id="L53">            listView.getItems().remove(item);</span>
-<span class="fc" id="L54">            List&lt;String&gt; friendsIds = friends.stream().map(User::_id).toList();</span>
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">            if (friendsIds.contains(item._id())) {</span>
-<span class="fc" id="L56">                addUserAndSort(item);</span>
-            }
-<span class="fc" id="L58">        } else {</span>
-<span class="fc" id="L59">            chosenUsers.add(item);</span>
-<span class="fc" id="L60">            addOrRemoveButton.setText(CHECK_MARK);</span>
-<span class="fc bfc" id="L61" title="All 2 branches covered.">            if (!listView.getItems().contains(item)) {</span>
-<span class="fc" id="L62">                listView.getItems().add(item);</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (chosenUsers.contains(item)) {</span>
+<span class="fc" id="L56">            chosenUsers.remove(item);</span>
+<span class="fc" id="L57">            addOrRemoveButton.setText(ADD_MARK);</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">            if (friends.contains(item)) {</span>
+<span class="fc" id="L59">                friendsListView.getItems().remove(item);</span>
+<span class="fc" id="L60">                addUserAndSort(friendsListView, item);</span>
             } else {
-<span class="fc" id="L64">                listView.getItems().remove(item);</span>
-<span class="fc" id="L65">                addUserAndSort(item);</span>
+<span class="fc" id="L62">                foreignListView.getItems().remove(item);</span>
+            }
+        } else {
+<span class="fc" id="L65">            chosenUsers.add(item);</span>
+<span class="fc" id="L66">            addOrRemoveButton.setText(CHECK_MARK);</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">            if (friends.contains(item)) {</span>
+<span class="fc" id="L68">                friendsListView.getItems().remove(item);</span>
+<span class="fc" id="L69">                addUserAndSort(friendsListView, item);</span>
+            } else {
+<span class="fc" id="L71">                foreignListView.getItems().remove(item);</span>
+<span class="fc" id="L72">                addUserAndSort(foreignListView, item);</span>
             }
         }
-<span class="fc" id="L68">    }</span>
+<span class="fc" id="L75">    }</span>
 
-    private void addUserAndSort(User item) {
-<span class="fc" id="L71">        listView.getItems().add(item);</span>
-<span class="fc" id="L72">        listView.getItems().sort((o1, o2) -&gt; {</span>
-<span class="pc bpc" id="L73" title="2 of 4 branches missed.">            if (friends.contains(o1) &amp;&amp; friends.contains(o2)) {</span>
-<span class="fc" id="L74">                return o1.name().compareTo(o2.name());</span>
-<span class="nc bnc" id="L75" title="All 2 branches missed.">            } else if (friends.contains(o1)) {</span>
-<span class="nc" id="L76">                return -1;</span>
-<span class="nc bnc" id="L77" title="All 2 branches missed.">            } else if (friends.contains(o2)) {</span>
-<span class="nc" id="L78">                return 1;</span>
-            } else {
-<span class="nc" id="L80">                return o1.name().compareTo(o2.name());</span>
-            }
-        });
-<span class="fc" id="L83">    }</span>
+    private void addUserAndSort(ListView&lt;User&gt; listView, User item) {
+<span class="fc" id="L78">        listView.getItems().add(item);</span>
+<span class="fc" id="L79">        listView.getItems().sort(Controller::sortByOnline);</span>
+<span class="fc" id="L80">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

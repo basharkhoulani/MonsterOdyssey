@@ -6,35 +6,34 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.controlsfx.control.PopOver;
 
-import static de.uniks.stpmon.team_m.Constants.BUTTON_PREF_SIZE;
-import static de.uniks.stpmon.team_m.Constants.THREE_DOTS;
+import static de.uniks.stpmon.team_m.Constants.*;
 import static javafx.geometry.Pos.CENTER_RIGHT;
 
-<span class="fc" id="L13">public class MainMenuUserCell extends UserCell {</span>
+<span class="fc" id="L12">public class MainMenuUserCell extends UserCell {</span>
     @Override
     protected void updateItem(User item, boolean empty) {
-<span class="fc" id="L16">        super.updateItem(item, empty);</span>
-<span class="pc bpc" id="L17" title="1 of 4 branches missed.">        if (item == null || empty) {</span>
-<span class="fc" id="L18">            setText(null);</span>
-<span class="fc" id="L19">            setGraphic(null);</span>
+<span class="fc" id="L15">        super.updateItem(item, empty);</span>
+<span class="pc bpc" id="L16" title="1 of 4 branches missed.">        if (item == null || empty) {</span>
+<span class="fc" id="L17">            setText(null);</span>
+<span class="fc" id="L18">            setGraphic(null);</span>
         } else {
-<span class="fc" id="L21">            final Button popOverButton = new Button();</span>
-<span class="fc" id="L22">            final HBox buttonHBox = new HBox(popOverButton);</span>
-<span class="fc" id="L23">            popOverButton.setPrefSize(BUTTON_PREF_SIZE, BUTTON_PREF_SIZE);</span>
-<span class="fc" id="L24">            popOverButton.setText(THREE_DOTS);</span>
-<span class="fc" id="L25">            popOverButton.setStyle(&quot;-fx-background-color: transparent; -fx-border-color: transparent;&quot;);</span>
-<span class="fc" id="L26">            buttonHBox.setAlignment(CENTER_RIGHT);</span>
-<span class="fc" id="L27">            HBox.setHgrow(buttonHBox, Priority.ALWAYS);</span>
-<span class="fc" id="L28">            super.getRootHBox().getChildren().add(buttonHBox);</span>
-<span class="pc" id="L29">            popOverButton.setOnAction(event -&gt; showPopOver(popOverButton, item));</span>
+<span class="fc" id="L20">            final Button popOverButton = new Button();</span>
+<span class="fc" id="L21">            final HBox buttonHBox = new HBox(popOverButton);</span>
+<span class="fc" id="L22">            popOverButton.setPrefSize(BUTTON_PREF_SIZE, BUTTON_PREF_SIZE);</span>
+<span class="fc" id="L23">            popOverButton.setText(THREE_DOTS);</span>
+<span class="fc" id="L24">            popOverButton.setStyle(BUTTON_TRANSPARENT_STYLE);</span>
+<span class="fc" id="L25">            buttonHBox.setAlignment(CENTER_RIGHT);</span>
+<span class="fc" id="L26">            HBox.setHgrow(buttonHBox, Priority.ALWAYS);</span>
+<span class="fc" id="L27">            super.getRootHBox().getChildren().add(buttonHBox);</span>
+<span class="pc" id="L28">            popOverButton.setOnAction(event -&gt; showPopOver(popOverButton, item));</span>
         }
-<span class="fc" id="L31">    }</span>
+<span class="fc" id="L30">    }</span>
 
     private void showPopOver(Button button, User user) {
-<span class="nc" id="L34">        PopOver popOver = new PopOver();</span>
-<span class="nc" id="L35">        popOver.setContentNode(new FriendSettingsController(user).render());</span>
-<span class="nc" id="L36">        popOver.setDetachable(false);</span>
-<span class="nc" id="L37">        popOver.show(button);</span>
-<span class="nc" id="L38">    }</span>
+<span class="nc" id="L33">        PopOver popOver = new PopOver();</span>
+<span class="nc" id="L34">        popOver.setContentNode(new FriendSettingsController(user).render());</span>
+<span class="nc" id="L35">        popOver.setDetachable(false);</span>
+<span class="nc" id="L36">        popOver.show(button);</span>
+<span class="nc" id="L37">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
