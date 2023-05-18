@@ -1,5 +1,7 @@
 .helpSymbol {
     -fx-background-image: url("images/ingameHelpSymbol.png");
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
     -fx-background-size: 35px;
     -fx-background-repeat: no-repeat;
     -fx-background-radius: 17;
@@ -21,6 +23,8 @@
 
 .hideSymbol {
     -fx-background-image: url("images/hideEye.png");
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
     -fx-background-size: 50px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 50%;
@@ -31,6 +35,8 @@
 
 .editSymbol {
     -fx-background-image: url("images/pencil.jpeg");
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
     -fx-background-size: 40px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 50%;

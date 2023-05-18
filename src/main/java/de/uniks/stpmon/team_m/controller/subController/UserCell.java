@@ -60,4 +60,5 @@ public class UserCell extends ListCell<User> {
     public HBox getRootHBox() {
         return rootHBox;
     }
+
 }
