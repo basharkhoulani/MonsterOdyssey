@@ -64,7 +64,10 @@ public class App extends Application {
 
                         disposables.add(authenticationService.refresh()
                                 .observeOn(Schedulers.from(Platform::runLater))
-                                .subscribe(lr -> show(component.mainMenuController()),
+                                .subscribe(lr -> {
+                                    component.loginController().userStatusUpdate(USER_STATUS_ONLINE);
+                                    show(component.mainMenuController());
+                                        },
                                         err -> show(component.loginController())));
                     } else {
                         show(component.loginController());
@@ -86,7 +89,6 @@ public class App extends Application {
 
     @Override
     public void stop() {
-        disposables.dispose();
         cleanup();
     }
 
@@ -111,7 +113,6 @@ public class App extends Application {
     }
 
     public void show(Controller controller) {
-        cleanup();
         this.controller = controller;
         initAndRender(controller);
     }
@@ -128,6 +129,8 @@ public class App extends Application {
     }
 
     private void cleanup() {
+        component.loginController().userStatusUpdate(USER_STATUS_OFFLINE);
+        disposables.dispose();
         if (controller != null) {
             controller.destroy();
             controller = null;

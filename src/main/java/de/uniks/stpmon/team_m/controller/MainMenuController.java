@@ -74,12 +74,6 @@ public class MainMenuController extends Controller {
 
     @Override
     public void init() {
-        if (!isInitialized()) {
-            disposables.add(usersService.updateUser(userStorageProvider.get().get_id(), USER_STATUS_ONLINE, null, null, null)
-                    .observeOn(FX_SCHEDULER).subscribe());
-            isInitialized = true;
-        }
-
         friendsListView = new ListView<>(friends);
         friendsListView.setId("friendsListView");
         friendsListView.setCellFactory(param -> new MainMenuUserCell(preferencesProvider.get(), userStorageProvider.get(), usersService));
