@@ -72,11 +72,6 @@ public class LoginController extends Controller {
     }
 
     @Override
-    public void init() {
-        isInitialized = true;
-    }
-
-    @Override
     public String getTitle() {
         return LOGIN_TITLE;
     }

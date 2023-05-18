@@ -79,7 +79,8 @@ public class NewFriendController extends Controller {
         for (User user : allUsers) {
             if (user.name().equals(searchTextField.getText())) {
                 userStorageProvider.get().addFriend(user._id());
-                disposables.add(usersServiceProvider.get().updateUser(null, null, null, userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER).subscribe());
+                disposables.add(usersServiceProvider.get().updateUser(null, null, null,
+                        userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER).subscribe());
                 createPrivateGroup(user);
                 searchTextField.setPromptText(FRIEND_ADDED);
                 break;
@@ -125,7 +126,8 @@ public class NewFriendController extends Controller {
                 if (group.members().size() == privateGroup.size() && group.name() == null) {
                     groupStorageProvider.get().set_id(group._id());
                 } else {
-                    disposables.add(groupServiceProvider.get().create(null, privateGroup).observeOn(FX_SCHEDULER).subscribe(newGroup -> groupStorageProvider.get().set_id(newGroup._id())));
+                    disposables.add(groupServiceProvider.get().create(null, privateGroup)
+                            .observeOn(FX_SCHEDULER).subscribe(newGroup -> groupStorageProvider.get().set_id(newGroup._id())));
                 }
 
             }

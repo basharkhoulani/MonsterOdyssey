@@ -85,7 +85,6 @@ public class MainMenuController extends Controller {
                     .observeOn(FX_SCHEDULER).subscribe(users -> {
                         friends.setAll(users);
                         sortListView(friendsListView);
-                        new BestFriendUtils(preferencesProvider.get()).sortBestFriendTop(friendsListView);
                     }));
             listenToStatusUpdate(friends, friendsListView);
         }

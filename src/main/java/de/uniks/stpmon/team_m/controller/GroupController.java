@@ -59,6 +59,7 @@ public class GroupController extends Controller {
     @Inject
     Preferences preferences;
     private final ObservableList<User> friends = FXCollections.observableArrayList();
+    private final ObservableList<User> foreign = FXCollections.observableArrayList();
     private ListView<User> friendsListView;
     private ListView<User> foreignListView;
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
@@ -98,6 +99,25 @@ public class GroupController extends Controller {
     }
 
     private void initEditGroupView(String groupId) {
+        disposables.add(groupService.getGroup(groupId).observeOn(FX_SCHEDULER).subscribe(group -> {
+            groupNameInput.setText(group.name());
+            final List<String> groupMembers = group.members();
+            if (!groupMembers.isEmpty()) {
+                disposables.add(usersService.getUsers(groupMembers, null).observeOn(FX_SCHEDULER).subscribe(users -> {
+                    friends.setAll(users);
+                    friendsListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
+                            foreignListView, friends));
+                    foreignListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
+                            foreignListView, friends));
+
+                    friendsListView.setItems(friends);
+                    foreignListView.setItems(foreign);
+
+                    sortListView(friendsListView);
+                    sortListView(foreignListView);
+                }));
+            }
+        }));
     }
 
     private void initNewGroupView() {
