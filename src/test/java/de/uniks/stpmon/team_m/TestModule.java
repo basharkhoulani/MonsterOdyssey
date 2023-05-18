@@ -55,7 +55,9 @@ public class TestModule {
 
             @Override
             public Observable<List<Group>> getGroups(List<String> ids) {
-                return Observable.empty();
+                return Observable.just(
+                        List.of(new Group("64610ec8420b3d786212aea8", "", List.of("64610e7b82ca062bfa5b7231", "64610e7b82ca062bfa5b7232")))
+                );
             }
 
             @Override
@@ -157,7 +159,7 @@ public class TestModule {
 
             @Override
             public Observable<User> deleteUser(String id) {
-                return Observable.just(new User("42", "Rick", "offline", null, null));
+                return Observable.just(new User("423f8d731c386bcd2204da39", "Rick", "offline", null, null));
             }
         };
     }
@@ -168,6 +170,11 @@ public class TestModule {
             @Override
             public List<String> getFriends() {
                 return List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64");
+            }
+
+            @Override
+            public String get_id() {
+                return "645cd04c11b590456276e9d6";
             }
         };
     }
