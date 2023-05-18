@@ -77,7 +77,7 @@ public class MainMenuController extends Controller {
 
         friendsListView = new ListView<>(friends);
         friendsListView.setId("friendsListView");
-        friendsListView.setCellFactory(param -> new MainMenuUserCell(preferencesProvider.get()));
+        friendsListView.setCellFactory(param -> new MainMenuUserCell(preferencesProvider.get(), userStorageProvider.get(), usersService));
         friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
         disposables.add(regionsApiService.getRegions()
                 .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));
