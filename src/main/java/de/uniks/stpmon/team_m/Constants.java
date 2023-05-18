@@ -37,6 +37,7 @@ public class Constants {
     public static final int HBOX_FRIENDS_SPACING = 15;
     public static final String THREE_DOTS = "···";
     public static final String BEST_FRIEND_PREF = "bestFriend";
+    public static final String DELETE_FRIEND_WARNING = "Are you sure you want to delete this friend?";
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
