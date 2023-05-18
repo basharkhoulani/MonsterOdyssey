@@ -136,28 +136,39 @@ public class MessagesController extends Controller {
         });
 
         userListView.setOnMouseClicked(event -> {
-            openFriendChat(false);
+            openFriendChat("userListView");
         });
         groupListView.setOnMouseClicked(event -> {
-            openFriendChat(true);
+            openFriendChat("groupListView");
         });
+        if (groupStorageProvider.get().get_id() != null) {
+            for (User user: friends) {
+                if (user._id().equals(groupStorageProvider.get().get_id())){
+                    userListView.getSelectionModel().select(user);
+                    break;
+                }
+            }
+            openFriendChat("other");
+        }
 
         // do something with filledListView
         return parent;
 
     }
 
-    private void openFriendChat(boolean isGroup) {
-        Group chat;
-        if (!isGroup) {
-            chat = new Group(null, null, List.of(userListView.getSelectionModel().getSelectedItem()._id(), userStorageProvider.get().get_id()));
+    private void openFriendChat(String origin) {
+        final Group[] chat = new Group[1];
+        if (origin.equals("userListView")) {
+            chat[0] = new Group(null, null, List.of(userListView.getSelectionModel().getSelectedItem()._id(), userStorageProvider.get().get_id()));
+        } else if (origin.equals("groupListView")) {
+            chat[0] = groupListView.getSelectionModel().getSelectedItem();
         } else {
-            chat = groupListView.getSelectionModel().getSelectedItem();
+            chat[0] = new Group(null, null, List.of(groupStorageProvider.get().get_id(), userStorageProvider.get().get_id()));
         }
 
-        disposables.add(groupService.getGroups(chat.membersToString())
+        disposables.add(groupService.getGroups(chat[0].membersToString())
                 .observeOn(FX_SCHEDULER).subscribe(gotGroups -> {
-                    if (chat.name() == null) {
+                    if (chat[0].name() == null) {
                         for (Group group : gotGroups) {
                             if (group.name() == null) {
                                 chatID = group._id();
@@ -166,10 +177,16 @@ public class MessagesController extends Controller {
                             chatID = null;
                         }
                     } else {
-                        chatID = chat._id();
+                        chatID = chat[0]._id();
                     }
 
-                    this.currentFriendOrGroupText.setText(isGroup ? chat.name() : userListView.getSelectionModel().getSelectedItem().name());
+                    if (origin.equals("userListView")) {
+                        this.currentFriendOrGroupText.setText(userListView.getSelectionModel().getSelectedItem().name());
+                    } else if (origin.equals("groupListView")) {
+                        this.currentFriendOrGroupText.setText(chat[0].name());
+                    } else {
+                        this.currentFriendOrGroupText.setText(groupStorageProvider.get().getName());
+                    }
                     chatViewVBox.getChildren().clear();
 
                     if (chatID != null) {
@@ -321,13 +338,11 @@ public class MessagesController extends Controller {
 
     public void onSendMessage() {
         String groupID = groupStorageProvider.get().get_id();
-        System.out.println(groupID);
         if (groupID == null) {
             return;
         }
 
         String messageBody = messageTextArea.getText();
-        System.out.println(messageBody);
         disposables.add(messageService.newMessage(groupID, messageBody, MESSAGE_NAMESPACE_GROUPS)
                 .observeOn(FX_SCHEDULER).subscribe(
                         message -> {
