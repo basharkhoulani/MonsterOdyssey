@@ -79,7 +79,7 @@ public class TestModule {
             }
 
             @Override
-            public Observable<List<Group>> getGroups(List<String> ids) {
+            public Observable<List<Group>> getGroups(String ids) {
                 return Observable.just(
                         List.of(new Group("64610ec8420b3d786212aea8", "", List.of("64610e7b82ca062bfa5b7231", "64610e7b82ca062bfa5b7232")))
                 );

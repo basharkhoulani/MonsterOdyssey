@@ -56,6 +56,7 @@ public class NewFriendController extends Controller {
 
     @Override
     public Parent render() {
+        groupStorageProvider.get().set_id(null);
         return super.render();
     }
 
@@ -116,18 +117,20 @@ public class NewFriendController extends Controller {
         }));
     }
     private void createPrivateGroup(User user) {
-        List<String> privateGroup = Arrays.asList(user._id(), userStorageProvider.get().get_id());
-        disposables.add(groupServiceProvider.get().getGroups(privateGroup).observeOn(FX_SCHEDULER).subscribe(groups -> {
+        Group privateGroup = new Group(null, null, List.of(user._id(), userStorageProvider.get().get_id()));
+        disposables.add(groupServiceProvider.get().getGroups(privateGroup.membersToString()).observeOn(FX_SCHEDULER).subscribe(groups -> {
             for (Group group : groups) {
                 if (group.members() == null) {
                     break;
                 }
-                if (group.members().size() == privateGroup.size() && group.name() == null) {
+                if (group.members().size() == 2 && group.name() == null) {
                     groupStorageProvider.get().set_id(group._id());
-                } else {
-                    disposables.add(groupServiceProvider.get().create(null, privateGroup).observeOn(FX_SCHEDULER).subscribe(newGroup -> groupStorageProvider.get().set_id(newGroup._id())));
+                    break;
                 }
-
+            }
+            if (groupStorageProvider.get().get_id() == null) {
+                disposables.add(groupServiceProvider.get().create("", privateGroup.members())
+                        .observeOn(FX_SCHEDULER).subscribe());
             }
         }));
     }
