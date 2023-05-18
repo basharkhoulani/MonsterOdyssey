@@ -1,18 +1,20 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.controller.subController.GroupCell;
 import de.uniks.stpmon.team_m.Constants;
-import de.uniks.stpmon.team_m.controller.subController.MessagesUserCell;
+import de.uniks.stpmon.team_m.controller.subController.GroupCell;
+import de.uniks.stpmon.team_m.controller.subController.UserCell;
 import de.uniks.stpmon.team_m.dto.Group;
+import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -22,9 +24,9 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -82,6 +84,8 @@ public class MessagesController extends Controller {
     private final ObservableList<Group> groups = FXCollections.observableArrayList();
     private ListView<User> userListView;
     private ListView<Group> groupListView;
+    private final ObservableList<Message> messages = FXCollections.observableArrayList();
+    private String chatID;
 
     @Inject
     public MessagesController() {
@@ -92,18 +96,7 @@ public class MessagesController extends Controller {
         userListView = new ListView<>(friends);
         userListView.setId("friends");
         userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
-        userListView.setCellFactory(param -> new MessagesUserCell(
-                preferences,
-                chatViewVBox,
-                currentFriendOrGroupText,
-                chatScrollPane,
-                userStorageProvider,
-                groupStorageProvider,
-                usersService,
-                messageService,
-                groupService,
-                disposables
-        ));
+        userListView.setCellFactory(param -> new UserCell(preferences));
         if (!userStorageProvider.get().getFriends().isEmpty()) {
             disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER)
                     .subscribe(users -> {
@@ -142,8 +135,170 @@ public class MessagesController extends Controller {
             }
         });
 
+        userListView.setOnMouseClicked(event -> {
+            openFriendChat(false);
+        });
+        groupListView.setOnMouseClicked(event -> {
+            openFriendChat(true);
+        });
+
         // do something with filledListView
         return parent;
+
+    }
+
+    private void openFriendChat(boolean isGroup) {
+        Group chat;
+        if (!isGroup) {
+            chat = new Group(null, null, List.of(userListView.getSelectionModel().getSelectedItem()._id(), userStorageProvider.get().get_id()));
+        } else {
+            chat = groupListView.getSelectionModel().getSelectedItem();
+        }
+
+        disposables.add(groupService.getGroups(chat.membersToString())
+                .observeOn(FX_SCHEDULER).subscribe(gotGroups -> {
+                    if (chat.name() == null) {
+                        for (Group group : gotGroups) {
+                            if (group.name() == null) {
+                                chatID = group._id();
+                                break;
+                            }
+                            chatID = null;
+                        }
+                    } else {
+                        chatID = chat._id();
+                    }
+
+                    this.currentFriendOrGroupText.setText(isGroup ? chat.name() : userListView.getSelectionModel().getSelectedItem().name());
+                    chatViewVBox.getChildren().clear();
+
+                    if (chatID != null) {
+                        groupStorageProvider.get().set_id(chatID);
+
+                        disposables.add(messageService.getGroupMessages(chatID)
+                                .observeOn(FX_SCHEDULER).subscribe(messages -> {
+                                    chatViewVBox.getChildren().clear();
+                                    this.messages.setAll(messages);
+
+                                    for (Message message : messages) {
+                                        chatViewVBox.getChildren().add(this.createMessageNode(message));
+                                    }
+
+                                    chatScrollPane.setVvalue(1.0);
+                                }));
+                    }
+                }));
+
+    }
+
+    public VBox createMessageNode(Message message) {
+        VBox newMessageNode = new VBox();
+        HBox newMessageValueArea = new HBox();
+        HBox newMessageInfoArea = new HBox();
+
+        // @Cheng, so you can call delete and edit functionality on this message
+        newMessageNode.setId(message._id());
+
+        newMessageValueArea.maxWidthProperty().bind(chatViewVBox.widthProperty().map(number -> number.intValue() / 2 - 20));
+        newMessageInfoArea.maxWidthProperty().bind(chatViewVBox.widthProperty().map(number -> number.intValue() / 2 - 20));
+
+        boolean userIsSender = message.sender().equals(userStorageProvider.get().get_id());
+        // if user is sender: message is on the right, else on the left
+        newMessageNode.setAlignment(userIsSender ? Pos.TOP_RIGHT : Pos.TOP_LEFT);
+
+        newMessageValueArea.setBorder(new Border(
+                new BorderStroke(
+                        Color.BLACK,
+                        BorderStrokeStyle.SOLID,
+                        new CornerRadii(10),
+                        new BorderWidths(2)
+                )
+        ));
+
+        Text messageText = new Text();
+        messageText.setText(message.body());
+        messageText.wrappingWidthProperty().bind(chatViewVBox.widthProperty().map(number -> number.intValue() / 2 - 20));
+
+        VBox newMessageValueContainer = new VBox();
+        newMessageValueContainer.getChildren().add(messageText);
+        newMessageValueArea.getChildren().add(newMessageValueContainer);
+
+        newMessageValueArea.setPadding(new Insets(2));
+        newMessageValueContainer.setPadding(new Insets(5));
+
+        Label authorAndTime = new Label();
+        if (userIsSender) {
+            authorAndTime.setText(userStorageProvider.get().getName() +
+                    " " +
+                    formatTimeString(message.createdAt()) +
+                    " " +
+                    (message.updatedAt() == null ? "" : "\u270F"));
+
+
+            newMessageValueContainer.setBackground(Background.fill(Paint.valueOf("lightblue")));
+        } else {
+            final String[] senderName = {""};
+            usersService.getUser(message.sender()).map(
+                    user -> {
+                        senderName[0] = user.name();
+                        return user;
+                    }
+            ).subscribe().dispose();
+
+            authorAndTime.setText(senderName[0] +
+                    " " +
+                    formatTimeString(message.createdAt()) +
+                    " " +
+                    (message.updatedAt() == null ? "" : "\u270F"));
+        }
+
+        newMessageInfoArea.getChildren().add(authorAndTime);
+
+        Button editButton = new Button("\u270F");
+        editButton.setOnAction(event -> {
+            // @Cheng
+        });
+
+        Button deleteButton = new Button("\uD83D\uDDD1");
+        deleteButton.setOnAction(event -> {
+            Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            deleteAlert.setTitle("Confirm delete");
+            deleteAlert.setHeaderText(null);
+            deleteAlert.setContentText("Do you really want to delete this message?");
+
+            deleteAlert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    disposables.add(messageService.deleteMessage(message._id(), chatID, Constants.MESSAGE_NAMESPACE_GROUPS)
+                            .observeOn(FX_SCHEDULER).subscribe());
+                }
+                deleteAlert.close();
+            });
+        });
+        newMessageInfoArea.getChildren().addAll(editButton, deleteButton);
+
+        newMessageInfoArea.setFillHeight(true);
+        HBox.setMargin(editButton, new Insets(0, 0, 0, 5));
+        HBox.setMargin(deleteButton, new Insets(0, 0, 0, 5));
+        editButton.setVisible(false);
+        deleteButton.setVisible(false);
+
+        newMessageNode.getChildren().add(newMessageValueArea);
+        newMessageNode.getChildren().add(newMessageInfoArea);
+
+        newMessageNode.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            editButton.setVisible(newValue);
+            deleteButton.setVisible(newValue);
+        });
+
+        return newMessageNode;
+    }
+
+    private String formatTimeString(String dateTime) {
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+        LocalDateTime localDateTime = LocalDateTime.parse(dateTime, inputFormatter);
+
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("HH:mm, dd.MM.yy");
+        return localDateTime.format(outputFormatter);
     }
 
     public void changeToMainMenu() {
@@ -160,27 +315,25 @@ public class MessagesController extends Controller {
     }
 
     public void changeToSettings() {
-        groupStorageProvider.get().set_id(LOADING);
+        groupStorageProvider.get().set_id(groupListView.getSelectionModel().getSelectedItem()._id());
         app.show(groupControllerProvider.get());
     }
 
     public void onSendMessage() {
         String groupID = groupStorageProvider.get().get_id();
         System.out.println(groupID);
-
         if (groupID == null) {
             return;
         }
 
         String messageBody = messageTextArea.getText();
-
+        System.out.println(messageBody);
         disposables.add(messageService.newMessage(groupID, messageBody, MESSAGE_NAMESPACE_GROUPS)
                 .observeOn(FX_SCHEDULER).subscribe(
                         message -> {
                             //
                         }, Throwable::printStackTrace
                 ));
-        System.out.println(messageTextArea.getText());
         messageTextArea.setText("");
     }
 }
