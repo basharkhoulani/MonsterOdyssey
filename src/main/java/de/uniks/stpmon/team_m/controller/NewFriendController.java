@@ -56,12 +56,12 @@ public class NewFriendController extends Controller {
 
     @Override
     public Parent render() {
-        groupStorageProvider.get().set_id(null);
         return super.render();
     }
 
     public void changeToMainMenu() {
-        groupStorageProvider.get().set_id("");
+        groupStorageProvider.get().set_id(null);
+        groupStorageProvider.get().set_id(null);
         app.show(mainMenuControllerProvider.get());
     }
 

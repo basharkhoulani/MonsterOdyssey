@@ -70,9 +70,9 @@ public class GroupServiceTest {
                         List.of("645e7bb58eeea04ccc5f0b5c", "645e7bb7b8be26e7be3162b0")))));
 
         final List<Group> groups = groupService.
-                getGroups(List.of("645e7a140cd1c6fd58b6bc43", "645e7ba9cc22fc2c695933cb")).blockingFirst();
+                getGroups("645e7a140cd1c6fd58b6bc43,645e7ba9cc22fc2c695933cb").blockingFirst();
         assertNotNull(groups);
-        verify(groupsApiService).getGroups(List.of("645e7a140cd1c6fd58b6bc43", "645e7ba9cc22fc2c695933cb"));
+        verify(groupsApiService).getGroups("645e7a140cd1c6fd58b6bc43,645e7ba9cc22fc2c695933cb");
     }
 
     @Test
