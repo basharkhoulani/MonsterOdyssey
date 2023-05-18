@@ -129,6 +129,7 @@ public class MainMenuController extends Controller {
     }
 
     public void changeToMessages() {
+        groupStorageProvider.get().set_id("");
         app.show(messagesControllerProvider.get());
     }
 
