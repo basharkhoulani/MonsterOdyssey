@@ -24,8 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.MAIN_MENU_TITLE;
-import static de.uniks.stpmon.team_m.Constants.USER_STATUS_OFFLINE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class MainMenuController extends Controller {
 
