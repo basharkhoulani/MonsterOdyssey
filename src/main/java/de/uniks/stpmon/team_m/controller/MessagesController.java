@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.subController.MessagesUserCell;
 import de.uniks.stpmon.team_m.controller.subController.UserCell;
 import de.uniks.stpmon.team_m.dto.Message;
@@ -12,6 +13,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -84,6 +87,7 @@ public class MessagesController extends Controller {
                 currentFriendOrGroupText,
                 chatScrollPane,
                 userStorageProvider,
+                groupStorageProvider,
                 usersService,
                 messageService,
                 groupService,
@@ -102,6 +106,14 @@ public class MessagesController extends Controller {
     public Parent render() {
         Parent parent = super.render();
         friendsListViewVBox.getChildren().add(listView);
+        messageTextArea.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER && !event.isShiftDown()) {
+                event.consume();
+                this.onSendMessage();
+            }
+        });
+
+        // do something with filledListView
         return parent;
     }
 
@@ -118,13 +130,23 @@ public class MessagesController extends Controller {
         app.show(groupControllerProvider.get());
     }
 
-    public void sendMessage() {
-        // TODO:
-        // button fx:id: '#sendButton'
-    }
-
     public void changeToSettings() {
         groupStorageProvider.get().set_id(LOADING);
         app.show(groupControllerProvider.get());
+    }
+
+    public void onSendMessage() {
+//        String groupID = groupStorageProvider.get().get_id();
+//
+//        if (groupID == null) {
+//            return;
+//        }
+//
+//        String messageBody = messageTextArea.getText();
+//
+//        disposables.add(messageService.newMessage(groupID, messageBody, MESSAGE_NAMESPACE_GROUPS)
+//                .observeOn(FX_SCHEDULER).subscribe());
+        System.out.println(messageTextArea.getText());
+        messageTextArea.setText("");
     }
 }
