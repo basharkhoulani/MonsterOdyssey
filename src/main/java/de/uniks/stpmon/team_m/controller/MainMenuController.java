@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
@@ -98,18 +99,20 @@ public class MainMenuController extends Controller {
         final Parent parent = super.render();
         initRadioButtons();
         friendsListVBox.getChildren().add(friendsListView);
-        friendsListView.setOnMouseClicked(event -> {
-            List<String> privateGroup = Arrays.asList(friendsListView.getSelectionModel().getSelectedItem()._id(), userStorageProvider.get().get_id());
-            disposables.add(groupServiceProvider.get().getGroups(privateGroup).observeOn(FX_SCHEDULER).subscribe(groups -> {
-                for (Group group : groups) {
-                    if (group.members().size() == privateGroup.size() && group.name() == null) {
-                        groupStorageProvider.get().set_id(group._id());
-                        app.show(messagesControllerProvider.get());
-                    }
-                }
-            }));
-        });
+        friendsListView.setOnMouseClicked(event -> switchToMessageScreen());
         return parent;
+    }
+
+    private void switchToMessageScreen() {
+        List<String> privateGroup = Arrays.asList(friendsListView.getSelectionModel().getSelectedItem()._id(), userStorageProvider.get().get_id());
+        disposables.add(groupServiceProvider.get().getGroups(privateGroup).observeOn(FX_SCHEDULER).subscribe(groups -> {
+            for (Group group : groups) {
+                if (group.members().size() == privateGroup.size() && group.name() == null) {
+                    groupStorageProvider.get().set_id(group._id());
+                    app.show(messagesControllerProvider.get());
+                }
+            }
+        }));
     }
 
     private void initRadioButtons() {
