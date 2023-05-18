@@ -13,7 +13,10 @@ import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
@@ -56,6 +59,8 @@ class MainMenuControllerTest extends ApplicationTest {
     App app = new App(null);
     @InjectMocks
     MainMenuController mainMenuController;
+    @Mock
+    Provider<EventListener> eventListenerProvider;
 
 
     @Override
@@ -71,6 +76,11 @@ class MainMenuControllerTest extends ApplicationTest {
                         new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
         when(userStorageProvider.get().getFriends())
                 .thenReturn(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
+        mainMenuController.setInitialized(true);
+
+        Mockito.when(eventListenerProvider.get()).thenReturn(mock(EventListener.class));
+        Mockito.when(eventListenerProvider.get().listen(any(), any())).thenReturn(Observable.empty());
+
         app.start(stage);
         app.show(mainMenuController);
         stage.requestFocus();
