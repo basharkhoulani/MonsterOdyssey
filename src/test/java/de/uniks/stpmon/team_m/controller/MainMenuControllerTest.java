@@ -2,12 +2,12 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.TestModule_AuthApiServiceFactory;
+import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
-import de.uniks.stpmon.team_m.service.AuthenticationService;
-import de.uniks.stpmon.team_m.service.UserStorage;
-import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.service.*;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
@@ -48,10 +48,15 @@ class MainMenuControllerTest extends ApplicationTest {
     Provider<UserStorage> userStorageProvider;
     @Mock
     Provider<Preferences> preferencesProvider;
+    @Mock
+    Provider<GroupStorage> groupStorageProvider;
+    @Mock
+    Provider<GroupService> groupServiceProvider;
     @Spy
     App app = new App(null);
     @InjectMocks
     MainMenuController mainMenuController;
+
 
     @Override
     public void start(Stage stage) {
@@ -85,6 +90,8 @@ class MainMenuControllerTest extends ApplicationTest {
         final MessagesController messagesController = mock(MessagesController.class);
         when(messagesControllerProvider.get()).thenReturn(messagesController);
         doNothing().when(app).show(messagesController);
+        GroupStorage groupStorage = mock(GroupStorage.class);
+        when(groupStorageProvider.get()).thenReturn(groupStorage);
         clickOn("#messagesButton");
         verify(app).show(messagesController);
     }
@@ -135,6 +142,12 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Test
     void displayFriends() {
+        GroupService groupService = mock(GroupService.class);
+        when(groupServiceProvider.get()).thenReturn(groupService);
+        when(groupService.getGroups(Mockito.anyList())).thenReturn(Observable.just(
+                        List.of(new Group("64610ec8420b3d786212aea8", "", List.of("64610e7b82ca062bfa5b7231", "64610e7b82ca062bfa5b7232")))
+                )
+        );
         ListView<User> friendListView = lookup("#friendsListView").query();
         assertEquals(3, friendListView.getItems().size());
         User user = friendListView.getItems().get(0);
