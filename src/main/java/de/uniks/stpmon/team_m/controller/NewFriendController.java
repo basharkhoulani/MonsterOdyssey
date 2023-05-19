@@ -97,7 +97,6 @@ public class NewFriendController extends Controller {
             }
             if (user.name().equals(searchTextField.getText())) {
                 createPrivateGroup(user);
-                app.show(messageControllerProvider.get());
                 break;
             }
         }
@@ -117,23 +116,35 @@ public class NewFriendController extends Controller {
     }
     private void createPrivateGroup(User user) {
         Group privateGroup = new Group(null, null, List.of(user._id(), userStorageProvider.get().get_id()));
+        System.out.println(privateGroup.membersToString());
         disposables.add(groupServiceProvider.get().getGroups(privateGroup.membersToString()).observeOn(FX_SCHEDULER).subscribe(groups -> {
-            for (Group group : groups) {
-                if (group.members() == null) {
-                    break;
-                }
-                if (group.members().size() == 2 && group.name() == null) {
-                    groupStorageProvider.get().set_id(user._id());
-                    groupStorageProvider.get().setName(user.name());
-                    break;
-                }
-                if (group.members().size() == privateGroup.members().size() && group.name() == null) {
-                    groupStorageProvider.get().set_id(group._id());
-                } else {
-                    disposables.add(groupServiceProvider.get().create(null, privateGroup.members())
-                            .observeOn(FX_SCHEDULER).subscribe(newGroup -> groupStorageProvider.get().set_id(newGroup._id())));
-                }
+            if (!groups.isEmpty()) {
+                for (Group group : groups) {
+                    if (group.members() == null) {
+                        break;
+                    }
+                    if (group.members().size() == 2 && group.name() == null) {
+                        groupStorageProvider.get().set_id(user._id());
+                        groupStorageProvider.get().setName(user.name());
+                        break;
+                    }
+                    if (group.members().size() == privateGroup.members().size() && group.name() == null) {
+                        groupStorageProvider.get().set_id(group._id());
+                    } else {
+                        disposables.add(groupServiceProvider.get().create(null, privateGroup.members())
+                                .observeOn(FX_SCHEDULER).subscribe(newGroup -> {
+                                    groupStorageProvider.get().set_id(newGroup._id());
+                                    app.show(messageControllerProvider.get());
+                                }));
+                    }
 
+                }
+            } else {
+                disposables.add(groupServiceProvider.get().create(null, privateGroup.members())
+                        .observeOn(FX_SCHEDULER).subscribe(newGroup -> {
+                            groupStorageProvider.get().set_id(newGroup._id());
+                            app.show(messageControllerProvider.get());
+                        }));
             }
         }));
     }

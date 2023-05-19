@@ -136,13 +136,15 @@ public class MessagesController extends Controller {
         groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
         disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> {
             groups.stream().filter(group -> {
+                System.out.println(group.members().size());
                 if (group.members().size() == 2 && group.name() == null ){
                     for (String id: userStorageProvider.get().getFriends()){
-                        if (!group.members().contains(id))
+                        if (!group.members().contains(id)){
                             return true;
+                        }
                     }
-                }
-                return group.name() != null;
+                } else return group.name() != null;
+                return false;
             }).forEach(group -> {
                 this.groups.add(group);
                     MessagesBoxController messagesBoxController = new MessagesBoxController(
