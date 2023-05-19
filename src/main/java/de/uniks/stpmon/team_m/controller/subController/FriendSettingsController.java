@@ -29,7 +29,8 @@ public class FriendSettingsController extends Controller {
     @FXML
     public Button deleteFriendButton;
 
-    public FriendSettingsController(Preferences preferences, UserStorage userStorage, UsersService usersService, ListView<User> friendsListView, User user) {
+    public FriendSettingsController(Preferences preferences, UserStorage userStorage,
+                                    UsersService usersService, ListView<User> friendsListView, User user) {
         this.preferences = preferences;
         this.userStorage = userStorage;
         this.usersService = usersService;
@@ -58,7 +59,9 @@ public class FriendSettingsController extends Controller {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.YES) {
             userStorage.deleteFriend(user._id());
-            disposables.add(usersService.updateUser(null, null, null, userStorage.getFriends(), null).observeOn(FX_SCHEDULER).subscribe(updatedUser -> friendsListView.getItems().remove(user), error -> {
+            disposables.add(usersService.updateUser(null, null, null,
+                    userStorage.getFriends(), null).observeOn(FX_SCHEDULER)
+                    .subscribe(updatedUser -> friendsListView.getItems().remove(user), error -> {
                 userStorage.addFriend(user._id());
                 alert.setContentText(GENERIC_ERROR);
                 alert.setTitle(error.getMessage());

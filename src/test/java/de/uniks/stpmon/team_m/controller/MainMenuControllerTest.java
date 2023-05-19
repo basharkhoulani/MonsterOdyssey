@@ -78,7 +78,6 @@ class MainMenuControllerTest extends ApplicationTest {
                         new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
         when(userStorageProvider.get().getFriends())
                 .thenReturn(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
-        mainMenuController.setInitialized(true);
 
         when(groupStorageProvider.get().get_id()).thenReturn("645cd04c11b590456276e9d1");
 

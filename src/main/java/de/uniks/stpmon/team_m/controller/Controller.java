@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.utils.BestFriendUtils;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -16,6 +17,7 @@ import javafx.scene.control.ListView;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.io.IOException;
+import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -27,7 +29,6 @@ public abstract class Controller {
     Provider<EventListener> eventListener;
     protected final CompositeDisposable disposables = new CompositeDisposable();
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
-    public boolean isInitialized = false;
 
     public void init() {
     }
@@ -68,7 +69,12 @@ public abstract class Controller {
     }
 
     public static int sortByOnline(User o1, User o2) {
-        if (o1.status().equals(USER_STATUS_ONLINE) && o2.status().equals(USER_STATUS_OFFLINE)) {
+        BestFriendUtils bestFriendUtils = new BestFriendUtils(Preferences.userNodeForPackage(Main.class));
+        if (bestFriendUtils.isBestFriend(o1) && !bestFriendUtils.isBestFriend(o2)) {
+            return -1;
+        } else if (!bestFriendUtils.isBestFriend(o1) && bestFriendUtils.isBestFriend(o2)) {
+            return 1;
+        } else if (o1.status().equals(USER_STATUS_ONLINE) && o2.status().equals(USER_STATUS_OFFLINE)) {
             return -1;
         } else if (o1.status().equals(USER_STATUS_OFFLINE) && o2.status().equals(USER_STATUS_ONLINE)) {
             return 1;
@@ -92,11 +98,4 @@ public abstract class Controller {
                 }));
     }
 
-    public boolean isInitialized() {
-        return isInitialized;
-    }
-
-    public void setInitialized(boolean initialized) {
-        isInitialized = initialized;
-    }
 }
