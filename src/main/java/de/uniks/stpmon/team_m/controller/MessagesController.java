@@ -136,7 +136,6 @@ public class MessagesController extends Controller {
         groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
         disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> {
             groups.stream().filter(group -> {
-                System.out.println(group.members().size());
                 if (group.members().size() == 2 && group.name() == null ){
                     for (String id: userStorageProvider.get().getFriends()){
                         if (!group.members().contains(id)){
@@ -165,17 +164,18 @@ public class MessagesController extends Controller {
                     subControllers.add(messagesBoxController);
             });
             if (groupStorageProvider.get().get_id() != null) {
-                for (Group group: groups){
-                    if (group.members().contains(groupStorageProvider.get().get_id()) && group.members().size() == 2 && group.name() == null)
+                for (Group group : groups) {
+                    if (group._id().equals(groupStorageProvider.get().get_id())) {
                         try {
                             messagesBoxControllerGroupMap.get(group).render();
                         } catch (Exception ignored) {
                         }
+                    }
                 }
             }
             groupListView.refresh();
         }));
-    }
+    };
 
     @Override
     public String getTitle() {
