@@ -154,7 +154,7 @@ public class LoginController extends Controller {
 
     public void userStatusUpdate(String status) {
 <span class="fc" id="L156">        disposables.add(usersService.updateUser(null, status, null, null, null)</span>
-<span class="fc" id="L157">                .observeOn(FX_SCHEDULER).subscribe(user -&gt; userStorage.setStatus(user.status())));</span>
+<span class="pc" id="L157">                .observeOn(FX_SCHEDULER).subscribe(user -&gt; userStorage.setStatus(user.status()), error -&gt; {}));</span>
 <span class="fc" id="L158">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

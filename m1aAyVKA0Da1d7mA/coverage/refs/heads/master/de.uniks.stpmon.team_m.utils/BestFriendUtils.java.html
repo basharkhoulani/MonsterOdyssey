@@ -21,20 +21,20 @@ public class BestFriendUtils {
     }
 
     public void sortBestFriendTop(ListView&lt;User&gt; friendsListView) {
-<span class="nc" id="L24">        friendsListView.getItems().sort(this::compare);</span>
-<span class="nc" id="L25">    }</span>
+<span class="fc" id="L24">        friendsListView.getItems().sort(this::compare);</span>
+<span class="fc" id="L25">    }</span>
 
     private int compare(User o1, User o2) {
-<span class="nc bnc" id="L28" title="All 4 branches missed.">        if (isBestFriend(o1) &amp;&amp; !isBestFriend(o2)) {</span>
+<span class="pc bpc" id="L28" title="3 of 4 branches missed.">        if (isBestFriend(o1) &amp;&amp; !isBestFriend(o2)) {</span>
 <span class="nc" id="L29">            return -1;</span>
-<span class="nc bnc" id="L30" title="All 4 branches missed.">        } else if (!isBestFriend(o1) &amp;&amp; isBestFriend(o2)) {</span>
+<span class="pc bpc" id="L30" title="2 of 4 branches missed.">        } else if (!isBestFriend(o1) &amp;&amp; isBestFriend(o2)) {</span>
 <span class="nc" id="L31">            return 1;</span>
-<span class="nc bnc" id="L32" title="All 4 branches missed.">        } else if (o1.status().equals(USER_STATUS_ONLINE) &amp;&amp; o2.status().equals(USER_STATUS_OFFLINE)) {</span>
-<span class="nc" id="L33">            return -1;</span>
-<span class="nc bnc" id="L34" title="All 4 branches missed.">        } else if (o1.status().equals(USER_STATUS_OFFLINE) &amp;&amp; o2.status().equals(USER_STATUS_ONLINE)) {</span>
+<span class="fc bfc" id="L32" title="All 4 branches covered.">        } else if (o1.status().equals(USER_STATUS_ONLINE) &amp;&amp; o2.status().equals(USER_STATUS_OFFLINE)) {</span>
+<span class="fc" id="L33">            return -1;</span>
+<span class="pc bpc" id="L34" title="1 of 4 branches missed.">        } else if (o1.status().equals(USER_STATUS_OFFLINE) &amp;&amp; o2.status().equals(USER_STATUS_ONLINE)) {</span>
 <span class="nc" id="L35">            return 1;</span>
         } else {
-<span class="nc" id="L37">            return o1.name().compareTo(o2.name());</span>
+<span class="fc" id="L37">            return o1.name().compareTo(o2.name());</span>
         }
     }
 }

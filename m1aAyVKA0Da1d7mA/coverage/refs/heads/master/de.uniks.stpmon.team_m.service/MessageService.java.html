@@ -77,6 +77,9 @@ public class MessageService {
 <span class="nc" id="L77">        return messagesApiService.update(namespace, receiverID, messageID, updateMessageDto);</span>
     }
 
+    public Observable&lt;Message&gt; deleteMessage(String messageID, String groupID, String namespace) {
+<span class="nc" id="L81">        return messagesApiService.delete(namespace, groupID, messageID);</span>
+    }
 
     // General message methods
 
@@ -88,10 +91,10 @@ public class MessageService {
      * @return a sorted observable of a sorted message list
      */
     public Observable&lt;List&lt;Message&gt;&gt; getGroupMessages(String groupID) {
-<span class="nc" id="L91">        return this.getMessagesByNamespace(groupID, Constants.MESSAGE_NAMESPACE_GROUPS)</span>
-<span class="nc" id="L92">                .map(messages -&gt; {</span>
-<span class="nc" id="L93">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
-<span class="nc" id="L94">                    return messages;</span>
+<span class="nc" id="L94">        return this.getMessagesByNamespace(groupID, Constants.MESSAGE_NAMESPACE_GROUPS)</span>
+<span class="nc" id="L95">                .map(messages -&gt; {</span>
+<span class="nc" id="L96">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
+<span class="nc" id="L97">                    return messages;</span>
                 });
     }
 
@@ -107,18 +110,18 @@ public class MessageService {
      * @return a sorted observable of a sorted message list
      */
     public Observable&lt;List&lt;Message&gt;&gt; getRegionMessages(String regionID) {
-<span class="nc" id="L110">        return this.getMessagesByNamespace(regionID, Constants.MESSAGE_NAMESPACE_REGIONS)</span>
-<span class="nc" id="L111">                .map(messages -&gt; {</span>
-<span class="nc" id="L112">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
-<span class="nc" id="L113">                    return messages;</span>
+<span class="nc" id="L113">        return this.getMessagesByNamespace(regionID, Constants.MESSAGE_NAMESPACE_REGIONS)</span>
+<span class="nc" id="L114">                .map(messages -&gt; {</span>
+<span class="nc" id="L115">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
+<span class="nc" id="L116">                    return messages;</span>
                 });
     }
 
     public Observable&lt;List&lt;Message&gt;&gt; getGlobalMessages(String parentID) {
-<span class="nc" id="L118">        return this.getMessagesByNamespace(parentID, Constants.MESSAGE_NAMESPACE_GLOBAL)</span>
-<span class="nc" id="L119">                .map(messages -&gt; {</span>
-<span class="nc" id="L120">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
-<span class="nc" id="L121">                    return messages;</span>
+<span class="nc" id="L121">        return this.getMessagesByNamespace(parentID, Constants.MESSAGE_NAMESPACE_GLOBAL)</span>
+<span class="nc" id="L122">                .map(messages -&gt; {</span>
+<span class="nc" id="L123">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
+<span class="nc" id="L124">                    return messages;</span>
                 });
     }
 }

@@ -114,7 +114,7 @@ public class GroupController extends Controller {
 <span class="fc" id="L114">                        foreign.add(user);</span>
                     }
 <span class="fc" id="L116">                }</span>
-<span class="fc" id="L117">                friendsListView.setCellFactory(param -&gt; new GroupUserCell(preferences, newGroupMembers, friendsListView,</span>
+<span class="pc" id="L117">                friendsListView.setCellFactory(param -&gt; new GroupUserCell(preferences, newGroupMembers, friendsListView,</span>
                         foreignListView, friends));
 <span class="fc" id="L119">                foreignListView.setCellFactory(param -&gt; new GroupUserCell(preferences, newGroupMembers, friendsListView,</span>
                         foreignListView, friends));
@@ -205,24 +205,24 @@ public class GroupController extends Controller {
 
     public void saveGroup() {
 <span class="fc" id="L207">        final String groupId = groupStorageProvider.get().get_id();</span>
-<span class="fc bfc" id="L208" title="All 2 branches covered.">        if (groupId.equals(EMPTY_STRING)) {</span>
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">        if (groupId.equals(EMPTY_STRING)) {</span>
 <span class="fc" id="L209">            createGroup();</span>
         } else {
-<span class="fc" id="L211">            updateGroup(groupId);</span>
+<span class="nc" id="L211">            updateGroup(groupId);</span>
         }
 <span class="fc" id="L213">    }</span>
 
     private void updateGroup(String groupId) {
-<span class="fc" id="L216">        List&lt;String&gt; newGroupMembersIDs = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L217">        newGroupMembers.forEach(user -&gt; newGroupMembersIDs.add(user._id()));</span>
-<span class="fc" id="L218">        disposables.add(groupService.update(groupId, groupNameInput.getText(), newGroupMembersIDs)</span>
-<span class="fc" id="L219">                .observeOn(FX_SCHEDULER).subscribe(group -&gt; {</span>
-<span class="fc" id="L220">                    groupStorageProvider.get().set_id(group._id());</span>
-<span class="fc" id="L221">                    groupStorageProvider.get().setName(group.name());</span>
-<span class="fc" id="L222">                    groupStorageProvider.get().setMembers(group.members());</span>
+<span class="nc" id="L216">        List&lt;String&gt; newGroupMembersIDs = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L217">        newGroupMembers.forEach(user -&gt; newGroupMembersIDs.add(user._id()));</span>
+<span class="nc" id="L218">        disposables.add(groupService.update(groupId, groupNameInput.getText(), newGroupMembersIDs)</span>
+<span class="nc" id="L219">                .observeOn(FX_SCHEDULER).subscribe(group -&gt; {</span>
+<span class="nc" id="L220">                    groupStorageProvider.get().set_id(group._id());</span>
+<span class="nc" id="L221">                    groupStorageProvider.get().setName(group.name());</span>
+<span class="nc" id="L222">                    groupStorageProvider.get().setMembers(group.members());</span>
 <span class="nc" id="L223">                    app.show(messagesControllerProvider.get());</span>
-<span class="pc" id="L224">                }, error -&gt; errorMessage.setText(error.getMessage())));</span>
-<span class="fc" id="L225">    }</span>
+<span class="nc" id="L224">                }, error -&gt; errorMessage.setText(error.getMessage())));</span>
+<span class="nc" id="L225">    }</span>
 
     private void createGroup() {
 <span class="fc" id="L228">        List&lt;String&gt; newGroupMembersIDs = new ArrayList&lt;&gt;();</span>

@@ -30,7 +30,7 @@ public class GroupService {
     }
 
     // For all groups the current user is member of, pass null as the parameter.
-    public Observable&lt;List&lt;Group&gt;&gt; getGroups(List&lt;String&gt; _ids) {
+    public Observable&lt;List&lt;Group&gt;&gt; getGroups(String _ids) {
 <span class="fc" id="L34">        return groupsApiService.getGroups(_ids);</span>
     }
 
