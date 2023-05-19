@@ -98,7 +98,7 @@ public class MessagesBoxController extends Controller {
                 .observeOn(FX_SCHEDULER).subscribe(gotGroups -> {
                     if (chat.name() == null) {
                         for (Group group : gotGroups) {
-                            if (Objects.equals(group.name(), "")) {
+                            if (group.name() == null) {
                                 chatID = group._id();
                                 break;
                             }
