@@ -222,21 +222,25 @@ public class MessagesController extends Controller {
     }
 
     public void changeToMainMenu() {
+        destroy();
         app.show(mainMenuControllerProvider.get());
     }
 
     public void changeToFindNewFriends() {
+        destroy();
         app.show(newFriendControllerProvider.get());
     }
 
     public void changeToNewGroup() {
         groupStorageProvider.get().set_id(EMPTY_STRING);
+        destroy();
         app.show(groupControllerProvider.get());
     }
 
     public void changeToSettings() {
         if (groupListView.getSelectionModel().getSelectedItem() != null) {
             groupStorageProvider.get().set_id(groupListView.getSelectionModel().getSelectedItem()._id());
+            destroy();
             app.show(groupControllerProvider.get());
         }
     }

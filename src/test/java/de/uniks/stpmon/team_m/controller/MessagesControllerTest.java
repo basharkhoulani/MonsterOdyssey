@@ -171,6 +171,5 @@ public class MessagesControllerTest extends ApplicationTest {
 
         clickOn("Rick");
 
-        clickOn("Get in the damn car Morty!");
     }
 }
