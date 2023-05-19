@@ -94,7 +94,7 @@ public class MessagesBoxController extends Controller {
                 .observeOn(FX_SCHEDULER).subscribe(gotGroups -> {
                     if (chat.name() == null) {
                         for (Group group : gotGroups) {
-                            if (group.name() == null) {
+                            if (Objects.equals(group.name(), "")) {
                                 chatID = group._id();
                                 break;
                             }
@@ -126,7 +126,6 @@ public class MessagesBoxController extends Controller {
 
                     chatViewVBox.getChildren().clear();
 
-                    System.out.println(chatID);
                     if (chatID != null) {
                         groupStorage.set_id(chatID);
 
@@ -138,8 +137,6 @@ public class MessagesBoxController extends Controller {
                                     for (Message message : messages) {
                                         chatViewVBox.getChildren().add(this.createMessageNode(message));
                                     }
-                                    System.out.println(chatID);
-                                    System.out.println(eventListener.get());
                                     if (!isInitialized) {
                                         disposables.add(eventListener.get()
                                                 .listen("groups." + chatID + ".messages.*.*", Message.class)

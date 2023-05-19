@@ -157,18 +157,17 @@ public class MessagesControllerTest extends ApplicationTest {
 
         assertEquals(3, friendsAndGroups.getItems().size());
 
-        User gg = friendsAndGroups.getItems().get(0);
-        assertEquals("Garbage Goober", gg.name());
+        User rick = friendsAndGroups.getItems().get(0);
+        assertEquals("Rick", rick.name());
     }
 
     @Test
-    void displayMessages() throws InterruptedException {
+    void displayMessages() {
         VBox friendsListViewVBox = lookup("#friendsListViewVBox").query();
-        ObservableList<Node> friendsAndGroupNodes = friendsListViewVBox.getChildren();
         ListView<User> listView = lookup("#friends").query();
 
         User user = listView.getItems().get(0);
-        assertEquals("Garbage Goober", user.name());
+        assertEquals("Rick", user.name());
 
         clickOn("Rick");
 

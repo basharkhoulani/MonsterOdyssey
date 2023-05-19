@@ -158,6 +158,6 @@ class MainMenuControllerTest extends ApplicationTest {
         ListView<User> friendListView = lookup("#friendsListView").query();
         assertEquals(3, friendListView.getItems().size());
         User user = friendListView.getItems().get(0);
-        assertEquals("Garbage Goober", user.name());
+        assertEquals("Rick", user.name());
     }
 }
