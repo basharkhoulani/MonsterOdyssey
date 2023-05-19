@@ -4,7 +4,6 @@ import de.uniks.stpmon.team_m.controller.subController.GroupCell;
 import de.uniks.stpmon.team_m.controller.subController.MessagesBoxController;
 import de.uniks.stpmon.team_m.controller.subController.UserCell;
 import de.uniks.stpmon.team_m.dto.Group;
-import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.BestFriendUtils;
@@ -76,8 +75,6 @@ public class MessagesController extends Controller {
     private final ObservableList<Group> groups = FXCollections.observableArrayList();
     private ListView<User> userListView;
     private ListView<Group> groupListView;
-    private final ObservableList<Message> messages = FXCollections.observableArrayList();
-    private String chatID;
     private final List<Controller> subControllers = new ArrayList<>();
     Map<User, MessagesBoxController> messagesBoxControllerUserMap = new HashMap<>();
     Map<Group, MessagesBoxController> messagesBoxControllerGroupMap = new HashMap<>();
@@ -196,11 +193,16 @@ public class MessagesController extends Controller {
                 messagesBoxControllerGroupMap.get(groupListView.getSelectionModel().getSelectedItem()).render();
             }
         });
-
-
-        // do something with filledListView
         return parent;
 
+    }
+    @Override
+    public void destroy() {
+        super.destroy();
+        subControllers.forEach(Controller::destroy);
+        subControllers.clear();
+        messagesBoxControllerUserMap.clear();
+        messagesBoxControllerGroupMap.clear();
     }
 
     public void changeToMainMenu() {
@@ -231,13 +233,8 @@ public class MessagesController extends Controller {
         disposables.add(messageService.newMessage(groupID, messageBody, MESSAGE_NAMESPACE_GROUPS)
                 .observeOn(FX_SCHEDULER).subscribe(
                         message -> {
-                            //
                         }, Throwable::printStackTrace
                 ));
         messageTextArea.setText("");
-    }
-
-    private void listenToMessages() {
-
     }
 }

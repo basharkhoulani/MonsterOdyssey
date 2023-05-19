@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
-import com.sun.javafx.collections.ElementObservableListDecorator;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.Group;
@@ -19,10 +18,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
-import org.controlsfx.tools.Platform;
 
 import javax.inject.Provider;
-import java.lang.reflect.Parameter;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -34,7 +31,7 @@ import static de.uniks.stpmon.team_m.Constants.MESSAGE_NAMESPACE_GROUPS;
 
 public class MessagesBoxController extends Controller {
 
-    private User user;
+    private final User user;
     private final VBox chatViewVBox;
     private final ScrollPane chatScrollPane;
 
@@ -62,13 +59,10 @@ public class MessagesBoxController extends Controller {
         this.chatScrollPane = chatScrollPane;
         this.currentFriendOrGroupText = currentFriendOrGroupText;
     }
+
     @Override
     public String getTitle() {
         return null;
-    }
-
-    @Override
-    public void init() {
     }
 
     @Override
@@ -144,11 +138,11 @@ public class MessagesBoxController extends Controller {
                                                     System.out.println(messageEvent);
                                                     final Message message = messageEvent.data();
                                                     switch (messageEvent.suffix()) {
-                                                        case "created":
+                                                        case "created" -> {
                                                             chatViewVBox.getChildren().add(createMessageNode(message));
                                                             chatScrollPane.setVvalue(1.0);
-                                                            break;
-                                                        case "updated":
+                                                        }
+                                                        case "updated" -> {
                                                             for (Node messageNode : chatViewVBox.getChildren()) {
                                                                 if (Objects.equals(messageNode.getId(), message._id())) {
                                                                     VBox messageVBox = (VBox) messageNode;
@@ -163,12 +157,10 @@ public class MessagesBoxController extends Controller {
                                                                     edited.setVisible(true);
                                                                 }
                                                             }
-                                                            break;
-                                                        case "deleted":
-                                                            chatViewVBox.getChildren().removeIf(
-                                                                    node -> Objects.equals(node.getId(), message._id())
-                                                            );
-                                                            break;
+                                                        }
+                                                        case "deleted" -> chatViewVBox.getChildren().removeIf(
+                                                                node -> Objects.equals(node.getId(), message._id())
+                                                        );
                                                     }
                                                 }));
                                         isInitialized = true;
@@ -257,10 +249,8 @@ public class MessagesBoxController extends Controller {
 
             dialog.getDialogPane().setContent(messageArea);
             Button ok = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-            ok.setOnAction( event1 -> {
-                disposables.add(messageService.updateMessage(chatID, message._id(), messageArea.getText(), MESSAGE_NAMESPACE_GROUPS)
-                        .observeOn(FX_SCHEDULER).subscribe());
-            });
+            ok.setOnAction(event1 -> disposables.add(messageService.updateMessage(chatID, message._id(), messageArea.getText(), MESSAGE_NAMESPACE_GROUPS)
+                    .observeOn(FX_SCHEDULER).subscribe()));
             dialog.showAndWait();
         });
 
