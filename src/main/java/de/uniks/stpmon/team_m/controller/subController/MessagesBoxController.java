@@ -19,6 +19,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
+import org.controlsfx.tools.Platform;
 
 import javax.inject.Provider;
 import java.lang.reflect.Parameter;
@@ -36,6 +37,7 @@ public class MessagesBoxController extends Controller {
     private final User user;
     private final VBox chatViewVBox;
     private final ScrollPane chatScrollPane;
+
     private final Text currentFriendOrGroupText;
     private final MessageService messageService;
     private final GroupService groupService;
@@ -67,11 +69,12 @@ public class MessagesBoxController extends Controller {
 
     @Override
     public void init() {
-
     }
 
     @Override
     public Parent render() {
+        Parent parent = new Parent() {
+        };
         if (group == null) {
             openFriendChat("userListView");
         }
@@ -79,7 +82,7 @@ public class MessagesBoxController extends Controller {
             openFriendChat("groupListView");
         }
 
-        return super.render();
+        return parent;
     }
 
     private void openFriendChat(String origin) {
@@ -131,48 +134,48 @@ public class MessagesBoxController extends Controller {
                                     for (Message message : messages) {
                                         chatViewVBox.getChildren().add(this.createMessageNode(message));
                                     }
-
-                                    chatScrollPane.setVvalue(1.0);
                                     System.out.println(chatID);
                                     System.out.println(eventListener.get());
-                                    disposables.add(eventListener.get()
-                                            .listen("groups." + chatID + ".messages.*.*", Message.class)
-                                            .observeOn(FX_SCHEDULER)
-                                            .subscribe(messageEvent -> {
-                                                System.out.println(messageEvent);
-                                                final Message message = messageEvent.data();
-                                                switch (messageEvent.suffix()) {
-                                                    case "created":
-                                                        chatViewVBox.getChildren().add(createMessageNode(message));
-                                                        chatScrollPane.setVvalue(1.0);
-                                                        break;
-                                                    case "updated":
-                                                        for (Node messageNode : chatViewVBox.getChildren()) {
-                                                            if (Objects.equals(messageNode.getId(), message._id())) {
-                                                                VBox messageVBox = (VBox) messageNode;
-                                                                HBox messageValueAreaContainer = (HBox) messageVBox.getChildren().get(0);
-                                                                VBox messageValueArea = (VBox) messageValueAreaContainer.getChildren().get(0);
-                                                                Text messageValueText = (Text) messageValueArea.getChildren().get(0);
+                                    if (!isInitialized) {
+                                        disposables.add(eventListener.get()
+                                                .listen("groups." + chatID + ".messages.*.*", Message.class)
+                                                .observeOn(FX_SCHEDULER)
+                                                .subscribe(messageEvent -> {
+                                                    System.out.println(messageEvent);
+                                                    final Message message = messageEvent.data();
+                                                    switch (messageEvent.suffix()) {
+                                                        case "created":
+                                                            chatViewVBox.getChildren().add(createMessageNode(message));
+                                                            chatScrollPane.setVvalue(1.0);
+                                                            break;
+                                                        case "updated":
+                                                            for (Node messageNode : chatViewVBox.getChildren()) {
+                                                                if (Objects.equals(messageNode.getId(), message._id())) {
+                                                                    VBox messageVBox = (VBox) messageNode;
+                                                                    HBox messageValueAreaContainer = (HBox) messageVBox.getChildren().get(0);
+                                                                    VBox messageValueArea = (VBox) messageValueAreaContainer.getChildren().get(0);
+                                                                    Text messageValueText = (Text) messageValueArea.getChildren().get(0);
 
-                                                                messageValueText.setText(message.body());
+                                                                    messageValueText.setText(message.body());
 
-                                                                HBox messageInfoArea = (HBox) messageVBox.getChildren().get(1);
-                                                                Label edited = (Label) messageInfoArea.getChildren().get(1);
-                                                                edited.setVisible(true);
+                                                                    HBox messageInfoArea = (HBox) messageVBox.getChildren().get(1);
+                                                                    Label edited = (Label) messageInfoArea.getChildren().get(1);
+                                                                    edited.setVisible(true);
+                                                                }
                                                             }
-                                                        }
-                                                        break;
-                                                    case "deleted":
-                                                        chatViewVBox.getChildren().removeIf(
-                                                                node -> Objects.equals(node.getId(), message._id())
-                                                        );
-                                                        break;
-                                                }
-                                            }));
+                                                            break;
+                                                        case "deleted":
+                                                            chatViewVBox.getChildren().removeIf(
+                                                                    node -> Objects.equals(node.getId(), message._id())
+                                                            );
+                                                            break;
+                                                    }
+                                                }));
+                                        isInitialized = true;
+                                    }
                                 }));
                     }
                 }));
-
     }
 
     public VBox createMessageNode(Message message) {

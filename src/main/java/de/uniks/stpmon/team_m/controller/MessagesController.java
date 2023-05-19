@@ -34,10 +34,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -86,8 +83,6 @@ public class MessagesController extends Controller {
     @Inject
     MessageService messageService;
     @Inject
-    Provider<EventListener> eventListener;
-    @Inject
     GroupService groupService;
     @Inject
     Preferences preferences;
@@ -98,6 +93,7 @@ public class MessagesController extends Controller {
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     private String chatID;
     private final List<Controller> subControllers = new ArrayList<>();
+    Map<User, MessagesBoxController> messagesBoxControllerMap = new HashMap<>();
 
     @Inject
     public MessagesController() {
@@ -113,6 +109,24 @@ public class MessagesController extends Controller {
             disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER)
                     .subscribe(users -> {
                         friends.setAll(users);
+                        for (User user : users){
+                            MessagesBoxController messagesBoxController = new MessagesBoxController(
+                                    messageService,
+                                    groupService,
+                                    eventListener,
+                                    usersService,
+                                    groupStorageProvider.get(),
+                                    userStorageProvider.get(),
+                                    user,
+                                    null,
+                                    chatViewVBox,
+                                    chatScrollPane,
+                                    currentFriendOrGroupText
+                            );
+                            messagesBoxController.init();
+                            messagesBoxControllerMap.put(user, messagesBoxController);
+                            subControllers.add(messagesBoxController);
+                        }
                         sortListView(userListView);
                         new BestFriendUtils(preferences).sortBestFriendTop(userListView);
                         userListView.refresh();
@@ -149,28 +163,15 @@ public class MessagesController extends Controller {
                 this.onSendMessage();
             }
         });
-
         userListView.setOnMouseClicked(event -> {
             if (userListView.getSelectionModel().getSelectedItem() != null) {
-                MessagesBoxController messagesBoxController = new MessagesBoxController(
-                        messageService,
-                        groupService,
-                        eventListener,
-                        usersService,
-                        groupStorageProvider.get(),
-                        userStorageProvider.get(),
-                        userListView.getSelectionModel().getSelectedItem(),
-                        null,
-                        chatViewVBox,
-                        chatScrollPane,
-                        currentFriendOrGroupText
-                );
-                messagesBoxController.render();
-                subControllers.add(messagesBoxController);
+                messagesBoxControllerMap.get(userListView.getSelectionModel().getSelectedItem()).render();
             }
         });
+
         groupListView.setOnMouseClicked(event -> {
             if (groupListView.getSelectionModel().getSelectedItem() != null) {
+                subControllers.forEach(Controller::destroy);
                 MessagesBoxController messagesBoxController = new MessagesBoxController(
                         messageService,
                         groupService,
@@ -189,6 +190,7 @@ public class MessagesController extends Controller {
             }
         });
         if (groupStorageProvider.get().get_id() != null) {
+            subControllers.forEach(Controller::destroy);
             MessagesBoxController messagesBoxController = new MessagesBoxController(
                     messageService,
                     groupService,
