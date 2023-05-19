@@ -128,7 +128,6 @@ public class NewFriendController extends Controller {
                         break;
                     }
                 }
-                System.out.println(groupStorageProvider.get().get_id());
                 if (groupStorageProvider.get().get_id() == null) {
                     disposables.add(groupServiceProvider.get().create(null, privateGroup.members())
                             .observeOn(FX_SCHEDULER).subscribe(newGroup -> {

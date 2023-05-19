@@ -85,7 +85,6 @@ public class MessagesBoxController extends Controller {
         if (origin.equals("userListView")) {
             chat = new Group(null, null, List.of(user._id(), userStorage.get_id()));
         } else if (origin.equals("groupListView")) {
-            System.out.println(group._id());
             if (group.name() == null) {
                 chat = group;
             } else {
@@ -147,7 +146,6 @@ public class MessagesBoxController extends Controller {
                                                 .listen("groups." + chatID + ".messages.*.*", Message.class)
                                                 .observeOn(FX_SCHEDULER)
                                                 .subscribe(messageEvent -> {
-                                                    System.out.println(messageEvent);
                                                     final Message message = messageEvent.data();
                                                     switch (messageEvent.suffix()) {
                                                         case "created" -> {
