@@ -7,7 +7,6 @@ import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
 import de.uniks.stpmon.team_m.service.*;
-import de.uniks.stpmon.team_m.utils.BestFriendUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -85,7 +84,6 @@ public class MainMenuController extends Controller {
                     .observeOn(FX_SCHEDULER).subscribe(users -> {
                         friends.setAll(users);
                         sortListView(friendsListView);
-                        new BestFriendUtils(preferencesProvider.get()).sortBestFriendTop(friendsListView);
                     }));
             listenToStatusUpdate(friends, friendsListView);
         }

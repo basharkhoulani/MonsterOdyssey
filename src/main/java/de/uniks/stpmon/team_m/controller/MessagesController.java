@@ -16,9 +16,6 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
