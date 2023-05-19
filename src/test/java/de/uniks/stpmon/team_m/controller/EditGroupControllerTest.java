@@ -115,7 +115,7 @@ class EditGroupControllerTest extends ApplicationTest {
 //        write("F");
 //        HBox hBox = lookup("#Friend").query();
 //        HBox buttonHBox = (HBox) hBox.getChildren().get(2);
-//        Button button = (Button) buttonHBox.getChildren().get(0);
+//        Button button = (Button) buttonHBox.getChildren().get(0);             <----
 //        final String buttonText = button.getText();
 //        assertEquals(CHECK_MARK, buttonText);
 //        clickOn(button);
