@@ -126,10 +126,11 @@ public class NewFriendController extends Controller {
                     groupStorageProvider.get().set_id(user._id());
                     groupStorageProvider.get().setName(user.name());
                     break;
-                if (group.members().size() == privateGroup.size() && group.name() == null) {
+                }
+                if (group.members().size() == privateGroup.members().size() && group.name() == null) {
                     groupStorageProvider.get().set_id(group._id());
                 } else {
-                    disposables.add(groupServiceProvider.get().create(null, privateGroup)
+                    disposables.add(groupServiceProvider.get().create(null, privateGroup.members())
                             .observeOn(FX_SCHEDULER).subscribe(newGroup -> groupStorageProvider.get().set_id(newGroup._id())));
                 }
 

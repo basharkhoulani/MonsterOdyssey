@@ -7,6 +7,7 @@ import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.BestFriendUtils;
+import io.reactivex.rxjava3.core.Single;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -134,7 +135,15 @@ public class MessagesController extends Controller {
         groupListView.setCellFactory(param -> new GroupCell());
         groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
         disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> {
-            groups.stream().filter(group -> group.name() != null).forEach(group -> {
+            groups.stream().filter(group -> {
+                if (group.members().size() == 2 && group.name() == null ){
+                    for (String id: userStorageProvider.get().getFriends()){
+                        if (!group.members().contains(id))
+                            return true;
+                    }
+                }
+                return group.name() != null;
+            }).forEach(group -> {
                 this.groups.add(group);
                     MessagesBoxController messagesBoxController = new MessagesBoxController(
                             messageService,

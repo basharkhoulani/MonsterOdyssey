@@ -45,6 +45,7 @@ public class MessagesBoxController extends Controller {
     private String chatID;
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     Provider<EventListener> eventListener;
+    boolean isInitialized = false;
 
     public MessagesBoxController(MessageService messageService, GroupService groupService, Provider<EventListener> eventListener, UsersService usersService, GroupStorage groupStorage, UserStorage userStorage, User user, Group group, VBox chatViewVBox, ScrollPane chatScrollPane, Text currentFriendOrGroupText) {
         this.messageService = messageService;
@@ -75,7 +76,6 @@ public class MessagesBoxController extends Controller {
         if (user == null) {
             openFriendChat("groupListView");
         }
-
         return parent;
     }
 
@@ -94,10 +94,7 @@ public class MessagesBoxController extends Controller {
                 .observeOn(FX_SCHEDULER).subscribe(gotGroups -> {
                     if (chat.name() == null) {
                         for (Group group : gotGroups) {
-                            System.out.println("for-loop");
                             if (group.name() == null) {
-                                System.out.println("group.name() == null");
-                                System.out.println(group._id());
                                 chatID = group._id();
                                 break;
                             }
@@ -111,9 +108,22 @@ public class MessagesBoxController extends Controller {
                         this.currentFriendOrGroupText.setText(user.name());
                     } else if (origin.equals("groupListView")) {
                         this.currentFriendOrGroupText.setText(chat.name());
+                        if(chat.name()==null){
+                            for (String id: chat.members()){
+                                if(!id.equals(userStorage.get_id())){
+                                    disposables.add(usersService.getUser(id)
+                                            .observeOn(FX_SCHEDULER).subscribe(user -> {
+                                                this.currentFriendOrGroupText.setText(user.name());
+                                            }, error -> {
+                                                this.currentFriendOrGroupText.setText("Unknown User");
+                                            }));
+                                }
+                            }
+                        }
                     } else {
-                        this.currentFriendOrGroupText.setText(groupStorage.getName());
+                        this.currentFriendOrGroupText.setText(user.name());
                     }
+
                     chatViewVBox.getChildren().clear();
 
                     System.out.println(chatID);
