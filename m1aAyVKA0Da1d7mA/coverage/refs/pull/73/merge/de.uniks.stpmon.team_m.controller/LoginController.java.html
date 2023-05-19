@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoginController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller</a> &gt; <span class="el_source">LoginController.java</span></div><h1>LoginController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller;
+
+
+import de.uniks.stpmon.team_m.service.AuthenticationService;
+import de.uniks.stpmon.team_m.service.TokenStorage;
+import de.uniks.stpmon.team_m.service.UserStorage;
+import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+
+public class LoginController extends Controller {
+
+    @FXML
+    public Label informationLabel;
+    @FXML
+    public TextField usernameField;
+    @FXML
+    public PasswordField passwordField;
+    @FXML
+    public CheckBox rememberMeCheckbox;
+    @FXML
+    public Button signUpButton;
+    @FXML
+    public Button signInButton;
+    @FXML
+    public Button hideButton;
+    @FXML
+    public Label usernameErrorLabel;
+    @FXML
+    public Label passwordErrorLabel;
+    @FXML
+    public Label welcomeLabel;
+    @FXML
+    public Label gameNameLabel;
+
+    private PasswordFieldSkin skin;
+
+    private BooleanBinding isInvalidUsername;
+    private BooleanBinding isInvalidPassword;
+
+
+<span class="fc" id="L52">    private final SimpleStringProperty username = new SimpleStringProperty();</span>
+<span class="fc" id="L53">    private final SimpleStringProperty password = new SimpleStringProperty();</span>
+<span class="fc" id="L54">    private final SimpleBooleanProperty rememberMe = new SimpleBooleanProperty();</span>
+<span class="fc" id="L55">    private String information = EMPTY_STRING;</span>
+
+
+    @Inject
+    Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
+    @Inject
+    AuthenticationService authenticationService;
+    @Inject
+    TokenStorage tokenStorage;
+    @Inject
+    UserStorage userStorage;
+    @Inject
+    UsersService usersService;
+
+
+    @Inject
+<span class="fc" id="L71">    public LoginController() {</span>
+<span class="fc" id="L72">    }</span>
+
+    @Override
+    public String getTitle() {
+<span class="fc" id="L76">        return LOGIN_TITLE;</span>
+    }
+
+    @Override
+    public Parent render() {
+<span class="fc" id="L81">        final Parent parent = super.render();</span>
+
+<span class="fc" id="L83">        skin = new PasswordFieldSkin(passwordField);</span>
+<span class="fc" id="L84">        passwordField.setSkin(skin);</span>
+
+<span class="fc" id="L86">        usernameField.textProperty().bindBidirectional(username);</span>
+<span class="fc" id="L87">        passwordField.textProperty().bindBidirectional(password);</span>
+<span class="fc" id="L88">        rememberMeCheckbox.selectedProperty().bindBidirectional(rememberMe);</span>
+
+<span class="fc" id="L90">        isInvalidUsername = username.isEmpty();</span>
+<span class="fc" id="L91">        isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);</span>
+<span class="fc" id="L92">        signInButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
+<span class="fc" id="L93">        signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
+
+<span class="fc" id="L95">        passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);</span>
+
+<span class="fc" id="L97">        showInformation();</span>
+
+<span class="fc" id="L99">        return parent;</span>
+    }
+
+    public void signIn() {
+<span class="fc" id="L103">        passwordErrorLabel.setText(EMPTY_STRING);</span>
+
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (isInvalidPassword.or(isInvalidUsername).get()) {</span>
+<span class="nc" id="L106">            return;</span>
+        }
+
+<span class="fc" id="L109">        disposables.add(authenticationService</span>
+<span class="fc" id="L110">                .login(username.get(), password.get(), rememberMe.get())</span>
+<span class="fc" id="L111">                .observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L112">                .subscribe(loginResult -&gt; {</span>
+<span class="fc" id="L113">                    userStatusUpdate(USER_STATUS_ONLINE);</span>
+<span class="fc" id="L114">                    app.show(mainMenuControllerProvider.get());</span>
+<span class="fc" id="L115">                    }, error -&gt; errorHandle(error.getMessage())));</span>
+<span class="fc" id="L116">    }</span>
+
+    public void signUp() {
+<span class="fc" id="L119">        passwordErrorLabel.setText(EMPTY_STRING);</span>
+
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">        if (isInvalidPassword.or(isInvalidUsername).get()) {</span>
+<span class="nc" id="L122">            return;</span>
+        }
+
+<span class="fc" id="L125">        disposables.add(usersService</span>
+<span class="fc" id="L126">                .createUser(username.get(), null, password.get())</span>
+<span class="fc" id="L127">                .observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L128">                .subscribe(userResult -&gt; signIn(),</span>
+<span class="fc" id="L129">                        error -&gt; errorHandle(error.getMessage())));</span>
+<span class="fc" id="L130">    }</span>
+
+    public void showPassword() {
+<span class="fc" id="L133">        skin.setMask(skin.getNotMask());</span>
+<span class="fc" id="L134">        passwordField.setText(passwordField.getText());</span>
+<span class="fc" id="L135">    }</span>
+
+    public void showInformation() {
+<span class="fc" id="L138">        informationLabel.setText(this.information);</span>
+<span class="fc" id="L139">    }</span>
+
+    public void setInformation(String information) {
+<span class="fc" id="L142">        this.information = information;</span>
+<span class="fc" id="L143">    }</span>
+
+    public void errorHandle(String error) {
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if(error.contains(HTTP_401)){</span>
+<span class="fc" id="L147">            passwordErrorLabel.setText(SIGNIN_ERROR);</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        } else if (error.contains(HTTP_409)) {</span>
+<span class="fc" id="L149">            passwordErrorLabel.setText(USERNAME_TAKEN);</span>
+        } else {
+<span class="fc" id="L151">            passwordErrorLabel.setText(CUSTOM_ERROR);</span>
+        }
+<span class="fc" id="L153">    }</span>
+
+    public void userStatusUpdate(String status) {
+<span class="fc" id="L156">        disposables.add(usersService.updateUser(null, status, null, null, null)</span>
+<span class="pc" id="L157">                .observeOn(FX_SCHEDULER).subscribe(user -&gt; userStorage.setStatus(user.status()), error -&gt; {}));</span>
+<span class="fc" id="L158">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
