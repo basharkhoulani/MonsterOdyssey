@@ -77,6 +77,8 @@ class NewFriendControllerTest extends ApplicationTest {
         // define mock
         final UsersService usersService = mock(UsersService.class);
         Mockito.when(usersServiceProvider.get()).thenReturn(usersService);
+        final GroupStorage groupStorage = mock(GroupStorage.class);
+        Mockito.when(groupStorageProvider.get()).thenReturn(groupStorage);
         when(usersService.getUsers(ArgumentMatchers.any(), ArgumentMatchers.any()))
                 .thenReturn(Observable.just(Arrays.asList(
                         new User("1", "11", "1", "1", null),
@@ -97,6 +99,7 @@ class NewFriendControllerTest extends ApplicationTest {
                 new Group("3", "33",  null)
         )));
         when(groupServiceProvider.get()).thenReturn(groupService);
+        when(groupService.create(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Observable.just(new Group(null, null, null)));
         // empty textfield
         clickOn("#addFriendButton");
         // click on searchbar

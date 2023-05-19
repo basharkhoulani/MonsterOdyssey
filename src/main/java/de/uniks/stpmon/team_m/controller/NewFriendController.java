@@ -56,12 +56,12 @@ public class NewFriendController extends Controller {
 
     @Override
     public Parent render() {
-        groupStorageProvider.get().set_id(null);
         return super.render();
     }
 
     public void changeToMainMenu() {
-        groupStorageProvider.get().set_id("");
+        groupStorageProvider.get().set_id(null);
+        groupStorageProvider.get().set_id(null);
         app.show(mainMenuControllerProvider.get());
     }
 
@@ -93,7 +93,6 @@ public class NewFriendController extends Controller {
         for (User user : allUsers) {
             if (!user.name().equals(searchTextField.getText())) {
                 searchTextField.setPromptText(FRIEND_NOT_FOUND);
-                return;
             }
             if (user.name().equals(searchTextField.getText())) {
                 createPrivateGroup(user);
@@ -101,7 +100,6 @@ public class NewFriendController extends Controller {
                 break;
             }
         }
-        app.show(messageControllerProvider.get());
         searchTextField.clear();
     }
 
@@ -124,13 +122,14 @@ public class NewFriendController extends Controller {
                     break;
                 }
                 if (group.members().size() == 2 && group.name() == null) {
-                    groupStorageProvider.get().set_id(group._id());
+                    groupStorageProvider.get().set_id(user._id());
+                    groupStorageProvider.get().setName(user.name());
                     break;
                 }
             }
             if (groupStorageProvider.get().get_id() == null) {
-                disposables.add(groupServiceProvider.get().create("", privateGroup.members())
-                        .observeOn(FX_SCHEDULER).subscribe());
+                disposables.add(groupServiceProvider.get().create(null, privateGroup.members())
+                        .observeOn(FX_SCHEDULER).subscribe(group -> System.out.println(group._id())));
             }
         }));
     }
