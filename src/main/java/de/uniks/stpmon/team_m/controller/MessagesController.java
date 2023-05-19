@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.subController.GroupCell;
 import de.uniks.stpmon.team_m.controller.subController.MessagesBoxController;
 import de.uniks.stpmon.team_m.controller.subController.UserCell;
@@ -9,31 +8,18 @@ import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.BestFriendUtils;
-import de.uniks.stpmon.team_m.ws.EventListener;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.prefs.Preferences;
 
@@ -93,7 +79,8 @@ public class MessagesController extends Controller {
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     private String chatID;
     private final List<Controller> subControllers = new ArrayList<>();
-    Map<User, MessagesBoxController> messagesBoxControllerMap = new HashMap<>();
+    Map<User, MessagesBoxController> messagesBoxControllerUserMap = new HashMap<>();
+    Map<Group, MessagesBoxController> messagesBoxControllerGroupMap = new HashMap<>();
 
     @Inject
     public MessagesController() {
@@ -124,7 +111,7 @@ public class MessagesController extends Controller {
                                     currentFriendOrGroupText
                             );
                             messagesBoxController.init();
-                            messagesBoxControllerMap.put(user, messagesBoxController);
+                            messagesBoxControllerUserMap.put(user, messagesBoxController);
                             subControllers.add(messagesBoxController);
                         }
                         sortListView(userListView);
@@ -142,6 +129,22 @@ public class MessagesController extends Controller {
         disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> {
             groups.stream().filter(group -> group.name() != null).forEach(group -> {
                 this.groups.add(group);
+                    MessagesBoxController messagesBoxController = new MessagesBoxController(
+                            messageService,
+                            groupService,
+                            eventListener,
+                            usersService,
+                            groupStorageProvider.get(),
+                            userStorageProvider.get(),
+                            null,
+                            group,
+                            chatViewVBox,
+                            chatScrollPane,
+                            currentFriendOrGroupText
+                    );
+                    messagesBoxController.init();
+                    messagesBoxControllerGroupMap.put(group, messagesBoxController);
+                    subControllers.add(messagesBoxController);
             });
             groupListView.refresh();
         }));
@@ -165,28 +168,13 @@ public class MessagesController extends Controller {
         });
         userListView.setOnMouseClicked(event -> {
             if (userListView.getSelectionModel().getSelectedItem() != null) {
-                messagesBoxControllerMap.get(userListView.getSelectionModel().getSelectedItem()).render();
+                messagesBoxControllerUserMap.get(userListView.getSelectionModel().getSelectedItem()).render();
             }
         });
 
         groupListView.setOnMouseClicked(event -> {
             if (groupListView.getSelectionModel().getSelectedItem() != null) {
-                subControllers.forEach(Controller::destroy);
-                MessagesBoxController messagesBoxController = new MessagesBoxController(
-                        messageService,
-                        groupService,
-                        eventListener,
-                        usersService,
-                        groupStorageProvider.get(),
-                        userStorageProvider.get(),
-                        null,
-                        groupListView.getSelectionModel().getSelectedItem(),
-                        chatViewVBox,
-                        chatScrollPane,
-                        currentFriendOrGroupText
-                );
-                messagesBoxController.render();
-                subControllers.add(messagesBoxController);
+                messagesBoxControllerGroupMap.get(groupListView.getSelectionModel().getSelectedItem()).render();
             }
         });
         if (groupStorageProvider.get().get_id() != null) {
