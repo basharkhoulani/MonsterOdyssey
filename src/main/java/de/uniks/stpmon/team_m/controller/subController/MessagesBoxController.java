@@ -32,9 +32,6 @@ import static de.uniks.stpmon.team_m.Constants.MESSAGE_NAMESPACE_GROUPS;
 public class MessagesBoxController extends Controller {
 
     private final User user;
-    private final VBox chatViewVBox;
-    private final ScrollPane chatScrollPane;
-
     private final Text currentFriendOrGroupText;
     private final MessageService messageService;
     private final GroupService groupService;
@@ -43,11 +40,13 @@ public class MessagesBoxController extends Controller {
     private final UsersService usersService;
     private final Group group;
     private String chatID;
+    private String title;
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     Provider<EventListener> eventListener;
-    boolean isInitialized = false;
 
-    public MessagesBoxController(MessageService messageService, GroupService groupService, Provider<EventListener> eventListener, UsersService usersService, GroupStorage groupStorage, UserStorage userStorage, User user, Group group, VBox chatViewVBox, ScrollPane chatScrollPane, Text currentFriendOrGroupText) {
+    VBox messageBox = new VBox();
+
+    public MessagesBoxController(MessageService messageService, GroupService groupService, Provider<EventListener> eventListener, UsersService usersService, GroupStorage groupStorage, UserStorage userStorage, User user, Group group, Text currentFriendOrGroupText) {
         this.messageService = messageService;
         this.groupService = groupService;
         this.eventListener = eventListener;
@@ -56,8 +55,6 @@ public class MessagesBoxController extends Controller {
         this.userStorage = userStorage;
         this.user = user;
         this.group = group;
-        this.chatViewVBox = chatViewVBox;
-        this.chatScrollPane = chatScrollPane;
         this.currentFriendOrGroupText = currentFriendOrGroupText;
     }
 
@@ -65,18 +62,21 @@ public class MessagesBoxController extends Controller {
     public String getTitle() {
         return null;
     }
-
     @Override
-    public Parent render() {
-        Parent parent = new Parent() {
-        };
+    public void init(){
         if (group == null) {
             openFriendChat("userListView");
         }
         if (user == null) {
             openFriendChat("groupListView");
         }
-        return parent;
+    }
+
+    @Override
+    public Parent render() {
+            groupStorage.set_id(chatID);
+            currentFriendOrGroupText.setText(title);
+        return messageBox;
     }
 
     private void openFriendChat(String origin) {
@@ -109,39 +109,38 @@ public class MessagesBoxController extends Controller {
                     }
 
                     if (origin.equals("userListView")) {
-                        this.currentFriendOrGroupText.setText(user.name());
+                        title = user.name();
                     } else if (origin.equals("groupListView")) {
-                        this.currentFriendOrGroupText.setText(chat.name());
+                        title = chat.name();
                         if(chat.name()==null){
                             for (String id: chat.members()){
                                 if(!id.equals(userStorage.get_id())){
                                     disposables.add(usersService.getUser(id)
                                             .observeOn(FX_SCHEDULER).subscribe(user -> {
-                                                this.currentFriendOrGroupText.setText(user.name());
+                                                title = user.name();
                                             }, error -> {
-                                                this.currentFriendOrGroupText.setText("Unknown User");
+                                                title = "Unknown User";
                                             }));
                                 }
                             }
                         }
                     } else {
-                        this.currentFriendOrGroupText.setText(user.name());
+                        title = user.name();
                     }
 
-                    chatViewVBox.getChildren().clear();
 
                     if (chatID != null) {
                         groupStorage.set_id(chatID);
 
                         disposables.add(messageService.getGroupMessages(chatID)
                                 .observeOn(FX_SCHEDULER).subscribe(messages -> {
-                                    chatViewVBox.getChildren().clear();
+                                    messageBox.getChildren().clear();
                                     this.messages.setAll(messages);
 
                                     for (Message message : messages) {
-                                        chatViewVBox.getChildren().add(this.createMessageNode(message));
+                                        messageBox.getChildren().add(this.createMessageNode(message));
                                     }
-                                    if (!isInitialized) {
+
                                         disposables.add(eventListener.get()
                                                 .listen("groups." + chatID + ".messages.*.*", Message.class)
                                                 .observeOn(FX_SCHEDULER)
@@ -149,11 +148,10 @@ public class MessagesBoxController extends Controller {
                                                     final Message message = messageEvent.data();
                                                     switch (messageEvent.suffix()) {
                                                         case "created" -> {
-                                                            chatViewVBox.getChildren().add(createMessageNode(message));
-                                                            chatScrollPane.setVvalue(1.0);
+                                                            messageBox.getChildren().add(createMessageNode(message));
                                                         }
                                                         case "updated" -> {
-                                                            for (Node messageNode : chatViewVBox.getChildren()) {
+                                                            for (Node messageNode : messageBox.getChildren()) {
                                                                 if (Objects.equals(messageNode.getId(), message._id())) {
                                                                     VBox messageVBox = (VBox) messageNode;
                                                                     HBox messageValueAreaContainer = (HBox) messageVBox.getChildren().get(0);
@@ -168,13 +166,12 @@ public class MessagesBoxController extends Controller {
                                                                 }
                                                             }
                                                         }
-                                                        case "deleted" -> chatViewVBox.getChildren().removeIf(
+                                                        case "deleted" -> messageBox.getChildren().removeIf(
                                                                 node -> Objects.equals(node.getId(), message._id())
                                                         );
                                                     }
                                                 }));
-                                        isInitialized = true;
-                                    }
+
                                 }));
                     }
                 }));
@@ -188,8 +185,8 @@ public class MessagesBoxController extends Controller {
         // @Cheng, so you can call delete and edit functionality on this message
         newMessageNode.setId(message._id());
 
-        newMessageValueArea.maxWidthProperty().bind(chatViewVBox.widthProperty().map(number -> number.intValue() / 2 - 20));
-        newMessageInfoArea.maxWidthProperty().bind(chatViewVBox.widthProperty().map(number -> number.intValue() / 2 - 20));
+        newMessageValueArea.maxWidthProperty().bind(messageBox.widthProperty().map(number -> number.intValue() / 2 - 20));
+        newMessageInfoArea.maxWidthProperty().bind(messageBox.widthProperty().map(number -> number.intValue() / 2 - 20));
 
         boolean userIsSender = message.sender().equals(userStorage.get_id());
         // if user is sender: message is on the right, else on the left
@@ -206,7 +203,7 @@ public class MessagesBoxController extends Controller {
 
         Text messageText = new Text();
         messageText.setText(message.body());
-        messageText.wrappingWidthProperty().bind(chatViewVBox.widthProperty().map(number -> number.intValue() / 2 - 20));
+        messageText.wrappingWidthProperty().bind(messageBox.widthProperty().map(number -> number.intValue() / 2 - 20));
 
         VBox newMessageValueContainer = new VBox();
         newMessageValueContainer.getChildren().add(messageText);

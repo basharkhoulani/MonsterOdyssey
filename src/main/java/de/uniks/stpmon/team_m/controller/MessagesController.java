@@ -7,7 +7,6 @@ import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.BestFriendUtils;
-import io.reactivex.rxjava3.core.Single;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,12 +14,15 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -94,37 +96,9 @@ public class MessagesController extends Controller {
             disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER)
                     .subscribe(users -> {
                         friends.setAll(users);
-                        for (User user : users){
-                            MessagesBoxController messagesBoxController = new MessagesBoxController(
-                                    messageService,
-                                    groupService,
-                                    eventListener,
-                                    usersService,
-                                    groupStorageProvider.get(),
-                                    userStorageProvider.get(),
-                                    user,
-                                    null,
-                                    chatViewVBox,
-                                    chatScrollPane,
-                                    currentFriendOrGroupText
-                            );
-                            messagesBoxController.init();
-                            messagesBoxControllerUserMap.put(user, messagesBoxController);
-                            subControllers.add(messagesBoxController);
-                        }
                         sortListView(userListView);
                         new BestFriendUtils(preferences).sortBestFriendTop(userListView);
                         userListView.refresh();
-                        if (groupStorageProvider.get().get_id() != null) {
-                            for (User user: friends){
-                                if (user._id().equals(groupStorageProvider.get().get_id())){
-                                    try {
-                                        messagesBoxControllerUserMap.get(user).render();
-                                    } catch (Exception ignored) {
-                                    }
-                                }
-                            }
-                        }
                     }));
         }
 
@@ -137,9 +111,9 @@ public class MessagesController extends Controller {
         System.out.println(userStorageProvider.get().getFriends());
         disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> {
             groups.stream().filter(group -> {
-                if (group.members().size() == 2 && group.name() == null ){
-                    for (String id: userStorageProvider.get().getFriends()){
-                        if (group.members().contains(id)){
+                if (group.members().size() == 2 && group.name() == null) {
+                    for (String id : userStorageProvider.get().getFriends()) {
+                        if (group.members().contains(id)) {
                             return false;
                         }
                     }
@@ -147,36 +121,12 @@ public class MessagesController extends Controller {
                 } else return group.name() != null;
             }).forEach(group -> {
                 this.groups.add(group);
-                    MessagesBoxController messagesBoxController = new MessagesBoxController(
-                            messageService,
-                            groupService,
-                            eventListener,
-                            usersService,
-                            groupStorageProvider.get(),
-                            userStorageProvider.get(),
-                            null,
-                            group,
-                            chatViewVBox,
-                            chatScrollPane,
-                            currentFriendOrGroupText
-                    );
-                    messagesBoxController.init();
-                    messagesBoxControllerGroupMap.put(group, messagesBoxController);
-                    subControllers.add(messagesBoxController);
             });
-            if (groupStorageProvider.get().get_id() != null) {
-                for (Group group : groups) {
-                    if (group._id().equals(groupStorageProvider.get().get_id())) {
-                        try {
-                            messagesBoxControllerGroupMap.get(group).render();
-                        } catch (Exception ignored) {
-                        }
-                    }
-                }
-            }
             groupListView.refresh();
         }));
-    };
+    }
+
+    ;
 
     @Override
     public String getTitle() {
@@ -195,19 +145,29 @@ public class MessagesController extends Controller {
             }
         });
         userListView.setOnMouseClicked(event -> {
-            if (userListView.getSelectionModel().getSelectedItem() != null) {
-                messagesBoxControllerUserMap.get(userListView.getSelectionModel().getSelectedItem()).render();
-            }
+            openPrivateChat(userListView.getSelectionModel().getSelectedItem());
         });
 
         groupListView.setOnMouseClicked(event -> {
-            if (groupListView.getSelectionModel().getSelectedItem() != null) {
-                messagesBoxControllerGroupMap.get(groupListView.getSelectionModel().getSelectedItem()).render();
-            }
+            openGroupChat(groupListView.getSelectionModel().getSelectedItem());
         });
+
+        if (groupStorageProvider.get().get_id() != null) {
+            for (User user : friends) {
+                if (user._id().equals(groupStorageProvider.get().get_id())) {
+                    openPrivateChat(user);
+                }
+            }
+            for (Group group : groups) {
+                if (group._id().equals(groupStorageProvider.get().get_id())) {
+                    openGroupChat(group);
+                }
+            }
+        }
         return parent;
 
     }
+
     @Override
     public void destroy() {
         super.destroy();
@@ -215,6 +175,50 @@ public class MessagesController extends Controller {
         subControllers.clear();
         messagesBoxControllerUserMap.clear();
         messagesBoxControllerGroupMap.clear();
+    }
+
+    public void openPrivateChat(User user) {
+        try {
+            chatScrollPane.setContent(messagesBoxControllerUserMap.get(user).render());
+        } catch (Exception ignored) {
+            MessagesBoxController messagesBoxController = new MessagesBoxController(
+                    messageService,
+                    groupService,
+                    eventListener,
+                    usersService,
+                    groupStorageProvider.get(),
+                    userStorageProvider.get(),
+                    user,
+                    null,
+                    currentFriendOrGroupText
+            );
+            messagesBoxController.init();
+            messagesBoxControllerUserMap.put(user, messagesBoxController);
+            subControllers.add(messagesBoxController);
+            chatScrollPane.setContent(messagesBoxControllerUserMap.get(user).render());
+        }
+    }
+
+    public void openGroupChat(Group group) {
+        try {
+            chatScrollPane.setContent(messagesBoxControllerGroupMap.get(group).render());
+        } catch (Exception ignored) {
+            MessagesBoxController messagesBoxController = new MessagesBoxController(
+                    messageService,
+                    groupService,
+                    eventListener,
+                    usersService,
+                    groupStorageProvider.get(),
+                    userStorageProvider.get(),
+                    null,
+                    group,
+                    currentFriendOrGroupText
+            );
+            messagesBoxController.init();
+            messagesBoxControllerGroupMap.put(group, messagesBoxController);
+            subControllers.add(messagesBoxController);
+            chatScrollPane.setContent(messagesBoxControllerGroupMap.get(group).render());
+        }
     }
 
     public void changeToMainMenu() {
