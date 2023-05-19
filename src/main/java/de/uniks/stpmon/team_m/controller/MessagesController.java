@@ -10,6 +10,7 @@ import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.BestFriendUtils;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -27,10 +28,14 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -90,7 +95,6 @@ public class MessagesController extends Controller {
     private ListView<Group> groupListView;
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     private String chatID;
-    private final CompositeDisposable messageEventListenerDisposable = new CompositeDisposable();
 
     @Inject
     public MessagesController() {
@@ -145,12 +149,12 @@ public class MessagesController extends Controller {
 
         userListView.setOnMouseClicked(event -> {
             if (userListView.getSelectionModel().getSelectedItem() != null) {
-                openFriendChat("userListView");
+                Platform.runLater(() -> openFriendChat("userListView"));
             }
         });
         groupListView.setOnMouseClicked(event -> {
             if (groupListView.getSelectionModel().getSelectedItem() != null) {
-                openFriendChat("groupListView");
+                Platform.runLater(() -> openFriendChat("groupListView"));
             }
         });
         if (groupStorageProvider.get().get_id() != null) {
@@ -163,7 +167,6 @@ public class MessagesController extends Controller {
     }
 
     private void openFriendChat(String origin) {
-        messageEventListenerDisposable.clear();
 
         final Group chat;
         if (origin.equals("userListView")) {
@@ -178,7 +181,10 @@ public class MessagesController extends Controller {
                 .observeOn(FX_SCHEDULER).subscribe(gotGroups -> {
                     if (chat.name() == null) {
                         for (Group group : gotGroups) {
+                            System.out.println("for-loop");
                             if (group.name() == null) {
+                                System.out.println("group.name() == null");
+                                System.out.println(group._id());
                                 chatID = group._id();
                                 break;
                             }
@@ -197,6 +203,7 @@ public class MessagesController extends Controller {
                     }
                     chatViewVBox.getChildren().clear();
 
+                    System.out.println(chatID);
                     if (chatID != null) {
                         groupStorageProvider.get().set_id(chatID);
 
@@ -210,38 +217,43 @@ public class MessagesController extends Controller {
                                     }
 
                                     chatScrollPane.setVvalue(1.0);
-                                }));
-                    }
-                }));
-        System.out.println(groupStorageProvider.get().get_id());
-        System.out.println(eventListener.get());
-        messageEventListenerDisposable.add(eventListener.get()
-                .listen("groups." + groupStorageProvider.get().get_id() + ".messages.*.*", Message.class)
-                .observeOn(FX_SCHEDULER)
-                .subscribe(messageEvent -> {
-                    System.out.println(messageEvent);
-                    final Message message = messageEvent.data();
-                    switch (messageEvent.suffix()) {
-                        case "created":
-                            chatViewVBox.getChildren().add(createMessageNode(message));
-                            break;
-                        case "updated":
-                            for (Node messageNode : chatViewVBox.getChildren()) {
-                                if (Objects.equals(messageNode.getId(), message._id())) {
-                                    VBox messageVBox = (VBox) messageNode;
-                                    VBox messageValueAreaContainer = (VBox) messageVBox.getChildren().get(0);
-                                    HBox messageValueArea = (HBox) messageValueAreaContainer.getChildren().get(0);
-                                    Text messageValueText = (Text) messageValueArea.getChildren().get(0);
+                                    System.out.println(chatID);
+                                    System.out.println(eventListener.get());
+                                    disposables.add(eventListener.get()
+                                            .listen("groups." + chatID + ".messages.*.*", Message.class)
+                                            .observeOn(FX_SCHEDULER)
+                                            .subscribe(messageEvent -> {
+                                                System.out.println(messageEvent);
+                                                final Message message = messageEvent.data();
+                                                switch (messageEvent.suffix()) {
+                                                    case "created":
+                                                        chatViewVBox.getChildren().add(createMessageNode(message));
+                                                        chatScrollPane.setVvalue(1.0);
+                                                        break;
+                                                    case "updated":
+                                                        for (Node messageNode : chatViewVBox.getChildren()) {
+                                                            if (Objects.equals(messageNode.getId(), message._id())) {
+                                                                VBox messageVBox = (VBox) messageNode;
+                                                                HBox messageValueAreaContainer = (HBox) messageVBox.getChildren().get(0);
+                                                                VBox messageValueArea = (VBox) messageValueAreaContainer.getChildren().get(0);
+                                                                Text messageValueText = (Text) messageValueArea.getChildren().get(0);
 
-                                    messageValueText.setText(message.body());
-                                }
-                            }
-                            break;
-                        case "deleted":
-                            chatViewVBox.getChildren().removeIf(
-                                    node -> Objects.equals(node.getId(), message._id())
-                            );
-                            break;
+                                                                messageValueText.setText(message.body());
+
+                                                                HBox messageInfoArea = (HBox) messageVBox.getChildren().get(1);
+                                                                Label edited = (Label) messageInfoArea.getChildren().get(1);
+                                                                edited.setVisible(true);
+                                                            }
+                                                        }
+                                                        break;
+                                                    case "deleted":
+                                                        chatViewVBox.getChildren().removeIf(
+                                                                node -> Objects.equals(node.getId(), message._id())
+                                                        );
+                                                        break;
+                                                }
+                                            }));
+                                }));
                     }
                 }));
 
@@ -283,13 +295,14 @@ public class MessagesController extends Controller {
         newMessageValueContainer.setPadding(new Insets(5));
 
         Label authorAndTime = new Label();
+        Label edited = new Label();
+        edited.setText("\u270F");
+
         if (userIsSender) {
             authorAndTime.setText(userStorageProvider.get().getName() +
                     " " +
                     formatTimeString(message.createdAt()) +
-                    " " +
-                    (message.updatedAt() == null ? "" : "\u270F"));
-
+                    " ");
 
             newMessageValueContainer.setBackground(Background.fill(Paint.valueOf("lightblue")));
         } else {
@@ -304,15 +317,32 @@ public class MessagesController extends Controller {
             authorAndTime.setText(senderName[0] +
                     " " +
                     formatTimeString(message.createdAt()) +
-                    " " +
-                    (message.updatedAt() == null ? "" : "\u270F"));
+                    " ");
         }
 
+        edited.setVisible(!Objects.equals(message.updatedAt(), message.createdAt()));
+
         newMessageInfoArea.getChildren().add(authorAndTime);
+        newMessageInfoArea.getChildren().add(edited);
 
         Button editButton = new Button("\u270F");
         editButton.setOnAction(event -> {
-            // @Cheng
+            TextInputDialog dialog = new TextInputDialog("");
+            dialog.setTitle("Edit message");
+            dialog.setHeaderText(null);
+            dialog.setContentText("Message:");
+
+            TextArea messageArea = new TextArea();
+            messageArea.setText(message.body());
+            messageArea.setPrefRowCount(4);
+
+            dialog.getDialogPane().setContent(messageArea);
+            Button ok = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+            ok.setOnAction( event1 -> {
+                disposables.add(messageService.updateMessage(chatID, message._id(), messageArea.getText(), MESSAGE_NAMESPACE_GROUPS)
+                        .observeOn(FX_SCHEDULER).subscribe());
+            });
+            dialog.showAndWait();
         });
 
         Button deleteButton = new Button("\uD83D\uDDD1");
@@ -350,8 +380,7 @@ public class MessagesController extends Controller {
     }
 
     private String formatTimeString(String dateTime) {
-        DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-        LocalDateTime localDateTime = LocalDateTime.parse(dateTime, inputFormatter);
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of("Europe/Berlin"));
 
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("HH:mm, dd.MM.yy");
         return localDateTime.format(outputFormatter);
