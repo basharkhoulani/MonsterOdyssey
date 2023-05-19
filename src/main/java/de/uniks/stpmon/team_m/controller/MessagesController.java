@@ -400,8 +400,10 @@ public class MessagesController extends Controller {
     }
 
     public void changeToSettings() {
-        groupStorageProvider.get().set_id(groupListView.getSelectionModel().getSelectedItem()._id());
-        app.show(groupControllerProvider.get());
+        if (groupListView.getSelectionModel().getSelectedItem() != null) {
+            groupStorageProvider.get().set_id(groupListView.getSelectionModel().getSelectedItem()._id());
+            app.show(groupControllerProvider.get());
+        }
     }
 
     public void onSendMessage() {
