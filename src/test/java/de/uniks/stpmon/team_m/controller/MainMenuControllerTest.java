@@ -67,6 +67,8 @@ class MainMenuControllerTest extends ApplicationTest {
     public void start(Stage stage) {
         when(regionsApiService.getRegions()).thenReturn(Observable.just(List.of(new Region("TestRegion", "NamedRegion"))));
         UserStorage mockUserStorage = mock(UserStorage.class);
+        GroupStorage mockGroupStorage = mock(GroupStorage.class);
+        when(groupStorageProvider.get()).thenReturn(mockGroupStorage);
         Mockito.when(userStorageProvider.get()).thenReturn(mockUserStorage);
         Preferences preferences = mock(Preferences.class);
         Mockito.when(preferencesProvider.get()).thenReturn(preferences);
@@ -77,6 +79,8 @@ class MainMenuControllerTest extends ApplicationTest {
         when(userStorageProvider.get().getFriends())
                 .thenReturn(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
         mainMenuController.setInitialized(true);
+
+        when(groupStorageProvider.get().get_id()).thenReturn("645cd04c11b590456276e9d1");
 
         Mockito.when(eventListenerProvider.get()).thenReturn(mock(EventListener.class));
         Mockito.when(eventListenerProvider.get().listen(any(), any())).thenReturn(Observable.empty());
@@ -152,16 +156,9 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Test
     void displayFriends() {
-        GroupService groupService = mock(GroupService.class);
-        when(groupServiceProvider.get()).thenReturn(groupService);
-        when(groupService.getGroups(any())).thenReturn(Observable.just(
-                        List.of(new Group("64610ec8420b3d786212aea8", "", List.of("64610e7b82ca062bfa5b7231", "64610e7b82ca062bfa5b7232")))
-                )
-        );
         ListView<User> friendListView = lookup("#friendsListView").query();
         assertEquals(3, friendListView.getItems().size());
         User user = friendListView.getItems().get(0);
         assertEquals("Garbage Goober", user.name());
-        clickOn("Morty");
     }
 }
