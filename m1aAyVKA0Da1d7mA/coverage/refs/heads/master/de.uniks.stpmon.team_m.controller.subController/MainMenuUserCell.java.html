@@ -46,9 +46,10 @@ public class MainMenuUserCell extends UserCell {
 
     private void showPopOver(Button button, User user) {
 <span class="nc" id="L48">        PopOver popOver = new PopOver();</span>
-<span class="nc" id="L49">        popOver.setContentNode(new FriendSettingsController(preferences, userStorage, usersService, getListView(), user).render());</span>
-<span class="nc" id="L50">        popOver.setDetachable(false);</span>
-<span class="nc" id="L51">        popOver.show(button);</span>
-<span class="nc" id="L52">    }</span>
+<span class="nc" id="L49">        popOver.setContentNode(new FriendSettingsController(preferences, userStorage,</span>
+<span class="nc" id="L50">                usersService, getListView(), user).render());</span>
+<span class="nc" id="L51">        popOver.setDetachable(false);</span>
+<span class="nc" id="L52">        popOver.show(button);</span>
+<span class="nc" id="L53">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
