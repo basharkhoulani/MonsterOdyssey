@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -76,6 +77,7 @@ public class MessagesController extends Controller {
     Preferences preferences;
     private final ObservableList<User> friends = FXCollections.observableArrayList();
     private final ObservableList<Group> groups = FXCollections.observableArrayList();
+    private final ObservableList<Group> groupsToAdd = FXCollections.observableArrayList();
     private ListView<User> userListView;
     private ListView<Group> groupListView;
     private final List<Controller> subControllers = new ArrayList<>();
@@ -103,8 +105,7 @@ public class MessagesController extends Controller {
         }
 
         listenToStatusUpdate(friends, userListView);
-
-        groupListView = new ListView<>(groups);
+        groupListView = new ListView<>(groupsToAdd);
         groupListView.setId("groups");
         groupListView.setCellFactory(param -> new GroupCell());
         groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
@@ -116,8 +117,17 @@ public class MessagesController extends Controller {
                             return false;
                         }
                     }
-                    return true;
-                } else return group.name() != null;
+                    for (String id: group.members()){
+                        if(!id.equals(userStorageProvider.get().get_id())){
+                            disposables.add(usersService.getUser(id)
+                                    .observeOn(FX_SCHEDULER).subscribe(user -> groupsToAdd.add(new Group(group._id(), user.name(), group.members())), error -> {}));
+                        }
+                    }
+                    return false;
+                } else if (group.name() != null) {
+                    groupsToAdd.add(group);
+                }
+                return false;
             }).forEach(this.groups::add);
             groupListView.refresh();
         }));
@@ -170,7 +180,7 @@ public class MessagesController extends Controller {
                     openPrivateChat(user);
                 }
             }
-            for (Group group : groups) {
+            for (Group group : groupsToAdd) {
                 if (group._id().equals(groupStorageProvider.get().get_id())) {
                     openGroupChat(group);
                 }
