@@ -19,6 +19,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.FRIEND_ADDED;
 import static de.uniks.stpmon.team_m.Constants.FRIEND_NOT_FOUND;
@@ -94,9 +95,9 @@ class NewFriendControllerTest extends ApplicationTest {
         GroupService groupService = mock(GroupService.class);
         when(groupServiceProvider.get()).thenReturn(groupService);
         when(groupService.getGroups(ArgumentMatchers.any())).thenReturn(Observable.just(Arrays.asList(
-                new Group("1", "11", null),
-                new Group("2", "22", null),
-                new Group("3", "33",  null)
+                new Group("1", "11", List.of("1", "2")),
+                new Group("2", "22", List.of("1", "2", "3")),
+                new Group("3", "33",  List.of("1", "2", "3"))
         )));
         when(groupServiceProvider.get()).thenReturn(groupService);
         when(groupService.create(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Observable.just(new Group(null, null, null)));
@@ -119,13 +120,13 @@ class NewFriendControllerTest extends ApplicationTest {
         Mockito.when(usersServiceProvider.get()).thenReturn(usersService);
 
         final GroupService groupService = mock(GroupService.class);
-        Mockito.when(groupServiceProvider.get()).thenReturn(groupService);
+        lenient().when(groupServiceProvider.get()).thenReturn(groupService);
 
         final GroupStorage groupStorage = mock(GroupStorage.class);
-        Mockito.when(groupStorageProvider.get()).thenReturn(groupStorage);
+        lenient().when(groupStorageProvider.get()).thenReturn(groupStorage);
 
         final MessagesController messageController = mock(MessagesController.class);
-        when(messageControllerProvider.get()).thenReturn(messageController);
+        lenient().when(messageControllerProvider.get()).thenReturn(messageController);
 
         when(usersService.getUsers(ArgumentMatchers.any(), ArgumentMatchers.any()))
                 .thenReturn(Observable.just(Arrays.asList(
@@ -135,15 +136,15 @@ class NewFriendControllerTest extends ApplicationTest {
                 )));
 
         UserStorage userStorage = mock(UserStorage.class);
-        Mockito.when(userStorageProvider.get()).thenReturn(userStorage);
+        lenient().when(userStorageProvider.get()).thenReturn(userStorage);
 
-        when(groupService.getGroups(any())).thenReturn(Observable.just(Arrays.asList(
+        lenient().when(groupService.getGroups(any())).thenReturn(Observable.just(Arrays.asList(
                 new Group("112345", "best", Arrays.asList("1", "2", "3")),
                 new Group("1124", null, Arrays.asList("1", "2")),
                 new Group("1151", "1", Arrays.asList("5", "3", "6")))));
 
-        when(groupService.create(any(), any())).thenReturn(Observable.just(new Group("123456", "best", Arrays.asList("1", "2", "3"))));
-        doNothing().when(app).show(messageController);
+        lenient().when(groupService.create(any(), any())).thenReturn(Observable.just(new Group("123456", "best", Arrays.asList("1", "2", "3"))));
+        lenient().doNothing().when(app).show(messageController);
 
         final TextField searchTextField = lookup("#searchTextField").query();
         clickOn(searchTextField);

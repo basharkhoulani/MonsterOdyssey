@@ -82,7 +82,7 @@ public class NewFriendController extends Controller {
                 userStorageProvider.get().addFriend(user._id());
                 disposables.add(usersServiceProvider.get().updateUser(null, null, null,
                         userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER).subscribe());
-                createPrivateGroup(user);
+                createPrivateGroup(user, false);
                 searchTextField.setPromptText(FRIEND_ADDED);
                 break;
             }
@@ -96,7 +96,7 @@ public class NewFriendController extends Controller {
                 searchTextField.setPromptText(FRIEND_NOT_FOUND);
             }
             if (user.name().equals(searchTextField.getText())) {
-                createPrivateGroup(user);
+                createPrivateGroup(user, true);
                 break;
             }
         }
@@ -114,7 +114,7 @@ public class NewFriendController extends Controller {
             autoCompletionBinding.setPrefWidth(searchTextField.getPrefWidth());
         }));
     }
-    private void createPrivateGroup(User user) {
+    private void createPrivateGroup(User user, boolean switchScreen) {
         groupStorageProvider.get().set_id(null);
         Group privateGroup = new Group(null, null, List.of(user._id(), userStorageProvider.get().get_id()));
         disposables.add(groupServiceProvider.get().getGroups(privateGroup.membersToString()).observeOn(FX_SCHEDULER).subscribe(groups -> {
@@ -122,7 +122,9 @@ public class NewFriendController extends Controller {
                 for (Group group : groups) {
                     if (group.members().size() == privateGroup.members().size() && group.name() == null) {
                         groupStorageProvider.get().set_id(group._id());
-                        app.show(messageControllerProvider.get());
+                        if (switchScreen) {
+                            app.show(messageControllerProvider.get());
+                        }
                         break;
                     }
                 }
@@ -131,14 +133,18 @@ public class NewFriendController extends Controller {
                     disposables.add(groupServiceProvider.get().create(null, privateGroup.members())
                             .observeOn(FX_SCHEDULER).subscribe(newGroup -> {
                                 groupStorageProvider.get().set_id(newGroup._id());
-                                app.show(messageControllerProvider.get());
+                                if (switchScreen) {
+                                    app.show(messageControllerProvider.get());
+                                }
                             }));
                 }
             } else {
                 disposables.add(groupServiceProvider.get().create(null, privateGroup.members())
                         .observeOn(FX_SCHEDULER).subscribe(newGroup -> {
                             groupStorageProvider.get().set_id(newGroup._id());
-                            app.show(messageControllerProvider.get());
+                            if (switchScreen) {
+                                app.show(messageControllerProvider.get());
+                            }
                         }));
             }
         }));
