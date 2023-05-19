@@ -97,7 +97,6 @@ public class NewFriendController extends Controller {
             }
             if (user.name().equals(searchTextField.getText())) {
                 createPrivateGroup(user);
-                app.show(messageControllerProvider.get());
                 break;
             }
         }
@@ -116,24 +115,31 @@ public class NewFriendController extends Controller {
         }));
     }
     private void createPrivateGroup(User user) {
+        groupStorageProvider.get().set_id(null);
         Group privateGroup = new Group(null, null, List.of(user._id(), userStorageProvider.get().get_id()));
         disposables.add(groupServiceProvider.get().getGroups(privateGroup.membersToString()).observeOn(FX_SCHEDULER).subscribe(groups -> {
-            for (Group group : groups) {
-                if (group.members() == null) {
-                    break;
+            if (!groups.isEmpty()) {
+                for (Group group : groups) {
+                    if (group.members().size() == privateGroup.members().size() && group.name() == null) {
+                        groupStorageProvider.get().set_id(group._id());
+                        app.show(messageControllerProvider.get());
+                        break;
+                    }
                 }
-                if (group.members().size() == 2 && group.name() == null) {
-                    groupStorageProvider.get().set_id(user._id());
-                    groupStorageProvider.get().setName(user.name());
-                    break;
-                }
-                if (group.members().size() == privateGroup.members().size() && group.name() == null) {
-                    groupStorageProvider.get().set_id(group._id());
-                } else {
+                System.out.println(groupStorageProvider.get().get_id());
+                if (groupStorageProvider.get().get_id() == null) {
                     disposables.add(groupServiceProvider.get().create(null, privateGroup.members())
-                            .observeOn(FX_SCHEDULER).subscribe(newGroup -> groupStorageProvider.get().set_id(newGroup._id())));
+                            .observeOn(FX_SCHEDULER).subscribe(newGroup -> {
+                                groupStorageProvider.get().set_id(newGroup._id());
+                                app.show(messageControllerProvider.get());
+                            }));
                 }
-
+            } else {
+                disposables.add(groupServiceProvider.get().create(null, privateGroup.members())
+                        .observeOn(FX_SCHEDULER).subscribe(newGroup -> {
+                            groupStorageProvider.get().set_id(newGroup._id());
+                            app.show(messageControllerProvider.get());
+                        }));
             }
         }));
     }

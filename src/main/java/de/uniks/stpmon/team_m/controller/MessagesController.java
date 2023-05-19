@@ -138,11 +138,12 @@ public class MessagesController extends Controller {
             groups.stream().filter(group -> {
                 if (group.members().size() == 2 && group.name() == null ){
                     for (String id: userStorageProvider.get().getFriends()){
-                        if (!group.members().contains(id))
+                        if (!group.members().contains(id)){
                             return true;
+                        }
                     }
-                }
-                return group.name() != null;
+                } else return group.name() != null;
+                return false;
             }).forEach(group -> {
                 this.groups.add(group);
                     MessagesBoxController messagesBoxController = new MessagesBoxController(
@@ -163,17 +164,18 @@ public class MessagesController extends Controller {
                     subControllers.add(messagesBoxController);
             });
             if (groupStorageProvider.get().get_id() != null) {
-                for (Group group: groups){
-                    if (group.members().contains(groupStorageProvider.get().get_id()) && group.members().size() == 2 && group.name() == null)
+                for (Group group : groups) {
+                    if (group._id().equals(groupStorageProvider.get().get_id())) {
                         try {
                             messagesBoxControllerGroupMap.get(group).render();
                         } catch (Exception ignored) {
                         }
+                    }
                 }
             }
             groupListView.refresh();
         }));
-    }
+    };
 
     @Override
     public String getTitle() {

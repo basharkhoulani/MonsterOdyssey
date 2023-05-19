@@ -85,9 +85,14 @@ public class MessagesBoxController extends Controller {
         if (origin.equals("userListView")) {
             chat = new Group(null, null, List.of(user._id(), userStorage.get_id()));
         } else if (origin.equals("groupListView")) {
-            chat = group;
+            System.out.println(group._id());
+            if (group.name() == null) {
+                chat = group;
+            } else {
+                chat = group;
+            }
         } else {
-            chat = new Group(null, null, List.of(groupStorage.get_id(), userStorage.get_id()));
+            chat = new Group(null, null, List.of(user._id(), userStorage.get_id()));
         }
 
         disposables.add(groupService.getGroups(chat.membersToString())
