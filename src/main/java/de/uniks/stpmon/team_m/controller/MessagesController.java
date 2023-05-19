@@ -9,11 +9,13 @@ import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.BestFriendUtils;
 import de.uniks.stpmon.team_m.ws.EventListener;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -28,6 +30,7 @@ import javax.inject.Provider;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -87,6 +90,7 @@ public class MessagesController extends Controller {
     private ListView<Group> groupListView;
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     private String chatID;
+    private final CompositeDisposable messageEventListenerDisposable = new CompositeDisposable();
 
     @Inject
     public MessagesController() {
@@ -159,6 +163,8 @@ public class MessagesController extends Controller {
     }
 
     private void openFriendChat(String origin) {
+        messageEventListenerDisposable.clear();
+
         final Group chat;
         if (origin.equals("userListView")) {
             chat = new Group(null, null, List.of(userListView.getSelectionModel().getSelectedItem()._id(), userStorageProvider.get().get_id()));
@@ -205,6 +211,37 @@ public class MessagesController extends Controller {
 
                                     chatScrollPane.setVvalue(1.0);
                                 }));
+                    }
+                }));
+        System.out.println(groupStorageProvider.get().get_id());
+        System.out.println(eventListener.get());
+        messageEventListenerDisposable.add(eventListener.get()
+                .listen("groups." + groupStorageProvider.get().get_id() + ".messages.*.*", Message.class)
+                .observeOn(FX_SCHEDULER)
+                .subscribe(messageEvent -> {
+                    System.out.println(messageEvent);
+                    final Message message = messageEvent.data();
+                    switch (messageEvent.suffix()) {
+                        case "created":
+                            chatViewVBox.getChildren().add(createMessageNode(message));
+                            break;
+                        case "updated":
+                            for (Node messageNode : chatViewVBox.getChildren()) {
+                                if (Objects.equals(messageNode.getId(), message._id())) {
+                                    VBox messageVBox = (VBox) messageNode;
+                                    VBox messageValueAreaContainer = (VBox) messageVBox.getChildren().get(0);
+                                    HBox messageValueArea = (HBox) messageValueAreaContainer.getChildren().get(0);
+                                    Text messageValueText = (Text) messageValueArea.getChildren().get(0);
+
+                                    messageValueText.setText(message.body());
+                                }
+                            }
+                            break;
+                        case "deleted":
+                            chatViewVBox.getChildren().removeIf(
+                                    node -> Objects.equals(node.getId(), message._id())
+                            );
+                            break;
                     }
                 }));
 
@@ -352,5 +389,9 @@ public class MessagesController extends Controller {
                         }, Throwable::printStackTrace
                 ));
         messageTextArea.setText("");
+    }
+
+    private void listenToMessages() {
+
     }
 }
