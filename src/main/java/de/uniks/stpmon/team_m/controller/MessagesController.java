@@ -120,7 +120,10 @@ public class MessagesController extends Controller {
                         if (groupStorageProvider.get().get_id() != null) {
                             for (User user: friends){
                                 if (user._id().equals(groupStorageProvider.get().get_id())){
-                                    messagesBoxControllerUserMap.get(user).render();
+                                    try {
+                                        messagesBoxControllerUserMap.get(user).render();
+                                    } catch (Exception ignored) {
+                                    }
                                 }
                             }
                         }
@@ -153,6 +156,15 @@ public class MessagesController extends Controller {
                     messagesBoxControllerGroupMap.put(group, messagesBoxController);
                     subControllers.add(messagesBoxController);
             });
+            if (groupStorageProvider.get().get_id() != null) {
+                for (Group group: groups){
+                    if (group.members().contains(groupStorageProvider.get().get_id()) && group.members().size() == 2 && group.name() == null)
+                        try {
+                            messagesBoxControllerGroupMap.get(group).render();
+                        } catch (Exception ignored) {
+                        }
+                }
+            }
             groupListView.refresh();
         }));
     }
