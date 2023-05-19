@@ -123,8 +123,6 @@ public class MessagesController extends Controller {
         }));
     }
 
-    ;
-
     @Override
     public String getTitle() {
         return MESSAGES_TITLE;
@@ -144,12 +142,25 @@ public class MessagesController extends Controller {
         userListView.setOnMouseClicked(event -> {
             if(!(userListView.getSelectionModel().getSelectedItem()==null)){
                 openPrivateChat(userListView.getSelectionModel().getSelectedItem());
+                currentFriendOrGroupText.setText(userListView.getSelectionModel().getSelectedItem().name());
             }
         });
 
         groupListView.setOnMouseClicked(event -> {
             if(!(groupListView.getSelectionModel().getSelectedItem()==null)){
                 openGroupChat(groupListView.getSelectionModel().getSelectedItem());
+                if (!(groupListView.getSelectionModel().getSelectedItem().name() == null)) {
+                    currentFriendOrGroupText.setText(groupListView.getSelectionModel().getSelectedItem().name());
+                }
+                else{
+                    for (String id: groupListView.getSelectionModel().getSelectedItem().members()){
+                        if(!id.equals(userStorageProvider.get().get_id())){
+                            disposables.add(usersService.getUser(id)
+                                    .observeOn(FX_SCHEDULER).subscribe(user -> currentFriendOrGroupText.setText(user.name()), error -> currentFriendOrGroupText.setText("Unknown User")));
+                        }
+                    }
+                }
+
             }
         });
 

@@ -40,7 +40,6 @@ public class MessagesBoxController extends Controller {
     private final UsersService usersService;
     private final Group group;
     private String chatID;
-    private String title;
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     Provider<EventListener> eventListener;
 
@@ -75,7 +74,6 @@ public class MessagesBoxController extends Controller {
     @Override
     public Parent render() {
             groupStorage.set_id(chatID);
-            currentFriendOrGroupText.setText(title);
         return messageBox;
     }
 
@@ -107,27 +105,6 @@ public class MessagesBoxController extends Controller {
                     } else {
                         chatID = chat._id();
                     }
-
-                    if (origin.equals("userListView")) {
-                        title = user.name();
-                    } else if (origin.equals("groupListView")) {
-                        title = chat.name();
-                        if(chat.name()==null){
-                            for (String id: chat.members()){
-                                if(!id.equals(userStorage.get_id())){
-                                    disposables.add(usersService.getUser(id)
-                                            .observeOn(FX_SCHEDULER).subscribe(user -> {
-                                                title = user.name();
-                                            }, error -> {
-                                                title = "Unknown User";
-                                            }));
-                                }
-                            }
-                        }
-                    } else {
-                        title = user.name();
-                    }
-
 
                     if (chatID != null) {
                         groupStorage.set_id(chatID);
