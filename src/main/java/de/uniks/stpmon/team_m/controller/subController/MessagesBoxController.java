@@ -34,7 +34,7 @@ import static de.uniks.stpmon.team_m.Constants.MESSAGE_NAMESPACE_GROUPS;
 
 public class MessagesBoxController extends Controller {
 
-    private final User user;
+    private User user;
     private final VBox chatViewVBox;
     private final ScrollPane chatScrollPane;
 

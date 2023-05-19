@@ -117,6 +117,13 @@ public class MessagesController extends Controller {
                         sortListView(userListView);
                         new BestFriendUtils(preferences).sortBestFriendTop(userListView);
                         userListView.refresh();
+                        if (groupStorageProvider.get().get_id() != null) {
+                            for (User user: friends){
+                                if (user._id().equals(groupStorageProvider.get().get_id())){
+                                    messagesBoxControllerUserMap.get(user).render();
+                                }
+                            }
+                        }
                     }));
         }
 
@@ -177,24 +184,7 @@ public class MessagesController extends Controller {
                 messagesBoxControllerGroupMap.get(groupListView.getSelectionModel().getSelectedItem()).render();
             }
         });
-        if (groupStorageProvider.get().get_id() != null) {
-            subControllers.forEach(Controller::destroy);
-            MessagesBoxController messagesBoxController = new MessagesBoxController(
-                    messageService,
-                    groupService,
-                    eventListener,
-                    usersService,
-                    groupStorageProvider.get(),
-                    userStorageProvider.get(),
-                    userListView.getSelectionModel().getSelectedItem(),
-                    null,
-                    chatViewVBox,
-                    chatScrollPane,
-                    currentFriendOrGroupText
-            );
-            messagesBoxController.render();
-            subControllers.add(messagesBoxController);;
-        }
+
 
         // do something with filledListView
         return parent;
