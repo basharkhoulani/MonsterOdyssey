@@ -70,7 +70,7 @@
                      </TextArea>
                   </HBox>
                   <HBox alignment="CENTER" fillHeight="false" prefHeight="64.0" prefWidth="84.0" HBox.hgrow="NEVER">
-                     <Button fx:id="sendButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="84.0" text="Send" HBox.hgrow="NEVER" />
+                     <Button fx:id="sendButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="84.0" text="Send" HBox.hgrow="NEVER" onAction="#onSendMessage"/>
                   </HBox>
                </HBox>
             </VBox>

@@ -26,6 +26,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -59,6 +60,8 @@ public class MessagesControllerTest extends ApplicationTest {
     Provider<GroupService> groupServiceProvider;
     @Mock
     Provider<MessageService> messageServiceProvider;
+    @Mock
+    Preferences preferences;
 
     @Spy
     App app = new App(null);
@@ -73,6 +76,9 @@ public class MessagesControllerTest extends ApplicationTest {
     public void start(Stage stage) {
         UserStorage mockUserStorage = mock(UserStorage.class);
         Mockito.when(userStorageProvider.get()).thenReturn(mockUserStorage);
+
+        GroupStorage mockGroupStorage = mock(GroupStorage.class);
+        Mockito.when(groupStorageProvider.get()).thenReturn(mockGroupStorage);
 
         final User Rick = new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null);
 
@@ -89,6 +95,8 @@ public class MessagesControllerTest extends ApplicationTest {
         when(userStorageProvider.get().getFriends()).thenReturn(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
         when(userStorageProvider.get().get_id()).thenReturn("64610e7b82ca062bfa5b7231");
         when(userStorageProvider.get().getName()).thenReturn("Morty");
+
+        when(groupStorageProvider.get().get_id()).thenReturn("64610ec8420b3d786212aea8");
 
         when(groupService.getGroups(any())).thenReturn(Observable.just(
                 List.of(new Group("64610ec8420b3d786212aea8", "", List.of("64610e7b82ca062bfa5b7231", Rick._id())))));
@@ -154,19 +162,15 @@ public class MessagesControllerTest extends ApplicationTest {
     }
 
     @Test
-    void displayMessages() throws InterruptedException {
+    void displayMessages() {
         VBox friendsListViewVBox = lookup("#friendsListViewVBox").query();
-        ObservableList<Node> friendsAndGroupNodes = friendsListViewVBox.getChildren();
         ListView<User> listView = lookup("#friends").query();
 
         User user = listView.getItems().get(0);
         assertEquals("Rick", user.name());
 
         clickOn("Rick");
-        clickOn("Rick");
-        clickOn("Rick");
 
         clickOn("Get in the damn car Morty!");
-
     }
 }

@@ -60,7 +60,8 @@ public class NewFriendController extends Controller {
     }
 
     public void changeToMainMenu() {
-        groupStorageProvider.get().set_id("");
+        groupStorageProvider.get().set_id(null);
+        groupStorageProvider.get().set_id(null);
         app.show(mainMenuControllerProvider.get());
     }
 
@@ -81,7 +82,7 @@ public class NewFriendController extends Controller {
                 userStorageProvider.get().addFriend(user._id());
                 disposables.add(usersServiceProvider.get().updateUser(null, null, null,
                         userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER).subscribe());
-                createPrivateGroup(user);
+                createPrivateGroup(user, false);
                 searchTextField.setPromptText(FRIEND_ADDED);
                 break;
             }
@@ -93,15 +94,12 @@ public class NewFriendController extends Controller {
         for (User user : allUsers) {
             if (!user.name().equals(searchTextField.getText())) {
                 searchTextField.setPromptText(FRIEND_NOT_FOUND);
-                return;
             }
             if (user.name().equals(searchTextField.getText())) {
-                createPrivateGroup(user);
-                app.show(messageControllerProvider.get());
+                createPrivateGroup(user, true);
                 break;
             }
         }
-        app.show(messageControllerProvider.get());
         searchTextField.clear();
     }
 
@@ -116,20 +114,37 @@ public class NewFriendController extends Controller {
             autoCompletionBinding.setPrefWidth(searchTextField.getPrefWidth());
         }));
     }
-    private void createPrivateGroup(User user) {
-        List<String> privateGroup = Arrays.asList(user._id(), userStorageProvider.get().get_id());
-        disposables.add(groupServiceProvider.get().getGroups(privateGroup).observeOn(FX_SCHEDULER).subscribe(groups -> {
-            for (Group group : groups) {
-                if (group.members() == null) {
-                    break;
+    private void createPrivateGroup(User user, boolean switchScreen) {
+        groupStorageProvider.get().set_id(null);
+        Group privateGroup = new Group(null, null, List.of(user._id(), userStorageProvider.get().get_id()));
+        disposables.add(groupServiceProvider.get().getGroups(privateGroup.membersToString()).observeOn(FX_SCHEDULER).subscribe(groups -> {
+            if (!groups.isEmpty()) {
+                for (Group group : groups) {
+                    if (group.members().size() == privateGroup.members().size() && group.name() == null) {
+                        groupStorageProvider.get().set_id(group._id());
+                        if (switchScreen) {
+                            app.show(messageControllerProvider.get());
+                        }
+                        break;
+                    }
                 }
-                if (group.members().size() == privateGroup.size() && group.name() == null) {
-                    groupStorageProvider.get().set_id(group._id());
-                } else {
-                    disposables.add(groupServiceProvider.get().create(null, privateGroup)
-                            .observeOn(FX_SCHEDULER).subscribe(newGroup -> groupStorageProvider.get().set_id(newGroup._id())));
+                if (groupStorageProvider.get().get_id() == null) {
+                    disposables.add(groupServiceProvider.get().create(null, privateGroup.members())
+                            .observeOn(FX_SCHEDULER).subscribe(newGroup -> {
+                                groupStorageProvider.get().set_id(newGroup._id());
+                                if (switchScreen) {
+                                    app.show(messageControllerProvider.get());
+                                }
+                            }));
                 }
-
+            } else {
+                disposables.add(groupServiceProvider.get().create(null, privateGroup.members())
+                        .observeOn(FX_SCHEDULER).subscribe(newGroup -> {
+                            groupStorageProvider.get().set_id(newGroup._id());
+                            if (switchScreen) {
+                                app.show(messageControllerProvider.get());
+                            }
+                        }));
             }
         }));
     }

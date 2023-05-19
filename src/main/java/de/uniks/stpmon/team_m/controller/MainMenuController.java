@@ -19,7 +19,6 @@ import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.Arrays;
 import java.util.List;
 import java.util.prefs.Preferences;
 
@@ -108,15 +107,10 @@ public class MainMenuController extends Controller {
     }
 
     private void switchToMessageScreen() {
-        List<String> privateGroup = Arrays.asList(friendsListView.getSelectionModel().getSelectedItem()._id(), userStorageProvider.get().get_id());
-        disposables.add(groupServiceProvider.get().getGroups(privateGroup).observeOn(FX_SCHEDULER).subscribe(groups -> {
-            for (Group group : groups) {
-                if (group.members().size() == privateGroup.size() && group.name() == null) {
-                    groupStorageProvider.get().set_id(group._id());
-                    app.show(messagesControllerProvider.get());
-                }
-            }
-        }));
+        Group privateGroup = new Group(friendsListView.getSelectionModel().getSelectedItem()._id(), friendsListView.getSelectionModel().getSelectedItem().name(), null);
+        groupStorageProvider.get().set_id(privateGroup._id());
+        groupStorageProvider.get().setName(privateGroup.name());
+        app.show(messagesControllerProvider.get());
     }
 
     private void initRadioButtons() {
@@ -134,14 +128,15 @@ public class MainMenuController extends Controller {
     }
 
     public void changeToMessages() {
-        groupStorageProvider.get().set_id("");
+        groupStorageProvider.get().set_id(null);
+        groupStorageProvider.get().setName(null);
         app.show(messagesControllerProvider.get());
     }
 
     public void changeToLogin() {
         disposables.add(usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)
-                    .observeOn(FX_SCHEDULER)
-                    .subscribe());
+                .observeOn(FX_SCHEDULER)
+                .subscribe());
         disposables.add(authenticationService.logout().observeOn(FX_SCHEDULER)
                 .subscribe(logoutResult -> app.show(loginControllerProvider.get())));
 

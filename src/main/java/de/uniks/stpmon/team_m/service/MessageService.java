@@ -77,6 +77,9 @@ public class MessageService {
         return messagesApiService.update(namespace, receiverID, messageID, updateMessageDto);
     }
 
+    public Observable<Message> deleteMessage(String messageID, String groupID, String namespace) {
+        return messagesApiService.delete(namespace, groupID, messageID);
+    }
 
     // General message methods
 
