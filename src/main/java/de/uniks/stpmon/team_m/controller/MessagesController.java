@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -113,26 +112,30 @@ public class MessagesController extends Controller {
         groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
         disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> {
             groups.stream().filter(group -> {
-                if (group.members().size() == 2 && group.name() == null) {
-                    for (String id : userStorageProvider.get().getFriends()) {
-                        if (group.members().contains(id)) {
-                            return false;
-                        }
-                    }
-                    for (String id: group.members()){
-                        if(!id.equals(userStorageProvider.get().get_id())){
-                            disposables.add(usersService.getUser(id)
-                                    .observeOn(FX_SCHEDULER).subscribe(user -> groupsToAdd.add(new Group(group._id(), user.name(), group.members())), error -> {}));
-                        }
-                    }
-                    return false;
-                } else if (group.name() != null) {
-                    groupsToAdd.add(group);
-                }
+                groupFiler(group);
                 return false;
             }).forEach(this.groups::add);
             groupListView.refresh();
         }));
+    }
+
+    private void groupFiler(Group group) {
+        if (group.members().size() == 2 && group.name() == null) {
+            for (String id : userStorageProvider.get().getFriends()) {
+                if (group.members().contains(id)) {
+                    return;
+                }
+            }
+            for (String id : group.members()) {
+                if (!id.equals(userStorageProvider.get().get_id())) {
+                    disposables.add(usersService.getUser(id)
+                            .observeOn(FX_SCHEDULER).subscribe(user -> groupsToAdd.add(new Group(group._id(), user.name(), group.members())), error -> {
+                            }));
+                }
+            }
+        } else if (group.name() != null) {
+            groupsToAdd.add(group);
+        }
     }
 
     @Override
@@ -152,14 +155,14 @@ public class MessagesController extends Controller {
             }
         });
         userListView.setOnMouseClicked(event -> {
-            if(!(userListView.getSelectionModel().getSelectedItem()==null)){
+            if (!(userListView.getSelectionModel().getSelectedItem() == null)) {
                 openPrivateChat(userListView.getSelectionModel().getSelectedItem());
                 currentFriendOrGroupText.setText(userListView.getSelectionModel().getSelectedItem().name());
             }
         });
 
         groupListView.setOnMouseClicked(event -> {
-            if(!(groupListView.getSelectionModel().getSelectedItem()==null)){
+            if (!(groupListView.getSelectionModel().getSelectedItem() == null)) {
                 openGroupChat(groupListView.getSelectionModel().getSelectedItem());
                 currentFriendOrGroupText.setText(groupListView.getSelectionModel().getSelectedItem().name());
             }
@@ -178,12 +181,7 @@ public class MessagesController extends Controller {
             }
         }
 
-        chatScrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                chatScrollPane.setVvalue(1.0);
-            }
-        });
+        chatScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> chatScrollPane.setVvalue(1.0));
         return parent;
 
     }
@@ -193,6 +191,7 @@ public class MessagesController extends Controller {
         super.destroy();
         subControllers.forEach(Controller::destroy);
         subControllers.clear();
+        chatScrollPane.vvalueProperty().removeListener((observable, oldValue, newValue) -> chatScrollPane.setVvalue(1.0));
         messagesBoxControllerUserMap.clear();
         messagesBoxControllerGroupMap.clear();
     }
@@ -217,7 +216,6 @@ public class MessagesController extends Controller {
             subControllers.add(messagesBoxController);
             chatScrollPane.setContent(messagesBoxControllerUserMap.get(user).render());
         }
-        chatScrollPane.setVvalue(1.0);
     }
 
     public void openGroupChat(Group group) {
@@ -240,7 +238,6 @@ public class MessagesController extends Controller {
             subControllers.add(messagesBoxController);
             chatScrollPane.setContent(messagesBoxControllerGroupMap.get(group).render());
         }
-        chatScrollPane.setVvalue(1.0);
     }
 
     public void changeToMainMenu() {
