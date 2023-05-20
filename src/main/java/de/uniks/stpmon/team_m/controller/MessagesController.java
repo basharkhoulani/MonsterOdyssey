@@ -7,6 +7,8 @@ import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.BestFriendUtils;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -159,18 +161,7 @@ public class MessagesController extends Controller {
         groupListView.setOnMouseClicked(event -> {
             if(!(groupListView.getSelectionModel().getSelectedItem()==null)){
                 openGroupChat(groupListView.getSelectionModel().getSelectedItem());
-                if (!(groupListView.getSelectionModel().getSelectedItem().name() == null)) {
-                    currentFriendOrGroupText.setText(groupListView.getSelectionModel().getSelectedItem().name());
-                }
-                else{
-                    for (String id: groupListView.getSelectionModel().getSelectedItem().members()){
-                        if(!id.equals(userStorageProvider.get().get_id())){
-                            disposables.add(usersService.getUser(id)
-                                    .observeOn(FX_SCHEDULER).subscribe(user -> currentFriendOrGroupText.setText(user.name()), error -> currentFriendOrGroupText.setText("Unknown User")));
-                        }
-                    }
-                }
-
+                currentFriendOrGroupText.setText(groupListView.getSelectionModel().getSelectedItem().name());
             }
         });
 
@@ -186,6 +177,13 @@ public class MessagesController extends Controller {
                 }
             }
         }
+
+        chatScrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                chatScrollPane.setVvalue(1.0);
+            }
+        });
         return parent;
 
     }
@@ -219,6 +217,7 @@ public class MessagesController extends Controller {
             subControllers.add(messagesBoxController);
             chatScrollPane.setContent(messagesBoxControllerUserMap.get(user).render());
         }
+        chatScrollPane.setVvalue(1.0);
     }
 
     public void openGroupChat(Group group) {
@@ -241,6 +240,7 @@ public class MessagesController extends Controller {
             subControllers.add(messagesBoxController);
             chatScrollPane.setContent(messagesBoxControllerGroupMap.get(group).render());
         }
+        chatScrollPane.setVvalue(1.0);
     }
 
     public void changeToMainMenu() {
