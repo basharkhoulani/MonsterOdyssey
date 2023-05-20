@@ -144,6 +144,8 @@ public class MessagesController extends Controller {
                             }));
                 }
             }
+        } else if (group.members().size() == 1 && group.name() == null) {
+            groupsToAdd.add(new Group(group._id(), ALONE, group.members()));
         } else if (group.name() != null) {
             groupsToAdd.add(group);
         }

@@ -79,6 +79,7 @@ public class Constants {
     public static final String NEW_GROUP_TITLE = "New Group";
     public static final String EDIT_GROUP_TITLE = "Edit Group";
     public static final String CHANGE_GROUP = "Change Group Name";
+    public static final String ALONE = "Alone";
     public static final String DELETE_WARNING = "Are you sure you want to delete this group?";
     public static final String DELETE_ERROR_403 = "You are not the last member of this group. You can't delete it.";
 
