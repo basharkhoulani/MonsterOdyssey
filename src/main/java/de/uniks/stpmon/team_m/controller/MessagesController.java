@@ -194,7 +194,11 @@ public class MessagesController extends Controller {
             }
         }
 
-        chatScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> chatScrollPane.setVvalue(1.0));
+        chatScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
+            if (!chatScrollPane.isPressed()){
+                chatScrollPane.setVvalue(1.0);
+            }
+        });
         return parent;
 
     }
@@ -204,7 +208,11 @@ public class MessagesController extends Controller {
         super.destroy();
         subControllers.forEach(Controller::destroy);
         subControllers.clear();
-        chatScrollPane.vvalueProperty().removeListener((observable, oldValue, newValue) -> chatScrollPane.setVvalue(1.0));
+        chatScrollPane.vvalueProperty().removeListener((observable, oldValue, newValue) -> {
+            if (!chatScrollPane.isPressed()){
+                chatScrollPane.setVvalue(1.0);
+            }
+        });
         messagesBoxControllerUserMap.clear();
         messagesBoxControllerGroupMap.clear();
     }
