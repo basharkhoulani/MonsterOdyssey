@@ -79,6 +79,11 @@ public class NewFriendController extends Controller {
         searchTextField.setPromptText(FRIEND_NOT_FOUND);
         for (User user : allUsers) {
             if (user.name().equals(searchTextField.getText())) {
+                if (userStorageProvider.get().getFriends().contains(user._id())) {
+                    searchTextField.setPromptText(FRIEND_ALREADY_ADDED);
+                    searchTextField.clear();
+                    return;
+                }
                 userStorageProvider.get().addFriend(user._id());
                 disposables.add(usersServiceProvider.get().updateUser(null, null, null,
                         userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER).subscribe());
@@ -117,6 +122,13 @@ public class NewFriendController extends Controller {
     private void createPrivateGroup(User user, boolean switchScreen) {
         groupStorageProvider.get().set_id(null);
         Group privateGroup = new Group(null, null, List.of(user._id(), userStorageProvider.get().get_id()));
+        if (userStorageProvider.get().getFriends().contains(user._id())) {
+            groupStorageProvider.get().set_id(user._id());
+            if (switchScreen) {
+                app.show(messageControllerProvider.get());
+            }
+            return;
+        }
         disposables.add(groupServiceProvider.get().getGroups(privateGroup.membersToString()).observeOn(FX_SCHEDULER).subscribe(groups -> {
             if (!groups.isEmpty()) {
                 for (Group group : groups) {

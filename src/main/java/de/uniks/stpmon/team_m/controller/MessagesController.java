@@ -99,6 +99,12 @@ public class MessagesController extends Controller {
                         friends.setAll(users);
                         sortListView(userListView);
                         new BestFriendUtils(preferences).sortBestFriendTop(userListView);
+                        for (User user : users) {
+                            if (user._id().equals(groupStorageProvider.get().get_id())) {
+                                openPrivateChat(user);
+                                currentFriendOrGroupText.setText(user.name());
+                            }
+                        }
                         userListView.refresh();
                     }));
         }
@@ -109,10 +115,17 @@ public class MessagesController extends Controller {
         groupListView.setCellFactory(param -> new GroupCell());
         groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
         disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> {
+            System.out.println("groups: " + groups);
             groups.stream().filter(group -> {
                 groupFiler(group);
                 return false;
             }).forEach(this.groups::add);
+            for (Group group : groupsToAdd) {
+                if (group._id().equals(groupStorageProvider.get().get_id())) {
+                    openGroupChat(group);
+                    currentFriendOrGroupText.setText(group.name());
+                }
+            }
             groupListView.refresh();
         }));
     }
