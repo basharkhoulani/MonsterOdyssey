@@ -7,8 +7,6 @@ import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.BestFriendUtils;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -208,8 +206,7 @@ public class MessagesController extends Controller {
                     groupStorageProvider.get(),
                     userStorageProvider.get(),
                     user,
-                    null,
-                    currentFriendOrGroupText
+                    null
             );
             messagesBoxController.init();
             messagesBoxControllerUserMap.put(user, messagesBoxController);
@@ -230,8 +227,7 @@ public class MessagesController extends Controller {
                     groupStorageProvider.get(),
                     userStorageProvider.get(),
                     null,
-                    group,
-                    currentFriendOrGroupText
+                    group
             );
             messagesBoxController.init();
             messagesBoxControllerGroupMap.put(group, messagesBoxController);

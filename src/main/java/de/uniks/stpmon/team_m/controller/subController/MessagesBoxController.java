@@ -32,7 +32,6 @@ import static de.uniks.stpmon.team_m.Constants.MESSAGE_NAMESPACE_GROUPS;
 public class MessagesBoxController extends Controller {
 
     private final User user;
-    private final Text currentFriendOrGroupText;
     private final MessageService messageService;
     private final GroupService groupService;
     private final GroupStorage groupStorage;
@@ -45,7 +44,7 @@ public class MessagesBoxController extends Controller {
 
     VBox messageBox = new VBox();
 
-    public MessagesBoxController(MessageService messageService, GroupService groupService, Provider<EventListener> eventListener, UsersService usersService, GroupStorage groupStorage, UserStorage userStorage, User user, Group group, Text currentFriendOrGroupText) {
+    public MessagesBoxController(MessageService messageService, GroupService groupService, Provider<EventListener> eventListener, UsersService usersService, GroupStorage groupStorage, UserStorage userStorage, User user, Group group) {
         this.messageService = messageService;
         this.groupService = groupService;
         this.eventListener = eventListener;
@@ -54,7 +53,6 @@ public class MessagesBoxController extends Controller {
         this.userStorage = userStorage;
         this.user = user;
         this.group = group;
-        this.currentFriendOrGroupText = currentFriendOrGroupText;
     }
 
     @Override
@@ -83,11 +81,7 @@ public class MessagesBoxController extends Controller {
         if (origin.equals("userListView")) {
             chat = new Group(null, null, List.of(user._id(), userStorage.get_id()));
         } else if (origin.equals("groupListView")) {
-            if (group.name() == null) {
-                chat = group;
-            } else {
-                chat = group;
-            }
+            chat = group;
         } else {
             chat = new Group(null, null, List.of(user._id(), userStorage.get_id()));
         }
@@ -124,9 +118,7 @@ public class MessagesBoxController extends Controller {
                                                 .subscribe(messageEvent -> {
                                                     final Message message = messageEvent.data();
                                                     switch (messageEvent.suffix()) {
-                                                        case "created" -> {
-                                                            messageBox.getChildren().add(createMessageNode(message));
-                                                        }
+                                                        case "created" -> messageBox.getChildren().add(createMessageNode(message));
                                                         case "updated" -> {
                                                             for (Node messageNode : messageBox.getChildren()) {
                                                                 if (Objects.equals(messageNode.getId(), message._id())) {
