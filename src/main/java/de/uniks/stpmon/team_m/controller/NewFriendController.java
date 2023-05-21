@@ -132,7 +132,7 @@ public class NewFriendController extends Controller {
         disposables.add(groupServiceProvider.get().getGroups(privateGroup.membersToString()).observeOn(FX_SCHEDULER).subscribe(groups -> {
             if (!groups.isEmpty()) {
                 for (Group group : groups) {
-                    if (group.members().size() == privateGroup.members().size() && group.name() == null) {
+                    if (group.name() == null) {
                         groupStorageProvider.get().set_id(group._id());
                         if (switchScreen) {
                             app.show(messageControllerProvider.get());

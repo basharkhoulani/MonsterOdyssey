@@ -66,6 +66,7 @@ public class MessagesBoxController extends Controller {
     @Override
     public Parent render() {
             groupStorage.set_id(chatID);
+            messageListView.scrollTo(messageListView.getItems().size() - 1);
         return messageListView;
     }
 
@@ -101,6 +102,7 @@ public class MessagesBoxController extends Controller {
                                 .observeOn(FX_SCHEDULER).subscribe(messages -> {
                                     this.messages.setAll(messages);
                                     listenToMessages(messageListView, this.messages, chatID);
+                                    messageListView.scrollTo(messageListView.getItems().size() - 1);
                                 }));
                     }
                 }));
@@ -134,9 +136,7 @@ public class MessagesBoxController extends Controller {
                     final Message message = event.data();
                     switch (event.suffix()) {
                         case "created" ->  {
-                            if (!messages.contains(message)) {
-                                messages.add(message);
-                            }
+                            messages.add(message);
                             messageListView.scrollTo(message);
                         }
                         case "updated" -> {
