@@ -20,7 +20,6 @@ import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.List;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -104,7 +103,7 @@ public class MainMenuController extends Controller {
         initRadioButtons();
         friendsListVBox.getChildren().add(friendsListView);
         friendsListView.setOnMouseClicked(event -> {
-            if (!friendsListView.getSelectionModel().isEmpty()){
+            if (!friendsListView.getSelectionModel().isEmpty()) {
                 switchToMessageScreen();
             }
         });
@@ -141,7 +140,8 @@ public class MainMenuController extends Controller {
     public void changeToLogin() {
         disposables.add(usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)
                 .observeOn(FX_SCHEDULER)
-                .subscribe(user -> {}, error -> showError(error.getMessage())));
+                .subscribe(user -> {
+                }, error -> showError(error.getMessage())));
         disposables.add(authenticationService.logout().observeOn(FX_SCHEDULER)
                 .subscribe(logoutResult -> app.show(loginControllerProvider.get()), error -> showError(error.getMessage())));
 

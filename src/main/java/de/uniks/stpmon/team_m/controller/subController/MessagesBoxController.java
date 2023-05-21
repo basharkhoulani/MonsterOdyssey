@@ -36,7 +36,7 @@ public class MessagesBoxController extends Controller {
     Provider<EventListener> eventListener;
     private ListView<Message> messageListView;
 
-    public MessagesBoxController(MessageService messageService, GroupService groupService, Provider<EventListener> eventListener, GroupStorage groupStorage, UserStorage userStorage,List<User> allUsers, User user, Group group) {
+    public MessagesBoxController(MessageService messageService, GroupService groupService, Provider<EventListener> eventListener, GroupStorage groupStorage, UserStorage userStorage, List<User> allUsers, User user, Group group) {
         this.messageService = messageService;
         this.groupService = groupService;
         this.eventListener = eventListener;
@@ -51,8 +51,9 @@ public class MessagesBoxController extends Controller {
     public String getTitle() {
         return null;
     }
+
     @Override
-    public void init(){
+    public void init() {
         messageListView = new ListView<>(messages);
         messageListView.setCellFactory(param -> new MessageCell(this, userStorage.get_id()));
         if (group == null) {
@@ -65,8 +66,8 @@ public class MessagesBoxController extends Controller {
 
     @Override
     public Parent render() {
-            groupStorage.set_id(chatID);
-            messageListView.scrollTo(messageListView.getItems().size() - 1);
+        groupStorage.set_id(chatID);
+        messageListView.scrollTo(messageListView.getItems().size() - 1);
         return messageListView;
     }
 
@@ -130,12 +131,13 @@ public class MessagesBoxController extends Controller {
                 }, error -> showError(error.getMessage())));
         alert.close();
     }
+
     public void listenToMessages(ListView<Message> messageListView, ObservableList<Message> messages, String id) {
         disposables.add(eventListener.get().listen("groups." + id + ".messages.*.*", Message.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Message message = event.data();
                     switch (event.suffix()) {
-                        case "created" ->  {
+                        case "created" -> {
                             messages.add(message);
                             messageListView.scrollTo(message);
                         }
@@ -150,7 +152,6 @@ public class MessagesBoxController extends Controller {
                     }
                 }));
     }
-
 
 
 }

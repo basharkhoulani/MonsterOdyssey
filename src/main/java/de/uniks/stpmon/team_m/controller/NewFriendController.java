@@ -119,6 +119,7 @@ public class NewFriendController extends Controller {
             autoCompletionBinding.setPrefWidth(searchTextField.getPrefWidth());
         }, error -> showError(error.getMessage())));
     }
+
     private void createPrivateGroup(User user, boolean switchScreen) {
         groupStorageProvider.get().set_id(null);
         Group privateGroup = new Group(null, null, List.of(user._id(), userStorageProvider.get().get_id()));

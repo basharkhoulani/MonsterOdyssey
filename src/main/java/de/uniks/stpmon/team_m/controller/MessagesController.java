@@ -114,43 +114,31 @@ public class MessagesController extends Controller {
                                             currentFriendOrGroupText.setText(user.name());
                                         }
                                     }
-                                }, error -> {
-                                    System.out.println("1");
-                                    showError(error.getMessage());
-                                }));
+                                }, error -> showError(error.getMessage())));
                     }
 
-                    disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> {
-                        groups.stream().filter(this::groupFilter).forEach(group -> {
-                            if (group.members().size() == 2 && group.name() == null) {
-                                for (String id : group.members()) {
-                                    if (!id.equals(userStorageProvider.get().get_id())) {
-                                        for (User user : allUsers) {
-                                            if (user._id().equals(id)) {
-                                                this.groups.add(new Group(group._id(), user.name(), group.members()));
-                                            }
+                    disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> groups.stream().filter(this::groupFilter).forEach(group -> {
+                        if (group.members().size() == 2 && group.name() == null) {
+                            for (String id : group.members()) {
+                                if (!id.equals(userStorageProvider.get().get_id())) {
+                                    for (User user : allUsers) {
+                                        if (user._id().equals(id)) {
+                                            this.groups.add(new Group(group._id(), user.name(), group.members()));
                                         }
                                     }
                                 }
-                            } else if (group.members().size() == 1 && group.name() == null) {
-                                this.groups.add(new Group(group._id(), ALONE, group.members()));
-                            } else {
-                                this.groups.add(group);
                             }
-                            if (group._id().equals(groupStorageProvider.get().get_id())) {
-                                openGroupChat(group);
-                                currentFriendOrGroupText.setText(groupStorageProvider.get().getName());
-                            }
-                        });
-
-                    }, error -> {
-                        System.out.println("2");
-                        showError(error.getMessage());
-                    }));
-                }, error -> {
-                    System.out.println("3");
-                    showError(error.getMessage());
-                }));
+                        } else if (group.members().size() == 1 && group.name() == null) {
+                            this.groups.add(new Group(group._id(), ALONE, group.members()));
+                        } else {
+                            this.groups.add(group);
+                        }
+                        if (group._id().equals(groupStorageProvider.get().get_id())) {
+                            openGroupChat(group);
+                            currentFriendOrGroupText.setText(groupStorageProvider.get().getName());
+                        }
+                    }), error -> showError(error.getMessage())));
+                }, error -> showError(error.getMessage())));
 
     }
 

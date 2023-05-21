@@ -1,7 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.Main;
-import de.uniks.stpmon.team_m.controller.MessagesController;
 import de.uniks.stpmon.team_m.dto.Message;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
