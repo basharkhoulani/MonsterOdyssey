@@ -82,7 +82,7 @@ public class MessagesControllerTest extends ApplicationTest {
 
         final User Rick = new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null);
 
-        when(usersService.getUsers(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"), null))
+        when(usersService.getUsers(null, null))
                 .thenReturn(Observable.just(List.of(Rick,
                         new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
                         new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));

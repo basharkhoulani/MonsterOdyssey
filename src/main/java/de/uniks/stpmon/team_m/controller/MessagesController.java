@@ -6,7 +6,6 @@ import de.uniks.stpmon.team_m.controller.subController.UserCell;
 import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.*;
-import de.uniks.stpmon.team_m.utils.BestFriendUtils;
 import de.uniks.stpmon.team_m.utils.FriendListUtils;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.collections.FXCollections;
@@ -62,7 +61,7 @@ public class MessagesController extends Controller {
     @Inject
     Provider<GroupController> groupControllerProvider;
     @Inject
-    Provider<EventListener> eventListener;
+    Provider<EventListener> eventListenerProvider;
     @Inject
     Provider<UserStorage> userStorageProvider;
     @Inject
@@ -233,7 +232,7 @@ public class MessagesController extends Controller {
             MessagesBoxController messagesBoxController = new MessagesBoxController(
                     messageService,
                     groupService,
-                    eventListener,
+                    eventListenerProvider,
                     groupStorageProvider.get(),
                     userStorageProvider.get(),
                     allUsers,
@@ -254,7 +253,7 @@ public class MessagesController extends Controller {
             MessagesBoxController messagesBoxController = new MessagesBoxController(
                     messageService,
                     groupService,
-                    eventListener,
+                    eventListenerProvider,
                     groupStorageProvider.get(),
                     userStorageProvider.get(),
                     allUsers,

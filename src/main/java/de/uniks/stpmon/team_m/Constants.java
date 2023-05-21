@@ -38,7 +38,6 @@ public class Constants {
     public static final String BUTTON_BORDER_STYLE = "-fx-border-color: black; -fx-border-width: 1px;";
     public static final String NO_FRIENDS_FOUND = "No friends found";
     public static final String NO_GROUPS_FOUND = "No groups found";
-    public static final String NO_USER_OR_GROUP_SELECTED = "No user or group selected\nor there are no messages yet";
     public static final String NO_USERS_ADDED_TO_GROUP = "No foreign users added to group yet";
     public static final String BEST_FRIEND_PREF = "bestFriend";
     public static final String DELETE_FRIEND_WARNING = "Are you sure you want to delete this friend?";
@@ -47,7 +46,6 @@ public class Constants {
     public static final String NOT_OWN_MESSAGE_STYLE = "-fx-background-color: lightgreen;";
     public static final String ROUNDED_CORNERS_STYLE = "-fx-border-radius: 10; -fx-background-radius: 10;";
     public static final String BORDER_COLOR_BLACK = "-fx-border-color: black;";
-    public static final String DELETE_ACCOUNT_TITLE = "Delete Account";
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
@@ -91,7 +89,7 @@ public class Constants {
     public static final String EDIT_GROUP_TITLE = "Edit Group";
     public static final String CHANGE_GROUP = "Change Group Name";
     public static final String DELETE_WARNING = "Are you sure you want to delete this group?";
-    public static final String DELETE_ERROR_403 = "You are not the last member of this group. You can't delete it.";
+
 
     // ACCOUNT SETTINGS
     public static final String ACCOUNT_SETTINGS_TITLE = "Account Setting";
