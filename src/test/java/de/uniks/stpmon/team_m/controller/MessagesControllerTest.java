@@ -76,13 +76,14 @@ public class MessagesControllerTest extends ApplicationTest {
     public void start(Stage stage) {
         UserStorage mockUserStorage = mock(UserStorage.class);
         Mockito.when(userStorageProvider.get()).thenReturn(mockUserStorage);
+        Mockito.when(userStorageProvider.get().getFriends()).thenReturn(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
 
         GroupStorage mockGroupStorage = mock(GroupStorage.class);
         Mockito.when(groupStorageProvider.get()).thenReturn(mockGroupStorage);
 
         final User Rick = new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null);
 
-        when(usersService.getUsers(null, null))
+        when(usersService.getUsers(any(), any()))
                 .thenReturn(Observable.just(List.of(Rick,
                         new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
                         new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
@@ -92,14 +93,16 @@ public class MessagesControllerTest extends ApplicationTest {
                 observer.onNext(Rick);
             }
         });
+        when(groupService.getGroups(null)).thenReturn(Observable.just(List.of(
+                new Group("64610ec8420b3d786212aea8", "", List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64")))));
         when(userStorageProvider.get().getFriends()).thenReturn(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
         when(userStorageProvider.get().get_id()).thenReturn("64610e7b82ca062bfa5b7231");
         when(userStorageProvider.get().getName()).thenReturn("Morty");
 
-        when(groupStorageProvider.get().get_id()).thenReturn("64610ec8420b3d786212aea8");
+        when(groupStorageProvider.get().get_id()).thenReturn(null);
 
         when(groupService.getGroups(any())).thenReturn(Observable.just(
-                List.of(new Group("64610ec8420b3d786212aea8", "", List.of("64610e7b82ca062bfa5b7231", Rick._id())))));
+                List.of(new Group("64610ec8420b3d786212aea8", "best Group", List.of("64610e7b82ca062bfa5b7231", Rick._id())))));
         lenient().when(messageService.getGroupMessages("64610ec8420b3d786212aea8")).thenReturn(Observable.just(List.of(
                 new Message("2023-05-15T09:30:00-05:00", null, "6461e15399e24fc86fa58097", "645cd04c11b590456276e9d9", "Get in the damn car Morty!"),
                 new Message("2023-05-15T09:35:00-05:00", null, "6461e15399e24fc86fa58096", "64610e7b82ca062bfa5b7231", "Oh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez Rick"),
@@ -114,7 +117,6 @@ public class MessagesControllerTest extends ApplicationTest {
         app.show(messagesController);
         stage.requestFocus();
     }
-
     @Test
     void changeToMainMenu() {
         final MainMenuController mainMenuController = mock(MainMenuController.class);
@@ -138,7 +140,7 @@ public class MessagesControllerTest extends ApplicationTest {
         GroupStorage mockedGroupStorage = mock(GroupStorage.class);
         Mockito.when(groupStorageProvider.get()).thenReturn(mockedGroupStorage);
         Mockito.doNothing().when(mockedGroupStorage).set_id(Mockito.anyString());
-        
+
         final GroupController groupController = mock(GroupController.class);
         when(groupControllerProvider.get()).thenReturn(groupController);
         doNothing().when(app).show(groupController);

@@ -114,7 +114,10 @@ public class MessagesController extends Controller {
                                             currentFriendOrGroupText.setText(user.name());
                                         }
                                     }
-                                }, error -> showError(error.getMessage())));
+                                }, error -> {
+                                    System.out.println("1");
+                                    showError(error.getMessage());
+                                }));
                     }
 
                     disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> {
@@ -140,8 +143,14 @@ public class MessagesController extends Controller {
                             }
                         });
 
-                    }, error -> showError(error.getMessage())));
-                }, error -> showError(error.getMessage())));
+                    }, error -> {
+                        System.out.println("2");
+                        showError(error.getMessage());
+                    }));
+                }, error -> {
+                    System.out.println("3");
+                    showError(error.getMessage());
+                }));
 
     }
 
@@ -171,6 +180,7 @@ public class MessagesController extends Controller {
     @Override
     public Parent render() {
         Parent parent = super.render();
+        settingsButton.setVisible(false);
         friendsListViewVBox.getChildren().add(userListView);
         groupsListViewVBox.getChildren().add(groupListView);
         messageTextArea.addEventHandler(KeyEvent.KEY_PRESSED, event -> {

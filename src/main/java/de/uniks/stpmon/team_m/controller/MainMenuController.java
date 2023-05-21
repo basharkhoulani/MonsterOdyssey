@@ -103,7 +103,11 @@ public class MainMenuController extends Controller {
         final Parent parent = super.render();
         initRadioButtons();
         friendsListVBox.getChildren().add(friendsListView);
-        friendsListView.setOnMouseClicked(event -> switchToMessageScreen());
+        friendsListView.setOnMouseClicked(event -> {
+            if (!friendsListView.getSelectionModel().isEmpty()){
+                switchToMessageScreen();
+            }
+        });
         return parent;
     }
 

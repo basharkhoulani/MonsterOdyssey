@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 class AppTest extends ApplicationTest {
@@ -110,7 +111,7 @@ class AppTest extends ApplicationTest {
 
         // test Edit Group
         clickOn("Go back");
-        clickOn("#settingsButton");
+        verifyThat("#settingsButton", (Button settingsButton) -> !settingsButton.isVisible());
 //        assertEquals("Monster Odyssey - Edit Group", stage.getTitle());
 //        final Button deleteButton = lookup("#deleteGroupButton").query();
 //        assertNotNull(deleteButton);

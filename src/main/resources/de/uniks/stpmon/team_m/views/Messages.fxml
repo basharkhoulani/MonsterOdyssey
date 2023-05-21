@@ -17,10 +17,11 @@
                   </Label>
                </VBox>
                <VBox alignment="CENTER" fillWidth="false" prefHeight="268.0" prefWidth="309.0" VBox.vgrow="ALWAYS">
-                  <children>
-                     <VBox fx:id="friendsListViewVBox" alignment="CENTER" prefHeight="227.0" prefWidth="293.0" VBox.vgrow="ALWAYS" />
-                     <VBox fx:id="groupsListViewVBox" alignment="CENTER" prefHeight="214.0" prefWidth="338.0" VBox.vgrow="ALWAYS" />
-                  </children></VBox>
+                  <VBox fx:id="friendsListViewVBox" alignment="CENTER" prefHeight="227.0" prefWidth="293.0"
+                        VBox.vgrow="ALWAYS"/>
+                  <VBox fx:id="groupsListViewVBox" alignment="CENTER" prefHeight="214.0" prefWidth="338.0"
+                        VBox.vgrow="ALWAYS"/>
+               </VBox>
                <VBox alignment="CENTER" fillWidth="false" prefHeight="76.0" prefWidth="281.0">
                   <HBox alignment="CENTER" fillHeight="false" prefHeight="44.0" prefWidth="126.0">
                      <Button fx:id="findNewFriendsButton" mnemonicParsing="false" onAction="#changeToFindNewFriends" prefHeight="30.0" prefWidth="109.0" text="Find New Friends" />
