@@ -112,7 +112,7 @@ public class LoginController extends Controller {
                 .subscribe(loginResult -> {
                     userStatusUpdate(USER_STATUS_ONLINE);
                     app.show(mainMenuControllerProvider.get());
-                    }, error -> errorHandle(error.getMessage())));
+                    },error -> showError(error.getMessage())));
     }
 
     public void signUp() {
@@ -125,8 +125,7 @@ public class LoginController extends Controller {
         disposables.add(usersService
                 .createUser(username.get(), null, password.get())
                 .observeOn(FX_SCHEDULER)
-                .subscribe(userResult -> signIn(),
-                        error -> errorHandle(error.getMessage())));
+                .subscribe(userResult -> signIn(), error -> showError(error.getMessage())));
     }
 
     public void showPassword() {
@@ -154,6 +153,6 @@ public class LoginController extends Controller {
 
     public void userStatusUpdate(String status) {
         disposables.add(usersService.updateUser(null, status, null, null, null)
-                .observeOn(FX_SCHEDULER).subscribe(user -> userStorage.setStatus(user.status()), error -> {}));
+                .observeOn(FX_SCHEDULER).subscribe(user -> userStorage.setStatus(user.status()), error -> showError(error.getMessage())));
     }
 }

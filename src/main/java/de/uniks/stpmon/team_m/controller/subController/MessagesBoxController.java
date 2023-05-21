@@ -103,9 +103,9 @@ public class MessagesBoxController extends Controller {
                                     this.messages.setAll(messages);
                                     listenToMessages(messageListView, this.messages, chatID);
                                     messageListView.scrollTo(messageListView.getItems().size() - 1);
-                                }));
+                                }, error -> showError(error.getMessage())));
                     }
-                }));
+                }, error -> showError(error.getMessage())));
     }
 
     public String getUsername(String _id) {

@@ -115,14 +115,10 @@ public class MessagesController extends Controller {
                                             currentFriendOrGroupText.setText(user.name());
                                         }
                                     }
-                                    userListView.refresh();
-                                }, error -> {
-                                    showError(error.getMessage());
-                                }));
+                                }, error -> showError(error.getMessage())));
                     }
 
                     disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> {
-                        System.out.println(groups.size());
                         groups.stream().filter(this::groupFilter).forEach(group -> {
                             if (group.members().size() == 2 && group.name() == null) {
                                 for (String id : group.members()) {
@@ -141,13 +137,12 @@ public class MessagesController extends Controller {
                             }
                             if (group._id().equals(groupStorageProvider.get().get_id())) {
                                 openGroupChat(group);
-                                currentFriendOrGroupText.setText(group.name());
+                                currentFriendOrGroupText.setText(groupStorageProvider.get().getName());
                             }
-                            System.out.println(group.name());
                         });
 
-                    }, error -> { showError(error.getMessage());}));
-                }, error -> { showError(error.getMessage());}));
+                    }, error -> showError(error.getMessage())));
+                }, error -> showError(error.getMessage())));
 
     }
 

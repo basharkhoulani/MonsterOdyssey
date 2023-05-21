@@ -84,7 +84,7 @@ public class MainMenuController extends Controller {
                     .observeOn(FX_SCHEDULER).subscribe(users -> {
                         friends.setAll(users);
                         FriendListUtils.sortListView(friendsListView);
-                    }));
+                    }, error -> showError(error.getMessage())));
             listenToStatusUpdate(friends, friendsListView);
         }
     }
@@ -137,9 +137,9 @@ public class MainMenuController extends Controller {
     public void changeToLogin() {
         disposables.add(usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)
                 .observeOn(FX_SCHEDULER)
-                .subscribe());
+                .subscribe(user -> {}, error -> showError(error.getMessage())));
         disposables.add(authenticationService.logout().observeOn(FX_SCHEDULER)
-                .subscribe(logoutResult -> app.show(loginControllerProvider.get())));
+                .subscribe(logoutResult -> app.show(loginControllerProvider.get()), error -> showError(error.getMessage())));
 
     }
 
