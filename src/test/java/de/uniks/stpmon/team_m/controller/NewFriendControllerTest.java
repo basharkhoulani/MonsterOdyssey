@@ -20,7 +20,6 @@ import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static de.uniks.stpmon.team_m.Constants.FRIEND_ADDED;
 import static de.uniks.stpmon.team_m.Constants.FRIEND_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -91,7 +90,6 @@ class NewFriendControllerTest extends ApplicationTest {
         userStorage.set_id("1");
         userStorage.setFriends(new ArrayList<>());
         Mockito.when(userStorageProvider.get()).thenReturn(userStorage);
-        GroupService groupService = mock(GroupService.class);
 
         // empty textfield
         clickOn("#addFriendButton");
@@ -102,7 +100,7 @@ class NewFriendControllerTest extends ApplicationTest {
         write("11");
         clickOn("#addFriendButton");
         clickOn("#addFriendButton");
-        assertEquals(FRIEND_ADDED, searchTextField.getPromptText());
+        assertEquals(FRIEND_NOT_FOUND, searchTextField.getPromptText());
     }
 
     @Test

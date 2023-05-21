@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
 
@@ -56,6 +57,8 @@ public class MessagesBoxController extends Controller {
     public void init() {
         messageListView = new ListView<>(messages);
         messageListView.setCellFactory(param -> new MessageCell(this, userStorage.get_id()));
+        messageListView.setPlaceholder(new Label("\t\tNo messages yet\n" +
+                "or there is no user or group selected"));
         if (group == null) {
             openFriendChat("userListView");
         }
