@@ -123,13 +123,13 @@ public class NewFriendController extends Controller {
     private void createPrivateGroup(User user, boolean switchScreen) {
         groupStorageProvider.get().set_id(null);
         Group privateGroup = new Group(null, null, List.of(user._id(), userStorageProvider.get().get_id()));
-        if (userStorageProvider.get().getFriends().contains(user._id())) {
-            groupStorageProvider.get().setName(user.name());
-            groupStorageProvider.get().set_id(user._id());
-            if (switchScreen) {
+        if(switchScreen){
+            if (userStorageProvider.get().getFriends().contains(user._id())) {
+                groupStorageProvider.get().setName(user.name());
+                groupStorageProvider.get().set_id(user._id());
                 app.show(messageControllerProvider.get());
+                return;
             }
-            return;
         }
         disposables.add(groupServiceProvider.get().getGroups(privateGroup.membersToString()).observeOn(FX_SCHEDULER).subscribe(groups -> {
             if (!groups.isEmpty()) {
