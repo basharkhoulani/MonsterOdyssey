@@ -214,11 +214,6 @@ public class MessagesController extends Controller {
         super.destroy();
         subControllers.forEach(Controller::destroy);
         subControllers.clear();
-        chatScrollPane.vvalueProperty().removeListener((observable, oldValue, newValue) -> {
-            if (!chatScrollPane.isPressed()) {
-                chatScrollPane.setVvalue(1.0);
-            }
-        });
         messagesBoxControllerUserMap.clear();
         messagesBoxControllerGroupMap.clear();
     }
