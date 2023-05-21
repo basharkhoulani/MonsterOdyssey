@@ -6,6 +6,7 @@ import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
 import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.utils.FriendListUtils;
 import impl.org.controlsfx.skin.AutoCompletePopup;
 import impl.org.controlsfx.skin.AutoCompletePopupSkin;
 import javafx.collections.FXCollections;
@@ -122,8 +123,8 @@ public class GroupController extends Controller {
                 friendsListView.setItems(friends);
                 foreignListView.setItems(foreign);
 
-                sortListView(friendsListView);
-                sortListView(foreignListView);
+                FriendListUtils.sortListView(friendsListView);
+                FriendListUtils.sortListView(foreignListView);
             }));
         }));
     }
@@ -141,8 +142,8 @@ public class GroupController extends Controller {
 
                 friendsListView.setItems(friends);
 
-                sortListView(friendsListView);
-                sortListView(foreignListView);
+                FriendListUtils.sortListView(friendsListView);
+                FriendListUtils.sortListView(foreignListView);
             }));
         }
     }

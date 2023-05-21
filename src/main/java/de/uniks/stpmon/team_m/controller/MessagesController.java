@@ -7,6 +7,8 @@ import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.BestFriendUtils;
+import de.uniks.stpmon.team_m.utils.FriendListUtils;
+import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -61,6 +63,8 @@ public class MessagesController extends Controller {
 
     @Inject
     Provider<GroupController> groupControllerProvider;
+    @Inject
+    Provider<EventListener> eventListener;
 
     @Inject
     Provider<UserStorage> userStorageProvider;
@@ -82,12 +86,18 @@ public class MessagesController extends Controller {
     private final List<Controller> subControllers = new ArrayList<>();
     Map<User, MessagesBoxController> messagesBoxControllerUserMap = new HashMap<>();
     Map<Group, MessagesBoxController> messagesBoxControllerGroupMap = new HashMap<>();
+    private List<User> allUsers;
+
     @Inject
     public MessagesController() {
     }
 
     @Override
     public void init() {
+        disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER)
+                .subscribe(users -> {
+                    allUsers = users;
+                }));
         userListView = new ListView<>(friends);
         userListView.setId("friends");
         userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
@@ -96,7 +106,7 @@ public class MessagesController extends Controller {
             disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER)
                     .subscribe(users -> {
                         friends.setAll(users);
-                        sortListView(userListView);
+                        FriendListUtils.sortListView(userListView);
                         new BestFriendUtils(preferences).sortBestFriendTop(userListView);
                         for (User user : users) {
                             if (user._id().equals(groupStorageProvider.get().get_id())) {
@@ -119,9 +129,11 @@ public class MessagesController extends Controller {
                 if (group.members().size() == 2 && group.name() == null) {
                     for (String id : group.members()) {
                         if (!id.equals(userStorageProvider.get().get_id())) {
-                            disposables.add(usersService.getUser(id)
-                                    .observeOn(FX_SCHEDULER).subscribe(user -> this.groups.add(new Group(group._id(), user.name(), group.members())), error -> {
-                                    }));
+                            for (User user : allUsers) {
+                                if (user._id().equals(id)) {
+                                    this.groups.add(new Group(group._id(), user.name(), group.members()));
+                                }
+                            }
                         }
                     }
                 } else if (group.members().size() == 1 && group.name() == null) {
@@ -201,12 +213,6 @@ public class MessagesController extends Controller {
                 }
             }
         }
-        chatScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
-            if (chatScrollPane.isPressed()) {
-                return;
-            }
-            chatScrollPane.setVvalue(1.0);
-        });
         return parent;
 
     }
@@ -233,9 +239,9 @@ public class MessagesController extends Controller {
                     messageService,
                     groupService,
                     eventListener,
-                    usersService,
                     groupStorageProvider.get(),
                     userStorageProvider.get(),
+                    allUsers,
                     user,
                     null
             );
@@ -254,9 +260,9 @@ public class MessagesController extends Controller {
                     messageService,
                     groupService,
                     eventListener,
-                    usersService,
                     groupStorageProvider.get(),
                     userStorageProvider.get(),
+                    allUsers,
                     null,
                     group
             );
@@ -305,4 +311,5 @@ public class MessagesController extends Controller {
                 ));
         messageTextArea.setText("");
     }
+
 }

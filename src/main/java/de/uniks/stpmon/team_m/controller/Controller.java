@@ -3,7 +3,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.utils.BestFriendUtils;
+import de.uniks.stpmon.team_m.utils.FriendListUtils;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -12,12 +12,12 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.io.IOException;
-import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -64,25 +64,6 @@ public abstract class Controller {
         return STANDARD_WIDTH != app.getStage().getWidth() ? (int) app.getStage().getWidth() : STANDARD_WIDTH;
     }
 
-    public void sortListView(ListView<User> friendsListView) {
-        friendsListView.getItems().sort(Controller::sortByOnline);
-    }
-
-    public static int sortByOnline(User o1, User o2) {
-        BestFriendUtils bestFriendUtils = new BestFriendUtils(Preferences.userNodeForPackage(Main.class));
-        if (bestFriendUtils.isBestFriend(o1) && !bestFriendUtils.isBestFriend(o2)) {
-            return -1;
-        } else if (!bestFriendUtils.isBestFriend(o1) && bestFriendUtils.isBestFriend(o2)) {
-            return 1;
-        } else if (o1.status().equals(USER_STATUS_ONLINE) && o2.status().equals(USER_STATUS_OFFLINE)) {
-            return -1;
-        } else if (o1.status().equals(USER_STATUS_OFFLINE) && o2.status().equals(USER_STATUS_ONLINE)) {
-            return 1;
-        } else {
-            return o1.name().compareTo(o2.name());
-        }
-    }
-
     public void listenToStatusUpdate(ObservableList<User> friends, ListView<User> friendsListView) {
         disposables.add(eventListener.get().listen("users.*.updated", User.class).observeOn(FX_SCHEDULER)
                 .subscribe(user -> {
@@ -92,10 +73,32 @@ public abstract class Controller {
                             .orElse(null);
                     if (userToUpdate != null) {
                         friends.set(friends.indexOf(userToUpdate), user.data());
-                        sortListView(friendsListView);
+                        FriendListUtils.sortListView(friendsListView);
                         friendsListView.refresh();
                     }
                 }));
+    }
+
+    public void showError(String error) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(ERROR);
+        alert.setHeaderText(null);
+        if (error.contains(HTTP_429)) {
+            alert.setContentText(HTTP_429_MESSAGE);
+        } else if (error.contains(HTTP_409)) {
+            alert.setContentText(HTTP_409_MESSAGE);
+        } else if (error.contains(HTTP_404)) {
+            alert.setContentText(HTTP_404_MESSAGE);
+        } else if (error.contains(HTTP_403)) {
+            alert.setContentText(HTTP_403_MESSAGE);
+        } else if (error.contains(HTTP_401)) {
+            alert.setContentText(HTTP_401_MESSAGE);
+        } else if (error.contains(HTTP_400)) {
+            alert.setContentText(HTTP_400_MESSAGE);
+        } else {
+            alert.setContentText(GENERIC_ERROR);
+        }
+        alert.showAndWait();
     }
 
 }
