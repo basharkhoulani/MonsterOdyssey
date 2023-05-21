@@ -22,7 +22,6 @@ import javafx.scene.input.KeyCode;
     public static final int MINIMUM_WIDTH = 700;
     public static final String APP_ICON = &quot;images/Monster-durchsichtig.png&quot;;
     public static final String TASKBAR_ICON = &quot;images/Monster-durchsichtig.png&quot;;
-    public static final String LOADING = &quot;Loading...&quot;;
     public static final String SURE = &quot;Are you sure?&quot;;
     public static final String EMPTY_STRING = &quot;&quot;;
     public static final String FX_STYLE_BORDER_COLOR_BLACK = &quot;-fx-border-color: black&quot;;
@@ -33,7 +32,6 @@ import javafx.scene.input.KeyCode;
     public static final String OFFLINE_STAR = &quot;images/offline_star.png&quot;;
     public static final String USER_STATUS_OFFLINE = &quot;offline&quot;;
     public static final String USER_STATUS_ONLINE = &quot;online&quot;;
-    public static final int STATUS_CIRCLE_RADIUS = 7;
     public static final int HBOX_FRIENDS_SPACING = 15;
     public static final String THREE_DOTS = &quot;\u2026&quot;;
     public static final String BUTTON_TRANSPARENT_STYLE = &quot;-fx-background-color: transparent; -fx-border-color: transparent;&quot;;
@@ -43,6 +41,11 @@ import javafx.scene.input.KeyCode;
     public static final String NO_USERS_ADDED_TO_GROUP = &quot;No foreign users added to group yet&quot;;
     public static final String BEST_FRIEND_PREF = &quot;bestFriend&quot;;
     public static final String DELETE_FRIEND_WARNING = &quot;Are you sure you want to delete this friend?&quot;;
+    public static final String LIST_VIEW_STYLE_NO_INDEXING = &quot;-fx-background-color: #F4F4F4;&quot;;
+    public static final String OWN_MESSAGE_STYLE = &quot;-fx-background-color: lightblue;&quot;;
+    public static final String NOT_OWN_MESSAGE_STYLE = &quot;-fx-background-color: lightgreen;&quot;;
+    public static final String ROUNDED_CORNERS_STYLE = &quot;-fx-border-radius: 10; -fx-background-radius: 10;&quot;;
+    public static final String BORDER_COLOR_BLACK = &quot;-fx-border-color: black;&quot;;
 
     // LOGIN &amp; SIGNUP
     public static final String LOGIN_TITLE = &quot;Sign Up &amp; In&quot;;
@@ -67,20 +70,26 @@ import javafx.scene.input.KeyCode;
 
     // MESSAGES
     public static final String MESSAGES_TITLE = &quot;Messages&quot;;
+    public static final String PENCIL = &quot;\u270F&quot;;
+    public static final String EDIT_MESSAGE_TITLE = &quot;Edit message&quot;;
+    public static final String EDIT_MESSAGE_CONTENT = &quot;Message:&quot;;
+    public static final String DELETE_MESSAGE_TITLE = &quot;Delete Message&quot;;
+    public static final String DELETE_MESSAGE_CONTENT = &quot;Are you sure you want to delete this message?&quot;;
+    public static final String ALONE = &quot;Alone&quot;;
 
     // NEW FRIEND
     public static final String NEW_FRIEND_TITLE = &quot;Add a new friend&quot;;
     public static final String FRIEND_ADDED = &quot;Friend added. You can add more friends or go back to the main menu.&quot;;
     public static final String FRIEND_NOT_FOUND = &quot;Friend not found. Please try again.&quot;;
-    public static final String FRIEND_ALREADY_ADDED = &quot;You are already friends with this user.&quot;;
     public static final String YOURSELF = &quot;You can't add yourself as a friend.&quot;;
+    public static final String FRIEND_ALREADY_ADDED = &quot;You are already friends with this user.&quot;;
 
     // GROUPS
     public static final String NEW_GROUP_TITLE = &quot;New Group&quot;;
     public static final String EDIT_GROUP_TITLE = &quot;Edit Group&quot;;
     public static final String CHANGE_GROUP = &quot;Change Group Name&quot;;
     public static final String DELETE_WARNING = &quot;Are you sure you want to delete this group?&quot;;
-    public static final String DELETE_ERROR_403 = &quot;You are not the last member of this group. You can't delete it.&quot;;
+
 
     // ACCOUNT SETTINGS
     public static final String ACCOUNT_SETTINGS_TITLE = &quot;Account Setting&quot;;
@@ -89,7 +98,7 @@ import javafx.scene.input.KeyCode;
 
     // INGAME
     public static final String INGAME_TITLE = &quot;Ingame&quot;;
-<span class="fc" id="L92">    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;</span>
+<span class="fc" id="L101">    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;</span>
     public static final String HELP_LABEL = &quot;Click 'p' on your keyboard for pause menu.&quot;;
     public static final String RESUME_BUTTON_LABEL = &quot;Resume Game&quot;;
     public static final String SAVE_GAME_AND_LEAVE_BUTTON_LABEL = &quot;Save Game &amp; Leave&quot;;
@@ -97,11 +106,18 @@ import javafx.scene.input.KeyCode;
     public static final String PAUSE_MENU_LABEL = &quot;What do you want to do?&quot;;
 
     // Error messages
-    public static final String HTTP_400 = &quot;HTTP 400&quot;;
-    public static final String HTTP_401 = &quot;HTTP 401&quot;;
-    public static final String HTTP_403 = &quot;HTTP 403&quot;;
-    public static final String HTTP_404 = &quot;HTTP 404&quot;;
-    public static final String HTTP_409 = &quot;HTTP 409&quot;;
-    public static final String HTTP_429 = &quot;HTTP 429&quot;;
+    public static final String HTTP_400 = &quot;400&quot;;
+    public static final String HTTP_400_MESSAGE = &quot;Bad request. Please try again later.&quot;;
+    public static final String HTTP_401 = &quot;401&quot;;
+    public static final String HTTP_401_MESSAGE = &quot;Unauthorized. Please try again later.&quot;;
+    public static final String HTTP_403 = &quot;403&quot;;
+    public static final String HTTP_403_MESSAGE = &quot;Forbidden. Please try again later.&quot;;
+    public static final String HTTP_404 = &quot;404&quot;;
+    public static final String HTTP_404_MESSAGE = &quot;Not found. Please try again later.&quot;;
+    public static final String HTTP_409 = &quot;409&quot;;
+    public static final String HTTP_409_MESSAGE = &quot;Conflict. Please try again later.&quot;;
+    public static final String HTTP_429 = &quot;429&quot;;
+    public static final String HTTP_429_MESSAGE = &quot;Too many requests. Please try again later.&quot;;
+    public static final String UNKNOWN_USER = &quot;Unknown&quot;;
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
