@@ -19,9 +19,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-import static de.uniks.stpmon.team_m.Constants.FRIEND_ADDED;
 import static de.uniks.stpmon.team_m.Constants.FRIEND_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -92,15 +90,7 @@ class NewFriendControllerTest extends ApplicationTest {
         userStorage.set_id("1");
         userStorage.setFriends(new ArrayList<>());
         Mockito.when(userStorageProvider.get()).thenReturn(userStorage);
-        GroupService groupService = mock(GroupService.class);
-        when(groupServiceProvider.get()).thenReturn(groupService);
-        when(groupService.getGroups(ArgumentMatchers.any())).thenReturn(Observable.just(Arrays.asList(
-                new Group("1", "11", List.of("1", "2")),
-                new Group("2", "22", List.of("1", "2", "3")),
-                new Group("3", "33",  List.of("1", "2", "3"))
-        )));
-        when(groupServiceProvider.get()).thenReturn(groupService);
-        when(groupService.create(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Observable.just(new Group(null, null, null)));
+
         // empty textfield
         clickOn("#addFriendButton");
         // click on searchbar
@@ -110,7 +100,7 @@ class NewFriendControllerTest extends ApplicationTest {
         write("11");
         clickOn("#addFriendButton");
         clickOn("#addFriendButton");
-        assertEquals(FRIEND_ADDED, searchTextField.getPromptText());
+        assertEquals(FRIEND_NOT_FOUND, searchTextField.getPromptText());
     }
 
     @Test

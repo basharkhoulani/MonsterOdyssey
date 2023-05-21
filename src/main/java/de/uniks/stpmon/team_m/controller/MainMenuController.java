@@ -7,6 +7,7 @@ import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
 import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.utils.FriendListUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,7 +20,6 @@ import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.List;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -82,8 +82,8 @@ public class MainMenuController extends Controller {
             disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
                     .observeOn(FX_SCHEDULER).subscribe(users -> {
                         friends.setAll(users);
-                        sortListView(friendsListView);
-                    }));
+                        FriendListUtils.sortListView(friendsListView);
+                    }, error -> showError(error.getMessage())));
             listenToStatusUpdate(friends, friendsListView);
         }
     }
@@ -102,7 +102,11 @@ public class MainMenuController extends Controller {
         final Parent parent = super.render();
         initRadioButtons();
         friendsListVBox.getChildren().add(friendsListView);
-        friendsListView.setOnMouseClicked(event -> switchToMessageScreen());
+        friendsListView.setOnMouseClicked(event -> {
+            if (!friendsListView.getSelectionModel().isEmpty()) {
+                switchToMessageScreen();
+            }
+        });
         return parent;
     }
 
@@ -136,9 +140,10 @@ public class MainMenuController extends Controller {
     public void changeToLogin() {
         disposables.add(usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)
                 .observeOn(FX_SCHEDULER)
-                .subscribe());
+                .subscribe(user -> {
+                }, error -> showError(error.getMessage())));
         disposables.add(authenticationService.logout().observeOn(FX_SCHEDULER)
-                .subscribe(logoutResult -> app.show(loginControllerProvider.get())));
+                .subscribe(logoutResult -> app.show(loginControllerProvider.get()), error -> showError(error.getMessage())));
 
     }
 

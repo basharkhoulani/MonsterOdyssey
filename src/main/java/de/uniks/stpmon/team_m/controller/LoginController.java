@@ -154,6 +154,6 @@ public class LoginController extends Controller {
 
     public void userStatusUpdate(String status) {
         disposables.add(usersService.updateUser(null, status, null, null, null)
-                .observeOn(FX_SCHEDULER).subscribe(user -> userStorage.setStatus(user.status()), error -> {}));
+                .observeOn(FX_SCHEDULER).subscribe(user -> userStorage.setStatus(user.status()), error -> errorHandle(error.getMessage())));
     }
 }

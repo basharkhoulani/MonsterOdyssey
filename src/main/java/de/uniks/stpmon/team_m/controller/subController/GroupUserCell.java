@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.utils.FriendListUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -78,7 +79,7 @@ public class GroupUserCell extends UserCell {
 
     private void addUserAndSort(ListView<User> listView, User item) {
         listView.getItems().add(item);
-        listView.getItems().sort(Controller::sortByOnline);
+        listView.getItems().sort(FriendListUtils::sortByOnline);
     }
 
 }

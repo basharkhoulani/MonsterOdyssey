@@ -6,6 +6,7 @@ import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
 import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.utils.FriendListUtils;
 import impl.org.controlsfx.skin.AutoCompletePopup;
 import impl.org.controlsfx.skin.AutoCompletePopupSkin;
 import javafx.collections.FXCollections;
@@ -122,8 +123,8 @@ public class GroupController extends Controller {
                 friendsListView.setItems(friends);
                 foreignListView.setItems(foreign);
 
-                sortListView(friendsListView);
-                sortListView(foreignListView);
+                FriendListUtils.sortListView(friendsListView);
+                FriendListUtils.sortListView(foreignListView);
             }));
         }));
     }
@@ -141,8 +142,8 @@ public class GroupController extends Controller {
 
                 friendsListView.setItems(friends);
 
-                sortListView(friendsListView);
-                sortListView(foreignListView);
+                FriendListUtils.sortListView(friendsListView);
+                FriendListUtils.sortListView(foreignListView);
             }));
         }
     }
@@ -182,26 +183,11 @@ public class GroupController extends Controller {
         if (result.isPresent() && result.get() == ButtonType.YES) {
             disposables.add(groupService.delete(groupStorageProvider.get().get_id())
                     .observeOn(FX_SCHEDULER)
-                    .subscribe(deleted -> app.show(messagesControllerProvider.get()),
-                            error -> errorAlert(error.getMessage(), alert)));
+                    .subscribe(deleted -> app.show(messagesControllerProvider.get()), error -> showError(error.getMessage())));
         } else {
             alert.close();
         }
     }
-
-    private void errorAlert(String error, Alert alert) {
-        if (error.equals(HTTP_403)) {
-            alert.setContentText(DELETE_ERROR_403);
-        } else {
-            alert.setContentText(GENERIC_ERROR);
-        }
-        alert.setTitle(ERROR);
-        alert.getButtonTypes().remove(ButtonType.NO);
-        alert.getButtonTypes().remove(ButtonType.YES);
-        alert.getButtonTypes().add(ButtonType.OK);
-        alert.showAndWait();
-    }
-
 
     public void saveGroup() {
         final String groupId = groupStorageProvider.get().get_id();
@@ -221,7 +207,7 @@ public class GroupController extends Controller {
                     groupStorageProvider.get().setName(group.name());
                     groupStorageProvider.get().setMembers(group.members());
                     app.show(messagesControllerProvider.get());
-                }, error -> errorMessage.setText(error.getMessage())));
+                }, error -> showError(error.getMessage())));
     }
 
     private void createGroup() {
@@ -234,7 +220,7 @@ public class GroupController extends Controller {
                     groupStorageProvider.get().setName(group.name());
                     groupStorageProvider.get().setMembers(group.members());
                     app.show(messagesControllerProvider.get());
-                }, error -> errorMessage.setText(error.getMessage())));
+                }, error -> showError(error.getMessage())));
     }
 
     public void searchForGroupMembers() {
