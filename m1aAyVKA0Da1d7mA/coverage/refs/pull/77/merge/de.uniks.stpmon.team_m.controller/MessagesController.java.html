@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MessagesController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller</a> &gt; <span class="el_source">MessagesController.java</span></div><h1>MessagesController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller;
+
+import de.uniks.stpmon.team_m.controller.subController.GroupCell;
+import de.uniks.stpmon.team_m.controller.subController.MessagesBoxController;
+import de.uniks.stpmon.team_m.controller.subController.UserCell;
+import de.uniks.stpmon.team_m.dto.Group;
+import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.utils.FriendListUtils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.prefs.Preferences;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+
+public class MessagesController extends Controller {
+
+    @FXML
+    public Text currentFriendOrGroupText; //needs to be set each time a different chat is selected
+    @FXML
+    public Label friendsAndGroupText;
+    @FXML
+    public VBox friendsListViewVBox;
+    @FXML
+    public VBox groupsListViewVBox;
+    @FXML
+    public Button findNewFriendsButton;
+    @FXML
+    public Button newGroupButton;
+    @FXML
+    public Button mainMenuButton;
+    @FXML
+    public Button settingsButton;
+    @FXML
+    public TextArea messageTextArea;
+    @FXML
+    public Button sendButton;
+    @FXML
+    public VBox chatViewVBox;
+    @FXML
+    public ScrollPane chatScrollPane;
+    @Inject
+    Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
+    @Inject
+    Provider&lt;NewFriendController&gt; newFriendControllerProvider;
+    @Inject
+    Provider&lt;GroupController&gt; groupControllerProvider;
+    @Inject
+    Provider&lt;UserStorage&gt; userStorageProvider;
+    @Inject
+    Provider&lt;GroupStorage&gt; groupStorageProvider;
+    @Inject
+    UsersService usersService;
+    @Inject
+    MessageService messageService;
+    @Inject
+    GroupService groupService;
+    @Inject
+    Preferences preferences;
+<span class="fc" id="L74">    private final ObservableList&lt;User&gt; friends = FXCollections.observableArrayList();</span>
+<span class="fc" id="L75">    private final ObservableList&lt;Group&gt; groups = FXCollections.observableArrayList();</span>
+<span class="fc" id="L76">    private final ObservableList&lt;Group&gt; groupsToAdd = FXCollections.observableArrayList();</span>
+    private ListView&lt;User&gt; userListView;
+    private ListView&lt;Group&gt; groupListView;
+<span class="fc" id="L79">    private final List&lt;Controller&gt; subControllers = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L80">    Map&lt;User, MessagesBoxController&gt; messagesBoxControllerUserMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L81">    Map&lt;Group, MessagesBoxController&gt; messagesBoxControllerGroupMap = new HashMap&lt;&gt;();</span>
+    private List&lt;User&gt; allUsers;
+
+    @Inject
+<span class="fc" id="L85">    public MessagesController() {</span>
+<span class="fc" id="L86">    }</span>
+
+    @Override
+    public void init() {
+<span class="fc" id="L90">        userListView = new ListView&lt;&gt;(friends);</span>
+<span class="fc" id="L91">        userListView.setId(&quot;friends&quot;);</span>
+<span class="fc" id="L92">        userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));</span>
+<span class="fc" id="L93">        userListView.setCellFactory(param -&gt; new UserCell(preferences));</span>
+
+<span class="fc" id="L95">        listenToUserUpdate(friends, userListView);</span>
+<span class="fc" id="L96">        groupListView = new ListView&lt;&gt;(groups);</span>
+<span class="fc" id="L97">        groupListView.setId(&quot;groups&quot;);</span>
+<span class="fc" id="L98">        groupListView.setCellFactory(param -&gt; new GroupCell());</span>
+<span class="fc" id="L99">        groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));</span>
+<span class="fc" id="L100">        listenToGroupChanges();</span>
+<span class="fc" id="L101">        disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L102">                .subscribe(users -&gt; {</span>
+<span class="fc" id="L103">                    allUsers = users;</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">                    if (!userStorageProvider.get().getFriends().isEmpty()) {</span>
+<span class="fc" id="L105">                        disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L106">                                .subscribe(friends -&gt; {</span>
+<span class="fc" id="L107">                                    this.friends.setAll(friends);</span>
+<span class="fc" id="L108">                                    FriendListUtils.sortListView(userListView);</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">                                    for (User user : friends) {</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">                                        if (user._id().equals(groupStorageProvider.get().get_id())) {</span>
+<span class="nc" id="L111">                                            openPrivateChat(user);</span>
+<span class="nc" id="L112">                                            currentFriendOrGroupText.setText(user.name());</span>
+                                        }
+<span class="fc" id="L114">                                    }</span>
+<span class="pc" id="L115">                                }, error -&gt; showError(error.getMessage())));</span>
+                    }
+
+<span class="fc" id="L118">                    disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -&gt; groups.stream().filter(this::groupFilter).forEach(group -&gt; {</span>
+<span class="pc bpc" id="L119" title="2 of 4 branches missed.">                        if (group.members().size() == 2 &amp;&amp; group.name() == null) {</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">                            for (String id : group.members()) {</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">                                if (!id.equals(userStorageProvider.get().get_id())) {</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">                                    for (User user : allUsers) {</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">                                        if (user._id().equals(id)) {</span>
+<span class="nc" id="L124">                                            this.groups.add(new Group(group._id(), user.name(), group.members()));</span>
+                                        }
+<span class="nc" id="L126">                                    }</span>
+                                }
+<span class="nc" id="L128">                            }</span>
+<span class="pc bpc" id="L129" title="3 of 4 branches missed.">                        } else if (group.members().size() == 1 &amp;&amp; group.name() == null) {</span>
+<span class="nc" id="L130">                            this.groups.add(new Group(group._id(), ALONE, group.members()));</span>
+                        } else {
+<span class="fc" id="L132">                            this.groups.add(group);</span>
+                        }
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">                        if (group._id().equals(groupStorageProvider.get().get_id())) {</span>
+<span class="nc" id="L135">                            openGroupChat(group);</span>
+<span class="nc" id="L136">                            currentFriendOrGroupText.setText(groupStorageProvider.get().getName());</span>
+                        }
+<span class="pc" id="L138">                    }), error -&gt; showError(error.getMessage())));</span>
+<span class="pc" id="L139">                }, error -&gt; showError(error.getMessage())));</span>
+
+<span class="fc" id="L141">    }</span>
+
+    private boolean groupFilter(Group group) {
+<span class="pc bpc" id="L144" title="2 of 4 branches missed.">        if (group.members().size() == 2 &amp;&amp; group.name() == null) {</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">            for (String id : userStorageProvider.get().getFriends()) {</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">                if (group.members().contains(id)) {</span>
+<span class="nc" id="L147">                    return false;</span>
+                }
+<span class="nc" id="L149">            }</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">            for (String id : group.members()) {</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">                if (!id.equals(userStorageProvider.get().get_id())) {</span>
+<span class="nc" id="L152">                    return true;</span>
+                }
+<span class="nc" id="L154">            }</span>
+<span class="pc bpc" id="L155" title="3 of 4 branches missed.">        } else if (group.members().size() == 1 &amp;&amp; group.name() == null) {</span>
+<span class="nc" id="L156">            return true;</span>
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">        } else return group.name() != null;</span>
+<span class="nc" id="L158">        return false;</span>
+    }
+
+    @Override
+    public String getTitle() {
+<span class="fc" id="L163">        return MESSAGES_TITLE;</span>
+    }
+
+    @Override
+    public Parent render() {
+<span class="fc" id="L168">        Parent parent = super.render();</span>
+<span class="fc" id="L169">        settingsButton.setVisible(false);</span>
+<span class="fc" id="L170">        friendsListViewVBox.getChildren().add(userListView);</span>
+<span class="fc" id="L171">        groupsListViewVBox.getChildren().add(groupListView);</span>
+<span class="fc" id="L172">        messageTextArea.addEventHandler(KeyEvent.KEY_PRESSED, event -&gt; {</span>
+<span class="nc bnc" id="L173" title="All 4 branches missed.">            if (event.getCode() == KeyCode.ENTER &amp;&amp; !event.isShiftDown()) {</span>
+<span class="nc" id="L174">                event.consume();</span>
+<span class="nc" id="L175">                this.onSendMessage();</span>
+            }
+<span class="nc" id="L177">        });</span>
+<span class="fc" id="L178">        userListView.setOnMouseClicked(event -&gt; {</span>
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">            if (!(userListView.getSelectionModel().getSelectedItem() == null)) {</span>
+<span class="fc" id="L180">                settingsButton.setVisible(false);</span>
+<span class="fc" id="L181">                openPrivateChat(userListView.getSelectionModel().getSelectedItem());</span>
+<span class="fc" id="L182">                currentFriendOrGroupText.setText(userListView.getSelectionModel().getSelectedItem().name());</span>
+            }
+<span class="fc" id="L184">        });</span>
+
+<span class="fc" id="L186">        groupListView.setOnMouseClicked(event -&gt; {</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">            if (!(groupListView.getSelectionModel().getSelectedItem() == null)) {</span>
+<span class="nc" id="L188">                settingsButton.setVisible(true);</span>
+<span class="nc" id="L189">                openGroupChat(groupListView.getSelectionModel().getSelectedItem());</span>
+<span class="nc" id="L190">                currentFriendOrGroupText.setText(groupListView.getSelectionModel().getSelectedItem().name());</span>
+            }
+<span class="nc" id="L192">        });</span>
+
+<span class="fc bfc" id="L194" title="All 2 branches covered.">        if (groupStorageProvider.get().get_id() != null) {</span>
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">            for (User user : friends) {</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">                if (user._id().equals(groupStorageProvider.get().get_id())) {</span>
+<span class="nc" id="L197">                    openPrivateChat(user);</span>
+                }
+<span class="nc" id="L199">            }</span>
+<span class="pc bpc" id="L200" title="1 of 2 branches missed.">            for (Group group : groupsToAdd) {</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">                if (group._id().equals(groupStorageProvider.get().get_id())) {</span>
+<span class="nc" id="L202">                    openGroupChat(group);</span>
+                }
+<span class="nc" id="L204">            }</span>
+        }
+<span class="fc" id="L206">        return parent;</span>
+
+    }
+
+    @Override
+    public void destroy() {
+<span class="fc" id="L212">        super.destroy();</span>
+<span class="fc" id="L213">        subControllers.forEach(Controller::destroy);</span>
+<span class="fc" id="L214">        subControllers.clear();</span>
+<span class="fc" id="L215">        messagesBoxControllerUserMap.clear();</span>
+<span class="fc" id="L216">        messagesBoxControllerGroupMap.clear();</span>
+<span class="fc" id="L217">    }</span>
+
+    public void openPrivateChat(User user) {
+        try {
+<span class="nc" id="L221">            chatScrollPane.setContent(messagesBoxControllerUserMap.get(user).render());</span>
+<span class="fc" id="L222">        } catch (Exception ignored) {</span>
+<span class="fc" id="L223">            MessagesBoxController messagesBoxController = new MessagesBoxController(</span>
+                    messageService,
+                    groupService,
+                    eventListenerProvider,
+<span class="fc" id="L227">                    groupStorageProvider.get(),</span>
+<span class="fc" id="L228">                    userStorageProvider.get(),</span>
+                    allUsers,
+                    user,
+                    null
+            );
+<span class="fc" id="L233">            messagesBoxController.init();</span>
+<span class="fc" id="L234">            messagesBoxControllerUserMap.put(user, messagesBoxController);</span>
+<span class="fc" id="L235">            subControllers.add(messagesBoxController);</span>
+<span class="fc" id="L236">            chatScrollPane.setContent(messagesBoxControllerUserMap.get(user).render());</span>
+<span class="nc" id="L237">        }</span>
+<span class="fc" id="L238">    }</span>
+
+    public void openGroupChat(Group group) {
+        try {
+<span class="nc" id="L242">            chatScrollPane.setContent(messagesBoxControllerGroupMap.get(group).render());</span>
+<span class="nc" id="L243">        } catch (Exception ignored) {</span>
+<span class="nc" id="L244">            MessagesBoxController messagesBoxController = new MessagesBoxController(</span>
+                    messageService,
+                    groupService,
+                    eventListenerProvider,
+<span class="nc" id="L248">                    groupStorageProvider.get(),</span>
+<span class="nc" id="L249">                    userStorageProvider.get(),</span>
+                    allUsers,
+                    null,
+                    group
+            );
+<span class="nc" id="L254">            messagesBoxController.init();</span>
+<span class="nc" id="L255">            messagesBoxControllerGroupMap.put(group, messagesBoxController);</span>
+<span class="nc" id="L256">            subControllers.add(messagesBoxController);</span>
+<span class="nc" id="L257">            chatScrollPane.setContent(messagesBoxControllerGroupMap.get(group).render());</span>
+<span class="nc" id="L258">        }</span>
+<span class="nc" id="L259">    }</span>
+
+    public void changeToMainMenu() {
+<span class="fc" id="L262">        destroy();</span>
+<span class="fc" id="L263">        app.show(mainMenuControllerProvider.get());</span>
+<span class="fc" id="L264">    }</span>
+
+    public void changeToFindNewFriends() {
+<span class="fc" id="L267">        destroy();</span>
+<span class="fc" id="L268">        app.show(newFriendControllerProvider.get());</span>
+<span class="fc" id="L269">    }</span>
+
+    public void changeToNewGroup() {
+<span class="fc" id="L272">        groupStorageProvider.get().set_id(EMPTY_STRING);</span>
+<span class="fc" id="L273">        destroy();</span>
+<span class="fc" id="L274">        app.show(groupControllerProvider.get());</span>
+<span class="fc" id="L275">    }</span>
+
+    public void changeToSettings() {
+<span class="nc bnc" id="L278" title="All 2 branches missed.">        if (groupListView.getSelectionModel().getSelectedItem() != null) {</span>
+<span class="nc" id="L279">            groupStorageProvider.get().set_id(groupListView.getSelectionModel().getSelectedItem()._id());</span>
+<span class="nc" id="L280">            destroy();</span>
+<span class="nc" id="L281">            app.show(groupControllerProvider.get());</span>
+        }
+<span class="nc" id="L283">    }</span>
+
+    public void onSendMessage() {
+<span class="nc" id="L286">        String groupID = groupStorageProvider.get().get_id();</span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">        if (groupID == null) {</span>
+<span class="nc" id="L288">            return;</span>
+        }
+
+<span class="nc" id="L291">        String messageBody = messageTextArea.getText();</span>
+<span class="nc" id="L292">        disposables.add(messageService.newMessage(groupID, messageBody, MESSAGE_NAMESPACE_GROUPS)</span>
+<span class="nc" id="L293">                .observeOn(FX_SCHEDULER).subscribe(</span>
+                        message -&gt; {
+<span class="nc" id="L295">                        }, Throwable::printStackTrace</span>
+                ));
+<span class="nc" id="L297">        messageTextArea.setText(&quot;&quot;);</span>
+<span class="nc" id="L298">    }</span>
+
+    public void listenToGroupChanges() {
+<span class="fc" id="L301">        disposables.add(eventListenerProvider.get().listen(&quot;groups.*.*&quot;, Group.class).observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L302">                .subscribe(groupEvent -&gt; {</span>
+<span class="nc" id="L303">                    final Group group = groupEvent.data();</span>
+<span class="nc bnc" id="L304" title="All 4 branches missed.">                    switch (groupEvent.suffix()) {</span>
+<span class="nc" id="L305">                        case &quot;created&quot; -&gt; groups.add(group);</span>
+<span class="nc" id="L306">                        case &quot;updated&quot; -&gt; updateGroup(group);</span>
+<span class="nc" id="L307">                        case &quot;deleted&quot; -&gt; groups.removeIf(g -&gt; g._id().equals(group._id()));</span>
+                    }
+<span class="nc" id="L309">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L310">    }</span>
+
+    private void updateGroup(Group group) {
+<span class="nc" id="L313">        Group groupToUpdate = groups.stream()</span>
+<span class="nc" id="L314">                .filter(g -&gt; g._id().equals(group._id()))</span>
+<span class="nc" id="L315">                .findFirst()</span>
+<span class="nc" id="L316">                .orElse(null);</span>
+<span class="nc bnc" id="L317" title="All 2 branches missed.">        if (groupToUpdate != null) {</span>
+<span class="nc" id="L318">            groupListView.getItems().set(groupListView.getItems().indexOf(groupToUpdate), group);</span>
+        } else {
+<span class="nc" id="L320">            groups.remove(group);</span>
+        }
+<span class="nc" id="L322">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
