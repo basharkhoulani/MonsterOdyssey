@@ -72,4 +72,10 @@ public class HttpModule {
     RegionsApiService regions(Retrofit retrofit) {
         return retrofit.create(RegionsApiService.class);
     }
+
+    @Provides
+    @Singleton
+    AreasApiService areas(Retrofit retrofit) {
+        return retrofit.create(AreasApiService.class);
+    }
 }
