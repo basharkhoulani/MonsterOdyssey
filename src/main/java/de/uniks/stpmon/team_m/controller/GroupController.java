@@ -90,7 +90,7 @@ public class GroupController extends Controller {
         foreignListView.setId("foreignListView");
         foreignListView.setPlaceholder(new Label(NO_USERS_ADDED_TO_GROUP));
 
-        listenToStatusUpdate(friends, friendsListView);
+        listenToUserUpdate(friends, friendsListView);
 
         if (groupId.equals(EMPTY_STRING)) {
             initNewGroupView();

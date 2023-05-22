@@ -84,7 +84,7 @@ public class MainMenuController extends Controller {
                         friends.setAll(users);
                         FriendListUtils.sortListView(friendsListView);
                     }, error -> showError(error.getMessage())));
-            listenToStatusUpdate(friends, friendsListView);
+            listenToUserUpdate(friends, friendsListView);
         }
     }
 

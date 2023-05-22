@@ -92,7 +92,7 @@ public class MessagesController extends Controller {
         userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
         userListView.setCellFactory(param -> new UserCell(preferences));
 
-        listenToStatusUpdate(friends, userListView);
+        listenToUserUpdate(friends, userListView);
         groupListView = new ListView<>(groups);
         groupListView.setId("groups");
         groupListView.setCellFactory(param -> new GroupCell());

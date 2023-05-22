@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.dto.Event;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.utils.FriendListUtils;
 import de.uniks.stpmon.team_m.ws.EventListener;
@@ -64,19 +65,26 @@ public abstract class Controller {
         return STANDARD_WIDTH != app.getStage().getWidth() ? (int) app.getStage().getWidth() : STANDARD_WIDTH;
     }
 
-    public void listenToStatusUpdate(ObservableList<User> friends, ListView<User> friendsListView) {
-        disposables.add(eventListenerProvider.get().listen("users.*.updated", User.class).observeOn(FX_SCHEDULER)
-                .subscribe(user -> {
-                    User userToUpdate = friends.stream()
-                            .filter(friend -> friend._id().equals(user.data()._id()))
-                            .findFirst()
-                            .orElse(null);
-                    if (userToUpdate != null) {
-                        friends.set(friends.indexOf(userToUpdate), user.data());
-                        FriendListUtils.sortListView(friendsListView);
-                        friendsListView.refresh();
+    public void listenToUserUpdate(ObservableList<User> friends, ListView<User> friendsListView) {
+        disposables.add(eventListenerProvider.get().listen("users.*.*", User.class).observeOn(FX_SCHEDULER)
+                .subscribe(event -> {
+                    final User user = event.data();
+                    switch (event.suffix()) {
+                        case "updated" -> updateUser(friends, friendsListView, event);
+                        case "deleted" -> friends.remove(user);
                     }
                 }));
+    }
+
+    private void updateUser(ObservableList<User> friends, ListView<User> friendsListView, Event<User> user) {
+        User userToUpdate = friends.stream()
+                .filter(friend -> friend._id().equals(user.data()._id()))
+                .findFirst()
+                .orElse(null);
+        if (userToUpdate != null) {
+            friends.set(friends.indexOf(userToUpdate), user.data());
+            FriendListUtils.sortListView(friendsListView);
+        }
     }
 
     public void showError(String error) {
