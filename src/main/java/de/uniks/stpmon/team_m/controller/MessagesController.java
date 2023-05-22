@@ -238,6 +238,9 @@ public class MessagesController extends Controller {
     }
 
     public void openGroupChat(Group group) {
+        groupStorageProvider.get().set_id(group._id());
+        groupStorageProvider.get().setName(group.name());
+        groupStorageProvider.get().setMembers(group.members());
         try {
             chatScrollPane.setContent(messagesBoxControllerGroupMap.get(group).render());
         } catch (Exception ignored) {

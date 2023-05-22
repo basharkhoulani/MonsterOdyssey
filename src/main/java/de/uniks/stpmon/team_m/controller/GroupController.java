@@ -1,7 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.GroupUserCell;
-import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
@@ -66,7 +65,6 @@ public class GroupController extends Controller {
     private final ObservableList<User> foreign = FXCollections.observableArrayList();
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
     private final ObservableList<User> newGroupMembers = FXCollections.observableArrayList();
-    private Group group;
 
     @Inject
     public GroupController() {
@@ -80,41 +78,36 @@ public class GroupController extends Controller {
     @Override
     public void init() {
         final String groupId = groupStorageProvider.get().get_id();
-        friendsListView = new ListView<>();
+        friendsListView = new ListView<>(friends);
         friendsListView.setSelectionModel(null);
         friendsListView.setFocusModel(null);
         friendsListView.setId("friendsListView");
         friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
         friendsListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
                 foreignListView, friends));
-        friendsListView.setItems(friends);
 
-        foreignListView = new ListView<>();
+        foreignListView = new ListView<>(foreign);
         foreignListView.setSelectionModel(null);
         foreignListView.setFocusModel(null);
         foreignListView.setId("foreignListView");
         foreignListView.setPlaceholder(new Label(NO_USERS_ADDED_TO_GROUP));
         foreignListView.setCellFactory(friendsListView.getCellFactory());
-        foreignListView.setItems(foreign);
 
         listenToUserUpdate(friends, friendsListView);
 
         if (groupId.equals(EMPTY_STRING)) {
             initNewGroupView();
         } else {
-            initEditGroupView(groupId);
+            initEditGroupView();
         }
     }
 
-    private void initEditGroupView(String groupId) {
-        groupService.getGroup(groupId)
-                .doOnNext(group -> this.group = group)
-                .flatMap(group -> usersService.getUsers(group.members(), null))
+    private void initEditGroupView() {
+        disposables.add(usersService.getUsers(groupStorageProvider.get().getMembers(), null)
                 .doOnNext(newGroupMembers::setAll)
                 .flatMap(users -> usersService.getUsers(userStorage.get().getFriends(), null))
                 .doOnNext(this::sortGroupMembersIntoLists)
-                .subscribe(event -> {}, error -> showError(error.getMessage()))
-                .dispose();
+                .subscribe(event -> {}, error -> showError(error.getMessage())));
     }
 
     private void sortGroupMembersIntoLists(List<User> friends) {
@@ -158,7 +151,7 @@ public class GroupController extends Controller {
     private void editGroup() {
         TITLE = EDIT_GROUP_TITLE;
         groupNameInput.setPromptText(CHANGE_GROUP);
-        groupNameInput.setText(group.name());
+        groupNameInput.setText(groupStorageProvider.get().getName());
     }
 
     public void changeToMessages() {
