@@ -59,10 +59,10 @@ public class GroupController extends Controller {
     Provider<UserStorage> userStorage;
     @Inject
     Preferences preferences;
-    private final ObservableList<User> friends = FXCollections.observableArrayList();
-    private final ObservableList<User> foreign = FXCollections.observableArrayList();
     private ListView<User> friendsListView;
     private ListView<User> foreignListView;
+    private final ObservableList<User> friends = FXCollections.observableArrayList();
+    private final ObservableList<User> foreign = FXCollections.observableArrayList();
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
     private final ObservableList<User> newGroupMembers = FXCollections.observableArrayList();
 
@@ -111,7 +111,7 @@ public class GroupController extends Controller {
                 .doOnNext(newGroupMembers::setAll)
                 .flatMap(users -> usersService.getUsers(userStorage.get().getFriends(), null))
                 .doOnNext(this::sortGroupMembersIntoLists)
-                .subscribe());
+                .subscribe(event -> {}, error -> showError(error.getMessage())));
     }
 
     private void sortGroupMembersIntoLists(List<User> friends) {
@@ -130,7 +130,7 @@ public class GroupController extends Controller {
             disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
                 friends.setAll(users);
                 FriendListUtils.sortListView(friendsListView);
-            }));
+            }, error -> showError(error.getMessage())));
         }
     }
 
