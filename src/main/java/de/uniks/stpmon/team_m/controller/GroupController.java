@@ -113,7 +113,7 @@ public class GroupController extends Controller {
                 .doOnNext(newGroupMembers::setAll)
                 .flatMap(users -> usersService.getUsers(userStorage.get().getFriends(), null))
                 .doOnNext(this::sortGroupMembersIntoLists)
-                .subscribe(event -> {})
+                .subscribe(event -> {}, error -> showError(error.getMessage()))
                 .dispose();
     }
 
@@ -197,7 +197,7 @@ public class GroupController extends Controller {
                     groupStorageProvider.get().setName(group.name());
                     groupStorageProvider.get().setMembers(group.members());
                     app.show(messagesControllerProvider.get());
-                }));
+                }, error -> showError(error.getMessage())));
     }
 
     private void createGroup() {
