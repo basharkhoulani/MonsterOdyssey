@@ -72,5 +72,11 @@ import javax.inject.Singleton;
     RegionsApiService regions(Retrofit retrofit) {
 <span class="nc" id="L73">        return retrofit.create(RegionsApiService.class);</span>
     }
+
+    @Provides
+    @Singleton
+    TrainersApiService trainers(Retrofit retrofit) {
+<span class="nc" id="L79">        return retrofit.create(TrainersApiService.class);</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
