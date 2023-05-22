@@ -57,11 +57,10 @@ class EditGroupControllerTest extends ApplicationTest {
         Mockito.when(eventListenerProvider.get()).thenReturn(mock(EventListener.class));
         Mockito.when(eventListenerProvider.get().listen(any(), any())).thenReturn(Observable.empty());
         Mockito.when(userStorageProvider.get()).thenReturn(mock(UserStorage.class));
-        when(groupService.getGroup(any())).thenReturn(Observable.just(
-                new Group("645f8d731c386bcd2204da39", "TestGroup", List.of("645e86427a1d4677f60df159", "645e86668b3e7de4bbd8a97f"))));
         when(usersService.getUsers(any(), any())).thenReturn(Observable.just(List.of(
                 new User("645e86427a1d4677f60df159", "Friend", "online", null, List.of("645e86668b3e7de4bbd8a97f", "645e866b602ff2930dfbf7ce")),
                 new User("645e86668b3e7de4bbd8a97f", "LOL", "online", null, List.of("645e866b602ff2930dfbf7ce")))));
+        when(groupStorageProvider.get().getName()).thenReturn("TestGroup");
 
         app.start(stage);
         app.show(groupController);
