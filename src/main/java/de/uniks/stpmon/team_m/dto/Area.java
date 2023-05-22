@@ -1,12 +1,13 @@
 package de.uniks.stpmon.team_m.dto;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import org.mapeditor.core.Map;
 
 public record Area(
         String createdAt,
         String updatedAt,
         String _id,
         String region,
-        String name
+        String name,
+        Map map
 ) {
 }

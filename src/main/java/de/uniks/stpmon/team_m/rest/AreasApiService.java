@@ -11,4 +11,6 @@ public interface AreasApiService {
     @GET("regions/{region}/areas")
     Observable<List<Area>> getAreas(@Path("region") String region);
 
+    @GET("regions/{region}/areas/{id}")
+    Observable<Area> getArea(@Path("region") String region, @Path("id") String _id);
 }
