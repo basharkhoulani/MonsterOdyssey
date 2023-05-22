@@ -26,7 +26,7 @@ public abstract class Controller {
     @Inject
     protected App app;
     @Inject
-    Provider<EventListener> eventListener;
+    Provider<EventListener> eventListenerProvider;
     protected final CompositeDisposable disposables = new CompositeDisposable();
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
 
@@ -65,7 +65,7 @@ public abstract class Controller {
     }
 
     public void listenToStatusUpdate(ObservableList<User> friends, ListView<User> friendsListView) {
-        disposables.add(eventListener.get().listen("users.*.updated", User.class).observeOn(FX_SCHEDULER)
+        disposables.add(eventListenerProvider.get().listen("users.*.updated", User.class).observeOn(FX_SCHEDULER)
                 .subscribe(user -> {
                     User userToUpdate = friends.stream()
                             .filter(friend -> friend._id().equals(user.data()._id()))

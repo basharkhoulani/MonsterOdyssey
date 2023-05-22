@@ -7,7 +7,6 @@ import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.FriendListUtils;
-import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -61,8 +60,6 @@ public class MessagesController extends Controller {
     @Inject
     Provider<GroupController> groupControllerProvider;
     @Inject
-    Provider<EventListener> eventListenerProvider;
-    @Inject
     Provider<UserStorage> userStorageProvider;
     @Inject
     Provider<GroupStorage> groupStorageProvider;
@@ -100,6 +97,7 @@ public class MessagesController extends Controller {
         groupListView.setId("groups");
         groupListView.setCellFactory(param -> new GroupCell());
         groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
+        listenToGroupChanges();
         disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER)
                 .subscribe(users -> {
                     allUsers = users;
@@ -297,6 +295,30 @@ public class MessagesController extends Controller {
                         }, Throwable::printStackTrace
                 ));
         messageTextArea.setText("");
+    }
+
+    public void listenToGroupChanges() {
+        disposables.add(eventListenerProvider.get().listen("groups.*.*", Group.class).observeOn(FX_SCHEDULER)
+                .subscribe(groupEvent -> {
+                    final Group group = groupEvent.data();
+                    switch (groupEvent.suffix()) {
+                        case "created" -> groups.add(group);
+                        case "updated" -> updateGroup(group);
+                        case "deleted" -> groups.removeIf(g -> g._id().equals(group._id()));
+                    }
+                }, error -> showError(error.getMessage())));
+    }
+
+    private void updateGroup(Group group) {
+        Group groupToUpdate = groups.stream()
+                .filter(g -> g._id().equals(group._id()))
+                .findFirst()
+                .orElse(null);
+        if (groupToUpdate != null) {
+            groupListView.getItems().set(groupListView.getItems().indexOf(groupToUpdate), group);
+        } else {
+            groups.remove(group);
+        }
     }
 
 }
