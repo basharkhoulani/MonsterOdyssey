@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.GroupUserCell;
+import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.GroupStorage;
@@ -65,6 +66,7 @@ public class GroupController extends Controller {
     private final ObservableList<User> foreign = FXCollections.observableArrayList();
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
     private final ObservableList<User> newGroupMembers = FXCollections.observableArrayList();
+    private Group group;
 
     @Inject
     public GroupController() {
@@ -105,13 +107,14 @@ public class GroupController extends Controller {
     }
 
     private void initEditGroupView(String groupId) {
-        disposables.add(groupService.getGroup(groupId)
-                .doOnNext(group -> groupNameInput.setText(group.name()))
+        groupService.getGroup(groupId)
+                .doOnNext(group -> this.group = group)
                 .flatMap(group -> usersService.getUsers(group.members(), null))
                 .doOnNext(newGroupMembers::setAll)
                 .flatMap(users -> usersService.getUsers(userStorage.get().getFriends(), null))
                 .doOnNext(this::sortGroupMembersIntoLists)
-                .subscribe(event -> {}, error -> showError(error.getMessage())));
+                .subscribe(event -> {})
+                .dispose();
     }
 
     private void sortGroupMembersIntoLists(List<User> friends) {
@@ -155,6 +158,7 @@ public class GroupController extends Controller {
     private void editGroup() {
         TITLE = EDIT_GROUP_TITLE;
         groupNameInput.setPromptText(CHANGE_GROUP);
+        groupNameInput.setText(group.name());
     }
 
     public void changeToMessages() {
@@ -193,7 +197,7 @@ public class GroupController extends Controller {
                     groupStorageProvider.get().setName(group.name());
                     groupStorageProvider.get().setMembers(group.members());
                     app.show(messagesControllerProvider.get());
-                }, error -> showError(error.getMessage())));
+                }));
     }
 
     private void createGroup() {
