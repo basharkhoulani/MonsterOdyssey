@@ -83,12 +83,17 @@ public class GroupController extends Controller {
         friendsListView.setFocusModel(null);
         friendsListView.setId("friendsListView");
         friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
+        friendsListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
+                foreignListView, friends));
+        friendsListView.setItems(friends);
 
         foreignListView = new ListView<>();
         foreignListView.setSelectionModel(null);
         foreignListView.setFocusModel(null);
         foreignListView.setId("foreignListView");
         foreignListView.setPlaceholder(new Label(NO_USERS_ADDED_TO_GROUP));
+        foreignListView.setCellFactory(friendsListView.getCellFactory());
+        foreignListView.setItems(foreign);
 
         listenToUserUpdate(friends, friendsListView);
 
@@ -100,33 +105,23 @@ public class GroupController extends Controller {
     }
 
     private void initEditGroupView(String groupId) {
-        disposables.add(groupService.getGroup(groupId).observeOn(FX_SCHEDULER).subscribe(group -> {
-            groupNameInput.setText(group.name());
-            final List<String> groupMembers = group.members();
-            final List<String> friendsByID = userStorage.get().getFriends();
-            disposables.add(usersService.getUsers(groupMembers, null).observeOn(FX_SCHEDULER).subscribe(users -> {
-                newGroupMembers.setAll(users);
-                for (User user : users) {
-                    if (user._id().equals(userStorage.get().get_id())) {
-                        continue;
-                    } else if (friendsByID.contains(user._id())) {
-                        friends.add(user);
-                    } else {
-                        foreign.add(user);
-                    }
-                }
-                friendsListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
-                        foreignListView, friends));
-                foreignListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
-                        foreignListView, friends));
+        disposables.add(groupService.getGroup(groupId)
+                .doOnNext(group -> groupNameInput.setText(group.name()))
+                .flatMap(group -> usersService.getUsers(group.members(), null))
+                .doOnNext(newGroupMembers::setAll)
+                .flatMap(users -> usersService.getUsers(userStorage.get().getFriends(), null))
+                .doOnNext(this::sortGroupMembersIntoLists)
+                .subscribe());
+    }
 
-                friendsListView.setItems(friends);
-                foreignListView.setItems(foreign);
-
-                FriendListUtils.sortListView(friendsListView);
-                FriendListUtils.sortListView(foreignListView);
-            }));
-        }));
+    private void sortGroupMembersIntoLists(List<User> friends) {
+        this.friends.setAll(friends);
+        final List<User> users = new ArrayList<>(newGroupMembers);
+        users.removeAll(this.friends);
+        foreign.setAll(users);
+        foreign.removeIf(user -> user._id().equals(userStorage.get().get_id()));
+        FriendListUtils.sortListView(foreignListView);
+        FriendListUtils.sortListView(friendsListView);
     }
 
     private void initNewGroupView() {
@@ -134,16 +129,7 @@ public class GroupController extends Controller {
         if (!friendsByID.isEmpty()) {
             disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
                 friends.setAll(users);
-
-                friendsListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
-                        foreignListView, friends));
-                foreignListView.setCellFactory(param -> new GroupUserCell(preferences,newGroupMembers, friendsListView,
-                        foreignListView, friends));
-
-                friendsListView.setItems(friends);
-
                 FriendListUtils.sortListView(friendsListView);
-                FriendListUtils.sortListView(foreignListView);
             }));
         }
     }
