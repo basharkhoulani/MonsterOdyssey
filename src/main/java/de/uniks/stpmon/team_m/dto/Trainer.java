@@ -4,6 +4,7 @@ public record Trainer(
         String createdAt,
         String updatedAt,
         String _id,
+        String region,
         String user,
         String name,
         String image,
