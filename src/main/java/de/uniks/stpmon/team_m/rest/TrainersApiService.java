@@ -13,7 +13,7 @@ public interface TrainersApiService {
     @GET("regions/{regionId}/trainers")
     Observable<List<Trainer>> getTrainers(@Path("regionId") String regionId, @Query("area") String area, @Query("user") String id);
     @GET("regions/{regionId}/trainers/{id}")
-    Observable<Trainer> getTrainer(@Path("regionId") String regionId, @Path("id") String id);
+    Observable<Trainer> getTrainer(@Path("regionId") String regionId, @Path("id") String _id);
     @DELETE("regions/{regionId}/trainers/{id}")
-    Observable<Trainer> deleteTrainer(@Path("regionId") String regionId, @Path("id") String id);
+    Observable<Trainer> deleteTrainer(@Path("regionId") String regionId, @Path("id") String _id);
 }
