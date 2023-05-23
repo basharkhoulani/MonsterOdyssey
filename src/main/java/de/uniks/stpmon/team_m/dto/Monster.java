@@ -1,6 +1,6 @@
 package de.uniks.stpmon.team_m.dto;
 
-import java.util.SortedMap;
+import java.util.LinkedHashMap;
 
 public record Monster(
         String createdAt,
@@ -10,7 +10,7 @@ public record Monster(
         int type,
         int level,
         int experience,
-        SortedMap<String, Integer> abilities,
+        LinkedHashMap<String, Integer> abilities,
         MonsterAttributes attributes,
         MonsterAttributes currentAttributes
 ) {
