@@ -4,7 +4,6 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
-import de.uniks.stpmon.team_m.utils.TokenStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -58,11 +57,9 @@ public class LoginController extends Controller {
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
+    Provider<UserStorage> userStorage;
+    @Inject
     AuthenticationService authenticationService;
-    @Inject
-    TokenStorage tokenStorage;
-    @Inject
-    UserStorage userStorage;
     @Inject
     UsersService usersService;
 
@@ -153,7 +150,9 @@ public class LoginController extends Controller {
     }
 
     public void userStatusUpdate(String status) {
-        disposables.add(usersService.updateUser(null, status, null, null, null)
-                .observeOn(FX_SCHEDULER).subscribe(user -> userStorage.setStatus(user.status()), error -> errorHandle(error.getMessage())));
+        if (userStorage.get().get_id() != null) {
+            disposables.add(usersService.updateUser(null, status, null, null, null)
+                    .observeOn(FX_SCHEDULER).subscribe(user -> userStorage.get().setStatus(user.status()), error -> errorHandle(error.getMessage())));
+        }
     }
 }
