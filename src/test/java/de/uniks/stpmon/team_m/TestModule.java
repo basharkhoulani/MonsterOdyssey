@@ -7,7 +7,7 @@ import dagger.Module;
 import dagger.Provides;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.rest.*;
-import de.uniks.stpmon.team_m.service.UserStorage;
+import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 

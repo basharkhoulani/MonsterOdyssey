@@ -1,17 +1,17 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.controlsfx.control.PopOver;
 
+import java.util.prefs.Preferences;
+
 import static de.uniks.stpmon.team_m.Constants.*;
 import static javafx.geometry.Pos.CENTER_RIGHT;
-
-import java.util.prefs.Preferences;
 
 
 public class MainMenuUserCell extends UserCell {

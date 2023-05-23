@@ -1,4 +1,4 @@
-package de.uniks.stpmon.team_m.service;
+package de.uniks.stpmon.team_m.utils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

@@ -1,4 +1,4 @@
-package de.uniks.stpmon.team_m.service;
+package de.uniks.stpmon.team_m.utils;
 
 import de.uniks.stpmon.team_m.dto.LoginResult;
 

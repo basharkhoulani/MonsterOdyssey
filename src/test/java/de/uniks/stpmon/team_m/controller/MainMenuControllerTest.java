@@ -2,11 +2,13 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
-import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
-import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.service.AuthenticationService;
+import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.utils.GroupStorage;
+import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.ListView;
@@ -53,8 +55,6 @@ class MainMenuControllerTest extends ApplicationTest {
     Provider<Preferences> preferencesProvider;
     @Mock
     Provider<GroupStorage> groupStorageProvider;
-    @Mock
-    Provider<GroupService> groupServiceProvider;
     @Spy
     App app = new App(null);
     @InjectMocks

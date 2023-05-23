@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.dto.CreateGroupDto;
 import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.UpdateGroupDto;
 import de.uniks.stpmon.team_m.rest.GroupsApiService;
+import de.uniks.stpmon.team_m.utils.GroupStorage;
 import io.reactivex.rxjava3.core.Observable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
