@@ -2,6 +2,7 @@
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.dto.Event;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.utils.FriendListUtils;
 import de.uniks.stpmon.team_m.ws.EventListener;
@@ -21,85 +22,92 @@ import java.io.IOException;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
-<span class="fc" id="L24">public abstract class Controller {</span>
+<span class="fc" id="L25">public abstract class Controller {</span>
 
     @Inject
     protected App app;
     @Inject
-    Provider&lt;EventListener&gt; eventListener;
-<span class="fc" id="L30">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
-<span class="fc" id="L31">    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);</span>
+    Provider&lt;EventListener&gt; eventListenerProvider;
+<span class="fc" id="L31">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
+<span class="fc" id="L32">    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);</span>
 
     public void init() {
-<span class="fc" id="L34">    }</span>
+<span class="fc" id="L35">    }</span>
 
     public String getTitle() {
-<span class="nc" id="L37">        return EMPTY_STRING;</span>
+<span class="nc" id="L38">        return EMPTY_STRING;</span>
     }
 
     public void destroy() {
-<span class="fc" id="L41">        disposables.dispose();</span>
-<span class="fc" id="L42">    }</span>
+<span class="fc" id="L42">        disposables.dispose();</span>
+<span class="fc" id="L43">    }</span>
 
     public Parent render() {
-<span class="fc" id="L45">        return load(getClass().getSimpleName().replace(&quot;Controller&quot;, &quot;&quot;));</span>
+<span class="fc" id="L46">        return load(getClass().getSimpleName().replace(&quot;Controller&quot;, &quot;&quot;));</span>
     }
 
     protected Parent load(String view) {
-<span class="fc" id="L49">        final FXMLLoader loader = new FXMLLoader((Main.class.getResource(&quot;views/&quot; + view + &quot;.fxml&quot;)));</span>
-<span class="fc" id="L50">        loader.setControllerFactory(c -&gt; this);</span>
+<span class="fc" id="L50">        final FXMLLoader loader = new FXMLLoader((Main.class.getResource(&quot;views/&quot; + view + &quot;.fxml&quot;)));</span>
+<span class="fc" id="L51">        loader.setControllerFactory(c -&gt; this);</span>
         // loader.setResources(resources);
         try {
-<span class="fc" id="L53">            return loader.load();</span>
-<span class="nc" id="L54">        } catch (IOException exception) {</span>
-<span class="nc" id="L55">            throw new RuntimeException(exception);</span>
+<span class="fc" id="L54">            return loader.load();</span>
+<span class="nc" id="L55">        } catch (IOException exception) {</span>
+<span class="nc" id="L56">            throw new RuntimeException(exception);</span>
         }
     }
 
     public int getHeight() {
-<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        return STANDARD_HEIGHT != app.getStage().getHeight() ? (int) app.getStage().getHeight() : STANDARD_HEIGHT;</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        return STANDARD_HEIGHT != app.getStage().getHeight() ? (int) app.getStage().getHeight() : STANDARD_HEIGHT;</span>
     }
 
     public int getWidth() {
-<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        return STANDARD_WIDTH != app.getStage().getWidth() ? (int) app.getStage().getWidth() : STANDARD_WIDTH;</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        return STANDARD_WIDTH != app.getStage().getWidth() ? (int) app.getStage().getWidth() : STANDARD_WIDTH;</span>
     }
 
-    public void listenToStatusUpdate(ObservableList&lt;User&gt; friends, ListView&lt;User&gt; friendsListView) {
-<span class="fc" id="L68">        disposables.add(eventListener.get().listen(&quot;users.*.updated&quot;, User.class).observeOn(FX_SCHEDULER)</span>
-<span class="fc" id="L69">                .subscribe(user -&gt; {</span>
-<span class="nc" id="L70">                    User userToUpdate = friends.stream()</span>
-<span class="nc" id="L71">                            .filter(friend -&gt; friend._id().equals(user.data()._id()))</span>
-<span class="nc" id="L72">                            .findFirst()</span>
-<span class="nc" id="L73">                            .orElse(null);</span>
-<span class="nc bnc" id="L74" title="All 2 branches missed.">                    if (userToUpdate != null) {</span>
-<span class="nc" id="L75">                        friends.set(friends.indexOf(userToUpdate), user.data());</span>
-<span class="nc" id="L76">                        FriendListUtils.sortListView(friendsListView);</span>
-<span class="nc" id="L77">                        friendsListView.refresh();</span>
+    public void listenToUserUpdate(ObservableList&lt;User&gt; friends, ListView&lt;User&gt; friendsListView) {
+<span class="fc" id="L69">        disposables.add(eventListenerProvider.get().listen(&quot;users.*.*&quot;, User.class).observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L70">                .subscribe(event -&gt; {</span>
+<span class="nc" id="L71">                    final User user = event.data();</span>
+<span class="nc bnc" id="L72" title="All 3 branches missed.">                    switch (event.suffix()) {</span>
+<span class="nc" id="L73">                        case &quot;updated&quot; -&gt; updateUser(friends, friendsListView, event);</span>
+<span class="nc" id="L74">                        case &quot;deleted&quot; -&gt; friends.remove(user);</span>
                     }
-<span class="nc" id="L79">                }));</span>
-<span class="fc" id="L80">    }</span>
+<span class="nc" id="L76">                }));</span>
+<span class="fc" id="L77">    }</span>
+
+    private void updateUser(ObservableList&lt;User&gt; friends, ListView&lt;User&gt; friendsListView, Event&lt;User&gt; user) {
+<span class="nc" id="L80">        User userToUpdate = friends.stream()</span>
+<span class="nc" id="L81">                .filter(friend -&gt; friend._id().equals(user.data()._id()))</span>
+<span class="nc" id="L82">                .findFirst()</span>
+<span class="nc" id="L83">                .orElse(null);</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        if (userToUpdate != null) {</span>
+<span class="nc" id="L85">            friends.set(friends.indexOf(userToUpdate), user.data());</span>
+<span class="nc" id="L86">            FriendListUtils.sortListView(friendsListView);</span>
+        }
+<span class="nc" id="L88">    }</span>
 
     public void showError(String error) {
-<span class="fc" id="L83">        Alert alert = new Alert(Alert.AlertType.ERROR);</span>
-<span class="fc" id="L84">        alert.setTitle(ERROR);</span>
-<span class="fc" id="L85">        alert.setHeaderText(null);</span>
-<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        if (error.contains(HTTP_429)) {</span>
-<span class="nc" id="L87">            alert.setContentText(HTTP_429_MESSAGE);</span>
-<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        } else if (error.contains(HTTP_409)) {</span>
-<span class="nc" id="L89">            alert.setContentText(HTTP_409_MESSAGE);</span>
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        } else if (error.contains(HTTP_404)) {</span>
-<span class="nc" id="L91">            alert.setContentText(HTTP_404_MESSAGE);</span>
-<span class="fc bfc" id="L92" title="All 2 branches covered.">        } else if (error.contains(HTTP_403)) {</span>
-<span class="fc" id="L93">            alert.setContentText(HTTP_403_MESSAGE);</span>
-<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        } else if (error.contains(HTTP_401)) {</span>
-<span class="nc" id="L95">            alert.setContentText(HTTP_401_MESSAGE);</span>
-<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        } else if (error.contains(HTTP_400)) {</span>
-<span class="nc" id="L97">            alert.setContentText(HTTP_400_MESSAGE);</span>
+<span class="fc" id="L91">        Alert alert = new Alert(Alert.AlertType.ERROR);</span>
+<span class="fc" id="L92">        alert.setTitle(ERROR);</span>
+<span class="fc" id="L93">        alert.setHeaderText(null);</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (error.contains(HTTP_429)) {</span>
+<span class="nc" id="L95">            alert.setContentText(HTTP_429_MESSAGE);</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        } else if (error.contains(HTTP_409)) {</span>
+<span class="nc" id="L97">            alert.setContentText(HTTP_409_MESSAGE);</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">        } else if (error.contains(HTTP_404)) {</span>
+<span class="nc" id="L99">            alert.setContentText(HTTP_404_MESSAGE);</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        } else if (error.contains(HTTP_403)) {</span>
+<span class="fc" id="L101">            alert.setContentText(HTTP_403_MESSAGE);</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        } else if (error.contains(HTTP_401)) {</span>
+<span class="nc" id="L103">            alert.setContentText(HTTP_401_MESSAGE);</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        } else if (error.contains(HTTP_400)) {</span>
+<span class="nc" id="L105">            alert.setContentText(HTTP_400_MESSAGE);</span>
         } else {
-<span class="fc" id="L99">            alert.setContentText(GENERIC_ERROR);</span>
+<span class="fc" id="L107">            alert.setContentText(GENERIC_ERROR);</span>
         }
-<span class="fc" id="L101">        alert.showAndWait();</span>
-<span class="fc" id="L102">    }</span>
+<span class="fc" id="L109">        alert.showAndWait();</span>
+<span class="fc" id="L110">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
