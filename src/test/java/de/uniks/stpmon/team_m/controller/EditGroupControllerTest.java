@@ -33,37 +33,34 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class EditGroupControllerTest extends ApplicationTest {
     @Mock
-    GroupService groupService;
-    @Spy
-    App app = new App(null);
+    Provider<MessagesController> messagesControllerProvider;
     @Mock
     Provider<GroupStorage> groupStorageProvider;
-    @InjectMocks
-    GroupController groupController;
-    @Mock
-    Provider<MessagesController> messagesControllerProvider;
     @Mock
     Provider<EventListener> eventListenerProvider;
     @Mock
     Provider<UserStorage> userStorageProvider;
     @Mock
+    GroupService groupService;
+    @Mock
     UsersService usersService;
+    @Spy
+    App app = new App(null);
+    @InjectMocks
+    GroupController groupController;
 
     @Override
     public void start(Stage stage) {
         GroupStorage groupStorage = mock(GroupStorage.class);
-        Mockito.when(groupStorage.get_id()).thenReturn("645f8d731c386bcd2204da39");
         Mockito.when(groupStorageProvider.get()).thenReturn(groupStorage);
+        Mockito.when(groupStorageProvider.get().get_id()).thenReturn("645f8d731c386bcd2204da39");
         Mockito.when(eventListenerProvider.get()).thenReturn(mock(EventListener.class));
         Mockito.when(eventListenerProvider.get().listen(any(), any())).thenReturn(Observable.empty());
         Mockito.when(userStorageProvider.get()).thenReturn(mock(UserStorage.class));
-        when(groupService.getGroup(any())).thenReturn(Observable.just(new Group("645f8d731c386bcd2204da39",
-                "TestGroup", List.of("645e86427a1d4677f60df159", "645e86668b3e7de4bbd8a97f"))));
         when(usersService.getUsers(any(), any())).thenReturn(Observable.just(List.of(
-                new User("645e86427a1d4677f60df159", "Friend", "online",
-                        null, List.of("645e86668b3e7de4bbd8a97f", "645e866b602ff2930dfbf7ce")),
-                new User("645e86668b3e7de4bbd8a97f", "LOL", "online",
-                        null, List.of("645e866b602ff2930dfbf7ce")))));
+                new User("645e86427a1d4677f60df159", "Friend", "online", null, List.of("645e86668b3e7de4bbd8a97f", "645e866b602ff2930dfbf7ce")),
+                new User("645e86668b3e7de4bbd8a97f", "LOL", "online", null, List.of("645e866b602ff2930dfbf7ce")))));
+        when(groupStorageProvider.get().getName()).thenReturn("TestGroup");
 
         app.start(stage);
         app.show(groupController);
@@ -104,26 +101,27 @@ class EditGroupControllerTest extends ApplicationTest {
 
     @Test
     void editGroup() {
-        // test not working, since it's not deterministic, don't know enough about this functionality to fix it now
-//        when(userStorageProvider.get().getFriends()).thenReturn(List.of("645e86427a1d4677f60df159"));
-//        when(groupService.update(any(), any(), any())).thenReturn(Observable.just(new Group("645f8d731c386bcd2204da39",
-//                "TestGroupNOT", List.of("645e86668b3e7de4bbd8a97f"))));
-//        final TextField groupNameTextField = lookup("#groupNameInput").query();
-//        final String groupName = groupNameTextField.getText();
-//        assertEquals("TestGroup", groupName);
-//        clickOn("#searchFieldGroupMembers");
-//        write("F");
-//        HBox hBox = lookup("#Friend").query();
-//        HBox buttonHBox = (HBox) hBox.getChildren().get(2);
-//        Button button = (Button) buttonHBox.getChildren().get(0);             <----
-//        final String buttonText = button.getText();
-//        assertEquals(CHECK_MARK, buttonText);
-//        clickOn(button);
-//        clickOn(button);
-//        assertEquals(ADD_MARK, button.getText());
-//        clickOn(groupNameTextField);
-//        write("NOT");
-//        clickOn("#saveGroupButton");
-//        verify(groupService, times(1)).update(any(), any(), any());
+        when(userStorageProvider.get().getFriends()).thenReturn(List.of("645e86427a1d4677f60df159"));
+        when(groupService.update(any(), any(), any())).thenReturn(Observable.just(new Group("645f8d731c386bcd2204da39",
+                "TestGroupNOT", List.of("645e86668b3e7de4bbd8a97f"))));
+        final MessagesController messagesController = mock(MessagesController.class);
+        when(messagesControllerProvider.get()).thenReturn(messagesController);
+        doNothing().when(app).show(messagesController);
+        final TextField groupNameTextField = lookup("#groupNameInput").query();
+        final String groupName = groupNameTextField.getText();
+        assertEquals("TestGroup", groupName);
+        clickOn("#searchFieldGroupMembers");
+        write("LOL");
+        HBox hBox = lookup("#Friend").query();
+        HBox buttonHBox = (HBox) hBox.getChildren().get(2);
+        Button button = (Button) buttonHBox.getChildren().get(0);
+        final String buttonText = button.getText();
+        assertEquals(CHECK_MARK, buttonText);
+        clickOn(button);
+        clickOn(button);
+        assertEquals(ADD_MARK, button.getText());
+        clickOn(groupNameTextField);
+        write("NOT");
+        clickOn("#saveGroupButton");
     }
 }

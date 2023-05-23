@@ -59,10 +59,10 @@ public class GroupController extends Controller {
     Provider<UserStorage> userStorage;
     @Inject
     Preferences preferences;
-    private final ObservableList<User> friends = FXCollections.observableArrayList();
-    private final ObservableList<User> foreign = FXCollections.observableArrayList();
     private ListView<User> friendsListView;
     private ListView<User> foreignListView;
+    private final ObservableList<User> friends = FXCollections.observableArrayList();
+    private final ObservableList<User> foreign = FXCollections.observableArrayList();
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
     private final ObservableList<User> newGroupMembers = FXCollections.observableArrayList();
 
@@ -78,55 +78,46 @@ public class GroupController extends Controller {
     @Override
     public void init() {
         final String groupId = groupStorageProvider.get().get_id();
-        friendsListView = new ListView<>();
+        friendsListView = new ListView<>(friends);
         friendsListView.setSelectionModel(null);
         friendsListView.setFocusModel(null);
         friendsListView.setId("friendsListView");
         friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
+        friendsListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
+                foreignListView, friends));
 
-        foreignListView = new ListView<>();
+        foreignListView = new ListView<>(foreign);
         foreignListView.setSelectionModel(null);
         foreignListView.setFocusModel(null);
         foreignListView.setId("foreignListView");
         foreignListView.setPlaceholder(new Label(NO_USERS_ADDED_TO_GROUP));
+        foreignListView.setCellFactory(friendsListView.getCellFactory());
 
-        listenToStatusUpdate(friends, friendsListView);
+        listenToUserUpdate(friends, friendsListView);
 
         if (groupId.equals(EMPTY_STRING)) {
             initNewGroupView();
         } else {
-            initEditGroupView(groupId);
+            initEditGroupView();
         }
     }
 
-    private void initEditGroupView(String groupId) {
-        disposables.add(groupService.getGroup(groupId).observeOn(FX_SCHEDULER).subscribe(group -> {
-            groupNameInput.setText(group.name());
-            final List<String> groupMembers = group.members();
-            final List<String> friendsByID = userStorage.get().getFriends();
-            disposables.add(usersService.getUsers(groupMembers, null).observeOn(FX_SCHEDULER).subscribe(users -> {
-                newGroupMembers.setAll(users);
-                for (User user : users) {
-                    if (user._id().equals(userStorage.get().get_id())) {
-                        continue;
-                    } else if (friendsByID.contains(user._id())) {
-                        friends.add(user);
-                    } else {
-                        foreign.add(user);
-                    }
-                }
-                friendsListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
-                        foreignListView, friends));
-                foreignListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
-                        foreignListView, friends));
+    private void initEditGroupView() {
+        disposables.add(usersService.getUsers(groupStorageProvider.get().getMembers(), null)
+                .doOnNext(newGroupMembers::setAll)
+                .flatMap(users -> usersService.getUsers(userStorage.get().getFriends(), null))
+                .doOnNext(this::sortGroupMembersIntoLists)
+                .subscribe(event -> {}, error -> showError(error.getMessage())));
+    }
 
-                friendsListView.setItems(friends);
-                foreignListView.setItems(foreign);
-
-                FriendListUtils.sortListView(friendsListView);
-                FriendListUtils.sortListView(foreignListView);
-            }));
-        }));
+    private void sortGroupMembersIntoLists(List<User> friends) {
+        this.friends.setAll(friends);
+        final List<User> users = new ArrayList<>(newGroupMembers);
+        users.removeAll(this.friends);
+        foreign.setAll(users);
+        foreign.removeIf(user -> user._id().equals(userStorage.get().get_id()));
+        FriendListUtils.sortListView(foreignListView);
+        FriendListUtils.sortListView(friendsListView);
     }
 
     private void initNewGroupView() {
@@ -134,17 +125,8 @@ public class GroupController extends Controller {
         if (!friendsByID.isEmpty()) {
             disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
                 friends.setAll(users);
-
-                friendsListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
-                        foreignListView, friends));
-                foreignListView.setCellFactory(param -> new GroupUserCell(preferences,newGroupMembers, friendsListView,
-                        foreignListView, friends));
-
-                friendsListView.setItems(friends);
-
                 FriendListUtils.sortListView(friendsListView);
-                FriendListUtils.sortListView(foreignListView);
-            }));
+            }, error -> showError(error.getMessage())));
         }
     }
 
@@ -169,6 +151,7 @@ public class GroupController extends Controller {
     private void editGroup() {
         TITLE = EDIT_GROUP_TITLE;
         groupNameInput.setPromptText(CHANGE_GROUP);
+        groupNameInput.setText(groupStorageProvider.get().getName());
     }
 
     public void changeToMessages() {
