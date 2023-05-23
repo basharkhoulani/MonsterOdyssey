@@ -109,6 +109,7 @@ public class MessagesControllerTest extends ApplicationTest {
         app.show(messagesController);
         stage.requestFocus();
     }
+
     @Test
     void changeToMainMenu() {
         final MainMenuController mainMenuController = mock(MainMenuController.class);

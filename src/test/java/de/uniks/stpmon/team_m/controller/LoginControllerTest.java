@@ -58,7 +58,7 @@ class LoginControllerTest extends ApplicationTest {
                 "a1a2",
                 "a3a4")));
 
-        when(usersService.updateUser(isNull(),anyString(),isNull(),isNull(),isNull())).thenReturn(Observable.just(new User(
+        when(usersService.updateUser(isNull(), anyString(), isNull(), isNull(), isNull())).thenReturn(Observable.just(new User(
                 "423f8d731c386bcd2204da39",
                 "1",
                 USER_STATUS_ONLINE,
@@ -90,9 +90,9 @@ class LoginControllerTest extends ApplicationTest {
     }
 
     @Test
-    void signInOtherError(){
+    void signInOtherError() {
         //Sign In with other errors
-        when(authenticationService.login(anyString(),anyString(),anyBoolean())).thenReturn(Observable.error(new Exception("Test")));
+        when(authenticationService.login(anyString(), anyString(), anyBoolean())).thenReturn(Observable.error(new Exception("Test")));
         write("Bob\t");
         write("12345678");
         clickOn("#signInButton");
@@ -120,7 +120,7 @@ class LoginControllerTest extends ApplicationTest {
                 "a1a2",
                 "a3a4")));
 
-        when(usersService.updateUser(isNull(),anyString(),isNull(),isNull(),isNull())).thenReturn(Observable.just(new User(
+        when(usersService.updateUser(isNull(), anyString(), isNull(), isNull(), isNull())).thenReturn(Observable.just(new User(
                 "423f8d731c386bcd2204da39",
                 "1",
                 USER_STATUS_ONLINE,
@@ -143,7 +143,7 @@ class LoginControllerTest extends ApplicationTest {
 
     @Test
     void signUpUsernameTaken() {
-        when(usersService.createUser(anyString(),isNull(),anyString())).thenReturn(Observable.error(new Exception("HTTP 409")));
+        when(usersService.createUser(anyString(), isNull(), anyString())).thenReturn(Observable.error(new Exception("HTTP 409")));
 
         write("1\t");
         write("12345678");
@@ -154,9 +154,9 @@ class LoginControllerTest extends ApplicationTest {
     }
 
     @Test
-    void signUpOtherError(){
+    void signUpOtherError() {
         //Sign In with other errors
-        when(usersService.createUser(anyString(),isNull(),anyString())).thenReturn(Observable.error(new Exception("Test")));
+        when(usersService.createUser(anyString(), isNull(), anyString())).thenReturn(Observable.error(new Exception("Test")));
         write("Bob\t");
         write("12345678");
         clickOn("#signUpButton");

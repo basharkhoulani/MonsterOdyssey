@@ -179,8 +179,8 @@ public class AccountSettingController extends Controller {
         alert.showAndWait();
     }
 
-    public String errorHandle(String error){
-        if(error.contains(HTTP_409)){
+    public String errorHandle(String error) {
+        if (error.contains(HTTP_409)) {
             return USERNAME_TAKEN;
         } else {
             return CUSTOM_ERROR;

@@ -58,7 +58,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void logout(){
+    void logout() {
         when(authApiService.logout()).thenReturn(Observable.just(new LogoutResult()));
 
         authenticationService.logout().blockingFirst();

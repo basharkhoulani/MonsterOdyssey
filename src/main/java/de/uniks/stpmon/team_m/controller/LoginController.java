@@ -109,7 +109,7 @@ public class LoginController extends Controller {
                 .subscribe(loginResult -> {
                     userStatusUpdate(USER_STATUS_ONLINE);
                     app.show(mainMenuControllerProvider.get());
-                    }, error -> errorHandle(error.getMessage())));
+                }, error -> errorHandle(error.getMessage())));
     }
 
     public void signUp() {
@@ -140,7 +140,7 @@ public class LoginController extends Controller {
     }
 
     public void errorHandle(String error) {
-        if(error.contains(HTTP_401)){
+        if (error.contains(HTTP_401)) {
             passwordErrorLabel.setText(SIGNIN_ERROR);
         } else if (error.contains(HTTP_409)) {
             passwordErrorLabel.setText(USERNAME_TAKEN);

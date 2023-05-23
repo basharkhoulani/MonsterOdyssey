@@ -57,6 +57,7 @@ public class NewGroupControllerTest extends ApplicationTest {
     App app = new App(null);
     @InjectMocks
     GroupController groupController;
+
     @Override
     public void start(Stage stage) {
         when(groupStorageProvider.get()).thenReturn(mock(GroupStorage.class));

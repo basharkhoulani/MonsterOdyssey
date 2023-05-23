@@ -38,6 +38,7 @@ public class TestModule {
             public <T> Observable<Event<T>> listen(String pattern, Class<T> type) {
                 return Observable.empty();
             }
+
             @Override
             public void send(Object object) {
             }

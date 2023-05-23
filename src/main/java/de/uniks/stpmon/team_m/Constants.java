@@ -10,8 +10,8 @@ public class Constants {
     public static final String MESSAGE_NAMESPACE_REGIONS = "regions";
     public static final String MESSAGE_NAMESPACE_GLOBAL = "global";
     public static final String GENERIC_ERROR = """
-                                        Something went wrong!
-                                        Please try again later!""";
+            Something went wrong!
+            Please try again later!""";
     public static final String ERROR = "Error";
 
     // GENERAL

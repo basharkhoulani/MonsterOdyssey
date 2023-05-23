@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
-import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.utils.FriendListUtils;
 import javafx.collections.ObservableList;

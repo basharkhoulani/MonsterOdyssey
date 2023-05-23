@@ -77,7 +77,7 @@ public class UserStorage {
         this.friends = loginResult.friends();
     }
 
-    public void removeUser(){
+    public void removeUser() {
         this._id = null;
         this.name = null;
         this.status = null;

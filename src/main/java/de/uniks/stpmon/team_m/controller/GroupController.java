@@ -107,7 +107,8 @@ public class GroupController extends Controller {
                 .doOnNext(newGroupMembers::setAll)
                 .flatMap(users -> usersService.getUsers(userStorage.get().getFriends(), null))
                 .doOnNext(this::sortGroupMembersIntoLists)
-                .subscribe(event -> {}, error -> showError(error.getMessage())));
+                .subscribe(event -> {
+                }, error -> showError(error.getMessage())));
     }
 
     private void sortGroupMembersIntoLists(List<User> friends) {

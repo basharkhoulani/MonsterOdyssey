@@ -65,8 +65,8 @@ public class App extends Application {
                         disposables.add(authenticationService.refresh()
                                 .observeOn(Schedulers.from(Platform::runLater))
                                 .subscribe(lr -> {
-                                    component.loginController().userStatusUpdate(USER_STATUS_ONLINE);
-                                    show(component.mainMenuController());
+                                            component.loginController().userStatusUpdate(USER_STATUS_ONLINE);
+                                            show(component.mainMenuController());
                                         },
                                         err -> show(component.loginController())));
                     } else {
@@ -124,7 +124,8 @@ public class App extends Application {
         stage.setWidth(controller.getWidth());
         stage.setHeight(controller.getHeight());
     }
-    public Controller getController(){
+
+    public Controller getController() {
         return controller;
     }
 

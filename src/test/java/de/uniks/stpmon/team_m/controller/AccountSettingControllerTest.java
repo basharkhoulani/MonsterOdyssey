@@ -89,7 +89,7 @@ class AccountSettingControllerTest extends ApplicationTest {
         final TextField usernameField = lookup("#usernameField").query();
         final Label usernameErrorLabel = lookup("#usernameErrorLabel").query();
 
-        when(usersService.updateUser(anyString(),isNull(),isNull(),isNull(),isNull())).thenReturn(Observable.error(new Exception("HTTP 409")));
+        when(usersService.updateUser(anyString(), isNull(), isNull(), isNull(), isNull())).thenReturn(Observable.error(new Exception("HTTP 409")));
 
         clickOn("#usernameEditButton");
         clickOn(usernameField);
@@ -104,7 +104,7 @@ class AccountSettingControllerTest extends ApplicationTest {
         final TextField usernameField = lookup("#usernameField").query();
         final Label usernameErrorLabel = lookup("#usernameErrorLabel").query();
 
-        when(usersService.updateUser(anyString(),isNull(),isNull(),isNull(),isNull())).thenReturn(Observable.error(new Exception("Test")));
+        when(usersService.updateUser(anyString(), isNull(), isNull(), isNull(), isNull())).thenReturn(Observable.error(new Exception("Test")));
 
         clickOn("#usernameEditButton");
         clickOn(usernameField);
@@ -168,7 +168,7 @@ class AccountSettingControllerTest extends ApplicationTest {
         final TextField passwordField = lookup("#passwordField").query();
         final Label passwordErrorLabel = lookup("#passwordErrorLabel").query();
 
-        when(usersService.updateUser(isNull(),isNull(),isNull(),isNull(),anyString())).thenReturn(Observable.error(new Exception("Test")));
+        when(usersService.updateUser(isNull(), isNull(), isNull(), isNull(), anyString())).thenReturn(Observable.error(new Exception("Test")));
 
         clickOn("#passwordEditButton");
         clickOn(passwordField);

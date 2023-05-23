@@ -73,9 +73,9 @@ class MainMenuControllerTest extends ApplicationTest {
         Preferences preferences = mock(Preferences.class);
         Mockito.when(preferencesProvider.get()).thenReturn(preferences);
         when(usersService.getUsers(any(), any())).thenReturn(Observable.just(List.of(
-                        new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
-                        new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
-                        new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
+                new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
+                new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
+                new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
         when(userStorageProvider.get().getFriends())
                 .thenReturn(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
 
@@ -111,7 +111,7 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Test
     void changeToLogin() {
-        when(usersService.updateUser(isNull(),anyString(),isNull(),isNull(),isNull()))
+        when(usersService.updateUser(isNull(), anyString(), isNull(), isNull(), isNull()))
                 .thenReturn(Observable.just(new User(
                         "423f8d731c386bcd2204da39",
                         "UserPatch",
@@ -128,7 +128,7 @@ class MainMenuControllerTest extends ApplicationTest {
         doNothing().when(app).show(loginController);
 
         clickOn("#logoutButton");
-        verify(usersService).updateUser(null,"offline", null, null,null);
+        verify(usersService).updateUser(null, "offline", null, null, null);
         verify(authenticationService).logout();
         verify(app).show(loginController);
     }
