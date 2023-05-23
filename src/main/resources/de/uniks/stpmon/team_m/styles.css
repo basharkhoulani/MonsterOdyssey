@@ -65,3 +65,8 @@
     -fx-border-style: solid none none none;
     -fx-background-color: lightblue;
 }
+.worldMapBackground {
+    -fx-background-image: url("images/WorldMap-Background.jpg");
+    -fx-background-size: cover;
+    -fx-opacity: 0.55;
+}
