@@ -78,4 +78,10 @@ public class HttpModule {
     TrainersApiService trainers(Retrofit retrofit) {
         return retrofit.create(TrainersApiService.class);
     }
+
+    @Provides
+    @Singleton
+    AreasApiService areas(Retrofit retrofit) {
+        return retrofit.create(AreasApiService.class);
+    }
 }
