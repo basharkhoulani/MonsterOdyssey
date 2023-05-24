@@ -40,6 +40,11 @@ public class MainMenuController extends Controller {
     public Button startGameButton;
     @FXML
     public VBox regionRadioButtonList;
+    @FXML
+    public ListView<User> friendsListView;
+    @FXML
+    public ListView<Region> regionListView;
+
     @Inject
     Provider<LoginController> loginControllerProvider;
     @Inject
@@ -66,21 +71,18 @@ public class MainMenuController extends Controller {
     Provider<GroupStorage> groupStorageProvider;
     private final ObservableList<Region> regions = FXCollections.observableArrayList();
     private final ObservableList<User> friends = FXCollections.observableArrayList();
-    private ListView<User> friendsListView;
+    //private ListView<User> friendsListView;
     private ToggleGroup regionToggleGroup;
 
     @Override
     public void init() {
-        friendsListView = new ListView<>(friends);
-        friendsListView.setId("friendsListView");
-        friendsListView.setCellFactory(param -> new MainMenuUserCell(preferencesProvider.get(), userStorageProvider.get(), usersService));
-        friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
         disposables.add(regionsService.getRegions()
                 .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll, error -> System.out.println(error.getMessage())));
         if (!userStorageProvider.get().getFriends().isEmpty()) {
             disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
                     .observeOn(FX_SCHEDULER).subscribe(users -> {
                         friends.setAll(users);
+                        friendsListView.getItems().setAll(users);
                         FriendListUtils.sortListView(friendsListView);
                     }, error -> showError(error.getMessage())));
             listenToUserUpdate(friends, friendsListView);
@@ -99,13 +101,8 @@ public class MainMenuController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
+        initFriendslist();
         initRadioButtons();
-        friendsListVBox.getChildren().add(friendsListView);
-        friendsListView.setOnMouseClicked(event -> {
-            if (!friendsListView.getSelectionModel().isEmpty()) {
-                switchToMessageScreen();
-            }
-        });
         return parent;
     }
 
@@ -117,13 +114,20 @@ public class MainMenuController extends Controller {
     }
 
     private void initRadioButtons() {
-        ListView<Region> regionListView = new ListView<>();
         regionToggleGroup = new ToggleGroup();
-        regionListView.setId("regionListView");
         regionListView.setCellFactory(param -> new RegionCell(regionToggleGroup));
         regionListView.setItems(regions);
-        regionRadioButtonList.getChildren().add(regionListView);
         startGameButton.disableProperty().bind(regionToggleGroup.selectedToggleProperty().isNull());
+    }
+
+    private void initFriendslist() {
+        friendsListView.setCellFactory(param -> new MainMenuUserCell(preferencesProvider.get(), userStorageProvider.get(), usersService));
+        friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
+        friendsListView.setOnMouseClicked(event -> {
+            if (!friendsListView.getSelectionModel().isEmpty()) {
+                switchToMessageScreen();
+            }
+        });
     }
 
     public void changeToFindNewFriends() {

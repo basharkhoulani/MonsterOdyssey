@@ -66,14 +66,16 @@
     -fx-background-color: lightblue;
 }
 
-/* Login background */
-.LoginBackground {
+/* Background */
+.Background {
     -fx-background-color: white;
     -fx-background-image: url("images/Background.jpg");
     -fx-background-repeat: space;
     -fx-background-size: 100%;
 }
-.loginContainer {
+
+/* Login */
+.ForegroundContainer {
     -fx-background-color: rgba(245, 245, 245, 0.7);
     -fx-background-radius: 10;
 }
@@ -85,4 +87,33 @@
 .hideSymbolContainer {
     -fx-border-width: 1px;
     -fx-border-color: black;
+}
+
+/* General buttons */
+.buttonsYellow {
+    -fx-background-color: #FFF2CC;
+    -fx-border-width: 1px;
+    -fx-border-color: gray;
+}
+
+.buttonsWhite {
+    -fx-background-color: #FFFFFF;
+    -fx-border-width: 1px;
+    -fx-border-color: gray;
+}
+
+
+
+/* Main Menu */
+.regionRadioButtonList {
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-padding: 2 0 2 0;
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+}
+.friendsListVBox {
+    -fx-border-style: solid;
+    -fx-border-width: 2px 0 0 0;
 }
