@@ -26,10 +26,8 @@ public class GroupUserCell extends UserCell {
      * It includes a button to remove and add to the group.
      * GroupUserCell extends UserCell which includes the status, best friend status, and name of the user.
      *
-     * @param preferences     The preferences of the user.
-     *                        The preferences are used to get the best friend status of the user.
-     * @param chosenUsers     The chosen users of the group.
-     *                        The chosen users are used to remove and add users to the group.
+     * @param preferences     The {@link Preferences} used to get the best friend status of the user.
+     * @param chosenUsers     The chosen users are used to remove and add users to the group.
      * @param friendsListView The friends list view.
      * @param foreignListView The foreign list view.
      * @param friends         The friends of the user.

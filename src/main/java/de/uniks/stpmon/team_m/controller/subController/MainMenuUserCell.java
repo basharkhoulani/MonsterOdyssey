@@ -19,11 +19,30 @@ public class MainMenuUserCell extends UserCell {
     private final UserStorage userStorage;
     private final UsersService usersService;
 
+
+    /**
+     * MainMenuUserCell is used to handle the main menu user cells in the MainMenuController.
+     * The users are the friends of the currently logged-in user.
+     * It includes a button to remove the friend and set/remove the friend as best friend.
+     * It also includes the possibility to open the chat with the friend by clicking the cell.
+     * MainMenuUserCell extends UserCell which includes the status, best friend status, and name of the user.
+     *
+     * @param preferences  The {@link Preferences} are used to get the best friend status of the user.
+     * @param userStorage  The {@link UserStorage} is used to get the currently logged-in user.
+     * @param usersService The {@link UsersService} is used to remove the friend.
+     */
+
     public MainMenuUserCell(Preferences preferences, UserStorage userStorage, UsersService usersService) {
         super(preferences);
         this.userStorage = userStorage;
         this.usersService = usersService;
     }
+
+
+    /**
+     * Updates and renders the main menu user cell.
+     * It creates a button to open the friend settings pop-over.
+     */
 
     @Override
     protected void updateItem(User item, boolean empty) {
@@ -43,6 +62,13 @@ public class MainMenuUserCell extends UserCell {
             popOverButton.setOnAction(event -> showPopOver(popOverButton, item));
         }
     }
+
+    /**
+     * Shows the friend settings pop over.
+     *
+     * @param button The button which is used to show the pop-over.
+     * @param user   The user which is used to show the pop-over.
+     */
 
     private void showPopOver(Button button, User user) {
         PopOver popOver = new PopOver();
