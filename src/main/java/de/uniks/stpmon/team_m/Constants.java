@@ -39,6 +39,7 @@ public class Constants {
     public static final String NO_FRIENDS_FOUND = "No friends found";
     public static final String NO_GROUPS_FOUND = "No groups found";
     public static final String NO_USERS_ADDED_TO_GROUP = "No foreign users added to group yet";
+    public static final String NO_MESSAGES_YET = "\t\tNo messages yet\nor there is no user or group selected";
     public static final String BEST_FRIEND_PREF = "bestFriend";
     public static final String DELETE_FRIEND_WARNING = "Are you sure you want to delete this friend?";
     public static final String LIST_VIEW_STYLE_NO_INDEXING = "-fx-background-color: #F4F4F4;";

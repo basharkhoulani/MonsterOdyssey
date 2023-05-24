@@ -128,10 +128,10 @@ public class MessageCell extends ListCell<Message> {
 
     public void showEditAndDelete() {
         if (!getItem().sender().equals(userID)) {
-            editMessage.setVisible(false);
-            deleteMessage.setVisible(false);
-        } else {
             hideEditAndDelete();
+        } else {
+            editMessage.setVisible(true);
+            deleteMessage.setVisible(true);
         }
     }
 
@@ -174,7 +174,10 @@ public class MessageCell extends ListCell<Message> {
 
         dialog.getDialogPane().setContent(messageArea);
         Button confirmEdit = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-        confirmEdit.setOnAction(event -> messagesBoxController.editMessage(dialog, messageArea.getText(), getItem()));
+        confirmEdit.setOnAction(event -> {
+            messagesBoxController.editMessage(messageArea.getText(), getItem());
+            dialog.close();
+        });
         dialog.showAndWait();
     }
 
@@ -195,7 +198,8 @@ public class MessageCell extends ListCell<Message> {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            messagesBoxController.deleteMessage(alert, getItem());
+            messagesBoxController.deleteMessage(getItem());
+            alert.close();
         }
     }
 }
