@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -44,6 +45,14 @@ public class AccountSettingController extends Controller {
     public Label usernameErrorLabel;
     @FXML
     public Label titleLabel;
+    @FXML
+    public ImageView avatarImageView;
+    @FXML
+    public Button avatarEditButton;
+    @FXML
+    public Button saveAvatarButton;
+    @FXML
+    public Label avatarErrorLabel;
 
     private PasswordFieldSkin skin;
     private final SimpleStringProperty username = new SimpleStringProperty();
@@ -57,6 +66,7 @@ public class AccountSettingController extends Controller {
     UserStorage user;
     @Inject
     UsersService usersService;
+    private AvatarSelectionController avatarSelectionController;
 
     @Inject
     AccountSettingController() {
@@ -65,6 +75,13 @@ public class AccountSettingController extends Controller {
     @Override
     public String getTitle() {
         return ACCOUNT_SETTINGS_TITLE;
+    }
+
+    @Override
+    public void init() {
+        super.init();
+        avatarSelectionController = new AvatarSelectionController();
+        avatarSelectionController.init();
     }
 
     @Override
@@ -146,6 +163,23 @@ public class AccountSettingController extends Controller {
                 }, error -> passwordErrorLabel.setText(errorHandle(error.getMessage()))));
     }
 
+    public void editAvatar() {
+        //vorläufige Buttons
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType okButton = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+
+        Dialog<?> dialog = new Dialog<>();
+        dialog.setTitle("Choose your Avatar");
+        dialog.getDialogPane().setContent(avatarSelectionController.render());
+        dialog.getDialogPane().getButtonTypes().add(okButton);
+        dialog.getDialogPane().getButtonTypes().add(cancelButton);
+        dialog.showAndWait();
+    }
+
+    public void saveAvatar() {
+
+    }
+
     public void deleteAccount(Alert alert) {
         disposables.add(usersService.deleteUser()
                 .observeOn(FX_SCHEDULER)
@@ -179,8 +213,8 @@ public class AccountSettingController extends Controller {
         alert.showAndWait();
     }
 
-    public String errorHandle(String error){
-        if(error.contains(HTTP_409)){
+    public String errorHandle(String error) {
+        if (error.contains(HTTP_409)) {
             return USERNAME_TAKEN;
         } else {
             return CUSTOM_ERROR;
