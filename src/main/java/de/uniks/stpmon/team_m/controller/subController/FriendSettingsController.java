@@ -33,11 +33,11 @@ public class FriendSettingsController extends Controller {
      * FriendSettingsContoller is used to handle the friend settings. It includes options to delete a friend and to set
      * a friend as best friend. The best friend is always on top of the friends list.
      *
-     * @param preferences       The preferences of the user
-     * @param userStorage       The user storage {@link UserStorage}
-     * @param usersService      The users service {@link UsersService}
-     * @param friendsListView   The list view of the friends
-     * @param user              The selected user {@link User}
+     * @param preferences     The preferences of the user
+     * @param userStorage     The user storage {@link UserStorage}
+     * @param usersService    The users service {@link UsersService}
+     * @param friendsListView The list view of the friends
+     * @param user            The selected user {@link User}
      */
 
     public FriendSettingsController(Preferences preferences, UserStorage userStorage,
