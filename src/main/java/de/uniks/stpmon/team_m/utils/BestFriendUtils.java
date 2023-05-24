@@ -1,12 +1,11 @@
 package de.uniks.stpmon.team_m.utils;
 
 import de.uniks.stpmon.team_m.dto.User;
-import javafx.scene.control.ListView;
 
 import java.util.Objects;
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.BEST_FRIEND_PREF;
 
 public class BestFriendUtils {
 
@@ -18,23 +17,5 @@ public class BestFriendUtils {
 
     public boolean isBestFriend(User user) {
         return Objects.equals(preferences.get(BEST_FRIEND_PREF, null), user._id());
-    }
-
-    public void sortBestFriendTop(ListView<User> friendsListView) {
-        friendsListView.getItems().sort(this::compare);
-    }
-
-    private int compare(User o1, User o2) {
-        if (isBestFriend(o1) && !isBestFriend(o2)) {
-            return -1;
-        } else if (!isBestFriend(o1) && isBestFriend(o2)) {
-            return 1;
-        } else if (o1.status().equals(USER_STATUS_ONLINE) && o2.status().equals(USER_STATUS_OFFLINE)) {
-            return -1;
-        } else if (o1.status().equals(USER_STATUS_OFFLINE) && o2.status().equals(USER_STATUS_ONLINE)) {
-            return 1;
-        } else {
-            return o1.name().compareTo(o2.name());
-        }
     }
 }
