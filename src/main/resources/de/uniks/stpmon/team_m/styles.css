@@ -70,3 +70,10 @@
     -fx-background-size: cover;
     -fx-opacity: 0.55;
 }
+
+.welcomeSceneButton {
+    -fx-background-color: #FFF2CC;
+    -fx-font-family: "Comic Sans MS";
+    -fx-min-width: 80px;
+    -fx-min-height: 30px;
+}
