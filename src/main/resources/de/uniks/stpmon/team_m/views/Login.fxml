@@ -1,46 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="de.uniks.stpmon.team_m.controller.LoginController">
-    <Label fx:id="welcomeLabel" alignment="CENTER" prefHeight="25.0" prefWidth="600.0" text="Welcome to"
-           textOverrun="CLIP">
-        <font>
-            <Font size="18.0"/>
-        </font>
-    </Label>
-    <Label fx:id="gameNameLabel" alignment="CENTER" prefHeight="71.0" prefWidth="600.0" text="Monster Odyssey">
-        <font>
-            <Font size="42.0"/>
-        </font>
-    </Label>
-    <Label fx:id="informationLabel" alignment="CENTER" prefHeight="17.0" prefWidth="562.0" styleClass="informationLabel"
-           stylesheets="@../styles.css"/>
-    <HBox alignment="CENTER" prefHeight="36.0" prefWidth="400.0">
-        <TextField fx:id="usernameField" prefHeight="25.0" prefWidth="356.0" promptText="Username"/>
-        <ImageView fitHeight="34.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true"/>
-    </HBox>
-    <Label fx:id="usernameErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="575.0" styleClass="errorLabel"
-           stylesheets="@../styles.css"/>
-    <HBox alignment="CENTER" prefHeight="36.0" prefWidth="400.0">
-        <PasswordField fx:id="passwordField" prefHeight="25.0" prefWidth="356.0" promptText="Password"/>
-        <Button fx:id="hideButton" mnemonicParsing="false" onAction="#showPassword" prefHeight="25.0" prefWidth="36.0"
-                styleClass="hideSymbol" stylesheets="@../styles.css"/>
-    </HBox>
-    <Label fx:id="passwordErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="581.0" styleClass="errorLabel"
-           stylesheets="@../styles.css"/>
-    <HBox alignment="CENTER" prefHeight="36.0" prefWidth="400.0">
-        <CheckBox fx:id="rememberMeCheckbox" mnemonicParsing="false" prefHeight="18.0" prefWidth="109.0"
-                  text="Remember Me"/>
-    </HBox>
-    <HBox alignment="CENTER" prefHeight="42.0" prefWidth="400.0">
-        <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#signUp" prefHeight="36.0" prefWidth="106.0"
-                text="Sign Up"/>
-        <SplitPane prefHeight="200.0" prefWidth="200.0" visible="false"/>
-        <Button fx:id="signInButton" mnemonicParsing="false" onAction="#signIn" prefHeight="36.0" prefWidth="106.0"
-                text="Sign In"/>
-    </HBox>
-</VBox>
+
+<HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="LoginBackground" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.LoginController">
+
+   <VBox alignment="CENTER" maxHeight="650.0" maxWidth="1000.0" minHeight="-Infinity" minWidth="-Infinity"
+         styleClass="loginContainer" HBox.hgrow="ALWAYS">
+      <VBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
+         <Label fx:id="welcomeLabel" alignment="BOTTOM_CENTER" prefHeight="25.0" prefWidth="600.0" text="Welcome to"
+                textOverrun="CLIP" VBox.vgrow="ALWAYS">
+            <font>
+               <Font name="System Bold" size="18.0"/>
+            </font>
+            <padding>
+               <Insets top="20.0"/>
+            </padding>
+         </Label>
+      </VBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="NEVER">
+         <VBox.margin>
+            <Insets top="10.0"/>
+         </VBox.margin>
+         <Label fx:id="gameNameLabel1" alignment="CENTER_RIGHT" prefHeight="71.0" prefWidth="600.0" text="Monster">
+            <font>
+               <Font name="Comic Sans MS Bold" size="42.0"/>
+            </font>
+            <HBox.margin>
+               <Insets right="10.0"/>
+            </HBox.margin>
+         </Label>
+         <ImageView fx:id="gameIcon" fitHeight="120.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../images/Monster1-without.png"/>
+         </ImageView>
+         <Label fx:id="gameNameLabel2" prefHeight="71.0" prefWidth="600.0" text="Odyssey">
+            <font>
+               <Font name="Comic Sans MS Bold" size="42.0"/>
+            </font>
+            <HBox.margin>
+               <Insets left="10.0"/>
+            </HBox.margin>
+         </Label>
+      </HBox>
+      <Label fx:id="informationLabel" alignment="CENTER" maxHeight="30.0" prefHeight="17.0" prefWidth="562.0"
+             styleClass="informationLabel" stylesheets="@../styles.css" VBox.vgrow="NEVER"/>
+      <HBox alignment="BOTTOM_CENTER" maxHeight="45.0" prefHeight="36.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
+         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+            <TextField fx:id="usernameField" maxHeight="40.0" maxWidth="500.0" minHeight="25.0" minWidth="120.0"
+                       promptText="Username" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets right="50.0"/>
+               </VBox.margin>
+               <font>
+                  <Font name="Comic Sans MS" size="17.0"/>
+               </font>
+            </TextField>
+            <HBox.margin>
+               <Insets left="100.0" right="100.0"/>
+            </HBox.margin>
+         </VBox>
+      </HBox>
+      <Label fx:id="usernameErrorLabel" alignment="CENTER" maxHeight="36.0" prefHeight="17.0" prefWidth="575.0"
+             styleClass="errorLabel" stylesheets="@../styles.css" VBox.vgrow="NEVER"/>
+      <VBox alignment="TOP_CENTER" maxHeight="45.0" VBox.vgrow="ALWAYS">
+         <VBox.margin>
+            <Insets left="100.0" right="100.0"/>
+         </VBox.margin>
+         <HBox alignment="CENTER" prefHeight="36.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
+            <PasswordField fx:id="passwordField" maxHeight="40.0" maxWidth="500.0" minHeight="25.0"
+                           minWidth="250.0" promptText="Password" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font name="Comic Sans MS" size="17.0"/>
+               </font>
+            </PasswordField>
+            <VBox styleClass="hideSymbolContainer">
+               <HBox.margin>
+                  <Insets left="8.0"/>
+               </HBox.margin>
+               <Button fx:id="hideButton" maxWidth="42.0" mnemonicParsing="false" onAction="#showPassword"
+                       prefHeight="42.0" prefWidth="42.0" styleClass="hideSymbol" stylesheets="@../styles.css"
+                       VBox.vgrow="ALWAYS">
+                  <VBox.margin>
+                     <Insets/>
+                  </VBox.margin>
+               </Button>
+            </VBox>
+         </HBox>
+      </VBox>
+      <Label fx:id="passwordErrorLabel" alignment="CENTER" maxHeight="40.0" prefHeight="17.0" prefWidth="581.0"
+             styleClass="errorLabel" stylesheets="@../styles.css" VBox.vgrow="NEVER"/>
+      <HBox alignment="TOP_CENTER" maxHeight="45.0" prefHeight="36.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
+         <CheckBox fx:id="rememberMeCheckbox" mnemonicParsing="false" prefHeight="18.0" text="Remember Me"
+                   HBox.hgrow="ALWAYS">
+            <font>
+               <Font name="Comic Sans MS Bold" size="17.0"/>
+            </font>
+         </CheckBox>
+      </HBox>
+      <HBox alignment="TOP_CENTER" prefHeight="42.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
+         <VBox.margin>
+            <Insets bottom="10.0"/>
+         </VBox.margin>
+         <Button fx:id="signUpButton" maxHeight="40.0" mnemonicParsing="false" onAction="#signUp" prefHeight="36.0"
+                 prefWidth="106.0" styleClass="loginButton" text="Sign Up" HBox.hgrow="ALWAYS">
+            <font>
+               <Font name="Comic Sans MS Bold" size="17.0"/>
+            </font>
+         </Button>
+         <SplitPane prefHeight="200.0" prefWidth="200.0" visible="false"/>
+         <Button fx:id="signInButton" maxHeight="40.0" mnemonicParsing="false" onAction="#signIn" prefHeight="36.0"
+                 prefWidth="106.0" styleClass="loginButton" text="Sign In" HBox.hgrow="ALWAYS">
+            <font>
+               <Font name="Comic Sans MS Bold" size="17.0"/>
+            </font>
+         </Button>
+      </HBox>
+   </VBox>
+</HBox>
