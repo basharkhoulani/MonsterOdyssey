@@ -64,6 +64,12 @@ dependencies {
     // -------------------- ControlFX --------------------
     // https://mvnrepository.com/artifact/org.controlsfx/controlsfx
     implementation group: 'org.controlsfx', name: 'controlsfx', version: '11.1.0'
+
+    // -------------------- Tiled --------------------
+    implementation group: 'org.mapeditor', name: 'libtiled', version: '1.4.2'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'
+    implementation 'com.sun.xml.bind:jaxb-impl:2.3.1'
 }
 
 javafx {

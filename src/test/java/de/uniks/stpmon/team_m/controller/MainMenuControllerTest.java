@@ -2,10 +2,9 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
-import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.dto.Spawn;
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.rest.RegionsApiService;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
@@ -42,7 +41,7 @@ class MainMenuControllerTest extends ApplicationTest {
     @Mock
     Provider<MessagesController> messagesControllerProvider;
     @Mock
-    RegionsApiService regionsApiService;
+    RegionsService regionsService;
     @Mock
     UsersService usersService;
     @Mock
@@ -53,8 +52,6 @@ class MainMenuControllerTest extends ApplicationTest {
     Provider<Preferences> preferencesProvider;
     @Mock
     Provider<GroupStorage> groupStorageProvider;
-    @Mock
-    Provider<GroupService> groupServiceProvider;
     @Spy
     App app = new App(null);
     @InjectMocks
@@ -65,7 +62,14 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
-        when(regionsApiService.getRegions()).thenReturn(Observable.just(List.of(new Region("TestRegion", "NamedRegion"))));
+        when(regionsService.getRegions()).thenReturn(Observable.just(List.of(new Region(
+                "2023-05-22T17:51:46.772Z",
+                "2023-05-22T17:51:46.772Z",
+                "646bc3c0a9ac1b375fb41d93",
+                "646bc436cfee07c0e408466f",
+                new Spawn("Albertina", 1, 1),
+                new Object()
+        ))));
         UserStorage mockUserStorage = mock(UserStorage.class);
         GroupStorage mockGroupStorage = mock(GroupStorage.class);
         when(groupStorageProvider.get()).thenReturn(mockGroupStorage);
@@ -73,9 +77,9 @@ class MainMenuControllerTest extends ApplicationTest {
         Preferences preferences = mock(Preferences.class);
         Mockito.when(preferencesProvider.get()).thenReturn(preferences);
         when(usersService.getUsers(any(), any())).thenReturn(Observable.just(List.of(
-                        new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
-                        new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
-                        new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
+                new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
+                new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
+                new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
         when(userStorageProvider.get().getFriends())
                 .thenReturn(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
 
@@ -111,7 +115,7 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Test
     void changeToLogin() {
-        when(usersService.updateUser(isNull(),anyString(),isNull(),isNull(),isNull()))
+        when(usersService.updateUser(isNull(), anyString(), isNull(), isNull(), isNull()))
                 .thenReturn(Observable.just(new User(
                         "423f8d731c386bcd2204da39",
                         "UserPatch",
@@ -128,7 +132,7 @@ class MainMenuControllerTest extends ApplicationTest {
         doNothing().when(app).show(loginController);
 
         clickOn("#logoutButton");
-        verify(usersService).updateUser(null,"offline", null, null,null);
+        verify(usersService).updateUser(null, "offline", null, null, null);
         verify(authenticationService).logout();
         verify(app).show(loginController);
     }
