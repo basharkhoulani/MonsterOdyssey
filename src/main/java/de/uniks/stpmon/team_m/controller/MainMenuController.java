@@ -5,7 +5,6 @@ import de.uniks.stpmon.team_m.controller.subController.RegionCell;
 import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.rest.RegionsApiService;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.FriendListUtils;
 import javafx.collections.FXCollections;
@@ -52,7 +51,7 @@ public class MainMenuController extends Controller {
     @Inject
     Provider<MessagesController> messagesControllerProvider;
     @Inject
-    RegionsApiService regionsApiService;
+    RegionsService regionsService;
     @Inject
     UsersService usersService;
     @Inject
@@ -76,8 +75,8 @@ public class MainMenuController extends Controller {
         friendsListView.setId("friendsListView");
         friendsListView.setCellFactory(param -> new MainMenuUserCell(preferencesProvider.get(), userStorageProvider.get(), usersService));
         friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
-        disposables.add(regionsApiService.getRegions()
-                .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));
+        disposables.add(regionsService.getRegions()
+                .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll, error -> System.out.println(error.getMessage())));
         if (!userStorageProvider.get().getFriends().isEmpty()) {
             disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
                     .observeOn(FX_SCHEDULER).subscribe(users -> {
