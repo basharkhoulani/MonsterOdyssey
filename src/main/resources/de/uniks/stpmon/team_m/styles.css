@@ -68,7 +68,7 @@
 .worldMapBackground {
     -fx-background-image: url("images/WorldMap-Background.jpg");
     -fx-background-size: cover;
-    -fx-opacity: 0.55;
+    -fx-opacity: 0.50;
 }
 
 .welcomeSceneButton {
@@ -76,4 +76,14 @@
     -fx-font-family: "Comic Sans MS";
     -fx-min-width: 80px;
     -fx-min-height: 30px;
+}
+
+.welcomeMessage {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #000000;
+    -fx-min-height: 45px;
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-padding: 0px 0px 0px 3px;
 }
