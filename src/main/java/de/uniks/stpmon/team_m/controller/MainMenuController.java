@@ -24,8 +24,6 @@ import java.util.prefs.Preferences;
 import static de.uniks.stpmon.team_m.Constants.*;
 
 public class MainMenuController extends Controller {
-
-
     @FXML
     public VBox friendsListVBox;
     @FXML
@@ -71,7 +69,6 @@ public class MainMenuController extends Controller {
     Provider<GroupStorage> groupStorageProvider;
     private final ObservableList<Region> regions = FXCollections.observableArrayList();
     private final ObservableList<User> friends = FXCollections.observableArrayList();
-    //private ListView<User> friendsListView;
     private ToggleGroup regionToggleGroup;
 
     @Override
