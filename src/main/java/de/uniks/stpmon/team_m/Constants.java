@@ -46,6 +46,8 @@ public class Constants {
     public static final String NOT_OWN_MESSAGE_STYLE = "-fx-background-color: lightgreen;";
     public static final String ROUNDED_CORNERS_STYLE = "-fx-border-radius: 10; -fx-background-radius: 10;";
     public static final String BORDER_COLOR_BLACK = "-fx-border-color: black;";
+    public static final String ZONE_ID_EUROPE_BERLIN = "Europe/Berlin";
+    public static final String DATE_TIME_FORMAT = "HH:mm, dd.MM.yy";
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
