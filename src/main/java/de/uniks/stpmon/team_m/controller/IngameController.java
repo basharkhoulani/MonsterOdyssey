@@ -20,29 +20,49 @@ public class IngameController extends Controller {
 
     @FXML
     public Button helpSymbol;
-
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
+
+    /**
+     * IngameController is used to show the In-Game screen and to pause the game.
+     */
 
     @Inject
     public IngameController() {
     }
+
+    /**
+     * This method sets the title of the {@link IngameController}.
+     *
+     * @return Title of the {@link IngameController}.
+     */
 
     @Override
     public String getTitle() {
         return INGAME_TITLE;
     }
 
+    /**
+     * This method is used to render the In-Game screen.
+     *
+     * @return Parent of the In-Game screen.
+     */
+
     @Override
     public Parent render() {
         final Parent parent = super.render();
         app.getStage().getScene().setOnKeyPressed(event -> {
-            if (event.getCode() == PAUSE_MENU_KEY) {
-                pauseGame();
+            if (!(event.getCode() == PAUSE_MENU_KEY)) {
+                return;
             }
+            pauseGame();
         });
         return parent;
     }
+
+    /**
+     * This method is used to show the help screen.
+     */
 
     public void showHelp() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -58,6 +78,14 @@ public class IngameController extends Controller {
         alert.showAndWait();
     }
 
+    /**
+     * This method is used to pause the game. It shows a dialog with two buttons.
+     * The first button is used to resume the game and the second button is used to save the game and leave.
+     * If the user presses the resume button, the dialog will be closed.
+     * If the user presses the save and leave button, the game will be saved and
+     * the user will be redirected to the main menu.
+     */
+
     public void pauseGame() {
         final Alert alert = new Alert(Alert.AlertType.NONE);
         final DialogPane dialogPane = alert.getDialogPane();
@@ -66,9 +94,10 @@ public class IngameController extends Controller {
         dialogPane.getButtonTypes().addAll(resume, saveAndExit);
         final Button resumeButton = (Button) dialogPane.lookupButton(resume);
         resumeButton.setOnKeyPressed(event -> {
-            if (event.getCode() == PAUSE_MENU_KEY) {
-                alert.setResult(resume);
+            if (!(event.getCode() == PAUSE_MENU_KEY)) {
+                return;
             }
+            alert.setResult(resume);
         });
 
         alert.setTitle(PAUSE_MENU_TITLE);
