@@ -317,14 +317,9 @@ public class MessagesController extends Controller {
     }
 
     private void updateGroup(Group group) {
-        Group groupToUpdate = groups.stream()
-                .filter(g -> g._id().equals(group._id()))
-                .findFirst()
-                .orElse(null);
-        if (groupToUpdate != null) {
-            groupListView.getItems().set(groupListView.getItems().indexOf(groupToUpdate), group);
-        } else {
-            groups.remove(group);
+        groups.removeIf(g -> g._id().equals(group._id()));
+        if (group.members().contains(userStorageProvider.get().get_id())) {
+            groups.add(group);
         }
     }
 
