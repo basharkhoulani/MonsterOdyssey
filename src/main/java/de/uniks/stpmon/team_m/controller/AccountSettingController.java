@@ -44,11 +44,6 @@ public class AccountSettingController extends Controller {
     public Label usernameErrorLabel;
     @FXML
     public Label titleLabel;
-
-    private PasswordFieldSkin skin;
-    private final SimpleStringProperty username = new SimpleStringProperty();
-    private final SimpleStringProperty password = new SimpleStringProperty();
-
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
@@ -57,6 +52,10 @@ public class AccountSettingController extends Controller {
     UserStorage user;
     @Inject
     UsersService usersService;
+    private PasswordFieldSkin skin;
+    private final SimpleStringProperty username = new SimpleStringProperty();
+    private final SimpleStringProperty password = new SimpleStringProperty();
+
 
     @Inject
     AccountSettingController() {
