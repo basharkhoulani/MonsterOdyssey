@@ -78,12 +78,10 @@ public class FriendSettingsController extends Controller {
      */
 
     private void removeFriend() {
+        userStorage.get().deleteFriend(user._id());
         disposables.add(usersService.updateUser(null, null, null, userStorage.get().getFriends(), null)
                 .observeOn(FX_SCHEDULER)
-                .subscribe(updatedUser -> {
-                    userStorage.get().deleteFriend(user._id());
-                    friendsListView.getItems().remove(user);
-                }, error -> showError(error.getMessage())));
+                .subscribe(updatedUser -> friendsListView.getItems().remove(user), error -> showError(error.getMessage())));
     }
 
     /**

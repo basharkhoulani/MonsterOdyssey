@@ -73,9 +73,18 @@ public class MainMenuController extends Controller {
     private ListView<User> friendsListView;
     private ToggleGroup regionToggleGroup;
 
+    /**
+     * MainMenuController is used as a lobby and puffer zone for all other controllers.
+     */
+
     @Inject
     public MainMenuController() {
     }
+
+    /**
+     * This method initializes the friends list and regions list. It also adds a listener to the friends list
+     * if the list is not empty.
+     */
 
     @Override
     public void init() {
@@ -95,10 +104,23 @@ public class MainMenuController extends Controller {
         }
     }
 
+    /**
+     * This method sets the controller title.
+     *
+     * @return Title of the controller.
+     */
+
     @Override
     public String getTitle() {
         return MAIN_MENU_TITLE;
     }
+
+    /**
+     * This method renders the main menu. If the user clicks on a friend in the friends list, the user will be
+     * selected and the user will be able to send messages to the selected user in the MessagesController.
+     *
+     * @return Parent of the main menu.
+     */
 
     @Override
     public Parent render() {
@@ -113,12 +135,21 @@ public class MainMenuController extends Controller {
         return parent;
     }
 
+    /**
+     * This method is used to switch to the MessagesController with the selected user.
+     */
+
     private void switchToMessageScreen() {
         Group privateGroup = new Group(friendsListView.getSelectionModel().getSelectedItem()._id(), friendsListView.getSelectionModel().getSelectedItem().name(), null);
         groupStorageProvider.get().set_id(privateGroup._id());
         groupStorageProvider.get().setName(privateGroup.name());
         app.show(messagesControllerProvider.get());
     }
+
+    /**
+     * This method is used to initialize the radio buttons for the regions list.
+     * It also disables the start game button if no region was selected.
+     */
 
     private void initRadioButtons() {
         ListView<Region> regionListView = new ListView<>();
@@ -130,9 +161,17 @@ public class MainMenuController extends Controller {
         startGameButton.disableProperty().bind(regionToggleGroup.selectedToggleProperty().isNull());
     }
 
+    /**
+     * This method is used to navigate to NewFriendsController.
+     */
+
     public void changeToFindNewFriends() {
         app.show(newFriendControllerProvider.get());
     }
+
+    /**
+     * This method is used to navigate to MessagesController.
+     */
 
     public void changeToMessages() {
         groupStorageProvider.get().set_id(null);
@@ -140,19 +179,30 @@ public class MainMenuController extends Controller {
         app.show(messagesControllerProvider.get());
     }
 
+    /**
+     * This method is used to navigate to LoginController.
+     * It logs out the current user and sets the user status to offline.
+     */
+
     public void changeToLogin() {
         disposables.add(usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)
-                .observeOn(FX_SCHEDULER)
-                .subscribe(user -> {
-                }, error -> showError(error.getMessage())));
-        disposables.add(authenticationService.logout().observeOn(FX_SCHEDULER)
-                .subscribe(logoutResult -> app.show(loginControllerProvider.get()), error -> showError(error.getMessage())));
-
+                .doOnNext(user -> {
+                })
+                .flatMap(user -> authenticationService.logout()).observeOn(FX_SCHEDULER)
+                .subscribe(event -> app.show(loginControllerProvider.get()), error -> showError(error.getMessage())));
     }
+
+    /**
+     * This method is used to navigate to AccountSettingController.
+     */
 
     public void changeToSettings() {
         app.show(accountSettingControllerProvider.get());
     }
+
+    /**
+     * This method is used to navigate to IngameController.
+     */
 
     public void changeToIngame() {
         app.show(ingameControllerProvider.get());
