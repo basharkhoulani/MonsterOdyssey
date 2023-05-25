@@ -119,4 +119,7 @@ public class Constants {
     public static final String HTTP_429 = "429";
     public static final String HTTP_429_MESSAGE = "Too many requests. Please try again later.";
     public static final String UNKNOWN_USER = "Unknown";
+
+    // Style
+    public static final String STYLE_RESOURCE = Main.class.getResource("styles.css").toString();
 }
