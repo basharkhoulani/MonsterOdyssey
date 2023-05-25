@@ -311,7 +311,7 @@ public class MessagesController extends Controller {
                     switch (groupEvent.suffix()) {
                         case "created" -> groups.add(group);
                         case "updated" -> updateGroup(group);
-                        case "deleted" -> groups.removeIf(g -> g._id().equals(group._id()));
+                        case "deleted" -> groups.remove(group);
                     }
                 }, error -> showError(error.getMessage())));
     }
