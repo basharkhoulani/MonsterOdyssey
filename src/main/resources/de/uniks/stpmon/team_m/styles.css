@@ -87,3 +87,9 @@
     -fx-font-size: 12px;
     -fx-padding: 0px 0px 0px 3px;
 }
+
+.alertDialogName {
+    -fx-padding: 10 0 0 0 ;
+    -fx-pref-height: 100px;
+    -fx-pref-width: 300px;
+}
