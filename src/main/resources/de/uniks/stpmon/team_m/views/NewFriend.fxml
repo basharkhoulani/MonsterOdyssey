@@ -9,81 +9,69 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="400.0" prefWidth="600.0" styleClass="Background" stylesheets="@../styles.css"
-      xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="de.uniks.stpmon.team_m.controller.NewFriendController">
-   <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS"/>
-   <VBox alignment="CENTER" maxHeight="850.0" maxWidth="1000.0" prefHeight="650.0" styleClass="ForegroundContainer"
-         VBox.vgrow="ALWAYS">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="Background" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.NewFriendController">
+   <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="SOMETIMES" />
+   <VBox alignment="CENTER" maxHeight="850.0" maxWidth="1000.0" prefHeight="650.0" styleClass="ForegroundContainer" VBox.vgrow="ALWAYS">
       <VBox.margin>
-         <Insets bottom="32.0" left="16.0" right="16.0" top="32.0"/>
+         <Insets bottom="32.0" left="16.0" right="16.0" top="32.0" />
       </VBox.margin>
       <padding>
-         <Insets bottom="16.0" top="16.0"/>
+         <Insets bottom="16.0" top="16.0" />
       </padding>
       <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
-         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
             <VBox.margin>
-               <Insets bottom="50.0"/>
+               <Insets bottom="50.0" />
             </VBox.margin>
             <padding>
-               <Insets left="8.0" right="8.0"/>
+               <Insets left="8.0" right="8.0" />
             </padding>
-            <Button fx:id="addFriendButton" alignment="CENTER" contentDisplay="CENTER" minHeight="36.0"
-                    minWidth="100.0" mnemonicParsing="false" onAction="#addAsAFriend"
-                    styleClass="buttonsYellow" text="Add as a friend" textAlignment="CENTER">
+            <Button fx:id="addFriendButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="60.0" minHeight="36.0" minWidth="100.0" mnemonicParsing="false" onAction="#addAsAFriend" prefHeight="50.0" styleClass="buttonsYellow" text="Add as a friend" textAlignment="CENTER" HBox.hgrow="SOMETIMES">
                <HBox.margin>
-                  <Insets/>
+                  <Insets />
                </HBox.margin>
                <font>
-                  <Font name="Comic Sans MS Bold" size="17.0"/>
+                  <Font name="Comic Sans MS Bold" size="17.0" />
                </font>
             </Button>
-            <TextField fx:id="searchTextField" maxWidth="1.7976931348623157E308" minWidth="330.0"
-                       onAction="#clickSearchField" onMouseClicked="#clickSearchField"
-                       promptText="Find new friends" HBox.hgrow="ALWAYS">
+            <TextField fx:id="searchTextField" maxHeight="60.0" maxWidth="1.7976931348623157E308" minWidth="330.0" onAction="#clickSearchField" onMouseClicked="#clickSearchField" promptText="Find new friends" HBox.hgrow="SOMETIMES">
                <HBox.margin>
-                  <Insets left="8.0"/>
+                  <Insets left="8.0" />
                </HBox.margin>
                <font>
-                  <Font name="Comic Sans MS" size="17.0"/>
+                  <Font name="Comic Sans MS" size="17.0" />
                </font>
                <padding>
-                  <Insets bottom="8.0" left="8.0" top="8.0"/>
+                  <Insets bottom="8.0" left="8.0" top="8.0" />
                </padding>
             </TextField>
             <ImageView fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
-                  <Insets left="10.0"/>
+                  <Insets left="10.0" />
                </HBox.margin>
-               <Image url="@../images/Monster1-without.png"/>
+               <Image url="@../images/Monster1-without.png" />
             </ImageView>
          </HBox>
-         <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
+         <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
             <VBox alignment="BOTTOM_CENTER" HBox.hgrow="ALWAYS">
-               <Button fx:id="mainMenuButton" alignment="TOP_LEFT" minHeight="36.0" minWidth="100.0"
-                       mnemonicParsing="false" onAction="#changeToMainMenu" styleClass="buttonsWhite"
-                       text="Main Menu" textAlignment="CENTER">
+               <Button fx:id="mainMenuButton" alignment="CENTER" maxHeight="60.0" minHeight="36.0" minWidth="100.0" mnemonicParsing="false" onAction="#changeToMainMenu" styleClass="buttonsWhite" text="Main Menu" textAlignment="CENTER" VBox.vgrow="ALWAYS">
                   <opaqueInsets>
-                     <Insets left="20.0"/>
+                     <Insets left="20.0" />
                   </opaqueInsets>
                   <font>
-                     <Font name="Comic Sans MS Bold" size="17.0"/>
+                     <Font name="Comic Sans MS Bold" size="17.0" />
                   </font>
                </Button>
             </VBox>
             <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-               <Button fx:id="messageButton" alignment="CENTER" minHeight="36.0" minWidth="100.0"
-                       mnemonicParsing="false" onAction="#sendMessage" styleClass="buttonsYellow"
-                       text="Send Message" textAlignment="CENTER">
+               <Button fx:id="messageButton" alignment="CENTER" maxHeight="60.0" minHeight="36.0" minWidth="100.0" mnemonicParsing="false" onAction="#sendMessage" styleClass="buttonsYellow" text="Send Message" textAlignment="CENTER" VBox.vgrow="ALWAYS">
                   <font>
-                     <Font name="Comic Sans MS Bold" size="17.0"/>
+                     <Font name="Comic Sans MS Bold" size="17.0" />
                   </font>
                </Button>
             </VBox>
          </HBox>
       </VBox>
    </VBox>
-   <VBox prefHeight="200.0" prefWidth="100.0"/>
+   <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="SOMETIMES" />
 </VBox>

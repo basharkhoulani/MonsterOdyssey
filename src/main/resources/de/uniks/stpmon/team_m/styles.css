@@ -54,7 +54,8 @@
     -fx-text-fill: #25c625;
 }
 
-/* Friend list */
+/*********************************************************************************/
+/******************************* Friendslist *************************************/
 .normalFriendHBox {
     -fx-border-color: black;
     -fx-border-width: 2px;
@@ -66,8 +67,8 @@
     -fx-border-style: solid none none none;
     -fx-background-color: lightblue;
 }
-
-/* Background */
+/*********************************************************************************/
+/********************************* General ***************************************/
 .Background {
     -fx-background-color: white;
     -fx-background-image: url("images/Background.jpg");
@@ -81,18 +82,6 @@
     -fx-background-radius: 10;
 }
 
-/* Login */
-.loginButton {
-    -fx-background-color: #FFF2CC;
-    -fx-border-width: 1px;
-    -fx-border-color: gray;
-}
-.hideSymbolContainer {
-    -fx-border-width: 1px;
-    -fx-border-color: black;
-}
-
-/* General buttons */
 .buttonsYellow {
     -fx-background-color: #FFF2CC;
     -fx-border-width: 1px;
@@ -104,9 +93,47 @@
     -fx-border-width: 1px;
     -fx-border-color: gray;
 }
-
-/* Main Menu */
+/*********************************************************************************/
+/********************************** Login ****************************************/
+.loginButton {
+    -fx-background-color: #FFF2CC;
+    -fx-border-width: 1px;
+    -fx-border-color: gray;
+}
+.hideSymbolContainer {
+    -fx-border-width: 1px;
+    -fx-border-color: black;
+}
+/*********************************************************************************/
+/********************************** Main Menu ************************************/
 .friendsListVBox {
     -fx-border-style: solid;
     -fx-border-width: 2px 0 0 0;
 }
+/*********************************************************************************/
+/*************************** Autocomplete textfield ******************************/
+.auto-complete-popup > .list-view {
+    -fx-background-color: white;
+    -fx-background-insets: -1 -2 -1 -1, 0 -1 0 0;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 12, 0.0 , 0 , 8 );
+}
+.auto-complete-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
+    -fx-padding: 4 0 4 5;
+    /* No alternate highlighting */
+    -fx-background: -fx-control-inner-background;
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 17px;
+}
+.auto-complete-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
+    -fx-background:  -fx-selection-bar-non-focused;
+    -fx-background-color: -fx-background;
+}
+.auto-complete-popup  > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:hover,
+.auto-complete-popup  > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected:hover {
+    -fx-background: -fx-accent;
+    -fx-background-color: -fx-selection-bar;
+}
+.auto-complete-popup > .list-view > .placeholder > .label {
+    -fx-text-fill: derive(-fx-control-inner-background,-30%);
+}
+/*********************************************************************************/
