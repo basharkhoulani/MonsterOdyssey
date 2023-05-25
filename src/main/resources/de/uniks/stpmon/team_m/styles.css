@@ -35,14 +35,15 @@
 
 .editSymbol {
     -fx-background-image: url("images/pencil.jpeg");
-    -fx-border-color: transparent;
+    -fx-border-style: solid;
     -fx-background-color: transparent;
     -fx-background-size: 40px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 50%;
     -fx-background-radius: 0;
-    -fx-border-radius: 15;
-    -fx-border-width: 5;
+    -fx-border-radius: 5;
+    -fx-border-width: 1;
+    -fx-border-color: darkgray;
 }
 
 .errorLabel {
@@ -72,13 +73,15 @@
     -fx-background-image: url("images/Background.jpg");
     -fx-background-repeat: space;
     -fx-background-size: 100%;
+    -fx-background-position: center;
 }
 
-/* Login */
 .ForegroundContainer {
     -fx-background-color: rgba(245, 245, 245, 0.7);
     -fx-background-radius: 10;
 }
+
+/* Login */
 .loginButton {
     -fx-background-color: #FFF2CC;
     -fx-border-width: 1px;
@@ -102,17 +105,7 @@
     -fx-border-color: gray;
 }
 
-
-
 /* Main Menu */
-.regionRadioButtonList {
-    -fx-border-style: solid;
-    -fx-border-width: 1px;
-    -fx-border-radius: 10px;
-    -fx-padding: 2 0 2 0;
-    -fx-background-color: white;
-    -fx-background-radius: 10px;
-}
 .friendsListVBox {
     -fx-border-style: solid;
     -fx-border-width: 2px 0 0 0;
