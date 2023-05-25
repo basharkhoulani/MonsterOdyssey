@@ -12,6 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
@@ -19,34 +21,26 @@ import static de.uniks.stpmon.team_m.Constants.*;
 
 public class FriendSettingsController extends Controller {
 
-    private final User user;
-    private final Preferences preferences;
-    private final ListView<User> friendsListView;
-    private final UserStorage userStorage;
-    private final UsersService usersService;
+    @Inject
+    Preferences preferences;
+    @Inject
+    Provider<UserStorage> userStorage;
+    @Inject
+    UsersService usersService;
     @FXML
     public Button bestFriendButton;
     @FXML
     public Button deleteFriendButton;
+    private User user;
+    private ListView<User> friendsListView;
 
     /**
      * FriendSettingsContoller is used to handle the friend settings. It includes options to delete a friend and to set
      * a friend as best friend. The best friend is always on top of the friends list.
-     *
-     * @param preferences     The {@link Preferences} of the user are used to get and set the best friend status of the user.
-     * @param userStorage     The {@link UserStorage} is used to get updated the friends list of the user.
-     * @param usersService    The {@link UsersService} is used to delete the friend.
-     * @param friendsListView The list view of the friends
-     * @param user            The selected user {@link User}
      */
 
-    public FriendSettingsController(Preferences preferences, UserStorage userStorage,
-                                    UsersService usersService, ListView<User> friendsListView, User user) {
-        this.preferences = preferences;
-        this.userStorage = userStorage;
-        this.usersService = usersService;
-        this.friendsListView = friendsListView;
-        this.user = user;
+    @Inject
+    public FriendSettingsController() {
     }
 
     /**
@@ -84,11 +78,31 @@ public class FriendSettingsController extends Controller {
      */
 
     private void removeFriend() {
-        disposables.add(usersService.updateUser(null, null, null, userStorage.getFriends(), null)
+        disposables.add(usersService.updateUser(null, null, null, userStorage.get().getFriends(), null)
                 .observeOn(FX_SCHEDULER)
                 .subscribe(updatedUser -> {
-                    userStorage.deleteFriend(user._id());
+                    userStorage.get().deleteFriend(user._id());
                     friendsListView.getItems().remove(user);
                 }, error -> showError(error.getMessage())));
+    }
+
+    /**
+     * Sets the user.
+     *
+     * @param user The {@link User}
+     */
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /**
+     * Sets the friends list view.
+     *
+     * @param friendsListView The {@link ListView}
+     */
+
+    public void setFriendsListView(ListView<User> friendsListView) {
+        this.friendsListView = friendsListView;
     }
 }

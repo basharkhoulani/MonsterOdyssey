@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
+import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.List;
 
@@ -22,14 +23,19 @@ import static de.uniks.stpmon.team_m.Constants.*;
 
 public class MessagesBoxController extends Controller {
 
-    private final MessageService messageService;
-    private final GroupService groupService;
-    private final GroupStorage groupStorage;
-    private final UserStorage userStorage;
-    private final List<User> allUsers;
-    private final Provider<EventListener> eventListener;
+    @Inject
+    MessageService messageService;
+    @Inject
+    GroupService groupService;
+    @Inject
+    Provider<GroupStorage> groupStorageProvider;
+    @Inject
+    Provider<UserStorage> userStorageProvider;
+    @Inject
+    Provider<EventListener> eventListener;
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
-    private final User user;
+    private List<User> allUsers;
+    private User user;
     private Group group;
     private String chatID;
     private ListView<Message> messageListView;
@@ -37,29 +43,10 @@ public class MessagesBoxController extends Controller {
     /**
      * For every group and friend chat opened, a new instance of this class is created. This solves the problem of
      * multiple server calls when switching between chats.
-     *
-     * @param messageService The {@link MessageService} to use for sending and receiving messages
-     * @param groupService   The {@link GroupService} to use for receiving groups and group members
-     * @param eventListener  The {@link EventListener} to use for receiving messages
-     * @param groupStorage   The {@link GroupStorage} to use for storing group ids
-     * @param userStorage    The {@link UserStorage} to use for storing user ids
-     * @param allUsers       The {@link List} of all users
-     * @param user           The {@link User} to check if the chat is with a friend
-     * @param group          The {@link Group} to check if the chat is with a group
      */
 
-    public MessagesBoxController(MessageService messageService, GroupService groupService,
-                                 Provider<EventListener> eventListener, GroupStorage groupStorage,
-                                 UserStorage userStorage, List<User> allUsers,
-                                 User user, Group group) {
-        this.messageService = messageService;
-        this.groupService = groupService;
-        this.eventListener = eventListener;
-        this.groupStorage = groupStorage;
-        this.userStorage = userStorage;
-        this.allUsers = allUsers;
-        this.user = user;
-        this.group = group;
+    @Inject
+    public MessagesBoxController() {
     }
 
     /**
@@ -70,7 +57,7 @@ public class MessagesBoxController extends Controller {
     @Override
     public void init() {
         messageListView = new ListView<>(messages);
-        messageListView.setCellFactory(param -> new MessageCell(this, userStorage.get_id()));
+        messageListView.setCellFactory(param -> new MessageCell(this, userStorageProvider.get().get_id()));
         messageListView.setPlaceholder(new Label(NO_MESSAGES_YET));
         if (group == null) {
             openFriendChat("userListView");
@@ -90,7 +77,7 @@ public class MessagesBoxController extends Controller {
 
     private void openFriendChat(String origin) {
         if (!origin.equals("groupListView")) {
-            group = new Group(null, null, List.of(user._id(), userStorage.get_id()));
+            group = new Group(null, null, List.of(user._id(), userStorageProvider.get().get_id()));
         }
         disposables.add(groupService.getGroups(group.membersToString()).observeOn(FX_SCHEDULER).subscribe(groups -> {
             if (group.name() == null) {
@@ -99,7 +86,7 @@ public class MessagesBoxController extends Controller {
                 chatID = group._id();
             }
             if (chatID != null) {
-                groupStorage.set_id(chatID);
+                groupStorageProvider.get().set_id(chatID);
                 disposables.add(messageService.getGroupMessages(chatID)
                         .observeOn(FX_SCHEDULER).subscribe(messages -> {
                             this.messages.setAll(messages);
@@ -117,7 +104,7 @@ public class MessagesBoxController extends Controller {
 
     @Override
     public Parent render() {
-        groupStorage.set_id(chatID);
+        groupStorageProvider.get().set_id(chatID);
         messageListView.scrollTo(messageListView.getItems().size() - 1);
         return messageListView;
     }
@@ -146,7 +133,7 @@ public class MessagesBoxController extends Controller {
      */
 
     public void editMessage(String newBody, Message message) {
-        disposables.add(messageService.updateMessage(groupStorage.get_id(), message._id(), newBody, MESSAGE_NAMESPACE_GROUPS)
+        disposables.add(messageService.updateMessage(groupStorageProvider.get().get_id(), message._id(), newBody, MESSAGE_NAMESPACE_GROUPS)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                 }, error -> showError(error.getMessage())));
     }
@@ -158,7 +145,7 @@ public class MessagesBoxController extends Controller {
      */
 
     public void deleteMessage(Message item) {
-        disposables.add(messageService.deleteMessage(item._id(), groupStorage.get_id(), MESSAGE_NAMESPACE_GROUPS)
+        disposables.add(messageService.deleteMessage(item._id(), groupStorageProvider.get().get_id(), MESSAGE_NAMESPACE_GROUPS)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                 }, error -> showError(error.getMessage())));
     }
@@ -197,4 +184,33 @@ public class MessagesBoxController extends Controller {
                 .ifPresent(m -> messages.set(messages.indexOf(m), message));
     }
 
+    /**
+     * Sets all users
+     *
+     * @param allUsers The list of all users
+     */
+
+    public void setAllUsers(List<User> allUsers) {
+        this.allUsers = allUsers;
+    }
+
+    /**
+     * Sets the user
+     *
+     * @param user The {@link User}
+     */
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /**
+     * Sets the group
+     *
+     * @param group The {@link Group}
+     */
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
 }

@@ -1,13 +1,12 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.service.UsersService;
-import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.controlsfx.control.PopOver;
 
+import javax.inject.Provider;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -16,9 +15,7 @@ import static javafx.geometry.Pos.CENTER_RIGHT;
 
 public class MainMenuUserCell extends UserCell {
 
-    private final UserStorage userStorage;
-    private final UsersService usersService;
-
+    Provider<FriendSettingsController> friendSettingsControllerProvider;
 
     /**
      * MainMenuUserCell is used to handle the main menu user cells in the MainMenuController.
@@ -27,15 +24,13 @@ public class MainMenuUserCell extends UserCell {
      * It also includes the possibility to open the chat with the friend by clicking the cell.
      * MainMenuUserCell extends UserCell which includes the status, best friend status, and name of the user.
      *
-     * @param preferences  The {@link Preferences} are used to get the best friend status of the user.
-     * @param userStorage  The {@link UserStorage} is used to get the currently logged-in user.
-     * @param usersService The {@link UsersService} is used to remove the friend.
+     * @param preferences                      The {@link Preferences} are used to get the best friend status of the user.
+     * @param friendSettingsControllerProvider The {@link Provider} is used to get the {@link FriendSettingsController}.
      */
 
-    public MainMenuUserCell(Preferences preferences, UserStorage userStorage, UsersService usersService) {
+    public MainMenuUserCell(Preferences preferences, Provider<FriendSettingsController> friendSettingsControllerProvider) {
         super(preferences);
-        this.userStorage = userStorage;
-        this.usersService = usersService;
+        this.friendSettingsControllerProvider = friendSettingsControllerProvider;
     }
 
 
@@ -72,8 +67,10 @@ public class MainMenuUserCell extends UserCell {
 
     private void showPopOver(Button button, User user) {
         PopOver popOver = new PopOver();
-        popOver.setContentNode(new FriendSettingsController(preferences, userStorage,
-                usersService, getListView(), user).render());
+        FriendSettingsController friendSettingsController = friendSettingsControllerProvider.get();
+        friendSettingsController.setUser(user);
+        friendSettingsController.setFriendsListView(getListView());
+        popOver.setContentNode(friendSettingsController.render());
         popOver.setDetachable(false);
         popOver.show(button);
     }

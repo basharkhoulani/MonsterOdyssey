@@ -64,6 +64,8 @@ public class MessagesController extends Controller {
     @Inject
     Provider<GroupController> groupControllerProvider;
     @Inject
+    Provider<MessagesBoxController> messagesBoxControllerProvider;
+    @Inject
     Provider<UserStorage> userStorageProvider;
     @Inject
     Provider<GroupStorage> groupStorageProvider;
@@ -224,16 +226,10 @@ public class MessagesController extends Controller {
         try {
             chatScrollPane.setContent(messagesBoxControllerUserMap.get(user).render());
         } catch (Exception ignored) {
-            MessagesBoxController messagesBoxController = new MessagesBoxController(
-                    messageService,
-                    groupService,
-                    eventListenerProvider,
-                    groupStorageProvider.get(),
-                    userStorageProvider.get(),
-                    allUsers,
-                    user,
-                    null
-            );
+            MessagesBoxController messagesBoxController = messagesBoxControllerProvider.get();
+            messagesBoxController.setUser(user);
+            messagesBoxController.setGroup(null);
+            messagesBoxController.setAllUsers(allUsers);
             messagesBoxController.init();
             messagesBoxControllerUserMap.put(user, messagesBoxController);
             subControllers.add(messagesBoxController);
@@ -248,16 +244,10 @@ public class MessagesController extends Controller {
         try {
             chatScrollPane.setContent(messagesBoxControllerGroupMap.get(group).render());
         } catch (Exception ignored) {
-            MessagesBoxController messagesBoxController = new MessagesBoxController(
-                    messageService,
-                    groupService,
-                    eventListenerProvider,
-                    groupStorageProvider.get(),
-                    userStorageProvider.get(),
-                    allUsers,
-                    null,
-                    group
-            );
+            MessagesBoxController messagesBoxController = messagesBoxControllerProvider.get();
+            messagesBoxController.setUser(null);
+            messagesBoxController.setGroup(group);
+            messagesBoxController.setAllUsers(allUsers);
             messagesBoxController.init();
             messagesBoxControllerGroupMap.put(group, messagesBoxController);
             subControllers.add(messagesBoxController);
