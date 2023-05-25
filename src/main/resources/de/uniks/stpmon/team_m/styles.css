@@ -74,6 +74,7 @@
 .welcomeSceneButton {
     -fx-background-color: #FFF2CC;
     -fx-font-family: "Comic Sans MS";
+    -fx-font-weight: bold;
     -fx-min-width: 80px;
     -fx-min-height: 30px;
 }
