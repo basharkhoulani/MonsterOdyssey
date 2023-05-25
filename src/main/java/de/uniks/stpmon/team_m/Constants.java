@@ -2,6 +2,8 @@ package de.uniks.stpmon.team_m;
 
 import javafx.scene.input.KeyCode;
 
+import java.util.Objects;
+
 public class Constants {
     // SERVER
     public static final String API_URL = "https://stpmon.uniks.de/api/v2";
@@ -33,7 +35,7 @@ public class Constants {
     public static final String USER_STATUS_OFFLINE = "offline";
     public static final String USER_STATUS_ONLINE = "online";
     public static final int HBOX_FRIENDS_SPACING = 15;
-    public static final String THREE_DOTS = "\u2026";
+    public static final String THREE_DOTS = "…";
     public static final String BUTTON_TRANSPARENT_STYLE = "-fx-background-color: transparent; -fx-border-color: transparent;";
     public static final String BUTTON_BORDER_STYLE = "-fx-border-color: black; -fx-border-width: 1px;";
     public static final String NO_FRIENDS_FOUND = "No friends found";
@@ -46,12 +48,14 @@ public class Constants {
     public static final String NOT_OWN_MESSAGE_STYLE = "-fx-background-color: lightgreen;";
     public static final String ROUNDED_CORNERS_STYLE = "-fx-border-radius: 10; -fx-background-radius: 10;";
     public static final String BORDER_COLOR_BLACK = "-fx-border-color: black;";
+    public static final String CANCEL = "Cancel";
+    public static final String OK = "OK";
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
     public static final String PASSWORD_LESS_THAN_8_CHARACTERS = "Password must have at least 8 characters.";
     public static final int PASSWORD_CHARACTER_LIMIT = 8;
-    public static final char BULLET = '\u25cf';
+    public static final char BULLET = '●';
     public static final String REFRESH_TOKEN_PREF = "refreshToken";
     public static final String DELETE_SUCCESS = "Account successfully deleted";
     public static final String CUSTOM_ERROR = "Something went terribly wrong!";
@@ -62,7 +66,7 @@ public class Constants {
     public static final String MAIN_MENU_TITLE = "Main Menu";
 
     // NEW GROUP
-    public static final String CHECK_MARK = "\u2713";
+    public static final String CHECK_MARK = "✓";
     public static final String ADD_MARK = "+";
     public static final int BUTTON_PREF_SIZE = 30;
     public static final int MAX_SUGGESTIONS_NEW_GROUP = 20;
@@ -70,7 +74,7 @@ public class Constants {
 
     // MESSAGES
     public static final String MESSAGES_TITLE = "Messages";
-    public static final String PENCIL = "\u270F";
+    public static final String PENCIL = "✏";
     public static final String EDIT_MESSAGE_TITLE = "Edit message";
     public static final String EDIT_MESSAGE_CONTENT = "Message:";
     public static final String DELETE_MESSAGE_TITLE = "Delete Message";
@@ -120,6 +124,19 @@ public class Constants {
     public static final String HTTP_429_MESSAGE = "Too many requests. Please try again later.";
     public static final String UNKNOWN_USER = "Unknown";
 
-    // Style
-    public static final String STYLE_RESOURCE = Main.class.getResource("styles.css").toString();
+    // Welcome Scene
+    public static final String STYLE_RESOURCE = Objects.requireNonNull(Main.class.getResource("styles.css")).toString();
+    public static final String FIRST_MESSAGE = "Welcome to Monster Odyssey!";
+    public static final String SECOND_MESSAGE = "Welcome Aboard.";
+    public static final String THIRD_MESSAGE = "We are the crew of this ship.";
+    public static final String FOURTH_MESSAGE = "My name is James.";
+    public static final String FIFTH_MESSAGE = "And my name is Henry!";
+    public static final String SIXTH_MESSAGE = "Now then, we'll need to look up your application.";
+    public static final String SEVENTH_MESSAGE = "Can we have your name?";
+
+    public static final String WELCOME_MESSAGE_STYLE = "welcomeMessage";
+    public static final String WELCOME_SCENE_BUTTON = "welcomeSceneButton";
+    public static final String ALERT_DIALOG_NAME = "alertDialogName";
+
+    public static final String NAME_ALERT_TITLE = "Name?";
 }
