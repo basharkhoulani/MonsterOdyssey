@@ -77,6 +77,7 @@
     -fx-font-weight: bold;
     -fx-min-width: 80px;
     -fx-min-height: 30px;
+    -fx-border-color: #000000;
 }
 
 .welcomeMessage {
@@ -91,6 +92,6 @@
 
 .alertDialogName {
     -fx-padding: 10 0 0 0 ;
-    -fx-pref-height: 100px;
+    -fx-pref-height: 90px;
     -fx-pref-width: 300px;
 }
