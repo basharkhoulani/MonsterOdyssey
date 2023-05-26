@@ -160,18 +160,9 @@ public class MessagesController extends Controller {
     @Override
     public Parent render() {
         Parent parent = super.render();
-        userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
-        userListView.setCellFactory(param -> new UserCell(preferences));
-
-        listenToUserUpdate(friends, userListView);
-
-        groupListView.setCellFactory(param -> new GroupCell());
-        groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
-        listenToGroupChanges();
+        initListViews();
 
         settingsButton.setVisible(false);
-        //friendsListViewVBox.getChildren().add(userListView);
-        //groupsListViewVBox.getChildren().add(groupListView);
         messageTextArea.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER && !event.isShiftDown()) {
                 event.consume();
@@ -208,6 +199,17 @@ public class MessagesController extends Controller {
         }
         return parent;
 
+    }
+
+    private void initListViews() {
+        userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
+        userListView.setCellFactory(param -> new UserCell(preferences));
+
+        listenToUserUpdate(friends, userListView);
+
+        groupListView.setCellFactory(param -> new GroupCell());
+        groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
+        listenToGroupChanges();
     }
 
     @Override
