@@ -82,7 +82,7 @@ public class MainMenuController extends Controller {
                         friendsListView.getItems().setAll(users);
                         FriendListUtils.sortListView(friendsListView);
                     }, error -> showError(error.getMessage())));
-            listenToUserUpdate(friends, friendsListView);
+
         }
     }
 
@@ -120,6 +120,7 @@ public class MainMenuController extends Controller {
     private void initFriendslist() {
         friendsListView.setCellFactory(param -> new MainMenuUserCell(preferencesProvider.get(), userStorageProvider.get(), usersService));
         friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
+        listenToUserUpdate(friends, friendsListView);
         friendsListView.setOnMouseClicked(event -> {
             if (!friendsListView.getSelectionModel().isEmpty()) {
                 switchToMessageScreen();
