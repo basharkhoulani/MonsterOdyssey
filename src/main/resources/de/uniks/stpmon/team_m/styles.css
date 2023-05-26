@@ -82,6 +82,11 @@
     -fx-background-radius: 10;
 }
 
+.ForegroundHeaderContainer {
+    -fx-background-color: rgba(245, 245, 245, 0.7);
+    -fx-background-radius: 10 10 0 0;
+}
+
 .buttonsYellow {
     -fx-background-color: #FFF2CC;
     -fx-border-width: 1px;

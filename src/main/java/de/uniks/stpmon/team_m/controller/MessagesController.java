@@ -53,6 +53,11 @@ public class MessagesController extends Controller {
     public VBox chatViewVBox;
     @FXML
     public ScrollPane chatScrollPane;
+    @FXML
+    public ListView<User> userListView;
+    @FXML
+    public ListView<Group> groupListView;
+
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
@@ -74,8 +79,6 @@ public class MessagesController extends Controller {
     private final ObservableList<User> friends = FXCollections.observableArrayList();
     private final ObservableList<Group> groups = FXCollections.observableArrayList();
     private final ObservableList<Group> groupsToAdd = FXCollections.observableArrayList();
-    private ListView<User> userListView;
-    private ListView<Group> groupListView;
     private final List<Controller> subControllers = new ArrayList<>();
     Map<User, MessagesBoxController> messagesBoxControllerUserMap = new HashMap<>();
     Map<Group, MessagesBoxController> messagesBoxControllerGroupMap = new HashMap<>();
@@ -87,17 +90,6 @@ public class MessagesController extends Controller {
 
     @Override
     public void init() {
-        userListView = new ListView<>(friends);
-        userListView.setId("friends");
-        userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
-        userListView.setCellFactory(param -> new UserCell(preferences));
-
-        listenToUserUpdate(friends, userListView);
-        groupListView = new ListView<>(groups);
-        groupListView.setId("groups");
-        groupListView.setCellFactory(param -> new GroupCell());
-        groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
-        listenToGroupChanges();
         disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER)
                 .subscribe(users -> {
                     allUsers = users;
@@ -105,6 +97,7 @@ public class MessagesController extends Controller {
                         disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER)
                                 .subscribe(friends -> {
                                     this.friends.setAll(friends);
+                                    userListView.getItems().setAll(friends);
                                     FriendListUtils.sortListView(userListView);
                                     for (User user : friends) {
                                         if (user._id().equals(groupStorageProvider.get().get_id())) {
@@ -114,8 +107,9 @@ public class MessagesController extends Controller {
                                     }
                                 }, error -> showError(error.getMessage())));
                     }
-
+                    groupListView.getItems().clear();
                     disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> groups.stream().filter(this::groupFilter).forEach(group -> {
+                        groupListView.getItems().add(group);
                         if (group.members().size() == 2 && group.name() == null) {
                             for (String id : group.members()) {
                                 if (!id.equals(userStorageProvider.get().get_id())) {
@@ -166,9 +160,18 @@ public class MessagesController extends Controller {
     @Override
     public Parent render() {
         Parent parent = super.render();
+        userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
+        userListView.setCellFactory(param -> new UserCell(preferences));
+
+        listenToUserUpdate(friends, userListView);
+
+        groupListView.setCellFactory(param -> new GroupCell());
+        groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
+        listenToGroupChanges();
+
         settingsButton.setVisible(false);
-        friendsListViewVBox.getChildren().add(userListView);
-        groupsListViewVBox.getChildren().add(groupListView);
+        //friendsListViewVBox.getChildren().add(userListView);
+        //groupsListViewVBox.getChildren().add(groupListView);
         messageTextArea.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER && !event.isShiftDown()) {
                 event.consume();
