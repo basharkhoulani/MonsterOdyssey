@@ -1,61 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="de.uniks.stpmon.team_m.controller.AvatarSelectionController">
+<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.AvatarSelectionController">
     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-            <ImageView fx:id="avatar1ImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true"
-                       preserveRatio="true">
+            <ImageView fx:id="avatar1ImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                 <VBox.margin>
-                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                 </VBox.margin>
             </ImageView>
             <RadioButton fx:id="avatar1RadioButton" mnemonicParsing="false" onAction="#selectAvatar1">
                 <toggleGroup>
-                    <ToggleGroup fx:id="selectAvatar"/>
+                    <ToggleGroup fx:id="selectAvatar" />
                 </toggleGroup>
             </RadioButton>
         </VBox>
         <VBox alignment="CENTER" layoutX="168.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
-            <ImageView fx:id="avatar2ImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true"
-                       preserveRatio="true">
+            <ImageView fx:id="avatar2ImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                 <VBox.margin>
-                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                 </VBox.margin>
             </ImageView>
-            <RadioButton fx:id="avatar2RadioButton" mnemonicParsing="false" onAction="#selectAvatar2"
-                         toggleGroup="$selectAvatar"/>
+            <RadioButton fx:id="avatar2RadioButton" mnemonicParsing="false" onAction="#selectAvatar2" toggleGroup="$selectAvatar" />
         </VBox>
         <VBox alignment="CENTER" layoutX="73.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
-            <ImageView fx:id="avatar3ImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true"
-                       preserveRatio="true">
+            <ImageView fx:id="avatar3ImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                 <VBox.margin>
-                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                 </VBox.margin>
             </ImageView>
-            <RadioButton fx:id="avatar3RadioButton" mnemonicParsing="false" onAction="#selectAvatar3"
-                         toggleGroup="$selectAvatar"/>
+            <RadioButton fx:id="avatar3RadioButton" mnemonicParsing="false" onAction="#selectAvatar3" toggleGroup="$selectAvatar" />
         </VBox>
         <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
-            <ImageView fx:id="avatar4ImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true"
-                       preserveRatio="true">
+            <ImageView fx:id="avatar4ImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                 <VBox.margin>
-                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                 </VBox.margin>
             </ImageView>
-            <RadioButton fx:id="avatar4RadioButton" mnemonicParsing="false" onAction="#selectAvatar4"
-                         toggleGroup="$selectAvatar"/>
+            <RadioButton fx:id="avatar4RadioButton" mnemonicParsing="false" onAction="#selectAvatar4" toggleGroup="$selectAvatar" />
         </VBox>
     </HBox>
-    <HBox alignment="CENTER" prefHeight="74.0" prefWidth="490.0"/>
-    <Label fx:id="uploadErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel"
-           stylesheets="@../styles.css"/>
+    <HBox alignment="CENTER" prefHeight="74.0" prefWidth="490.0">
+        <VBox.margin>
+            <Insets top="20.0"/>
+        </VBox.margin>
+        <TextField fx:id="uploadTextField" onAction="#uploadAvatarPicture" prefHeight="25.0" prefWidth="260.0"
+                   promptText="Upload your avatar picture here">
+           <HBox.margin>
+               <Insets right="60.0"/>
+           </HBox.margin>
+        </TextField>
+        <Button fx:id="selectFileButton" mnemonicParsing="false" onAction="#selectFile" text="Select File"/>
+    </HBox>
+    <Label fx:id="uploadErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel" stylesheets="@../styles.css" />
 </VBox>

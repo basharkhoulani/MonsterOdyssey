@@ -48,7 +48,7 @@ public class AccountSettingController extends Controller {
     @FXML
     public ImageView avatarImageView;
     @FXML
-    public Button avatarEditButton;
+    public Button editAvatarButton;
     @FXML
     public Button saveAvatarButton;
     @FXML
@@ -164,7 +164,6 @@ public class AccountSettingController extends Controller {
     }
 
     public void editAvatar() {
-        //vorläufige Buttons
         ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         ButtonType okButton = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
 

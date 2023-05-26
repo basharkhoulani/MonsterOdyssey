@@ -3,9 +3,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 
 public class AvatarSelectionController extends Controller {
@@ -30,6 +28,10 @@ public class AvatarSelectionController extends Controller {
     public RadioButton avatar4RadioButton;
     @FXML
     public ToggleGroup selectAvatar;
+    @FXML
+    public TextField uploadTextField;
+    @FXML
+    public Button selectFileButton;
 
 
     @Override
@@ -50,6 +52,14 @@ public class AvatarSelectionController extends Controller {
     }
 
     public void selectAvatar4() {
+
+    }
+
+    public void uploadAvatarPicture() {
+
+    }
+
+    public void selectFile() {
 
     }
 }
