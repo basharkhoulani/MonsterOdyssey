@@ -45,6 +45,15 @@
     -fx-border-width: 1;
     -fx-border-color: darkgray;
 }
+.editSymbol:hover {
+    -fx-background-image: url("images/pencil_yellow.jpg");
+    -fx-background-size: 40px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 50%;
+    -fx-border-color: #4f4f4f;
+    -fx-border-width: 2;
+
+}
 
 .errorLabel {
     -fx-text-fill: red;
@@ -83,7 +92,7 @@
 }
 
 .ForegroundHeaderContainer {
-    -fx-background-color: rgba(245, 245, 245, 0.7);
+    -fx-background-color: rgba(245, 245, 245, 0.8);
     -fx-background-radius: 10 10 0 0;
 }
 
