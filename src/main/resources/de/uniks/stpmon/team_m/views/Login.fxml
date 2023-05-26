@@ -101,16 +101,19 @@
          <VBox.margin>
             <Insets bottom="10.0" />
          </VBox.margin>
-         <Button fx:id="signUpButton" maxHeight="40.0" mnemonicParsing="false" onAction="#signUp" prefHeight="36.0" prefWidth="106.0" styleClass="buttonsYellow" text="Sign Up" HBox.hgrow="ALWAYS">
+         <Button fx:id="signUpButton" maxHeight="50.0" mnemonicParsing="false" onAction="#signUp" prefHeight="36.0" prefWidth="106.0" styleClass="buttonsYellow" text="Sign Up" HBox.hgrow="ALWAYS">
             <font>
                <Font name="Comic Sans MS Bold" size="17.0" />
             </font>
          </Button>
          <SplitPane prefHeight="200.0" prefWidth="200.0" visible="false" />
-         <Button fx:id="signInButton" maxHeight="40.0" mnemonicParsing="false" onAction="#signIn" prefHeight="36.0" prefWidth="106.0" styleClass="buttonsYellow" text="Sign In" HBox.hgrow="ALWAYS">
+         <Button fx:id="signInButton" maxHeight="50.0" mnemonicParsing="false" onAction="#signIn" prefHeight="36.0" prefWidth="106.0" styleClass="buttonsYellow" text="Sign In" HBox.hgrow="ALWAYS">
             <font>
                <Font name="Comic Sans MS Bold" size="17.0" />
             </font>
+            <HBox.margin>
+               <Insets />
+            </HBox.margin>
          </Button>
       </HBox>
    </VBox>
