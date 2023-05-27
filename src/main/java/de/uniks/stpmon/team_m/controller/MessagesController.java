@@ -11,6 +11,7 @@ import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.FriendListUtils;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
+import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -34,7 +35,7 @@ import static de.uniks.stpmon.team_m.Constants.*;
 public class MessagesController extends Controller {
 
     @FXML
-    public Text currentFriendOrGroupText; //needs to be set each time a different chat is selected
+    public Text currentFriendOrGroupText;
     @FXML
     public Label friendsAndGroupText;
     @FXML
@@ -80,12 +81,13 @@ public class MessagesController extends Controller {
     private final ObservableList<User> friends = FXCollections.observableArrayList();
     private final ObservableList<Group> groups = FXCollections.observableArrayList();
     private final ObservableList<Group> groupsToAdd = FXCollections.observableArrayList();
+    private final ObservableList<User> allUsers = FXCollections.observableArrayList();
     private ListView<User> userListView;
     private ListView<Group> groupListView;
     private final List<Controller> subControllers = new ArrayList<>();
     Map<User, MessagesBoxController> messagesBoxControllerUserMap = new HashMap<>();
     Map<Group, MessagesBoxController> messagesBoxControllerGroupMap = new HashMap<>();
-    private List<User> allUsers;
+    private boolean userChosenFromMainMenu;
 
     @Inject
     public MessagesController() {
@@ -93,57 +95,79 @@ public class MessagesController extends Controller {
 
     @Override
     public void init() {
-        userListView = new ListView<>(friends);
-        userListView.setId("friends");
-        userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
-        userListView.setCellFactory(param -> new UserCell(preferences));
+        initializeFriendsList();
+        initializeGroupsList();
+        setContentFriendsAndGroupsList();
+    }
 
-        listenToUserUpdate(friends, userListView);
+    private void setContentFriendsAndGroupsList() {
+        disposables.add(usersService.getUsers(null, null)
+                .doOnNext(allUsers::setAll).flatMap(users -> getListOfFriends().observeOn(FX_SCHEDULER))
+                .doOnNext(friends -> {
+                    this.friends.setAll(friends);
+                    FriendListUtils.sortListView(userListView);
+                    if (userChosenFromMainMenu) {
+                        selectUserChosenFromMainMenu();
+                    }
+                }).flatMap(friends -> groupService.getGroups(null).observeOn(FX_SCHEDULER))
+                .doOnNext(groups -> groups.stream().filter(this::groupFilter).forEach(this::setGroups))
+                .observeOn(FX_SCHEDULER).subscribe(event -> {
+                }, error -> showError(error.getMessage())));
+    }
+
+    private void setGroups(Group group) {
+        if (group.members().size() == 2 && group.name() == null) {
+            for (String id : group.members()) {
+                if (!id.equals(userStorageProvider.get().get_id())) {
+                    allUsers.stream().filter(u -> u._id().equals(id)).findFirst()
+                            .ifPresent(u -> this.groups.add(new Group(group._id(), u.name(), group.members())));
+                }
+            }
+        } else if (group.members().size() == 1 && group.name() == null) {
+            this.groups.add(new Group(group._id(), ALONE, group.members()));
+        } else {
+            this.groups.add(group);
+        }
+        if (group._id().equals(groupStorageProvider.get().get_id())) {
+            groupListView.getSelectionModel().select(group);
+            groupListView.scrollTo(group);
+        }
+    }
+
+    private void selectUserChosenFromMainMenu() {
+        userListView.getItems().stream()
+                .filter(user -> user._id().equals(groupStorageProvider.get().get_id()))
+                .findFirst()
+                .ifPresent(user -> {
+                    userListView.getSelectionModel().select(user);
+                    userListView.scrollTo(user);
+                });
+        userChosenFromMainMenu = false;
+    }
+
+    private Observable<List<User>> getListOfFriends() {
+        List<String> friends = userStorageProvider.get().getFriends();
+        if (friends.isEmpty()) {
+            return Observable.empty();
+        } else {
+            return usersService.getUsers(friends, null);
+        }
+    }
+
+    private void initializeGroupsList() {
         groupListView = new ListView<>(groups);
         groupListView.setId("groups");
         groupListView.setCellFactory(param -> new GroupCell());
         groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
         listenToGroupChanges();
-        disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER)
-                .subscribe(users -> {
-                    allUsers = users;
-                    if (!userStorageProvider.get().getFriends().isEmpty()) {
-                        disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER)
-                                .subscribe(friends -> {
-                                    this.friends.setAll(friends);
-                                    FriendListUtils.sortListView(userListView);
-                                    for (User user : friends) {
-                                        if (user._id().equals(groupStorageProvider.get().get_id())) {
-                                            openPrivateChat(user);
-                                            currentFriendOrGroupText.setText(user.name());
-                                        }
-                                    }
-                                }, error -> showError(error.getMessage())));
-                    }
+    }
 
-                    disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> groups.stream().filter(this::groupFilter).forEach(group -> {
-                        if (group.members().size() == 2 && group.name() == null) {
-                            for (String id : group.members()) {
-                                if (!id.equals(userStorageProvider.get().get_id())) {
-                                    for (User user : allUsers) {
-                                        if (user._id().equals(id)) {
-                                            this.groups.add(new Group(group._id(), user.name(), group.members()));
-                                        }
-                                    }
-                                }
-                            }
-                        } else if (group.members().size() == 1 && group.name() == null) {
-                            this.groups.add(new Group(group._id(), ALONE, group.members()));
-                        } else {
-                            this.groups.add(group);
-                        }
-                        if (group._id().equals(groupStorageProvider.get().get_id())) {
-                            openGroupChat(group);
-                            currentFriendOrGroupText.setText(groupStorageProvider.get().getName());
-                        }
-                    }), error -> showError(error.getMessage())));
-                }, error -> showError(error.getMessage())));
-
+    private void initializeFriendsList() {
+        userListView = new ListView<>(friends);
+        userListView.setId("friends");
+        userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
+        userListView.setCellFactory(param -> new UserCell(preferences));
+        listenToUserUpdate(friends, userListView);
     }
 
     private boolean groupFilter(Group group) {
@@ -181,22 +205,26 @@ public class MessagesController extends Controller {
                 this.onSendMessage();
             }
         });
-        userListView.setOnMouseClicked(event -> {
-            if (!(userListView.getSelectionModel().getSelectedItem() == null)) {
+        userListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
                 settingsButton.setVisible(false);
-                openPrivateChat(userListView.getSelectionModel().getSelectedItem());
-                currentFriendOrGroupText.setText(userListView.getSelectionModel().getSelectedItem().name());
+                openPrivateChat(newValue);
+                currentFriendOrGroupText.setText(newValue.name());
+                if (groupListView.getSelectionModel().getSelectedItem() != null) {
+                    groupListView.getSelectionModel().clearSelection();
+                }
             }
         });
-
-        groupListView.setOnMouseClicked(event -> {
-            if (!(groupListView.getSelectionModel().getSelectedItem() == null)) {
+        groupListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
                 settingsButton.setVisible(true);
-                openGroupChat(groupListView.getSelectionModel().getSelectedItem());
-                currentFriendOrGroupText.setText(groupListView.getSelectionModel().getSelectedItem().name());
+                openGroupChat(newValue);
+                currentFriendOrGroupText.setText(newValue.name());
+                if (userListView.getSelectionModel().getSelectedItem() != null) {
+                    userListView.getSelectionModel().clearSelection();
+                }
             }
         });
-
         if (groupStorageProvider.get().get_id() != null) {
             for (User user : friends) {
                 if (user._id().equals(groupStorageProvider.get().get_id())) {
@@ -223,6 +251,7 @@ public class MessagesController extends Controller {
     }
 
     public void openPrivateChat(User user) {
+
         try {
             chatScrollPane.setContent(messagesBoxControllerUserMap.get(user).render());
         } catch (Exception ignored) {
@@ -281,17 +310,13 @@ public class MessagesController extends Controller {
 
     public void onSendMessage() {
         String groupID = groupStorageProvider.get().get_id();
-        if (groupID == null) {
-            return;
+        if (groupID != null) {
+            String messageBody = messageTextArea.getText();
+            disposables.add(messageService.newMessage(groupID, messageBody, MESSAGE_NAMESPACE_GROUPS)
+                    .observeOn(FX_SCHEDULER).subscribe(message -> {
+                    }, error -> showError(error.getMessage())));
+            messageTextArea.setText(EMPTY_STRING);
         }
-
-        String messageBody = messageTextArea.getText();
-        disposables.add(messageService.newMessage(groupID, messageBody, MESSAGE_NAMESPACE_GROUPS)
-                .observeOn(FX_SCHEDULER).subscribe(
-                        message -> {
-                        }, Throwable::printStackTrace
-                ));
-        messageTextArea.setText("");
     }
 
     public void listenToGroupChanges() {
@@ -313,4 +338,7 @@ public class MessagesController extends Controller {
         }
     }
 
+    public void setUserChosenFromMainMenu(boolean userChosenFromMainMenu) {
+        this.userChosenFromMainMenu = userChosenFromMainMenu;
+    }
 }

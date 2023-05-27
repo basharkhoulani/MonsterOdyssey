@@ -3,7 +3,6 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.controller.subController.FriendSettingsController;
 import de.uniks.stpmon.team_m.controller.subController.MainMenuUserCell;
 import de.uniks.stpmon.team_m.controller.subController.RegionCell;
-import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
@@ -140,10 +139,12 @@ public class MainMenuController extends Controller {
      */
 
     private void switchToMessageScreen() {
-        Group privateGroup = new Group(friendsListView.getSelectionModel().getSelectedItem()._id(), friendsListView.getSelectionModel().getSelectedItem().name(), null);
-        groupStorageProvider.get().set_id(privateGroup._id());
-        groupStorageProvider.get().setName(privateGroup.name());
-        app.show(messagesControllerProvider.get());
+        User selectedUser = friendsListView.getSelectionModel().getSelectedItem();
+        groupStorageProvider.get().set_id(selectedUser._id());
+        groupStorageProvider.get().setName(selectedUser.name());
+        MessagesController messagesController = messagesControllerProvider.get();
+        messagesController.setUserChosenFromMainMenu(true);
+        app.show(messagesController);
     }
 
     /**
