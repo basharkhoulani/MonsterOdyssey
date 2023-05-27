@@ -104,8 +104,8 @@ class AppTest extends ApplicationTest {
 
         // test New Group
         clickOn("New Group");
-        final Text selectGroupMembersText = lookup("Select Groupmembers").queryText();
-        assertNotNull(selectGroupMembersText);
+        final Label selectGroupMembersLabel = lookup("Select Groupmembers").query();
+        assertNotNull(selectGroupMembersLabel);
         assertEquals("Monster Odyssey - New Group", stage.getTitle());
         final Button saveGroupButton = lookup("Save Group").query();
         assertNotNull(saveGroupButton);
