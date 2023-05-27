@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox styleClass="Background" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.GroupController">
+<HBox xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.GroupController" styleClass="Background">
    <VBox alignment="TOP_CENTER" fillWidth="false" minWidth="375.0" HBox.hgrow="NEVER">
       <HBox alignment="CENTER" styleClass="ForegroundHeaderContainer" VBox.vgrow="SOMETIMES">
          <ImageView fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">

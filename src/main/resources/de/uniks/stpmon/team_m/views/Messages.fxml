@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane minHeight="480.0" minWidth="640.0" prefHeight="600.0" prefWidth="800.0" styleClass="Background" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MessagesController">
+<BorderPane minHeight="480.0" minWidth="640.0" prefHeight="600.0" prefWidth="800.0" styleClass="Background" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MessagesController">
    <left>
       <HBox alignment="CENTER" fillHeight="false" BorderPane.alignment="TOP_CENTER">
          <HBox alignment="CENTER" fillHeight="false">
@@ -149,7 +149,7 @@
       </VBox>
    </center>
    <top>
-      <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#changeToSettings" prefHeight="42.0" prefWidth="42.0" styleClass="settingsSymbol" stylesheets="@../styles.css" BorderPane.alignment="TOP_RIGHT">
+      <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#changeToSettings" prefHeight="42.0" prefWidth="42.0" styleClass="settingsSymbol" BorderPane.alignment="TOP_RIGHT">
          <BorderPane.margin>
             <Insets bottom="-38.0" />
          </BorderPane.margin></Button>

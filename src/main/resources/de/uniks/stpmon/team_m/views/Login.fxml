@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="Background" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.LoginController">
+<HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="Background" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.LoginController">
 
    <VBox alignment="CENTER" maxHeight="650.0" maxWidth="1000.0" minHeight="-Infinity" minWidth="-Infinity" styleClass="ForegroundContainer" HBox.hgrow="ALWAYS">
       <VBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
@@ -50,7 +50,7 @@
             </HBox.margin>
          </Label>
       </HBox>
-      <Label fx:id="informationLabel" alignment="CENTER" maxHeight="30.0" prefHeight="17.0" prefWidth="562.0" styleClass="informationLabel" stylesheets="@../styles.css" VBox.vgrow="NEVER" />
+      <Label fx:id="informationLabel" alignment="CENTER" maxHeight="30.0" prefHeight="17.0" prefWidth="562.0" styleClass="informationLabel" VBox.vgrow="NEVER" />
       <HBox alignment="BOTTOM_CENTER" maxHeight="45.0" prefHeight="36.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
             <TextField fx:id="usernameField" maxHeight="40.0" maxWidth="500.0" minHeight="25.0" minWidth="120.0" promptText="Username" VBox.vgrow="ALWAYS">
@@ -66,7 +66,7 @@
             </HBox.margin>
          </VBox>
       </HBox>
-      <Label fx:id="usernameErrorLabel" alignment="CENTER" maxHeight="36.0" prefHeight="17.0" prefWidth="575.0" styleClass="errorLabel" stylesheets="@../styles.css" VBox.vgrow="NEVER" />
+      <Label fx:id="usernameErrorLabel" alignment="CENTER" maxHeight="36.0" prefHeight="17.0" prefWidth="575.0" styleClass="errorLabel" VBox.vgrow="NEVER" />
       <VBox alignment="TOP_CENTER" maxHeight="45.0" VBox.vgrow="ALWAYS">
          <VBox.margin>
             <Insets left="100.0" right="100.0" />
@@ -81,7 +81,7 @@
                <HBox.margin>
                   <Insets left="8.0" />
                </HBox.margin>
-               <Button fx:id="hideButton" maxWidth="42.0" mnemonicParsing="false" onAction="#showPassword" prefHeight="42.0" prefWidth="42.0" styleClass="hideSymbol" stylesheets="@../styles.css" VBox.vgrow="ALWAYS">
+               <Button fx:id="hideButton" maxWidth="42.0" mnemonicParsing="false" onAction="#showPassword" prefHeight="42.0" prefWidth="42.0" styleClass="hideSymbol" VBox.vgrow="ALWAYS">
                   <VBox.margin>
                      <Insets />
                   </VBox.margin>
@@ -89,7 +89,7 @@
             </VBox>
          </HBox>
       </VBox>
-      <Label fx:id="passwordErrorLabel" alignment="CENTER" maxHeight="40.0" prefHeight="17.0" prefWidth="581.0" styleClass="errorLabel" stylesheets="@../styles.css" VBox.vgrow="NEVER" />
+      <Label fx:id="passwordErrorLabel" alignment="CENTER" maxHeight="40.0" prefHeight="17.0" prefWidth="581.0" styleClass="errorLabel" VBox.vgrow="NEVER" />
       <HBox alignment="TOP_CENTER" maxHeight="45.0" prefHeight="36.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
          <CheckBox fx:id="rememberMeCheckbox" mnemonicParsing="false" prefHeight="18.0" text="Remember Me" HBox.hgrow="ALWAYS">
             <font>

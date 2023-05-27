@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" styleClass="Background" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.AccountSettingController">
+<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.AccountSettingController" styleClass="Background">
     <VBox alignment="CENTER" maxHeight="600.0" maxWidth="1000.0" styleClass="ForegroundContainer" VBox.vgrow="ALWAYS">
         <VBox.margin>
             <Insets bottom="16.0" left="32.0" right="32.0" top="16.0" />
