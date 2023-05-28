@@ -42,7 +42,7 @@ public class WelcomeSceneControllerTest extends ApplicationTest{
 
         final Button startGameButton = lookup("Start Game").query();
         final ObservableList<Region> items = FXCollections
-                .observableArrayList(new Region("TestRegion", "NamedRegion"));
+                .observableArrayList(new Region("TestRegion", "NamedRegion", null, null, null, null));
         final ListView<Region> regionListView = lookup("#regionListView").query();
         regionListView.setItems(items);
         regionListView.getSelectionModel().selectFirst();
