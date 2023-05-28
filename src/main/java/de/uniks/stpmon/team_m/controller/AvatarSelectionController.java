@@ -6,13 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
-import org.controlsfx.control.decoration.Decorator;
-import org.controlsfx.control.textfield.CustomTextField;
-import org.controlsfx.control.textfield.TextFields;
-
 
 import javax.inject.Inject;
-
 import java.io.File;
 
 import static de.uniks.stpmon.team_m.Constants.IMAGE;
@@ -50,6 +45,7 @@ public class AvatarSelectionController extends Controller {
     public AvatarSelectionController() {
         super();
     }
+
     @Override
     public Parent render() {
         return super.render();
