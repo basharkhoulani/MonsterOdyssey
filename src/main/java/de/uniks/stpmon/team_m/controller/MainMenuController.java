@@ -5,8 +5,8 @@ import de.uniks.stpmon.team_m.controller.subController.MainMenuUserCell;
 import de.uniks.stpmon.team_m.controller.subController.RegionCell;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
+import de.uniks.stpmon.team_m.service.RegionsService;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.FriendListUtils;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
@@ -59,6 +59,7 @@ public class MainMenuController extends Controller {
     UsersService usersService;
     @Inject
     AuthenticationService authenticationService;
+    @Inject
     Provider<FriendSettingsController> friendSettingsControllerProvider;
     @Inject
     Provider<UserStorage> userStorageProvider;
