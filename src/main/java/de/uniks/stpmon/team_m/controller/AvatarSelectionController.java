@@ -6,11 +6,16 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import org.controlsfx.control.decoration.Decorator;
+import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
+
 
 import javax.inject.Inject;
 
 import java.io.File;
 
+import static de.uniks.stpmon.team_m.Constants.IMAGE;
 import static de.uniks.stpmon.team_m.Constants.SELECT_AVATAR_PICTURE;
 
 public class AvatarSelectionController extends Controller {
@@ -72,7 +77,7 @@ public class AvatarSelectionController extends Controller {
 
     public void selectFile() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Bilder", "*.png", "*.jpg", "*.jpeg"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(IMAGE, "*.png", "*.jpg", "*.jpeg"));
         fileChooser.setTitle(SELECT_AVATAR_PICTURE);
         File selectedFile = fileChooser.showOpenDialog(null);
     }

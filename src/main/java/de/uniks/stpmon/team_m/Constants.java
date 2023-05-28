@@ -96,6 +96,7 @@ public class Constants {
     public static final String USERNAME_SUCCESS_CHANGED = "Your username has been changed successfully.";
     public static final String PASSWORD_SUCCESS_CHANGED = "Your Password has been changed successfully.";
     public static final String SELECT_AVATAR_PICTURE = "Select Avatar Picture";
+    public static final String IMAGE = "Image";
 
     // INGAME
     public static final String INGAME_TITLE = "Ingame";
