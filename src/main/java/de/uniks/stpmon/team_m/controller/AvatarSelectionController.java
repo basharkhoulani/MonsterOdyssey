@@ -76,5 +76,8 @@ public class AvatarSelectionController extends Controller {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(IMAGE, "*.png", "*.jpg", "*.jpeg"));
         fileChooser.setTitle(SELECT_AVATAR_PICTURE);
         File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            uploadTextField.setText(selectedFile.getAbsolutePath());
+        }
     }
 }
