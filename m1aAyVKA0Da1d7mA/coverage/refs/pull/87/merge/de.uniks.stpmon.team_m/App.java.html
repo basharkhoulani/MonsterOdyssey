@@ -20,116 +20,120 @@ import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
-
 public class App extends Application {
     private Stage stage;
     private Controller controller;
     private final MainComponent component;
-<span class="pc" id="L28">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
+<span class="pc" id="L27">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
 
-<span class="nc" id="L30">    public App() {</span>
-<span class="nc" id="L31">        component = DaggerMainComponent.builder().mainApp(this).build();</span>
-<span class="nc" id="L32">    }</span>
+<span class="nc" id="L29">    public App() {</span>
+<span class="nc" id="L30">        component = DaggerMainComponent.builder().mainApp(this).build();</span>
+<span class="nc" id="L31">    }</span>
 
-<span class="fc" id="L34">    public App(MainComponent component) {</span>
-<span class="fc" id="L35">        this.component = component;</span>
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L33">    public App(MainComponent component) {</span>
+<span class="fc" id="L34">        this.component = component;</span>
+<span class="fc" id="L35">    }</span>
 
     public Stage getStage() {
-<span class="fc" id="L39">        return stage;</span>
+<span class="fc" id="L38">        return stage;</span>
     }
 
     @Override
     public void start(Stage primaryStage) {
-<span class="fc" id="L44">        stage = primaryStage;</span>
-<span class="fc" id="L45">        stage.setWidth(STANDARD_WIDTH);</span>
-<span class="fc" id="L46">        stage.setHeight(STANDARD_HEIGHT);</span>
-<span class="fc" id="L47">        stage.setMinHeight(MINIMUM_HEIGHT);</span>
-<span class="fc" id="L48">        stage.setMinWidth(MINIMUM_WIDTH);</span>
-<span class="fc" id="L49">        stage.setTitle(GAME_NAME);</span>
+<span class="fc" id="L43">        stage = primaryStage;</span>
+<span class="fc" id="L44">        stage.setWidth(STANDARD_WIDTH);</span>
+<span class="fc" id="L45">        stage.setHeight(STANDARD_HEIGHT);</span>
+<span class="fc" id="L46">        stage.setMinHeight(MINIMUM_HEIGHT);</span>
+<span class="fc" id="L47">        stage.setMinWidth(MINIMUM_WIDTH);</span>
+<span class="fc" id="L48">        stage.setTitle(GAME_NAME);</span>
 
-<span class="fc" id="L51">        stage.setScene(loadingScreen());</span>
+<span class="fc" id="L50">        stage.setScene(loadingScreen());</span>
+      
 <span class="fc" id="L52">        setAppIcon(stage);</span>
 <span class="fc" id="L53">        setTaskbarIcon();</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L55">            stage.getScene().getStylesheets().add(Main.class.getResource(&quot;styles.css&quot;).toString());</span>
+        }
 
-<span class="fc" id="L55">        PauseTransition pause = new PauseTransition(Duration.seconds(DURATION_OF_LOADING_SCREEN));</span>
-<span class="fc" id="L56">        pause.setOnFinished(event -&gt; {</span>
-<span class="pc bpc" id="L57" title="1 of 2 branches missed.">            if (component == null) {</span>
-<span class="fc" id="L58">                return;</span>
+<span class="fc" id="L58">        PauseTransition pause = new PauseTransition(Duration.seconds(DURATION_OF_LOADING_SCREEN));</span>
+<span class="fc" id="L59">        pause.setOnFinished(event -&gt; {</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">            if (component == null) {</span>
+<span class="fc" id="L61">                return;</span>
             }
-<span class="nc" id="L60">            final AuthenticationService authenticationService = component.authenticationService();</span>
-<span class="nc bnc" id="L61" title="All 2 branches missed.">            if (authenticationService.isRememberMe()) {</span>
-<span class="nc" id="L62">                disposables.add(authenticationService.refresh().observeOn(Schedulers.from(Platform::runLater)).subscribe(</span>
+<span class="nc" id="L63">            final AuthenticationService authenticationService = component.authenticationService();</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">            if (authenticationService.isRememberMe()) {</span>
+<span class="nc" id="L65">                disposables.add(authenticationService.refresh().observeOn(Schedulers.from(Platform::runLater)).subscribe(</span>
                         lr -&gt; {
-<span class="nc" id="L64">                            component.loginController().userStatusUpdate(USER_STATUS_ONLINE);</span>
-<span class="nc" id="L65">                            show(component.mainMenuController());</span>
-<span class="nc" id="L66">                        }, err -&gt; show(component.loginController())));</span>
+<span class="nc" id="L67">                            component.loginController().userStatusUpdate(USER_STATUS_ONLINE);</span>
+<span class="nc" id="L68">                            show(component.mainMenuController());</span>
+<span class="nc" id="L69">                        }, err -&gt; show(component.loginController())));</span>
             } else {
-<span class="nc" id="L68">                show(component.loginController());</span>
+<span class="nc" id="L71">                show(component.loginController());</span>
             }
-<span class="nc" id="L70">        });</span>
-<span class="fc" id="L71">        pause.play();</span>
-<span class="fc" id="L72">        stage.show();</span>
-<span class="fc" id="L73">    }</span>
+<span class="nc" id="L73">        });</span>
+<span class="fc" id="L74">        pause.play();</span>
+<span class="fc" id="L75">        stage.show();</span>
+<span class="fc" id="L76">    }</span>
 
     private Scene loadingScreen() {
-<span class="fc" id="L76">        final ImageView loading = new ImageView(new Image(Objects.requireNonNull(App.class.getResource(LOADING_ANIMATION)).toString()));</span>
-<span class="fc" id="L77">        loading.setFitHeight(250);</span>
-<span class="fc" id="L78">        loading.setPreserveRatio(true);</span>
-<span class="fc" id="L79">        final FlowPane loadingPane = new FlowPane(loading);</span>
-<span class="fc" id="L80">        loadingPane.setAlignment(javafx.geometry.Pos.CENTER);</span>
-<span class="fc" id="L81">        return new Scene(loadingPane);</span>
+<span class="fc" id="L79">        final ImageView loading = new ImageView(new Image(Objects.requireNonNull(App.class.getResource(LOADING_ANIMATION)).toString()));</span>
+<span class="fc" id="L80">        loading.setFitHeight(250);</span>
+<span class="fc" id="L81">        loading.setPreserveRatio(true);</span>
+<span class="fc" id="L82">        final FlowPane loadingPane = new FlowPane(loading);</span>
+<span class="fc" id="L83">        loadingPane.setAlignment(javafx.geometry.Pos.CENTER);</span>
+<span class="fc" id="L84">        return new Scene(loadingPane);</span>
     }
 
     @Override
     public void stop() {
-<span class="nc" id="L86">        cleanup();</span>
-<span class="nc" id="L87">    }</span>
+<span class="nc" id="L89">        cleanup();</span>
+<span class="nc" id="L90">    }</span>
 
     private void setAppIcon(Stage stage) {
-<span class="fc" id="L90">        final Image image = new Image(Objects.requireNonNull(App.class.getResource(APP_ICON)).toString());</span>
-<span class="fc" id="L91">        stage.getIcons().clear();</span>
-<span class="fc" id="L92">        stage.getIcons().add(image);</span>
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L93">        final Image image = new Image(Objects.requireNonNull(App.class.getResource(APP_ICON)).toString());</span>
+<span class="fc" id="L94">        stage.getIcons().clear();</span>
+<span class="fc" id="L95">        stage.getIcons().add(image);</span>
+<span class="fc" id="L96">    }</span>
 
     private void setTaskbarIcon() {
-<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (GraphicsEnvironment.isHeadless()) {</span>
-<span class="fc" id="L97">            return;</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        if (GraphicsEnvironment.isHeadless()) {</span>
+<span class="fc" id="L100">            return;</span>
         }
 
         try {
-<span class="nc" id="L101">            final Taskbar taskbar = Taskbar.getTaskbar();</span>
-<span class="nc" id="L102">            final java.awt.Image image = ImageIO.read(Objects.requireNonNull(Main.class.getResource(TASKBAR_ICON)));</span>
-<span class="nc" id="L103">            taskbar.setIconImage(image);</span>
-<span class="nc" id="L104">        } catch (Exception ignored) {</span>
+<span class="nc" id="L104">            final Taskbar taskbar = Taskbar.getTaskbar();</span>
+<span class="nc" id="L105">            final java.awt.Image image = ImageIO.read(Objects.requireNonNull(Main.class.getResource(TASKBAR_ICON)));</span>
+<span class="nc" id="L106">            taskbar.setIconImage(image);</span>
+<span class="nc" id="L107">        } catch (Exception ignored) {</span>
 
-<span class="nc" id="L106">        }</span>
-<span class="nc" id="L107">    }</span>
+<span class="nc" id="L109">        }</span>
+<span class="nc" id="L110">    }</span>
 
     public void show(Controller controller) {
-<span class="fc" id="L110">        this.controller = controller;</span>
-<span class="fc" id="L111">        initAndRender(controller);</span>
-<span class="fc" id="L112">    }</span>
+<span class="fc" id="L113">        this.controller = controller;</span>
+<span class="fc" id="L114">        initAndRender(controller);</span>
+<span class="fc" id="L115">    }</span>
 
     private void initAndRender(Controller controller) {
-<span class="fc" id="L115">        controller.init();</span>
-<span class="fc" id="L116">        stage.getScene().setRoot(controller.render());</span>
-<span class="fc" id="L117">        stage.setTitle(GAME_NAME + &quot; - &quot; + controller.getTitle());</span>
-<span class="fc" id="L118">        stage.setWidth(controller.getWidth());</span>
-<span class="fc" id="L119">        stage.setHeight(controller.getHeight());</span>
-<span class="fc" id="L120">    }</span>
+<span class="fc" id="L118">        controller.init();</span>
+<span class="fc" id="L119">        stage.getScene().setRoot(controller.render());</span>
+<span class="fc" id="L120">        stage.setTitle(GAME_NAME + &quot; - &quot; + controller.getTitle());</span>
+<span class="fc" id="L121">        stage.setWidth(controller.getWidth());</span>
+<span class="fc" id="L122">        stage.setHeight(controller.getHeight());</span>
+
+<span class="fc" id="L124">    }</span>
 
     public Controller getController() {
-<span class="nc" id="L123">        return controller;</span>
+<span class="nc" id="L127">        return controller;</span>
     }
 
     private void cleanup() {
-<span class="nc" id="L127">        component.loginController().userStatusUpdate(USER_STATUS_OFFLINE);</span>
-<span class="nc" id="L128">        disposables.dispose();</span>
-<span class="nc bnc" id="L129" title="All 2 branches missed.">        if (controller != null) {</span>
-<span class="nc" id="L130">            controller.destroy();</span>
-<span class="nc" id="L131">            controller = null;</span>
+<span class="nc" id="L131">        component.loginController().userStatusUpdate(USER_STATUS_OFFLINE);</span>
+<span class="nc" id="L132">        disposables.dispose();</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (controller != null) {</span>
+<span class="nc" id="L134">            controller.destroy();</span>
+<span class="nc" id="L135">            controller = null;</span>
         }
-<span class="nc" id="L133">    }</span>
+<span class="nc" id="L137">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
