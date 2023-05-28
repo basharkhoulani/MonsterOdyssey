@@ -46,6 +46,44 @@ class AccountSettingControllerTest extends ApplicationTest {
     }
 
     @Test
+    void changeAvatar() {
+        final Button editAvatarButton = lookup("#editAvatarButton").query();
+        clickOn(editAvatarButton);
+
+        final DialogPane dialogPane = lookup(".dialog-pane").query();
+        assertTrue(dialogPane.isVisible());
+
+        final RadioButton radioButton1 = lookup("#avatar1RadioButton").query();
+        final RadioButton radioButton2 = lookup("#avatar2RadioButton").query();
+        final RadioButton radioButton3 = lookup("#avatar3RadioButton").query();
+        final RadioButton radioButton4 = lookup("#avatar4RadioButton").query();
+        assertFalse(radioButton1.isSelected());
+        assertFalse(radioButton2.isSelected());
+        assertFalse(radioButton3.isSelected());
+        assertFalse(radioButton4.isSelected());
+        clickOn(radioButton1);
+        assertTrue(radioButton1.isSelected());
+        assertFalse(radioButton2.isSelected());
+        assertFalse(radioButton3.isSelected());
+        assertFalse(radioButton4.isSelected());
+        clickOn(radioButton2);
+        assertFalse(radioButton1.isSelected());
+        assertTrue(radioButton2.isSelected());
+        assertFalse(radioButton3.isSelected());
+        assertFalse(radioButton4.isSelected());
+        clickOn(radioButton3);
+        assertFalse(radioButton1.isSelected());
+        assertFalse(radioButton2.isSelected());
+        assertTrue(radioButton3.isSelected());
+        assertFalse(radioButton4.isSelected());
+        clickOn(radioButton4);
+        assertFalse(radioButton1.isSelected());
+        assertFalse(radioButton2.isSelected());
+        assertFalse(radioButton3.isSelected());
+        assertTrue(radioButton4.isSelected());
+    }
+
+    @Test
     void editUsername() {
         final Button editButton = lookup("#usernameEditButton").query();
         final TextField usernameField = lookup("#usernameField").query();
@@ -89,7 +127,7 @@ class AccountSettingControllerTest extends ApplicationTest {
         final TextField usernameField = lookup("#usernameField").query();
         final Label usernameErrorLabel = lookup("#usernameErrorLabel").query();
 
-        when(usersService.updateUser(anyString(),isNull(),isNull(),isNull(),isNull())).thenReturn(Observable.error(new Exception("HTTP 409")));
+        when(usersService.updateUser(anyString(), isNull(), isNull(), isNull(), isNull())).thenReturn(Observable.error(new Exception("HTTP 409")));
 
         clickOn("#usernameEditButton");
         clickOn(usernameField);
@@ -104,7 +142,7 @@ class AccountSettingControllerTest extends ApplicationTest {
         final TextField usernameField = lookup("#usernameField").query();
         final Label usernameErrorLabel = lookup("#usernameErrorLabel").query();
 
-        when(usersService.updateUser(anyString(),isNull(),isNull(),isNull(),isNull())).thenReturn(Observable.error(new Exception("Test")));
+        when(usersService.updateUser(anyString(), isNull(), isNull(), isNull(), isNull())).thenReturn(Observable.error(new Exception("Test")));
 
         clickOn("#usernameEditButton");
         clickOn(usernameField);
@@ -168,7 +206,7 @@ class AccountSettingControllerTest extends ApplicationTest {
         final TextField passwordField = lookup("#passwordField").query();
         final Label passwordErrorLabel = lookup("#passwordErrorLabel").query();
 
-        when(usersService.updateUser(isNull(),isNull(),isNull(),isNull(),anyString())).thenReturn(Observable.error(new Exception("Test")));
+        when(usersService.updateUser(isNull(), isNull(), isNull(), isNull(), anyString())).thenReturn(Observable.error(new Exception("Test")));
 
         clickOn("#passwordEditButton");
         clickOn(passwordField);

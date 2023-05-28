@@ -33,7 +33,7 @@ public class AreasServiceTest {
                         "646bc3c0a9ac1b375fb41d93",
                         "646bc436cfee07c0e408466f",
                         "Albertina",
-                        new Map()
+                        new Object()
                 ),
                 new Area(
                         "2023-05-16T17:51:15.772Z",
@@ -41,7 +41,7 @@ public class AreasServiceTest {
                         "646bc3c0a9ac1b375fb41d61",
                         "646bc436cfee07c0e408466f",
                         "Sanitaire",
-                        new Map()
+                        new Object()
                 )
         )));
 
