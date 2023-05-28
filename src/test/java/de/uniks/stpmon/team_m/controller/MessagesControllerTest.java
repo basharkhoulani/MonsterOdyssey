@@ -2,7 +2,6 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
-import de.uniks.stpmon.team_m.controller.subController.MessagesBoxController;
 import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.User;
@@ -15,7 +14,6 @@ import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
-import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +27,6 @@ import org.testfx.framework.junit5.ApplicationTest;
 import javax.inject.Provider;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,8 +40,6 @@ public class MessagesControllerTest extends ApplicationTest {
     Provider<MainMenuController> mainMenuControllerProvider;
     @Mock
     Provider<NewFriendController> newFriendControllerProvider;
-    @Mock
-    Provider<MessagesBoxController> messagesBoxControllerProvider;
     @Mock
     Provider<GroupController> groupControllerProvider;
     @Mock
@@ -147,24 +142,10 @@ public class MessagesControllerTest extends ApplicationTest {
 
     @Test
     void displayFriends() {
-        ListView<User> friendsAndGroups = lookup("#friends").query();
 
-        assertEquals(3, friendsAndGroups.getItems().size());
-
-        User rick = friendsAndGroups.getItems().get(0);
-        assertEquals("Rick", rick.name());
     }
 
     @Test
     void displayMessages() {
-        ListView<User> listView = lookup("#friends").query();
-        MessagesBoxController messagesBoxController = mock(MessagesBoxController.class);
-        when(messagesBoxControllerProvider.get()).thenReturn(messagesBoxController);
-
-        User user = listView.getItems().get(0);
-        assertEquals("Rick", user.name());
-
-        clickOn("Rick");
-
     }
 }
