@@ -155,7 +155,7 @@ public class MainMenuController extends Controller {
     }
 
     private void initFriendslist() {
-        friendsListView.setCellFactory(param -> new MainMenuUserCell(preferencesProvider.get(), userStorageProvider.get(), usersService));
+        friendsListView.setCellFactory(param -> new MainMenuUserCell(preferencesProvider.get(), friendSettingsControllerProvider));
         friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
         listenToUserUpdate(friends, friendsListView);
         friendsListView.setOnMouseClicked(event -> {
