@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.TestComponent;
 import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.dto.Spawn;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -42,7 +43,12 @@ public class WelcomeSceneControllerTest extends ApplicationTest{
 
         final Button startGameButton = lookup("Start Game").query();
         final ObservableList<Region> items = FXCollections
-                .observableArrayList(new Region("TestRegion", "NamedRegion", null, null, null, null));
+                .observableArrayList(new Region("2023-05-22T17:51:46.772Z",
+                        "2023-05-22T17:51:46.772Z",
+                        "646bc3c0a9ac1b375fb41d93",
+                        "646bc436cfee07c0e408466f",
+                        new Spawn("Albertina", 1, 1),
+                        new Object()));
         final ListView<Region> regionListView = lookup("#regionListView").query();
         regionListView.setItems(items);
         regionListView.getSelectionModel().selectFirst();
