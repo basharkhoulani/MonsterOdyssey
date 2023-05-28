@@ -3,8 +3,8 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.dto.Spawn;
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.rest.RegionsApiService;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
@@ -44,7 +44,7 @@ class MainMenuControllerTest extends ApplicationTest {
     @Mock
     Provider<MessagesController> messagesControllerProvider;
     @Mock
-    RegionsApiService regionsApiService;
+    RegionsService regionsService;
     @Mock
     UsersService usersService;
     @Mock
@@ -65,7 +65,14 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
-        when(regionsApiService.getRegions()).thenReturn(Observable.just(List.of(new Region("TestRegion", "NamedRegion"))));
+        when(regionsService.getRegions()).thenReturn(Observable.just(List.of(new Region(
+                "2023-05-22T17:51:46.772Z",
+                "2023-05-22T17:51:46.772Z",
+                "646bc3c0a9ac1b375fb41d93",
+                "646bc436cfee07c0e408466f",
+                new Spawn("Albertina", 1, 1),
+                new Object()
+        ))));
         UserStorage mockUserStorage = mock(UserStorage.class);
         GroupStorage mockGroupStorage = mock(GroupStorage.class);
         when(groupStorageProvider.get()).thenReturn(mockGroupStorage);

@@ -5,7 +5,7 @@ import de.uniks.stpmon.team_m.controller.subController.MainMenuUserCell;
 import de.uniks.stpmon.team_m.controller.subController.RegionCell;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.rest.RegionsApiService;
+import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.FriendListUtils;
@@ -54,6 +54,11 @@ public class MainMenuController extends Controller {
     @Inject
     Provider<MessagesController> messagesControllerProvider;
     @Inject
+    RegionsService regionsService;
+    @Inject
+    UsersService usersService;
+    @Inject
+    AuthenticationService authenticationService;
     Provider<FriendSettingsController> friendSettingsControllerProvider;
     @Inject
     Provider<UserStorage> userStorageProvider;
@@ -61,12 +66,6 @@ public class MainMenuController extends Controller {
     Provider<Preferences> preferencesProvider;
     @Inject
     Provider<GroupStorage> groupStorageProvider;
-    @Inject
-    RegionsApiService regionsApiService;
-    @Inject
-    UsersService usersService;
-    @Inject
-    AuthenticationService authenticationService;
     private final ObservableList<Region> regions = FXCollections.observableArrayList();
     private final ObservableList<User> friends = FXCollections.observableArrayList();
     private ListView<User> friendsListView;
@@ -91,8 +90,8 @@ public class MainMenuController extends Controller {
         friendsListView.setId("friendsListView");
         friendsListView.setCellFactory(param -> new MainMenuUserCell(preferencesProvider.get(), friendSettingsControllerProvider));
         friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
-        disposables.add(regionsApiService.getRegions()
-                .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll));
+        disposables.add(regionsService.getRegions()
+                .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll, error -> System.out.println(error.getMessage())));
         if (!userStorageProvider.get().getFriends().isEmpty()) {
             disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
                     .observeOn(FX_SCHEDULER).subscribe(users -> {

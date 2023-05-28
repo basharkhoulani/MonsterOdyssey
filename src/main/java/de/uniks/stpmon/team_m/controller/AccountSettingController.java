@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -44,6 +45,14 @@ public class AccountSettingController extends Controller {
     public Label usernameErrorLabel;
     @FXML
     public Label titleLabel;
+    @FXML
+    public ImageView avatarImageView;
+    @FXML
+    public Button editAvatarButton;
+    @FXML
+    public Button saveAvatarButton;
+    @FXML
+    public Label avatarErrorLabel;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
@@ -52,6 +61,7 @@ public class AccountSettingController extends Controller {
     Provider<UserStorage> userStorageProvider;
     @Inject
     UsersService usersService;
+    private AvatarSelectionController avatarSelectionController;
     private PasswordFieldSkin skin;
     private final SimpleStringProperty username = new SimpleStringProperty();
     private final SimpleStringProperty password = new SimpleStringProperty();
@@ -73,6 +83,13 @@ public class AccountSettingController extends Controller {
     @Override
     public String getTitle() {
         return ACCOUNT_SETTINGS_TITLE;
+    }
+
+    @Override
+    public void init() {
+        super.init();
+        avatarSelectionController = new AvatarSelectionController();
+        avatarSelectionController.init();
     }
 
     /**
@@ -176,6 +193,22 @@ public class AccountSettingController extends Controller {
                     showPasswordButton.setDisable(true);
                     informationLabel.setText(PASSWORD_SUCCESS_CHANGED);
                 }, error -> passwordErrorLabel.setText(errorHandle(error.getMessage()))));
+    }
+
+    public void editAvatar() {
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType okButton = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+
+        Dialog<?> dialog = new Dialog<>();
+        dialog.setTitle("Choose your Avatar");
+        dialog.getDialogPane().setContent(avatarSelectionController.render());
+        dialog.getDialogPane().getButtonTypes().add(okButton);
+        dialog.getDialogPane().getButtonTypes().add(cancelButton);
+        dialog.showAndWait();
+    }
+
+    public void saveAvatar() {
+
     }
 
     /**

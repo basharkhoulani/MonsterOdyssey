@@ -84,4 +84,10 @@ public class HttpModule {
     AreasApiService areas(Retrofit retrofit) {
         return retrofit.create(AreasApiService.class);
     }
+
+    @Provides
+    @Singleton
+    MonstersApiService monsters(Retrofit retrofit) {
+        return retrofit.create(MonstersApiService.class);
+    }
 }
