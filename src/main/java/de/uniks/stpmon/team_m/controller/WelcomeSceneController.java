@@ -33,8 +33,8 @@ public class WelcomeSceneController extends Controller{
     Provider<IngameController> ingameControllerProvider;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
-    @Inject
-    TrainersService trainersService;
+    //@Inject
+    //TrainersService trainersService;
     @Inject
     public WelcomeSceneController(){}
     @Override
@@ -73,6 +73,7 @@ public class WelcomeSceneController extends Controller{
                 messageVBox3.getStylesheets().add(STYLE_RESOURCE);
                 messageVBox3.getStyleClass().add(WELCOME_MESSAGE_STYLE);
                 final Label thirdMessage = new Label();
+                thirdMessage.setId("thirdMessage");
                 thirdMessage.setText(FIFTH_MESSAGE);
                 thirdMessage.setPrefHeight(45);
                 thirdMessage.setPrefWidth(170);
@@ -95,6 +96,7 @@ public class WelcomeSceneController extends Controller{
                 final ButtonType cancelButton = new ButtonType(CANCEL, ButtonBar.ButtonData.APPLY);
                 final ButtonType okButton = new ButtonType(OK);
                 final TextField textFieldName = new TextField();
+                textFieldName.setId("nameField");
 
                 dialogPane.getButtonTypes().addAll(cancelButton, okButton);
 
