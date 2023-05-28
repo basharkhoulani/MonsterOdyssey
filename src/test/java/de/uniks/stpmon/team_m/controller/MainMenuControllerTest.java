@@ -65,7 +65,7 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
-        when(regionsApiService.getRegions()).thenReturn(Observable.just(List.of(new Region("TestRegion", "NamedRegion"))));
+        when(regionsApiService.getRegions()).thenReturn(Observable.just(List.of(new Region("TestRegion", "NamedRegion", null, null, null, null))));
         UserStorage mockUserStorage = mock(UserStorage.class);
         GroupStorage mockGroupStorage = mock(GroupStorage.class);
         when(groupStorageProvider.get()).thenReturn(mockGroupStorage);
