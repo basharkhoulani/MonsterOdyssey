@@ -5,6 +5,11 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
+
+import javax.inject.Inject;
+
+import static de.uniks.stpmon.team_m.Constants.AVATAR_TITLE;
 
 public class AvatarSelectionController extends Controller {
 
@@ -34,6 +39,10 @@ public class AvatarSelectionController extends Controller {
     public Button selectFileButton;
 
 
+    @Inject
+    public AvatarSelectionController() {
+        super();
+    }
     @Override
     public Parent render() {
         return super.render();
@@ -60,6 +69,11 @@ public class AvatarSelectionController extends Controller {
     }
 
     public void selectFile() {
-
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(AVATAR_TITLE);
+        java.io.File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            uploadTextField.setText(selectedFile.getAbsolutePath());
+        }
     }
 }
