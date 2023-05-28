@@ -87,6 +87,7 @@ public class MessagesController extends Controller {
     Map<User, MessagesBoxController> messagesBoxControllerUserMap = new HashMap<>();
     Map<Group, MessagesBoxController> messagesBoxControllerGroupMap = new HashMap<>();
     private boolean userChosenFromMainMenu;
+    private boolean userChosenFromNewFriend;
 
     /**
      * MessagesController handles the chatting system with friends and groups of users. The friends and groups are
@@ -122,9 +123,21 @@ public class MessagesController extends Controller {
                         selectUserChosenFromMainMenu();
                     }
                 }).flatMap(friends -> groupService.getGroups(null).observeOn(FX_SCHEDULER))
-                .doOnNext(this::filterAndSetGroups).observeOn(FX_SCHEDULER)
-                .subscribe(event -> {
+                .doOnNext(groups -> {
+                    filterAndSetGroups(groups);
+                    if (userChosenFromNewFriend) {
+                        selectGroupChosenFromMainMenu();
+                    }
+                }).observeOn(FX_SCHEDULER).subscribe(event -> {
                 }, error -> showError(error.getMessage())));
+    }
+
+    private void selectGroupChosenFromMainMenu() {
+        groupListView.getItems().stream().filter(group -> group._id().equals(groupStorageProvider.get().get_id())).findFirst().ifPresent(group -> {
+            groupListView.getSelectionModel().select(group);
+            groupListView.scrollTo(group);
+        });
+        userChosenFromNewFriend = false;
     }
 
     /**
@@ -155,6 +168,7 @@ public class MessagesController extends Controller {
             } else {
                 this.groups.add(group);
             }
+            groupFound = false;
         }
     }
 
@@ -437,5 +451,15 @@ public class MessagesController extends Controller {
 
     public void setUserChosenFromMainMenu(boolean userChosenFromMainMenu) {
         this.userChosenFromMainMenu = userChosenFromMainMenu;
+    }
+
+    /**
+     * This method sets a boolean if a user was selected from the new friend view.
+     *
+     * @param userChosenFromNewFriend Boolean if a user was selected from the new friend view
+     */
+
+    public void setUserChosenFromNewFriend(boolean userChosenFromNewFriend) {
+        this.userChosenFromNewFriend = userChosenFromNewFriend;
     }
 }

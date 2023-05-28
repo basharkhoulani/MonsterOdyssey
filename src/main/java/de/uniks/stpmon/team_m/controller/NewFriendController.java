@@ -32,39 +32,63 @@ public class NewFriendController extends Controller {
     public TextField searchTextField;
     List<User> allUsers;
     @Inject
-    Provider<MainMenuController> mainMenuControllerProvider;
+    UsersService usersService;
     @Inject
-    Provider<UsersService> usersServiceProvider;
-    @Inject
-    Provider<GroupService> groupServiceProvider;
+    GroupService groupService;
     @Inject
     Provider<UserStorage> userStorageProvider;
     @Inject
     Provider<GroupStorage> groupStorageProvider;
     @Inject
+    Provider<MainMenuController> mainMenuControllerProvider;
+    @Inject
     Provider<MessagesController> messageControllerProvider;
+
+    /**
+     * NewFriendController handles the adding of new friends.
+     */
 
     @Inject
     public NewFriendController() {
     }
+
+    /**
+     * This method sets the title of the controller.
+     *
+     * @return Title of the controller.
+     */
 
     @Override
     public String getTitle() {
         return NEW_FRIEND_TITLE;
     }
 
+    /**
+     * This method renders JavaFX elements of the view.
+     *
+     * @return Parent object
+     */
+
     @Override
     public Parent render() {
         return super.render();
     }
+
+    /**
+     * This method enables the user to navigate to the main menu.
+     */
 
     public void changeToMainMenu() {
         groupStorageProvider.get().set_id(null);
         app.show(mainMenuControllerProvider.get());
     }
 
+    /**
+     * This method adds the functionality to the button to add friends and handles edge cases.
+     */
+
     public void addAsAFriend() {
-        if (searchTextField.getText().equals("")) {
+        if (searchTextField.getText().equals(EMPTY_STRING)) {
             return;
         }
         if (allUsers.isEmpty()) {
@@ -74,7 +98,6 @@ public class NewFriendController extends Controller {
             searchTextField.setPromptText(YOURSELF);
             return;
         }
-        searchTextField.setPromptText(FRIEND_NOT_FOUND);
         for (User user : allUsers) {
             if (user.name().equals(searchTextField.getText())) {
                 if (userStorageProvider.get().getFriends().contains(user._id())) {
@@ -83,8 +106,7 @@ public class NewFriendController extends Controller {
                     return;
                 }
                 userStorageProvider.get().addFriend(user._id());
-                disposables.add(usersServiceProvider.get().updateUser(null, null, null,
-                        userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER).subscribe(user1 -> {
+                disposables.add(usersService.updateUser(null, null, null, userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER).subscribe(user1 -> {
                     createPrivateGroup(user, false);
                     searchTextField.setPromptText(FRIEND_ADDED);
                 }, error -> showError(error.getMessage())));
@@ -93,6 +115,10 @@ public class NewFriendController extends Controller {
         }
         searchTextField.clear();
     }
+
+    /**
+     * This method adds the functionality to the button to send a message to the found user.
+     */
 
     public void sendMessage() {
         for (User user : allUsers) {
@@ -107,8 +133,12 @@ public class NewFriendController extends Controller {
         searchTextField.clear();
     }
 
+    /**
+     * This method adds the AutoCompletion functionality to the search field.
+     */
+
     public void clickSearchField() {
-        disposables.add(usersServiceProvider.get().getUsers(null, null).observeOn(FX_SCHEDULER).subscribe(users -> {
+        disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER).subscribe(users -> {
             allUsers = users;
             List<String> names = new ArrayList<>();
             for (User user : allUsers) {
@@ -119,49 +149,57 @@ public class NewFriendController extends Controller {
         }, error -> showError(error.getMessage())));
     }
 
+    /**
+     * This method creates a private group between the user and the found user. If the user was a friend, no new group is created.
+     * If the user was not a friend, a new group is created if sendMessage method was called. At the end it switches to the message screen.
+     *
+     * @param user         User to create a private group with.
+     * @param switchScreen Boolean to switch to the message screen.
+     */
+
     private void createPrivateGroup(User user, boolean switchScreen) {
         groupStorageProvider.get().set_id(null);
-        Group privateGroup = new Group(null, null, List.of(user._id(), userStorageProvider.get().get_id()));
         if (switchScreen) {
             if (userStorageProvider.get().getFriends().contains(user._id())) {
                 groupStorageProvider.get().setName(user.name());
                 groupStorageProvider.get().set_id(user._id());
-                app.show(messageControllerProvider.get());
+                MessagesController messagesController = messageControllerProvider.get();
+                messagesController.setUserChosenFromNewFriend(true);
+                app.show(messagesController);
                 return;
             }
         }
-        disposables.add(groupServiceProvider.get().getGroups(privateGroup.membersToString()).observeOn(FX_SCHEDULER).subscribe(groups -> {
-            if (!groups.isEmpty()) {
-                for (Group group : groups) {
-                    if (group.name() == null) {
-                        groupStorageProvider.get().setName(user.name());
-                        groupStorageProvider.get().set_id(group._id());
-                        if (switchScreen) {
-                            app.show(messageControllerProvider.get());
-                        }
-                        break;
-                    }
+        Group privateGroup = new Group(null, null, List.of(user._id(), userStorageProvider.get().get_id()));
+        disposables.add(groupService.getGroups(privateGroup.membersToString()).observeOn(FX_SCHEDULER).subscribe(groups -> {
+            if (groups.isEmpty()) throw new RuntimeException(HTTP_403);
+            for (Group group : groups) {
+                if (group.members().contains(user._id()) && group.members().contains(userStorageProvider.get().get_id())) {
+                    setGroupIDAndSwitchScreen(user, switchScreen, group);
+                    return;
                 }
-                if (groupStorageProvider.get().get_id() == null) {
-                    disposables.add(groupServiceProvider.get().create(null, privateGroup.members())
-                            .observeOn(FX_SCHEDULER).subscribe(newGroup -> {
-                                groupStorageProvider.get().setName(user.name());
-                                groupStorageProvider.get().set_id(newGroup._id());
-                                if (switchScreen) {
-                                    app.show(messageControllerProvider.get());
-                                }
-                            }));
-                }
-            } else {
-                disposables.add(groupServiceProvider.get().create(null, privateGroup.members())
-                        .observeOn(FX_SCHEDULER).subscribe(newGroup -> {
-                            groupStorageProvider.get().setName(user.name());
-                            groupStorageProvider.get().set_id(newGroup._id());
-                            if (switchScreen) {
-                                app.show(messageControllerProvider.get());
-                            }
-                        }, error -> showError(error.getMessage())));
             }
-        }, error -> showError(error.getMessage())));
+        }, error -> {
+            if (error.getMessage().contains(HTTP_403)) {
+                disposables.add(groupService.create(privateGroup.name(), privateGroup.members()).observeOn(FX_SCHEDULER).subscribe(group -> setGroupIDAndSwitchScreen(user, switchScreen, group), error1 -> showError(error1.getMessage())));
+            }
+        }));
+    }
+
+    /**
+     * This method sets the group ID and switches to the message screen.
+     *
+     * @param user         User to create a private group with.
+     * @param switchScreen Boolean to switch to the message screen.
+     * @param group        Group to set the ID.
+     */
+
+    private void setGroupIDAndSwitchScreen(User user, boolean switchScreen, Group group) {
+        groupStorageProvider.get().setName(user.name());
+        groupStorageProvider.get().set_id(group._id());
+        if (switchScreen) {
+            MessagesController messagesController = messageControllerProvider.get();
+            messagesController.setUserChosenFromNewFriend(true);
+            app.show(messagesController);
+        }
     }
 }
