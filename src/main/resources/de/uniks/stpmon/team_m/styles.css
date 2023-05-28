@@ -13,7 +13,7 @@
     -fx-background-image: url("images/settingsSymbol.png");
     -fx-border-color: transparent;
     -fx-background-color: transparent;
-    -fx-background-size: 60px;
+    -fx-background-size: 75px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 50%;
     -fx-background-radius: 15;
@@ -81,7 +81,7 @@
 .Background {
     -fx-background-color: white;
     -fx-background-image: url("images/Background.jpg");
-    -fx-background-repeat: space;
+    -fx-background-repeat: no-repeat;
     -fx-background-size: 100%;
     -fx-background-position: center;
 }
@@ -94,6 +94,10 @@
 .ForegroundHeaderContainer {
     -fx-background-color: rgba(245, 245, 245, 0.8);
     -fx-background-radius: 10 10 0 0;
+}
+
+.messageText {
+    -fx-text-fill: black;
 }
 
 .buttonsYellow {
