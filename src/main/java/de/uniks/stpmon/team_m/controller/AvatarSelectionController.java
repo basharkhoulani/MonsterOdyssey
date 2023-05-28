@@ -9,7 +9,9 @@ import javafx.stage.FileChooser;
 
 import javax.inject.Inject;
 
-import static de.uniks.stpmon.team_m.Constants.AVATAR_TITLE;
+import java.io.File;
+
+import static de.uniks.stpmon.team_m.Constants.SELECT_AVATAR_PICTURE;
 
 public class AvatarSelectionController extends Controller {
 
@@ -70,10 +72,8 @@ public class AvatarSelectionController extends Controller {
 
     public void selectFile() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(AVATAR_TITLE);
-        java.io.File selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile != null) {
-            uploadTextField.setText(selectedFile.getAbsolutePath());
-        }
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Bilder", "*.png", "*.jpg", "*.jpeg"));
+        fileChooser.setTitle(SELECT_AVATAR_PICTURE);
+        File selectedFile = fileChooser.showOpenDialog(null);
     }
 }
