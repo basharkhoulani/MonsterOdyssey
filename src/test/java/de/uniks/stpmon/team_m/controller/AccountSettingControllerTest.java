@@ -33,13 +33,15 @@ class AccountSettingControllerTest extends ApplicationTest {
     @InjectMocks
     AccountSettingController accountSettingController;
     @Mock
-    UserStorage userStorage;
+    Provider<UserStorage> userStorageProvider;
 
     @Spy
     App app = new App(null);
 
     @Override
     public void start(Stage stage) {
+        UserStorage userStorage = mock(UserStorage.class);
+        when(userStorageProvider.get()).thenReturn(userStorage);
         app.start(stage);
         app.show(accountSettingController);
         stage.requestFocus();
@@ -110,7 +112,7 @@ class AccountSettingControllerTest extends ApplicationTest {
                         null
                 )));
 
-        when(userStorage.getName()).thenReturn("UserPatch");
+        when(userStorageProvider.get().getName()).thenReturn("UserPatch");
 
         clickOn("#usernameEditButton");
         clickOn(usernameField);

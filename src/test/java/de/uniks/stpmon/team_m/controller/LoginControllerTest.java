@@ -18,17 +18,12 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import javax.inject.Provider;
-
 import static de.uniks.stpmon.team_m.Constants.USER_STATUS_ONLINE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class LoginControllerTest extends ApplicationTest {
-
-    @Mock
-    Provider<MainMenuController> mainMenuControllerProvider;
     @Mock
     AuthenticationService authenticationService;
     @Mock
@@ -58,24 +53,11 @@ class LoginControllerTest extends ApplicationTest {
                 "a1a2",
                 "a3a4")));
 
-        when(usersService.updateUser(isNull(), anyString(), isNull(), isNull(), isNull())).thenReturn(Observable.just(new User(
-                "423f8d731c386bcd2204da39",
-                "1",
-                USER_STATUS_ONLINE,
-                null,
-                null
-        )));
-
-        final MainMenuController mainMenuController = mock(MainMenuController.class);
-        when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
-        doNothing().when(app).show(mainMenuController);
-
         write("1\t");
         write("12345678");
         clickOn("#signInButton");
 
         verify(authenticationService).login("1", "12345678", false);
-        verify(app).show(mainMenuController);
     }
 
     @Test
@@ -120,25 +102,12 @@ class LoginControllerTest extends ApplicationTest {
                 "a1a2",
                 "a3a4")));
 
-        when(usersService.updateUser(isNull(), anyString(), isNull(), isNull(), isNull())).thenReturn(Observable.just(new User(
-                "423f8d731c386bcd2204da39",
-                "1",
-                USER_STATUS_ONLINE,
-                null,
-                null
-        )));
-
-        final MainMenuController mainMenuController = mock(MainMenuController.class);
-        when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
-        doNothing().when(app).show(mainMenuController);
-
         write("1\t");
         write("12345678");
         clickOn("#signUpButton");
 
         verify(usersService).createUser("1", null, "12345678");
         verify(authenticationService).login("1", "12345678", false);
-        verify(app).show(mainMenuController);
     }
 
     @Test

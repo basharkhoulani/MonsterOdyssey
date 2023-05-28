@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.controller.subController.MessagesBoxController;
 import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.User;
@@ -38,16 +39,14 @@ public class MessagesControllerTest extends ApplicationTest {
     Provider<UserStorage> userStorageProvider;
     @Mock
     Provider<GroupStorage> groupStorageProvider;
-
     @Mock
     Provider<MainMenuController> mainMenuControllerProvider;
-
     @Mock
     Provider<NewFriendController> newFriendControllerProvider;
-
+    @Mock
+    Provider<MessagesBoxController> messagesBoxControllerProvider;
     @Mock
     Provider<GroupController> groupControllerProvider;
-
     @Mock
     UsersService usersService;
     @Mock
@@ -159,6 +158,8 @@ public class MessagesControllerTest extends ApplicationTest {
     @Test
     void displayMessages() {
         ListView<User> listView = lookup("#friends").query();
+        MessagesBoxController messagesBoxController = mock(MessagesBoxController.class);
+        when(messagesBoxControllerProvider.get()).thenReturn(messagesBoxController);
 
         User user = listView.getItems().get(0);
         assertEquals("Rick", user.name());
