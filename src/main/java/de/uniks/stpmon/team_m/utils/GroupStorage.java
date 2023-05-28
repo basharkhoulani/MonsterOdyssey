@@ -10,6 +10,10 @@ public class GroupStorage {
     private String name;
     private List<String> members;
 
+    /**
+     * GroupStorage handles the storage of groups that need to be used.
+     */
+
     @Inject
     public GroupStorage() {
     }

@@ -7,6 +7,11 @@ import javax.inject.Singleton;
 public class TokenStorage {
     private String token;
 
+    /**
+     * TokenStorage handles the storage of the token that needs to be used when logging the user in
+     * with the Remember Me function.
+     */
+
     @Inject
     public TokenStorage() {
     }

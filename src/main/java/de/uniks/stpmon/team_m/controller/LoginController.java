@@ -177,8 +177,8 @@ public class LoginController extends Controller {
 
     public void userStatusUpdate(String status) {
         if (userStorage.get().get_id() != null) {
-            disposables.add(usersService.updateUser(null, status, null, null, null)
-                    .observeOn(FX_SCHEDULER).subscribe(user -> userStorage.get().setStatus(user.status()), error -> errorHandle(error.getMessage())));
+            disposables.add(usersService.updateUser(null, status, null, null, null).observeOn(FX_SCHEDULER)
+                    .subscribe(user -> userStorage.get().setStatus(user.status()), error -> errorHandle(error.getMessage())));
         }
     }
 }

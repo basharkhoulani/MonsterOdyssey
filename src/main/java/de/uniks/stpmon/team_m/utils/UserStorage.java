@@ -14,9 +14,12 @@ public class UserStorage {
     private String avatar;
     private List<String> friends;
 
+    /**
+     * UserStorage handles the storage of the user that needs to be used as the currently logged in user.
+     */
+
     @Inject
     public UserStorage() {
-
     }
 
     public String get_id() {
