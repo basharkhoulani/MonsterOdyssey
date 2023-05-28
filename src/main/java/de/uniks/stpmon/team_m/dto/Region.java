@@ -5,11 +5,11 @@ import netscape.javascript.JSObject;
 import javax.json.JsonObject;
 
 public record Region(
-        String _id,
-        String name,
         String createdAt,
         String updatedAt,
-        JsonObject map,
-        Spawn spawn
+        String _id,
+        String name,
+        Spawn spawn,
+        Object map
 ) {
 }
