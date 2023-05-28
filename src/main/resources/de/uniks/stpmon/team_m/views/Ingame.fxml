@@ -10,7 +10,7 @@
             fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
     <top>
         <Button fx:id="helpSymbol" mnemonicParsing="false" onAction="#showHelp" prefHeight="35.0" prefWidth="36.0"
-                styleClass="helpSymbol" stylesheets="@../styles.css" BorderPane.alignment="TOP_RIGHT"/>
+                styleClass="helpSymbol" BorderPane.alignment="TOP_RIGHT"/>
     </top>
     <center>
         <VBox alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
