@@ -20,7 +20,6 @@ import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
-
 public class App extends Application {
     private Stage stage;
     private Controller controller;
@@ -49,8 +48,12 @@ public class App extends Application {
         stage.setTitle(GAME_NAME);
 
         stage.setScene(loadingScreen());
+      
         setAppIcon(stage);
         setTaskbarIcon();
+        if (!GraphicsEnvironment.isHeadless()) {
+            stage.getScene().getStylesheets().add(Main.class.getResource("styles.css").toString());
+        }
 
         PauseTransition pause = new PauseTransition(Duration.seconds(DURATION_OF_LOADING_SCREEN));
         pause.setOnFinished(event -> {
@@ -117,6 +120,7 @@ public class App extends Application {
         stage.setTitle(GAME_NAME + " - " + controller.getTitle());
         stage.setWidth(controller.getWidth());
         stage.setHeight(controller.getHeight());
+
     }
 
     public Controller getController() {

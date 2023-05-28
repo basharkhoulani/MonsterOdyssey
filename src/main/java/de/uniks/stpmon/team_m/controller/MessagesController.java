@@ -58,6 +58,10 @@ public class MessagesController extends Controller {
     public VBox chatViewVBox;
     @FXML
     public ScrollPane chatScrollPane;
+    @FXML
+    public ListView<User> userListView;
+    @FXML
+    public ListView<Group> groupListView;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
@@ -81,8 +85,6 @@ public class MessagesController extends Controller {
     private final ObservableList<User> friends = FXCollections.observableArrayList();
     private final ObservableList<Group> groups = FXCollections.observableArrayList();
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
-    private ListView<User> userListView;
-    private ListView<Group> groupListView;
     private final List<Controller> subControllers = new ArrayList<>();
     Map<User, MessagesBoxController> messagesBoxControllerUserMap = new HashMap<>();
     Map<Group, MessagesBoxController> messagesBoxControllerGroupMap = new HashMap<>();
@@ -128,8 +130,7 @@ public class MessagesController extends Controller {
                     if (userChosenFromNewFriend) {
                         selectGroupChosenFromMainMenu();
                     }
-                }).observeOn(FX_SCHEDULER).subscribe(event -> {
-                }, error -> showError(error.getMessage())));
+                }).observeOn(FX_SCHEDULER).subscribe(event -> {}, error -> showError(error.getMessage())));
     }
 
     private void selectGroupChosenFromMainMenu() {
@@ -243,9 +244,9 @@ public class MessagesController extends Controller {
     @Override
     public Parent render() {
         Parent parent = super.render();
+        initListViews();
+
         settingsButton.setVisible(false);
-        friendsListViewVBox.getChildren().add(userListView);
-        groupsListViewVBox.getChildren().add(groupListView);
         messageTextArea.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
         userListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> addListenerOnSelectedFriends(newValue));
         groupListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> addListenerOnSelectedGroups(newValue));
@@ -282,7 +283,6 @@ public class MessagesController extends Controller {
             }
         }
     }
-
     /**
      * This method is to set the behaviour of a selected friend.
      *
@@ -301,9 +301,24 @@ public class MessagesController extends Controller {
     }
 
     /**
+     * This method initializes group and friend list views and listens to changes of groups and friends.
+     */
+  
+    private void initListViews() {
+        userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
+        userListView.setCellFactory(param -> new UserCell(preferences));
+
+        listenToUserUpdate(friends, userListView);
+
+        groupListView.setCellFactory(param -> new GroupCell());
+        groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
+        listenToGroupChanges();
+    }
+
+    /**
      * This method destroys the subcontrollers which are MessagesBoxControllers and clears the maps.
      */
-
+  
     @Override
     public void destroy() {
         super.destroy();

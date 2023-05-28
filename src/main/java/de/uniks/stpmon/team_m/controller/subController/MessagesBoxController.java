@@ -65,6 +65,7 @@ public class MessagesBoxController extends Controller {
         if (user == null) {
             openFriendChat("groupListView");
         }
+        messageListView.setFocusTraversable(false);
     }
 
     /**

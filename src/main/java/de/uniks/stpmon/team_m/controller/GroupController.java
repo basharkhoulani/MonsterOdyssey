@@ -16,7 +16,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -33,11 +32,7 @@ public class GroupController extends Controller {
     @FXML
     public Label errorMessage;
     @FXML
-    public Text selectGroupMembersText;
-    @FXML
-    public VBox friendsUsers;
-    @FXML
-    public VBox foreignUsers;
+    public Label selectGroupMembersLabel;
     @FXML
     public Button backToMessagesButton;
     @FXML
@@ -48,6 +43,10 @@ public class GroupController extends Controller {
     public Button saveGroupButton;
     @FXML
     public Button deleteGroupButton;
+    @FXML
+    public ListView<User> friendsListView;
+    @FXML
+    public ListView<User> foreignListView;
     @Inject
     UsersService usersService;
     @Inject
@@ -60,8 +59,6 @@ public class GroupController extends Controller {
     Provider<UserStorage> userStorage;
     @Inject
     Preferences preferences;
-    private ListView<User> friendsListView;
-    private ListView<User> foreignListView;
     private final ObservableList<User> friends = FXCollections.observableArrayList();
     private final ObservableList<User> foreign = FXCollections.observableArrayList();
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
@@ -95,11 +92,7 @@ public class GroupController extends Controller {
     public void init() {
         disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER)
                 .subscribe(allUsers::setAll, error -> showError(error.getMessage())));
-
         final String groupId = groupStorageProvider.get().get_id();
-        initFriendsListView();
-        initForeignListView();
-        listenToUserUpdate(friends, friendsListView);
         if (groupId.equals(EMPTY_STRING)) {
             initNewGroupView();
         } else {
@@ -112,10 +105,8 @@ public class GroupController extends Controller {
      */
 
     private void initForeignListView() {
-        foreignListView = new ListView<>(foreign);
         foreignListView.setSelectionModel(null);
         foreignListView.setFocusModel(null);
-        foreignListView.setId("foreignListView");
         foreignListView.setPlaceholder(new Label(NO_USERS_ADDED_TO_GROUP));
         foreignListView.setCellFactory(friendsListView.getCellFactory());
     }
@@ -125,10 +116,8 @@ public class GroupController extends Controller {
      */
 
     private void initFriendsListView() {
-        friendsListView = new ListView<>(friends);
         friendsListView.setSelectionModel(null);
         friendsListView.setFocusModel(null);
-        friendsListView.setId("friendsListView");
         friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
         friendsListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
                 foreignListView, friends));
@@ -161,7 +150,9 @@ public class GroupController extends Controller {
         users.removeAll(this.friends);
         foreign.setAll(users);
         foreign.removeIf(user -> user._id().equals(userStorage.get().get_id()));
+        foreignListView.getItems().setAll(users);
         FriendListUtils.sortListView(foreignListView);
+        friendsListView.getItems().setAll(friends);
         FriendListUtils.sortListView(friendsListView);
     }
 
@@ -175,6 +166,7 @@ public class GroupController extends Controller {
         if (!friendsByID.isEmpty()) {
             disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
                 friends.setAll(users);
+                friendsListView.getItems().setAll(friends);
                 FriendListUtils.sortListView(friendsListView);
             }, error -> showError(error.getMessage())));
         }
@@ -196,8 +188,10 @@ public class GroupController extends Controller {
             groupNameInput.setPromptText(CHANGE_GROUP);
             groupNameInput.setText(groupStorageProvider.get().getName());
         }
-        friendsUsers.getChildren().add(friendsListView);
-        foreignUsers.getChildren().add(foreignListView);
+      
+        initFriendsListView();
+        initForeignListView();
+        listenToUserUpdate(friends, friendsListView);
         return parent;
     }
 

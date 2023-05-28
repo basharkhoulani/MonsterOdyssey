@@ -1,80 +1,137 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-<BorderPane minHeight="540.0" minWidth="700.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.GroupController">
-    <center>
-        <VBox alignment="CENTER" fillWidth="false" prefHeight="399.0" prefWidth="402.0" BorderPane.alignment="CENTER">
-            <VBox alignment="CENTER" fillWidth="false" prefHeight="75.0" prefWidth="588.0" VBox.vgrow="NEVER">
-                <TextField fx:id="searchFieldGroupMembers" onAction="#searchForGroupMembers"
-                           onMouseClicked="#searchForGroupMembers" prefHeight="27.0" prefWidth="299.0"
-                           promptText="Search for Groupmembers" VBox.vgrow="NEVER">
-                    <font>
-                        <Font size="13.0"/>
-                    </font>
-                    <VBox.margin>
-                        <Insets/>
-                    </VBox.margin>
-                </TextField>
+
+<HBox xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.GroupController" styleClass="Background">
+   <VBox alignment="TOP_CENTER" fillWidth="false" minWidth="375.0" HBox.hgrow="NEVER">
+      <HBox alignment="CENTER" styleClass="ForegroundHeaderContainer" VBox.vgrow="SOMETIMES">
+         <ImageView fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../images/Monster1-without.png"/>
+         </ImageView>
+         <Label fx:id="selectGroupMembersLabel" text="Select Groupmembers" HBox.hgrow="NEVER">
+            <font>
+               <Font name="Comic Sans MS Bold" size="24.0" />
+            </font>
+            <HBox.margin>
+               <Insets left="16.0" />
+            </HBox.margin>
+         </Label>
+         <VBox.margin>
+            <Insets bottom="8.0" top="24.0" />
+         </VBox.margin>
+      </HBox>
+      <VBox alignment="CENTER" maxWidth="1.7976931348623157E308" VBox.vgrow="SOMETIMES">
+         <HBox alignment="CENTER" maxHeight="650.0" maxWidth="700.0" VBox.vgrow="ALWAYS">
+            <VBox maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+               <ListView id="friendsListView" fx:id="friendsListView" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="200.0" prefWidth="700.0" VBox.vgrow="ALWAYS" />
+               <ListView id="foreignListView" fx:id="foreignListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="200.0" prefWidth="700.0" />
             </VBox>
-            <HBox prefHeight="262.0" prefWidth="512.0" VBox.vgrow="NEVER">
-                <VBox alignment="CENTER" minHeight="100.0" prefHeight="448.0" prefWidth="523.0" HBox.hgrow="ALWAYS"/>
+            <VBox.margin>
+               <Insets left="16.0" right="16.0" />
+            </VBox.margin>
+         </HBox>
+      </VBox>
+      <HBox alignment="CENTER" fillHeight="false" prefWidth="700.0" VBox.vgrow="NEVER">
+         <HBox alignment="CENTER" HBox.hgrow="NEVER">
+            <Button fx:id="backToMessagesButton" maxHeight="50.0" minHeight="50.0" mnemonicParsing="false" onAction="#changeToMessages" prefHeight="50.0" prefWidth="150.0" styleClass="buttonsWhite" text="Go back">
+               <HBox.margin>
+                  <Insets right="16.0" />
+               </HBox.margin>
+            </Button>
+            <HBox.margin>
+               <Insets left="16.0" />
+            </HBox.margin>
+         </HBox>
+         <HBox alignment="CENTER" HBox.hgrow="NEVER">
+            <Button fx:id="deleteGroupButton" maxHeight="50.0" minHeight="50.0" mnemonicParsing="false" onAction="#deleteGroup" prefHeight="50.0" prefWidth="150.0" styleClass="buttonsWhite" text="Delete group">
+               <HBox.margin>
+                  <Insets left="16.0" right="16.0" />
+               </HBox.margin>
+            </Button>
+         </HBox>
+         <VBox.margin>
+            <Insets bottom="64.0" top="64.0" />
+         </VBox.margin>
+      </HBox>
+      <VBox alignment="CENTER" VBox.vgrow="ALWAYS" />
+   </VBox>
+   <Separator orientation="VERTICAL" />
+   <VBox alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="375.0" HBox.hgrow="ALWAYS">
+      <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+         <VBox.margin>
+            <Insets bottom="24.0" left="24.0" right="24.0" top="24.0"/>
+         </VBox.margin>
+         <VBox alignment="TOP_CENTER" maxHeight="700.0" maxWidth="1.7976931348623157E308"
+               styleClass="ForegroundContainer" HBox.hgrow="ALWAYS">
+            <padding>
+               <Insets bottom="16.0" left="16.0" right="16.0" top="8.0"/>
+            </padding>
+            <VBox alignment="CENTER" prefHeight="75.0" prefWidth="588.0">
+               <VBox.margin>
+                  <Insets top="50.0"/>
+               </VBox.margin>
+               <padding>
+                  <Insets left="25.0" right="25.0"/>
+               </padding>
+               <TextField fx:id="searchFieldGroupMembers" maxWidth="1.7976931348623157E308" minHeight="35.0"
+                          onAction="#searchForGroupMembers" onMouseClicked="#searchForGroupMembers"
+                          prefHeight="60.0" promptText="Search for Groupmembers" VBox.vgrow="ALWAYS">
+                  <font>
+                     <Font name="Comic Sans MS" size="17.0"/>
+                  </font>
+                  <VBox.margin>
+                     <Insets/>
+                  </VBox.margin>
+               </TextField>
+            </VBox>
+            <HBox prefHeight="262.0" prefWidth="512.0" VBox.vgrow="ALWAYS">
+               <VBox alignment="CENTER" minHeight="100.0" prefHeight="448.0" prefWidth="523.0" HBox.hgrow="ALWAYS"/>
             </HBox>
-            <VBox alignment="BOTTOM_CENTER" fillWidth="false" prefHeight="119.0" prefWidth="513.0" VBox.vgrow="NEVER">
-                <VBox.margin>
-                    <Insets/>
-                </VBox.margin>
-                <VBox alignment="CENTER" prefHeight="17.0" prefWidth="126.0" VBox.vgrow="NEVER">
-                    <VBox.margin>
+            <VBox alignment="BOTTOM_CENTER" VBox.vgrow="NEVER">
+               <VBox.margin>
+                  <Insets/>
+               </VBox.margin>
+               <VBox alignment="CENTER" prefHeight="17.0" prefWidth="126.0" VBox.vgrow="NEVER">
+                  <VBox.margin>
+                     <Insets/>
+                  </VBox.margin>
+                  <Label fx:id="errorMessage" textFill="RED"/>
+               </VBox>
+               <VBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                  <TextField fx:id="groupNameInput" maxWidth="1.7976931348623157E308" minHeight="35.0"
+                             prefHeight="50.0" prefWidth="588.0" promptText="New Group Name" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font name="Comic Sans MS" size="17.0"/>
+                     </font>
+                     <VBox.margin>
                         <Insets/>
-                    </VBox.margin>
-                    <Label fx:id="errorMessage" textFill="RED"/>
-                </VBox>
-                <VBox alignment="CENTER" prefHeight="47.0" prefWidth="300.0" VBox.vgrow="NEVER">
-                    <TextField fx:id="groupNameInput" prefHeight="25.0" prefWidth="300.0" promptText="New Group Name"/>
-                </VBox>
-                <VBox alignment="CENTER" prefHeight="63.0" prefWidth="100.0">
-                    <Button fx:id="saveGroupButton" mnemonicParsing="false" onAction="#saveGroup" prefHeight="32.0"
-                            prefWidth="95.0" text="Save Group"/>
-                </VBox>
+                     </VBox.margin>
+                  </TextField>
+                  <Button fx:id="saveGroupButton" mnemonicParsing="false" onAction="#saveGroup" prefHeight="50.0"
+                          prefWidth="150.0" styleClass="buttonsYellow" text="Save Group">
+                     <font>
+                        <Font name="Comic Sans MS Bold" size="17.0"/>
+                     </font>
+                     <VBox.margin>
+                        <Insets top="32.0"/>
+                     </VBox.margin>
+                  </Button>
+                  <VBox.margin>
+                     <Insets bottom="50.0"/>
+                  </VBox.margin>
+               </VBox>
             </VBox>
-        </VBox>
-    </center>
-    <left>
-        <VBox alignment="CENTER_LEFT" fillWidth="false" prefHeight="600.0" prefWidth="288.0"
-              BorderPane.alignment="CENTER_LEFT">
-            <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="30.0" prefWidth="280.0" VBox.vgrow="NEVER">
-                <Text fx:id="selectGroupMembersText" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Groupmembers"
-                      textAlignment="CENTER" wrappingWidth="233.509765625" VBox.vgrow="ALWAYS">
-                    <font>
-                        <Font size="23.0"/>
-                    </font>
-                </Text>
-            </VBox>
-            <VBox alignment="CENTER" prefHeight="384.0" prefWidth="288.0" VBox.vgrow="NEVER">
-                <HBox alignment="CENTER" prefHeight="389.0" prefWidth="288.0" VBox.vgrow="NEVER">
-                    <VBox>
-                        <VBox fx:id="friendsUsers" alignment="CENTER" prefHeight="330.0" prefWidth="296.0"/>
-                        <VBox fx:id="foreignUsers" alignment="CENTER" prefHeight="330.0" prefWidth="296.0"/>
-                    </VBox>
-                </HBox>
-            </VBox>
-            <VBox alignment="CENTER" fillWidth="false" VBox.vgrow="NEVER">
-                <HBox alignment="CENTER" fillHeight="false" prefHeight="75.0" prefWidth="320.0" VBox.vgrow="ALWAYS">
-                    <HBox alignment="CENTER" prefHeight="35.0" prefWidth="117.0" HBox.hgrow="NEVER">
-                        <Button fx:id="backToMessagesButton" mnemonicParsing="false" onAction="#changeToMessages"
-                                prefHeight="29.0" prefWidth="92.0" text="Go back"/>
-                    </HBox>
-                    <HBox alignment="CENTER" prefHeight="35.0" prefWidth="116.0" HBox.hgrow="NEVER">
-                        <Button fx:id="deleteGroupButton" mnemonicParsing="false" onAction="#deleteGroup"
-                                prefHeight="29.0" prefWidth="92.0" text="Delete group"/>
-                    </HBox>
-                </HBox>
-            </VBox>
-        </VBox>
-    </left>
-</BorderPane>
+         </VBox>
+      </HBox>
+   </VBox>
+</HBox>

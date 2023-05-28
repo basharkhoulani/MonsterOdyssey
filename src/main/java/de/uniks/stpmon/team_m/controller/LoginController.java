@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -40,7 +41,11 @@ public class LoginController extends Controller {
     @FXML
     public Label welcomeLabel;
     @FXML
-    public Label gameNameLabel;
+    public Label gameNameLabel1;
+    @FXML
+    public Label gameNameLabel2;
+    @FXML
+    public ImageView gameIcon;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
