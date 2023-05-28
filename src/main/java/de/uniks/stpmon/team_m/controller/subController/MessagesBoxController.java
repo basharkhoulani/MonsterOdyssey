@@ -9,7 +9,6 @@ import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
-import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
@@ -80,25 +79,33 @@ public class MessagesBoxController extends Controller {
         if (!origin.equals("groupListView")) {
             group = new Group(null, null, List.of(user._id(), userStorageProvider.get().get_id()));
         }
-        disposables.add(groupService.getGroups(group.membersToString())
-                .doOnNext(groups -> {
-                    if (group.name() == null) {
-                        groups.stream().filter(g -> g.name() == null).findFirst().ifPresent(g -> group = g);
-                    } else {
-                        chatID = group._id();
-                    }
-                }).flatMap(groups -> {
-                    if (chatID != null) {
-                        groupStorageProvider.get().set_id(chatID);
-                        return messageService.getGroupMessages(chatID);
-                    } else {
-                        return Observable.empty();
-                    }
-                }).doOnNext(messages -> {
-                    this.messages.setAll(messages);
-                    listenToMessages(this.messages, chatID);
-                }).observeOn(FX_SCHEDULER).subscribe(event -> {
-                }, error -> showError(error.getMessage())));
+        disposables.add(groupService.getGroups(group.membersToString()).doOnNext(groups -> {
+            findGroupID(groups);
+            groupStorageProvider.get().set_id(chatID);
+        }).flatMap(groups -> messageService.getGroupMessages(chatID).observeOn(FX_SCHEDULER)).doOnNext(messages -> {
+            this.messages.setAll(messages);
+            listenToMessages(this.messages, chatID);
+        }).observeOn(FX_SCHEDULER).subscribe());
+    }
+
+    /**
+     * Finds the groupID of the chat.
+     *
+     * @param groups The list of groups
+     */
+
+    private void findGroupID(List<Group> groups) {
+        if (group.name() == null) {
+            for (Group group : groups) {
+                if (group.members().contains(user._id()) && group.members().contains(userStorageProvider.get().get_id())) {
+                    this.group = group;
+                    chatID = group._id();
+                    break;
+                }
+            }
+        } else {
+            chatID = group._id();
+        }
     }
 
     /**

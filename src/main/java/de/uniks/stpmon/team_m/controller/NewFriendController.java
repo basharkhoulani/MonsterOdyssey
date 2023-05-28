@@ -60,7 +60,6 @@ public class NewFriendController extends Controller {
 
     public void changeToMainMenu() {
         groupStorageProvider.get().set_id(null);
-        groupStorageProvider.get().set_id(null);
         app.show(mainMenuControllerProvider.get());
     }
 

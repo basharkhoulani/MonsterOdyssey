@@ -80,7 +80,6 @@ public class MessagesController extends Controller {
     Preferences preferences;
     private final ObservableList<User> friends = FXCollections.observableArrayList();
     private final ObservableList<Group> groups = FXCollections.observableArrayList();
-    private final ObservableList<Group> groupsToAdd = FXCollections.observableArrayList();
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
     private ListView<User> userListView;
     private ListView<Group> groupListView;
@@ -89,9 +88,18 @@ public class MessagesController extends Controller {
     Map<Group, MessagesBoxController> messagesBoxControllerGroupMap = new HashMap<>();
     private boolean userChosenFromMainMenu;
 
+    /**
+     * MessagesController handles the chatting system with friends and groups of users. The friends and groups are
+     * separated in two list view. The user can choose a friend or group to chat with.
+     */
+
     @Inject
     public MessagesController() {
     }
+
+    /**
+     * Initializes the MessagesController. The friends and groups list view are initialized and the content of them is set.
+     */
 
     @Override
     public void init() {
@@ -100,9 +108,13 @@ public class MessagesController extends Controller {
         setContentFriendsAndGroupsList();
     }
 
+    /**
+     * Gets a list of friends or groups and displays them in the list view.
+     */
+
     private void setContentFriendsAndGroupsList() {
-        disposables.add(usersService.getUsers(null, null)
-                .doOnNext(allUsers::setAll).flatMap(users -> getListOfFriends().observeOn(FX_SCHEDULER))
+        disposables.add(usersService.getUsers(null, null).doOnNext(allUsers::setAll)
+                .flatMap(users -> getListOfFriends().observeOn(FX_SCHEDULER))
                 .doOnNext(friends -> {
                     this.friends.setAll(friends);
                     FriendListUtils.sortListView(userListView);
@@ -110,40 +122,59 @@ public class MessagesController extends Controller {
                         selectUserChosenFromMainMenu();
                     }
                 }).flatMap(friends -> groupService.getGroups(null).observeOn(FX_SCHEDULER))
-                .doOnNext(groups -> groups.stream().filter(this::groupFilter).forEach(this::setGroups))
-                .observeOn(FX_SCHEDULER).subscribe(event -> {
+                .doOnNext(this::filterAndSetGroups).observeOn(FX_SCHEDULER)
+                .subscribe(event -> {
                 }, error -> showError(error.getMessage())));
     }
 
-    private void setGroups(Group group) {
-        if (group.members().size() == 2 && group.name() == null) {
-            for (String id : group.members()) {
-                if (!id.equals(userStorageProvider.get().get_id())) {
-                    allUsers.stream().filter(u -> u._id().equals(id)).findFirst()
-                            .ifPresent(u -> this.groups.add(new Group(group._id(), u.name(), group.members())));
+    /**
+     * This method filters the groups whether the user is alone, with a friend, or a group of users.
+     *
+     * @param groups List of groups
+     */
+
+    private void filterAndSetGroups(List<Group> groups) {
+        boolean groupFound = false;
+        for (Group group : groups) {
+            if (group.members().size() == 2 && group.name() == null) {
+                for (String id : userStorageProvider.get().getFriends()) {
+                    if (group.members().contains(id)) {
+                        groupFound = true;
+                        break;
+                    }
                 }
+                for (String id : group.members()) {
+                    if (!id.equals(userStorageProvider.get().get_id()) && !groupFound) {
+                        allUsers.stream().filter(u -> u._id().equals(id))
+                                .findFirst()
+                                .ifPresent(u -> this.groups.add(new Group(group._id(), u.name(), group.members())));
+                    }
+                }
+            } else if (group.members().size() == 1 && group.name() == null) {
+                this.groups.add(new Group(group._id(), ALONE, group.members()));
+            } else {
+                this.groups.add(group);
             }
-        } else if (group.members().size() == 1 && group.name() == null) {
-            this.groups.add(new Group(group._id(), ALONE, group.members()));
-        } else {
-            this.groups.add(group);
-        }
-        if (group._id().equals(groupStorageProvider.get().get_id())) {
-            groupListView.getSelectionModel().select(group);
-            groupListView.scrollTo(group);
         }
     }
 
+    /**
+     * This method selects the user and opens a chat with them, if the friend was chosen from the main menu.
+     */
+
     private void selectUserChosenFromMainMenu() {
-        userListView.getItems().stream()
-                .filter(user -> user._id().equals(groupStorageProvider.get().get_id()))
-                .findFirst()
-                .ifPresent(user -> {
-                    userListView.getSelectionModel().select(user);
-                    userListView.scrollTo(user);
-                });
+        userListView.getItems().stream().filter(user -> user._id().equals(groupStorageProvider.get().get_id())).findFirst().ifPresent(user -> {
+            userListView.getSelectionModel().select(user);
+            userListView.scrollTo(user);
+        });
         userChosenFromMainMenu = false;
     }
+
+    /**
+     * This method gets a list of friends and returns an observable list of users.
+     *
+     * @return Observable list of friends
+     */
 
     private Observable<List<User>> getListOfFriends() {
         List<String> friends = userStorageProvider.get().getFriends();
@@ -154,6 +185,10 @@ public class MessagesController extends Controller {
         }
     }
 
+    /**
+     * This method initializes the list view of groups.
+     */
+
     private void initializeGroupsList() {
         groupListView = new ListView<>(groups);
         groupListView.setId("groups");
@@ -161,6 +196,10 @@ public class MessagesController extends Controller {
         groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
         listenToGroupChanges();
     }
+
+    /**
+     * This method initializes the list view of friends.
+     */
 
     private void initializeFriendsList() {
         userListView = new ListView<>(friends);
@@ -170,28 +209,22 @@ public class MessagesController extends Controller {
         listenToUserUpdate(friends, userListView);
     }
 
-    private boolean groupFilter(Group group) {
-        if (group.members().size() == 2 && group.name() == null) {
-            for (String id : userStorageProvider.get().getFriends()) {
-                if (group.members().contains(id)) {
-                    return false;
-                }
-            }
-            for (String id : group.members()) {
-                if (!id.equals(userStorageProvider.get().get_id())) {
-                    return true;
-                }
-            }
-        } else if (group.members().size() == 1 && group.name() == null) {
-            return true;
-        } else return group.name() != null;
-        return false;
-    }
+    /**
+     * This method sets the title of the controller.
+     *
+     * @return Title of the controller
+     */
 
     @Override
     public String getTitle() {
         return MESSAGES_TITLE;
     }
+
+    /**
+     * This method sets the content of the controller and adds listeners to selected property of the list views.
+     *
+     * @return Parent object
+     */
 
     @Override
     public Parent render() {
@@ -199,47 +232,63 @@ public class MessagesController extends Controller {
         settingsButton.setVisible(false);
         friendsListViewVBox.getChildren().add(userListView);
         groupsListViewVBox.getChildren().add(groupListView);
-        messageTextArea.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.ENTER && !event.isShiftDown()) {
-                event.consume();
-                this.onSendMessage();
-            }
-        });
-        userListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                settingsButton.setVisible(false);
-                openPrivateChat(newValue);
-                currentFriendOrGroupText.setText(newValue.name());
-                if (groupListView.getSelectionModel().getSelectedItem() != null) {
-                    groupListView.getSelectionModel().clearSelection();
-                }
-            }
-        });
-        groupListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                settingsButton.setVisible(true);
-                openGroupChat(newValue);
-                currentFriendOrGroupText.setText(newValue.name());
-                if (userListView.getSelectionModel().getSelectedItem() != null) {
-                    userListView.getSelectionModel().clearSelection();
-                }
-            }
-        });
-        if (groupStorageProvider.get().get_id() != null) {
-            for (User user : friends) {
-                if (user._id().equals(groupStorageProvider.get().get_id())) {
-                    openPrivateChat(user);
-                }
-            }
-            for (Group group : groupsToAdd) {
-                if (group._id().equals(groupStorageProvider.get().get_id())) {
-                    openGroupChat(group);
-                }
-            }
-        }
+        messageTextArea.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
+        userListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> addListenerOnSelectedFriends(newValue));
+        groupListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> addListenerOnSelectedGroups(newValue));
         return parent;
 
     }
+
+    /**
+     * This method enables the user to press Enter to send messages.
+     *
+     * @param event Key event
+     */
+
+    private void enterButtonPressedToSend(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER && !event.isShiftDown()) {
+            event.consume();
+            this.onSendMessage();
+        }
+    }
+
+    /**
+     * This method is to set the behaviour of a selected group.
+     *
+     * @param newValue Selected group
+     */
+
+    private void addListenerOnSelectedGroups(Group newValue) {
+        if (newValue != null) {
+            settingsButton.setVisible(true);
+            openGroupChat(newValue);
+            currentFriendOrGroupText.setText(newValue.name());
+            if (userListView.getSelectionModel().getSelectedItem() != null) {
+                userListView.getSelectionModel().clearSelection();
+            }
+        }
+    }
+
+    /**
+     * This method is to set the behaviour of a selected friend.
+     *
+     * @param newValue Selected friend
+     */
+
+    private void addListenerOnSelectedFriends(User newValue) {
+        if (newValue != null) {
+            settingsButton.setVisible(false);
+            openPrivateChat(newValue);
+            currentFriendOrGroupText.setText(newValue.name());
+            if (groupListView.getSelectionModel().getSelectedItem() != null) {
+                groupListView.getSelectionModel().clearSelection();
+            }
+        }
+    }
+
+    /**
+     * This method destroys the subcontrollers which are MessagesBoxControllers and clears the maps.
+     */
 
     @Override
     public void destroy() {
@@ -250,8 +299,15 @@ public class MessagesController extends Controller {
         messagesBoxControllerGroupMap.clear();
     }
 
-    public void openPrivateChat(User user) {
+    /**
+     * This method creates a subcontroller for the selected user if it does not exist and opens a private chat with them.
+     * Else it opens the chat with the selected user.
+     *
+     * @param user Selected user
+     */
 
+    public void openPrivateChat(User user) {
+        groupStorageProvider.get().set_id(user._id());
         try {
             chatScrollPane.setContent(messagesBoxControllerUserMap.get(user).render());
         } catch (Exception ignored) {
@@ -265,6 +321,13 @@ public class MessagesController extends Controller {
             chatScrollPane.setContent(messagesBoxControllerUserMap.get(user).render());
         }
     }
+
+    /**
+     * This method creates a subcontroller for the selected group if it does not exist and opens a group chat with them.
+     * Else it opens the chat with the selected group.
+     *
+     * @param group Selected group
+     */
 
     public void openGroupChat(Group group) {
         groupStorageProvider.get().set_id(group._id());
@@ -284,21 +347,37 @@ public class MessagesController extends Controller {
         }
     }
 
+    /**
+     * This method enables the user to change to the main menu.
+     */
+
     public void changeToMainMenu() {
         destroy();
         app.show(mainMenuControllerProvider.get());
     }
+
+    /**
+     * This method enables the user to change to the find new friends view.
+     */
 
     public void changeToFindNewFriends() {
         destroy();
         app.show(newFriendControllerProvider.get());
     }
 
+    /**
+     * This method enables the user to change to the new group view. GroupStorage ID needs to be cleared.
+     */
+
     public void changeToNewGroup() {
         groupStorageProvider.get().set_id(EMPTY_STRING);
         destroy();
         app.show(groupControllerProvider.get());
     }
+
+    /**
+     * This method enables the user to change to the settings view. GroupStorage ID needs to be set.
+     */
 
     public void changeToSettings() {
         if (groupListView.getSelectionModel().getSelectedItem() != null) {
@@ -308,28 +387,40 @@ public class MessagesController extends Controller {
         }
     }
 
+    /**
+     * This method sends the current text in the TextField as a message to the selected group or user.
+     */
+
     public void onSendMessage() {
         String groupID = groupStorageProvider.get().get_id();
         if (groupID != null) {
             String messageBody = messageTextArea.getText();
-            disposables.add(messageService.newMessage(groupID, messageBody, MESSAGE_NAMESPACE_GROUPS)
-                    .observeOn(FX_SCHEDULER).subscribe(message -> {
-                    }, error -> showError(error.getMessage())));
+            disposables.add(messageService.newMessage(groupID, messageBody, MESSAGE_NAMESPACE_GROUPS).observeOn(FX_SCHEDULER).subscribe(message -> {
+            }, error -> showError(error.getMessage())));
             messageTextArea.setText(EMPTY_STRING);
         }
     }
 
+    /**
+     * This method listens to changes in the groups and updates the groups list accordingly.
+     */
+
     public void listenToGroupChanges() {
-        disposables.add(eventListenerProvider.get().listen("groups.*.*", Group.class).observeOn(FX_SCHEDULER)
-                .subscribe(groupEvent -> {
-                    final Group group = groupEvent.data();
-                    switch (groupEvent.suffix()) {
-                        case "created" -> groups.add(group);
-                        case "updated" -> updateGroup(group);
-                        case "deleted" -> groups.remove(group);
-                    }
-                }, error -> showError(error.getMessage())));
+        disposables.add(eventListenerProvider.get().listen("groups.*.*", Group.class).observeOn(FX_SCHEDULER).subscribe(groupEvent -> {
+            final Group group = groupEvent.data();
+            switch (groupEvent.suffix()) {
+                case "created" -> groups.add(group);
+                case "updated" -> updateGroup(group);
+                case "deleted" -> groups.remove(group);
+            }
+        }, error -> showError(error.getMessage())));
     }
+
+    /**
+     * This method listens to changes of the group name or members and updates the groups list accordingly.
+     *
+     * @param group Updated group
+     */
 
     private void updateGroup(Group group) {
         groups.removeIf(g -> g._id().equals(group._id()));
@@ -337,6 +428,12 @@ public class MessagesController extends Controller {
             groups.add(group);
         }
     }
+
+    /**
+     * This method sets a boolean if a user was selected from the main menu.
+     *
+     * @param userChosenFromMainMenu Boolean if a user was selected from the main menu
+     */
 
     public void setUserChosenFromMainMenu(boolean userChosenFromMainMenu) {
         this.userChosenFromMainMenu = userChosenFromMainMenu;
