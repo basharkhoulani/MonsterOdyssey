@@ -53,31 +53,31 @@ public class WelcomeSceneControllerTest extends ApplicationTest{
         assertEquals("Monster Odyssey - Ingame", stage.getTitle());
 
         // Scene 1
-        Label firstMessage = (Label) lookup("#firstMessage").query();
+        Label firstMessage = lookup("#firstMessage").query();
         assertEquals("Welcome to Monster Odyssey!", firstMessage.getText());
 
-        Label secondMessage = (Label) lookup("#secondMessage").query();
+        Label secondMessage =  lookup("#secondMessage").query();
         assertEquals("Welcome Aboard!", secondMessage.getText());
 
         clickOn("Next");
 
         // Scene 2
-        Label thirdMessage = (Label) lookup("#firstMessage").query();
+        Label thirdMessage = lookup("#firstMessage").query();
         assertEquals("We are the crew of this ship.", thirdMessage.getText());
 
-        Label fourthMessage = (Label) lookup("#secondMessage").query();
+        Label fourthMessage = lookup("#secondMessage").query();
         assertEquals("My name is James.", fourthMessage.getText());
 
-        Label fifthMessage = (Label) lookup("#thirdMessage").query();
+        Label fifthMessage = lookup("#thirdMessage").query();
         assertEquals("And my name is Henry!", fifthMessage.getText());
 
         clickOn("Next");
 
         // Scene 3
-        Label sixthMessage = (Label) lookup("#firstMessage").query();
+        Label sixthMessage = lookup("#firstMessage").query();
         assertEquals("Now then, we'll need to look up your application.", sixthMessage.getText());
 
-        Label seventhMessage = (Label) lookup("#secondMessage").query();
+        Label seventhMessage = lookup("#secondMessage").query();
         assertEquals("Can we have your name?", seventhMessage.getText());
 
         clickOn("Next");

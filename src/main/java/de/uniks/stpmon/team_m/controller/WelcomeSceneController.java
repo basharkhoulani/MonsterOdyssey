@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.service.TrainersService;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
