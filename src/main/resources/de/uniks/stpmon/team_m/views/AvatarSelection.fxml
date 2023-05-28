@@ -61,5 +61,5 @@
         </TextField>
         <Button fx:id="selectFileButton" mnemonicParsing="false" onAction="#selectFile" text="Select File"/>
     </HBox>
-    <Label fx:id="uploadErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel" stylesheets="@../styles.css" />
+    <Label fx:id="uploadErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel" />
 </VBox>

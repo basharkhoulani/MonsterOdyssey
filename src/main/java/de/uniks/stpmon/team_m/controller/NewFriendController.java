@@ -116,7 +116,7 @@ public class NewFriendController extends Controller {
                 names.add(user.name());
             }
             AutoCompletionBinding<String> autoCompletionBinding = TextFields.bindAutoCompletion(searchTextField, names);
-            autoCompletionBinding.setPrefWidth(searchTextField.getPrefWidth());
+            autoCompletionBinding.prefWidthProperty().bind(searchTextField.widthProperty());
         }, error -> showError(error.getMessage())));
     }
 
