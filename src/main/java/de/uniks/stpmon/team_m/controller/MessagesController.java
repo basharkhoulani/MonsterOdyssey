@@ -107,9 +107,9 @@ public class MessagesController extends Controller {
                                     }
                                 }, error -> showError(error.getMessage())));
                     }
-                    groupListView.getItems().clear();
+
                     disposables.add(groupService.getGroups(null).observeOn(FX_SCHEDULER).subscribe(groups -> groups.stream().filter(this::groupFilter).forEach(group -> {
-                        groupListView.getItems().add(group);
+
                         if (group.members().size() == 2 && group.name() == null) {
                             for (String id : group.members()) {
                                 if (!id.equals(userStorageProvider.get().get_id())) {
@@ -125,10 +125,21 @@ public class MessagesController extends Controller {
                         } else {
                             this.groups.add(group);
                         }
-                        if (group._id().equals(groupStorageProvider.get().get_id())) {
-                            openGroupChat(group);
-                            currentFriendOrGroupText.setText(groupStorageProvider.get().getName());
+                        if (groupStorageProvider.get().get_id() != null) {
+                            for (User user : friends) {
+                                if (user._id().equals(groupStorageProvider.get().get_id())) {
+                                    openPrivateChat(user);
+                                    currentFriendOrGroupText.setText(groupStorageProvider.get().getName());
+                                }
+                            }
+                            for (Group groupOpen : this.groups) {
+                                if (groupOpen._id().equals(groupStorageProvider.get().get_id())) {
+                                    openGroupChat(groupOpen);
+                                    currentFriendOrGroupText.setText(groupStorageProvider.get().getName());
+                                }
+                            }
                         }
+                        groupListView.getItems().setAll(this.groups);
                     }), error -> showError(error.getMessage())));
                 }, error -> showError(error.getMessage())));
 
@@ -184,19 +195,6 @@ public class MessagesController extends Controller {
                 currentFriendOrGroupText.setText(groupListView.getSelectionModel().getSelectedItem().name());
             }
         });
-
-        if (groupStorageProvider.get().get_id() != null) {
-            for (User user : friends) {
-                if (user._id().equals(groupStorageProvider.get().get_id())) {
-                    openPrivateChat(user);
-                }
-            }
-            for (Group group : groupsToAdd) {
-                if (group._id().equals(groupStorageProvider.get().get_id())) {
-                    openGroupChat(group);
-                }
-            }
-        }
         return parent;
 
     }
