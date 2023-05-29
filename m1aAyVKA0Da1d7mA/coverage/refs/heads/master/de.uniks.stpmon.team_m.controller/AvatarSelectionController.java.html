@@ -52,30 +52,42 @@ public class AvatarSelectionController extends Controller {
     }
 
     public void selectAvatar1() {
-
+<span class="fc" id="L55">        uploadTextField.clear();</span>
 <span class="fc" id="L56">    }</span>
 
     public void selectAvatar2() {
-
+<span class="fc" id="L59">        uploadTextField.clear();</span>
 <span class="fc" id="L60">    }</span>
 
     public void selectAvatar3() {
-
+<span class="fc" id="L63">        uploadTextField.clear();</span>
 <span class="fc" id="L64">    }</span>
 
     public void selectAvatar4() {
-
+<span class="fc" id="L67">        uploadTextField.clear();</span>
 <span class="fc" id="L68">    }</span>
 
-    public void uploadAvatarPicture() {
-
-<span class="nc" id="L72">    }</span>
+    public void clickTextField() {
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        for (Toggle radioButton : selectAvatar.getToggles()) {</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">            if (radioButton.isSelected()) {</span>
+<span class="fc" id="L73">                radioButton.setSelected(false);</span>
+            }
+<span class="fc" id="L75">        }</span>
+<span class="fc" id="L76">    }</span>
 
     public void selectFile() {
-<span class="nc" id="L75">        FileChooser fileChooser = new FileChooser();</span>
-<span class="nc" id="L76">        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(IMAGE, &quot;*.png&quot;, &quot;*.jpg&quot;, &quot;*.jpeg&quot;));</span>
-<span class="nc" id="L77">        fileChooser.setTitle(SELECT_AVATAR_PICTURE);</span>
-<span class="nc" id="L78">        File selectedFile = fileChooser.showOpenDialog(null);</span>
-<span class="nc" id="L79">    }</span>
+<span class="nc" id="L79">        FileChooser fileChooser = new FileChooser();</span>
+<span class="nc" id="L80">        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(IMAGE, &quot;*.png&quot;, &quot;*.jpg&quot;, &quot;*.jpeg&quot;));</span>
+<span class="nc" id="L81">        fileChooser.setTitle(SELECT_AVATAR_PICTURE);</span>
+<span class="nc" id="L82">        File selectedFile = fileChooser.showOpenDialog(null);</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (selectedFile != null) {</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">            for (Toggle radioButton : selectAvatar.getToggles()) {</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">                if (radioButton.isSelected()) {</span>
+<span class="nc" id="L86">                    radioButton.setSelected(false);</span>
+                }
+<span class="nc" id="L88">            }</span>
+<span class="nc" id="L89">            uploadTextField.setText(selectedFile.getAbsolutePath());</span>
+        }
+<span class="nc" id="L91">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
