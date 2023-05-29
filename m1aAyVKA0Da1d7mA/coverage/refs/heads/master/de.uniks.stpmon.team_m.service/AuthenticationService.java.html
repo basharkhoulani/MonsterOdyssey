@@ -5,6 +5,8 @@ import de.uniks.stpmon.team_m.dto.LoginDto;
 import de.uniks.stpmon.team_m.dto.LoginResult;
 import de.uniks.stpmon.team_m.dto.RefreshDto;
 import de.uniks.stpmon.team_m.rest.AuthApiService;
+import de.uniks.stpmon.team_m.utils.TokenStorage;
+import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.core.Observable;
 
 import javax.inject.Inject;
@@ -16,44 +18,75 @@ public class AuthenticationService {
     private final Preferences preferences;
     private final UserStorage userStorage;
 
+    /**
+     * AuthenticationService handles the communication with the backend for the authentication.
+     */
+
     @Inject
     public AuthenticationService(
             TokenStorage tokenStorage,
             AuthApiService authApiService,
             Preferences preferences,
             UserStorage userStorage
-<span class="fc" id="L25">    ) {</span>
-<span class="fc" id="L26">        this.tokenStorage = tokenStorage;</span>
-<span class="fc" id="L27">        this.authApiService = authApiService;</span>
-<span class="fc" id="L28">        this.preferences = preferences;</span>
-<span class="fc" id="L29">        this.userStorage = userStorage;</span>
-<span class="fc" id="L30">    }</span>
+<span class="fc" id="L31">    ) {</span>
+<span class="fc" id="L32">        this.tokenStorage = tokenStorage;</span>
+<span class="fc" id="L33">        this.authApiService = authApiService;</span>
+<span class="fc" id="L34">        this.preferences = preferences;</span>
+<span class="fc" id="L35">        this.userStorage = userStorage;</span>
+<span class="fc" id="L36">    }</span>
+
+    /**
+     * login logs in a user. If the user wants to be remembered, the refresh token is stored in the preferences.
+     *
+     * @param username   The username of the user.
+     * @param password   The password of the user.
+     * @param rememberMe Whether the user wants to be remembered.
+     * @return The login result.
+     */
 
     public Observable&lt;LoginResult&gt; login(String username, String password, boolean rememberMe) {
-<span class="fc" id="L33">        return authApiService.login(new LoginDto(username, password)).map(lr -&gt; {</span>
-<span class="fc" id="L34">            tokenStorage.setToken(lr.accessToken());</span>
-<span class="fc" id="L35">            userStorage.setUser(lr);</span>
-<span class="pc bpc" id="L36" title="1 of 2 branches missed.">            if (rememberMe) {</span>
-<span class="nc" id="L37">                preferences.put(Constants.REFRESH_TOKEN_PREF, lr.refreshToken());</span>
+<span class="fc" id="L48">        return authApiService.login(new LoginDto(username, password)).map(lr -&gt; {</span>
+<span class="fc" id="L49">            tokenStorage.setToken(lr.accessToken());</span>
+<span class="fc" id="L50">            userStorage.setUser(lr);</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">            if (rememberMe) {</span>
+<span class="nc" id="L52">                preferences.put(Constants.REFRESH_TOKEN_PREF, lr.refreshToken());</span>
             }
-<span class="fc" id="L39">            return lr;</span>
+<span class="fc" id="L54">            return lr;</span>
         });
     }
+
+    /**
+     * isRememberMe checks whether the user wants to be remembered.
+     *
+     * @return Whether the user wants to be remembered.
+     */
 
     public boolean isRememberMe() {
-<span class="nc bnc" id="L44" title="All 2 branches missed.">        return preferences.get(Constants.REFRESH_TOKEN_PREF, null) != null;</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        return preferences.get(Constants.REFRESH_TOKEN_PREF, null) != null;</span>
     }
 
+    /**
+     * Logs in a user with the refresh token.
+     *
+     * @return The login result.
+     */
+
     public Observable&lt;LoginResult&gt; refresh() {
-<span class="nc" id="L48">        return authApiService.refresh(new RefreshDto(preferences.get(Constants.REFRESH_TOKEN_PREF, null))).map(lr -&gt; {</span>
-<span class="nc" id="L49">            userStorage.setUser(lr);</span>
-<span class="nc" id="L50">            tokenStorage.setToken(lr.accessToken());</span>
-<span class="nc" id="L51">            return lr;</span>
+<span class="nc" id="L75">        return authApiService.refresh(new RefreshDto(preferences.get(Constants.REFRESH_TOKEN_PREF, null))).map(lr -&gt; {</span>
+<span class="nc" id="L76">            userStorage.setUser(lr);</span>
+<span class="nc" id="L77">            tokenStorage.setToken(lr.accessToken());</span>
+<span class="nc" id="L78">            return lr;</span>
         });
     }
 
+    /**
+     * logout logs out a user.
+     *
+     * @return A string that says that the logout was successful.
+     */
+
     public Observable&lt;String&gt; logout() {
-<span class="fc" id="L56">        return authApiService.logout().map(lr -&gt; &quot;LogoutSuccess&quot;);</span>
+<span class="fc" id="L89">        return authApiService.logout().map(lr -&gt; &quot;LogoutSuccess&quot;);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

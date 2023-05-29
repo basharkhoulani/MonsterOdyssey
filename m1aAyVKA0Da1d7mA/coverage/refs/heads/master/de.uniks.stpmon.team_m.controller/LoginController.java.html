@@ -2,10 +2,9 @@
 
 
 import de.uniks.stpmon.team_m.service.AuthenticationService;
-import de.uniks.stpmon.team_m.service.TokenStorage;
-import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
+import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -47,119 +46,145 @@ public class LoginController extends Controller {
     public Label gameNameLabel2;
     @FXML
     public ImageView gameIcon;
-
-    private PasswordFieldSkin skin;
-
-    private BooleanBinding isInvalidUsername;
-    private BooleanBinding isInvalidPassword;
-
-
-<span class="fc" id="L57">    private final SimpleStringProperty username = new SimpleStringProperty();</span>
-<span class="fc" id="L58">    private final SimpleStringProperty password = new SimpleStringProperty();</span>
-<span class="fc" id="L59">    private final SimpleBooleanProperty rememberMe = new SimpleBooleanProperty();</span>
-<span class="fc" id="L60">    private String information = EMPTY_STRING;</span>
-
-
     @Inject
     Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
     @Inject
+    Provider&lt;UserStorage&gt; userStorage;
+    @Inject
     AuthenticationService authenticationService;
     @Inject
-    TokenStorage tokenStorage;
-    @Inject
-    UserStorage userStorage;
-    @Inject
     UsersService usersService;
+    private PasswordFieldSkin skin;
+<span class="fc" id="L58">    private final SimpleStringProperty username = new SimpleStringProperty();</span>
+<span class="fc" id="L59">    private final SimpleStringProperty password = new SimpleStringProperty();</span>
+<span class="fc" id="L60">    private final SimpleBooleanProperty rememberMe = new SimpleBooleanProperty();</span>
+    private String information;
 
+    /**
+     * LoginController is used to show the login screen and to login or signup the user.
+     */
 
     @Inject
-<span class="fc" id="L76">    public LoginController() {</span>
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L68">    public LoginController() {</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * This method is used to set the title of the login screen.
+     */
 
     @Override
     public String getTitle() {
-<span class="fc" id="L81">        return LOGIN_TITLE;</span>
+<span class="fc" id="L77">        return LOGIN_TITLE;</span>
     }
+
+    /**
+     * This method is used to render JavaFX elements of the login screen.
+     *
+     * @return Parent object
+     */
 
     @Override
     public Parent render() {
-<span class="fc" id="L86">        final Parent parent = super.render();</span>
+<span class="fc" id="L88">        final Parent parent = super.render();</span>
 
-<span class="fc" id="L88">        skin = new PasswordFieldSkin(passwordField);</span>
-<span class="fc" id="L89">        passwordField.setSkin(skin);</span>
+<span class="fc" id="L90">        skin = new PasswordFieldSkin(passwordField);</span>
+<span class="fc" id="L91">        passwordField.setSkin(skin);</span>
 
-<span class="fc" id="L91">        usernameField.textProperty().bindBidirectional(username);</span>
-<span class="fc" id="L92">        passwordField.textProperty().bindBidirectional(password);</span>
-<span class="fc" id="L93">        rememberMeCheckbox.selectedProperty().bindBidirectional(rememberMe);</span>
+<span class="fc" id="L93">        usernameField.textProperty().bindBidirectional(username);</span>
+<span class="fc" id="L94">        passwordField.textProperty().bindBidirectional(password);</span>
+<span class="fc" id="L95">        rememberMeCheckbox.selectedProperty().bindBidirectional(rememberMe);</span>
 
-<span class="fc" id="L95">        isInvalidUsername = username.isEmpty();</span>
-<span class="fc" id="L96">        isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);</span>
-<span class="fc" id="L97">        signInButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
-<span class="fc" id="L98">        signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
+<span class="fc" id="L97">        BooleanBinding isInvalidUsername = username.isEmpty();</span>
+<span class="fc" id="L98">        BooleanBinding isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);</span>
+<span class="fc" id="L99">        signInButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
+<span class="fc" id="L100">        signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
 
-<span class="fc" id="L100">        passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);</span>
+<span class="fc" id="L102">        passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);</span>
 
-<span class="fc" id="L102">        showInformation();</span>
+<span class="fc" id="L104">        showInformation();</span>
 
-<span class="fc" id="L104">        return parent;</span>
+<span class="fc" id="L106">        return parent;</span>
     }
 
+    /**
+     * This method is used to log in the user and update the status to online.
+     * It also shows the main menu screen. It handles the error if the user is not found.
+     */
+
     public void signIn() {
-<span class="fc" id="L108">        passwordErrorLabel.setText(EMPTY_STRING);</span>
-
-<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        if (isInvalidPassword.or(isInvalidUsername).get()) {</span>
-<span class="nc" id="L111">            return;</span>
-        }
-
-<span class="fc" id="L114">        disposables.add(authenticationService</span>
-<span class="fc" id="L115">                .login(username.get(), password.get(), rememberMe.get())</span>
-<span class="fc" id="L116">                .observeOn(FX_SCHEDULER)</span>
-<span class="fc" id="L117">                .subscribe(loginResult -&gt; {</span>
+<span class="fc" id="L115">        passwordErrorLabel.setText(EMPTY_STRING);</span>
+<span class="fc" id="L116">        disposables.add(authenticationService.login(username.get(), password.get(), rememberMe.get())</span>
+<span class="fc" id="L117">                .observeOn(FX_SCHEDULER).subscribe(loginResult -&gt; {</span>
 <span class="fc" id="L118">                    userStatusUpdate(USER_STATUS_ONLINE);</span>
 <span class="fc" id="L119">                    app.show(mainMenuControllerProvider.get());</span>
-<span class="fc" id="L120">                    }, error -&gt; errorHandle(error.getMessage())));</span>
+<span class="fc" id="L120">                }, error -&gt; errorHandle(error.getMessage())));</span>
 <span class="fc" id="L121">    }</span>
 
+    /**
+     * This method is used to sign up the user and show the main menu screen.
+     * It handles the error if the username is already taken.
+     */
+
     public void signUp() {
-<span class="fc" id="L124">        passwordErrorLabel.setText(EMPTY_STRING);</span>
+<span class="fc" id="L129">        passwordErrorLabel.setText(EMPTY_STRING);</span>
+<span class="fc" id="L130">        disposables.add(usersService.createUser(username.get(), null, password.get())</span>
+<span class="fc" id="L131">                .observeOn(FX_SCHEDULER).subscribe(userResult -&gt; signIn(), error -&gt; errorHandle(error.getMessage())));</span>
+<span class="fc" id="L132">    }</span>
 
-<span class="pc bpc" id="L126" title="1 of 2 branches missed.">        if (isInvalidPassword.or(isInvalidUsername).get()) {</span>
-<span class="nc" id="L127">            return;</span>
-        }
-
-<span class="fc" id="L130">        disposables.add(usersService</span>
-<span class="fc" id="L131">                .createUser(username.get(), null, password.get())</span>
-<span class="fc" id="L132">                .observeOn(FX_SCHEDULER)</span>
-<span class="fc" id="L133">                .subscribe(userResult -&gt; signIn(),</span>
-<span class="fc" id="L134">                        error -&gt; errorHandle(error.getMessage())));</span>
-<span class="fc" id="L135">    }</span>
+    /**
+     * This method is used to show the password of the user in the PasswordField.
+     */
 
     public void showPassword() {
-<span class="fc" id="L138">        skin.setMask(skin.getNotMask());</span>
-<span class="fc" id="L139">        passwordField.setText(passwordField.getText());</span>
-<span class="fc" id="L140">    }</span>
+<span class="fc" id="L139">        skin.setMask(skin.getNotMask());</span>
+<span class="fc" id="L140">        passwordField.setText(passwordField.getText());</span>
+<span class="fc" id="L141">    }</span>
+
+    /**
+     * This method is used to show a message when the user has been deleted from AccountSettingController
+     */
 
     public void showInformation() {
-<span class="fc" id="L143">        informationLabel.setText(this.information);</span>
-<span class="fc" id="L144">    }</span>
+<span class="fc" id="L148">        informationLabel.setText(this.information);</span>
+<span class="fc" id="L149">    }</span>
+
+    /**
+     * This method is used to set the information if the user has been deleted from AccountSettingController
+     *
+     * @param information String, the success message
+     */
 
     public void setInformation(String information) {
-<span class="fc" id="L147">        this.information = information;</span>
-<span class="fc" id="L148">    }</span>
+<span class="fc" id="L158">        this.information = information;</span>
+<span class="fc" id="L159">    }</span>
+
+    /**
+     * This method is used to handle the error messages.
+     *
+     * @param error String, the error message
+     */
 
     public void errorHandle(String error) {
-<span class="fc bfc" id="L151" title="All 2 branches covered.">        if(error.contains(HTTP_401)){</span>
-<span class="fc" id="L152">            passwordErrorLabel.setText(SIGNIN_ERROR);</span>
-<span class="fc bfc" id="L153" title="All 2 branches covered.">        } else if (error.contains(HTTP_409)) {</span>
-<span class="fc" id="L154">            passwordErrorLabel.setText(USERNAME_TAKEN);</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        if (error.contains(HTTP_401)) {</span>
+<span class="fc" id="L169">            passwordErrorLabel.setText(SIGNIN_ERROR);</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        } else if (error.contains(HTTP_409)) {</span>
+<span class="fc" id="L171">            passwordErrorLabel.setText(USERNAME_TAKEN);</span>
         } else {
-<span class="fc" id="L156">            passwordErrorLabel.setText(CUSTOM_ERROR);</span>
+<span class="fc" id="L173">            passwordErrorLabel.setText(CUSTOM_ERROR);</span>
         }
-<span class="fc" id="L158">    }</span>
+<span class="fc" id="L175">    }</span>
+
+    /**
+     * This method is used to update the status of the user.
+     *
+     * @param status String, the status of the user
+     */
 
     public void userStatusUpdate(String status) {
-<span class="fc" id="L161">        disposables.add(usersService.updateUser(null, status, null, null, null)</span>
-<span class="pc" id="L162">                .observeOn(FX_SCHEDULER).subscribe(user -&gt; userStorage.setStatus(user.status()), error -&gt; errorHandle(error.getMessage())));</span>
-<span class="fc" id="L163">    }</span>
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        if (userStorage.get().get_id() != null) {</span>
+<span class="fc" id="L185">            disposables.add(usersService.updateUser(null, status, null, null, null).observeOn(FX_SCHEDULER)</span>
+<span class="pc" id="L186">                    .subscribe(user -&gt; userStorage.get().setStatus(user.status()), error -&gt; errorHandle(error.getMessage())));</span>
+        }
+<span class="fc" id="L188">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

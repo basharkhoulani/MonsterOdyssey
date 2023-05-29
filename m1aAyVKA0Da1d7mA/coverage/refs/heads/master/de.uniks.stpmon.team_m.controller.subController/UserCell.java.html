@@ -18,46 +18,70 @@ import static javafx.geometry.Pos.CENTER;
 public class UserCell extends ListCell&lt;User&gt; {
     Preferences preferences;
 
-<span class="fc" id="L21">    public UserCell(Preferences preferences) {</span>
-<span class="fc" id="L22">        this.preferences = preferences;</span>
-<span class="fc" id="L23">    }</span>
+    /**
+     * UserCell is used to handle user cells in every ListView. It is the parent class for every user cell.
+     * It includes the status of the user, status as best friend and the username.
+     * rootHBox is the root of the user cell which contains data about the user.
+     *
+     * @param preferences The {@link Preferences} of the user are used to get the best friend status of the user.
+     *                    If the user is a best friend, a star will be shown next to the username, and if the user is
+     *                    not a best friend, a circle will be shown next to the username.
+     */
+
+<span class="fc" id="L31">    public UserCell(Preferences preferences) {</span>
+<span class="fc" id="L32">        this.preferences = preferences;</span>
+<span class="fc" id="L33">    }</span>
 
     private HBox rootHBox;
 
+    /**
+     * Updates the user cell if changes are made.
+     *
+     * @param user  The selected {@link User}
+     * @param empty The empty status of the user cell
+     */
+
     @Override
     protected void updateItem(User user, boolean empty) {
-<span class="fc" id="L29">        super.updateItem(user, empty);</span>
-<span class="pc bpc" id="L30" title="1 of 4 branches missed.">        if (user == null || empty) {</span>
-<span class="fc" id="L31">            setText(null);</span>
-<span class="fc" id="L32">            setGraphic(null);</span>
+<span class="fc" id="L46">        super.updateItem(user, empty);</span>
+<span class="pc bpc" id="L47" title="1 of 4 branches missed.">        if (user == null || empty) {</span>
+<span class="fc" id="L48">            setText(null);</span>
+<span class="fc" id="L49">            setGraphic(null);</span>
         } else {
-<span class="fc" id="L34">            final Label usernameLabel = new Label(user.name());</span>
-<span class="fc" id="L35">            final Image onlineImage = new Image(Objects.requireNonNull(App.class.getResource(ONLINE_IMG)).toString());</span>
-<span class="fc" id="L36">            final Image offlineImage = new Image(Objects.requireNonNull(App.class.getResource(OFFLINE_IMG)).toString());</span>
-<span class="fc" id="L37">            final Image onlineStar = new Image(Objects.requireNonNull(App.class.getResource(ONLINE_STAR)).toString());</span>
-<span class="fc" id="L38">            final Image offlineStar = new Image(Objects.requireNonNull(App.class.getResource(OFFLINE_STAR)).toString());</span>
-<span class="fc" id="L39">            ImageView statusImageView = new ImageView();</span>
-<span class="fc" id="L40">            final HBox statusHBox = new HBox(statusImageView);</span>
-<span class="fc" id="L41">            statusHBox.setAlignment(CENTER);</span>
-<span class="fc" id="L42">            final HBox nameHBox = new HBox(usernameLabel);</span>
-<span class="fc" id="L43">            nameHBox.setAlignment(CENTER);</span>
-<span class="fc" id="L44">            rootHBox = new HBox(HBOX_FRIENDS_SPACING, statusHBox, nameHBox);</span>
-<span class="fc" id="L45">            final BestFriendUtils bestFriendUtils = new BestFriendUtils(preferences);</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">            statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineImage : offlineImage);</span>
-<span class="fc bfc" id="L47" title="All 2 branches covered.">            if (preferences != null) {</span>
-<span class="pc bpc" id="L48" title="1 of 2 branches missed.">                if (bestFriendUtils.isBestFriend(user)) {</span>
-<span class="nc bnc" id="L49" title="All 2 branches missed.">                    statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineStar : offlineStar);</span>
+<span class="fc" id="L51">            final Label usernameLabel = new Label(user.name());</span>
+<span class="fc" id="L52">            final Image onlineImage = new Image(Objects.requireNonNull(App.class.getResource(ONLINE_IMG)).toString());</span>
+<span class="fc" id="L53">            final Image offlineImage = new Image(Objects.requireNonNull(App.class.getResource(OFFLINE_IMG)).toString());</span>
+<span class="fc" id="L54">            final Image onlineStar = new Image(Objects.requireNonNull(App.class.getResource(ONLINE_STAR)).toString());</span>
+<span class="fc" id="L55">            final Image offlineStar = new Image(Objects.requireNonNull(App.class.getResource(OFFLINE_STAR)).toString());</span>
+<span class="fc" id="L56">            ImageView statusImageView = new ImageView();</span>
+<span class="fc" id="L57">            final HBox statusHBox = new HBox(statusImageView);</span>
+<span class="fc" id="L58">            statusHBox.setAlignment(CENTER);</span>
+<span class="fc" id="L59">            final HBox nameHBox = new HBox(usernameLabel);</span>
+<span class="fc" id="L60">            nameHBox.setAlignment(CENTER);</span>
+<span class="fc" id="L61">            rootHBox = new HBox(HBOX_FRIENDS_SPACING, statusHBox, nameHBox);</span>
+<span class="fc" id="L62">            final BestFriendUtils bestFriendUtils = new BestFriendUtils(preferences);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">            statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineImage : offlineImage);</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">            if (preferences != null) {</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">                if (bestFriendUtils.isBestFriend(user)) {</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">                    statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineStar : offlineStar);</span>
                 }
             }
-<span class="fc" id="L52">            rootHBox.setId(user.name());</span>
-<span class="fc" id="L53">            rootHBox.setUserData(user);</span>
-<span class="fc" id="L54">            setGraphic(rootHBox);</span>
-<span class="fc" id="L55">            setText(null);</span>
+<span class="fc" id="L69">            rootHBox.setId(user.name());</span>
+<span class="fc" id="L70">            rootHBox.setUserData(user);</span>
+<span class="fc" id="L71">            setGraphic(rootHBox);</span>
+<span class="fc" id="L72">            setText(null);</span>
         }
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L74">    }</span>
+
+
+    /**
+     * Returns the root of the user cell.
+     *
+     * @return The root of the user cell
+     */
 
     public HBox getRootHBox() {
-<span class="fc" id="L60">        return rootHBox;</span>
+<span class="fc" id="L84">        return rootHBox;</span>
     }
 
 }

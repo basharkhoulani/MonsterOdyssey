@@ -10,17 +10,39 @@ import java.util.List;
 public class MonstersService {
     private final MonstersApiService monstersApiService;
 
+
+    /**
+     * MonstersService handles the communication with the backend for the monsters.
+     */
+
     @Inject
-<span class="fc" id="L14">    public MonstersService(MonstersApiService monstersApiService) {</span>
-<span class="fc" id="L15">        this.monstersApiService = monstersApiService;</span>
-<span class="fc" id="L16">    }</span>
+<span class="fc" id="L19">    public MonstersService(MonstersApiService monstersApiService) {</span>
+<span class="fc" id="L20">        this.monstersApiService = monstersApiService;</span>
+<span class="fc" id="L21">    }</span>
+
+    /**
+     * getMonsters returns all monsters of a region.
+     *
+     * @param regionId  The region of the monsters.
+     * @param trainerId The trainer of the monsters.
+     * @return A list of monsters of the region.
+     */
 
     public Observable&lt;List&lt;Monster&gt;&gt; getMonsters(String regionId, String trainerId) {
-<span class="fc" id="L19">        return monstersApiService.getMonsters(regionId, trainerId);</span>
+<span class="fc" id="L32">        return monstersApiService.getMonsters(regionId, trainerId);</span>
     }
 
+    /**
+     * getMonster returns a specific monster of a region.
+     *
+     * @param regionId  The region of the monster.
+     * @param trainerId The trainer of the monster.
+     * @param monsterId The id of the monster.
+     * @return The monster.
+     */
+
     public Observable&lt;Monster&gt; getMonster(String regionId, String trainerId, String monsterId) {
-<span class="fc" id="L23">        return monstersApiService.getMonster(regionId, trainerId, monsterId);</span>
+<span class="fc" id="L45">        return monstersApiService.getMonster(regionId, trainerId, monsterId);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

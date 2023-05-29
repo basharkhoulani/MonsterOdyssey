@@ -10,22 +10,37 @@ import static de.uniks.stpmon.team_m.Constants.USER_STATUS_OFFLINE;
 import static de.uniks.stpmon.team_m.Constants.USER_STATUS_ONLINE;
 
 <span class="nc" id="L12">public class FriendListUtils {</span>
+
+    /**
+     * This method sorts the friends list view.
+     *
+     * @param friendsListView Friends list view to sort.
+     */
+
     public static void sortListView(ListView&lt;User&gt; friendsListView) {
-<span class="fc" id="L14">        friendsListView.getItems().sort(FriendListUtils::sortByOnline);</span>
-<span class="fc" id="L15">    }</span>
+<span class="fc" id="L21">        friendsListView.getItems().sort(FriendListUtils::sortByOnline);</span>
+<span class="fc" id="L22">    }</span>
+
+    /**
+     * This method sorts the friends list view based on the best friend status, then the online status and then the name.
+     *
+     * @param o1 First user to compare.
+     * @param o2 Second user to compare.
+     * @return The result of the comparison according to the best friend status, then the online status and then the name.
+     */
 
     public static int sortByOnline(User o1, User o2) {
-<span class="fc" id="L18">        BestFriendUtils bestFriendUtils = new BestFriendUtils(Preferences.userNodeForPackage(Main.class));</span>
-<span class="pc bpc" id="L19" title="3 of 4 branches missed.">        if (bestFriendUtils.isBestFriend(o1) &amp;&amp; !bestFriendUtils.isBestFriend(o2)) {</span>
-<span class="nc" id="L20">            return -1;</span>
-<span class="pc bpc" id="L21" title="2 of 4 branches missed.">        } else if (!bestFriendUtils.isBestFriend(o1) &amp;&amp; bestFriendUtils.isBestFriend(o2)) {</span>
-<span class="nc" id="L22">            return 1;</span>
-<span class="fc bfc" id="L23" title="All 4 branches covered.">        } else if (o1.status().equals(USER_STATUS_ONLINE) &amp;&amp; o2.status().equals(USER_STATUS_OFFLINE)) {</span>
-<span class="fc" id="L24">            return -1;</span>
-<span class="pc bpc" id="L25" title="1 of 4 branches missed.">        } else if (o1.status().equals(USER_STATUS_OFFLINE) &amp;&amp; o2.status().equals(USER_STATUS_ONLINE)) {</span>
-<span class="nc" id="L26">            return 1;</span>
+<span class="fc" id="L33">        BestFriendUtils bestFriendUtils = new BestFriendUtils(Preferences.userNodeForPackage(Main.class));</span>
+<span class="pc bpc" id="L34" title="3 of 4 branches missed.">        if (bestFriendUtils.isBestFriend(o1) &amp;&amp; !bestFriendUtils.isBestFriend(o2)) {</span>
+<span class="nc" id="L35">            return -1;</span>
+<span class="pc bpc" id="L36" title="2 of 4 branches missed.">        } else if (!bestFriendUtils.isBestFriend(o1) &amp;&amp; bestFriendUtils.isBestFriend(o2)) {</span>
+<span class="nc" id="L37">            return 1;</span>
+<span class="fc bfc" id="L38" title="All 4 branches covered.">        } else if (o1.status().equals(USER_STATUS_ONLINE) &amp;&amp; o2.status().equals(USER_STATUS_OFFLINE)) {</span>
+<span class="fc" id="L39">            return -1;</span>
+<span class="pc bpc" id="L40" title="1 of 4 branches missed.">        } else if (o1.status().equals(USER_STATUS_OFFLINE) &amp;&amp; o2.status().equals(USER_STATUS_ONLINE)) {</span>
+<span class="nc" id="L41">            return 1;</span>
         } else {
-<span class="fc" id="L28">            return o1.name().compareTo(o2.name());</span>
+<span class="fc" id="L43">            return o1.name().compareTo(o2.name());</span>
         }
     }
 

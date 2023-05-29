@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.dto.CreateGroupDto;
 import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.UpdateGroupDto;
 import de.uniks.stpmon.team_m.rest.GroupsApiService;
+import de.uniks.stpmon.team_m.utils.GroupStorage;
 import io.reactivex.rxjava3.core.Observable;
 
 import javax.inject.Inject;
@@ -14,45 +15,87 @@ public class GroupService {
     private final GroupsApiService groupsApiService;
     private final GroupStorage groupStorage;
 
+    /**
+     * GroupService handles the communication with the backend for the groups.
+     */
+
     @Inject
-<span class="fc" id="L18">    public GroupService(GroupsApiService groupsApiService, GroupStorage groupStorage) {</span>
-<span class="fc" id="L19">        this.groupsApiService = groupsApiService;</span>
-<span class="fc" id="L20">        this.groupStorage = groupStorage;</span>
-<span class="fc" id="L21">    }</span>
+<span class="fc" id="L23">    public GroupService(GroupsApiService groupsApiService, GroupStorage groupStorage) {</span>
+<span class="fc" id="L24">        this.groupsApiService = groupsApiService;</span>
+<span class="fc" id="L25">        this.groupStorage = groupStorage;</span>
+<span class="fc" id="L26">    }</span>
+
+    /**
+     * create creates a new group.
+     *
+     * @param name    The name of the group.
+     * @param members The members of the group.
+     * @return The created group.
+     */
 
     public Observable&lt;Group&gt; create(String name, List&lt;String&gt; members) {
-<span class="fc" id="L24">        return groupsApiService.create(new CreateGroupDto(name, members)).map(group -&gt; {</span>
-<span class="fc" id="L25">            groupStorage.set_id(group._id());</span>
-<span class="fc" id="L26">            groupStorage.setName(group.name());</span>
-<span class="fc" id="L27">            groupStorage.setMembers(group.members());</span>
-<span class="fc" id="L28">            return group;</span>
+<span class="fc" id="L37">        return groupsApiService.create(new CreateGroupDto(name, members)).map(group -&gt; {</span>
+<span class="fc" id="L38">            groupStorage.set_id(group._id());</span>
+<span class="fc" id="L39">            groupStorage.setName(group.name());</span>
+<span class="fc" id="L40">            groupStorage.setMembers(group.members());</span>
+<span class="fc" id="L41">            return group;</span>
         });
     }
 
-    // For all groups the current user is member of, pass null as the parameter.
+    /**
+     * getGroups returns groups of the current user. If _ids is null, all groups are returned.
+     * If _ids is not null, only the groups with the ids exclusively are returned.
+     *
+     * @param _ids The ids of the groups.
+     * @return A list of groups.
+     */
+
     public Observable&lt;List&lt;Group&gt;&gt; getGroups(String _ids) {
-<span class="fc" id="L34">        return groupsApiService.getGroups(_ids);</span>
+<span class="fc" id="L54">        return groupsApiService.getGroups(_ids);</span>
     }
+
+    /**
+     * getGroup returns a specific group.
+     *
+     * @param _id The id of the group.
+     * @return The group.
+     */
 
     public Observable&lt;Group&gt; getGroup(String _id) {
-<span class="fc" id="L38">        return groupsApiService.getGroup(_id);</span>
+<span class="fc" id="L65">        return groupsApiService.getGroup(_id);</span>
     }
 
+    /**
+     * update updates a group.
+     *
+     * @param _id     The id of the group.
+     * @param name    The name of the group.
+     * @param members The members of the group.
+     * @return The updated group.
+     */
+
     public Observable&lt;Group&gt; update(String _id, String name, List&lt;String&gt; members) {
-<span class="fc" id="L42">        return groupsApiService.update(_id, new UpdateGroupDto(name, members)).map(group -&gt; {</span>
-<span class="fc" id="L43">            groupStorage.set_id(group._id());</span>
-<span class="fc" id="L44">            groupStorage.setName(group.name());</span>
-<span class="fc" id="L45">            groupStorage.setMembers(group.members());</span>
-<span class="fc" id="L46">            return group;</span>
+<span class="fc" id="L78">        return groupsApiService.update(_id, new UpdateGroupDto(name, members)).map(group -&gt; {</span>
+<span class="fc" id="L79">            groupStorage.set_id(group._id());</span>
+<span class="fc" id="L80">            groupStorage.setName(group.name());</span>
+<span class="fc" id="L81">            groupStorage.setMembers(group.members());</span>
+<span class="fc" id="L82">            return group;</span>
         });
     }
 
+    /**
+     * delete deletes a group.
+     *
+     * @param _id The id of the group.
+     * @return The deleted group.
+     */
+
     public Observable&lt;Group&gt; delete(String _id) {
-<span class="fc" id="L51">        return groupsApiService.delete(_id).map(group -&gt; {</span>
-<span class="fc" id="L52">            groupStorage.set_id(null);</span>
-<span class="fc" id="L53">            groupStorage.setName(null);</span>
-<span class="fc" id="L54">            groupStorage.setMembers(null);</span>
-<span class="fc" id="L55">            return group;</span>
+<span class="fc" id="L94">        return groupsApiService.delete(_id).map(group -&gt; {</span>
+<span class="fc" id="L95">            groupStorage.set_id(null);</span>
+<span class="fc" id="L96">            groupStorage.setName(null);</span>
+<span class="fc" id="L97">            groupStorage.setMembers(null);</span>
+<span class="fc" id="L98">            return group;</span>
         });
     }
 
