@@ -35,7 +35,7 @@ import static de.uniks.stpmon.team_m.Constants.*;
 <span class="fc" id="L35">    }</span>
 
     public String getTitle() {
-<span class="nc" id="L38">        return EMPTY_STRING;</span>
+<span class="fc" id="L38">        return EMPTY_STRING;</span>
     }
 
     public void destroy() {
@@ -97,8 +97,8 @@ import static de.uniks.stpmon.team_m.Constants.*;
 <span class="nc" id="L97">            alert.setContentText(HTTP_409_MESSAGE);</span>
 <span class="pc bpc" id="L98" title="1 of 2 branches missed.">        } else if (error.contains(HTTP_404)) {</span>
 <span class="nc" id="L99">            alert.setContentText(HTTP_404_MESSAGE);</span>
-<span class="fc bfc" id="L100" title="All 2 branches covered.">        } else if (error.contains(HTTP_403)) {</span>
-<span class="fc" id="L101">            alert.setContentText(HTTP_403_MESSAGE);</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        } else if (error.contains(HTTP_403)) {</span>
+<span class="nc" id="L101">            alert.setContentText(HTTP_403_MESSAGE);</span>
 <span class="pc bpc" id="L102" title="1 of 2 branches missed.">        } else if (error.contains(HTTP_401)) {</span>
 <span class="nc" id="L103">            alert.setContentText(HTTP_401_MESSAGE);</span>
 <span class="pc bpc" id="L104" title="1 of 2 branches missed.">        } else if (error.contains(HTTP_400)) {</span>

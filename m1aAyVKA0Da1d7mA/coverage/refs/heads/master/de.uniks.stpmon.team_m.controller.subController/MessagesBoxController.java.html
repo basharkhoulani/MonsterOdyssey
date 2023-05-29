@@ -65,96 +65,97 @@ public class MessagesBoxController extends Controller {
 <span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (user == null) {</span>
 <span class="nc" id="L66">            openFriendChat(&quot;groupListView&quot;);</span>
         }
-<span class="fc" id="L68">    }</span>
+<span class="fc" id="L68">        messageListView.setFocusTraversable(false);</span>
+<span class="fc" id="L69">    }</span>
 
     @Override
     public Parent render() {
-<span class="fc" id="L72">        groupStorage.set_id(chatID);</span>
-<span class="fc" id="L73">        messageListView.scrollTo(messageListView.getItems().size() - 1);</span>
-<span class="fc" id="L74">        return messageListView;</span>
+<span class="fc" id="L73">        groupStorage.set_id(chatID);</span>
+<span class="fc" id="L74">        messageListView.scrollTo(messageListView.getItems().size() - 1);</span>
+<span class="fc" id="L75">        return messageListView;</span>
     }
 
     private void openFriendChat(String origin) {
 
         final Group chat;
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (origin.equals(&quot;userListView&quot;)) {</span>
-<span class="fc" id="L81">            chat = new Group(null, null, List.of(user._id(), userStorage.get_id()));</span>
-<span class="nc bnc" id="L82" title="All 2 branches missed.">        } else if (origin.equals(&quot;groupListView&quot;)) {</span>
-<span class="nc" id="L83">            chat = group;</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        if (origin.equals(&quot;userListView&quot;)) {</span>
+<span class="fc" id="L82">            chat = new Group(null, null, List.of(user._id(), userStorage.get_id()));</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        } else if (origin.equals(&quot;groupListView&quot;)) {</span>
+<span class="nc" id="L84">            chat = group;</span>
         } else {
-<span class="nc" id="L85">            chat = new Group(null, null, List.of(user._id(), userStorage.get_id()));</span>
+<span class="nc" id="L86">            chat = new Group(null, null, List.of(user._id(), userStorage.get_id()));</span>
         }
 
-<span class="fc" id="L88">        disposables.add(groupService.getGroups(chat.membersToString())</span>
-<span class="fc" id="L89">                .observeOn(FX_SCHEDULER).subscribe(gotGroups -&gt; {</span>
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">                    if (chat.name() == null) {</span>
-<span class="fc bfc" id="L91" title="All 2 branches covered.">                        for (Group group : gotGroups) {</span>
-<span class="pc bpc" id="L92" title="1 of 2 branches missed.">                            if (group.name() == null) {</span>
-<span class="nc" id="L93">                                chatID = group._id();</span>
-<span class="nc" id="L94">                                break;</span>
+<span class="fc" id="L89">        disposables.add(groupService.getGroups(chat.membersToString())</span>
+<span class="fc" id="L90">                .observeOn(FX_SCHEDULER).subscribe(gotGroups -&gt; {</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">                    if (chat.name() == null) {</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">                        for (Group group : gotGroups) {</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">                            if (group.name() == null) {</span>
+<span class="nc" id="L94">                                chatID = group._id();</span>
+<span class="nc" id="L95">                                break;</span>
                             }
-<span class="fc" id="L96">                            chatID = null;</span>
-<span class="fc" id="L97">                        }</span>
+<span class="fc" id="L97">                            chatID = null;</span>
+<span class="fc" id="L98">                        }</span>
                     } else {
-<span class="nc" id="L99">                        chatID = chat._id();</span>
+<span class="nc" id="L100">                        chatID = chat._id();</span>
                     }
 
-<span class="pc bpc" id="L102" title="1 of 2 branches missed.">                    if (chatID != null) {</span>
-<span class="nc" id="L103">                        groupStorage.set_id(chatID);</span>
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">                    if (chatID != null) {</span>
+<span class="nc" id="L104">                        groupStorage.set_id(chatID);</span>
 
-<span class="nc" id="L105">                        disposables.add(messageService.getGroupMessages(chatID)</span>
-<span class="nc" id="L106">                                .observeOn(FX_SCHEDULER).subscribe(messages -&gt; {</span>
-<span class="nc" id="L107">                                    this.messages.setAll(messages);</span>
-<span class="nc" id="L108">                                    listenToMessages(messageListView, this.messages, chatID);</span>
-<span class="nc" id="L109">                                    messageListView.scrollTo(messageListView.getItems().size() - 1);</span>
-<span class="nc" id="L110">                                }, error -&gt; showError(error.getMessage())));</span>
+<span class="nc" id="L106">                        disposables.add(messageService.getGroupMessages(chatID)</span>
+<span class="nc" id="L107">                                .observeOn(FX_SCHEDULER).subscribe(messages -&gt; {</span>
+<span class="nc" id="L108">                                    this.messages.setAll(messages);</span>
+<span class="nc" id="L109">                                    listenToMessages(messageListView, this.messages, chatID);</span>
+<span class="nc" id="L110">                                    messageListView.scrollTo(messageListView.getItems().size() - 1);</span>
+<span class="nc" id="L111">                                }, error -&gt; showError(error.getMessage())));</span>
                     }
-<span class="pc" id="L112">                }, error -&gt; showError(error.getMessage())));</span>
-<span class="fc" id="L113">    }</span>
+<span class="pc" id="L113">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L114">    }</span>
 
     public String getUsername(String _id) {
-<span class="nc bnc" id="L116" title="All 2 branches missed.">        for (User user : allUsers) {</span>
-<span class="nc bnc" id="L117" title="All 2 branches missed.">            if (user._id().equals(_id)) {</span>
-<span class="nc" id="L118">                return user.name();</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        for (User user : allUsers) {</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (user._id().equals(_id)) {</span>
+<span class="nc" id="L119">                return user.name();</span>
             }
-<span class="nc" id="L120">        }</span>
-<span class="nc" id="L121">        return UNKNOWN_USER;</span>
+<span class="nc" id="L121">        }</span>
+<span class="nc" id="L122">        return UNKNOWN_USER;</span>
     }
 
     public void editMessage(TextInputDialog dialog, String newBody, Message message) {
-<span class="nc" id="L125">        disposables.add(messageService.updateMessage(groupStorage.get_id(), message._id(), newBody, MESSAGE_NAMESPACE_GROUPS)</span>
-<span class="nc" id="L126">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
-<span class="nc" id="L127">                }, error -&gt; showError(error.getMessage())));</span>
-<span class="nc" id="L128">        dialog.close();</span>
-<span class="nc" id="L129">    }</span>
+<span class="nc" id="L126">        disposables.add(messageService.updateMessage(groupStorage.get_id(), message._id(), newBody, MESSAGE_NAMESPACE_GROUPS)</span>
+<span class="nc" id="L127">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
+<span class="nc" id="L128">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="nc" id="L129">        dialog.close();</span>
+<span class="nc" id="L130">    }</span>
 
     public void deleteMessage(Alert alert, Message item) {
-<span class="nc" id="L132">        disposables.add(messageService.deleteMessage(item._id(), groupStorage.get_id(), MESSAGE_NAMESPACE_GROUPS)</span>
-<span class="nc" id="L133">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
-<span class="nc" id="L134">                }, error -&gt; showError(error.getMessage())));</span>
-<span class="nc" id="L135">        alert.close();</span>
-<span class="nc" id="L136">    }</span>
+<span class="nc" id="L133">        disposables.add(messageService.deleteMessage(item._id(), groupStorage.get_id(), MESSAGE_NAMESPACE_GROUPS)</span>
+<span class="nc" id="L134">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
+<span class="nc" id="L135">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="nc" id="L136">        alert.close();</span>
+<span class="nc" id="L137">    }</span>
 
     public void listenToMessages(ListView&lt;Message&gt; messageListView, ObservableList&lt;Message&gt; messages, String id) {
-<span class="nc" id="L139">        disposables.add(eventListener.get().listen(&quot;groups.&quot; + id + &quot;.messages.*.*&quot;, Message.class)</span>
-<span class="nc" id="L140">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
-<span class="nc" id="L141">                    final Message message = event.data();</span>
-<span class="nc bnc" id="L142" title="All 4 branches missed.">                    switch (event.suffix()) {</span>
+<span class="nc" id="L140">        disposables.add(eventListener.get().listen(&quot;groups.&quot; + id + &quot;.messages.*.*&quot;, Message.class)</span>
+<span class="nc" id="L141">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
+<span class="nc" id="L142">                    final Message message = event.data();</span>
+<span class="nc bnc" id="L143" title="All 4 branches missed.">                    switch (event.suffix()) {</span>
                         case &quot;created&quot; -&gt; {
-<span class="nc" id="L144">                            messages.add(message);</span>
-<span class="nc" id="L145">                            messageListView.scrollTo(message);</span>
-<span class="nc" id="L146">                        }</span>
+<span class="nc" id="L145">                            messages.add(message);</span>
+<span class="nc" id="L146">                            messageListView.scrollTo(message);</span>
+<span class="nc" id="L147">                        }</span>
                         case &quot;updated&quot; -&gt; {
-<span class="nc" id="L148">                            String messageID = message._id();</span>
-<span class="nc" id="L149">                            messageListView.getItems().stream()</span>
-<span class="nc" id="L150">                                    .filter(m -&gt; m._id().equals(messageID))</span>
-<span class="nc" id="L151">                                    .findFirst()</span>
-<span class="nc" id="L152">                                    .ifPresent(m -&gt; messageListView.getItems().set(messageListView.getItems().indexOf(m), message));</span>
-<span class="nc" id="L153">                        }</span>
-<span class="nc" id="L154">                        case &quot;deleted&quot; -&gt; messages.removeIf(m -&gt; m._id().equals(message._id()));</span>
+<span class="nc" id="L149">                            String messageID = message._id();</span>
+<span class="nc" id="L150">                            messageListView.getItems().stream()</span>
+<span class="nc" id="L151">                                    .filter(m -&gt; m._id().equals(messageID))</span>
+<span class="nc" id="L152">                                    .findFirst()</span>
+<span class="nc" id="L153">                                    .ifPresent(m -&gt; messageListView.getItems().set(messageListView.getItems().indexOf(m), message));</span>
+<span class="nc" id="L154">                        }</span>
+<span class="nc" id="L155">                        case &quot;deleted&quot; -&gt; messages.removeIf(m -&gt; m._id().equals(message._id()));</span>
                     }
-<span class="nc" id="L156">                }));</span>
-<span class="nc" id="L157">    }</span>
+<span class="nc" id="L157">                }));</span>
+<span class="nc" id="L158">    }</span>
 
 
 }
