@@ -52,23 +52,27 @@ public class AvatarSelectionController extends Controller {
     }
 
     public void selectAvatar1() {
-
+        uploadTextField.clear();
     }
 
     public void selectAvatar2() {
-
+        uploadTextField.clear();
     }
 
     public void selectAvatar3() {
-
+        uploadTextField.clear();
     }
 
     public void selectAvatar4() {
-
+        uploadTextField.clear();
     }
 
-    public void uploadAvatarPicture() {
-
+    public void clickTextField() {
+        for (Toggle radioButton : selectAvatar.getToggles()) {
+            if (radioButton.isSelected()) {
+                radioButton.setSelected(false);
+            }
+        }
     }
 
     public void selectFile() {
@@ -76,5 +80,13 @@ public class AvatarSelectionController extends Controller {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(IMAGE, "*.png", "*.jpg", "*.jpeg"));
         fileChooser.setTitle(SELECT_AVATAR_PICTURE);
         File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            for (Toggle radioButton : selectAvatar.getToggles()) {
+                if (radioButton.isSelected()) {
+                    radioButton.setSelected(false);
+                }
+            }
+            uploadTextField.setText(selectedFile.getAbsolutePath());
+        }
     }
 }
