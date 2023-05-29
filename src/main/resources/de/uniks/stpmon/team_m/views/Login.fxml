@@ -17,7 +17,12 @@
 
    <VBox alignment="CENTER" maxHeight="650.0" maxWidth="1000.0" minHeight="-Infinity" minWidth="-Infinity" styleClass="ForegroundContainer" HBox.hgrow="ALWAYS">
       <VBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
-         <Label fx:id="welcomeLabel" alignment="BOTTOM_CENTER" prefHeight="25.0" prefWidth="600.0" text="Welcome to" textOverrun="CLIP" VBox.vgrow="ALWAYS">
+         <Button fx:id="languageSettings" mnemonicParsing="false" onAction="#changeLanguage" styleClass="settingsSymbol" stylesheets="@../styles.css">
+            <VBox.margin>
+               <Insets bottom="-50.0" left="500.0" />
+            </VBox.margin>
+         </Button>
+         <Label fx:id="welcomeLabel" alignment="BOTTOM_CENTER" prefHeight="43.0" prefWidth="178.0" text="Welcome to" textOverrun="CLIP" VBox.vgrow="ALWAYS">
             <font>
                <Font name="System Bold" size="18.0" />
             </font>

@@ -62,6 +62,9 @@ public class Constants {
     public static final String SIGNIN_ERROR = "Wrong Password or Username! Try again!";
     public static final String USERNAME_TAKEN = "Username is already taken!";
 
+    //Change Language Pop up
+    public static final String CHANGE_LANGUAGE_TITLE = "Change Language";
+
     // MAIN MENU
     public static final String MAIN_MENU_TITLE = "Main Menu";
 

@@ -46,6 +46,8 @@ public class LoginController extends Controller {
     public Label gameNameLabel2;
     @FXML
     public ImageView gameIcon;
+    @FXML
+    public Button languageSettings;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
@@ -59,6 +61,8 @@ public class LoginController extends Controller {
     private final SimpleStringProperty password = new SimpleStringProperty();
     private final SimpleBooleanProperty rememberMe = new SimpleBooleanProperty();
     private String information;
+
+    private ChangeLanguageController changeLanguageController;
 
     /**
      * LoginController is used to show the login screen and to login or signup the user.
@@ -75,6 +79,13 @@ public class LoginController extends Controller {
     @Override
     public String getTitle() {
         return LOGIN_TITLE;
+    }
+
+    @Override
+    public void init() {
+        super.init();
+        changeLanguageController= new ChangeLanguageController();
+        changeLanguageController.init();
     }
 
     /**
@@ -185,5 +196,12 @@ public class LoginController extends Controller {
             disposables.add(usersService.updateUser(null, status, null, null, null).observeOn(FX_SCHEDULER)
                     .subscribe(user -> userStorage.get().setStatus(user.status()), error -> errorHandle(error.getMessage())));
         }
+    }
+
+    public void changeLanguage(){
+        Dialog<?> dialog = new Dialog<>();
+        dialog.setTitle("Change Language");
+        dialog.getDialogPane().setContent(changeLanguageController.render());
+        dialog.showAndWait();
     }
 }

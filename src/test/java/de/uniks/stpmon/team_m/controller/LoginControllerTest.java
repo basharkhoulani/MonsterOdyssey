@@ -6,9 +6,7 @@ import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.UsersService;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -159,5 +157,42 @@ class LoginControllerTest extends ApplicationTest {
 
         assertFalse(signInButton.isDisabled());
         assertFalse(signUpButton.isDisabled());
+    }
+
+    @Test
+    void changeLanguage() {
+        final Button languageSettings = lookup("#languageSettings").query();
+        clickOn(languageSettings);
+
+        final DialogPane dialogPane = lookup(".dialog-pane").query();
+        assertTrue(dialogPane.isVisible());
+
+        final RadioButton radioButtonLanguageEnglish = lookup("#radioButtonLanguageEnglish").query();
+        final RadioButton radioButtonLanguageGerman = lookup("#radioButtonLanguageGerman").query();
+        final RadioButton radioButtonLanguageChinese = lookup("#radioButtonLanguageChinese").query();
+        final Button applyLanguageButton = lookup("#applyLanguageButton").query();
+
+        assertTrue(radioButtonLanguageEnglish.isSelected());
+        assertFalse(radioButtonLanguageGerman.isSelected());
+        assertFalse(radioButtonLanguageChinese.isSelected());
+
+        clickOn(radioButtonLanguageGerman);
+        assertTrue(radioButtonLanguageGerman.isSelected());
+        assertFalse(radioButtonLanguageEnglish.isSelected());
+        assertFalse(radioButtonLanguageChinese.isSelected());
+
+        clickOn(radioButtonLanguageChinese);
+        assertTrue(radioButtonLanguageChinese.isSelected());
+        assertFalse(radioButtonLanguageEnglish.isSelected());
+        assertFalse(radioButtonLanguageGerman.isSelected());
+
+        clickOn(radioButtonLanguageEnglish);
+        assertTrue(radioButtonLanguageEnglish.isSelected());
+        assertFalse(radioButtonLanguageGerman.isSelected());
+        assertFalse(radioButtonLanguageChinese.isSelected());
+
+        clickOn(applyLanguageButton);
+        verify(app).show(loginController);
+
     }
 }
