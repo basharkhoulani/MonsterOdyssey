@@ -12,16 +12,16 @@ public class Constants {
     public static final String MESSAGE_NAMESPACE_REGIONS = "regions";
     public static final String MESSAGE_NAMESPACE_GLOBAL = "global";
     public static final String GENERIC_ERROR = """
-                                        Something went wrong!
-                                        Please try again later!""";
+            Something went wrong!
+            Please try again later!""";
     public static final String ERROR = "Error";
 
     // GENERAL
     public static final String GAME_NAME = "Monster Odyssey";
     public static final int STANDARD_HEIGHT = 600;
     public static final int STANDARD_WIDTH = 800;
-    public static final int MINIMUM_HEIGHT = 540;
-    public static final int MINIMUM_WIDTH = 700;
+    public static final int MINIMUM_HEIGHT = 590; // 540
+    public static final int MINIMUM_WIDTH = 750; // 700
     public static final String APP_ICON = "images/Monster-durchsichtig.png";
     public static final String TASKBAR_ICON = "images/Monster-durchsichtig.png";
     public static final String SURE = "Are you sure?";
@@ -35,12 +35,13 @@ public class Constants {
     public static final String USER_STATUS_OFFLINE = "offline";
     public static final String USER_STATUS_ONLINE = "online";
     public static final int HBOX_FRIENDS_SPACING = 15;
-    public static final String THREE_DOTS = "…";
+    public static final String THREE_DOTS = "\u2026";
     public static final String BUTTON_TRANSPARENT_STYLE = "-fx-background-color: transparent; -fx-border-color: transparent;";
     public static final String BUTTON_BORDER_STYLE = "-fx-border-color: black; -fx-border-width: 1px;";
     public static final String NO_FRIENDS_FOUND = "No friends found";
     public static final String NO_GROUPS_FOUND = "No groups found";
     public static final String NO_USERS_ADDED_TO_GROUP = "No foreign users added to group yet";
+    public static final String NO_MESSAGES_YET = "\t\tNo messages yet\nor there is no user or group selected";
     public static final String BEST_FRIEND_PREF = "bestFriend";
     public static final String DELETE_FRIEND_WARNING = "Are you sure you want to delete this friend?";
     public static final String LIST_VIEW_STYLE_NO_INDEXING = "-fx-background-color: #F4F4F4;";
@@ -48,6 +49,9 @@ public class Constants {
     public static final String NOT_OWN_MESSAGE_STYLE = "-fx-background-color: lightgreen;";
     public static final String ROUNDED_CORNERS_STYLE = "-fx-border-radius: 10; -fx-background-radius: 10;";
     public static final String BORDER_COLOR_BLACK = "-fx-border-color: black;";
+    public static final String ZONE_ID_EUROPE_BERLIN = "Europe/Berlin";
+    public static final String DATE_TIME_FORMAT = "HH:mm, dd.MM.yy";
+    public static final int DURATION_OF_LOADING_SCREEN = 3;
     public static final String CANCEL = "Cancel";
     public static final String OK = "OK";
 
@@ -55,7 +59,7 @@ public class Constants {
     public static final String LOGIN_TITLE = "Sign Up & In";
     public static final String PASSWORD_LESS_THAN_8_CHARACTERS = "Password must have at least 8 characters.";
     public static final int PASSWORD_CHARACTER_LIMIT = 8;
-    public static final char BULLET = '●';
+    public static final char BULLET = '\u25cf';
     public static final String REFRESH_TOKEN_PREF = "refreshToken";
     public static final String DELETE_SUCCESS = "Account successfully deleted";
     public static final String CUSTOM_ERROR = "Something went terribly wrong!";
@@ -66,7 +70,7 @@ public class Constants {
     public static final String MAIN_MENU_TITLE = "Main Menu";
 
     // NEW GROUP
-    public static final String CHECK_MARK = "✓";
+    public static final String CHECK_MARK = "\u2713";
     public static final String ADD_MARK = "+";
     public static final int BUTTON_PREF_SIZE = 30;
     public static final int MAX_SUGGESTIONS_NEW_GROUP = 20;
@@ -74,7 +78,7 @@ public class Constants {
 
     // MESSAGES
     public static final String MESSAGES_TITLE = "Messages";
-    public static final String PENCIL = "✏";
+    public static final String PENCIL = "\u270F";
     public static final String EDIT_MESSAGE_TITLE = "Edit message";
     public static final String EDIT_MESSAGE_CONTENT = "Message:";
     public static final String DELETE_MESSAGE_TITLE = "Delete Message";
@@ -99,6 +103,8 @@ public class Constants {
     public static final String ACCOUNT_SETTINGS_TITLE = "Account Setting";
     public static final String USERNAME_SUCCESS_CHANGED = "Your username has been changed successfully.";
     public static final String PASSWORD_SUCCESS_CHANGED = "Your Password has been changed successfully.";
+    public static final String SELECT_AVATAR_PICTURE = "Select Avatar Picture";
+    public static final String IMAGE = "Image";
 
     // INGAME
     public static final String INGAME_TITLE = "Ingame";

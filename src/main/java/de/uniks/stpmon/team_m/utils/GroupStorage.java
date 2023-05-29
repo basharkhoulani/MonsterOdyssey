@@ -1,4 +1,4 @@
-package de.uniks.stpmon.team_m.service;
+package de.uniks.stpmon.team_m.utils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -9,6 +9,10 @@ public class GroupStorage {
     private String _id;
     private String name;
     private List<String> members;
+
+    /**
+     * GroupStorage handles the storage of groups that need to be used.
+     */
 
     @Inject
     public GroupStorage() {

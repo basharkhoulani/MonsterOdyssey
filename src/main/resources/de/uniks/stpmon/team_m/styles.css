@@ -13,7 +13,7 @@
     -fx-background-image: url("images/settingsSymbol.png");
     -fx-border-color: transparent;
     -fx-background-color: transparent;
-    -fx-background-size: 60px;
+    -fx-background-size: 75px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 50%;
     -fx-background-radius: 15;
@@ -35,14 +35,24 @@
 
 .editSymbol {
     -fx-background-image: url("images/pencil.jpeg");
-    -fx-border-color: transparent;
+    -fx-border-style: solid;
     -fx-background-color: transparent;
     -fx-background-size: 40px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 50%;
     -fx-background-radius: 0;
-    -fx-border-radius: 15;
-    -fx-border-width: 5;
+    -fx-border-radius: 5;
+    -fx-border-width: 1;
+    -fx-border-color: darkgray;
+}
+.editSymbol:hover {
+    -fx-background-image: url("images/pencil_yellow.jpg");
+    -fx-background-size: 40px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 50%;
+    -fx-border-color: #4f4f4f;
+    -fx-border-width: 2;
+
 }
 
 .errorLabel {
@@ -53,7 +63,8 @@
     -fx-text-fill: #25c625;
 }
 
-/* Friend list */
+/*********************************************************************************/
+/******************************* Friendslist *************************************/
 .normalFriendHBox {
     -fx-border-color: black;
     -fx-border-width: 2px;
@@ -65,6 +76,85 @@
     -fx-border-style: solid none none none;
     -fx-background-color: lightblue;
 }
+/*********************************************************************************/
+/********************************* General ***************************************/
+.Background {
+    -fx-background-color: white;
+    -fx-background-image: url("images/Background.jpg");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100%;
+    -fx-background-position: center;
+}
+
+.ForegroundContainer {
+    -fx-background-color: rgba(245, 245, 245, 0.7);
+    -fx-background-radius: 10;
+}
+
+.ForegroundHeaderContainer {
+    -fx-background-color: rgba(245, 245, 245, 0.8);
+    -fx-background-radius: 10 10 0 0;
+}
+
+.messageText {
+    -fx-text-fill: black;
+}
+
+.buttonsYellow {
+    -fx-background-color: #FFF2CC;
+    -fx-border-width: 1px;
+    -fx-border-color: gray;
+}
+
+.buttonsWhite {
+    -fx-background-color: #FFFFFF;
+    -fx-border-width: 1px;
+    -fx-border-color: gray;
+}
+/*********************************************************************************/
+/********************************** Login ****************************************/
+.loginButton {
+    -fx-background-color: #FFF2CC;
+    -fx-border-width: 1px;
+    -fx-border-color: gray;
+}
+.hideSymbolContainer {
+    -fx-border-width: 1px;
+    -fx-border-color: black;
+}
+/*********************************************************************************/
+/********************************** Main Menu ************************************/
+.friendsListVBox {
+    -fx-border-style: solid;
+    -fx-border-width: 2px 0 0 0;
+}
+/*********************************************************************************/
+/*************************** Autocomplete textfield ******************************/
+.auto-complete-popup > .list-view {
+    -fx-background-color: white;
+    -fx-background-insets: -1 -2 -1 -1, 0 -1 0 0;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 12, 0.0 , 0 , 8 );
+}
+.auto-complete-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
+    -fx-padding: 4 0 4 5;
+    /* No alternate highlighting */
+    -fx-background: -fx-control-inner-background;
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 17px;
+}
+.auto-complete-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
+    -fx-background:  -fx-selection-bar-non-focused;
+    -fx-background-color: -fx-background;
+}
+.auto-complete-popup  > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:hover,
+.auto-complete-popup  > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected:hover {
+    -fx-background: -fx-accent;
+    -fx-background-color: -fx-selection-bar;
+}
+.auto-complete-popup > .list-view > .placeholder > .label {
+    -fx-text-fill: derive(-fx-control-inner-background,-30%);
+}
+/*********************************************************************************/
 .worldMapBackground {
     -fx-background-image: url("images/WorldMap-Background.jpg");
     -fx-background-size: cover;

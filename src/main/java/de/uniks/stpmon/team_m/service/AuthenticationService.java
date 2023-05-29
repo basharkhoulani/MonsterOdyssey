@@ -5,6 +5,8 @@ import de.uniks.stpmon.team_m.dto.LoginDto;
 import de.uniks.stpmon.team_m.dto.LoginResult;
 import de.uniks.stpmon.team_m.dto.RefreshDto;
 import de.uniks.stpmon.team_m.rest.AuthApiService;
+import de.uniks.stpmon.team_m.utils.TokenStorage;
+import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.core.Observable;
 
 import javax.inject.Inject;
@@ -15,6 +17,10 @@ public class AuthenticationService {
     private final AuthApiService authApiService;
     private final Preferences preferences;
     private final UserStorage userStorage;
+
+    /**
+     * AuthenticationService handles the communication with the backend for the authentication.
+     */
 
     @Inject
     public AuthenticationService(
@@ -29,6 +35,15 @@ public class AuthenticationService {
         this.userStorage = userStorage;
     }
 
+    /**
+     * login logs in a user. If the user wants to be remembered, the refresh token is stored in the preferences.
+     *
+     * @param username   The username of the user.
+     * @param password   The password of the user.
+     * @param rememberMe Whether the user wants to be remembered.
+     * @return The login result.
+     */
+
     public Observable<LoginResult> login(String username, String password, boolean rememberMe) {
         return authApiService.login(new LoginDto(username, password)).map(lr -> {
             tokenStorage.setToken(lr.accessToken());
@@ -40,9 +55,21 @@ public class AuthenticationService {
         });
     }
 
+    /**
+     * isRememberMe checks whether the user wants to be remembered.
+     *
+     * @return Whether the user wants to be remembered.
+     */
+
     public boolean isRememberMe() {
         return preferences.get(Constants.REFRESH_TOKEN_PREF, null) != null;
     }
+
+    /**
+     * Logs in a user with the refresh token.
+     *
+     * @return The login result.
+     */
 
     public Observable<LoginResult> refresh() {
         return authApiService.refresh(new RefreshDto(preferences.get(Constants.REFRESH_TOKEN_PREF, null))).map(lr -> {
@@ -51,6 +78,12 @@ public class AuthenticationService {
             return lr;
         });
     }
+
+    /**
+     * logout logs out a user.
+     *
+     * @return A string that says that the logout was successful.
+     */
 
     public Observable<String> logout() {
         return authApiService.logout().map(lr -> "LogoutSuccess");
