@@ -37,6 +37,8 @@ class MainMenuControllerTest extends ApplicationTest {
     @Mock
     Provider<IngameController> ingameControllerProvider;
     @Mock
+    Provider<WelcomeSceneController> welcomeSceneControllerProvider;
+    @Mock
     Provider<AccountSettingController> accountSettingControllerProvider;
     @Mock
     Provider<NewFriendController> newFriendControllerProvider;
@@ -152,13 +154,13 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Test
     void changeToIngame() {
-        final IngameController ingameController = mock(IngameController.class);
-        when(ingameControllerProvider.get()).thenReturn(ingameController);
-        doNothing().when(app).show(ingameController);
+        final WelcomeSceneController welcomeSceneController = mock(WelcomeSceneController.class);
+        when(welcomeSceneControllerProvider.get()).thenReturn(welcomeSceneController);
+        doNothing().when(app).show(welcomeSceneController);
         final ListView<Region> regionListView = lookup("#regionListView").query();
         clickOn(regionListView.getItems().get(0).name());
         clickOn("#startGameButton");
-        verify(app).show(ingameController);
+        verify(app).show(welcomeSceneController);
     }
 
     @Test
