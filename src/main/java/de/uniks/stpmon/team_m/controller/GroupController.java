@@ -15,7 +15,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -130,12 +129,12 @@ public class GroupController extends Controller {
 
     private void initEditGroupView() {
         TITLE = EDIT_GROUP_TITLE;
-        disposables.add(usersService.getUsers(groupStorageProvider.get().getMembers(), null)
+        disposables.add(usersService.getUsers(groupStorageProvider.get().getMembers(), null).observeOn(FX_SCHEDULER)
                 .doOnNext(newGroupMembers::setAll)
-                .flatMap(users -> usersService.getUsers(userStorage.get().getFriends(), null))
+                .flatMap(users -> usersService.getUsers(userStorage.get().getFriends(), null).observeOn(FX_SCHEDULER))
                 .doOnNext(this::sortGroupMembersIntoLists)
-                .subscribe(event -> {
-                }, error -> showError(error.getMessage())));
+                .observeOn(FX_SCHEDULER)
+                .subscribe(event -> {}, error -> showError(error.getMessage())));
     }
 
     /**
@@ -150,7 +149,7 @@ public class GroupController extends Controller {
         users.removeAll(this.friends);
         foreign.setAll(users);
         foreign.removeIf(user -> user._id().equals(userStorage.get().get_id()));
-        foreignListView.getItems().setAll(users);
+        foreignListView.getItems().setAll(foreign);
         FriendListUtils.sortListView(foreignListView);
         friendsListView.getItems().setAll(friends);
         FriendListUtils.sortListView(friendsListView);
