@@ -117,13 +117,12 @@ public class WelcomeSceneController extends Controller{
                     alert.close();
                 } else if (result.isPresent() && result.get() == okButton) {
                     BooleanBinding isInvalidUsername = trainerName.isEmpty();
-                    if (!isInvalidUsername.get()) {
-                        alert.close();
-                        textFieldName.textProperty().bindBidirectional(trainerName);
-                        app.getStage().getScene().setOnKeyPressed(null);
-                        // hier muss dann der trainer erstellt werde jedoch fehlt der avatar
-                        app.show(ingameControllerProvider.get());
-                    }
+                    //alert.close();
+                    app.show(ingameControllerProvider.get());
+                    textFieldName.textProperty().bindBidirectional(trainerName);
+                    app.getStage().getScene().setOnKeyPressed(null);
+                    // hier muss dann der trainer erstellt werde jedoch fehlt der avatar
+
                 }
             }
         }
