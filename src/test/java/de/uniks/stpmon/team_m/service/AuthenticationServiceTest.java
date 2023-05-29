@@ -4,6 +4,8 @@ import de.uniks.stpmon.team_m.dto.LoginDto;
 import de.uniks.stpmon.team_m.dto.LoginResult;
 import de.uniks.stpmon.team_m.dto.LogoutResult;
 import de.uniks.stpmon.team_m.rest.AuthApiService;
+import de.uniks.stpmon.team_m.utils.TokenStorage;
+import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.core.Observable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,7 +58,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void logout(){
+    void logout() {
         when(authApiService.logout()).thenReturn(Observable.just(new LogoutResult()));
 
         authenticationService.logout().blockingFirst();

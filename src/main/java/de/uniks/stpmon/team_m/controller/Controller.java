@@ -2,7 +2,6 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
-import de.uniks.stpmon.team_m.dto.Event;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.utils.FriendListUtils;
 import de.uniks.stpmon.team_m.ws.EventListener;
@@ -31,16 +30,35 @@ public abstract class Controller {
     protected final CompositeDisposable disposables = new CompositeDisposable();
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
 
+    /**
+     * This method is called when the controller is initialized. It is called before the render() method.
+     */
+
     public void init() {
     }
+
+    /**
+     * This method is called when the controller title is needed and to be set.
+     */
 
     public String getTitle() {
         return EMPTY_STRING;
     }
 
+    /**
+     * This method is called when the controller is destroyed to clean up.
+     */
+
     public void destroy() {
         disposables.dispose();
     }
+
+    /**
+     * This method is called when the controller is rendered.
+     * It loads the fxml file and its elements and sets the controller factory.
+     *
+     * @return Parent object
+     */
 
     public Parent render() {
         return load(getClass().getSimpleName().replace("Controller", ""));
@@ -57,35 +75,69 @@ public abstract class Controller {
         }
     }
 
+    /**
+     * This method sets the height and minimum height of the stage.
+     *
+     * @return height
+     */
+
     public int getHeight() {
         return STANDARD_HEIGHT != app.getStage().getHeight() ? (int) app.getStage().getHeight() : STANDARD_HEIGHT;
     }
 
+    /**
+     * This method sets the width and minimum width of the stage.
+     *
+     * @return width
+     */
+
     public int getWidth() {
         return STANDARD_WIDTH != app.getStage().getWidth() ? (int) app.getStage().getWidth() : STANDARD_WIDTH;
     }
+
+    /**
+     * This method is called when there are user changes and updates the user list.
+     *
+     * @param friends         List of friends to be updated
+     * @param friendsListView ListView of friends list
+     */
 
     public void listenToUserUpdate(ObservableList<User> friends, ListView<User> friendsListView) {
         disposables.add(eventListenerProvider.get().listen("users.*.*", User.class).observeOn(FX_SCHEDULER)
                 .subscribe(event -> {
                     final User user = event.data();
                     switch (event.suffix()) {
-                        case "updated" -> updateUser(friends, friendsListView, event);
+                        case "updated" -> updateUser(friends, friendsListView, user);
                         case "deleted" -> friends.remove(user);
                     }
                 }));
     }
 
-    private void updateUser(ObservableList<User> friends, ListView<User> friendsListView, Event<User> user) {
+    /**
+     * This method is called when the friend user has had a change. Its user cell will be updated with
+     * the new information.
+     *
+     * @param friends         List of friends to be updated
+     * @param friendsListView ListView of friends list
+     * @param user            User to be updated
+     */
+
+    private void updateUser(ObservableList<User> friends, ListView<User> friendsListView, User user) {
         User userToUpdate = friends.stream()
-                .filter(friend -> friend._id().equals(user.data()._id()))
+                .filter(friend -> friend._id().equals(user._id()))
                 .findFirst()
                 .orElse(null);
         if (userToUpdate != null) {
-            friends.set(friends.indexOf(userToUpdate), user.data());
+            friends.set(friends.indexOf(userToUpdate), user);
             FriendListUtils.sortListView(friendsListView);
         }
     }
+
+    /**
+     * This method is called when there is an error and shows an alert with the error message.
+     *
+     * @param error Error message
+     */
 
     public void showError(String error) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

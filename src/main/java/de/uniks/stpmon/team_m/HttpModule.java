@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Module;
 import dagger.Provides;
 import de.uniks.stpmon.team_m.rest.*;
-import de.uniks.stpmon.team_m.service.TokenStorage;
+import de.uniks.stpmon.team_m.utils.TokenStorage;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;

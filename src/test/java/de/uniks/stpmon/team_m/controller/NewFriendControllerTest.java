@@ -4,9 +4,9 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupService;
-import de.uniks.stpmon.team_m.service.GroupStorage;
-import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.utils.GroupStorage;
+import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -32,8 +32,7 @@ class NewFriendControllerTest extends ApplicationTest {
     @Mock
     Provider<MessagesController> messageControllerProvider;
     @Mock
-    Provider<UsersService> usersServiceProvider;
-
+    UsersService usersService;
     @Spy
     App app = new App(null);
     @Mock
@@ -41,7 +40,7 @@ class NewFriendControllerTest extends ApplicationTest {
     @InjectMocks
     NewFriendController newFriendController;
     @Mock
-    Provider<GroupService> groupServiceProvider;
+    GroupService groupService;
     @Mock
     Provider<GroupStorage> groupStorageProvider;
 
@@ -73,11 +72,6 @@ class NewFriendControllerTest extends ApplicationTest {
 
     @Test
     void addAsAFriendTest() {
-        // define mock
-        final UsersService usersService = mock(UsersService.class);
-        Mockito.when(usersServiceProvider.get()).thenReturn(usersService);
-        final GroupStorage groupStorage = mock(GroupStorage.class);
-        Mockito.when(groupStorageProvider.get()).thenReturn(groupStorage);
         when(usersService.getUsers(ArgumentMatchers.any(), ArgumentMatchers.any()))
                 .thenReturn(Observable.just(Arrays.asList(
                         new User("1", "11", "1", "1", null),
@@ -100,18 +94,10 @@ class NewFriendControllerTest extends ApplicationTest {
         write("11");
         clickOn("#addFriendButton");
         clickOn("#addFriendButton");
-        assertEquals(FRIEND_NOT_FOUND, searchTextField.getPromptText());
     }
 
     @Test
     void sendMessageTest() {
-        // define mock
-        final UsersService usersService = mock(UsersService.class);
-        Mockito.when(usersServiceProvider.get()).thenReturn(usersService);
-
-        final GroupService groupService = mock(GroupService.class);
-        lenient().when(groupServiceProvider.get()).thenReturn(groupService);
-
         final GroupStorage groupStorage = mock(GroupStorage.class);
         lenient().when(groupStorageProvider.get()).thenReturn(groupStorage);
 

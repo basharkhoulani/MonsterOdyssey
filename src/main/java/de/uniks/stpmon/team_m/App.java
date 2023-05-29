@@ -46,40 +46,36 @@ public class App extends Application {
         stage.setMinHeight(MINIMUM_HEIGHT);
         stage.setMinWidth(MINIMUM_WIDTH);
         stage.setTitle(GAME_NAME);
-        stage.setScene(loadingscreen());
+
+        stage.setScene(loadingScreen());
+      
         setAppIcon(stage);
         setTaskbarIcon();
         if (!GraphicsEnvironment.isHeadless()) {
             stage.getScene().getStylesheets().add(Main.class.getResource("styles.css").toString());
         }
 
-        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+        PauseTransition pause = new PauseTransition(Duration.seconds(DURATION_OF_LOADING_SCREEN));
         pause.setOnFinished(event -> {
-                    if (component == null) {
-                        return;
-                    }
-
-                    final AuthenticationService authenticationService = component.authenticationService();
-
-                    if (authenticationService.isRememberMe()) {
-
-                        disposables.add(authenticationService.refresh()
-                                .observeOn(Schedulers.from(Platform::runLater))
-                                .subscribe(lr -> {
-                                    component.loginController().userStatusUpdate(USER_STATUS_ONLINE);
-                                    show(component.mainMenuController());
-                                        },
-                                        err -> show(component.loginController())));
-                    } else {
-                        show(component.loginController());
-                    }
-                }
-        );
+            if (component == null) {
+                return;
+            }
+            final AuthenticationService authenticationService = component.authenticationService();
+            if (authenticationService.isRememberMe()) {
+                disposables.add(authenticationService.refresh().observeOn(Schedulers.from(Platform::runLater)).subscribe(
+                        lr -> {
+                            component.loginController().userStatusUpdate(USER_STATUS_ONLINE);
+                            show(component.mainMenuController());
+                        }, err -> show(component.loginController())));
+            } else {
+                show(component.loginController());
+            }
+        });
         pause.play();
         stage.show();
     }
 
-    private Scene loadingscreen() {
+    private Scene loadingScreen() {
         final ImageView loading = new ImageView(new Image(Objects.requireNonNull(App.class.getResource(LOADING_ANIMATION)).toString()));
         loading.setFitHeight(250);
         loading.setPreserveRatio(true);
@@ -126,7 +122,8 @@ public class App extends Application {
         stage.setHeight(controller.getHeight());
 
     }
-    public Controller getController(){
+
+    public Controller getController() {
         return controller;
     }
 

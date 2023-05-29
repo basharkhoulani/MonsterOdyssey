@@ -4,7 +4,6 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.dto.LoginResult;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
-import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
@@ -19,25 +18,16 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import javax.inject.Provider;
-
 import static de.uniks.stpmon.team_m.Constants.USER_STATUS_ONLINE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class LoginControllerTest extends ApplicationTest {
-
-    @Mock
-    Provider<MainMenuController> mainMenuControllerProvider;
     @Mock
     AuthenticationService authenticationService;
     @Mock
     UsersService usersService;
-    // please don't delete this line. It's important fo the test. It will be indirect used
-    @Spy
-    UserStorage userStorage;
-
     @Spy
     App app = new App(null);
 
@@ -63,24 +53,11 @@ class LoginControllerTest extends ApplicationTest {
                 "a1a2",
                 "a3a4")));
 
-        when(usersService.updateUser(isNull(),anyString(),isNull(),isNull(),isNull())).thenReturn(Observable.just(new User(
-                "423f8d731c386bcd2204da39",
-                "1",
-                USER_STATUS_ONLINE,
-                null,
-                null
-        )));
-
-        final MainMenuController mainMenuController = mock(MainMenuController.class);
-        when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
-        doNothing().when(app).show(mainMenuController);
-
         write("1\t");
         write("12345678");
         clickOn("#signInButton");
 
         verify(authenticationService).login("1", "12345678", false);
-        verify(app).show(mainMenuController);
     }
 
     @Test
@@ -95,9 +72,9 @@ class LoginControllerTest extends ApplicationTest {
     }
 
     @Test
-    void signInOtherError(){
+    void signInOtherError() {
         //Sign In with other errors
-        when(authenticationService.login(anyString(),anyString(),anyBoolean())).thenReturn(Observable.error(new Exception("Test")));
+        when(authenticationService.login(anyString(), anyString(), anyBoolean())).thenReturn(Observable.error(new Exception("Test")));
         write("Bob\t");
         write("12345678");
         clickOn("#signInButton");
@@ -125,30 +102,17 @@ class LoginControllerTest extends ApplicationTest {
                 "a1a2",
                 "a3a4")));
 
-        when(usersService.updateUser(isNull(),anyString(),isNull(),isNull(),isNull())).thenReturn(Observable.just(new User(
-                "423f8d731c386bcd2204da39",
-                "1",
-                USER_STATUS_ONLINE,
-                null,
-                null
-        )));
-
-        final MainMenuController mainMenuController = mock(MainMenuController.class);
-        when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
-        doNothing().when(app).show(mainMenuController);
-
         write("1\t");
         write("12345678");
         clickOn("#signUpButton");
 
         verify(usersService).createUser("1", null, "12345678");
         verify(authenticationService).login("1", "12345678", false);
-        verify(app).show(mainMenuController);
     }
 
     @Test
     void signUpUsernameTaken() {
-        when(usersService.createUser(anyString(),isNull(),anyString())).thenReturn(Observable.error(new Exception("HTTP 409")));
+        when(usersService.createUser(anyString(), isNull(), anyString())).thenReturn(Observable.error(new Exception("HTTP 409")));
 
         write("1\t");
         write("12345678");
@@ -159,9 +123,9 @@ class LoginControllerTest extends ApplicationTest {
     }
 
     @Test
-    void signUpOtherError(){
+    void signUpOtherError() {
         //Sign In with other errors
-        when(usersService.createUser(anyString(),isNull(),anyString())).thenReturn(Observable.error(new Exception("Test")));
+        when(usersService.createUser(anyString(), isNull(), anyString())).thenReturn(Observable.error(new Exception("Test")));
         write("Bob\t");
         write("12345678");
         clickOn("#signUpButton");

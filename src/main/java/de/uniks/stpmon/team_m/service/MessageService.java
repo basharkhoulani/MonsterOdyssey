@@ -13,9 +13,6 @@ import java.util.List;
 
 public class MessageService {
 
-    /*
-     * TODO: Tests still have to be implemented, but we need mocking to realize this
-     * */
     private final MessagesApiService messagesApiService;
 
     @Inject
@@ -81,8 +78,6 @@ public class MessageService {
         return messagesApiService.delete(namespace, groupID, messageID);
     }
 
-    // General message methods
-
     /**
      * Gets all the messages from a group and returns them sorted after createdAt. This also includes private chat
      * messages, since private messages are realized via a group of two persons.
@@ -98,11 +93,6 @@ public class MessageService {
                 });
     }
 
-    //TODO: maybe you can refactor this function out, since it's basically the same code as the getGroupMessages
-    // method, but maybe it will be better for readability and usability if we keep them separate.
-    // We also could create a helper method and just make one line calls in the getGroupMessages and getRegionMessages
-    // methods.
-
     /**
      * Gets all the messages from a region and returns them sorted after createdAt
      *
@@ -116,6 +106,13 @@ public class MessageService {
                     return messages;
                 });
     }
+
+    /**
+     * Gets all the messages from a user and returns them sorted after createdAt
+     *
+     * @param parentID the ID of the user which messages you need
+     * @return a sorted observable of a sorted message list
+     */
 
     public Observable<List<Message>> getGlobalMessages(String parentID) {
         return this.getMessagesByNamespace(parentID, Constants.MESSAGE_NAMESPACE_GLOBAL)
