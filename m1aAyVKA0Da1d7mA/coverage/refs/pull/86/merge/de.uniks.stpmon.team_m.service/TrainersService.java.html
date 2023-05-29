@@ -11,29 +11,65 @@ import java.util.List;
 public class TrainersService {
     private final TrainersApiService trainersApiService;
 
+    /**
+     * TrainersService handles the communication with the backend for the trainers.
+     */
+
     @Inject
-<span class="fc" id="L15">    public TrainersService(TrainersApiService trainersApiService) {</span>
-<span class="fc" id="L16">        this.trainersApiService = trainersApiService;</span>
-<span class="fc" id="L17">    }</span>
+<span class="fc" id="L19">    public TrainersService(TrainersApiService trainersApiService) {</span>
+<span class="fc" id="L20">        this.trainersApiService = trainersApiService;</span>
+<span class="fc" id="L21">    }</span>
+
+    /**
+     * createTrainer creates a new trainer.
+     *
+     * @param regionId The region of the trainer.
+     * @param name     The name of the trainer.
+     * @param image    The image of the trainer.
+     * @return The created trainer.
+     */
 
     public Observable&lt;Trainer&gt; createTrainer(String regionId, String name, String image) {
-<span class="fc" id="L20">        return trainersApiService.createTrainer(regionId, new CreateTrainerDto(name, image));</span>
+<span class="fc" id="L33">        return trainersApiService.createTrainer(regionId, new CreateTrainerDto(name, image));</span>
     }
 
     /**
+     * getTrainers returns trainers of a region.
      * Area and/or user can be null to get all trainers from all areas,
      * all trainers from one area or one specific trainer from all areas
+     *
+     * @param regionId The region of the trainers.
+     * @param area     The area of the trainers.
+     * @param user     The user of the trainers.
+     * @return A list of trainers of the region.
      */
+
     public Observable&lt;List&lt;Trainer&gt;&gt; getTrainers(String regionId, String area, String user) {
-<span class="fc" id="L28">        return trainersApiService.getTrainers(regionId, area, user);</span>
+<span class="fc" id="L48">        return trainersApiService.getTrainers(regionId, area, user);</span>
     }
+
+    /**
+     * getTrainer returns a specific trainer of a region.
+     *
+     * @param regionId The region of the trainer.
+     * @param _id      The id of the trainer.
+     * @return The trainer.
+     */
 
     public Observable&lt;Trainer&gt; getTrainer(String regionId, String _id) {
-<span class="fc" id="L32">        return trainersApiService.getTrainer(regionId, _id);</span>
+<span class="fc" id="L60">        return trainersApiService.getTrainer(regionId, _id);</span>
     }
 
+    /**
+     * deleteTrainer deletes a specific trainer of a region.
+     *
+     * @param regionId The region of the trainer.
+     * @param _id      The id of the trainer.
+     * @return The trainer.
+     */
+
     public Observable&lt;Trainer&gt; deleteTrainer(String regionId, String _id) {
-<span class="fc" id="L36">        return trainersApiService.deleteTrainer(regionId, _id);</span>
+<span class="fc" id="L72">        return trainersApiService.deleteTrainer(regionId, _id);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

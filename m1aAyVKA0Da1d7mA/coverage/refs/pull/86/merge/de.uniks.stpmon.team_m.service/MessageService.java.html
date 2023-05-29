@@ -13,15 +13,12 @@ import java.util.List;
 
 public class MessageService {
 
-    /*
-     * TODO: Tests still have to be implemented, but we need mocking to realize this
-     * */
     private final MessagesApiService messagesApiService;
 
     @Inject
-<span class="fc" id="L22">    public MessageService(MessagesApiService messagesApiService) {</span>
-<span class="fc" id="L23">        this.messagesApiService = messagesApiService;</span>
-<span class="fc" id="L24">    }</span>
+<span class="fc" id="L19">    public MessageService(MessagesApiService messagesApiService) {</span>
+<span class="fc" id="L20">        this.messagesApiService = messagesApiService;</span>
+<span class="fc" id="L21">    }</span>
 
     // Base api communication
 
@@ -35,7 +32,7 @@ public class MessageService {
      * @return an observable record of message
      */
     public Observable&lt;Message&gt; getMessageOfUserByID(String receiverID, String messageID, String namespace) {
-<span class="nc" id="L38">        return messagesApiService.getMessage(namespace, receiverID, messageID);</span>
+<span class="nc" id="L35">        return messagesApiService.getMessage(namespace, receiverID, messageID);</span>
     }
 
     /**
@@ -47,7 +44,7 @@ public class MessageService {
      * @return an observable list of message records
      */
     private Observable&lt;List&lt;Message&gt;&gt; getMessagesByNamespace(String receiverID, String namespace) {
-<span class="nc" id="L50">        return messagesApiService.getMessages(namespace, receiverID);</span>
+<span class="nc" id="L47">        return messagesApiService.getMessages(namespace, receiverID);</span>
     }
 
     /**
@@ -59,8 +56,8 @@ public class MessageService {
      * @return the created message as an observable
      */
     public Observable&lt;Message&gt; newMessage(String receiverID, String message, String namespace) {
-<span class="nc" id="L62">        CreateMessageDto createMessageDto = new CreateMessageDto(message);</span>
-<span class="nc" id="L63">        return messagesApiService.create(namespace, receiverID, createMessageDto);</span>
+<span class="nc" id="L59">        CreateMessageDto createMessageDto = new CreateMessageDto(message);</span>
+<span class="nc" id="L60">        return messagesApiService.create(namespace, receiverID, createMessageDto);</span>
     }
 
     /**
@@ -73,15 +70,13 @@ public class MessageService {
      * @return the updated message as an observable
      */
     public Observable&lt;Message&gt; updateMessage(String receiverID, String messageID, String updatedMessage, String namespace) {
-<span class="nc" id="L76">        UpdateMessageDto updateMessageDto = new UpdateMessageDto(updatedMessage);</span>
-<span class="nc" id="L77">        return messagesApiService.update(namespace, receiverID, messageID, updateMessageDto);</span>
+<span class="nc" id="L73">        UpdateMessageDto updateMessageDto = new UpdateMessageDto(updatedMessage);</span>
+<span class="nc" id="L74">        return messagesApiService.update(namespace, receiverID, messageID, updateMessageDto);</span>
     }
 
     public Observable&lt;Message&gt; deleteMessage(String messageID, String groupID, String namespace) {
-<span class="nc" id="L81">        return messagesApiService.delete(namespace, groupID, messageID);</span>
+<span class="nc" id="L78">        return messagesApiService.delete(namespace, groupID, messageID);</span>
     }
-
-    // General message methods
 
     /**
      * Gets all the messages from a group and returns them sorted after createdAt. This also includes private chat
@@ -91,17 +86,12 @@ public class MessageService {
      * @return a sorted observable of a sorted message list
      */
     public Observable&lt;List&lt;Message&gt;&gt; getGroupMessages(String groupID) {
-<span class="nc" id="L94">        return this.getMessagesByNamespace(groupID, Constants.MESSAGE_NAMESPACE_GROUPS)</span>
-<span class="nc" id="L95">                .map(messages -&gt; {</span>
-<span class="nc" id="L96">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
-<span class="nc" id="L97">                    return messages;</span>
+<span class="nc" id="L89">        return this.getMessagesByNamespace(groupID, Constants.MESSAGE_NAMESPACE_GROUPS)</span>
+<span class="nc" id="L90">                .map(messages -&gt; {</span>
+<span class="nc" id="L91">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
+<span class="nc" id="L92">                    return messages;</span>
                 });
     }
-
-    //TODO: maybe you can refactor this function out, since it's basically the same code as the getGroupMessages
-    // method, but maybe it will be better for readability and usability if we keep them separate.
-    // We also could create a helper method and just make one line calls in the getGroupMessages and getRegionMessages
-    // methods.
 
     /**
      * Gets all the messages from a region and returns them sorted after createdAt
@@ -110,18 +100,25 @@ public class MessageService {
      * @return a sorted observable of a sorted message list
      */
     public Observable&lt;List&lt;Message&gt;&gt; getRegionMessages(String regionID) {
-<span class="nc" id="L113">        return this.getMessagesByNamespace(regionID, Constants.MESSAGE_NAMESPACE_REGIONS)</span>
-<span class="nc" id="L114">                .map(messages -&gt; {</span>
-<span class="nc" id="L115">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
-<span class="nc" id="L116">                    return messages;</span>
+<span class="nc" id="L103">        return this.getMessagesByNamespace(regionID, Constants.MESSAGE_NAMESPACE_REGIONS)</span>
+<span class="nc" id="L104">                .map(messages -&gt; {</span>
+<span class="nc" id="L105">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
+<span class="nc" id="L106">                    return messages;</span>
                 });
     }
 
+    /**
+     * Gets all the messages from a user and returns them sorted after createdAt
+     *
+     * @param parentID the ID of the user which messages you need
+     * @return a sorted observable of a sorted message list
+     */
+
     public Observable&lt;List&lt;Message&gt;&gt; getGlobalMessages(String parentID) {
-<span class="nc" id="L121">        return this.getMessagesByNamespace(parentID, Constants.MESSAGE_NAMESPACE_GLOBAL)</span>
-<span class="nc" id="L122">                .map(messages -&gt; {</span>
-<span class="nc" id="L123">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
-<span class="nc" id="L124">                    return messages;</span>
+<span class="nc" id="L118">        return this.getMessagesByNamespace(parentID, Constants.MESSAGE_NAMESPACE_GLOBAL)</span>
+<span class="nc" id="L119">                .map(messages -&gt; {</span>
+<span class="nc" id="L120">                    messages.sort(Comparator.comparing(Message::createdAt));</span>
+<span class="nc" id="L121">                    return messages;</span>
                 });
     }
 }

@@ -10,17 +10,35 @@ import java.util.List;
 public class RegionsService {
     private final RegionsApiService regionsApiService;
 
+
+    /**
+     * RegionsService handles the communication with the backend for the regions.
+     */
+
     @Inject
-<span class="fc" id="L14">    public RegionsService(RegionsApiService regionsApiService) {</span>
-<span class="fc" id="L15">        this.regionsApiService = regionsApiService;</span>
-<span class="fc" id="L16">    }</span>
+<span class="fc" id="L19">    public RegionsService(RegionsApiService regionsApiService) {</span>
+<span class="fc" id="L20">        this.regionsApiService = regionsApiService;</span>
+<span class="fc" id="L21">    }</span>
+
+    /**
+     * getRegions returns all regions.
+     *
+     * @return A list of regions.
+     */
 
     public Observable&lt;List&lt;Region&gt;&gt; getRegions() {
-<span class="fc" id="L19">        return regionsApiService.getRegions();</span>
+<span class="fc" id="L30">        return regionsApiService.getRegions();</span>
     }
 
+    /**
+     * getRegion returns a specific region.
+     *
+     * @param id The id of the region.
+     * @return The region.
+     */
+
     public Observable&lt;Region&gt; getRegion(String id) {
-<span class="fc" id="L23">        return regionsApiService.getRegion(id);</span>
+<span class="fc" id="L41">        return regionsApiService.getRegion(id);</span>
     }
 
 }

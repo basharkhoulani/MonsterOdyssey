@@ -10,17 +10,36 @@ import java.util.List;
 public class AreasService {
     private final AreasApiService areasApiService;
 
+    /**
+     * AreasService handles the communication with the backend for the areas.
+     */
+
     @Inject
-<span class="fc" id="L14">    public AreasService(AreasApiService areasApiService) {</span>
-<span class="fc" id="L15">        this.areasApiService = areasApiService;</span>
-<span class="fc" id="L16">    }</span>
+<span class="fc" id="L18">    public AreasService(AreasApiService areasApiService) {</span>
+<span class="fc" id="L19">        this.areasApiService = areasApiService;</span>
+<span class="fc" id="L20">    }</span>
+
+    /**
+     * getAreas returns all areas of a region.
+     *
+     * @param region The region of the areas.
+     * @return A list of areas of the region.
+     */
 
     public Observable&lt;List&lt;Area&gt;&gt; getAreas(String region) {
-<span class="fc" id="L19">        return areasApiService.getAreas(region);</span>
+<span class="fc" id="L30">        return areasApiService.getAreas(region);</span>
     }
 
+    /**
+     * getArea returns a specific area of a region.
+     *
+     * @param region The region of the area.
+     * @param _id    The id of the area.
+     * @return The area.
+     */
+
     public Observable&lt;Area&gt; getArea(String region, String _id) {
-<span class="fc" id="L23">        return areasApiService.getArea(region, _id);</span>
+<span class="fc" id="L42">        return areasApiService.getArea(region, _id);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
