@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.AccountSettingController" styleClass="Background">
+<VBox alignment="CENTER" styleClass="Background" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.AccountSettingController">
     <VBox alignment="CENTER" maxHeight="600.0" maxWidth="1000.0" styleClass="ForegroundContainer" VBox.vgrow="ALWAYS">
         <VBox.margin>
             <Insets bottom="16.0" left="32.0" right="32.0" top="16.0" />
@@ -44,10 +44,10 @@
         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
             <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" prefWidth="375.0" HBox.hgrow="ALWAYS">
                 <HBox.margin>
-                    <Insets right="8.0"/>
+                    <Insets right="8.0" />
                 </HBox.margin>
                 <HBox.margin>
-                    <Insets left="8.0"/>
+                    <Insets left="8.0" />
                 </HBox.margin>
             </HBox>
             <Button fx:id="editAvatarButton" minHeight="42.0" minWidth="42.0" mnemonicParsing="false" onAction="#editAvatar" styleClass="editSymbol" stylesheets="@../styles.css">
@@ -124,21 +124,34 @@
           </padding>
         </HBox>
         <HBox alignment="CENTER" prefHeight="52.0" prefWidth="490.0" VBox.vgrow="ALWAYS">
-            <Button fx:id="cancelButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#cancel" styleClass="buttonsWhite" text="Cancel">
+            <Button fx:id="changeLanguageButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#changeLanguage" styleClass="buttonsYellow" text="Change Language">
                 <font>
                     <Font name="Comic Sans MS Bold" size="17.0" />
                 </font>
+            <HBox.margin>
+               <Insets left="130.0" />
+            </HBox.margin>
           </Button>
             <SplitPane prefHeight="52.0" prefWidth="124.0" visible="false" />
-            <Button fx:id="deleteAccountButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#showDeletePopUp" styleClass="buttonsWhite" text="Delete Account">
-                <font>
-                    <Font name="Comic Sans MS Bold" size="17.0" />
-                </font>
-          </Button>
           <VBox.margin>
               <Insets bottom="5.0" />
           </VBox.margin>
         </HBox>
+      <HBox alignment="CENTER" layoutX="18.0" layoutY="350.0" prefHeight="52.0" prefWidth="490.0">
+         <children>
+            <Button fx:id="cancelButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#cancel" styleClass="buttonsWhite" text="Cancel">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="17.0" />
+               </font>
+            </Button>
+            <SplitPane prefHeight="52.0" prefWidth="124.0" visible="false" />
+            <Button fx:id="deleteAccountButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#showDeletePopUp" styleClass="buttonsWhite" text="Delete Account">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="17.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
     </VBox>
     <Label fx:id="usernameErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel" stylesheets="@../styles.css" />
     <Label fx:id="passwordErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="509.0" styleClass="errorLabel" stylesheets="@../styles.css" />

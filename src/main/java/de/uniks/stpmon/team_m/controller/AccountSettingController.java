@@ -53,6 +53,8 @@ public class AccountSettingController extends Controller {
     public Button saveAvatarButton;
     @FXML
     public Label avatarErrorLabel;
+    @FXML
+    public Button changeLanguageButton;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
@@ -62,6 +64,7 @@ public class AccountSettingController extends Controller {
     @Inject
     UsersService usersService;
     private AvatarSelectionController avatarSelectionController;
+    private ChangeLanguageController changeLanguageController;
     private PasswordFieldSkin skin;
     private final SimpleStringProperty username = new SimpleStringProperty();
     private final SimpleStringProperty password = new SimpleStringProperty();
@@ -90,6 +93,8 @@ public class AccountSettingController extends Controller {
         super.init();
         avatarSelectionController = new AvatarSelectionController();
         avatarSelectionController.init();
+        changeLanguageController = new ChangeLanguageController();
+        changeLanguageController.init();
     }
 
     /**
@@ -276,5 +281,12 @@ public class AccountSettingController extends Controller {
         } else {
             return CUSTOM_ERROR;
         }
+    }
+
+    public void changeLanguage(){
+        Dialog<?> dialog = new Dialog<>();
+        dialog.setTitle("Change Language");
+        dialog.getDialogPane().setContent(changeLanguageController.render());
+        dialog.showAndWait();
     }
 }
