@@ -118,9 +118,8 @@ public class WelcomeSceneController extends Controller{
                 } else if (result.isPresent() && result.get() == okButton) {
                     BooleanBinding isInvalidUsername = trainerName.isEmpty();
                     //alert.close();
-                    app.show(ingameControllerProvider.get());
                     textFieldName.textProperty().bindBidirectional(trainerName);
-                    app.getStage().getScene().setOnKeyPressed(null);
+                    app.show(ingameControllerProvider.get());
                     // hier muss dann der trainer erstellt werde jedoch fehlt der avatar
 
                 }
