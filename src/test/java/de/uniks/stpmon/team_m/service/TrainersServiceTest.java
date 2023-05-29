@@ -108,19 +108,19 @@ public class TrainersServiceTest {
     void getTrainerTest() {
         when(trainersApiService.getTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5")).thenReturn(Observable.just(
                 new Trainer(
-                "2023-05-21T13:43:12.742Z",
-                "2023-05-21T13:43:12.742Z",
-                "646baf531f097a36fc1b8bc5",
-                "646bab5cecf584e1be02598a",
-                "646baf778eceac8ef458cc34",
-                "Peter",
-                "Premade_Character_03.png",
-                0,
-                "646baf8096dc75bef5ab7cae",
-                0,
-                0,
-                0,
-                new NPCInfo(true))
+                        "2023-05-21T13:43:12.742Z",
+                        "2023-05-21T13:43:12.742Z",
+                        "646baf531f097a36fc1b8bc5",
+                        "646bab5cecf584e1be02598a",
+                        "646baf778eceac8ef458cc34",
+                        "Peter",
+                        "Premade_Character_03.png",
+                        0,
+                        "646baf8096dc75bef5ab7cae",
+                        0,
+                        0,
+                        0,
+                        new NPCInfo(true))
         ));
 
         final Trainer trainer = trainersService.getTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5").blockingFirst();

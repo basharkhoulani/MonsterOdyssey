@@ -4,9 +4,9 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupService;
-import de.uniks.stpmon.team_m.service.GroupStorage;
-import de.uniks.stpmon.team_m.service.UserStorage;
 import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.utils.GroupStorage;
+import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
@@ -34,29 +34,23 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class NewGroupControllerTest extends ApplicationTest {
 
-
     @Mock
     Provider<MessagesController> messagesControllerProvider;
-
     @Mock
     GroupService groupService;
-
     @Mock
     UsersService usersService;
-
     @Mock
     Provider<GroupStorage> groupStorageProvider;
-
     @Mock
     Provider<UserStorage> userStorageProvider;
-
     @Mock
     Provider<EventListener> eventListenerProvider;
-
     @Spy
     App app = new App(null);
     @InjectMocks
     GroupController groupController;
+
     @Override
     public void start(Stage stage) {
         when(groupStorageProvider.get()).thenReturn(mock(GroupStorage.class));
@@ -64,7 +58,7 @@ public class NewGroupControllerTest extends ApplicationTest {
         when(userStorageProvider.get()).thenReturn(mock(UserStorage.class));
         when(userStorageProvider.get().get_id()).thenReturn("645f8d731c386bcd2204da39");
         when(userStorageProvider.get().getFriends()).thenReturn(List.of("645e86427a1d4677f60df159"));
-        when(usersService.getUsers(anyList(), any())).thenReturn(Observable.just(List.of(
+        when(usersService.getUsers(any(), any())).thenReturn(Observable.just(List.of(
                 new User("645e86427a1d4677f60df159", "Friend", "online",
                         null, List.of("645e86668b3e7de4bbd8a97f", "645e866b602ff2930dfbf7ce")))));
 
@@ -106,7 +100,6 @@ public class NewGroupControllerTest extends ApplicationTest {
                         null, List.of("645e86668b3e7de4bbd8a97f", "645e866b602ff2930dfbf7ce")),
                 new User("645e86668b3e7de4bbd8a97f", "NotFriend", "offline",
                         null, List.of("645e866b602ff2930dfbf7ce", "645e86427a1d4677f60df159")))));
-
         final TextField searchFieldGroupMembers = lookup("#searchFieldGroupMembers").query();
         assertNotNull(searchFieldGroupMembers);
         final VBox groupMembersVBox = lookup("#friendsUsers").query();
@@ -114,11 +107,12 @@ public class NewGroupControllerTest extends ApplicationTest {
 
         clickOn(searchFieldGroupMembers);
         write("F");
-        HBox rootHBox = lookup("#NotFriend").query();
+        HBox rootHBox = lookup("#Friend").query();
         HBox buttonHBox = (HBox) rootHBox.getChildren().get(2);
         Button button = (Button) buttonHBox.getChildren().get(0);
         String buttonText = button.getText();
         assertEquals(ADD_MARK, buttonText);
+        clickOn(button);
         clickOn(button);
         assertSame(CHECK_MARK, button.getText());
         clickOn(groupMembersVBox);

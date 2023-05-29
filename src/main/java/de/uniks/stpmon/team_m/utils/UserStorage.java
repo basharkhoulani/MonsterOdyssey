@@ -1,4 +1,4 @@
-package de.uniks.stpmon.team_m.service;
+package de.uniks.stpmon.team_m.utils;
 
 import de.uniks.stpmon.team_m.dto.LoginResult;
 
@@ -14,9 +14,12 @@ public class UserStorage {
     private String avatar;
     private List<String> friends;
 
+    /**
+     * UserStorage handles the storage of the user that needs to be used as the currently logged in user.
+     */
+
     @Inject
     public UserStorage() {
-
     }
 
     public String get_id() {
@@ -77,7 +80,7 @@ public class UserStorage {
         this.friends = loginResult.friends();
     }
 
-    public void removeUser(){
+    public void removeUser() {
         this._id = null;
         this.name = null;
         this.status = null;
