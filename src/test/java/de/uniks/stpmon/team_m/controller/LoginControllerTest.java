@@ -51,6 +51,7 @@ class LoginControllerTest extends ApplicationTest {
                 "a1a2",
                 "a3a4")));
 
+        clickOn("#usernameField");
         write("1\t");
         write("12345678");
         clickOn("#signInButton");
@@ -62,6 +63,7 @@ class LoginControllerTest extends ApplicationTest {
     void signInWrongUsername() {
         //Sign In with incorrect username or password
         when(authenticationService.login(anyString(), anyString(), anyBoolean())).thenReturn(Observable.error(new Exception("HTTP 401")));
+        clickOn("#usernameField");
         write("Bob\t");
         write("12345678");
         clickOn("#signInButton");
@@ -73,6 +75,7 @@ class LoginControllerTest extends ApplicationTest {
     void signInOtherError() {
         //Sign In with other errors
         when(authenticationService.login(anyString(), anyString(), anyBoolean())).thenReturn(Observable.error(new Exception("Test")));
+        clickOn("#usernameField");
         write("Bob\t");
         write("12345678");
         clickOn("#signInButton");
@@ -100,6 +103,7 @@ class LoginControllerTest extends ApplicationTest {
                 "a1a2",
                 "a3a4")));
 
+        clickOn("#usernameField");
         write("1\t");
         write("12345678");
         clickOn("#signUpButton");
@@ -112,6 +116,7 @@ class LoginControllerTest extends ApplicationTest {
     void signUpUsernameTaken() {
         when(usersService.createUser(anyString(), isNull(), anyString())).thenReturn(Observable.error(new Exception("HTTP 409")));
 
+        clickOn("#usernameField");
         write("1\t");
         write("12345678");
         clickOn("#signUpButton");
@@ -124,6 +129,7 @@ class LoginControllerTest extends ApplicationTest {
     void signUpOtherError() {
         //Sign In with other errors
         when(usersService.createUser(anyString(), isNull(), anyString())).thenReturn(Observable.error(new Exception("Test")));
+        clickOn("#usernameField");
         write("Bob\t");
         write("12345678");
         clickOn("#signUpButton");
@@ -152,6 +158,7 @@ class LoginControllerTest extends ApplicationTest {
         assertTrue(signUpButton.isDisabled());
 
         // test Sign In To MainMenu
+        clickOn("#usernameField");
         write("t\t");
         write("testtest");
 
