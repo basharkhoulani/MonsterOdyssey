@@ -6,10 +6,13 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+
 import javax.inject.Inject;
 import java.io.File;
+
 import static de.uniks.stpmon.team_m.Constants.IMAGE;
 import static de.uniks.stpmon.team_m.Constants.SELECT_AVATAR_PICTURE;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Base64;
@@ -40,8 +43,10 @@ public class AvatarSelectionController extends Controller {
     @FXML
     public Button selectFileButton;
 
+    // the avatar selected with the radiobutton
     public String selectedAvatar;
 
+    // default avatars
     public String avatar1 = "https://gravatar.com/avatar/85f983f7459c2d26000ea0df68c74ede?s=400&d=robohash&r=x";
     public String avatar2 = "https://robohash.org/2e1549952236b1e98fc61f3985d7ffd6?set=set4&bgset=bg2&size=400x400";
     public String avatar3 = "https://gravatar.com/avatar/d457438462edd31dd0208e8ef1044f9e?s=400&d=identicon&r=x";
@@ -56,20 +61,7 @@ public class AvatarSelectionController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
 
-/*
-        //HTTP 400 Validation Error
-        //uri wird nicht vom server erkannt
-        try {
-            avatar1 = convertToURI("src/main/resources/de/uniks/stpmon/team_m/images/cat.jpeg");
-            avatar2 = convertToURI("src/main/resources/de/uniks/stpmon/team_m/images/monster.png");
-            avatar3 = convertToURI("src/main/resources/de/uniks/stpmon/team_m/images/rabbit.png");
-            avatar4 = convertToURI("src/main/resources/de/uniks/stpmon/team_m/images/sheep_icon.png");
-            System.out.println(avatar1);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
- */
-
+        // show images
         avatar1ImageView.setImage(new Image(avatar1));
         avatar2ImageView.setImage(new Image(avatar2));
         avatar3ImageView.setImage(new Image(avatar3));
@@ -78,6 +70,9 @@ public class AvatarSelectionController extends Controller {
         return parent;
     }
 
+    /**
+     * This method converts images to URI.
+     */
     public String convertToURI(String filePath) throws IOException {
         File file = new File(filePath);
         String contentType = Files.probeContentType(file.toPath());
@@ -86,21 +81,33 @@ public class AvatarSelectionController extends Controller {
         return "data:" + contentType + ";base64," + base64str;
     }
 
+    /**
+     * This method selects default avatar 1.
+     */
     public void selectAvatar1() {
         selectedAvatar = avatar1;
         uploadTextField.clear();
     }
 
+    /**
+     * This method selects default avatar 2.
+     */
     public void selectAvatar2() {
         selectedAvatar = avatar2;
         uploadTextField.clear();
     }
 
+    /**
+     * This method selects default avatar 3.
+     */
     public void selectAvatar3() {
         selectedAvatar = avatar3;
         uploadTextField.clear();
     }
 
+    /**
+     * This method selects default avatar 4.
+     */
     public void selectAvatar4() {
         selectedAvatar = avatar4;
         uploadTextField.clear();

@@ -204,9 +204,13 @@ public class AccountSettingController extends Controller {
                 }, error -> passwordErrorLabel.setText(errorHandle(error.getMessage()))));
     }
 
+
+    /**
+     * This method opens a pop-up to the avatar selection.
+     */
     public void editAvatar() {
         ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        ButtonType okButton = new ButtonType("ok", ButtonBar.ButtonData.OK_DONE);
+        ButtonType okButton = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
 
         Dialog<?> dialog = new Dialog<>();
         dialog.setTitle("Choose your Avatar");
@@ -216,7 +220,7 @@ public class AccountSettingController extends Controller {
         dialog.showAndWait();
 
         if (!dialog.isShowing()) {
-            if (dialog.getResult().toString().equals("ButtonType [text=ok, buttonData=OK_DONE]")) {
+            if (dialog.getResult().toString().equals("ButtonType [text=Ok, buttonData=OK_DONE]")) {
                 saveAvatarButton.setDisable(false);
                 Image image = new Image(avatarSelectionController.selectedAvatar);
                 avatarImageView.setImage(image);
@@ -225,6 +229,9 @@ public class AccountSettingController extends Controller {
         }
     }
 
+    /**
+     * This method is used to save the selected avatar by sending a request to the server.
+     */
     public void saveAvatar() {
         informationLabel.setText(EMPTY_STRING);
         disposables.add(usersService
