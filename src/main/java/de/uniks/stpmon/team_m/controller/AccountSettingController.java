@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
@@ -109,6 +110,8 @@ public class AccountSettingController extends Controller {
         passwordField.setDisable(true);
         showPasswordButton.setDisable(true);
 
+        saveAvatarButton.setDisable(true);
+
         // Show the Current UserName
         usernameField.setPromptText(userStorageProvider.get().getName());
 
@@ -127,6 +130,12 @@ public class AccountSettingController extends Controller {
         savePasswordButton.disableProperty().bind(isInvalidPassword);
 
         passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);
+
+        // show Avatar if there is one
+        if (userStorageProvider.get().getAvatar() != null) {
+            Image image = new Image(userStorageProvider.get().getAvatar());
+            avatarImageView.setImage(image);
+        }
 
         return parent;
     }
@@ -197,7 +206,7 @@ public class AccountSettingController extends Controller {
 
     public void editAvatar() {
         ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        ButtonType okButton = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+        ButtonType okButton = new ButtonType("ok", ButtonBar.ButtonData.OK_DONE);
 
         Dialog<?> dialog = new Dialog<>();
         dialog.setTitle("Choose your Avatar");
@@ -205,9 +214,28 @@ public class AccountSettingController extends Controller {
         dialog.getDialogPane().getButtonTypes().add(okButton);
         dialog.getDialogPane().getButtonTypes().add(cancelButton);
         dialog.showAndWait();
+
+        if (!dialog.isShowing()) {
+            if (dialog.getResult().toString().equals("ButtonType [text=ok, buttonData=OK_DONE]")) {
+                saveAvatarButton.setDisable(false);
+                Image image = new Image(avatarSelectionController.selectedAvatar);
+                avatarImageView.setImage(image);
+            }
+
+        }
     }
 
     public void saveAvatar() {
+        informationLabel.setText(EMPTY_STRING);
+        disposables.add(usersService
+                .updateUser(null, null, avatarSelectionController.selectedAvatar, null, null)
+                .observeOn(FX_SCHEDULER)
+                .subscribe(userResult -> {
+                    userStorageProvider.get().setAvatar(avatarSelectionController.selectedAvatar);
+                    saveAvatarButton.setDisable(true);
+                    informationLabel.setText(AVATAR_SUCCESS_CHANGED);
+                }, error -> avatarErrorLabel.setText(error.getMessage()))
+        );
 
     }
 
