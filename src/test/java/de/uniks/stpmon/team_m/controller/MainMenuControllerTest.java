@@ -70,8 +70,8 @@ class MainMenuControllerTest extends ApplicationTest {
                 "2023-05-22T17:51:46.772Z",
                 "2023-05-22T17:51:46.772Z",
                 "646bc3c0a9ac1b375fb41d93",
-                "646bc436cfee07c0e408466f",
-                new Spawn("Albertina", 1, 1),
+                "Albertina",
+                new Spawn("646bc436cfee07c0e408466f", 1, 1),
                 new Object()
         ))));
         UserStorage mockUserStorage = mock(UserStorage.class);
