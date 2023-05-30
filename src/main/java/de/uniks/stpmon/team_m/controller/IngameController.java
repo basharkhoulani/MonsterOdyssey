@@ -104,8 +104,6 @@ public class IngameController extends Controller {
         alert.setHeaderText(null);
         alert.setGraphic(null);
         alert.setContentText(PAUSE_MENU_LABEL);
-        alert.initOwner(app.getStage());
-        alert.initModality(Modality.APPLICATION_MODAL);
         alert.initStyle(StageStyle.UNDECORATED);
         dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);
 
