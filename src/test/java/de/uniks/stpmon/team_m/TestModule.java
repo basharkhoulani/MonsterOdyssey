@@ -12,6 +12,7 @@ import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import javafx.stage.FileChooser;
 
 import java.util.List;
 import java.util.prefs.Preferences;
@@ -235,4 +236,8 @@ public class TestModule {
         };
     }
 
+    @Provides
+    static FileChooser fileChooser() {
+        return new FileChooser();
+    }
 }

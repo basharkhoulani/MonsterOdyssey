@@ -19,10 +19,12 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import javax.inject.Provider;
 import java.io.File;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,7 +32,7 @@ public class AvatarSelectionControllerTest extends ApplicationTest {
     @Spy
     App app = new App(null);
     @Mock
-    FileChooser fileChooser;
+    Provider<FileChooser> fileChooserProvider;
     @InjectMocks
     AvatarSelectionController avatarSelectionController;
 
@@ -44,6 +46,8 @@ public class AvatarSelectionControllerTest extends ApplicationTest {
 
     @Test
     void selectFileTest() {
+        FileChooser fileChooser = mock(FileChooser.class);
+        when(fileChooserProvider.get()).thenReturn(fileChooser);
         RadioButton avatar1RadioButton = lookup("#avatar1RadioButton").query();
         avatar1RadioButton.setSelected(true);
         ObservableList<FileChooser.ExtensionFilter> extensionFilters = FXCollections.observableArrayList();

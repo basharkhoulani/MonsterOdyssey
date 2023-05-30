@@ -8,11 +8,14 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.inject.Singleton;
 import java.io.File;
 
 import static de.uniks.stpmon.team_m.Constants.IMAGE;
 import static de.uniks.stpmon.team_m.Constants.SELECT_AVATAR_PICTURE;
 
+@Singleton
 public class AvatarSelectionController extends Controller {
 
     @FXML
@@ -40,12 +43,10 @@ public class AvatarSelectionController extends Controller {
     @FXML
     public Button selectFileButton;
     @Inject
-    FileChooser fileChooser;
-
+    Provider<FileChooser> fileChooserProvider;
 
     @Inject
     public AvatarSelectionController() {
-        super();
     }
 
     @Override
@@ -78,6 +79,7 @@ public class AvatarSelectionController extends Controller {
     }
 
     public void selectFile() {
+        FileChooser fileChooser = fileChooserProvider.get();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(IMAGE, "*.png", "*.jpg", "*.jpeg"));
         fileChooser.setTitle(SELECT_AVATAR_PICTURE);
         File selectedFile = fileChooser.showOpenDialog(null);

@@ -61,7 +61,8 @@ public class AccountSettingController extends Controller {
     Provider<UserStorage> userStorageProvider;
     @Inject
     UsersService usersService;
-    private AvatarSelectionController avatarSelectionController;
+    @Inject
+    Provider<AvatarSelectionController> avatarSelectionControllerProvider;
     private PasswordFieldSkin skin;
     private final SimpleStringProperty username = new SimpleStringProperty();
     private final SimpleStringProperty password = new SimpleStringProperty();
@@ -88,8 +89,6 @@ public class AccountSettingController extends Controller {
     @Override
     public void init() {
         super.init();
-        avatarSelectionController = new AvatarSelectionController();
-        avatarSelectionController.init();
     }
 
     /**
@@ -196,6 +195,8 @@ public class AccountSettingController extends Controller {
     }
 
     public void editAvatar() {
+        AvatarSelectionController avatarSelectionController = avatarSelectionControllerProvider.get();
+        avatarSelectionController.init();
         ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         ButtonType okButton = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
 

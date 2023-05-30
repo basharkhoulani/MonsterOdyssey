@@ -29,12 +29,13 @@ class AccountSettingControllerTest extends ApplicationTest {
     @Mock
     Provider<LoginController> loginControllerProvider;
     @Mock
+    Provider<AvatarSelectionController> avatarSelectionControllerProvider;
+    @Mock
     UsersService usersService;
     @InjectMocks
     AccountSettingController accountSettingController;
     @Mock
     Provider<UserStorage> userStorageProvider;
-
     @Spy
     App app = new App(null);
 
@@ -49,6 +50,7 @@ class AccountSettingControllerTest extends ApplicationTest {
 
     @Test
     void changeAvatar() {
+        when(avatarSelectionControllerProvider.get()).thenReturn(new AvatarSelectionController());
         final Button editAvatarButton = lookup("#editAvatarButton").query();
         clickOn(editAvatarButton);
 
