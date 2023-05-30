@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m.controller;
 
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -32,8 +31,6 @@ public class WelcomeSceneController extends Controller{
     Provider<IngameController> ingameControllerProvider;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
-    //@Inject
-    //TrainersService trainersService;
     @Inject
     public WelcomeSceneController(){}
     @Override
@@ -56,6 +53,8 @@ public class WelcomeSceneController extends Controller{
     }
 
     private void switchScene(int sceneNumber, AnchorPane messagePane) {
+        VBox firstMessageBox = (VBox) messagePane.getChildren().get(0);
+
         switch (sceneNumber) {
             case 0 -> app.show(mainMenuControllerProvider.get());
             case 1 -> {
@@ -74,10 +73,10 @@ public class WelcomeSceneController extends Controller{
                 final Label thirdMessage = new Label();
                 thirdMessage.setId("thirdMessage");
                 thirdMessage.setText(FIFTH_MESSAGE);
-                thirdMessage.setPrefHeight(45);
-                thirdMessage.setPrefWidth(170);
+                thirdMessage.setPrefHeight(MESSAGEBOX_HEIGHT);
+                thirdMessage.setPrefWidth(MESSAGEBOX_WIDTH);
                 messageVBox3.getChildren().add(thirdMessage);
-                messageVBox3.setLayoutY(270);
+                messageVBox3.setLayoutY(firstMessageBox.getLayoutY() + 100);
                 messagePane.getChildren().add(messageVBox3);
             }
             case 3 -> {
@@ -116,12 +115,9 @@ public class WelcomeSceneController extends Controller{
                 if (result.isPresent() && result.get() == cancelButton) {
                     alert.close();
                 } else if (result.isPresent() && result.get() == okButton) {
-                    BooleanBinding isInvalidUsername = trainerName.isEmpty();
-                    //alert.close();
                     textFieldName.textProperty().bindBidirectional(trainerName);
                     app.show(ingameControllerProvider.get());
                     // hier muss dann der trainer erstellt werde jedoch fehlt der avatar
-
                 }
             }
         }

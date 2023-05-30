@@ -143,6 +143,9 @@ public class Constants {
     public static final String WELCOME_MESSAGE_STYLE = "welcomeMessage";
     public static final String WELCOME_SCENE_BUTTON = "welcomeSceneButton";
     public static final String ALERT_DIALOG_NAME = "alertDialogName";
-
     public static final String NAME_ALERT_TITLE = "Name?";
+
+    public static final int MESSAGEBOX_HEIGHT = 45;
+    public static final int MESSAGEBOX_WIDTH = 170;
+
 }
