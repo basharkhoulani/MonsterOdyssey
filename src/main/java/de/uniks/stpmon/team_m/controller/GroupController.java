@@ -249,12 +249,7 @@ public class GroupController extends Controller {
         List<String> newGroupMembersIDs = new ArrayList<>();
         newGroupMembers.forEach(user -> newGroupMembersIDs.add(user._id()));
         disposables.add(groupService.update(groupId, groupNameInput.getText(), newGroupMembersIDs)
-                .observeOn(FX_SCHEDULER).subscribe(group -> {
-                    groupStorageProvider.get().set_id(group._id());
-                    groupStorageProvider.get().setName(group.name());
-                    groupStorageProvider.get().setMembers(group.members());
-                    app.show(messagesControllerProvider.get());
-                }, error -> showError(error.getMessage())));
+                .observeOn(FX_SCHEDULER).subscribe(group -> app.show(messagesControllerProvider.get()), error -> showError(error.getMessage())));
     }
 
     /**
@@ -266,12 +261,7 @@ public class GroupController extends Controller {
         newGroupMembersIDs.add(userStorage.get().get_id());
         newGroupMembers.forEach(user -> newGroupMembersIDs.add(user._id()));
         disposables.add(groupService.create(groupNameInput.getText(), newGroupMembersIDs)
-                .observeOn(FX_SCHEDULER).subscribe(group -> {
-                    groupStorageProvider.get().set_id(group._id());
-                    groupStorageProvider.get().setName(group.name());
-                    groupStorageProvider.get().setMembers(group.members());
-                    app.show(messagesControllerProvider.get());
-                }, error -> showError(error.getMessage())));
+                .observeOn(FX_SCHEDULER).subscribe(group -> app.show(messagesControllerProvider.get()), error -> showError(error.getMessage())));
     }
 
     /**
