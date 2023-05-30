@@ -2,23 +2,35 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.AppTest;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.io.File;
+import java.util.Objects;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class AvatarSelectionControllerTest extends ApplicationTest {
     @Spy
     App app = new App(null);
+    @Mock
+    FileChooser fileChooser;
     @InjectMocks
     AvatarSelectionController avatarSelectionController;
 
@@ -32,7 +44,19 @@ public class AvatarSelectionControllerTest extends ApplicationTest {
 
     @Test
     void selectFileTest() {
-        //The FileChooser is not a JavaFX control, so it is not located by the FxRobot and can not be tested.
+        RadioButton avatar1RadioButton = lookup("#avatar1RadioButton").query();
+        avatar1RadioButton.setSelected(true);
+        ObservableList<FileChooser.ExtensionFilter> extensionFilters = FXCollections.observableArrayList();
+        File chooserFile = new File(Objects.requireNonNull(AppTest.class.getResource("images/Monster.png")).getPath());
+        when(fileChooser.getExtensionFilters()).thenReturn(extensionFilters);
+        when(fileChooser.showOpenDialog(null)).thenReturn(chooserFile);
+        clickOn("#selectFileButton");
+        ToggleGroup avatarToggleGroup = avatar1RadioButton.getToggleGroup();
+        for (Toggle toggle : avatarToggleGroup.getToggles()) {
+            assertFalse(toggle.isSelected());
+        }
+        TextField uploadTextField = lookup("#uploadTextField").query();
+        assertEquals(chooserFile.getAbsolutePath(), uploadTextField.getText());
     }
 
     @Test

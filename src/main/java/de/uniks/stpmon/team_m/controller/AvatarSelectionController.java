@@ -39,6 +39,8 @@ public class AvatarSelectionController extends Controller {
     public TextField uploadTextField;
     @FXML
     public Button selectFileButton;
+    @Inject
+    FileChooser fileChooser;
 
 
     @Inject
@@ -76,7 +78,6 @@ public class AvatarSelectionController extends Controller {
     }
 
     public void selectFile() {
-        FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(IMAGE, "*.png", "*.jpg", "*.jpeg"));
         fileChooser.setTitle(SELECT_AVATAR_PICTURE);
         File selectedFile = fileChooser.showOpenDialog(null);

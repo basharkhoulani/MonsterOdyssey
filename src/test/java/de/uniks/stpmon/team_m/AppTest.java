@@ -10,7 +10,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
-class AppTest extends ApplicationTest {
+public class AppTest extends ApplicationTest {
 
     private Stage stage;
     private final App app = new App(null);
