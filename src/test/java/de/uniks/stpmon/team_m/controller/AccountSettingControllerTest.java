@@ -156,6 +156,7 @@ class AccountSettingControllerTest extends ApplicationTest {
 
     @Test
     void showPassword() {
+        clickOn("#passwordEditButton");
         final PasswordField passwordField = lookup("#passwordField").query();
         clickOn(passwordField);
         write("password");
