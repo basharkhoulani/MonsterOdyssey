@@ -108,6 +108,7 @@ public class GroupController extends Controller {
         foreignListView.setFocusModel(null);
         foreignListView.setPlaceholder(new Label(NO_USERS_ADDED_TO_GROUP));
         foreignListView.setCellFactory(friendsListView.getCellFactory());
+        foreignListView.setItems(foreign);
     }
 
     /**
@@ -120,6 +121,7 @@ public class GroupController extends Controller {
         friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
         friendsListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
                 foreignListView, friends));
+        friendsListView.setItems(friends);
     }
 
     /**
@@ -144,14 +146,16 @@ public class GroupController extends Controller {
      */
 
     private void sortGroupMembersIntoLists(List<User> friends) {
-        this.friends.setAll(friends);
+        if (userStorage.get().getFriends().isEmpty()) {
+            this.friends.setAll(List.of());
+        } else {
+            this.friends.setAll(friends);
+        }
         final List<User> users = new ArrayList<>(newGroupMembers);
         users.removeAll(this.friends);
         foreign.setAll(users);
         foreign.removeIf(user -> user._id().equals(userStorage.get().get_id()));
-        foreignListView.getItems().setAll(foreign);
         FriendListUtils.sortListView(foreignListView);
-        friendsListView.getItems().setAll(friends);
         FriendListUtils.sortListView(friendsListView);
     }
 
@@ -165,7 +169,6 @@ public class GroupController extends Controller {
         if (!friendsByID.isEmpty()) {
             disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
                 friends.setAll(users);
-                friendsListView.getItems().setAll(friends);
                 FriendListUtils.sortListView(friendsListView);
             }, error -> showError(error.getMessage())));
         }
@@ -191,6 +194,7 @@ public class GroupController extends Controller {
         initFriendsListView();
         initForeignListView();
         listenToUserUpdate(friends, friendsListView);
+        listenToUserUpdate(foreign, foreignListView);
         return parent;
     }
 
