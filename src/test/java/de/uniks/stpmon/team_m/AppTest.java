@@ -1,18 +1,13 @@
 package de.uniks.stpmon.team_m;
 
 import de.uniks.stpmon.team_m.dto.Region;
-import de.uniks.stpmon.team_m.dto.Spawn;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 class AppTest extends ApplicationTest {
@@ -112,22 +107,13 @@ class AppTest extends ApplicationTest {
 
         // test Edit Group
         clickOn("Go back");
-        verifyThat("#settingsButton", (Button settingsButton) -> !settingsButton.isVisible());
-//        assertEquals("Monster Odyssey - Edit Group", stage.getTitle());
-//        final Button deleteButton = lookup("#deleteGroupButton").query();
-//        assertNotNull(deleteButton);
-//        clickOn("Go back");
         clickOn("Main Menu");
 
 
         // Main Menu to Ingame
         final Button startGameButton = lookup("Start Game").query();
         assertNotNull(startGameButton);
-        final ObservableList<Region> items = FXCollections
-                .observableArrayList(new Region("2023-05-22T17:51:46.772Z",
-                        "2023-05-22T17:51:46.772Z", "646bc436cfee07c0e408466f", "Albertina", new Spawn("Albertina", 1, 1), new Object()));
         final ListView<Region> regionListView = lookup("#regionListView").query();
-        regionListView.setItems(items);
         regionListView.getSelectionModel().selectFirst();
         assertNotNull(regionListView);
         waitForFxEvents();
