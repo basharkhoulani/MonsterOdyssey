@@ -91,7 +91,7 @@ public class MainMenuController extends Controller {
     @Override
     public void init() {
         disposables.add(regionsService.getRegions()
-                .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll, error -> System.out.println(error.getMessage())));
+                .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll, error -> showError(error.getMessage())));
         if (!userStorageProvider.get().getFriends().isEmpty()) {
             disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)
                     .observeOn(FX_SCHEDULER).subscribe(users -> {

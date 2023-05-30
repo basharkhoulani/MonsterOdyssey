@@ -168,4 +168,13 @@ class MainMenuControllerTest extends ApplicationTest {
         User user = friendListView.getItems().get(0);
         assertEquals("Rick", user.name());
     }
+
+    @Test
+    void switchToMessagesScreen() {
+        final MessagesController messagesController = mock(MessagesController.class);
+        when(messagesControllerProvider.get()).thenReturn(messagesController);
+        doNothing().when(app).show(messagesController);
+        clickOn("Rick");
+        verify(app).show(messagesController);
+    }
 }
