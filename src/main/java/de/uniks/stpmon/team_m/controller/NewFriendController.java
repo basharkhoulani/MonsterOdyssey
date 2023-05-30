@@ -173,11 +173,13 @@ public class NewFriendController extends Controller {
         disposables.add(groupService.getGroups(privateGroup.membersToString()).observeOn(FX_SCHEDULER).subscribe(groups -> {
             if (groups.isEmpty()) throw new RuntimeException(HTTP_403);
             for (Group group : groups) {
-                if (group.members().contains(user._id()) && group.members().contains(userStorageProvider.get().get_id())) {
+                if (group.members().contains(user._id()) && group.members().contains(userStorageProvider.get().get_id())
+                        && group.name() == null) {
                     setGroupIDAndSwitchScreen(user, switchScreen, group);
                     return;
                 }
             }
+            throw new RuntimeException(HTTP_403);
         }, error -> {
             if (error.getMessage().contains(HTTP_403)) {
                 disposables.add(groupService.create(privateGroup.name(), privateGroup.members())
