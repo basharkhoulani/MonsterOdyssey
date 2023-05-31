@@ -155,3 +155,33 @@
     -fx-text-fill: derive(-fx-control-inner-background,-30%);
 }
 /*********************************************************************************/
+.worldMapBackground {
+    -fx-background-image: url("images/WorldMap-Background.jpg");
+    -fx-background-size: cover;
+    -fx-opacity: 0.50;
+}
+
+.welcomeSceneButton {
+    -fx-background-color: #FFF2CC;
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-weight: bold;
+    -fx-min-width: 80px;
+    -fx-min-height: 30px;
+    -fx-border-color: #000000;
+}
+
+.welcomeMessage {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #000000;
+    -fx-min-height: 45px;
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-padding: 0px 0px 0px 3px;
+}
+
+.alertDialogName {
+    -fx-padding: 10 0 0 0 ;
+    -fx-pref-height: 90px;
+    -fx-pref-width: 300px;
+}
