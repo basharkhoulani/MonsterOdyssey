@@ -172,6 +172,9 @@ class NewFriendControllerTest extends ApplicationTest {
                 new User("6475e6121a0f21b9cd9fa708", "TestFriend 1", "online", null, null),
                 new User("6475e6259cb7e1e7606c0dc6", "TestFriend 2", "online", null, null)
         )));
+        when(groupService.create(any(), any())).thenReturn(Observable.just(
+                new Group("6477558f10c6cfb437ce4693", null, List.of("6475e6121a0f21b9cd9fa708", "6475e6259cb7e1e7606c0dc6"))
+        ));
         userStorage.setName("TestFriend 1");
         userStorage.setFriends(new ArrayList<>(Arrays.asList("64766a77235906e874a3b1d2", "64766a7f81b222e09a57b9a9")));
         userStorage.set_id("6475e6121a0f21b9cd9fa708");
@@ -216,6 +219,9 @@ class NewFriendControllerTest extends ApplicationTest {
                 new User("6475e6121a0f21b9cd9fa708", "TestFriend 1", "online", null, null),
                 new User("6475e6259cb7e1e7606c0dc6", "TestFriend 2", "online", null, null)
         )));
+        when(groupService.create(any(), any())).thenReturn(Observable.just(
+                new Group("6477558f10c6cfb437ce4693", null, List.of("6475e6121a0f21b9cd9fa708", "6475e6259cb7e1e7606c0dc6"))
+        ));
         userStorage.setName("TestFriend 1");
         userStorage.set_id("6475e6121a0f21b9cd9fa708");
         userStorage.setFriends(new ArrayList<>(Arrays.asList("64766a77235906e874a3b1d2", "64766a7f81b222e09a57b9a9")));

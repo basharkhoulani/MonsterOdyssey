@@ -7,22 +7,17 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import javax.inject.Provider;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class WelcomeSceneControllerTest extends ApplicationTest {
 
-    @Mock
-    Provider<IngameController> ingameControllerProvider;
+
     @Spy
     App app = new App(null);
     @InjectMocks
@@ -37,9 +32,6 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
 
     @Test
     void welcomeScene() {
-        when(ingameControllerProvider.get()).thenReturn(mock(IngameController.class));
-        doNothing().when(app).show(any(IngameController.class));
-
         // Scene 1
         Label firstMessage = lookup("#firstMessage").query();
         assertEquals("Welcome to Monster Odyssey!", firstMessage.getText());

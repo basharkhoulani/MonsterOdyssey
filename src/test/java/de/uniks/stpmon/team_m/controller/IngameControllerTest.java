@@ -49,7 +49,11 @@ public class IngameControllerTest extends ApplicationTest {
                 .findFirst()
                 .orElse(null);
         assertNotNull(helpLabel);
-        assertEquals("Click 'p' on your keyboard for pause menu.", helpLabel.getText());
+        assertEquals("""
+                Click 'p' on your keyboard for pause menu.
+                     \u2191\s
+                 \u2190 \u2193 \u2192  to move your character.\s
+                Click Space for interact and attack.""", helpLabel.getText());
         clickOn("OK");
         final Label gameTitle = lookup("Monster Odyssey").query();
         assertNotNull(gameTitle);
