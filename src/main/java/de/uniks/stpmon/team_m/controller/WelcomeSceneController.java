@@ -25,7 +25,7 @@ public class WelcomeSceneController extends Controller{
     public Label firstMessage;
     @FXML
     public Label secondMessage;
-    public int sceneNumber;
+    private int sceneNumber = 1;
     private final SimpleStringProperty trainerName = new SimpleStringProperty();
     @Inject
     Provider<IngameController> ingameControllerProvider;
@@ -40,19 +40,17 @@ public class WelcomeSceneController extends Controller{
     public Parent render() {
         final Parent parent = super.render();
 
-        sceneNumber = 1;
-        nextButton.setOnAction(event -> {
-            sceneNumber++;
-            switchScene(sceneNumber, messagePane);
-        });
-        previousButton.setOnAction(event -> {
-            sceneNumber--;
-            switchScene(sceneNumber, messagePane);
-        });
+        nextButton.setOnAction(event -> changeCount(true));
+        previousButton.setOnAction(event -> changeCount(false));
         return parent;
     }
 
-    private void switchScene(int sceneNumber, AnchorPane messagePane) {
+    private void changeCount(boolean change) {
+        sceneNumber = sceneCounter(sceneNumber, change);
+        switchScene(sceneNumber, messagePane);
+    }
+
+    public void switchScene(int sceneNumber, AnchorPane messagePane) {
         VBox firstMessageBox = (VBox) messagePane.getChildren().get(0);
 
         switch (sceneNumber) {
@@ -85,7 +83,7 @@ public class WelcomeSceneController extends Controller{
                 }
                 firstMessage.setText(SIXTH_MESSAGE);
                 firstMessage.setWrapText(true);
-                firstMessage.setPrefWidth(170);
+                firstMessage.setPrefWidth(200);
                 secondMessage.setText(SEVENTH_MESSAGE);
             }
             case 4 -> {
@@ -114,14 +112,31 @@ public class WelcomeSceneController extends Controller{
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == cancelButton) {
                     alert.close();
+                    changeCount(false);
                 } else if (result.isPresent() && result.get() == okButton) {
                     textFieldName.textProperty().bindBidirectional(trainerName);
-                    app.show(ingameControllerProvider.get());
-                    // hier muss dann der trainer erstellt werde jedoch fehlt der avatar
+                    changeCount(true);
                 }
+            }
+            case 5 -> {
+                firstMessage.setText(EIGHTH_MESSAGE);
+                secondMessage.setText(NINTH_MESSAGE);
+                secondMessage.setWrapText(true);
+                secondMessage.setPrefWidth(200);
+            }
+            case 6 -> {
+                app.show(ingameControllerProvider.get());
             }
         }
 
+    }
+
+    public int sceneCounter(int sceneNumber, boolean next) {
+        if (next) {
+            return sceneNumber + 1;
+        } else {
+            return sceneNumber - 1;
+        }
     }
 
 }

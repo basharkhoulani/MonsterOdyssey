@@ -26,14 +26,14 @@
          <center>
             <AnchorPane fx:id="messagePane" prefHeight="445.0" prefWidth="400.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox layoutY="163.0" prefHeight="45.0" prefWidth="210.0" styleClass="welcomeMessage" stylesheets="@../styles.css">
+                  <VBox layoutY="163.0" prefHeight="45.0" prefWidth="205.0" styleClass="welcomeMessage" stylesheets="@../styles.css">
                      <children>
                         <Label fx:id="firstMessage" prefHeight="43.0" prefWidth="208.0" text="Welcome to Monster Odyssey!" />
                      </children>
                   </VBox>
-                  <VBox layoutX="227.0" layoutY="219.0" prefHeight="45.0" prefWidth="170.0" styleClass="welcomeMessage" stylesheets="@../styles.css">
+                  <VBox layoutX="202.0" layoutY="219.0" prefHeight="45.0" prefWidth="205.0" styleClass="welcomeMessage" stylesheets="@../styles.css">
                      <children>
-                        <Label fx:id="secondMessage" prefHeight="45.0" prefWidth="170.0" text="Welcome Aboard!" />
+                        <Label fx:id="secondMessage" prefHeight="43.0" prefWidth="207.0" text="Welcome Aboard!" />
                      </children></VBox>
                </children>
                <BorderPane.margin>

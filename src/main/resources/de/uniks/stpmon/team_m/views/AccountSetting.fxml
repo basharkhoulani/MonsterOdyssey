@@ -49,22 +49,25 @@
                 <HBox.margin>
                     <Insets left="8.0" />
                 </HBox.margin>
+                <ImageView fx:id="avatarImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
             </HBox>
             <Button fx:id="editAvatarButton" minHeight="42.0" minWidth="42.0" mnemonicParsing="false" onAction="#editAvatar" styleClass="editSymbol" stylesheets="@../styles.css">
-            <HBox.margin>
-               <Insets left="8.0" />
-            </HBox.margin></Button>
-         <SplitPane maxWidth="25.0" minWidth="2.0" prefHeight="74.0" prefWidth="2.0" visible="false" HBox.hgrow="ALWAYS" />
+                <HBox.margin>
+                    <Insets left="8.0" />
+                </HBox.margin>
+            </Button>
+            <SplitPane maxWidth="25.0" minWidth="2.0" prefHeight="74.0" prefWidth="2.0" visible="false" HBox.hgrow="ALWAYS" />
             <Button fx:id="saveAvatarButton" mnemonicParsing="false" onAction="#saveAvatar" prefHeight="50.0" prefWidth="150.0" styleClass="buttonsYellow" text="Save Avatar">
-            <font>
-               <Font name="Comic Sans MS Bold" size="17.0" />
-            </font>
-            <HBox.margin>
-               <Insets />
-            </HBox.margin></Button>
-         <VBox.margin>
-            <Insets right="8.0" />
-         </VBox.margin>
+                <font>
+                    <Font name="Comic Sans MS Bold" size="17.0" />
+                </font>
+                <HBox.margin>
+                    <Insets />
+                </HBox.margin>
+            </Button>
+            <VBox.margin>
+                <Insets right="8.0" />
+            </VBox.margin>
         </HBox>
         <Label fx:id="avatarErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel" stylesheets="@../styles.css" />
         <HBox alignment="CENTER" prefHeight="74.0" prefWidth="490.0" VBox.vgrow="ALWAYS">
@@ -74,10 +77,10 @@
                 </font>
             </TextField>
             <Button fx:id="usernameEditButton" minHeight="42.0" minWidth="42.0" mnemonicParsing="false" onAction="#editUsername" styleClass="editSymbol" stylesheets="@../styles.css">
-            <HBox.margin>
-               <Insets left="8.0" />
-            </HBox.margin>
-         </Button>
+                <HBox.margin>
+                    <Insets left="8.0" />
+                </HBox.margin>
+            </Button>
             <SplitPane prefHeight="74.0" prefWidth="25.0" visible="false" />
             <Button fx:id="saveUsernameButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#saveUsername" styleClass="buttonsYellow" text="Save Username">
                 <font>
@@ -86,10 +89,10 @@
                 <HBox.margin>
                     <Insets left="5.0" />
                 </HBox.margin>
-          </Button>
-          <padding>
-              <Insets left="8.0" right="8.0" />
-          </padding>
+            </Button>
+            <padding>
+                <Insets left="8.0" right="8.0" />
+            </padding>
         </HBox>
         <HBox alignment="CENTER" prefHeight="74.0" prefWidth="311.0">
             <PasswordField fx:id="passwordField" maxHeight="50.0" minHeight="36.0" minWidth="375.0" promptText="New Password" HBox.hgrow="ALWAYS">
@@ -106,10 +109,10 @@
                 </HBox.margin>
             </Button>
             <Button fx:id="passwordEditButton" alignment="CENTER" minHeight="42.0" minWidth="42.0" mnemonicParsing="false" onAction="#editPassword" styleClass="editSymbol" stylesheets="@../styles.css">
-            <HBox.margin>
-               <Insets left="11.0" />
-            </HBox.margin>
-         </Button>
+                <HBox.margin>
+                    <Insets left="11.0" />
+                </HBox.margin>
+            </Button>
             <SplitPane layoutX="233.0" layoutY="10.0" prefHeight="74.0" prefWidth="25.0" visible="false" />
             <Button fx:id="savePasswordButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#savePassword" styleClass="buttonsYellow" text="Save Password" HBox.hgrow="ALWAYS">
                 <font>
@@ -118,10 +121,10 @@
                 <HBox.margin>
                     <Insets left="5.0" />
                 </HBox.margin>
-          </Button>
-          <padding>
-              <Insets left="8.0" right="8.0" />
-          </padding>
+            </Button>
+            <padding>
+                <Insets left="8.0" right="8.0" />
+            </padding>
         </HBox>
         <HBox alignment="CENTER" prefHeight="52.0" prefWidth="490.0" VBox.vgrow="ALWAYS">
             <Button fx:id="changeLanguageButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#changeLanguage" styleClass="buttonsYellow" text="Change Language">
@@ -129,13 +132,13 @@
                     <Font name="Comic Sans MS Bold" size="17.0" />
                 </font>
             <HBox.margin>
-               <Insets left="130.0" />
+               <Insets left="125.0" />
             </HBox.margin>
-          </Button>
+            </Button>
             <SplitPane prefHeight="52.0" prefWidth="124.0" visible="false" />
-          <VBox.margin>
-              <Insets bottom="5.0" />
-          </VBox.margin>
+            <VBox.margin>
+                <Insets bottom="5.0" />
+            </VBox.margin>
         </HBox>
       <HBox alignment="CENTER" layoutX="18.0" layoutY="350.0" prefHeight="52.0" prefWidth="490.0">
          <children>
@@ -149,6 +152,9 @@
                <font>
                   <Font name="Comic Sans MS Bold" size="17.0" />
                </font>
+               <HBox.margin>
+                  <Insets left="90.0" />
+               </HBox.margin>
             </Button>
          </children>
       </HBox>
