@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AvatarSelectionController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller</a> &gt; <span class="el_source">AvatarSelectionController.java</span></div><h1>AvatarSelectionController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller;
 
-
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
@@ -13,8 +13,11 @@ import java.io.File;
 import static de.uniks.stpmon.team_m.Constants.IMAGE;
 import static de.uniks.stpmon.team_m.Constants.SELECT_AVATAR_PICTURE;
 
-public class AvatarSelectionController extends Controller {
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Base64;
 
+public class AvatarSelectionController extends Controller {
     @FXML
     public Label uploadErrorLabel;
     @FXML
@@ -40,54 +43,97 @@ public class AvatarSelectionController extends Controller {
     @FXML
     public Button selectFileButton;
 
+    // the avatar selected with the radiobutton
+    public String selectedAvatar;
+
+    // default avatars
+<span class="fc" id="L50">    public String avatar1 = &quot;https://gravatar.com/avatar/85f983f7459c2d26000ea0df68c74ede?s=400&amp;d=robohash&amp;r=x&quot;;</span>
+<span class="fc" id="L51">    public String avatar2 = &quot;https://robohash.org/2e1549952236b1e98fc61f3985d7ffd6?set=set4&amp;bgset=bg2&amp;size=400x400&quot;;</span>
+<span class="fc" id="L52">    public String avatar3 = &quot;https://gravatar.com/avatar/d457438462edd31dd0208e8ef1044f9e?s=400&amp;d=identicon&amp;r=x&quot;;</span>
+<span class="fc" id="L53">    public String avatar4 = &quot;https://gravatar.com/avatar/0d0954aa7a5e3932e9669699c76d2ada?s=400&amp;d=monsterid&amp;r=x&quot;;</span>
 
     @Inject
     public AvatarSelectionController() {
-<span class="fc" id="L46">        super();</span>
-<span class="fc" id="L47">    }</span>
+<span class="fc" id="L57">        super();</span>
+<span class="fc" id="L58">    }</span>
 
     @Override
     public Parent render() {
-<span class="fc" id="L51">        return super.render();</span>
+<span class="fc" id="L62">        final Parent parent = super.render();</span>
+
+        // show images
+<span class="fc" id="L65">        avatar1ImageView.setImage(new Image(avatar1));</span>
+<span class="fc" id="L66">        avatar2ImageView.setImage(new Image(avatar2));</span>
+<span class="fc" id="L67">        avatar3ImageView.setImage(new Image(avatar3));</span>
+<span class="fc" id="L68">        avatar4ImageView.setImage(new Image(avatar4));</span>
+
+<span class="fc" id="L70">        return parent;</span>
     }
 
+    /**
+     * This method converts images to URI.
+     */
+    public String convertToURI(String filePath) throws IOException {
+<span class="nc" id="L77">        File file = new File(filePath);</span>
+<span class="nc" id="L78">        String contentType = Files.probeContentType(file.toPath());</span>
+<span class="nc" id="L79">        byte[] data = Files.readAllBytes(file.toPath());</span>
+<span class="nc" id="L80">        String base64str = Base64.getEncoder().encodeToString(data);</span>
+<span class="nc" id="L81">        return &quot;data:&quot; + contentType + &quot;;base64,&quot; + base64str;</span>
+    }
+
+    /**
+     * This method selects default avatar 1.
+     */
     public void selectAvatar1() {
-<span class="fc" id="L55">        uploadTextField.clear();</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L88">        selectedAvatar = avatar1;</span>
+<span class="fc" id="L89">        uploadTextField.clear();</span>
+<span class="fc" id="L90">    }</span>
 
+    /**
+     * This method selects default avatar 2.
+     */
     public void selectAvatar2() {
-<span class="fc" id="L59">        uploadTextField.clear();</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L96">        selectedAvatar = avatar2;</span>
+<span class="fc" id="L97">        uploadTextField.clear();</span>
+<span class="fc" id="L98">    }</span>
 
+    /**
+     * This method selects default avatar 3.
+     */
     public void selectAvatar3() {
-<span class="fc" id="L63">        uploadTextField.clear();</span>
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L104">        selectedAvatar = avatar3;</span>
+<span class="fc" id="L105">        uploadTextField.clear();</span>
+<span class="fc" id="L106">    }</span>
 
+    /**
+     * This method selects default avatar 4.
+     */
     public void selectAvatar4() {
-<span class="fc" id="L67">        uploadTextField.clear();</span>
-<span class="fc" id="L68">    }</span>
+<span class="fc" id="L112">        selectedAvatar = avatar4;</span>
+<span class="fc" id="L113">        uploadTextField.clear();</span>
+<span class="fc" id="L114">    }</span>
 
     public void clickTextField() {
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        for (Toggle radioButton : selectAvatar.getToggles()) {</span>
-<span class="fc bfc" id="L72" title="All 2 branches covered.">            if (radioButton.isSelected()) {</span>
-<span class="fc" id="L73">                radioButton.setSelected(false);</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        for (Toggle radioButton : selectAvatar.getToggles()) {</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">            if (radioButton.isSelected()) {</span>
+<span class="fc" id="L119">                radioButton.setSelected(false);</span>
             }
-<span class="fc" id="L75">        }</span>
-<span class="fc" id="L76">    }</span>
+<span class="fc" id="L121">        }</span>
+<span class="fc" id="L122">    }</span>
 
     public void selectFile() {
-<span class="nc" id="L79">        FileChooser fileChooser = new FileChooser();</span>
-<span class="nc" id="L80">        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(IMAGE, &quot;*.png&quot;, &quot;*.jpg&quot;, &quot;*.jpeg&quot;));</span>
-<span class="nc" id="L81">        fileChooser.setTitle(SELECT_AVATAR_PICTURE);</span>
-<span class="nc" id="L82">        File selectedFile = fileChooser.showOpenDialog(null);</span>
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (selectedFile != null) {</span>
-<span class="nc bnc" id="L84" title="All 2 branches missed.">            for (Toggle radioButton : selectAvatar.getToggles()) {</span>
-<span class="nc bnc" id="L85" title="All 2 branches missed.">                if (radioButton.isSelected()) {</span>
-<span class="nc" id="L86">                    radioButton.setSelected(false);</span>
+<span class="nc" id="L125">        FileChooser fileChooser = new FileChooser();</span>
+<span class="nc" id="L126">        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(IMAGE, &quot;*.png&quot;, &quot;*.jpg&quot;, &quot;*.jpeg&quot;));</span>
+<span class="nc" id="L127">        fileChooser.setTitle(SELECT_AVATAR_PICTURE);</span>
+<span class="nc" id="L128">        File selectedFile = fileChooser.showOpenDialog(null);</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">        if (selectedFile != null) {</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">            for (Toggle radioButton : selectAvatar.getToggles()) {</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">                if (radioButton.isSelected()) {</span>
+<span class="nc" id="L132">                    radioButton.setSelected(false);</span>
                 }
-<span class="nc" id="L88">            }</span>
-<span class="nc" id="L89">            uploadTextField.setText(selectedFile.getAbsolutePath());</span>
+<span class="nc" id="L134">            }</span>
+<span class="nc" id="L135">            uploadTextField.setText(selectedFile.getAbsolutePath());</span>
         }
-<span class="nc" id="L91">    }</span>
+<span class="nc" id="L137">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

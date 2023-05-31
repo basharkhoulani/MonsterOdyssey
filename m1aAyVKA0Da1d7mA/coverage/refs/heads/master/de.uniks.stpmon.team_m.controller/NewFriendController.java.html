@@ -173,17 +173,22 @@ public class NewFriendController extends Controller {
 <span class="nc" id="L173">        disposables.add(groupService.getGroups(privateGroup.membersToString()).observeOn(FX_SCHEDULER).subscribe(groups -&gt; {</span>
 <span class="nc bnc" id="L174" title="All 2 branches missed.">            if (groups.isEmpty()) throw new RuntimeException(HTTP_403);</span>
 <span class="nc bnc" id="L175" title="All 2 branches missed.">            for (Group group : groups) {</span>
-<span class="nc bnc" id="L176" title="All 4 branches missed.">                if (group.members().contains(user._id()) &amp;&amp; group.members().contains(userStorageProvider.get().get_id())) {</span>
-<span class="nc" id="L177">                    setGroupIDAndSwitchScreen(user, switchScreen, group);</span>
-<span class="nc" id="L178">                    return;</span>
+<span class="nc bnc" id="L176" title="All 4 branches missed.">                if (group.members().contains(user._id()) &amp;&amp; group.members().contains(userStorageProvider.get().get_id())</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">                        &amp;&amp; group.name() == null) {</span>
+<span class="nc" id="L178">                    setGroupIDAndSwitchScreen(user, switchScreen, group);</span>
+<span class="nc" id="L179">                    return;</span>
                 }
-<span class="nc" id="L180">            }</span>
-<span class="nc" id="L181">        }, error -&gt; {</span>
-<span class="nc bnc" id="L182" title="All 2 branches missed.">            if (error.getMessage().contains(HTTP_403)) {</span>
-<span class="nc" id="L183">                disposables.add(groupService.create(privateGroup.name(), privateGroup.members()).observeOn(FX_SCHEDULER).subscribe(group -&gt; setGroupIDAndSwitchScreen(user, switchScreen, group), error1 -&gt; showError(error1.getMessage())));</span>
+<span class="nc" id="L181">            }</span>
+<span class="nc" id="L182">            throw new RuntimeException(HTTP_403);</span>
+        }, error -&gt; {
+<span class="nc bnc" id="L184" title="All 2 branches missed.">            if (error.getMessage().contains(HTTP_403)) {</span>
+<span class="nc" id="L185">                disposables.add(groupService.create(privateGroup.name(), privateGroup.members())</span>
+<span class="nc" id="L186">                        .observeOn(FX_SCHEDULER)</span>
+<span class="nc" id="L187">                        .subscribe(group -&gt; setGroupIDAndSwitchScreen(user, switchScreen, group),</span>
+<span class="nc" id="L188">                                error1 -&gt; showError(error1.getMessage())));</span>
             }
-<span class="nc" id="L185">        }));</span>
-<span class="nc" id="L186">    }</span>
+<span class="nc" id="L190">        }));</span>
+<span class="nc" id="L191">    }</span>
 
     /**
      * This method sets the group ID and switches to the message screen.
@@ -194,13 +199,13 @@ public class NewFriendController extends Controller {
      */
 
     private void setGroupIDAndSwitchScreen(User user, boolean switchScreen, Group group) {
-<span class="nc" id="L197">        groupStorageProvider.get().setName(user.name());</span>
-<span class="nc" id="L198">        groupStorageProvider.get().set_id(group._id());</span>
-<span class="nc bnc" id="L199" title="All 2 branches missed.">        if (switchScreen) {</span>
-<span class="nc" id="L200">            MessagesController messagesController = messageControllerProvider.get();</span>
-<span class="nc" id="L201">            messagesController.setUserChosenFromNewFriend(true);</span>
-<span class="nc" id="L202">            app.show(messagesController);</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">        if (switchScreen) {</span>
+<span class="nc" id="L203">            groupStorageProvider.get().setName(user.name());</span>
+<span class="nc" id="L204">            groupStorageProvider.get().set_id(group._id());</span>
+<span class="nc" id="L205">            MessagesController messagesController = messageControllerProvider.get();</span>
+<span class="nc" id="L206">            messagesController.setUserChosenFromNewFriend(true);</span>
+<span class="nc" id="L207">            app.show(messagesController);</span>
         }
-<span class="nc" id="L204">    }</span>
+<span class="nc" id="L209">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
