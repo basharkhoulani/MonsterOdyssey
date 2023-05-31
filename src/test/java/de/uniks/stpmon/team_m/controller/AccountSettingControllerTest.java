@@ -83,6 +83,9 @@ class AccountSettingControllerTest extends ApplicationTest {
         assertFalse(radioButton2.isSelected());
         assertFalse(radioButton3.isSelected());
         assertTrue(radioButton4.isSelected());
+
+        final Button okButton = lookup("Ok").query();
+        clickOn(okButton);
     }
 
     @Test
