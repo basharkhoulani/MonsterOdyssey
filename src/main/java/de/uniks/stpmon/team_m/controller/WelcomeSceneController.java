@@ -125,6 +125,9 @@ public class WelcomeSceneController extends Controller{
                 secondMessage.setWrapText(true);
                 secondMessage.setPrefWidth(200);
             }
+            case 6 -> {
+                app.show(ingameControllerProvider.get());
+            }
         }
 
     }
