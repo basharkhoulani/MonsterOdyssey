@@ -52,6 +52,8 @@ public class MainMenuController extends Controller {
     @Inject
     Provider<IngameController> ingameControllerProvider;
     @Inject
+    Provider<WelcomeSceneController> welcomeSceneControllerProvider;
+    @Inject
     Provider<AccountSettingController> accountSettingControllerProvider;
     @Inject
     Provider<NewFriendController> newFriendControllerProvider;
@@ -208,6 +210,6 @@ public class MainMenuController extends Controller {
      */
 
     public void changeToIngame() {
-        app.show(ingameControllerProvider.get());
+        app.show(welcomeSceneControllerProvider.get());
     }
 }

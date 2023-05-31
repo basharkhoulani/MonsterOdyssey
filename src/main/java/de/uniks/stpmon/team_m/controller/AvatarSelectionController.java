@@ -1,9 +1,9 @@
 package de.uniks.stpmon.team_m.controller;
 
-
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
@@ -15,9 +15,12 @@ import java.io.File;
 import static de.uniks.stpmon.team_m.Constants.IMAGE;
 import static de.uniks.stpmon.team_m.Constants.SELECT_AVATAR_PICTURE;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Base64;
+
 @Singleton
 public class AvatarSelectionController extends Controller {
-
     @FXML
     public Label uploadErrorLabel;
     @FXML
@@ -42,6 +45,15 @@ public class AvatarSelectionController extends Controller {
     public TextField uploadTextField;
     @FXML
     public Button selectFileButton;
+
+    // the avatar selected with the radiobutton
+    public String selectedAvatar;
+
+    // default avatars
+    public String avatar1 = "https://gravatar.com/avatar/85f983f7459c2d26000ea0df68c74ede?s=400&d=robohash&r=x";
+    public String avatar2 = "https://robohash.org/2e1549952236b1e98fc61f3985d7ffd6?set=set4&bgset=bg2&size=400x400";
+    public String avatar3 = "https://gravatar.com/avatar/d457438462edd31dd0208e8ef1044f9e?s=400&d=identicon&r=x";
+    public String avatar4 = "https://gravatar.com/avatar/0d0954aa7a5e3932e9669699c76d2ada?s=400&d=monsterid&r=x";
     @Inject
     Provider<FileChooser> fileChooserProvider;
 
@@ -51,22 +63,57 @@ public class AvatarSelectionController extends Controller {
 
     @Override
     public Parent render() {
-        return super.render();
+        final Parent parent = super.render();
+
+        // show images
+        avatar1ImageView.setImage(new Image(avatar1));
+        avatar2ImageView.setImage(new Image(avatar2));
+        avatar3ImageView.setImage(new Image(avatar3));
+        avatar4ImageView.setImage(new Image(avatar4));
+
+        return parent;
     }
 
+    /**
+     * This method converts images to URI.
+     */
+    public String convertToURI(String filePath) throws IOException {
+        File file = new File(filePath);
+        String contentType = Files.probeContentType(file.toPath());
+        byte[] data = Files.readAllBytes(file.toPath());
+        String base64str = Base64.getEncoder().encodeToString(data);
+        return "data:" + contentType + ";base64," + base64str;
+    }
+
+    /**
+     * This method selects default avatar 1.
+     */
     public void selectAvatar1() {
+        selectedAvatar = avatar1;
         uploadTextField.clear();
     }
 
+    /**
+     * This method selects default avatar 2.
+     */
     public void selectAvatar2() {
+        selectedAvatar = avatar2;
         uploadTextField.clear();
     }
 
+    /**
+     * This method selects default avatar 3.
+     */
     public void selectAvatar3() {
+        selectedAvatar = avatar3;
         uploadTextField.clear();
     }
 
+    /**
+     * This method selects default avatar 4.
+     */
     public void selectAvatar4() {
+        selectedAvatar = avatar4;
         uploadTextField.clear();
     }
 
