@@ -234,6 +234,7 @@ public class AccountSettingController extends Controller {
      * This method is used to save the selected avatar by sending a request to the server.
      */
     public void saveAvatar() {
+        AvatarSelectionController avatarSelectionController = avatarSelectionControllerProvider.get();
         informationLabel.setText(EMPTY_STRING);
         disposables.add(usersService
                 .updateUser(null, null, avatarSelectionController.selectedAvatar, null, null)
