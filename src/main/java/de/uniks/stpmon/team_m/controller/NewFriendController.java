@@ -173,14 +173,19 @@ public class NewFriendController extends Controller {
         disposables.add(groupService.getGroups(privateGroup.membersToString()).observeOn(FX_SCHEDULER).subscribe(groups -> {
             if (groups.isEmpty()) throw new RuntimeException(HTTP_403);
             for (Group group : groups) {
-                if (group.members().contains(user._id()) && group.members().contains(userStorageProvider.get().get_id())) {
+                if (group.members().contains(user._id()) && group.members().contains(userStorageProvider.get().get_id())
+                        && group.name() == null) {
                     setGroupIDAndSwitchScreen(user, switchScreen, group);
                     return;
                 }
             }
+            throw new RuntimeException(HTTP_403);
         }, error -> {
             if (error.getMessage().contains(HTTP_403)) {
-                disposables.add(groupService.create(privateGroup.name(), privateGroup.members()).observeOn(FX_SCHEDULER).subscribe(group -> setGroupIDAndSwitchScreen(user, switchScreen, group), error1 -> showError(error1.getMessage())));
+                disposables.add(groupService.create(privateGroup.name(), privateGroup.members())
+                        .observeOn(FX_SCHEDULER)
+                        .subscribe(group -> setGroupIDAndSwitchScreen(user, switchScreen, group),
+                                error1 -> showError(error1.getMessage())));
             }
         }));
     }
@@ -194,9 +199,9 @@ public class NewFriendController extends Controller {
      */
 
     private void setGroupIDAndSwitchScreen(User user, boolean switchScreen, Group group) {
-        groupStorageProvider.get().setName(user.name());
-        groupStorageProvider.get().set_id(group._id());
         if (switchScreen) {
+            groupStorageProvider.get().setName(user.name());
+            groupStorageProvider.get().set_id(group._id());
             MessagesController messagesController = messageControllerProvider.get();
             messagesController.setUserChosenFromNewFriend(true);
             app.show(messagesController);
