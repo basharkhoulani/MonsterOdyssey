@@ -56,7 +56,8 @@ public class MessagesBoxController extends Controller {
 
     @Override
     public void init() {
-        messageListView = new ListView<>(messages);
+        messageListView = new ListView<>();
+        messageListView.setItems(messages);
         messageListView.setCellFactory(param -> new MessageCell(this, userStorageProvider.get().get_id()));
         messageListView.setPlaceholder(new Label(NO_MESSAGES_YET));
         if (group == null) {
@@ -80,13 +81,14 @@ public class MessagesBoxController extends Controller {
         if (!origin.equals("groupListView")) {
             group = new Group(null, null, List.of(user._id(), userStorageProvider.get().get_id()));
         }
+
         disposables.add(groupService.getGroups(group.membersToString()).doOnNext(groups -> {
             findGroupID(groups);
             groupStorageProvider.get().set_id(chatID);
-        }).flatMap(groups -> messageService.getGroupMessages(chatID).observeOn(FX_SCHEDULER)).doOnNext(messages -> {
-            this.messages.setAll(messages);
-            listenToMessages(this.messages, chatID);
-        }).observeOn(FX_SCHEDULER).subscribe());
+        }).flatMap(groups -> messageService.getGroupMessages(chatID).observeOn(FX_SCHEDULER))
+          .doOnNext(this.messages::setAll)
+          .doOnNext(messages1 -> listenToMessages(this.messages, chatID))
+          .observeOn(FX_SCHEDULER).subscribe(event -> {}, error -> showError(error.getMessage())));
     }
 
     /**

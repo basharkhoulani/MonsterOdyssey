@@ -106,8 +106,6 @@ public class MessagesController extends Controller {
 
     @Override
     public void init() {
-        initializeFriendsList();
-        initializeGroupsList();
         setContentFriendsAndGroupsList();
     }
 
@@ -116,7 +114,8 @@ public class MessagesController extends Controller {
      */
 
     private void setContentFriendsAndGroupsList() {
-        disposables.add(usersService.getUsers(null, null).doOnNext(allUsers::setAll)
+        disposables.add(usersService.getUsers(null, null).observeOn(FX_SCHEDULER)
+                .doOnNext(allUsers::setAll)
                 .flatMap(users -> getListOfFriends().observeOn(FX_SCHEDULER))
                 .doOnNext(friends -> {
                     this.friends.setAll(friends);
@@ -193,35 +192,10 @@ public class MessagesController extends Controller {
 
     private Observable<List<User>> getListOfFriends() {
         List<String> friends = userStorageProvider.get().getFriends();
-        if (friends.isEmpty()) {
-            return Observable.empty();
-        } else {
+        if (!friends.isEmpty()) {
             return usersService.getUsers(friends, null);
         }
-    }
-
-    /**
-     * This method initializes the list view of groups.
-     */
-
-    private void initializeGroupsList() {
-        groupListView = new ListView<>(groups);
-        groupListView.setId("groups");
-        groupListView.setCellFactory(param -> new GroupCell());
-        groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
-        listenToGroupChanges();
-    }
-
-    /**
-     * This method initializes the list view of friends.
-     */
-
-    private void initializeFriendsList() {
-        userListView = new ListView<>(friends);
-        userListView.setId("friends");
-        userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
-        userListView.setCellFactory(param -> new UserCell(preferences));
-        listenToUserUpdate(friends, userListView);
+        return Observable.just(new ArrayList<>());
     }
 
     /**
@@ -245,7 +219,6 @@ public class MessagesController extends Controller {
     public Parent render() {
         Parent parent = super.render();
         initListViews();
-
         settingsButton.setVisible(false);
         messageTextArea.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
         userListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> addListenerOnSelectedFriends(newValue));
@@ -307,11 +280,12 @@ public class MessagesController extends Controller {
     private void initListViews() {
         userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
         userListView.setCellFactory(param -> new UserCell(preferences));
-
+        userListView.setItems(friends);
         listenToUserUpdate(friends, userListView);
 
         groupListView.setCellFactory(param -> new GroupCell());
         groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
+        groupListView.setItems(groups);
         listenToGroupChanges();
     }
 
