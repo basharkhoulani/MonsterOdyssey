@@ -2,6 +2,8 @@ package de.uniks.stpmon.team_m;
 
 import javafx.scene.input.KeyCode;
 
+import java.util.Objects;
+
 public class Constants {
     // SERVER
     public static final String API_URL = "https://stpmon.uniks.de/api/v2";
@@ -50,6 +52,8 @@ public class Constants {
     public static final String ZONE_ID_EUROPE_BERLIN = "Europe/Berlin";
     public static final String DATE_TIME_FORMAT = "HH:mm, dd.MM.yy";
     public static final int DURATION_OF_LOADING_SCREEN = 3;
+    public static final String CANCEL = "Cancel";
+    public static final String OK = "OK";
 
     // LOGIN & SIGNUP
     public static final String LOGIN_TITLE = "Sign Up & In";
@@ -125,4 +129,23 @@ public class Constants {
     public static final String HTTP_429 = "429";
     public static final String HTTP_429_MESSAGE = "Too many requests. Please try again later.";
     public static final String UNKNOWN_USER = "Unknown";
+
+    // Welcome Scene
+    public static final String STYLE_RESOURCE = Objects.requireNonNull(Main.class.getResource("styles.css")).toString();
+    public static final String FIRST_MESSAGE = "Welcome to Monster Odyssey!";
+    public static final String SECOND_MESSAGE = "Welcome Aboard.";
+    public static final String THIRD_MESSAGE = "We are the crew of this ship.";
+    public static final String FOURTH_MESSAGE = "My name is James.";
+    public static final String FIFTH_MESSAGE = "And my name is Henry!";
+    public static final String SIXTH_MESSAGE = "Now then, we'll need to look up your application.";
+    public static final String SEVENTH_MESSAGE = "Can we have your name?";
+
+    public static final String WELCOME_MESSAGE_STYLE = "welcomeMessage";
+    public static final String WELCOME_SCENE_BUTTON = "welcomeSceneButton";
+    public static final String ALERT_DIALOG_NAME = "alertDialogName";
+    public static final String NAME_ALERT_TITLE = "Name?";
+
+    public static final int MESSAGEBOX_HEIGHT = 45;
+    public static final int MESSAGEBOX_WIDTH = 170;
+
 }
