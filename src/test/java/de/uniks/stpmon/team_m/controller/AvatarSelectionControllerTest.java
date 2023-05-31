@@ -12,8 +12,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AvatarSelectionControllerTest extends ApplicationTest {
@@ -58,5 +57,21 @@ public class AvatarSelectionControllerTest extends ApplicationTest {
         assertFalse(avatar3RadioButton.isSelected());
         clickOn(uploadTextField);
         assertFalse(avatar4RadioButton.isSelected());
+    }
+
+    @Test
+    void selectedAvatarTest() {
+        final RadioButton avatar1RadioButton = lookup("#avatar1RadioButton").query();
+        final RadioButton avatar2RadioButton = lookup("#avatar2RadioButton").query();
+        final RadioButton avatar3RadioButton = lookup("#avatar3RadioButton").query();
+        final RadioButton avatar4RadioButton = lookup("#avatar4RadioButton").query();
+        clickOn(avatar1RadioButton);
+        assertEquals(avatarSelectionController.selectedAvatar, avatarSelectionController.avatar1);
+        clickOn(avatar2RadioButton);
+        assertEquals(avatarSelectionController.selectedAvatar, avatarSelectionController.avatar2);
+        clickOn(avatar3RadioButton);
+        assertEquals(avatarSelectionController.selectedAvatar, avatarSelectionController.avatar3);
+        clickOn(avatar4RadioButton);
+        assertEquals(avatarSelectionController.selectedAvatar, avatarSelectionController.avatar4);
     }
 }
