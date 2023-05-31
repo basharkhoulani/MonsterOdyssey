@@ -137,6 +137,13 @@ class AppTest extends ApplicationTest {
         clickOn(startGameButton);
         assertEquals("Monster Odyssey - Ingame", stage.getTitle());
 
+        clickOn("Next");
+        clickOn("Next");
+        clickOn("Next");
+        clickOn("#nameField");
+        write("Ash");
+        clickOn("OK");
+
         // test Ingame Help Symbol
         clickOn("#helpSymbol");
         final DialogPane dialogPane = lookup(".dialog-pane").query();
@@ -164,6 +171,8 @@ class AppTest extends ApplicationTest {
         assertNotNull(pauseLabel);
         assertEquals("What do you want to do?", pauseLabel.getText());
 
+
+
         // test Ingame Unpause With Key Code P
         type(KeyCode.P);
         final Label gameTitleUnpauseP = lookup("Monster Odyssey").query();
@@ -179,5 +188,6 @@ class AppTest extends ApplicationTest {
         type(KeyCode.P);
         clickOn("Save Game & Leave");
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
+
     }
 }
