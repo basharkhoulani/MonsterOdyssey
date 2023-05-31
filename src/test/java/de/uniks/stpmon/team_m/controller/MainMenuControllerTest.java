@@ -2,12 +2,12 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.Spawn;
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.service.AuthenticationService;
-import de.uniks.stpmon.team_m.service.RegionsService;
-import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.rest.RegionsApiService;
+import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
@@ -39,6 +39,8 @@ class MainMenuControllerTest extends ApplicationTest {
     @Mock
     Provider<IngameController> ingameControllerProvider;
     @Mock
+    Provider<WelcomeSceneController> welcomeSceneControllerProvider;
+    @Mock
     Provider<AccountSettingController> accountSettingControllerProvider;
     @Mock
     Provider<NewFriendController> newFriendControllerProvider;
@@ -56,6 +58,8 @@ class MainMenuControllerTest extends ApplicationTest {
     Provider<Preferences> preferencesProvider;
     @Mock
     Provider<GroupStorage> groupStorageProvider;
+    @Mock
+    Provider<GroupService> groupServiceProvider;
     @Spy
     App app = new App(null);
     @InjectMocks
@@ -81,9 +85,9 @@ class MainMenuControllerTest extends ApplicationTest {
         Preferences preferences = mock(Preferences.class);
         Mockito.when(preferencesProvider.get()).thenReturn(preferences);
         when(usersService.getUsers(any(), any())).thenReturn(Observable.just(List.of(
-                new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
-                new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
-                new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
+                        new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
+                        new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
+                        new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
         when(userStorageProvider.get().getFriends())
                 .thenReturn(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
 
@@ -119,7 +123,7 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Test
     void changeToLogin() {
-        when(usersService.updateUser(isNull(), anyString(), isNull(), isNull(), isNull()))
+        when(usersService.updateUser(isNull(),anyString(),isNull(),isNull(),isNull()))
                 .thenReturn(Observable.just(new User(
                         "423f8d731c386bcd2204da39",
                         "UserPatch",
@@ -136,7 +140,7 @@ class MainMenuControllerTest extends ApplicationTest {
         doNothing().when(app).show(loginController);
 
         clickOn("#logoutButton");
-        verify(usersService).updateUser(null, "offline", null, null, null);
+        verify(usersService).updateUser(null,"offline", null, null,null);
         verify(authenticationService).logout();
         verify(app).show(loginController);
     }
@@ -152,13 +156,13 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Test
     void changeToIngame() {
-        final IngameController ingameController = mock(IngameController.class);
-        when(ingameControllerProvider.get()).thenReturn(ingameController);
-        doNothing().when(app).show(ingameController);
+        final WelcomeSceneController welcomeSceneController = mock(WelcomeSceneController.class);
+        when(welcomeSceneControllerProvider.get()).thenReturn(welcomeSceneController);
+        doNothing().when(app).show(welcomeSceneController);
         final ListView<Region> regionListView = lookup("#regionListView").query();
         clickOn(regionListView.getItems().get(0).name());
         clickOn("#startGameButton");
-        verify(app).show(ingameController);
+        verify(app).show(welcomeSceneController);
     }
 
     @Test
