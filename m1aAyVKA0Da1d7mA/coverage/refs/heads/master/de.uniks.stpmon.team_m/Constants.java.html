@@ -110,7 +110,10 @@ import java.util.Objects;
     // INGAME
     public static final String INGAME_TITLE = &quot;Ingame&quot;;
 <span class="fc" id="L112">    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;</span>
-    public static final String HELP_LABEL = &quot;Click 'p' on your keyboard for pause menu.&quot;;
+    public static final String FIRST_HELP = &quot;Click 'p' on your keyboard for pause menu.\n&quot;;
+    public static final String SECOND_HELP = &quot;     \u2191 \n \u2190 \u2193 \u2192  to move your character. \n&quot;;
+    public static final String THIRD_HELP = &quot;Click Space for interact and attack.&quot;;
+    public static final String HELP_LABEL = FIRST_HELP + SECOND_HELP + THIRD_HELP;
     public static final String RESUME_BUTTON_LABEL = &quot;Resume Game&quot;;
     public static final String SAVE_GAME_AND_LEAVE_BUTTON_LABEL = &quot;Save Game &amp; Leave&quot;;
     public static final String PAUSE_MENU_TITLE = &quot;Pause Menu&quot;;
@@ -132,7 +135,7 @@ import java.util.Objects;
     public static final String UNKNOWN_USER = &quot;Unknown&quot;;
 
     // Welcome Scene
-<span class="fc" id="L135">    public static final String STYLE_RESOURCE = Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString();</span>
+<span class="fc" id="L138">    public static final String STYLE_RESOURCE = Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString();</span>
     public static final String FIRST_MESSAGE = &quot;Welcome to Monster Odyssey!&quot;;
     public static final String SECOND_MESSAGE = &quot;Welcome Aboard.&quot;;
     public static final String THIRD_MESSAGE = &quot;We are the crew of this ship.&quot;;
@@ -140,6 +143,9 @@ import java.util.Objects;
     public static final String FIFTH_MESSAGE = &quot;And my name is Henry!&quot;;
     public static final String SIXTH_MESSAGE = &quot;Now then, we'll need to look up your application.&quot;;
     public static final String SEVENTH_MESSAGE = &quot;Can we have your name?&quot;;
+    public static final String EIGHTH_MESSAGE = &quot;Hello. Next, we 'd like to take a picture of you&quot;;
+    public static final String NINTH_MESSAGE = &quot;Take as much time as you want to get dressed up for it.&quot;;
+
 
     public static final String WELCOME_MESSAGE_STYLE = &quot;welcomeMessage&quot;;
     public static final String WELCOME_SCENE_BUTTON = &quot;welcomeSceneButton&quot;;
