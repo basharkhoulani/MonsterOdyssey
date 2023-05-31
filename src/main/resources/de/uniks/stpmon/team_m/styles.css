@@ -185,3 +185,7 @@
     -fx-pref-height: 90px;
     -fx-pref-width: 300px;
 }
+
+.comicSans {
+    -fx-font-family: "Comic Sans MS";
+}
