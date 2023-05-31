@@ -15,7 +15,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -134,8 +133,7 @@ public class GroupController extends Controller {
                 .doOnNext(newGroupMembers::setAll)
                 .flatMap(users -> usersService.getUsers(userStorage.get().getFriends(), null))
                 .doOnNext(this::sortGroupMembersIntoLists)
-                .subscribe(event -> {
-                }, error -> showError(error.getMessage())));
+                .subscribe(event -> {}, error -> showError(error.getMessage())));
     }
 
     /**
@@ -188,7 +186,6 @@ public class GroupController extends Controller {
             groupNameInput.setPromptText(CHANGE_GROUP);
             groupNameInput.setText(groupStorageProvider.get().getName());
         }
-      
         initFriendsListView();
         initForeignListView();
         listenToUserUpdate(friends, friendsListView);
