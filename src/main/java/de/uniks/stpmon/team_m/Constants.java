@@ -139,6 +139,9 @@ public class Constants {
     public static final String FIFTH_MESSAGE = "And my name is Henry!";
     public static final String SIXTH_MESSAGE = "Now then, we'll need to look up your application.";
     public static final String SEVENTH_MESSAGE = "Can we have your name?";
+    public static final String EIGHTH_MESSAGE = "Hello. Next, we 'd like to take a picture of you";
+    public static final String NINTH_MESSAGE = "Take as much time as you want to get dressed up for it.";
+
 
     public static final String WELCOME_MESSAGE_STYLE = "welcomeMessage";
     public static final String WELCOME_SCENE_BUTTON = "welcomeSceneButton";
