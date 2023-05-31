@@ -2,12 +2,12 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
-import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.Spawn;
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.rest.RegionsApiService;
-import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.service.AuthenticationService;
+import de.uniks.stpmon.team_m.service.RegionsService;
+import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
@@ -37,8 +37,6 @@ class MainMenuControllerTest extends ApplicationTest {
     @Mock
     Provider<LoginController> loginControllerProvider;
     @Mock
-    Provider<IngameController> ingameControllerProvider;
-    @Mock
     Provider<WelcomeSceneController> welcomeSceneControllerProvider;
     @Mock
     Provider<AccountSettingController> accountSettingControllerProvider;
@@ -46,10 +44,6 @@ class MainMenuControllerTest extends ApplicationTest {
     Provider<NewFriendController> newFriendControllerProvider;
     @Mock
     Provider<MessagesController> messagesControllerProvider;
-    @Mock
-    RegionsService regionsService;
-    @Mock
-    UsersService usersService;
     @Mock
     AuthenticationService authenticationService;
     @Mock
@@ -59,14 +53,21 @@ class MainMenuControllerTest extends ApplicationTest {
     @Mock
     Provider<GroupStorage> groupStorageProvider;
     @Mock
-    Provider<GroupService> groupServiceProvider;
+    Provider<EventListener> eventListenerProvider;
+    @Mock
+    RegionsService regionsService;
+    @Mock
+    UsersService usersService;
+    @Spy
+    Preferences preferences;
+    @Spy
+    UserStorage userStorage;
+    @Spy
+    GroupStorage groupStorage;
     @Spy
     App app = new App(null);
     @InjectMocks
     MainMenuController mainMenuController;
-    @Mock
-    Provider<EventListener> eventListenerProvider;
-
 
     @Override
     public void start(Stage stage) {
@@ -78,21 +79,14 @@ class MainMenuControllerTest extends ApplicationTest {
                 new Spawn("646bc436cfee07c0e408466f", 1, 1),
                 new Object()
         ))));
-        UserStorage mockUserStorage = mock(UserStorage.class);
-        GroupStorage mockGroupStorage = mock(GroupStorage.class);
-        when(groupStorageProvider.get()).thenReturn(mockGroupStorage);
-        Mockito.when(userStorageProvider.get()).thenReturn(mockUserStorage);
-        Preferences preferences = mock(Preferences.class);
+        Mockito.when(userStorageProvider.get()).thenReturn(userStorage);
         Mockito.when(preferencesProvider.get()).thenReturn(preferences);
         when(usersService.getUsers(any(), any())).thenReturn(Observable.just(List.of(
                         new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
                         new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
                         new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
-        when(userStorageProvider.get().getFriends())
-                .thenReturn(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
-
-        when(groupStorageProvider.get().get_id()).thenReturn("645cd04c11b590456276e9d1");
-
+        userStorage.setFriends(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
+        groupStorage.set_id("645cd04c11b590456276e9d1");
         Mockito.when(eventListenerProvider.get()).thenReturn(mock(EventListener.class));
         Mockito.when(eventListenerProvider.get().listen(any(), any())).thenReturn(Observable.empty());
 
@@ -175,6 +169,7 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Test
     void switchToMessagesScreen() {
+        when(groupStorageProvider.get()).thenReturn(groupStorage);
         final MessagesController messagesController = mock(MessagesController.class);
         when(messagesControllerProvider.get()).thenReturn(messagesController);
         doNothing().when(app).show(messagesController);
