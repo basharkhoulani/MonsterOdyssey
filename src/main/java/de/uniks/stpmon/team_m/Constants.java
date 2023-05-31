@@ -2,8 +2,6 @@ package de.uniks.stpmon.team_m;
 
 import javafx.scene.input.KeyCode;
 
-import java.util.Objects;
-
 public class Constants {
     // SERVER
     public static final String API_URL = "https://stpmon.uniks.de/api/v2";
@@ -135,7 +133,6 @@ public class Constants {
     public static final String UNKNOWN_USER = "Unknown";
 
     // Welcome Scene
-    public static final String STYLE_RESOURCE = Objects.requireNonNull(Main.class.getResource("styles.css")).toString();
     public static final String FIRST_MESSAGE = "Welcome to Monster Odyssey!";
     public static final String SECOND_MESSAGE = "Welcome Aboard.";
     public static final String THIRD_MESSAGE = "We are the crew of this ship.";

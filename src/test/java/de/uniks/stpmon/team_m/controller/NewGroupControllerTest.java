@@ -9,6 +9,10 @@ import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +26,12 @@ import org.testfx.framework.junit5.ApplicationTest;
 import javax.inject.Provider;
 import java.util.List;
 
+import static de.uniks.stpmon.team_m.Constants.ADD_MARK;
+import static de.uniks.stpmon.team_m.Constants.CHECK_MARK;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 public class NewGroupControllerTest extends ApplicationTest {
@@ -51,9 +60,16 @@ public class NewGroupControllerTest extends ApplicationTest {
         when(userStorageProvider.get()).thenReturn(mock(UserStorage.class));
         when(userStorageProvider.get().get_id()).thenReturn("645f8d731c386bcd2204da39");
         when(userStorageProvider.get().getFriends()).thenReturn(List.of("645e86427a1d4677f60df159"));
-        when(usersService.getUsers(any(), any())).thenReturn(Observable.just(List.of(
+        when(usersService.getUsers(eq(List.of("645e86427a1d4677f60df159")), any())).thenReturn(Observable.just(List.of(
                 new User("645e86427a1d4677f60df159", "Friend", "online",
-                        null, List.of("645e86668b3e7de4bbd8a97f", "645e866b602ff2930dfbf7ce")))));
+                        null, List.of("645e86668b3e7de4bbd8a97f", "645e866b602ff2930dfbf7ce"))
+        )));
+        when(usersService.getUsers(isNull(), any())).thenReturn(Observable.just(List.of(
+                new User("645e86427a1d4677f60df159", "Friend", "online",
+                        null, List.of("645e86668b3e7de4bbd8a97f", "645e866b602ff2930dfbf7ce")),
+                new User("645f8d731c386bcd2204da39", "NotFriend", "online",
+                        null, List.of("645e86668b3e7de4bbd8a97f", "645e866b602ff2930dfbf7ce"))
+        )));
 
         Mockito.when(eventListenerProvider.get()).thenReturn(mock(EventListener.class));
         Mockito.when(eventListenerProvider.get().listen(any(), any())).thenReturn(Observable.empty());
@@ -76,7 +92,6 @@ public class NewGroupControllerTest extends ApplicationTest {
     void saveGroup() {
         when(groupService.create(any(), any())).thenReturn(Observable.just(new Group("645e82c2f29727b68379f3e5",
                 "ThisIsMyHood", List.of("645e82c2f29727b68379f3e5", "645e82dbe8a15911ae2c5cf3"))));
-
         final MessagesController messagesController = mock(MessagesController.class);
         when(messagesControllerProvider.get()).thenReturn(messagesController);
         doNothing().when(app).show(messagesController);
@@ -86,40 +101,35 @@ public class NewGroupControllerTest extends ApplicationTest {
     }
 
     @Test
-    void searchForGroupMembers() {
-        /*
-        // TODO: fix test
-        when(usersService.getUsers(any(), any())).thenReturn(Observable.just(List.of(new User("645e86427a1d4677f60df159", "Friend", "online",
-                        null, List.of("645e86668b3e7de4bbd8a97f", "645e866b602ff2930dfbf7ce")),
-                new User("645e86668b3e7de4bbd8a97f", "NotFriend", "offline",
-                        null, List.of("645e866b602ff2930dfbf7ce", "645e86427a1d4677f60df159")))));
-        final TextField searchFieldGroupMembers = lookup("#searchFieldGroupMembers").query();
-        assertNotNull(searchFieldGroupMembers);
-        final VBox groupMembersVBox = lookup("#friendsUsers").query();
-        assertNotNull(groupMembersVBox);
-
-        clickOn(searchFieldGroupMembers);
-        write("F");
-        HBox rootHBox = lookup("#Friend").query();
-        HBox buttonHBox = (HBox) rootHBox.getChildren().get(2);
-        Button button = (Button) buttonHBox.getChildren().get(0);
-        String buttonText = button.getText();
-        assertEquals(ADD_MARK, buttonText);
+    void clickOnFriendButton() {
+        final ListView<User> friendsList = lookup("#friendsListView").query();
+        assertNotNull(friendsList);
+        assertEquals(1, friendsList.getItems().size());
+        assertEquals("Friend", friendsList.getItems().get(0).name());
+        HBox rootHbox = lookup("#Friend").query();
+        assertNotNull(rootHbox);
+        HBox buttonHbox = (HBox) rootHbox.getChildren().get(2);
+        Button button = (Button) buttonHbox.getChildren().get(0);
+        assertNotNull(button);
+        assertEquals(ADD_MARK, button.getText());
         clickOn(button);
-        clickOn(button);
-        assertSame(CHECK_MARK, button.getText());
-        clickOn(groupMembersVBox);
-        clickOn(CHECK_MARK);
-        clickOn(ADD_MARK);
-        HBox rootHBox2 = lookup("#Friend").query();
-        HBox buttonHBox2 = (HBox) rootHBox2.getChildren().get(2);
-        Button button2 = (Button) buttonHBox2.getChildren().get(0);
-        String buttonText2 = button2.getText();
-        assertEquals(CHECK_MARK, buttonText2);
-        clickOn(button2);
-        assertSame(ADD_MARK, button2.getText());
-        assertNotNull(rootHBox);
-
-         */
+        assertEquals(CHECK_MARK, button.getText());
     }
+
+    @Test
+    void searchForGroupMembers() {
+        TextField searchFieldGroupMembers = lookup("#searchFieldGroupMembers").query();
+        assertNotNull(searchFieldGroupMembers);
+        clickOn(searchFieldGroupMembers);
+        write("NotFriend");
+        HBox rootHbox = lookup("#NotFriend").query();
+        assertNotNull(rootHbox);
+        HBox buttonHbox = (HBox) rootHbox.getChildren().get(2);
+        Button button = (Button) buttonHbox.getChildren().get(0);
+        assertNotNull(button);
+        assertEquals(ADD_MARK, button.getText());
+        clickOn(button);
+        assertEquals(CHECK_MARK, button.getText());
+    }
+
 }
