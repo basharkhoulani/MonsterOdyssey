@@ -1,68 +1,50 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.TestComponent;
-import de.uniks.stpmon.team_m.dto.Region;
-import de.uniks.stpmon.team_m.dto.Spawn;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.Button;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import javax.inject.Provider;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
+public class WelcomeSceneControllerTest extends ApplicationTest {
 
-public class WelcomeSceneControllerTest extends ApplicationTest{
-    private Stage stage;
-    private final App app = new App(null);
-    private final TestComponent component = (TestComponent) de.uniks.stpmon.team_m.DaggerTestComponent.builder().mainApp(app).build();
+    @Mock
+    Provider<IngameController> ingameControllerProvider;
+    @Spy
+    App app = new App(null);
+    @InjectMocks
+    WelcomeSceneController welcomeSceneController;
 
     @Override
     public void start(Stage stage) {
-        this.stage = stage;
-        app.start(this.stage);
-        app.show(component.loginController());
+        app.start(stage);
+        app.show(welcomeSceneController);
         stage.requestFocus();
     }
 
     @Test
     void welcomeScene() {
-        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
-        write("t\t");
-        write("testtest");
-        clickOn("Sign In");
-        assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
-
-
-        final Button startGameButton = lookup("Start Game").query();
-        final ObservableList<Region> items = FXCollections
-                .observableArrayList(new Region("2023-05-22T17:51:46.772Z",
-                        "2023-05-22T17:51:46.772Z",
-                        "646bc3c0a9ac1b375fb41d93",
-                        "646bc436cfee07c0e408466f",
-                        new Spawn("Albertina", 1, 1),
-                        new Object()));
-        final ListView<Region> regionListView = lookup("#regionListView").query();
-        regionListView.setItems(items);
-        regionListView.getSelectionModel().selectFirst();
-        assertNotNull(regionListView);
-        waitForFxEvents();
-        assertFalse(startGameButton.isDisabled());
-        clickOn(startGameButton);
-        assertEquals("Monster Odyssey - Ingame", stage.getTitle());
+        when(ingameControllerProvider.get()).thenReturn(mock(IngameController.class));
+        doNothing().when(app).show(any(IngameController.class));
 
         // Scene 1
         Label firstMessage = lookup("#firstMessage").query();
         assertEquals("Welcome to Monster Odyssey!", firstMessage.getText());
 
-        Label secondMessage =  lookup("#secondMessage").query();
+        Label secondMessage = lookup("#secondMessage").query();
         assertEquals("Welcome Aboard!", secondMessage.getText());
 
         clickOn("Next");

@@ -9,12 +9,11 @@ import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
-public class WelcomeSceneController extends Controller{
+public class WelcomeSceneController extends Controller {
     @FXML
     public Button nextButton;
     @FXML
@@ -25,16 +24,21 @@ public class WelcomeSceneController extends Controller{
     public Label firstMessage;
     @FXML
     public Label secondMessage;
-    public int sceneNumber;
+    public int sceneNumber = 1;
     private final SimpleStringProperty trainerName = new SimpleStringProperty();
     @Inject
     Provider<IngameController> ingameControllerProvider;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
+
     @Inject
-    public WelcomeSceneController(){}
+    public WelcomeSceneController() {
+    }
+
     @Override
-    public String getTitle() {return INGAME_TITLE;}
+    public String getTitle() {
+        return INGAME_TITLE;
+    }
 
     @Override
     public Parent render() {
