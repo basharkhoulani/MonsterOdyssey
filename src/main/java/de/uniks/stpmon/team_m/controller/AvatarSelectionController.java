@@ -135,7 +135,7 @@ public class AvatarSelectionController extends Controller {
                 }
             }
             uploadTextField.setText(selectedFile.getAbsolutePath());
-            selectedAvatar = "file:" + selectedFile.getAbsolutePath();
+            selectedAvatar = selectedFile.getAbsolutePath();
         }
     }
 }

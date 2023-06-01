@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.beans.binding.BooleanBinding;
@@ -12,10 +13,17 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
+
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -68,6 +76,7 @@ public class AccountSettingController extends Controller {
     private PasswordFieldSkin skin;
     private final SimpleStringProperty username = new SimpleStringProperty();
     private final SimpleStringProperty password = new SimpleStringProperty();
+    private String selectedFilePath;
 
     /**
      * AccountSettingController is used to edit the avatar, language, username and password of the user.
@@ -227,9 +236,12 @@ public class AccountSettingController extends Controller {
                 Image image;
                 try {
                     image = new Image(Objects.requireNonNull(App.class.getResource(avatarSelectionController.selectedAvatar)).toString());
+                    selectedFilePath = Objects.requireNonNull(App.class.getResource(avatarSelectionController.selectedAvatar)).toURI().getPath();
                 } catch (Exception e) {
-                    image = new Image(avatarSelectionController.selectedAvatar);
+                    image = new Image("file:" + avatarSelectionController.selectedAvatar);
+                    selectedFilePath = avatarSelectionController.selectedAvatar;
                 }
+                System.out.println(selectedFilePath);
                 avatarImageView.setImage(image);
             }
 
@@ -239,19 +251,25 @@ public class AccountSettingController extends Controller {
     /**
      * This method is used to save the selected avatar by sending a request to the server.
      */
-    public void saveAvatar() {
-        informationLabel.setText(EMPTY_STRING);
+    public void saveAvatar() throws IOException {
+        informationLabel.setText(IMAGE_PROCESSING_ONGOING);
+        String base64Image = ImageProcessor.toBase64(selectedFilePath);
+        if (base64Image.equals(IMAGE_PROCESSING_ERROR))
+            informationLabel.setText(IMAGE_PROCESSING_ERROR);
         disposables.add(usersService
-                .updateUser(null, null, avatarSelectionController.selectedAvatar, null, null)
+                .updateUser(null, null, "data:image/png;base64, "+base64Image, null, null)
                 .observeOn(FX_SCHEDULER)
                 .subscribe(userResult -> {
-                    userStorageProvider.get().setAvatar(avatarSelectionController.selectedAvatar);
+                    userStorageProvider.get().setAvatar(userResult.avatar());
+                    System.out.println(userResult.avatar());
                     saveAvatarButton.setDisable(true);
                     informationLabel.setText(AVATAR_SUCCESS_CHANGED);
                 }, error -> avatarErrorLabel.setText(error.getMessage()))
         );
 
     }
+
+
 
     /**
      * This method is used to delete the account.
