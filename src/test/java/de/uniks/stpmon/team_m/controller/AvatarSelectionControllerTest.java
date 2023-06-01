@@ -49,5 +49,13 @@ public class AvatarSelectionControllerTest extends ApplicationTest {
         assertEquals(avatarSelectionController.selectedAvatar, AVATAR_3);
         clickOn(avatar4RadioButton);
         assertEquals(avatarSelectionController.selectedAvatar, AVATAR_4);
+        clickOn("#avatar1ImageView");
+        assertEquals(avatarSelectionController.selectedAvatar, AVATAR_1);
+        clickOn("#avatar2ImageView");
+        assertEquals(avatarSelectionController.selectedAvatar, AVATAR_2);
+        clickOn("#avatar3ImageView");
+        assertEquals(avatarSelectionController.selectedAvatar, AVATAR_3);
+        clickOn("#avatar4ImageView");
+        assertEquals(avatarSelectionController.selectedAvatar, AVATAR_4);
     }
 }
