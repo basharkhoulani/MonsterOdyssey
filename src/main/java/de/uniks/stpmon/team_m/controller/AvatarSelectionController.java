@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.App;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -10,12 +11,13 @@ import javafx.stage.FileChooser;
 import javax.inject.Inject;
 import java.io.File;
 
-import static de.uniks.stpmon.team_m.Constants.IMAGE;
-import static de.uniks.stpmon.team_m.Constants.SELECT_AVATAR_PICTURE;
-
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.util.Base64;
+import java.util.Objects;
+
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class AvatarSelectionController extends Controller {
     @FXML
@@ -62,10 +64,10 @@ public class AvatarSelectionController extends Controller {
         final Parent parent = super.render();
 
         // show images
-        avatar1ImageView.setImage(new Image(avatar1));
-        avatar2ImageView.setImage(new Image(avatar2));
-        avatar3ImageView.setImage(new Image(avatar3));
-        avatar4ImageView.setImage(new Image(avatar4));
+        avatar1ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString()));
+        avatar2ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_2)).toString()));
+        avatar3ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_3)).toString()));
+        avatar4ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_4)).toString()));
 
         return parent;
     }
@@ -85,7 +87,7 @@ public class AvatarSelectionController extends Controller {
      * This method selects default avatar 1.
      */
     public void selectAvatar1() {
-        selectedAvatar = avatar1;
+        selectedAvatar = AVATAR_1;
         uploadTextField.clear();
     }
 
@@ -93,7 +95,7 @@ public class AvatarSelectionController extends Controller {
      * This method selects default avatar 2.
      */
     public void selectAvatar2() {
-        selectedAvatar = avatar2;
+        selectedAvatar = AVATAR_2;
         uploadTextField.clear();
     }
 
@@ -101,7 +103,7 @@ public class AvatarSelectionController extends Controller {
      * This method selects default avatar 3.
      */
     public void selectAvatar3() {
-        selectedAvatar = avatar3;
+        selectedAvatar = AVATAR_3;
         uploadTextField.clear();
     }
 
@@ -109,7 +111,7 @@ public class AvatarSelectionController extends Controller {
      * This method selects default avatar 4.
      */
     public void selectAvatar4() {
-        selectedAvatar = avatar4;
+        selectedAvatar = AVATAR_4;
         uploadTextField.clear();
     }
 
@@ -133,6 +135,7 @@ public class AvatarSelectionController extends Controller {
                 }
             }
             uploadTextField.setText(selectedFile.getAbsolutePath());
+            selectedAvatar = "file:" + selectedFile.getAbsolutePath();
         }
     }
 }

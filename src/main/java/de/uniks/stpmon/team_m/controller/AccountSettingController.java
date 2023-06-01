@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
 import de.uniks.stpmon.team_m.utils.UserStorage;
@@ -13,6 +14,7 @@ import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Objects;
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -222,7 +224,12 @@ public class AccountSettingController extends Controller {
         if (!dialog.isShowing()) {
             if (dialog.getResult().toString().equals("ButtonType [text=Ok, buttonData=OK_DONE]")) {
                 saveAvatarButton.setDisable(false);
-                Image image = new Image(avatarSelectionController.selectedAvatar);
+                Image image;
+                try {
+                    image = new Image(Objects.requireNonNull(App.class.getResource(avatarSelectionController.selectedAvatar)).toString());
+                } catch (Exception e) {
+                    image = new Image(avatarSelectionController.selectedAvatar);
+                }
                 avatarImageView.setImage(image);
             }
 
