@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.rest;
 
 import io.reactivex.rxjava3.core.Observable;
+import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
@@ -11,5 +12,5 @@ public interface PresetsApiSrvice {
     @GET("presets/characters")
     Observable<List<String>> getCharacters();
     @GET("presets/characters/{filename}")
-    Observable<ByteArrayInputStream> getCharacter(@Path("filename") String filename);
+    Observable<ResponseBody> getCharacter(@Path("filename") String filename);
 }

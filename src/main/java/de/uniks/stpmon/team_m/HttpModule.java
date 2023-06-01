@@ -11,6 +11,7 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import javax.inject.Singleton;
 import java.io.FileOutputStream;
@@ -42,6 +43,7 @@ public class HttpModule {
                 .baseUrl(Constants.API_URL + "/")
                 .client(client)
                 .addConverterFactory(JacksonConverterFactory.create(mapper))
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .build();
     }
