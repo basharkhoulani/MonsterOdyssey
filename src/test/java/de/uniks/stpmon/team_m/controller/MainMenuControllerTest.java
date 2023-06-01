@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.controller.subController.FriendSettingsController;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.Spawn;
 import de.uniks.stpmon.team_m.dto.User;
@@ -12,7 +13,10 @@ import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,6 +48,8 @@ class MainMenuControllerTest extends ApplicationTest {
     Provider<NewFriendController> newFriendControllerProvider;
     @Mock
     Provider<MessagesController> messagesControllerProvider;
+    @Mock
+    Provider<FriendSettingsController> friendSettingsControllerProvider;
     @Mock
     AuthenticationService authenticationService;
     @Mock
@@ -175,5 +181,20 @@ class MainMenuControllerTest extends ApplicationTest {
         doNothing().when(app).show(messagesController);
         clickOn("Rick");
         verify(app).show(messagesController);
+    }
+
+    @Test
+    void clickOnFriendSettings() {
+        FriendSettingsController friendSettingsController = mock(FriendSettingsController.class);
+        when(friendSettingsControllerProvider.get()).thenReturn(friendSettingsController);
+        doNothing().when(friendSettingsController).setUser(any());
+        doNothing().when(friendSettingsController).setFriendsListView(any());
+        doReturn(new Label("test")).when(friendSettingsController).render();
+        HBox friend = lookup("#Rick").query();
+        HBox friendSettings = (HBox) friend.getChildren().get(2);
+        Button friendSettingsButton = (Button) friendSettings.getChildren().get(0);
+        clickOn(friendSettingsButton);
+        verify(friendSettingsController).setUser(any());
+        verify(friendSettingsController).setFriendsListView(any());
     }
 }
