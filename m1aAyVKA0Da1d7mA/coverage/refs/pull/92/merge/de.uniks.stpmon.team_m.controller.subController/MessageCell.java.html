@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MessageCell.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">MessageCell.java</span></div><h1>MessageCell.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.dto.Message;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+import static javafx.geometry.Pos.CENTER_LEFT;
+import static javafx.geometry.Pos.CENTER_RIGHT;
+
+public class MessageCell extends ListCell&lt;Message&gt; {
+
+    @FXML
+    public HBox rootMessageHBox;
+    @FXML
+    public Label messageContent;
+    @FXML
+    public Label senderTimeDate;
+    @FXML
+    public Button editMessage;
+    @FXML
+    public Button deleteMessage;
+    @FXML
+    public VBox messageVBox;
+    private FXMLLoader loader;
+    private final MessagesBoxController messagesBoxController;
+    public String userID;
+
+    /**
+     * MessageCell is used to handle the message cells.
+     * Every message cell has a rootMessageHBox which contains the content of the message, the sender and the time and
+     * date of the message. The rootMessageHBox has the id of the message. The message cell has a messageVBox which
+     * contains the rootMessageHBox. The message cell has a editMessage button and a deleteMessage button.
+     *
+     * @param messagesBoxController The {@link MessagesBoxController} is used to handle the messages box.
+     * @param userID                The userID is used to identify the user.
+     */
+
+<span class="nc" id="L49">    public MessageCell(MessagesBoxController messagesBoxController, String userID) {</span>
+<span class="nc" id="L50">        this.messagesBoxController = messagesBoxController;</span>
+<span class="nc" id="L51">        this.userID = userID;</span>
+<span class="nc" id="L52">    }</span>
+
+    /**
+     * The updateItem method is used to update the message cell.
+     */
+
+    @Override
+    protected void updateItem(Message message, boolean empty) {
+<span class="nc" id="L60">        super.updateItem(message, empty);</span>
+<span class="nc" id="L61">        setStyle(LIST_VIEW_STYLE_NO_INDEXING);</span>
+<span class="nc bnc" id="L62" title="All 4 branches missed.">        if (message == null || empty) {</span>
+<span class="nc" id="L63">            setText(null);</span>
+<span class="nc" id="L64">            setGraphic(null);</span>
+        } else {
+<span class="nc" id="L66">            loadFXML();</span>
+<span class="nc" id="L67">            final String senderName = messagesBoxController.getUsername(message.sender());</span>
+<span class="nc" id="L68">            messageContent.setText(message.body());</span>
+<span class="nc" id="L69">            setDateAndEdited(message, senderName);</span>
+<span class="nc" id="L70">            setMessageOrientationAndStyle(message);</span>
+<span class="nc" id="L71">            setGraphic(rootMessageHBox);</span>
+<span class="nc" id="L72">            setUserData(message);</span>
+<span class="nc" id="L73">            setText(null);</span>
+        }
+<span class="nc" id="L75">    }</span>
+
+    /**
+     * The setMessageOrientationAndStyle method is used to set the message orientation and style.
+     *
+     * @param message The {@link Message} is used to get the sender of the message.
+     */
+
+    private void setMessageOrientationAndStyle(Message message) {
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        if (message.sender().equals(userID)) {</span>
+<span class="nc" id="L85">            messageVBox.setStyle(messageVBox.getStyle() + OWN_MESSAGE_STYLE);</span>
+<span class="nc" id="L86">            setAlignment(CENTER_RIGHT);</span>
+        } else {
+<span class="nc" id="L88">            messageVBox.setStyle(messageVBox.getStyle() + NOT_OWN_MESSAGE_STYLE);</span>
+<span class="nc" id="L89">            setAlignment(CENTER_LEFT);</span>
+        }
+<span class="nc" id="L91">        messageVBox.setStyle(messageVBox.getStyle() + ROUNDED_CORNERS_STYLE + BORDER_COLOR_BLACK);</span>
+<span class="nc" id="L92">    }</span>
+
+    /**
+     * The setDateAndEdited method is used to set the date and, if edited, the updated time of the message.
+     *
+     * @param message    The {@link Message} is used to get the date of the message.
+     * @param senderName The senderName is used to get the name of the sender.
+     */
+
+    private void setDateAndEdited(Message message, String senderName) {
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        if (!message.createdAt().equals(message.updatedAt())) {</span>
+<span class="nc" id="L103">            senderTimeDate.setText(senderName + &quot;, &quot; + formatTimeString(getItem().updatedAt()) + &quot; (&quot; + PENCIL + &quot;)&quot;);</span>
+        } else {
+<span class="nc" id="L105">            senderTimeDate.setText(senderName + &quot;, &quot; + formatTimeString(getItem().createdAt()));</span>
+        }
+<span class="nc" id="L107">    }</span>
+
+    /**
+     * The loadFXML method is used to load the FXML file.
+     */
+
+    private void loadFXML() {
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        if (loader == null) {</span>
+<span class="nc" id="L115">            loader = new FXMLLoader(Main.class.getResource(&quot;views/MessageCell.fxml&quot;));</span>
+<span class="nc" id="L116">            loader.setControllerFactory(c -&gt; this);</span>
+            try {
+<span class="nc" id="L118">                loader.load();</span>
+<span class="nc" id="L119">            } catch (Exception e) {</span>
+<span class="nc" id="L120">                e.printStackTrace();</span>
+<span class="nc" id="L121">            }</span>
+        }
+<span class="nc" id="L123">    }</span>
+
+    /**
+     * The showEditAndDelete method is used to show the edit and delete button if the user is the sender of the message.
+     */
+
+    public void showEditAndDelete() {
+<span class="nc bnc" id="L130" title="All 2 branches missed.">        if (!getItem().sender().equals(userID)) {</span>
+<span class="nc" id="L131">            hideEditAndDelete();</span>
+        } else {
+<span class="nc" id="L133">            editMessage.setVisible(true);</span>
+<span class="nc" id="L134">            deleteMessage.setVisible(true);</span>
+        }
+<span class="nc" id="L136">    }</span>
+
+    public void hideEditAndDelete() {
+<span class="nc" id="L139">        editMessage.setVisible(false);</span>
+<span class="nc" id="L140">        deleteMessage.setVisible(false);</span>
+<span class="nc" id="L141">    }</span>
+
+    /**
+     * The formatTimeString method is used to format the time string.
+     *
+     * @param dateTime The dateTime is used to get the time.
+     * @return The formatted time string.
+     */
+
+    private String formatTimeString(String dateTime) {
+<span class="nc" id="L151">        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(ZONE_ID_EUROPE_BERLIN));</span>
+
+<span class="nc" id="L153">        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);</span>
+<span class="nc" id="L154">        return localDateTime.format(outputFormatter);</span>
+    }
+
+    /**
+     * The editMessage method is used to edit the message.
+     * The editMessage method opens a TextInputDialog where the user can edit the message. If the user clicks on the
+     * editMessage method calls the editMessage method of the {@link MessagesBoxController}.
+     */
+
+    public void editMessage() {
+<span class="nc bnc" id="L164" title="All 2 branches missed.">        if (!getItem().sender().equals(userID)) {</span>
+<span class="nc" id="L165">            return;</span>
+        }
+<span class="nc" id="L167">        TextInputDialog dialog = new TextInputDialog();</span>
+<span class="nc" id="L168">        dialog.setTitle(EDIT_MESSAGE_TITLE);</span>
+<span class="nc" id="L169">        dialog.setHeaderText(null);</span>
+<span class="nc" id="L170">        dialog.setContentText(EDIT_MESSAGE_CONTENT);</span>
+
+<span class="nc" id="L172">        TextArea messageArea = new TextArea();</span>
+<span class="nc" id="L173">        messageArea.setText(getItem().body());</span>
+
+<span class="nc" id="L175">        dialog.getDialogPane().setContent(messageArea);</span>
+<span class="nc" id="L176">        Button confirmEdit = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);</span>
+<span class="nc" id="L177">        confirmEdit.setOnAction(event -&gt; {</span>
+<span class="nc" id="L178">            messagesBoxController.editMessage(messageArea.getText(), getItem());</span>
+<span class="nc" id="L179">            dialog.close();</span>
+<span class="nc" id="L180">        });</span>
+<span class="nc" id="L181">        dialog.showAndWait();</span>
+<span class="nc" id="L182">    }</span>
+
+    /**
+     * The deleteMessage method is used to delete the message.
+     * The deleteMessage method opens an Alert where the user can confirm the deletion of the message. If the user
+     * confirms the deletion the deleteMessage method calls the deleteMessage method of the {@link MessagesBoxController}.
+     */
+
+    public void deleteMessage() {
+<span class="nc bnc" id="L191" title="All 2 branches missed.">        if (!getItem().sender().equals(userID)) {</span>
+<span class="nc" id="L192">            return;</span>
+        }
+<span class="nc" id="L194">        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);</span>
+<span class="nc" id="L195">        alert.setTitle(DELETE_MESSAGE_TITLE);</span>
+<span class="nc" id="L196">        alert.setHeaderText(DELETE_MESSAGE_TITLE);</span>
+<span class="nc" id="L197">        alert.setContentText(DELETE_MESSAGE_CONTENT);</span>
+
+<span class="nc" id="L199">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+<span class="nc bnc" id="L200" title="All 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK) {</span>
+<span class="nc" id="L201">            messagesBoxController.deleteMessage(getItem());</span>
+<span class="nc" id="L202">            alert.close();</span>
+        }
+<span class="nc" id="L204">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
