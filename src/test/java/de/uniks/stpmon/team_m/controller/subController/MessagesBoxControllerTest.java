@@ -31,8 +31,7 @@ import static io.reactivex.rxjava3.core.Observable.just;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
@@ -102,12 +101,13 @@ class MessagesBoxControllerTest extends ApplicationTest {
     }
 
     @Test
-    void editMessage() {
+    void messages() {
         Message updatedMessage = new Message("2023-05-30T12:02:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863",
                 "6477bc8f27adf9b5b978401e", "Test1Test2");
         when(messageService.updateMessage(any(), any(), any(), any())).thenReturn(just(updatedMessage)).thenReturn(error(new Exception(HTTP_403)));
         when(messageService.deleteMessage(any(), any(), any())).thenReturn(just(updatedMessage)).thenReturn(error(new Exception(HTTP_409)));
         ObservableList<Message> messageList = messagesBoxController.getMessages();
+        // New Message incoming
         messagesBoxController.listenToMessages(messageList, groupStorage.get_id());
         waitForFxEvents();
         clickOn("Test1");
@@ -115,23 +115,33 @@ class MessagesBoxControllerTest extends ApplicationTest {
         clickOn("#messageArea");
         write("Test2");
         clickOn("OK");
+        verify(messageService, times(1)).updateMessage(any(), any(), any(), any());
+        // Message updated
         messagesBoxController.listenToMessages(messageList, groupStorage.get_id());
         waitForFxEvents();
         assertNotNull(lookup("Test1Test2").query());
         clickOn("Test1Test2");
         clickOn("#deleteMessage");
         clickOn("OK");
+        verify(messageService, times(1)).deleteMessage(any(), any(), any());
+        // Message deleted
         messagesBoxController.listenToMessages(messageList, groupStorage.get_id());
         waitForFxEvents();
         assertNull(lookup("Test1Test2").tryQueryAs(Label.class).orElse(null));
+        // Foreign message
         messagesBoxController.listenToMessages(messageList, groupStorage.get_id());
         waitForFxEvents();
         assertNotNull(lookup("Test3").query());
+        // Error
         messagesBoxController.listenToMessages(messageList, groupStorage.get_id());
         waitForFxEvents();
         clickOn("OK");
+        // New Message incoming
         messagesBoxController.listenToMessages(messageList, groupStorage.get_id());
         waitForFxEvents();
+        clickOn("Test1");
+        clickOn("Test3");
+        // Errors
         clickOn("Test1");
         clickOn("#editMessage");
         clickOn("#messageArea");

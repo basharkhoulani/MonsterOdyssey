@@ -171,16 +171,20 @@ public class MessagesControllerTest extends ApplicationTest {
         clickOn(messageTextArea);
         write("Hello");
         type(KeyCode.ENTER);
+        verify(messageService).newMessage(any(), any(), any());
         clickOn(messageTextArea);
         write("Hello");
         clickOn("#sendButton");
+        verify(messageService, times(2)).newMessage(any(), any(), any());
         clickOn(messageTextArea);
         write("Hello");
         type(KeyCode.SHIFT);
         clickOn("#sendButton");
         clickOn("OK");
+        verify(messageService, times(3)).newMessage(any(), any(), any());
         assertEquals("", messageTextArea.getText());
         clickOn("#settingsButton");
+        verify(app).show(any(GroupController.class));
     }
 
     @Test

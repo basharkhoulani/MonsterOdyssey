@@ -25,8 +25,7 @@ import static de.uniks.stpmon.team_m.Constants.HTTP_403;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -60,6 +59,7 @@ class FriendSettingsControllerTest extends ApplicationTest {
         friendSettingsController.setFriendsListView(friendsList);
         friendSettingsController.setUser(user);
         clickOn("#bestFriendButton");
+        verify(preferences, times(1)).put(BEST_FRIEND_PREF, "");
         assertNull(preferences.get(BEST_FRIEND_PREF, null));
     }
     @Test
@@ -70,6 +70,7 @@ class FriendSettingsControllerTest extends ApplicationTest {
         friendSettingsController.setFriendsListView(friendsList);
         friendSettingsController.setUser(user);
         clickOn("#bestFriendButton");
+        verify(preferences, times(1)).put(BEST_FRIEND_PREF, "6477bc8f27adf9b5b978401e");
         assertEquals("6477bc8f27adf9b5b978401e", preferences.get(BEST_FRIEND_PREF, null));
     }
 
@@ -89,6 +90,8 @@ class FriendSettingsControllerTest extends ApplicationTest {
         assertEquals(2, friendsList.getItems().size());
         clickOn("#deleteFriendButton");
         clickOn("Yes");
+        verify(userStorage, times(1)).deleteFriend("6477bc8f27adf9b5b978401d");
+        verify(usersService, times(1)).updateUser(any(), any(), any(), any(), any());
         assertEquals(1, friendsList.getItems().size());
     }
 

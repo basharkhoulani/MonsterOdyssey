@@ -67,6 +67,7 @@ class LoginControllerTest extends ApplicationTest {
         write("Bob\t");
         write("12345678");
         clickOn("#signInButton");
+        verify(authenticationService).login("Bob", "12345678", false);
         final Label errorLabel = lookup("#passwordErrorLabel").query();
         assertEquals("Wrong Password or Username! Try again!", errorLabel.getText());
     }
@@ -78,6 +79,7 @@ class LoginControllerTest extends ApplicationTest {
         write("Bob\t");
         write("12345678");
         clickOn("#signInButton");
+        verify(authenticationService).login("Bob", "12345678", false);
         final Label errorLabel = lookup("#passwordErrorLabel").query();
         assertEquals("Something went terribly wrong!", errorLabel.getText());
     }
@@ -117,7 +119,7 @@ class LoginControllerTest extends ApplicationTest {
         write("1\t");
         write("12345678");
         clickOn("#signUpButton");
-
+        verify(usersService).createUser("1", null, "12345678");
         final Label errorLabel = lookup("#passwordErrorLabel").query();
         assertEquals("Username is already taken!", errorLabel.getText());
     }
@@ -129,6 +131,7 @@ class LoginControllerTest extends ApplicationTest {
         write("Bob\t");
         write("12345678");
         clickOn("#signUpButton");
+        verify(usersService).createUser("Bob", null, "12345678");
         final Label errorLabel = lookup("#passwordErrorLabel").query();
         assertEquals("Something went terribly wrong!", errorLabel.getText());
     }

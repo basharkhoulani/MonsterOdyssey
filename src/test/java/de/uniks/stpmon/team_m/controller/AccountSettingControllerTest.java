@@ -140,6 +140,7 @@ class AccountSettingControllerTest extends ApplicationTest {
         clickOn(usernameField);
         write("UserPatch");
         clickOn("#saveUsernameButton");
+        verify(usersService).updateUser("UserPatch", null, null, null, null);
 
         assertEquals("Username is already taken!", usernameErrorLabel.getText());
     }
@@ -155,6 +156,7 @@ class AccountSettingControllerTest extends ApplicationTest {
         clickOn(usernameField);
         write("UserPatch");
         clickOn("#saveUsernameButton");
+        verify(usersService).updateUser("UserPatch", null, null, null, null);
 
         assertEquals("Something went terribly wrong!", usernameErrorLabel.getText());
     }
@@ -220,7 +222,7 @@ class AccountSettingControllerTest extends ApplicationTest {
         clickOn(passwordField);
         write("UserPatch");
         clickOn("#savePasswordButton");
-
+        verify(usersService).updateUser(null, null, null, null, "UserPatch");
         assertEquals("Something went terribly wrong!", passwordErrorLabel.getText());
     }
 

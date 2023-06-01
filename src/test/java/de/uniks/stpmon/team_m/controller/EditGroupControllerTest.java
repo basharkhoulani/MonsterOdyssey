@@ -88,6 +88,7 @@ class EditGroupControllerTest extends ApplicationTest {
         assertEquals("Monster Odyssey - Edit Group", app.getStage().getTitle());
         clickOn("Delete group");
         clickOn(ButtonType.YES.getText());
+        verify(groupService, times(1)).delete(any());
         assertEquals("Monster Odyssey - Edit Group", app.getStage().getTitle());
     }
 
@@ -127,5 +128,6 @@ class EditGroupControllerTest extends ApplicationTest {
         clickOn(button);
         assertEquals(ADD_MARK, button.getText());
         clickOn("#saveGroupButton");
+        verify(groupService, times(1)).update(any(), any(), any());
     }
 }

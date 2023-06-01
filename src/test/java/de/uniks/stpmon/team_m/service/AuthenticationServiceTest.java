@@ -78,9 +78,9 @@ class AuthenticationServiceTest {
     void refresh() {
         preferences.put(REFRESH_TOKEN_PREF, "a1a2");
         RefreshDto refreshDto = new RefreshDto(preferences.get(REFRESH_TOKEN_PREF, null));
-        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
         when(authApiService.refresh(refreshDto))
                 .thenReturn(Observable.just(new LoginResult("645ccafaaa5cd5e15e00f65f", "t", "online", null, null, "a1a2", "a3a4")));
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
         final LoginResult result = authenticationService.refresh().blockingFirst();
         verify(preferences).put(eq(REFRESH_TOKEN_PREF), argumentCaptor.capture());
         assertEquals("a1a2", result.accessToken());

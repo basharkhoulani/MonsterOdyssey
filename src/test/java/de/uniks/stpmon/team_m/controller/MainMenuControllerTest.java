@@ -12,7 +12,6 @@ import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
-import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -22,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -33,8 +31,7 @@ import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.HTTP_429;
 import static de.uniks.stpmon.team_m.Constants.USER_STATUS_OFFLINE;
-import static io.reactivex.rxjava3.core.Observable.error;
-import static io.reactivex.rxjava3.core.Observable.just;
+import static io.reactivex.rxjava3.core.Observable.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -88,16 +85,16 @@ class MainMenuControllerTest extends ApplicationTest {
                 new Spawn("646bc436cfee07c0e408466f", 1, 1),
                 new Object()
         ))));
-        Mockito.when(userStorageProvider.get()).thenReturn(userStorage);
-        Mockito.when(preferencesProvider.get()).thenReturn(preferences);
+        when(userStorageProvider.get()).thenReturn(userStorage);
+        when(preferencesProvider.get()).thenReturn(preferences);
         when(usersService.getUsers(any(), any())).thenReturn(just(List.of(
                 new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
                 new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
                 new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
+        when(eventListenerProvider.get()).thenReturn(mock(EventListener.class));
+        when(eventListenerProvider.get().listen(any(), any())).thenReturn(empty());
         userStorage.setFriends(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
         groupStorage.set_id("645cd04c11b590456276e9d1");
-        Mockito.when(eventListenerProvider.get()).thenReturn(mock(EventListener.class));
-        Mockito.when(eventListenerProvider.get().listen(any(), any())).thenReturn(Observable.empty());
 
         app.start(stage);
         app.show(mainMenuController);
