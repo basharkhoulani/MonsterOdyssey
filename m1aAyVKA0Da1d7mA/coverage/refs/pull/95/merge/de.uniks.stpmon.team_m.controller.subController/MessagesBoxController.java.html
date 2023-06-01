@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MessagesBoxController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">MessagesBoxController.java</span></div><h1>MessagesBoxController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.dto.Group;
+import de.uniks.stpmon.team_m.dto.Message;
+import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.service.GroupService;
+import de.uniks.stpmon.team_m.service.MessageService;
+import de.uniks.stpmon.team_m.utils.GroupStorage;
+import de.uniks.stpmon.team_m.utils.UserStorage;
+import de.uniks.stpmon.team_m.ws.EventListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import java.util.List;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+
+public class MessagesBoxController extends Controller {
+
+    @Inject
+    MessageService messageService;
+    @Inject
+    GroupService groupService;
+    @Inject
+    Provider&lt;GroupStorage&gt; groupStorageProvider;
+    @Inject
+    Provider&lt;UserStorage&gt; userStorageProvider;
+    @Inject
+    Provider&lt;EventListener&gt; eventListener;
+<span class="nc" id="L36">    private final ObservableList&lt;Message&gt; messages = FXCollections.observableArrayList();</span>
+    private List&lt;User&gt; allUsers;
+    private User user;
+    private Group group;
+    private String chatID;
+    private ListView&lt;Message&gt; messageListView;
+
+    /**
+     * For every group and friend chat opened, a new instance of this class is created. This solves the problem of
+     * multiple server calls when switching between chats.
+     */
+
+    @Inject
+<span class="nc" id="L49">    public MessagesBoxController() {</span>
+<span class="nc" id="L50">    }</span>
+
+    /**
+     * Initializes the messages box.
+     * Sets the messageListView and the placeholder.
+     */
+
+    @Override
+    public void init() {
+<span class="nc" id="L59">        messageListView = new ListView&lt;&gt;();</span>
+<span class="nc" id="L60">        messageListView.setItems(messages);</span>
+<span class="nc" id="L61">        messageListView.setCellFactory(param -&gt; new MessageCell(this, userStorageProvider.get().get_id()));</span>
+<span class="nc" id="L62">        messageListView.setPlaceholder(new Label(NO_MESSAGES_YET));</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        if (group == null) {</span>
+<span class="nc" id="L64">            openFriendChat(&quot;userListView&quot;);</span>
+        }
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L67">            openFriendChat(&quot;groupListView&quot;);</span>
+        }
+<span class="nc" id="L69">        messageListView.setFocusTraversable(false);</span>
+<span class="nc" id="L70">    }</span>
+
+    /**
+     * Opens a chat with a friend or a group. If the chat is with a friend, the group is created and the chatID is set.
+     * If the chat is with a group, the chatID is set.
+     * The messages are loaded and the listener is set.
+     *
+     * @param origin The origin of the chat
+     */
+
+    private void openFriendChat(String origin) {
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (!origin.equals(&quot;groupListView&quot;)) {</span>
+<span class="nc" id="L82">            group = new Group(null, null, List.of(user._id(), userStorageProvider.get().get_id()));</span>
+        }
+
+<span class="nc" id="L85">        disposables.add(groupService.getGroups(group.membersToString()).doOnNext(groups -&gt; {</span>
+<span class="nc" id="L86">            findGroupID(groups);</span>
+<span class="nc" id="L87">            groupStorageProvider.get().set_id(chatID);</span>
+<span class="nc" id="L88">        }).flatMap(groups -&gt; messageService.getGroupMessages(chatID).observeOn(FX_SCHEDULER))</span>
+<span class="nc" id="L89">          .doOnNext(this.messages::setAll)</span>
+<span class="nc" id="L90">          .doOnNext(messages1 -&gt; listenToMessages(this.messages, chatID))</span>
+<span class="nc" id="L91">          .observeOn(FX_SCHEDULER).subscribe(event -&gt; {}, error -&gt; showError(error.getMessage())));</span>
+<span class="nc" id="L92">    }</span>
+
+    /**
+     * Finds the groupID of the chat.
+     *
+     * @param groups The list of groups
+     */
+
+    private void findGroupID(List&lt;Group&gt; groups) {
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        if (group.name() == null) {</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">            for (Group group : groups) {</span>
+<span class="nc bnc" id="L103" title="All 4 branches missed.">                if (group.members().contains(user._id()) &amp;&amp; group.members().contains(userStorageProvider.get().get_id())) {</span>
+<span class="nc" id="L104">                    this.group = group;</span>
+<span class="nc" id="L105">                    chatID = group._id();</span>
+<span class="nc" id="L106">                    break;</span>
+                }
+<span class="nc" id="L108">            }</span>
+        } else {
+<span class="nc" id="L110">            chatID = group._id();</span>
+        }
+<span class="nc" id="L112">    }</span>
+
+    /**
+     * Renders the message listview.
+     *
+     * @return The message listview
+     */
+
+    @Override
+    public Parent render() {
+<span class="nc" id="L122">        groupStorageProvider.get().set_id(chatID);</span>
+<span class="nc" id="L123">        messageListView.scrollTo(messageListView.getItems().size() - 1);</span>
+<span class="nc" id="L124">        return messageListView;</span>
+    }
+
+    /**
+     * Search for the username of the user with the given id.
+     *
+     * @param _id The id of the user
+     * @return The username of the user
+     */
+
+    public String getUsername(String _id) {
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        for (User user : allUsers) {</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">            if (user._id().equals(_id)) {</span>
+<span class="nc" id="L137">                return user.name();</span>
+            }
+<span class="nc" id="L139">        }</span>
+<span class="nc" id="L140">        return UNKNOWN_USER;</span>
+    }
+
+    /**
+     * Updates the message on the server.
+     *
+     * @param newBody The new message body
+     * @param message The message to update
+     */
+
+    public void editMessage(String newBody, Message message) {
+<span class="nc" id="L151">        disposables.add(messageService.updateMessage(groupStorageProvider.get().get_id(), message._id(), newBody, MESSAGE_NAMESPACE_GROUPS)</span>
+<span class="nc" id="L152">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
+<span class="nc" id="L153">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="nc" id="L154">    }</span>
+
+    /**
+     * Deletes a message from the server.
+     *
+     * @param item The message to delete
+     */
+
+    public void deleteMessage(Message item) {
+<span class="nc" id="L163">        disposables.add(messageService.deleteMessage(item._id(), groupStorageProvider.get().get_id(), MESSAGE_NAMESPACE_GROUPS)</span>
+<span class="nc" id="L164">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
+<span class="nc" id="L165">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="nc" id="L166">    }</span>
+
+    /**
+     * Listens to messages from the server. If a message is created, updated or deleted, the listview is updated.
+     *
+     * @param messages The list of messages
+     * @param id       The id of the chat
+     */
+
+    public void listenToMessages(ObservableList&lt;Message&gt; messages, String id) {
+<span class="nc" id="L176">        disposables.add(eventListener.get().listen(&quot;groups.&quot; + id + &quot;.messages.*.*&quot;, Message.class)</span>
+<span class="nc" id="L177">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
+<span class="nc" id="L178">                    final Message message = event.data();</span>
+<span class="nc bnc" id="L179" title="All 4 branches missed.">                    switch (event.suffix()) {</span>
+<span class="nc" id="L180">                        case &quot;created&quot; -&gt; messages.add(message);</span>
+<span class="nc" id="L181">                        case &quot;updated&quot; -&gt; updateMessage(messages, message);</span>
+<span class="nc" id="L182">                        case &quot;deleted&quot; -&gt; messages.removeIf(m -&gt; m._id().equals(message._id()));</span>
+                    }
+<span class="nc" id="L184">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="nc" id="L185">    }</span>
+
+    /**
+     * Updates the message in the listview.
+     *
+     * @param messages The list of messages
+     * @param message  The message to update
+     */
+
+    private void updateMessage(ObservableList&lt;Message&gt; messages, Message message) {
+<span class="nc" id="L195">        String messageID = message._id();</span>
+<span class="nc" id="L196">        messages.stream()</span>
+<span class="nc" id="L197">                .filter(m -&gt; m._id().equals(messageID))</span>
+<span class="nc" id="L198">                .findFirst()</span>
+<span class="nc" id="L199">                .ifPresent(m -&gt; messages.set(messages.indexOf(m), message));</span>
+<span class="nc" id="L200">    }</span>
+
+    /**
+     * Sets all users
+     *
+     * @param allUsers The list of all users
+     */
+
+    public void setAllUsers(List&lt;User&gt; allUsers) {
+<span class="nc" id="L209">        this.allUsers = allUsers;</span>
+<span class="nc" id="L210">    }</span>
+
+    /**
+     * Sets the user
+     *
+     * @param user The {@link User}
+     */
+
+    public void setUser(User user) {
+<span class="nc" id="L219">        this.user = user;</span>
+<span class="nc" id="L220">    }</span>
+
+    /**
+     * Sets the group
+     *
+     * @param group The {@link Group}
+     */
+
+    public void setGroup(Group group) {
+<span class="nc" id="L229">        this.group = group;</span>
+<span class="nc" id="L230">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
