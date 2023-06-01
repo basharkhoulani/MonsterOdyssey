@@ -161,25 +161,22 @@ public class MessageCell extends ListCell&lt;Message&gt; {
      */
 
     public void editMessage() {
-<span class="pc bpc" id="L164" title="1 of 2 branches missed.">        if (!getItem().sender().equals(userID)) {</span>
-<span class="nc" id="L165">            return;</span>
-        }
-<span class="fc" id="L167">        TextInputDialog dialog = new TextInputDialog();</span>
-<span class="fc" id="L168">        dialog.setTitle(EDIT_MESSAGE_TITLE);</span>
-<span class="fc" id="L169">        dialog.setHeaderText(null);</span>
-<span class="fc" id="L170">        dialog.setContentText(EDIT_MESSAGE_CONTENT);</span>
+<span class="fc" id="L164">        TextInputDialog dialog = new TextInputDialog();</span>
+<span class="fc" id="L165">        dialog.setTitle(EDIT_MESSAGE_TITLE);</span>
+<span class="fc" id="L166">        dialog.setHeaderText(null);</span>
+<span class="fc" id="L167">        dialog.setContentText(EDIT_MESSAGE_CONTENT);</span>
 
-<span class="fc" id="L172">        TextArea messageArea = new TextArea();</span>
-<span class="fc" id="L173">        messageArea.setText(getItem().body());</span>
-<span class="fc" id="L174">        messageArea.setId(&quot;messageArea&quot;);</span>
-<span class="fc" id="L175">        dialog.getDialogPane().setContent(messageArea);</span>
-<span class="fc" id="L176">        Button confirmEdit = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);</span>
-<span class="fc" id="L177">        confirmEdit.setOnAction(event -&gt; {</span>
-<span class="fc" id="L178">            messagesBoxController.editMessage(messageArea.getText(), getItem());</span>
-<span class="fc" id="L179">            dialog.close();</span>
-<span class="fc" id="L180">        });</span>
-<span class="fc" id="L181">        dialog.showAndWait();</span>
-<span class="fc" id="L182">    }</span>
+<span class="fc" id="L169">        TextArea messageArea = new TextArea();</span>
+<span class="fc" id="L170">        messageArea.setText(getItem().body());</span>
+<span class="fc" id="L171">        messageArea.setId(&quot;messageArea&quot;);</span>
+<span class="fc" id="L172">        dialog.getDialogPane().setContent(messageArea);</span>
+<span class="fc" id="L173">        Button confirmEdit = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);</span>
+<span class="fc" id="L174">        confirmEdit.setOnAction(event -&gt; {</span>
+<span class="fc" id="L175">            messagesBoxController.editMessage(messageArea.getText(), getItem());</span>
+<span class="fc" id="L176">            dialog.close();</span>
+<span class="fc" id="L177">        });</span>
+<span class="fc" id="L178">        dialog.showAndWait();</span>
+<span class="fc" id="L179">    }</span>
 
     /**
      * The deleteMessage method is used to delete the message.
@@ -188,19 +185,16 @@ public class MessageCell extends ListCell&lt;Message&gt; {
      */
 
     public void deleteMessage() {
-<span class="pc bpc" id="L191" title="1 of 2 branches missed.">        if (!getItem().sender().equals(userID)) {</span>
-<span class="nc" id="L192">            return;</span>
-        }
-<span class="fc" id="L194">        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);</span>
-<span class="fc" id="L195">        alert.setTitle(DELETE_MESSAGE_TITLE);</span>
-<span class="fc" id="L196">        alert.setHeaderText(DELETE_MESSAGE_TITLE);</span>
-<span class="fc" id="L197">        alert.setContentText(DELETE_MESSAGE_CONTENT);</span>
+<span class="fc" id="L188">        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);</span>
+<span class="fc" id="L189">        alert.setTitle(DELETE_MESSAGE_TITLE);</span>
+<span class="fc" id="L190">        alert.setHeaderText(DELETE_MESSAGE_TITLE);</span>
+<span class="fc" id="L191">        alert.setContentText(DELETE_MESSAGE_CONTENT);</span>
 
-<span class="fc" id="L199">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
-<span class="pc bpc" id="L200" title="2 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK) {</span>
-<span class="fc" id="L201">            messagesBoxController.deleteMessage(getItem());</span>
-<span class="fc" id="L202">            alert.close();</span>
+<span class="fc" id="L193">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+<span class="pc bpc" id="L194" title="2 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK) {</span>
+<span class="fc" id="L195">            messagesBoxController.deleteMessage(getItem());</span>
+<span class="fc" id="L196">            alert.close();</span>
         }
-<span class="fc" id="L204">    }</span>
+<span class="fc" id="L198">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
