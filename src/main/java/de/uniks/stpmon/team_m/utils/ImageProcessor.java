@@ -1,7 +1,6 @@
 package de.uniks.stpmon.team_m.utils;
 
 import de.uniks.stpmon.team_m.App;
-import javafx.scene.control.Label;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

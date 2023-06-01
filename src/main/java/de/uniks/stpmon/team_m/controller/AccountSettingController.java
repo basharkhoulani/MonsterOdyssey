@@ -13,17 +13,11 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
-
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -222,7 +216,7 @@ public class AccountSettingController extends Controller {
      */
     public void editAvatar() {
         ButtonType cancelButton = new ButtonType(ButtonType.CANCEL.getText(), ButtonBar.ButtonData.CANCEL_CLOSE);
-        ButtonType okButton = new ButtonType(ButtonType.OK.getText(), ButtonBar.ButtonData.OK_DONE);
+        ButtonType okButton = new ButtonType(ButtonType.OK.getText(), ButtonBar.ButtonData.FINISH);
 
         Dialog<?> dialog = new Dialog<>();
         dialog.setTitle("Choose your Avatar");
@@ -241,7 +235,6 @@ public class AccountSettingController extends Controller {
                 image = new Image("file:" + avatarSelectionController.selectedAvatar);
                 selectedFilePath = avatarSelectionController.selectedAvatar;
             }
-            System.out.println(selectedFilePath);
             avatarImageView.setImage(image);
         }
     }
@@ -255,6 +248,7 @@ public class AccountSettingController extends Controller {
         if (base64Image.equals(IMAGE_PROCESSING_ERROR))
             informationLabel.setText(IMAGE_PROCESSING_ERROR);
         String avatarUpload = "data:image/png;base64, " + base64Image;
+        System.out.println(avatarUpload);
         disposables.add(usersService
                 .updateUser(null, null, avatarUpload, null, null)
                 .observeOn(FX_SCHEDULER)

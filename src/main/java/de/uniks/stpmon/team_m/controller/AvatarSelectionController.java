@@ -48,12 +48,6 @@ public class AvatarSelectionController extends Controller {
     // the avatar selected with the radiobutton
     public String selectedAvatar;
 
-    // default avatars
-    public String avatar1 = "https://gravatar.com/avatar/85f983f7459c2d26000ea0df68c74ede?s=400&d=robohash&r=x";
-    public String avatar2 = "https://robohash.org/2e1549952236b1e98fc61f3985d7ffd6?set=set4&bgset=bg2&size=400x400";
-    public String avatar3 = "https://gravatar.com/avatar/d457438462edd31dd0208e8ef1044f9e?s=400&d=identicon&r=x";
-    public String avatar4 = "https://gravatar.com/avatar/0d0954aa7a5e3932e9669699c76d2ada?s=400&d=monsterid&r=x";
-
     @Inject
     public AvatarSelectionController() {
         super();
@@ -69,6 +63,22 @@ public class AvatarSelectionController extends Controller {
         avatar3ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_3)).toString()));
         avatar4ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_4)).toString()));
 
+        avatar1ImageView.setOnMouseClicked(event -> {
+            avatar1RadioButton.setSelected(true);
+            selectAvatar1();
+        });
+        avatar2ImageView.setOnMouseClicked(event -> {
+            avatar2RadioButton.setSelected(true);
+            selectAvatar2();
+        });
+        avatar3ImageView.setOnMouseClicked(event -> {
+            avatar3RadioButton.setSelected(true);
+            selectAvatar3();
+        });
+        avatar4ImageView.setOnMouseClicked(event -> {
+            avatar4RadioButton.setSelected(true);
+            selectAvatar4();
+        });
         return parent;
     }
 
