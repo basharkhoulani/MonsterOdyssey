@@ -11,7 +11,6 @@ import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
-import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -27,6 +26,7 @@ import javax.inject.Provider;
 import java.util.Arrays;
 import java.util.List;
 
+import static io.reactivex.rxjava3.core.Observable.empty;
 import static io.reactivex.rxjava3.core.Observable.just;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -83,6 +83,7 @@ public class MessagesControllerTest extends ApplicationTest {
                 new Group("64610ec8420b3d786212aea3", null, List.of("64610e7b82ca062bfa5b7231", "645cd0a34389d5c06620fe64"))
         )));
         when(eventListenerProvider.get()).thenReturn(eventListener);
+        when(eventListener.listen(any(), any())).thenReturn(empty());
         when(groupStorageProvider.get()).thenReturn(groupStorage);
         when(messagesBoxControllerProvider.get()).thenReturn(messagesBoxController);
         doNothing().when(messagesBoxController).setUser(any());
@@ -134,7 +135,7 @@ public class MessagesControllerTest extends ApplicationTest {
     void changeToSettingsAndSendMessage() {
         when(groupControllerProvider.get()).thenReturn(mock(GroupController.class));
         when(groupStorageProvider.get()).thenReturn(groupStorage);
-        when(messageService.newMessage(any(), any(), any())).thenReturn(Observable.empty());
+        when(messageService.newMessage(any(), any(), any())).thenReturn(empty());
         doNothing().when(app).show(any());
         groupStorage.set_id("64610ec8420b3d786212aea8");
         clickOn("best Group");

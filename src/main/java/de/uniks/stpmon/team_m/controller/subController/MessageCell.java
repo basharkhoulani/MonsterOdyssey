@@ -171,7 +171,7 @@ public class MessageCell extends ListCell<Message> {
 
         TextArea messageArea = new TextArea();
         messageArea.setText(getItem().body());
-
+        messageArea.setId("messageArea");
         dialog.getDialogPane().setContent(messageArea);
         Button confirmEdit = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         confirmEdit.setOnAction(event -> {
