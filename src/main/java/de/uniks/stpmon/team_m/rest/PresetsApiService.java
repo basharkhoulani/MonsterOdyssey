@@ -19,11 +19,11 @@ public interface PresetsApiService {
     @GET("presets/monsters")
     Observable<List<MonsterTypeDto>> getMonsters();
     @GET("presets/monsters/{id}")
-    Observable<MonsterTypeDto> getMonster(@Path("id") String id);
+    Observable<MonsterTypeDto> getMonster(@Path("id") int id);
     @GET("presets/monsters/{id}/image")
     Observable<ResponseBody> getMonsterImage(@Path("id") String id);
     @GET("presets/abilities")
     Observable<List<AbilityDto>> getAbilities();
     @GET("presets/abilities/{id}")
-    Observable<AbilityDto> getAbility(@Path("id") String id);
+    Observable<AbilityDto> getAbility(@Path("id") int id);
 }

@@ -72,7 +72,7 @@ public class PresetsService {
      * @return The monster type.
      */
 
-    public Observable<MonsterTypeDto> getMonster(String id) {
+    public Observable<MonsterTypeDto> getMonster(int id) {
         return presetsApiService.getMonster(id);
     }
 
@@ -105,7 +105,7 @@ public class PresetsService {
      * @return The ability.
      */
 
-    public Observable<AbilityDto> getAbility(String id) {
+    public Observable<AbilityDto> getAbility(int id) {
         return presetsApiService.getAbility(id);
     }
 }
