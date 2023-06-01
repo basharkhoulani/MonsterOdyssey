@@ -7,10 +7,9 @@ import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-import java.io.ByteArrayInputStream;
 import java.util.List;
 
-public interface PresetsApiSrvice {
+public interface PresetsApiService {
     @GET("presets/tilesets/{filename}")
     Observable<ResponseBody> getTileset(@Path("filename") String filename);
     @GET("presets/characters")

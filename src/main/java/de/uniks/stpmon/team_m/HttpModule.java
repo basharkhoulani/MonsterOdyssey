@@ -7,15 +7,12 @@ import de.uniks.stpmon.team_m.rest.*;
 import de.uniks.stpmon.team_m.utils.TokenStorage;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import javax.inject.Singleton;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 @Module
 public class HttpModule {
@@ -98,7 +95,7 @@ public class HttpModule {
 
     @Provides
     @Singleton
-    PresetsApiSrvice presets(Retrofit retrofit) {
-        return retrofit.create(PresetsApiSrvice.class);
+    PresetsApiService presets(Retrofit retrofit) {
+        return retrofit.create(PresetsApiService.class);
     }
 }
