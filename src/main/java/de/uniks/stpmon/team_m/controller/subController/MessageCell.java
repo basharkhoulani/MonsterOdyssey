@@ -161,9 +161,6 @@ public class MessageCell extends ListCell<Message> {
      */
 
     public void editMessage() {
-        if (!getItem().sender().equals(userID)) {
-            return;
-        }
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle(EDIT_MESSAGE_TITLE);
         dialog.setHeaderText(null);
@@ -188,9 +185,6 @@ public class MessageCell extends ListCell<Message> {
      */
 
     public void deleteMessage() {
-        if (!getItem().sender().equals(userID)) {
-            return;
-        }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(DELETE_MESSAGE_TITLE);
         alert.setHeaderText(DELETE_MESSAGE_TITLE);
