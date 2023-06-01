@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.subController.MessagesBoxController;
+import de.uniks.stpmon.team_m.dto.Event;
 import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupService;
@@ -11,6 +12,8 @@ import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -28,9 +31,9 @@ import java.util.List;
 
 import static io.reactivex.rxjava3.core.Observable.empty;
 import static io.reactivex.rxjava3.core.Observable.just;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class MessagesControllerTest extends ApplicationTest {
@@ -67,6 +70,9 @@ public class MessagesControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
+        Group newGroup = new Group("6478e132cd8fd7a6174991a9", "newGroup", Arrays.asList("64610e7b82ca062bfa5b7231", "645cd04c11b590456276e9d9"));
+        Group changedGroup = new Group("6478e132cd8fd7a6174991a9", "changedNameGroup", Arrays.asList("64610e7b82ca062bfa5b7231", "645cd04c11b590456276e9d9"));
+        User changedUser = new User("645cd0a34389d5c06620fe64", "Garbage", Constants.USER_STATUS_OFFLINE, null, null);
         MessagesBoxController messagesBoxController = mock(MessagesBoxController.class);
         EventListener eventListener = mock(EventListener.class);
         when(userStorageProvider.get()).thenReturn(userStorage);
@@ -83,7 +89,21 @@ public class MessagesControllerTest extends ApplicationTest {
                 new Group("64610ec8420b3d786212aea3", null, List.of("64610e7b82ca062bfa5b7231", "645cd0a34389d5c06620fe64"))
         )));
         when(eventListenerProvider.get()).thenReturn(eventListener);
-        when(eventListener.listen(any(), any())).thenReturn(empty());
+        when(eventListener.listen(any(), any())).thenReturn(just(
+                new Event<>("groups.*.nothappening", null)
+        )).thenReturn(just(
+                new Event<>("groups.*.nothappening", null)
+        )).thenReturn(just(
+                new Event<>("groups.*.created", newGroup)
+        )).thenReturn(just(
+                new Event<>("groups.*.updated", changedGroup)
+        )).thenReturn(just(
+                new Event<>("groups.*.deleted", changedGroup)
+        )).thenReturn(just(
+                new Event<>("users.*.updated", changedUser)
+        )).thenReturn(just(
+                new Event<>("users.*.deleted", changedUser)
+        ));
         when(groupStorageProvider.get()).thenReturn(groupStorage);
         when(messagesBoxControllerProvider.get()).thenReturn(messagesBoxController);
         doNothing().when(messagesBoxController).setUser(any());
@@ -95,7 +115,6 @@ public class MessagesControllerTest extends ApplicationTest {
         messagesController.setUserChosenFromMainMenu(true);
         messagesController.setUserChosenFromNewFriend(true);
         groupStorage.set_id("645cd04c11b590456276e9d9");
-
 
         app.start(stage);
         app.show(messagesController);
@@ -154,6 +173,31 @@ public class MessagesControllerTest extends ApplicationTest {
         clickOn("#sendButton");
         assertEquals("", messageTextArea.getText());
         clickOn("#settingsButton");
+    }
+
+    @Test
+    void eventChanges() {
+        when(groupStorageProvider.get()).thenReturn(groupStorage);
+        messagesController.listenToGroupChanges();
+        waitForFxEvents();
+        assertNotNull(lookup("newGroup").query());
+        clickOn("newGroup");
+        messagesController.listenToGroupChanges();
+        waitForFxEvents();
+        assertNotNull(lookup("changedNameGroup").query());
+        clickOn("changedNameGroup");
+        messagesController.listenToGroupChanges();
+        waitForFxEvents();
+        assertNull(lookup("changedNameGroup").tryQueryAs(Label.class).orElse(null));
+
+        ListView<User> usersListView = lookup("#friends").query();
+        messagesController.listenToUserUpdate(usersListView.getItems(), usersListView);
+        waitForFxEvents();
+        assertNotNull(lookup("Garbage").query());
+        clickOn("Garbage");
+        messagesController.listenToUserUpdate(usersListView.getItems(), usersListView);
+        waitForFxEvents();
+        assertNull(lookup("Garbage").tryQueryAs(Label.class).orElse(null));
     }
 
 }

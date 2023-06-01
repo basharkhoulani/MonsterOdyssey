@@ -109,7 +109,17 @@ public class AppTest extends ApplicationTest {
         // test Edit Group
         clickOn("Go back");
         clickOn("Main Menu");
+    }
 
+    @Test
+    void criticalPathV2() {
+        // test Login Screen
+        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
+
+        // test Sign In To MainMenu
+        write("t\t");
+        write("testtest");
+        clickOn("Sign In");
 
         // Main Menu to Ingame
         final Button startGameButton = lookup("Start Game").query();
@@ -157,8 +167,6 @@ public class AppTest extends ApplicationTest {
         assertNotNull(pauseLabel);
         assertEquals("What do you want to do?", pauseLabel.getText());
 
-
-
         // test Ingame Unpause With Key Code P
         type(KeyCode.P);
         final Label gameTitleUnpauseP = lookup("Monster Odyssey").query();
@@ -174,6 +182,5 @@ public class AppTest extends ApplicationTest {
         type(KeyCode.P);
         clickOn("Save Game & Leave");
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
-
     }
 }
