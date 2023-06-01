@@ -73,17 +73,6 @@ public class AvatarSelectionController extends Controller {
     }
 
     /**
-     * This method converts images to URI.
-     */
-    public String convertToURI(String filePath) throws IOException {
-        File file = new File(filePath);
-        String contentType = Files.probeContentType(file.toPath());
-        byte[] data = Files.readAllBytes(file.toPath());
-        String base64str = Base64.getEncoder().encodeToString(data);
-        return "data:" + contentType + ";base64," + base64str;
-    }
-
-    /**
      * This method selects default avatar 1.
      */
     public void selectAvatar1() {

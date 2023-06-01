@@ -221,8 +221,8 @@ public class AccountSettingController extends Controller {
      * This method opens a pop-up to the avatar selection.
      */
     public void editAvatar() {
-        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        ButtonType okButton = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType(ButtonType.CANCEL.getText(), ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType okButton = new ButtonType(ButtonType.OK.getText(), ButtonBar.ButtonData.OK_DONE);
 
         Dialog<?> dialog = new Dialog<>();
         dialog.setTitle("Choose your Avatar");
@@ -231,21 +231,18 @@ public class AccountSettingController extends Controller {
         dialog.getDialogPane().getButtonTypes().add(cancelButton);
         dialog.showAndWait();
 
-        if (!dialog.isShowing()) {
-            if (dialog.getResult().toString().equals("ButtonType [text=Ok, buttonData=OK_DONE]")) {
-                saveAvatarButton.setDisable(false);
-                Image image;
-                try {
-                    image = new Image(Objects.requireNonNull(App.class.getResource(avatarSelectionController.selectedAvatar)).toString());
-                    selectedFilePath = Objects.requireNonNull(App.class.getResource(avatarSelectionController.selectedAvatar)).toURI().getPath();
-                } catch (Exception e) {
-                    image = new Image("file:" + avatarSelectionController.selectedAvatar);
-                    selectedFilePath = avatarSelectionController.selectedAvatar;
-                }
-                System.out.println(selectedFilePath);
-                avatarImageView.setImage(image);
+        if (dialog.getResult() == okButton) {
+            saveAvatarButton.setDisable(false);
+            Image image;
+            try {
+                image = new Image(Objects.requireNonNull(App.class.getResource(avatarSelectionController.selectedAvatar)).toString());
+                selectedFilePath = Objects.requireNonNull(App.class.getResource(avatarSelectionController.selectedAvatar)).toURI().getPath();
+            } catch (Exception e) {
+                image = new Image("file:" + avatarSelectionController.selectedAvatar);
+                selectedFilePath = avatarSelectionController.selectedAvatar;
             }
-
+            System.out.println(selectedFilePath);
+            avatarImageView.setImage(image);
         }
     }
 
@@ -257,7 +254,7 @@ public class AccountSettingController extends Controller {
         String base64Image = ImageProcessor.toBase64(selectedFilePath);
         if (base64Image.equals(IMAGE_PROCESSING_ERROR))
             informationLabel.setText(IMAGE_PROCESSING_ERROR);
-        String avatarUpload = "data:image/png;base64, "+ base64Image;
+        String avatarUpload = "data:image/png;base64, " + base64Image;
         disposables.add(usersService
                 .updateUser(null, null, avatarUpload, null, null)
                 .observeOn(FX_SCHEDULER)
@@ -269,7 +266,6 @@ public class AccountSettingController extends Controller {
         );
 
     }
-
 
 
     /**
