@@ -151,7 +151,7 @@ public class MessagesBoxController extends Controller {
     public void editMessage(String newBody, Message message) {
 <span class="fc" id="L152">        disposables.add(messageService.updateMessage(groupStorageProvider.get().get_id(), message._id(), newBody, MESSAGE_NAMESPACE_GROUPS)</span>
 <span class="fc" id="L153">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
-<span class="pc" id="L154">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L154">                }, error -&gt; showError(error.getMessage())));</span>
 <span class="fc" id="L155">    }</span>
 
     /**
@@ -163,7 +163,7 @@ public class MessagesBoxController extends Controller {
     public void deleteMessage(Message item) {
 <span class="fc" id="L164">        disposables.add(messageService.deleteMessage(item._id(), groupStorageProvider.get().get_id(), MESSAGE_NAMESPACE_GROUPS)</span>
 <span class="fc" id="L165">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
-<span class="pc" id="L166">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L166">                }, error -&gt; showError(error.getMessage())));</span>
 <span class="fc" id="L167">    }</span>
 
     /**
@@ -182,7 +182,7 @@ public class MessagesBoxController extends Controller {
 <span class="fc" id="L182">                        case &quot;updated&quot; -&gt; updateMessage(messages, message);</span>
 <span class="fc" id="L183">                        case &quot;deleted&quot; -&gt; messages.removeIf(m -&gt; m._id().equals(message._id()));</span>
                     }
-<span class="pc" id="L185">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L185">                }, error -&gt; showError(error.getMessage())));</span>
 <span class="fc" id="L186">    }</span>
 
     /**

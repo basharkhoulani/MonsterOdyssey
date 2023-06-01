@@ -194,7 +194,7 @@ public class MainMenuController extends Controller {
 <span class="fc" id="L194">        disposables.add(usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)</span>
 <span class="fc" id="L195">                .doOnNext(user -&gt; {})</span>
 <span class="fc" id="L196">                .flatMap(user -&gt; authenticationService.logout()).observeOn(FX_SCHEDULER)</span>
-<span class="pc" id="L197">                .subscribe(event -&gt; app.show(loginControllerProvider.get()), error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L197">                .subscribe(event -&gt; app.show(loginControllerProvider.get()), error -&gt; showError(error.getMessage())));</span>
 <span class="fc" id="L198">    }</span>
 
     /**

@@ -261,7 +261,7 @@ public class GroupController extends Controller {
 <span class="fc" id="L261">        newGroupMembersIDs.add(userStorage.get().get_id());</span>
 <span class="pc" id="L262">        newGroupMembers.forEach(user -&gt; newGroupMembersIDs.add(user._id()));</span>
 <span class="fc" id="L263">        disposables.add(groupService.create(groupNameInput.getText(), newGroupMembersIDs)</span>
-<span class="pc" id="L264">                .observeOn(FX_SCHEDULER).subscribe(group -&gt; app.show(messagesControllerProvider.get()), error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L264">                .observeOn(FX_SCHEDULER).subscribe(group -&gt; app.show(messagesControllerProvider.get()), error -&gt; showError(error.getMessage())));</span>
 <span class="fc" id="L265">    }</span>
 
     /**

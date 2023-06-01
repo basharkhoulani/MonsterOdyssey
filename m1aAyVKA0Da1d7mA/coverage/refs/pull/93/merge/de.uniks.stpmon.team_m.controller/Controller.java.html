@@ -110,7 +110,7 @@ import static de.uniks.stpmon.team_m.Constants.*;
 <span class="fc" id="L110">                        case &quot;updated&quot; -&gt; updateUser(friends, friendsListView, user);</span>
 <span class="fc" id="L111">                        case &quot;deleted&quot; -&gt; friends.remove(user);</span>
                     }
-<span class="pc" id="L113">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L113">                }, error -&gt; showError(error.getMessage())));</span>
 <span class="fc" id="L114">    }</span>
 
     /**
@@ -143,18 +143,18 @@ import static de.uniks.stpmon.team_m.Constants.*;
 <span class="fc" id="L143">        Alert alert = new Alert(Alert.AlertType.ERROR);</span>
 <span class="fc" id="L144">        alert.setTitle(ERROR);</span>
 <span class="fc" id="L145">        alert.setHeaderText(null);</span>
-<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (error.contains(HTTP_429)) {</span>
-<span class="nc" id="L147">            alert.setContentText(HTTP_429_MESSAGE);</span>
-<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        } else if (error.contains(HTTP_409)) {</span>
-<span class="nc" id="L149">            alert.setContentText(HTTP_409_MESSAGE);</span>
-<span class="pc bpc" id="L150" title="1 of 2 branches missed.">        } else if (error.contains(HTTP_404)) {</span>
-<span class="nc" id="L151">            alert.setContentText(HTTP_404_MESSAGE);</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (error.contains(HTTP_429)) {</span>
+<span class="fc" id="L147">            alert.setContentText(HTTP_429_MESSAGE);</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        } else if (error.contains(HTTP_409)) {</span>
+<span class="fc" id="L149">            alert.setContentText(HTTP_409_MESSAGE);</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        } else if (error.contains(HTTP_404)) {</span>
+<span class="fc" id="L151">            alert.setContentText(HTTP_404_MESSAGE);</span>
 <span class="fc bfc" id="L152" title="All 2 branches covered.">        } else if (error.contains(HTTP_403)) {</span>
 <span class="fc" id="L153">            alert.setContentText(HTTP_403_MESSAGE);</span>
-<span class="pc bpc" id="L154" title="1 of 2 branches missed.">        } else if (error.contains(HTTP_401)) {</span>
-<span class="nc" id="L155">            alert.setContentText(HTTP_401_MESSAGE);</span>
-<span class="pc bpc" id="L156" title="1 of 2 branches missed.">        } else if (error.contains(HTTP_400)) {</span>
-<span class="nc" id="L157">            alert.setContentText(HTTP_400_MESSAGE);</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        } else if (error.contains(HTTP_401)) {</span>
+<span class="fc" id="L155">            alert.setContentText(HTTP_401_MESSAGE);</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        } else if (error.contains(HTTP_400)) {</span>
+<span class="fc" id="L157">            alert.setContentText(HTTP_400_MESSAGE);</span>
         } else {
 <span class="fc" id="L159">            alert.setContentText(GENERIC_ERROR);</span>
         }

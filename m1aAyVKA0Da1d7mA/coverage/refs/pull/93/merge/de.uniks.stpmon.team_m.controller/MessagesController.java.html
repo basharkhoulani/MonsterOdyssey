@@ -399,7 +399,7 @@ public class MessagesController extends Controller {
 <span class="pc bpc" id="L399" title="1 of 2 branches missed.">        if (groupID != null) {</span>
 <span class="fc" id="L400">            String messageBody = messageTextArea.getText();</span>
 <span class="fc" id="L401">            disposables.add(messageService.newMessage(groupID, messageBody, MESSAGE_NAMESPACE_GROUPS).observeOn(FX_SCHEDULER).subscribe(message -&gt; {</span>
-<span class="nc" id="L402">            }, error -&gt; showError(error.getMessage())));</span>
+<span class="pc" id="L402">            }, error -&gt; showError(error.getMessage())));</span>
 <span class="fc" id="L403">            messageTextArea.setText(EMPTY_STRING);</span>
         }
 <span class="fc" id="L405">    }</span>
@@ -416,7 +416,7 @@ public class MessagesController extends Controller {
 <span class="fc" id="L416">                case &quot;updated&quot; -&gt; updateGroup(group);</span>
 <span class="fc" id="L417">                case &quot;deleted&quot; -&gt; groups.remove(group);</span>
             }
-<span class="pc" id="L419">        }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L419">        }, error -&gt; showError(error.getMessage())));</span>
 <span class="fc" id="L420">    }</span>
 
     /**
