@@ -116,7 +116,6 @@ public class WelcomeSceneController extends Controller{
                 } else if (result.isPresent() && result.get() == okButton) {
                     textFieldName.textProperty().bindBidirectional(trainerName);
                     changeCount(true);
-                    // hier muss dann der trainer erstellt werde jedoch fehlt der avatar
                 }
             }
             case 5 -> {

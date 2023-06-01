@@ -15,7 +15,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -109,6 +108,7 @@ public class GroupController extends Controller {
         foreignListView.setFocusModel(null);
         foreignListView.setPlaceholder(new Label(NO_USERS_ADDED_TO_GROUP));
         foreignListView.setCellFactory(friendsListView.getCellFactory());
+        foreignListView.setItems(foreign);
     }
 
     /**
@@ -121,6 +121,7 @@ public class GroupController extends Controller {
         friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
         friendsListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
                 foreignListView, friends));
+        friendsListView.setItems(friends);
     }
 
     /**
@@ -130,12 +131,12 @@ public class GroupController extends Controller {
 
     private void initEditGroupView() {
         TITLE = EDIT_GROUP_TITLE;
-        disposables.add(usersService.getUsers(groupStorageProvider.get().getMembers(), null)
+        disposables.add(usersService.getUsers(groupStorageProvider.get().getMembers(), null).observeOn(FX_SCHEDULER)
                 .doOnNext(newGroupMembers::setAll)
-                .flatMap(users -> usersService.getUsers(userStorage.get().getFriends(), null))
+                .flatMap(users -> usersService.getUsers(userStorage.get().getFriends(), null).observeOn(FX_SCHEDULER))
                 .doOnNext(this::sortGroupMembersIntoLists)
-                .subscribe(event -> {
-                }, error -> showError(error.getMessage())));
+                .observeOn(FX_SCHEDULER)
+                .subscribe(event -> {}, error -> showError(error.getMessage())));
     }
 
     /**
@@ -145,14 +146,16 @@ public class GroupController extends Controller {
      */
 
     private void sortGroupMembersIntoLists(List<User> friends) {
-        this.friends.setAll(friends);
+        if (userStorage.get().getFriends().isEmpty()) {
+            this.friends.setAll(List.of());
+        } else {
+            this.friends.setAll(friends);
+        }
         final List<User> users = new ArrayList<>(newGroupMembers);
         users.removeAll(this.friends);
         foreign.setAll(users);
         foreign.removeIf(user -> user._id().equals(userStorage.get().get_id()));
-        foreignListView.getItems().setAll(users);
         FriendListUtils.sortListView(foreignListView);
-        friendsListView.getItems().setAll(friends);
         FriendListUtils.sortListView(friendsListView);
     }
 
@@ -166,7 +169,6 @@ public class GroupController extends Controller {
         if (!friendsByID.isEmpty()) {
             disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
                 friends.setAll(users);
-                friendsListView.getItems().setAll(friends);
                 FriendListUtils.sortListView(friendsListView);
             }, error -> showError(error.getMessage())));
         }
@@ -192,6 +194,7 @@ public class GroupController extends Controller {
         initFriendsListView();
         initForeignListView();
         listenToUserUpdate(friends, friendsListView);
+        listenToUserUpdate(foreign, foreignListView);
         return parent;
     }
 
@@ -246,12 +249,7 @@ public class GroupController extends Controller {
         List<String> newGroupMembersIDs = new ArrayList<>();
         newGroupMembers.forEach(user -> newGroupMembersIDs.add(user._id()));
         disposables.add(groupService.update(groupId, groupNameInput.getText(), newGroupMembersIDs)
-                .observeOn(FX_SCHEDULER).subscribe(group -> {
-                    groupStorageProvider.get().set_id(group._id());
-                    groupStorageProvider.get().setName(group.name());
-                    groupStorageProvider.get().setMembers(group.members());
-                    app.show(messagesControllerProvider.get());
-                }, error -> showError(error.getMessage())));
+                .observeOn(FX_SCHEDULER).subscribe(group -> app.show(messagesControllerProvider.get()), error -> showError(error.getMessage())));
     }
 
     /**
@@ -263,12 +261,7 @@ public class GroupController extends Controller {
         newGroupMembersIDs.add(userStorage.get().get_id());
         newGroupMembers.forEach(user -> newGroupMembersIDs.add(user._id()));
         disposables.add(groupService.create(groupNameInput.getText(), newGroupMembersIDs)
-                .observeOn(FX_SCHEDULER).subscribe(group -> {
-                    groupStorageProvider.get().set_id(group._id());
-                    groupStorageProvider.get().setName(group.name());
-                    groupStorageProvider.get().setMembers(group.members());
-                    app.show(messagesControllerProvider.get());
-                }, error -> showError(error.getMessage())));
+                .observeOn(FX_SCHEDULER).subscribe(group -> app.show(messagesControllerProvider.get()), error -> showError(error.getMessage())));
     }
 
     /**

@@ -74,6 +74,7 @@ public class IngameController extends Controller {
         alert.initStyle(StageStyle.UNDECORATED);
         alert.setContentText(HELP_LABEL);
         final DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStyleClass().add("comicSans");
         dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);
         alert.showAndWait();
     }
@@ -92,6 +93,7 @@ public class IngameController extends Controller {
         final ButtonType resume = new ButtonType(RESUME_BUTTON_LABEL);
         final ButtonType saveAndExit = new ButtonType(SAVE_GAME_AND_LEAVE_BUTTON_LABEL);
         dialogPane.getButtonTypes().addAll(resume, saveAndExit);
+        dialogPane.getStyleClass().add("comicSans");
         final Button resumeButton = (Button) dialogPane.lookupButton(resume);
         resumeButton.setOnKeyPressed(event -> {
             if (!(event.getCode() == PAUSE_MENU_KEY)) {

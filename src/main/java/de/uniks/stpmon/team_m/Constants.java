@@ -105,11 +105,15 @@ public class Constants {
     public static final String PASSWORD_SUCCESS_CHANGED = "Your Password has been changed successfully.";
     public static final String SELECT_AVATAR_PICTURE = "Select Avatar Picture";
     public static final String IMAGE = "Image";
+    public static final String AVATAR_SUCCESS_CHANGED = "Your Avatar has been changed successfully.";
 
     // INGAME
     public static final String INGAME_TITLE = "Ingame";
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
-    public static final String HELP_LABEL = "Click 'p' on your keyboard for pause menu.";
+    public static final String FIRST_HELP = "Click 'p' on your keyboard for pause menu.\n";
+    public static final String SECOND_HELP = "     \u2191 \n \u2190 \u2193 \u2192  to move your character. \n";
+    public static final String THIRD_HELP = "Click Space for interact and attack.";
+    public static final String HELP_LABEL = FIRST_HELP + SECOND_HELP + THIRD_HELP;
     public static final String RESUME_BUTTON_LABEL = "Resume Game";
     public static final String SAVE_GAME_AND_LEAVE_BUTTON_LABEL = "Save Game & Leave";
     public static final String PAUSE_MENU_TITLE = "Pause Menu";
