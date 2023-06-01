@@ -144,8 +144,9 @@ public class AccountSettingController extends Controller {
 
         // show Avatar if there is one
         if (userStorageProvider.get().getAvatar() != null) {
-            Image image = new Image(userStorageProvider.get().getAvatar());
-            avatarImageView.setImage(image);
+            String avatar = userStorageProvider.get().getAvatar();
+
+            avatarImageView.setImage(ImageProcessor.toFXImage(avatar));
         }
 
         return parent;
@@ -256,12 +257,12 @@ public class AccountSettingController extends Controller {
         String base64Image = ImageProcessor.toBase64(selectedFilePath);
         if (base64Image.equals(IMAGE_PROCESSING_ERROR))
             informationLabel.setText(IMAGE_PROCESSING_ERROR);
+        String avatarUpload = "data:image/png;base64, "+ base64Image;
         disposables.add(usersService
-                .updateUser(null, null, "data:image/png;base64, "+base64Image, null, null)
+                .updateUser(null, null, avatarUpload, null, null)
                 .observeOn(FX_SCHEDULER)
                 .subscribe(userResult -> {
                     userStorageProvider.get().setAvatar(userResult.avatar());
-                    System.out.println(userResult.avatar());
                     saveAvatarButton.setDisable(true);
                     informationLabel.setText(AVATAR_SUCCESS_CHANGED);
                 }, error -> avatarErrorLabel.setText(error.getMessage()))

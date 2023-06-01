@@ -1,5 +1,8 @@
 package de.uniks.stpmon.team_m.utils;
 
+import de.uniks.stpmon.team_m.App;
+import javafx.scene.control.Label;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -8,9 +11,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.IMAGE_PROCESSING_ERROR;
-import static de.uniks.stpmon.team_m.Constants.MAX_BASE64_LENGTH;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class ImageProcessor {
     public static String toBase64(String inputImagePath) {
@@ -23,10 +26,18 @@ public class ImageProcessor {
         }
     }
 
-    public static javafx.scene.image.Image toFXImage(String base64) {
-        byte[] imageBytes = Base64.getDecoder().decode(base64);
-        ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
-        return new javafx.scene.image.Image(bis);
+    public static javafx.scene.image.Image toFXImage(String avatar) {
+        javafx.scene.image.Image image;
+        if (avatar.startsWith("data")){
+            byte[] imageBytes = Base64.getDecoder().decode(avatar.replaceFirst("data:image/png;base64, ", ""));
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
+            image = new javafx.scene.image.Image(bis);
+        } else if (avatar.startsWith("http")) {
+            image = new javafx.scene.image.Image(avatar);
+        } else {
+            image = new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString());
+        }
+        return image;
     }
 
     private static String getBase64(BufferedImage image) throws IOException {
