@@ -29,8 +29,8 @@ import javax.inject.Provider;
 import java.util.Arrays;
 import java.util.List;
 
-import static io.reactivex.rxjava3.core.Observable.empty;
-import static io.reactivex.rxjava3.core.Observable.just;
+import static de.uniks.stpmon.team_m.Constants.*;
+import static io.reactivex.rxjava3.core.Observable.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
@@ -93,17 +93,18 @@ public class MessagesControllerTest extends ApplicationTest {
                 new Event<>("groups.*.nothappening", null)
         )).thenReturn(just(
                 new Event<>("groups.*.nothappening", null)
-        )).thenReturn(just(
-                new Event<>("groups.*.created", newGroup)
-        )).thenReturn(just(
-                new Event<>("groups.*.updated", changedGroup)
-        )).thenReturn(just(
-                new Event<>("groups.*.deleted", changedGroup)
-        )).thenReturn(just(
-                new Event<>("users.*.updated", changedUser)
-        )).thenReturn(just(
-                new Event<>("users.*.deleted", changedUser)
-        ));
+                )).thenReturn(just(
+                        new Event<>("groups.*.created", newGroup)
+                )).thenReturn(just(
+                        new Event<>("groups.*.updated", changedGroup)
+                )).thenReturn(just(
+                        new Event<>("groups.*.deleted", changedGroup)
+                )).thenReturn(just(
+                        new Event<>("users.*.updated", changedUser)
+                )).thenReturn(just(
+                        new Event<>("users.*.deleted", changedUser)
+                )).thenReturn(error(new Exception(HTTP_400)))
+                .thenReturn(error(new Exception(HTTP_403)));
         when(groupStorageProvider.get()).thenReturn(groupStorage);
         when(messagesBoxControllerProvider.get()).thenReturn(messagesBoxController);
         doNothing().when(messagesBoxController).setUser(any());
@@ -154,7 +155,9 @@ public class MessagesControllerTest extends ApplicationTest {
     void changeToSettingsAndSendMessage() {
         when(groupControllerProvider.get()).thenReturn(mock(GroupController.class));
         when(groupStorageProvider.get()).thenReturn(groupStorage);
-        when(messageService.newMessage(any(), any(), any())).thenReturn(empty());
+        when(messageService.newMessage(any(), any(), any())).thenReturn(empty())
+                .thenReturn(empty())
+                .thenReturn(error(new Exception(HTTP_401)));
         doNothing().when(app).show(any());
         groupStorage.set_id("64610ec8420b3d786212aea8");
         clickOn("best Group");
@@ -171,6 +174,11 @@ public class MessagesControllerTest extends ApplicationTest {
         clickOn(messageTextArea);
         write("Hello");
         clickOn("#sendButton");
+        clickOn(messageTextArea);
+        write("Hello");
+        type(KeyCode.SHIFT);
+        clickOn("#sendButton");
+        clickOn("OK");
         assertEquals("", messageTextArea.getText());
         clickOn("#settingsButton");
     }
@@ -198,6 +206,13 @@ public class MessagesControllerTest extends ApplicationTest {
         messagesController.listenToUserUpdate(usersListView.getItems(), usersListView);
         waitForFxEvents();
         assertNull(lookup("Garbage").tryQueryAs(Label.class).orElse(null));
+
+        messagesController.listenToUserUpdate(usersListView.getItems(), usersListView);
+        waitForFxEvents();
+        clickOn("OK");
+        messagesController.listenToGroupChanges();
+        waitForFxEvents();
+        clickOn("OK");
     }
 
 }

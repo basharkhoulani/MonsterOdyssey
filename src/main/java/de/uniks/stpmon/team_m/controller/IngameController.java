@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 
@@ -22,6 +23,7 @@ public class IngameController extends Controller {
     public Button helpSymbol;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
+    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.

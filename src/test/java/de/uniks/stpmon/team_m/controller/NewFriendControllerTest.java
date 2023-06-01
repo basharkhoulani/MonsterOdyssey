@@ -7,7 +7,6 @@ import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
-import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -24,6 +23,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.*;
+import static io.reactivex.rxjava3.core.Observable.error;
+import static io.reactivex.rxjava3.core.Observable.just;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
@@ -83,7 +84,7 @@ class NewFriendControllerTest extends ApplicationTest {
 
     @Test
     void addAsAFriendEmptyUsers() {
-        when(usersService.getUsers(any(), any())).thenReturn(Observable.just(new ArrayList<>()));
+        when(usersService.getUsers(any(), any())).thenReturn(just(new ArrayList<>())).thenReturn(error(new Exception(HTTP_409)));
         TextField textField = lookup("#searchTextField").query();
         assertEquals("", textField.getText());
         clickOn(textField);
@@ -94,7 +95,7 @@ class NewFriendControllerTest extends ApplicationTest {
 
     @Test
     void addAsAFriendSelfAdd() {
-        when(usersService.getUsers(any(), any())).thenReturn(Observable.just(Arrays.asList(
+        when(usersService.getUsers(any(), any())).thenReturn(just(Arrays.asList(
                 new User("6475e6121a0f21b9cd9fa708", "TestFriend 1", "online", null, null),
                 new User("6475e6259cb7e1e7606c0dc6", "TestFriend 2", "online", null, null)
         )));
@@ -113,7 +114,7 @@ class NewFriendControllerTest extends ApplicationTest {
     @Test
     void addAFriendAlreadyAdded() {
         when(userStorageProvider.get()).thenReturn(userStorage);
-        when(usersService.getUsers(any(), any())).thenReturn(Observable.just(Arrays.asList(
+        when(usersService.getUsers(any(), any())).thenReturn(just(Arrays.asList(
                 new User("6475e6121a0f21b9cd9fa708", "TestFriend 1", "online", null, null),
                 new User("6475e6259cb7e1e7606c0dc6", "TestFriend 2", "online", null, null)
         )));
@@ -135,15 +136,15 @@ class NewFriendControllerTest extends ApplicationTest {
     void addAFriendNoCurrentGroup() {
         when(userStorageProvider.get()).thenReturn(userStorage);
         when(groupStorageProvider.get()).thenReturn(groupStorage);
-        when(groupService.getGroups(any())).thenReturn(Observable.just(List.of()));
-        when(usersService.updateUser(any(), any(), any(), any(), any())).thenReturn(Observable.just(
+        when(groupService.getGroups(any())).thenReturn(just(List.of()));
+        when(usersService.updateUser(any(), any(), any(), any(), any())).thenReturn(just(
                 new User("6475e6121a0f21b9cd9fa708", "TestFriend 1", "online", null, Arrays.asList("6475e6259cb7e1e7606c0dc6", "64766a77235906e874a3b1d2", "64766a7f81b222e09a57b9a9"))
         ));
-        when(usersService.getUsers(any(), any())).thenReturn(Observable.just(Arrays.asList(
+        when(usersService.getUsers(any(), any())).thenReturn(just(Arrays.asList(
                 new User("6475e6121a0f21b9cd9fa708", "TestFriend 1", "online", null, null),
                 new User("6475e6259cb7e1e7606c0dc6", "TestFriend 2", "online", null, null)
         )));
-        when(groupService.create(any(), any())).thenReturn(Observable.just(
+        when(groupService.create(any(), any())).thenReturn(just(
                 new Group("64610ec8420b3d786212aea8", "CreatedGroup", List.of("6475e6121a0f21b9cd9fa708", "6475e6259cb7e1e7606c0dc6")
                 )));
         userStorage.setName("TestFriend 1");
@@ -162,17 +163,17 @@ class NewFriendControllerTest extends ApplicationTest {
     void addAFriendWithCurrentGroup() {
         when(userStorageProvider.get()).thenReturn(userStorage);
         when(groupStorageProvider.get()).thenReturn(groupStorage);
-        when(groupService.getGroups(any())).thenReturn(Observable.just(List.of(
+        when(groupService.getGroups(any())).thenReturn(just(List.of(
                 new Group("64610ec8420b3d786212aea8", "CreatedGroup", List.of("6475e6121a0f21b9cd9fa708", "6475e6259cb7e1e7606c0dc6"))
         )));
-        when(usersService.updateUser(any(), any(), any(), any(), any())).thenReturn(Observable.just(
+        when(usersService.updateUser(any(), any(), any(), any(), any())).thenReturn(just(
                 new User("6475e6121a0f21b9cd9fa708", "TestFriend 1", "online", null, Arrays.asList("6475e6259cb7e1e7606c0dc6", "64766a77235906e874a3b1d2", "64766a7f81b222e09a57b9a9"))
         ));
-        when(usersService.getUsers(any(), any())).thenReturn(Observable.just(Arrays.asList(
+        when(usersService.getUsers(any(), any())).thenReturn(just(Arrays.asList(
                 new User("6475e6121a0f21b9cd9fa708", "TestFriend 1", "online", null, null),
                 new User("6475e6259cb7e1e7606c0dc6", "TestFriend 2", "online", null, null)
         )));
-        when(groupService.create(any(), any())).thenReturn(Observable.just(
+        when(groupService.create(any(), any())).thenReturn(just(
                 new Group("6477558f10c6cfb437ce4693", null, List.of("6475e6121a0f21b9cd9fa708", "6475e6259cb7e1e7606c0dc6"))
         ));
         userStorage.setName("TestFriend 1");
@@ -189,7 +190,7 @@ class NewFriendControllerTest extends ApplicationTest {
 
     @Test
     void sendMessageUserNotFound() {
-        when(usersService.getUsers(any(), any())).thenReturn(Observable.just(Arrays.asList(
+        when(usersService.getUsers(any(), any())).thenReturn(just(Arrays.asList(
                 new User("6475e6121a0f21b9cd9fa708", "TestFriend 1", "online", null, null),
                 new User("6475e6259cb7e1e7606c0dc6", "TestFriend 2", "online", null, null)
         )));
@@ -212,14 +213,14 @@ class NewFriendControllerTest extends ApplicationTest {
         doNothing().when(app).show(messagesController);
         when(userStorageProvider.get()).thenReturn(userStorage);
         when(groupStorageProvider.get()).thenReturn(groupStorage);
-        when(groupService.getGroups(any())).thenReturn(Observable.just(List.of(
+        when(groupService.getGroups(any())).thenReturn(just(List.of(
                 new Group("64610ec8420b3d786212aea8", "CreatedGroup", List.of("6475e6121a0f21b9cd9fa708", "6475e6259cb7e1e7606c0dc6"))
         )));
-        when(usersService.getUsers(any(), any())).thenReturn(Observable.just(Arrays.asList(
+        when(usersService.getUsers(any(), any())).thenReturn(just(Arrays.asList(
                 new User("6475e6121a0f21b9cd9fa708", "TestFriend 1", "online", null, null),
                 new User("6475e6259cb7e1e7606c0dc6", "TestFriend 2", "online", null, null)
         )));
-        when(groupService.create(any(), any())).thenReturn(Observable.just(
+        when(groupService.create(any(), any())).thenReturn(just(
                 new Group("6477558f10c6cfb437ce4693", null, List.of("6475e6121a0f21b9cd9fa708", "6475e6259cb7e1e7606c0dc6"))
         ));
         userStorage.setName("TestFriend 1");
@@ -240,7 +241,7 @@ class NewFriendControllerTest extends ApplicationTest {
         doNothing().when(app).show(messagesController);
         when(userStorageProvider.get()).thenReturn(userStorage);
         when(groupStorageProvider.get()).thenReturn(groupStorage);
-        when(usersService.getUsers(any(), any())).thenReturn(Observable.just(Arrays.asList(
+        when(usersService.getUsers(any(), any())).thenReturn(just(Arrays.asList(
                 new User("6475e6121a0f21b9cd9fa708", "TestFriend 1", "online", null, null),
                 new User("6475e6259cb7e1e7606c0dc6", "TestFriend 2", "online", null, null)
         )));

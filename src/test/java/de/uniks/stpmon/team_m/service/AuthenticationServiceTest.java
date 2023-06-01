@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.REFRESH_TOKEN_PREF;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -94,11 +94,15 @@ class AuthenticationServiceTest {
                 .thenReturn(Observable.just(new LoginResult("645ccafaaa5cd5e15e00f65f", "t", "online", null, null, "a1a2", "a3a4")));
 
         final LoginResult result = authenticationService.login("t", "12345678", true).blockingFirst();
-        when(preferences.get(REFRESH_TOKEN_PREF, null)).thenReturn("a1a2");
+        when(preferences.get(REFRESH_TOKEN_PREF, null)).thenReturn("a1a2")
+                .thenReturn("a1a2")
+                .thenReturn(null);
         assertEquals("a1a2", result.accessToken());
         assertEquals("a1a2", tokenStorage.getToken());
         assertEquals("645ccafaaa5cd5e15e00f65f", result._id());
         assertEquals("645ccafaaa5cd5e15e00f65f", userStorage.get_id());
         assertEquals("a1a2", preferences.get(REFRESH_TOKEN_PREF, null));
+        assertTrue(authenticationService.isRememberMe());
+        assertFalse(authenticationService.isRememberMe());
     }
 }

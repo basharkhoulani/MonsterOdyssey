@@ -26,8 +26,8 @@ import org.testfx.framework.junit5.ApplicationTest;
 import javax.inject.Provider;
 import java.util.List;
 
-import static de.uniks.stpmon.team_m.Constants.ADD_MARK;
-import static de.uniks.stpmon.team_m.Constants.CHECK_MARK;
+import static de.uniks.stpmon.team_m.Constants.*;
+import static io.reactivex.rxjava3.core.Observable.error;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -91,13 +91,15 @@ public class NewGroupControllerTest extends ApplicationTest {
     @Test
     void saveGroup() {
         when(groupService.create(any(), any())).thenReturn(Observable.just(new Group("645e82c2f29727b68379f3e5",
-                "ThisIsMyHood", List.of("645e82c2f29727b68379f3e5", "645e82dbe8a15911ae2c5cf3"))));
+                "ThisIsMyHood", List.of("645e82c2f29727b68379f3e5", "645e82dbe8a15911ae2c5cf3")))).thenReturn(error(new Exception(HTTP_404)));
         final MessagesController messagesController = mock(MessagesController.class);
         when(messagesControllerProvider.get()).thenReturn(messagesController);
         doNothing().when(app).show(messagesController);
         clickOn("#saveGroupButton");
         verify(groupService).create(any(), any());
         verify(app).show(messagesController);
+        clickOn("#saveGroupButton");
+        clickOn("OK");
     }
 
     @Test

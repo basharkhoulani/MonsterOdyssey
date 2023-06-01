@@ -31,7 +31,10 @@ import javax.inject.Provider;
 import java.util.List;
 import java.util.prefs.Preferences;
 
+import static de.uniks.stpmon.team_m.Constants.HTTP_429;
 import static de.uniks.stpmon.team_m.Constants.USER_STATUS_OFFLINE;
+import static io.reactivex.rxjava3.core.Observable.error;
+import static io.reactivex.rxjava3.core.Observable.just;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -77,7 +80,7 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
-        when(regionsService.getRegions()).thenReturn(Observable.just(List.of(new Region(
+        when(regionsService.getRegions()).thenReturn(just(List.of(new Region(
                 "2023-05-22T17:51:46.772Z",
                 "2023-05-22T17:51:46.772Z",
                 "646bc3c0a9ac1b375fb41d93",
@@ -87,10 +90,10 @@ class MainMenuControllerTest extends ApplicationTest {
         ))));
         Mockito.when(userStorageProvider.get()).thenReturn(userStorage);
         Mockito.when(preferencesProvider.get()).thenReturn(preferences);
-        when(usersService.getUsers(any(), any())).thenReturn(Observable.just(List.of(
-                        new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
-                        new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
-                        new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
+        when(usersService.getUsers(any(), any())).thenReturn(just(List.of(
+                new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
+                new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
+                new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
         userStorage.setFriends(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
         groupStorage.set_id("645cd04c11b590456276e9d1");
         Mockito.when(eventListenerProvider.get()).thenReturn(mock(EventListener.class));
@@ -123,26 +126,28 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Test
     void changeToLogin() {
-        when(usersService.updateUser(isNull(),anyString(),isNull(),isNull(),isNull()))
-                .thenReturn(Observable.just(new User(
+        when(usersService.updateUser(isNull(), anyString(), isNull(), isNull(), isNull()))
+                .thenReturn(just(new User(
                         "423f8d731c386bcd2204da39",
                         "UserPatch",
                         USER_STATUS_OFFLINE,
                         null,
                         null
-                )));
+                ))).thenReturn(error(new Exception(HTTP_429)));
 
         when(authenticationService.logout())
-                .thenReturn(Observable.just("Successful"));
+                .thenReturn(just("Successful")).thenReturn(error(new Exception(HTTP_429)));
 
         final LoginController loginController = mock(LoginController.class);
         when(loginControllerProvider.get()).thenReturn(loginController);
         doNothing().when(app).show(loginController);
 
         clickOn("#logoutButton");
-        verify(usersService).updateUser(null,"offline", null, null,null);
+        verify(usersService).updateUser(null, "offline", null, null, null);
         verify(authenticationService).logout();
         verify(app).show(loginController);
+        clickOn("#logoutButton");
+        clickOn("OK");
     }
 
     @Test
