@@ -3,7 +3,6 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import static de.uniks.stpmon.team_m.Constants.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class AvatarSelectionControllerTest extends ApplicationTest {

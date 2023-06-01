@@ -5,7 +5,6 @@ import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -252,7 +251,6 @@ class AccountSettingControllerTest extends ApplicationTest {
         final Button saveAvatarButton = lookup("#saveAvatarButton").query();
         clickOn(editAvatarButton);
         waitForFxEvents();
-        final DialogPane dialogPane = lookup(".dialog-pane").query();
         clickOn("#avatar2ImageView");
         clickOn(ButtonType.OK.getText());
         waitForFxEvents();

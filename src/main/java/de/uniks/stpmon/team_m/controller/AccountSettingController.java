@@ -15,7 +15,6 @@ import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -242,7 +241,7 @@ public class AccountSettingController extends Controller {
     /**
      * This method is used to save the selected avatar by sending a request to the server.
      */
-    public void saveAvatar() throws IOException {
+    public void saveAvatar() {
         informationLabel.setText(IMAGE_PROCESSING_ONGOING);
         String base64Image = ImageProcessor.toBase64(selectedFilePath);
         if (base64Image.equals(IMAGE_PROCESSING_ERROR))
