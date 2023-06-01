@@ -134,10 +134,10 @@ public class MessagesBoxController extends Controller {
 
     public String getUsername(String _id) {
 <span class="pc bpc" id="L136" title="1 of 2 branches missed.">        for (User user : allUsers) {</span>
-<span class="pc bpc" id="L137" title="1 of 2 branches missed.">            if (user._id().equals(_id)) {</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">            if (user._id().equals(_id)) {</span>
 <span class="fc" id="L138">                return user.name();</span>
             }
-<span class="nc" id="L140">        }</span>
+<span class="fc" id="L140">        }</span>
 <span class="nc" id="L141">        return UNKNOWN_USER;</span>
     }
 
@@ -176,13 +176,13 @@ public class MessagesBoxController extends Controller {
     public void listenToMessages(ObservableList&lt;Message&gt; messages, String id) {
 <span class="fc" id="L177">        disposables.add(eventListener.get().listen(&quot;groups.&quot; + id + &quot;.messages.*.*&quot;, Message.class)</span>
 <span class="fc" id="L178">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
-<span class="nc" id="L179">                    final Message message = event.data();</span>
-<span class="nc bnc" id="L180" title="All 4 branches missed.">                    switch (event.suffix()) {</span>
-<span class="nc" id="L181">                        case &quot;created&quot; -&gt; messages.add(message);</span>
-<span class="nc" id="L182">                        case &quot;updated&quot; -&gt; updateMessage(messages, message);</span>
-<span class="nc" id="L183">                        case &quot;deleted&quot; -&gt; messages.removeIf(m -&gt; m._id().equals(message._id()));</span>
+<span class="fc" id="L179">                    final Message message = event.data();</span>
+<span class="fc bfc" id="L180" title="All 4 branches covered.">                    switch (event.suffix()) {</span>
+<span class="fc" id="L181">                        case &quot;created&quot; -&gt; messages.add(message);</span>
+<span class="fc" id="L182">                        case &quot;updated&quot; -&gt; updateMessage(messages, message);</span>
+<span class="fc" id="L183">                        case &quot;deleted&quot; -&gt; messages.removeIf(m -&gt; m._id().equals(message._id()));</span>
                     }
-<span class="nc" id="L185">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="pc" id="L185">                }, error -&gt; showError(error.getMessage())));</span>
 <span class="fc" id="L186">    }</span>
 
     /**
@@ -193,12 +193,12 @@ public class MessagesBoxController extends Controller {
      */
 
     private void updateMessage(ObservableList&lt;Message&gt; messages, Message message) {
-<span class="nc" id="L196">        String messageID = message._id();</span>
-<span class="nc" id="L197">        messages.stream()</span>
-<span class="nc" id="L198">                .filter(m -&gt; m._id().equals(messageID))</span>
-<span class="nc" id="L199">                .findFirst()</span>
-<span class="nc" id="L200">                .ifPresent(m -&gt; messages.set(messages.indexOf(m), message));</span>
-<span class="nc" id="L201">    }</span>
+<span class="fc" id="L196">        String messageID = message._id();</span>
+<span class="fc" id="L197">        messages.stream()</span>
+<span class="fc" id="L198">                .filter(m -&gt; m._id().equals(messageID))</span>
+<span class="fc" id="L199">                .findFirst()</span>
+<span class="fc" id="L200">                .ifPresent(m -&gt; messages.set(messages.indexOf(m), message));</span>
+<span class="fc" id="L201">    }</span>
 
     /**
      * Sets all users
