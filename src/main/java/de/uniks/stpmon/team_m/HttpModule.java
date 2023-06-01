@@ -93,4 +93,10 @@ public class HttpModule {
     MonstersApiService monsters(Retrofit retrofit) {
         return retrofit.create(MonstersApiService.class);
     }
+
+    @Provides
+    @Singleton
+    PresetsApiSrvice presets(Retrofit retrofit) {
+        return retrofit.create(PresetsApiSrvice.class);
+    }
 }
