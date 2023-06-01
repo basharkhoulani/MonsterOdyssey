@@ -2,8 +2,8 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.controller.subController.MessagesBoxController;
 import de.uniks.stpmon.team_m.dto.Group;
-import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupService;
 import de.uniks.stpmon.team_m.service.MessageService;
@@ -11,22 +11,25 @@ import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
-import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Observer;
+import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
+import java.util.Arrays;
 import java.util.List;
 
+import static io.reactivex.rxjava3.core.Observable.just;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,70 +37,64 @@ public class MessagesControllerTest extends ApplicationTest {
 
     @Mock
     Provider<UserStorage> userStorageProvider;
+    @Spy
+    UserStorage userStorage;
     @Mock
     Provider<GroupStorage> groupStorageProvider;
+    @Spy
+    GroupStorage groupStorage;
     @Mock
     Provider<MainMenuController> mainMenuControllerProvider;
     @Mock
     Provider<NewFriendController> newFriendControllerProvider;
     @Mock
+    Provider<MessagesBoxController> messagesBoxControllerProvider;
+    @Mock
     Provider<GroupController> groupControllerProvider;
+    @Mock
+    Provider<EventListener> eventListenerProvider;
     @Mock
     UsersService usersService;
     @Mock
     GroupService groupService;
     @Mock
     MessageService messageService;
-
-    @Spy
-    App app = new App(null);
-
     @InjectMocks
     MessagesController messagesController;
-    @Mock
-    Provider<EventListener> eventListenerProvider;
+    @Spy
+    App app = new App(null);
 
 
     @Override
     public void start(Stage stage) {
-        UserStorage mockUserStorage = mock(UserStorage.class);
-        Mockito.when(userStorageProvider.get()).thenReturn(mockUserStorage);
-        Mockito.when(userStorageProvider.get().getFriends()).thenReturn(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
-
-        GroupStorage mockGroupStorage = mock(GroupStorage.class);
-        Mockito.when(groupStorageProvider.get()).thenReturn(mockGroupStorage);
-
-        final User Rick = new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null);
-
-        when(usersService.getUsers(any(), any()))
-                .thenReturn(Observable.just(List.of(Rick,
-                        new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
-                        new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
-        when(usersService.getUser("645cd04c11b590456276e9d9")).thenReturn(new Observable<>() {
-            @Override
-            protected void subscribeActual(@NonNull Observer<? super User> observer) {
-                observer.onNext(Rick);
-            }
-        });
-        when(groupService.getGroups(null)).thenReturn(Observable.just(List.of(
-                new Group("64610ec8420b3d786212aea8", "", List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64")))));
-        when(userStorageProvider.get().getFriends()).thenReturn(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
-        when(userStorageProvider.get().get_id()).thenReturn("64610e7b82ca062bfa5b7231");
-        when(userStorageProvider.get().getName()).thenReturn("Morty");
-
-        when(groupStorageProvider.get().get_id()).thenReturn(null);
-
-        when(groupService.getGroups(any())).thenReturn(Observable.just(
-                List.of(new Group("64610ec8420b3d786212aea8", "best Group", List.of("64610e7b82ca062bfa5b7231", Rick._id())))));
-        when(messageService.getGroupMessages("64610ec8420b3d786212aea8")).thenReturn(Observable.just(List.of(
-                new Message("2023-05-15T09:30:00-05:00", null, "6461e15399e24fc86fa58097", "645cd04c11b590456276e9d9", "Get in the damn car Morty!"),
-                new Message("2023-05-15T09:35:00-05:00", null, "6461e15399e24fc86fa58096", "64610e7b82ca062bfa5b7231", "Oh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez Rick"),
-                new Message("2023-05-15T09:35:00-05:00", null, "6461e15399e24fc86fa58096", "64610e7b82ca062bfa5b7231", "Oh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez Rick"),
-                new Message("2023-05-15T09:35:00-05:00", null, "6461e15399e24fc86fa58096", "64610e7b82ca062bfa5b7231", "Oh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez RickOh geez Rick")
+        MessagesBoxController messagesBoxController = mock(MessagesBoxController.class);
+        EventListener eventListener = mock(EventListener.class);
+        when(userStorageProvider.get()).thenReturn(userStorage);
+        when(usersService.getUsers(any(), any())).thenReturn(just(List.of(
+                new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
+                new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
+                new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null)
         )));
+        when(groupService.getGroups(any())).thenReturn(just(List.of(
+                new Group("64610ec8420b3d786212aea8", "best Group", Arrays.asList("64610e7b82ca062bfa5b7231", "645cd04c11b590456276e9d9")),
+                new Group("64610ec8420b3d786212aef8", null, List.of("645cd04c11b590456276e9d9", "64610e7b82ca062bfa5b7231")),
+                new Group("64610ec8420b3d786212aef5", null, List.of("64610e7b82ca062bfa5b7231")),
+                new Group("645cd04c11b590456276e9d9", null, List.of("64610e7b82ca062bfa5b7231", "645cd04c11b590456276e9d9")),
+                new Group("64610ec8420b3d786212aea3", null, List.of("64610e7b82ca062bfa5b7231", "645cd0a34389d5c06620fe64"))
+        )));
+        when(eventListenerProvider.get()).thenReturn(eventListener);
+        when(groupStorageProvider.get()).thenReturn(groupStorage);
+        when(messagesBoxControllerProvider.get()).thenReturn(messagesBoxController);
+        doNothing().when(messagesBoxController).setUser(any());
+        doNothing().when(messagesBoxController).setGroup(any());
+        doNothing().when(messagesBoxController).setAllUsers(any());
+        userStorage.setFriends(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e"));
+        userStorage.set_id("64610e7b82ca062bfa5b7231");
+        userStorage.setName("Morty");
+        messagesController.setUserChosenFromMainMenu(true);
+        messagesController.setUserChosenFromNewFriend(true);
+        groupStorage.set_id("645cd04c11b590456276e9d9");
 
-        Mockito.when(eventListenerProvider.get()).thenReturn(mock(EventListener.class));
-        Mockito.when(eventListenerProvider.get().listen(any(), any())).thenReturn(Observable.empty());
 
         app.start(stage);
         app.show(messagesController);
@@ -124,24 +121,38 @@ public class MessagesControllerTest extends ApplicationTest {
 
     @Test
     void changeToNewGroup() {
+        when(groupStorageProvider.get()).thenReturn(groupStorage);
+        groupStorage.set_id(null);
         final GroupController groupController = mock(GroupController.class);
         when(groupControllerProvider.get()).thenReturn(groupController);
         doNothing().when(app).show(groupController);
-        doNothing().when(groupStorageProvider.get()).set_id(any());
         clickOn("#newGroupButton");
         verify(app).show(groupController);
     }
 
     @Test
-    void changeToSettings() {
+    void changeToSettingsAndSendMessage() {
+        when(groupControllerProvider.get()).thenReturn(mock(GroupController.class));
+        when(groupStorageProvider.get()).thenReturn(groupStorage);
+        when(messageService.newMessage(any(), any(), any())).thenReturn(Observable.empty());
+        doNothing().when(app).show(any());
+        groupStorage.set_id("64610ec8420b3d786212aea8");
+        clickOn("best Group");
+        assertTrue(lookup("#settingsButton").query().isVisible());
+        clickOn("Alone");
+        clickOn("Rick");
+        clickOn("Morty");
+        clickOn("Rick");
+        clickOn("best Group");
+        TextArea messageTextArea = lookup("#messageTextArea").query();
+        clickOn(messageTextArea);
+        write("Hello");
+        type(KeyCode.ENTER);
+        clickOn(messageTextArea);
+        write("Hello");
+        clickOn("#sendButton");
+        assertEquals("", messageTextArea.getText());
+        clickOn("#settingsButton");
     }
 
-    @Test
-    void displayFriends() {
-
-    }
-
-    @Test
-    void displayMessages() {
-    }
 }
