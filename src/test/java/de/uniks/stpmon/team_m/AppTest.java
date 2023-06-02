@@ -119,6 +119,7 @@ public class AppTest extends ApplicationTest {
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
 
         // test Sign In To MainMenu
+        clickOn("#usernameField");
         write("t\t");
         write("testtest");
         clickOn("Sign In");

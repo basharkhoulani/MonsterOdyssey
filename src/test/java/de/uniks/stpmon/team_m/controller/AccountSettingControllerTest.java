@@ -241,8 +241,10 @@ class AccountSettingControllerTest extends ApplicationTest {
     }
 
     @Test
-    void saveAvatar() {
-        when(usersService.updateUser(isNull(), isNull(),anyString(), isNull(), isNull()))
+    void editAvatar() {
+        AvatarSelectionController avatarSelectionController = new AvatarSelectionController();
+        when(avatarSelectionControllerProvider.get()).thenReturn(avatarSelectionController);
+        when(usersService.updateUser(isNull(), isNull(), anyString(), isNull(), isNull()))
                 .thenReturn(Observable.just(new User(
                         "423f8d731c386bcd2204da39",
                         "New Avatar",
@@ -261,6 +263,11 @@ class AccountSettingControllerTest extends ApplicationTest {
         clickOn(saveAvatarButton);
         waitForFxEvents();
         assertEquals(AVATAR_SUCCESS_CHANGED, infoLabel.getText());
+    }
+
+    @Test
+    void saveAvatar() {
+
     }
 
     @Test

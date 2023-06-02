@@ -23,11 +23,11 @@ import javax.inject.Provider;
 import java.io.File;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static de.uniks.stpmon.team_m.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class AvatarSelectionControllerTest extends ApplicationTest {
@@ -62,7 +62,7 @@ public class AvatarSelectionControllerTest extends ApplicationTest {
             assertFalse(toggle.isSelected());
         }
         TextField uploadTextField = lookup("#uploadTextField").query();
-        assertEquals(chooserFile.getAbsolutePath(), uploadTextField.getText());
+        assertEquals(chooserFile.getName(), uploadTextField.getText());
     }
 
     @Test
