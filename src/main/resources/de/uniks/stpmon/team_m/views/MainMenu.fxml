@@ -91,7 +91,7 @@
       </VBox>
       <HBox minHeight="16.0" VBox.vgrow="ALWAYS" />
    </VBox>
-   <VBox prefHeight="200.0" prefWidth="100.0">
+   <VBox minWidth="250.0">
       <HBox alignment="TOP_RIGHT" prefWidth="200.0">
          <Button fx:id="settingsButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" minHeight="50.0" mnemonicParsing="false" onAction="#changeToSettings" prefHeight="50.0" prefWidth="50.0" styleClass="settingsSymbol" text="settings" textFill="TRANSPARENT" />
       </HBox>

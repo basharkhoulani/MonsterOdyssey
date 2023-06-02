@@ -1,6 +1,7 @@
 /********************************* General ***************************************/
 .root {
     -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 17px;
 }
 .Background {
     -fx-background-color: white;
@@ -237,9 +238,10 @@
     -fx-background-color: #FFF2CC;
     -fx-font-family: "Comic Sans MS";
     -fx-font-weight: bold;
-    -fx-min-width: 80px;
-    -fx-min-height: 30px;
+    -fx-min-width: 100px;
+    -fx-min-height: 40px;
     -fx-border-color: #000000;
+    -fx-font-size: 17px;
 }
 .welcomeMessage {
     -fx-background-color: #FFFFFF;
@@ -257,6 +259,8 @@
 }
 .comicSans {
     -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
 }
 /*********************************************************************************/
 /*************************** Ingame - TrainerSettings ****************************/
