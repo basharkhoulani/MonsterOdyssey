@@ -258,4 +258,40 @@ class AccountSettingControllerTest extends ApplicationTest {
         waitForFxEvents();
         assertEquals(AVATAR_SUCCESS_CHANGED, infoLabel.getText());
     }
+  
+    @Test
+    void changeLanguage() {
+        final Button changeLanguageButton = lookup("#changeLanguageButton").query();
+        clickOn(changeLanguageButton);
+
+        final DialogPane dialogPane = lookup(".dialog-pane").query();
+        assertTrue(dialogPane.isVisible());
+
+        final RadioButton radioButtonLanguageEnglish = lookup("#radioButtonLanguageEnglish").query();
+        final RadioButton radioButtonLanguageGerman = lookup("#radioButtonLanguageGerman").query();
+        final RadioButton radioButtonLanguageChinese = lookup("#radioButtonLanguageChinese").query();
+        final Button applyLanguageButton = lookup("#applyLanguageButton").query();
+
+        assertTrue(radioButtonLanguageEnglish.isSelected());
+        assertFalse(radioButtonLanguageGerman.isSelected());
+        assertFalse(radioButtonLanguageChinese.isSelected());
+
+        clickOn(radioButtonLanguageGerman);
+        assertTrue(radioButtonLanguageGerman.isSelected());
+        assertFalse(radioButtonLanguageEnglish.isSelected());
+        assertFalse(radioButtonLanguageChinese.isSelected());
+
+        clickOn(radioButtonLanguageChinese);
+        assertTrue(radioButtonLanguageChinese.isSelected());
+        assertFalse(radioButtonLanguageEnglish.isSelected());
+        assertFalse(radioButtonLanguageGerman.isSelected());
+
+        clickOn(radioButtonLanguageEnglish);
+        assertTrue(radioButtonLanguageEnglish.isSelected());
+        assertFalse(radioButtonLanguageGerman.isSelected());
+        assertFalse(radioButtonLanguageChinese.isSelected());
+
+        clickOn(applyLanguageButton);
+        verify(app).show(accountSettingController);
+    }
 }

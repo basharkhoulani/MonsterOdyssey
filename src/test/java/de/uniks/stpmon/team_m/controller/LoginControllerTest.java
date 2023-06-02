@@ -6,9 +6,7 @@ import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.UsersService;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,6 +51,7 @@ class LoginControllerTest extends ApplicationTest {
                 "a1a2",
                 "a3a4")));
 
+        clickOn("#usernameField");
         write("1\t");
         write("12345678");
         clickOn("#signInButton");
@@ -64,6 +63,7 @@ class LoginControllerTest extends ApplicationTest {
     void signInWrongUsername() {
         //Sign In with incorrect username or password
         when(authenticationService.login(anyString(), anyString(), anyBoolean())).thenReturn(Observable.error(new Exception("HTTP 401")));
+        clickOn("#usernameField");
         write("Bob\t");
         write("12345678");
         clickOn("#signInButton");
@@ -75,6 +75,7 @@ class LoginControllerTest extends ApplicationTest {
     void signInOtherError() {
         //Sign In with other errors
         when(authenticationService.login(anyString(), anyString(), anyBoolean())).thenReturn(Observable.error(new Exception("Test")));
+        clickOn("#usernameField");
         write("Bob\t");
         write("12345678");
         clickOn("#signInButton");
@@ -102,6 +103,7 @@ class LoginControllerTest extends ApplicationTest {
                 "a1a2",
                 "a3a4")));
 
+        clickOn("#usernameField");
         write("1\t");
         write("12345678");
         clickOn("#signUpButton");
@@ -114,6 +116,7 @@ class LoginControllerTest extends ApplicationTest {
     void signUpUsernameTaken() {
         when(usersService.createUser(anyString(), isNull(), anyString())).thenReturn(Observable.error(new Exception("HTTP 409")));
 
+        clickOn("#usernameField");
         write("1\t");
         write("12345678");
         clickOn("#signUpButton");
@@ -126,6 +129,7 @@ class LoginControllerTest extends ApplicationTest {
     void signUpOtherError() {
         //Sign In with other errors
         when(usersService.createUser(anyString(), isNull(), anyString())).thenReturn(Observable.error(new Exception("Test")));
+        clickOn("#usernameField");
         write("Bob\t");
         write("12345678");
         clickOn("#signUpButton");
@@ -154,10 +158,48 @@ class LoginControllerTest extends ApplicationTest {
         assertTrue(signUpButton.isDisabled());
 
         // test Sign In To MainMenu
+        clickOn("#usernameField");
         write("t\t");
         write("testtest");
 
         assertFalse(signInButton.isDisabled());
         assertFalse(signUpButton.isDisabled());
+    }
+
+    @Test
+    void changeLanguage() {
+        final Button languageSettings = lookup("#languageSettings").query();
+        clickOn(languageSettings);
+
+        final DialogPane dialogPane = lookup(".dialog-pane").query();
+        assertTrue(dialogPane.isVisible());
+
+        final RadioButton radioButtonLanguageEnglish = lookup("#radioButtonLanguageEnglish").query();
+        final RadioButton radioButtonLanguageGerman = lookup("#radioButtonLanguageGerman").query();
+        final RadioButton radioButtonLanguageChinese = lookup("#radioButtonLanguageChinese").query();
+        final Button applyLanguageButton = lookup("#applyLanguageButton").query();
+
+        assertTrue(radioButtonLanguageEnglish.isSelected());
+        assertFalse(radioButtonLanguageGerman.isSelected());
+        assertFalse(radioButtonLanguageChinese.isSelected());
+
+        clickOn(radioButtonLanguageGerman);
+        assertTrue(radioButtonLanguageGerman.isSelected());
+        assertFalse(radioButtonLanguageEnglish.isSelected());
+        assertFalse(radioButtonLanguageChinese.isSelected());
+
+        clickOn(radioButtonLanguageChinese);
+        assertTrue(radioButtonLanguageChinese.isSelected());
+        assertFalse(radioButtonLanguageEnglish.isSelected());
+        assertFalse(radioButtonLanguageGerman.isSelected());
+
+        clickOn(radioButtonLanguageEnglish);
+        assertTrue(radioButtonLanguageEnglish.isSelected());
+        assertFalse(radioButtonLanguageGerman.isSelected());
+        assertFalse(radioButtonLanguageChinese.isSelected());
+
+        clickOn(applyLanguageButton);
+        verify(app).show(loginController);
+
     }
 }
