@@ -62,7 +62,7 @@ public class ImageProcessor {
         int scaledWidth = (int) (image.getWidth() * scaleFactor);
         int scaledHeight = (int) (image.getHeight() * scaleFactor);
 
-        Image scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
+        java.awt.Image scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, java.awt.Image.SCALE_SMOOTH);
 
         BufferedImage bufferedImage = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
 
