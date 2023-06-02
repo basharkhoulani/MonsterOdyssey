@@ -1,8 +1,5 @@
 package de.uniks.stpmon.team_m;
 
-import javafx.scene.input.KeyCode;
-
-import java.util.Objects;
 
 public class Constants {
     // SERVER
@@ -121,7 +118,6 @@ public class Constants {
 
     // INGAME
     public static final String INGAME_TITLE = "Ingame";
-    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     public static final String FIRST_HELP = "Click 'p' on your keyboard for pause menu.\n";
     public static final String SECOND_HELP = "     \u2191 \n \u2190 \u2193 \u2192  to move your character. \n";
     public static final String THIRD_HELP = "Click Space for interact and attack.";
@@ -147,7 +143,6 @@ public class Constants {
     public static final String UNKNOWN_USER = "Unknown";
 
     // Welcome Scene
-    public static final String STYLE_RESOURCE = Objects.requireNonNull(Main.class.getResource("styles.css")).toString();
     public static final String FIRST_MESSAGE = "Welcome to Monster Odyssey!";
     public static final String SECOND_MESSAGE = "Welcome Aboard.";
     public static final String THIRD_MESSAGE = "We are the crew of this ship.";

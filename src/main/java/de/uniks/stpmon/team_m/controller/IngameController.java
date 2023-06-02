@@ -10,6 +10,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.skin.ButtonBarSkin;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -34,6 +39,7 @@ public class IngameController extends Controller {
 
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
+    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
 
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
@@ -128,8 +134,6 @@ public class IngameController extends Controller {
         alert.setHeaderText(null);
         alert.setGraphic(null);
         alert.setContentText(PAUSE_MENU_LABEL);
-        alert.initOwner(app.getStage());
-        alert.initModality(Modality.APPLICATION_MODAL);
         alert.initStyle(StageStyle.UNDECORATED);
         dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);
 

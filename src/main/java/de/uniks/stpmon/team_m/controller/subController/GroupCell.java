@@ -5,7 +5,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
 
-import static de.uniks.stpmon.team_m.Constants.EMPTY_STRING;
 
 public class GroupCell extends ListCell<Group> {
 
@@ -18,10 +17,10 @@ public class GroupCell extends ListCell<Group> {
     @Override
     protected void updateItem(Group group, boolean empty) {
         super.updateItem(group, empty);
-        if (group != null || empty) {
-            final Label groupNameLabel = new Label(group != null ? group.name() : EMPTY_STRING);
+        if (group != null && !empty) {
+            final Label groupNameLabel = new Label(group.name());
             final HBox rootHBox = new HBox(groupNameLabel);
-            rootHBox.setId(group != null ? group.name() : EMPTY_STRING);
+            rootHBox.setId(group.name());
             rootHBox.setUserData(group);
             setGraphic(rootHBox);
             setText(null);
