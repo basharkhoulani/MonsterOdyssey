@@ -1,7 +1,88 @@
+/********************************* General ***************************************/
 .root {
     -fx-font-family: "Comic Sans MS";
 }
-
+.Background {
+    -fx-background-color: white;
+    -fx-background-image: url("images/Background.jpg");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100%;
+    -fx-background-position: center;
+}
+.ForegroundContainer {
+    -fx-background-color: rgba(245, 245, 245, 0.7);
+    -fx-background-radius: 10;
+}
+.ForegroundHeaderContainer {
+    -fx-background-color: rgba(245, 245, 245, 0.8);
+    -fx-background-radius: 10 10 0 0;
+}
+.messageText {
+    -fx-text-fill: black;
+}
+.buttonsYellow {
+    -fx-background-color: #FFF2CC;
+    -fx-border-width: 1px;
+    -fx-border-color: gray;
+}
+.buttonsWhite {
+    -fx-background-color: #FFFFFF;
+    -fx-border-width: 1px;
+    -fx-border-color: gray;
+}
+.buttonsWhite:hover {
+    -fx-background-color: #FFF2CC;
+}
+.errorLabel {
+    -fx-text-fill: red;
+}
+.informationLabel {
+    -fx-text-fill: #25c625;
+}
+/*********************************************************************************/
+/******************************** Scroll bar *************************************/
+.scroll-bar:vertical {
+    -fx-font-size: 12px;
+}
+.scroll-bar:vertical .track{
+    -fx-background-color :transparent;
+    -fx-border-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-border-radius : 5px;
+    -fx-padding :0.0 5.0 0.0 5.0;
+}
+.scroll-bar:vertical .increment-button ,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-font-size: 14px;
+}
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow{
+    -fx-background-color: black;
+}
+.scroll-bar:vertical .thumb {
+    -fx-background-color :derive(black,90.0%);
+    -fx-background-insets : 2.0, 0.0, 0.0;
+    -fx-background-radius : 5px;
+}
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color :derive(#4D4C4F,10.0%);
+    -fx-background-insets : 2.0, 0.0, 0.0;
+    -fx-background-radius : 5px;
+}
+/*********************************************************************************/
+/******************************** List cells *************************************/
+.userCell {
+    -fx-padding: 2px 8px 2px 8px;
+    -fx-font-size: 17px;
+}
+.regionCell, .groupCell {
+    -fx-padding: 8px;
+    -fx-font-size: 17px;
+}
+/*********************************************************************************/
+/*********************************** Symbols *************************************/
 .helpSymbol {
     -fx-background-image: url("images/ingameHelpSymbol.png");
     -fx-border-color: transparent;
@@ -12,7 +93,16 @@
     -fx-border-radius: 17;
     -fx-border-width: 5;
 }
-
+.helpSymbol:hover {
+    -fx-background-image: url("images/ingameHelpSymbol_yellow.png");
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-background-size: 35px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-radius: 17;
+    -fx-border-radius: 17;
+    -fx-border-width: 5;
+}
 .settingsSymbol {
     -fx-background-image: url("images/settingsSymbol.png");
     -fx-border-color: transparent;
@@ -24,21 +114,6 @@
     -fx-border-radius: 15;
     -fx-border-width: 5;
 }
-
-.settingsButton {
-    -fx-background-image: url("images/settingsSymbol.png");
-    -fx-background-size: 50px;
-    -fx-padding: 0 0 0 28px;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: 0% 50%;
-}
-.monstersButton {
-    -fx-background-image: url("images/Monster1-without.png");
-    -fx-background-size: 24px;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: 5% 50%;
-}
-
 .hideSymbol {
     -fx-background-image: url("images/hideEye.png");
     -fx-border-color: transparent;
@@ -50,7 +125,6 @@
     -fx-border-radius: 15;
     -fx-border-width: 5;
 }
-
 .editSymbol {
     -fx-background-image: url("images/pencil.jpeg");
     -fx-border-style: solid;
@@ -72,63 +146,6 @@
     -fx-border-width: 2;
 
 }
-
-.errorLabel {
-    -fx-text-fill: red;
-}
-
-.informationLabel {
-    -fx-text-fill: #25c625;
-}
-
-/*********************************************************************************/
-/******************************* Friendslist *************************************/
-.normalFriendHBox {
-    -fx-border-color: black;
-    -fx-border-width: 2px;
-    -fx-border-style: solid none none none;
-}
-.onHoverFriendHBox {
-    -fx-border-color: black;
-    -fx-border-width: 2px;
-    -fx-border-style: solid none none none;
-    -fx-background-color: lightblue;
-}
-/*********************************************************************************/
-/********************************* General ***************************************/
-.Background {
-    -fx-background-color: white;
-    -fx-background-image: url("images/Background.jpg");
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: 100%;
-    -fx-background-position: center;
-}
-
-.ForegroundContainer {
-    -fx-background-color: rgba(245, 245, 245, 0.7);
-    -fx-background-radius: 10;
-}
-
-.ForegroundHeaderContainer {
-    -fx-background-color: rgba(245, 245, 245, 0.8);
-    -fx-background-radius: 10 10 0 0;
-}
-
-.messageText {
-    -fx-text-fill: black;
-}
-
-.buttonsYellow {
-    -fx-background-color: #FFF2CC;
-    -fx-border-width: 1px;
-    -fx-border-color: gray;
-}
-
-.buttonsWhite {
-    -fx-background-color: #FFFFFF;
-    -fx-border-width: 1px;
-    -fx-border-color: gray;
-}
 /*********************************************************************************/
 /********************************** Login ****************************************/
 .loginButton {
@@ -147,7 +164,44 @@
     -fx-border-width: 2px 0 0 0;
 }
 /*********************************************************************************/
-/*************************** Autocomplete textfield ******************************/
+/******************************* Friendslist *************************************/
+.normalFriendHBox {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-style: solid none none none;
+}
+.onHoverFriendHBox {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-style: solid none none none;
+    -fx-background-color: lightblue;
+}
+/*********************************************************************************/
+/************************** friend settings popup ********************************/
+.popOverButton {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+.friendSettingsPopOver Button {
+    -fx-background-color: #e8e8e8;
+}
+/*********************************************************************************/
+/*********************************** Ingame *************************************/
+.settingsButton {
+    -fx-background-image: url("images/settingsSymbol.png");
+    -fx-background-size: 50px;
+    -fx-padding: 0 0 0 28px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 0% 50%;
+}
+.monstersButton {
+    -fx-background-image: url("images/Monster1-without.png");
+    -fx-background-size: 24px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 5% 50%;
+}
+/*********************************************************************************/
+/*************************** Autocomplete textfields *****************************/
 .auto-complete-popup > .list-view {
     -fx-background-color: white;
     -fx-background-insets: -1 -2 -1 -1, 0 -1 0 0;
@@ -173,12 +227,12 @@
     -fx-text-fill: derive(-fx-control-inner-background,-30%);
 }
 /*********************************************************************************/
+/********************************** Welcome scene ********************************/
 .worldMapBackground {
     -fx-background-image: url("images/WorldMap-Background.jpg");
     -fx-background-size: cover;
     -fx-opacity: 0.50;
 }
-
 .welcomeSceneButton {
     -fx-background-color: #FFF2CC;
     -fx-font-family: "Comic Sans MS";
@@ -186,13 +240,6 @@
     -fx-min-width: 80px;
     -fx-min-height: 30px;
     -fx-border-color: #000000;
-}
-
-.trainerAvatarImageView {
-    -fx-border-color: black;
-    -fx-border-style: solid;
-    -fx-border-width: 1px;
-    -fx-padding: 8px;
 }
 .welcomeMessage {
     -fx-background-color: #FFFFFF;
@@ -203,13 +250,20 @@
     -fx-font-size: 12px;
     -fx-padding: 0px 0px 0px 3px;
 }
-
 .alertDialogName {
     -fx-padding: 10 0 0 0 ;
     -fx-pref-height: 90px;
     -fx-pref-width: 300px;
 }
-
 .comicSans {
     -fx-font-family: "Comic Sans MS";
 }
+/*********************************************************************************/
+/*************************** Ingame - TrainerSettings ****************************/
+.trainerAvatarImageView {
+    -fx-border-color: black;
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+    -fx-padding: 8px;
+}
+/*********************************************************************************/
