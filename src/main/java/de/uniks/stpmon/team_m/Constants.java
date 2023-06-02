@@ -110,6 +110,15 @@ public class Constants {
     public static final String IMAGE = "Image";
     public static final String AVATAR_SUCCESS_CHANGED = "Your Avatar has been changed successfully.";
 
+    // AVATAR
+    public static final String AVATAR_1 = "images/Monster1-color.png";
+    public static final String AVATAR_2 = "images/Monster2-color.png";
+    public static final String AVATAR_3 = "images/rabbit.png";
+    public static final String AVATAR_4 = "images/sheep_icon.png";
+    public static final int MAX_BASE64_LENGTH = 16000;
+    public static final String IMAGE_PROCESSING_ONGOING = "Image is being processed. Please wait.";
+    public static final String IMAGE_PROCESSING_ERROR = "Image could not be processed. Please try again.";
+
     // INGAME
     public static final String INGAME_TITLE = "Ingame";
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;

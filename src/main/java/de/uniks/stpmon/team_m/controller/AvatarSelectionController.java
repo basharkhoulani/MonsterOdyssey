@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.App;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -9,13 +10,9 @@ import javafx.stage.FileChooser;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.IMAGE;
-import static de.uniks.stpmon.team_m.Constants.SELECT_AVATAR_PICTURE;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Base64;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class AvatarSelectionController extends Controller {
     @FXML
@@ -46,12 +43,6 @@ public class AvatarSelectionController extends Controller {
     // the avatar selected with the radiobutton
     public String selectedAvatar;
 
-    // default avatars
-    public String avatar1 = "https://gravatar.com/avatar/85f983f7459c2d26000ea0df68c74ede?s=400&d=robohash&r=x";
-    public String avatar2 = "https://robohash.org/2e1549952236b1e98fc61f3985d7ffd6?set=set4&bgset=bg2&size=400x400";
-    public String avatar3 = "https://gravatar.com/avatar/d457438462edd31dd0208e8ef1044f9e?s=400&d=identicon&r=x";
-    public String avatar4 = "https://gravatar.com/avatar/0d0954aa7a5e3932e9669699c76d2ada?s=400&d=monsterid&r=x";
-
     @Inject
     public AvatarSelectionController() {
         super();
@@ -62,30 +53,35 @@ public class AvatarSelectionController extends Controller {
         final Parent parent = super.render();
 
         // show images
-        avatar1ImageView.setImage(new Image(avatar1));
-        avatar2ImageView.setImage(new Image(avatar2));
-        avatar3ImageView.setImage(new Image(avatar3));
-        avatar4ImageView.setImage(new Image(avatar4));
+        avatar1ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString()));
+        avatar2ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_2)).toString()));
+        avatar3ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_3)).toString()));
+        avatar4ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_4)).toString()));
 
+        avatar1ImageView.setOnMouseClicked(event -> {
+            avatar1RadioButton.setSelected(true);
+            selectAvatar1();
+        });
+        avatar2ImageView.setOnMouseClicked(event -> {
+            avatar2RadioButton.setSelected(true);
+            selectAvatar2();
+        });
+        avatar3ImageView.setOnMouseClicked(event -> {
+            avatar3RadioButton.setSelected(true);
+            selectAvatar3();
+        });
+        avatar4ImageView.setOnMouseClicked(event -> {
+            avatar4RadioButton.setSelected(true);
+            selectAvatar4();
+        });
         return parent;
-    }
-
-    /**
-     * This method converts images to URI.
-     */
-    public String convertToURI(String filePath) throws IOException {
-        File file = new File(filePath);
-        String contentType = Files.probeContentType(file.toPath());
-        byte[] data = Files.readAllBytes(file.toPath());
-        String base64str = Base64.getEncoder().encodeToString(data);
-        return "data:" + contentType + ";base64," + base64str;
     }
 
     /**
      * This method selects default avatar 1.
      */
     public void selectAvatar1() {
-        selectedAvatar = avatar1;
+        selectedAvatar = AVATAR_1;
         uploadTextField.clear();
     }
 
@@ -93,7 +89,7 @@ public class AvatarSelectionController extends Controller {
      * This method selects default avatar 2.
      */
     public void selectAvatar2() {
-        selectedAvatar = avatar2;
+        selectedAvatar = AVATAR_2;
         uploadTextField.clear();
     }
 
@@ -101,7 +97,7 @@ public class AvatarSelectionController extends Controller {
      * This method selects default avatar 3.
      */
     public void selectAvatar3() {
-        selectedAvatar = avatar3;
+        selectedAvatar = AVATAR_3;
         uploadTextField.clear();
     }
 
@@ -109,16 +105,8 @@ public class AvatarSelectionController extends Controller {
      * This method selects default avatar 4.
      */
     public void selectAvatar4() {
-        selectedAvatar = avatar4;
+        selectedAvatar = AVATAR_4;
         uploadTextField.clear();
-    }
-
-    public void clickTextField() {
-        for (Toggle radioButton : selectAvatar.getToggles()) {
-            if (radioButton.isSelected()) {
-                radioButton.setSelected(false);
-            }
-        }
     }
 
     public void selectFile() {
@@ -132,7 +120,8 @@ public class AvatarSelectionController extends Controller {
                     radioButton.setSelected(false);
                 }
             }
-            uploadTextField.setText(selectedFile.getAbsolutePath());
+            uploadTextField.setText(selectedFile.getName());
+            selectedAvatar = selectedFile.getAbsolutePath();
         }
     }
 }

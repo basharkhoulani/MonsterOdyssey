@@ -1,6 +1,8 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.beans.binding.BooleanBinding;
@@ -14,6 +16,7 @@ import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Objects;
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -70,6 +73,7 @@ public class AccountSettingController extends Controller {
     private PasswordFieldSkin skin;
     private final SimpleStringProperty username = new SimpleStringProperty();
     private final SimpleStringProperty password = new SimpleStringProperty();
+    private String selectedFilePath;
 
     /**
      * AccountSettingController is used to edit the avatar, language, username and password of the user.
@@ -139,8 +143,9 @@ public class AccountSettingController extends Controller {
 
         // show Avatar if there is one
         if (userStorageProvider.get().getAvatar() != null) {
-            Image image = new Image(userStorageProvider.get().getAvatar());
-            avatarImageView.setImage(image);
+            String avatar = userStorageProvider.get().getAvatar();
+
+            avatarImageView.setImage(ImageProcessor.toFXImage(avatar));
         }
 
         return parent;
@@ -215,8 +220,8 @@ public class AccountSettingController extends Controller {
      * This method opens a pop-up to the avatar selection.
      */
     public void editAvatar() {
-        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        ButtonType okButton = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType(ButtonType.CANCEL.getText(), ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType okButton = new ButtonType(ButtonType.OK.getText(), ButtonBar.ButtonData.FINISH);
 
         Dialog<?> dialog = new Dialog<>();
         dialog.setTitle("Choose your Avatar");
@@ -225,13 +230,17 @@ public class AccountSettingController extends Controller {
         dialog.getDialogPane().getButtonTypes().add(cancelButton);
         dialog.showAndWait();
 
-        if (!dialog.isShowing()) {
-            if (dialog.getResult().toString().equals("ButtonType [text=Ok, buttonData=OK_DONE]")) {
-                saveAvatarButton.setDisable(false);
-                Image image = new Image(avatarSelectionController.selectedAvatar);
-                avatarImageView.setImage(image);
+        if (dialog.getResult() == okButton) {
+            saveAvatarButton.setDisable(false);
+            Image image;
+            try {
+                image = new Image(Objects.requireNonNull(App.class.getResource(avatarSelectionController.selectedAvatar)).toString());
+                selectedFilePath = Objects.requireNonNull(App.class.getResource(avatarSelectionController.selectedAvatar)).toURI().getPath();
+            } catch (Exception e) {
+                image = new Image("file:" + avatarSelectionController.selectedAvatar);
+                selectedFilePath = avatarSelectionController.selectedAvatar;
             }
-
+            avatarImageView.setImage(image);
         }
     }
 
@@ -239,18 +248,24 @@ public class AccountSettingController extends Controller {
      * This method is used to save the selected avatar by sending a request to the server.
      */
     public void saveAvatar() {
-        informationLabel.setText(EMPTY_STRING);
+        informationLabel.setText(IMAGE_PROCESSING_ONGOING);
+        String base64Image = ImageProcessor.toBase64(selectedFilePath);
+        if (base64Image.equals(IMAGE_PROCESSING_ERROR))
+            informationLabel.setText(IMAGE_PROCESSING_ERROR);
+        String avatarUpload = "data:image/png;base64, " + base64Image;
+        System.out.println(avatarUpload);
         disposables.add(usersService
-                .updateUser(null, null, avatarSelectionController.selectedAvatar, null, null)
+                .updateUser(null, null, avatarUpload, null, null)
                 .observeOn(FX_SCHEDULER)
                 .subscribe(userResult -> {
-                    userStorageProvider.get().setAvatar(avatarSelectionController.selectedAvatar);
+                    userStorageProvider.get().setAvatar(userResult.avatar());
                     saveAvatarButton.setDisable(true);
                     informationLabel.setText(AVATAR_SUCCESS_CHANGED);
                 }, error -> avatarErrorLabel.setText(error.getMessage()))
         );
 
     }
+
 
     /**
      * This method is used to delete the account.
