@@ -10,6 +10,7 @@ import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import javax.inject.Singleton;
 
@@ -39,6 +40,7 @@ public class HttpModule {
                 .baseUrl(Constants.API_URL + "/")
                 .client(client)
                 .addConverterFactory(JacksonConverterFactory.create(mapper))
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .build();
     }
@@ -89,5 +91,11 @@ public class HttpModule {
     @Singleton
     MonstersApiService monsters(Retrofit retrofit) {
         return retrofit.create(MonstersApiService.class);
+    }
+
+    @Provides
+    @Singleton
+    PresetsApiService presets(Retrofit retrofit) {
+        return retrofit.create(PresetsApiService.class);
     }
 }

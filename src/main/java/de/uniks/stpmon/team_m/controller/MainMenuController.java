@@ -170,7 +170,7 @@ public class MainMenuController extends Controller {
     /**
      * This method is used to navigate to NewFriendsController.
      */
-  
+
     public void changeToFindNewFriends() {
         app.show(newFriendControllerProvider.get());
     }
@@ -192,7 +192,8 @@ public class MainMenuController extends Controller {
 
     public void changeToLogin() {
         disposables.add(usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)
-                .doOnNext(user -> {})
+                .doOnNext(user -> {
+                })
                 .flatMap(user -> authenticationService.logout()).observeOn(FX_SCHEDULER)
                 .subscribe(event -> app.show(loginControllerProvider.get()), error -> showError(error.getMessage())));
     }
