@@ -3,13 +3,9 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
-import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.skin.ButtonBarSkin;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -22,9 +18,11 @@ import javafx.stage.Window;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Objects;
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
+
 
 public class IngameController extends Controller {
 
@@ -121,6 +119,7 @@ public class IngameController extends Controller {
         final ButtonType resume = new ButtonType(RESUME_BUTTON_LABEL);
         final ButtonType saveAndExit = new ButtonType(SAVE_GAME_AND_LEAVE_BUTTON_LABEL);
         dialogPane.getButtonTypes().addAll(resume, saveAndExit);
+        dialogPane.getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
         dialogPane.getStyleClass().add("comicSans");
         final Button resumeButton = (Button) dialogPane.lookupButton(resume);
         resumeButton.setOnKeyPressed(event -> {
