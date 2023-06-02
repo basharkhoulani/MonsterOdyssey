@@ -18,8 +18,8 @@
          <bottom>
             <AnchorPane prefHeight="131.0" prefWidth="800.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="previousButton" layoutX="56.0" layoutY="14.0" mnemonicParsing="false" styleClass="welcomeSceneButton" stylesheets="@../styles.css" text="Previous" />
-                  <Button fx:id="nextButton" layoutX="657.0" layoutY="14.0" mnemonicParsing="false" styleClass="welcomeSceneButton" stylesheets="@../styles.css" text="Next" />
+                  <Button fx:id="previousButton" layoutX="56.0" layoutY="14.0" mnemonicParsing="false" styleClass="welcomeSceneButton" stylesheets="@../styles.css" text="%Previous" />
+                  <Button fx:id="nextButton" layoutX="657.0" layoutY="14.0" mnemonicParsing="false" styleClass="welcomeSceneButton" stylesheets="@../styles.css" text="%Next" />
                </children>
             </AnchorPane>
          </bottom>
@@ -28,12 +28,12 @@
                <children>
                   <VBox layoutY="163.0" prefHeight="45.0" prefWidth="205.0" styleClass="welcomeMessage" stylesheets="@../styles.css">
                      <children>
-                        <Label fx:id="firstMessage" prefHeight="43.0" prefWidth="208.0" text="Welcome to Monster Odyssey!" />
+                        <Label fx:id="firstMessage" prefHeight="43.0" prefWidth="208.0" text="%Welcome.to.Monster.Odyssey!" />
                      </children>
                   </VBox>
                   <VBox layoutX="202.0" layoutY="219.0" prefHeight="45.0" prefWidth="205.0" styleClass="welcomeMessage" stylesheets="@../styles.css">
                      <children>
-                        <Label fx:id="secondMessage" prefHeight="43.0" prefWidth="207.0" text="Welcome Aboard!" />
+                        <Label fx:id="secondMessage" prefHeight="43.0" prefWidth="207.0" text="%Welcome.Aboard!" />
                      </children></VBox>
                </children>
                <BorderPane.margin>

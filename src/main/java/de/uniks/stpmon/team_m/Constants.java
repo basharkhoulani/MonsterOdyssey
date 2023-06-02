@@ -4,6 +4,7 @@ import javafx.scene.input.KeyCode;
 
 import java.util.Objects;
 
+
 public class Constants {
     // SERVER
     public static final String API_URL = "https://stpmon.uniks.de/api/v2";

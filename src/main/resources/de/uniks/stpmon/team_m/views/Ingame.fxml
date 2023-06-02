@@ -14,7 +14,7 @@
     </top>
     <center>
         <VBox alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-            <Label text="Monster Odyssey">
+            <Label text="%Monster.Odyssey">
                 <font>
                     <Font name="System Bold" size="30.0"/>
                 </font>

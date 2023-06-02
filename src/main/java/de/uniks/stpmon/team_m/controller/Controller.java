@@ -18,12 +18,20 @@ import javafx.scene.control.ListView;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.io.IOException;
+import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
 public abstract class Controller {
 
     @Inject
+    protected ResourceBundle resources;
+    @Inject
+    protected Preferences preferences;
+    @Inject
+    protected Provider<ResourceBundle> resourceBundleProvider;
+    protected Controller toReload;
     protected App app;
     @Inject
     Provider<EventListener> eventListenerProvider;
@@ -35,6 +43,23 @@ public abstract class Controller {
      */
 
     public void init() {
+    }
+
+    public void setValues(ResourceBundle resources, Preferences preferences, Provider<ResourceBundle> resourceBundleProvider, Controller toReload, App app) {
+        this.resources = resources;
+        this.preferences = preferences;
+        this.resourceBundleProvider = resourceBundleProvider;
+        this.toReload = toReload;
+        this.app = app;
+    }
+
+    public void setApp(App app) {
+        this.app = app;
+    }
+
+    public void reload(Controller controller) {
+        resources = resourceBundleProvider.get();
+        app.show(controller);
     }
 
     /**
@@ -67,7 +92,7 @@ public abstract class Controller {
     protected Parent load(String view) {
         final FXMLLoader loader = new FXMLLoader((Main.class.getResource("views/" + view + ".fxml")));
         loader.setControllerFactory(c -> this);
-        // loader.setResources(resources);
+        loader.setResources(resources);
         try {
             return loader.load();
         } catch (IOException exception) {

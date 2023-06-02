@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
@@ -15,6 +16,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -75,7 +79,6 @@ public class LoginController extends Controller {
     /**
      * This method is used to set the title of the login screen.
      */
-
     @Override
     public String getTitle() {
         return LOGIN_TITLE;
@@ -208,6 +211,7 @@ public class LoginController extends Controller {
         closeButton.managedProperty().bind(closeButton.visibleProperty());
         closeButton.setVisible(false);
         dialog.setTitle("Change Language");
+        changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);
         dialog.getDialogPane().setContent(changeLanguageController.render());
         dialog.showAndWait();
     }

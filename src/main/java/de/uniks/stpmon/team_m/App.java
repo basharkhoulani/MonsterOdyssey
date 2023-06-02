@@ -48,7 +48,7 @@ public class App extends Application {
         stage.setTitle(GAME_NAME);
 
         stage.setScene(loadingScreen());
-      
+
         setAppIcon(stage);
         setTaskbarIcon();
         if (!GraphicsEnvironment.isHeadless()) {
@@ -116,6 +116,7 @@ public class App extends Application {
 
     private void initAndRender(Controller controller) {
         controller.init();
+        controller.setApp(this);
         stage.getScene().setRoot(controller.render());
         stage.setTitle(GAME_NAME + " - " + controller.getTitle());
         stage.setWidth(controller.getWidth());
