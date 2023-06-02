@@ -120,9 +120,7 @@ class EditGroupControllerTest extends ApplicationTest {
         assertEquals("TestGroup", groupName);
         clickOn(groupNameTextField);
         write("NOT");
-        HBox hBox = lookup("#TestUser").query();
-        HBox buttonHBox = (HBox) hBox.getChildren().get(2);
-        Button button = (Button) buttonHBox.getChildren().get(0);
+        Button button = lookup("#TestUserAddOrRemoveButton").query();
         final String buttonText = button.getText();
         assertEquals(CHECK_MARK, buttonText);
         clickOn(button);

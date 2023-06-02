@@ -108,10 +108,7 @@ public class NewGroupControllerTest extends ApplicationTest {
         assertNotNull(friendsList);
         assertEquals(1, friendsList.getItems().size());
         assertEquals("Friend", friendsList.getItems().get(0).name());
-        HBox rootHbox = lookup("#Friend").query();
-        assertNotNull(rootHbox);
-        HBox buttonHbox = (HBox) rootHbox.getChildren().get(2);
-        Button button = (Button) buttonHbox.getChildren().get(0);
+        Button button = lookup("#FriendAddOrRemoveButton").query();
         assertNotNull(button);
         assertEquals(ADD_MARK, button.getText());
         clickOn(button);
@@ -124,10 +121,7 @@ public class NewGroupControllerTest extends ApplicationTest {
         assertNotNull(searchFieldGroupMembers);
         clickOn(searchFieldGroupMembers);
         write("NotFriend");
-        HBox rootHbox = lookup("#NotFriend").query();
-        assertNotNull(rootHbox);
-        HBox buttonHbox = (HBox) rootHbox.getChildren().get(2);
-        Button button = (Button) buttonHbox.getChildren().get(0);
+        Button button = lookup("#NotFriendAddOrRemoveButton").query();
         assertNotNull(button);
         assertEquals(ADD_MARK, button.getText());
         clickOn(button);

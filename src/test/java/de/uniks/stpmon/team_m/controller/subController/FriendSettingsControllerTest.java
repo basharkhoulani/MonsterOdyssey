@@ -5,6 +5,7 @@ import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -89,7 +90,7 @@ class FriendSettingsControllerTest extends ApplicationTest {
         friendSettingsController.setUser(user1);
         assertEquals(2, friendsList.getItems().size());
         clickOn("#deleteFriendButton");
-        clickOn("Yes");
+        clickOn(ButtonType.YES.getText());
         verify(userStorage, times(1)).deleteFriend("6477bc8f27adf9b5b978401d");
         verify(usersService, times(1)).updateUser(any(), any(), any(), any(), any());
         assertEquals(1, friendsList.getItems().size());
@@ -110,13 +111,13 @@ class FriendSettingsControllerTest extends ApplicationTest {
         friendSettingsController.setUser(user1);
         assertEquals(2, friendsList.getItems().size());
         clickOn("#deleteFriendButton");
-        clickOn("Yes");
-        clickOn("OK");
+        clickOn(ButtonType.YES.getText());
+        clickOn(ButtonType.OK.getText());
     }
 
     @Test
     void noDeleteFriendAction() {
         clickOn("#deleteFriendButton");
-        clickOn("No");
+        clickOn(ButtonType.NO.getText());
     }
 }

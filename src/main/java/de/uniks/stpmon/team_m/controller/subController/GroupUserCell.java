@@ -55,6 +55,7 @@ public class GroupUserCell extends UserCell {
             setGraphic(null);
         } else {
             final Button addOrRemoveButton = new Button();
+            addOrRemoveButton.setId(item.name() + "AddOrRemoveButton");
             final HBox buttonHBox = new HBox(addOrRemoveButton);
             addOrRemoveButton.setPrefSize(BUTTON_PREF_SIZE, BUTTON_PREF_SIZE);
             addOrRemoveButton.setStyle(BUTTON_TRANSPARENT_STYLE + BUTTON_BORDER_STYLE);
