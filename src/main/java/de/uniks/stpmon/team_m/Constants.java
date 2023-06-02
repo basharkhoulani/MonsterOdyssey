@@ -115,7 +115,7 @@ public class Constants {
     public static final int MAX_BASE64_LENGTH = 16000;
     public static final String IMAGE_PROCESSING_ONGOING = "Image is being processed. Please wait.";
     public static final String IMAGE_PROCESSING_ERROR = "Image could not be processed. Please try again.";
-    public static final int AVATAR_SIZE = 20;
+    public static final int AVATAR_SIZE = 30;
 
     // INGAME
     public static final String INGAME_TITLE = "Ingame";
