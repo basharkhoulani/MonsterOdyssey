@@ -26,6 +26,8 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static de.uniks.stpmon.team_m.Constants.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class AvatarSelectionControllerTest extends ApplicationTest {
@@ -64,43 +66,26 @@ public class AvatarSelectionControllerTest extends ApplicationTest {
     }
 
     @Test
-    void selectAvatarTest() {
-        RadioButton avatar1RadioButton = lookup("#avatar1RadioButton").query();
-        TextField uploadTextField = lookup("#uploadTextField").query();
-        RadioButton avatar2RadioButton = lookup("#avatar2RadioButton").query();
-        RadioButton avatar3RadioButton = lookup("#avatar3RadioButton").query();
-        RadioButton avatar4RadioButton = lookup("#avatar4RadioButton").query();
-        clickOn(uploadTextField);
-        write("/pictures/avatar.png");
-        clickOn(avatar1RadioButton);
-        assertTrue(avatar1RadioButton.isSelected());
-        assertTrue(uploadTextField.getText().isEmpty());
-        clickOn(avatar2RadioButton);
-        assertTrue(avatar2RadioButton.isSelected());
-        assertFalse(avatar1RadioButton.isSelected());
-        clickOn(avatar3RadioButton);
-        assertTrue(avatar3RadioButton.isSelected());
-        assertFalse(avatar2RadioButton.isSelected());
-        clickOn(avatar4RadioButton);
-        assertTrue(avatar4RadioButton.isSelected());
-        assertFalse(avatar3RadioButton.isSelected());
-        clickOn(uploadTextField);
-        assertFalse(avatar4RadioButton.isSelected());
-    }
-
-    @Test
     void selectedAvatarTest() {
         final RadioButton avatar1RadioButton = lookup("#avatar1RadioButton").query();
         final RadioButton avatar2RadioButton = lookup("#avatar2RadioButton").query();
         final RadioButton avatar3RadioButton = lookup("#avatar3RadioButton").query();
         final RadioButton avatar4RadioButton = lookup("#avatar4RadioButton").query();
         clickOn(avatar1RadioButton);
-        assertEquals(avatarSelectionController.selectedAvatar, avatarSelectionController.avatar1);
+        assertEquals(avatarSelectionController.selectedAvatar, AVATAR_1);
         clickOn(avatar2RadioButton);
-        assertEquals(avatarSelectionController.selectedAvatar, avatarSelectionController.avatar2);
+        assertEquals(avatarSelectionController.selectedAvatar, AVATAR_2);
         clickOn(avatar3RadioButton);
-        assertEquals(avatarSelectionController.selectedAvatar, avatarSelectionController.avatar3);
+        assertEquals(avatarSelectionController.selectedAvatar, AVATAR_3);
         clickOn(avatar4RadioButton);
-        assertEquals(avatarSelectionController.selectedAvatar, avatarSelectionController.avatar4);
+        assertEquals(avatarSelectionController.selectedAvatar, AVATAR_4);
+        clickOn("#avatar1ImageView");
+        assertEquals(avatarSelectionController.selectedAvatar, AVATAR_1);
+        clickOn("#avatar2ImageView");
+        assertEquals(avatarSelectionController.selectedAvatar, AVATAR_2);
+        clickOn("#avatar3ImageView");
+        assertEquals(avatarSelectionController.selectedAvatar, AVATAR_3);
+        clickOn("#avatar4ImageView");
+        assertEquals(avatarSelectionController.selectedAvatar, AVATAR_4);
     }
 }
