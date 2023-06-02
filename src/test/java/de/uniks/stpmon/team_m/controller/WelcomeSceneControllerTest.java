@@ -35,6 +35,7 @@ public class WelcomeSceneControllerTest extends ApplicationTest{
     @Test
     void welcomeScene() {
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
+        clickOn("#usernameField");
         write("t\t");
         write("testtest");
         clickOn("Sign In");
