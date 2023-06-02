@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import static de.uniks.stpmon.team_m.Constants.HELP_LABEL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
@@ -135,6 +136,14 @@ class AppTest extends ApplicationTest {
         clickOn(startGameButton);
         assertEquals("Monster Odyssey - Ingame", stage.getTitle());
 
+        clickOn("Next");
+        clickOn("Next");
+        clickOn("Next");
+        clickOn("#nameField");
+        write("Ash");
+        clickOn("OK");
+        clickOn("Next");
+
         // test Ingame Help Symbol
         clickOn("#helpSymbol");
         final DialogPane dialogPane = lookup(".dialog-pane").query();
@@ -145,7 +154,7 @@ class AppTest extends ApplicationTest {
                 .findFirst()
                 .orElse(null);
         assertNotNull(helpLabel);
-        assertEquals("Click 'p' on your keyboard for pause menu.", helpLabel.getText());
+        assertEquals(HELP_LABEL, helpLabel.getText());
         clickOn("OK");
         final Label gameTitle = lookup("Monster Odyssey").query();
         assertNotNull(gameTitle);
@@ -162,6 +171,8 @@ class AppTest extends ApplicationTest {
         assertNotNull(pauseLabel);
         assertEquals("What do you want to do?", pauseLabel.getText());
 
+
+
         // test Ingame Unpause With Key Code P
         type(KeyCode.P);
         final Label gameTitleUnpauseP = lookup("Monster Odyssey").query();
@@ -177,5 +188,6 @@ class AppTest extends ApplicationTest {
         type(KeyCode.P);
         clickOn("Save Game & Leave");
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
+
     }
 }
