@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.utils.BestFriendUtils;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
@@ -56,17 +57,23 @@ public class UserCell extends ListCell<User> {
             ImageView statusImageView = new ImageView();
             final HBox statusHBox = new HBox(statusImageView);
             statusHBox.setAlignment(CENTER);
+            statusHBox.getStyleClass().add("statusHBox");
             final HBox nameHBox = new HBox(usernameLabel);
             nameHBox.setAlignment(CENTER);
             rootHBox = new HBox(HBOX_FRIENDS_SPACING, statusHBox, nameHBox);
             final BestFriendUtils bestFriendUtils = new BestFriendUtils(preferences);
             statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineImage : offlineImage);
+            statusImageView.setPreserveRatio(true);
+            statusImageView.setFitWidth(20);
             if (preferences != null) {
                 if (bestFriendUtils.isBestFriend(user)) {
                     statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineStar : offlineStar);
+                    statusImageView.setPreserveRatio(true);
+                    statusImageView.setFitWidth(25);
                 }
             }
             rootHBox.setId(user.name());
+            rootHBox.getStyleClass().add("userCell");
             rootHBox.setUserData(user);
             setGraphic(rootHBox);
             setText(null);

@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.geometry.Point3D?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="600.0" styleClass="Background" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MainMenuController">
+<SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="600.0" styleClass="Background" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MainMenuController">
    <VBox alignment="TOP_CENTER">
       <padding>
          <Insets left="8.0" right="8.0" />
@@ -26,7 +20,7 @@
          <padding>
             <Insets bottom="8.0" />
          </padding>
-         <ImageView fitHeight="42.0" fitWidth="42.0" pickOnBounds="true">
+         <ImageView fitHeight="38.0" fitWidth="38.0" pickOnBounds="true">
             <HBox.margin>
                <Insets top="8.0" />
             </HBox.margin>
@@ -47,7 +41,7 @@
                <HBox.margin>
                   <Insets />
                </HBox.margin>
-               <ListView fx:id="friendsListView" VBox.vgrow="ALWAYS">
+               <ListView fx:id="friendsListView" focusTraversable="false" VBox.vgrow="ALWAYS">
                   <VBox.margin>
                      <Insets />
                   </VBox.margin>
@@ -103,7 +97,7 @@
       </HBox>
       <VBox alignment="BOTTOM_CENTER" fillWidth="false" VBox.vgrow="ALWAYS">
          <HBox alignment="BOTTOM_CENTER" fillHeight="false" prefWidth="250.0" styleClass="ForegroundContainer" VBox.vgrow="NEVER">
-            <ImageView fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" HBox.hgrow="ALWAYS">
+            <ImageView fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" HBox.hgrow="ALWAYS">
                <HBox.margin>
                   <Insets top="8.0" />
                </HBox.margin>
@@ -128,7 +122,7 @@
       <VBox alignment="CENTER" fillWidth="false" prefHeight="600.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
          <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="250.0" minWidth="200.0" VBox.vgrow="ALWAYS">
             <VBox fx:id="regionRadioButtonList" alignment="CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="250.0" VBox.vgrow="ALWAYS">
-               <ListView fx:id="regionListView" VBox.vgrow="ALWAYS" />
+               <ListView fx:id="regionListView" focusTraversable="false" VBox.vgrow="ALWAYS" />
             </VBox>
          </VBox>
          <VBox alignment="CENTER" prefHeight="123.0" VBox.vgrow="ALWAYS">
@@ -149,4 +143,3 @@
       </VBox>
    </VBox>
 </SplitPane>
-
