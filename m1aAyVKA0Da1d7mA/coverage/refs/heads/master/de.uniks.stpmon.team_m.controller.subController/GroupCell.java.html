@@ -5,9 +5,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
 
-import static de.uniks.stpmon.team_m.Constants.EMPTY_STRING;
 
-<span class="fc" id="L10">public class GroupCell extends ListCell&lt;Group&gt; {</span>
+<span class="fc" id="L9">public class GroupCell extends ListCell&lt;Group&gt; {</span>
 
     /**
      * GroupCell is used to handle the group cells. It includes the name of the group. The group cell contains data
@@ -17,18 +16,18 @@ import static de.uniks.stpmon.team_m.Constants.EMPTY_STRING;
 
     @Override
     protected void updateItem(Group group, boolean empty) {
-<span class="fc" id="L20">        super.updateItem(group, empty);</span>
-<span class="pc bpc" id="L21" title="1 of 4 branches missed.">        if (group != null || empty) {</span>
-<span class="fc bfc" id="L22" title="All 2 branches covered.">            final Label groupNameLabel = new Label(group != null ? group.name() : EMPTY_STRING);</span>
-<span class="fc" id="L23">            final HBox rootHBox = new HBox(groupNameLabel);</span>
-<span class="fc bfc" id="L24" title="All 2 branches covered.">            rootHBox.setId(group != null ? group.name() : EMPTY_STRING);</span>
-<span class="fc" id="L25">            rootHBox.setUserData(group);</span>
-<span class="fc" id="L26">            setGraphic(rootHBox);</span>
-<span class="fc" id="L27">            setText(null);</span>
-<span class="fc" id="L28">        } else {</span>
-<span class="nc" id="L29">            setText(null);</span>
-<span class="nc" id="L30">            setGraphic(null);</span>
+<span class="fc" id="L19">        super.updateItem(group, empty);</span>
+<span class="pc bpc" id="L20" title="1 of 4 branches missed.">        if (group != null &amp;&amp; !empty) {</span>
+<span class="fc" id="L21">            final Label groupNameLabel = new Label(group.name());</span>
+<span class="fc" id="L22">            final HBox rootHBox = new HBox(groupNameLabel);</span>
+<span class="fc" id="L23">            rootHBox.setId(group.name());</span>
+<span class="fc" id="L24">            rootHBox.setUserData(group);</span>
+<span class="fc" id="L25">            setGraphic(rootHBox);</span>
+<span class="fc" id="L26">            setText(null);</span>
+<span class="fc" id="L27">        } else {</span>
+<span class="fc" id="L28">            setText(null);</span>
+<span class="fc" id="L29">            setGraphic(null);</span>
         }
-<span class="fc" id="L32">    }</span>
+<span class="fc" id="L31">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

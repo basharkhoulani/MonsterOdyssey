@@ -48,8 +48,8 @@ public class AuthenticationService {
 <span class="fc" id="L48">        return authApiService.login(new LoginDto(username, password)).map(lr -&gt; {</span>
 <span class="fc" id="L49">            tokenStorage.setToken(lr.accessToken());</span>
 <span class="fc" id="L50">            userStorage.setUser(lr);</span>
-<span class="pc bpc" id="L51" title="1 of 2 branches missed.">            if (rememberMe) {</span>
-<span class="nc" id="L52">                preferences.put(Constants.REFRESH_TOKEN_PREF, lr.refreshToken());</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">            if (rememberMe) {</span>
+<span class="fc" id="L52">                preferences.put(Constants.REFRESH_TOKEN_PREF, lr.refreshToken());</span>
             }
 <span class="fc" id="L54">            return lr;</span>
         });
@@ -62,7 +62,7 @@ public class AuthenticationService {
      */
 
     public boolean isRememberMe() {
-<span class="nc bnc" id="L65" title="All 2 branches missed.">        return preferences.get(Constants.REFRESH_TOKEN_PREF, null) != null;</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        return preferences.get(Constants.REFRESH_TOKEN_PREF, null) != null;</span>
     }
 
     /**
@@ -72,10 +72,10 @@ public class AuthenticationService {
      */
 
     public Observable&lt;LoginResult&gt; refresh() {
-<span class="nc" id="L75">        return authApiService.refresh(new RefreshDto(preferences.get(Constants.REFRESH_TOKEN_PREF, null))).map(lr -&gt; {</span>
-<span class="nc" id="L76">            userStorage.setUser(lr);</span>
-<span class="nc" id="L77">            tokenStorage.setToken(lr.accessToken());</span>
-<span class="nc" id="L78">            return lr;</span>
+<span class="fc" id="L75">        return authApiService.refresh(new RefreshDto(preferences.get(Constants.REFRESH_TOKEN_PREF, null))).map(lr -&gt; {</span>
+<span class="fc" id="L76">            userStorage.setUser(lr);</span>
+<span class="fc" id="L77">            tokenStorage.setToken(lr.accessToken());</span>
+<span class="fc" id="L78">            return lr;</span>
         });
     }
 

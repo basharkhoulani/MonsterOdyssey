@@ -5,18 +5,25 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Module;
 import dagger.Provides;
+import javafx.stage.FileChooser;
 
 import javax.inject.Singleton;
 
 @Module
-<span class="nc" id="L12">public class MainModule {</span>
+<span class="nc" id="L13">public class MainModule {</span>
     @Provides
     @Singleton
     ObjectMapper mapper() {
-<span class="nc" id="L16">        return new ObjectMapper()</span>
-<span class="nc" id="L17">                .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)</span>
-<span class="nc" id="L18">                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)</span>
-<span class="nc" id="L19">                .setSerializationInclusion(JsonInclude.Include.NON_ABSENT);</span>
+<span class="nc" id="L17">        return new ObjectMapper()</span>
+<span class="nc" id="L18">                .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)</span>
+<span class="nc" id="L19">                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)</span>
+<span class="nc" id="L20">                .setSerializationInclusion(JsonInclude.Include.NON_ABSENT);</span>
+    }
+
+    @Provides
+    @Singleton
+    FileChooser fileChooser() {
+<span class="nc" id="L26">        return new FileChooser();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

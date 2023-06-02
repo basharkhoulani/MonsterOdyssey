@@ -54,7 +54,7 @@ public class MainMenuUserCell extends UserCell {
 <span class="fc" id="L54">            buttonHBox.setAlignment(CENTER_RIGHT);</span>
 <span class="fc" id="L55">            HBox.setHgrow(buttonHBox, Priority.ALWAYS);</span>
 <span class="fc" id="L56">            super.getRootHBox().getChildren().add(buttonHBox);</span>
-<span class="pc" id="L57">            popOverButton.setOnAction(event -&gt; showPopOver(popOverButton, item));</span>
+<span class="fc" id="L57">            popOverButton.setOnAction(event -&gt; showPopOver(popOverButton, item));</span>
         }
 <span class="fc" id="L59">    }</span>
 
@@ -66,13 +66,13 @@ public class MainMenuUserCell extends UserCell {
      */
 
     private void showPopOver(Button button, User user) {
-<span class="nc" id="L69">        PopOver popOver = new PopOver();</span>
-<span class="nc" id="L70">        FriendSettingsController friendSettingsController = friendSettingsControllerProvider.get();</span>
-<span class="nc" id="L71">        friendSettingsController.setUser(user);</span>
-<span class="nc" id="L72">        friendSettingsController.setFriendsListView(getListView());</span>
-<span class="nc" id="L73">        popOver.setContentNode(friendSettingsController.render());</span>
-<span class="nc" id="L74">        popOver.setDetachable(false);</span>
-<span class="nc" id="L75">        popOver.show(button);</span>
-<span class="nc" id="L76">    }</span>
+<span class="fc" id="L69">        PopOver popOver = new PopOver();</span>
+<span class="fc" id="L70">        FriendSettingsController friendSettingsController = friendSettingsControllerProvider.get();</span>
+<span class="fc" id="L71">        friendSettingsController.setUser(user);</span>
+<span class="fc" id="L72">        friendSettingsController.setFriendsListView(getListView());</span>
+<span class="fc" id="L73">        popOver.setContentNode(friendSettingsController.render());</span>
+<span class="fc" id="L74">        popOver.setDetachable(false);</span>
+<span class="fc" id="L75">        popOver.show(button);</span>
+<span class="fc" id="L76">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

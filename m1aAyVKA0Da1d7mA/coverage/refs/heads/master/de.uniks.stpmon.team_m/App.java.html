@@ -52,7 +52,7 @@ public class App extends Application {
 <span class="fc" id="L52">        setAppIcon(stage);</span>
 <span class="fc" id="L53">        setTaskbarIcon();</span>
 <span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L55">            stage.getScene().getStylesheets().add(Main.class.getResource(&quot;styles.css&quot;).toString());</span>
+<span class="nc" id="L55">            stage.getScene().getStylesheets().add(Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString());</span>
         }
 
 <span class="fc" id="L58">        PauseTransition pause = new PauseTransition(Duration.seconds(DURATION_OF_LOADING_SCREEN));</span>

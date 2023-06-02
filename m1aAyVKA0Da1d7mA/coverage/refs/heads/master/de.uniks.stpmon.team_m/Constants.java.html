@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Constants.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m</a> &gt; <span class="el_source">Constants.java</span></div><h1>Constants.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m;
 
-import javafx.scene.input.KeyCode;
 
-import java.util.Objects;
-
-<span class="nc" id="L7">public class Constants {</span>
+<span class="nc" id="L4">public class Constants {</span>
     // SERVER
     public static final String API_URL = &quot;https://stpmon.uniks.de/api/v2&quot;;
     public static final String WS_URL = &quot;wss://stpmon.uniks.de/ws/v2&quot;;
@@ -110,9 +107,17 @@ import java.util.Objects;
     public static final String IMAGE = &quot;Image&quot;;
     public static final String AVATAR_SUCCESS_CHANGED = &quot;Your Avatar has been changed successfully.&quot;;
 
+    // AVATAR
+    public static final String AVATAR_1 = &quot;images/Monster1-color.png&quot;;
+    public static final String AVATAR_2 = &quot;images/Monster2-color.png&quot;;
+    public static final String AVATAR_3 = &quot;images/rabbit.png&quot;;
+    public static final String AVATAR_4 = &quot;images/sheep_icon.png&quot;;
+    public static final int MAX_BASE64_LENGTH = 16000;
+    public static final String IMAGE_PROCESSING_ONGOING = &quot;Image is being processed. Please wait.&quot;;
+    public static final String IMAGE_PROCESSING_ERROR = &quot;Image could not be processed. Please try again.&quot;;
+
     // INGAME
     public static final String INGAME_TITLE = &quot;Ingame&quot;;
-<span class="fc" id="L115">    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;</span>
     public static final String FIRST_HELP = &quot;Click 'p' on your keyboard for pause menu.\n&quot;;
     public static final String SECOND_HELP = &quot;     \u2191 \n \u2190 \u2193 \u2192  to move your character. \n&quot;;
     public static final String THIRD_HELP = &quot;Click Space for interact and attack.&quot;;
@@ -138,7 +143,6 @@ import java.util.Objects;
     public static final String UNKNOWN_USER = &quot;Unknown&quot;;
 
     // Welcome Scene
-<span class="fc" id="L141">    public static final String STYLE_RESOURCE = Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString();</span>
     public static final String FIRST_MESSAGE = &quot;Welcome to Monster Odyssey!&quot;;
     public static final String SECOND_MESSAGE = &quot;Welcome Aboard.&quot;;
     public static final String THIRD_MESSAGE = &quot;We are the crew of this ship.&quot;;

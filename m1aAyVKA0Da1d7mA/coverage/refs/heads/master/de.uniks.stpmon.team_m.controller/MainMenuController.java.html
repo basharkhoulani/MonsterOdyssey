@@ -93,7 +93,7 @@ public class MainMenuController extends Controller {
     @Override
     public void init() {
 <span class="fc" id="L95">        disposables.add(regionsService.getRegions()</span>
-<span class="pc" id="L96">                .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll, error -&gt; System.out.println(error.getMessage())));</span>
+<span class="pc" id="L96">                .observeOn(FX_SCHEDULER).subscribe(this.regions::setAll, error -&gt; showError(error.getMessage())));</span>
 <span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (!userStorageProvider.get().getFriends().isEmpty()) {</span>
 <span class="fc" id="L98">            disposables.add(usersService.getUsers(userStorageProvider.get().getFriends(), null)</span>
 <span class="fc" id="L99">                    .observeOn(FX_SCHEDULER).subscribe(users -&gt; {</span>
@@ -136,13 +136,13 @@ public class MainMenuController extends Controller {
      */
 
     private void switchToMessageScreen() {
-<span class="nc" id="L139">        User selectedUser = friendsListView.getSelectionModel().getSelectedItem();</span>
-<span class="nc" id="L140">        groupStorageProvider.get().set_id(selectedUser._id());</span>
-<span class="nc" id="L141">        groupStorageProvider.get().setName(selectedUser.name());</span>
-<span class="nc" id="L142">        MessagesController messagesController = messagesControllerProvider.get();</span>
-<span class="nc" id="L143">        messagesController.setUserChosenFromMainMenu(true);</span>
-<span class="nc" id="L144">        app.show(messagesController);</span>
-<span class="nc" id="L145">    }</span>
+<span class="fc" id="L139">        User selectedUser = friendsListView.getSelectionModel().getSelectedItem();</span>
+<span class="fc" id="L140">        groupStorageProvider.get().set_id(selectedUser._id());</span>
+<span class="fc" id="L141">        groupStorageProvider.get().setName(selectedUser.name());</span>
+<span class="fc" id="L142">        MessagesController messagesController = messagesControllerProvider.get();</span>
+<span class="fc" id="L143">        messagesController.setUserChosenFromMainMenu(true);</span>
+<span class="fc" id="L144">        app.show(messagesController);</span>
+<span class="fc" id="L145">    }</span>
 
     /**
      * This method is used to initialize the radio buttons for the regions list.
@@ -161,16 +161,16 @@ public class MainMenuController extends Controller {
 <span class="fc" id="L161">        friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));</span>
 <span class="fc" id="L162">        listenToUserUpdate(friends, friendsListView);</span>
 <span class="fc" id="L163">        friendsListView.setOnMouseClicked(event -&gt; {</span>
-<span class="nc bnc" id="L164" title="All 2 branches missed.">            if (!friendsListView.getSelectionModel().isEmpty()) {</span>
-<span class="nc" id="L165">                switchToMessageScreen();</span>
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">            if (!friendsListView.getSelectionModel().isEmpty()) {</span>
+<span class="fc" id="L165">                switchToMessageScreen();</span>
             }
-<span class="nc" id="L167">        });</span>
+<span class="fc" id="L167">        });</span>
 <span class="fc" id="L168">    }</span>
 
     /**
      * This method is used to navigate to NewFriendsController.
      */
-  
+
     public void changeToFindNewFriends() {
 <span class="fc" id="L175">        app.show(newFriendControllerProvider.get());</span>
 <span class="fc" id="L176">    }</span>
@@ -192,25 +192,26 @@ public class MainMenuController extends Controller {
 
     public void changeToLogin() {
 <span class="fc" id="L194">        disposables.add(usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)</span>
-<span class="fc" id="L195">                .doOnNext(user -&gt; {})</span>
-<span class="fc" id="L196">                .flatMap(user -&gt; authenticationService.logout()).observeOn(FX_SCHEDULER)</span>
-<span class="pc" id="L197">                .subscribe(event -&gt; app.show(loginControllerProvider.get()), error -&gt; showError(error.getMessage())));</span>
-<span class="fc" id="L198">    }</span>
+<span class="fc" id="L195">                .doOnNext(user -&gt; {</span>
+<span class="fc" id="L196">                })</span>
+<span class="fc" id="L197">                .flatMap(user -&gt; authenticationService.logout()).observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L198">                .subscribe(event -&gt; app.show(loginControllerProvider.get()), error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L199">    }</span>
 
     /**
      * This method is used to navigate to AccountSettingController.
      */
 
     public void changeToSettings() {
-<span class="fc" id="L205">        app.show(accountSettingControllerProvider.get());</span>
-<span class="fc" id="L206">    }</span>
+<span class="fc" id="L206">        app.show(accountSettingControllerProvider.get());</span>
+<span class="fc" id="L207">    }</span>
 
     /**
      * This method is used to navigate to IngameController.
      */
 
     public void changeToIngame() {
-<span class="fc" id="L213">        app.show(welcomeSceneControllerProvider.get());</span>
-<span class="fc" id="L214">    }</span>
+<span class="fc" id="L214">        app.show(welcomeSceneControllerProvider.get());</span>
+<span class="fc" id="L215">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
