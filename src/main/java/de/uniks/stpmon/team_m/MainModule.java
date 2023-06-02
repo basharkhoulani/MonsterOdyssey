@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Module;
 import dagger.Provides;
+import javafx.stage.FileChooser;
 
 import javax.inject.Singleton;
 
@@ -17,5 +18,11 @@ public class MainModule {
                 .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .setSerializationInclusion(JsonInclude.Include.NON_ABSENT);
+    }
+
+    @Provides
+    @Singleton
+    FileChooser fileChooser() {
+        return new FileChooser();
     }
 }

@@ -9,12 +9,11 @@ import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
-public class WelcomeSceneController extends Controller{
+public class WelcomeSceneController extends Controller {
     @FXML
     public Button nextButton;
     @FXML
@@ -31,10 +30,15 @@ public class WelcomeSceneController extends Controller{
     Provider<IngameController> ingameControllerProvider;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
+
     @Inject
-    public WelcomeSceneController(){}
+    public WelcomeSceneController() {
+    }
+
     @Override
-    public String getTitle() {return INGAME_TITLE;}
+    public String getTitle() {
+        return INGAME_TITLE;
+    }
 
     @Override
     public Parent render() {
@@ -66,7 +70,6 @@ public class WelcomeSceneController extends Controller{
                 firstMessage.setText(THIRD_MESSAGE);
                 secondMessage.setText(FOURTH_MESSAGE);
                 final VBox messageVBox3 = new VBox();
-                messageVBox3.getStylesheets().add(STYLE_RESOURCE);
                 messageVBox3.getStyleClass().add(WELCOME_MESSAGE_STYLE);
                 final Label thirdMessage = new Label();
                 thirdMessage.setId("thirdMessage");
@@ -104,7 +107,6 @@ public class WelcomeSceneController extends Controller{
                 final VBox vbox = new VBox(textFieldName);
 
                 alert.setTitle(NAME_ALERT_TITLE);
-                dialogPane.getStylesheets().add(STYLE_RESOURCE);
                 dialogPane.getStyleClass().add(ALERT_DIALOG_NAME);
 
                 dialogPane.setContent(vbox);
@@ -124,9 +126,7 @@ public class WelcomeSceneController extends Controller{
                 secondMessage.setWrapText(true);
                 secondMessage.setPrefWidth(200);
             }
-            case 6 -> {
-                app.show(ingameControllerProvider.get());
-            }
+            case 6 -> app.show(ingameControllerProvider.get());
         }
 
     }

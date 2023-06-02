@@ -68,7 +68,8 @@ public class AccountSettingController extends Controller {
     Provider<UserStorage> userStorageProvider;
     @Inject
     UsersService usersService;
-    private AvatarSelectionController avatarSelectionController;
+    @Inject
+    Provider<AvatarSelectionController> avatarSelectionControllerProvider;
     private ChangeLanguageController changeLanguageController;
     private PasswordFieldSkin skin;
     private final SimpleStringProperty username = new SimpleStringProperty();
@@ -97,8 +98,6 @@ public class AccountSettingController extends Controller {
     @Override
     public void init() {
         super.init();
-        avatarSelectionController = new AvatarSelectionController();
-        avatarSelectionController.init();
         changeLanguageController = new ChangeLanguageController();
         changeLanguageController.init();
     }
@@ -220,6 +219,8 @@ public class AccountSettingController extends Controller {
      * This method opens a pop-up to the avatar selection.
      */
     public void editAvatar() {
+        AvatarSelectionController avatarSelectionController = avatarSelectionControllerProvider.get();
+        avatarSelectionController.init();
         ButtonType cancelButton = new ButtonType(ButtonType.CANCEL.getText(), ButtonBar.ButtonData.CANCEL_CLOSE);
         ButtonType okButton = new ButtonType(ButtonType.OK.getText(), ButtonBar.ButtonData.FINISH);
 

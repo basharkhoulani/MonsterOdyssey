@@ -155,4 +155,21 @@ class UsersServiceTest {
 
         verify(usersApiService).deleteUser("423f8d731c386bcd2204da39");
     }
+
+    @Test
+    void getUser() {
+        when(usersApiService.getUser(anyString()))
+                .thenReturn(Observable.just(new User(
+                        "423f8d731c386bcd2204da39",
+                        "UserGet",
+                        USER_STATUS_ONLINE,
+                        null,
+                        null)));
+
+        final User user = usersService.getUser("423f8d731c386bcd2204da39").blockingFirst();
+
+        assertEquals("UserGet", user.name());
+
+        verify(usersApiService).getUser("423f8d731c386bcd2204da39");
+    }
 }

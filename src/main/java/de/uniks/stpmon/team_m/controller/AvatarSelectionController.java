@@ -9,11 +9,14 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.inject.Singleton;
 import java.io.File;
 import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
+@Singleton
 public class AvatarSelectionController extends Controller {
     @FXML
     public Label uploadErrorLabel;
@@ -39,13 +42,12 @@ public class AvatarSelectionController extends Controller {
     public TextField uploadTextField;
     @FXML
     public Button selectFileButton;
-
-    // the avatar selected with the radiobutton
+    @Inject
+    Provider<FileChooser> fileChooserProvider;
     public String selectedAvatar;
 
     @Inject
     public AvatarSelectionController() {
-        super();
     }
 
     @Override
@@ -110,7 +112,7 @@ public class AvatarSelectionController extends Controller {
     }
 
     public void selectFile() {
-        FileChooser fileChooser = new FileChooser();
+        FileChooser fileChooser = fileChooserProvider.get();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(IMAGE, "*.png", "*.jpg", "*.jpeg"));
         fileChooser.setTitle(SELECT_AVATAR_PICTURE);
         File selectedFile = fileChooser.showOpenDialog(null);

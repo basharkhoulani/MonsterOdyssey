@@ -30,12 +30,13 @@ class AccountSettingControllerTest extends ApplicationTest {
     @Mock
     Provider<LoginController> loginControllerProvider;
     @Mock
+    Provider<AvatarSelectionController> avatarSelectionControllerProvider;
+    @Mock
     UsersService usersService;
     @InjectMocks
     AccountSettingController accountSettingController;
     @Mock
     Provider<UserStorage> userStorageProvider;
-
     @Spy
     App app = new App(null);
 
@@ -98,6 +99,7 @@ class AccountSettingControllerTest extends ApplicationTest {
         clickOn(usernameField);
         write("UserPatch");
         clickOn("#saveUsernameButton");
+        verify(usersService).updateUser("UserPatch", null, null, null, null);
 
         assertEquals("Username is already taken!", usernameErrorLabel.getText());
     }
@@ -113,12 +115,14 @@ class AccountSettingControllerTest extends ApplicationTest {
         clickOn(usernameField);
         write("UserPatch");
         clickOn("#saveUsernameButton");
+        verify(usersService).updateUser("UserPatch", null, null, null, null);
 
         assertEquals("Something went terribly wrong!", usernameErrorLabel.getText());
     }
 
     @Test
     void showPassword() {
+        clickOn("#passwordEditButton");
         final PasswordField passwordField = lookup("#passwordField").query();
         clickOn(passwordField);
         write("password");
@@ -177,7 +181,7 @@ class AccountSettingControllerTest extends ApplicationTest {
         clickOn(passwordField);
         write("UserPatch");
         clickOn("#savePasswordButton");
-
+        verify(usersService).updateUser(null, null, null, null, "UserPatch");
         assertEquals("Something went terribly wrong!", passwordErrorLabel.getText());
     }
 
@@ -237,8 +241,10 @@ class AccountSettingControllerTest extends ApplicationTest {
     }
 
     @Test
-    void saveAvatar() {
-        when(usersService.updateUser(isNull(), isNull(),anyString(), isNull(), isNull()))
+    void editAvatar() {
+        AvatarSelectionController avatarSelectionController = new AvatarSelectionController();
+        when(avatarSelectionControllerProvider.get()).thenReturn(avatarSelectionController);
+        when(usersService.updateUser(isNull(), isNull(), anyString(), isNull(), isNull()))
                 .thenReturn(Observable.just(new User(
                         "423f8d731c386bcd2204da39",
                         "New Avatar",
@@ -258,7 +264,12 @@ class AccountSettingControllerTest extends ApplicationTest {
         waitForFxEvents();
         assertEquals(AVATAR_SUCCESS_CHANGED, infoLabel.getText());
     }
-  
+
+    @Test
+    void saveAvatar() {
+
+    }
+
     @Test
     void changeLanguage() {
         final Button changeLanguageButton = lookup("#changeLanguageButton").query();

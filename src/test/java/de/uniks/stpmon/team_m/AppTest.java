@@ -1,22 +1,17 @@
 package de.uniks.stpmon.team_m;
 
 import de.uniks.stpmon.team_m.dto.Region;
-import de.uniks.stpmon.team_m.dto.Spawn;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import static de.uniks.stpmon.team_m.Constants.HELP_LABEL;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
-class AppTest extends ApplicationTest {
+public class AppTest extends ApplicationTest {
 
     private Stage stage;
     private final App app = new App(null);
@@ -115,22 +110,24 @@ class AppTest extends ApplicationTest {
 
         // test Edit Group
         clickOn("Go back");
-        verifyThat("#settingsButton", (Button settingsButton) -> !settingsButton.isVisible());
-//        assertEquals("Monster Odyssey - Edit Group", stage.getTitle());
-//        final Button deleteButton = lookup("#deleteGroupButton").query();
-//        assertNotNull(deleteButton);
-//        clickOn("Go back");
         clickOn("Main Menu");
+    }
 
+    @Test
+    void criticalPathV2() {
+        // test Login Screen
+        assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
+
+        // test Sign In To MainMenu
+        clickOn("#usernameField");
+        write("t\t");
+        write("testtest");
+        clickOn("Sign In");
 
         // Main Menu to Ingame
         final Button startGameButton = lookup("Start Game").query();
         assertNotNull(startGameButton);
-        final ObservableList<Region> items = FXCollections
-                .observableArrayList(new Region("2023-05-22T17:51:46.772Z",
-                        "2023-05-22T17:51:46.772Z", "646bc436cfee07c0e408466f", "Albertina", new Spawn("Albertina", 1, 1), new Object()));
         final ListView<Region> regionListView = lookup("#regionListView").query();
-        regionListView.setItems(items);
         regionListView.getSelectionModel().selectFirst();
         assertNotNull(regionListView);
         waitForFxEvents();
@@ -173,8 +170,6 @@ class AppTest extends ApplicationTest {
         assertNotNull(pauseLabel);
         assertEquals("What do you want to do?", pauseLabel.getText());
 
-
-
         // test Ingame Unpause With Key Code P
         type(KeyCode.P);
         final Label gameTitleUnpauseP = lookup("Monster Odyssey").query();
@@ -190,6 +185,5 @@ class AppTest extends ApplicationTest {
         type(KeyCode.P);
         clickOn("Save Game & Leave");
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
-
     }
 }
