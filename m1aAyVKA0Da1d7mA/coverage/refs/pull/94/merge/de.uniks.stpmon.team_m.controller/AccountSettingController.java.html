@@ -8,6 +8,7 @@ import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -57,6 +58,8 @@ public class AccountSettingController extends Controller {
     public Button saveAvatarButton;
     @FXML
     public Label avatarErrorLabel;
+    @FXML
+    public Button changeLanguageButton;
     @Inject
     Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
     @Inject
@@ -66,9 +69,10 @@ public class AccountSettingController extends Controller {
     @Inject
     UsersService usersService;
     private AvatarSelectionController avatarSelectionController;
+    private ChangeLanguageController changeLanguageController;
     private PasswordFieldSkin skin;
-<span class="fc" id="L70">    private final SimpleStringProperty username = new SimpleStringProperty();</span>
-<span class="fc" id="L71">    private final SimpleStringProperty password = new SimpleStringProperty();</span>
+<span class="fc" id="L74">    private final SimpleStringProperty username = new SimpleStringProperty();</span>
+<span class="fc" id="L75">    private final SimpleStringProperty password = new SimpleStringProperty();</span>
     private String selectedFilePath;
 
     /**
@@ -76,8 +80,8 @@ public class AccountSettingController extends Controller {
      */
 
     @Inject
-<span class="fc" id="L79">    AccountSettingController() {</span>
-<span class="fc" id="L80">    }</span>
+<span class="fc" id="L83">    AccountSettingController() {</span>
+<span class="fc" id="L84">    }</span>
 
     /**
      * This method is used to define the title of the AccountSettingController
@@ -87,15 +91,17 @@ public class AccountSettingController extends Controller {
 
     @Override
     public String getTitle() {
-<span class="fc" id="L90">        return ACCOUNT_SETTINGS_TITLE;</span>
+<span class="fc" id="L94">        return ACCOUNT_SETTINGS_TITLE;</span>
     }
 
     @Override
     public void init() {
-<span class="fc" id="L95">        super.init();</span>
-<span class="fc" id="L96">        avatarSelectionController = new AvatarSelectionController();</span>
-<span class="fc" id="L97">        avatarSelectionController.init();</span>
-<span class="fc" id="L98">    }</span>
+<span class="fc" id="L99">        super.init();</span>
+<span class="fc" id="L100">        avatarSelectionController = new AvatarSelectionController();</span>
+<span class="fc" id="L101">        avatarSelectionController.init();</span>
+<span class="fc" id="L102">        changeLanguageController = new ChangeLanguageController();</span>
+<span class="fc" id="L103">        changeLanguageController.init();</span>
+<span class="fc" id="L104">    }</span>
 
     /**
      * This method is used to render JavaFX elements of the AccountSettingController.
@@ -107,42 +113,42 @@ public class AccountSettingController extends Controller {
 
     @Override
     public Parent render() {
-<span class="fc" id="L110">        final Parent parent = super.render();</span>
+<span class="fc" id="L116">        final Parent parent = super.render();</span>
 
         // Firstly disable the editfield
-<span class="fc" id="L113">        usernameField.setDisable(true);</span>
-<span class="fc" id="L114">        passwordField.setDisable(true);</span>
-<span class="fc" id="L115">        showPasswordButton.setDisable(true);</span>
+<span class="fc" id="L119">        usernameField.setDisable(true);</span>
+<span class="fc" id="L120">        passwordField.setDisable(true);</span>
+<span class="fc" id="L121">        showPasswordButton.setDisable(true);</span>
 
-<span class="fc" id="L117">        saveAvatarButton.setDisable(true);</span>
+<span class="fc" id="L123">        saveAvatarButton.setDisable(true);</span>
 
         // Show the Current UserName
-<span class="fc" id="L120">        usernameField.setPromptText(userStorageProvider.get().getName());</span>
+<span class="fc" id="L126">        usernameField.setPromptText(userStorageProvider.get().getName());</span>
 
         // show password
-<span class="fc" id="L123">        skin = new PasswordFieldSkin(passwordField);</span>
-<span class="fc" id="L124">        passwordField.setSkin(skin);</span>
+<span class="fc" id="L129">        skin = new PasswordFieldSkin(passwordField);</span>
+<span class="fc" id="L130">        passwordField.setSkin(skin);</span>
 
         // bind the username and password
-<span class="fc" id="L127">        usernameField.textProperty().bindBidirectional(username);</span>
-<span class="fc" id="L128">        passwordField.textProperty().bindBidirectional(password);</span>
+<span class="fc" id="L133">        usernameField.textProperty().bindBidirectional(username);</span>
+<span class="fc" id="L134">        passwordField.textProperty().bindBidirectional(password);</span>
 
-<span class="fc" id="L130">        BooleanBinding isInvalidUsername = username.isEmpty();</span>
-<span class="fc" id="L131">        saveUsernameButton.disableProperty().bind(isInvalidUsername);</span>
+<span class="fc" id="L136">        BooleanBinding isInvalidUsername = username.isEmpty();</span>
+<span class="fc" id="L137">        saveUsernameButton.disableProperty().bind(isInvalidUsername);</span>
 
-<span class="fc" id="L133">        BooleanBinding isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);</span>
-<span class="fc" id="L134">        savePasswordButton.disableProperty().bind(isInvalidPassword);</span>
+<span class="fc" id="L139">        BooleanBinding isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);</span>
+<span class="fc" id="L140">        savePasswordButton.disableProperty().bind(isInvalidPassword);</span>
 
-<span class="fc" id="L136">        passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);</span>
+<span class="fc" id="L142">        passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);</span>
 
         // show Avatar if there is one
-<span class="pc bpc" id="L139" title="1 of 2 branches missed.">        if (userStorageProvider.get().getAvatar() != null) {</span>
-<span class="nc" id="L140">            String avatar = userStorageProvider.get().getAvatar();</span>
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">        if (userStorageProvider.get().getAvatar() != null) {</span>
+<span class="nc" id="L146">            String avatar = userStorageProvider.get().getAvatar();</span>
 
-<span class="nc" id="L142">            avatarImageView.setImage(ImageProcessor.toFXImage(avatar));</span>
+<span class="nc" id="L148">            avatarImageView.setImage(ImageProcessor.toFXImage(avatar));</span>
         }
 
-<span class="fc" id="L145">        return parent;</span>
+<span class="fc" id="L151">        return parent;</span>
     }
 
     /**
@@ -150,8 +156,8 @@ public class AccountSettingController extends Controller {
      */
 
     public void editUsername() {
-<span class="fc bfc" id="L153" title="All 2 branches covered.">        usernameField.setDisable(!usernameField.isDisabled());</span>
-<span class="fc" id="L154">    }</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        usernameField.setDisable(!usernameField.isDisabled());</span>
+<span class="fc" id="L160">    }</span>
 
     /**
      * This method is used to save the username.
@@ -159,106 +165,106 @@ public class AccountSettingController extends Controller {
      */
 
     public void saveUsername() {
-<span class="fc" id="L162">        informationLabel.setText(EMPTY_STRING);</span>
-<span class="fc" id="L163">        usernameErrorLabel.setText(EMPTY_STRING);</span>
+<span class="fc" id="L168">        informationLabel.setText(EMPTY_STRING);</span>
+<span class="fc" id="L169">        usernameErrorLabel.setText(EMPTY_STRING);</span>
 
-<span class="fc" id="L165">        disposables.add(usersService.updateUser(username.get(), null, null, null, null)</span>
-<span class="fc" id="L166">                .observeOn(FX_SCHEDULER).subscribe(userResult -&gt; {</span>
-<span class="fc" id="L167">                    userStorageProvider.get().setName(userResult.name());</span>
-<span class="fc" id="L168">                    informationLabel.setText(USERNAME_SUCCESS_CHANGED);</span>
-<span class="fc" id="L169">                    usernameField.setDisable(true);</span>
-<span class="fc" id="L170">                    usernameField.setText(EMPTY_STRING);</span>
-<span class="fc" id="L171">                    usernameField.setPromptText(userStorageProvider.get().getName());</span>
-<span class="fc" id="L172">                }, error -&gt; usernameErrorLabel.setText(errorHandle(error.getMessage()))));</span>
+<span class="fc" id="L171">        disposables.add(usersService.updateUser(username.get(), null, null, null, null)</span>
+<span class="fc" id="L172">                .observeOn(FX_SCHEDULER).subscribe(userResult -&gt; {</span>
+<span class="fc" id="L173">                    userStorageProvider.get().setName(userResult.name());</span>
+<span class="fc" id="L174">                    informationLabel.setText(USERNAME_SUCCESS_CHANGED);</span>
+<span class="fc" id="L175">                    usernameField.setDisable(true);</span>
+<span class="fc" id="L176">                    usernameField.setText(EMPTY_STRING);</span>
+<span class="fc" id="L177">                    usernameField.setPromptText(userStorageProvider.get().getName());</span>
+<span class="fc" id="L178">                }, error -&gt; usernameErrorLabel.setText(errorHandle(error.getMessage()))));</span>
 
-<span class="fc" id="L174">    }</span>
+<span class="fc" id="L180">    }</span>
 
     /**
      * This method is used to show the password when clicking the show password button.
      */
 
     public void showPassword() {
-<span class="nc" id="L181">        skin.setMask(skin.getNotMask());</span>
-<span class="nc" id="L182">        passwordField.setText(passwordField.getText());</span>
-<span class="nc" id="L183">    }</span>
+<span class="nc" id="L187">        skin.setMask(skin.getNotMask());</span>
+<span class="nc" id="L188">        passwordField.setText(passwordField.getText());</span>
+<span class="nc" id="L189">    }</span>
 
     /**
      * This method is used to re-enable the TextField for the password.
      */
 
     public void editPassword() {
-<span class="fc bfc" id="L190" title="All 2 branches covered.">        passwordField.setDisable(!passwordField.isDisabled());</span>
-<span class="fc bfc" id="L191" title="All 2 branches covered.">        showPasswordButton.setDisable(!showPasswordButton.isDisabled());</span>
-<span class="fc" id="L192">    }</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        passwordField.setDisable(!passwordField.isDisabled());</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">        showPasswordButton.setDisable(!showPasswordButton.isDisabled());</span>
+<span class="fc" id="L198">    }</span>
 
     /**
      * This method is used to save the password by sending a request to the server.
      */
 
     public void savePassword() {
-<span class="fc" id="L199">        informationLabel.setText(EMPTY_STRING);</span>
-<span class="fc" id="L200">        passwordErrorLabel.setText(EMPTY_STRING);</span>
+<span class="fc" id="L205">        informationLabel.setText(EMPTY_STRING);</span>
+<span class="fc" id="L206">        passwordErrorLabel.setText(EMPTY_STRING);</span>
 
-<span class="fc" id="L202">        disposables.add(usersService.updateUser(null, null, null, null, password.get())</span>
-<span class="fc" id="L203">                .observeOn(FX_SCHEDULER).subscribe(userResult -&gt; {</span>
-<span class="fc" id="L204">                    passwordField.setText(EMPTY_STRING);</span>
-<span class="fc" id="L205">                    passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);</span>
-<span class="fc" id="L206">                    passwordField.setDisable(true);</span>
-<span class="fc" id="L207">                    showPasswordButton.setDisable(true);</span>
-<span class="fc" id="L208">                    informationLabel.setText(PASSWORD_SUCCESS_CHANGED);</span>
-<span class="fc" id="L209">                }, error -&gt; passwordErrorLabel.setText(errorHandle(error.getMessage()))));</span>
-<span class="fc" id="L210">    }</span>
+<span class="fc" id="L208">        disposables.add(usersService.updateUser(null, null, null, null, password.get())</span>
+<span class="fc" id="L209">                .observeOn(FX_SCHEDULER).subscribe(userResult -&gt; {</span>
+<span class="fc" id="L210">                    passwordField.setText(EMPTY_STRING);</span>
+<span class="fc" id="L211">                    passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);</span>
+<span class="fc" id="L212">                    passwordField.setDisable(true);</span>
+<span class="fc" id="L213">                    showPasswordButton.setDisable(true);</span>
+<span class="fc" id="L214">                    informationLabel.setText(PASSWORD_SUCCESS_CHANGED);</span>
+<span class="fc" id="L215">                }, error -&gt; passwordErrorLabel.setText(errorHandle(error.getMessage()))));</span>
+<span class="fc" id="L216">    }</span>
 
 
     /**
      * This method opens a pop-up to the avatar selection.
      */
     public void editAvatar() {
-<span class="fc" id="L217">        ButtonType cancelButton = new ButtonType(ButtonType.CANCEL.getText(), ButtonBar.ButtonData.CANCEL_CLOSE);</span>
-<span class="fc" id="L218">        ButtonType okButton = new ButtonType(ButtonType.OK.getText(), ButtonBar.ButtonData.FINISH);</span>
+<span class="fc" id="L223">        ButtonType cancelButton = new ButtonType(ButtonType.CANCEL.getText(), ButtonBar.ButtonData.CANCEL_CLOSE);</span>
+<span class="fc" id="L224">        ButtonType okButton = new ButtonType(ButtonType.OK.getText(), ButtonBar.ButtonData.FINISH);</span>
 
-<span class="fc" id="L220">        Dialog&lt;?&gt; dialog = new Dialog&lt;&gt;();</span>
-<span class="fc" id="L221">        dialog.setTitle(&quot;Choose your Avatar&quot;);</span>
-<span class="fc" id="L222">        dialog.getDialogPane().setContent(avatarSelectionController.render());</span>
-<span class="fc" id="L223">        dialog.getDialogPane().getButtonTypes().add(okButton);</span>
-<span class="fc" id="L224">        dialog.getDialogPane().getButtonTypes().add(cancelButton);</span>
-<span class="fc" id="L225">        dialog.showAndWait();</span>
+<span class="fc" id="L226">        Dialog&lt;?&gt; dialog = new Dialog&lt;&gt;();</span>
+<span class="fc" id="L227">        dialog.setTitle(&quot;Choose your Avatar&quot;);</span>
+<span class="fc" id="L228">        dialog.getDialogPane().setContent(avatarSelectionController.render());</span>
+<span class="fc" id="L229">        dialog.getDialogPane().getButtonTypes().add(okButton);</span>
+<span class="fc" id="L230">        dialog.getDialogPane().getButtonTypes().add(cancelButton);</span>
+<span class="fc" id="L231">        dialog.showAndWait();</span>
 
-<span class="pc bpc" id="L227" title="1 of 2 branches missed.">        if (dialog.getResult() == okButton) {</span>
-<span class="fc" id="L228">            saveAvatarButton.setDisable(false);</span>
+<span class="pc bpc" id="L233" title="1 of 2 branches missed.">        if (dialog.getResult() == okButton) {</span>
+<span class="fc" id="L234">            saveAvatarButton.setDisable(false);</span>
             Image image;
             try {
-<span class="fc" id="L231">                image = new Image(Objects.requireNonNull(App.class.getResource(avatarSelectionController.selectedAvatar)).toString());</span>
-<span class="fc" id="L232">                selectedFilePath = Objects.requireNonNull(App.class.getResource(avatarSelectionController.selectedAvatar)).toURI().getPath();</span>
-<span class="nc" id="L233">            } catch (Exception e) {</span>
-<span class="nc" id="L234">                image = new Image(&quot;file:&quot; + avatarSelectionController.selectedAvatar);</span>
-<span class="nc" id="L235">                selectedFilePath = avatarSelectionController.selectedAvatar;</span>
-<span class="fc" id="L236">            }</span>
-<span class="fc" id="L237">            avatarImageView.setImage(image);</span>
+<span class="fc" id="L237">                image = new Image(Objects.requireNonNull(App.class.getResource(avatarSelectionController.selectedAvatar)).toString());</span>
+<span class="fc" id="L238">                selectedFilePath = Objects.requireNonNull(App.class.getResource(avatarSelectionController.selectedAvatar)).toURI().getPath();</span>
+<span class="nc" id="L239">            } catch (Exception e) {</span>
+<span class="nc" id="L240">                image = new Image(&quot;file:&quot; + avatarSelectionController.selectedAvatar);</span>
+<span class="nc" id="L241">                selectedFilePath = avatarSelectionController.selectedAvatar;</span>
+<span class="fc" id="L242">            }</span>
+<span class="fc" id="L243">            avatarImageView.setImage(image);</span>
         }
-<span class="fc" id="L239">    }</span>
+<span class="fc" id="L245">    }</span>
 
     /**
      * This method is used to save the selected avatar by sending a request to the server.
      */
     public void saveAvatar() {
-<span class="fc" id="L245">        informationLabel.setText(IMAGE_PROCESSING_ONGOING);</span>
-<span class="fc" id="L246">        String base64Image = ImageProcessor.toBase64(selectedFilePath);</span>
-<span class="pc bpc" id="L247" title="1 of 2 branches missed.">        if (base64Image.equals(IMAGE_PROCESSING_ERROR))</span>
-<span class="nc" id="L248">            informationLabel.setText(IMAGE_PROCESSING_ERROR);</span>
-<span class="fc" id="L249">        String avatarUpload = &quot;data:image/png;base64, &quot; + base64Image;</span>
-<span class="fc" id="L250">        System.out.println(avatarUpload);</span>
-<span class="fc" id="L251">        disposables.add(usersService</span>
-<span class="fc" id="L252">                .updateUser(null, null, avatarUpload, null, null)</span>
-<span class="fc" id="L253">                .observeOn(FX_SCHEDULER)</span>
-<span class="fc" id="L254">                .subscribe(userResult -&gt; {</span>
-<span class="fc" id="L255">                    userStorageProvider.get().setAvatar(userResult.avatar());</span>
-<span class="fc" id="L256">                    saveAvatarButton.setDisable(true);</span>
-<span class="fc" id="L257">                    informationLabel.setText(AVATAR_SUCCESS_CHANGED);</span>
-<span class="pc" id="L258">                }, error -&gt; avatarErrorLabel.setText(error.getMessage()))</span>
+<span class="fc" id="L251">        informationLabel.setText(IMAGE_PROCESSING_ONGOING);</span>
+<span class="fc" id="L252">        String base64Image = ImageProcessor.toBase64(selectedFilePath);</span>
+<span class="pc bpc" id="L253" title="1 of 2 branches missed.">        if (base64Image.equals(IMAGE_PROCESSING_ERROR))</span>
+<span class="nc" id="L254">            informationLabel.setText(IMAGE_PROCESSING_ERROR);</span>
+<span class="fc" id="L255">        String avatarUpload = &quot;data:image/png;base64, &quot; + base64Image;</span>
+<span class="fc" id="L256">        System.out.println(avatarUpload);</span>
+<span class="fc" id="L257">        disposables.add(usersService</span>
+<span class="fc" id="L258">                .updateUser(null, null, avatarUpload, null, null)</span>
+<span class="fc" id="L259">                .observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L260">                .subscribe(userResult -&gt; {</span>
+<span class="fc" id="L261">                    userStorageProvider.get().setAvatar(userResult.avatar());</span>
+<span class="fc" id="L262">                    saveAvatarButton.setDisable(true);</span>
+<span class="fc" id="L263">                    informationLabel.setText(AVATAR_SUCCESS_CHANGED);</span>
+<span class="pc" id="L264">                }, error -&gt; avatarErrorLabel.setText(error.getMessage()))</span>
         );
 
-<span class="fc" id="L261">    }</span>
+<span class="fc" id="L267">    }</span>
 
 
     /**
@@ -269,36 +275,36 @@ public class AccountSettingController extends Controller {
      */
 
     public void deleteAccount(Alert alert) {
-<span class="fc" id="L272">        disposables.add(usersService.deleteUser().observeOn(FX_SCHEDULER).subscribe(delete -&gt; {</span>
-<span class="fc" id="L273">            LoginController loginController = loginControllerProvider.get();</span>
-<span class="fc" id="L274">            loginController.setInformation(DELETE_SUCCESS);</span>
-<span class="fc" id="L275">            app.show(loginController);</span>
-<span class="fc" id="L276">        }, error -&gt; errorAlert(alert)));</span>
-<span class="fc" id="L277">    }</span>
+<span class="fc" id="L278">        disposables.add(usersService.deleteUser().observeOn(FX_SCHEDULER).subscribe(delete -&gt; {</span>
+<span class="fc" id="L279">            LoginController loginController = loginControllerProvider.get();</span>
+<span class="fc" id="L280">            loginController.setInformation(DELETE_SUCCESS);</span>
+<span class="fc" id="L281">            app.show(loginController);</span>
+<span class="fc" id="L282">        }, error -&gt; errorAlert(alert)));</span>
+<span class="fc" id="L283">    }</span>
 
     /**
      * This method is used to leave the AccountSettingController and go back to the MainMenuController.
      */
 
     public void cancel() {
-<span class="fc" id="L284">        app.show(mainMenuControllerProvider.get());</span>
-<span class="fc" id="L285">    }</span>
+<span class="fc" id="L290">        app.show(mainMenuControllerProvider.get());</span>
+<span class="fc" id="L291">    }</span>
 
     /**
      * This method is used to show a pop-up to confirm the deletion of the account.
      */
 
     public void showDeletePopUp() {
-<span class="fc" id="L292">        Alert alert = new Alert(Alert.AlertType.WARNING, SURE, ButtonType.OK, ButtonType.CANCEL);</span>
-<span class="fc" id="L293">        alert.setTitle(&quot;Delete Account&quot;);</span>
-<span class="fc" id="L294">        alert.setHeaderText(null);</span>
-<span class="fc" id="L295">        alert.initOwner(app.getStage());</span>
-<span class="fc" id="L296">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+<span class="fc" id="L298">        Alert alert = new Alert(Alert.AlertType.WARNING, SURE, ButtonType.OK, ButtonType.CANCEL);</span>
+<span class="fc" id="L299">        alert.setTitle(&quot;Delete Account&quot;);</span>
+<span class="fc" id="L300">        alert.setHeaderText(null);</span>
+<span class="fc" id="L301">        alert.initOwner(app.getStage());</span>
+<span class="fc" id="L302">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
 
-<span class="pc bpc" id="L298" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK) {</span>
-<span class="fc" id="L299">            deleteAccount(alert);</span>
+<span class="pc bpc" id="L304" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK) {</span>
+<span class="fc" id="L305">            deleteAccount(alert);</span>
         }
-<span class="fc" id="L301">    }</span>
+<span class="fc" id="L307">    }</span>
 
     /**
      * This method is used to show a pop-up when an error occurs.
@@ -307,11 +313,11 @@ public class AccountSettingController extends Controller {
      */
 
     private void errorAlert(Alert alert) {
-<span class="fc" id="L310">        alert.setContentText(CUSTOM_ERROR);</span>
-<span class="fc" id="L311">        alert.setTitle(ERROR);</span>
-<span class="fc" id="L312">        alert.getButtonTypes().remove(ButtonType.CANCEL);</span>
-<span class="fc" id="L313">        alert.showAndWait();</span>
-<span class="fc" id="L314">    }</span>
+<span class="fc" id="L316">        alert.setContentText(CUSTOM_ERROR);</span>
+<span class="fc" id="L317">        alert.setTitle(ERROR);</span>
+<span class="fc" id="L318">        alert.getButtonTypes().remove(ButtonType.CANCEL);</span>
+<span class="fc" id="L319">        alert.showAndWait();</span>
+<span class="fc" id="L320">    }</span>
 
     /**
      * This method is used to handle the error message.
@@ -321,11 +327,25 @@ public class AccountSettingController extends Controller {
      */
 
     public String errorHandle(String error) {
-<span class="fc bfc" id="L324" title="All 2 branches covered.">        if (error.contains(HTTP_409)) {</span>
-<span class="fc" id="L325">            return USERNAME_TAKEN;</span>
+<span class="fc bfc" id="L330" title="All 2 branches covered.">        if (error.contains(HTTP_409)) {</span>
+<span class="fc" id="L331">            return USERNAME_TAKEN;</span>
         } else {
-<span class="fc" id="L327">            return CUSTOM_ERROR;</span>
+<span class="fc" id="L333">            return CUSTOM_ERROR;</span>
         }
     }
+
+    /**
+     * This method is used to open the Change Language Pop up
+     */
+    public void changeLanguage(){
+<span class="fc" id="L341">        Dialog&lt;?&gt; dialog = new Dialog&lt;&gt;();</span>
+<span class="fc" id="L342">        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);</span>
+<span class="fc" id="L343">        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);</span>
+<span class="fc" id="L344">        closeButton.managedProperty().bind(closeButton.visibleProperty());</span>
+<span class="fc" id="L345">        closeButton.setVisible(false);</span>
+<span class="fc" id="L346">        dialog.setTitle(&quot;Change Language&quot;);</span>
+<span class="fc" id="L347">        dialog.getDialogPane().setContent(changeLanguageController.render());</span>
+<span class="fc" id="L348">        dialog.showAndWait();</span>
+<span class="fc" id="L349">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
