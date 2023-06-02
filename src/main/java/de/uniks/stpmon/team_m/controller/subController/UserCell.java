@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
+import java.awt.*;
 import java.util.Objects;
 import java.util.prefs.Preferences;
 
@@ -57,8 +58,11 @@ public class UserCell extends ListCell<User> {
             ImageView statusImageView = new ImageView();
             final HBox statusHBox = new HBox(statusImageView);
             statusHBox.setAlignment(CENTER);
-            final Image avatar = ImageProcessor.toFXImage(user.avatar());
-            final ImageView avatarImageView = new ImageView(avatar);
+            ImageView avatarImageView = new ImageView();
+            if (!GraphicsEnvironment.isHeadless()) {
+                final Image avatar = ImageProcessor.toFXImage(user.avatar());
+                avatarImageView = new ImageView(avatar);
+            }
             avatarImageView.setPreserveRatio(true);
             avatarImageView.setFitHeight(AVATAR_SIZE);
             final HBox avatarHBox = new HBox(avatarImageView);
