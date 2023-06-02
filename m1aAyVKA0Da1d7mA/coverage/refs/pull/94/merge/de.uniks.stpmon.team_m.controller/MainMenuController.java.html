@@ -170,7 +170,7 @@ public class MainMenuController extends Controller {
     /**
      * This method is used to navigate to NewFriendsController.
      */
-  
+
     public void changeToFindNewFriends() {
 <span class="fc" id="L175">        app.show(newFriendControllerProvider.get());</span>
 <span class="fc" id="L176">    }</span>
@@ -192,25 +192,26 @@ public class MainMenuController extends Controller {
 
     public void changeToLogin() {
 <span class="fc" id="L194">        disposables.add(usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)</span>
-<span class="fc" id="L195">                .doOnNext(user -&gt; {})</span>
-<span class="fc" id="L196">                .flatMap(user -&gt; authenticationService.logout()).observeOn(FX_SCHEDULER)</span>
-<span class="pc" id="L197">                .subscribe(event -&gt; app.show(loginControllerProvider.get()), error -&gt; showError(error.getMessage())));</span>
-<span class="fc" id="L198">    }</span>
+<span class="fc" id="L195">                .doOnNext(user -&gt; {</span>
+<span class="fc" id="L196">                })</span>
+<span class="fc" id="L197">                .flatMap(user -&gt; authenticationService.logout()).observeOn(FX_SCHEDULER)</span>
+<span class="pc" id="L198">                .subscribe(event -&gt; app.show(loginControllerProvider.get()), error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L199">    }</span>
 
     /**
      * This method is used to navigate to AccountSettingController.
      */
 
     public void changeToSettings() {
-<span class="fc" id="L205">        app.show(accountSettingControllerProvider.get());</span>
-<span class="fc" id="L206">    }</span>
+<span class="fc" id="L206">        app.show(accountSettingControllerProvider.get());</span>
+<span class="fc" id="L207">    }</span>
 
     /**
      * This method is used to navigate to IngameController.
      */
 
     public void changeToIngame() {
-<span class="fc" id="L213">        app.show(welcomeSceneControllerProvider.get());</span>
-<span class="fc" id="L214">    }</span>
+<span class="fc" id="L214">        app.show(welcomeSceneControllerProvider.get());</span>
+<span class="fc" id="L215">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
