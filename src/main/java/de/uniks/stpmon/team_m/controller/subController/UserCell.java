@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.utils.BestFriendUtils;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
@@ -56,9 +57,15 @@ public class UserCell extends ListCell<User> {
             ImageView statusImageView = new ImageView();
             final HBox statusHBox = new HBox(statusImageView);
             statusHBox.setAlignment(CENTER);
+            final Image avatar = ImageProcessor.toFXImage(user.avatar());
+            final ImageView avatarImageView = new ImageView(avatar);
+            avatarImageView.setPreserveRatio(true);
+            avatarImageView.setFitHeight(AVATAR_SIZE);
+            final HBox avatarHBox = new HBox(avatarImageView);
+            avatarHBox.setAlignment(CENTER);
             final HBox nameHBox = new HBox(usernameLabel);
             nameHBox.setAlignment(CENTER);
-            rootHBox = new HBox(HBOX_FRIENDS_SPACING, statusHBox, nameHBox);
+            rootHBox = new HBox(HBOX_FRIENDS_SPACING, statusHBox, avatarHBox, nameHBox);
             final BestFriendUtils bestFriendUtils = new BestFriendUtils(preferences);
             statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineImage : offlineImage);
             if (preferences != null) {

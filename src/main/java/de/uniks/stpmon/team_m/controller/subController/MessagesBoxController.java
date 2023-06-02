@@ -9,6 +9,7 @@ import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
+import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
@@ -88,6 +89,7 @@ public class MessagesBoxController extends Controller {
             groupStorageProvider.get().set_id(chatID);
         }).flatMap(groups -> messageService.getGroupMessages(chatID).observeOn(FX_SCHEDULER))
           .doOnNext(this.messages::setAll)
+          .flatMap(messages -> Observable.just(messages).observeOn(FX_SCHEDULER))
           .doOnNext(messages1 -> listenToMessages(this.messages, chatID))
           .observeOn(FX_SCHEDULER).subscribe(event -> {}, error -> showError(error.getMessage())));
     }

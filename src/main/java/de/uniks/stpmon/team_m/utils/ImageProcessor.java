@@ -31,14 +31,22 @@ public class ImageProcessor {
 
     public static javafx.scene.image.Image toFXImage(String avatar) {
         javafx.scene.image.Image image;
-        if (avatar.startsWith("data")){
+        if (avatar == null) {
+            image = new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString());
+            return image;
+        }
+        if (avatar.startsWith("data:image/png;base64, ")){
             byte[] imageBytes = Base64.getDecoder().decode(avatar.replaceFirst("data:image/png;base64, ", ""));
             ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
             image = new javafx.scene.image.Image(bis);
-        } else if (avatar.startsWith("http")) {
+        } else if (avatar.startsWith("data:image/jpg;base64, ")){
+                byte[] imageBytes = Base64.getDecoder().decode(avatar.replaceFirst("data:image/jpg;base64, ", ""));
+                ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
+                image = new javafx.scene.image.Image(bis);
+        }else if (avatar.startsWith("http")) {
             image = new javafx.scene.image.Image(avatar);
         } else {
-            image = new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString());
+            image = new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(AVATAR_2)).toString());
         }
         return image;
     }
