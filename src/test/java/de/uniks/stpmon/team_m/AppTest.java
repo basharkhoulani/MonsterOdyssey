@@ -36,6 +36,7 @@ class AppTest extends ApplicationTest {
         assertEquals("Monster Odyssey - Sign Up & In", stage.getTitle());
 
         // test Sign In To MainMenu
+        clickOn("#usernameField");
         write("t\t");
         write("testtest");
         clickOn("Sign In");
@@ -79,6 +80,7 @@ class AppTest extends ApplicationTest {
         final Label infoLabel = lookup("#informationLabel").query();
         assertEquals("Account successfully deleted", infoLabel.getText());
 
+        clickOn("#usernameField");
         write("t\t");
         write("testtest");
         clickOn("Sign Up");
