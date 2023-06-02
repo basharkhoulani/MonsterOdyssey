@@ -2,10 +2,8 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class IngameTrainerSettingsControllerTest extends ApplicationTest {
@@ -34,7 +31,6 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
     public void Cancel() {
         Button cancelButton = lookup("#cancelButton").queryButton();
         Button deleteTrainerButton = lookup("#deleteTrainerButton").queryButton();
-        Window window = cancelButton.getScene().getWindow();
         assertEquals(cancelButton.getText(), "Cancel");
         assertEquals(deleteTrainerButton.getText(), "Delete your trainer");
         clickOn(cancelButton);
