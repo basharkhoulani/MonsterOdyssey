@@ -2,23 +2,25 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
-import de.uniks.stpmon.team_m.dto.Group;
+import de.uniks.stpmon.team_m.controller.subController.FriendSettingsController;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.Spawn;
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.rest.RegionsApiService;
-import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.service.AuthenticationService;
+import de.uniks.stpmon.team_m.service.RegionsService;
+import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
-import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -27,7 +29,9 @@ import javax.inject.Provider;
 import java.util.List;
 import java.util.prefs.Preferences;
 
+import static de.uniks.stpmon.team_m.Constants.HTTP_429;
 import static de.uniks.stpmon.team_m.Constants.USER_STATUS_OFFLINE;
+import static io.reactivex.rxjava3.core.Observable.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -37,8 +41,6 @@ class MainMenuControllerTest extends ApplicationTest {
     @Mock
     Provider<LoginController> loginControllerProvider;
     @Mock
-    Provider<IngameController> ingameControllerProvider;
-    @Mock
     Provider<WelcomeSceneController> welcomeSceneControllerProvider;
     @Mock
     Provider<AccountSettingController> accountSettingControllerProvider;
@@ -47,9 +49,7 @@ class MainMenuControllerTest extends ApplicationTest {
     @Mock
     Provider<MessagesController> messagesControllerProvider;
     @Mock
-    RegionsService regionsService;
-    @Mock
-    UsersService usersService;
+    Provider<FriendSettingsController> friendSettingsControllerProvider;
     @Mock
     AuthenticationService authenticationService;
     @Mock
@@ -59,42 +59,42 @@ class MainMenuControllerTest extends ApplicationTest {
     @Mock
     Provider<GroupStorage> groupStorageProvider;
     @Mock
-    Provider<GroupService> groupServiceProvider;
+    Provider<EventListener> eventListenerProvider;
+    @Mock
+    RegionsService regionsService;
+    @Mock
+    UsersService usersService;
+    @Spy
+    Preferences preferences;
+    @Spy
+    UserStorage userStorage;
+    @Spy
+    GroupStorage groupStorage;
     @Spy
     App app = new App(null);
     @InjectMocks
     MainMenuController mainMenuController;
-    @Mock
-    Provider<EventListener> eventListenerProvider;
-
 
     @Override
     public void start(Stage stage) {
-        when(regionsService.getRegions()).thenReturn(Observable.just(List.of(new Region(
+        when(regionsService.getRegions()).thenReturn(just(List.of(new Region(
                 "2023-05-22T17:51:46.772Z",
                 "2023-05-22T17:51:46.772Z",
                 "646bc3c0a9ac1b375fb41d93",
-                "646bc436cfee07c0e408466f",
-                new Spawn("Albertina", 1, 1),
+                "Albertina",
+                new Spawn("646bc436cfee07c0e408466f", 1, 1),
                 new Object()
         ))));
-        UserStorage mockUserStorage = mock(UserStorage.class);
-        GroupStorage mockGroupStorage = mock(GroupStorage.class);
-        when(groupStorageProvider.get()).thenReturn(mockGroupStorage);
-        Mockito.when(userStorageProvider.get()).thenReturn(mockUserStorage);
-        Preferences preferences = mock(Preferences.class);
-        Mockito.when(preferencesProvider.get()).thenReturn(preferences);
-        when(usersService.getUsers(any(), any())).thenReturn(Observable.just(List.of(
-                        new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
-                        new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
-                        new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
-        when(userStorageProvider.get().getFriends())
-                .thenReturn(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
-
-        when(groupStorageProvider.get().get_id()).thenReturn("645cd04c11b590456276e9d1");
-
-        Mockito.when(eventListenerProvider.get()).thenReturn(mock(EventListener.class));
-        Mockito.when(eventListenerProvider.get().listen(any(), any())).thenReturn(Observable.empty());
+        when(userStorageProvider.get()).thenReturn(userStorage);
+        when(preferencesProvider.get()).thenReturn(preferences);
+        when(usersService.getUsers(any(), any())).thenReturn(just(List.of(
+                new User("645cd04c11b590456276e9d9", "Rick", Constants.USER_STATUS_ONLINE, null, null),
+                new User("645cd086f249626b1eefa92e", "Morty", Constants.USER_STATUS_OFFLINE, null, null),
+                new User("645cd0a34389d5c06620fe64", "Garbage Goober", Constants.USER_STATUS_OFFLINE, null, null))));
+        when(eventListenerProvider.get()).thenReturn(mock(EventListener.class));
+        when(eventListenerProvider.get().listen(any(), any())).thenReturn(empty());
+        userStorage.setFriends(List.of("645cd04c11b590456276e9d9", "645cd086f249626b1eefa92e", "645cd0a34389d5c06620fe64"));
+        groupStorage.set_id("645cd04c11b590456276e9d1");
 
         app.start(stage);
         app.show(mainMenuController);
@@ -123,26 +123,28 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Test
     void changeToLogin() {
-        when(usersService.updateUser(isNull(),anyString(),isNull(),isNull(),isNull()))
-                .thenReturn(Observable.just(new User(
+        when(usersService.updateUser(isNull(), anyString(), isNull(), isNull(), isNull()))
+                .thenReturn(just(new User(
                         "423f8d731c386bcd2204da39",
                         "UserPatch",
                         USER_STATUS_OFFLINE,
                         null,
                         null
-                )));
+                ))).thenReturn(error(new Exception(HTTP_429)));
 
         when(authenticationService.logout())
-                .thenReturn(Observable.just("Successful"));
+                .thenReturn(just("Successful")).thenReturn(error(new Exception(HTTP_429)));
 
         final LoginController loginController = mock(LoginController.class);
         when(loginControllerProvider.get()).thenReturn(loginController);
         doNothing().when(app).show(loginController);
 
         clickOn("#logoutButton");
-        verify(usersService).updateUser(null,"offline", null, null,null);
+        verify(usersService).updateUser(null, "offline", null, null, null);
         verify(authenticationService).logout();
         verify(app).show(loginController);
+        clickOn("#logoutButton");
+        clickOn("OK");
     }
 
     @Test
@@ -171,5 +173,30 @@ class MainMenuControllerTest extends ApplicationTest {
         assertEquals(3, friendListView.getItems().size());
         User user = friendListView.getItems().get(0);
         assertEquals("Rick", user.name());
+    }
+
+    @Test
+    void switchToMessagesScreen() {
+        when(groupStorageProvider.get()).thenReturn(groupStorage);
+        final MessagesController messagesController = mock(MessagesController.class);
+        when(messagesControllerProvider.get()).thenReturn(messagesController);
+        doNothing().when(app).show(messagesController);
+        clickOn("Rick");
+        verify(app).show(messagesController);
+    }
+
+    @Test
+    void clickOnFriendSettings() {
+        FriendSettingsController friendSettingsController = mock(FriendSettingsController.class);
+        when(friendSettingsControllerProvider.get()).thenReturn(friendSettingsController);
+        doNothing().when(friendSettingsController).setUser(any());
+        doNothing().when(friendSettingsController).setFriendsListView(any());
+        doReturn(new Label("test")).when(friendSettingsController).render();
+        HBox friend = lookup("#Rick").query();
+        HBox friendSettings = (HBox) friend.getChildren().get(2);
+        Button friendSettingsButton = (Button) friendSettings.getChildren().get(0);
+        clickOn(friendSettingsButton);
+        verify(friendSettingsController).setUser(any());
+        verify(friendSettingsController).setFriendsListView(any());
     }
 }
