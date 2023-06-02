@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.utils;
 
+
 import de.uniks.stpmon.team_m.App;
 
 import javax.imageio.ImageIO;
@@ -11,6 +12,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Objects;
+import javafx.scene.image.Image;
+import okhttp3.ResponseBody;
+import java.io.InputStream;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -78,4 +82,22 @@ public class ImageProcessor {
 
         return Base64.getEncoder().encodeToString(imageBytes);
     }
+  
+  public static Image resonseBodyToJavaFXImage(ResponseBody responseBody) throws IOException {
+        try (InputStream inputStream = responseBody.byteStream()) {
+            byte[] imageData = toByteArray(inputStream);
+            return new Image(new ByteArrayInputStream(imageData));
+        }
+    }
+
+    private static byte[] toByteArray(InputStream inputStream) throws IOException {
+        byte[] buffer = new byte[4096];
+        int bytesRead;
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            output.write(buffer, 0, bytesRead);
+        }
+        return output.toByteArray();
+    }
 }
+
