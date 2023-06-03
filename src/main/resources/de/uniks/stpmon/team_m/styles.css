@@ -52,23 +52,34 @@
     -fx-border-radius : 5px;
     -fx-padding :0.0 5.0 0.0 5.0;
 }
-.scroll-bar:vertical .increment-button ,
+.scroll-bar:vertical .increment-button,
 .scroll-bar:vertical .decrement-button {
     -fx-background-color :transparent;
     -fx-background-radius : 0.0em;
     -fx-font-size: 14px;
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+    -fx-padding: 4px;
 }
-.scroll-bar:vertical .increment-arrow,
-.scroll-bar:vertical .decrement-arrow{
-    -fx-background-color: black;
+.scroll-bar:vertical .increment-arrow {
+    -fx-shape: "M 100 100 L 300 100 L 200 300 z";
+    -fx-border-color: black;
+    -fx-border-width: 10px;
+}
+.scroll-bar:vertical .decrement-arrow {
+    -fx-shape: "M 300 300 L 100 300 L 200 100 z";
+    -fx-border-color: black;
+    -fx-border-width: 10px;
 }
 .scroll-bar:vertical .thumb {
-    -fx-background-color :derive(black,90.0%);
+    -fx-background-color :derive(#4D4C4F,10.0%);
     -fx-background-insets : 2.0, 0.0, 0.0;
     -fx-background-radius : 5px;
+    -fx-pref-height: 30;
+    -fx-pref-width: 30;
 }
 .scroll-bar:vertical .thumb:hover {
-    -fx-background-color :derive(#4D4C4F,10.0%);
+    -fx-background-color : derive(black,25.0%);
     -fx-background-insets : 2.0, 0.0, 0.0;
     -fx-background-radius : 5px;
 }
@@ -81,6 +92,7 @@
 .regionCell, .groupCell {
     -fx-padding: 8px;
     -fx-font-size: 17px;
+    -fx-background-radius: 10px;
 }
 /*********************************************************************************/
 /*********************************** Symbols *************************************/
@@ -163,6 +175,13 @@
 .friendsListVBox {
     -fx-border-style: solid;
     -fx-border-width: 2px 0 0 0;
+}
+.regionListView {
+    -fx-background-radius: 10px 0 0 10px;
+}
+.regionListView .list-cell, .regionListView .list-cell:focused {
+    -fx-border-radius: 10px 0 0 10px;
+    -fx-padding: 0 8px 0 16px;
 }
 /*********************************************************************************/
 /******************************* Friendslist *************************************/
@@ -250,7 +269,7 @@
     -fx-font-family: "Comic Sans MS";
     -fx-font-weight: bold;
     -fx-font-size: 12px;
-    -fx-padding: 0px 0px 0px 3px;
+    -fx-padding: 0 0 0 3px;
 }
 .alertDialogName {
     -fx-padding: 10 0 0 0 ;
