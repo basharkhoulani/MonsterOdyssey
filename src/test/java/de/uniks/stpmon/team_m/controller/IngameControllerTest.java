@@ -1,15 +1,14 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
@@ -26,6 +25,9 @@ public class IngameControllerTest extends ApplicationTest {
     App app = new App(null);
 
     @Mock
+    Provider<IngameTrainerSettingsController> trainerSettingsControllerProvider;
+
+    @Mock
     Provider<MainMenuController> mainMenuControllerProvider;
 
     @InjectMocks
@@ -33,9 +35,12 @@ public class IngameControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
+        final IngameTrainerSettingsController trainerSettingsController = mock(IngameTrainerSettingsController.class);
+        Mockito.when(trainerSettingsControllerProvider.get()).thenReturn(trainerSettingsController);
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
+
     }
 
     @Test
