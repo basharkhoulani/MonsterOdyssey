@@ -97,12 +97,13 @@ public class MessageCell extends ListCell&lt;Message&gt; {
 <span class="fc bfc" id="L97" title="All 2 branches covered.">        if (message.sender().equals(user.get_id())) {</span>
 <span class="fc" id="L98">            messageVBox.setStyle(messageVBox.getStyle() + OWN_MESSAGE_STYLE);</span>
 <span class="fc" id="L99">            setAlignment(CENTER_RIGHT);</span>
+<span class="fc" id="L100">            avatar.toFront();</span>
         } else {
-<span class="fc" id="L101">            messageVBox.setStyle(messageVBox.getStyle() + NOT_OWN_MESSAGE_STYLE);</span>
-<span class="fc" id="L102">            setAlignment(CENTER_LEFT);</span>
+<span class="fc" id="L102">            messageVBox.setStyle(messageVBox.getStyle() + NOT_OWN_MESSAGE_STYLE);</span>
+<span class="fc" id="L103">            setAlignment(CENTER_LEFT);</span>
         }
-<span class="fc" id="L104">        messageVBox.setStyle(messageVBox.getStyle() + ROUNDED_CORNERS_STYLE + BORDER_COLOR_BLACK);</span>
-<span class="fc" id="L105">    }</span>
+<span class="fc" id="L105">        messageVBox.setStyle(messageVBox.getStyle() + ROUNDED_CORNERS_STYLE + BORDER_COLOR_BLACK);</span>
+<span class="fc" id="L106">    }</span>
 
     /**
      * The setDateAndEdited method is used to set the date and, if edited, the updated time of the message.
@@ -112,46 +113,46 @@ public class MessageCell extends ListCell&lt;Message&gt; {
      */
 
     private void setDateAndEdited(Message message, String senderName) {
-<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (!message.createdAt().equals(message.updatedAt())) {</span>
-<span class="fc" id="L116">            senderTimeDate.setText(senderName + &quot;, &quot; + formatTimeString(getItem().updatedAt()) + &quot; (&quot; + PENCIL + &quot;)&quot;);</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (!message.createdAt().equals(message.updatedAt())) {</span>
+<span class="fc" id="L117">            senderTimeDate.setText(senderName + &quot;, &quot; + formatTimeString(getItem().updatedAt()) + &quot; (&quot; + PENCIL + &quot;)&quot;);</span>
         } else {
-<span class="fc" id="L118">            senderTimeDate.setText(senderName + &quot;, &quot; + formatTimeString(getItem().createdAt()));</span>
+<span class="fc" id="L119">            senderTimeDate.setText(senderName + &quot;, &quot; + formatTimeString(getItem().createdAt()));</span>
         }
-<span class="fc" id="L120">    }</span>
+<span class="fc" id="L121">    }</span>
 
     /**
      * The loadFXML method is used to load the FXML file.
      */
 
     private void loadFXML() {
-<span class="fc bfc" id="L127" title="All 2 branches covered.">        if (loader == null) {</span>
-<span class="fc" id="L128">            loader = new FXMLLoader(Main.class.getResource(&quot;views/MessageCell.fxml&quot;));</span>
-<span class="fc" id="L129">            loader.setControllerFactory(c -&gt; this);</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (loader == null) {</span>
+<span class="fc" id="L129">            loader = new FXMLLoader(Main.class.getResource(&quot;views/MessageCell.fxml&quot;));</span>
+<span class="fc" id="L130">            loader.setControllerFactory(c -&gt; this);</span>
             try {
-<span class="fc" id="L131">                loader.load();</span>
-<span class="nc" id="L132">            } catch (Exception e) {</span>
-<span class="nc" id="L133">                e.printStackTrace();</span>
-<span class="fc" id="L134">            }</span>
+<span class="fc" id="L132">                loader.load();</span>
+<span class="nc" id="L133">            } catch (Exception e) {</span>
+<span class="nc" id="L134">                e.printStackTrace();</span>
+<span class="fc" id="L135">            }</span>
         }
-<span class="fc" id="L136">    }</span>
+<span class="fc" id="L137">    }</span>
 
     /**
      * The showEditAndDelete method is used to show the edit and delete button if the user is the sender of the message.
      */
 
     public void showEditAndDelete() {
-<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (!getItem().sender().equals(user.get_id())) {</span>
-<span class="fc" id="L144">            hideEditAndDelete();</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        if (!getItem().sender().equals(user.get_id())) {</span>
+<span class="fc" id="L145">            hideEditAndDelete();</span>
         } else {
-<span class="fc" id="L146">            editMessage.setVisible(true);</span>
-<span class="fc" id="L147">            deleteMessage.setVisible(true);</span>
+<span class="fc" id="L147">            editMessage.setVisible(true);</span>
+<span class="fc" id="L148">            deleteMessage.setVisible(true);</span>
         }
-<span class="fc" id="L149">    }</span>
+<span class="fc" id="L150">    }</span>
 
     public void hideEditAndDelete() {
-<span class="fc" id="L152">        editMessage.setVisible(false);</span>
-<span class="fc" id="L153">        deleteMessage.setVisible(false);</span>
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L153">        editMessage.setVisible(false);</span>
+<span class="fc" id="L154">        deleteMessage.setVisible(false);</span>
+<span class="fc" id="L155">    }</span>
 
     /**
      * The formatTimeString method is used to format the time string.
@@ -161,10 +162,10 @@ public class MessageCell extends ListCell&lt;Message&gt; {
      */
 
     private String formatTimeString(String dateTime) {
-<span class="fc" id="L164">        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(ZONE_ID_EUROPE_BERLIN));</span>
+<span class="fc" id="L165">        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(ZONE_ID_EUROPE_BERLIN));</span>
 
-<span class="fc" id="L166">        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);</span>
-<span class="fc" id="L167">        return localDateTime.format(outputFormatter);</span>
+<span class="fc" id="L167">        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);</span>
+<span class="fc" id="L168">        return localDateTime.format(outputFormatter);</span>
     }
 
     /**
@@ -174,22 +175,22 @@ public class MessageCell extends ListCell&lt;Message&gt; {
      */
 
     public void editMessage() {
-<span class="fc" id="L177">        TextInputDialog dialog = new TextInputDialog();</span>
-<span class="fc" id="L178">        dialog.setTitle(EDIT_MESSAGE_TITLE);</span>
-<span class="fc" id="L179">        dialog.setHeaderText(null);</span>
-<span class="fc" id="L180">        dialog.setContentText(EDIT_MESSAGE_CONTENT);</span>
+<span class="fc" id="L178">        TextInputDialog dialog = new TextInputDialog();</span>
+<span class="fc" id="L179">        dialog.setTitle(EDIT_MESSAGE_TITLE);</span>
+<span class="fc" id="L180">        dialog.setHeaderText(null);</span>
+<span class="fc" id="L181">        dialog.setContentText(EDIT_MESSAGE_CONTENT);</span>
 
-<span class="fc" id="L182">        TextArea messageArea = new TextArea();</span>
-<span class="fc" id="L183">        messageArea.setText(getItem().body());</span>
-<span class="fc" id="L184">        messageArea.setId(&quot;messageArea&quot;);</span>
-<span class="fc" id="L185">        dialog.getDialogPane().setContent(messageArea);</span>
-<span class="fc" id="L186">        Button confirmEdit = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);</span>
-<span class="fc" id="L187">        confirmEdit.setOnAction(event -&gt; {</span>
-<span class="fc" id="L188">            messagesBoxController.editMessage(messageArea.getText(), getItem());</span>
-<span class="fc" id="L189">            dialog.close();</span>
-<span class="fc" id="L190">        });</span>
-<span class="fc" id="L191">        dialog.showAndWait();</span>
-<span class="fc" id="L192">    }</span>
+<span class="fc" id="L183">        TextArea messageArea = new TextArea();</span>
+<span class="fc" id="L184">        messageArea.setText(getItem().body());</span>
+<span class="fc" id="L185">        messageArea.setId(&quot;messageArea&quot;);</span>
+<span class="fc" id="L186">        dialog.getDialogPane().setContent(messageArea);</span>
+<span class="fc" id="L187">        Button confirmEdit = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);</span>
+<span class="fc" id="L188">        confirmEdit.setOnAction(event -&gt; {</span>
+<span class="fc" id="L189">            messagesBoxController.editMessage(messageArea.getText(), getItem());</span>
+<span class="fc" id="L190">            dialog.close();</span>
+<span class="fc" id="L191">        });</span>
+<span class="fc" id="L192">        dialog.showAndWait();</span>
+<span class="fc" id="L193">    }</span>
 
     /**
      * The deleteMessage method is used to delete the message.
@@ -198,16 +199,16 @@ public class MessageCell extends ListCell&lt;Message&gt; {
      */
 
     public void deleteMessage() {
-<span class="fc" id="L201">        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);</span>
-<span class="fc" id="L202">        alert.setTitle(DELETE_MESSAGE_TITLE);</span>
-<span class="fc" id="L203">        alert.setHeaderText(DELETE_MESSAGE_TITLE);</span>
-<span class="fc" id="L204">        alert.setContentText(DELETE_MESSAGE_CONTENT);</span>
+<span class="fc" id="L202">        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);</span>
+<span class="fc" id="L203">        alert.setTitle(DELETE_MESSAGE_TITLE);</span>
+<span class="fc" id="L204">        alert.setHeaderText(DELETE_MESSAGE_TITLE);</span>
+<span class="fc" id="L205">        alert.setContentText(DELETE_MESSAGE_CONTENT);</span>
 
-<span class="fc" id="L206">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
-<span class="pc bpc" id="L207" title="2 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK) {</span>
-<span class="fc" id="L208">            messagesBoxController.deleteMessage(getItem());</span>
-<span class="fc" id="L209">            alert.close();</span>
+<span class="fc" id="L207">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+<span class="pc bpc" id="L208" title="2 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK) {</span>
+<span class="fc" id="L209">            messagesBoxController.deleteMessage(getItem());</span>
+<span class="fc" id="L210">            alert.close();</span>
         }
-<span class="fc" id="L211">    }</span>
+<span class="fc" id="L212">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
