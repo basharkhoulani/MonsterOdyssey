@@ -186,5 +186,7 @@ public class AppTest extends ApplicationTest {
         type(KeyCode.P);
         clickOn("Save Game & Leave");
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
+
+
     }
 }
