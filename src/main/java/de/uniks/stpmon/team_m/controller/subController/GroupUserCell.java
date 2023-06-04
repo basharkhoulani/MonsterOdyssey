@@ -57,7 +57,9 @@ public class GroupUserCell extends UserCell {
             final Button addOrRemoveButton = new Button();
             addOrRemoveButton.setId(item.name() + "AddOrRemoveButton");
             final HBox buttonHBox = new HBox(addOrRemoveButton);
+            addOrRemoveButton.setMinSize(BUTTON_PREF_SIZE, BUTTON_PREF_SIZE);
             addOrRemoveButton.setPrefSize(BUTTON_PREF_SIZE, BUTTON_PREF_SIZE);
+            addOrRemoveButton.setMaxSize(BUTTON_PREF_SIZE, BUTTON_PREF_SIZE);
             addOrRemoveButton.setStyle(BUTTON_TRANSPARENT_STYLE + BUTTON_BORDER_STYLE);
             buttonHBox.setAlignment(CENTER_RIGHT);
             HBox.setHgrow(buttonHBox, Priority.ALWAYS);

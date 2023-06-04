@@ -52,6 +52,7 @@ public class MainMenuUserCell extends UserCell {
             popOverButton.setText(THREE_DOTS);
             popOverButton.setStyle(BUTTON_TRANSPARENT_STYLE);
             popOverButton.setId(item.name() + "PopOverButton");
+            popOverButton.getStyleClass().add("popOverButton");
             buttonHBox.setAlignment(CENTER_RIGHT);
             HBox.setHgrow(buttonHBox, Priority.ALWAYS);
             super.getRootHBox().getChildren().add(buttonHBox);

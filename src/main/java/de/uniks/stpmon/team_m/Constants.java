@@ -72,7 +72,7 @@ public class Constants {
     // NEW GROUP
     public static final String CHECK_MARK = "\u2713";
     public static final String ADD_MARK = "+";
-    public static final int BUTTON_PREF_SIZE = 30;
+    public static final int BUTTON_PREF_SIZE = 40;
     public static final int MAX_SUGGESTIONS_NEW_GROUP = 20;
 
 
