@@ -1,8 +1,5 @@
 package de.uniks.stpmon.team_m;
 
-import javafx.scene.input.KeyCode;
-
-import java.util.Objects;
 
 public class Constants {
     // SERVER
@@ -66,6 +63,9 @@ public class Constants {
     public static final String SIGNIN_ERROR = "Wrong Password or Username! Try again!";
     public static final String USERNAME_TAKEN = "Username is already taken!";
 
+    //Change Language Pop up
+    public static final String CHANGE_LANGUAGE_TITLE = "Change Language";
+
     // MAIN MENU
     public static final String MAIN_MENU_TITLE = "Main Menu";
 
@@ -107,9 +107,17 @@ public class Constants {
     public static final String IMAGE = "Image";
     public static final String AVATAR_SUCCESS_CHANGED = "Your Avatar has been changed successfully.";
 
+    // AVATAR
+    public static final String AVATAR_1 = "images/Monster1-color.png";
+    public static final String AVATAR_2 = "images/Monster2-color.png";
+    public static final String AVATAR_3 = "images/rabbit.png";
+    public static final String AVATAR_4 = "images/sheep_icon.png";
+    public static final int MAX_BASE64_LENGTH = 16000;
+    public static final String IMAGE_PROCESSING_ONGOING = "Image is being processed. Please wait.";
+    public static final String IMAGE_PROCESSING_ERROR = "Image could not be processed. Please try again.";
+
     // INGAME
     public static final String INGAME_TITLE = "Ingame";
-    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     public static final String FIRST_HELP = "Click 'p' on your keyboard for pause menu.\n";
     public static final String SECOND_HELP = "     \u2191 \n \u2190 \u2193 \u2192  to move your character. \n";
     public static final String THIRD_HELP = "Click Space for interact and attack.";
@@ -135,7 +143,6 @@ public class Constants {
     public static final String UNKNOWN_USER = "Unknown";
 
     // Welcome Scene
-    public static final String STYLE_RESOURCE = Objects.requireNonNull(Main.class.getResource("styles.css")).toString();
     public static final String FIRST_MESSAGE = "Welcome to Monster Odyssey!";
     public static final String SECOND_MESSAGE = "Welcome Aboard.";
     public static final String THIRD_MESSAGE = "We are the crew of this ship.";

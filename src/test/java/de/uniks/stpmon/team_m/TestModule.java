@@ -10,6 +10,9 @@ import de.uniks.stpmon.team_m.rest.*;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subjects.Subject;
+import javafx.stage.FileChooser;
 
 import java.util.List;
 import java.util.prefs.Preferences;
@@ -36,6 +39,11 @@ public class TestModule {
         return new EventListener(null, null) {
             @Override
             public <T> Observable<Event<T>> listen(String pattern, Class<T> type) {
+                Subject<Event<T>> eventSubject;
+                if (pattern.equals(("groups." + "64610ec8420b3d786212aea8" + "messages" + "6475e50ed2b996624960cc2c" + "created"))) {
+                    eventSubject = PublishSubject.create();
+                    return eventSubject;
+                }
                 return Observable.empty();
             }
 
@@ -50,18 +58,18 @@ public class TestModule {
         return new AuthApiService() {
             @Override
             public Observable<LoginResult> login(LoginDto dto) {
-                return Observable.just(new LoginResult("1",
-                        "1",
+                return Observable.just(new LoginResult("6475e51abff65ded36a854ae",
+                        "TestUser",
                         "online",
                         null,
                         null,
-                        "a1a2",
-                        "a3a4"));
+                        "6475ee91c3cd3c45a009060d",
+                        "6475ee9744d0553374489d56"));
             }
 
             @Override
             public Observable<LoginResult> refresh(RefreshDto dto) {
-                return Observable.just(new LoginResult("42", "42", "online", null, null, "123", "456"));
+                return Observable.just(new LoginResult("6475e51abff65ded36a854ae", "TestUser", "online", null, null, "6475ee91c3cd3c45a009060d", "6475ee9744d0553374489d56"));
             }
 
             @Override
@@ -76,29 +84,29 @@ public class TestModule {
         return new GroupsApiService() {
             @Override
             public Observable<Group> create(CreateGroupDto dto) {
-                return Observable.empty();
+                return Observable.just(new Group("6475e39e5ec1ca327fad76cc", "TestGroup", List.of("6475e51abff65ded36a854ae", "6475e423f0c71676ff8a9e16")));
             }
 
             @Override
             public Observable<List<Group>> getGroups(String ids) {
                 return Observable.just(
-                        List.of(new Group("64610ec8420b3d786212aea8", "", List.of("64610e7b82ca062bfa5b7231", "64610e7b82ca062bfa5b7232")))
+                        List.of(new Group("64610ec8420b3d786212aea8", "AlreadyCreatedGroup", List.of("6475e51abff65ded36a854ae", "6475e45f6aa7df2539471876")))
                 );
             }
 
             @Override
             public Observable<Group> getGroup(String id) {
-                return Observable.empty();
+                return Observable.just(new Group("64610ec8420b3d786212aea8", "AlreadyCreatedGroup", List.of("6475e51abff65ded36a854ae", "6475e45f6aa7df2539471876")));
             }
 
             @Override
             public Observable<Group> update(String _id, UpdateGroupDto dto) {
-                return Observable.empty();
+                return Observable.just(new Group("6475e39e5ec1ca327fad76cc", "TestGroupUpdated", List.of("6475e51abff65ded36a854ae", "6475e423f0c71676ff8a9e16")));
             }
 
             @Override
             public Observable<Group> delete(String _id) {
-                return Observable.empty();
+                return Observable.just(new Group("6475e39e5ec1ca327fad76cc", "TestGroup", List.of("6475e51abff65ded36a854ae")));
             }
         };
     }
@@ -108,27 +116,42 @@ public class TestModule {
         return new MessagesApiService() {
             @Override
             public Observable<Message> create(String namespace, String parent, CreateMessageDto dto) {
-                return Observable.empty();
+                return Observable.just(new Message("2023-05-31T12:50:57.510Z", "2023-05-31T12:50:57.510Z", "6475e58f40b88eaff651b164",
+                        "6475e51abff65ded36a854ae", "This is a created test message 1."));
             }
 
             @Override
             public Observable<List<Message>> getMessages(String namespace, String parent) {
-                return Observable.empty();
+                return Observable.just(List.of(
+                        new Message("2023-05-30T12:01:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863",
+                                "6475e51abff65ded36a854ae", "This is an already created test message 1."),
+                        new Message("2023-05-31T12:01:57.510Z", "2023-05-31T12:01:57.510Z", "6475e59dd60f90d6f550dd2d",
+                                "6475e59dd60f90d6f550dd2d", "This is an already created test message 2.")
+                ));
             }
 
             @Override
             public Observable<Message> getMessage(String namespace, String parent, String id) {
-                return Observable.empty();
+                return Observable.just(
+                        new Message("2023-05-30T12:00:57.510Z", "2023-05-30T12:00:57.510Z", "6475e58f40b88eaff651b164",
+                                "6475e51abff65ded36a854ae", "This is an already created test message 1.")
+                );
             }
 
             @Override
             public Observable<Message> update(String namespace, String parent, String id, UpdateMessageDto dto) {
-                return Observable.empty();
+                return Observable.just(
+                        new Message("2023-05-30T12:01:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863",
+                                "6475e51abff65ded36a854ae", "This is an already created test message 2.")
+                );
             }
 
             @Override
             public Observable<Message> delete(String namespace, String parent, String id) {
-                return Observable.empty();
+                return Observable.just(
+                        new Message("2023-05-31T12:01:57.510Z", "2023-05-31T12:01:57.510Z", "6475e59dd60f90d6f550dd2d",
+                                "6475e59dd60f90d6f550dd2d", "This is an already created test message 3.")
+                );
             }
         };
     }
@@ -138,12 +161,14 @@ public class TestModule {
         return new RegionsApiService() {
             @Override
             public Observable<List<Region>> getRegions() {
-                return Observable.empty();
+                return Observable.just(List.of(new Region("2023-05-22T17:51:46.772Z",
+                        "2023-05-22T17:51:46.772Z", "646bc436cfee07c0e408466f", "Albertina", new Spawn("Albertina", 1, 1), new Object())));
             }
 
             @Override
             public Observable<Region> getRegion(String id) {
-                return Observable.empty();
+                return Observable.just(new Region("2023-05-22T17:51:46.772Z",
+                        "2023-05-22T17:51:46.772Z", "646bc436cfee07c0e408466f", "Albertina", new Spawn("Albertina", 1, 1), new Object()));
             }
         };
     }
@@ -153,39 +178,45 @@ public class TestModule {
         return new UsersApiService() {
             @Override
             public Observable<User> createUser(CreateUserDto dto) {
-                return Observable.just(new User("42", "Rick", "offline", null, null));
+                return Observable.just(new User("6475e51abff65ded36a854ae", "TestUser", "online", null, null));
             }
 
             @Override
             public Observable<List<User>> getUsers(List<String> ids, String status) {
                 return Observable.just(List.of(
-                        new User("0815", "Morty", "online", null, null),
-                        new User("Owen", "Morty", "online", null, null),
-                        new User("2", "Morty", "online", null, null)
+                        new User("6475e6121a0f21b9cd9fa708", "TestFriend 1", "online", null, null),
+                        new User("6475e6259cb7e1e7606c0dc6", "TestFriend 2", "online", null, null),
+                        new User("6475e6325ec09749507c3848", "TestFriend 3", "offline", null, null),
+                        new User("6475e51abff65ded36a854ae", "TestUser", "online", null, null)
                 ));
             }
 
             @Override
             public Observable<User> getUser(String id) {
-                if (id.equals("0815")) {
-                    return Observable.just(new User("0815", "Morty", "online", null, null));
+                if (id.equals("6475e6121a0f21b9cd9fa708")) {
+                    return Observable.just(new User("6475e6121a0f21b9cd9fa708", "TestFriend 1", "online", null, null));
+                } else if (id.equals("6475e6259cb7e1e7606c0dc6")) {
+                    return Observable.just(new User("6475e6259cb7e1e7606c0dc6", "TestFriend 2", "online", null, null));
                 } else {
-                    return Observable.just(new User("42", "Rick", "online", null, null));
+                    return Observable.just(new User("6475e6325ec09749507c3848", "TestFriend 3", "offline", null, null));
                 }
             }
 
             @Override
             public Observable<User> updateUser(String id, UpdateUserDto dto) {
                 if (dto.status().equals("offline")) {
-                    return Observable.just(new User("42", "Rick", "online", null, null));
+                    return Observable.just(new User("6475e51abff65ded36a854ae", "TestUser", "online", null, List.of(
+                            "6475e6259cb7e1e7606c0dc6", "6475e6121a0f21b9cd9fa708")));
                 } else {
-                    return Observable.just(new User("42", "Rick", "offline", null, null));
+                    return Observable.just(new User("6475e51abff65ded36a854ae", "TestUser", "offline", null, List.of(
+                            "6475e6259cb7e1e7606c0dc6", "6475e6121a0f21b9cd9fa708")));
                 }
             }
 
             @Override
             public Observable<User> deleteUser(String id) {
-                return Observable.just(new User("423f8d731c386bcd2204da39", "Rick", "offline", null, null));
+                return Observable.just(new User("6475e51abff65ded36a854ae", "TestUser", "offline", null, List.of(
+                        "6475e6259cb7e1e7606c0dc6", "6475e6121a0f21b9cd9fa708")));
             }
         };
     }
@@ -200,9 +231,13 @@ public class TestModule {
 
             @Override
             public String get_id() {
-                return "645cd04c11b590456276e9d6";
+                return "6475e51abff65ded36a854ae";
             }
         };
     }
 
+    @Provides
+    static FileChooser fileChooser() {
+        return new FileChooser();
+    }
 }
