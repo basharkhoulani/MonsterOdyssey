@@ -227,7 +227,7 @@ public class MainMenuController extends Controller {
 <span class="fc" id="L227">                        ingameControllerProvider.get().setRegion(selectedRegion._id());</span>
 <span class="fc" id="L228">                        app.show(ingameControllerProvider.get());</span>
                     }
-<span class="fc" id="L230">                }, Throwable::printStackTrace</span>
+<span class="pc" id="L230">                }, error -&gt; showError(error.getMessage())</span>
         ));
 <span class="fc" id="L232">    }</span>
 }
