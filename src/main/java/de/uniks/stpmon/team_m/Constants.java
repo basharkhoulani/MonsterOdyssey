@@ -72,7 +72,7 @@ public class Constants {
     // NEW GROUP
     public static final String CHECK_MARK = "\u2713";
     public static final String ADD_MARK = "+";
-    public static final int BUTTON_PREF_SIZE = 30;
+    public static final int BUTTON_PREF_SIZE = 40;
     public static final int MAX_SUGGESTIONS_NEW_GROUP = 20;
 
 
@@ -108,13 +108,14 @@ public class Constants {
     public static final String AVATAR_SUCCESS_CHANGED = "Your Avatar has been changed successfully.";
 
     // AVATAR
-    public static final String AVATAR_1 = "images/Monster1-color.png";
-    public static final String AVATAR_2 = "images/Monster2-color.png";
-    public static final String AVATAR_3 = "images/rabbit.png";
-    public static final String AVATAR_4 = "images/sheep_icon.png";
+    public static final String AVATAR_1 = "images/monster.png";
+    public static final String AVATAR_2 = "images/rabbit.png";
+    public static final String AVATAR_3 = "images/sheep_icon.png";
+    public static final String AVATAR_4 = "images/cat.jpeg";
     public static final int MAX_BASE64_LENGTH = 16000;
     public static final String IMAGE_PROCESSING_ONGOING = "Image is being processed. Please wait.";
     public static final String IMAGE_PROCESSING_ERROR = "Image could not be processed. Please try again.";
+    public static final int AVATAR_SIZE = 30;
 
     // INGAME
     public static final String INGAME_TITLE = "Ingame";
@@ -152,6 +153,10 @@ public class Constants {
     public static final String SEVENTH_MESSAGE = "Can we have your name?";
     public static final String EIGHTH_MESSAGE = "Hello. Next, we 'd like to take a picture of you";
     public static final String NINTH_MESSAGE = "Take as much time as you want to get dressed up for it.";
+    public static final String TENTH_MESSAGE = "Now it's time to start your Journey";
+    public static final String ELEVENTH_MESSAGE = "See you next time!";
+
+
     public static final String DELETE_TRAINER_ALERT = "Delete Trainer";
     public static final String WELCOME_MESSAGE_STYLE = "welcomeMessage";
     public static final String WELCOME_SCENE_BUTTON = "welcomeSceneButton";

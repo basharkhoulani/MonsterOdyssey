@@ -2,12 +2,19 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.dto.Message;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.awt.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -32,9 +39,11 @@ public class MessageCell extends ListCell<Message> {
     public Button deleteMessage;
     @FXML
     public VBox messageVBox;
+    @FXML
+    public ImageView avatar;
     private FXMLLoader loader;
     private final MessagesBoxController messagesBoxController;
-    public String userID;
+    public UserStorage user;
 
     /**
      * MessageCell is used to handle the message cells.
@@ -43,12 +52,12 @@ public class MessageCell extends ListCell<Message> {
      * contains the rootMessageHBox. The message cell has a editMessage button and a deleteMessage button.
      *
      * @param messagesBoxController The {@link MessagesBoxController} is used to handle the messages box.
-     * @param userID                The userID is used to identify the user.
+     * @param user                  The user is used to identify the user.
      */
 
-    public MessageCell(MessagesBoxController messagesBoxController, String userID) {
+    public MessageCell(MessagesBoxController messagesBoxController, UserStorage user) {
         this.messagesBoxController = messagesBoxController;
-        this.userID = userID;
+        this.user = user;
     }
 
     /**
@@ -65,9 +74,13 @@ public class MessageCell extends ListCell<Message> {
         } else {
             loadFXML();
             final String senderName = messagesBoxController.getUsername(message.sender());
+            final String base64avatar = messagesBoxController.getAvatar(message.sender());
             messageContent.setText(message.body());
             setDateAndEdited(message, senderName);
             setMessageOrientationAndStyle(message);
+            if (!GraphicsEnvironment.isHeadless()){
+                avatar.setImage(ImageProcessor.fromBase64ToFXImage(base64avatar));
+            }
             setGraphic(rootMessageHBox);
             setUserData(message);
             setText(null);
@@ -81,9 +94,10 @@ public class MessageCell extends ListCell<Message> {
      */
 
     private void setMessageOrientationAndStyle(Message message) {
-        if (message.sender().equals(userID)) {
+        if (message.sender().equals(user.get_id())) {
             messageVBox.setStyle(messageVBox.getStyle() + OWN_MESSAGE_STYLE);
             setAlignment(CENTER_RIGHT);
+            avatar.toFront();
         } else {
             messageVBox.setStyle(messageVBox.getStyle() + NOT_OWN_MESSAGE_STYLE);
             setAlignment(CENTER_LEFT);
@@ -127,7 +141,7 @@ public class MessageCell extends ListCell<Message> {
      */
 
     public void showEditAndDelete() {
-        if (!getItem().sender().equals(userID)) {
+        if (!getItem().sender().equals(user.get_id())) {
             hideEditAndDelete();
         } else {
             editMessage.setVisible(true);

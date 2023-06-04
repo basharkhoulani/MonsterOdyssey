@@ -15,7 +15,6 @@ import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -192,9 +191,7 @@ class MainMenuControllerTest extends ApplicationTest {
         doNothing().when(friendSettingsController).setUser(any());
         doNothing().when(friendSettingsController).setFriendsListView(any());
         doReturn(new Label("test")).when(friendSettingsController).render();
-        HBox friend = lookup("#Rick").query();
-        HBox friendSettings = (HBox) friend.getChildren().get(2);
-        Button friendSettingsButton = (Button) friendSettings.getChildren().get(0);
+        Button friendSettingsButton = lookup("#RickPopOverButton").query();
         clickOn(friendSettingsButton);
         verify(friendSettingsController).setUser(any());
         verify(friendSettingsController).setFriendsListView(any());

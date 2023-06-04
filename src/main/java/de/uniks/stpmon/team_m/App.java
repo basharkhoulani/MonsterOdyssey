@@ -134,5 +134,7 @@ public class App extends Application {
             controller.destroy();
             controller = null;
         }
+        Platform.exit();
+        System.exit(0);
     }
 }

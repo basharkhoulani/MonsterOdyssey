@@ -1,9 +1,12 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
+import de.uniks.stpmon.team_m.dto.Region;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.skin.ButtonBarSkin;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -16,9 +19,12 @@ import javafx.stage.Window;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
+import java.util.Objects;
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
+
 
 public class IngameController extends Controller {
 
@@ -33,6 +39,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
+
+    private Region region;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -110,7 +118,10 @@ public class IngameController extends Controller {
         final ButtonType resume = new ButtonType(RESUME_BUTTON_LABEL);
         final ButtonType saveAndExit = new ButtonType(SAVE_GAME_AND_LEAVE_BUTTON_LABEL);
         dialogPane.getButtonTypes().addAll(resume, saveAndExit);
-        dialogPane.getStyleClass().add("comicSans");
+        if (!GraphicsEnvironment.isHeadless()) {
+            dialogPane.getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
+            dialogPane.getStyleClass().add("comicSans");
+        }
         final Button resumeButton = (Button) dialogPane.lookupButton(resume);
         resumeButton.setOnKeyPressed(event -> {
             if (!(event.getCode() == PAUSE_MENU_KEY)) {
@@ -136,11 +147,20 @@ public class IngameController extends Controller {
         }
     }
 
+    public void setRegion(Region region) {
+        this.region = region;
+    }
+
 
     public void showTrainerSettings() {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
+        trainerSettingsController.setRegion(this.region);
         trainerSettingsDialog.setTitle("Trainer Profil");
         trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());
+        trainerSettingsDialog.getDialogPane().setContent(trainerSettingsController.render());
+        trainerSettingsDialog.getDialogPane().setExpandableContent(null);
+        trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
+        trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");
         Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();
         popUp.setOnCloseRequest(evt ->
             ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close()

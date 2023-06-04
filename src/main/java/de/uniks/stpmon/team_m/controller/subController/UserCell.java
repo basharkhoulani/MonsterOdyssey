@@ -3,12 +3,15 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.utils.BestFriendUtils;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
+import java.awt.*;
 import java.util.Objects;
 import java.util.prefs.Preferences;
 
@@ -56,17 +59,32 @@ public class UserCell extends ListCell<User> {
             ImageView statusImageView = new ImageView();
             final HBox statusHBox = new HBox(statusImageView);
             statusHBox.setAlignment(CENTER);
+            ImageView avatarImageView = new ImageView();
+            if (!GraphicsEnvironment.isHeadless()) {
+                final Image avatar = ImageProcessor.fromBase64ToFXImage(user.avatar());
+                avatarImageView = new ImageView(avatar);
+            }
+            avatarImageView.setPreserveRatio(true);
+            avatarImageView.setFitHeight(AVATAR_SIZE);
+            final HBox avatarHBox = new HBox(avatarImageView);
+            avatarHBox.setAlignment(CENTER);
+            statusHBox.getStyleClass().add("statusHBox");
             final HBox nameHBox = new HBox(usernameLabel);
             nameHBox.setAlignment(CENTER);
-            rootHBox = new HBox(HBOX_FRIENDS_SPACING, statusHBox, nameHBox);
+            rootHBox = new HBox(HBOX_FRIENDS_SPACING, statusHBox, avatarHBox, nameHBox);
             final BestFriendUtils bestFriendUtils = new BestFriendUtils(preferences);
             statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineImage : offlineImage);
+            statusImageView.setPreserveRatio(true);
+            statusImageView.setFitWidth(20);
             if (preferences != null) {
                 if (bestFriendUtils.isBestFriend(user)) {
                     statusImageView.setImage(Objects.equals(user.status(), USER_STATUS_ONLINE) ? onlineStar : offlineStar);
+                    statusImageView.setPreserveRatio(true);
+                    statusImageView.setFitWidth(25);
                 }
             }
             rootHBox.setId(user.name());
+            rootHBox.getStyleClass().add("userCell");
             rootHBox.setUserData(user);
             setGraphic(rootHBox);
             setText(null);
