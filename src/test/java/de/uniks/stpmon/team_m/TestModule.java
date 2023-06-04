@@ -292,12 +292,24 @@ public class TestModule {
         return new TrainersApiService() {
             @Override
             public Observable<Trainer> createTrainer(String regionId, CreateTrainerDto createTrainerDto) {
-                return null;
+                return Observable.just(new Trainer("2023-05-22T17:51:46.772Z",
+                        "2023-05-22T17:51:46.772Z",
+                        "646bac223b4804b87c0b8054",
+                        "646bab5cecf584e1be02598a",
+                        "646bac8c1a74032c70fffe24",
+                        "Hans",
+                        "Premade_Character_01.png",
+                        0,
+                        "646bacc568933551792bf3d5",
+                        0,
+                        0,
+                        0,
+                        new NPCInfo(false)));
             }
 
             @Override
             public Observable<List<Trainer>> getTrainers(String regionId, String area, String id) {
-                return null;
+                return Observable.just(List.of());
             }
 
             @Override

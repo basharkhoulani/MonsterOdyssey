@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.WelcomeSceneController;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +22,8 @@ public class CharacterSelectionControllerTest extends ApplicationTest {
     CharacterSelectionController characterSelectionController;
     @Mock
     Provider<WelcomeSceneController> welcomeSceneControllerProvider;
+    @Mock
+    Provider<TrainerStorage> trainerStorageProvider;
     @Spy
     App app = new App(null);
 
@@ -29,6 +32,9 @@ public class CharacterSelectionControllerTest extends ApplicationTest {
         final WelcomeSceneController welcomeSceneController = mock(WelcomeSceneController.class);
         when(welcomeSceneControllerProvider.get()).thenReturn(welcomeSceneController);
         doNothing().when(app).show(welcomeSceneController);
+
+        final TrainerStorage trainerStorage = mock(TrainerStorage.class);
+        when(trainerStorageProvider.get()).thenReturn(trainerStorage);
 
         app.start(stage);
         app.show(characterSelectionController);

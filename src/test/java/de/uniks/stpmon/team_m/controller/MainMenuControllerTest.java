@@ -3,15 +3,16 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.subController.FriendSettingsController;
-import de.uniks.stpmon.team_m.dto.Region;
-import de.uniks.stpmon.team_m.dto.Spawn;
-import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.RegionsService;
+import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
+import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -42,6 +43,10 @@ class MainMenuControllerTest extends ApplicationTest {
     @Mock
     Provider<WelcomeSceneController> welcomeSceneControllerProvider;
     @Mock
+    Provider<TrainerStorage> trainerStorageProvider;
+    @Mock
+    Provider<TrainersService> trainersServiceProvider;
+    @Mock
     Provider<AccountSettingController> accountSettingControllerProvider;
     @Mock
     Provider<NewFriendController> newFriendControllerProvider;
@@ -49,6 +54,8 @@ class MainMenuControllerTest extends ApplicationTest {
     Provider<MessagesController> messagesControllerProvider;
     @Mock
     Provider<FriendSettingsController> friendSettingsControllerProvider;
+    @Mock
+    Provider<IngameController> ingameControllerProvider;
     @Mock
     AuthenticationService authenticationService;
     @Mock
@@ -159,11 +166,31 @@ class MainMenuControllerTest extends ApplicationTest {
     void changeToIngame() {
         final WelcomeSceneController welcomeSceneController = mock(WelcomeSceneController.class);
         when(welcomeSceneControllerProvider.get()).thenReturn(welcomeSceneController);
-        doNothing().when(app).show(welcomeSceneController);
+        final IngameController ingameController = mock(IngameController.class);
+        when(ingameControllerProvider.get()).thenReturn(ingameController);
+        doNothing().when(app).show(ingameController);
+        final TrainerStorage trainerStorage = mock(TrainerStorage.class);
+        when(trainerStorageProvider.get()).thenReturn(trainerStorage);
+        final TrainersService trainersService = mock(TrainersService.class);
+        when(trainersServiceProvider.get()).thenReturn(trainersService);
+        when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(new Trainer(
+                "2023-05-22T17:51:46.772Z",
+                "2023-05-22T17:51:46.772Z",
+                "646bac223b4804b87c0b8054",
+                "646bab5cecf584e1be02598a",
+                "646bac8c1a74032c70fffe24",
+                "Hans",
+                "Premade_Character_01.png",
+                0,
+                "646bacc568933551792bf3d5",
+                0,
+                0,
+                0,
+                new NPCInfo(false)))));
         final ListView<Region> regionListView = lookup("#regionListView").query();
         clickOn(regionListView.getItems().get(0).name());
         clickOn("#startGameButton");
-        verify(app).show(welcomeSceneController);
+        verify(app).show(ingameController);
     }
 
     @Test
