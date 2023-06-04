@@ -2,6 +2,11 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.CharacterSelectionController;
+import de.uniks.stpmon.team_m.dto.NPCInfo;
+import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -12,13 +17,9 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
-
 import javax.inject.Provider;
-
 import java.util.Locale;
 import java.util.ResourceBundle;
-
-import static de.uniks.stpmon.team_m.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -33,7 +34,10 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
     @Mock
     Provider<CharacterSelectionController> characterSelectionControllerProvider;
     @Mock
-    Provider<IngameController> ingameControllerProvider;
+    Provider<TrainerStorage> trainerStorageProvider;
+    @Mock
+    Provider<TrainersService> trainersServiceProvider;
+
 
     @Override
     public void start(Stage stage) {
@@ -43,9 +47,27 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
         when(characterSelectionControllerProvider.get()).thenReturn(characterSelectionController);
         doNothing().when(app).show(characterSelectionController);
 
-        final IngameController ingameController = mock(IngameController.class);
-        when(ingameControllerProvider.get()).thenReturn(ingameController);
-        doNothing().when(app).show(ingameController);
+        final TrainerStorage trainerStorage = mock(TrainerStorage.class);
+        when(trainerStorageProvider.get()).thenReturn(trainerStorage);
+
+
+        final TrainersService trainersService = mock(TrainersService.class);
+        when(trainersServiceProvider.get()).thenReturn(trainersService);
+        when(trainersService.createTrainer(any(), any(), any())).thenReturn(Observable.just(new Trainer(
+                "2023-05-22T17:51:46.772Z",
+                "2023-05-22T17:51:46.772Z",
+                "646bac223b4804b87c0b8054",
+                "646bab5cecf584e1be02598a",
+                "646bac8c1a74032c70fffe24",
+                "Hans",
+                "Premade_Character_01.png",
+                0,
+                "646bacc568933551792bf3d5",
+                0,
+                0,
+                0,
+                new NPCInfo(false))));
+
 
         app.start(stage);
         app.show(welcomeSceneController);
@@ -116,8 +138,5 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
         assertEquals("See you next time!", eleventhMessage.getText());
 
         clickOn("Next");
-
-        // Change to Ingame
-        verify(app).show(ingameControllerProvider.get());
     }
 }

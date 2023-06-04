@@ -131,6 +131,8 @@ public class AppTest extends ApplicationTest {
         waitForFxEvents();
         assertFalse(startGameButton.isDisabled());
         clickOn(startGameButton);
+
+        // Intro
         assertEquals("Monster Odyssey - Ingame", stage.getTitle());
 
         clickOn("Next");

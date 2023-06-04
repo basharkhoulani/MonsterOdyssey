@@ -1,7 +1,8 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.CharacterSelectionController;
-import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -14,6 +15,7 @@ import javafx.scene.layout.*;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Optional;
+import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -31,7 +33,6 @@ public class WelcomeSceneController extends Controller {
     @FXML
     public VBox firstMessageBox;
     public int sceneNumber = 1;
-    private Region region;
     private final SimpleStringProperty trainerName = new SimpleStringProperty();
     @Inject
     Provider<IngameController> ingameControllerProvider;
@@ -39,6 +40,13 @@ public class WelcomeSceneController extends Controller {
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
     Provider<CharacterSelectionController> characterSelectionControllerProvider;
+    @Inject
+    Provider<Preferences> preferencesProvider;
+    @Inject
+    Provider<TrainersService> trainersServiceProvider;
+    @Inject
+    Provider<TrainerStorage> trainerStorageProvider;
+
 
     @Inject
     public WelcomeSceneController() {
@@ -103,7 +111,7 @@ public class WelcomeSceneController extends Controller {
                 final ButtonType okButton = new ButtonType(OK);
                 final TextField textFieldName = new TextField();
                 textFieldName.setId("nameField");
-
+                textFieldName.textProperty().bindBidirectional(trainerName);
                 dialogPane.getButtonTypes().addAll(cancelButton, okButton);
 
                 final Button cancelButton2 = (Button) alert.getDialogPane().lookupButton(cancelButton);
@@ -124,7 +132,7 @@ public class WelcomeSceneController extends Controller {
                     alert.close();
                     changeCount(false);
                 } else if (result.isPresent() && result.get() == okButton) {
-                    textFieldName.textProperty().bindBidirectional(trainerName);
+                    trainerStorageProvider.get().setTrainerName(trainerName.get());
                     changeCount(true);
                 }
             }
@@ -142,9 +150,18 @@ public class WelcomeSceneController extends Controller {
                 secondMessage.setPrefWidth(200);
             }
             case 8 -> {
-                IngameController ingameController = ingameControllerProvider.get();
-                ingameController.setRegion(region);
-                app.show(ingameController);
+                String regionId = trainerStorageProvider.get().getRegionId();
+                disposables.add(trainersServiceProvider.get().createTrainer(
+                        regionId,
+                        trainerStorageProvider.get().getTrainerName(),
+                        trainerStorageProvider.get().getTrainerSprite()
+                ).observeOn(FX_SCHEDULER).subscribe(result -> {
+                            trainerStorageProvider.get().setTrainer(result);
+                            IngameController ingameController = ingameControllerProvider.get();
+                            ingameController.setRegion(regionId);
+                            app.show(ingameController);
+                        }, error -> showError(error.getMessage())
+                ));
             }
         }
 
@@ -157,9 +174,4 @@ public class WelcomeSceneController extends Controller {
             return sceneNumber - 1;
         }
     }
-
-    public void setRegion(de.uniks.stpmon.team_m.dto.Region region) {
-        this.region = region;
-    }
-
 }
