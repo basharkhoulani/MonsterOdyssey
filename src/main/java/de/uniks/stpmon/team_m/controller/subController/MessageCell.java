@@ -44,7 +44,6 @@ public class MessageCell extends ListCell<Message> {
     private FXMLLoader loader;
     private final MessagesBoxController messagesBoxController;
     public UserStorage user;
-    private String base64avatar;
 
     /**
      * MessageCell is used to handle the message cells.
@@ -54,13 +53,11 @@ public class MessageCell extends ListCell<Message> {
      *
      * @param messagesBoxController The {@link MessagesBoxController} is used to handle the messages box.
      * @param user                  The user is used to identify the user.
-     * @param base64avatar          The base64avatar is used to show the avatar of the user.
      */
 
-    public MessageCell(MessagesBoxController messagesBoxController, UserStorage user, String base64avatar) {
+    public MessageCell(MessagesBoxController messagesBoxController, UserStorage user) {
         this.messagesBoxController = messagesBoxController;
         this.user = user;
-        this.base64avatar = base64avatar;
     }
 
     /**
@@ -77,6 +74,7 @@ public class MessageCell extends ListCell<Message> {
         } else {
             loadFXML();
             final String senderName = messagesBoxController.getUsername(message.sender());
+            final String base64avatar = messagesBoxController.getAvatar(message.sender());
             messageContent.setText(message.body());
             setDateAndEdited(message, senderName);
             setMessageOrientationAndStyle(message);
@@ -98,8 +96,8 @@ public class MessageCell extends ListCell<Message> {
     private void setMessageOrientationAndStyle(Message message) {
         if (message.sender().equals(user.get_id())) {
             messageVBox.setStyle(messageVBox.getStyle() + OWN_MESSAGE_STYLE);
-            base64avatar = user.getAvatar();
             setAlignment(CENTER_RIGHT);
+            avatar.toFront();
         } else {
             messageVBox.setStyle(messageVBox.getStyle() + NOT_OWN_MESSAGE_STYLE);
             setAlignment(CENTER_LEFT);

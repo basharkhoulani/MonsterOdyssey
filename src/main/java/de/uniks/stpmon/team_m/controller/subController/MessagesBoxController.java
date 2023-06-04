@@ -59,7 +59,7 @@ public class MessagesBoxController extends Controller {
     public void init() {
         messageListView = new ListView<>();
         messageListView.setItems(messages);
-        messageListView.setCellFactory(param -> new MessageCell(this, userStorageProvider.get(), user.avatar()));
+        messageListView.setCellFactory(param -> new MessageCell(this, userStorageProvider.get()));
         messageListView.setPlaceholder(new Label(NO_MESSAGES_YET));
         messageListView.setId("messageListView");
         if (group == null) {
@@ -138,6 +138,22 @@ public class MessagesBoxController extends Controller {
         for (User user : allUsers) {
             if (user._id().equals(_id)) {
                 return user.name();
+            }
+        }
+        return UNKNOWN_USER;
+    }
+
+    /**
+     * Search for the avatar of the user with the given id.
+     *
+     * @param _id The id of the user
+     * @return The avatar of the user
+     */
+
+    public String getAvatar(String _id) {
+        for (User user : allUsers) {
+            if (user._id().equals(_id)) {
+                return user.avatar();
             }
         }
         return UNKNOWN_USER;
