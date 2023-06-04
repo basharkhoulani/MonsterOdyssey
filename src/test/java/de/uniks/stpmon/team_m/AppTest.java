@@ -142,6 +142,8 @@ public class AppTest extends ApplicationTest {
         write("Ash");
         clickOn("OK");
         clickOn("Next");
+        clickOn("Next");
+        clickOn("Next");
 
         // test Ingame Help Symbol
         clickOn("#helpSymbol");
