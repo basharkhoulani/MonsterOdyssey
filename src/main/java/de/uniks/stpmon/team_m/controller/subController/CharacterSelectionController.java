@@ -47,13 +47,11 @@ public class CharacterSelectionController extends Controller {
             app.show(welcomeSceneController);
             welcomeSceneController.sceneNumber = 7;
             welcomeSceneController.switchScene();
-            welcomeSceneController.render();
         });
         previousButton.setOnAction(event -> {
             app.show(welcomeSceneController);
             welcomeSceneController.sceneNumber = 5;
             welcomeSceneController.switchScene();
-            welcomeSceneController.render();
         });
 
         character1RadioButton.setSelected(true);
