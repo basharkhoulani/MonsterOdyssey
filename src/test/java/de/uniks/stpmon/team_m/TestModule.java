@@ -15,6 +15,8 @@ import io.reactivex.rxjava3.subjects.Subject;
 import javafx.stage.FileChooser;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 import static org.mockito.Mockito.mock;
@@ -24,6 +26,12 @@ public class TestModule {
     @Provides
     static Preferences prefs() {
         return mock(Preferences.class);
+    }
+
+    @Provides
+    static ResourceBundle resourceBundle(){
+        final String locale = prefs().get("locale", Locale.getDefault().toLanguageTag());
+        return ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag(locale));
     }
 
     @Provides

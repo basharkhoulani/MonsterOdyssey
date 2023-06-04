@@ -108,7 +108,7 @@ class NewFriendControllerTest extends ApplicationTest {
         clickOn("#addFriendButton");
         clickOn("#addFriendButton");
         verify(userStorage, times(1)).getName();
-        assertEquals(YOURSELF, textField.getPromptText());
+        assertEquals("You can't add yourself as a friend.", textField.getPromptText());
     }
 
     @Test
@@ -128,7 +128,7 @@ class NewFriendControllerTest extends ApplicationTest {
         clickOn("#addFriendButton");
         verify(userStorage, times(1)).getName();
         verify(userStorage, times(1)).getFriends();
-        assertEquals(FRIEND_ALREADY_ADDED, textField.getPromptText());
+        assertEquals("You are already friends with this user.", textField.getPromptText());
         assertEquals("", textField.getText());
     }
 

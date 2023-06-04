@@ -262,7 +262,7 @@ class AccountSettingControllerTest extends ApplicationTest {
         waitForFxEvents();
         clickOn(saveAvatarButton);
         waitForFxEvents();
-        assertEquals(AVATAR_SUCCESS_CHANGED, infoLabel.getText());
+        assertEquals("Your Avatar has been changed successfully.", infoLabel.getText());
     }
 
     @Test

@@ -97,13 +97,13 @@ class EditGroupControllerTest extends ApplicationTest {
         when(groupService.delete(any())).thenReturn(Observable.error(new Exception("Test")));
         clickOn("Delete group");
         clickOn(ButtonType.YES.getText());
-        clickOn(GENERIC_ERROR);
+        clickOn("Something went wrong! Please try again later!");
         clickOn(ButtonType.OK.getText());
         assertEquals("Monster Odyssey - Edit Group", app.getStage().getTitle());
         when(groupService.delete(any())).thenReturn(Observable.error(new Exception("HTTP 403")));
         clickOn("Delete group");
         clickOn(ButtonType.YES.getText());
-        clickOn(HTTP_403_MESSAGE);
+        clickOn("Forbidden. Please try again later.");
         clickOn(ButtonType.OK.getText());
         assertEquals("Monster Odyssey - Edit Group", app.getStage().getTitle());
     }
