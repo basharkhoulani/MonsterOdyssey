@@ -6,6 +6,7 @@ import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.RegionsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 
 public class IngameTrainerSettingsController extends Controller {
@@ -39,9 +41,10 @@ public class IngameTrainerSettingsController extends Controller {
 
     @Inject
     public UserStorage usersStorage;
+    @Inject
+    public Provider<TrainerStorage> trainerStorageProvider;
     private String regionId;
     protected final CompositeDisposable disposables = new CompositeDisposable();
-    private Trainer trainer;
     private Image trainerImage;
 
 
@@ -64,7 +67,13 @@ public class IngameTrainerSettingsController extends Controller {
     }
 
     public void onDeleteTrainerButtonClick() {
-        // TODO: show alert dialog
+        disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegionId(), trainerStorageProvider.get().getTrainer()._id()).
+                observeOn(FX_SCHEDULER).subscribe(result -> {
+                 trainerStorageProvider.get().setTrainer(null);
+                 trainerStorageProvider.get().setTrainerSprite(null);
+                 trainerStorageProvider.get().setTrainerName(null);
+                 trainerStorageProvider.get().setRegionId(null);
+        }, error -> this.showError(error.getMessage())));
     }
 
     public void setRegion(String regionId) {
@@ -85,7 +94,7 @@ public class IngameTrainerSettingsController extends Controller {
 
 
     private void loadAndSetTrainerImage() {
-        disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody ->  {
+        disposables.add(presetsService.getCharacter(trainerStorageProvider.get().getTrainer().image()).observeOn(FX_SCHEDULER).subscribe(responseBody ->  {
             try {
                 trainerImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
                 trainerAvatarImageView.setImage(trainerImage);
