@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.skin.ButtonBarSkin;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -21,6 +22,7 @@ import javafx.stage.Window;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -123,8 +125,10 @@ public class IngameController extends Controller {
         final ButtonType resume = new ButtonType(RESUME_BUTTON_LABEL);
         final ButtonType saveAndExit = new ButtonType(SAVE_GAME_AND_LEAVE_BUTTON_LABEL);
         dialogPane.getButtonTypes().addAll(resume, saveAndExit);
-        dialogPane.getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
-        dialogPane.getStyleClass().add("comicSans");
+        if (!GraphicsEnvironment.isHeadless()) {
+            dialogPane.getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
+            dialogPane.getStyleClass().add("comicSans");
+        }
         final Button resumeButton = (Button) dialogPane.lookupButton(resume);
         resumeButton.setOnKeyPressed(event -> {
             if (!(event.getCode() == PAUSE_MENU_KEY)) {
