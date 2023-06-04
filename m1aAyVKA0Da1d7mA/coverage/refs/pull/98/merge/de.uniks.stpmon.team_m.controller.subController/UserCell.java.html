@@ -60,7 +60,7 @@ public class UserCell extends ListCell&lt;User&gt; {
 <span class="fc" id="L60">            statusHBox.setAlignment(CENTER);</span>
 <span class="fc" id="L61">            ImageView avatarImageView = new ImageView();</span>
 <span class="pc bpc" id="L62" title="1 of 2 branches missed.">            if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L63">                final Image avatar = ImageProcessor.toFXImage(user.avatar());</span>
+<span class="nc" id="L63">                final Image avatar = ImageProcessor.fromBase64ToFXImage(user.avatar());</span>
 <span class="nc" id="L64">                avatarImageView = new ImageView(avatar);</span>
             }
 <span class="fc" id="L66">            avatarImageView.setPreserveRatio(true);</span>
