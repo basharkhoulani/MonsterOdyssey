@@ -35,7 +35,7 @@ public class FriendSettingsController extends Controller {
     private ListView<User> friendsListView;
 
     /**
-     * FriendSettingsContoller is used to handle the friend settings. It includes options to delete a friend and to set
+     * FriendSettingsController is used to handle the friend settings. It includes options to delete a friend and to set
      * a friend as best friend. The best friend is always on top of the friends list.
      */
 

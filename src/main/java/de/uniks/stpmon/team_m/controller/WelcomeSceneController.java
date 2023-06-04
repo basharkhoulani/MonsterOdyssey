@@ -1,20 +1,22 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.controller.subController.CharacterSelectionController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
-public class WelcomeSceneController extends Controller{
+public class WelcomeSceneController extends Controller {
     @FXML
     public Button nextButton;
     @FXML
@@ -25,16 +27,24 @@ public class WelcomeSceneController extends Controller{
     public Label firstMessage;
     @FXML
     public Label secondMessage;
-    private int sceneNumber = 1;
+    @FXML
+    public VBox firstMessageBox;
+    public int sceneNumber = 1;
     private final SimpleStringProperty trainerName = new SimpleStringProperty();
     @Inject
     Provider<IngameController> ingameControllerProvider;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
-    public WelcomeSceneController(){}
+    Provider<CharacterSelectionController> characterSelectionControllerProvider;
+
+    @Inject
+    public WelcomeSceneController() {
+    }
+
     @Override
     public String getTitle() {return resources.getString("INGAME.TITLE");}
+
 
     @Override
     public Parent render() {
@@ -47,11 +57,10 @@ public class WelcomeSceneController extends Controller{
 
     private void changeCount(boolean change) {
         sceneNumber = sceneCounter(sceneNumber, change);
-        switchScene(sceneNumber, messagePane);
+        switchScene();
     }
 
-    public void switchScene(int sceneNumber, AnchorPane messagePane) {
-        VBox firstMessageBox = (VBox) messagePane.getChildren().get(0);
+    public void switchScene() {
 
         switch (sceneNumber) {
             case 0 -> app.show(mainMenuControllerProvider.get());
@@ -66,7 +75,6 @@ public class WelcomeSceneController extends Controller{
                 firstMessage.setText(resources.getString("THIRD.MESSAGE"));
                 secondMessage.setText(resources.getString("FOURTH.MESSAGE"));
                 final VBox messageVBox3 = new VBox();
-                messageVBox3.getStylesheets().add(STYLE_RESOURCE);
                 messageVBox3.getStyleClass().add(resources.getString("WELCOME.MESSAGE.STYLE"));
                 final Label thirdMessage = new Label();
                 thirdMessage.setId("thirdMessage");
@@ -104,8 +112,8 @@ public class WelcomeSceneController extends Controller{
                 final VBox vbox = new VBox(textFieldName);
 
                 alert.setTitle(resources.getString("NAME.ALERT.TITLE"));
-                dialogPane.getStylesheets().add(STYLE_RESOURCE);
                 dialogPane.getStyleClass().add(resources.getString("ALERT.DIALOG.NAME"));
+
 
                 dialogPane.setContent(vbox);
 
@@ -124,9 +132,14 @@ public class WelcomeSceneController extends Controller{
                 secondMessage.setWrapText(true);
                 secondMessage.setPrefWidth(200);
             }
-            case 6 -> {
-                app.show(ingameControllerProvider.get());
+            case 6 -> app.show(characterSelectionControllerProvider.get());
+            case 7 -> {
+                firstMessage.setText(TENTH_MESSAGE);
+                secondMessage.setText(ELEVENTH_MESSAGE);
+                secondMessage.setWrapText(true);
+                secondMessage.setPrefWidth(200);
             }
+            case 8 -> app.show(ingameControllerProvider.get());
         }
 
     }

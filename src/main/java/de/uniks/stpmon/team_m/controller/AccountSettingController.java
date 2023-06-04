@@ -1,6 +1,8 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.beans.binding.BooleanBinding;
@@ -14,6 +16,7 @@ import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Objects;
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -65,11 +68,13 @@ public class AccountSettingController extends Controller {
     Provider<UserStorage> userStorageProvider;
     @Inject
     UsersService usersService;
-    private AvatarSelectionController avatarSelectionController;
+    @Inject
+    Provider<AvatarSelectionController> avatarSelectionControllerProvider;
     private ChangeLanguageController changeLanguageController;
     private PasswordFieldSkin skin;
     private final SimpleStringProperty username = new SimpleStringProperty();
     private final SimpleStringProperty password = new SimpleStringProperty();
+    private String selectedFilePath;
 
     /**
      * AccountSettingController is used to edit the avatar, language, username and password of the user.
@@ -93,8 +98,6 @@ public class AccountSettingController extends Controller {
     @Override
     public void init() {
         super.init();
-        avatarSelectionController = new AvatarSelectionController();
-        avatarSelectionController.init();
         changeLanguageController = new ChangeLanguageController();
         changeLanguageController.init();
     }
@@ -139,8 +142,9 @@ public class AccountSettingController extends Controller {
 
         // show Avatar if there is one
         if (userStorageProvider.get().getAvatar() != null) {
-            Image image = new Image(userStorageProvider.get().getAvatar());
-            avatarImageView.setImage(image);
+            String avatar = userStorageProvider.get().getAvatar();
+
+            avatarImageView.setImage(ImageProcessor.toFXImage(avatar));
         }
 
         return parent;
@@ -215,8 +219,11 @@ public class AccountSettingController extends Controller {
      * This method opens a pop-up to the avatar selection.
      */
     public void editAvatar() {
+        AvatarSelectionController avatarSelectionController = avatarSelectionControllerProvider.get();
+        avatarSelectionController.init();
         ButtonType cancelButton = new ButtonType(resources.getString("Cancel"),ButtonBar.ButtonData.CANCEL_CLOSE);
         ButtonType okButton = new ButtonType(resources.getString("OK"),ButtonBar.ButtonData.OK_DONE);
+
         Dialog<?> dialog = new Dialog<>();
         dialog.setTitle(resources.getString("Choose.your.Avatar"));
         avatarSelectionController.setValues(resources, preferences, resourceBundleProvider, this, app);
@@ -225,13 +232,17 @@ public class AccountSettingController extends Controller {
         dialog.getDialogPane().getButtonTypes().add(cancelButton);
         dialog.showAndWait();
 
-        if (!dialog.isShowing()) {
-            if (dialog.getResult().toString().equals("ButtonType [text=Ok, buttonData=OK_DONE]")) {
-                saveAvatarButton.setDisable(false);
-                Image image = new Image(avatarSelectionController.selectedAvatar);
-                avatarImageView.setImage(image);
+        if (dialog.getResult() == okButton) {
+            saveAvatarButton.setDisable(false);
+            Image image;
+            try {
+                image = new Image(Objects.requireNonNull(App.class.getResource(avatarSelectionController.selectedAvatar)).toString());
+                selectedFilePath = Objects.requireNonNull(App.class.getResource(avatarSelectionController.selectedAvatar)).toURI().getPath();
+            } catch (Exception e) {
+                image = new Image("file:" + avatarSelectionController.selectedAvatar);
+                selectedFilePath = avatarSelectionController.selectedAvatar;
             }
-
+            avatarImageView.setImage(image);
         }
     }
 
@@ -239,18 +250,24 @@ public class AccountSettingController extends Controller {
      * This method is used to save the selected avatar by sending a request to the server.
      */
     public void saveAvatar() {
-        informationLabel.setText(EMPTY_STRING);
+        informationLabel.setText(IMAGE_PROCESSING_ONGOING);
+        String base64Image = ImageProcessor.toBase64(selectedFilePath);
+        if (base64Image.equals(IMAGE_PROCESSING_ERROR))
+            informationLabel.setText(IMAGE_PROCESSING_ERROR);
+        String avatarUpload = "data:image/png;base64, " + base64Image;
+        System.out.println(avatarUpload);
         disposables.add(usersService
-                .updateUser(null, null, avatarSelectionController.selectedAvatar, null, null)
+                .updateUser(null, null, avatarUpload, null, null)
                 .observeOn(FX_SCHEDULER)
                 .subscribe(userResult -> {
-                    userStorageProvider.get().setAvatar(avatarSelectionController.selectedAvatar);
+                    userStorageProvider.get().setAvatar(userResult.avatar());
                     saveAvatarButton.setDisable(true);
                     informationLabel.setText(resources.getString("AVATAR.SUCCESS.CHANGED"));
                 }, error -> avatarErrorLabel.setText(error.getMessage()))
         );
 
     }
+
 
     /**
      * This method is used to delete the account.

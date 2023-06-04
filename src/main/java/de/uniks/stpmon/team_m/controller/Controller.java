@@ -135,7 +135,7 @@ public abstract class Controller {
                         case "updated" -> updateUser(friends, friendsListView, user);
                         case "deleted" -> friends.remove(user);
                     }
-                }));
+                }, error -> showError(error.getMessage())));
     }
 
     /**

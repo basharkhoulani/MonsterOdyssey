@@ -1,11 +1,11 @@
 package de.uniks.stpmon.team_m;
 
+
 import javafx.scene.input.KeyCode;
 
 import javax.inject.Inject;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
 
 
 public class Constants {
@@ -78,8 +78,18 @@ public class Constants {
     public static final String USERNAME_SUCCESS_CHANGED = "Your username has been changed successfully.";
     public static final String PASSWORD_SUCCESS_CHANGED = "Your Password has been changed successfully.";
 
+    // AVATAR
+    public static final String AVATAR_1 = "images/Monster1-color.png";
+    public static final String AVATAR_2 = "images/Monster2-color.png";
+    public static final String AVATAR_3 = "images/rabbit.png";
+    public static final String AVATAR_4 = "images/sheep_icon.png";
+    public static final int MAX_BASE64_LENGTH = 16000;
+    public static final String IMAGE_PROCESSING_ONGOING = "Image is being processed. Please wait.";
+    public static final String IMAGE_PROCESSING_ERROR = "Image could not be processed. Please try again.";
+
     // INGAME
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
+    public static final String INGAME_TITLE = "Ingame";
     public static final String FIRST_HELP = "Click 'p' on your keyboard for pause menu.\n";
     public static final String SECOND_HELP = "     \u2191 \n \u2190 \u2193 \u2192  to move your character. \n";
     public static final String THIRD_HELP = "Click Space for interact and attack.";
@@ -96,6 +106,24 @@ public class Constants {
 
     // Welcome Scene
     public static final String STYLE_RESOURCE = Objects.requireNonNull(Main.class.getResource("styles.css")).toString();
+    public static final String FIRST_MESSAGE = "Welcome to Monster Odyssey!";
+    public static final String SECOND_MESSAGE = "Welcome Aboard.";
+    public static final String THIRD_MESSAGE = "We are the crew of this ship.";
+    public static final String FOURTH_MESSAGE = "My name is James.";
+    public static final String FIFTH_MESSAGE = "And my name is Henry!";
+    public static final String SIXTH_MESSAGE = "Now then, we'll need to look up your application.";
+    public static final String SEVENTH_MESSAGE = "Can we have your name?";
+    public static final String EIGHTH_MESSAGE = "Hello. Next, we 'd like to take a picture of you";
+    public static final String NINTH_MESSAGE = "Take as much time as you want to get dressed up for it.";
+    public static final String TENTH_MESSAGE = "Now it's time to start your Journey";
+    public static final String ELEVENTH_MESSAGE = "See you next time!";
+
+
+    public static final String WELCOME_MESSAGE_STYLE = "welcomeMessage";
+    public static final String WELCOME_SCENE_BUTTON = "welcomeSceneButton";
+    public static final String ALERT_DIALOG_NAME = "alertDialogName";
+    public static final String NAME_ALERT_TITLE = "Name?";
+
     public static final int MESSAGEBOX_HEIGHT = 45;
     public static final int MESSAGEBOX_WIDTH = 170;
 

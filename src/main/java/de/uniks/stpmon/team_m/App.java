@@ -52,7 +52,7 @@ public class App extends Application {
         setAppIcon(stage);
         setTaskbarIcon();
         if (!GraphicsEnvironment.isHeadless()) {
-            stage.getScene().getStylesheets().add(Main.class.getResource("styles.css").toString());
+            stage.getScene().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
         }
 
         PauseTransition pause = new PauseTransition(Duration.seconds(DURATION_OF_LOADING_SCREEN));

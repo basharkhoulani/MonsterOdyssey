@@ -60,6 +60,7 @@ public class MessagesBoxController extends Controller {
         messageListView.setItems(messages);
         messageListView.setCellFactory(param -> new MessageCell(this, userStorageProvider.get().get_id()));
         messageListView.setPlaceholder(new Label(resources.getString("NO.MESSAGES.YET")));
+        messageListView.setId("messageListView");
         if (group == null) {
             openFriendChat("userListView");
         }
@@ -227,5 +228,9 @@ public class MessagesBoxController extends Controller {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    public ObservableList<Message> getMessages() {
+        return messages;
     }
 }
