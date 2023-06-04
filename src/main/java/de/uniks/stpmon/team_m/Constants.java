@@ -152,10 +152,10 @@ public class Constants {
     public static final String SEVENTH_MESSAGE = "Can we have your name?";
     public static final String EIGHTH_MESSAGE = "Hello. Next, we 'd like to take a picture of you";
     public static final String NINTH_MESSAGE = "Take as much time as you want to get dressed up for it.";
-
-
+    public static final String DELETE_TRAINER_ALERT = "Delete Trainer";
     public static final String WELCOME_MESSAGE_STYLE = "welcomeMessage";
     public static final String WELCOME_SCENE_BUTTON = "welcomeSceneButton";
+    public static final String WHITE_BUTTON = "whiteButton";
     public static final String ALERT_DIALOG_NAME = "alertDialogName";
     public static final String NAME_ALERT_TITLE = "Name?";
 
