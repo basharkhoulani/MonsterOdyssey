@@ -97,6 +97,7 @@ public class MessageCell extends ListCell<Message> {
         if (message.sender().equals(user.get_id())) {
             messageVBox.setStyle(messageVBox.getStyle() + OWN_MESSAGE_STYLE);
             setAlignment(CENTER_RIGHT);
+            avatar.toFront();
         } else {
             messageVBox.setStyle(messageVBox.getStyle() + NOT_OWN_MESSAGE_STYLE);
             setAlignment(CENTER_LEFT);
