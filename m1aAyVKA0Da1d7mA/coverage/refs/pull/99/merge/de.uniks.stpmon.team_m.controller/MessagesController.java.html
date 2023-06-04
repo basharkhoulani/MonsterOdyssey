@@ -173,16 +173,17 @@ public class MessagesController extends Controller {
 <span class="fc" id="L173">    }</span>
 
     /**
-     * This method selects the user and opens a chat with them, if the friend was chosen from the main menu.
+     * This method selects the user and open
+     * s a chat with them, if the friend was chosen from the main menu.
      */
 
     private void selectUserChosenFromMainMenu() {
-<span class="fc" id="L180">        userListView.getItems().stream().filter(user -&gt; user._id().equals(groupStorageProvider.get().get_id())).findFirst().ifPresent(user -&gt; {</span>
-<span class="fc" id="L181">            userListView.getSelectionModel().select(user);</span>
-<span class="fc" id="L182">            userListView.scrollTo(user);</span>
-<span class="fc" id="L183">        });</span>
-<span class="fc" id="L184">        userChosenFromMainMenu = false;</span>
-<span class="fc" id="L185">    }</span>
+<span class="fc" id="L181">        userListView.getItems().stream().filter(user -&gt; user._id().equals(groupStorageProvider.get().get_id())).findFirst().ifPresent(user -&gt; {</span>
+<span class="fc" id="L182">            userListView.getSelectionModel().select(user);</span>
+<span class="fc" id="L183">            userListView.scrollTo(user);</span>
+<span class="fc" id="L184">        });</span>
+<span class="fc" id="L185">        userChosenFromMainMenu = false;</span>
+<span class="fc" id="L186">    }</span>
 
     /**
      * This method gets a list of friends and returns an observable list of users.
@@ -191,11 +192,11 @@ public class MessagesController extends Controller {
      */
 
     private Observable&lt;List&lt;User&gt;&gt; getListOfFriends() {
-<span class="fc" id="L194">        List&lt;String&gt; friends = userStorageProvider.get().getFriends();</span>
-<span class="pc bpc" id="L195" title="1 of 2 branches missed.">        if (!friends.isEmpty()) {</span>
-<span class="fc" id="L196">            return usersService.getUsers(friends, null);</span>
+<span class="fc" id="L195">        List&lt;String&gt; friends = userStorageProvider.get().getFriends();</span>
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">        if (!friends.isEmpty()) {</span>
+<span class="fc" id="L197">            return usersService.getUsers(friends, null);</span>
         }
-<span class="nc" id="L198">        return Observable.just(new ArrayList&lt;&gt;());</span>
+<span class="nc" id="L199">        return Observable.just(new ArrayList&lt;&gt;());</span>
     }
 
     /**
@@ -206,7 +207,7 @@ public class MessagesController extends Controller {
 
     @Override
     public String getTitle() {
-<span class="fc" id="L209">        return MESSAGES_TITLE;</span>
+<span class="fc" id="L210">        return MESSAGES_TITLE;</span>
     }
 
     /**
@@ -217,13 +218,13 @@ public class MessagesController extends Controller {
 
     @Override
     public Parent render() {
-<span class="fc" id="L220">        Parent parent = super.render();</span>
-<span class="fc" id="L221">        initListViews();</span>
-<span class="fc" id="L222">        settingsButton.setVisible(false);</span>
-<span class="fc" id="L223">        messageTextArea.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);</span>
-<span class="fc" id="L224">        userListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -&gt; addListenerOnSelectedFriends(newValue));</span>
-<span class="fc" id="L225">        groupListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -&gt; addListenerOnSelectedGroups(newValue));</span>
-<span class="fc" id="L226">        return parent;</span>
+<span class="fc" id="L221">        Parent parent = super.render();</span>
+<span class="fc" id="L222">        initListViews();</span>
+<span class="fc" id="L223">        settingsButton.setVisible(false);</span>
+<span class="fc" id="L224">        messageTextArea.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);</span>
+<span class="fc" id="L225">        userListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -&gt; addListenerOnSelectedFriends(newValue));</span>
+<span class="fc" id="L226">        groupListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -&gt; addListenerOnSelectedGroups(newValue));</span>
+<span class="fc" id="L227">        return parent;</span>
 
     }
 
@@ -234,11 +235,11 @@ public class MessagesController extends Controller {
      */
 
     private void enterButtonPressedToSend(KeyEvent event) {
-<span class="pc bpc" id="L237" title="1 of 4 branches missed.">        if (event.getCode() == KeyCode.ENTER &amp;&amp; !event.isShiftDown()) {</span>
-<span class="fc" id="L238">            event.consume();</span>
-<span class="fc" id="L239">            this.onSendMessage();</span>
+<span class="pc bpc" id="L238" title="1 of 4 branches missed.">        if (event.getCode() == KeyCode.ENTER &amp;&amp; !event.isShiftDown()) {</span>
+<span class="fc" id="L239">            event.consume();</span>
+<span class="fc" id="L240">            this.onSendMessage();</span>
         }
-<span class="fc" id="L241">    }</span>
+<span class="fc" id="L242">    }</span>
 
     /**
      * This method is to set the behaviour of a selected group.
@@ -247,15 +248,15 @@ public class MessagesController extends Controller {
      */
 
     private void addListenerOnSelectedGroups(Group newValue) {
-<span class="fc bfc" id="L250" title="All 2 branches covered.">        if (newValue != null) {</span>
-<span class="fc" id="L251">            settingsButton.setVisible(true);</span>
-<span class="fc" id="L252">            openGroupChat(newValue);</span>
-<span class="fc" id="L253">            currentFriendOrGroupText.setText(newValue.name());</span>
-<span class="fc bfc" id="L254" title="All 2 branches covered.">            if (userListView.getSelectionModel().getSelectedItem() != null) {</span>
-<span class="fc" id="L255">                userListView.getSelectionModel().clearSelection();</span>
+<span class="fc bfc" id="L251" title="All 2 branches covered.">        if (newValue != null) {</span>
+<span class="fc" id="L252">            settingsButton.setVisible(true);</span>
+<span class="fc" id="L253">            openGroupChat(newValue);</span>
+<span class="fc" id="L254">            currentFriendOrGroupText.setText(newValue.name());</span>
+<span class="fc bfc" id="L255" title="All 2 branches covered.">            if (userListView.getSelectionModel().getSelectedItem() != null) {</span>
+<span class="fc" id="L256">                userListView.getSelectionModel().clearSelection();</span>
             }
         }
-<span class="fc" id="L258">    }</span>
+<span class="fc" id="L259">    }</span>
     /**
      * This method is to set the behaviour of a selected friend.
      *
@@ -263,31 +264,31 @@ public class MessagesController extends Controller {
      */
 
     private void addListenerOnSelectedFriends(User newValue) {
-<span class="fc bfc" id="L266" title="All 2 branches covered.">        if (newValue != null) {</span>
-<span class="fc" id="L267">            settingsButton.setVisible(false);</span>
-<span class="fc" id="L268">            openPrivateChat(newValue);</span>
-<span class="fc" id="L269">            currentFriendOrGroupText.setText(newValue.name());</span>
-<span class="fc bfc" id="L270" title="All 2 branches covered.">            if (groupListView.getSelectionModel().getSelectedItem() != null) {</span>
-<span class="fc" id="L271">                groupListView.getSelectionModel().clearSelection();</span>
+<span class="fc bfc" id="L267" title="All 2 branches covered.">        if (newValue != null) {</span>
+<span class="fc" id="L268">            settingsButton.setVisible(false);</span>
+<span class="fc" id="L269">            openPrivateChat(newValue);</span>
+<span class="fc" id="L270">            currentFriendOrGroupText.setText(newValue.name());</span>
+<span class="fc bfc" id="L271" title="All 2 branches covered.">            if (groupListView.getSelectionModel().getSelectedItem() != null) {</span>
+<span class="fc" id="L272">                groupListView.getSelectionModel().clearSelection();</span>
             }
         }
-<span class="fc" id="L274">    }</span>
+<span class="fc" id="L275">    }</span>
 
     /**
      * This method initializes group and friend list views and listens to changes of groups and friends.
      */
   
     private void initListViews() {
-<span class="fc" id="L281">        userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));</span>
-<span class="fc" id="L282">        userListView.setCellFactory(param -&gt; new UserCell(preferences));</span>
-<span class="fc" id="L283">        userListView.setItems(friends);</span>
-<span class="fc" id="L284">        listenToUserUpdate(friends, userListView);</span>
+<span class="fc" id="L282">        userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));</span>
+<span class="fc" id="L283">        userListView.setCellFactory(param -&gt; new UserCell(preferences));</span>
+<span class="fc" id="L284">        userListView.setItems(friends);</span>
+<span class="fc" id="L285">        listenToUserUpdate(friends, userListView);</span>
 
-<span class="fc" id="L286">        groupListView.setCellFactory(param -&gt; new GroupCell());</span>
-<span class="fc" id="L287">        groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));</span>
-<span class="fc" id="L288">        groupListView.setItems(groups);</span>
-<span class="fc" id="L289">        listenToGroupChanges();</span>
-<span class="fc" id="L290">    }</span>
+<span class="fc" id="L287">        groupListView.setCellFactory(param -&gt; new GroupCell());</span>
+<span class="fc" id="L288">        groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));</span>
+<span class="fc" id="L289">        groupListView.setItems(groups);</span>
+<span class="fc" id="L290">        listenToGroupChanges();</span>
+<span class="fc" id="L291">    }</span>
 
     /**
      * This method destroys the subcontrollers which are MessagesBoxControllers and clears the maps.
@@ -295,12 +296,12 @@ public class MessagesController extends Controller {
   
     @Override
     public void destroy() {
-<span class="fc" id="L298">        super.destroy();</span>
-<span class="fc" id="L299">        subControllers.forEach(Controller::destroy);</span>
-<span class="fc" id="L300">        subControllers.clear();</span>
-<span class="fc" id="L301">        messagesBoxControllerUserMap.clear();</span>
-<span class="fc" id="L302">        messagesBoxControllerGroupMap.clear();</span>
-<span class="fc" id="L303">    }</span>
+<span class="fc" id="L299">        super.destroy();</span>
+<span class="fc" id="L300">        subControllers.forEach(Controller::destroy);</span>
+<span class="fc" id="L301">        subControllers.clear();</span>
+<span class="fc" id="L302">        messagesBoxControllerUserMap.clear();</span>
+<span class="fc" id="L303">        messagesBoxControllerGroupMap.clear();</span>
+<span class="fc" id="L304">    }</span>
 
     /**
      * This method creates a subcontroller for the selected user if it does not exist and opens a private chat with them.
@@ -310,20 +311,20 @@ public class MessagesController extends Controller {
      */
 
     public void openPrivateChat(User user) {
-<span class="fc" id="L313">        groupStorageProvider.get().set_id(user._id());</span>
+<span class="fc" id="L314">        groupStorageProvider.get().set_id(user._id());</span>
         try {
-<span class="fc" id="L315">            chatScrollPane.setContent(messagesBoxControllerUserMap.get(user).render());</span>
-<span class="fc" id="L316">        } catch (Exception ignored) {</span>
-<span class="fc" id="L317">            MessagesBoxController messagesBoxController = messagesBoxControllerProvider.get();</span>
-<span class="fc" id="L318">            messagesBoxController.setUser(user);</span>
-<span class="fc" id="L319">            messagesBoxController.setGroup(null);</span>
-<span class="fc" id="L320">            messagesBoxController.setAllUsers(allUsers);</span>
-<span class="fc" id="L321">            messagesBoxController.init();</span>
-<span class="fc" id="L322">            messagesBoxControllerUserMap.put(user, messagesBoxController);</span>
-<span class="fc" id="L323">            subControllers.add(messagesBoxController);</span>
-<span class="fc" id="L324">            chatScrollPane.setContent(messagesBoxControllerUserMap.get(user).render());</span>
-<span class="fc" id="L325">        }</span>
-<span class="fc" id="L326">    }</span>
+<span class="fc" id="L316">            chatScrollPane.setContent(messagesBoxControllerUserMap.get(user).render());</span>
+<span class="fc" id="L317">        } catch (Exception ignored) {</span>
+<span class="fc" id="L318">            MessagesBoxController messagesBoxController = messagesBoxControllerProvider.get();</span>
+<span class="fc" id="L319">            messagesBoxController.setUser(user);</span>
+<span class="fc" id="L320">            messagesBoxController.setGroup(null);</span>
+<span class="fc" id="L321">            messagesBoxController.setAllUsers(allUsers);</span>
+<span class="fc" id="L322">            messagesBoxController.init();</span>
+<span class="fc" id="L323">            messagesBoxControllerUserMap.put(user, messagesBoxController);</span>
+<span class="fc" id="L324">            subControllers.add(messagesBoxController);</span>
+<span class="fc" id="L325">            chatScrollPane.setContent(messagesBoxControllerUserMap.get(user).render());</span>
+<span class="fc" id="L326">        }</span>
+<span class="fc" id="L327">    }</span>
 
     /**
      * This method creates a subcontroller for the selected group if it does not exist and opens a group chat with them.
@@ -333,91 +334,91 @@ public class MessagesController extends Controller {
      */
 
     public void openGroupChat(Group group) {
-<span class="fc" id="L336">        groupStorageProvider.get().set_id(group._id());</span>
-<span class="fc" id="L337">        groupStorageProvider.get().setName(group.name());</span>
-<span class="fc" id="L338">        groupStorageProvider.get().setMembers(group.members());</span>
+<span class="fc" id="L337">        groupStorageProvider.get().set_id(group._id());</span>
+<span class="fc" id="L338">        groupStorageProvider.get().setName(group.name());</span>
+<span class="fc" id="L339">        groupStorageProvider.get().setMembers(group.members());</span>
         try {
-<span class="fc" id="L340">            chatScrollPane.setContent(messagesBoxControllerGroupMap.get(group).render());</span>
-<span class="fc" id="L341">        } catch (Exception ignored) {</span>
-<span class="fc" id="L342">            MessagesBoxController messagesBoxController = messagesBoxControllerProvider.get();</span>
-<span class="fc" id="L343">            messagesBoxController.setUser(null);</span>
-<span class="fc" id="L344">            messagesBoxController.setGroup(group);</span>
-<span class="fc" id="L345">            messagesBoxController.setAllUsers(allUsers);</span>
-<span class="fc" id="L346">            messagesBoxController.init();</span>
-<span class="fc" id="L347">            messagesBoxControllerGroupMap.put(group, messagesBoxController);</span>
-<span class="fc" id="L348">            subControllers.add(messagesBoxController);</span>
-<span class="fc" id="L349">            chatScrollPane.setContent(messagesBoxControllerGroupMap.get(group).render());</span>
-<span class="fc" id="L350">        }</span>
-<span class="fc" id="L351">    }</span>
+<span class="fc" id="L341">            chatScrollPane.setContent(messagesBoxControllerGroupMap.get(group).render());</span>
+<span class="fc" id="L342">        } catch (Exception ignored) {</span>
+<span class="fc" id="L343">            MessagesBoxController messagesBoxController = messagesBoxControllerProvider.get();</span>
+<span class="fc" id="L344">            messagesBoxController.setUser(null);</span>
+<span class="fc" id="L345">            messagesBoxController.setGroup(group);</span>
+<span class="fc" id="L346">            messagesBoxController.setAllUsers(allUsers);</span>
+<span class="fc" id="L347">            messagesBoxController.init();</span>
+<span class="fc" id="L348">            messagesBoxControllerGroupMap.put(group, messagesBoxController);</span>
+<span class="fc" id="L349">            subControllers.add(messagesBoxController);</span>
+<span class="fc" id="L350">            chatScrollPane.setContent(messagesBoxControllerGroupMap.get(group).render());</span>
+<span class="fc" id="L351">        }</span>
+<span class="fc" id="L352">    }</span>
 
     /**
      * This method enables the user to change to the main menu.
      */
 
     public void changeToMainMenu() {
-<span class="fc" id="L358">        destroy();</span>
-<span class="fc" id="L359">        app.show(mainMenuControllerProvider.get());</span>
-<span class="fc" id="L360">    }</span>
+<span class="fc" id="L359">        destroy();</span>
+<span class="fc" id="L360">        app.show(mainMenuControllerProvider.get());</span>
+<span class="fc" id="L361">    }</span>
 
     /**
      * This method enables the user to change to the find new friends view.
      */
 
     public void changeToFindNewFriends() {
-<span class="fc" id="L367">        destroy();</span>
-<span class="fc" id="L368">        app.show(newFriendControllerProvider.get());</span>
-<span class="fc" id="L369">    }</span>
+<span class="fc" id="L368">        destroy();</span>
+<span class="fc" id="L369">        app.show(newFriendControllerProvider.get());</span>
+<span class="fc" id="L370">    }</span>
 
     /**
      * This method enables the user to change to the new group view. GroupStorage ID needs to be cleared.
      */
 
     public void changeToNewGroup() {
-<span class="fc" id="L376">        groupStorageProvider.get().set_id(EMPTY_STRING);</span>
-<span class="fc" id="L377">        destroy();</span>
-<span class="fc" id="L378">        app.show(groupControllerProvider.get());</span>
-<span class="fc" id="L379">    }</span>
+<span class="fc" id="L377">        groupStorageProvider.get().set_id(EMPTY_STRING);</span>
+<span class="fc" id="L378">        destroy();</span>
+<span class="fc" id="L379">        app.show(groupControllerProvider.get());</span>
+<span class="fc" id="L380">    }</span>
 
     /**
      * This method enables the user to change to the settings view. GroupStorage ID needs to be set.
      */
 
     public void changeToSettings() {
-<span class="pc bpc" id="L386" title="1 of 2 branches missed.">        if (groupListView.getSelectionModel().getSelectedItem() != null) {</span>
-<span class="fc" id="L387">            groupStorageProvider.get().set_id(groupListView.getSelectionModel().getSelectedItem()._id());</span>
-<span class="fc" id="L388">            destroy();</span>
-<span class="fc" id="L389">            app.show(groupControllerProvider.get());</span>
+<span class="pc bpc" id="L387" title="1 of 2 branches missed.">        if (groupListView.getSelectionModel().getSelectedItem() != null) {</span>
+<span class="fc" id="L388">            groupStorageProvider.get().set_id(groupListView.getSelectionModel().getSelectedItem()._id());</span>
+<span class="fc" id="L389">            destroy();</span>
+<span class="fc" id="L390">            app.show(groupControllerProvider.get());</span>
         }
-<span class="fc" id="L391">    }</span>
+<span class="fc" id="L392">    }</span>
 
     /**
      * This method sends the current text in the TextField as a message to the selected group or user.
      */
 
     public void onSendMessage() {
-<span class="fc" id="L398">        String groupID = groupStorageProvider.get().get_id();</span>
-<span class="pc bpc" id="L399" title="1 of 2 branches missed.">        if (groupID != null) {</span>
-<span class="fc" id="L400">            String messageBody = messageTextArea.getText();</span>
-<span class="fc" id="L401">            disposables.add(messageService.newMessage(groupID, messageBody, MESSAGE_NAMESPACE_GROUPS).observeOn(FX_SCHEDULER).subscribe(message -&gt; {</span>
-<span class="pc" id="L402">            }, error -&gt; showError(error.getMessage())));</span>
-<span class="fc" id="L403">            messageTextArea.setText(EMPTY_STRING);</span>
+<span class="fc" id="L399">        String groupID = groupStorageProvider.get().get_id();</span>
+<span class="pc bpc" id="L400" title="1 of 2 branches missed.">        if (groupID != null) {</span>
+<span class="fc" id="L401">            String messageBody = messageTextArea.getText();</span>
+<span class="fc" id="L402">            disposables.add(messageService.newMessage(groupID, messageBody, MESSAGE_NAMESPACE_GROUPS).observeOn(FX_SCHEDULER).subscribe(message -&gt; {</span>
+<span class="pc" id="L403">            }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L404">            messageTextArea.setText(EMPTY_STRING);</span>
         }
-<span class="fc" id="L405">    }</span>
+<span class="fc" id="L406">    }</span>
 
     /**
      * This method listens to changes in the groups and updates the groups list accordingly.
      */
 
     public void listenToGroupChanges() {
-<span class="fc" id="L412">        disposables.add(eventListenerProvider.get().listen(&quot;groups.*.*&quot;, Group.class).observeOn(FX_SCHEDULER).subscribe(groupEvent -&gt; {</span>
-<span class="fc" id="L413">            final Group group = groupEvent.data();</span>
-<span class="fc bfc" id="L414" title="All 4 branches covered.">            switch (groupEvent.suffix()) {</span>
-<span class="fc" id="L415">                case &quot;created&quot; -&gt; groups.add(group);</span>
-<span class="fc" id="L416">                case &quot;updated&quot; -&gt; updateGroup(group);</span>
-<span class="fc" id="L417">                case &quot;deleted&quot; -&gt; groups.remove(group);</span>
+<span class="fc" id="L413">        disposables.add(eventListenerProvider.get().listen(&quot;groups.*.*&quot;, Group.class).observeOn(FX_SCHEDULER).subscribe(groupEvent -&gt; {</span>
+<span class="fc" id="L414">            final Group group = groupEvent.data();</span>
+<span class="fc bfc" id="L415" title="All 4 branches covered.">            switch (groupEvent.suffix()) {</span>
+<span class="fc" id="L416">                case &quot;created&quot; -&gt; groups.add(group);</span>
+<span class="fc" id="L417">                case &quot;updated&quot; -&gt; updateGroup(group);</span>
+<span class="fc" id="L418">                case &quot;deleted&quot; -&gt; groups.remove(group);</span>
             }
-<span class="fc" id="L419">        }, error -&gt; showError(error.getMessage())));</span>
-<span class="fc" id="L420">    }</span>
+<span class="fc" id="L420">        }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L421">    }</span>
 
     /**
      * This method listens to changes of the group name or members and updates the groups list accordingly.
@@ -426,11 +427,11 @@ public class MessagesController extends Controller {
      */
 
     private void updateGroup(Group group) {
-<span class="fc" id="L429">        groups.removeIf(g -&gt; g._id().equals(group._id()));</span>
-<span class="pc bpc" id="L430" title="1 of 2 branches missed.">        if (group.members().contains(userStorageProvider.get().get_id())) {</span>
-<span class="fc" id="L431">            groups.add(group);</span>
+<span class="fc" id="L430">        groups.removeIf(g -&gt; g._id().equals(group._id()));</span>
+<span class="pc bpc" id="L431" title="1 of 2 branches missed.">        if (group.members().contains(userStorageProvider.get().get_id())) {</span>
+<span class="fc" id="L432">            groups.add(group);</span>
         }
-<span class="fc" id="L433">    }</span>
+<span class="fc" id="L434">    }</span>
 
     /**
      * This method sets a boolean if a user was selected from the main menu.
@@ -439,8 +440,8 @@ public class MessagesController extends Controller {
      */
 
     public void setUserChosenFromMainMenu(boolean userChosenFromMainMenu) {
-<span class="fc" id="L442">        this.userChosenFromMainMenu = userChosenFromMainMenu;</span>
-<span class="fc" id="L443">    }</span>
+<span class="fc" id="L443">        this.userChosenFromMainMenu = userChosenFromMainMenu;</span>
+<span class="fc" id="L444">    }</span>
 
     /**
      * This method sets a boolean if a user was selected from the new friend view.
@@ -449,7 +450,7 @@ public class MessagesController extends Controller {
      */
 
     public void setUserChosenFromNewFriend(boolean userChosenFromNewFriend) {
-<span class="fc" id="L452">        this.userChosenFromNewFriend = userChosenFromNewFriend;</span>
-<span class="fc" id="L453">    }</span>
+<span class="fc" id="L453">        this.userChosenFromNewFriend = userChosenFromNewFriend;</span>
+<span class="fc" id="L454">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

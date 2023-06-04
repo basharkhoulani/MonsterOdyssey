@@ -144,7 +144,7 @@ public class AccountSettingController extends Controller {
 <span class="pc bpc" id="L144" title="1 of 2 branches missed.">        if (userStorageProvider.get().getAvatar() != null) {</span>
 <span class="nc" id="L145">            String avatar = userStorageProvider.get().getAvatar();</span>
 
-<span class="nc" id="L147">            avatarImageView.setImage(ImageProcessor.toFXImage(avatar));</span>
+<span class="nc" id="L147">            avatarImageView.setImage(ImageProcessor.fromBase64ToFXImage(avatar));</span>
         }
 
 <span class="fc" id="L150">        return parent;</span>
