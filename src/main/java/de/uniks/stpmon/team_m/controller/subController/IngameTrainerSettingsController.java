@@ -85,7 +85,7 @@ public class IngameTrainerSettingsController extends Controller {
         if (this.regionId != null) {
             disposables.add(trainersService.getTrainers(this.regionId, null, usersStorage.get_id()).observeOn(FX_SCHEDULER).subscribe(trainers -> {
                 if (!trainers.isEmpty()) {
-                    trainer = trainers.get(0);
+                    trainerStorageProvider.get().setTrainer(trainers.get(0));
                     loadAndSetTrainerImage();
                 }
             }, error -> this.showError(error.getMessage())));
