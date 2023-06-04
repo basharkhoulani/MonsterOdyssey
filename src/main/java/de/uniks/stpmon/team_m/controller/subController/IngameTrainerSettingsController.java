@@ -1,23 +1,23 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.controller.MainMenuController;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.inject.Singleton;
+
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
-
+@Singleton
 public class IngameTrainerSettingsController extends Controller {
     @FXML
     public ImageView trainerAvatarImageView;
@@ -30,7 +30,8 @@ public class IngameTrainerSettingsController extends Controller {
 
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
-
+    @Inject
+    Provider<IngameController> ingameControllerProvider;
     @Inject
     public IngameTrainerSettingsController() {
     }
@@ -60,6 +61,7 @@ public class IngameTrainerSettingsController extends Controller {
 
         final Button cancelButton2 = (Button) alert.getDialogPane().lookupButton(cancelButton);
         final Button okButton2 = (Button) alert.getDialogPane().lookupButton(okButton);
+        okButton2.setOnAction(event -> onCancelButtonClick());
         cancelButton2.getStyleClass().add(WHITE_BUTTON);
         okButton2.getStyleClass().add(WHITE_BUTTON);
 
