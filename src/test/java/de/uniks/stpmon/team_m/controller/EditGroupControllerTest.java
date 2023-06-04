@@ -13,7 +13,6 @@ import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -120,9 +119,7 @@ class EditGroupControllerTest extends ApplicationTest {
         assertEquals("TestGroup", groupName);
         clickOn(groupNameTextField);
         write("NOT");
-        HBox hBox = lookup("#TestUser").query();
-        HBox buttonHBox = (HBox) hBox.getChildren().get(2);
-        Button button = (Button) buttonHBox.getChildren().get(0);
+        Button button = lookup("#TestUserAddOrRemoveButton").query();
         final String buttonText = button.getText();
         assertEquals(CHECK_MARK, buttonText);
         clickOn(button);
