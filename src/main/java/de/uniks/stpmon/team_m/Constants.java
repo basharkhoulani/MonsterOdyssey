@@ -153,6 +153,8 @@ public class Constants {
     public static final String SEVENTH_MESSAGE = "Can we have your name?";
     public static final String EIGHTH_MESSAGE = "Hello. Next, we 'd like to take a picture of you";
     public static final String NINTH_MESSAGE = "Take as much time as you want to get dressed up for it.";
+    public static final String TENTH_MESSAGE = "Now it's time to start your Journey";
+    public static final String ELEVENTH_MESSAGE = "See you next time!";
 
 
     public static final String WELCOME_MESSAGE_STYLE = "welcomeMessage";
