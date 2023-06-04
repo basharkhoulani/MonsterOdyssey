@@ -21,13 +21,14 @@ import javafx.scene.layout.HBox;
 <span class="fc" id="L21">            final Label groupNameLabel = new Label(group.name());</span>
 <span class="fc" id="L22">            final HBox rootHBox = new HBox(groupNameLabel);</span>
 <span class="fc" id="L23">            rootHBox.setId(group.name());</span>
-<span class="fc" id="L24">            rootHBox.setUserData(group);</span>
-<span class="fc" id="L25">            setGraphic(rootHBox);</span>
-<span class="fc" id="L26">            setText(null);</span>
-<span class="fc" id="L27">        } else {</span>
-<span class="fc" id="L28">            setText(null);</span>
-<span class="fc" id="L29">            setGraphic(null);</span>
+<span class="fc" id="L24">            rootHBox.getStyleClass().add(&quot;groupCell&quot;);</span>
+<span class="fc" id="L25">            rootHBox.setUserData(group);</span>
+<span class="fc" id="L26">            setGraphic(rootHBox);</span>
+<span class="fc" id="L27">            setText(null);</span>
+<span class="fc" id="L28">        } else {</span>
+<span class="fc" id="L29">            setText(null);</span>
+<span class="fc" id="L30">            setGraphic(null);</span>
         }
-<span class="fc" id="L31">    }</span>
+<span class="fc" id="L32">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
