@@ -6,7 +6,6 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
-
 import static de.uniks.stpmon.team_m.Constants.HELP_LABEL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
@@ -133,6 +132,8 @@ public class AppTest extends ApplicationTest {
         waitForFxEvents();
         assertFalse(startGameButton.isDisabled());
         clickOn(startGameButton);
+
+        // Intro
         assertEquals("Monster Odyssey - Ingame", stage.getTitle());
 
         clickOn("Next");

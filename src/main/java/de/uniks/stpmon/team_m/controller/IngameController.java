@@ -3,13 +3,9 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
-import de.uniks.stpmon.team_m.dto.Region;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.skin.ButtonBarSkin;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -46,7 +42,7 @@ public class IngameController extends Controller {
 
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
-    private Region region;
+    private String regionId;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -154,14 +150,14 @@ public class IngameController extends Controller {
         }
     }
 
-    public void setRegion(Region region) {
-        this.region = region;
+    public void setRegion(String regionId) {
+        this.regionId = regionId;
     }
 
 
     public void showTrainerSettings() {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
-        trainerSettingsController.setRegion(this.region);
+        trainerSettingsController.setRegion(this.regionId);
         trainerSettingsDialog.setTitle("Trainer Profil");
         trainerSettingsDialog.getDialogPane().setContent(trainerSettingsController.render());
         trainerSettingsDialog.getDialogPane().setExpandableContent(null);
