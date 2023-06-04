@@ -9,6 +9,7 @@ import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
+import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
@@ -58,7 +59,7 @@ public class MessagesBoxController extends Controller {
     public void init() {
         messageListView = new ListView<>();
         messageListView.setItems(messages);
-        messageListView.setCellFactory(param -> new MessageCell(this, userStorageProvider.get().get_id()));
+        messageListView.setCellFactory(param -> new MessageCell(this, userStorageProvider.get()));
         messageListView.setPlaceholder(new Label(resources.getString("NO.MESSAGES.YET")));
         messageListView.setId("messageListView");
         if (group == null) {
@@ -88,6 +89,7 @@ public class MessagesBoxController extends Controller {
             groupStorageProvider.get().set_id(chatID);
         }).flatMap(groups -> messageService.getGroupMessages(chatID).observeOn(FX_SCHEDULER))
           .doOnNext(this.messages::setAll)
+          .flatMap(messages -> Observable.just(messages).observeOn(FX_SCHEDULER))
           .doOnNext(messages1 -> listenToMessages(this.messages, chatID))
           .observeOn(FX_SCHEDULER).subscribe(event -> {}, error -> showError(error.getMessage())));
     }
@@ -136,6 +138,22 @@ public class MessagesBoxController extends Controller {
         for (User user : allUsers) {
             if (user._id().equals(_id)) {
                 return user.name();
+            }
+        }
+        return UNKNOWN_USER;
+    }
+
+    /**
+     * Search for the avatar of the user with the given id.
+     *
+     * @param _id The id of the user
+     * @return The avatar of the user
+     */
+
+    public String getAvatar(String _id) {
+        for (User user : allUsers) {
+            if (user._id().equals(_id)) {
+                return user.avatar();
             }
         }
         return UNKNOWN_USER;

@@ -144,7 +144,7 @@ public class AccountSettingController extends Controller {
         if (userStorageProvider.get().getAvatar() != null) {
             String avatar = userStorageProvider.get().getAvatar();
 
-            avatarImageView.setImage(ImageProcessor.toFXImage(avatar));
+            avatarImageView.setImage(ImageProcessor.fromBase64ToFXImage(avatar));
         }
 
         return parent;

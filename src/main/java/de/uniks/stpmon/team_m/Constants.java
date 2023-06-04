@@ -59,7 +59,7 @@ public class Constants {
     // NEW GROUP
     public static final String CHECK_MARK = "\u2713";
     public static final String ADD_MARK = "+";
-    public static final int BUTTON_PREF_SIZE = 30;
+    public static final int BUTTON_PREF_SIZE = 40;
     public static final int MAX_SUGGESTIONS_NEW_GROUP = 20;
 
 
@@ -79,13 +79,14 @@ public class Constants {
     public static final String PASSWORD_SUCCESS_CHANGED = "Your Password has been changed successfully.";
 
     // AVATAR
-    public static final String AVATAR_1 = "images/Monster1-color.png";
-    public static final String AVATAR_2 = "images/Monster2-color.png";
-    public static final String AVATAR_3 = "images/rabbit.png";
-    public static final String AVATAR_4 = "images/sheep_icon.png";
+    public static final String AVATAR_1 = "images/monster.png";
+    public static final String AVATAR_2 = "images/rabbit.png";
+    public static final String AVATAR_3 = "images/sheep_icon.png";
+    public static final String AVATAR_4 = "images/cat.jpeg";
     public static final int MAX_BASE64_LENGTH = 16000;
     public static final String IMAGE_PROCESSING_ONGOING = "Image is being processed. Please wait.";
     public static final String IMAGE_PROCESSING_ERROR = "Image could not be processed. Please try again.";
+    public static final int AVATAR_SIZE = 30;
 
     // INGAME
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;

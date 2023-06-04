@@ -34,6 +34,7 @@ public class RegionCell extends ListCell<Region> {
         if (item != null && !empty) {
             final RadioButton radioButton = new RadioButton(item.name());
             radioButton.setToggleGroup(regionToggleGroup);
+            radioButton.getStyleClass().add("regionCell");
             setGraphic(radioButton);
             radioButton.setTextAlignment(TextAlignment.CENTER);
             radioButton.setUserData(item);

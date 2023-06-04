@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<HBox styleClass="Background" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.GroupController">
+
+<HBox styleClass="Background" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.GroupController">
    <VBox alignment="TOP_CENTER" fillWidth="false" minWidth="375.0" HBox.hgrow="NEVER">
       <HBox alignment="CENTER" styleClass="ForegroundHeaderContainer" VBox.vgrow="SOMETIMES">
          <ImageView fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
@@ -33,8 +28,8 @@
       <VBox alignment="CENTER" maxWidth="1.7976931348623157E308" VBox.vgrow="SOMETIMES">
          <HBox alignment="CENTER" maxHeight="650.0" maxWidth="700.0" VBox.vgrow="ALWAYS">
             <VBox maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
-               <ListView id="friendsListView" fx:id="friendsListView" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="200.0" prefWidth="700.0" VBox.vgrow="ALWAYS" />
-               <ListView id="foreignListView" fx:id="foreignListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="200.0" prefWidth="700.0" />
+               <ListView id="friendsListView" fx:id="friendsListView" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="200.0" prefWidth="700.0" VBox.vgrow="ALWAYS" />
+               <ListView id="foreignListView" fx:id="foreignListView" focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="200.0" prefWidth="700.0" />
             </VBox>
             <VBox.margin>
                <Insets left="16.0" right="16.0" />
@@ -113,7 +108,7 @@
                         <Insets />
                      </VBox.margin>
                   </TextField>
-                  <Button fx:id="saveGroupButton" mnemonicParsing="false" onAction="#saveGroup" prefHeight="50.0" prefWidth="226.0" styleClass="buttonsYellow" text="%Save.Group">
+                  <Button fx:id="saveGroupButton" mnemonicParsing="false" onAction="#saveGroup" prefHeight="50.0" prefWidth="150.0" styleClass="buttonsYellow" text="%Save.Group">
                      <font>
                         <Font name="Comic Sans MS Bold" size="17.0" />
                      </font>

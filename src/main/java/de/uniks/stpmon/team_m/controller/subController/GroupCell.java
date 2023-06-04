@@ -21,6 +21,7 @@ public class GroupCell extends ListCell<Group> {
             final Label groupNameLabel = new Label(group.name());
             final HBox rootHBox = new HBox(groupNameLabel);
             rootHBox.setId(group.name());
+            rootHBox.getStyleClass().add("groupCell");
             rootHBox.setUserData(group);
             setGraphic(rootHBox);
             setText(null);

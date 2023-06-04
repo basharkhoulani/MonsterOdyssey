@@ -13,6 +13,7 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.stage.FileChooser;
+import okhttp3.ResponseBody;
 
 import java.util.List;
 import java.util.Locale;
@@ -247,5 +248,75 @@ public class TestModule {
     @Provides
     static FileChooser fileChooser() {
         return new FileChooser();
+    }
+
+    @Provides
+    static PresetsApiService presetsApiService() {
+        return new PresetsApiService() {
+            @Override
+            public Observable<ResponseBody> getTileset(String filename) {
+                return null;
+            }
+
+            @Override
+            public Observable<List<String>> getCharacters() {
+                return Observable.just(List.of());
+            }
+
+            @Override
+            public Observable<ResponseBody> getCharacter(String filename) {
+                return null;
+            }
+
+            @Override
+            public Observable<List<MonsterTypeDto>> getMonsters() {
+                return null;
+            }
+
+            @Override
+            public Observable<MonsterTypeDto> getMonster(int id) {
+                return null;
+            }
+
+            @Override
+            public Observable<ResponseBody> getMonsterImage(String id) {
+                return null;
+            }
+
+            @Override
+            public Observable<List<AbilityDto>> getAbilities() {
+                return null;
+            }
+
+            @Override
+            public Observable<AbilityDto> getAbility(int id) {
+                return null;
+            }
+        };
+    }
+
+    @Provides
+    static TrainersApiService trainersApiService() {
+        return new TrainersApiService() {
+            @Override
+            public Observable<Trainer> createTrainer(String regionId, CreateTrainerDto createTrainerDto) {
+                return null;
+            }
+
+            @Override
+            public Observable<List<Trainer>> getTrainers(String regionId, String area, String id) {
+                return null;
+            }
+
+            @Override
+            public Observable<Trainer> getTrainer(String regionId, String _id) {
+                return null;
+            }
+
+            @Override
+            public Observable<Trainer> deleteTrainer(String regionId, String _id) {
+                return null;
+            }
+        };
     }
 }
