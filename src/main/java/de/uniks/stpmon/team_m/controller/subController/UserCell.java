@@ -60,7 +60,7 @@ public class UserCell extends ListCell<User> {
             statusHBox.setAlignment(CENTER);
             ImageView avatarImageView = new ImageView();
             if (!GraphicsEnvironment.isHeadless()) {
-                final Image avatar = ImageProcessor.toFXImage(user.avatar());
+                final Image avatar = ImageProcessor.fromBase64ToFXImage(user.avatar());
                 avatarImageView = new ImageView(avatar);
             }
             avatarImageView.setPreserveRatio(true);

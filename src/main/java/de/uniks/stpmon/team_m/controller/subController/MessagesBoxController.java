@@ -59,7 +59,7 @@ public class MessagesBoxController extends Controller {
     public void init() {
         messageListView = new ListView<>();
         messageListView.setItems(messages);
-        messageListView.setCellFactory(param -> new MessageCell(this, userStorageProvider.get().get_id()));
+        messageListView.setCellFactory(param -> new MessageCell(this, userStorageProvider.get(), user.avatar()));
         messageListView.setPlaceholder(new Label(NO_MESSAGES_YET));
         messageListView.setId("messageListView");
         if (group == null) {

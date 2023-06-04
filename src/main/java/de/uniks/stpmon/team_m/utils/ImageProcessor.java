@@ -21,7 +21,6 @@ import static de.uniks.stpmon.team_m.Constants.*;
 public class ImageProcessor {
     public static String toBase64(String inputImagePath) {
         try {
-            // Originalbild laden
             BufferedImage originalImage = ImageIO.read(new File(inputImagePath));
             return getBase64(originalImage);
         } catch (IOException e) {
@@ -29,7 +28,7 @@ public class ImageProcessor {
         }
     }
 
-    public static javafx.scene.image.Image toFXImage(String avatar) {
+    public static javafx.scene.image.Image fromBase64ToFXImage(String avatar) {
         javafx.scene.image.Image image;
         if (avatar == null) {
             image = new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString());
