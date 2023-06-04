@@ -34,7 +34,7 @@ public class WelcomeSceneController extends Controller{
     @Inject
     public WelcomeSceneController(){}
     @Override
-    public String getTitle() {return INGAME_TITLE;}
+    public String getTitle() {return resources.getString("INGAME.TITLE");}
 
     @Override
     public Parent render() {
@@ -59,18 +59,18 @@ public class WelcomeSceneController extends Controller{
                 if (messagePane.getChildren().size() > 2) {
                     messagePane.getChildren().remove(2);
                 }
-                firstMessage.setText(FIRST_MESSAGE);
-                secondMessage.setText(SECOND_MESSAGE);
+                firstMessage.setText(resources.getString("FIRST.MESSAGE"));
+                secondMessage.setText(resources.getString("SECOND.MESSAGE"));
             }
             case 2 -> {
-                firstMessage.setText(THIRD_MESSAGE);
-                secondMessage.setText(FOURTH_MESSAGE);
+                firstMessage.setText(resources.getString("THIRD.MESSAGE"));
+                secondMessage.setText(resources.getString("FOURTH.MESSAGE"));
                 final VBox messageVBox3 = new VBox();
                 messageVBox3.getStylesheets().add(STYLE_RESOURCE);
-                messageVBox3.getStyleClass().add(WELCOME_MESSAGE_STYLE);
+                messageVBox3.getStyleClass().add(resources.getString("WELCOME.MESSAGE.STYLE"));
                 final Label thirdMessage = new Label();
                 thirdMessage.setId("thirdMessage");
-                thirdMessage.setText(FIFTH_MESSAGE);
+                thirdMessage.setText(resources.getString("FIFTH.MESSAGE"));
                 thirdMessage.setPrefHeight(MESSAGEBOX_HEIGHT);
                 thirdMessage.setPrefWidth(MESSAGEBOX_WIDTH);
                 messageVBox3.getChildren().add(thirdMessage);
@@ -81,15 +81,15 @@ public class WelcomeSceneController extends Controller{
                 if (messagePane.getChildren().size() > 2) {
                     messagePane.getChildren().remove(2);
                 }
-                firstMessage.setText(SIXTH_MESSAGE);
+                firstMessage.setText(resources.getString("SIXTH.MESSAGE"));
                 firstMessage.setWrapText(true);
                 firstMessage.setPrefWidth(200);
-                secondMessage.setText(SEVENTH_MESSAGE);
+                secondMessage.setText(resources.getString("SEVENTH.MESSAGE"));
             }
             case 4 -> {
                 final Alert alert = new Alert(Alert.AlertType.NONE);
                 final DialogPane dialogPane = alert.getDialogPane();
-                final ButtonType cancelButton = new ButtonType(CANCEL, ButtonBar.ButtonData.APPLY);
+                final ButtonType cancelButton = new ButtonType(resources.getString("CANCEL"), ButtonBar.ButtonData.APPLY);
                 final ButtonType okButton = new ButtonType(OK);
                 final TextField textFieldName = new TextField();
                 textFieldName.setId("nameField");
@@ -98,14 +98,14 @@ public class WelcomeSceneController extends Controller{
 
                 final Button cancelButton2 = (Button) alert.getDialogPane().lookupButton(cancelButton);
                 final Button okButton2 = (Button) alert.getDialogPane().lookupButton(okButton);
-                cancelButton2.getStyleClass().add(WELCOME_SCENE_BUTTON);
-                okButton2.getStyleClass().add(WELCOME_SCENE_BUTTON);
+                cancelButton2.getStyleClass().add(resources.getString("WELCOME.SCENE.BUTTON"));
+                okButton2.getStyleClass().add(resources.getString("WELCOME.SCENE.BUTTON"));
 
                 final VBox vbox = new VBox(textFieldName);
 
-                alert.setTitle(NAME_ALERT_TITLE);
+                alert.setTitle(resources.getString("NAME.ALERT.TITLE"));
                 dialogPane.getStylesheets().add(STYLE_RESOURCE);
-                dialogPane.getStyleClass().add(ALERT_DIALOG_NAME);
+                dialogPane.getStyleClass().add(resources.getString("ALERT.DIALOG.NAME"));
 
                 dialogPane.setContent(vbox);
 
@@ -119,8 +119,8 @@ public class WelcomeSceneController extends Controller{
                 }
             }
             case 5 -> {
-                firstMessage.setText(EIGHTH_MESSAGE);
-                secondMessage.setText(NINTH_MESSAGE);
+                firstMessage.setText(resources.getString("EIGHTH.MESSAGE"));
+                secondMessage.setText(resources.getString("NINTH.MESSAGE"));
                 secondMessage.setWrapText(true);
                 secondMessage.setPrefWidth(200);
             }

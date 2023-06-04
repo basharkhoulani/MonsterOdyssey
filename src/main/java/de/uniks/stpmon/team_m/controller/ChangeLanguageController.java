@@ -12,7 +12,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Locale;
 
-import static de.uniks.stpmon.team_m.Constants.CHANGE_LANGUAGE_TITLE;
 
 public class ChangeLanguageController extends Controller {
     @FXML
@@ -49,7 +48,7 @@ public class ChangeLanguageController extends Controller {
 
     @Override
     public String getTitle() {
-        return CHANGE_LANGUAGE_TITLE;
+        return resources.getString("CHANGE.LANGUAGE.TITLE");
     }
 
     private void initRadioButtons() {
@@ -92,15 +91,13 @@ public class ChangeLanguageController extends Controller {
     }
 
     public void setLanguageChinese() {
-        setLanguage(Locale.CHINESE);
+        setLanguage(Locale.SIMPLIFIED_CHINESE);
     }
 
 
     private void setLanguage(Locale locale) {
         preferences.put("locale", locale.toLanguageTag());
-        //resources = resourceBundleProvider.get();
         toReload.reload(toReload);
-        //app.show(toReload); //reload
     }
 }
 

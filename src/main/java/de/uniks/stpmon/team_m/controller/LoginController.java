@@ -68,6 +68,7 @@ public class LoginController extends Controller {
 
     private ChangeLanguageController changeLanguageController;
 
+
     /**
      * LoginController is used to show the login screen and to login or signup the user.
      */
@@ -81,7 +82,7 @@ public class LoginController extends Controller {
      */
     @Override
     public String getTitle() {
-        return LOGIN_TITLE;
+        return resources.getString("LOGIN.TITLE");
     }
 
     @Override
@@ -113,7 +114,7 @@ public class LoginController extends Controller {
         signInButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));
         signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));
 
-        passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);
+        passwordField.setPromptText(resources.getString("PASSWORD.LESS.THAN.8.CHARACTERS"));
 
         showInformation();
 
@@ -180,11 +181,11 @@ public class LoginController extends Controller {
 
     public void errorHandle(String error) {
         if (error.contains(HTTP_401)) {
-            passwordErrorLabel.setText(SIGNIN_ERROR);
+            passwordErrorLabel.setText(resources.getString("SIGNIN.ERROR"));
         } else if (error.contains(HTTP_409)) {
-            passwordErrorLabel.setText(USERNAME_TAKEN);
+            passwordErrorLabel.setText(resources.getString("USERNAME.TAKEN"));
         } else {
-            passwordErrorLabel.setText(CUSTOM_ERROR);
+            passwordErrorLabel.setText(resources.getString("CUSTOM.ERROR"));
         }
     }
 
@@ -210,7 +211,7 @@ public class LoginController extends Controller {
         Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
         closeButton.managedProperty().bind(closeButton.visibleProperty());
         closeButton.setVisible(false);
-        dialog.setTitle("Change Language");
+        dialog.setTitle(resources.getString("Change.Language"));
         changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);
         dialog.getDialogPane().setContent(changeLanguageController.render());
         dialog.showAndWait();

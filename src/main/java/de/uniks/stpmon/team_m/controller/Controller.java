@@ -166,22 +166,22 @@ public abstract class Controller {
 
     public void showError(String error) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(ERROR);
+        alert.setTitle(resources.getString("ERROR"));
         alert.setHeaderText(null);
         if (error.contains(HTTP_429)) {
-            alert.setContentText(HTTP_429_MESSAGE);
+            alert.setContentText(resources.getString("HTTP.429.MESSAGE"));
         } else if (error.contains(HTTP_409)) {
-            alert.setContentText(HTTP_409_MESSAGE);
+            alert.setContentText(resources.getString("HTTP.409.MESSAGE"));
         } else if (error.contains(HTTP_404)) {
-            alert.setContentText(HTTP_404_MESSAGE);
+            alert.setContentText(resources.getString("HTTP.404.MESSAGE"));
         } else if (error.contains(HTTP_403)) {
-            alert.setContentText(HTTP_403_MESSAGE);
+            alert.setContentText(resources.getString("HTTP.403.MESSAGE"));
         } else if (error.contains(HTTP_401)) {
-            alert.setContentText(HTTP_401_MESSAGE);
+            alert.setContentText(resources.getString("HTTP.401.MESSAGE"));
         } else if (error.contains(HTTP_400)) {
-            alert.setContentText(HTTP_400_MESSAGE);
+            alert.setContentText(resources.getString("HTTP.400.MESSAGE"));
         } else {
-            alert.setContentText(GENERIC_ERROR);
+            alert.setContentText(resources.getString("GENERIC.ERROR"));
         }
         alert.showAndWait();
     }

@@ -164,7 +164,7 @@ public class MessagesController extends Controller {
                     }
                 }
             } else if (group.members().size() == 1 && group.name() == null) {
-                this.groups.add(new Group(group._id(), ALONE, group.members()));
+                this.groups.add(new Group(group._id(), resources.getString("ALONE"), group.members()));
             } else {
                 this.groups.add(group);
             }
@@ -206,7 +206,7 @@ public class MessagesController extends Controller {
 
     @Override
     public String getTitle() {
-        return MESSAGES_TITLE;
+        return resources.getString("MESSAGES.TITLE");
     }
 
     /**
@@ -278,13 +278,13 @@ public class MessagesController extends Controller {
      */
   
     private void initListViews() {
-        userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
+        userListView.setPlaceholder(new Label(resources.getString("NO.FRIENDS.FOUND")));
         userListView.setCellFactory(param -> new UserCell(preferences));
         userListView.setItems(friends);
         listenToUserUpdate(friends, userListView);
 
         groupListView.setCellFactory(param -> new GroupCell());
-        groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
+        groupListView.setPlaceholder(new Label(resources.getString("NO.GROUPS.FOUND")));
         groupListView.setItems(groups);
         listenToGroupChanges();
     }

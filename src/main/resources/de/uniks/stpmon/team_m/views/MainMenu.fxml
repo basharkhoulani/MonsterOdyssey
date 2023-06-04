@@ -32,7 +32,7 @@
             </HBox.margin>
             <Image url="@../images/Monster1-without.png" />
          </ImageView>
-         <Label text="My Friends" textAlignment="CENTER">
+         <Label text="%My.Friends" textAlignment="CENTER">
             <font>
                <Font name="Comic Sans MS Bold" size="24.0" />
             </font>

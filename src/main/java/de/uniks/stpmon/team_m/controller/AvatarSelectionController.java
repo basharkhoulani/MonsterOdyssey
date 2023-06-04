@@ -9,10 +9,6 @@ import javafx.stage.FileChooser;
 
 import javax.inject.Inject;
 import java.io.File;
-
-import static de.uniks.stpmon.team_m.Constants.IMAGE;
-import static de.uniks.stpmon.team_m.Constants.SELECT_AVATAR_PICTURE;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Base64;
@@ -123,8 +119,8 @@ public class AvatarSelectionController extends Controller {
 
     public void selectFile() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(IMAGE, "*.png", "*.jpg", "*.jpeg"));
-        fileChooser.setTitle(SELECT_AVATAR_PICTURE);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(resources.getString("IMAGE"), "*.png", "*.jpg", "*.jpeg"));
+        fileChooser.setTitle(resources.getString("SELECT.AVATAR.PICTURE"));
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
             for (Toggle radioButton : selectAvatar.getToggles()) {

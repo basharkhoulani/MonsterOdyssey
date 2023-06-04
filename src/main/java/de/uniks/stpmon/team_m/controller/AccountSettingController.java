@@ -87,7 +87,7 @@ public class AccountSettingController extends Controller {
 
     @Override
     public String getTitle() {
-        return ACCOUNT_SETTINGS_TITLE;
+        return resources.getString("ACCOUNT.SETTINGS.TITLE");
     }
 
     @Override
@@ -135,7 +135,7 @@ public class AccountSettingController extends Controller {
         BooleanBinding isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);
         savePasswordButton.disableProperty().bind(isInvalidPassword);
 
-        passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);
+        passwordField.setPromptText(resources.getString("PASSWORD.LESS.THAN.8.CHARACTERS"));
 
         // show Avatar if there is one
         if (userStorageProvider.get().getAvatar() != null) {
@@ -166,7 +166,7 @@ public class AccountSettingController extends Controller {
         disposables.add(usersService.updateUser(username.get(), null, null, null, null)
                 .observeOn(FX_SCHEDULER).subscribe(userResult -> {
                     userStorageProvider.get().setName(userResult.name());
-                    informationLabel.setText(USERNAME_SUCCESS_CHANGED);
+                    informationLabel.setText(resources.getString("USERNAME.SUCCESS.CHANGED"));
                     usernameField.setDisable(true);
                     usernameField.setText(EMPTY_STRING);
                     usernameField.setPromptText(userStorageProvider.get().getName());
@@ -203,10 +203,10 @@ public class AccountSettingController extends Controller {
         disposables.add(usersService.updateUser(null, null, null, null, password.get())
                 .observeOn(FX_SCHEDULER).subscribe(userResult -> {
                     passwordField.setText(EMPTY_STRING);
-                    passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);
+                    passwordField.setPromptText(resources.getString("PASSWORD.LESS.THAN.8.CHARACTERS"));
                     passwordField.setDisable(true);
                     showPasswordButton.setDisable(true);
-                    informationLabel.setText(PASSWORD_SUCCESS_CHANGED);
+                    informationLabel.setText(resources.getString("PASSWORD.SUCCESS.CHANGED"));
                 }, error -> passwordErrorLabel.setText(errorHandle(error.getMessage()))));
     }
 
@@ -246,7 +246,7 @@ public class AccountSettingController extends Controller {
                 .subscribe(userResult -> {
                     userStorageProvider.get().setAvatar(avatarSelectionController.selectedAvatar);
                     saveAvatarButton.setDisable(true);
-                    informationLabel.setText(AVATAR_SUCCESS_CHANGED);
+                    informationLabel.setText(resources.getString("AVATAR.SUCCESS.CHANGED"));
                 }, error -> avatarErrorLabel.setText(error.getMessage()))
         );
 
@@ -262,7 +262,7 @@ public class AccountSettingController extends Controller {
     public void deleteAccount(Alert alert) {
         disposables.add(usersService.deleteUser().observeOn(FX_SCHEDULER).subscribe(delete -> {
             LoginController loginController = loginControllerProvider.get();
-            loginController.setInformation(DELETE_SUCCESS);
+            loginController.setInformation(resources.getString("DELETE.SUCCESS"));
             app.show(loginController);
         }, error -> errorAlert(alert)));
     }
@@ -280,8 +280,8 @@ public class AccountSettingController extends Controller {
      */
 
     public void showDeletePopUp() {
-        Alert alert = new Alert(Alert.AlertType.WARNING, SURE, ButtonType.OK, ButtonType.CANCEL);
-        alert.setTitle("Delete Account");
+        Alert alert = new Alert(Alert.AlertType.WARNING, resources.getString("SURE"), ButtonType.OK, ButtonType.CANCEL);
+        alert.setTitle(resources.getString("Delete.Account"));
         alert.setHeaderText(null);
         alert.initOwner(app.getStage());
         Optional<ButtonType> result = alert.showAndWait();
@@ -297,8 +297,8 @@ public class AccountSettingController extends Controller {
      */
 
     private void errorAlert(Alert alert) {
-        alert.setContentText(CUSTOM_ERROR);
-        alert.setTitle(ERROR);
+        alert.setContentText(resources.getString("CUSTOM.ERROR"));
+        alert.setTitle(resources.getString("ERROR"));
         alert.getButtonTypes().remove(ButtonType.CANCEL);
         alert.showAndWait();
     }
@@ -312,9 +312,9 @@ public class AccountSettingController extends Controller {
 
     public String errorHandle(String error) {
         if (error.contains(HTTP_409)) {
-            return USERNAME_TAKEN;
+            return resources.getString("USERNAME.TAKEN");
         } else {
-            return CUSTOM_ERROR;
+            return resources.getString("CUSTOM.ERROR");
         }
     }
 
@@ -327,7 +327,7 @@ public class AccountSettingController extends Controller {
         Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
         closeButton.managedProperty().bind(closeButton.visibleProperty());
         closeButton.setVisible(false);
-        dialog.setTitle("Change Language");
+        dialog.setTitle(resources.getString("Change.Language"));
         changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);
         dialog.getDialogPane().setContent(changeLanguageController.render());
         dialog.showAndWait();

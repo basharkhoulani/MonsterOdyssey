@@ -8,11 +8,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import javax.inject.Inject;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 import static javafx.geometry.Pos.CENTER_LEFT;
@@ -34,7 +36,9 @@ public class MessageCell extends ListCell<Message> {
     public VBox messageVBox;
     private FXMLLoader loader;
     private final MessagesBoxController messagesBoxController;
+
     public String userID;
+
 
     /**
      * MessageCell is used to handle the message cells.
@@ -50,6 +54,7 @@ public class MessageCell extends ListCell<Message> {
         this.messagesBoxController = messagesBoxController;
         this.userID = userID;
     }
+
 
     /**
      * The updateItem method is used to update the message cell.

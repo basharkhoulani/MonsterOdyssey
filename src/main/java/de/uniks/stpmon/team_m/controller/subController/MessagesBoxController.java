@@ -59,7 +59,7 @@ public class MessagesBoxController extends Controller {
         messageListView = new ListView<>();
         messageListView.setItems(messages);
         messageListView.setCellFactory(param -> new MessageCell(this, userStorageProvider.get().get_id()));
-        messageListView.setPlaceholder(new Label(NO_MESSAGES_YET));
+        messageListView.setPlaceholder(new Label(resources.getString("NO.MESSAGES.YET")));
         if (group == null) {
             openFriendChat("userListView");
         }
