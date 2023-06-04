@@ -173,7 +173,8 @@ public class MessagesController extends Controller {
     }
 
     /**
-     * This method selects the user and opens a chat with them, if the friend was chosen from the main menu.
+     * This method selects the user and open
+     * s a chat with them, if the friend was chosen from the main menu.
      */
 
     private void selectUserChosenFromMainMenu() {
