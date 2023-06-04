@@ -52,12 +52,13 @@ public class MainMenuUserCell extends UserCell {
 <span class="fc" id="L52">            popOverButton.setText(THREE_DOTS);</span>
 <span class="fc" id="L53">            popOverButton.setStyle(BUTTON_TRANSPARENT_STYLE);</span>
 <span class="fc" id="L54">            popOverButton.setId(item.name() + &quot;PopOverButton&quot;);</span>
-<span class="fc" id="L55">            buttonHBox.setAlignment(CENTER_RIGHT);</span>
-<span class="fc" id="L56">            HBox.setHgrow(buttonHBox, Priority.ALWAYS);</span>
-<span class="fc" id="L57">            super.getRootHBox().getChildren().add(buttonHBox);</span>
-<span class="fc" id="L58">            popOverButton.setOnAction(event -&gt; showPopOver(popOverButton, item));</span>
+<span class="fc" id="L55">            popOverButton.getStyleClass().add(&quot;popOverButton&quot;);</span>
+<span class="fc" id="L56">            buttonHBox.setAlignment(CENTER_RIGHT);</span>
+<span class="fc" id="L57">            HBox.setHgrow(buttonHBox, Priority.ALWAYS);</span>
+<span class="fc" id="L58">            super.getRootHBox().getChildren().add(buttonHBox);</span>
+<span class="fc" id="L59">            popOverButton.setOnAction(event -&gt; showPopOver(popOverButton, item));</span>
         }
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L61">    }</span>
 
     /**
      * Shows the friend settings pop over.
@@ -67,13 +68,13 @@ public class MainMenuUserCell extends UserCell {
      */
 
     private void showPopOver(Button button, User user) {
-<span class="fc" id="L70">        PopOver popOver = new PopOver();</span>
-<span class="fc" id="L71">        FriendSettingsController friendSettingsController = friendSettingsControllerProvider.get();</span>
-<span class="fc" id="L72">        friendSettingsController.setUser(user);</span>
-<span class="fc" id="L73">        friendSettingsController.setFriendsListView(getListView());</span>
-<span class="fc" id="L74">        popOver.setContentNode(friendSettingsController.render());</span>
-<span class="fc" id="L75">        popOver.setDetachable(false);</span>
-<span class="fc" id="L76">        popOver.show(button);</span>
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L71">        PopOver popOver = new PopOver();</span>
+<span class="fc" id="L72">        FriendSettingsController friendSettingsController = friendSettingsControllerProvider.get();</span>
+<span class="fc" id="L73">        friendSettingsController.setUser(user);</span>
+<span class="fc" id="L74">        friendSettingsController.setFriendsListView(getListView());</span>
+<span class="fc" id="L75">        popOver.setContentNode(friendSettingsController.render());</span>
+<span class="fc" id="L76">        popOver.setDetachable(false);</span>
+<span class="fc" id="L77">        popOver.show(button);</span>
+<span class="fc" id="L78">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

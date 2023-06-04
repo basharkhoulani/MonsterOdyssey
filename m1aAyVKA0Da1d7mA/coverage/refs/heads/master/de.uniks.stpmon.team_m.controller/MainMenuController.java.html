@@ -211,7 +211,10 @@ public class MainMenuController extends Controller {
      */
 
     public void changeToIngame() {
-<span class="fc" id="L214">        app.show(welcomeSceneControllerProvider.get());</span>
-<span class="fc" id="L215">    }</span>
+<span class="fc" id="L214">        Region selectedRegion = (Region) regionToggleGroup.getSelectedToggle().getUserData();</span>
+<span class="fc" id="L215">        WelcomeSceneController welcomeSceneController = welcomeSceneControllerProvider.get();</span>
+<span class="fc" id="L216">        welcomeSceneController.setRegion(selectedRegion);</span>
+<span class="fc" id="L217">        app.show(welcomeSceneController);</span>
+<span class="fc" id="L218">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
