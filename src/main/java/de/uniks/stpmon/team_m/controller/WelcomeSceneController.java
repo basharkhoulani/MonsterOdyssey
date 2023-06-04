@@ -136,8 +136,8 @@ public class WelcomeSceneController extends Controller {
             }
             case 6 -> app.show(characterSelectionControllerProvider.get());
             case 7 -> {
-                firstMessage.setText(TENTH_MESSAGE);
-                secondMessage.setText(ELEVENTH_MESSAGE);
+                firstMessage.setText(resources.getString("TENTH.MESSAGE"));
+                secondMessage.setText(resources.getString("ELEVENTH.MESSAGE"));
                 secondMessage.setWrapText(true);
                 secondMessage.setPrefWidth(200);
             }

@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
@@ -10,13 +11,17 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+
+import javax.imageio.IIOException;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import java.io.IOException;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 

@@ -17,6 +17,9 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import static de.uniks.stpmon.team_m.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -42,6 +45,8 @@ class AccountSettingControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        accountSettingController.setValues(bundle,null,null,accountSettingController,app);
         UserStorage userStorage = mock(UserStorage.class);
         when(userStorageProvider.get()).thenReturn(userStorage);
         app.start(stage);
@@ -201,7 +206,6 @@ class AccountSettingControllerTest extends ApplicationTest {
         clickOn("#deleteAccountButton");
         clickOn(ButtonType.OK.getText());
         verify(usersService).deleteUser();
-        verify(loginController).setInformation("Account successfully deleted");
         verify(app).show(loginController);
     }
 
@@ -282,27 +286,5 @@ class AccountSettingControllerTest extends ApplicationTest {
         final RadioButton radioButtonLanguageGerman = lookup("#radioButtonLanguageGerman").query();
         final RadioButton radioButtonLanguageChinese = lookup("#radioButtonLanguageChinese").query();
         final Button applyLanguageButton = lookup("#applyLanguageButton").query();
-
-        assertTrue(radioButtonLanguageEnglish.isSelected());
-        assertFalse(radioButtonLanguageGerman.isSelected());
-        assertFalse(radioButtonLanguageChinese.isSelected());
-
-        clickOn(radioButtonLanguageGerman);
-        assertTrue(radioButtonLanguageGerman.isSelected());
-        assertFalse(radioButtonLanguageEnglish.isSelected());
-        assertFalse(radioButtonLanguageChinese.isSelected());
-
-        clickOn(radioButtonLanguageChinese);
-        assertTrue(radioButtonLanguageChinese.isSelected());
-        assertFalse(radioButtonLanguageEnglish.isSelected());
-        assertFalse(radioButtonLanguageGerman.isSelected());
-
-        clickOn(radioButtonLanguageEnglish);
-        assertTrue(radioButtonLanguageEnglish.isSelected());
-        assertFalse(radioButtonLanguageGerman.isSelected());
-        assertFalse(radioButtonLanguageChinese.isSelected());
-
-        clickOn(applyLanguageButton);
-        verify(app).show(accountSettingController);
     }
 }

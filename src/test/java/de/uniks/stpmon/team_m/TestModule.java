@@ -31,8 +31,8 @@ public class TestModule {
 
     @Provides
     static ResourceBundle resourceBundle(){
-        final String locale = prefs().get("locale", Locale.getDefault().toLanguageTag());
-        return ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag(locale));
+        final String locale = prefs().get("locale", Locale.ENGLISH.toLanguageTag());
+        return ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
     }
 
     @Provides

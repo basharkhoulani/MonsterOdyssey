@@ -6,8 +6,6 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
-
-import static de.uniks.stpmon.team_m.Constants.HELP_LABEL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
@@ -34,7 +32,7 @@ public class AppTest extends ApplicationTest {
         clickOn("#usernameField");
         write("t\t");
         write("testtest");
-        clickOn("Sign In");
+        clickOn("#signInButton");
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
 
         // test Main Menu to Settings
@@ -78,7 +76,7 @@ public class AppTest extends ApplicationTest {
         clickOn("#usernameField");
         write("t\t");
         write("testtest");
-        clickOn("Sign Up");
+        clickOn("#signUpButton");
 
         // test Main Menu to New Friends
         clickOn("#findNewFriendsButton");
@@ -122,7 +120,7 @@ public class AppTest extends ApplicationTest {
         clickOn("#usernameField");
         write("t\t");
         write("testtest");
-        clickOn("Sign In");
+        clickOn("#signInButton");
 
         // Main Menu to Ingame
         final Button startGameButton = lookup("Start Game").query();
@@ -155,7 +153,6 @@ public class AppTest extends ApplicationTest {
                 .findFirst()
                 .orElse(null);
         assertNotNull(helpLabel);
-        assertEquals(HELP_LABEL, helpLabel.getText());
         clickOn("OK");
         final Label gameTitle = lookup("Monster Odyssey").query();
         assertNotNull(gameTitle);

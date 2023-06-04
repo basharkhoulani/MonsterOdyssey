@@ -24,6 +24,8 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -55,6 +57,8 @@ class EditGroupControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        groupController.setValues(bundle,null,null,groupController,app);
         when(groupStorageProvider.get()).thenReturn(groupStorage);
         when(userStorageProvider.get()).thenReturn(userStorage);
         groupStorage.set_id("645f8d731c386bcd2204da39");
