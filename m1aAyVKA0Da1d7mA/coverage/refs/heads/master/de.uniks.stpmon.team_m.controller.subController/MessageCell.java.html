@@ -44,7 +44,6 @@ public class MessageCell extends ListCell&lt;Message&gt; {
     private FXMLLoader loader;
     private final MessagesBoxController messagesBoxController;
     public UserStorage user;
-    private String base64avatar;
 
     /**
      * MessageCell is used to handle the message cells.
@@ -54,14 +53,12 @@ public class MessageCell extends ListCell&lt;Message&gt; {
      *
      * @param messagesBoxController The {@link MessagesBoxController} is used to handle the messages box.
      * @param user                  The user is used to identify the user.
-     * @param base64avatar          The base64avatar is used to show the avatar of the user.
      */
 
-<span class="fc" id="L60">    public MessageCell(MessagesBoxController messagesBoxController, UserStorage user, String base64avatar) {</span>
-<span class="fc" id="L61">        this.messagesBoxController = messagesBoxController;</span>
-<span class="fc" id="L62">        this.user = user;</span>
-<span class="fc" id="L63">        this.base64avatar = base64avatar;</span>
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L58">    public MessageCell(MessagesBoxController messagesBoxController, UserStorage user) {</span>
+<span class="fc" id="L59">        this.messagesBoxController = messagesBoxController;</span>
+<span class="fc" id="L60">        this.user = user;</span>
+<span class="fc" id="L61">    }</span>
 
     /**
      * The updateItem method is used to update the message cell.
@@ -69,25 +66,26 @@ public class MessageCell extends ListCell&lt;Message&gt; {
 
     @Override
     protected void updateItem(Message message, boolean empty) {
-<span class="fc" id="L72">        super.updateItem(message, empty);</span>
-<span class="fc" id="L73">        setStyle(LIST_VIEW_STYLE_NO_INDEXING);</span>
-<span class="pc bpc" id="L74" title="1 of 4 branches missed.">        if (message == null || empty) {</span>
-<span class="fc" id="L75">            setText(null);</span>
-<span class="fc" id="L76">            setGraphic(null);</span>
+<span class="fc" id="L69">        super.updateItem(message, empty);</span>
+<span class="fc" id="L70">        setStyle(LIST_VIEW_STYLE_NO_INDEXING);</span>
+<span class="pc bpc" id="L71" title="1 of 4 branches missed.">        if (message == null || empty) {</span>
+<span class="fc" id="L72">            setText(null);</span>
+<span class="fc" id="L73">            setGraphic(null);</span>
         } else {
-<span class="fc" id="L78">            loadFXML();</span>
-<span class="fc" id="L79">            final String senderName = messagesBoxController.getUsername(message.sender());</span>
-<span class="fc" id="L80">            messageContent.setText(message.body());</span>
-<span class="fc" id="L81">            setDateAndEdited(message, senderName);</span>
-<span class="fc" id="L82">            setMessageOrientationAndStyle(message);</span>
-<span class="pc bpc" id="L83" title="1 of 2 branches missed.">            if (!GraphicsEnvironment.isHeadless()){</span>
-<span class="nc" id="L84">                avatar.setImage(ImageProcessor.fromBase64ToFXImage(base64avatar));</span>
+<span class="fc" id="L75">            loadFXML();</span>
+<span class="fc" id="L76">            final String senderName = messagesBoxController.getUsername(message.sender());</span>
+<span class="fc" id="L77">            final String base64avatar = messagesBoxController.getAvatar(message.sender());</span>
+<span class="fc" id="L78">            messageContent.setText(message.body());</span>
+<span class="fc" id="L79">            setDateAndEdited(message, senderName);</span>
+<span class="fc" id="L80">            setMessageOrientationAndStyle(message);</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">            if (!GraphicsEnvironment.isHeadless()){</span>
+<span class="nc" id="L82">                avatar.setImage(ImageProcessor.fromBase64ToFXImage(base64avatar));</span>
             }
-<span class="fc" id="L86">            setGraphic(rootMessageHBox);</span>
-<span class="fc" id="L87">            setUserData(message);</span>
-<span class="fc" id="L88">            setText(null);</span>
+<span class="fc" id="L84">            setGraphic(rootMessageHBox);</span>
+<span class="fc" id="L85">            setUserData(message);</span>
+<span class="fc" id="L86">            setText(null);</span>
         }
-<span class="fc" id="L90">    }</span>
+<span class="fc" id="L88">    }</span>
 
     /**
      * The setMessageOrientationAndStyle method is used to set the message orientation and style.
@@ -96,16 +94,16 @@ public class MessageCell extends ListCell&lt;Message&gt; {
      */
 
     private void setMessageOrientationAndStyle(Message message) {
-<span class="fc bfc" id="L99" title="All 2 branches covered.">        if (message.sender().equals(user.get_id())) {</span>
-<span class="fc" id="L100">            messageVBox.setStyle(messageVBox.getStyle() + OWN_MESSAGE_STYLE);</span>
-<span class="fc" id="L101">            base64avatar = user.getAvatar();</span>
-<span class="fc" id="L102">            setAlignment(CENTER_RIGHT);</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (message.sender().equals(user.get_id())) {</span>
+<span class="fc" id="L98">            messageVBox.setStyle(messageVBox.getStyle() + OWN_MESSAGE_STYLE);</span>
+<span class="fc" id="L99">            setAlignment(CENTER_RIGHT);</span>
+<span class="fc" id="L100">            avatar.toFront();</span>
         } else {
-<span class="fc" id="L104">            messageVBox.setStyle(messageVBox.getStyle() + NOT_OWN_MESSAGE_STYLE);</span>
-<span class="fc" id="L105">            setAlignment(CENTER_LEFT);</span>
+<span class="fc" id="L102">            messageVBox.setStyle(messageVBox.getStyle() + NOT_OWN_MESSAGE_STYLE);</span>
+<span class="fc" id="L103">            setAlignment(CENTER_LEFT);</span>
         }
-<span class="fc" id="L107">        messageVBox.setStyle(messageVBox.getStyle() + ROUNDED_CORNERS_STYLE + BORDER_COLOR_BLACK);</span>
-<span class="fc" id="L108">    }</span>
+<span class="fc" id="L105">        messageVBox.setStyle(messageVBox.getStyle() + ROUNDED_CORNERS_STYLE + BORDER_COLOR_BLACK);</span>
+<span class="fc" id="L106">    }</span>
 
     /**
      * The setDateAndEdited method is used to set the date and, if edited, the updated time of the message.
@@ -115,46 +113,46 @@ public class MessageCell extends ListCell&lt;Message&gt; {
      */
 
     private void setDateAndEdited(Message message, String senderName) {
-<span class="fc bfc" id="L118" title="All 2 branches covered.">        if (!message.createdAt().equals(message.updatedAt())) {</span>
-<span class="fc" id="L119">            senderTimeDate.setText(senderName + &quot;, &quot; + formatTimeString(getItem().updatedAt()) + &quot; (&quot; + PENCIL + &quot;)&quot;);</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (!message.createdAt().equals(message.updatedAt())) {</span>
+<span class="fc" id="L117">            senderTimeDate.setText(senderName + &quot;, &quot; + formatTimeString(getItem().updatedAt()) + &quot; (&quot; + PENCIL + &quot;)&quot;);</span>
         } else {
-<span class="fc" id="L121">            senderTimeDate.setText(senderName + &quot;, &quot; + formatTimeString(getItem().createdAt()));</span>
+<span class="fc" id="L119">            senderTimeDate.setText(senderName + &quot;, &quot; + formatTimeString(getItem().createdAt()));</span>
         }
-<span class="fc" id="L123">    }</span>
+<span class="fc" id="L121">    }</span>
 
     /**
      * The loadFXML method is used to load the FXML file.
      */
 
     private void loadFXML() {
-<span class="fc bfc" id="L130" title="All 2 branches covered.">        if (loader == null) {</span>
-<span class="fc" id="L131">            loader = new FXMLLoader(Main.class.getResource(&quot;views/MessageCell.fxml&quot;));</span>
-<span class="fc" id="L132">            loader.setControllerFactory(c -&gt; this);</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (loader == null) {</span>
+<span class="fc" id="L129">            loader = new FXMLLoader(Main.class.getResource(&quot;views/MessageCell.fxml&quot;));</span>
+<span class="fc" id="L130">            loader.setControllerFactory(c -&gt; this);</span>
             try {
-<span class="fc" id="L134">                loader.load();</span>
-<span class="nc" id="L135">            } catch (Exception e) {</span>
-<span class="nc" id="L136">                e.printStackTrace();</span>
-<span class="fc" id="L137">            }</span>
+<span class="fc" id="L132">                loader.load();</span>
+<span class="nc" id="L133">            } catch (Exception e) {</span>
+<span class="nc" id="L134">                e.printStackTrace();</span>
+<span class="fc" id="L135">            }</span>
         }
-<span class="fc" id="L139">    }</span>
+<span class="fc" id="L137">    }</span>
 
     /**
      * The showEditAndDelete method is used to show the edit and delete button if the user is the sender of the message.
      */
 
     public void showEditAndDelete() {
-<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (!getItem().sender().equals(user.get_id())) {</span>
-<span class="fc" id="L147">            hideEditAndDelete();</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        if (!getItem().sender().equals(user.get_id())) {</span>
+<span class="fc" id="L145">            hideEditAndDelete();</span>
         } else {
-<span class="fc" id="L149">            editMessage.setVisible(true);</span>
-<span class="fc" id="L150">            deleteMessage.setVisible(true);</span>
+<span class="fc" id="L147">            editMessage.setVisible(true);</span>
+<span class="fc" id="L148">            deleteMessage.setVisible(true);</span>
         }
-<span class="fc" id="L152">    }</span>
+<span class="fc" id="L150">    }</span>
 
     public void hideEditAndDelete() {
-<span class="fc" id="L155">        editMessage.setVisible(false);</span>
-<span class="fc" id="L156">        deleteMessage.setVisible(false);</span>
-<span class="fc" id="L157">    }</span>
+<span class="fc" id="L153">        editMessage.setVisible(false);</span>
+<span class="fc" id="L154">        deleteMessage.setVisible(false);</span>
+<span class="fc" id="L155">    }</span>
 
     /**
      * The formatTimeString method is used to format the time string.
@@ -164,10 +162,10 @@ public class MessageCell extends ListCell&lt;Message&gt; {
      */
 
     private String formatTimeString(String dateTime) {
-<span class="fc" id="L167">        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(ZONE_ID_EUROPE_BERLIN));</span>
+<span class="fc" id="L165">        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(ZONE_ID_EUROPE_BERLIN));</span>
 
-<span class="fc" id="L169">        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);</span>
-<span class="fc" id="L170">        return localDateTime.format(outputFormatter);</span>
+<span class="fc" id="L167">        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);</span>
+<span class="fc" id="L168">        return localDateTime.format(outputFormatter);</span>
     }
 
     /**
@@ -177,22 +175,22 @@ public class MessageCell extends ListCell&lt;Message&gt; {
      */
 
     public void editMessage() {
-<span class="fc" id="L180">        TextInputDialog dialog = new TextInputDialog();</span>
-<span class="fc" id="L181">        dialog.setTitle(EDIT_MESSAGE_TITLE);</span>
-<span class="fc" id="L182">        dialog.setHeaderText(null);</span>
-<span class="fc" id="L183">        dialog.setContentText(EDIT_MESSAGE_CONTENT);</span>
+<span class="fc" id="L178">        TextInputDialog dialog = new TextInputDialog();</span>
+<span class="fc" id="L179">        dialog.setTitle(EDIT_MESSAGE_TITLE);</span>
+<span class="fc" id="L180">        dialog.setHeaderText(null);</span>
+<span class="fc" id="L181">        dialog.setContentText(EDIT_MESSAGE_CONTENT);</span>
 
-<span class="fc" id="L185">        TextArea messageArea = new TextArea();</span>
-<span class="fc" id="L186">        messageArea.setText(getItem().body());</span>
-<span class="fc" id="L187">        messageArea.setId(&quot;messageArea&quot;);</span>
-<span class="fc" id="L188">        dialog.getDialogPane().setContent(messageArea);</span>
-<span class="fc" id="L189">        Button confirmEdit = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);</span>
-<span class="fc" id="L190">        confirmEdit.setOnAction(event -&gt; {</span>
-<span class="fc" id="L191">            messagesBoxController.editMessage(messageArea.getText(), getItem());</span>
-<span class="fc" id="L192">            dialog.close();</span>
-<span class="fc" id="L193">        });</span>
-<span class="fc" id="L194">        dialog.showAndWait();</span>
-<span class="fc" id="L195">    }</span>
+<span class="fc" id="L183">        TextArea messageArea = new TextArea();</span>
+<span class="fc" id="L184">        messageArea.setText(getItem().body());</span>
+<span class="fc" id="L185">        messageArea.setId(&quot;messageArea&quot;);</span>
+<span class="fc" id="L186">        dialog.getDialogPane().setContent(messageArea);</span>
+<span class="fc" id="L187">        Button confirmEdit = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);</span>
+<span class="fc" id="L188">        confirmEdit.setOnAction(event -&gt; {</span>
+<span class="fc" id="L189">            messagesBoxController.editMessage(messageArea.getText(), getItem());</span>
+<span class="fc" id="L190">            dialog.close();</span>
+<span class="fc" id="L191">        });</span>
+<span class="fc" id="L192">        dialog.showAndWait();</span>
+<span class="fc" id="L193">    }</span>
 
     /**
      * The deleteMessage method is used to delete the message.
@@ -201,16 +199,16 @@ public class MessageCell extends ListCell&lt;Message&gt; {
      */
 
     public void deleteMessage() {
-<span class="fc" id="L204">        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);</span>
-<span class="fc" id="L205">        alert.setTitle(DELETE_MESSAGE_TITLE);</span>
-<span class="fc" id="L206">        alert.setHeaderText(DELETE_MESSAGE_TITLE);</span>
-<span class="fc" id="L207">        alert.setContentText(DELETE_MESSAGE_CONTENT);</span>
+<span class="fc" id="L202">        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);</span>
+<span class="fc" id="L203">        alert.setTitle(DELETE_MESSAGE_TITLE);</span>
+<span class="fc" id="L204">        alert.setHeaderText(DELETE_MESSAGE_TITLE);</span>
+<span class="fc" id="L205">        alert.setContentText(DELETE_MESSAGE_CONTENT);</span>
 
-<span class="fc" id="L209">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
-<span class="pc bpc" id="L210" title="2 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK) {</span>
-<span class="fc" id="L211">            messagesBoxController.deleteMessage(getItem());</span>
-<span class="fc" id="L212">            alert.close();</span>
+<span class="fc" id="L207">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+<span class="pc bpc" id="L208" title="2 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK) {</span>
+<span class="fc" id="L209">            messagesBoxController.deleteMessage(getItem());</span>
+<span class="fc" id="L210">            alert.close();</span>
         }
-<span class="fc" id="L214">    }</span>
+<span class="fc" id="L212">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
