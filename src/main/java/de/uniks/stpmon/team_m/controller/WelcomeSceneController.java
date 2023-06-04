@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.dto.Region;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -30,6 +31,7 @@ public class WelcomeSceneController extends Controller {
     Provider<IngameController> ingameControllerProvider;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
+    private Region region;
 
     @Inject
     public WelcomeSceneController() {
@@ -47,6 +49,9 @@ public class WelcomeSceneController extends Controller {
         nextButton.setOnAction(event -> changeCount(true));
         previousButton.setOnAction(event -> changeCount(false));
         return parent;
+    }
+    public void setCurrentRegion(Region region) {
+        this.region = region;
     }
 
     private void changeCount(boolean change) {
@@ -126,7 +131,11 @@ public class WelcomeSceneController extends Controller {
                 secondMessage.setWrapText(true);
                 secondMessage.setPrefWidth(200);
             }
-            case 6 -> app.show(ingameControllerProvider.get());
+            case 6 -> {
+                IngameController ingameController = ingameControllerProvider.get();
+                ingameController.setRegion(this.region);
+                app.show(ingameController);
+            }
         }
 
     }
