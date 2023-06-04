@@ -42,8 +42,6 @@ public class ImageProcessor {
                 byte[] imageBytes = Base64.getDecoder().decode(avatar.replaceFirst("data:image/jpg;base64, ", ""));
                 ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
                 image = new javafx.scene.image.Image(bis);
-        }else if (avatar.startsWith("http")) {
-            image = new javafx.scene.image.Image(avatar);
         } else {
             image = new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(AVATAR_2)).toString());
         }
