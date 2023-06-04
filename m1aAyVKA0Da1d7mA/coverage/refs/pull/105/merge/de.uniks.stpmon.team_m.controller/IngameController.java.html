@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IngameController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller</a> &gt; <span class="el_source">IngameController.java</span></div><h1>IngameController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller;
+
+
+import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
+import javafx.scene.input.KeyCode;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.Window;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import java.awt.*;
+import java.util.Objects;
+import java.util.Optional;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+
+
+public class IngameController extends Controller {
+
+    @FXML
+    public Button helpSymbol;
+    @FXML
+    public Button monstersButton;
+    @FXML
+    public Button settingsButton;
+
+    private IngameTrainerSettingsController trainerSettingsController;
+
+    @Inject
+    Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
+<span class="fc" id="L41">    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;</span>
+
+    @Inject
+    Provider&lt;IngameTrainerSettingsController&gt; ingameTrainerSettingsControllerProvider;
+    private String regionId;
+
+    /**
+     * IngameController is used to show the In-Game screen and to pause the game.
+     */
+
+    @Inject
+<span class="fc" id="L52">    public IngameController() {</span>
+<span class="fc" id="L53">    }</span>
+
+    @Override
+    public void init() {
+<span class="fc" id="L57">        super.init();</span>
+<span class="fc" id="L58">        trainerSettingsController = ingameTrainerSettingsControllerProvider.get();</span>
+<span class="fc" id="L59">        trainerSettingsController.init();</span>
+<span class="fc" id="L60">    }</span>
+
+    /**
+     * This method sets the title of the {@link IngameController}.
+     *
+     * @return Title of the {@link IngameController}.
+     */
+
+    @Override
+    public String getTitle() {
+<span class="fc" id="L70">        return resources.getString(&quot;INGAME.TITLE&quot;);</span>
+    }
+
+    /**
+     * This method is used to render the In-Game screen.
+     *
+     * @return Parent of the In-Game screen.
+     */
+
+    @Override
+    public Parent render() {
+<span class="fc" id="L81">        final Parent parent = super.render();</span>
+<span class="fc" id="L82">        app.getStage().getScene().setOnKeyPressed(event -&gt; {</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            if (!(event.getCode() == PAUSE_MENU_KEY)) {</span>
+<span class="fc" id="L84">                return;</span>
+            }
+<span class="fc" id="L86">            pauseGame();</span>
+<span class="fc" id="L87">        });</span>
+<span class="fc" id="L88">        return parent;</span>
+    }
+
+    /**
+     * This method is used to show the help screen.
+     */
+
+    public void showHelp() {
+<span class="fc" id="L96">        Alert alert = new Alert(Alert.AlertType.INFORMATION);</span>
+<span class="fc" id="L97">        alert.setTitle(null);</span>
+<span class="fc" id="L98">        alert.setHeaderText(null);</span>
+<span class="fc" id="L99">        alert.setGraphic(null);</span>
+<span class="fc" id="L100">        alert.initOwner(app.getStage());</span>
+<span class="fc" id="L101">        alert.initModality(Modality.APPLICATION_MODAL);</span>
+<span class="fc" id="L102">        alert.initStyle(StageStyle.UNDECORATED);</span>
+<span class="fc" id="L103">        alert.setContentText(resources.getString(&quot;HELP.LABEL&quot;));</span>
+<span class="fc" id="L104">        final DialogPane dialogPane = alert.getDialogPane();</span>
+<span class="fc" id="L105">        dialogPane.getStyleClass().add(&quot;comicSans&quot;);</span>
+<span class="fc" id="L106">        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);</span>
+<span class="fc" id="L107">        alert.showAndWait();</span>
+<span class="fc" id="L108">    }</span>
+
+    /**
+     * This method is used to pause the game. It shows a dialog with two buttons.
+     * The first button is used to resume the game and the second button is used to save the game and leave.
+     * If the user presses the resume button, the dialog will be closed.
+     * If the user presses the save and leave button, the game will be saved and
+     * the user will be redirected to the main menu.
+     */
+
+    public void pauseGame() {
+<span class="fc" id="L119">        final Alert alert = new Alert(Alert.AlertType.NONE);</span>
+<span class="fc" id="L120">        final DialogPane dialogPane = alert.getDialogPane();</span>
+<span class="fc" id="L121">        final ButtonType resume = new ButtonType(resources.getString(&quot;RESUME.BUTTON.LABEL&quot;));</span>
+<span class="fc" id="L122">        final ButtonType saveAndExit = new ButtonType(resources.getString(&quot;SAVE.GAME.AND.LEAVE.BUTTON.LABEL&quot;));</span>
+<span class="fc" id="L123">        dialogPane.getButtonTypes().addAll(resume, saveAndExit);</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L125">            dialogPane.getStylesheets().add(Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString());</span>
+<span class="nc" id="L126">            dialogPane.getStyleClass().add(&quot;comicSans&quot;);</span>
+        }
+<span class="fc" id="L128">        final Button resumeButton = (Button) dialogPane.lookupButton(resume);</span>
+<span class="fc" id="L129">        resumeButton.setOnKeyPressed(event -&gt; {</span>
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">            if (!(event.getCode() == PAUSE_MENU_KEY)) {</span>
+<span class="nc" id="L131">                return;</span>
+            }
+<span class="fc" id="L133">            alert.setResult(resume);</span>
+<span class="fc" id="L134">        });</span>
+
+<span class="fc" id="L136">        alert.setTitle(resources.getString(&quot;PAUSE.MENU.TITLE&quot;));</span>
+<span class="fc" id="L137">        alert.setHeaderText(null);</span>
+<span class="fc" id="L138">        alert.setGraphic(null);</span>
+<span class="fc" id="L139">        alert.setContentText(resources.getString(&quot;PAUSE.MENU.LABEL&quot;));</span>
+<span class="fc" id="L140">        alert.initStyle(StageStyle.UNDECORATED);</span>
+<span class="fc" id="L141">        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);</span>
+
+<span class="fc" id="L143">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+<span class="pc bpc" id="L144" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == resume) {</span>
+<span class="fc" id="L145">            alert.close();</span>
+<span class="pc bpc" id="L146" title="2 of 4 branches missed.">        } else if (result.isPresent() &amp;&amp; result.get() == saveAndExit) {</span>
+<span class="fc" id="L147">            alert.close();</span>
+<span class="fc" id="L148">            app.getStage().getScene().setOnKeyPressed(null);</span>
+<span class="fc" id="L149">            app.show(mainMenuControllerProvider.get());</span>
+        }
+<span class="fc" id="L151">    }</span>
+
+    public void setRegion(String regionId) {
+<span class="fc" id="L154">        this.regionId = regionId;</span>
+<span class="fc" id="L155">    }</span>
+
+
+    public void showTrainerSettings() {
+<span class="nc" id="L159">        Dialog&lt;?&gt; trainerSettingsDialog = new Dialog&lt;&gt;();</span>
+<span class="nc" id="L160">        trainerSettingsController.setRegion(this.regionId);</span>
+<span class="nc" id="L161">        trainerSettingsDialog.setTitle(&quot;Trainer Profil&quot;);</span>
+<span class="nc" id="L162">        trainerSettingsDialog.getDialogPane().setContent(trainerSettingsController.render());</span>
+<span class="nc" id="L163">        trainerSettingsDialog.getDialogPane().setExpandableContent(null);</span>
+<span class="nc" id="L164">        trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString());</span>
+<span class="nc" id="L165">        trainerSettingsDialog.getDialogPane().getStyleClass().add(&quot;trainerSettingsDialog&quot;);</span>
+<span class="nc" id="L166">        Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();</span>
+<span class="nc" id="L167">        popUp.setOnCloseRequest(evt -&gt;</span>
+<span class="nc" id="L168">            ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close()</span>
+        );
+<span class="nc" id="L170">        trainerSettingsDialog.showAndWait();</span>
+<span class="nc" id="L171">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

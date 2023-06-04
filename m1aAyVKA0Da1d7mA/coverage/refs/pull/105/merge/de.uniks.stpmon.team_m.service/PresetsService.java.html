@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PresetsService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.service</a> &gt; <span class="el_source">PresetsService.java</span></div><h1>PresetsService.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.service;
+
+import de.uniks.stpmon.team_m.dto.AbilityDto;
+import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import de.uniks.stpmon.team_m.rest.PresetsApiService;
+import io.reactivex.rxjava3.core.Observable;
+import okhttp3.ResponseBody;
+
+import javax.inject.Inject;
+import java.util.List;
+
+public class PresetsService {
+    private final PresetsApiService presetsApiService;
+
+    /**
+     * MonstersService handles the communication with the backend for the monsters.
+     */
+
+    @Inject
+<span class="fc" id="L20">    public PresetsService(PresetsApiService presetsApiService) {</span>
+<span class="fc" id="L21">        this.presetsApiService = presetsApiService;</span>
+<span class="fc" id="L22">    }</span>
+
+    /**
+     * getTileset returns a tileset in JSON format, or a tile image PNG.
+     * Saved in a ResponseBody to be able to processed as needed.
+     * Example for image to JavaFX image is found in ImageProcessor.java
+     * @param filename The filename of the tileset.
+     * @return The tileset.
+     */
+
+    public Observable&lt;ResponseBody&gt; getTileset(String filename) {
+<span class="fc" id="L33">        return presetsApiService.getTileset(filename);</span>
+    }
+
+    /**
+     * getCharacters returns a list of character filenames.
+     *
+     * @return The list of character filenames.
+     */
+
+    public Observable&lt;List&lt;String&gt;&gt; getCharacters() {
+<span class="fc" id="L43">        return presetsApiService.getCharacters();</span>
+    }
+
+    /**
+     * getCharacter returns a character image PNG.
+     * Saved in a ResponseBody to be able to processed as needed.
+     * Example for image to JavaFX image is found in ImageProcessor.java
+     * @param filename The filename of the character.
+     * @return The character.
+     */
+
+    public Observable&lt;ResponseBody&gt; getCharacter(String filename) {
+<span class="fc" id="L55">        return presetsApiService.getCharacter(filename);</span>
+    }
+
+    /**
+     * getMonsters returns a list of monster types.
+     *
+     * @return The list of monster types.
+     */
+
+    public Observable&lt;List&lt;MonsterTypeDto&gt;&gt; getMonsters() {
+<span class="fc" id="L65">        return presetsApiService.getMonsters();</span>
+    }
+
+    /**
+     * getMonster returns a specific monster type.
+     *
+     * @param id The id of the monster type.
+     * @return The monster type.
+     */
+
+    public Observable&lt;MonsterTypeDto&gt; getMonster(int id) {
+<span class="fc" id="L76">        return presetsApiService.getMonster(id);</span>
+    }
+
+    /**
+     * getMonsterImage returns a specific monster type image PNG.
+     * Saved in a ResponseBody to be able to processed as needed.
+     * Example for image to JavaFX image is found in ImageProcessor.java
+     * @param id The id of the monster type.
+     * @return The monster type image.
+     */
+
+    public Observable&lt;ResponseBody&gt; getMonsterImage(String id) {
+<span class="fc" id="L88">        return presetsApiService.getMonsterImage(id);</span>
+    }
+
+    /**
+     * getAbilities returns a list of abilities.
+     *
+     * @return The list of abilities.
+     */
+
+    public Observable&lt;List&lt;AbilityDto&gt;&gt; getAbilities() {
+<span class="fc" id="L98">        return presetsApiService.getAbilities();</span>
+    }
+
+    /**
+     * getAbility returns a specific ability.
+     *
+     * @param id The id of the ability.
+     * @return The ability.
+     */
+
+    public Observable&lt;AbilityDto&gt; getAbility(int id) {
+<span class="fc" id="L109">        return presetsApiService.getAbility(id);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
