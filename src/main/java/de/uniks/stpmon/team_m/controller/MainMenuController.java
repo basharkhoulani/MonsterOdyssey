@@ -227,7 +227,7 @@ public class MainMenuController extends Controller {
                         ingameControllerProvider.get().setRegion(selectedRegion._id());
                         app.show(ingameControllerProvider.get());
                     }
-                }, Throwable::printStackTrace
+                }, error -> showError(error.getMessage())
         ));
     }
 }
