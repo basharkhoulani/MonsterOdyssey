@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.CharacterSelectionController;
+import de.uniks.stpmon.team_m.dto.Region;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -30,6 +31,7 @@ public class WelcomeSceneController extends Controller {
     @FXML
     public VBox firstMessageBox;
     public int sceneNumber = 1;
+    private Region region;
     private final SimpleStringProperty trainerName = new SimpleStringProperty();
     @Inject
     Provider<IngameController> ingameControllerProvider;
@@ -139,7 +141,11 @@ public class WelcomeSceneController extends Controller {
                 secondMessage.setWrapText(true);
                 secondMessage.setPrefWidth(200);
             }
-            case 8 -> app.show(ingameControllerProvider.get());
+            case 8 -> {
+                IngameController ingameController = ingameControllerProvider.get();
+                ingameController.setRegion(region);
+                app.show(ingameController);
+            }
         }
 
     }
@@ -150,6 +156,10 @@ public class WelcomeSceneController extends Controller {
         } else {
             return sceneNumber - 1;
         }
+    }
+
+    public void setRegion(de.uniks.stpmon.team_m.dto.Region region) {
+        this.region = region;
     }
 
 }

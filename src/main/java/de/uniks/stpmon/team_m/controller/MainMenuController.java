@@ -213,7 +213,7 @@ public class MainMenuController extends Controller {
     public void changeToIngame() {
         Region selectedRegion = (Region) regionToggleGroup.getSelectedToggle().getUserData();
         WelcomeSceneController welcomeSceneController = welcomeSceneControllerProvider.get();
-        welcomeSceneController.setCurrentRegion(selectedRegion);
+        welcomeSceneController.setRegion(selectedRegion);
         app.show(welcomeSceneController);
     }
 }
