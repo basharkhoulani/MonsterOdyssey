@@ -1,12 +1,14 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.controller.subController.CharacterSelectionController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -25,13 +27,16 @@ public class WelcomeSceneController extends Controller {
     public Label firstMessage;
     @FXML
     public Label secondMessage;
-    private int sceneNumber = 1;
+    @FXML
+    public VBox firstMessageBox;
+    public int sceneNumber = 1;
     private final SimpleStringProperty trainerName = new SimpleStringProperty();
     @Inject
     Provider<IngameController> ingameControllerProvider;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
-    private Region region;
+    @Inject
+    Provider<CharacterSelectionController> characterSelectionControllerProvider;
 
     @Inject
     public WelcomeSceneController() {
@@ -50,17 +55,13 @@ public class WelcomeSceneController extends Controller {
         previousButton.setOnAction(event -> changeCount(false));
         return parent;
     }
-    public void setCurrentRegion(Region region) {
-        this.region = region;
-    }
 
     private void changeCount(boolean change) {
         sceneNumber = sceneCounter(sceneNumber, change);
-        switchScene(sceneNumber, messagePane);
+        switchScene();
     }
 
-    public void switchScene(int sceneNumber, AnchorPane messagePane) {
-        VBox firstMessageBox = (VBox) messagePane.getChildren().get(0);
+    public void switchScene() {
 
         switch (sceneNumber) {
             case 0 -> app.show(mainMenuControllerProvider.get());
@@ -131,11 +132,14 @@ public class WelcomeSceneController extends Controller {
                 secondMessage.setWrapText(true);
                 secondMessage.setPrefWidth(200);
             }
-            case 6 -> {
-                IngameController ingameController = ingameControllerProvider.get();
-                ingameController.setRegion(this.region);
-                app.show(ingameController);
+            case 6 -> app.show(characterSelectionControllerProvider.get());
+            case 7 -> {
+                firstMessage.setText(TENTH_MESSAGE);
+                secondMessage.setText(ELEVENTH_MESSAGE);
+                secondMessage.setWrapText(true);
+                secondMessage.setPrefWidth(200);
             }
+            case 8 -> app.show(ingameControllerProvider.get());
         }
 
     }
