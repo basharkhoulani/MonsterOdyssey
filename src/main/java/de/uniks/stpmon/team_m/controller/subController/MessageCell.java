@@ -7,10 +7,14 @@ import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.awt.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -76,7 +80,9 @@ public class MessageCell extends ListCell<Message> {
             messageContent.setText(message.body());
             setDateAndEdited(message, senderName);
             setMessageOrientationAndStyle(message);
-            avatar.setImage(ImageProcessor.fromBase64ToFXImage(base64avatar));
+            if (!GraphicsEnvironment.isHeadless()){
+                avatar.setImage(ImageProcessor.fromBase64ToFXImage(base64avatar));
+            }
             setGraphic(rootMessageHBox);
             setUserData(message);
             setText(null);
