@@ -165,4 +165,11 @@ public class Constants {
     public static final int MESSAGEBOX_HEIGHT = 45;
     public static final int MESSAGEBOX_WIDTH = 170;
 
+    // Trainer
+
+    public static final String PREMADE_CHARACTER_1 = "Premade_Character_01.png";
+    public static final String PREMADE_CHARACTER_2 = "Premade_Character_04.png";
+    public static final String CHARACTER_1 = "images/Character1.png";
+    public static final String CHARACTER_2 = "images/Character4.png";
+
 }
