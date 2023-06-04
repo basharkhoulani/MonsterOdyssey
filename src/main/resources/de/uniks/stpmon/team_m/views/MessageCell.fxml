@@ -7,10 +7,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox fx:id="rootMessageHBox" maxWidth="300.0" onMouseEntered="#showEditAndDelete" onMouseExited="#hideEditAndDelete" prefWidth="300.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.MessageCell">
+<HBox fx:id="rootMessageHBox" maxWidth="500.0" onMouseEntered="#showEditAndDelete" onMouseExited="#hideEditAndDelete" prefWidth="300.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.MessageCell">
    <ImageView fx:id="avatar" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
     <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-        <VBox fx:id="messageVBox" maxWidth="250.0" VBox.vgrow="ALWAYS">
+        <VBox fx:id="messageVBox" maxWidth="450.0" VBox.vgrow="ALWAYS">
             <Label fx:id="messageContent" styleClass="messageText" text="Label" wrapText="true" VBox.vgrow="ALWAYS">
                 <VBox.margin>
                     <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -20,7 +20,6 @@
         <VBox alignment="CENTER_LEFT" VBox.vgrow="NEVER">
             <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                 <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-                    <Label fx:id="senderTimeDate" styleClass="messageText" text="Label" HBox.hgrow="ALWAYS" />
                     <Label fx:id="senderTimeDate" text="Label" HBox.hgrow="ALWAYS" styleClass="messageMetaData" />
                 </HBox>
                 <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
