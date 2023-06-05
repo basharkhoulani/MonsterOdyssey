@@ -4,7 +4,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
-import de.uniks.stpmon.team_m.udp.UdpEventListener;
+import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -49,7 +49,7 @@ public class IngameController extends Controller {
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
-    Provider<UdpEventListener> udpEventListenerProvider;
+    Provider<UDPEventListener> udpEventListenerProvider;
     private final ObservableList<MoveTrainerDto> moveTrainerDtos = FXCollections.observableArrayList();
 
     /**

@@ -18,12 +18,12 @@ import static de.uniks.stpmon.team_m.Constants.SERVER_PORT;
 import static de.uniks.stpmon.team_m.Constants.UDP_URL;
 
 @Singleton
-public class UdpEventListener {
+public class UDPEventListener {
     private final ObjectMapper mapper;
-    private UdpClient client;
+    private UDPClient client;
 
     @Inject
-    public UdpEventListener(ObjectMapper mapper) {
+    public UDPEventListener(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
@@ -33,7 +33,7 @@ public class UdpEventListener {
         }
         try {
             InetAddress address = InetAddress.getByName(UDP_URL);
-            client = new UdpClient(address, SERVER_PORT);
+            client = new UDPClient(address, SERVER_PORT);
             client.open();
             client.startReceiving();
         } catch (IOException e) {

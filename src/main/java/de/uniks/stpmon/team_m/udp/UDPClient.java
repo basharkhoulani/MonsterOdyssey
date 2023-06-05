@@ -13,14 +13,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class UdpClient {
+public class UDPClient {
     private final InetAddress serverAddress;
     private final int serverPort;
     private final List<Consumer<String>> messageHandlers = Collections.synchronizedList(new ArrayList<>());
     private DatagramSocket socket;
     private Thread receivingThread;
 
-    public UdpClient(InetAddress serverAddress, int serverPort) {
+    public UDPClient(InetAddress serverAddress, int serverPort) {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
     }
