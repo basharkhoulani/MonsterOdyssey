@@ -67,7 +67,7 @@ public class IngameController extends Controller {
 
     @Override
     public String getTitle() {
-<span class="fc" id="L70">        return INGAME_TITLE;</span>
+<span class="fc" id="L70">        return resources.getString(&quot;INGAME.TITLE&quot;);</span>
     }
 
     /**
@@ -100,7 +100,7 @@ public class IngameController extends Controller {
 <span class="fc" id="L100">        alert.initOwner(app.getStage());</span>
 <span class="fc" id="L101">        alert.initModality(Modality.APPLICATION_MODAL);</span>
 <span class="fc" id="L102">        alert.initStyle(StageStyle.UNDECORATED);</span>
-<span class="fc" id="L103">        alert.setContentText(HELP_LABEL);</span>
+<span class="fc" id="L103">        alert.setContentText(resources.getString(&quot;HELP.LABEL&quot;));</span>
 <span class="fc" id="L104">        final DialogPane dialogPane = alert.getDialogPane();</span>
 <span class="fc" id="L105">        dialogPane.getStyleClass().add(&quot;comicSans&quot;);</span>
 <span class="fc" id="L106">        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);</span>
@@ -118,8 +118,8 @@ public class IngameController extends Controller {
     public void pauseGame() {
 <span class="fc" id="L119">        final Alert alert = new Alert(Alert.AlertType.NONE);</span>
 <span class="fc" id="L120">        final DialogPane dialogPane = alert.getDialogPane();</span>
-<span class="fc" id="L121">        final ButtonType resume = new ButtonType(RESUME_BUTTON_LABEL);</span>
-<span class="fc" id="L122">        final ButtonType saveAndExit = new ButtonType(SAVE_GAME_AND_LEAVE_BUTTON_LABEL);</span>
+<span class="fc" id="L121">        final ButtonType resume = new ButtonType(resources.getString(&quot;RESUME.BUTTON.LABEL&quot;));</span>
+<span class="fc" id="L122">        final ButtonType saveAndExit = new ButtonType(resources.getString(&quot;SAVE.GAME.AND.LEAVE.BUTTON.LABEL&quot;));</span>
 <span class="fc" id="L123">        dialogPane.getButtonTypes().addAll(resume, saveAndExit);</span>
 <span class="pc bpc" id="L124" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
 <span class="nc" id="L125">            dialogPane.getStylesheets().add(Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString());</span>
@@ -133,10 +133,10 @@ public class IngameController extends Controller {
 <span class="fc" id="L133">            alert.setResult(resume);</span>
 <span class="fc" id="L134">        });</span>
 
-<span class="fc" id="L136">        alert.setTitle(PAUSE_MENU_TITLE);</span>
+<span class="fc" id="L136">        alert.setTitle(resources.getString(&quot;PAUSE.MENU.TITLE&quot;));</span>
 <span class="fc" id="L137">        alert.setHeaderText(null);</span>
 <span class="fc" id="L138">        alert.setGraphic(null);</span>
-<span class="fc" id="L139">        alert.setContentText(PAUSE_MENU_LABEL);</span>
+<span class="fc" id="L139">        alert.setContentText(resources.getString(&quot;PAUSE.MENU.LABEL&quot;));</span>
 <span class="fc" id="L140">        alert.initStyle(StageStyle.UNDECORATED);</span>
 <span class="fc" id="L141">        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);</span>
 
@@ -158,7 +158,7 @@ public class IngameController extends Controller {
     public void showTrainerSettings() {
 <span class="nc" id="L159">        Dialog&lt;?&gt; trainerSettingsDialog = new Dialog&lt;&gt;();</span>
 <span class="nc" id="L160">        trainerSettingsController.setRegion(this.regionId);</span>
-<span class="nc" id="L161">        trainerSettingsDialog.setTitle(&quot;Trainer Profil&quot;);</span>
+<span class="nc" id="L161">        trainerSettingsDialog.setTitle(resources.getString(&quot;Trainer.Profil&quot;));</span>
 <span class="nc" id="L162">        trainerSettingsDialog.getDialogPane().setContent(trainerSettingsController.render());</span>
 <span class="nc" id="L163">        trainerSettingsDialog.getDialogPane().setExpandableContent(null);</span>
 <span class="nc" id="L164">        trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString());</span>

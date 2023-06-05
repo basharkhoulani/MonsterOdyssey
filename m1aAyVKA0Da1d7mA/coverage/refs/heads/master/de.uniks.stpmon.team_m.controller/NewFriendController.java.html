@@ -60,7 +60,7 @@ public class NewFriendController extends Controller {
 
     @Override
     public String getTitle() {
-<span class="fc" id="L63">        return NEW_FRIEND_TITLE;</span>
+<span class="fc" id="L63">        return resources.getString(&quot;NEW.FRIEND.TITLE&quot;);</span>
     }
 
     /**
@@ -95,20 +95,20 @@ public class NewFriendController extends Controller {
 <span class="fc" id="L95">            return;</span>
         }
 <span class="fc bfc" id="L97" title="All 2 branches covered.">        if (searchTextField.getText().equals(userStorageProvider.get().getName())) {</span>
-<span class="fc" id="L98">            searchTextField.setPromptText(YOURSELF);</span>
+<span class="fc" id="L98">            searchTextField.setPromptText(resources.getString(&quot;YOURSELF&quot;));</span>
 <span class="fc" id="L99">            return;</span>
         }
 <span class="pc bpc" id="L101" title="1 of 2 branches missed.">        for (User user : allUsers) {</span>
 <span class="fc bfc" id="L102" title="All 2 branches covered.">            if (user.name().equals(searchTextField.getText())) {</span>
 <span class="fc bfc" id="L103" title="All 2 branches covered.">                if (userStorageProvider.get().getFriends().contains(user._id())) {</span>
-<span class="fc" id="L104">                    searchTextField.setPromptText(FRIEND_ALREADY_ADDED);</span>
+<span class="fc" id="L104">                    searchTextField.setPromptText(resources.getString(&quot;FRIEND.ALREADY.ADDED&quot;));</span>
 <span class="fc" id="L105">                    searchTextField.clear();</span>
 <span class="fc" id="L106">                    return;</span>
                 }
 <span class="fc" id="L108">                userStorageProvider.get().addFriend(user._id());</span>
 <span class="fc" id="L109">                disposables.add(usersService.updateUser(null, null, null, userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER).subscribe(user1 -&gt; {</span>
 <span class="fc" id="L110">                    createPrivateGroup(user, false);</span>
-<span class="fc" id="L111">                    searchTextField.setPromptText(FRIEND_ADDED);</span>
+<span class="fc" id="L111">                    searchTextField.setPromptText(resources.getString(&quot;FRIEND.ADDED&quot;));</span>
 <span class="pc" id="L112">                }, error -&gt; showError(error.getMessage())));</span>
 <span class="fc" id="L113">                break;</span>
             }
@@ -123,7 +123,7 @@ public class NewFriendController extends Controller {
     public void sendMessage() {
 <span class="fc bfc" id="L124" title="All 2 branches covered.">        for (User user : allUsers) {</span>
 <span class="fc bfc" id="L125" title="All 2 branches covered.">            if (!user.name().equals(searchTextField.getText())) {</span>
-<span class="fc" id="L126">                searchTextField.setPromptText(FRIEND_NOT_FOUND);</span>
+<span class="fc" id="L126">                searchTextField.setPromptText(resources.getString(&quot;FRIEND.NOT.FOUND&quot;));</span>
             }
 <span class="fc bfc" id="L128" title="All 2 branches covered.">            if (user.name().equals(searchTextField.getText())) {</span>
 <span class="fc" id="L129">                createPrivateGroup(user, true);</span>
