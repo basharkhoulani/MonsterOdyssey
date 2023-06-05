@@ -19,6 +19,8 @@ import org.testfx.framework.junit5.ApplicationTest;
 import javax.inject.Provider;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.BEST_FRIEND_PREF;
@@ -47,6 +49,8 @@ class FriendSettingsControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        friendSettingsController.setValues(bundle,null,null,friendSettingsController,app);
         app.start(stage);
         app.show(friendSettingsController);
         stage.requestFocus();

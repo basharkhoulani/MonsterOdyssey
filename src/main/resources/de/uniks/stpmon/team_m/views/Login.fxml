@@ -22,7 +22,7 @@
                <Insets bottom="-50.0" left="500.0" />
             </VBox.margin>
          </Button>
-         <Label fx:id="welcomeLabel" alignment="BOTTOM_CENTER" prefHeight="43.0" prefWidth="178.0" text="Welcome to" textOverrun="CLIP" VBox.vgrow="ALWAYS">
+         <Label fx:id="welcomeLabel" alignment="BOTTOM_CENTER" prefHeight="43.0" prefWidth="338.0" text="%Welcome.to" textOverrun="CLIP" VBox.vgrow="ALWAYS">
             <font>
                <Font name="System Bold" size="18.0" />
             </font>
@@ -35,7 +35,7 @@
          <VBox.margin>
             <Insets top="10.0" />
          </VBox.margin>
-         <Label fx:id="gameNameLabel1" alignment="CENTER_RIGHT" prefHeight="71.0" prefWidth="600.0" text="Monster">
+         <Label fx:id="gameNameLabel1" alignment="CENTER_RIGHT" prefHeight="71.0" prefWidth="600.0" text="%Monster">
             <font>
                <Font name="Comic Sans MS Bold" size="42.0" />
             </font>
@@ -46,7 +46,7 @@
          <ImageView fx:id="gameIcon" fitHeight="120.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../images/Monster1-without.png" />
          </ImageView>
-         <Label fx:id="gameNameLabel2" prefHeight="71.0" prefWidth="600.0" text="Odyssey">
+         <Label fx:id="gameNameLabel2" prefHeight="71.0" prefWidth="600.0" text="%Odyssey">
             <font>
                <Font name="Comic Sans MS Bold" size="42.0" />
             </font>
@@ -58,7 +58,7 @@
       <Label fx:id="informationLabel" alignment="CENTER" maxHeight="30.0" prefHeight="17.0" prefWidth="562.0" styleClass="informationLabel" VBox.vgrow="NEVER" />
       <HBox alignment="BOTTOM_CENTER" maxHeight="45.0" prefHeight="36.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-            <TextField fx:id="usernameField" maxHeight="40.0" maxWidth="500.0" minHeight="25.0" minWidth="120.0" promptText="Username" VBox.vgrow="ALWAYS">
+            <TextField fx:id="usernameField" maxHeight="40.0" maxWidth="500.0" minHeight="25.0" minWidth="120.0" promptText="%Username" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets right="50.0" />
                </VBox.margin>
@@ -77,7 +77,7 @@
             <Insets left="100.0" right="100.0" />
          </VBox.margin>
          <HBox alignment="CENTER" prefHeight="36.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
-            <PasswordField fx:id="passwordField" maxHeight="40.0" maxWidth="500.0" minHeight="25.0" minWidth="250.0" promptText="Password" HBox.hgrow="ALWAYS">
+            <PasswordField fx:id="passwordField" maxHeight="40.0" maxWidth="500.0" minHeight="25.0" minWidth="250.0" promptText="%Password" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="Comic Sans MS" size="17.0" />
                </font>
@@ -96,7 +96,7 @@
       </VBox>
       <Label fx:id="passwordErrorLabel" alignment="CENTER" maxHeight="40.0" prefHeight="17.0" prefWidth="581.0" styleClass="errorLabel" VBox.vgrow="NEVER" />
       <HBox alignment="TOP_CENTER" maxHeight="45.0" prefHeight="36.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
-         <CheckBox fx:id="rememberMeCheckbox" mnemonicParsing="false" prefHeight="18.0" text="Remember Me" HBox.hgrow="ALWAYS">
+         <CheckBox fx:id="rememberMeCheckbox" mnemonicParsing="false" prefHeight="18.0" text="%Remember.Me" HBox.hgrow="ALWAYS">
             <font>
                <Font name="Comic Sans MS Bold" size="17.0" />
             </font>
@@ -106,13 +106,13 @@
          <VBox.margin>
             <Insets bottom="10.0" />
          </VBox.margin>
-         <Button fx:id="signUpButton" maxHeight="50.0" mnemonicParsing="false" onAction="#signUp" prefHeight="36.0" prefWidth="106.0" styleClass="buttonsYellow" text="Sign Up" HBox.hgrow="ALWAYS">
+         <Button fx:id="signUpButton" maxHeight="50.0" mnemonicParsing="false" onAction="#signUp" prefHeight="48.0" prefWidth="140.0" styleClass="buttonsYellow" text="%Sign.Up" HBox.hgrow="ALWAYS">
             <font>
                <Font name="Comic Sans MS Bold" size="17.0" />
             </font>
          </Button>
          <SplitPane prefHeight="200.0" prefWidth="200.0" visible="false" />
-         <Button fx:id="signInButton" maxHeight="50.0" mnemonicParsing="false" onAction="#signIn" prefHeight="36.0" prefWidth="106.0" styleClass="buttonsYellow" text="Sign In" HBox.hgrow="ALWAYS">
+         <Button fx:id="signInButton" maxHeight="50.0" mnemonicParsing="false" onAction="#signIn" prefHeight="48.0" prefWidth="140.0" styleClass="buttonsYellow" text="%Sign.In" HBox.hgrow="ALWAYS">
             <font>
                <Font name="Comic Sans MS Bold" size="17.0" />
             </font>

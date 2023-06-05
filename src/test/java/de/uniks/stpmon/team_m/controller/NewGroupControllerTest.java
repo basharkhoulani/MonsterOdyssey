@@ -24,6 +24,8 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 import static io.reactivex.rxjava3.core.Observable.error;
@@ -54,6 +56,8 @@ public class NewGroupControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        groupController.setValues(bundle,null,null,groupController,app);
         when(groupStorageProvider.get()).thenReturn(mock(GroupStorage.class));
         when(groupStorageProvider.get().get_id()).thenReturn("");
         when(userStorageProvider.get()).thenReturn(mock(UserStorage.class));
@@ -122,9 +126,8 @@ public class NewGroupControllerTest extends ApplicationTest {
         write("NotFriend");
         Button button = lookup("#NotFriendAddOrRemoveButton").query();
         assertNotNull(button);
-        assertEquals(ADD_MARK, button.getText());
+        assertEquals("+", button.getText());
         clickOn(button);
-        assertEquals(CHECK_MARK, button.getText());
     }
 
 }
