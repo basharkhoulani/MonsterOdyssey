@@ -4,19 +4,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stpmon.team_m.dto.Event;
 import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
-import de.uniks.stpmon.team_m.utils.TokenStorage;
-import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.ObservableEmitter;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
-import java.net.DatagramPacket;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.regex.Pattern;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
 import static de.uniks.stpmon.team_m.Constants.SERVER_PORT;
 import static de.uniks.stpmon.team_m.Constants.UDP_URL;

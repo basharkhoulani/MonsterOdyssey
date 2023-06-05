@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m.utils;
 
-import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
 import de.uniks.stpmon.team_m.dto.Trainer;
 
 import javax.inject.Inject;
@@ -68,10 +67,6 @@ public class TrainerStorage {
 
     public void setY(int y) {
         this.y = y;
-    }
-
-    public int getDirection() {
-        return direction;
     }
 
     public void setDirection(int direction) {
