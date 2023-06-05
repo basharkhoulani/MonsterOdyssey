@@ -43,7 +43,7 @@ public class MessageCell extends ListCell&lt;Message&gt; {
     @FXML
     public ImageView avatar;
     private FXMLLoader loader;
-    private final MessagesBoxController messagesBoxController;
+    private MessagesBoxController messagesBoxController;
 
     public UserStorage user;
 
@@ -181,9 +181,9 @@ public class MessageCell extends ListCell&lt;Message&gt; {
 
     public void editMessage() {
 <span class="fc" id="L183">        TextInputDialog dialog = new TextInputDialog();</span>
-<span class="fc" id="L184">        dialog.setTitle(EDIT_MESSAGE_TITLE);</span>
+<span class="fc" id="L184">        dialog.setTitle(messagesBoxController.getResources().getString(&quot;EDIT.MESSAGE.TITLE&quot;));</span>
 <span class="fc" id="L185">        dialog.setHeaderText(null);</span>
-<span class="fc" id="L186">        dialog.setContentText(EDIT_MESSAGE_CONTENT);</span>
+<span class="fc" id="L186">        dialog.setContentText(messagesBoxController.getResources().getString(&quot;EDIT.MESSAGE.CONTENT&quot;));</span>
 
 <span class="fc" id="L188">        TextArea messageArea = new TextArea();</span>
 <span class="fc" id="L189">        messageArea.setText(getItem().body());</span>
@@ -205,9 +205,9 @@ public class MessageCell extends ListCell&lt;Message&gt; {
 
     public void deleteMessage() {
 <span class="fc" id="L207">        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);</span>
-<span class="fc" id="L208">        alert.setTitle(DELETE_MESSAGE_TITLE);</span>
-<span class="fc" id="L209">        alert.setHeaderText(DELETE_MESSAGE_TITLE);</span>
-<span class="fc" id="L210">        alert.setContentText(DELETE_MESSAGE_CONTENT);</span>
+<span class="fc" id="L208">        alert.setTitle(messagesBoxController.getResources().getString(&quot;DELETE.MESSAGE.TITLE&quot;));</span>
+<span class="fc" id="L209">        alert.setHeaderText(messagesBoxController.getResources().getString(&quot;DELETE.MESSAGE.TITLE&quot;));</span>
+<span class="fc" id="L210">        alert.setContentText(messagesBoxController.getResources().getString(&quot;DELETE.MESSAGE.CONTENT&quot;));</span>
 
 <span class="fc" id="L212">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
 <span class="pc bpc" id="L213" title="2 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK) {</span>
@@ -215,5 +215,6 @@ public class MessageCell extends ListCell&lt;Message&gt; {
 <span class="fc" id="L215">            alert.close();</span>
         }
 <span class="fc" id="L217">    }</span>
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

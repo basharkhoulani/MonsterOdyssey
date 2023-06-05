@@ -250,10 +250,10 @@ public class AccountSettingController extends Controller {
      * This method is used to save the selected avatar by sending a request to the server.
      */
     public void saveAvatar() {
-<span class="fc" id="L253">        informationLabel.setText(IMAGE_PROCESSING_ONGOING);</span>
+<span class="fc" id="L253">        informationLabel.setText(resources.getString(&quot;IMAGE.PROCESSING.ONGOING&quot;));</span>
 <span class="fc" id="L254">        String base64Image = ImageProcessor.toBase64(selectedFilePath);</span>
-<span class="pc bpc" id="L255" title="1 of 2 branches missed.">        if (base64Image.equals(IMAGE_PROCESSING_ERROR))</span>
-<span class="nc" id="L256">            informationLabel.setText(IMAGE_PROCESSING_ERROR);</span>
+<span class="pc bpc" id="L255" title="1 of 2 branches missed.">        if (base64Image.equals(resources.getString(&quot;IMAGE.PROCESSING.ERROR&quot;)))</span>
+<span class="nc" id="L256">            informationLabel.setText(resources.getString(&quot;IMAGE.PROCESSING.ERROR&quot;));</span>
 <span class="fc" id="L257">        String avatarUpload = &quot;data:image/png;base64, &quot; + base64Image;</span>
 <span class="fc" id="L258">        System.out.println(avatarUpload);</span>
 <span class="fc" id="L259">        disposables.add(usersService</span>
