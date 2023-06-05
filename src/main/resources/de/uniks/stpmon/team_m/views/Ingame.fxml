@@ -47,7 +47,7 @@
                            <Insets left="24.0" />
                        </padding>
                    </Button>
-                   <Button fx:id="settingsButton" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0" mnemonicParsing="false" onAction="#showTrainerSettings" text="Settings">
+                   <Button fx:id="settingsButton" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0" mnemonicParsing="false" onAction="#showTrainerSettings" text="%Settings">
                        <font>
                            <Font name="Comic Sans MS Bold" size="17.0" />
                        </font>
