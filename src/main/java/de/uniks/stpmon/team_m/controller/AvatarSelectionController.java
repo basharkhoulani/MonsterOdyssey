@@ -12,9 +12,14 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Base64;
+
 import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
+
 
 @Singleton
 public class AvatarSelectionController extends Controller {
@@ -113,8 +118,8 @@ public class AvatarSelectionController extends Controller {
 
     public void selectFile() {
         FileChooser fileChooser = fileChooserProvider.get();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(IMAGE, "*.png", "*.jpg", "*.jpeg"));
-        fileChooser.setTitle(SELECT_AVATAR_PICTURE);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(resources.getString("SELECT.AVATAR.PICTURE"), "*.png", "*.jpg", "*.jpeg"));
+        fileChooser.setTitle(resources.getString("SELECT.AVATAR.PICTURE"));
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
             for (Toggle radioButton : selectAvatar.getToggles()) {

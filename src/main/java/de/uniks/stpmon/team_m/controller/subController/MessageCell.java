@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 import static javafx.geometry.Pos.CENTER_LEFT;
@@ -43,7 +44,10 @@ public class MessageCell extends ListCell<Message> {
     public ImageView avatar;
     private FXMLLoader loader;
     private final MessagesBoxController messagesBoxController;
+
     public UserStorage user;
+
+
 
     /**
      * MessageCell is used to handle the message cells.
@@ -59,6 +63,7 @@ public class MessageCell extends ListCell<Message> {
         this.messagesBoxController = messagesBoxController;
         this.user = user;
     }
+
 
     /**
      * The updateItem method is used to update the message cell.

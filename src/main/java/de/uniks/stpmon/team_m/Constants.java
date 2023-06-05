@@ -1,6 +1,8 @@
 package de.uniks.stpmon.team_m;
 
 
+import javafx.scene.input.KeyCode;
+
 public class Constants {
     // SERVER
     public static final String API_URL = "https://stpmon.uniks.de/api/v2";
@@ -8,10 +10,6 @@ public class Constants {
     public static final String MESSAGE_NAMESPACE_GROUPS = "groups";
     public static final String MESSAGE_NAMESPACE_REGIONS = "regions";
     public static final String MESSAGE_NAMESPACE_GLOBAL = "global";
-    public static final String GENERIC_ERROR = """
-            Something went wrong!
-            Please try again later!""";
-    public static final String ERROR = "Error";
 
     // GENERAL
     public static final String GAME_NAME = "Monster Odyssey";
@@ -21,7 +19,6 @@ public class Constants {
     public static final int MINIMUM_WIDTH = 750; // 700
     public static final String APP_ICON = "images/Monster-durchsichtig.png";
     public static final String TASKBAR_ICON = "images/Monster-durchsichtig.png";
-    public static final String SURE = "Are you sure?";
     public static final String EMPTY_STRING = "";
     public static final String FX_STYLE_BORDER_COLOR_BLACK = "-fx-border-color: black";
     public static final String LOADING_ANIMATION = "images/loading.gif";
@@ -35,12 +32,7 @@ public class Constants {
     public static final String THREE_DOTS = "\u2026";
     public static final String BUTTON_TRANSPARENT_STYLE = "-fx-background-color: transparent; -fx-border-color: transparent;";
     public static final String BUTTON_BORDER_STYLE = "-fx-border-color: black; -fx-border-width: 1px;";
-    public static final String NO_FRIENDS_FOUND = "No friends found";
-    public static final String NO_GROUPS_FOUND = "No groups found";
-    public static final String NO_USERS_ADDED_TO_GROUP = "No foreign users added to group yet";
-    public static final String NO_MESSAGES_YET = "\t\tNo messages yet\nor there is no user or group selected";
     public static final String BEST_FRIEND_PREF = "bestFriend";
-    public static final String DELETE_FRIEND_WARNING = "Are you sure you want to delete this friend?";
     public static final String LIST_VIEW_STYLE_NO_INDEXING = "-fx-background-color: #F4F4F4;";
     public static final String OWN_MESSAGE_STYLE = "-fx-background-color: lightblue;";
     public static final String NOT_OWN_MESSAGE_STYLE = "-fx-background-color: lightgreen;";
@@ -49,25 +41,13 @@ public class Constants {
     public static final String ZONE_ID_EUROPE_BERLIN = "Europe/Berlin";
     public static final String DATE_TIME_FORMAT = "HH:mm, dd.MM.yy";
     public static final int DURATION_OF_LOADING_SCREEN = 3;
-    public static final String CANCEL = "Cancel";
     public static final String OK = "OK";
 
     // LOGIN & SIGNUP
-    public static final String LOGIN_TITLE = "Sign Up & In";
-    public static final String PASSWORD_LESS_THAN_8_CHARACTERS = "Password must have at least 8 characters.";
     public static final int PASSWORD_CHARACTER_LIMIT = 8;
     public static final char BULLET = '\u25cf';
     public static final String REFRESH_TOKEN_PREF = "refreshToken";
-    public static final String DELETE_SUCCESS = "Account successfully deleted";
-    public static final String CUSTOM_ERROR = "Something went terribly wrong!";
-    public static final String SIGNIN_ERROR = "Wrong Password or Username! Try again!";
-    public static final String USERNAME_TAKEN = "Username is already taken!";
 
-    //Change Language Pop up
-    public static final String CHANGE_LANGUAGE_TITLE = "Change Language";
-
-    // MAIN MENU
-    public static final String MAIN_MENU_TITLE = "Main Menu";
 
     // NEW GROUP
     public static final String CHECK_MARK = "\u2713";
@@ -77,35 +57,19 @@ public class Constants {
 
 
     // MESSAGES
-    public static final String MESSAGES_TITLE = "Messages";
     public static final String PENCIL = "\u270F";
     public static final String EDIT_MESSAGE_TITLE = "Edit message";
     public static final String EDIT_MESSAGE_CONTENT = "Message:";
     public static final String DELETE_MESSAGE_TITLE = "Delete Message";
     public static final String DELETE_MESSAGE_CONTENT = "Are you sure you want to delete this message?";
-    public static final String ALONE = "Alone";
 
     // NEW FRIEND
-    public static final String NEW_FRIEND_TITLE = "Add a new friend";
-    public static final String FRIEND_ADDED = "Friend added. You can add more friends or go back to the main menu.";
     public static final String FRIEND_NOT_FOUND = "Friend not found. Please try again.";
-    public static final String YOURSELF = "You can't add yourself as a friend.";
-    public static final String FRIEND_ALREADY_ADDED = "You are already friends with this user.";
-
-    // GROUPS
-    public static final String NEW_GROUP_TITLE = "New Group";
-    public static final String EDIT_GROUP_TITLE = "Edit Group";
-    public static final String CHANGE_GROUP = "Change Group Name";
-    public static final String DELETE_WARNING = "Are you sure you want to delete this group?";
 
 
     // ACCOUNT SETTINGS
-    public static final String ACCOUNT_SETTINGS_TITLE = "Account Setting";
     public static final String USERNAME_SUCCESS_CHANGED = "Your username has been changed successfully.";
     public static final String PASSWORD_SUCCESS_CHANGED = "Your Password has been changed successfully.";
-    public static final String SELECT_AVATAR_PICTURE = "Select Avatar Picture";
-    public static final String IMAGE = "Image";
-    public static final String AVATAR_SUCCESS_CHANGED = "Your Avatar has been changed successfully.";
 
     // AVATAR
     public static final String AVATAR_1 = "images/monster.png";
@@ -118,6 +82,7 @@ public class Constants {
     public static final int AVATAR_SIZE = 30;
 
     // INGAME
+    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     public static final String INGAME_TITLE = "Ingame";
     public static final String FIRST_HELP = "Click 'p' on your keyboard for pause menu.\n";
     public static final String SECOND_HELP = "     \u2191 \n \u2190 \u2193 \u2192  to move your character. \n";
@@ -132,17 +97,11 @@ public class Constants {
 
     // Error messages
     public static final String HTTP_400 = "400";
-    public static final String HTTP_400_MESSAGE = "Bad request. Please try again later.";
     public static final String HTTP_401 = "401";
-    public static final String HTTP_401_MESSAGE = "Unauthorized. Please try again later.";
     public static final String HTTP_403 = "403";
-    public static final String HTTP_403_MESSAGE = "Forbidden. Please try again later.";
     public static final String HTTP_404 = "404";
-    public static final String HTTP_404_MESSAGE = "Not found. Please try again later.";
     public static final String HTTP_409 = "409";
-    public static final String HTTP_409_MESSAGE = "Conflict. Please try again later.";
     public static final String HTTP_429 = "429";
-    public static final String HTTP_429_MESSAGE = "Too many requests. Please try again later.";
     public static final String UNKNOWN_USER = "Unknown";
 
     // Welcome Scene
