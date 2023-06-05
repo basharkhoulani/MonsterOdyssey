@@ -13,8 +13,10 @@ public class TrainerStorage {
     private String regionId;
     private String trainerName;
     private String trainerSprite;
+    private int x;
+    private int y;
+    private int direction;
     private Trainer trainer;
-    private MoveTrainerDto moveTrainerDto;
 
     @Inject
     public TrainerStorage() {
@@ -52,11 +54,27 @@ public class TrainerStorage {
         return trainerSprite;
     }
 
-    public MoveTrainerDto getMoveTrainerDto() {
-        return moveTrainerDto;
+    public int getX() {
+        return x;
     }
 
-    public void setMoveTrainerDto(MoveTrainerDto moveTrainerDto) {
-        this.moveTrainerDto = moveTrainerDto;
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
     }
 }

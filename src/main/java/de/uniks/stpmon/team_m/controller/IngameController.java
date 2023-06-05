@@ -91,15 +91,33 @@ public class IngameController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
         System.out.println(trainerStorageProvider.get().getTrainer());
+        trainerStorageProvider.get().setX(trainerStorageProvider.get().getTrainer().x());
+        trainerStorageProvider.get().setY(trainerStorageProvider.get().getTrainer().y());
+        trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());
         listenToMovement(moveTrainerDtos,trainerStorageProvider.get().getTrainer().area());
         app.getStage().getScene().setOnKeyPressed(event -> {
             if ((event.getCode() == PAUSE_MENU_KEY)) {
                 pauseGame();
             }
-            if ((event.getCode() == KeyCode.H)) {
+            if ((event.getCode() == KeyCode.W)) {
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getTrainer().x() - 1, trainerStorageProvider.get().getTrainer().y(), 1)).subscribe());
+                            trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() + 1, 1)).subscribe());
+            }
+            if ((event.getCode() == KeyCode.S)) {
+                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
+                        trainerStorageProvider.get().getTrainer().area(),
+                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() - 1, 2)).subscribe());
+            }
+            if ((event.getCode() == KeyCode.D)) {
+                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
+                        trainerStorageProvider.get().getTrainer().area(),
+                        trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 3)).subscribe());
+            }
+            if ((event.getCode() == KeyCode.A)) {
+                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
+                        trainerStorageProvider.get().getTrainer().area(),
+                        trainerStorageProvider.get().getX() - 1, trainerStorageProvider.get().getY() , 4)).subscribe());
             }
         });
         return parent;
@@ -112,7 +130,10 @@ public class IngameController extends Controller {
                     final MoveTrainerDto moveTrainerDto = event.data();
                     moveTrainerDtos.add(moveTrainerDto);
                     if (moveTrainerDto._id().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                        trainerStorageProvider.get().setMoveTrainerDto(moveTrainerDto);
+                        trainerStorageProvider.get().setX(moveTrainerDto.x());
+                        trainerStorageProvider.get().setY(moveTrainerDto.y());
+                        trainerStorageProvider.get().setDirection(moveTrainerDto.direction());
+                        System.out.println(moveTrainerDto);
                     }
                 }, error -> showError(error.getMessage())));
     }
