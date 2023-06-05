@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -153,7 +154,7 @@ public class IngameController extends Controller {
 
     public void showTrainerSettings() {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
-        trainerSettingsController.setRegion(this.regionId);
+        ingameTrainerSettingsControllerProvider.get().setRegion(this.regionId);
         trainerSettingsDialog.setTitle("Trainer Profil");
         trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());
         //trainerSettingsDialog.getDialogPane().setContent(trainerSettingsController.render());
