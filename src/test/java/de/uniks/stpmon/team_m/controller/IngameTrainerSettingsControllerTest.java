@@ -11,6 +11,9 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,6 +25,8 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        trainerSettingsController.setValues(bundle,null,null,trainerSettingsController,app);
         app.start(stage);
         app.show(trainerSettingsController);
         stage.requestFocus();

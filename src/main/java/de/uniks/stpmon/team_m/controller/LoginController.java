@@ -1,6 +1,8 @@
 package de.uniks.stpmon.team_m.controller;
 
 
+import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
@@ -9,12 +11,19 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+
+import javax.imageio.IIOException;
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import java.io.IOException;
+import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -64,6 +73,7 @@ public class LoginController extends Controller {
 
     private ChangeLanguageController changeLanguageController;
 
+
     /**
      * LoginController is used to show the login screen and to login or signup the user.
      */
@@ -75,10 +85,9 @@ public class LoginController extends Controller {
     /**
      * This method is used to set the title of the login screen.
      */
-
     @Override
     public String getTitle() {
-        return LOGIN_TITLE;
+        return resources.getString("LOGIN.TITLE");
     }
 
     @Override
@@ -110,7 +119,7 @@ public class LoginController extends Controller {
         signInButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));
         signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));
 
-        passwordField.setPromptText(PASSWORD_LESS_THAN_8_CHARACTERS);
+        passwordField.setPromptText(resources.getString("PASSWORD.LESS.THAN.8.CHARACTERS"));
 
         showInformation();
 
@@ -177,11 +186,11 @@ public class LoginController extends Controller {
 
     public void errorHandle(String error) {
         if (error.contains(HTTP_401)) {
-            passwordErrorLabel.setText(SIGNIN_ERROR);
+            passwordErrorLabel.setText(resources.getString("SIGNIN.ERROR"));
         } else if (error.contains(HTTP_409)) {
-            passwordErrorLabel.setText(USERNAME_TAKEN);
+            passwordErrorLabel.setText(resources.getString("USERNAME.TAKEN"));
         } else {
-            passwordErrorLabel.setText(CUSTOM_ERROR);
+            passwordErrorLabel.setText(resources.getString("CUSTOM.ERROR"));
         }
     }
 
@@ -207,7 +216,8 @@ public class LoginController extends Controller {
         Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
         closeButton.managedProperty().bind(closeButton.visibleProperty());
         closeButton.setVisible(false);
-        dialog.setTitle("Change Language");
+        dialog.setTitle(resources.getString("Change.Language"));
+        changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);
         dialog.getDialogPane().setContent(changeLanguageController.render());
         dialog.showAndWait();
     }

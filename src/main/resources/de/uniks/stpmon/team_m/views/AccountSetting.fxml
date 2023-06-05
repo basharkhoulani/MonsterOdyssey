@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" styleClass="Background" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.AccountSettingController">
-    <VBox alignment="CENTER" maxHeight="600.0" maxWidth="1000.0" styleClass="ForegroundContainer" VBox.vgrow="ALWAYS">
+    <VBox alignment="CENTER" maxHeight="600.0" maxWidth="1000.0" prefHeight="493.0" prefWidth="662.0" styleClass="ForegroundContainer" VBox.vgrow="ALWAYS">
         <VBox.margin>
             <Insets bottom="16.0" left="32.0" right="32.0" top="16.0" />
         </VBox.margin>
@@ -30,7 +30,7 @@
                         <Image url="@../images/Monster1-without.png" />
                     </ImageView>
                 </VBox>
-                <Label fx:id="titleLabel" alignment="TOP_CENTER" text="Change Account Information" HBox.hgrow="ALWAYS">
+                <Label fx:id="titleLabel" alignment="TOP_CENTER" text="%Change.Account.Information" HBox.hgrow="ALWAYS">
                     <font>
                         <Font name="Comic Sans MS Bold" size="24.0" />
                     </font>
@@ -57,7 +57,7 @@
                 </HBox.margin>
             </Button>
             <SplitPane maxWidth="25.0" minWidth="2.0" prefHeight="74.0" prefWidth="2.0" visible="false" HBox.hgrow="ALWAYS" />
-            <Button fx:id="saveAvatarButton" mnemonicParsing="false" onAction="#saveAvatar" prefHeight="50.0" prefWidth="150.0" styleClass="buttonsYellow" text="Save Avatar">
+            <Button fx:id="saveAvatarButton" mnemonicParsing="false" onAction="#saveAvatar" prefHeight="50.0" prefWidth="198.0" styleClass="buttonsYellow" text="%Save.Avatar">
                 <font>
                     <Font name="Comic Sans MS Bold" size="17.0" />
                 </font>
@@ -71,7 +71,7 @@
         </HBox>
         <Label fx:id="avatarErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel" stylesheets="@../styles.css" />
         <HBox alignment="CENTER" prefHeight="74.0" prefWidth="490.0" VBox.vgrow="ALWAYS">
-            <TextField fx:id="usernameField" maxHeight="50.0" minHeight="36.0" minWidth="375.0" promptText="Current Username" HBox.hgrow="ALWAYS">
+            <TextField fx:id="usernameField" maxHeight="50.0" minHeight="36.0" minWidth="375.0" promptText="%Current.Username" HBox.hgrow="ALWAYS">
                 <font>
                     <Font name="Comic Sans MS Bold" size="17.0" />
                 </font>
@@ -82,7 +82,7 @@
                 </HBox.margin>
             </Button>
             <SplitPane prefHeight="74.0" prefWidth="25.0" visible="false" />
-            <Button fx:id="saveUsernameButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#saveUsername" styleClass="buttonsYellow" text="Save Username">
+            <Button fx:id="saveUsernameButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#saveUsername" prefHeight="50.0" prefWidth="245.0" styleClass="buttonsYellow" text="%Save.Username">
                 <font>
                     <Font name="Comic Sans MS Bold" size="17.0" />
                 </font>
@@ -95,7 +95,7 @@
             </padding>
         </HBox>
         <HBox alignment="CENTER" prefHeight="74.0" prefWidth="311.0">
-            <PasswordField fx:id="passwordField" maxHeight="50.0" minHeight="36.0" minWidth="375.0" promptText="New Password" HBox.hgrow="ALWAYS">
+            <PasswordField fx:id="passwordField" maxHeight="50.0" minHeight="36.0" minWidth="375.0" promptText="%New.Password" HBox.hgrow="ALWAYS">
                 <HBox.margin>
                     <Insets />
                 </HBox.margin>
@@ -114,7 +114,7 @@
                 </HBox.margin>
             </Button>
             <SplitPane layoutX="233.0" layoutY="10.0" prefHeight="74.0" prefWidth="25.0" visible="false" />
-            <Button fx:id="savePasswordButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#savePassword" styleClass="buttonsYellow" text="Save Password" HBox.hgrow="ALWAYS">
+            <Button fx:id="savePasswordButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#savePassword" prefHeight="50.0" prefWidth="250.0" styleClass="buttonsYellow" text="%Save.Password" HBox.hgrow="ALWAYS">
                 <font>
                     <Font name="Comic Sans MS Bold" size="17.0" />
                 </font>
@@ -127,7 +127,7 @@
             </padding>
         </HBox>
         <HBox alignment="CENTER" prefHeight="52.0" prefWidth="490.0" VBox.vgrow="ALWAYS">
-            <Button fx:id="changeLanguageButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#changeLanguage" styleClass="buttonsYellow" text="Change Language">
+            <Button fx:id="changeLanguageButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#changeLanguage" styleClass="buttonsYellow" text="%Change.Language">
                 <font>
                     <Font name="Comic Sans MS Bold" size="17.0" />
                 </font>
@@ -142,13 +142,13 @@
         </HBox>
       <HBox alignment="CENTER" layoutX="18.0" layoutY="350.0" prefHeight="52.0" prefWidth="490.0">
          <children>
-            <Button fx:id="cancelButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#cancel" styleClass="buttonsWhite" text="Cancel">
+            <Button fx:id="cancelButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#cancel" styleClass="buttonsWhite" text="%Cancel">
                <font>
                   <Font name="Comic Sans MS Bold" size="17.0" />
                </font>
             </Button>
             <SplitPane prefHeight="52.0" prefWidth="124.0" visible="false" />
-            <Button fx:id="deleteAccountButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#showDeletePopUp" styleClass="buttonsWhite" text="Delete Account">
+            <Button fx:id="deleteAccountButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#showDeletePopUp" styleClass="buttonsWhite" text="%Delete.Account">
                <font>
                   <Font name="Comic Sans MS Bold" size="17.0" />
                </font>

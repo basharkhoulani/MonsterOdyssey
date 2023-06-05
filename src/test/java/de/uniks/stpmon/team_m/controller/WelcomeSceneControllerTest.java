@@ -18,7 +18,8 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 import javax.inject.Provider;
-import static de.uniks.stpmon.team_m.Constants.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -40,6 +41,8 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        welcomeSceneController.setValues(bundle,null,null,welcomeSceneController,app);
         final CharacterSelectionController characterSelectionController = mock(CharacterSelectionController.class);
         when(characterSelectionControllerProvider.get()).thenReturn(characterSelectionController);
         doNothing().when(app).show(characterSelectionController);
@@ -114,10 +117,10 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
 
         // Scene 5
         Label eightMessage = lookup("#firstMessage").query();
-        assertEquals(EIGHTH_MESSAGE, eightMessage.getText());
+        assertEquals("Hello. Next, we 'd like to take a picture of you.", eightMessage.getText());
 
         Label ninthMessage = lookup("#secondMessage").query();
-        assertEquals(NINTH_MESSAGE, ninthMessage.getText());
+        assertEquals("Take as much time as you want to get dressed up for it.", ninthMessage.getText());
 
         clickOn("Next");
 
@@ -129,10 +132,10 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
         // Scene 7
         verify(app).show(welcomeSceneController);
         Label tenthMessage = lookup("#firstMessage").query();
-        assertEquals(TENTH_MESSAGE, tenthMessage.getText());
+        assertEquals("Now it's time to start your Journey", tenthMessage.getText());
 
         Label eleventhMessage = lookup("#secondMessage").query();
-        assertEquals(ELEVENTH_MESSAGE, eleventhMessage.getText());
+        assertEquals("See you next time!", eleventhMessage.getText());
 
         clickOn("Next");
     }

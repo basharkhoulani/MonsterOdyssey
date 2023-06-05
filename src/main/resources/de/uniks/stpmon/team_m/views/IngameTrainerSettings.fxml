@@ -39,7 +39,7 @@
             </padding>
             <Button fx:id="deleteTrainerButton" minHeight="50.0" minWidth="150.0" mnemonicParsing="false"
                     onAction="#onDeleteTrainerButtonClick" styleClass="buttonsWhite"
-                    text="Delete your trainer">
+                    text="%Delete.your.trainer">
                <font>
                   <Font name="Comic Sans MS Bold" size="17.0"/>
                </font>
@@ -53,7 +53,7 @@
                <Insets bottom="8.0" right="8.0"/>
             </padding>
             <Button fx:id="cancelButton" minHeight="50.0" minWidth="125.0" mnemonicParsing="false"
-                    onAction="#onCancelButtonClick" styleClass="buttonsWhite" text="Cancel">
+                    onAction="#onCancelButtonClick" styleClass="buttonsWhite" text="%Cancel">
                <font>
                   <Font name="Comic Sans MS Bold" size="17.0"/>
                </font>

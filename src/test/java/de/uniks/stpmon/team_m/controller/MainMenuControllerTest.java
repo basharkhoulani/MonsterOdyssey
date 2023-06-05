@@ -27,6 +27,8 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.HTTP_429;
@@ -83,6 +85,8 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        mainMenuController.setValues(bundle,null,null,mainMenuController,app);
         when(regionsService.getRegions()).thenReturn(just(List.of(new Region(
                 "2023-05-22T17:51:46.772Z",
                 "2023-05-22T17:51:46.772Z",
