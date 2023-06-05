@@ -16,7 +16,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
@@ -87,7 +86,7 @@ public class IngameTrainerSettingsController extends Controller {
 
         dialogPane.getButtonTypes().addAll(cancelButton);
 
-        String trainerName = trainerStorageProvider.get().getTrainerName();
+        String trainerName = trainerStorageProvider.get().getTrainer().name();
         dialogPane.setContentText(DELETE_TRAINER_TEXT + trainerName);
         final Button cancelButton2 = (Button) alert.getDialogPane().lookupButton(cancelButton);
         final Button okButton2 = (Button) alert.getDialogPane().lookupButton(okButton);
@@ -109,8 +108,9 @@ public class IngameTrainerSettingsController extends Controller {
                         trainerStorageProvider.get().setTrainerName(null);
                         trainerStorageProvider.get().setRegionId(null);
                     }, error -> this.showError(error.getMessage())));
-
-            app.show(mainMenuControllerProvider.get());
+            MainMenuController mainMenuController = mainMenuControllerProvider.get();
+            mainMenuController.setTrainerDeletion();
+            app.show(mainMenuController);
             alert.close();
         }
 

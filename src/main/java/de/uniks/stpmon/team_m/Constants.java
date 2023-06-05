@@ -128,6 +128,7 @@ public class Constants {
     public static final String PAUSE_MENU_TITLE = "Pause Menu";
     public static final String PAUSE_MENU_LABEL = "What do you want to do?";
     public static final String DELETE_TRAINER_TEXT = "Delete ";
+    public static final String DELETE_TRAINER_SUCCESS = "Trainer Account delete successfully";
 
     // Error messages
     public static final String HTTP_400 = "400";

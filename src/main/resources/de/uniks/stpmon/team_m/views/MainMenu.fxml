@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Point3D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="600.0" styleClass="Background" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MainMenuController">
+<SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="600.0" styleClass="Background" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MainMenuController">
    <VBox alignment="TOP_CENTER">
       <padding>
          <Insets left="8.0" right="8.0" />
@@ -129,6 +135,11 @@
             </VBox>
          </VBox>
          <VBox alignment="CENTER" prefHeight="123.0" VBox.vgrow="ALWAYS">
+            <Label fx:id="trainerDeletedSuccessfully" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="391.0" styleClass="informationLabel">
+               <VBox.margin>
+                  <Insets top="9.0" />
+               </VBox.margin>
+            </Label>
             <HBox alignment="TOP_CENTER" fillHeight="false" prefHeight="82.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
                <Button fx:id="startGameButton" maxHeight="50.0" minHeight="38.0" minWidth="100.0" mnemonicParsing="false" onAction="#changeToIngame" prefHeight="50.0" styleClass="buttonsYellow" text="Start Game" HBox.hgrow="ALWAYS">
                   <font>
