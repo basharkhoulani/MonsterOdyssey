@@ -80,7 +80,7 @@ public class IngameTrainerSettingsController extends Controller {
     public void onDeleteTrainerButtonClick() {
         final Alert alert = new Alert(Alert.AlertType.WARNING);
         final DialogPane dialogPane = alert.getDialogPane();
-        final ButtonType cancelButton = new ButtonType(CANCEL);
+        final ButtonType cancelButton = new ButtonType(resources.getString("CANCEL"));
         final ButtonType okButton = alert.getButtonTypes().stream()
                         .filter(buttonType -> buttonType.getButtonData().isDefaultButton()).findFirst().orElse(null);
 
