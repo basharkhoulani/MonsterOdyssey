@@ -157,8 +157,10 @@ public class Constants {
     public static final String ELEVENTH_MESSAGE = "See you next time!";
 
 
+    public static final String DELETE_TRAINER_ALERT = "Delete Trainer";
     public static final String WELCOME_MESSAGE_STYLE = "welcomeMessage";
     public static final String WELCOME_SCENE_BUTTON = "welcomeSceneButton";
+    public static final String WHITE_BUTTON = "whiteButton";
     public static final String ALERT_DIALOG_NAME = "alertDialogName";
     public static final String NAME_ALERT_TITLE = "Name?";
 

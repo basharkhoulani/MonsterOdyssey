@@ -1,10 +1,10 @@
 package de.uniks.stpmon.team_m.controller;
 
-
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.*;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -33,16 +33,13 @@ public class IngameController extends Controller {
     public Button monstersButton;
     @FXML
     public Button settingsButton;
-
-    private IngameTrainerSettingsController trainerSettingsController;
-
+    @Inject
+    Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
 
-    @Inject
-    Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
-    private String regionId;
+    public String regionId;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -55,8 +52,7 @@ public class IngameController extends Controller {
     @Override
     public void init() {
         super.init();
-        trainerSettingsController = ingameTrainerSettingsControllerProvider.get();
-        trainerSettingsController.init();
+        ingameTrainerSettingsControllerProvider.get().init();
     }
 
     /**
@@ -157,9 +153,10 @@ public class IngameController extends Controller {
 
     public void showTrainerSettings() {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
-        trainerSettingsController.setRegion(this.regionId);
+        ingameTrainerSettingsControllerProvider.get().setRegion(this.regionId);
         trainerSettingsDialog.setTitle("Trainer Profil");
-        trainerSettingsDialog.getDialogPane().setContent(trainerSettingsController.render());
+        trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());
+        //trainerSettingsDialog.getDialogPane().setContent(trainerSettingsController.render());
         trainerSettingsDialog.getDialogPane().setExpandableContent(null);
         trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
         trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");
