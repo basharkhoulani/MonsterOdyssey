@@ -43,7 +43,7 @@ public class MessageCell extends ListCell<Message> {
     @FXML
     public ImageView avatar;
     private FXMLLoader loader;
-    private final MessagesBoxController messagesBoxController;
+    private MessagesBoxController messagesBoxController;
 
     public UserStorage user;
 
@@ -181,9 +181,9 @@ public class MessageCell extends ListCell<Message> {
 
     public void editMessage() {
         TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle(EDIT_MESSAGE_TITLE);
+        dialog.setTitle(messagesBoxController.getResources().getString("EDIT.MESSAGE.TITLE"));
         dialog.setHeaderText(null);
-        dialog.setContentText(EDIT_MESSAGE_CONTENT);
+        dialog.setContentText(messagesBoxController.getResources().getString("EDIT.MESSAGE.CONTENT"));
 
         TextArea messageArea = new TextArea();
         messageArea.setText(getItem().body());
@@ -205,9 +205,9 @@ public class MessageCell extends ListCell<Message> {
 
     public void deleteMessage() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(DELETE_MESSAGE_TITLE);
-        alert.setHeaderText(DELETE_MESSAGE_TITLE);
-        alert.setContentText(DELETE_MESSAGE_CONTENT);
+        alert.setTitle(messagesBoxController.getResources().getString("DELETE.MESSAGE.TITLE"));
+        alert.setHeaderText(messagesBoxController.getResources().getString("DELETE.MESSAGE.TITLE"));
+        alert.setContentText(messagesBoxController.getResources().getString("DELETE.MESSAGE.CONTENT"));
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -215,4 +215,5 @@ public class MessageCell extends ListCell<Message> {
             alert.close();
         }
     }
+
 }

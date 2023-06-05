@@ -203,7 +203,7 @@ class NewFriendControllerTest extends ApplicationTest {
         write("TestFriend 3");
         clickOn("#messageButton");
         clickOn("#messageButton");
-        assertEquals(FRIEND_NOT_FOUND, textField.getPromptText());
+        assertEquals("Friend not found. Please try again.", textField.getPromptText());
     }
 
     @Test
