@@ -146,8 +146,8 @@ public class WelcomeSceneController extends Controller {
             case 7 -> {
                 firstMessage.setText(TENTH_MESSAGE);
                 secondMessage.setText(ELEVENTH_MESSAGE);
-                secondMessage.setWrapText(true);
-                secondMessage.setPrefWidth(200);
+                firstMessage.setWrapText(true);
+                firstMessage.setPrefWidth(200);
             }
             case 8 -> {
                 String regionId = trainerStorageProvider.get().getRegionId();
