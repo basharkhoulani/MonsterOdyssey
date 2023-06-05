@@ -40,7 +40,7 @@ public class IngameController extends Controller {
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
 
     @Inject
-    private String regionId;
+    public String regionId;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
