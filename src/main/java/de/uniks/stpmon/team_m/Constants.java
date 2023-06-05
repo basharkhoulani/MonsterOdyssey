@@ -127,6 +127,7 @@ public class Constants {
     public static final String SAVE_GAME_AND_LEAVE_BUTTON_LABEL = "Save Game & Leave";
     public static final String PAUSE_MENU_TITLE = "Pause Menu";
     public static final String PAUSE_MENU_LABEL = "What do you want to do?";
+    public static final String DELETE_TRAINER_TEXT = "Delete ";
 
     // Error messages
     public static final String HTTP_400 = "400";
