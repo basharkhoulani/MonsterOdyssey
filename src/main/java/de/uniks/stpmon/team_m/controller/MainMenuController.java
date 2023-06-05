@@ -3,16 +3,20 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.controller.subController.FriendSettingsController;
 import de.uniks.stpmon.team_m.controller.subController.MainMenuUserCell;
 import de.uniks.stpmon.team_m.controller.subController.RegionCell;
+import de.uniks.stpmon.team_m.dto.Message;
+import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.RegionsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.udp.UdpEventListener;
 import de.uniks.stpmon.team_m.utils.FriendListUtils;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
+import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -225,6 +229,7 @@ public class MainMenuController extends Controller {
                         app.show(welcomeSceneController);
                     } else {
                         ingameControllerProvider.get().setRegion(selectedRegion._id());
+                        trainerStorageProvider.get().setTrainer(result.get(0));
                         app.show(ingameControllerProvider.get());
                     }
                 }, error -> showError(error.getMessage())

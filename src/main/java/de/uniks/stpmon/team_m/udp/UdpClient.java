@@ -48,7 +48,7 @@ import java.util.function.Consumer;
             this.socket = null;
         }
 
-         @OnMessage
+        @OnMessage
         public void onMessage(String message) {
             for (final Consumer<String> handler : this.messageHandlers) {
                 handler.accept(message);

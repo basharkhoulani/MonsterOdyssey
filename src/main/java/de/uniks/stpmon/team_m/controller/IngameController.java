@@ -1,8 +1,12 @@
 package de.uniks.stpmon.team_m.controller;
 
 
+import com.sun.net.httpserver.Authenticator;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
+import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
+import de.uniks.stpmon.team_m.udp.UdpEventListener;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Dialog;
@@ -43,6 +47,10 @@ public class IngameController extends Controller {
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
     private String regionId;
+    @Inject
+    Provider<TrainerStorage> trainerStorageProvider;
+    @Inject
+    Provider<UdpEventListener> udpEventListenerProvider;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -79,13 +87,35 @@ public class IngameController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
+        System.out.println(trainerStorageProvider.get().getTrainer());
+        listenToMovement("645e32c6866ace359554a7fa");
         app.getStage().getScene().setOnKeyPressed(event -> {
-            if (!(event.getCode() == PAUSE_MENU_KEY)) {
-                return;
+            if ((event.getCode() == PAUSE_MENU_KEY)) {
+                pauseGame();
             }
-            pauseGame();
+            if ((event.getCode() == KeyCode.H)) {
+                System.out.println("H");
+                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
+                        trainerStorageProvider.get().getTrainer().area(),
+                        trainerStorageProvider.get().getTrainer().x() -1, trainerStorageProvider.get().getTrainer().y(), 1)).subscribe(result -> {
+                    System.out.println(result);
+                }, error -> {
+                    System.out.println(error.getMessage());
+                }));
+            }
         });
         return parent;
+    }
+
+
+    public void listenToMovement( String id) {
+        disposables.add(udpEventListenerProvider.get().listen("areas." + id + ".trainers.*.*", MoveTrainerDto.class)
+                .observeOn(FX_SCHEDULER).subscribe(event -> {
+                    final MoveTrainerDto moveTrainerDto = event.data();
+                    switch (event.suffix()) {
+                        case "moved" -> System.out.println(moveTrainerDto);
+                    }
+                }, error -> showError(error.getMessage())));
     }
 
     /**

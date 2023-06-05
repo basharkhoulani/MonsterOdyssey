@@ -3,7 +3,9 @@ package de.uniks.stpmon.team_m.udp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stpmon.team_m.dto.Event;
+import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
 import de.uniks.stpmon.team_m.utils.TokenStorage;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.ObservableEmitter;
 
@@ -98,5 +100,13 @@ public class UdpEventListener {
             client.close();
             client = null;
         }
+    }
+
+
+    public <T> Observable<Event<T>> move(MoveTrainerDto moveTrainerDto) {
+        return Observable.create(emitter -> {
+            this.ensureOpen();
+            send(new Event<>("areas." + moveTrainerDto.area() + ".trainers." + moveTrainerDto._id() + ".moved", moveTrainerDto));
+        });
     }
 }
