@@ -23,13 +23,11 @@ import static de.uniks.stpmon.team_m.Constants.UDP_URL;
 
 @Singleton
 public class UdpEventListener {
-    private final TokenStorage tokenStorage;
     private final ObjectMapper mapper;
     private UdpClient client;
 
     @Inject
-    public UdpEventListener(TokenStorage tokenStorage, ObjectMapper mapper) {
-        this.tokenStorage = tokenStorage;
+    public UdpEventListener(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
@@ -41,6 +39,7 @@ public class UdpEventListener {
             InetAddress address = InetAddress.getByName(UDP_URL);
             client = new UdpClient(address, SERVER_PORT);
             client.open();
+            client.startReceiving();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

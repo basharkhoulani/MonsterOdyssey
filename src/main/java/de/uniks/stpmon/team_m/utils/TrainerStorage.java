@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.utils;
 
+import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
 import de.uniks.stpmon.team_m.dto.Trainer;
 
 import javax.inject.Inject;
@@ -13,6 +14,7 @@ public class TrainerStorage {
     private String trainerName;
     private String trainerSprite;
     private Trainer trainer;
+    private MoveTrainerDto moveTrainerDto;
 
     @Inject
     public TrainerStorage() {
@@ -48,5 +50,13 @@ public class TrainerStorage {
 
     public String getTrainerSprite() {
         return trainerSprite;
+    }
+
+    public MoveTrainerDto getMoveTrainerDto() {
+        return moveTrainerDto;
+    }
+
+    public void setMoveTrainerDto(MoveTrainerDto moveTrainerDto) {
+        this.moveTrainerDto = moveTrainerDto;
     }
 }

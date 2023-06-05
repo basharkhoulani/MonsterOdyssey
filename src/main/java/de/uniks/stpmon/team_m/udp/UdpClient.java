@@ -18,6 +18,7 @@ import java.util.function.Consumer;
         private final int serverPort;
         private final List<Consumer<String>> messageHandlers = Collections.synchronizedList(new ArrayList<>());
         private DatagramSocket socket;
+        private Thread receivingThread;
 
         public UdpClient(InetAddress serverAddress, int serverPort) {
             this.serverAddress = serverAddress;
@@ -29,12 +30,12 @@ import java.util.function.Consumer;
         }
 
         public void open() throws IOException {
-            socket = new DatagramSocket();
+            onOpen(new DatagramSocket());
         }
 
         public void close() {
             if (socket != null && !socket.isClosed()) {
-                socket.close();
+                onClose();
             }
         }
 
@@ -44,8 +45,10 @@ import java.util.function.Consumer;
         }
 
         @OnClose
-        public void onClose(DatagramSocket socket) {
+        public void onClose() {
+            socket.close();
             this.socket = null;
+            receivingThread.interrupt();
         }
 
         @OnMessage
@@ -75,7 +78,7 @@ import java.util.function.Consumer;
         }
 
         protected void startReceiving() {
-            new Thread(() -> {
+            receivingThread = new Thread(() -> {
                 while (isOpen()) {
                     try {
                         byte[] receiveData = new byte[1024];
@@ -84,10 +87,11 @@ import java.util.function.Consumer;
                         String message = new String(receivePacket.getData(), 0, receivePacket.getLength());
                         onMessage(message);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        onError(e);
                     }
                 }
-            }).start();
+            });
+            receivingThread.start();
         }
 
         public boolean hasMessageHandler() {

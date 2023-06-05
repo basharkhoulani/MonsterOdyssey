@@ -7,6 +7,8 @@ import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsCont
 import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
 import de.uniks.stpmon.team_m.udp.UdpEventListener;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Dialog;
@@ -51,6 +53,7 @@ public class IngameController extends Controller {
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
     Provider<UdpEventListener> udpEventListenerProvider;
+    private final ObservableList<MoveTrainerDto> moveTrainerDtos = FXCollections.observableArrayList();
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -88,32 +91,28 @@ public class IngameController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
         System.out.println(trainerStorageProvider.get().getTrainer());
-        listenToMovement("645e32c6866ace359554a7fa");
+        listenToMovement(moveTrainerDtos,trainerStorageProvider.get().getTrainer().area());
         app.getStage().getScene().setOnKeyPressed(event -> {
             if ((event.getCode() == PAUSE_MENU_KEY)) {
                 pauseGame();
             }
             if ((event.getCode() == KeyCode.H)) {
-                System.out.println("H");
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getTrainer().x() -1, trainerStorageProvider.get().getTrainer().y(), 1)).subscribe(result -> {
-                    System.out.println(result);
-                }, error -> {
-                    System.out.println(error.getMessage());
-                }));
+                        trainerStorageProvider.get().getTrainer().x() - 1, trainerStorageProvider.get().getTrainer().y(), 1)).subscribe());
             }
         });
         return parent;
     }
 
 
-    public void listenToMovement( String id) {
-        disposables.add(udpEventListenerProvider.get().listen("areas." + id + ".trainers.*.*", MoveTrainerDto.class)
+    public void listenToMovement(ObservableList<MoveTrainerDto> moveTrainerDtos, String area) {
+        disposables.add(udpEventListenerProvider.get().listen("areas." + area + ".trainers.*.*", MoveTrainerDto.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final MoveTrainerDto moveTrainerDto = event.data();
-                    switch (event.suffix()) {
-                        case "moved" -> System.out.println(moveTrainerDto);
+                    moveTrainerDtos.add(moveTrainerDto);
+                    if (moveTrainerDto._id().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                        trainerStorageProvider.get().setMoveTrainerDto(moveTrainerDto);
                     }
                 }, error -> showError(error.getMessage())));
     }
