@@ -3,8 +3,6 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.controller.MainMenuController;
-import de.uniks.stpmon.team_m.dto.Region;
-import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.RegionsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
@@ -90,7 +88,7 @@ public class IngameTrainerSettingsController extends Controller {
 
         final Button cancelButton2 = (Button) alert.getDialogPane().lookupButton(cancelButton);
         final Button okButton2 = (Button) alert.getDialogPane().lookupButton(okButton);
-        okButton2.setOnAction(event -> onCancelButtonClick());
+        //okButton2.setOnAction(event -> onCancelButtonClick());
         cancelButton2.getStyleClass().add(WHITE_BUTTON);
         okButton2.getStyleClass().add(WHITE_BUTTON);
 
@@ -101,16 +99,18 @@ public class IngameTrainerSettingsController extends Controller {
         if (result.isPresent() && result.get() == cancelButton) {
             alert.close();
         } else if (result.isPresent() && result.get() == okButton) {
+            onCancelButtonClick();
+            disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegionId(), trainerStorageProvider.get().getTrainer()._id()).
+                    observeOn(FX_SCHEDULER).subscribe(end -> {
+                        trainerStorageProvider.get().setTrainer(null);
+                        trainerStorageProvider.get().setTrainerSprite(null);
+                        trainerStorageProvider.get().setTrainerName(null);
+                        trainerStorageProvider.get().setRegionId(null);
+                    }, error -> this.showError(error.getMessage())));
             app.show(mainMenuControllerProvider.get());
             alert.close();
         }
-        disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegionId(), trainerStorageProvider.get().getTrainer()._id()).
-                observeOn(FX_SCHEDULER).subscribe(result -> {
-                 trainerStorageProvider.get().setTrainer(null);
-                 trainerStorageProvider.get().setTrainerSprite(null);
-                 trainerStorageProvider.get().setTrainerName(null);
-                 trainerStorageProvider.get().setRegionId(null);
-        }, error -> this.showError(error.getMessage())));
+
     }
 
     public void setRegion(String regionId) {
