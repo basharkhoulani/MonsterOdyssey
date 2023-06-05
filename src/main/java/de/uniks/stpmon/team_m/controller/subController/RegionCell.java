@@ -6,8 +6,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.TextAlignment;
 
-public class RegionCell extends ListCell<Region> {
 
+public class RegionCell extends ListCell<Region> {
     private final ToggleGroup regionToggleGroup;
 
     /**
@@ -22,6 +22,7 @@ public class RegionCell extends ListCell<Region> {
     public RegionCell(ToggleGroup regionToggleGroup) {
         this.regionToggleGroup = regionToggleGroup;
     }
+
 
     /**
      * The updateItem method is used to update the region cell.

@@ -117,7 +117,7 @@ public class MainMenuController extends Controller {
 
     @Override
     public String getTitle() {
-        return MAIN_MENU_TITLE;
+        return resources.getString("MAIN.MENU.TITLE");
     }
 
     /**
@@ -162,7 +162,7 @@ public class MainMenuController extends Controller {
 
     private void initFriendslist() {
         friendsListView.setCellFactory(param -> new MainMenuUserCell(preferencesProvider.get(), friendSettingsControllerProvider));
-        friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
+        friendsListView.setPlaceholder(new Label(resources.getString("NO.FRIENDS.FOUND")));
         listenToUserUpdate(friends, friendsListView);
         friendsListView.setOnMouseClicked(event -> {
             if (!friendsListView.getSelectionModel().isEmpty()) {

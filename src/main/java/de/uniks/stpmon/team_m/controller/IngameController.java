@@ -75,7 +75,7 @@ public class IngameController extends Controller {
 
     @Override
     public String getTitle() {
-        return INGAME_TITLE;
+        return resources.getString("INGAME.TITLE");
     }
 
     /**
@@ -145,7 +145,7 @@ public class IngameController extends Controller {
         alert.initOwner(app.getStage());
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.initStyle(StageStyle.UNDECORATED);
-        alert.setContentText(HELP_LABEL);
+        alert.setContentText(resources.getString("HELP.LABEL"));
         final DialogPane dialogPane = alert.getDialogPane();
         dialogPane.getStyleClass().add("comicSans");
         dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);
@@ -163,8 +163,8 @@ public class IngameController extends Controller {
     public void pauseGame() {
         final Alert alert = new Alert(Alert.AlertType.NONE);
         final DialogPane dialogPane = alert.getDialogPane();
-        final ButtonType resume = new ButtonType(RESUME_BUTTON_LABEL);
-        final ButtonType saveAndExit = new ButtonType(SAVE_GAME_AND_LEAVE_BUTTON_LABEL);
+        final ButtonType resume = new ButtonType(resources.getString("RESUME.BUTTON.LABEL"));
+        final ButtonType saveAndExit = new ButtonType(resources.getString("SAVE.GAME.AND.LEAVE.BUTTON.LABEL"));
         dialogPane.getButtonTypes().addAll(resume, saveAndExit);
         if (!GraphicsEnvironment.isHeadless()) {
             dialogPane.getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
@@ -178,10 +178,10 @@ public class IngameController extends Controller {
             alert.setResult(resume);
         });
 
-        alert.setTitle(PAUSE_MENU_TITLE);
+        alert.setTitle(resources.getString("PAUSE.MENU.TITLE"));
         alert.setHeaderText(null);
         alert.setGraphic(null);
-        alert.setContentText(PAUSE_MENU_LABEL);
+        alert.setContentText(resources.getString("PAUSE.MENU.LABEL"));
         alert.initStyle(StageStyle.UNDECORATED);
         dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);
 
@@ -203,7 +203,7 @@ public class IngameController extends Controller {
     public void showTrainerSettings() {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
         trainerSettingsController.setRegion(this.regionId);
-        trainerSettingsDialog.setTitle("Trainer Profil");
+        trainerSettingsDialog.setTitle(resources.getString("Trainer.Profil"));
         trainerSettingsDialog.getDialogPane().setContent(trainerSettingsController.render());
         trainerSettingsDialog.getDialogPane().setExpandableContent(null);
         trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());

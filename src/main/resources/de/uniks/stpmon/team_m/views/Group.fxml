@@ -6,13 +6,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+
 <HBox styleClass="Background" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.GroupController">
    <VBox alignment="TOP_CENTER" fillWidth="false" minWidth="375.0" HBox.hgrow="NEVER">
       <HBox alignment="CENTER" styleClass="ForegroundHeaderContainer" VBox.vgrow="SOMETIMES">
          <ImageView fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../images/Monster1-without.png" />
          </ImageView>
-         <Label fx:id="selectGroupMembersLabel" text="Select Groupmembers" HBox.hgrow="NEVER">
+         <Label fx:id="selectGroupMembersLabel" text="%Select.Groupmembers" HBox.hgrow="NEVER">
             <font>
                <Font name="Comic Sans MS Bold" size="24.0" />
             </font>
@@ -37,7 +38,7 @@
       </VBox>
       <HBox alignment="CENTER" fillHeight="false" prefWidth="700.0" VBox.vgrow="NEVER">
          <HBox alignment="CENTER" HBox.hgrow="NEVER">
-            <Button fx:id="backToMessagesButton" maxHeight="50.0" minHeight="50.0" mnemonicParsing="false" onAction="#changeToMessages" prefHeight="50.0" prefWidth="150.0" styleClass="buttonsWhite" text="Go back">
+            <Button fx:id="backToMessagesButton" maxHeight="50.0" minHeight="50.0" mnemonicParsing="false" onAction="#changeToMessages" prefHeight="50.0" prefWidth="150.0" styleClass="buttonsWhite" text="%Go.back">
                <HBox.margin>
                   <Insets right="16.0" />
                </HBox.margin>
@@ -47,7 +48,7 @@
             </HBox.margin>
          </HBox>
          <HBox alignment="CENTER" HBox.hgrow="NEVER">
-            <Button fx:id="deleteGroupButton" maxHeight="50.0" minHeight="50.0" mnemonicParsing="false" onAction="#deleteGroup" prefHeight="50.0" prefWidth="150.0" styleClass="buttonsWhite" text="Delete group">
+            <Button fx:id="deleteGroupButton" maxHeight="50.0" minHeight="50.0" mnemonicParsing="false" onAction="#deleteGroup" prefHeight="50.0" prefWidth="150.0" styleClass="buttonsWhite" text="%Delete.group">
                <HBox.margin>
                   <Insets left="16.0" right="16.0" />
                </HBox.margin>
@@ -76,7 +77,7 @@
                <padding>
                   <Insets left="25.0" right="25.0" />
                </padding>
-               <TextField fx:id="searchFieldGroupMembers" maxWidth="1.7976931348623157E308" minHeight="35.0" onAction="#searchForGroupMembers" onMouseClicked="#searchForGroupMembers" prefHeight="60.0" promptText="Search for Groupmembers" VBox.vgrow="ALWAYS">
+               <TextField fx:id="searchFieldGroupMembers" maxWidth="1.7976931348623157E308" minHeight="35.0" onAction="#searchForGroupMembers" onMouseClicked="#searchForGroupMembers" prefHeight="60.0" promptText="%Search.for.Groupmembers" VBox.vgrow="ALWAYS">
                   <font>
                      <Font name="Comic Sans MS" size="17.0" />
                   </font>
@@ -99,7 +100,7 @@
                   <Label fx:id="errorMessage" textFill="RED" />
                </VBox>
                <VBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
-                  <TextField fx:id="groupNameInput" maxWidth="1.7976931348623157E308" minHeight="35.0" prefHeight="50.0" prefWidth="588.0" promptText="New Group Name" VBox.vgrow="ALWAYS">
+                  <TextField fx:id="groupNameInput" maxWidth="1.7976931348623157E308" minHeight="35.0" prefHeight="50.0" prefWidth="588.0" promptText="%New.Group.Name" VBox.vgrow="ALWAYS">
                      <font>
                         <Font name="Comic Sans MS" size="17.0" />
                      </font>
@@ -107,7 +108,7 @@
                         <Insets />
                      </VBox.margin>
                   </TextField>
-                  <Button fx:id="saveGroupButton" mnemonicParsing="false" onAction="#saveGroup" prefHeight="50.0" prefWidth="150.0" styleClass="buttonsYellow" text="Save Group">
+                  <Button fx:id="saveGroupButton" mnemonicParsing="false" onAction="#saveGroup" prefHeight="50.0" prefWidth="150.0" styleClass="buttonsYellow" text="%Save.Group">
                      <font>
                         <Font name="Comic Sans MS Bold" size="17.0" />
                      </font>

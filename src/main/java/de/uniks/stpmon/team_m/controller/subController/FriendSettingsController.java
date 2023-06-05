@@ -62,8 +62,8 @@ public class FriendSettingsController extends Controller {
      */
 
     public void deleteFriendAction() {
-        Alert alert = new Alert(Alert.AlertType.WARNING, DELETE_FRIEND_WARNING, ButtonType.YES, ButtonType.NO);
-        alert.setTitle(SURE);
+        Alert alert = new Alert(Alert.AlertType.WARNING, resources.getString("DELETE.FRIEND.WARNING"), ButtonType.YES, ButtonType.NO);
+        alert.setTitle(resources.getString("SURE"));
         alert.setHeaderText(null);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.YES) {
