@@ -39,7 +39,6 @@ public class IngameController extends Controller {
     Provider<MainMenuController> mainMenuControllerProvider;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
 
-    @Inject
     public String regionId;
 
     /**
