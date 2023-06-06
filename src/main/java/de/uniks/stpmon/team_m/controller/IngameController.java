@@ -12,7 +12,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -36,6 +38,8 @@ public class IngameController extends Controller {
     public Button monstersButton;
     @FXML
     public Button settingsButton;
+    @FXML
+    public VBox ingameVBox;
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
     @Inject
@@ -65,6 +69,9 @@ public class IngameController extends Controller {
         name = name.substring(name.lastIndexOf("/") + 1);
         name = name.substring(0, name.lastIndexOf("."));
         System.out.println(name);
+        disposables.add(presetsService.getTilesetImage(name).observeOn(FX_SCHEDULER).subscribe(image -> {
+            ingameVBox.getChildren().add(new ImageView(image));
+        }));
     }
 
     /**

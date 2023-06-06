@@ -26,23 +26,20 @@ public class PresetsService {
     }
 
     /**
-     * getTileset returns a tileset in JSON format, or a tile image PNG.
+     * getTileset(-Image) returns a tileset in JSON format, or a tile image PNG.
      * Saved in a ResponseBody to be able to processed as needed.
      * Example for image to JavaFX image is found in ImageProcessor.java
+     *
      * @param filename The filename of the tileset.
      * @return The tileset.
      */
 
-    public Observable<ResponseBody> getTileset(String filename) {
-        return presetsApiService.getTileset(filename);
-    }
-
     public Observable<Image> getTilesetImage(String filename) {
-        return presetsApiService.getTileset(filename).map(ImageProcessor::responseBodyToJavaFXImage);
+        return presetsApiService.getTileset(filename + ".png").map(ImageProcessor::responseBodyToJavaFXImage);
     }
 
-    public Observable<TileSet> getTilesetJson(String filename) {
-        return presetsApiService.getTileset(filename).map(responseBody -> new Gson().fromJson(responseBody.string(), TileSet.class));
+    public Observable<TileSet> getTileset(String filename) {
+        return presetsApiService.getTileset(filename + ".json").map(responseBody -> new Gson().fromJson(responseBody.string(), TileSet.class));
     }
 
     /**
