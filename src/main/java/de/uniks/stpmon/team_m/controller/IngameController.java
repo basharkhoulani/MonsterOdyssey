@@ -11,6 +11,8 @@ import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.*;
@@ -24,6 +26,7 @@ import javafx.stage.Window;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -98,13 +101,14 @@ public class IngameController extends Controller {
             }
             pauseGame();
         });
-        disposables.add(areasService.getArea(trainerStorageProvider.get().getTrainer().region(), trainerStorageProvider.get().getTrainer().area()).subscribe(area -> {
+        disposables.add(areasService.getArea(trainerStorageProvider.get().getTrainer().region(),
+                "645e32c6866ace359554a7fa").subscribe(area -> {
             if (area != null) {
                 loadMap(area.map());
             } else {
                 System.out.println("Area is null");
             }
-        }));
+        }, error -> showError(error.getMessage())));
         return parent;
     }
 
@@ -113,24 +117,26 @@ public class IngameController extends Controller {
         final String mapName = getFileName(map.tilesets().get(0).source());
         disposables.add(presetsService.getTilesetImage(mapName).observeOn(FX_SCHEDULER).subscribe(image -> {
             if (image != null) {
-                javafx.scene.canvas.Canvas canvas = new javafx.scene.canvas.Canvas(map.width() * TILE_SIZE, map.height() * TILE_SIZE);
-                javafx.scene.canvas.GraphicsContext gc = canvas.getGraphicsContext2D();
+                final Canvas canvas = new Canvas(800, 600);
+                final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
                 for (Layer layer : map.layers()) {
                     if (!layer.type().equals("tilelayer")) {
                         continue;
                     }
+                    int x = 0;
+                    int y = 0;
                     for (Chunk chunk : layer.chunks()) {
-                        for (int i = 0; i < chunk.data().length; i++) {
-                            int tileId = chunk.data()[i];
-                            if (tileId == 0) {
-                                continue;
+                        List<Integer> data = chunk.data();
+                        for (int tileId : data) {
+                            int tileX = tileId % layer.width(); // 21
+                            int tileY = tileId / layer.height(); // 8
+                            graphicsContext.drawImage(image, tileX * TILE_SIZE, tileY * TILE_SIZE,
+                                    TILE_SIZE, TILE_SIZE, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                            x++;
+                            if (x >= layer.width()) {
+                                x = 0;
+                                y++;
                             }
-                            tileId--;
-                            final int x = i % chunk.width();
-                            final int y = i / chunk.width();
-                            final int tileX = tileId % TILE_SIZE;
-                            final int tileY = tileId / TILE_SIZE;
-                            gc.drawImage(image, tileX * TILE_SIZE, tileY * TILE_SIZE, TILE_SIZE, TILE_SIZE, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                         }
                     }
                 }
@@ -138,7 +144,7 @@ public class IngameController extends Controller {
             } else {
                 System.out.println("Image is null");
             }
-        }));
+        }, error -> showError(error.getMessage())));
     }
 
     /**
@@ -212,7 +218,7 @@ public class IngameController extends Controller {
         trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");
         Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();
         popUp.setOnCloseRequest(evt ->
-            ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close()
+                ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close()
         );
         trainerSettingsDialog.showAndWait();
     }

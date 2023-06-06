@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import java.lang.String?>
-<BorderPane prefHeight="600.0" prefWidth="800.0" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/19"
+<BorderPane prefHeight="765.0" prefWidth="1028.0" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/19"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
     <top>
         <Button fx:id="helpSymbol" mnemonicParsing="false" onAction="#showHelp" prefHeight="35.0" prefWidth="36.0"
@@ -16,7 +16,8 @@
         </Button>
     </top>
     <center>
-        <VBox fx:id="ingameVBox" alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER"/>
+        <VBox fx:id="ingameVBox" alignment="CENTER" prefHeight="640.0" prefWidth="1028.0"
+              style="-fx-background-color: red;" BorderPane.alignment="CENTER"/>
     </center>
     <bottom>
        <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
