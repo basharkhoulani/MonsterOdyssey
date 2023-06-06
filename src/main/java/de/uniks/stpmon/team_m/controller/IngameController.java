@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
+import de.uniks.stpmon.team_m.dto.Chunk;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -18,6 +19,7 @@ import javafx.stage.Window;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -51,6 +53,13 @@ public class IngameController extends Controller {
     @Override
     public void init() {
         super.init();
+        System.out.println(trainerStorageProvider.get().getRegion().map());
+        List<Chunk> chunks = trainerStorageProvider.get().getRegion().map().layers().get(0).chunks();
+        for (Chunk chunk : chunks) {
+            for (int i : chunk.data()) {
+                System.out.print(i + ", ");
+            }
+        }
     }
 
     /**
