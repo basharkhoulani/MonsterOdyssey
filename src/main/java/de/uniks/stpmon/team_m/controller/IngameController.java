@@ -42,6 +42,8 @@ public class IngameController extends Controller {
 
     public String regionId;
 
+    public IngameTrainerSettingsController trainerSettingsController;
+
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
      */
