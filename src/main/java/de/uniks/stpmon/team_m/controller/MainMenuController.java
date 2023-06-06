@@ -227,7 +227,6 @@ public class MainMenuController extends Controller {
                         app.show(welcomeSceneController);
                     } else {
                         trainerStorageProvider.get().setTrainer(result.get(0));
-                        System.out.println("Trainer: " + trainerStorageProvider.get().getTrainer());
                         app.show(ingameControllerProvider.get());
                     }
                 }, error -> showError(error.getMessage())

@@ -7,9 +7,15 @@ public record Layer(
         int height,
         int id,
         String name,
+        int opacity,
         int startx,
         int starty,
         String type,
-        int width
+        boolean visible,
+        int width,
+        int x,
+        int y,
+        String draworder,
+        List<TileObject> objects
 ) {
 }

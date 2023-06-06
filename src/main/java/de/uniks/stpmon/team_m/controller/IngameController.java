@@ -4,6 +4,8 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import de.uniks.stpmon.team_m.dto.Chunk;
+import de.uniks.stpmon.team_m.dto.Layer;
+import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -12,7 +14,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -23,11 +24,11 @@ import javafx.stage.Window;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.FX_STYLE_BORDER_COLOR_BLACK;
+import static de.uniks.stpmon.team_m.Constants.TILE_SIZE;
 
 
 public class IngameController extends Controller {
@@ -63,15 +64,12 @@ public class IngameController extends Controller {
     @Override
     public void init() {
         super.init();
-        System.out.println(trainerStorageProvider.get().getRegion().map());
-        List<Chunk> chunks = trainerStorageProvider.get().getRegion().map().layers().get(0).chunks();
-        String name = trainerStorageProvider.get().getRegion().map().tilesets().get(0).source();
+    }
+
+    private static String getFileName(String name) {
         name = name.substring(name.lastIndexOf("/") + 1);
         name = name.substring(0, name.lastIndexOf("."));
-        System.out.println(name);
-        disposables.add(presetsService.getTilesetImage(name).observeOn(FX_SCHEDULER).subscribe(image -> {
-            ingameVBox.getChildren().add(new ImageView(image));
-        }));
+        return name;
     }
 
     /**
@@ -100,7 +98,47 @@ public class IngameController extends Controller {
             }
             pauseGame();
         });
+        disposables.add(areasService.getArea(trainerStorageProvider.get().getTrainer().region(), trainerStorageProvider.get().getTrainer().area()).subscribe(area -> {
+            if (area != null) {
+                loadMap(area.map());
+            } else {
+                System.out.println("Area is null");
+            }
+        }));
         return parent;
+    }
+
+    private void loadMap(Map map) {
+        System.out.println("Loading map: " + map);
+        final String mapName = getFileName(map.tilesets().get(0).source());
+        disposables.add(presetsService.getTilesetImage(mapName).observeOn(FX_SCHEDULER).subscribe(image -> {
+            if (image != null) {
+                javafx.scene.canvas.Canvas canvas = new javafx.scene.canvas.Canvas(map.width() * TILE_SIZE, map.height() * TILE_SIZE);
+                javafx.scene.canvas.GraphicsContext gc = canvas.getGraphicsContext2D();
+                for (Layer layer : map.layers()) {
+                    if (!layer.type().equals("tilelayer")) {
+                        continue;
+                    }
+                    for (Chunk chunk : layer.chunks()) {
+                        for (int i = 0; i < chunk.data().length; i++) {
+                            int tileId = chunk.data()[i];
+                            if (tileId == 0) {
+                                continue;
+                            }
+                            tileId--;
+                            final int x = i % chunk.width();
+                            final int y = i / chunk.width();
+                            final int tileX = tileId % TILE_SIZE;
+                            final int tileY = tileId / TILE_SIZE;
+                            gc.drawImage(image, tileX * TILE_SIZE, tileY * TILE_SIZE, TILE_SIZE, TILE_SIZE, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                        }
+                    }
+                }
+                ingameVBox.getChildren().add(canvas);
+            } else {
+                System.out.println("Image is null");
+            }
+        }));
     }
 
     /**

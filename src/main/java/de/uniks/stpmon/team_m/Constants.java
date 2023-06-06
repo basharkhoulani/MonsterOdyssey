@@ -1,8 +1,6 @@
 package de.uniks.stpmon.team_m;
 
 
-import javafx.scene.input.KeyCode;
-
 public class Constants {
     // SERVER
     public static final String API_URL = "https://stpmon.uniks.de/api/v2";
@@ -68,7 +66,7 @@ public class Constants {
     public static final int AVATAR_SIZE = 30;
 
     // INGAME
-    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
+    public static int TILE_SIZE = 30;
 
     // Error messages
     public static final String HTTP_400 = "400";
