@@ -55,8 +55,6 @@ public class IngameController extends Controller {
     @Override
     public void init() {
         super.init();
-        trainerSettingsController = ingameTrainerSettingsControllerProvider.get();
-        trainerSettingsController.init();
     }
 
     /**
