@@ -62,8 +62,8 @@ public class FriendSettingsController extends Controller {
      */
 
     public void deleteFriendAction() {
-<span class="fc" id="L65">        Alert alert = new Alert(Alert.AlertType.WARNING, DELETE_FRIEND_WARNING, ButtonType.YES, ButtonType.NO);</span>
-<span class="fc" id="L66">        alert.setTitle(SURE);</span>
+<span class="fc" id="L65">        Alert alert = new Alert(Alert.AlertType.WARNING, resources.getString(&quot;DELETE.FRIEND.WARNING&quot;), ButtonType.YES, ButtonType.NO);</span>
+<span class="fc" id="L66">        alert.setTitle(resources.getString(&quot;SURE&quot;));</span>
 <span class="fc" id="L67">        alert.setHeaderText(null);</span>
 <span class="fc" id="L68">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
 <span class="pc bpc" id="L69" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.YES) {</span>

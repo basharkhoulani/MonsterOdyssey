@@ -60,7 +60,7 @@ public class MessagesBoxController extends Controller {
 <span class="fc" id="L60">        messageListView = new ListView&lt;&gt;();</span>
 <span class="fc" id="L61">        messageListView.setItems(messages);</span>
 <span class="fc" id="L62">        messageListView.setCellFactory(param -&gt; new MessageCell(this, userStorageProvider.get()));</span>
-<span class="fc" id="L63">        messageListView.setPlaceholder(new Label(NO_MESSAGES_YET));</span>
+<span class="fc" id="L63">        messageListView.setPlaceholder(new Label(resources.getString(&quot;NO.MESSAGES.YET&quot;)));</span>
 <span class="fc" id="L64">        messageListView.setId(&quot;messageListView&quot;);</span>
 <span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (group == null) {</span>
 <span class="fc" id="L66">            openFriendChat(&quot;userListView&quot;);</span>

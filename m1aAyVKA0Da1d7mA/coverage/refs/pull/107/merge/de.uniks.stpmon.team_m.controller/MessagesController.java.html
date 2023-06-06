@@ -91,14 +91,15 @@ public class MessagesController extends Controller {
     private boolean userChosenFromMainMenu;
     private boolean userChosenFromNewFriend;
 
+
     /**
      * MessagesController handles the chatting system with friends and groups of users. The friends and groups are
      * separated in two list view. The user can choose a friend or group to chat with.
      */
 
     @Inject
-<span class="fc" id="L100">    public MessagesController() {</span>
-<span class="fc" id="L101">    }</span>
+<span class="fc" id="L101">    public MessagesController() {</span>
+<span class="fc" id="L102">    }</span>
 
     /**
      * Initializes the MessagesController. The friends and groups list view are initialized and the content of them is set.
@@ -106,8 +107,7 @@ public class MessagesController extends Controller {
 
     @Override
     public void init() {
-<span class="fc" id="L109">        setContentFriendsAndGroupsList();</span>
-<span class="fc" id="L110">    }</span>
+<span class="fc" id="L110">        setContentFriendsAndGroupsList();}</span>
 
     /**
      * Gets a list of friends or groups and displays them in the list view.
@@ -164,7 +164,7 @@ public class MessagesController extends Controller {
                     }
 <span class="fc" id="L165">                }</span>
 <span class="pc bpc" id="L166" title="1 of 4 branches missed.">            } else if (group.members().size() == 1 &amp;&amp; group.name() == null) {</span>
-<span class="fc" id="L167">                this.groups.add(new Group(group._id(), ALONE, group.members()));</span>
+<span class="fc" id="L167">                this.groups.add(new Group(group._id(), resources.getString(&quot;ALONE&quot;), group.members()));</span>
             } else {
 <span class="fc" id="L169">                this.groups.add(group);</span>
             }
@@ -207,7 +207,7 @@ public class MessagesController extends Controller {
 
     @Override
     public String getTitle() {
-<span class="fc" id="L210">        return MESSAGES_TITLE;</span>
+<span class="fc" id="L210">        return resources.getString(&quot;MESSAGES.TITLE&quot;);</span>
     }
 
     /**
@@ -279,13 +279,13 @@ public class MessagesController extends Controller {
      */
   
     private void initListViews() {
-<span class="fc" id="L282">        userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));</span>
+<span class="fc" id="L282">        userListView.setPlaceholder(new Label(resources.getString(&quot;NO.FRIENDS.FOUND&quot;)));</span>
 <span class="fc" id="L283">        userListView.setCellFactory(param -&gt; new UserCell(preferences));</span>
 <span class="fc" id="L284">        userListView.setItems(friends);</span>
 <span class="fc" id="L285">        listenToUserUpdate(friends, userListView);</span>
 
 <span class="fc" id="L287">        groupListView.setCellFactory(param -&gt; new GroupCell());</span>
-<span class="fc" id="L288">        groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));</span>
+<span class="fc" id="L288">        groupListView.setPlaceholder(new Label(resources.getString(&quot;NO.GROUPS.FOUND&quot;)));</span>
 <span class="fc" id="L289">        groupListView.setItems(groups);</span>
 <span class="fc" id="L290">        listenToGroupChanges();</span>
 <span class="fc" id="L291">    }</span>

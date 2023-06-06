@@ -48,7 +48,7 @@ public class App extends Application {
 <span class="fc" id="L48">        stage.setTitle(GAME_NAME);</span>
 
 <span class="fc" id="L50">        stage.setScene(loadingScreen());</span>
-      
+
 <span class="fc" id="L52">        setAppIcon(stage);</span>
 <span class="fc" id="L53">        setTaskbarIcon();</span>
 <span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
@@ -116,26 +116,27 @@ public class App extends Application {
 
     private void initAndRender(Controller controller) {
 <span class="fc" id="L118">        controller.init();</span>
-<span class="fc" id="L119">        stage.getScene().setRoot(controller.render());</span>
-<span class="fc" id="L120">        stage.setTitle(GAME_NAME + &quot; - &quot; + controller.getTitle());</span>
-<span class="fc" id="L121">        stage.setWidth(controller.getWidth());</span>
-<span class="fc" id="L122">        stage.setHeight(controller.getHeight());</span>
+<span class="fc" id="L119">        controller.setApp(this);</span>
+<span class="fc" id="L120">        stage.getScene().setRoot(controller.render());</span>
+<span class="fc" id="L121">        stage.setTitle(GAME_NAME + &quot; - &quot; + controller.getTitle());</span>
+<span class="fc" id="L122">        stage.setWidth(controller.getWidth());</span>
+<span class="fc" id="L123">        stage.setHeight(controller.getHeight());</span>
 
-<span class="fc" id="L124">    }</span>
+<span class="fc" id="L125">    }</span>
 
     public Controller getController() {
-<span class="nc" id="L127">        return controller;</span>
+<span class="nc" id="L128">        return controller;</span>
     }
 
     private void cleanup() {
-<span class="nc" id="L131">        component.loginController().userStatusUpdate(USER_STATUS_OFFLINE);</span>
-<span class="nc" id="L132">        disposables.dispose();</span>
-<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (controller != null) {</span>
-<span class="nc" id="L134">            controller.destroy();</span>
-<span class="nc" id="L135">            controller = null;</span>
+<span class="nc" id="L132">        component.loginController().userStatusUpdate(USER_STATUS_OFFLINE);</span>
+<span class="nc" id="L133">        disposables.dispose();</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        if (controller != null) {</span>
+<span class="nc" id="L135">            controller.destroy();</span>
+<span class="nc" id="L136">            controller = null;</span>
         }
-<span class="nc" id="L137">        Platform.exit();</span>
-<span class="nc" id="L138">        System.exit(0);</span>
-<span class="nc" id="L139">    }</span>
+<span class="nc" id="L138">        Platform.exit();</span>
+<span class="nc" id="L139">        System.exit(0);</span>
+<span class="nc" id="L140">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
