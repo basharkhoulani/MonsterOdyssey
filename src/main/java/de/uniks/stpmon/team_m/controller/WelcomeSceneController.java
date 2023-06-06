@@ -108,7 +108,7 @@ public class WelcomeSceneController extends Controller {
                 final Alert alert = new Alert(Alert.AlertType.NONE);
                 final DialogPane dialogPane = alert.getDialogPane();
                 final ButtonType cancelButton = new ButtonType(resources.getString("CANCEL"), ButtonBar.ButtonData.APPLY);
-                final ButtonType okButton = new ButtonType(OK);
+                final ButtonType okButton = new ButtonType(resources.getString("OK"));
                 final TextField textFieldName = new TextField();
                 textFieldName.setId("nameField");
                 textFieldName.textProperty().bindBidirectional(trainerName);

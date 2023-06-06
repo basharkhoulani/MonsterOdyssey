@@ -91,6 +91,7 @@ public class MessagesController extends Controller {
     private boolean userChosenFromMainMenu;
     private boolean userChosenFromNewFriend;
 
+
     /**
      * MessagesController handles the chatting system with friends and groups of users. The friends and groups are
      * separated in two list view. The user can choose a friend or group to chat with.
@@ -106,8 +107,7 @@ public class MessagesController extends Controller {
 
     @Override
     public void init() {
-        setContentFriendsAndGroupsList();
-    }
+        setContentFriendsAndGroupsList();}
 
     /**
      * Gets a list of friends or groups and displays them in the list view.

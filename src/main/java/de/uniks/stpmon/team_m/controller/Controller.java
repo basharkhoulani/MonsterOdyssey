@@ -186,4 +186,8 @@ public abstract class Controller {
         alert.showAndWait();
     }
 
+    public ResourceBundle getResources() {
+        return resources;
+    }
+
 }

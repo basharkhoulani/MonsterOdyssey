@@ -89,7 +89,7 @@ class AccountSettingControllerTest extends ApplicationTest {
         clickOn("#saveUsernameButton");
 
         verify(usersService).updateUser("UserPatch", null, null, null, null);
-        assertEquals(USERNAME_SUCCESS_CHANGED, infoLabel.getText());
+        assertEquals("Your username has been changed successfully.", infoLabel.getText());
         assertEquals("UserPatch", usernameField.getPromptText());
     }
 
@@ -172,7 +172,7 @@ class AccountSettingControllerTest extends ApplicationTest {
         clickOn("#savePasswordButton");
 
         verify(usersService).updateUser(null, null, null, null, "UserPatch");
-        assertEquals(PASSWORD_SUCCESS_CHANGED, infoLabel.getText());
+        assertEquals("Your Password has been changed successfully.", infoLabel.getText());
     }
 
     @Test
