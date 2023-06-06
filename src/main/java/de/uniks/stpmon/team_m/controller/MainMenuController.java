@@ -22,10 +22,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.prefs.Preferences;
-import static de.uniks.stpmon.team_m.Constants.*;
+
+import static de.uniks.stpmon.team_m.Constants.DELETE_TRAINER_SUCCESS;
+import static de.uniks.stpmon.team_m.Constants.USER_STATUS_OFFLINE;
 
 public class MainMenuController extends Controller {
 

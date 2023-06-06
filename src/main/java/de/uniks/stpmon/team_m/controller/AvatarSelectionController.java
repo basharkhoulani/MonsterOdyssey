@@ -12,10 +12,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Base64;
-
 import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
