@@ -4,6 +4,8 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import de.uniks.stpmon.team_m.dto.Chunk;
+import de.uniks.stpmon.team_m.service.AreasService;
+import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -40,6 +42,10 @@ public class IngameController extends Controller {
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
+    @Inject
+    AreasService areasService;
+    @Inject
+    PresetsService presetsService;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
 
     /**
@@ -55,11 +61,10 @@ public class IngameController extends Controller {
         super.init();
         System.out.println(trainerStorageProvider.get().getRegion().map());
         List<Chunk> chunks = trainerStorageProvider.get().getRegion().map().layers().get(0).chunks();
-        for (Chunk chunk : chunks) {
-            for (int i : chunk.data()) {
-                System.out.print(i + ", ");
-            }
-        }
+        String name = trainerStorageProvider.get().getRegion().map().tilesets().get(0).source();
+        name = name.substring(name.lastIndexOf("/") + 1);
+        name = name.substring(0, name.lastIndexOf("."));
+        System.out.println(name);
     }
 
     /**

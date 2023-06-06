@@ -1,9 +1,13 @@
 package de.uniks.stpmon.team_m.service;
 
+import com.google.gson.Gson;
 import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import de.uniks.stpmon.team_m.dto.TileSet;
 import de.uniks.stpmon.team_m.rest.PresetsApiService;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.image.Image;
 import okhttp3.ResponseBody;
 
 import javax.inject.Inject;
@@ -31,6 +35,14 @@ public class PresetsService {
 
     public Observable<ResponseBody> getTileset(String filename) {
         return presetsApiService.getTileset(filename);
+    }
+
+    public Observable<Image> getTilesetImage(String filename) {
+        return presetsApiService.getTileset(filename).map(ImageProcessor::responseBodyToJavaFXImage);
+    }
+
+    public Observable<TileSet> getTilesetJson(String filename) {
+        return presetsApiService.getTileset(filename).map(responseBody -> new Gson().fromJson(responseBody.string(), TileSet.class));
     }
 
     /**

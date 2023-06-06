@@ -67,7 +67,7 @@ public class IngameTrainerSettingsController extends Controller {
     private void loadAndSetTrainerImage() {
         disposables.add(presetsService.getCharacter(trainerStorageProvider.get().getTrainer().image()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
             try {
-                trainerImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
+                trainerImage = ImageProcessor.responseBodyToJavaFXImage(responseBody);
                 trainerAvatarImageView.setImage(trainerImage);
             } catch (Exception e) {
                 this.showError(e.getMessage());
