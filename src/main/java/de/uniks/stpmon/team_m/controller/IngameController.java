@@ -3,13 +3,12 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -22,7 +21,7 @@ import java.awt.*;
 import java.util.Objects;
 import java.util.Optional;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.FX_STYLE_BORDER_COLOR_BLACK;
 
 
 public class IngameController extends Controller {
@@ -33,16 +32,13 @@ public class IngameController extends Controller {
     public Button monstersButton;
     @FXML
     public Button settingsButton;
-
-    private IngameTrainerSettingsController trainerSettingsController;
-
-    @Inject
-    Provider<MainMenuController> mainMenuControllerProvider;
-    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
-
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
-    private String regionId;
+    @Inject
+    Provider<MainMenuController> mainMenuControllerProvider;
+    @Inject
+    Provider<TrainerStorage> trainerStorageProvider;
+    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -55,8 +51,6 @@ public class IngameController extends Controller {
     @Override
     public void init() {
         super.init();
-        trainerSettingsController = ingameTrainerSettingsControllerProvider.get();
-        trainerSettingsController.init();
     }
 
     /**
@@ -150,16 +144,10 @@ public class IngameController extends Controller {
         }
     }
 
-    public void setRegion(String regionId) {
-        this.regionId = regionId;
-    }
-
-
     public void showTrainerSettings() {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
-        trainerSettingsController.setRegion(this.regionId);
         trainerSettingsDialog.setTitle(resources.getString("Trainer.Profil"));
-        trainerSettingsDialog.getDialogPane().setContent(trainerSettingsController.render());
+        trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());
         trainerSettingsDialog.getDialogPane().setExpandableContent(null);
         trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
         trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");

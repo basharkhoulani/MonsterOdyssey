@@ -7,17 +7,16 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.MESSAGEBOX_HEIGHT;
+import static de.uniks.stpmon.team_m.Constants.MESSAGEBOX_WIDTH;
 
 public class WelcomeSceneController extends Controller {
     @FXML
@@ -150,7 +149,7 @@ public class WelcomeSceneController extends Controller {
                 secondMessage.setPrefWidth(200);
             }
             case 8 -> {
-                String regionId = trainerStorageProvider.get().getRegionId();
+                String regionId = trainerStorageProvider.get().getRegion()._id();
                 disposables.add(trainersServiceProvider.get().createTrainer(
                         regionId,
                         trainerStorageProvider.get().getTrainerName(),
@@ -158,7 +157,6 @@ public class WelcomeSceneController extends Controller {
                 ).observeOn(FX_SCHEDULER).subscribe(result -> {
                             trainerStorageProvider.get().setTrainer(result);
                             IngameController ingameController = ingameControllerProvider.get();
-                            ingameController.setRegion(regionId);
                             app.show(ingameController);
                         }, error -> showError(error.getMessage())
                 ));

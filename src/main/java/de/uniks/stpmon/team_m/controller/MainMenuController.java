@@ -22,10 +22,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.prefs.Preferences;
-import static de.uniks.stpmon.team_m.Constants.*;
+
+import static de.uniks.stpmon.team_m.Constants.USER_STATUS_OFFLINE;
 
 public class MainMenuController extends Controller {
 
@@ -217,14 +219,15 @@ public class MainMenuController extends Controller {
     public void changeToIngame() {
         Region selectedRegion = (Region) regionToggleGroup.getSelectedToggle().getUserData();
         WelcomeSceneController welcomeSceneController = welcomeSceneControllerProvider.get();
-        trainerStorageProvider.get().setRegionId(selectedRegion._id());
+        trainerStorageProvider.get().setRegion(selectedRegion);
 
 
         disposables.add(trainersServiceProvider.get().getTrainers(selectedRegion._id(), null, userStorageProvider.get().get_id()).observeOn(FX_SCHEDULER).subscribe(result -> {
                     if (result.isEmpty()) {
                         app.show(welcomeSceneController);
                     } else {
-                        ingameControllerProvider.get().setRegion(selectedRegion._id());
+                        trainerStorageProvider.get().setTrainer(result.get(0));
+                        System.out.println("Trainer: " + trainerStorageProvider.get().getTrainer());
                         app.show(ingameControllerProvider.get());
                     }
                 }, error -> showError(error.getMessage())
