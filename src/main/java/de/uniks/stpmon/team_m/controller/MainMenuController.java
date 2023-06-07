@@ -22,9 +22,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.prefs.Preferences;
+
 import static de.uniks.stpmon.team_m.Constants.*;
 
 public class MainMenuController extends Controller {
@@ -225,6 +227,9 @@ public class MainMenuController extends Controller {
                         app.show(welcomeSceneController);
                     } else {
                         ingameControllerProvider.get().setRegion(selectedRegion._id());
+                        trainerStorageProvider.get().setTrainer(result.get(0));
+                        trainerStorageProvider.get().setTrainerName(result.get(0).name());
+                        trainerStorageProvider.get().setTrainerSprite(result.get(0).image());
                         app.show(ingameControllerProvider.get());
                     }
                 }, error -> showError(error.getMessage())
