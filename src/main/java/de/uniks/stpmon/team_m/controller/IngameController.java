@@ -3,7 +3,9 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Dialog;
@@ -11,11 +13,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -28,6 +33,8 @@ import static de.uniks.stpmon.team_m.Constants.*;
 
 public class IngameController extends Controller {
 
+    @FXML
+    public ImageView playerSpriteImageView;
     @FXML
     public Button helpSymbol;
     @FXML
@@ -73,20 +80,54 @@ public class IngameController extends Controller {
         return resources.getString("INGAME.TITLE");
     }
 
+
+    private void playSpriteAnimation(Image[] movementImages, Image lastImages) {
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.millis(100), e -> {
+                    // Calculate the index of the next image
+                    int currentIndex = (int) (System.currentTimeMillis() / 100 % 6);
+                    playerSpriteImageView.setImage(movementImages[currentIndex]);
+                })
+        );
+        timeline.setOnFinished(c -> playerSpriteImageView.setImage(lastImages));
+        timeline.setCycleCount(6);
+        timeline.play();
+    }
+
     /**
      * This method is used to render the In-Game screen.
      *
      * @return Parent of the In-Game screen.
      */
-
     @Override
     public Parent render() {
         final Parent parent = super.render();
+        Image[] trainerStandingDown = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "down", false);
+        Image[] trainerStandingUp = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "up", false);
+        Image[] trainerStandingLeft = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "left", false);
+        Image[] trainerStandingRight = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "right", false);
+
+        Image[] trainerWalkingUp = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "up", true);
+        Image[] trainerWalkingDown = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "down", true);
+        Image[] trainerWalkingLeft = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "left", true);
+        Image[] trainerWalkingRight = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "right", true);
+        playerSpriteImageView.setImage(trainerStandingDown[0]);
         app.getStage().getScene().setOnKeyPressed(event -> {
-            if (!(event.getCode() == PAUSE_MENU_KEY)) {
-                return;
+            if ((event.getCode() == PAUSE_MENU_KEY)) {
+                pauseGame();
             }
-            pauseGame();
+            if ((event.getCode() == KeyCode.S)) {
+                playSpriteAnimation(trainerWalkingDown, trainerStandingDown[0]);
+            }
+            if ((event.getCode() == KeyCode.W)) {
+                playSpriteAnimation(trainerWalkingUp, trainerStandingUp[0]);
+            }
+            if ((event.getCode() == KeyCode.A)) {
+                playSpriteAnimation(trainerWalkingLeft, trainerStandingLeft[0]);
+            }
+            if ((event.getCode() == KeyCode.D)) {
+                playSpriteAnimation(trainerWalkingRight, trainerStandingRight[0]);
+            }
         });
         return parent;
     }
@@ -152,7 +193,6 @@ public class IngameController extends Controller {
             app.show(mainMenuControllerProvider.get());
         }
     }
-
     public void showTrainerSettings() {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
         trainerSettingsDialog.setTitle(resources.getString("Trainer.Profil"));
@@ -162,7 +202,7 @@ public class IngameController extends Controller {
         trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");
         Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();
         popUp.setOnCloseRequest(evt ->
-            ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close()
+                ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close()
         );
         trainerSettingsDialog.showAndWait();
     }
