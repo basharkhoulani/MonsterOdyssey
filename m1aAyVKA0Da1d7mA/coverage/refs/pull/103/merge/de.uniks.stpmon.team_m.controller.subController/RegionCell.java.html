@@ -6,8 +6,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.TextAlignment;
 
-public class RegionCell extends ListCell&lt;Region&gt; {
 
+public class RegionCell extends ListCell&lt;Region&gt; {
     private final ToggleGroup regionToggleGroup;
 
     /**
@@ -23,27 +23,28 @@ public class RegionCell extends ListCell&lt;Region&gt; {
 <span class="fc" id="L23">        this.regionToggleGroup = regionToggleGroup;</span>
 <span class="fc" id="L24">    }</span>
 
+
     /**
      * The updateItem method is used to update the region cell.
      */
 
     @Override
     protected void updateItem(Region item, boolean empty) {
-<span class="fc" id="L32">        super.updateItem(item, empty);</span>
-<span class="pc bpc" id="L33" title="1 of 4 branches missed.">        if (item != null &amp;&amp; !empty) {</span>
-<span class="fc" id="L34">            final RadioButton radioButton = new RadioButton(item.name());</span>
-<span class="fc" id="L35">            radioButton.setToggleGroup(regionToggleGroup);</span>
-<span class="fc" id="L36">            radioButton.getStyleClass().add(&quot;regionCell&quot;);</span>
-<span class="fc" id="L37">            setGraphic(radioButton);</span>
-<span class="fc" id="L38">            radioButton.setTextAlignment(TextAlignment.CENTER);</span>
-<span class="fc" id="L39">            radioButton.setUserData(item);</span>
-<span class="fc bfc" id="L40" title="All 2 branches covered.">            if (this.isSelected()) {</span>
-<span class="fc" id="L41">                radioButton.setSelected(true);</span>
+<span class="fc" id="L33">        super.updateItem(item, empty);</span>
+<span class="pc bpc" id="L34" title="1 of 4 branches missed.">        if (item != null &amp;&amp; !empty) {</span>
+<span class="fc" id="L35">            final RadioButton radioButton = new RadioButton(item.name());</span>
+<span class="fc" id="L36">            radioButton.setToggleGroup(regionToggleGroup);</span>
+<span class="fc" id="L37">            radioButton.getStyleClass().add(&quot;regionCell&quot;);</span>
+<span class="fc" id="L38">            setGraphic(radioButton);</span>
+<span class="fc" id="L39">            radioButton.setTextAlignment(TextAlignment.CENTER);</span>
+<span class="fc" id="L40">            radioButton.setUserData(item);</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">            if (this.isSelected()) {</span>
+<span class="fc" id="L42">                radioButton.setSelected(true);</span>
             }
-<span class="fc" id="L43">        } else {</span>
-<span class="fc" id="L44">            setGraphic(null);</span>
-<span class="fc" id="L45">            setText(null);</span>
+<span class="fc" id="L44">        } else {</span>
+<span class="fc" id="L45">            setGraphic(null);</span>
+<span class="fc" id="L46">            setText(null);</span>
         }
-<span class="fc" id="L47">    }</span>
+<span class="fc" id="L48">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

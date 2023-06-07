@@ -2,16 +2,18 @@
 
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Locale;
 
 
-import static de.uniks.stpmon.team_m.Constants.CHANGE_LANGUAGE_TITLE;
-
-public class ChangeLanguageController extends Controller{
+public class ChangeLanguageController extends Controller {
     @FXML
     public Label changeLanguageLabel;
 
@@ -23,15 +25,14 @@ public class ChangeLanguageController extends Controller{
 
     @FXML
     public RadioButton radioButtonLanguageChinese;
-
     @FXML
     public Button applyLanguageButton;
 
     @Override
     public Parent render() {
-<span class="fc" id="L32">        final Parent parent = super.render();</span>
-<span class="fc" id="L33">        initRadioButtons();</span>
-<span class="fc" id="L34">        return parent;</span>
+<span class="fc" id="L33">        final Parent parent = super.render();</span>
+<span class="fc" id="L34">        initRadioButtons();</span>
+<span class="fc" id="L35">        return parent;</span>
     }
 
     @Inject
@@ -41,41 +42,63 @@ public class ChangeLanguageController extends Controller{
     Provider&lt;LoginController&gt; loginControllerProvider;
 
     @Inject
-<span class="fc" id="L44">    public ChangeLanguageController(){</span>
+<span class="fc" id="L45">    public ChangeLanguageController() {</span>
 
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L47">    }</span>
 
     @Override
     public String getTitle() {
-<span class="nc" id="L50">        return CHANGE_LANGUAGE_TITLE;</span>
+<span class="nc" id="L51">        return resources.getString(&quot;CHANGE.LANGUAGE.TITLE&quot;);</span>
     }
 
     private void initRadioButtons() {
-<span class="fc" id="L54">        ToggleGroup languageToggleGroup = new ToggleGroup();</span>
-<span class="fc" id="L55">        radioButtonLanguageEnglish.setToggleGroup(languageToggleGroup);</span>
-<span class="fc" id="L56">        radioButtonLanguageEnglish.setSelected(true);</span>
+<span class="fc" id="L55">        ToggleGroup languageToggleGroup = new ToggleGroup();</span>
+<span class="fc" id="L56">        radioButtonLanguageEnglish.setToggleGroup(languageToggleGroup);</span>
 <span class="fc" id="L57">        radioButtonLanguageGerman.setToggleGroup(languageToggleGroup);</span>
 <span class="fc" id="L58">        radioButtonLanguageChinese.setToggleGroup(languageToggleGroup);</span>
-<span class="fc" id="L59">    }</span>
+<span class="fc" id="L59">        Locale locale = resources.getLocale();</span>
+<span class="pc bpc" id="L60" title="3 of 4 branches missed.">        switch (locale.toLanguageTag()) {</span>
+            case &quot;de&quot;:
+<span class="nc" id="L62">                radioButtonLanguageGerman.setSelected(true);</span>
+<span class="nc" id="L63">                break;</span>
+            case &quot;en&quot;:
+<span class="fc" id="L65">                radioButtonLanguageEnglish.setSelected(true);</span>
+<span class="fc" id="L66">                break;</span>
+            case &quot;zh&quot;:
+<span class="nc" id="L68">                radioButtonLanguageChinese.setSelected(true);</span>
+                break;
+        }
+<span class="fc" id="L71">    }</span>
 
-    public void applyLanguage(){
-<span class="fc" id="L62">        Stage stage = (Stage) applyLanguageButton.getScene().getWindow();</span>
-<span class="fc" id="L63">        stage.close();</span>
-<span class="fc" id="L64">    }</span>
-
-
+    public void applyLanguage() {
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (radioButtonLanguageEnglish.isSelected()) {</span>
+<span class="nc" id="L75">            setLanguageEnglish();</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        } else if (radioButtonLanguageGerman.isSelected()) {</span>
+<span class="nc" id="L77">            setLanguageGerman();</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        } else if (radioButtonLanguageChinese.isSelected()) {</span>
+<span class="nc" id="L79">            setLanguageChinese();</span>
+        }
+<span class="nc" id="L81">        Stage stage = (Stage) applyLanguageButton.getScene().getWindow();</span>
+<span class="nc" id="L82">        stage.close();</span>
+<span class="nc" id="L83">    }</span>
 
     public void setLanguageEnglish() {
-
-<span class="nc" id="L70">    }</span>
+<span class="nc" id="L86">        setLanguage(Locale.ENGLISH);</span>
+<span class="nc" id="L87">    }</span>
 
     public void setLanguageGerman() {
-
-<span class="nc" id="L74">    }</span>
+<span class="nc" id="L90">        setLanguage(Locale.GERMAN);</span>
+<span class="nc" id="L91">    }</span>
 
     public void setLanguageChinese() {
+<span class="nc" id="L94">        setLanguage(Locale.SIMPLIFIED_CHINESE);</span>
+<span class="nc" id="L95">    }</span>
 
-<span class="nc" id="L78">    }</span>
+
+    private void setLanguage(Locale locale) {
+<span class="nc" id="L99">        preferences.put(&quot;locale&quot;, locale.toLanguageTag());</span>
+<span class="nc" id="L100">        toReload.reload(toReload);</span>
+<span class="nc" id="L101">    }</span>
 }
 
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

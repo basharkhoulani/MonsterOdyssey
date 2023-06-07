@@ -80,7 +80,7 @@ public class IngameTrainerSettingsController extends Controller {
     public void onDeleteTrainerButtonClick() {
 <span class="nc" id="L81">        final Alert alert = new Alert(Alert.AlertType.WARNING);</span>
 <span class="nc" id="L82">        final DialogPane dialogPane = alert.getDialogPane();</span>
-<span class="nc" id="L83">        final ButtonType cancelButton = new ButtonType(CANCEL);</span>
+<span class="nc" id="L83">        final ButtonType cancelButton = new ButtonType(resources.getString(&quot;Cancel&quot;));</span>
 <span class="nc" id="L84">        final ButtonType okButton = alert.getButtonTypes().stream()</span>
 <span class="nc" id="L85">                        .filter(buttonType -&gt; buttonType.getButtonData().isDefaultButton()).findFirst().orElse(null);</span>
 
@@ -89,48 +89,45 @@ public class IngameTrainerSettingsController extends Controller {
 <span class="nc" id="L89">        final Button cancelButton2 = (Button) alert.getDialogPane().lookupButton(cancelButton);</span>
 <span class="nc" id="L90">        final Button okButton2 = (Button) alert.getDialogPane().lookupButton(okButton);</span>
 <span class="nc" id="L91">        okButton2.setOnAction(event -&gt; onCancelButtonClick());</span>
-<span class="nc" id="L92">        cancelButton2.getStyleClass().add(WHITE_BUTTON);</span>
-<span class="nc" id="L93">        okButton2.getStyleClass().add(WHITE_BUTTON);</span>
 
-<span class="nc" id="L95">        alert.setTitle(DELETE_TRAINER_ALERT);</span>
-<span class="nc" id="L96">        dialogPane.getStyleClass().add(ALERT_DIALOG_NAME);</span>
+<span class="nc" id="L93">        alert.setTitle(resources.getString(&quot;Delete.your.trainer&quot;));</span>
 
-<span class="nc" id="L98">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
-<span class="nc bnc" id="L99" title="All 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == cancelButton) {</span>
+<span class="nc" id="L95">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+<span class="nc bnc" id="L96" title="All 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == cancelButton) {</span>
+<span class="nc" id="L97">            alert.close();</span>
+<span class="nc bnc" id="L98" title="All 4 branches missed.">        } else if (result.isPresent() &amp;&amp; result.get() == okButton) {</span>
+<span class="nc" id="L99">            app.show(mainMenuControllerProvider.get());</span>
 <span class="nc" id="L100">            alert.close();</span>
-<span class="nc bnc" id="L101" title="All 4 branches missed.">        } else if (result.isPresent() &amp;&amp; result.get() == okButton) {</span>
-<span class="nc" id="L102">            app.show(mainMenuControllerProvider.get());</span>
-<span class="nc" id="L103">            alert.close();</span>
         }
-<span class="nc" id="L105">    }</span>
+<span class="nc" id="L102">    }</span>
 
     public void setRegion(String regionId) {
-<span class="nc" id="L108">        this.regionId = regionId;</span>
-<span class="nc" id="L109">        loadTrainer();</span>
-<span class="nc" id="L110">    }</span>
+<span class="nc" id="L105">        this.regionId = regionId;</span>
+<span class="nc" id="L106">        loadTrainer();</span>
+<span class="nc" id="L107">    }</span>
 
     public void loadTrainer() {
-<span class="nc bnc" id="L113" title="All 2 branches missed.">        if (this.regionId != null) {</span>
-<span class="nc" id="L114">            disposables.add(trainersService.getTrainers(this.regionId, null, usersStorage.get_id()).observeOn(FX_SCHEDULER).subscribe(trainers -&gt; {</span>
-<span class="nc bnc" id="L115" title="All 2 branches missed.">                if (!trainers.isEmpty()) {</span>
-<span class="nc" id="L116">                    trainer = trainers.get(0);</span>
-<span class="nc" id="L117">                    loadAndSetTrainerImage();</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        if (this.regionId != null) {</span>
+<span class="nc" id="L111">            disposables.add(trainersService.getTrainers(this.regionId, null, usersStorage.get_id()).observeOn(FX_SCHEDULER).subscribe(trainers -&gt; {</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">                if (!trainers.isEmpty()) {</span>
+<span class="nc" id="L113">                    trainer = trainers.get(0);</span>
+<span class="nc" id="L114">                    loadAndSetTrainerImage();</span>
                 }
-<span class="nc" id="L119">            }, error -&gt; this.showError(error.getMessage())));</span>
+<span class="nc" id="L116">            }, error -&gt; this.showError(error.getMessage())));</span>
         }
-<span class="nc" id="L121">    }</span>
+<span class="nc" id="L118">    }</span>
 
 
     private void loadAndSetTrainerImage() {
-<span class="nc" id="L125">        disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody -&gt;  {</span>
+<span class="nc" id="L122">        disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody -&gt;  {</span>
             try {
-<span class="nc" id="L127">                trainerImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);</span>
-<span class="nc" id="L128">                trainerAvatarImageView.setImage(trainerImage);</span>
+<span class="nc" id="L124">                trainerImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);</span>
+<span class="nc" id="L125">                trainerAvatarImageView.setImage(trainerImage);</span>
             }
-<span class="nc" id="L130">            catch (Exception e) {</span>
-<span class="nc" id="L131">                this.showError(e.getMessage());</span>
-<span class="nc" id="L132">            }</span>
-<span class="nc" id="L133">        }, error -&gt; this.showError(error.getMessage())));</span>
-<span class="nc" id="L134">    }</span>
+<span class="nc" id="L127">            catch (Exception e) {</span>
+<span class="nc" id="L128">                this.showError(e.getMessage());</span>
+<span class="nc" id="L129">            }</span>
+<span class="nc" id="L130">        }, error -&gt; this.showError(error.getMessage())));</span>
+<span class="nc" id="L131">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

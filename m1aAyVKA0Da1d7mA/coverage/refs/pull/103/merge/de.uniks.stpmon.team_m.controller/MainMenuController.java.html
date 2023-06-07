@@ -117,7 +117,7 @@ public class MainMenuController extends Controller {
 
     @Override
     public String getTitle() {
-<span class="fc" id="L120">        return MAIN_MENU_TITLE;</span>
+<span class="fc" id="L120">        return resources.getString(&quot;MAIN.MENU.TITLE&quot;);</span>
     }
 
     /**
@@ -162,7 +162,7 @@ public class MainMenuController extends Controller {
 
     private void initFriendslist() {
 <span class="fc" id="L164">        friendsListView.setCellFactory(param -&gt; new MainMenuUserCell(preferencesProvider.get(), friendSettingsControllerProvider));</span>
-<span class="fc" id="L165">        friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));</span>
+<span class="fc" id="L165">        friendsListView.setPlaceholder(new Label(resources.getString(&quot;NO.FRIENDS.FOUND&quot;)));</span>
 <span class="fc" id="L166">        listenToUserUpdate(friends, friendsListView);</span>
 <span class="fc" id="L167">        friendsListView.setOnMouseClicked(event -&gt; {</span>
 <span class="pc bpc" id="L168" title="1 of 2 branches missed.">            if (!friendsListView.getSelectionModel().isEmpty()) {</span>
