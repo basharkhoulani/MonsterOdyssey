@@ -91,6 +91,7 @@ public class MessagesController extends Controller {
     private boolean userChosenFromMainMenu;
     private boolean userChosenFromNewFriend;
 
+
     /**
      * MessagesController handles the chatting system with friends and groups of users. The friends and groups are
      * separated in two list view. The user can choose a friend or group to chat with.
@@ -106,8 +107,7 @@ public class MessagesController extends Controller {
 
     @Override
     public void init() {
-        setContentFriendsAndGroupsList();
-    }
+        setContentFriendsAndGroupsList();}
 
     /**
      * Gets a list of friends or groups and displays them in the list view.
@@ -164,7 +164,7 @@ public class MessagesController extends Controller {
                     }
                 }
             } else if (group.members().size() == 1 && group.name() == null) {
-                this.groups.add(new Group(group._id(), ALONE, group.members()));
+                this.groups.add(new Group(group._id(), resources.getString("ALONE"), group.members()));
             } else {
                 this.groups.add(group);
             }
@@ -207,7 +207,7 @@ public class MessagesController extends Controller {
 
     @Override
     public String getTitle() {
-        return MESSAGES_TITLE;
+        return resources.getString("MESSAGES.TITLE");
     }
 
     /**
@@ -279,13 +279,13 @@ public class MessagesController extends Controller {
      */
   
     private void initListViews() {
-        userListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
+        userListView.setPlaceholder(new Label(resources.getString("NO.FRIENDS.FOUND")));
         userListView.setCellFactory(param -> new UserCell(preferences));
         userListView.setItems(friends);
         listenToUserUpdate(friends, userListView);
 
         groupListView.setCellFactory(param -> new GroupCell());
-        groupListView.setPlaceholder(new Label(NO_GROUPS_FOUND));
+        groupListView.setPlaceholder(new Label(resources.getString("NO.GROUPS.FOUND")));
         groupListView.setItems(groups);
         listenToGroupChanges();
     }

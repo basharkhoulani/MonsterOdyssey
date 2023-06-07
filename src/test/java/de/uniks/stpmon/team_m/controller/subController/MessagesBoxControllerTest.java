@@ -23,6 +23,8 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.HTTP_403;
 import static de.uniks.stpmon.team_m.Constants.HTTP_409;
@@ -58,6 +60,8 @@ class MessagesBoxControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        messagesBoxController.setValues(bundle,null,null,messagesBoxController,app);
         EventListener eventListener = mock(EventListener.class);
         Message updatedMessage = new Message("2023-05-30T12:02:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863",
                 "6477bc8f27adf9b5b978401e", "Test1Test2");

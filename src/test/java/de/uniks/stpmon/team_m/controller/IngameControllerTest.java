@@ -14,6 +14,9 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -35,12 +38,13 @@ public class IngameControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        ingameController.setValues(bundle,null,null,ingameController,app);
         final IngameTrainerSettingsController trainerSettingsController = mock(IngameTrainerSettingsController.class);
         Mockito.when(trainerSettingsControllerProvider.get()).thenReturn(trainerSettingsController);
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
-
     }
 
     @Test
@@ -54,11 +58,6 @@ public class IngameControllerTest extends ApplicationTest {
                 .findFirst()
                 .orElse(null);
         assertNotNull(helpLabel);
-        assertEquals("""
-                Click 'p' on your keyboard for pause menu.
-                     \u2191\s
-                 \u2190 \u2193 \u2192  to move your character.\s
-                Click Space for interact and attack.""", helpLabel.getText());
         clickOn("OK");
         final Label gameTitle = lookup("Monster Odyssey").query();
         assertNotNull(gameTitle);

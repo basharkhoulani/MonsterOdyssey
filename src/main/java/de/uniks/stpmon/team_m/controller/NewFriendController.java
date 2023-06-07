@@ -60,7 +60,7 @@ public class NewFriendController extends Controller {
 
     @Override
     public String getTitle() {
-        return NEW_FRIEND_TITLE;
+        return resources.getString("NEW.FRIEND.TITLE");
     }
 
     /**
@@ -95,20 +95,20 @@ public class NewFriendController extends Controller {
             return;
         }
         if (searchTextField.getText().equals(userStorageProvider.get().getName())) {
-            searchTextField.setPromptText(YOURSELF);
+            searchTextField.setPromptText(resources.getString("YOURSELF"));
             return;
         }
         for (User user : allUsers) {
             if (user.name().equals(searchTextField.getText())) {
                 if (userStorageProvider.get().getFriends().contains(user._id())) {
-                    searchTextField.setPromptText(FRIEND_ALREADY_ADDED);
+                    searchTextField.setPromptText(resources.getString("FRIEND.ALREADY.ADDED"));
                     searchTextField.clear();
                     return;
                 }
                 userStorageProvider.get().addFriend(user._id());
                 disposables.add(usersService.updateUser(null, null, null, userStorageProvider.get().getFriends(), null).observeOn(FX_SCHEDULER).subscribe(user1 -> {
                     createPrivateGroup(user, false);
-                    searchTextField.setPromptText(FRIEND_ADDED);
+                    searchTextField.setPromptText(resources.getString("FRIEND.ADDED"));
                 }, error -> showError(error.getMessage())));
                 break;
             }
@@ -123,7 +123,7 @@ public class NewFriendController extends Controller {
     public void sendMessage() {
         for (User user : allUsers) {
             if (!user.name().equals(searchTextField.getText())) {
-                searchTextField.setPromptText(FRIEND_NOT_FOUND);
+                searchTextField.setPromptText(resources.getString("FRIEND.NOT.FOUND"));
             }
             if (user.name().equals(searchTextField.getText())) {
                 createPrivateGroup(user, true);

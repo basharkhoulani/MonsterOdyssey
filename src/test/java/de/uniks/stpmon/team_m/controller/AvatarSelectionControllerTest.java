@@ -21,7 +21,9 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
 import java.io.File;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 
 import static org.mockito.Mockito.mock;
@@ -42,6 +44,8 @@ public class AvatarSelectionControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        avatarSelectionController.setValues(bundle,null,null,avatarSelectionController,app);
         app.start(stage);
         app.show(avatarSelectionController);
         stage.requestFocus();

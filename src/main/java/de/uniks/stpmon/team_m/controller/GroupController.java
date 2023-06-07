@@ -106,7 +106,7 @@ public class GroupController extends Controller {
     private void initForeignListView() {
         foreignListView.setSelectionModel(null);
         foreignListView.setFocusModel(null);
-        foreignListView.setPlaceholder(new Label(NO_USERS_ADDED_TO_GROUP));
+        foreignListView.setPlaceholder(new Label(resources.getString("NO.USERS.ADDED.TO.GROUP")));
         foreignListView.setCellFactory(friendsListView.getCellFactory());
         foreignListView.setItems(foreign);
     }
@@ -118,7 +118,7 @@ public class GroupController extends Controller {
     private void initFriendsListView() {
         friendsListView.setSelectionModel(null);
         friendsListView.setFocusModel(null);
-        friendsListView.setPlaceholder(new Label(NO_FRIENDS_FOUND));
+        friendsListView.setPlaceholder(new Label(resources.getString("NO.FRIENDS.FOUND")));
         friendsListView.setCellFactory(param -> new GroupUserCell(preferences, newGroupMembers, friendsListView,
                 foreignListView, friends));
         friendsListView.setItems(friends);
@@ -130,7 +130,7 @@ public class GroupController extends Controller {
      */
 
     private void initEditGroupView() {
-        TITLE = EDIT_GROUP_TITLE;
+        TITLE = resources.getString("EDIT.GROUP.TITLE");
         disposables.add(usersService.getUsers(groupStorageProvider.get().getMembers(), null).observeOn(FX_SCHEDULER)
                 .doOnNext(newGroupMembers::setAll)
                 .flatMap(users -> usersService.getUsers(userStorage.get().getFriends(), null).observeOn(FX_SCHEDULER))
@@ -164,7 +164,7 @@ public class GroupController extends Controller {
      */
 
     private void initNewGroupView() {
-        TITLE = NEW_GROUP_TITLE;
+        TITLE = resources.getString("NEW.GROUP.TITLE");
         final List<String> friendsByID = userStorage.get().getFriends();
         if (!friendsByID.isEmpty()) {
             disposables.add(usersService.getUsers(friendsByID, null).observeOn(FX_SCHEDULER).subscribe(users -> {
@@ -187,7 +187,7 @@ public class GroupController extends Controller {
         if (groupId.equals(EMPTY_STRING)) {
             deleteGroupButton.setVisible(false);
         } else {
-            groupNameInput.setPromptText(CHANGE_GROUP);
+            groupNameInput.setPromptText(resources.getString("CHANGE.GROUP"));
             groupNameInput.setText(groupStorageProvider.get().getName());
         }
       
@@ -211,8 +211,8 @@ public class GroupController extends Controller {
      */
 
     public void deleteGroup() {
-        Alert alert = new Alert(Alert.AlertType.WARNING, DELETE_WARNING, ButtonType.YES, ButtonType.NO);
-        alert.setTitle(SURE);
+        Alert alert = new Alert(Alert.AlertType.WARNING, resources.getString("DELETE.WARNING"), ButtonType.YES, ButtonType.NO);
+        alert.setTitle(resources.getString("SURE"));
         alert.setHeaderText(null);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.YES) {
