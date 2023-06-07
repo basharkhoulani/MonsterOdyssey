@@ -103,6 +103,13 @@ public class IngameController extends Controller {
         return parent;
     }
 
+    /**
+     * loadMap is used to load the map of the current area, given a Tiled Map. It loads every image of every tileset, then
+     * calls afterAllTileSetsLoaded to render the map. It also sets the size of the stage to the size of the map.
+     *
+     * @param map Tiled Map of the current area.
+     */
+
     private void loadMap(Map map) {
         tileSetImages.clear();
         for (TileSet tileSet : map.tilesets()) {
@@ -116,6 +123,10 @@ public class IngameController extends Controller {
         app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE));
     }
 
+    /**
+     * loadPlayer is used to load the player on the map. It loads the image of the player and sets its position.
+     */
+
     private void loadPlayer() {
         final Trainer trainer = trainerStorageProvider.get().getTrainer();
         Image image = new Image(Objects.requireNonNull(App.class.getResource("images/character.png")).toString());
@@ -124,6 +135,13 @@ public class IngameController extends Controller {
         imageView.setTranslateY(trainer.y() * TILE_SIZE);
         ingamePane.getChildren().add(imageView);
     }
+
+    /**
+     * afterAllTileSetsLoaded is used to render the map. It renders every chunk of every layer of every tileset. After
+     * rendering the map, it calls loadPlayer to load the player on the map.
+     *
+     * @param map Tiled Map of the current area.
+     */
 
     private void afterAllTileSetsLoaded(Map map) {
         if (tileSetImages.size() == map.tilesets().size()) {
@@ -135,19 +153,39 @@ public class IngameController extends Controller {
         }
     }
 
+    /**
+     * renderMap is used to render the map. It renders every chunk of every layer of the map. It skips every layer that
+     * is not a tilelayer. It calls renderChunk to render every chunk.
+     *
+     * @param map              Tiled Map of the current area.
+     * @param image            Image of the current tileset.
+     * @param tileSet          Current tileset.
+     * @param multipleTileSets Boolean that is true if there are multiple tilesets.
+     */
+
     private void renderMap(Map map, Image image, TileSet tileSet, boolean multipleTileSets) {
-        int tilesPerRow = (int) (image.getWidth() / TILE_SIZE);
         for (Layer layer : map.layers()) {
             if (!layer.type().equals("tilelayer")) {
                 continue;
             }
             for (Chunk chunk : layer.chunks()) {
-                renderChunk(map, image, tileSet, multipleTileSets, tilesPerRow, chunk);
+                renderChunk(map, image, tileSet, multipleTileSets, chunk);
             }
         }
     }
 
-    private void renderChunk(Map map, Image image, TileSet tileSet, boolean multipleTileSets, int tilesPerRow, Chunk chunk) {
+    /**
+     * renderChunk is used to render a chunk of the map. It renders every tile of the chunk. It skips every tile that
+     * is not in the current tileset. It calls extractTile to extract the image of the tile.
+     *
+     * @param map              Tiled Map of the current area.
+     * @param image            Image of the current tileset.
+     * @param tileSet          Current tileset.
+     * @param multipleTileSets Boolean that is true if there are multiple tilesets.
+     * @param chunk            Current chunk.
+     */
+
+    private void renderChunk(Map map, Image image, TileSet tileSet, boolean multipleTileSets, Chunk chunk) {
         for (int y = 0; y < chunk.height(); y++) {
             for (int x = 0; x < chunk.width(); x++) {
                 int tileId = chunk.data().get(y * chunk.width() + x);
@@ -161,14 +199,27 @@ public class IngameController extends Controller {
                 if (tilesImages.containsKey(tileId)) {
                     imageView = tilesImages.get(tileId);
                 } else {
-                    imageView = extractTile(image, tileSet, tilesPerRow, chunk, y, x, tileId);
+                    imageView = extractTile(image, tileSet, chunk, y, x, tileId);
                 }
                 ingamePane.getChildren().add(imageView);
             }
         }
     }
 
-    private ImageView extractTile(Image image, TileSet tileSet, int tilesPerRow, Chunk chunk, int y, int x, int tileId) {
+    /**
+     * extractTile is used to extract the image of a tile. It extracts the image of the tile from the image of the tileset.
+     *
+     * @param image   Image of the current tileset.
+     * @param tileSet Current tileset.
+     * @param chunk   Current chunk.
+     * @param y       Y coordinate of the tile.
+     * @param x       X coordinate of the tile.
+     * @param tileId  ID of the tile.
+     * @return ImageView of the tile.
+     */
+
+    private ImageView extractTile(Image image, TileSet tileSet, Chunk chunk, int y, int x, int tileId) {
+        int tilesPerRow = (int) (image.getWidth() / TILE_SIZE);
         int tileX = ((tileId - tileSet.firstgid()) % tilesPerRow) * TILE_SIZE;
         int tileY = ((tileId - tileSet.firstgid()) / tilesPerRow) * TILE_SIZE;
         WritableImage writableImage = new WritableImage(image.getPixelReader(), tileX, tileY, TILE_SIZE, TILE_SIZE);
@@ -178,6 +229,15 @@ public class IngameController extends Controller {
         return imageView;
     }
 
+    /**
+     * checkIfNotInTileSet is used to check if a tile is not in the current tileset.
+     *
+     * @param map     Tiled Map of the current area.
+     * @param tileSet Current tileset.
+     * @param tileId  ID of the tile.
+     * @return Boolean that is true if the tile is not in the current tileset.
+     */
+
     private boolean checkIfNotInTileSet(Map map, TileSet tileSet, int tileId) {
         int tileSetIndex = map.tilesets().indexOf(tileSet);
         if (tileSetIndex < map.tilesets().size() - 1) {
@@ -185,6 +245,13 @@ public class IngameController extends Controller {
             return tileId >= nextTileSet.firstgid();
         } else return tileId < tileSet.firstgid();
     }
+
+    /**
+     * getFileName is used to get the name of the file.
+     *
+     * @param name Name of the file.
+     * @return Name of the file.
+     */
 
     private static String getFileName(String name) {
         name = name.substring(name.lastIndexOf("/") + 1);
