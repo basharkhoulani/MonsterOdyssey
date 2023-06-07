@@ -5,14 +5,8 @@ import de.uniks.stpmon.team_m.controller.subController.MainMenuUserCell;
 import de.uniks.stpmon.team_m.controller.subController.RegionCell;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.User;
-import de.uniks.stpmon.team_m.service.AuthenticationService;
-import de.uniks.stpmon.team_m.service.RegionsService;
-import de.uniks.stpmon.team_m.service.TrainersService;
-import de.uniks.stpmon.team_m.service.UsersService;
-import de.uniks.stpmon.team_m.utils.FriendListUtils;
-import de.uniks.stpmon.team_m.utils.GroupStorage;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
-import de.uniks.stpmon.team_m.utils.UserStorage;
+import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.utils.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -77,6 +71,9 @@ public class MainMenuController extends Controller {
     Provider<TrainersService> trainersServiceProvider;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
+    @Inject
+    Provider<PresetsService> presetsServiceProvider;
+
     private final ObservableList<Region> regions = FXCollections.observableArrayList();
     private final ObservableList<User> friends = FXCollections.observableArrayList();
     private ToggleGroup regionToggleGroup;
@@ -227,7 +224,10 @@ public class MainMenuController extends Controller {
                         trainerStorageProvider.get().setTrainer(result.get(0));
                         trainerStorageProvider.get().setTrainerName(result.get(0).name());
                         trainerStorageProvider.get().setTrainerSprite(result.get(0).image());
-                        app.show(ingameControllerProvider.get());
+                        disposables.add(presetsServiceProvider.get().getCharacter(result.get(0).image()).observeOn(FX_SCHEDULER).subscribe(response -> {
+                            trainerStorageProvider.get().setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
+                            app.show(ingameControllerProvider.get());
+                        }));
                     }
                 }, error -> showError(error.getMessage())
         ));
