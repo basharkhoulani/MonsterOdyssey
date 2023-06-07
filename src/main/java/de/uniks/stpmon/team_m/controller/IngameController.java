@@ -80,7 +80,11 @@ public class IngameController extends Controller {
         return resources.getString("INGAME.TITLE");
     }
 
-
+    /**
+     * This method plays a timeline animation for the trainer character of the given
+     * @param movementImages and displays the
+     * @param lastImages after the animation has finished.
+     */
     private void playSpriteAnimation(Image[] movementImages, Image lastImages) {
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.millis(100), e -> {
