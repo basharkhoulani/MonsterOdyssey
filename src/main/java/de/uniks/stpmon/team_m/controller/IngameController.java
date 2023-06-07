@@ -5,7 +5,6 @@ import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -34,15 +33,16 @@ public class IngameController extends Controller {
     public Button monstersButton;
     @FXML
     public Button settingsButton;
-    @Inject
-    Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
+
+    private IngameTrainerSettingsController trainerSettingsController;
+
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
 
-    public String regionId;
-
-    public IngameTrainerSettingsController trainerSettingsController;
+    @Inject
+    Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
+    private String regionId;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -157,10 +157,9 @@ public class IngameController extends Controller {
 
     public void showTrainerSettings() {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
-        ingameTrainerSettingsControllerProvider.get().setApp(this.app);
-        ingameTrainerSettingsControllerProvider.get().setRegion(this.regionId);
-        trainerSettingsDialog.setTitle("Trainer.Profil");
-        trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());
+        trainerSettingsController.setRegion(this.regionId);
+        trainerSettingsDialog.setTitle(resources.getString("Trainer.Profil"));
+        trainerSettingsDialog.getDialogPane().setContent(trainerSettingsController.render());
         trainerSettingsDialog.getDialogPane().setExpandableContent(null);
         trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
         trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");

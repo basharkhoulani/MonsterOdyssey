@@ -69,17 +69,6 @@ public class Constants {
 
     // INGAME
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
-    public static final String INGAME_TITLE = "Ingame";
-    public static final String FIRST_HELP = "Click 'p' on your keyboard for pause menu.\n";
-    public static final String SECOND_HELP = "     \u2191 \n \u2190 \u2193 \u2192  to move your character. \n";
-    public static final String THIRD_HELP = "Click Space for interact and attack.";
-    public static final String HELP_LABEL = FIRST_HELP + SECOND_HELP + THIRD_HELP;
-    public static final String RESUME_BUTTON_LABEL = "Resume Game";
-    public static final String SAVE_GAME_AND_LEAVE_BUTTON_LABEL = "Save Game & Leave";
-    public static final String PAUSE_MENU_TITLE = "Pause Menu";
-    public static final String PAUSE_MENU_LABEL = "What do you want to do?";
-    public static final String DELETE_TRAINER_TEXT = "Delete ";
-    public static final String DELETE_TRAINER_SUCCESS = "Trainer Account delete successfully";
 
     // Error messages
     public static final String HTTP_400 = "400";
@@ -91,26 +80,6 @@ public class Constants {
     public static final String UNKNOWN_USER = "Unknown";
 
     // Welcome Scene
-    public static final String FIRST_MESSAGE = "Welcome to Monster Odyssey!";
-    public static final String SECOND_MESSAGE = "Welcome Aboard.";
-    public static final String THIRD_MESSAGE = "We are the crew of this ship.";
-    public static final String FOURTH_MESSAGE = "My name is James.";
-    public static final String FIFTH_MESSAGE = "And my name is Henry!";
-    public static final String SIXTH_MESSAGE = "Now then, we'll need to look up your application.";
-    public static final String SEVENTH_MESSAGE = "Can we have your name?";
-    public static final String EIGHTH_MESSAGE = "Hello. Next, we 'd like to take a picture of you";
-    public static final String NINTH_MESSAGE = "Take as much time as you want to get dressed up for it.";
-    public static final String TENTH_MESSAGE = "Now it's time to start your Journey";
-    public static final String ELEVENTH_MESSAGE = "See you next time!";
-
-
-    public static final String DELETE_TRAINER_ALERT = "Delete Trainer";
-    public static final String WELCOME_MESSAGE_STYLE = "welcomeMessage";
-    public static final String WELCOME_SCENE_BUTTON = "welcomeSceneButton";
-    public static final String WHITE_BUTTON = "whiteButton";
-    public static final String ALERT_DIALOG_NAME = "alertDialogName";
-    public static final String NAME_ALERT_TITLE = "Name?";
-
     public static final int MESSAGEBOX_HEIGHT = 45;
     public static final int MESSAGEBOX_WIDTH = 170;
 
