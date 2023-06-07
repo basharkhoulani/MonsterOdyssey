@@ -33,7 +33,7 @@ public class CharacterSelectionController extends Controller {
     @FXML
     public RadioButton character2RadioButton;
     public ToggleGroup selectCharacter;
-    public String selectedCharacter = PREMADE_CHARACTER_1;
+    public String selectedCharacter = PREMADE_CHARACTERS[0];
     @Inject
     Provider<WelcomeSceneController> welcomeSceneControllerProvider;
     @Inject
@@ -61,8 +61,8 @@ public class CharacterSelectionController extends Controller {
 
         character1RadioButton.setSelected(true);
 
-        character1ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(CHARACTER_1)).toString()));
-        character2ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(CHARACTER_2)).toString()));
+        character1ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(PREMADE_CHARACTERS[0])).toString()));
+        character2ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(PREMADE_CHARACTERS[1])).toString()));
 
         return parent;
     }
@@ -71,13 +71,13 @@ public class CharacterSelectionController extends Controller {
      * This method selects the first character.
      */
     public void selectCharacter1() {
-        selectedCharacter = PREMADE_CHARACTER_1;
+        selectedCharacter = PREMADE_CHARACTERS[0];
     }
 
     /**
      * This method selects the second character.
      */
     public void selectCharacter2() {
-        selectedCharacter = PREMADE_CHARACTER_2;
+        selectedCharacter = PREMADE_CHARACTERS[0];
     }
 }

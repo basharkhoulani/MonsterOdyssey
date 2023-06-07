@@ -217,14 +217,16 @@ public class MainMenuController extends Controller {
     public void changeToIngame() {
         Region selectedRegion = (Region) regionToggleGroup.getSelectedToggle().getUserData();
         WelcomeSceneController welcomeSceneController = welcomeSceneControllerProvider.get();
-        trainerStorageProvider.get().setRegionId(selectedRegion._id());
+        trainerStorageProvider.get().setRegion(selectedRegion);
 
 
         disposables.add(trainersServiceProvider.get().getTrainers(selectedRegion._id(), null, userStorageProvider.get().get_id()).observeOn(FX_SCHEDULER).subscribe(result -> {
                     if (result.isEmpty()) {
                         app.show(welcomeSceneController);
                     } else {
-                        ingameControllerProvider.get().setRegion(selectedRegion._id());
+                        trainerStorageProvider.get().setTrainer(result.get(0));
+                        trainerStorageProvider.get().setTrainerName(result.get(0).name());
+                        trainerStorageProvider.get().setTrainerSprite(result.get(0).image());
                         app.show(ingameControllerProvider.get());
                     }
                 }, error -> showError(error.getMessage())

@@ -1,13 +1,18 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import com.sun.javafx.collections.ObservableListWrapper;
+import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.RegionsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -16,29 +21,33 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 
 public class IngameTrainerSettingsController extends Controller {
     @FXML
     public ImageView trainerAvatarImageView;
-
     @FXML
     public Button cancelButton;
-
     @FXML
     public Button deleteTrainerButton;
 
     @Inject
     public PresetsService presetsService;
-
     @Inject
     public RegionsService regionsService;
-
     @Inject
     public TrainersService trainersService;
 
     @Inject
+    public Provider<TrainerStorage> trainerStorageProvider;
+    @Inject
     public UserStorage usersStorage;
+
     private String regionId;
     protected final CompositeDisposable disposables = new CompositeDisposable();
     private Trainer trainer;
@@ -56,7 +65,9 @@ public class IngameTrainerSettingsController extends Controller {
 
     @Override
     public Parent render() {
-        return super.render();
+        Parent parent = super.render();
+        loadAndSetTrainerImage();
+        return parent;
     }
 
     public void onCancelButtonClick() {
@@ -67,32 +78,11 @@ public class IngameTrainerSettingsController extends Controller {
         // TODO: show alert dialog
     }
 
-    public void setRegion(String regionId) {
-        this.regionId = regionId;
-        loadTrainer();
-    }
-
-    public void loadTrainer() {
-        if (this.regionId != null) {
-            disposables.add(trainersService.getTrainers(this.regionId, null, usersStorage.get_id()).observeOn(FX_SCHEDULER).subscribe(trainers -> {
-                if (!trainers.isEmpty()) {
-                    trainer = trainers.get(0);
-                    loadAndSetTrainerImage();
-                }
-            }, error -> this.showError(error.getMessage())));
-        }
-    }
-
-
     private void loadAndSetTrainerImage() {
-        disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody ->  {
-            try {
-                trainerImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
-                trainerAvatarImageView.setImage(trainerImage);
-            }
-            catch (Exception e) {
-                this.showError(e.getMessage());
-            }
-        }, error -> this.showError(error.getMessage())));
+        String trainerSprite = trainerStorageProvider.get().getTrainerSprite();
+        trainerSprite = trainerSprite.substring(8);
+        String path = Objects.requireNonNull(Main.class.getResource("charactermodels/" + trainerSprite)).toString();
+        Image trainerImage = new Image(path);
+        trainerAvatarImageView.setImage(trainerImage);
     }
 }

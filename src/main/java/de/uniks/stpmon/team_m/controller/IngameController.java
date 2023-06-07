@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Dialog;
@@ -42,7 +43,9 @@ public class IngameController extends Controller {
 
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
-    private String regionId;
+
+    @Inject
+    Provider<TrainerStorage> trainerStorageProvider;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -150,14 +153,8 @@ public class IngameController extends Controller {
         }
     }
 
-    public void setRegion(String regionId) {
-        this.regionId = regionId;
-    }
-
-
     public void showTrainerSettings() {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
-        trainerSettingsController.setRegion(this.regionId);
         trainerSettingsDialog.setTitle(resources.getString("Trainer.Profil"));
         trainerSettingsDialog.getDialogPane().setContent(trainerSettingsController.render());
         trainerSettingsDialog.getDialogPane().setExpandableContent(null);

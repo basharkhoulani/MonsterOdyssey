@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.CharacterSelectionController;
+import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.beans.property.SimpleStringProperty;
@@ -150,16 +151,14 @@ public class WelcomeSceneController extends Controller {
                 secondMessage.setPrefWidth(200);
             }
             case 8 -> {
-                String regionId = trainerStorageProvider.get().getRegionId();
+                Region region = trainerStorageProvider.get().getRegion();
                 disposables.add(trainersServiceProvider.get().createTrainer(
-                        regionId,
-                        trainerStorageProvider.get().getTrainerName(),
-                        trainerStorageProvider.get().getTrainerSprite()
+                        region._id(),
+                        trainerStorageProvider.get().getTrainer().name(),
+                        trainerStorageProvider.get().getTrainer().name()
                 ).observeOn(FX_SCHEDULER).subscribe(result -> {
                             trainerStorageProvider.get().setTrainer(result);
-                            IngameController ingameController = ingameControllerProvider.get();
-                            ingameController.setRegion(regionId);
-                            app.show(ingameController);
+                            app.show(ingameControllerProvider.get());
                         }, error -> showError(error.getMessage())
                 ));
             }
