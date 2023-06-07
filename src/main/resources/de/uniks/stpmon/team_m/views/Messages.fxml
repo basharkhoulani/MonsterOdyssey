@@ -45,7 +45,7 @@
                </VBox>
                <VBox alignment="CENTER" fillWidth="false" minWidth="309.0" VBox.vgrow="NEVER">
                   <HBox alignment="CENTER" fillHeight="false" prefHeight="44.0" prefWidth="126.0">
-                     <Button fx:id="findNewFriendsButton" minHeight="36.0" minWidth="125.0" mnemonicParsing="false" onAction="#changeToFindNewFriends" prefHeight="50.0" styleClass="buttonsYellow" text="%New.Friends" HBox.hgrow="ALWAYS">
+                     <Button fx:id="findNewFriendsButton" maxHeight="50.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#changeToFindNewFriends" prefHeight="50.0" styleClass="buttonsYellow" text="%New.Friends" wrapText="true" HBox.hgrow="ALWAYS">
                         <font>
                            <Font name="Comic Sans MS Bold" size="17.0" />
                         </font>
@@ -58,7 +58,7 @@
                   </HBox>
                   <HBox alignment="CENTER" fillHeight="false">
                      <HBox alignment="CENTER" fillHeight="false" prefHeight="51.0" prefWidth="119.0">
-                        <Button fx:id="mainMenuButton" minHeight="36.0" minWidth="125.0" mnemonicParsing="false" onAction="#changeToMainMenu" styleClass="buttonsWhite" text="%Main.Menu">
+                        <Button fx:id="mainMenuButton" maxHeight="50.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#changeToMainMenu" prefHeight="50.0" styleClass="buttonsWhite" text="%Main.Menu">
                            <font>
                               <Font name="Comic Sans MS Bold" size="17.0" />
                            </font></Button>
@@ -67,7 +67,7 @@
                         </HBox.margin>
                      </HBox>
                      <HBox alignment="CENTER" fillHeight="false" prefHeight="55.0" prefWidth="120.0">
-                        <Button fx:id="newGroupButton" minHeight="36.0" minWidth="125.0" mnemonicParsing="false" onAction="#changeToNewGroup" styleClass="buttonsYellow" text="%New.Group">
+                        <Button fx:id="newGroupButton" maxHeight="50.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#changeToNewGroup" prefHeight="50.0" styleClass="buttonsYellow" text="%New.Group">
                            <font>
                               <Font name="Comic Sans MS Bold" size="17.0" />
                            </font></Button>
