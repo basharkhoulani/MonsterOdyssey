@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.FriendSettingsController;
+import de.uniks.stpmon.team_m.controller.subController.IngameLoadingController;
 import de.uniks.stpmon.team_m.controller.subController.MainMenuUserCell;
 import de.uniks.stpmon.team_m.controller.subController.RegionCell;
 import de.uniks.stpmon.team_m.dto.Region;
@@ -65,6 +66,8 @@ public class MainMenuController extends Controller {
     Provider<NewFriendController> newFriendControllerProvider;
     @Inject
     Provider<MessagesController> messagesControllerProvider;
+    @Inject
+    Provider<IngameLoadingController> ingameLoadingControllerProvider;
     @Inject
     RegionsService regionsService;
     @Inject
@@ -233,7 +236,7 @@ public class MainMenuController extends Controller {
                     } else {
                         trainerStorageProvider.get().setTrainer(result.get(0));
                         ingameControllerProvider.get().setRegion(selectedRegion._id());
-                        app.show(ingameControllerProvider.get());
+                        app.show(ingameLoadingControllerProvider.get());
                     }
                 }, error -> showError(error.getMessage())
         ));
