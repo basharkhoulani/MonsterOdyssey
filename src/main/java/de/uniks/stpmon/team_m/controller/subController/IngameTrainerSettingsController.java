@@ -80,7 +80,7 @@ public class IngameTrainerSettingsController extends Controller {
     public void onDeleteTrainerButtonClick() {
         final Alert alert = new Alert(Alert.AlertType.WARNING);
         final DialogPane dialogPane = alert.getDialogPane();
-        final ButtonType cancelButton = new ButtonType(CANCEL);
+        final ButtonType cancelButton = new ButtonType(resources.getString("Cancel"));
         final ButtonType okButton = alert.getButtonTypes().stream()
                         .filter(buttonType -> buttonType.getButtonData().isDefaultButton()).findFirst().orElse(null);
 
@@ -89,11 +89,8 @@ public class IngameTrainerSettingsController extends Controller {
         final Button cancelButton2 = (Button) alert.getDialogPane().lookupButton(cancelButton);
         final Button okButton2 = (Button) alert.getDialogPane().lookupButton(okButton);
         okButton2.setOnAction(event -> onCancelButtonClick());
-        cancelButton2.getStyleClass().add(WHITE_BUTTON);
-        okButton2.getStyleClass().add(WHITE_BUTTON);
 
-        alert.setTitle(DELETE_TRAINER_ALERT);
-        dialogPane.getStyleClass().add(ALERT_DIALOG_NAME);
+        alert.setTitle(resources.getString("Delete.your.trainer"));
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == cancelButton) {
