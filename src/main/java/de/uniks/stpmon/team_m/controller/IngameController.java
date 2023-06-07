@@ -11,26 +11,23 @@ import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.Window;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.FX_STYLE_BORDER_COLOR_BLACK;
-import static de.uniks.stpmon.team_m.Constants.TILE_SIZE;
 
 
 public class IngameController extends Controller {
@@ -43,6 +40,8 @@ public class IngameController extends Controller {
     public Button settingsButton;
     @FXML
     public VBox ingameVBox;
+    @FXML
+    public Pane mainPane;
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
     @Inject
@@ -53,6 +52,7 @@ public class IngameController extends Controller {
     AreasService areasService;
     @Inject
     PresetsService presetsService;
+    ImageView imageView;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
 
     /**
@@ -101,7 +101,7 @@ public class IngameController extends Controller {
             pauseGame();
         });
         disposables.add(areasService.getArea(trainerStorageProvider.get().getTrainer().region(),
-                "645e32c6866ace359554a7fa").subscribe(area -> {
+                trainerStorageProvider.get().getRegion().spawn().area()).subscribe(area -> {
             if (area != null) {
                 loadMap(area.map());
             } else {
@@ -117,27 +117,29 @@ public class IngameController extends Controller {
         disposables.add(presetsService.getTilesetImage(mapName).observeOn(FX_SCHEDULER).subscribe(image -> {
             if (image != null) {
                 Layer firstLayer = map.layers().get(0);
-                int width = firstLayer.width() * TILE_SIZE;
-                int height = firstLayer.height() * TILE_SIZE;
-                final Canvas canvas = new Canvas(width, height);
-                final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-                int columnsInImage = (int) (image.getWidth() / TILE_SIZE);
-                int x = 0;
-                int y = 0;
+                int columns = (int) image.getWidth() / 16;
+                HashMap<Integer, Image> tiles = new HashMap<>();
+                Image tileImage = null;
                 for (Chunk chunk : firstLayer.chunks()) {
-                    for (int i = 0; i < chunk.data().size(); i++) {
-                        int tileId = chunk.data().get(i);
-                        int tileX = ((tileId - 1) % columnsInImage) * TILE_SIZE;
-                        int tileY = ((tileId - 1) / columnsInImage) * TILE_SIZE;
-                        graphicsContext.drawImage(image, tileX * TILE_SIZE, tileY * TILE_SIZE, TILE_SIZE, TILE_SIZE, x, y, TILE_SIZE, TILE_SIZE);
-                        x += TILE_SIZE;
-                        if (x >= width) {
-                            x = 0;
-                            y += TILE_SIZE;
+                    for (Integer tile : chunk.data()) {
+                        if (tile == 0) {
+                            continue;
                         }
+                        if (tiles.containsKey(tile)) {
+                            tileImage = tiles.get(tile);
+                        } else {
+                            int x = (tile - 1) % columns;
+                            int y = (tile - 1) / columns;
+                            tileImage = new WritableImage(image.getPixelReader(), x * 16, y * 16, 16, 16);
+                            tiles.put(tile, tileImage);
+                        }
+                        ImageView imageView = new ImageView(tileImage);
+                        imageView.setX(chunk.x() * 16);
+                        imageView.setY(chunk.y() * 16);
+                        mainPane.getChildren().add(imageView);
                     }
                 }
-                ingameVBox.getChildren().add(canvas);
+                tiles.clear();
             } else {
                 System.out.println("Image is null");
             }
