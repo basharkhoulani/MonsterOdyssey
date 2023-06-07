@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Objects;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
 import okhttp3.ResponseBody;
 import java.io.InputStream;
 
@@ -76,6 +78,33 @@ public class ImageProcessor {
         g2d.dispose();
 
         return bufferedImage;
+    }
+
+    public static Image[] cropTrainerImages(Image trainerChumk, String direction, Boolean isWalking) {
+        Image[] array = new Image[6];
+        int x,y;
+        if (isWalking) {
+            y = 71;
+        }
+        else {
+            y = 39;
+        }
+        switch (direction) {
+            case "right"    -> x = 0;
+            case "up"       -> x = 96;
+            case "left"     -> x = 192;
+            default         -> x = 288;
+        }
+        for (int i=0; i < 6; i++) {
+            array[i] = getSubImage(trainerChumk, x, y, 16, 25);
+            x += 16;
+        }
+        return array;
+    }
+
+    public static Image getSubImage(Image img, int x, int y, int w, int h) {
+        PixelReader reader = img.getPixelReader();
+        return new WritableImage(reader, x, y, w, h);
     }
 
     private static String convertToBase64(BufferedImage image) throws IOException {
