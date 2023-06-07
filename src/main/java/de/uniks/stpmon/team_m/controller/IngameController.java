@@ -56,6 +56,7 @@ public class IngameController extends Controller {
     PresetsService presetsService;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     HashMap<String, Image> tileSetImages = new HashMap<>();
+    HashMap<Integer, ImageView> tilesImages = new HashMap<>();
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -108,13 +109,7 @@ public class IngameController extends Controller {
             final String mapName = getFileName(tileSet.source());
             disposables.add(presetsService.getTilesetImage(mapName).observeOn(FX_SCHEDULER).subscribe(image -> {
                 tileSetImages.put(mapName, image);
-                if (tileSetImages.size() == map.tilesets().size()) {
-                    for (TileSet tileSet1 : map.tilesets()) {
-                        renderMap(map, tileSetImages.get(getFileName(tileSet1.source())),
-                                tileSet1, map.tilesets().size() > 1);
-                    }
-                    loadPlayer();
-                }
+                afterAllTileSetsLoaded(map);
             }, error -> showError(error.getMessage())));
         }
         app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE));
@@ -130,6 +125,16 @@ public class IngameController extends Controller {
         ingamePane.getChildren().add(imageView);
     }
 
+    private void afterAllTileSetsLoaded(Map map) {
+        if (tileSetImages.size() == map.tilesets().size()) {
+            for (TileSet tileSet : map.tilesets()) {
+                renderMap(map, tileSetImages.get(getFileName(tileSet.source())),
+                        tileSet, map.tilesets().size() > 1);
+            }
+            loadPlayer();
+        }
+    }
+
     private void renderMap(Map map, Image image, TileSet tileSet, boolean multipleTileSets) {
         int tilesPerRow = (int) (image.getWidth() / TILE_SIZE);
         for (Layer layer : map.layers()) {
@@ -137,19 +142,28 @@ public class IngameController extends Controller {
                 continue;
             }
             for (Chunk chunk : layer.chunks()) {
-                for (int y = 0; y < chunk.height(); y++) {
-                    for (int x = 0; x < chunk.width(); x++) {
-                        int tileId = chunk.data().get(y * chunk.width() + x);
-                        if (tileId == 0) {
-                            continue;
-                        }
-                        if (multipleTileSets) {
-                            if (checkIfNotInTileSet(map, tileSet, tileId)) continue;
-                        }
-                        ImageView imageView = extractTile(image, tileSet, tilesPerRow, chunk, y, x, tileId);
-                        ingamePane.getChildren().add(imageView);
-                    }
+                renderChunk(map, image, tileSet, multipleTileSets, tilesPerRow, chunk);
+            }
+        }
+    }
+
+    private void renderChunk(Map map, Image image, TileSet tileSet, boolean multipleTileSets, int tilesPerRow, Chunk chunk) {
+        for (int y = 0; y < chunk.height(); y++) {
+            for (int x = 0; x < chunk.width(); x++) {
+                int tileId = chunk.data().get(y * chunk.width() + x);
+                if (tileId == 0) {
+                    continue;
                 }
+                if (multipleTileSets) {
+                    if (checkIfNotInTileSet(map, tileSet, tileId)) continue;
+                }
+                ImageView imageView;
+                if (tilesImages.containsKey(tileId)) {
+                    imageView = tilesImages.get(tileId);
+                } else {
+                    imageView = extractTile(image, tileSet, tilesPerRow, chunk, y, x, tileId);
+                }
+                ingamePane.getChildren().add(imageView);
             }
         }
     }
