@@ -11,23 +11,27 @@ import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.FX_STYLE_BORDER_COLOR_BLACK;
+import static de.uniks.stpmon.team_m.Constants.TILE_SIZE;
 
 
 public class IngameController extends Controller {
@@ -39,9 +43,7 @@ public class IngameController extends Controller {
     @FXML
     public Button settingsButton;
     @FXML
-    public VBox ingameVBox;
-    @FXML
-    public Pane mainPane;
+    public Pane ingamePane;
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
     @Inject
@@ -52,7 +54,6 @@ public class IngameController extends Controller {
     AreasService areasService;
     @Inject
     PresetsService presetsService;
-    ImageView imageView;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
 
     /**
@@ -116,34 +117,39 @@ public class IngameController extends Controller {
         final String mapName = getFileName(map.tilesets().get(0).source());
         disposables.add(presetsService.getTilesetImage(mapName).observeOn(FX_SCHEDULER).subscribe(image -> {
             if (image != null) {
-                Layer firstLayer = map.layers().get(0);
-                int columns = (int) image.getWidth() / 16;
-                HashMap<Integer, Image> tiles = new HashMap<>();
-                Image tileImage = null;
-                for (Chunk chunk : firstLayer.chunks()) {
-                    for (Integer tile : chunk.data()) {
-                        if (tile == 0) {
-                            continue;
-                        }
-                        if (tiles.containsKey(tile)) {
-                            tileImage = tiles.get(tile);
-                        } else {
-                            int x = (tile - 1) % columns;
-                            int y = (tile - 1) / columns;
-                            tileImage = new WritableImage(image.getPixelReader(), x * 16, y * 16, 16, 16);
-                            tiles.put(tile, tileImage);
-                        }
-                        ImageView imageView = new ImageView(tileImage);
-                        imageView.setX(chunk.x() * 16);
-                        imageView.setY(chunk.y() * 16);
-                        mainPane.getChildren().add(imageView);
-                    }
-                }
-                tiles.clear();
+                renderMap(map, image);
             } else {
                 System.out.println("Image is null");
             }
         }, error -> showError(error.getMessage())));
+    }
+
+    private void renderMap(Map map, Image image) {
+        app.getStage().setWidth(map.width() * TILE_SIZE);
+        app.getStage().setHeight(map.height() * TILE_SIZE);
+        int tilesPerRow = (int) (image.getWidth() / TILE_SIZE);
+        for (Layer layer : map.layers()) {
+            if (!layer.type().equals("tilelayer")) {
+                continue;
+            }
+            for (Chunk chunk : layer.chunks()) {
+                for (int y = 0; y < chunk.height(); y++) {
+                    for (int x = 0; x < chunk.width(); x++) {
+                        int tileId = chunk.data().get(y * chunk.width() + x);
+                        if (tileId == 0) {
+                            continue;
+                        }
+                        int tileX = ((tileId - 1) % tilesPerRow) * TILE_SIZE;
+                        int tileY = ((tileId - 1) / tilesPerRow) * TILE_SIZE;
+                        WritableImage writableImage = new WritableImage(image.getPixelReader(), tileX, tileY, TILE_SIZE, TILE_SIZE);
+                        ImageView imageView = new ImageView(writableImage);
+                        imageView.setTranslateX((chunk.x() + x) * TILE_SIZE);
+                        imageView.setTranslateY((chunk.y() + y) * TILE_SIZE);
+                        ingamePane.getChildren().add(imageView);
+                    }
+                }
+            }
+        }
     }
 
     /**
