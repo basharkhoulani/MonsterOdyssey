@@ -154,8 +154,8 @@ public class WelcomeSceneController extends Controller {
                 Region region = trainerStorageProvider.get().getRegion();
                 disposables.add(trainersServiceProvider.get().createTrainer(
                         region._id(),
-                        trainerStorageProvider.get().getTrainer().name(),
-                        trainerStorageProvider.get().getTrainer().name()
+                        trainerStorageProvider.get().getTrainerName(),
+                        trainerStorageProvider.get().getTrainerSprite()
                 ).observeOn(FX_SCHEDULER).subscribe(result -> {
                             trainerStorageProvider.get().setTrainer(result);
                             app.show(ingameControllerProvider.get());
