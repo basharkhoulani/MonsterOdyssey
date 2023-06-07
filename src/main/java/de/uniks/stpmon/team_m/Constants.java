@@ -66,7 +66,7 @@ public class Constants {
     public static final int AVATAR_SIZE = 30;
 
     // INGAME
-    public static int TILE_SIZE = 32;
+    public static int TILE_SIZE = 16;
 
     // Error messages
     public static final String HTTP_400 = "400";

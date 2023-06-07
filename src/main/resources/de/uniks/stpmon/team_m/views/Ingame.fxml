@@ -1,66 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import java.lang.String?>
-<BorderPane prefHeight="765.0" prefWidth="1028.0" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/19"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
-    <top>
-        <Button fx:id="helpSymbol" mnemonicParsing="false" onAction="#showHelp" prefHeight="35.0" prefWidth="36.0"
-                styleClass="helpSymbol" BorderPane.alignment="TOP_RIGHT">
-            <BorderPane.margin>
-                <Insets right="8.0" top="8.0"/>
-            </BorderPane.margin>
-        </Button>
-    </top>
-    <center>
-        <VBox fx:id="ingameVBox" alignment="CENTER" prefHeight="640.0" prefWidth="1028.0"
-              style="-fx-background-color: red;" BorderPane.alignment="CENTER"/>
-    </center>
-    <bottom>
-       <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-           <VBox alignment="BOTTOM_RIGHT">
-               <HBox alignment="CENTER" styleClass="ForegroundContainer">
-                   <VBox.margin>
-                       <Insets />
-                   </VBox.margin>
-                   <padding>
-                       <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                   </padding>
-                   <Button fx:id="monstersButton" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0" mnemonicParsing="false" text="%Monsters">
-                       <font>
-                           <Font name="Comic Sans MS Bold" size="17.0" />
-                       </font>
-                       <HBox.margin>
-                           <Insets right="8.0" />
-                       </HBox.margin>
-                       <styleClass>
-                           <String fx:value="buttonsYellow" />
-                           <String fx:value="monstersButton" />
-                       </styleClass>
-                       <padding>
-                           <Insets left="24.0" />
-                       </padding>
-                   </Button>
-                   <Button fx:id="settingsButton" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0" mnemonicParsing="false" onAction="#showTrainerSettings" text="%Settings">
-                       <font>
-                           <Font name="Comic Sans MS Bold" size="17.0" />
-                       </font>
-                       <styleClass>
-                           <String fx:value="buttonsYellow" />
-                           <String fx:value="settingsButton" />
-                       </styleClass>
-                       <HBox.margin>
-                           <Insets />
-                       </HBox.margin>
-                       <padding>
-                           <Insets left="24.0" />
-                       </padding>
-                   </Button>
-               </HBox>
-           </VBox>
-       </HBox>
-   </bottom>
-</BorderPane>
+<StackPane stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
+   <VBox fx:id="ingameVBox" alignment="CENTER" prefHeight="640.0" prefWidth="1028.0"
+         style="-fx-background-color: red;"/>
+   <HBox alignment="TOP_RIGHT">
+      <Button fx:id="helpSymbol" mnemonicParsing="false" onAction="#showHelp" prefHeight="31.0" prefWidth="37.0"
+              styleClass="helpSymbol"/>
+   </HBox>
+   <HBox alignment="BOTTOM_RIGHT" prefHeight="538.0" prefWidth="878.0" spacing="5.0">
+      <StackPane.margin>
+         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+      </StackPane.margin>
+      <padding>
+         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+      </padding>
+      <Button fx:id="monstersButton" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0"
+              mnemonicParsing="false" text="%Monsters">
+         <font>
+            <Font name="Comic Sans MS Bold" size="17.0"/>
+         </font>
+         <styleClass>
+            <String fx:value="buttonsYellow"/>
+            <String fx:value="monstersButton"/>
+         </styleClass>
+         <padding>
+            <Insets left="24.0"/>
+         </padding>
+      </Button>
+      <Button fx:id="settingsButton" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0"
+              mnemonicParsing="false" onAction="#showTrainerSettings" text="%Settings">
+         <font>
+            <Font name="Comic Sans MS Bold" size="17.0"/>
+         </font>
+         <styleClass>
+            <String fx:value="buttonsYellow"/>
+            <String fx:value="settingsButton"/>
+         </styleClass>
+         <padding>
+            <Insets left="24.0"/>
+         </padding>
+      </Button>
+   </HBox>
+</StackPane>
