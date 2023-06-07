@@ -3,6 +3,7 @@
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
@@ -15,11 +16,10 @@
     </top>
     <center>
         <VBox alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-            <Label text="%Monster.Odyssey">
-                <font>
-                    <Font name="System Bold" size="30.0" />
-                </font>
-            </Label>
+            <ImageView fx:id="playerSpriteImageView" fitHeight="64.0" fitWidth="32.0" pickOnBounds="true"
+                       preserveRatio="true">
+                <Image url="@../charactermodels/Character_01.png"/>
+            </ImageView>
         </VBox>
     </center>
    <bottom>
