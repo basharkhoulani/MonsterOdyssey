@@ -20,7 +20,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.List;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.MESSAGE_NAMESPACE_GROUPS;
+import static de.uniks.stpmon.team_m.Constants.UNKNOWN_USER;
 
 public class MessagesBoxController extends Controller {
 
@@ -85,13 +86,14 @@ public class MessagesBoxController extends Controller {
         }
 
         disposables.add(groupService.getGroups(group.membersToString()).doOnNext(groups -> {
-            findGroupID(groups);
-            groupStorageProvider.get().set_id(chatID);
-        }).flatMap(groups -> messageService.getGroupMessages(chatID).observeOn(FX_SCHEDULER))
-          .doOnNext(this.messages::setAll)
-          .flatMap(messages -> Observable.just(messages).observeOn(FX_SCHEDULER))
-          .doOnNext(messages1 -> listenToMessages(this.messages, chatID))
-          .observeOn(FX_SCHEDULER).subscribe(event -> {}, error -> showError(error.getMessage())));
+                    findGroupID(groups);
+                    groupStorageProvider.get().set_id(chatID);
+                }).flatMap(groups -> messageService.getGroupMessages(chatID).observeOn(FX_SCHEDULER))
+                .doOnNext(this.messages::setAll)
+                .flatMap(messages -> Observable.just(messages).observeOn(FX_SCHEDULER))
+                .doOnNext(messages1 -> listenToMessages(this.messages, chatID))
+                .observeOn(FX_SCHEDULER).subscribe(event -> {
+                }, error -> showError(error.getMessage())));
     }
 
     /**

@@ -17,9 +17,6 @@ public interface MainComponent {
 
     MainMenuController mainMenuController();
 
-
-
-
     @Component.Builder
     interface Builder {
         @BindsInstance

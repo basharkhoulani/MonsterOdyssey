@@ -52,7 +52,9 @@ public class WelcomeSceneController extends Controller {
     }
 
     @Override
-    public String getTitle() {return resources.getString("INGAME.TITLE");}
+    public String getTitle() {
+        return resources.getString("INGAME.TITLE");
+    }
 
 
     @Override

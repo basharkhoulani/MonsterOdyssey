@@ -12,9 +12,11 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Objects;
+
 import static de.uniks.stpmon.team_m.Constants.*;
 
 public class CharacterSelectionController extends Controller {
@@ -38,6 +40,7 @@ public class CharacterSelectionController extends Controller {
     Provider<WelcomeSceneController> welcomeSceneControllerProvider;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
+
     @Inject
     public CharacterSelectionController() {
     }
