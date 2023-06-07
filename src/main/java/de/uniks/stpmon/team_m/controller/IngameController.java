@@ -1,11 +1,10 @@
 package de.uniks.stpmon.team_m.controller;
 
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
-import de.uniks.stpmon.team_m.dto.Chunk;
-import de.uniks.stpmon.team_m.dto.Layer;
-import de.uniks.stpmon.team_m.dto.Map;
+import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -27,6 +26,7 @@ import javafx.stage.Window;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -55,6 +55,7 @@ public class IngameController extends Controller {
     @Inject
     PresetsService presetsService;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
+    HashMap<String, Image> tileSetImages = new HashMap<>();
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -67,12 +68,6 @@ public class IngameController extends Controller {
     @Override
     public void init() {
         super.init();
-    }
-
-    private static String getFileName(String name) {
-        name = name.substring(name.lastIndexOf("/") + 1);
-        name = name.substring(0, name.lastIndexOf("."));
-        return name;
     }
 
     /**
@@ -101,32 +96,41 @@ public class IngameController extends Controller {
             }
             pauseGame();
         });
-        disposables.add(areasService.getArea(trainerStorageProvider.get().getTrainer().region(),
-                trainerStorageProvider.get().getRegion().spawn().area()).subscribe(area -> {
-            if (area != null) {
-                loadMap(area.map());
-            } else {
-                System.out.println("Area is null");
-            }
-        }, error -> showError(error.getMessage())));
+        Region region = trainerStorageProvider.get().getRegion();
+        disposables.add(areasService.getArea(region._id(), region.spawn().area())
+                .subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
         return parent;
     }
 
     private void loadMap(Map map) {
-        System.out.println("Loading map: " + map);
-        final String mapName = getFileName(map.tilesets().get(0).source());
-        disposables.add(presetsService.getTilesetImage(mapName).observeOn(FX_SCHEDULER).subscribe(image -> {
-            if (image != null) {
-                renderMap(map, image);
-            } else {
-                System.out.println("Image is null");
-            }
-        }, error -> showError(error.getMessage())));
+        tileSetImages.clear();
+        for (TileSet tileSet : map.tilesets()) {
+            final String mapName = getFileName(tileSet.source());
+            disposables.add(presetsService.getTilesetImage(mapName).observeOn(FX_SCHEDULER).subscribe(image -> {
+                tileSetImages.put(mapName, image);
+                if (tileSetImages.size() == map.tilesets().size()) {
+                    for (TileSet tileSet1 : map.tilesets()) {
+                        renderMap(map, tileSetImages.get(getFileName(tileSet1.source())),
+                                tileSet1, map.tilesets().size() > 1);
+                    }
+                    loadPlayer();
+                }
+            }, error -> showError(error.getMessage())));
+        }
+        app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE));
+        app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE));
     }
 
-    private void renderMap(Map map, Image image) {
-        app.getStage().setWidth(map.width() * TILE_SIZE);
-        app.getStage().setHeight(map.height() * TILE_SIZE);
+    private void loadPlayer() {
+        final Trainer trainer = trainerStorageProvider.get().getTrainer();
+        Image image = new Image(Objects.requireNonNull(App.class.getResource("images/character.png")).toString());
+        ImageView imageView = new ImageView(image);
+        imageView.setTranslateX(trainer.x() * TILE_SIZE);
+        imageView.setTranslateY(trainer.y() * TILE_SIZE);
+        ingamePane.getChildren().add(imageView);
+    }
+
+    private void renderMap(Map map, Image image, TileSet tileSet, boolean multipleTileSets) {
         int tilesPerRow = (int) (image.getWidth() / TILE_SIZE);
         for (Layer layer : map.layers()) {
             if (!layer.type().equals("tilelayer")) {
@@ -139,17 +143,39 @@ public class IngameController extends Controller {
                         if (tileId == 0) {
                             continue;
                         }
-                        int tileX = ((tileId - 1) % tilesPerRow) * TILE_SIZE;
-                        int tileY = ((tileId - 1) / tilesPerRow) * TILE_SIZE;
-                        WritableImage writableImage = new WritableImage(image.getPixelReader(), tileX, tileY, TILE_SIZE, TILE_SIZE);
-                        ImageView imageView = new ImageView(writableImage);
-                        imageView.setTranslateX((chunk.x() + x) * TILE_SIZE);
-                        imageView.setTranslateY((chunk.y() + y) * TILE_SIZE);
+                        if (multipleTileSets) {
+                            if (checkIfNotInTileSet(map, tileSet, tileId)) continue;
+                        }
+                        ImageView imageView = extractTile(image, tileSet, tilesPerRow, chunk, y, x, tileId);
                         ingamePane.getChildren().add(imageView);
                     }
                 }
             }
         }
+    }
+
+    private ImageView extractTile(Image image, TileSet tileSet, int tilesPerRow, Chunk chunk, int y, int x, int tileId) {
+        int tileX = ((tileId - tileSet.firstgid()) % tilesPerRow) * TILE_SIZE;
+        int tileY = ((tileId - tileSet.firstgid()) / tilesPerRow) * TILE_SIZE;
+        WritableImage writableImage = new WritableImage(image.getPixelReader(), tileX, tileY, TILE_SIZE, TILE_SIZE);
+        ImageView imageView = new ImageView(writableImage);
+        imageView.setTranslateX((chunk.x() + x) * TILE_SIZE);
+        imageView.setTranslateY((chunk.y() + y) * TILE_SIZE);
+        return imageView;
+    }
+
+    private boolean checkIfNotInTileSet(Map map, TileSet tileSet, int tileId) {
+        int tileSetIndex = map.tilesets().indexOf(tileSet);
+        if (tileSetIndex < map.tilesets().size() - 1) {
+            TileSet nextTileSet = map.tilesets().get(tileSetIndex + 1);
+            return tileId >= nextTileSet.firstgid();
+        } else return tileId < tileSet.firstgid();
+    }
+
+    private static String getFileName(String name) {
+        name = name.substring(name.lastIndexOf("/") + 1);
+        name = name.substring(0, name.lastIndexOf("."));
+        return name;
     }
 
     /**
