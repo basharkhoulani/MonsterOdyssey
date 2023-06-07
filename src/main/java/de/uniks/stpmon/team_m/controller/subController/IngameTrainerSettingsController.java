@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
+import java.text.MessageFormat;
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -93,7 +94,8 @@ public class IngameTrainerSettingsController extends Controller {
         cancelButton2.getStyleClass().add(WHITE_BUTTON);
         okButton2.getStyleClass().add(WHITE_BUTTON);
 
-        alert.setTitle(DELETE_TRAINER_ALERT);
+        final String deleteTrainerTitle = resources.getString("Delete.your.Trainer");
+        alert.setTitle());
         dialogPane.getStyleClass().add(ALERT_DIALOG_NAME);
 
         Optional<ButtonType> result = alert.showAndWait();
