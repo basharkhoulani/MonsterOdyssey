@@ -79,7 +79,12 @@ public class ImageProcessor {
 
         return bufferedImage;
     }
-
+    /**
+     * This method is used to crop the
+     * @param trainerChumk into 6 Images, that displays the player character moving in some direction
+     * @param direction : either "up", "down", "left" or "right" are possible directions
+     * @param isWalking : determine if the character is moving or not
+     */
     public static Image[] cropTrainerImages(Image trainerChumk, String direction, Boolean isWalking) {
         Image[] array = new Image[6];
         int x,y;
