@@ -7,8 +7,6 @@ import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsCont
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.PresetsService;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
-import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.collections.FXCollections;
@@ -21,8 +19,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -64,7 +60,6 @@ public class IngameController extends Controller {
     PresetsService presetsService;
     GraphicsContext graphicsContext;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
-    private String regionId;
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
     private final ObservableList<MoveTrainerDto> moveTrainerDtos = FXCollections.observableArrayList();
