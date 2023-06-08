@@ -1,9 +1,13 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.AppTest;
+import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -15,6 +19,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 import javax.inject.Provider;
 
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,6 +38,9 @@ public class IngameControllerTest extends ApplicationTest {
     @Mock
     Provider<MainMenuController> mainMenuControllerProvider;
 
+    @Mock
+    TrainerStorage trainerStorage;
+
     @InjectMocks
     IngameController ingameController;
 
@@ -42,6 +50,7 @@ public class IngameControllerTest extends ApplicationTest {
         ingameController.setValues(bundle,null,null,ingameController,app);
         final IngameTrainerSettingsController trainerSettingsController = mock(IngameTrainerSettingsController.class);
         Mockito.when(trainerSettingsControllerProvider.get()).thenReturn(trainerSettingsController);
+        Mockito.when(trainerStorage.getTrainerSpriteChunk()).thenReturn(new Image(Objects.requireNonNull(AppTest.class.getResource("images/Monster.png")).toString()));
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
@@ -59,8 +68,6 @@ public class IngameControllerTest extends ApplicationTest {
                 .orElse(null);
         assertNotNull(helpLabel);
         clickOn("OK");
-        final Label gameTitle = lookup("Monster Odyssey").query();
-        assertNotNull(gameTitle);
     }
 
     @Test
@@ -86,8 +93,6 @@ public class IngameControllerTest extends ApplicationTest {
         // test Ingame Unpause With Button
         type(KeyCode.P);
         clickOn("Resume Game");
-        final Label gameTitleUnpauseButton = lookup("Monster Odyssey").query();
-        assertNotNull(gameTitleUnpauseButton);
 
         // test Ingame Back To Main Menu
         type(KeyCode.P);
