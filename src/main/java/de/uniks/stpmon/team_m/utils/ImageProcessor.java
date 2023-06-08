@@ -2,14 +2,13 @@ package de.uniks.stpmon.team_m.utils;
 
 
 import de.uniks.stpmon.team_m.App;
+import javafx.scene.image.Image;
+import okhttp3.ResponseBody;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Base64;
 import java.util.Objects;
 import javafx.scene.image.Image;
@@ -108,8 +107,11 @@ public class ImageProcessor {
     }
 
     public static Image getSubImage(Image img, int x, int y, int w, int h) {
-        PixelReader reader = img.getPixelReader();
-        return new WritableImage(reader, x, y, w, h);
+        if (img != null) {
+            PixelReader reader = img.getPixelReader();
+            return new WritableImage(reader, x, y, w, h);
+        }
+        return null;
     }
 
     private static String convertToBase64(BufferedImage image) throws IOException {

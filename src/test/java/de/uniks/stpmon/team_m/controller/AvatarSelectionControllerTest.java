@@ -25,12 +25,11 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static de.uniks.stpmon.team_m.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -45,7 +44,7 @@ public class AvatarSelectionControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        avatarSelectionController.setValues(bundle,null,null,avatarSelectionController,app);
+        avatarSelectionController.setValues(bundle, null, null, avatarSelectionController, app);
         app.start(stage);
         app.show(avatarSelectionController);
         stage.requestFocus();

@@ -86,14 +86,30 @@ class MainMenuControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        mainMenuController.setValues(bundle,null,null,mainMenuController,app);
+        mainMenuController.setValues(bundle, null, null, mainMenuController, app);
         when(regionsService.getRegions()).thenReturn(just(List.of(new Region(
                 "2023-05-22T17:51:46.772Z",
                 "2023-05-22T17:51:46.772Z",
                 "646bc3c0a9ac1b375fb41d93",
                 "Albertina",
                 new Spawn("646bc436cfee07c0e408466f", 1, 1),
-                new Object()
+                new Map(
+                        -1,
+                        true,
+                        1,
+                        1,
+                        "orthogonal",
+                        "right-down",
+                        "1.6.1",
+                        "map",
+                        "1.6",
+                        32,
+                        32,
+                        List.of(),
+                        16,
+                        16,
+                        List.of(),
+                        List.of())
         ))));
         when(userStorageProvider.get()).thenReturn(userStorage);
         when(preferencesProvider.get()).thenReturn(preferences);

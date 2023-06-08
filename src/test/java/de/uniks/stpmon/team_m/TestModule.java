@@ -43,7 +43,6 @@ public class TestModule {
 
     @Provides
     static ResourceBundle resourceBundle() {
-        final String locale = prefs().get("locale", Locale.ENGLISH.toLanguageTag());
         return ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
     }
 
@@ -183,13 +182,45 @@ public class TestModule {
             @Override
             public Observable<List<Region>> getRegions() {
                 return Observable.just(List.of(new Region("2023-05-22T17:51:46.772Z",
-                        "2023-05-22T17:51:46.772Z", "646bc436cfee07c0e408466f", "Albertina", new Spawn("Albertina", 1, 1), new Object())));
+                        "2023-05-22T17:51:46.772Z", "646bc436cfee07c0e408466f", "Albertina", new Spawn("Albertina", 1, 1), new Map(
+                        -1,
+                        true,
+                        1,
+                        1,
+                        "orthogonal",
+                        "right-down",
+                        "1.6.1",
+                        "map",
+                        "1.6",
+                        32,
+                        32,
+                        List.of(),
+                        16,
+                        16,
+                        List.of(),
+                        List.of()))));
             }
 
             @Override
             public Observable<Region> getRegion(String id) {
                 return Observable.just(new Region("2023-05-22T17:51:46.772Z",
-                        "2023-05-22T17:51:46.772Z", "646bc436cfee07c0e408466f", "Albertina", new Spawn("Albertina", 1, 1), new Object()));
+                        "2023-05-22T17:51:46.772Z", "646bc436cfee07c0e408466f", "Albertina", new Spawn("Albertina", 1, 1), new Map(
+                        -1,
+                        true,
+                        1,
+                        1,
+                        "orthogonal",
+                        "right-down",
+                        "1.6.1",
+                        "map",
+                        "1.6",
+                        32,
+                        32,
+                        List.of(),
+                        16,
+                        16,
+                        List.of(),
+                        List.of())));
             }
         };
     }
@@ -406,6 +437,72 @@ public class TestModule {
             @Override
             public Observable<Trainer> deleteTrainer(String regionId, String _id) {
                 return null;
+            }
+        };
+    }
+
+    @Provides
+    static AreasApiService areasApiService() {
+        return new AreasApiService() {
+
+            @Override
+            public Observable<List<Area>> getAreas(String regionId) {
+                return Observable.just(List.of(
+                        new Area(
+                                "2023-05-22T17:51:46.772Z",
+                                "2023-05-22T17:51:46.772Z",
+                                "646bc3c0a9ac1b375fb41d93",
+                                "646bc436cfee07c0e408466f",
+                                "Albertina",
+                                new Map(
+                                        -1,
+                                        true,
+                                        1,
+                                        1,
+                                        "orthogonal",
+                                        "right-down",
+                                        "1.6.1",
+                                        "map",
+                                        "1.6",
+                                        32,
+                                        32,
+                                        List.of(),
+                                        16,
+                                        16,
+                                        List.of(),
+                                        List.of()))
+
+                ));
+            }
+
+            @Override
+            public Observable<Area> getArea(String regionId, String _id) {
+                return Observable.just(
+                        new Area(
+                                "2023-05-22T17:51:46.772Z",
+                                "2023-05-22T17:51:46.772Z",
+                                "646bc3c0a9ac1b375fb41d93",
+                                "646bc436cfee07c0e408466f",
+                                "Albertina",
+                                new Map(
+                                        -1,
+                                        true,
+                                        1,
+                                        1,
+                                        "orthogonal",
+                                        "right-down",
+                                        "1.6.1",
+                                        "map",
+                                        "1.6",
+                                        32,
+                                        32,
+                                        List.of(),
+                                        16,
+                                        16,
+                                        List.of(),
+                                        List.of()))
+
+                );
             }
         };
     }

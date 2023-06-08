@@ -1,12 +1,12 @@
 package de.uniks.stpmon.team_m;
 
 
-import javafx.scene.input.KeyCode;
-
 public class Constants {
     // SERVER
     public static final String API_URL = "https://stpmon.uniks.de/api/v2";
     public static final String WS_URL = "wss://stpmon.uniks.de/ws/v2";
+    public static final String UDP_URL = "stpmon.uniks.de";
+    public static final int SERVER_PORT = 30011;
     public static final String MESSAGE_NAMESPACE_GROUPS = "groups";
     public static final String MESSAGE_NAMESPACE_REGIONS = "regions";
     public static final String MESSAGE_NAMESPACE_GLOBAL = "global";
@@ -68,7 +68,9 @@ public class Constants {
     public static final int AVATAR_SIZE = 30;
 
     // INGAME
-    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
+    public static int TILE_SIZE = 16;
+    public static int OFFSET_WIDTH = 50;
+    public static int OFFSET_HEIGHT = 50;
 
     // Error messages
     public static final String HTTP_400 = "400";

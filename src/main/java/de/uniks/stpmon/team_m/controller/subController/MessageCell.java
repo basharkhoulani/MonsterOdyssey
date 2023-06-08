@@ -6,10 +6,10 @@ import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 import static javafx.geometry.Pos.CENTER_LEFT;
@@ -43,10 +42,9 @@ public class MessageCell extends ListCell<Message> {
     @FXML
     public ImageView avatar;
     private FXMLLoader loader;
-    private MessagesBoxController messagesBoxController;
+    private final MessagesBoxController messagesBoxController;
 
     public UserStorage user;
-
 
 
     /**
@@ -83,7 +81,7 @@ public class MessageCell extends ListCell<Message> {
             messageContent.setText(message.body());
             setDateAndEdited(message, senderName);
             setMessageOrientationAndStyle(message);
-            if (!GraphicsEnvironment.isHeadless()){
+            if (!GraphicsEnvironment.isHeadless()) {
                 avatar.setImage(ImageProcessor.fromBase64ToFXImage(base64avatar));
             }
             setGraphic(rootMessageHBox);

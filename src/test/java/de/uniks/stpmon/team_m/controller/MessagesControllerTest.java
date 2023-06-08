@@ -73,7 +73,7 @@ public class MessagesControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        messagesController.setValues(bundle,null,null,messagesController,app);
+        messagesController.setValues(bundle, null, null, messagesController, app);
         Group newGroup = new Group("6478e132cd8fd7a6174991a9", "newGroup", Arrays.asList("64610e7b82ca062bfa5b7231", "645cd04c11b590456276e9d9"));
         Group changedGroup = new Group("6478e132cd8fd7a6174991a9", "changedNameGroup", Arrays.asList("64610e7b82ca062bfa5b7231", "645cd04c11b590456276e9d9"));
         User changedUser = new User("645cd0a34389d5c06620fe64", "Garbage", Constants.USER_STATUS_OFFLINE, null, null);
@@ -94,9 +94,9 @@ public class MessagesControllerTest extends ApplicationTest {
         )));
         when(eventListenerProvider.get()).thenReturn(eventListener);
         when(eventListener.listen(any(), any())).thenReturn(just(
-                new Event<>("groups.*.nothappening", null)
-        )).thenReturn(just(
-                new Event<>("groups.*.nothappening", null)
+                        new Event<>("groups.*.nothappening", null)
+                )).thenReturn(just(
+                        new Event<>("groups.*.nothappening", null)
                 )).thenReturn(just(
                         new Event<>("groups.*.created", newGroup)
                 )).thenReturn(just(

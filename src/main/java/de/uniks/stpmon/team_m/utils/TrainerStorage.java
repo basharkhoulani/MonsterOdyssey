@@ -12,8 +12,11 @@ import javax.inject.Singleton;
 public class TrainerStorage {
 
     private Region region;
-    private Trainer trainer;
     private String trainerName;
+    private int x;
+    private int y;
+    private int direction;
+    private Trainer trainer;
     private String trainerImageUrl;
     private Image trainerSpriteChunk;
 
@@ -25,11 +28,9 @@ public class TrainerStorage {
         this.trainer = trainer;
     }
 
-    public void setRegion(Region region) {
-        this.region = region;
+    public void setTrainerName(String trainerName) {
+        this.trainerName = trainerName;
     }
-
-    public void setTrainerName(String name) { this.trainerName = name; }
 
     public void setTrainerSprite(String url) { this.trainerImageUrl = url; }
 
@@ -39,6 +40,9 @@ public class TrainerStorage {
 
     public Region getRegion() {
         return region;
+    }
+    public void setRegion(Region region) {
+        this.region = region;
     }
 
     public String getTrainerName() {
@@ -55,5 +59,29 @@ public class TrainerStorage {
 
     public void setTrainerSpriteChunk(Image trainerSpriteChunk) {
         this.trainerSpriteChunk = trainerSpriteChunk;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
     }
 }

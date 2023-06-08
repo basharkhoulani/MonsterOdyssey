@@ -1,21 +1,12 @@
 package de.uniks.stpmon.team_m;
 
 import de.uniks.stpmon.team_m.dto.Region;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import java.io.IOException;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
@@ -168,6 +159,7 @@ public class AppTest extends ApplicationTest {
         assertNotNull(helpLabel);
         clickOn("OK");
 
+
         // test Ingame Pause
         type(KeyCode.P);
         final DialogPane dialogPanePause = lookup(".dialog-pane").query();
@@ -186,6 +178,7 @@ public class AppTest extends ApplicationTest {
         // test Ingame Unpause With Button
         type(KeyCode.P);
         clickOn("Resume Game");
+
 
         // test Ingame Back To Main Menu
         type(KeyCode.P);

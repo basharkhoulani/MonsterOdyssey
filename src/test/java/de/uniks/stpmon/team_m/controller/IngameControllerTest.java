@@ -5,6 +5,11 @@ import de.uniks.stpmon.team_m.AppTest;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import de.uniks.stpmon.team_m.dto.*;
+import de.uniks.stpmon.team_m.service.AreasService;
+import de.uniks.stpmon.team_m.udp.UDPEventListener;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -12,12 +17,15 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
-
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -34,9 +42,14 @@ public class IngameControllerTest extends ApplicationTest {
 
     @Mock
     Provider<IngameTrainerSettingsController> trainerSettingsControllerProvider;
-
     @Mock
     Provider<MainMenuController> mainMenuControllerProvider;
+    @Mock
+    Provider<TrainerStorage> trainerStorageProvider;
+    @Mock
+    AreasService areasService;
+    @Mock
+    Provider<UDPEventListener> udpEventListenerProvider;
 
     @Mock
     TrainerStorage trainerStorage;
@@ -47,10 +60,78 @@ public class IngameControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        ingameController.setValues(bundle, null, null, ingameController, app);
+
+        UDPEventListener udpEventListener = mock(UDPEventListener.class);
+        Mockito.when(udpEventListenerProvider.get()).thenReturn(udpEventListener);
+        when(udpEventListener.listen(any(), any())).thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("646bac223b4804b87c0b8054", "64610ec8420b3d786212aea3", 0, 0, 2))));
+        final TrainerStorage trainerStorage = mock(TrainerStorage.class);
+        Mockito.when(trainerStorageProvider.get()).thenReturn(trainerStorage);
+        Mockito.when(trainerStorage.getTrainer()).thenReturn(new Trainer(
+                "2023-05-22T17:51:46.772Z",
+                "2023-05-22T17:51:46.772Z",
+                "646bac223b4804b87c0b8054",
+                "646bab5cecf584e1be02598a",
+                "646bac8c1a74032c70fffe24",
+                "Hans",
+                "Premade_Character_01.png",
+                0,
+                "646bacc568933551792bf3d5",
+                0,
+                0,
+                0,
+                new NPCInfo(false)
+        ));
+        when(trainerStorageProvider.get().getRegion()).thenReturn(
+                new Region(
+                        "2023-05-22T17:51:46.772Z",
+                        "2023-05-22T17:51:46.772Z",
+                        "646bc436cfee07c0e408466f",
+                        "Albertina",
+                        new Spawn("646bc3c0a9ac1b375fb41d93", 1, 1),
+                        new Map(-1,
+                                true,
+                                1,
+                                1,
+                                "orthogonal",
+                                "right-down",
+                                "1.6.1",
+                                "map",
+                                "1.6",
+                                32,
+                                32,
+                                List.of(),
+                                16,
+                                16,
+                                List.of(),
+                                List.of())));
+        when(areasService.getArea(any(), any())).thenReturn(Observable.just(
+                new Area(
+                        "2023-05-22T17:51:46.772Z",
+                        "2023-05-22T17:51:46.772Z",
+                        "646bc3c0a9ac1b375fb41d93",
+                        "646bc436cfee07c0e408466f",
+                        "Albertina",
+                        new Map(
+                                -1,
+                                true,
+                                1,
+                                1,
+                                "orthogonal",
+                                "right-down",
+                                "1.6.1",
+                                "map",
+                                "1.6",
+                                32,
+                                32,
+                                List.of(),
+                                16,
+                                16,
+                                List.of(),
+                                List.of()))
+
+        ));
         ingameController.setValues(bundle,null,null,ingameController,app);
-        final IngameTrainerSettingsController trainerSettingsController = mock(IngameTrainerSettingsController.class);
-        Mockito.when(trainerSettingsControllerProvider.get()).thenReturn(trainerSettingsController);
-        Mockito.when(trainerStorage.getTrainerSpriteChunk()).thenReturn(new Image(Objects.requireNonNull(AppTest.class.getResource("images/Monster.png")).toString()));
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();

@@ -221,8 +221,8 @@ public class AccountSettingController extends Controller {
     public void editAvatar() {
         AvatarSelectionController avatarSelectionController = avatarSelectionControllerProvider.get();
         avatarSelectionController.init();
-        ButtonType cancelButton = new ButtonType(resources.getString("Cancel"),ButtonBar.ButtonData.CANCEL_CLOSE);
-        ButtonType okButton = new ButtonType(resources.getString("OK"),ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType(resources.getString("Cancel"), ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType okButton = new ButtonType(resources.getString("OK"), ButtonBar.ButtonData.OK_DONE);
 
         Dialog<?> dialog = new Dialog<>();
         dialog.setTitle(resources.getString("Choose.your.Avatar"));
@@ -307,6 +307,7 @@ public class AccountSettingController extends Controller {
             deleteAccount(alert);
         }
     }
+
     /**
      * This method is used to show a pop-up when an error occurs.
      *
@@ -338,7 +339,7 @@ public class AccountSettingController extends Controller {
     /**
      * This method is used to open the Change Language Pop up
      */
-    public void changeLanguage(){
+    public void changeLanguage() {
         Dialog<?> dialog = new Dialog<>();
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
