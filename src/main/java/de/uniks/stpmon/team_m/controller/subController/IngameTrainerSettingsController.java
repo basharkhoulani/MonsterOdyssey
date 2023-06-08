@@ -87,16 +87,11 @@ public class IngameTrainerSettingsController extends Controller {
 
         dialogPane.getButtonTypes().addAll(cancelButton);
 
-        String trainerName = trainerStorageProvider.get().getTrainer().name();
-        dialogPane.setContentText(DELETE_TRAINER_TEXT + trainerName);
-        final Button cancelButton2 = (Button) alert.getDialogPane().lookupButton(cancelButton);
-        final Button okButton2 = (Button) alert.getDialogPane().lookupButton(okButton);
-        cancelButton2.getStyleClass().add(WHITE_BUTTON);
-        okButton2.getStyleClass().add(WHITE_BUTTON);
+        final String trainerName = trainerStorageProvider.get().getTrainer().name();
+        final String deleteTrainerText = resources.getString("DELETE.TRAINER.TEXT");
+        dialogPane.setContentText(MessageFormat.format(deleteTrainerText, trainerName));
 
-        final String deleteTrainerTitle = resources.getString("Delete.your.Trainer");
-        alert.setTitle());
-        dialogPane.getStyleClass().add(ALERT_DIALOG_NAME);
+        alert.setTitle(resources.getString("Delete.your.trainer"));
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == cancelButton) {

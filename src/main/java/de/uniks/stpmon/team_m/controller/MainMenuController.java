@@ -241,6 +241,6 @@ public class MainMenuController extends Controller {
     }
 
     public void setTrainerDeletion() {
-        this.information = DELETE_TRAINER_SUCCESS;
+        this.information = resources.getString("delete.trainer.success");
     }
 }

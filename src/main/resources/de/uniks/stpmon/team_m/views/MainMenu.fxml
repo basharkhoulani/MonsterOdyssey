@@ -135,7 +135,7 @@
             </VBox>
          </VBox>
          <VBox alignment="CENTER" prefHeight="123.0" VBox.vgrow="ALWAYS">
-            <Label fx:id="trainerDeletedSuccessfully" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="391.0" styleClass="informationLabel">
+            <Label fx:id="trainerDeletedSuccessfully" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="391.0" styleClass="informationLabel" text="%delete.trainer.success">
                <VBox.margin>
                   <Insets top="9.0" />
                </VBox.margin>

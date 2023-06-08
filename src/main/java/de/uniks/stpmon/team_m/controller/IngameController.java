@@ -158,6 +158,7 @@ public class IngameController extends Controller {
     public void showTrainerSettings() {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
         trainerSettingsController.setRegion(this.regionId);
+        ingameTrainerSettingsControllerProvider.get().setApp(this.app);
         trainerSettingsDialog.setTitle(resources.getString("Trainer.Profil"));
         trainerSettingsDialog.getDialogPane().setContent(trainerSettingsController.render());
         trainerSettingsDialog.getDialogPane().setExpandableContent(null);
