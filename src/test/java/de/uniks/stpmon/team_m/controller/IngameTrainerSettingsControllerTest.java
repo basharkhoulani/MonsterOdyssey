@@ -2,11 +2,13 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -20,6 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class IngameTrainerSettingsControllerTest extends ApplicationTest {
     @Spy
     App app = new App(null);
+
+    @Mock
+    TrainerStorage trainerStorage;
+
     @InjectMocks
     IngameTrainerSettingsController trainerSettingsController;
 

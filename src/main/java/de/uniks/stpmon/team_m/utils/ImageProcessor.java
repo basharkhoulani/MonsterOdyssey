@@ -123,10 +123,13 @@ public class ImageProcessor {
     }
   
   public static Image resonseBodyToJavaFXImage(ResponseBody responseBody) throws IOException {
-        try (InputStream inputStream = responseBody.byteStream()) {
-            byte[] imageData = toByteArray(inputStream);
-            return new Image(new ByteArrayInputStream(imageData));
+        if (responseBody.source() != null) {
+            try (InputStream inputStream = responseBody.byteStream()) {
+                byte[] imageData = toByteArray(inputStream);
+                return new Image(new ByteArrayInputStream(imageData));
+            }
         }
+        return null;
     }
 
     private static byte[] toByteArray(InputStream inputStream) throws IOException {

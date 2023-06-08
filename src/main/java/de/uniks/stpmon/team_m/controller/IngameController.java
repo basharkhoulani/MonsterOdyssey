@@ -52,7 +52,7 @@ public class IngameController extends Controller {
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
 
     @Inject
-    Provider<TrainerStorage> trainerStorageProvider;
+    TrainerStorage trainerStorage;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -106,15 +106,15 @@ public class IngameController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
-        Image[] trainerStandingDown = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "down", false);
-        Image[] trainerStandingUp = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "up", false);
-        Image[] trainerStandingLeft = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "left", false);
-        Image[] trainerStandingRight = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "right", false);
+        Image[] trainerStandingDown = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "down", false);
+        Image[] trainerStandingUp = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "up", false);
+        Image[] trainerStandingLeft = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "left", false);
+        Image[] trainerStandingRight = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "right", false);
 
-        Image[] trainerWalkingUp = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "up", true);
-        Image[] trainerWalkingDown = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "down", true);
-        Image[] trainerWalkingLeft = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "left", true);
-        Image[] trainerWalkingRight = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "right", true);
+        Image[] trainerWalkingUp = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "up", true);
+        Image[] trainerWalkingDown = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "down", true);
+        Image[] trainerWalkingLeft = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "left", true);
+        Image[] trainerWalkingRight = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "right", true);
         playerSpriteImageView.setImage(trainerStandingDown[0]);
         app.getStage().getScene().setOnKeyPressed(event -> {
             if ((event.getCode() == PAUSE_MENU_KEY)) {

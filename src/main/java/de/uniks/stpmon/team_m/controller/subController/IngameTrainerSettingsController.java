@@ -1,18 +1,14 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
-import com.sun.javafx.collections.ObservableListWrapper;
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.RegionsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -21,10 +17,6 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 
@@ -44,7 +36,7 @@ public class IngameTrainerSettingsController extends Controller {
     public TrainersService trainersService;
 
     @Inject
-    public Provider<TrainerStorage> trainerStorageProvider;
+    public TrainerStorage trainerStorage;
     @Inject
     public UserStorage usersStorage;
 
@@ -79,7 +71,7 @@ public class IngameTrainerSettingsController extends Controller {
     }
 
     private void loadAndSetTrainerImage() {
-        String trainerSprite = trainerStorageProvider.get().getTrainerSprite();
+        String trainerSprite = trainerStorage.getTrainerSprite();
         trainerSprite = trainerSprite.substring(8);
         String path = Objects.requireNonNull(Main.class.getResource("charactermodels/" + trainerSprite)).toString();
         Image trainerImage = new Image(path);

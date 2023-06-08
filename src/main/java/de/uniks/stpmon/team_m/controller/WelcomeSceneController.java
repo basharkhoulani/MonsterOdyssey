@@ -46,7 +46,7 @@ public class WelcomeSceneController extends Controller {
     @Inject
     Provider<TrainersService> trainersServiceProvider;
     @Inject
-    Provider<TrainerStorage> trainerStorageProvider;
+    TrainerStorage trainerStorage;
 
 
     @Inject
@@ -133,7 +133,7 @@ public class WelcomeSceneController extends Controller {
                     alert.close();
                     changeCount(false);
                 } else if (result.isPresent() && result.get() == okButton) {
-                    trainerStorageProvider.get().setTrainerName(trainerName.get());
+                    trainerStorage.setTrainerName(trainerName.get());
                     changeCount(true);
                 }
             }
@@ -151,13 +151,13 @@ public class WelcomeSceneController extends Controller {
                 secondMessage.setPrefWidth(200);
             }
             case 8 -> {
-                Region region = trainerStorageProvider.get().getRegion();
+                Region region = trainerStorage.getRegion();
                 disposables.add(trainersServiceProvider.get().createTrainer(
                         region._id(),
-                        trainerStorageProvider.get().getTrainerName(),
-                        trainerStorageProvider.get().getTrainerSprite()
+                        trainerStorage.getTrainerName(),
+                        trainerStorage.getTrainerSprite()
                 ).observeOn(FX_SCHEDULER).subscribe(result -> {
-                            trainerStorageProvider.get().setTrainer(result);
+                            trainerStorage.setTrainer(result);
                             app.show(ingameControllerProvider.get());
                         }, error -> showError(error.getMessage())
                 ));

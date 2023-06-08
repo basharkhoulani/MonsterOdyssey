@@ -16,9 +16,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.prefs.Preferences;
+
 import static de.uniks.stpmon.team_m.Constants.*;
 
 public class MainMenuController extends Controller {
@@ -70,7 +72,7 @@ public class MainMenuController extends Controller {
     @Inject
     Provider<TrainersService> trainersServiceProvider;
     @Inject
-    Provider<TrainerStorage> trainerStorageProvider;
+    TrainerStorage trainerStorage;
     @Inject
     Provider<PresetsService> presetsServiceProvider;
 
@@ -214,20 +216,26 @@ public class MainMenuController extends Controller {
     public void changeToIngame() {
         Region selectedRegion = (Region) regionToggleGroup.getSelectedToggle().getUserData();
         WelcomeSceneController welcomeSceneController = welcomeSceneControllerProvider.get();
-        trainerStorageProvider.get().setRegion(selectedRegion);
+        trainerStorage.setRegion(selectedRegion);
 
 
         disposables.add(trainersServiceProvider.get().getTrainers(selectedRegion._id(), null, userStorageProvider.get().get_id()).observeOn(FX_SCHEDULER).subscribe(result -> {
                     if (result.isEmpty()) {
                         app.show(welcomeSceneController);
                     } else {
-                        trainerStorageProvider.get().setTrainer(result.get(0));
-                        trainerStorageProvider.get().setTrainerName(result.get(0).name());
-                        trainerStorageProvider.get().setTrainerSprite(result.get(0).image());
-                        disposables.add(presetsServiceProvider.get().getCharacter(result.get(0).image()).observeOn(FX_SCHEDULER).subscribe(response -> {
-                            trainerStorageProvider.get().setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
-                            app.show(ingameControllerProvider.get());
-                        }));
+                        trainerStorage.setTrainer(result.get(0));
+                        trainerStorage.setTrainerName(result.get(0).name());
+                        trainerStorage.setTrainerSprite(result.get(0).image());
+                        disposables.add(presetsServiceProvider.get().getCharacter(result.get(0).image()).observeOn(FX_SCHEDULER).subscribe(
+                                response -> {
+                                    trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
+                                    app.show(ingameControllerProvider.get());
+                                },
+                                error -> {
+                                    showError(error.getMessage());
+                                    error.printStackTrace();
+                                }
+                        ));
                     }
                 }, error -> showError(error.getMessage())
         ));
