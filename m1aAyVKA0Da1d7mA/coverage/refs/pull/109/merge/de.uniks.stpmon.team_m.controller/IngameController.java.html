@@ -10,14 +10,14 @@ import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -30,8 +30,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 
-import static de.uniks.stpmon.team_m.Constants.FX_STYLE_BORDER_COLOR_BLACK;
-import static de.uniks.stpmon.team_m.Constants.TILE_SIZE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 
 public class IngameController extends Controller {
@@ -43,7 +42,9 @@ public class IngameController extends Controller {
     @FXML
     public Button settingsButton;
     @FXML
-    public Pane ingamePane;
+    public Canvas canvas;
+    @FXML
+    public VBox ingameVBox;
     @Inject
     Provider&lt;IngameTrainerSettingsController&gt; ingameTrainerSettingsControllerProvider;
     @Inject
@@ -54,22 +55,22 @@ public class IngameController extends Controller {
     AreasService areasService;
     @Inject
     PresetsService presetsService;
-<span class="fc" id="L57">    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;</span>
-<span class="fc" id="L58">    HashMap&lt;String, Image&gt; tileSetImages = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L59">    HashMap&lt;Integer, ImageView&gt; tilesImages = new HashMap&lt;&gt;();</span>
+    GraphicsContext graphicsContext;
+<span class="fc" id="L59">    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;</span>
+<span class="fc" id="L60">    HashMap&lt;String, Image&gt; tileSetImages = new HashMap&lt;&gt;();</span>
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
      */
 
     @Inject
-<span class="fc" id="L66">    public IngameController() {</span>
-<span class="fc" id="L67">    }</span>
+<span class="fc" id="L67">    public IngameController() {</span>
+<span class="fc" id="L68">    }</span>
 
     @Override
     public void init() {
-<span class="fc" id="L71">        super.init();</span>
-<span class="fc" id="L72">    }</span>
+<span class="fc" id="L72">        super.init();</span>
+<span class="fc" id="L73">    }</span>
 
     /**
      * This method sets the title of the {@link IngameController}.
@@ -79,7 +80,7 @@ public class IngameController extends Controller {
 
     @Override
     public String getTitle() {
-<span class="fc" id="L82">        return resources.getString(&quot;INGAME.TITLE&quot;);</span>
+<span class="fc" id="L83">        return resources.getString(&quot;INGAME.TITLE&quot;);</span>
     }
 
     /**
@@ -90,17 +91,17 @@ public class IngameController extends Controller {
 
     @Override
     public Parent render() {
-<span class="fc" id="L93">        final Parent parent = super.render();</span>
-<span class="fc" id="L94">        app.getStage().getScene().setOnKeyPressed(event -&gt; {</span>
-<span class="fc bfc" id="L95" title="All 2 branches covered.">            if (!(event.getCode() == PAUSE_MENU_KEY)) {</span>
-<span class="fc" id="L96">                return;</span>
+<span class="fc" id="L94">        final Parent parent = super.render();</span>
+<span class="fc" id="L95">        app.getStage().getScene().setOnKeyPressed(event -&gt; {</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">            if (!(event.getCode() == PAUSE_MENU_KEY)) {</span>
+<span class="fc" id="L97">                return;</span>
             }
-<span class="fc" id="L98">            pauseGame();</span>
-<span class="fc" id="L99">        });</span>
-<span class="fc" id="L100">        Region region = trainerStorageProvider.get().getRegion();</span>
-<span class="fc" id="L101">        disposables.add(areasService.getArea(region._id(), region.spawn().area())</span>
-<span class="pc" id="L102">                .subscribe(area -&gt; loadMap(area.map()), error -&gt; showError(error.getMessage())));</span>
-<span class="fc" id="L103">        return parent;</span>
+<span class="fc" id="L99">            pauseGame();</span>
+<span class="fc" id="L100">        });</span>
+<span class="fc" id="L101">        Region region = trainerStorageProvider.get().getRegion();</span>
+<span class="fc" id="L102">        disposables.add(areasService.getArea(region._id(), region.spawn().area()).observeOn(FX_SCHEDULER)</span>
+<span class="pc" id="L103">                .subscribe(area -&gt; loadMap(area.map()), error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L104">        return parent;</span>
     }
 
     /**
@@ -111,30 +112,27 @@ public class IngameController extends Controller {
      */
 
     private void loadMap(Map map) {
-<span class="fc" id="L114">        tileSetImages.clear();</span>
-<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        for (TileSet tileSet : map.tilesets()) {</span>
-<span class="nc" id="L116">            final String mapName = getFileName(tileSet.source());</span>
-<span class="nc" id="L117">            disposables.add(presetsService.getTilesetImage(mapName).observeOn(FX_SCHEDULER).subscribe(image -&gt; {</span>
-<span class="nc" id="L118">                tileSetImages.put(mapName, image);</span>
-<span class="nc" id="L119">                afterAllTileSetsLoaded(map);</span>
-<span class="nc" id="L120">            }, error -&gt; showError(error.getMessage())));</span>
-<span class="nc" id="L121">        }</span>
-<span class="fc" id="L122">        app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE));</span>
-<span class="fc" id="L123">        app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE));</span>
-<span class="fc" id="L124">    }</span>
+<span class="fc" id="L115">        tileSetImages.clear();</span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">        for (TileSet tileSet : map.tilesets()) {</span>
+<span class="nc" id="L117">            final String mapName = getFileName(tileSet.source());</span>
+<span class="nc" id="L118">            disposables.add(presetsService.getTilesetImage(mapName).observeOn(FX_SCHEDULER).subscribe(image -&gt; {</span>
+<span class="nc" id="L119">                tileSetImages.put(mapName, image);</span>
+<span class="nc" id="L120">                afterAllTileSetsLoaded(map);</span>
+<span class="nc" id="L121">            }, error -&gt; showError(error.getMessage())));</span>
+<span class="nc" id="L122">        }</span>
+<span class="fc" id="L123">        app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);</span>
+<span class="fc" id="L124">        app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);</span>
+<span class="fc" id="L125">    }</span>
 
     /**
      * loadPlayer is used to load the player on the map. It loads the image of the player and sets its position.
      */
 
     private void loadPlayer() {
-<span class="nc" id="L131">        final Trainer trainer = trainerStorageProvider.get().getTrainer();</span>
-<span class="nc" id="L132">        Image image = new Image(Objects.requireNonNull(App.class.getResource(&quot;images/character.png&quot;)).toString());</span>
-<span class="nc" id="L133">        ImageView imageView = new ImageView(image);</span>
-<span class="nc" id="L134">        imageView.setTranslateX(trainer.x() * TILE_SIZE);</span>
-<span class="nc" id="L135">        imageView.setTranslateY(trainer.y() * TILE_SIZE);</span>
-<span class="nc" id="L136">        ingamePane.getChildren().add(imageView);</span>
-<span class="nc" id="L137">    }</span>
+<span class="nc" id="L132">        final Trainer trainer = trainerStorageProvider.get().getTrainer();</span>
+<span class="nc" id="L133">        Image image = new Image(Objects.requireNonNull(App.class.getResource(&quot;images/character.png&quot;)).toString());</span>
+<span class="nc" id="L134">        graphicsContext.drawImage(image, trainer.x() * TILE_SIZE, trainer.y() * TILE_SIZE);</span>
+<span class="nc" id="L135">    }</span>
 
     /**
      * afterAllTileSetsLoaded is used to render the map. It renders every chunk of every layer of every tileset. After
@@ -144,6 +142,8 @@ public class IngameController extends Controller {
      */
 
     private void afterAllTileSetsLoaded(Map map) {
+<span class="nc" id="L145">        canvas.setWidth(map.width() * TILE_SIZE);</span>
+<span class="nc" id="L146">        canvas.setHeight(map.height() * TILE_SIZE);</span>
 <span class="nc bnc" id="L147" title="All 2 branches missed.">        if (tileSetImages.size() == map.tilesets().size()) {</span>
 <span class="nc bnc" id="L148" title="All 2 branches missed.">            for (TileSet tileSet : map.tilesets()) {</span>
 <span class="nc" id="L149">                renderMap(map, tileSetImages.get(getFileName(tileSet.source())),</span>
@@ -165,7 +165,7 @@ public class IngameController extends Controller {
 
     private void renderMap(Map map, Image image, TileSet tileSet, boolean multipleTileSets) {
 <span class="nc bnc" id="L167" title="All 2 branches missed.">        for (Layer layer : map.layers()) {</span>
-<span class="nc bnc" id="L168" title="All 2 branches missed.">            if (!layer.type().equals(&quot;tilelayer&quot;)) {</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">            if (layer.chunks() == null) {</span>
 <span class="nc" id="L169">                continue;</span>
             }
 <span class="nc bnc" id="L171" title="All 2 branches missed.">            for (Chunk chunk : layer.chunks()) {</span>
@@ -186,48 +186,24 @@ public class IngameController extends Controller {
      */
 
     private void renderChunk(Map map, Image image, TileSet tileSet, boolean multipleTileSets, Chunk chunk) {
-<span class="nc bnc" id="L189" title="All 2 branches missed.">        for (int y = 0; y &lt; chunk.height(); y++) {</span>
-<span class="nc bnc" id="L190" title="All 2 branches missed.">            for (int x = 0; x &lt; chunk.width(); x++) {</span>
-<span class="nc" id="L191">                int tileId = chunk.data().get(y * chunk.width() + x);</span>
-<span class="nc bnc" id="L192" title="All 2 branches missed.">                if (tileId == 0) {</span>
-<span class="nc" id="L193">                    continue;</span>
+<span class="nc" id="L189">        graphicsContext = canvas.getGraphicsContext2D();</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">        for (int y = 0; y &lt; chunk.height(); y++) {</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">            for (int x = 0; x &lt; chunk.width(); x++) {</span>
+<span class="nc" id="L192">                int tileId = chunk.data().get(y * chunk.width() + x);</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">                if (tileId == 0) {</span>
+<span class="nc" id="L194">                    continue;</span>
                 }
-<span class="nc bnc" id="L195" title="All 2 branches missed.">                if (multipleTileSets) {</span>
-<span class="nc bnc" id="L196" title="All 2 branches missed.">                    if (checkIfNotInTileSet(map, tileSet, tileId)) continue;</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">                if (multipleTileSets) {</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">                    if (checkIfNotInTileSet(map, tileSet, tileId)) continue;</span>
                 }
-                ImageView imageView;
-<span class="nc bnc" id="L199" title="All 2 branches missed.">                if (tilesImages.containsKey(tileId)) {</span>
-<span class="nc" id="L200">                    imageView = tilesImages.get(tileId);</span>
-                } else {
-<span class="nc" id="L202">                    imageView = extractTile(image, tileSet, chunk, y, x, tileId);</span>
-                }
-<span class="nc" id="L204">                ingamePane.getChildren().add(imageView);</span>
+<span class="nc" id="L199">                int tilesPerRow = (int) (image.getWidth() / TILE_SIZE);</span>
+<span class="nc" id="L200">                int tileX = ((tileId - tileSet.firstgid()) % tilesPerRow) * TILE_SIZE;</span>
+<span class="nc" id="L201">                int tileY = ((tileId - tileSet.firstgid()) / tilesPerRow) * TILE_SIZE;</span>
+<span class="nc" id="L202">                graphicsContext.drawImage(image, tileX, tileY, TILE_SIZE, TILE_SIZE,</span>
+<span class="nc" id="L203">                        (chunk.x() + x) * TILE_SIZE, (chunk.y() + y) * TILE_SIZE, TILE_SIZE, TILE_SIZE);</span>
             }
         }
-<span class="nc" id="L207">    }</span>
-
-    /**
-     * extractTile is used to extract the image of a tile. It extracts the image of the tile from the image of the tileset.
-     *
-     * @param image   Image of the current tileset.
-     * @param tileSet Current tileset.
-     * @param chunk   Current chunk.
-     * @param y       Y coordinate of the tile.
-     * @param x       X coordinate of the tile.
-     * @param tileId  ID of the tile.
-     * @return ImageView of the tile.
-     */
-
-    private ImageView extractTile(Image image, TileSet tileSet, Chunk chunk, int y, int x, int tileId) {
-<span class="nc" id="L222">        int tilesPerRow = (int) (image.getWidth() / TILE_SIZE);</span>
-<span class="nc" id="L223">        int tileX = ((tileId - tileSet.firstgid()) % tilesPerRow) * TILE_SIZE;</span>
-<span class="nc" id="L224">        int tileY = ((tileId - tileSet.firstgid()) / tilesPerRow) * TILE_SIZE;</span>
-<span class="nc" id="L225">        WritableImage writableImage = new WritableImage(image.getPixelReader(), tileX, tileY, TILE_SIZE, TILE_SIZE);</span>
-<span class="nc" id="L226">        ImageView imageView = new ImageView(writableImage);</span>
-<span class="nc" id="L227">        imageView.setTranslateX((chunk.x() + x) * TILE_SIZE);</span>
-<span class="nc" id="L228">        imageView.setTranslateY((chunk.y() + y) * TILE_SIZE);</span>
-<span class="nc" id="L229">        return imageView;</span>
-    }
+<span class="nc" id="L206">    }</span>
 
     /**
      * checkIfNotInTileSet is used to check if a tile is not in the current tileset.
@@ -239,11 +215,11 @@ public class IngameController extends Controller {
      */
 
     private boolean checkIfNotInTileSet(Map map, TileSet tileSet, int tileId) {
-<span class="nc" id="L242">        int tileSetIndex = map.tilesets().indexOf(tileSet);</span>
-<span class="nc bnc" id="L243" title="All 2 branches missed.">        if (tileSetIndex &lt; map.tilesets().size() - 1) {</span>
-<span class="nc" id="L244">            TileSet nextTileSet = map.tilesets().get(tileSetIndex + 1);</span>
-<span class="nc bnc" id="L245" title="All 2 branches missed.">            return tileId &gt;= nextTileSet.firstgid();</span>
-<span class="nc bnc" id="L246" title="All 2 branches missed.">        } else return tileId &lt; tileSet.firstgid();</span>
+<span class="nc" id="L218">        int tileSetIndex = map.tilesets().indexOf(tileSet);</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">        if (tileSetIndex &lt; map.tilesets().size() - 1) {</span>
+<span class="nc" id="L220">            TileSet nextTileSet = map.tilesets().get(tileSetIndex + 1);</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">            return tileId &gt;= nextTileSet.firstgid();</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">        } else return tileId &lt; tileSet.firstgid();</span>
     }
 
     /**
@@ -254,9 +230,9 @@ public class IngameController extends Controller {
      */
 
     private static String getFileName(String name) {
-<span class="nc" id="L257">        name = name.substring(name.lastIndexOf(&quot;/&quot;) + 1);</span>
-<span class="nc" id="L258">        name = name.substring(0, name.lastIndexOf(&quot;.&quot;));</span>
-<span class="nc" id="L259">        return name;</span>
+<span class="nc" id="L233">        name = name.substring(name.lastIndexOf(&quot;/&quot;) + 1);</span>
+<span class="nc" id="L234">        name = name.substring(0, name.lastIndexOf(&quot;.&quot;));</span>
+<span class="nc" id="L235">        return name;</span>
     }
 
     /**
@@ -264,19 +240,19 @@ public class IngameController extends Controller {
      */
 
     public void showHelp() {
-<span class="fc" id="L267">        Alert alert = new Alert(Alert.AlertType.INFORMATION);</span>
-<span class="fc" id="L268">        alert.setTitle(null);</span>
-<span class="fc" id="L269">        alert.setHeaderText(null);</span>
-<span class="fc" id="L270">        alert.setGraphic(null);</span>
-<span class="fc" id="L271">        alert.initOwner(app.getStage());</span>
-<span class="fc" id="L272">        alert.initModality(Modality.APPLICATION_MODAL);</span>
-<span class="fc" id="L273">        alert.initStyle(StageStyle.UNDECORATED);</span>
-<span class="fc" id="L274">        alert.setContentText(resources.getString(&quot;HELP.LABEL&quot;));</span>
-<span class="fc" id="L275">        final DialogPane dialogPane = alert.getDialogPane();</span>
-<span class="fc" id="L276">        dialogPane.getStyleClass().add(&quot;comicSans&quot;);</span>
-<span class="fc" id="L277">        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);</span>
-<span class="fc" id="L278">        alert.showAndWait();</span>
-<span class="fc" id="L279">    }</span>
+<span class="fc" id="L243">        Alert alert = new Alert(Alert.AlertType.INFORMATION);</span>
+<span class="fc" id="L244">        alert.setTitle(null);</span>
+<span class="fc" id="L245">        alert.setHeaderText(null);</span>
+<span class="fc" id="L246">        alert.setGraphic(null);</span>
+<span class="fc" id="L247">        alert.initOwner(app.getStage());</span>
+<span class="fc" id="L248">        alert.initModality(Modality.APPLICATION_MODAL);</span>
+<span class="fc" id="L249">        alert.initStyle(StageStyle.UNDECORATED);</span>
+<span class="fc" id="L250">        alert.setContentText(resources.getString(&quot;HELP.LABEL&quot;));</span>
+<span class="fc" id="L251">        final DialogPane dialogPane = alert.getDialogPane();</span>
+<span class="fc" id="L252">        dialogPane.getStyleClass().add(&quot;comicSans&quot;);</span>
+<span class="fc" id="L253">        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);</span>
+<span class="fc" id="L254">        alert.showAndWait();</span>
+<span class="fc" id="L255">    }</span>
 
     /**
      * This method is used to pause the game. It shows a dialog with two buttons.
@@ -287,52 +263,52 @@ public class IngameController extends Controller {
      */
 
     public void pauseGame() {
-<span class="fc" id="L290">        final Alert alert = new Alert(Alert.AlertType.NONE);</span>
-<span class="fc" id="L291">        final DialogPane dialogPane = alert.getDialogPane();</span>
-<span class="fc" id="L292">        final ButtonType resume = new ButtonType(resources.getString(&quot;RESUME.BUTTON.LABEL&quot;));</span>
-<span class="fc" id="L293">        final ButtonType saveAndExit = new ButtonType(resources.getString(&quot;SAVE.GAME.AND.LEAVE.BUTTON.LABEL&quot;));</span>
-<span class="fc" id="L294">        dialogPane.getButtonTypes().addAll(resume, saveAndExit);</span>
-<span class="pc bpc" id="L295" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L296">            dialogPane.getStylesheets().add(Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString());</span>
-<span class="nc" id="L297">            dialogPane.getStyleClass().add(&quot;comicSans&quot;);</span>
+<span class="fc" id="L266">        final Alert alert = new Alert(Alert.AlertType.NONE);</span>
+<span class="fc" id="L267">        final DialogPane dialogPane = alert.getDialogPane();</span>
+<span class="fc" id="L268">        final ButtonType resume = new ButtonType(resources.getString(&quot;RESUME.BUTTON.LABEL&quot;));</span>
+<span class="fc" id="L269">        final ButtonType saveAndExit = new ButtonType(resources.getString(&quot;SAVE.GAME.AND.LEAVE.BUTTON.LABEL&quot;));</span>
+<span class="fc" id="L270">        dialogPane.getButtonTypes().addAll(resume, saveAndExit);</span>
+<span class="pc bpc" id="L271" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L272">            dialogPane.getStylesheets().add(Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString());</span>
+<span class="nc" id="L273">            dialogPane.getStyleClass().add(&quot;comicSans&quot;);</span>
         }
-<span class="fc" id="L299">        final Button resumeButton = (Button) dialogPane.lookupButton(resume);</span>
-<span class="fc" id="L300">        resumeButton.setOnKeyPressed(event -&gt; {</span>
-<span class="pc bpc" id="L301" title="1 of 2 branches missed.">            if (!(event.getCode() == PAUSE_MENU_KEY)) {</span>
-<span class="nc" id="L302">                return;</span>
+<span class="fc" id="L275">        final Button resumeButton = (Button) dialogPane.lookupButton(resume);</span>
+<span class="fc" id="L276">        resumeButton.setOnKeyPressed(event -&gt; {</span>
+<span class="pc bpc" id="L277" title="1 of 2 branches missed.">            if (!(event.getCode() == PAUSE_MENU_KEY)) {</span>
+<span class="nc" id="L278">                return;</span>
             }
-<span class="fc" id="L304">            alert.setResult(resume);</span>
-<span class="fc" id="L305">        });</span>
+<span class="fc" id="L280">            alert.setResult(resume);</span>
+<span class="fc" id="L281">        });</span>
 
-<span class="fc" id="L307">        alert.setTitle(resources.getString(&quot;PAUSE.MENU.TITLE&quot;));</span>
-<span class="fc" id="L308">        alert.setHeaderText(null);</span>
-<span class="fc" id="L309">        alert.setGraphic(null);</span>
-<span class="fc" id="L310">        alert.setContentText(resources.getString(&quot;PAUSE.MENU.LABEL&quot;));</span>
-<span class="fc" id="L311">        alert.initStyle(StageStyle.UNDECORATED);</span>
-<span class="fc" id="L312">        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);</span>
+<span class="fc" id="L283">        alert.setTitle(resources.getString(&quot;PAUSE.MENU.TITLE&quot;));</span>
+<span class="fc" id="L284">        alert.setHeaderText(null);</span>
+<span class="fc" id="L285">        alert.setGraphic(null);</span>
+<span class="fc" id="L286">        alert.setContentText(resources.getString(&quot;PAUSE.MENU.LABEL&quot;));</span>
+<span class="fc" id="L287">        alert.initStyle(StageStyle.UNDECORATED);</span>
+<span class="fc" id="L288">        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);</span>
 
-<span class="fc" id="L314">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
-<span class="pc bpc" id="L315" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == resume) {</span>
-<span class="fc" id="L316">            alert.close();</span>
-<span class="pc bpc" id="L317" title="2 of 4 branches missed.">        } else if (result.isPresent() &amp;&amp; result.get() == saveAndExit) {</span>
-<span class="fc" id="L318">            alert.close();</span>
-<span class="fc" id="L319">            app.getStage().getScene().setOnKeyPressed(null);</span>
-<span class="fc" id="L320">            app.show(mainMenuControllerProvider.get());</span>
+<span class="fc" id="L290">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+<span class="pc bpc" id="L291" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == resume) {</span>
+<span class="fc" id="L292">            alert.close();</span>
+<span class="pc bpc" id="L293" title="2 of 4 branches missed.">        } else if (result.isPresent() &amp;&amp; result.get() == saveAndExit) {</span>
+<span class="fc" id="L294">            alert.close();</span>
+<span class="fc" id="L295">            app.getStage().getScene().setOnKeyPressed(null);</span>
+<span class="fc" id="L296">            app.show(mainMenuControllerProvider.get());</span>
         }
-<span class="fc" id="L322">    }</span>
+<span class="fc" id="L298">    }</span>
 
     public void showTrainerSettings() {
-<span class="nc" id="L325">        Dialog&lt;?&gt; trainerSettingsDialog = new Dialog&lt;&gt;();</span>
-<span class="nc" id="L326">        trainerSettingsDialog.setTitle(resources.getString(&quot;Trainer.Profil&quot;));</span>
-<span class="nc" id="L327">        trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());</span>
-<span class="nc" id="L328">        trainerSettingsDialog.getDialogPane().setExpandableContent(null);</span>
-<span class="nc" id="L329">        trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString());</span>
-<span class="nc" id="L330">        trainerSettingsDialog.getDialogPane().getStyleClass().add(&quot;trainerSettingsDialog&quot;);</span>
-<span class="nc" id="L331">        Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();</span>
-<span class="nc" id="L332">        popUp.setOnCloseRequest(evt -&gt;</span>
-<span class="nc" id="L333">                ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close()</span>
+<span class="nc" id="L301">        Dialog&lt;?&gt; trainerSettingsDialog = new Dialog&lt;&gt;();</span>
+<span class="nc" id="L302">        trainerSettingsDialog.setTitle(resources.getString(&quot;Trainer.Profil&quot;));</span>
+<span class="nc" id="L303">        trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());</span>
+<span class="nc" id="L304">        trainerSettingsDialog.getDialogPane().setExpandableContent(null);</span>
+<span class="nc" id="L305">        trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString());</span>
+<span class="nc" id="L306">        trainerSettingsDialog.getDialogPane().getStyleClass().add(&quot;trainerSettingsDialog&quot;);</span>
+<span class="nc" id="L307">        Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();</span>
+<span class="nc" id="L308">        popUp.setOnCloseRequest(evt -&gt;</span>
+<span class="nc" id="L309">                ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close()</span>
         );
-<span class="nc" id="L335">        trainerSettingsDialog.showAndWait();</span>
-<span class="nc" id="L336">    }</span>
+<span class="nc" id="L311">        trainerSettingsDialog.showAndWait();</span>
+<span class="nc" id="L312">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
