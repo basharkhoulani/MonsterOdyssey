@@ -148,34 +148,30 @@ public class WelcomeSceneController extends Controller {
 <span class="fc" id="L148">                secondMessage.setText(resources.getString(&quot;ELEVENTH.MESSAGE&quot;));</span>
 <span class="fc" id="L149">                secondMessage.setWrapText(true);</span>
 <span class="fc" id="L150">                secondMessage.setPrefWidth(200);</span>
-<span class="fc" id="L151">                firstMessage.setText(TENTH_MESSAGE);</span>
-<span class="fc" id="L152">                secondMessage.setText(ELEVENTH_MESSAGE);</span>
-<span class="fc" id="L153">                firstMessage.setWrapText(true);</span>
-<span class="fc" id="L154">                firstMessage.setPrefWidth(200);</span>
-<span class="fc" id="L155">            }</span>
+<span class="fc" id="L151">            }</span>
             case 8 -&gt; {
-<span class="fc" id="L157">                String regionId = trainerStorageProvider.get().getRegionId();</span>
-<span class="fc" id="L158">                disposables.add(trainersServiceProvider.get().createTrainer(</span>
+<span class="fc" id="L153">                String regionId = trainerStorageProvider.get().getRegionId();</span>
+<span class="fc" id="L154">                disposables.add(trainersServiceProvider.get().createTrainer(</span>
                         regionId,
-<span class="fc" id="L160">                        trainerStorageProvider.get().getTrainerName(),</span>
-<span class="fc" id="L161">                        trainerStorageProvider.get().getTrainerSprite()</span>
-<span class="fc" id="L162">                ).observeOn(FX_SCHEDULER).subscribe(result -&gt; {</span>
-<span class="fc" id="L163">                            trainerStorageProvider.get().setTrainer(result);</span>
-<span class="fc" id="L164">                            IngameController ingameController = ingameControllerProvider.get();</span>
-<span class="fc" id="L165">                            ingameController.setRegion(regionId);</span>
-<span class="fc" id="L166">                            app.show(ingameController);</span>
-<span class="fc" id="L167">                        }, error -&gt; showError(error.getMessage())</span>
+<span class="fc" id="L156">                        trainerStorageProvider.get().getTrainerName(),</span>
+<span class="fc" id="L157">                        trainerStorageProvider.get().getTrainerSprite()</span>
+<span class="fc" id="L158">                ).observeOn(FX_SCHEDULER).subscribe(result -&gt; {</span>
+<span class="fc" id="L159">                            trainerStorageProvider.get().setTrainer(result);</span>
+<span class="fc" id="L160">                            IngameController ingameController = ingameControllerProvider.get();</span>
+<span class="fc" id="L161">                            ingameController.setRegion(regionId);</span>
+<span class="fc" id="L162">                            app.show(ingameController);</span>
+<span class="fc" id="L163">                        }, error -&gt; showError(error.getMessage())</span>
                 ));
             }
         }
 
-<span class="fc" id="L172">    }</span>
+<span class="fc" id="L168">    }</span>
 
     public int sceneCounter(int sceneNumber, boolean next) {
-<span class="fc bfc" id="L175" title="All 2 branches covered.">        if (next) {</span>
-<span class="fc" id="L176">            return sceneNumber + 1;</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        if (next) {</span>
+<span class="fc" id="L172">            return sceneNumber + 1;</span>
         } else {
-<span class="fc" id="L178">            return sceneNumber - 1;</span>
+<span class="fc" id="L174">            return sceneNumber - 1;</span>
         }
     }
 }

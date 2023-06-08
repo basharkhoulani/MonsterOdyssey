@@ -5,7 +5,6 @@ import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -34,15 +33,16 @@ public class IngameController extends Controller {
     public Button monstersButton;
     @FXML
     public Button settingsButton;
-    @Inject
-    Provider&lt;IngameTrainerSettingsController&gt; ingameTrainerSettingsControllerProvider;
+
+    private IngameTrainerSettingsController trainerSettingsController;
+
     @Inject
     Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
 <span class="fc" id="L41">    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;</span>
 
-    public String regionId;
-
-    public IngameTrainerSettingsController trainerSettingsController;
+    @Inject
+    Provider&lt;IngameTrainerSettingsController&gt; ingameTrainerSettingsControllerProvider;
+    private String regionId;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -157,10 +157,10 @@ public class IngameController extends Controller {
 
     public void showTrainerSettings() {
 <span class="nc" id="L159">        Dialog&lt;?&gt; trainerSettingsDialog = new Dialog&lt;&gt;();</span>
-<span class="nc" id="L160">        ingameTrainerSettingsControllerProvider.get().setApp(this.app);</span>
-<span class="nc" id="L161">        ingameTrainerSettingsControllerProvider.get().setRegion(this.regionId);</span>
-<span class="nc" id="L162">        trainerSettingsDialog.setTitle(&quot;Trainer.Profil&quot;);</span>
-<span class="nc" id="L163">        trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());</span>
+<span class="nc" id="L160">        trainerSettingsController.setRegion(this.regionId);</span>
+<span class="nc" id="L161">        ingameTrainerSettingsControllerProvider.get().setApp(this.app);</span>
+<span class="nc" id="L162">        trainerSettingsDialog.setTitle(resources.getString(&quot;Trainer.Profil&quot;));</span>
+<span class="nc" id="L163">        trainerSettingsDialog.getDialogPane().setContent(trainerSettingsController.render());</span>
 <span class="nc" id="L164">        trainerSettingsDialog.getDialogPane().setExpandableContent(null);</span>
 <span class="nc" id="L165">        trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString());</span>
 <span class="nc" id="L166">        trainerSettingsDialog.getDialogPane().getStyleClass().add(&quot;trainerSettingsDialog&quot;);</span>
