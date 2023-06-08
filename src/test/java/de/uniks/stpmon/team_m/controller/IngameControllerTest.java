@@ -1,25 +1,9 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.dto.Area;
-import de.uniks.stpmon.team_m.dto.Map;
-import de.uniks.stpmon.team_m.dto.Region;
-import de.uniks.stpmon.team_m.dto.Spawn;
+import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AreasService;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
-import io.reactivex.rxjava3.core.Observable;
-import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
-import de.uniks.stpmon.team_m.dto.Event;
-import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
-import de.uniks.stpmon.team_m.dto.NPCInfo;
-import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
-import io.reactivex.rxjava3.core.Observable;
-import de.uniks.stpmon.team_m.dto.Event;
-import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
-import de.uniks.stpmon.team_m.dto.NPCInfo;
-import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.DialogPane;
@@ -30,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -70,8 +55,6 @@ public class IngameControllerTest extends ApplicationTest {
         UDPEventListener udpEventListener = mock(UDPEventListener.class);
         Mockito.when(udpEventListenerProvider.get()).thenReturn(udpEventListener);
         when(udpEventListener.listen(any(), any())).thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("646bac223b4804b87c0b8054", "64610ec8420b3d786212aea3", 0, 0, 2))));
-        final IngameTrainerSettingsController trainerSettingsController = mock(IngameTrainerSettingsController.class);
-        Mockito.when(trainerSettingsControllerProvider.get()).thenReturn(trainerSettingsController);
         final TrainerStorage trainerStorage = mock(TrainerStorage.class);
         Mockito.when(trainerStorageProvider.get()).thenReturn(trainerStorage);
         Mockito.when(trainerStorage.getTrainer()).thenReturn(new Trainer(
