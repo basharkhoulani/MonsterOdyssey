@@ -4,10 +4,7 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.subController.FriendSettingsController;
 import de.uniks.stpmon.team_m.dto.*;
-import de.uniks.stpmon.team_m.service.AuthenticationService;
-import de.uniks.stpmon.team_m.service.RegionsService;
-import de.uniks.stpmon.team_m.service.TrainersService;
-import de.uniks.stpmon.team_m.service.UsersService;
+import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
@@ -17,11 +14,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
+import okhttp3.MediaType;
+import okhttp3.ResponseBody;
+import okio.BufferedSource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
@@ -44,8 +42,8 @@ class MainMenuControllerTest extends ApplicationTest {
     Provider<LoginController> loginControllerProvider;
     @Mock
     Provider<WelcomeSceneController> welcomeSceneControllerProvider;
-    @Mock
-    Provider<TrainerStorage> trainerStorageProvider;
+    @Spy
+    TrainerStorage trainerStorage;
     @Mock
     Provider<TrainersService> trainersServiceProvider;
     @Mock
@@ -68,6 +66,8 @@ class MainMenuControllerTest extends ApplicationTest {
     Provider<GroupStorage> groupStorageProvider;
     @Mock
     Provider<EventListener> eventListenerProvider;
+    @Mock
+    Provider<PresetsService> presetsServiceProvider;
     @Mock
     RegionsService regionsService;
     @Mock
@@ -168,13 +168,15 @@ class MainMenuControllerTest extends ApplicationTest {
 
     @Test
     void changeToIngame() {
+        final PresetsService presetsService = mock(PresetsService.class);
+        when(presetsServiceProvider.get()).thenReturn(presetsService);
+        when(presetsServiceProvider.get().getCharacter(ArgumentMatchers.anyString())).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
         final WelcomeSceneController welcomeSceneController = mock(WelcomeSceneController.class);
         when(welcomeSceneControllerProvider.get()).thenReturn(welcomeSceneController);
         final IngameController ingameController = mock(IngameController.class);
         when(ingameControllerProvider.get()).thenReturn(ingameController);
         doNothing().when(app).show(ingameController);
-        final TrainerStorage trainerStorage = mock(TrainerStorage.class);
-        when(trainerStorageProvider.get()).thenReturn(trainerStorage);
+        Mockito.doNothing().when(trainerStorage).setRegion(ArgumentMatchers.any());
         final TrainersService trainersService = mock(TrainersService.class);
         when(trainersServiceProvider.get()).thenReturn(trainersService);
         when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(new Trainer(
