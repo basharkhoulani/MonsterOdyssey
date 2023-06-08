@@ -67,6 +67,8 @@ public class Constants {
 
     // INGAME
     public static int TILE_SIZE = 16;
+    public static int OFFSET_WIDTH = 50;
+    public static int OFFSET_HEIGHT = 50;
 
     // Error messages
     public static final String HTTP_400 = "400";

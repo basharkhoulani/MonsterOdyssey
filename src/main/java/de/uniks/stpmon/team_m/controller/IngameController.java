@@ -10,14 +10,14 @@ import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -30,8 +30,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 
-import static de.uniks.stpmon.team_m.Constants.FX_STYLE_BORDER_COLOR_BLACK;
-import static de.uniks.stpmon.team_m.Constants.TILE_SIZE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 
 public class IngameController extends Controller {
@@ -43,7 +42,9 @@ public class IngameController extends Controller {
     @FXML
     public Button settingsButton;
     @FXML
-    public Pane ingamePane;
+    public Canvas canvas;
+    @FXML
+    public VBox ingameVBox;
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
     @Inject
@@ -54,9 +55,9 @@ public class IngameController extends Controller {
     AreasService areasService;
     @Inject
     PresetsService presetsService;
+    GraphicsContext graphicsContext;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     HashMap<String, Image> tileSetImages = new HashMap<>();
-    HashMap<Integer, ImageView> tilesImages = new HashMap<>();
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -98,7 +99,7 @@ public class IngameController extends Controller {
             pauseGame();
         });
         Region region = trainerStorageProvider.get().getRegion();
-        disposables.add(areasService.getArea(region._id(), region.spawn().area())
+        disposables.add(areasService.getArea(region._id(), region.spawn().area()).observeOn(FX_SCHEDULER)
                 .subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
         return parent;
     }
@@ -119,8 +120,8 @@ public class IngameController extends Controller {
                 afterAllTileSetsLoaded(map);
             }, error -> showError(error.getMessage())));
         }
-        app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE));
-        app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE));
+        app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);
+        app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
     }
 
     /**
@@ -130,10 +131,7 @@ public class IngameController extends Controller {
     private void loadPlayer() {
         final Trainer trainer = trainerStorageProvider.get().getTrainer();
         Image image = new Image(Objects.requireNonNull(App.class.getResource("images/character.png")).toString());
-        ImageView imageView = new ImageView(image);
-        imageView.setTranslateX(trainer.x() * TILE_SIZE);
-        imageView.setTranslateY(trainer.y() * TILE_SIZE);
-        ingamePane.getChildren().add(imageView);
+        graphicsContext.drawImage(image, trainer.x() * TILE_SIZE, trainer.y() * TILE_SIZE);
     }
 
     /**
@@ -144,6 +142,8 @@ public class IngameController extends Controller {
      */
 
     private void afterAllTileSetsLoaded(Map map) {
+        canvas.setWidth(map.width() * TILE_SIZE);
+        canvas.setHeight(map.height() * TILE_SIZE);
         if (tileSetImages.size() == map.tilesets().size()) {
             for (TileSet tileSet : map.tilesets()) {
                 renderMap(map, tileSetImages.get(getFileName(tileSet.source())),
@@ -165,7 +165,7 @@ public class IngameController extends Controller {
 
     private void renderMap(Map map, Image image, TileSet tileSet, boolean multipleTileSets) {
         for (Layer layer : map.layers()) {
-            if (!layer.type().equals("tilelayer")) {
+            if (layer.chunks() == null) {
                 continue;
             }
             for (Chunk chunk : layer.chunks()) {
@@ -186,6 +186,7 @@ public class IngameController extends Controller {
      */
 
     private void renderChunk(Map map, Image image, TileSet tileSet, boolean multipleTileSets, Chunk chunk) {
+        graphicsContext = canvas.getGraphicsContext2D();
         for (int y = 0; y < chunk.height(); y++) {
             for (int x = 0; x < chunk.width(); x++) {
                 int tileId = chunk.data().get(y * chunk.width() + x);
@@ -195,38 +196,13 @@ public class IngameController extends Controller {
                 if (multipleTileSets) {
                     if (checkIfNotInTileSet(map, tileSet, tileId)) continue;
                 }
-                ImageView imageView;
-                if (tilesImages.containsKey(tileId)) {
-                    imageView = tilesImages.get(tileId);
-                } else {
-                    imageView = extractTile(image, tileSet, chunk, y, x, tileId);
-                }
-                ingamePane.getChildren().add(imageView);
+                int tilesPerRow = (int) (image.getWidth() / TILE_SIZE);
+                int tileX = ((tileId - tileSet.firstgid()) % tilesPerRow) * TILE_SIZE;
+                int tileY = ((tileId - tileSet.firstgid()) / tilesPerRow) * TILE_SIZE;
+                graphicsContext.drawImage(image, tileX, tileY, TILE_SIZE, TILE_SIZE,
+                        (chunk.x() + x) * TILE_SIZE, (chunk.y() + y) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
             }
         }
-    }
-
-    /**
-     * extractTile is used to extract the image of a tile. It extracts the image of the tile from the image of the tileset.
-     *
-     * @param image   Image of the current tileset.
-     * @param tileSet Current tileset.
-     * @param chunk   Current chunk.
-     * @param y       Y coordinate of the tile.
-     * @param x       X coordinate of the tile.
-     * @param tileId  ID of the tile.
-     * @return ImageView of the tile.
-     */
-
-    private ImageView extractTile(Image image, TileSet tileSet, Chunk chunk, int y, int x, int tileId) {
-        int tilesPerRow = (int) (image.getWidth() / TILE_SIZE);
-        int tileX = ((tileId - tileSet.firstgid()) % tilesPerRow) * TILE_SIZE;
-        int tileY = ((tileId - tileSet.firstgid()) / tilesPerRow) * TILE_SIZE;
-        WritableImage writableImage = new WritableImage(image.getPixelReader(), tileX, tileY, TILE_SIZE, TILE_SIZE);
-        ImageView imageView = new ImageView(writableImage);
-        imageView.setTranslateX((chunk.x() + x) * TILE_SIZE);
-        imageView.setTranslateY((chunk.y() + y) * TILE_SIZE);
-        return imageView;
     }
 
     /**
