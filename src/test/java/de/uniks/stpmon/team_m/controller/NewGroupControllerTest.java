@@ -57,7 +57,7 @@ public class NewGroupControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        groupController.setValues(bundle,null,null,groupController,app);
+        groupController.setValues(bundle, null, null, groupController, app);
         when(groupStorageProvider.get()).thenReturn(mock(GroupStorage.class));
         when(groupStorageProvider.get().get_id()).thenReturn("");
         when(userStorageProvider.get()).thenReturn(mock(UserStorage.class));

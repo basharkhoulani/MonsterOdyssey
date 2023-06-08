@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.utils;
 
+import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.Trainer;
 
 import javax.inject.Inject;
@@ -8,14 +9,13 @@ import javax.inject.Singleton;
 
 @Singleton
 public class TrainerStorage {
-
-    private String regionId;
     private String trainerName;
     private String trainerSprite;
     private int x;
     private int y;
     private int direction;
     private Trainer trainer;
+    private Region region;
 
     @Inject
     public TrainerStorage() {
@@ -23,10 +23,6 @@ public class TrainerStorage {
 
     public void setTrainer(Trainer trainer) {
         this.trainer = trainer;
-    }
-
-    public void setRegionId(String regionId) {
-        this.regionId = regionId;
     }
 
     public void setTrainerName(String trainerName) {
@@ -41,16 +37,20 @@ public class TrainerStorage {
         return trainer;
     }
 
-    public String getRegionId() {
-        return regionId;
-    }
-
     public String getTrainerName() {
         return trainerName;
     }
 
     public String getTrainerSprite() {
         return trainerSprite;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
+    }
+
+    public Region getRegion() {
+        return region;
     }
 
     public int getX() {

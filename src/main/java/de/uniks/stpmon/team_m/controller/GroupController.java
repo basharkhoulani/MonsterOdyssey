@@ -23,7 +23,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.EMPTY_STRING;
+import static de.uniks.stpmon.team_m.Constants.MAX_SUGGESTIONS_NEW_GROUP;
 
 public class GroupController extends Controller {
 
@@ -136,7 +137,8 @@ public class GroupController extends Controller {
                 .flatMap(users -> usersService.getUsers(userStorage.get().getFriends(), null).observeOn(FX_SCHEDULER))
                 .doOnNext(this::sortGroupMembersIntoLists)
                 .observeOn(FX_SCHEDULER)
-                .subscribe(event -> {}, error -> showError(error.getMessage())));
+                .subscribe(event -> {
+                }, error -> showError(error.getMessage())));
     }
 
     /**
@@ -190,7 +192,7 @@ public class GroupController extends Controller {
             groupNameInput.setPromptText(resources.getString("CHANGE.GROUP"));
             groupNameInput.setText(groupStorageProvider.get().getName());
         }
-      
+
         initFriendsListView();
         initForeignListView();
         listenToUserUpdate(friends, friendsListView);

@@ -2,8 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.CharacterSelectionController;
-import de.uniks.stpmon.team_m.dto.NPCInfo;
-import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import io.reactivex.rxjava3.core.Observable;
@@ -17,10 +16,14 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
+
 import javax.inject.Provider;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,15 +45,35 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        welcomeSceneController.setValues(bundle,null,null,welcomeSceneController,app);
+        welcomeSceneController.setValues(bundle, null, null, welcomeSceneController, app);
         final CharacterSelectionController characterSelectionController = mock(CharacterSelectionController.class);
         when(characterSelectionControllerProvider.get()).thenReturn(characterSelectionController);
         doNothing().when(app).show(characterSelectionController);
 
         final TrainerStorage trainerStorage = mock(TrainerStorage.class);
         when(trainerStorageProvider.get()).thenReturn(trainerStorage);
-
-
+        when(trainerStorageProvider.get().getRegion()).thenReturn(new Region(
+                "2023-05-22T17:51:46.772Z",
+                "2023-05-22T17:51:46.772Z",
+                "646bc436cfee07c0e408466f",
+                "Albertina",
+                new Spawn("646bc3c0a9ac1b375fb41d93", 1, 1),
+                new Map(-1,
+                        true,
+                        1,
+                        1,
+                        "orthogonal",
+                        "right-down",
+                        "1.6.1",
+                        "map",
+                        "1.6",
+                        32,
+                        32,
+                        List.of(),
+                        16,
+                        16,
+                        List.of(),
+                        List.of())));
         final TrainersService trainersService = mock(TrainersService.class);
         when(trainersServiceProvider.get()).thenReturn(trainersService);
         when(trainersService.createTrainer(any(), any(), any())).thenReturn(Observable.just(new Trainer(

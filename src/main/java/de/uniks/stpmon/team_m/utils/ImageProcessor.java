@@ -2,19 +2,15 @@ package de.uniks.stpmon.team_m.utils;
 
 
 import de.uniks.stpmon.team_m.App;
+import javafx.scene.image.Image;
+import okhttp3.ResponseBody;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Base64;
 import java.util.Objects;
-import javafx.scene.image.Image;
-import okhttp3.ResponseBody;
-import java.io.InputStream;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -87,8 +83,8 @@ public class ImageProcessor {
 
         return Base64.getEncoder().encodeToString(imageBytes);
     }
-  
-  public static Image resonseBodyToJavaFXImage(ResponseBody responseBody) throws IOException {
+
+    public static Image responseBodyToJavaFXImage(ResponseBody responseBody) throws IOException {
         try (InputStream inputStream = responseBody.byteStream()) {
             byte[] imageData = toByteArray(inputStream);
             return new Image(new ByteArrayInputStream(imageData));

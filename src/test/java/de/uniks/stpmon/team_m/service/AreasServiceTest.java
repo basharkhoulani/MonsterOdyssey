@@ -1,11 +1,11 @@
 package de.uniks.stpmon.team_m.service;
 
 import de.uniks.stpmon.team_m.dto.Area;
+import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.rest.AreasApiService;
 import io.reactivex.rxjava3.core.Observable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mapeditor.core.Map;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -33,17 +33,46 @@ public class AreasServiceTest {
                         "646bc3c0a9ac1b375fb41d93",
                         "646bc436cfee07c0e408466f",
                         "Albertina",
-                        new Object()
-                ),
+                        new Map(-1,
+                                true,
+                                1,
+                                1,
+                                "orthogonal",
+                                "right-down",
+                                "1.6.1",
+                                "map",
+                                "1.6",
+                                32,
+                                32,
+                                List.of(),
+                                16,
+                                16,
+                                List.of(),
+                                List.of())),
                 new Area(
                         "2023-05-16T17:51:15.772Z",
                         "2023-05-18T11:23:46.772Z",
                         "646bc3c0a9ac1b375fb41d61",
                         "646bc436cfee07c0e408466f",
                         "Sanitaire",
-                        new Object()
-                )
-        )));
+                        new Map(
+                                -1,
+                                true,
+                                1,
+                                1,
+                                "orthogonal",
+                                "right-down",
+                                "1.6.1",
+                                "map",
+                                "1.6",
+                                32,
+                                32,
+                                List.of(),
+                                16,
+                                16,
+                                List.of(),
+                                List.of())))
+        ));
 
         final List<Area> areas = areasService.getAreas("646bc436cfee07c0e408466f").blockingFirst();
 
@@ -60,8 +89,24 @@ public class AreasServiceTest {
                         "646bc3c0a9ac1b375fb41d93",
                         "646bc436cfee07c0e408466f",
                         "Albertina",
-                        new Map()
-                )
+                        new Map(
+                                -1,
+                                true,
+                                1,
+                                1,
+                                "orthogonal",
+                                "right-down",
+                                "1.6.1",
+                                "map",
+                                "1.6",
+                                32,
+                                32,
+                                List.of(),
+                                16,
+                                16,
+                                List.of(),
+                                List.of()))
+
         ));
 
         final Area area = areasService.getArea("646bc436cfee07c0e408466f", "646bc6960b9bca2eae935a69").blockingFirst();

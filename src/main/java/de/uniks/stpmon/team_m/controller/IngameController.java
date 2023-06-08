@@ -1,19 +1,26 @@
 package de.uniks.stpmon.team_m.controller;
 
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
-import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
+import de.uniks.stpmon.team_m.dto.*;
+import de.uniks.stpmon.team_m.service.AreasService;
+import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -22,6 +29,7 @@ import javafx.stage.Window;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -36,21 +44,26 @@ public class IngameController extends Controller {
     public Button monstersButton;
     @FXML
     public Button settingsButton;
-
-    private IngameTrainerSettingsController trainerSettingsController;
-
-    @Inject
-    Provider<MainMenuController> mainMenuControllerProvider;
-    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
-
+    @FXML
+    public Canvas canvas;
+    @FXML
+    public VBox ingameVBox;
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
-    private String regionId;
+    @Inject
+    Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
+    AreasService areasService;
+    @Inject
+    PresetsService presetsService;
+    GraphicsContext graphicsContext;
+    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
+    @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
     private final ObservableList<MoveTrainerDto> moveTrainerDtos = FXCollections.observableArrayList();
+    HashMap<String, Image> tileSetImages = new HashMap<>();
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -63,8 +76,6 @@ public class IngameController extends Controller {
     @Override
     public void init() {
         super.init();
-        trainerSettingsController = ingameTrainerSettingsControllerProvider.get();
-        trainerSettingsController.init();
     }
 
     /**
@@ -116,6 +127,9 @@ public class IngameController extends Controller {
                         trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 3)).subscribe());
             }
         });
+        Region region = trainerStorageProvider.get().getRegion();
+        disposables.add(areasService.getArea(region._id(), region.spawn().area()).observeOn(FX_SCHEDULER)
+                .subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
         return parent;
     }
 
@@ -131,6 +145,137 @@ public class IngameController extends Controller {
                         trainerStorageProvider.get().setDirection(moveTrainerDto.direction());
                     }
                 }, error -> showError(error.getMessage())));
+    }
+
+    /**
+     * loadMap is used to load the map of the current area, given a Tiled Map. It loads every image of every tileset, then
+     * calls afterAllTileSetsLoaded to render the map. It also sets the size of the stage to the size of the map.
+     *
+     * @param map Tiled Map of the current area.
+     */
+
+    private void loadMap(Map map) {
+        tileSetImages.clear();
+        for (TileSet tileSet : map.tilesets()) {
+            final String mapName = getFileName(tileSet.source());
+            disposables.add(presetsService.getTilesetImage(mapName).observeOn(FX_SCHEDULER).subscribe(image -> {
+                tileSetImages.put(mapName, image);
+                afterAllTileSetsLoaded(map);
+            }, error -> showError(error.getMessage())));
+        }
+        app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);
+        app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
+    }
+
+    /**
+     * loadPlayer is used to load the player on the map. It loads the image of the player and sets its position.
+     */
+
+    private void loadPlayer() {
+        final Trainer trainer = trainerStorageProvider.get().getTrainer();
+        Image image = new Image(Objects.requireNonNull(App.class.getResource("images/character.png")).toString());
+        graphicsContext.drawImage(image, trainer.x() * TILE_SIZE, trainer.y() * TILE_SIZE);
+    }
+
+    /**
+     * afterAllTileSetsLoaded is used to render the map. It renders every chunk of every layer of every tileset. After
+     * rendering the map, it calls loadPlayer to load the player on the map.
+     *
+     * @param map Tiled Map of the current area.
+     */
+
+    private void afterAllTileSetsLoaded(Map map) {
+        canvas.setWidth(map.width() * TILE_SIZE);
+        canvas.setHeight(map.height() * TILE_SIZE);
+        if (tileSetImages.size() == map.tilesets().size()) {
+            for (TileSet tileSet : map.tilesets()) {
+                renderMap(map, tileSetImages.get(getFileName(tileSet.source())),
+                        tileSet, map.tilesets().size() > 1);
+            }
+            loadPlayer();
+        }
+    }
+
+    /**
+     * renderMap is used to render the map. It renders every chunk of every layer of the map. It skips every layer that
+     * is not a tilelayer. It calls renderChunk to render every chunk.
+     *
+     * @param map              Tiled Map of the current area.
+     * @param image            Image of the current tileset.
+     * @param tileSet          Current tileset.
+     * @param multipleTileSets Boolean that is true if there are multiple tilesets.
+     */
+
+    private void renderMap(Map map, Image image, TileSet tileSet, boolean multipleTileSets) {
+        for (Layer layer : map.layers()) {
+            if (layer.chunks() == null) {
+                continue;
+            }
+            for (Chunk chunk : layer.chunks()) {
+                renderChunk(map, image, tileSet, multipleTileSets, chunk);
+            }
+        }
+    }
+
+    /**
+     * renderChunk is used to render a chunk of the map. It renders every tile of the chunk. It skips every tile that
+     * is not in the current tileset. It calls extractTile to extract the image of the tile.
+     *
+     * @param map              Tiled Map of the current area.
+     * @param image            Image of the current tileset.
+     * @param tileSet          Current tileset.
+     * @param multipleTileSets Boolean that is true if there are multiple tilesets.
+     * @param chunk            Current chunk.
+     */
+
+    private void renderChunk(Map map, Image image, TileSet tileSet, boolean multipleTileSets, Chunk chunk) {
+        graphicsContext = canvas.getGraphicsContext2D();
+        for (int y = 0; y < chunk.height(); y++) {
+            for (int x = 0; x < chunk.width(); x++) {
+                int tileId = chunk.data().get(y * chunk.width() + x);
+                if (tileId == 0) {
+                    continue;
+                }
+                if (multipleTileSets) {
+                    if (checkIfNotInTileSet(map, tileSet, tileId)) continue;
+                }
+                int tilesPerRow = (int) (image.getWidth() / TILE_SIZE);
+                int tileX = ((tileId - tileSet.firstgid()) % tilesPerRow) * TILE_SIZE;
+                int tileY = ((tileId - tileSet.firstgid()) / tilesPerRow) * TILE_SIZE;
+                graphicsContext.drawImage(image, tileX, tileY, TILE_SIZE, TILE_SIZE,
+                        (chunk.x() + x) * TILE_SIZE, (chunk.y() + y) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            }
+        }
+    }
+
+    /**
+     * checkIfNotInTileSet is used to check if a tile is not in the current tileset.
+     *
+     * @param map     Tiled Map of the current area.
+     * @param tileSet Current tileset.
+     * @param tileId  ID of the tile.
+     * @return Boolean that is true if the tile is not in the current tileset.
+     */
+
+    private boolean checkIfNotInTileSet(Map map, TileSet tileSet, int tileId) {
+        int tileSetIndex = map.tilesets().indexOf(tileSet);
+        if (tileSetIndex < map.tilesets().size() - 1) {
+            TileSet nextTileSet = map.tilesets().get(tileSetIndex + 1);
+            return tileId >= nextTileSet.firstgid();
+        } else return tileId < tileSet.firstgid();
+    }
+
+    /**
+     * getFileName is used to get the name of the file.
+     *
+     * @param name Name of the file.
+     * @return Name of the file.
+     */
+
+    private static String getFileName(String name) {
+        name = name.substring(name.lastIndexOf("/") + 1);
+        name = name.substring(0, name.lastIndexOf("."));
+        return name;
     }
 
     /**
@@ -195,22 +340,16 @@ public class IngameController extends Controller {
         }
     }
 
-    public void setRegion(String regionId) {
-        this.regionId = regionId;
-    }
-
-
     public void showTrainerSettings() {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
-        trainerSettingsController.setRegion(this.regionId);
         trainerSettingsDialog.setTitle(resources.getString("Trainer.Profil"));
-        trainerSettingsDialog.getDialogPane().setContent(trainerSettingsController.render());
+        trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());
         trainerSettingsDialog.getDialogPane().setExpandableContent(null);
         trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
         trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");
         Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();
         popUp.setOnCloseRequest(evt ->
-            ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close()
+                ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close()
         );
         trainerSettingsDialog.showAndWait();
     }

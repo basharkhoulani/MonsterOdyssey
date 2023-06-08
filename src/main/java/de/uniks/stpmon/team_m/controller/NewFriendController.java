@@ -18,7 +18,8 @@ import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.List;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.EMPTY_STRING;
+import static de.uniks.stpmon.team_m.Constants.HTTP_403;
 
 public class NewFriendController extends Controller {
 

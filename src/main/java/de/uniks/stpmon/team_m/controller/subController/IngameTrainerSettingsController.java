@@ -3,7 +3,6 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.controller.MainMenuController;
-import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.RegionsService;
@@ -13,8 +12,10 @@ import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -22,10 +23,7 @@ import javafx.stage.Stage;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
-
 import java.util.Optional;
-
-import static de.uniks.stpmon.team_m.Constants.*;
 
 @Singleton
 public class IngameTrainerSettingsController extends Controller {
@@ -121,7 +119,7 @@ public class IngameTrainerSettingsController extends Controller {
     private void loadAndSetTrainerImage() {
         disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody ->  {
             try {
-                trainerImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
+                trainerImage = ImageProcessor.responseBodyToJavaFXImage(responseBody);
                 trainerAvatarImageView.setImage(trainerImage);
             }
             catch (Exception e) {

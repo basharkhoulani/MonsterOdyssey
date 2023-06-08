@@ -17,7 +17,8 @@ import javax.inject.Provider;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.BEST_FRIEND_PREF;
+import static de.uniks.stpmon.team_m.Constants.EMPTY_STRING;
 
 public class FriendSettingsController extends Controller {
 

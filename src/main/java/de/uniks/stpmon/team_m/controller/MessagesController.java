@@ -30,7 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.EMPTY_STRING;
+import static de.uniks.stpmon.team_m.Constants.MESSAGE_NAMESPACE_GROUPS;
 
 public class MessagesController extends Controller {
 
@@ -107,7 +108,8 @@ public class MessagesController extends Controller {
 
     @Override
     public void init() {
-        setContentFriendsAndGroupsList();}
+        setContentFriendsAndGroupsList();
+    }
 
     /**
      * Gets a list of friends or groups and displays them in the list view.
@@ -129,7 +131,8 @@ public class MessagesController extends Controller {
                     if (userChosenFromNewFriend) {
                         selectGroupChosenFromMainMenu();
                     }
-                }).observeOn(FX_SCHEDULER).subscribe(event -> {}, error -> showError(error.getMessage())));
+                }).observeOn(FX_SCHEDULER).subscribe(event -> {
+                }, error -> showError(error.getMessage())));
     }
 
     private void selectGroupChosenFromMainMenu() {
@@ -257,6 +260,7 @@ public class MessagesController extends Controller {
             }
         }
     }
+
     /**
      * This method is to set the behaviour of a selected friend.
      *
@@ -277,7 +281,7 @@ public class MessagesController extends Controller {
     /**
      * This method initializes group and friend list views and listens to changes of groups and friends.
      */
-  
+
     private void initListViews() {
         userListView.setPlaceholder(new Label(resources.getString("NO.FRIENDS.FOUND")));
         userListView.setCellFactory(param -> new UserCell(preferences));
@@ -293,7 +297,7 @@ public class MessagesController extends Controller {
     /**
      * This method destroys the subcontrollers which are MessagesBoxControllers and clears the maps.
      */
-  
+
     @Override
     public void destroy() {
         super.destroy();

@@ -38,7 +38,7 @@ class LoginControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        loginController.setValues(bundle,null,null,loginController,app);
+        loginController.setValues(bundle, null, null, loginController, app);
         app.start(stage);
         app.show(loginController);
         stage.requestFocus();
