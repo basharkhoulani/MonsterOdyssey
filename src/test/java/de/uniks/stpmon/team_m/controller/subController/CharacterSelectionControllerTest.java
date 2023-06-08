@@ -2,10 +2,13 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.WelcomeSceneController;
+import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import io.reactivex.rxjava3.core.Observable;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -24,6 +27,8 @@ public class CharacterSelectionControllerTest extends ApplicationTest {
     Provider<WelcomeSceneController> welcomeSceneControllerProvider;
     @Mock
     Provider<TrainerStorage> trainerStorageProvider;
+    @Mock
+    Provider<PresetsService> presetsServiceProvider;
     @Spy
     App app = new App(null);
 
@@ -34,7 +39,10 @@ public class CharacterSelectionControllerTest extends ApplicationTest {
         doNothing().when(app).show(welcomeSceneController);
 
         final TrainerStorage trainerStorage = mock(TrainerStorage.class);
+        final PresetsService presetsService = mock(PresetsService.class);
         when(trainerStorageProvider.get()).thenReturn(trainerStorage);
+        when(presetsServiceProvider.get()).thenReturn(presetsService);
+        when(presetsService.getCharacter(ArgumentMatchers.anyString())).thenReturn(Observable.empty());
 
         app.start(stage);
         app.show(characterSelectionController);
