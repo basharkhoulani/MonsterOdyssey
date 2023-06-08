@@ -17,6 +17,8 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
+import java.awt.*;
 import java.util.Objects;
 
 
@@ -36,7 +38,7 @@ public class IngameTrainerSettingsController extends Controller {
     public TrainersService trainersService;
 
     @Inject
-    public TrainerStorage trainerStorage;
+    public Provider<TrainerStorage> trainerStorageProvider;
     @Inject
     public UserStorage usersStorage;
 
@@ -71,10 +73,13 @@ public class IngameTrainerSettingsController extends Controller {
     }
 
     private void loadAndSetTrainerImage() {
-        String trainerSprite = trainerStorage.getTrainerSprite();
-        trainerSprite = trainerSprite.substring(8);
-        String path = Objects.requireNonNull(Main.class.getResource("charactermodels/" + trainerSprite)).toString();
-        Image trainerImage = new Image(path);
-        trainerAvatarImageView.setImage(trainerImage);
+        String trainerSprite = trainerStorageProvider.get().getTrainerSprite();
+        if (!GraphicsEnvironment.isHeadless()) {
+            trainerSprite = trainerSprite.substring(8);
+            String path = Objects.requireNonNull(Main.class.getResource("charactermodels/" + trainerSprite)).toString();
+            Image trainerImage = new Image(path);
+            trainerAvatarImageView.setImage(trainerImage);
+        }
+
     }
 }
