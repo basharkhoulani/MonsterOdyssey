@@ -225,10 +225,11 @@ public class MainMenuController extends Controller {
 <span class="fc" id="L225">                        app.show(welcomeSceneController);</span>
                     } else {
 <span class="fc" id="L227">                        ingameControllerProvider.get().setRegion(selectedRegion._id());</span>
-<span class="fc" id="L228">                        app.show(ingameControllerProvider.get());</span>
+<span class="fc" id="L228">                        trainerStorageProvider.get().setTrainer(result.get(0));</span>
+<span class="fc" id="L229">                        app.show(ingameControllerProvider.get());</span>
                     }
-<span class="pc" id="L230">                }, error -&gt; showError(error.getMessage())</span>
+<span class="pc" id="L231">                }, error -&gt; showError(error.getMessage())</span>
         ));
-<span class="fc" id="L232">    }</span>
+<span class="fc" id="L233">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
