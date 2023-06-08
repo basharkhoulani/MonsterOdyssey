@@ -3,13 +3,16 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
+import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
+import de.uniks.stpmon.team_m.udp.UDPEventListener;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -43,6 +46,11 @@ public class IngameController extends Controller {
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
     private String regionId;
+    @Inject
+    Provider<TrainerStorage> trainerStorageProvider;
+    @Inject
+    Provider<UDPEventListener> udpEventListenerProvider;
+    private final ObservableList<MoveTrainerDto> moveTrainerDtos = FXCollections.observableArrayList();
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -79,13 +87,50 @@ public class IngameController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
+        trainerStorageProvider.get().setX(trainerStorageProvider.get().getTrainer().x());
+        trainerStorageProvider.get().setY(trainerStorageProvider.get().getTrainer().y());
+        trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());
+        listenToMovement(moveTrainerDtos,trainerStorageProvider.get().getTrainer().area());
         app.getStage().getScene().setOnKeyPressed(event -> {
-            if (!(event.getCode() == PAUSE_MENU_KEY)) {
-                return;
+            if ((event.getCode() == PAUSE_MENU_KEY)) {
+                pauseGame();
             }
-            pauseGame();
+            if ((event.getCode() == KeyCode.W)) {
+                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
+                        trainerStorageProvider.get().getTrainer().area(),
+                            trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() + 1, 0)).subscribe());
+            }
+            if ((event.getCode() == KeyCode.A)) {
+                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
+                        trainerStorageProvider.get().getTrainer().area(),
+                        trainerStorageProvider.get().getX() - 1, trainerStorageProvider.get().getY() , 1)).subscribe());
+            }
+            if ((event.getCode() == KeyCode.S)) {
+                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
+                        trainerStorageProvider.get().getTrainer().area(),
+                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() - 1, 2)).subscribe());
+            }
+            if ((event.getCode() == KeyCode.D)) {
+                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
+                        trainerStorageProvider.get().getTrainer().area(),
+                        trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 3)).subscribe());
+            }
         });
         return parent;
+    }
+
+
+    public void listenToMovement(ObservableList<MoveTrainerDto> moveTrainerDtos, String area) {
+        disposables.add(udpEventListenerProvider.get().listen("areas." + area + ".trainers.*.*", MoveTrainerDto.class)
+                .observeOn(FX_SCHEDULER).subscribe(event -> {
+                    final MoveTrainerDto moveTrainerDto = event.data();
+                    moveTrainerDtos.add(moveTrainerDto);
+                    if (moveTrainerDto._id().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                        trainerStorageProvider.get().setX(moveTrainerDto.x());
+                        trainerStorageProvider.get().setY(moveTrainerDto.y());
+                        trainerStorageProvider.get().setDirection(moveTrainerDto.direction());
+                    }
+                }, error -> showError(error.getMessage())));
     }
 
     /**

@@ -225,6 +225,7 @@ public class MainMenuController extends Controller {
                         app.show(welcomeSceneController);
                     } else {
                         ingameControllerProvider.get().setRegion(selectedRegion._id());
+                        trainerStorageProvider.get().setTrainer(result.get(0));
                         app.show(ingameControllerProvider.get());
                     }
                 }, error -> showError(error.getMessage())
