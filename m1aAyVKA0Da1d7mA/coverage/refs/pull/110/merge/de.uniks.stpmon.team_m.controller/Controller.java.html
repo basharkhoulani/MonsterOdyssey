@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Controller.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller</a> &gt; <span class="el_source">Controller.java</span></div><h1>Controller.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller;
+
+import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.utils.FriendListUtils;
+import de.uniks.stpmon.team_m.ws.EventListener;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ListView;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import java.io.IOException;
+import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+
+<span class="fc" id="L26">public abstract class Controller {</span>
+
+    @Inject
+    protected ResourceBundle resources;
+    @Inject
+    protected Preferences preferences;
+    @Inject
+    protected Provider&lt;ResourceBundle&gt; resourceBundleProvider;
+    protected Controller toReload;
+    protected App app;
+    @Inject
+    Provider&lt;EventListener&gt; eventListenerProvider;
+<span class="fc" id="L38">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
+<span class="fc" id="L39">    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);</span>
+
+    /**
+     * This method is called when the controller is initialized. It is called before the render() method.
+     */
+
+    public void init() {
+<span class="fc" id="L46">    }</span>
+
+    public void setValues(ResourceBundle resources, Preferences preferences, Provider&lt;ResourceBundle&gt; resourceBundleProvider, Controller toReload, App app) {
+<span class="fc" id="L49">        this.resources = resources;</span>
+<span class="fc" id="L50">        this.preferences = preferences;</span>
+<span class="fc" id="L51">        this.resourceBundleProvider = resourceBundleProvider;</span>
+<span class="fc" id="L52">        this.toReload = toReload;</span>
+<span class="fc" id="L53">        this.app = app;</span>
+<span class="fc" id="L54">    }</span>
+
+    public void setApp(App app) {
+<span class="fc" id="L57">        this.app = app;</span>
+<span class="fc" id="L58">    }</span>
+
+    public void reload(Controller controller) {
+<span class="nc" id="L61">        resources = resourceBundleProvider.get();</span>
+<span class="nc" id="L62">        app.show(controller);</span>
+<span class="nc" id="L63">    }</span>
+
+    /**
+     * This method is called when the controller title is needed and to be set.
+     */
+
+    public String getTitle() {
+<span class="fc" id="L70">        return EMPTY_STRING;</span>
+    }
+
+    /**
+     * This method is called when the controller is destroyed to clean up.
+     */
+
+    public void destroy() {
+<span class="fc" id="L78">        disposables.dispose();</span>
+<span class="fc" id="L79">    }</span>
+
+    /**
+     * This method is called when the controller is rendered.
+     * It loads the fxml file and its elements and sets the controller factory.
+     *
+     * @return Parent object
+     */
+
+    public Parent render() {
+<span class="fc" id="L89">        return load(getClass().getSimpleName().replace(&quot;Controller&quot;, &quot;&quot;));</span>
+    }
+
+    protected Parent load(String view) {
+<span class="fc" id="L93">        final FXMLLoader loader = new FXMLLoader((Main.class.getResource(&quot;views/&quot; + view + &quot;.fxml&quot;)));</span>
+<span class="fc" id="L94">        loader.setControllerFactory(c -&gt; this);</span>
+<span class="fc" id="L95">        loader.setResources(resources);</span>
+        try {
+<span class="fc" id="L97">            return loader.load();</span>
+<span class="nc" id="L98">        } catch (IOException exception) {</span>
+<span class="nc" id="L99">            throw new RuntimeException(exception);</span>
+        }
+    }
+
+    /**
+     * This method sets the height and minimum height of the stage.
+     *
+     * @return height
+     */
+
+    public int getHeight() {
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        return STANDARD_HEIGHT != app.getStage().getHeight() ? (int) app.getStage().getHeight() : STANDARD_HEIGHT;</span>
+    }
+
+    /**
+     * This method sets the width and minimum width of the stage.
+     *
+     * @return width
+     */
+
+    public int getWidth() {
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        return STANDARD_WIDTH != app.getStage().getWidth() ? (int) app.getStage().getWidth() : STANDARD_WIDTH;</span>
+    }
+
+    /**
+     * This method is called when there are user changes and updates the user list.
+     *
+     * @param friends         List of friends to be updated
+     * @param friendsListView ListView of friends list
+     */
+
+    public void listenToUserUpdate(ObservableList&lt;User&gt; friends, ListView&lt;User&gt; friendsListView) {
+<span class="fc" id="L131">        disposables.add(eventListenerProvider.get().listen(&quot;users.*.*&quot;, User.class).observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L132">                .subscribe(event -&gt; {</span>
+<span class="fc" id="L133">                    final User user = event.data();</span>
+<span class="fc bfc" id="L134" title="All 3 branches covered.">                    switch (event.suffix()) {</span>
+<span class="fc" id="L135">                        case &quot;updated&quot; -&gt; updateUser(friends, friendsListView, user);</span>
+<span class="fc" id="L136">                        case &quot;deleted&quot; -&gt; friends.remove(user);</span>
+                    }
+<span class="fc" id="L138">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L139">    }</span>
+
+    /**
+     * This method is called when the friend user has had a change. Its user cell will be updated with
+     * the new information.
+     *
+     * @param friends         List of friends to be updated
+     * @param friendsListView ListView of friends list
+     * @param user            User to be updated
+     */
+
+    private void updateUser(ObservableList&lt;User&gt; friends, ListView&lt;User&gt; friendsListView, User user) {
+<span class="fc" id="L151">        User userToUpdate = friends.stream()</span>
+<span class="fc" id="L152">                .filter(friend -&gt; friend._id().equals(user._id()))</span>
+<span class="fc" id="L153">                .findFirst()</span>
+<span class="fc" id="L154">                .orElse(null);</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        if (userToUpdate != null) {</span>
+<span class="fc" id="L156">            friends.set(friends.indexOf(userToUpdate), user);</span>
+<span class="fc" id="L157">            FriendListUtils.sortListView(friendsListView);</span>
+        }
+<span class="fc" id="L159">    }</span>
+
+    /**
+     * This method is called when there is an error and shows an alert with the error message.
+     *
+     * @param error Error message
+     */
+
+    public void showError(String error) {
+<span class="fc" id="L168">        Alert alert = new Alert(Alert.AlertType.ERROR);</span>
+<span class="fc" id="L169">        alert.setTitle(resources.getString(&quot;ERROR&quot;));</span>
+<span class="fc" id="L170">        alert.setHeaderText(null);</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        if (error.contains(HTTP_429)) {</span>
+<span class="fc" id="L172">            alert.setContentText(resources.getString(&quot;HTTP.429.MESSAGE&quot;));</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        } else if (error.contains(HTTP_409)) {</span>
+<span class="fc" id="L174">            alert.setContentText(resources.getString(&quot;HTTP.409.MESSAGE&quot;));</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        } else if (error.contains(HTTP_404)) {</span>
+<span class="fc" id="L176">            alert.setContentText(resources.getString(&quot;HTTP.404.MESSAGE&quot;));</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        } else if (error.contains(HTTP_403)) {</span>
+<span class="fc" id="L178">            alert.setContentText(resources.getString(&quot;HTTP.403.MESSAGE&quot;));</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">        } else if (error.contains(HTTP_401)) {</span>
+<span class="fc" id="L180">            alert.setContentText(resources.getString(&quot;HTTP.401.MESSAGE&quot;));</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">        } else if (error.contains(HTTP_400)) {</span>
+<span class="fc" id="L182">            alert.setContentText(resources.getString(&quot;HTTP.400.MESSAGE&quot;));</span>
+        } else {
+<span class="fc" id="L184">            alert.setContentText(resources.getString(&quot;GENERIC.ERROR&quot;));</span>
+        }
+<span class="fc" id="L186">        alert.showAndWait();</span>
+<span class="fc" id="L187">    }</span>
+
+    public ResourceBundle getResources() {
+<span class="fc" id="L190">        return resources;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
