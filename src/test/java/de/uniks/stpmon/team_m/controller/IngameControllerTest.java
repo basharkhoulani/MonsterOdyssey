@@ -8,6 +8,20 @@ import de.uniks.stpmon.team_m.dto.Spawn;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import io.reactivex.rxjava3.core.Observable;
+import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
+import de.uniks.stpmon.team_m.dto.Event;
+import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
+import de.uniks.stpmon.team_m.dto.NPCInfo;
+import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.udp.UDPEventListener;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import io.reactivex.rxjava3.core.Observable;
+import de.uniks.stpmon.team_m.dto.Event;
+import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
+import de.uniks.stpmon.team_m.dto.NPCInfo;
+import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -42,6 +56,9 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<TrainerStorage> trainerStorageProvider;
     @Mock
     AreasService areasService;
+    @Mock
+    Provider<UDPEventListener> udpEventListenerProvider;
+
     @InjectMocks
     IngameController ingameController;
 
@@ -50,7 +67,28 @@ public class IngameControllerTest extends ApplicationTest {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
         ingameController.setValues(bundle, null, null, ingameController, app);
 
-        when(trainerStorageProvider.get()).thenReturn(mock(TrainerStorage.class));
+        UDPEventListener udpEventListener = mock(UDPEventListener.class);
+        Mockito.when(udpEventListenerProvider.get()).thenReturn(udpEventListener);
+        when(udpEventListener.listen(any(), any())).thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("646bac223b4804b87c0b8054", "64610ec8420b3d786212aea3", 0, 0, 2))));
+        final IngameTrainerSettingsController trainerSettingsController = mock(IngameTrainerSettingsController.class);
+        Mockito.when(trainerSettingsControllerProvider.get()).thenReturn(trainerSettingsController);
+        final TrainerStorage trainerStorage = mock(TrainerStorage.class);
+        Mockito.when(trainerStorageProvider.get()).thenReturn(trainerStorage);
+        Mockito.when(trainerStorage.getTrainer()).thenReturn(new Trainer(
+                "2023-05-22T17:51:46.772Z",
+                "2023-05-22T17:51:46.772Z",
+                "646bac223b4804b87c0b8054",
+                "646bab5cecf584e1be02598a",
+                "646bac8c1a74032c70fffe24",
+                "Hans",
+                "Premade_Character_01.png",
+                0,
+                "646bacc568933551792bf3d5",
+                0,
+                0,
+                0,
+                new NPCInfo(false)
+        ));
         when(trainerStorageProvider.get().getRegion()).thenReturn(
                 new Region(
                         "2023-05-22T17:51:46.772Z",

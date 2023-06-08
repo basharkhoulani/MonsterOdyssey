@@ -8,6 +8,11 @@ import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
+import de.uniks.stpmon.team_m.udp.UDPEventListener;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
@@ -16,6 +21,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -57,6 +64,10 @@ public class IngameController extends Controller {
     PresetsService presetsService;
     GraphicsContext graphicsContext;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
+    private String regionId;
+    @Inject
+    Provider<UDPEventListener> udpEventListenerProvider;
+    private final ObservableList<MoveTrainerDto> moveTrainerDtos = FXCollections.observableArrayList();
     HashMap<String, Image> tileSetImages = new HashMap<>();
 
     /**
@@ -92,16 +103,53 @@ public class IngameController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
+        trainerStorageProvider.get().setX(trainerStorageProvider.get().getTrainer().x());
+        trainerStorageProvider.get().setY(trainerStorageProvider.get().getTrainer().y());
+        trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());
+        listenToMovement(moveTrainerDtos,trainerStorageProvider.get().getTrainer().area());
         app.getStage().getScene().setOnKeyPressed(event -> {
-            if (!(event.getCode() == PAUSE_MENU_KEY)) {
-                return;
+            if ((event.getCode() == PAUSE_MENU_KEY)) {
+                pauseGame();
             }
-            pauseGame();
+            if ((event.getCode() == KeyCode.W)) {
+                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
+                        trainerStorageProvider.get().getTrainer().area(),
+                            trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() + 1, 0)).subscribe());
+            }
+            if ((event.getCode() == KeyCode.A)) {
+                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
+                        trainerStorageProvider.get().getTrainer().area(),
+                        trainerStorageProvider.get().getX() - 1, trainerStorageProvider.get().getY() , 1)).subscribe());
+            }
+            if ((event.getCode() == KeyCode.S)) {
+                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
+                        trainerStorageProvider.get().getTrainer().area(),
+                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() - 1, 2)).subscribe());
+            }
+            if ((event.getCode() == KeyCode.D)) {
+                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
+                        trainerStorageProvider.get().getTrainer().area(),
+                        trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 3)).subscribe());
+            }
         });
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), region.spawn().area()).observeOn(FX_SCHEDULER)
                 .subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
         return parent;
+    }
+
+
+    public void listenToMovement(ObservableList<MoveTrainerDto> moveTrainerDtos, String area) {
+        disposables.add(udpEventListenerProvider.get().listen("areas." + area + ".trainers.*.*", MoveTrainerDto.class)
+                .observeOn(FX_SCHEDULER).subscribe(event -> {
+                    final MoveTrainerDto moveTrainerDto = event.data();
+                    moveTrainerDtos.add(moveTrainerDto);
+                    if (moveTrainerDto._id().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                        trainerStorageProvider.get().setX(moveTrainerDto.x());
+                        trainerStorageProvider.get().setY(moveTrainerDto.y());
+                        trainerStorageProvider.get().setDirection(moveTrainerDto.direction());
+                    }
+                }, error -> showError(error.getMessage())));
     }
 
     /**
