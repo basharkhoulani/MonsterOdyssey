@@ -6,7 +6,6 @@ import de.uniks.stpmon.team_m.dto.NPCInfo;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
-import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -55,7 +53,6 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
                 0,
                 0,
                 new NPCInfo(false)));
-        when(presetsService.getCharacter(anyString())).thenReturn(Observable.empty());
         app.start(stage);
         app.show(trainerSettingsController);
         stage.requestFocus();
