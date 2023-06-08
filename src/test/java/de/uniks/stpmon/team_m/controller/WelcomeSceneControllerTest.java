@@ -3,6 +3,8 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.CharacterSelectionController;
 import de.uniks.stpmon.team_m.dto.NPCInfo;
+import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.dto.Spawn;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -33,8 +35,8 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
     WelcomeSceneController welcomeSceneController;
     @Mock
     Provider<CharacterSelectionController> characterSelectionControllerProvider;
-    @Mock
-    Provider<TrainerStorage> trainerStorageProvider;
+    @Spy
+    TrainerStorage trainerStorage;
     @Mock
     Provider<TrainersService> trainersServiceProvider;
 
@@ -46,10 +48,6 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
         final CharacterSelectionController characterSelectionController = mock(CharacterSelectionController.class);
         when(characterSelectionControllerProvider.get()).thenReturn(characterSelectionController);
         doNothing().when(app).show(characterSelectionController);
-
-        final TrainerStorage trainerStorage = mock(TrainerStorage.class);
-        when(trainerStorageProvider.get()).thenReturn(trainerStorage);
-
 
         final TrainersService trainersService = mock(TrainersService.class);
         when(trainersServiceProvider.get()).thenReturn(trainersService);
@@ -126,6 +124,8 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
 
         // Scene 6 CharacterSelection
         verify(app).show(characterSelectionControllerProvider.get());
+
+        when(trainerStorage.getRegion()).thenReturn(new Region("123", "456", "789", "test", new Spawn("adsad", 0, 0), null));
 
         clickOn("Next");
 
