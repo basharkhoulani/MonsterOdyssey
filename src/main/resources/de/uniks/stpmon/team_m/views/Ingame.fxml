@@ -9,8 +9,8 @@
 <?import javafx.scene.text.*?>
 
 <VBox fx:id="ingameVBox" alignment="CENTER_LEFT" cacheShape="false" centerShape="false" scaleShape="false" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
-   <StackPane cacheShape="false" centerShape="false" scaleShape="false" style="-fx-background-color: black;" stylesheets="@../styles.css" VBox.vgrow="ALWAYS">
-      <Canvas fx:id="canvas" height="200.0" width="200.0" onMouseClicked="#canvasClicked"/>
+   <StackPane cacheShape="false" centerShape="false" scaleShape="false" style="-fx-background-color: black;" stylesheets="@../styles.css" VBox.vgrow="ALWAYS" onMouseClicked="#paneClicked">
+      <Canvas fx:id="canvas" height="200.0" width="200.0" />
        <VBox alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
            <ImageView fx:id="playerSpriteImageView" fitHeight="30.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                <Image url="@../charactermodels/Character_01.png" />
@@ -60,7 +60,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
          </StackPane.margin>
          <TextField fx:id="messageField" maxHeight="40.0" maxWidth="400.0" minHeight="40.0" minWidth="400.0"
-                    promptText="Send a message">
+                    promptText="%SEND.MESSAGE" onMouseClicked="#messageFieldClicked">
             <font>
                <Font name="Comic Sans MS" size="14.0"/>
             </font>
@@ -76,7 +76,7 @@
             </styleClass>
          </Button>
          <Button fx:id="sendMessageButton" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0"
-                 mnemonicParsing="false" onAction="#sendMessage" styleClass="buttonsYellow" text="%SEND">
+                 mnemonicParsing="false" onAction="#sendMessageButton" styleClass="buttonsYellow" text="%SEND">
             <font>
                <Font name="Comic Sans MS Bold" size="17.0"/>
             </font>
