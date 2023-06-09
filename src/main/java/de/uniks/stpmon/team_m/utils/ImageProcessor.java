@@ -11,6 +11,9 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Base64;
 import java.util.Objects;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
+import java.io.InputStream;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -73,6 +76,41 @@ public class ImageProcessor {
 
         return bufferedImage;
     }
+    /**
+     * This method is used to crop the
+     * @param trainerChumk into 6 Images, that displays the player character moving in some direction
+     * @param direction : either "up", "down", "left" or "right" are possible directions
+     * @param isWalking : determine if the character is moving or not
+     */
+    public static Image[] cropTrainerImages(Image trainerChumk, String direction, Boolean isWalking) {
+        Image[] array = new Image[6];
+        int x,y;
+        if (isWalking) {
+            y = 71;
+        }
+        else {
+            y = 39;
+        }
+        switch (direction) {
+            case "right"    -> x = 0;
+            case "up"       -> x = 96;
+            case "left"     -> x = 192;
+            default         -> x = 288;
+        }
+        for (int i=0; i < 6; i++) {
+            array[i] = getSubImage(trainerChumk, x, y, 16, 25);
+            x += 16;
+        }
+        return array;
+    }
+
+    public static Image getSubImage(Image img, int x, int y, int w, int h) {
+        if (img != null) {
+            PixelReader reader = img.getPixelReader();
+            return new WritableImage(reader, x, y, w, h);
+        }
+        return null;
+    }
 
     private static String convertToBase64(BufferedImage image) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -83,12 +121,15 @@ public class ImageProcessor {
 
         return Base64.getEncoder().encodeToString(imageBytes);
     }
-
-    public static Image responseBodyToJavaFXImage(ResponseBody responseBody) throws IOException {
-        try (InputStream inputStream = responseBody.byteStream()) {
-            byte[] imageData = toByteArray(inputStream);
-            return new Image(new ByteArrayInputStream(imageData));
+  
+  public static Image resonseBodyToJavaFXImage(ResponseBody responseBody) throws IOException {
+        if (responseBody.source() != null) {
+            try (InputStream inputStream = responseBody.byteStream()) {
+                byte[] imageData = toByteArray(inputStream);
+                return new Image(new ByteArrayInputStream(imageData));
+            }
         }
+        return null;
     }
 
     private static byte[] toByteArray(InputStream inputStream) throws IOException {

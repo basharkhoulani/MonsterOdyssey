@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.utils;
 
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.Trainer;
+import javafx.scene.image.Image;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -9,13 +10,15 @@ import javax.inject.Singleton;
 
 @Singleton
 public class TrainerStorage {
+
+    private Region region;
     private String trainerName;
-    private String trainerSprite;
     private int x;
     private int y;
     private int direction;
     private Trainer trainer;
-    private Region region;
+    private String trainerImageUrl;
+    private Image trainerSpriteChunk;
 
     @Inject
     public TrainerStorage() {
@@ -29,28 +32,33 @@ public class TrainerStorage {
         this.trainerName = trainerName;
     }
 
-    public void setTrainerSprite(String trainerSprite) {
-        this.trainerSprite = trainerSprite;
-    }
+    public void setTrainerSprite(String url) { this.trainerImageUrl = url; }
 
     public Trainer getTrainer() {
         return trainer;
     }
 
-    public String getTrainerName() {
-        return trainerName;
+    public Region getRegion() {
+        return region;
     }
-
-    public String getTrainerSprite() {
-        return trainerSprite;
-    }
-
     public void setRegion(Region region) {
         this.region = region;
     }
 
-    public Region getRegion() {
-        return region;
+    public String getTrainerName() {
+        return this.trainerName;
+    }
+
+    public String getTrainerSprite() {
+        return this.trainerImageUrl;
+    }
+
+    public Image getTrainerSpriteChunk() {
+        return trainerSpriteChunk;
+    }
+
+    public void setTrainerSpriteChunk(Image trainerSpriteChunk) {
+        this.trainerSpriteChunk = trainerSpriteChunk;
     }
 
     public int getX() {

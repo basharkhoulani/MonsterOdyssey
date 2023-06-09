@@ -13,9 +13,9 @@
         <bottom>
             <AnchorPane prefHeight="131.0" prefWidth="800.0" BorderPane.alignment="CENTER">
                 <Button fx:id="previousButton" layoutX="56.0" layoutY="14.0" mnemonicParsing="false"
-                        styleClass="welcomeSceneButton" text="%Previous"/>
+                        styleClass="welcomeSceneButton" text="%PREVIOUS"/>
                 <Button fx:id="nextButton" layoutX="657.0" layoutY="14.0" mnemonicParsing="false"
-                        styleClass="welcomeSceneButton" text="%Next"/>
+                        styleClass="welcomeSceneButton" text="%NEXT"/>
             </AnchorPane>
         </bottom>
         <center>
@@ -28,10 +28,10 @@
                 </padding>
                 <VBox fx:id="firstMessageBox" layoutY="163.0" prefHeight="45.0" prefWidth="205.0"
                       styleClass="welcomeMessage">
-                    <Label fx:id="firstMessage" prefHeight="43.0" prefWidth="208.0" text="%Welcome.to.Monster.Odyssey!"/>
+                    <Label fx:id="firstMessage" prefHeight="43.0" prefWidth="208.0" text="%WELCOME.TO.MONSTER.ODYSSEY!"/>
                 </VBox>
                 <VBox layoutX="202.0" layoutY="219.0" prefHeight="45.0" prefWidth="205.0" styleClass="welcomeMessage">
-                    <Label fx:id="secondMessage" prefHeight="43.0" prefWidth="207.0" text="%Welcome.Aboard!"/>
+                    <Label fx:id="secondMessage" prefHeight="43.0" prefWidth="207.0" text="%WELCOME.ABOARD!"/>
                 </VBox>
             </AnchorPane>
         </center>
