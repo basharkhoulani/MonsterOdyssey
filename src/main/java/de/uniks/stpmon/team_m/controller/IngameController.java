@@ -619,7 +619,7 @@ public class IngameController extends Controller {
 
     private void sendMessage() {
         if (messageField.getText().isEmpty()) {
-            canvas.requestFocus()
+            canvas.requestFocus();
             return;
         }
         String regionID = trainerStorageProvider.get().getRegion()._id();
