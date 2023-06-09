@@ -4,6 +4,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Alert;
@@ -36,6 +37,8 @@ public class IngameController extends Controller {
 
     private IngameTrainerSettingsController trainerSettingsController;
 
+    private MonstersListController monstersListController;
+
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
@@ -57,6 +60,8 @@ public class IngameController extends Controller {
         super.init();
         trainerSettingsController = ingameTrainerSettingsControllerProvider.get();
         trainerSettingsController.init();
+        monstersListController = new MonstersListController();
+        monstersListController.init();
     }
 
     /**
@@ -168,5 +173,17 @@ public class IngameController extends Controller {
             ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close()
         );
         trainerSettingsDialog.showAndWait();
+    }
+
+    public void showMonsters(){
+        Dialog<?> monstersDialog = new Dialog<>();
+        monstersDialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        Node closeButton = monstersDialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+        closeButton.managedProperty().bind(closeButton.visibleProperty());
+        closeButton.setVisible(false);
+        monstersListController.setValues(resources, preferences, resourceBundleProvider, this, app);
+        monstersDialog.setTitle(resources.getString("MONSTERS"));
+        monstersDialog.getDialogPane().setContent(monstersListController.render());
+        monstersDialog.showAndWait();
     }
 }
