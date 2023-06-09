@@ -54,9 +54,9 @@ public class CharacterSelectionControllerTest extends ApplicationTest {
 
     @Test
     void selectCharacterTest() {
-        clickOn("PREVIOUS");
+        clickOn("Previous");
         verify(app).show(welcomeSceneControllerProvider.get());
-        clickOn("NEXT");
+        clickOn("Next");
 
         RadioButton radioButton1 = lookup("#character1RadioButton").query();
         RadioButton radioButton2 = lookup("#character2RadioButton").query();
