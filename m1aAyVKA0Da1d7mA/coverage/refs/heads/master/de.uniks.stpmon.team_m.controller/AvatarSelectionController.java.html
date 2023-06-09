@@ -12,10 +12,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Base64;
-
 import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -52,84 +48,84 @@ public class AvatarSelectionController extends Controller {
     public String selectedAvatar;
 
     @Inject
-<span class="fc" id="L55">    public AvatarSelectionController() {</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L51">    public AvatarSelectionController() {</span>
+<span class="fc" id="L52">    }</span>
 
     @Override
     public Parent render() {
-<span class="fc" id="L60">        final Parent parent = super.render();</span>
+<span class="fc" id="L56">        final Parent parent = super.render();</span>
 
         // show images
-<span class="fc" id="L63">        avatar1ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString()));</span>
-<span class="fc" id="L64">        avatar2ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_2)).toString()));</span>
-<span class="fc" id="L65">        avatar3ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_3)).toString()));</span>
-<span class="fc" id="L66">        avatar4ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_4)).toString()));</span>
+<span class="fc" id="L59">        avatar1ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString()));</span>
+<span class="fc" id="L60">        avatar2ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_2)).toString()));</span>
+<span class="fc" id="L61">        avatar3ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_3)).toString()));</span>
+<span class="fc" id="L62">        avatar4ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_4)).toString()));</span>
 
-<span class="fc" id="L68">        avatar1ImageView.setOnMouseClicked(event -&gt; {</span>
-<span class="fc" id="L69">            avatar1RadioButton.setSelected(true);</span>
-<span class="fc" id="L70">            selectAvatar1();</span>
+<span class="fc" id="L64">        avatar1ImageView.setOnMouseClicked(event -&gt; {</span>
+<span class="fc" id="L65">            avatar1RadioButton.setSelected(true);</span>
+<span class="fc" id="L66">            selectAvatar1();</span>
+<span class="fc" id="L67">        });</span>
+<span class="fc" id="L68">        avatar2ImageView.setOnMouseClicked(event -&gt; {</span>
+<span class="fc" id="L69">            avatar2RadioButton.setSelected(true);</span>
+<span class="fc" id="L70">            selectAvatar2();</span>
 <span class="fc" id="L71">        });</span>
-<span class="fc" id="L72">        avatar2ImageView.setOnMouseClicked(event -&gt; {</span>
-<span class="fc" id="L73">            avatar2RadioButton.setSelected(true);</span>
-<span class="fc" id="L74">            selectAvatar2();</span>
+<span class="fc" id="L72">        avatar3ImageView.setOnMouseClicked(event -&gt; {</span>
+<span class="fc" id="L73">            avatar3RadioButton.setSelected(true);</span>
+<span class="fc" id="L74">            selectAvatar3();</span>
 <span class="fc" id="L75">        });</span>
-<span class="fc" id="L76">        avatar3ImageView.setOnMouseClicked(event -&gt; {</span>
-<span class="fc" id="L77">            avatar3RadioButton.setSelected(true);</span>
-<span class="fc" id="L78">            selectAvatar3();</span>
+<span class="fc" id="L76">        avatar4ImageView.setOnMouseClicked(event -&gt; {</span>
+<span class="fc" id="L77">            avatar4RadioButton.setSelected(true);</span>
+<span class="fc" id="L78">            selectAvatar4();</span>
 <span class="fc" id="L79">        });</span>
-<span class="fc" id="L80">        avatar4ImageView.setOnMouseClicked(event -&gt; {</span>
-<span class="fc" id="L81">            avatar4RadioButton.setSelected(true);</span>
-<span class="fc" id="L82">            selectAvatar4();</span>
-<span class="fc" id="L83">        });</span>
-<span class="fc" id="L84">        return parent;</span>
+<span class="fc" id="L80">        return parent;</span>
     }
 
     /**
      * This method selects default avatar 1.
      */
     public void selectAvatar1() {
-<span class="fc" id="L91">        selectedAvatar = AVATAR_1;</span>
-<span class="fc" id="L92">        uploadTextField.clear();</span>
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L87">        selectedAvatar = AVATAR_1;</span>
+<span class="fc" id="L88">        uploadTextField.clear();</span>
+<span class="fc" id="L89">    }</span>
 
     /**
      * This method selects default avatar 2.
      */
     public void selectAvatar2() {
-<span class="fc" id="L99">        selectedAvatar = AVATAR_2;</span>
-<span class="fc" id="L100">        uploadTextField.clear();</span>
-<span class="fc" id="L101">    }</span>
+<span class="fc" id="L95">        selectedAvatar = AVATAR_2;</span>
+<span class="fc" id="L96">        uploadTextField.clear();</span>
+<span class="fc" id="L97">    }</span>
 
     /**
      * This method selects default avatar 3.
      */
     public void selectAvatar3() {
-<span class="fc" id="L107">        selectedAvatar = AVATAR_3;</span>
-<span class="fc" id="L108">        uploadTextField.clear();</span>
-<span class="fc" id="L109">    }</span>
+<span class="fc" id="L103">        selectedAvatar = AVATAR_3;</span>
+<span class="fc" id="L104">        uploadTextField.clear();</span>
+<span class="fc" id="L105">    }</span>
 
     /**
      * This method selects default avatar 4.
      */
     public void selectAvatar4() {
-<span class="fc" id="L115">        selectedAvatar = AVATAR_4;</span>
-<span class="fc" id="L116">        uploadTextField.clear();</span>
-<span class="fc" id="L117">    }</span>
+<span class="fc" id="L111">        selectedAvatar = AVATAR_4;</span>
+<span class="fc" id="L112">        uploadTextField.clear();</span>
+<span class="fc" id="L113">    }</span>
 
     public void selectFile() {
-<span class="fc" id="L120">        FileChooser fileChooser = fileChooserProvider.get();</span>
-<span class="fc" id="L121">        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(resources.getString(&quot;SELECT.AVATAR.PICTURE&quot;), &quot;*.png&quot;, &quot;*.jpg&quot;, &quot;*.jpeg&quot;));</span>
-<span class="fc" id="L122">        fileChooser.setTitle(resources.getString(&quot;SELECT.AVATAR.PICTURE&quot;));</span>
-<span class="fc" id="L123">        File selectedFile = fileChooser.showOpenDialog(null);</span>
-<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        if (selectedFile != null) {</span>
-<span class="fc bfc" id="L125" title="All 2 branches covered.">            for (Toggle radioButton : selectAvatar.getToggles()) {</span>
-<span class="fc bfc" id="L126" title="All 2 branches covered.">                if (radioButton.isSelected()) {</span>
-<span class="fc" id="L127">                    radioButton.setSelected(false);</span>
+<span class="fc" id="L116">        FileChooser fileChooser = fileChooserProvider.get();</span>
+<span class="fc" id="L117">        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(resources.getString(&quot;SELECT.AVATAR.PICTURE&quot;), &quot;*.png&quot;, &quot;*.jpg&quot;, &quot;*.jpeg&quot;));</span>
+<span class="fc" id="L118">        fileChooser.setTitle(resources.getString(&quot;SELECT.AVATAR.PICTURE&quot;));</span>
+<span class="fc" id="L119">        File selectedFile = fileChooser.showOpenDialog(null);</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        if (selectedFile != null) {</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">            for (Toggle radioButton : selectAvatar.getToggles()) {</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">                if (radioButton.isSelected()) {</span>
+<span class="fc" id="L123">                    radioButton.setSelected(false);</span>
                 }
-<span class="fc" id="L129">            }</span>
-<span class="fc" id="L130">            uploadTextField.setText(selectedFile.getName());</span>
-<span class="fc" id="L131">            selectedAvatar = selectedFile.getAbsolutePath();</span>
+<span class="fc" id="L125">            }</span>
+<span class="fc" id="L126">            uploadTextField.setText(selectedFile.getName());</span>
+<span class="fc" id="L127">            selectedAvatar = selectedFile.getAbsolutePath();</span>
         }
-<span class="fc" id="L133">    }</span>
+<span class="fc" id="L129">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
