@@ -208,7 +208,7 @@ public class LoginController extends Controller {
 <span class="fc" id="L208">        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);</span>
 <span class="fc" id="L209">        closeButton.managedProperty().bind(closeButton.visibleProperty());</span>
 <span class="fc" id="L210">        closeButton.setVisible(false);</span>
-<span class="fc" id="L211">        dialog.setTitle(resources.getString(&quot;Change.Language&quot;));</span>
+<span class="fc" id="L211">        dialog.setTitle(resources.getString(&quot;CHOOSE.LANGUAGE&quot;));</span>
 <span class="fc" id="L212">        changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);</span>
 <span class="fc" id="L213">        dialog.getDialogPane().setContent(changeLanguageController.render());</span>
 <span class="fc" id="L214">        dialog.showAndWait();</span>
