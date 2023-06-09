@@ -5,23 +5,26 @@ import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AreasService;
+import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
-import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -56,6 +59,12 @@ public class IngameController extends Controller {
     public Canvas canvas;
     @FXML
     public VBox ingameVBox;
+    @FXML
+    public TextField messageField;
+    @FXML
+    public Button showChatButton;
+    @FXML
+    public Button sendMessageButton;
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
     @Inject
@@ -66,8 +75,11 @@ public class IngameController extends Controller {
     AreasService areasService;
     @Inject
     PresetsService presetsService;
+    @Inject
+    MessageService messageService;
     GraphicsContext graphicsContext;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
+    private boolean isChatting = false;
 
     @Inject
     TrainerStorage trainerStorage;
@@ -208,6 +220,8 @@ public class IngameController extends Controller {
         trainerStorageProvider.get().setY(trainerStorageProvider.get().getTrainer().y());
         trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());
         listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
+        messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
+        listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
 
         // Start standing animation
         playerSpriteImageView.setScaleX(2.0);
@@ -218,9 +232,16 @@ public class IngameController extends Controller {
             spriteStandingAnimation.play();
         }
         app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, evt -> {
+            if (isChatting) {
+                return;
+            }
 
             if (spriteStandingAnimation != null) {
                 spriteStandingAnimation.stop();
+            }
+            if (evt.getCode() == KeyCode.ENTER) {
+                messageField.requestFocus();
+                isChatting = true;
             }
             if (evt.getCode() == PAUSE_MENU_KEY) {
                 pauseGame();
@@ -240,6 +261,9 @@ public class IngameController extends Controller {
         });
 
         app.getStage().getScene().addEventHandler(KeyEvent.KEY_RELEASED, evt -> {
+            if (isChatting) {
+                return;
+            }
             if (!GraphicsEnvironment.isHeadless()) {
                 if (spriteWalkingAnimation != null) {
                     spriteWalkingAnimation.stop();
@@ -313,6 +337,7 @@ public class IngameController extends Controller {
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), region.spawn().area()).observeOn(FX_SCHEDULER)
                 .subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
+        canvas.requestFocus();
         return parent;
     }
 
@@ -382,6 +407,9 @@ public class IngameController extends Controller {
      */
 
     private void loadMap(Map map) {
+        if (GraphicsEnvironment.isHeadless()) {
+            return;
+        }
         tileSetImages.clear();
         for (TileSet tileSet : map.tilesets()) {
             final String mapName = getFileName(tileSet.source());
@@ -577,9 +605,49 @@ public class IngameController extends Controller {
         trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
         trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");
         Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();
-        popUp.setOnCloseRequest(evt ->
-                ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close()
+        popUp.setOnCloseRequest(evt -> {
+                    ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close();
+                    canvas.requestFocus();
+                }
         );
         trainerSettingsDialog.showAndWait();
+    }
+
+    public void sendMessageButton() {
+        sendMessage();
+    }
+
+    private void sendMessage() {
+        if (messageField.getText().isEmpty()) {
+            canvas.requestFocus();
+            isChatting = false;
+            return;
+        }
+        String regionID = trainerStorageProvider.get().getRegion()._id();
+        if (regionID != null) {
+            String messageBody = messageField.getText();
+            disposables.add(messageService.newMessage(regionID, messageBody, MESSAGE_NAMESPACE_REGIONS).observeOn(FX_SCHEDULER).subscribe(message -> {
+                messageField.setText(EMPTY_STRING);
+                isChatting = false;
+                canvas.requestFocus();
+            }, error -> showError(error.getMessage())));
+        }
+    }
+
+    private void enterButtonPressedToSend(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            event.consume();
+            sendMessage();
+        }
+    }
+
+    public void paneClicked() {
+        canvas.requestFocus();
+        isChatting = false;
+    }
+
+    public void messageFieldClicked() {
+        messageField.requestFocus();
+        isChatting = true;
     }
 }
