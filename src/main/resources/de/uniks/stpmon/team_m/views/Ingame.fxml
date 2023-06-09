@@ -12,7 +12,7 @@
    <StackPane cacheShape="false" centerShape="false" scaleShape="false" style="-fx-background-color: black;" stylesheets="@../styles.css" VBox.vgrow="ALWAYS">
       <Canvas fx:id="canvas" height="200.0" width="200.0" />
        <VBox alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-           <ImageView fx:id="playerSpriteImageView" fitHeight="64.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+           <ImageView fx:id="playerSpriteImageView" fitHeight="30.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                <Image url="@../charactermodels/Character_01.png" />
            </ImageView>
        </VBox>

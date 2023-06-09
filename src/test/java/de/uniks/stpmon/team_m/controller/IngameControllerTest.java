@@ -1,18 +1,14 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.AppTest;
-import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -27,7 +23,6 @@ import org.testfx.framework.junit5.ApplicationTest;
 import javax.inject.Provider;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,9 +34,6 @@ public class IngameControllerTest extends ApplicationTest {
 
     @Spy
     App app = new App(null);
-
-    @Mock
-    Provider<IngameTrainerSettingsController> trainerSettingsControllerProvider;
     @Mock
     Provider<MainMenuController> mainMenuControllerProvider;
     @Mock
@@ -51,6 +43,7 @@ public class IngameControllerTest extends ApplicationTest {
     @Mock
     Provider<UDPEventListener> udpEventListenerProvider;
 
+    // Leave this mock!! it ensures that tests run fine
     @Mock
     TrainerStorage trainerStorage;
 
