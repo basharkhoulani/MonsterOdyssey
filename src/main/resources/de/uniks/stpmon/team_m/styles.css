@@ -159,6 +159,12 @@
     -fx-border-width: 2;
 
 }
+.triangle {
+    -fx-background-image: url("images/triangle.png");
+    -fx-background-size: 40px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 50%;
+}
 /*********************************************************************************/
 /********************************** Login ****************************************/
 .loginButton {

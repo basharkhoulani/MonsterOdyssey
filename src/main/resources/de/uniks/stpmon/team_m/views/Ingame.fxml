@@ -63,10 +63,14 @@
             </font>
          </TextField>
          <Button fx:id="showChatButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0"
-                 mnemonicParsing="false" styleClass="buttonsWhite">
+                 mnemonicParsing="false">
             <font>
                <Font name="Comic Sans MS Bold" size="17.0"/>
             </font>
+            <styleClass>
+               <String fx:value="buttonsWhite" />
+               <String fx:value="triangle" />
+            </styleClass>
          </Button>
          <Button fx:id="sendMessageButton" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0"
                  mnemonicParsing="false" onAction="#sendMessage" styleClass="buttonsYellow" text="%Send">
