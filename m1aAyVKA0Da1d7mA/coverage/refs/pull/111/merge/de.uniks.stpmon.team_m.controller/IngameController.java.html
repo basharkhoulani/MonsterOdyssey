@@ -619,34 +619,35 @@ public class IngameController extends Controller {
 
     private void sendMessage() {
 <span class="pc bpc" id="L621" title="1 of 2 branches missed.">        if (messageField.getText().isEmpty()) {</span>
-<span class="nc" id="L622">            return;</span>
+<span class="nc" id="L622">            canvas.requestFocus();</span>
+<span class="nc" id="L623">            return;</span>
         }
-<span class="fc" id="L624">        String regionID = trainerStorageProvider.get().getRegion()._id();</span>
-<span class="pc bpc" id="L625" title="1 of 2 branches missed.">        if (regionID != null) {</span>
-<span class="fc" id="L626">            String messageBody = messageField.getText();</span>
-<span class="fc" id="L627">            disposables.add(messageService.newMessage(regionID, messageBody, MESSAGE_NAMESPACE_REGIONS).observeOn(FX_SCHEDULER).subscribe(message -&gt; {</span>
-<span class="fc" id="L628">                messageField.setText(EMPTY_STRING);</span>
-<span class="fc" id="L629">                isChatting = false;</span>
-<span class="fc" id="L630">                canvas.requestFocus();</span>
-<span class="pc" id="L631">            }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L625">        String regionID = trainerStorageProvider.get().getRegion()._id();</span>
+<span class="pc bpc" id="L626" title="1 of 2 branches missed.">        if (regionID != null) {</span>
+<span class="fc" id="L627">            String messageBody = messageField.getText();</span>
+<span class="fc" id="L628">            disposables.add(messageService.newMessage(regionID, messageBody, MESSAGE_NAMESPACE_REGIONS).observeOn(FX_SCHEDULER).subscribe(message -&gt; {</span>
+<span class="fc" id="L629">                messageField.setText(EMPTY_STRING);</span>
+<span class="fc" id="L630">                isChatting = false;</span>
+<span class="fc" id="L631">                canvas.requestFocus();</span>
+<span class="pc" id="L632">            }, error -&gt; showError(error.getMessage())));</span>
         }
-<span class="fc" id="L633">    }</span>
+<span class="fc" id="L634">    }</span>
 
     private void enterButtonPressedToSend(KeyEvent event) {
-<span class="fc bfc" id="L636" title="All 2 branches covered.">        if (event.getCode() == KeyCode.ENTER) {</span>
-<span class="fc" id="L637">            event.consume();</span>
-<span class="fc" id="L638">            sendMessage();</span>
+<span class="fc bfc" id="L637" title="All 2 branches covered.">        if (event.getCode() == KeyCode.ENTER) {</span>
+<span class="fc" id="L638">            event.consume();</span>
+<span class="fc" id="L639">            sendMessage();</span>
         }
-<span class="fc" id="L640">    }</span>
+<span class="fc" id="L641">    }</span>
 
     public void paneClicked() {
-<span class="nc" id="L643">        canvas.requestFocus();</span>
-<span class="nc" id="L644">        isChatting = false;</span>
-<span class="nc" id="L645">    }</span>
+<span class="nc" id="L644">        canvas.requestFocus();</span>
+<span class="nc" id="L645">        isChatting = false;</span>
+<span class="nc" id="L646">    }</span>
 
     public void messageFieldClicked() {
-<span class="fc" id="L648">        messageField.requestFocus();</span>
-<span class="fc" id="L649">        isChatting = true;</span>
-<span class="fc" id="L650">    }</span>
+<span class="fc" id="L649">        messageField.requestFocus();</span>
+<span class="fc" id="L650">        isChatting = true;</span>
+<span class="fc" id="L651">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
