@@ -28,8 +28,8 @@ public class UDPEventListener {
 <span class="fc" id="L28">    }</span>
 
     private void ensureOpen() {
-<span class="pc bpc" id="L31" title="3 of 4 branches missed.">        if (client != null &amp;&amp; client.isOpen()) {</span>
-<span class="nc" id="L32">            return;</span>
+<span class="pc bpc" id="L31" title="1 of 4 branches missed.">        if (client != null &amp;&amp; client.isOpen()) {</span>
+<span class="fc" id="L32">            return;</span>
         }
         try {
 <span class="fc" id="L35">            InetAddress address = InetAddress.getByName(UDP_URL);</span>
