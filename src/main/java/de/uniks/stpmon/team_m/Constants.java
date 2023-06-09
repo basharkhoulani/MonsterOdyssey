@@ -71,6 +71,8 @@ public class Constants {
     public static int TILE_SIZE = 16;
     public static int OFFSET_WIDTH = 50;
     public static int OFFSET_HEIGHT = 50;
+    public static double ZERO = 0;
+    public static double ONE = 1;
 
     // Error messages
     public static final String HTTP_400 = "400";

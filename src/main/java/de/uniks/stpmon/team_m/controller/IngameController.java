@@ -101,6 +101,7 @@ public class IngameController extends Controller {
     private Image[] trainerWalkingDown;
     private Image[] trainerWalkingLeft;
     private Image[] trainerWalkingRight;
+    private final ObservableList<Message> chatMessages = FXCollections.observableArrayList();
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -225,6 +226,7 @@ public class IngameController extends Controller {
         messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
         listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
 
+        chatListView.setItems(chatMessages);
         // Start standing animation
         playerSpriteImageView.setScaleX(2.0);
         playerSpriteImageView.setScaleY(2.0);
@@ -651,5 +653,29 @@ public class IngameController extends Controller {
     public void messageFieldClicked() {
         messageField.requestFocus();
         isChatting = true;
+    }
+
+    public void showChat() {
+        if (chatListView.getOpacity() == ZERO) {
+            chatListView.setOpacity(ONE);
+        } else {
+            chatListView.setOpacity(ZERO);
+        }
+    }
+
+    public void listenToTrainers(ObservableList<Trainer> trainers) {
+        disposables.add(eventListenerProvider.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers", Trainer.class).observeOn(FX_SCHEDULER).subscribe(event -> {
+            final Trainer trainer = event.data();
+            switch (event.suffix()) {
+                case "created" -> trainers.add(trainer);
+                case "updated" -> updateTrainer(trainers, trainer);
+                case "deleted" -> trainers.removeIf(t -> t._id().equals(trainer._id()));
+        }}, error -> showError(error.getMessage()))
+        );
+    }
+
+    private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {
+        String trainerId = trainer._id();
+        trainers.stream().filter(t-> t._id().equals(trainerId)).findFirst().ifPresent(t -> trainers.set(trainers.indexOf(t), trainer));
     }
 }
