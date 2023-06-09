@@ -128,26 +128,29 @@ public class IngameController extends Controller {
      * @param direction - either "up", "down", "left" or "right" are valid directions
      */
     private void stay(String direction) {
-        spriteWalkingAnimation.stop();
-        mapMovementTransition.stop();
-        switch (direction) {
-            case "up" -> {
-                spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingUp, false);
-                spriteStandingAnimation.play();
+        if (!GraphicsEnvironment.isHeadless()) {
+            spriteWalkingAnimation.stop();
+            mapMovementTransition.stop();
+            switch (direction) {
+                case "up" -> {
+                    spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingUp, false);
+                    spriteStandingAnimation.play();
+                }
+                case "down" -> {
+                    spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingDown, false);
+                    spriteStandingAnimation.play();
+                }
+                case "left" -> {
+                    spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingLeft, false);
+                    spriteStandingAnimation.play();
+                }
+                case "right" -> {
+                    spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingRight, false);
+                    spriteStandingAnimation.play();
+                }
+                default -> {
+                }
             }
-            case "down" -> {
-                spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingDown, false);
-                spriteStandingAnimation.play();
-            }
-            case "left" -> {
-                spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingLeft, false);
-                spriteStandingAnimation.play();
-            }
-            case "right" -> {
-                spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingRight, false);
-                spriteStandingAnimation.play();
-            }
-            default -> {}
         }
     }
 
@@ -157,37 +160,40 @@ public class IngameController extends Controller {
      * @param direction - either "up", "down", "left" or "right" are valid directions
      */
     private void walk(String direction) {
-        if (spriteStandingAnimation != null) {
-            spriteStandingAnimation.stop();
-        }
-        switch (direction) {
-            case "up" -> {
-                spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingUp, true);
-                spriteWalkingAnimation.play();
-                mapMovementTransition = getMapMovementTransition(canvas,  0.0, 16.0 / 2.5);
-                mapMovementTransition.play();
+        if (!GraphicsEnvironment.isHeadless()) {
+            if (spriteStandingAnimation != null) {
+                spriteStandingAnimation.stop();
             }
-            case "down" -> {
-                spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingDown, true);
-                spriteWalkingAnimation.play();
-                mapMovementTransition = getMapMovementTransition(canvas,  0.0, -16.0 / 2.5);
-                mapMovementTransition.play();
-            }
-            case "left" -> {
-                spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingLeft, true);
-                spriteWalkingAnimation.play();
-                mapMovementTransition = getMapMovementTransition(canvas,  16.0 / 2.5, 0.0);
-                mapMovementTransition.play();
-            }
-            case "right" -> {
-                spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingRight, true);
-                spriteWalkingAnimation.play();
-                mapMovementTransition = getMapMovementTransition(canvas,  -16.0 / 2.5, 0.0);
-                mapMovementTransition.play();
-            }
-            default -> {}
-        }
+            switch (direction) {
+                case "up" -> {
+                    spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingUp, true);
+                    spriteWalkingAnimation.play();
+                    mapMovementTransition = getMapMovementTransition(canvas, 0.0, 16.0 / 2.5);
+                    mapMovementTransition.play();
+                }
+                case "down" -> {
+                    spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingDown, true);
+                    spriteWalkingAnimation.play();
+                    mapMovementTransition = getMapMovementTransition(canvas, 0.0, -16.0 / 2.5);
+                    mapMovementTransition.play();
+                }
+                case "left" -> {
+                    spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingLeft, true);
+                    spriteWalkingAnimation.play();
+                    mapMovementTransition = getMapMovementTransition(canvas, 16.0 / 2.5, 0.0);
+                    mapMovementTransition.play();
+                }
+                case "right" -> {
+                    spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingRight, true);
+                    spriteWalkingAnimation.play();
+                    mapMovementTransition = getMapMovementTransition(canvas, -16.0 / 2.5, 0.0);
+                    mapMovementTransition.play();
 
+                }
+                default -> {
+                }
+            }
+        }
     }
 
     /**
@@ -230,20 +236,27 @@ public class IngameController extends Controller {
         });
 
         app.getStage().getScene().addEventHandler(KeyEvent.KEY_RELEASED, evt -> {
-            spriteWalkingAnimation.stop();
-            mapMovementTransition.stop();
-            if ((evt.getCode() == KeyCode.W)) {
-                stay("up");
+            if (!GraphicsEnvironment.isHeadless()) {
+                if (spriteWalkingAnimation != null) {
+                    spriteWalkingAnimation.stop();
+                }
+                if (mapMovementTransition != null) {
+                    mapMovementTransition.stop();
+                }
+                if ((evt.getCode() == KeyCode.W)) {
+                    stay("up");
+                }
+                if ((evt.getCode() == KeyCode.S)) {
+                    stay("down");
+                }
+                if ((evt.getCode() == KeyCode.A)) {
+                    stay("left");
+                }
+                if ((evt.getCode() == KeyCode.D)) {
+                    stay("right");
+                }
             }
-            if ((evt.getCode() == KeyCode.S)) {
-                stay("down");
-            }
-            if ((evt.getCode() == KeyCode.A)) {
-                stay("left");
-            }
-            if ((evt.getCode() == KeyCode.D)) {
-                stay("right");
-            }
+
         });
         /*
         app.getStage().getScene().setOnKeyPressed(event -> {
