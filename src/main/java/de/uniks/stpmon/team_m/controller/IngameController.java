@@ -6,6 +6,7 @@ import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AreasService;
+import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -66,6 +67,8 @@ public class IngameController extends Controller {
     AreasService areasService;
     @Inject
     PresetsService presetsService;
+    @Inject
+    MessageService messageService;
     GraphicsContext graphicsContext;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     @Inject
@@ -363,5 +366,12 @@ public class IngameController extends Controller {
     }
 
     public void sendMessage() {
+        String regionID = trainerStorageProvider.get().getRegion()._id();
+        if (regionID != null) {
+            String messageBody = messageField.getText();
+            disposables.add(messageService.newMessage(regionID, messageBody, MESSAGE_NAMESPACE_REGIONS).observeOn(FX_SCHEDULER).subscribe(message -> {
+            }, error -> showError(error.getMessage())));
+            messageField.setText(EMPTY_STRING);
+        }
     }
 }
