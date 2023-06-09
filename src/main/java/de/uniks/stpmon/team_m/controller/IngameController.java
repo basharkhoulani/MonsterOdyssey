@@ -169,6 +169,9 @@ public class IngameController extends Controller {
      */
 
     private void loadMap(Map map) {
+        if (GraphicsEnvironment.isHeadless()) {
+            return;
+        }
         tileSetImages.clear();
         for (TileSet tileSet : map.tilesets()) {
             final String mapName = getFileName(tileSet.source());

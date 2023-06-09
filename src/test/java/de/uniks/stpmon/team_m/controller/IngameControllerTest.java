@@ -188,6 +188,7 @@ public class IngameControllerTest extends ApplicationTest {
         clickOn("#messageField");
         write("Hello World");
         type(KeyCode.ENTER);
+        assertEquals("", messageField.getText());
         verify(messageService).newMessage(any(), any(), any());
         assertTrue(messageField.isFocused());
         clickOn("#canvas");
@@ -197,6 +198,7 @@ public class IngameControllerTest extends ApplicationTest {
         clickOn("#messageField");
         write("Hello World");
         clickOn("#sendMessageButton");
+        assertEquals("", messageField.getText());
         verify(messageService, times(2)).newMessage(any(), any(), any());
     }
 }
