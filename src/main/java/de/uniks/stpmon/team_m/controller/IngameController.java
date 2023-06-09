@@ -65,6 +65,8 @@ public class IngameController extends Controller {
     public Button showChatButton;
     @FXML
     public Button sendMessageButton;
+    @FXML
+    public ListView chatListView;
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
     @Inject
