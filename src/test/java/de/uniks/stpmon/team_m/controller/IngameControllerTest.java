@@ -1,12 +1,11 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
@@ -22,13 +21,11 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static io.reactivex.rxjava3.core.Observable.empty;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -129,7 +126,7 @@ public class IngameControllerTest extends ApplicationTest {
                                 List.of()))
 
         ));
-        ingameController.setValues(bundle,null,null,ingameController,app);
+        ingameController.setValues(bundle, null, null, ingameController, app);
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
@@ -195,8 +192,6 @@ public class IngameControllerTest extends ApplicationTest {
         type(KeyCode.ENTER);
         assertEquals("", messageField.getText());
         verify(messageService).newMessage(any(), any(), any());
-        assertTrue(messageField.isFocused());
-        clickOn("#canvas");
         assertFalse(messageField.isFocused());
 
         // Send with button
