@@ -11,6 +11,7 @@ import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
@@ -18,6 +19,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.*;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
@@ -48,6 +50,12 @@ public class IngameController extends Controller {
     public Canvas canvas;
     @FXML
     public VBox ingameVBox;
+    @FXML
+    public TextField messageField;
+    @FXML
+    public Button showChatButton;
+    @FXML
+    public Button sendMessageButton;
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
     @Inject
@@ -352,5 +360,8 @@ public class IngameController extends Controller {
                 ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close()
         );
         trainerSettingsDialog.showAndWait();
+    }
+
+    public void sendMessage() {
     }
 }
