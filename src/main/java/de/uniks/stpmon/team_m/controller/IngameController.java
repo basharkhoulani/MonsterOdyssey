@@ -8,22 +8,23 @@ import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
-import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.*;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -218,7 +219,7 @@ public class IngameController extends Controller {
         trainerStorageProvider.get().setX(trainerStorageProvider.get().getTrainer().x());
         trainerStorageProvider.get().setY(trainerStorageProvider.get().getTrainer().y());
         trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());
-        listenToMovement(moveTrainerDtos,trainerStorageProvider.get().getTrainer().area());
+        listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
         messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
         listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
 
@@ -237,6 +238,10 @@ public class IngameController extends Controller {
 
             if (spriteStandingAnimation != null) {
                 spriteStandingAnimation.stop();
+            }
+            if (evt.getCode() == KeyCode.ENTER) {
+                messageField.requestFocus();
+                isChatting = true;
             }
             if (evt.getCode() == PAUSE_MENU_KEY) {
                 pauseGame();
@@ -332,6 +337,7 @@ public class IngameController extends Controller {
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), region.spawn().area()).observeOn(FX_SCHEDULER)
                 .subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
+        canvas.requestFocus();
         return parent;
     }
 
@@ -599,18 +605,19 @@ public class IngameController extends Controller {
         trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
         trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");
         Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();
-        popUp.setOnCloseRequest(evt ->
-                ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close()
+        popUp.setOnCloseRequest(evt -> {
+                    ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close();
+                    canvas.requestFocus();
+                }
         );
         trainerSettingsDialog.showAndWait();
     }
 
     public void sendMessageButton() {
         sendMessage();
-        isChatting = false;
     }
 
-    private void sendMessage(){
+    private void sendMessage() {
         if (messageField.getText().isEmpty()) {
             return;
         }
@@ -618,8 +625,10 @@ public class IngameController extends Controller {
         if (regionID != null) {
             String messageBody = messageField.getText();
             disposables.add(messageService.newMessage(regionID, messageBody, MESSAGE_NAMESPACE_REGIONS).observeOn(FX_SCHEDULER).subscribe(message -> {
+                messageField.setText(EMPTY_STRING);
+                isChatting = false;
+                canvas.requestFocus();
             }, error -> showError(error.getMessage())));
-            messageField.setText(EMPTY_STRING);
         }
     }
 
