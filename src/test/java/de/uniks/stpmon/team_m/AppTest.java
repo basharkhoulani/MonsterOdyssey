@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
@@ -173,6 +174,7 @@ public class AppTest extends ApplicationTest {
 
         // test Ingame Unpause With Key Code P
         type(KeyCode.P);
+
         // test Ingame Unpause With Button
         type(KeyCode.P);
         clickOn("Resume Game");
@@ -182,5 +184,6 @@ public class AppTest extends ApplicationTest {
         type(KeyCode.P);
         clickOn("Save Game & Leave");
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
+
     }
 }

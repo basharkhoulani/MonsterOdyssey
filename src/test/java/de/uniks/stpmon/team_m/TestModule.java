@@ -7,16 +7,28 @@ import dagger.Module;
 import dagger.Provides;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.rest.*;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
+import okhttp3.MediaType;
 import okhttp3.ResponseBody;
+import okio.BufferedSource;
 
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
+import javax.inject.Provider;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
@@ -296,7 +308,22 @@ public class TestModule {
 
             @Override
             public Observable<ResponseBody> getCharacter(String filename) {
-                return null;
+                return Observable.just(new ResponseBody() {
+                    @Override
+                    public MediaType contentType() {
+                        return null;
+                    }
+
+                    @Override
+                    public long contentLength() {
+                        return 0;
+                    }
+
+                    @Override
+                    public BufferedSource source() {
+                        return null;
+                    }
+                });
             }
 
             @Override
@@ -322,6 +349,57 @@ public class TestModule {
             @Override
             public Observable<AbilityDto> getAbility(int id) {
                 return null;
+            }
+        };
+    }
+
+    @Provides
+    static TrainerStorage trainerStorage() {
+        return new TrainerStorage() {
+            @Override
+            public void setTrainer(Trainer trainer) {
+            }
+
+            @Override
+            public void setRegion(Region region) {
+            }
+
+            @Override
+            public void setTrainerName(String name) {
+            }
+
+            @Override
+            public void setTrainerSprite(String url) {
+            }
+
+            @Override
+            public Trainer getTrainer() {
+                return new Trainer("123", "456", "789", "test", "max", "mustermann", getTrainerSprite(), 0, "Testina", 0, 0, 0, null);
+            }
+
+            @Override
+            public Region getRegion() {
+                return new Region("123", "456", "789", "test", new Spawn("Testina", 0, 0), null);
+            }
+
+            @Override
+            public String getTrainerName() {
+                return "Test";
+            }
+
+            @Override
+            public String getTrainerSprite() {
+                return Objects.requireNonNull(Main.class.getResource("images/Premade_Character_01.png")).toString();
+            }
+
+            @Override
+            public Image getTrainerSpriteChunk() {
+                String path = Objects.requireNonNull(Main.class.getResource("images/Premade_Character_01.png")).toString();
+                return new Image(path);
+            }
+
+            @Override
+            public void setTrainerSpriteChunk(Image trainerSpriteChunk) {
             }
         };
     }
@@ -353,7 +431,7 @@ public class TestModule {
 
             @Override
             public Observable<Trainer> getTrainer(String regionId, String _id) {
-                return null;
+                return Observable.just(new Trainer("123", "456", "789", "test", "max", "mustermann", Objects.requireNonNull(Main.class.getResource("images/Premade_Character_01.png")).toString(), 0, "Testina", 0, 0, 0, null));
             }
 
             @Override

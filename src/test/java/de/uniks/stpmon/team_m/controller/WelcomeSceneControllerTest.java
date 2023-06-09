@@ -36,8 +36,8 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
     WelcomeSceneController welcomeSceneController;
     @Mock
     Provider<CharacterSelectionController> characterSelectionControllerProvider;
-    @Mock
-    Provider<TrainerStorage> trainerStorageProvider;
+    @Spy
+    TrainerStorage trainerStorage;
     @Mock
     Provider<TrainersService> trainersServiceProvider;
 
@@ -49,10 +49,7 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
         final CharacterSelectionController characterSelectionController = mock(CharacterSelectionController.class);
         when(characterSelectionControllerProvider.get()).thenReturn(characterSelectionController);
         doNothing().when(app).show(characterSelectionController);
-
-        final TrainerStorage trainerStorage = mock(TrainerStorage.class);
-        when(trainerStorageProvider.get()).thenReturn(trainerStorage);
-        when(trainerStorageProvider.get().getRegion()).thenReturn(new Region(
+        when(trainerStorage.getRegion()).thenReturn(new Region(
                 "2023-05-22T17:51:46.772Z",
                 "2023-05-22T17:51:46.772Z",
                 "646bc436cfee07c0e408466f",
@@ -149,6 +146,8 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
 
         // Scene 6 CharacterSelection
         verify(app).show(characterSelectionControllerProvider.get());
+
+        when(trainerStorage.getRegion()).thenReturn(new Region("123", "456", "789", "test", new Spawn("adsad", 0, 0), null));
 
         clickOn("Next");
 

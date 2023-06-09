@@ -1,55 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.control.Button?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<?import java.lang.String?>
-<VBox fx:id="ingameVBox" alignment="CENTER_LEFT" cacheShape="false" centerShape="false" scaleShape="false"
-      xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
-   <StackPane cacheShape="false" centerShape="false" scaleShape="false" style="-fx-background-color: black;"
-              stylesheets="@../styles.css" VBox.vgrow="ALWAYS">
-      <Canvas fx:id="canvas" height="200.0" width="200.0"/>
-      <HBox alignment="TOP_RIGHT" fillHeight="false" maxHeight="40.0" maxWidth="40.0" minHeight="40.0"
-            minWidth="40.0" prefHeight="40.0" prefWidth="40.0" StackPane.alignment="TOP_RIGHT">
-         <Button fx:id="helpSymbol" mnemonicParsing="false" onAction="#showHelp" prefHeight="31.0" prefWidth="37.0"
-                 styleClass="helpSymbol"/>
+<?import javafx.scene.text.*?>
+
+<VBox fx:id="ingameVBox" alignment="CENTER_LEFT" cacheShape="false" centerShape="false" scaleShape="false" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
+   <StackPane cacheShape="false" centerShape="false" scaleShape="false" style="-fx-background-color: black;" stylesheets="@../styles.css" VBox.vgrow="ALWAYS">
+      <Canvas fx:id="canvas" height="200.0" width="200.0" />
+       <VBox alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+           <ImageView fx:id="playerSpriteImageView" fitHeight="30.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+               <Image url="@../charactermodels/Character_01.png" />
+           </ImageView>
+       </VBox>
+      <HBox alignment="TOP_RIGHT" fillHeight="false" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" prefHeight="40.0" prefWidth="40.0" StackPane.alignment="TOP_RIGHT">
+         <Button fx:id="helpSymbol" mnemonicParsing="false" onAction="#showHelp" prefHeight="31.0" prefWidth="37.0" styleClass="helpSymbol" />
       </HBox>
-      <HBox alignment="BOTTOM_RIGHT" fillHeight="false" maxHeight="50.0" maxWidth="270.0" minHeight="50.0"
-            minWidth="270.0" prefHeight="50.0" prefWidth="270.0" spacing="5.0" StackPane.alignment="BOTTOM_RIGHT">
+      <HBox alignment="BOTTOM_RIGHT" fillHeight="false" maxHeight="50.0" maxWidth="270.0" minHeight="50.0" minWidth="270.0" prefHeight="50.0" prefWidth="270.0" spacing="5.0" StackPane.alignment="BOTTOM_RIGHT">
          <StackPane.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </StackPane.margin>
          <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
-         <Button fx:id="monstersButton" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0"
-                 mnemonicParsing="false" text="%Monsters">
+         <Button fx:id="monstersButton" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0" mnemonicParsing="false" text="%MONSTER">
             <font>
-               <Font name="Comic Sans MS Bold" size="17.0"/>
+               <Font name="Comic Sans MS Bold" size="17.0" />
             </font>
             <styleClass>
-               <String fx:value="buttonsYellow"/>
-               <String fx:value="monstersButton"/>
+               <String fx:value="buttonsYellow" />
+               <String fx:value="monstersButton" />
             </styleClass>
             <padding>
-               <Insets left="24.0"/>
+               <Insets left="24.0" />
             </padding>
          </Button>
-         <Button fx:id="settingsButton" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0"
-                 mnemonicParsing="false" onAction="#showTrainerSettings" text="%Settings">
+         <Button fx:id="settingsButton" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0" mnemonicParsing="false" onAction="#showTrainerSettings" text="%SETTINGS">
             <font>
-               <Font name="Comic Sans MS Bold" size="17.0"/>
+               <Font name="Comic Sans MS Bold" size="17.0" />
             </font>
             <styleClass>
-               <String fx:value="buttonsYellow"/>
-               <String fx:value="settingsButton"/>
+               <String fx:value="buttonsYellow" />
+               <String fx:value="settingsButton" />
             </styleClass>
             <padding>
-               <Insets left="24.0"/>
+               <Insets left="24.0" />
             </padding>
          </Button>
       </HBox>

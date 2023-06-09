@@ -1,7 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
 
-import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import de.uniks.stpmon.team_m.dto.*;
@@ -11,6 +10,8 @@ import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
@@ -19,12 +20,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -38,6 +44,8 @@ import static de.uniks.stpmon.team_m.Constants.*;
 
 public class IngameController extends Controller {
 
+    @FXML
+    public ImageView playerSpriteImageView;
     @FXML
     public Button helpSymbol;
     @FXML
@@ -60,10 +68,25 @@ public class IngameController extends Controller {
     PresetsService presetsService;
     GraphicsContext graphicsContext;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
+
+    @Inject
+    TrainerStorage trainerStorage;
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
     private final ObservableList<MoveTrainerDto> moveTrainerDtos = FXCollections.observableArrayList();
     HashMap<String, Image> tileSetImages = new HashMap<>();
+    private Timeline spriteWalkingAnimation;
+    private Timeline spriteStandingAnimation;
+    private Timeline mapMovementTransition;
+
+    private Image[] trainerStandingDown;
+    private Image[] trainerStandingUp;
+    private Image[] trainerStandingLeft;
+    private Image[] trainerStandingRight;
+    private Image[] trainerWalkingUp;
+    private Image[] trainerWalkingDown;
+    private Image[] trainerWalkingLeft;
+    private Image[] trainerWalkingRight;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -76,6 +99,15 @@ public class IngameController extends Controller {
     @Override
     public void init() {
         super.init();
+        // Image arrays for sprite animations
+        trainerStandingDown = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "down", false);
+        trainerStandingUp = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "up", false);
+        trainerStandingLeft = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "left", false);
+        trainerStandingRight = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "right", false);
+        trainerWalkingUp = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "up", true);
+        trainerWalkingDown = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "down", true);
+        trainerWalkingLeft = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "left", true);
+        trainerWalkingRight = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "right", true);
     }
 
     /**
@@ -87,6 +119,80 @@ public class IngameController extends Controller {
     @Override
     public String getTitle() {
         return resources.getString("INGAME.TITLE");
+    }
+
+
+    /**
+     * This method is used to play the stay animation for the given direction for the trainer character
+     *
+     * @param direction - either "up", "down", "left" or "right" are valid directions
+     */
+    private void stay(String direction) {
+        if (!GraphicsEnvironment.isHeadless()) {
+            spriteWalkingAnimation.stop();
+            mapMovementTransition.stop();
+            switch (direction) {
+                case "up" -> {
+                    spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingUp, false);
+                    spriteStandingAnimation.play();
+                }
+                case "down" -> {
+                    spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingDown, false);
+                    spriteStandingAnimation.play();
+                }
+                case "left" -> {
+                    spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingLeft, false);
+                    spriteStandingAnimation.play();
+                }
+                case "right" -> {
+                    spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingRight, false);
+                    spriteStandingAnimation.play();
+                }
+                default -> {
+                }
+            }
+        }
+    }
+
+    /**
+     * This method is used to play the walk animation for the given direction for the trainer character and move the map
+     *
+     * @param direction - either "up", "down", "left" or "right" are valid directions
+     */
+    private void walk(String direction) {
+        if (!GraphicsEnvironment.isHeadless()) {
+            if (spriteStandingAnimation != null) {
+                spriteStandingAnimation.stop();
+            }
+            switch (direction) {
+                case "up" -> {
+                    spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingUp, true);
+                    spriteWalkingAnimation.play();
+                    mapMovementTransition = getMapMovementTransition(canvas, 0.0, 16.0 / 2.0);
+                    mapMovementTransition.play();
+                }
+                case "down" -> {
+                    spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingDown, true);
+                    spriteWalkingAnimation.play();
+                    mapMovementTransition = getMapMovementTransition(canvas, 0.0, -16.0 / 2.0);
+                    mapMovementTransition.play();
+                }
+                case "left" -> {
+                    spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingLeft, true);
+                    spriteWalkingAnimation.play();
+                    mapMovementTransition = getMapMovementTransition(canvas, 16.0 / 2.0, 0.0);
+                    mapMovementTransition.play();
+                }
+                case "right" -> {
+                    spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingRight, true);
+                    spriteWalkingAnimation.play();
+                    mapMovementTransition = getMapMovementTransition(canvas, -16.0 / 2.0, 0.0);
+                    mapMovementTransition.play();
+                }
+                default -> {
+                }
+            }
+        }
     }
 
     /**
@@ -101,36 +207,157 @@ public class IngameController extends Controller {
         trainerStorageProvider.get().setX(trainerStorageProvider.get().getTrainer().x());
         trainerStorageProvider.get().setY(trainerStorageProvider.get().getTrainer().y());
         trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());
-        listenToMovement(moveTrainerDtos,trainerStorageProvider.get().getTrainer().area());
+        listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
+
+        // Start standing animation
+        playerSpriteImageView.setScaleX(2.0);
+        playerSpriteImageView.setScaleY(2.0);
+        playerSpriteImageView.relocate(trainerStorage.getX(), trainerStorage.getY());
+        spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingDown, false);
+        if (!GraphicsEnvironment.isHeadless()) {
+            spriteStandingAnimation.play();
+        }
+        app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, evt -> {
+
+            if (spriteStandingAnimation != null) {
+                spriteStandingAnimation.stop();
+            }
+            if (evt.getCode() == PAUSE_MENU_KEY) {
+                pauseGame();
+            }
+            if ((evt.getCode() == KeyCode.W)) {
+                walk("up");
+            }
+            if ((evt.getCode() == KeyCode.S)) {
+                walk("down");
+            }
+            if ((evt.getCode() == KeyCode.A)) {
+                walk("left");
+            }
+            if ((evt.getCode() == KeyCode.D)) {
+                walk("right");
+            }
+        });
+
+        app.getStage().getScene().addEventHandler(KeyEvent.KEY_RELEASED, evt -> {
+            if (!GraphicsEnvironment.isHeadless()) {
+                if (spriteWalkingAnimation != null) {
+                    spriteWalkingAnimation.stop();
+                }
+                if (mapMovementTransition != null) {
+                    mapMovementTransition.stop();
+                }
+                if ((evt.getCode() == KeyCode.W)) {
+                    stay("up");
+                }
+                if ((evt.getCode() == KeyCode.S)) {
+                    stay("down");
+                }
+                if ((evt.getCode() == KeyCode.A)) {
+                    stay("left");
+                }
+                if ((evt.getCode() == KeyCode.D)) {
+                    stay("right");
+                }
+            }
+
+        });
+        /*
         app.getStage().getScene().setOnKeyPressed(event -> {
+
             if ((event.getCode() == PAUSE_MENU_KEY)) {
                 pauseGame();
             }
             if ((event.getCode() == KeyCode.W)) {
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
-                            trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() + 1, 0)).subscribe());
+                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() + 1, 0)).subscribe(
+                        res -> {
+                            playSpriteAnimation(trainerWalkingUp, trainerStandingUp[0]);
+                            // move camera/map down
+                        }
+                ));
             }
             if ((event.getCode() == KeyCode.A)) {
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX() - 1, trainerStorageProvider.get().getY() , 1)).subscribe());
+                        trainerStorageProvider.get().getX() - 1, trainerStorageProvider.get().getY(), 1)).subscribe(
+                        res -> {
+                            playSpriteAnimation(trainerWalkingLeft, trainerStandingLeft[0]);
+                            // move camera/map right
+                        }
+                ));
             }
             if ((event.getCode() == KeyCode.S)) {
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() - 1, 2)).subscribe());
+                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() - 1, 2)).subscribe(
+                        res -> {
+                            playSpriteAnimation(trainerWalkingDown, trainerStandingDown[0]);
+                            // move camera/map up
+                        }
+                ));
             }
             if ((event.getCode() == KeyCode.D)) {
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 3)).subscribe());
+                        trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 3)).subscribe(
+                        res -> {
+                            playSpriteAnimation(trainerWalkingRight, trainerStandingRight[0]);
+                            // move camera/map left
+                        }
+                ));
             }
         });
+         */
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), region.spawn().area()).observeOn(FX_SCHEDULER)
                 .subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
         return parent;
+    }
+
+    /**
+     * This method returns a timeline animation for the trainer character
+     *
+     * @param movementImages are the images to be rapidly switched through
+     * @param isWalking      determines if the walking - or standing animation is requested.
+     */
+    private Timeline getSpriteAnimationTimeLine(Image[] movementImages, Boolean isWalking) {
+        if (isWalking) {
+            Timeline timeline = new Timeline(
+                    new KeyFrame(Duration.millis(66), e -> {
+                        // Calculate the index of the next image
+                        int currentIndex = (int) (System.currentTimeMillis() / 66 % 6);
+                        playerSpriteImageView.setImage(movementImages[currentIndex]);
+                    })
+            );
+            timeline.setCycleCount(2);
+            return timeline;
+        } else {
+            Timeline timeline = new Timeline(
+                    new KeyFrame(Duration.millis(300), e -> {
+                        // Calculate the index of the next image
+                        int currentIndex = (int) (System.currentTimeMillis() / 300 % 6);
+                        playerSpriteImageView.setImage(movementImages[currentIndex]);
+                    })
+            );
+            timeline.setCycleCount(Animation.INDEFINITE);
+            return timeline;
+        }
+    }
+
+    private Timeline getMapMovementTransition(Canvas map, Double x, Double y) {
+        return new Timeline(
+                new KeyFrame(Duration.millis(1), e -> {
+                    TranslateTransition translateTransition = new TranslateTransition();
+                    translateTransition.setDuration(Duration.millis(10));
+                    translateTransition.setNode(map);
+                    translateTransition.setByX(x);
+                    translateTransition.setByY(y);
+                    translateTransition.play();
+
+                })
+        );
     }
 
 
@@ -172,9 +399,9 @@ public class IngameController extends Controller {
      */
 
     private void loadPlayer() {
-        final Trainer trainer = trainerStorageProvider.get().getTrainer();
-        Image image = new Image(Objects.requireNonNull(App.class.getResource("images/character.png")).toString());
-        graphicsContext.drawImage(image, trainer.x() * TILE_SIZE, trainer.y() * TILE_SIZE);
+        //final Trainer trainer = trainerStorageProvider.get().getTrainer();
+        //Image image = new Image(Objects.requireNonNull(App.class.getResource("images/character.png")).toString());
+        //graphicsContext.drawImage(image, trainer.x() * TILE_SIZE, trainer.y() * TILE_SIZE);
     }
 
     /**
@@ -185,6 +412,8 @@ public class IngameController extends Controller {
      */
 
     private void afterAllTileSetsLoaded(Map map) {
+        canvas.setScaleX(2.0);
+        canvas.setScaleY(2.0);
         canvas.setWidth(map.width() * TILE_SIZE);
         canvas.setHeight(map.height() * TILE_SIZE);
         if (tileSetImages.size() == map.tilesets().size()) {
@@ -342,7 +571,7 @@ public class IngameController extends Controller {
 
     public void showTrainerSettings() {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
-        trainerSettingsDialog.setTitle(resources.getString("Trainer.Profil"));
+        trainerSettingsDialog.setTitle(resources.getString("TRAINER.PROFIL"));
         trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());
         trainerSettingsDialog.getDialogPane().setExpandableContent(null);
         trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());

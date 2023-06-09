@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.controller.MainMenuController;
@@ -7,7 +8,7 @@ import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.RegionsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import javafx.fxml.FXML;
@@ -22,6 +23,8 @@ import javafx.stage.Stage;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
+import java.util.Objects;
 import javax.inject.Singleton;
 import java.util.Optional;
 
@@ -50,7 +53,10 @@ public class IngameTrainerSettingsController extends Controller {
     public TrainersService trainersService;
 
     @Inject
+    public Provider<TrainerStorage> trainerStorageProvider;
+    @Inject
     public UserStorage usersStorage;
+
     private String regionId;
     protected final CompositeDisposable disposables = new CompositeDisposable();
     private Trainer trainer;
@@ -68,7 +74,9 @@ public class IngameTrainerSettingsController extends Controller {
 
     @Override
     public Parent render() {
-        return super.render();
+        Parent parent = super.render();
+        loadAndSetTrainerImage();
+        return parent;
     }
 
     public void onCancelButtonClick() {
@@ -88,7 +96,7 @@ public class IngameTrainerSettingsController extends Controller {
         final Button okButton2 = (Button) alert.getDialogPane().lookupButton(okButton);
         okButton2.setOnAction(event -> onCancelButtonClick());
 
-        alert.setTitle(resources.getString("Delete.your.trainer"));
+        alert.setTitle(resources.getString("DELETE.YOUR.TRAINER"));
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == cancelButton) {
@@ -99,32 +107,14 @@ public class IngameTrainerSettingsController extends Controller {
         }
     }
 
-    public void setRegion(String regionId) {
-        this.regionId = regionId;
-        loadTrainer();
-    }
-
-    public void loadTrainer() {
-        if (this.regionId != null) {
-            disposables.add(trainersService.getTrainers(this.regionId, null, usersStorage.get_id()).observeOn(FX_SCHEDULER).subscribe(trainers -> {
-                if (!trainers.isEmpty()) {
-                    trainer = trainers.get(0);
-                    loadAndSetTrainerImage();
-                }
-            }, error -> this.showError(error.getMessage())));
-        }
-    }
-
-
     private void loadAndSetTrainerImage() {
-        disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody ->  {
-            try {
-                trainerImage = ImageProcessor.responseBodyToJavaFXImage(responseBody);
-                trainerAvatarImageView.setImage(trainerImage);
-            }
-            catch (Exception e) {
-                this.showError(e.getMessage());
-            }
-        }, error -> this.showError(error.getMessage())));
+        String trainerSprite = trainerStorageProvider.get().getTrainerSprite();
+        if (!GraphicsEnvironment.isHeadless()) {
+            trainerSprite = trainerSprite.substring(8);
+            String path = Objects.requireNonNull(Main.class.getResource("charactermodels/" + trainerSprite)).toString();
+            Image trainerImage = new Image(path);
+            trainerAvatarImageView.setImage(trainerImage);
+        }
+
     }
 }
