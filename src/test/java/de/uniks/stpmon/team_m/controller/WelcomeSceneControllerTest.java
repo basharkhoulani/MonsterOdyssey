@@ -103,9 +103,9 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
         Label secondMessage = lookup("#secondMessage").query();
         assertEquals("Welcome Aboard!", secondMessage.getText());
 
-        clickOn("Next");
-        clickOn("Previous");
-        clickOn("Next");
+        clickOn("NEXT");
+        clickOn("PREVIOUS");
+        clickOn("NEXT");
 
         // Scene 2
         Label thirdMessage = lookup("#firstMessage").query();
@@ -117,7 +117,7 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
         Label fifthMessage = lookup("#thirdMessage").query();
         assertEquals("And my name is Henry!", fifthMessage.getText());
 
-        clickOn("Next");
+        clickOn("NEXT");
 
         // Scene 3
         Label sixthMessage = lookup("#firstMessage").query();
@@ -126,7 +126,7 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
         Label seventhMessage = lookup("#secondMessage").query();
         assertEquals("Can we have your name?", seventhMessage.getText());
 
-        clickOn("Next");
+        clickOn("NEXT");
 
         // Scene 4
         final DialogPane dialogPane = lookup(".dialog-pane").query();
@@ -142,14 +142,14 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
         Label ninthMessage = lookup("#secondMessage").query();
         assertEquals("Take as much time as you want to get dressed up for it.", ninthMessage.getText());
 
-        clickOn("Next");
+        clickOn("NEXT");
 
         // Scene 6 CharacterSelection
         verify(app).show(characterSelectionControllerProvider.get());
 
         when(trainerStorage.getRegion()).thenReturn(new Region("123", "456", "789", "test", new Spawn("adsad", 0, 0), null));
 
-        clickOn("Next");
+        clickOn("NEXT");
 
         // Scene 7
         verify(app).show(welcomeSceneController);
@@ -159,6 +159,6 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
         Label eleventhMessage = lookup("#secondMessage").query();
         assertEquals("See you next time!", eleventhMessage.getText());
 
-        clickOn("Next");
+        clickOn("NEXT");
     }
 }

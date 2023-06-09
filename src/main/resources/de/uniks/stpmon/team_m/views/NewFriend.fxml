@@ -23,7 +23,7 @@
             <padding>
                <Insets left="8.0" right="8.0" />
             </padding>
-            <Button fx:id="addFriendButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="50.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#addAsAFriend" prefHeight="50.0" styleClass="buttonsYellow" text="%Add.as.a.friend" textAlignment="CENTER" HBox.hgrow="SOMETIMES">
+            <Button fx:id="addFriendButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="50.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#addAsAFriend" prefHeight="50.0" styleClass="buttonsYellow" text="%ADD.AS.A.FRIEND" textAlignment="CENTER" HBox.hgrow="SOMETIMES">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
@@ -31,7 +31,7 @@
                   <Font name="Comic Sans MS Bold" size="17.0" />
                </font>
             </Button>
-            <TextField fx:id="searchTextField" maxHeight="50.0" maxWidth="1.7976931348623157E308" minHeight="40.0" minWidth="330.0" onAction="#clickSearchField" onMouseClicked="#clickSearchField" prefHeight="50.0" promptText="%Find.new.friends" HBox.hgrow="SOMETIMES">
+            <TextField fx:id="searchTextField" maxHeight="50.0" maxWidth="1.7976931348623157E308" minHeight="40.0" minWidth="330.0" onAction="#clickSearchField" onMouseClicked="#clickSearchField" prefHeight="50.0" promptText="%FIND.NEW.FRIENDS" HBox.hgrow="SOMETIMES">
                <HBox.margin>
                   <Insets left="8.0" />
                </HBox.margin>
@@ -51,7 +51,7 @@
          </HBox>
          <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
             <VBox alignment="BOTTOM_CENTER" HBox.hgrow="ALWAYS">
-               <Button fx:id="mainMenuButton" alignment="CENTER" maxHeight="50.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#changeToMainMenu" prefHeight="50.0" styleClass="buttonsWhite" text="%Main.Menu" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+               <Button fx:id="mainMenuButton" alignment="CENTER" maxHeight="50.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#changeToMainMenu" prefHeight="50.0" styleClass="buttonsWhite" text="%MAIN.MENU" textAlignment="CENTER" VBox.vgrow="ALWAYS">
                   <opaqueInsets>
                      <Insets left="20.0" />
                   </opaqueInsets>
@@ -61,7 +61,7 @@
                </Button>
             </VBox>
             <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-               <Button fx:id="messageButton" alignment="CENTER" maxHeight="50.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="50.0" styleClass="buttonsYellow" text="%Send.Message" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+               <Button fx:id="messageButton" alignment="CENTER" maxHeight="50.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="50.0" styleClass="buttonsYellow" text="%SEND.MESSAGE" textAlignment="CENTER" VBox.vgrow="ALWAYS">
                   <font>
                      <Font name="Comic Sans MS Bold" size="17.0" />
                   </font>

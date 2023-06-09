@@ -225,7 +225,7 @@ public class AccountSettingController extends Controller {
         ButtonType okButton = new ButtonType(resources.getString("OK"), ButtonBar.ButtonData.OK_DONE);
 
         Dialog<?> dialog = new Dialog<>();
-        dialog.setTitle(resources.getString("Choose.your.Avatar"));
+        dialog.setTitle(resources.getString("CHOOSE.YOUR.AVATAR"));
         avatarSelectionController.setValues(resources, preferences, resourceBundleProvider, this, app);
         dialog.getDialogPane().setContent(avatarSelectionController.render());
         dialog.getDialogPane().getButtonTypes().add(okButton);
@@ -298,7 +298,7 @@ public class AccountSettingController extends Controller {
 
     public void showDeletePopUp() {
         Alert alert = new Alert(Alert.AlertType.WARNING, resources.getString("SURE"), ButtonType.OK, ButtonType.CANCEL);
-        alert.setTitle(resources.getString("Delete.Account"));
+        alert.setTitle(resources.getString("DELETE.ACCOUNT"));
         alert.setHeaderText(null);
         alert.initOwner(app.getStage());
         Optional<ButtonType> result = alert.showAndWait();
@@ -345,7 +345,7 @@ public class AccountSettingController extends Controller {
         Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
         closeButton.managedProperty().bind(closeButton.visibleProperty());
         closeButton.setVisible(false);
-        dialog.setTitle(resources.getString("Change.Language"));
+        dialog.setTitle(resources.getString("CHOOSE.LANGUAGE"));
         changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);
         dialog.getDialogPane().setContent(changeLanguageController.render());
         dialog.showAndWait();

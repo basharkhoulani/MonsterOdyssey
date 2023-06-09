@@ -32,7 +32,7 @@
             <padding>
                <Insets bottom="8.0" left="8.0" />
             </padding>
-            <Button fx:id="deleteTrainerButton" minHeight="50.0" minWidth="150.0" mnemonicParsing="false" onAction="#onDeleteTrainerButtonClick" styleClass="buttonsWhite" text="%Delete.your.trainer">
+            <Button fx:id="deleteTrainerButton" minHeight="50.0" minWidth="150.0" mnemonicParsing="false" onAction="#onDeleteTrainerButtonClick" styleClass="buttonsWhite" text="%DELETE.YOUR.TRAINER">
                <font>
                   <Font name="Comic Sans MS Bold" size="17.0" />
                </font>

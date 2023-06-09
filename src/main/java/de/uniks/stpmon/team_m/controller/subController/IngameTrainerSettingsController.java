@@ -25,7 +25,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.util.Objects;
-import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.util.Optional;
 
@@ -97,7 +96,7 @@ public class IngameTrainerSettingsController extends Controller {
         final Button okButton2 = (Button) alert.getDialogPane().lookupButton(okButton);
         okButton2.setOnAction(event -> onCancelButtonClick());
 
-        alert.setTitle(resources.getString("Delete.your.trainer"));
+        alert.setTitle(resources.getString("DELETE.YOUR.TRAINER"));
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == cancelButton) {

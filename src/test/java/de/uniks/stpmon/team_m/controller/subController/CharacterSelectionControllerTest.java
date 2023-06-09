@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
-import javafx.scene.control.RadioButton;
+
 import javax.inject.Provider;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -54,9 +54,9 @@ public class CharacterSelectionControllerTest extends ApplicationTest {
 
     @Test
     void selectCharacterTest() {
-        clickOn("Previous");
+        clickOn("PREVIOUS");
         verify(app).show(welcomeSceneControllerProvider.get());
-        clickOn("Next");
+        clickOn("NEXT");
 
         RadioButton radioButton1 = lookup("#character1RadioButton").query();
         RadioButton radioButton2 = lookup("#character2RadioButton").query();

@@ -95,7 +95,7 @@ public class AppTest extends ApplicationTest {
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
 
         // test Main Menu to Messages
-        clickOn("Messages");
+        clickOn("MESSAGES");
         assertEquals("Monster Odyssey - Messages", stage.getTitle());
         final Button sendButton = lookup("#sendButton").query();
         assertNotNull(sendButton);
@@ -137,15 +137,15 @@ public class AppTest extends ApplicationTest {
         // Intro
         assertEquals("Monster Odyssey - Ingame", stage.getTitle());
 
-        clickOn("Next");
-        clickOn("Next");
-        clickOn("Next");
+        clickOn("NEXT");
+        clickOn("NEXT");
+        clickOn("NEXT");
         clickOn("#nameField");
         write("Ash");
         clickOn("OK");
-        clickOn("Next");
-        clickOn("Next");
-        clickOn("Next");
+        clickOn("NEXT");
+        clickOn("NEXT");
+        clickOn("NEXT");
 
         // test Ingame Help Symbol
         clickOn("#helpSymbol");

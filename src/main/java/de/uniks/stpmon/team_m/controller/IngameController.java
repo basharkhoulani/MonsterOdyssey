@@ -168,27 +168,26 @@ public class IngameController extends Controller {
                 case "up" -> {
                     spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingUp, true);
                     spriteWalkingAnimation.play();
-                    mapMovementTransition = getMapMovementTransition(canvas, 0.0, 16.0 / 2.5);
+                    mapMovementTransition = getMapMovementTransition(canvas, 0.0, 16.0 / 2.0);
                     mapMovementTransition.play();
                 }
                 case "down" -> {
                     spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingDown, true);
                     spriteWalkingAnimation.play();
-                    mapMovementTransition = getMapMovementTransition(canvas, 0.0, -16.0 / 2.5);
+                    mapMovementTransition = getMapMovementTransition(canvas, 0.0, -16.0 / 2.0);
                     mapMovementTransition.play();
                 }
                 case "left" -> {
                     spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingLeft, true);
                     spriteWalkingAnimation.play();
-                    mapMovementTransition = getMapMovementTransition(canvas, 16.0 / 2.5, 0.0);
+                    mapMovementTransition = getMapMovementTransition(canvas, 16.0 / 2.0, 0.0);
                     mapMovementTransition.play();
                 }
                 case "right" -> {
                     spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingRight, true);
                     spriteWalkingAnimation.play();
-                    mapMovementTransition = getMapMovementTransition(canvas, -16.0 / 2.5, 0.0);
+                    mapMovementTransition = getMapMovementTransition(canvas, -16.0 / 2.0, 0.0);
                     mapMovementTransition.play();
-
                 }
                 default -> {
                 }
@@ -215,9 +214,14 @@ public class IngameController extends Controller {
         playerSpriteImageView.setScaleY(2.0);
         playerSpriteImageView.relocate(trainerStorage.getX(), trainerStorage.getY());
         spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingDown, false);
-        spriteStandingAnimation.play();
-
+        if (!GraphicsEnvironment.isHeadless()) {
+            spriteStandingAnimation.play();
+        }
         app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, evt -> {
+
+            if (spriteStandingAnimation != null) {
+                spriteStandingAnimation.stop();
+            }
             if (evt.getCode() == PAUSE_MENU_KEY) {
                 pauseGame();
             }
@@ -313,9 +317,9 @@ public class IngameController extends Controller {
     }
 
     /**
-     * This method plays a timeline animation for the trainer character of the given
+     * This method returns a timeline animation for the trainer character
      *
-     * @param movementImages .
+     * @param movementImages are the images to be rapidly switched through
      * @param isWalking      determines if the walking - or standing animation is requested.
      */
     private Timeline getSpriteAnimationTimeLine(Image[] movementImages, Boolean isWalking) {
@@ -408,6 +412,8 @@ public class IngameController extends Controller {
      */
 
     private void afterAllTileSetsLoaded(Map map) {
+        canvas.setScaleX(2.0);
+        canvas.setScaleY(2.0);
         canvas.setWidth(map.width() * TILE_SIZE);
         canvas.setHeight(map.height() * TILE_SIZE);
         if (tileSetImages.size() == map.tilesets().size()) {
@@ -417,8 +423,6 @@ public class IngameController extends Controller {
             }
             loadPlayer();
         }
-        canvas.setScaleX(2.0);
-        canvas.setScaleY(2.0);
     }
 
     /**
@@ -567,7 +571,7 @@ public class IngameController extends Controller {
 
     public void showTrainerSettings() {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
-        trainerSettingsDialog.setTitle(resources.getString("Trainer.Profil"));
+        trainerSettingsDialog.setTitle(resources.getString("TRAINER.PROFIL"));
         trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());
         trainerSettingsDialog.getDialogPane().setExpandableContent(null);
         trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
