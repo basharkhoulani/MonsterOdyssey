@@ -24,6 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -385,5 +386,9 @@ public class IngameController extends Controller {
             event.consume();
             this.sendMessage();
         }
+    }
+
+    public void canvasClicked() {
+        canvas.requestFocus();
     }
 }
