@@ -23,6 +23,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -113,6 +114,7 @@ public class IngameController extends Controller {
         trainerStorageProvider.get().setY(trainerStorageProvider.get().getTrainer().y());
         trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());
         listenToMovement(moveTrainerDtos,trainerStorageProvider.get().getTrainer().area());
+        messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
         app.getStage().getScene().setOnKeyPressed(event -> {
             if ((event.getCode() == PAUSE_MENU_KEY)) {
                 pauseGame();
@@ -366,12 +368,22 @@ public class IngameController extends Controller {
     }
 
     public void sendMessage() {
+        if (messageField.getText().isEmpty()) {
+            return;
+        }
         String regionID = trainerStorageProvider.get().getRegion()._id();
         if (regionID != null) {
             String messageBody = messageField.getText();
             disposables.add(messageService.newMessage(regionID, messageBody, MESSAGE_NAMESPACE_REGIONS).observeOn(FX_SCHEDULER).subscribe(message -> {
             }, error -> showError(error.getMessage())));
             messageField.setText(EMPTY_STRING);
+        }
+    }
+
+    private void enterButtonPressedToSend(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER && !event.isShiftDown()) {
+            event.consume();
+            this.sendMessage();
         }
     }
 }
