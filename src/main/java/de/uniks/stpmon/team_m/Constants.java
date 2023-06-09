@@ -1,12 +1,12 @@
 package de.uniks.stpmon.team_m;
 
 
-import javafx.scene.input.KeyCode;
-
 public class Constants {
     // SERVER
     public static final String API_URL = "https://stpmon.uniks.de/api/v2";
     public static final String WS_URL = "wss://stpmon.uniks.de/ws/v2";
+    public static final String UDP_URL = "stpmon.uniks.de";
+    public static final int SERVER_PORT = 30011;
     public static final String MESSAGE_NAMESPACE_GROUPS = "groups";
     public static final String MESSAGE_NAMESPACE_REGIONS = "regions";
     public static final String MESSAGE_NAMESPACE_GLOBAL = "global";
@@ -51,7 +51,7 @@ public class Constants {
     // NEW GROUP
     public static final String CHECK_MARK = "\u2713";
     public static final String ADD_MARK = "+";
-    public static final int BUTTON_PREF_SIZE = 40;
+    public static final int BUTTON_PREF_SIZE = 42;
     public static final int MAX_SUGGESTIONS_NEW_GROUP = 20;
 
 
@@ -68,7 +68,9 @@ public class Constants {
     public static final int AVATAR_SIZE = 30;
 
     // INGAME
-    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
+    public static int TILE_SIZE = 16;
+    public static int OFFSET_WIDTH = 50;
+    public static int OFFSET_HEIGHT = 50;
 
     // Error messages
     public static final String HTTP_400 = "400";
@@ -83,11 +85,20 @@ public class Constants {
     public static final int MESSAGEBOX_HEIGHT = 45;
     public static final int MESSAGEBOX_WIDTH = 170;
 
-    // Trainer
-
-    public static final String PREMADE_CHARACTER_1 = "Premade_Character_01.png";
-    public static final String PREMADE_CHARACTER_2 = "Premade_Character_04.png";
-    public static final String CHARACTER_1 = "images/Character1.png";
-    public static final String CHARACTER_2 = "images/Character4.png";
+    // Characters
+    public static final String[] PREMADE_CHARACTERS = {
+            "Premade_Character_01.png", "Premade_Character_02.png", "Premade_Character_03.png", "Premade_Character_04.png",
+            "Premade_Character_05.png", "Premade_Character_06.png", "Premade_Character_07.png", "Premade_Character_08.png",
+            "Premade_Character_09.png", "Premade_Character_10.png", "Premade_Character_11.png", "Premade_Character_12.png",
+            "Premade_Character_13.png", "Premade_Character_14.png", "Premade_Character_15.png", "Premade_Character_16.png",
+            "Premade_Character_17.png", "Premade_Character_18.png", "Premade_Character_19.png", "Premade_Character_20.png"
+    };
+    public static final String[] CHARACTERS_FRONT = {
+            "charactermodels/Character_01.png", "charactermodels/Character_02.png", "charactermodels/Character_03.png", "charactermodels/Character_04.png",
+            "charactermodels/Character_05.png", "charactermodels/Character_06.png", "charactermodels/Character_07.png", "charactermodels/Character_08.png",
+            "charactermodels/Character_09.png", "charactermodels/Character_10.png", "charactermodels/Character_11.png", "charactermodels/Character_12.png",
+            "charactermodels/Character_13.png", "charactermodels/Character_14.png", "charactermodels/Character_15.png", "charactermodels/Character_16.png",
+            "charactermodels/Character_17.png", "charactermodels/Character_18.png", "charactermodels/Character_19.png", "charactermodels/Character_20.png"
+    };
 
 }

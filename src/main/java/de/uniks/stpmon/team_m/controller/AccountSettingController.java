@@ -221,11 +221,11 @@ public class AccountSettingController extends Controller {
     public void editAvatar() {
         AvatarSelectionController avatarSelectionController = avatarSelectionControllerProvider.get();
         avatarSelectionController.init();
-        ButtonType cancelButton = new ButtonType(resources.getString("Cancel"),ButtonBar.ButtonData.CANCEL_CLOSE);
-        ButtonType okButton = new ButtonType(resources.getString("OK"),ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType(resources.getString("Cancel"), ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType okButton = new ButtonType(resources.getString("OK"), ButtonBar.ButtonData.OK_DONE);
 
         Dialog<?> dialog = new Dialog<>();
-        dialog.setTitle(resources.getString("Choose.your.Avatar"));
+        dialog.setTitle(resources.getString("CHOOSE.YOUR.AVATAR"));
         avatarSelectionController.setValues(resources, preferences, resourceBundleProvider, this, app);
         dialog.getDialogPane().setContent(avatarSelectionController.render());
         dialog.getDialogPane().getButtonTypes().add(okButton);
@@ -298,7 +298,7 @@ public class AccountSettingController extends Controller {
 
     public void showDeletePopUp() {
         Alert alert = new Alert(Alert.AlertType.WARNING, resources.getString("SURE"), ButtonType.OK, ButtonType.CANCEL);
-        alert.setTitle(resources.getString("Delete.Account"));
+        alert.setTitle(resources.getString("DELETE.ACCOUNT"));
         alert.setHeaderText(null);
         alert.initOwner(app.getStage());
         Optional<ButtonType> result = alert.showAndWait();
@@ -307,6 +307,7 @@ public class AccountSettingController extends Controller {
             deleteAccount(alert);
         }
     }
+
     /**
      * This method is used to show a pop-up when an error occurs.
      *
@@ -338,13 +339,13 @@ public class AccountSettingController extends Controller {
     /**
      * This method is used to open the Change Language Pop up
      */
-    public void changeLanguage(){
+    public void changeLanguage() {
         Dialog<?> dialog = new Dialog<>();
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
         closeButton.managedProperty().bind(closeButton.visibleProperty());
         closeButton.setVisible(false);
-        dialog.setTitle(resources.getString("Change.Language"));
+        dialog.setTitle(resources.getString("CHOOSE.LANGUAGE"));
         changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);
         dialog.getDialogPane().setContent(changeLanguageController.render());
         dialog.showAndWait();

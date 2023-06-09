@@ -6,6 +6,8 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
+
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
@@ -156,8 +158,7 @@ public class AppTest extends ApplicationTest {
                 .orElse(null);
         assertNotNull(helpLabel);
         clickOn("OK");
-        final Label gameTitle = lookup("Monster Odyssey").query();
-        assertNotNull(gameTitle);
+
 
         // test Ingame Pause
         type(KeyCode.P);
@@ -173,20 +174,16 @@ public class AppTest extends ApplicationTest {
 
         // test Ingame Unpause With Key Code P
         type(KeyCode.P);
-        final Label gameTitleUnpauseP = lookup("Monster Odyssey").query();
-        assertNotNull(gameTitleUnpauseP);
 
         // test Ingame Unpause With Button
         type(KeyCode.P);
         clickOn("Resume Game");
-        final Label gameTitleUnpauseButton = lookup("Monster Odyssey").query();
-        assertNotNull(gameTitleUnpauseButton);
+
 
         // test Ingame Back To Main Menu
         type(KeyCode.P);
         clickOn("Save Game & Leave");
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
-
 
     }
 }

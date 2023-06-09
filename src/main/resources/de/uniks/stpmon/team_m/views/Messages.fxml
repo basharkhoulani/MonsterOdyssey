@@ -25,7 +25,7 @@
                            <Insets bottom="8.0" />
                         </HBox.margin>
                      </ImageView>
-                     <Label fx:id="friendsAndGroupText" text="%My.Friends.and.My.Groups" textAlignment="CENTER">
+                     <Label fx:id="friendsAndGroupText" text="%MY.FRIENDS.AND.MY.GROUPS" textAlignment="CENTER">
                         <font>
                            <Font name="Comic Sans MS Bold" size="17.0" />
                         </font>
@@ -45,7 +45,7 @@
                </VBox>
                <VBox alignment="CENTER" fillWidth="false" minWidth="309.0" VBox.vgrow="NEVER">
                   <HBox alignment="CENTER" fillHeight="false" prefHeight="44.0" prefWidth="126.0">
-                     <Button fx:id="findNewFriendsButton" minHeight="36.0" minWidth="125.0" mnemonicParsing="false" onAction="#changeToFindNewFriends" prefHeight="50.0" styleClass="buttonsYellow" text="%New.Friends" HBox.hgrow="ALWAYS">
+                     <Button fx:id="findNewFriendsButton" maxHeight="50.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#changeToFindNewFriends" prefHeight="50.0" styleClass="buttonsYellow" text="%NEW.FRIENDS" wrapText="true" HBox.hgrow="ALWAYS">
                         <font>
                            <Font name="Comic Sans MS Bold" size="17.0" />
                         </font>
@@ -58,7 +58,7 @@
                   </HBox>
                   <HBox alignment="CENTER" fillHeight="false">
                      <HBox alignment="CENTER" fillHeight="false" prefHeight="51.0" prefWidth="119.0">
-                        <Button fx:id="mainMenuButton" minHeight="36.0" minWidth="125.0" mnemonicParsing="false" onAction="#changeToMainMenu" styleClass="buttonsWhite" text="%Main.Menu">
+                        <Button fx:id="mainMenuButton" maxHeight="50.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#changeToMainMenu" prefHeight="50.0" styleClass="buttonsWhite" text="%MAIN.MENU">
                            <font>
                               <Font name="Comic Sans MS Bold" size="17.0" />
                            </font></Button>
@@ -67,7 +67,7 @@
                         </HBox.margin>
                      </HBox>
                      <HBox alignment="CENTER" fillHeight="false" prefHeight="55.0" prefWidth="120.0">
-                        <Button fx:id="newGroupButton" minHeight="36.0" minWidth="125.0" mnemonicParsing="false" onAction="#changeToNewGroup" styleClass="buttonsYellow" text="%New.Group">
+                        <Button fx:id="newGroupButton" maxHeight="50.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#changeToNewGroup" prefHeight="50.0" styleClass="buttonsYellow" text="%NEW.GROUP">
                            <font>
                               <Font name="Comic Sans MS Bold" size="17.0" />
                            </font></Button>
@@ -96,7 +96,7 @@
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
          <HBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER">
             <VBox alignment="CENTER" fillWidth="false" styleClass="ForegroundHeaderContainer" HBox.hgrow="ALWAYS">
-               <Text fx:id="currentFriendOrGroupText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Friends/Group.Chat" textAlignment="CENTER" wrappingWidth="243.13671875" VBox.vgrow="ALWAYS">
+               <Text fx:id="currentFriendOrGroupText" strokeType="OUTSIDE" strokeWidth="0.0" text="%FRIENDS/GROUP.CHAT" textAlignment="CENTER" wrappingWidth="243.13671875" VBox.vgrow="ALWAYS">
                   <font>
                      <Font name="Comic Sans MS Bold" size="24.0" />
                   </font>
@@ -118,12 +118,12 @@
             <VBox alignment="BOTTOM_CENTER" fillWidth="false" HBox.hgrow="NEVER">
                <HBox alignment="CENTER" fillHeight="false" prefHeight="65.0" prefWidth="10000.0" VBox.vgrow="ALWAYS">
                   <HBox alignment="CENTER" fillHeight="false" maxWidth="1.7976931348623157E308" minHeight="60.0" minWidth="300.0" HBox.hgrow="ALWAYS">
-                     <TextArea fx:id="messageTextArea" maxWidth="1.7976931348623157E308" minHeight="42.0" minWidth="282.0" prefWidth="10000.0" promptText="%Write.your.message.here..." wrapText="true" HBox.hgrow="ALWAYS">
+                     <TextArea fx:id="messageTextArea" maxWidth="1.7976931348623157E308" minHeight="42.0" minWidth="282.0" prefWidth="10000.0" promptText="%WRITE.YOUR.MESSAGE.HERE..." wrapText="true" HBox.hgrow="ALWAYS">
                         <font>
                            <Font name="Comic Sans MS" size="17.0" />
                         </font>
                      </TextArea>
-                     <Button fx:id="sendButton" maxHeight="1.7976931348623157E308" minHeight="36.0" minWidth="125.0" mnemonicParsing="false" onAction="#onSendMessage" prefHeight="66.0" styleClass="buttonsYellow" text="%Send" HBox.hgrow="ALWAYS">
+                     <Button fx:id="sendButton" maxHeight="1.7976931348623157E308" minHeight="36.0" minWidth="125.0" mnemonicParsing="false" onAction="#onSendMessage" prefHeight="66.0" styleClass="buttonsYellow" text="%SEND" HBox.hgrow="ALWAYS">
                         <font>
                            <Font name="Comic Sans MS Bold" size="17.0" />
                         </font>

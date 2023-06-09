@@ -26,7 +26,7 @@
             </HBox.margin>
             <Image url="@../images/Monster1-without.png" />
          </ImageView>
-         <Label text="%My.Friends" textAlignment="CENTER">
+         <Label text="%MY.FRIENDS" textAlignment="CENTER">
             <font>
                <Font name="Comic Sans MS Bold" size="24.0" />
             </font>
@@ -61,7 +61,7 @@
                <Insets top="8.0" />
             </padding>
             <HBox alignment="CENTER" fillHeight="false" prefWidth="80.0" HBox.hgrow="ALWAYS">
-               <Button fx:id="findNewFriendsButton" maxHeight="50.0" minHeight="38.0" minWidth="100.0" mnemonicParsing="false" onAction="#changeToFindNewFriends" prefHeight="50.0" styleClass="buttonsYellow" text="%New.Friends" HBox.hgrow="ALWAYS">
+               <Button fx:id="findNewFriendsButton" maxHeight="50.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#changeToFindNewFriends" prefHeight="50.0" styleClass="buttonsYellow" text="%NEW.FRIENDS" HBox.hgrow="ALWAYS">
                   <padding>
                      <Insets left="8.0" right="8.0" />
                   </padding>
@@ -71,7 +71,7 @@
                </Button>
             </HBox>
             <HBox alignment="CENTER" fillHeight="false" HBox.hgrow="ALWAYS">
-               <Button fx:id="messagesButton" maxHeight="60.0" minHeight="38.0" minWidth="100.0" mnemonicParsing="false" onAction="#changeToMessages" prefHeight="50.0" styleClass="buttonsYellow" text="%Messages" HBox.hgrow="ALWAYS">
+               <Button fx:id="messagesButton" maxHeight="50.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#changeToMessages" prefHeight="50.0" styleClass="buttonsYellow" text="%MESSAGES" HBox.hgrow="ALWAYS">
                   <font>
                      <Font name="Comic Sans MS Bold" size="17.0" />
                   </font>
@@ -82,7 +82,7 @@
             <VBox.margin>
                <Insets top="8.0" />
             </VBox.margin>
-            <Button fx:id="logoutButton" maxHeight="50.0" minHeight="38.0" minWidth="100.0" mnemonicParsing="false" onAction="#changeToLogin" prefHeight="50.0" styleClass="buttonsWhite" text="%Logout" HBox.hgrow="ALWAYS">
+            <Button fx:id="logoutButton" maxHeight="50.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#changeToLogin" prefHeight="50.0" styleClass="buttonsWhite" text="%LOGOUT" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="Comic Sans MS Bold" size="17.0" />
                </font>
@@ -103,7 +103,7 @@
                </HBox.margin>
                <Image url="@../images/Monster1-without.png" />
             </ImageView>
-            <Label alignment="CENTER" text="%Choose.a.Region" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+            <Label alignment="CENTER" minWidth="-Infinity" text="%CHOOSE.A.REGION" textAlignment="CENTER" wrapText="true" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="Comic Sans MS Bold" size="24.0" />
                </font>
@@ -130,7 +130,7 @@
          </VBox>
          <VBox alignment="CENTER" prefHeight="123.0" VBox.vgrow="ALWAYS">
             <HBox alignment="TOP_CENTER" fillHeight="false" prefHeight="82.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
-               <Button fx:id="startGameButton" maxHeight="50.0" minHeight="38.0" minWidth="100.0" mnemonicParsing="false" onAction="#changeToIngame" prefHeight="50.0" styleClass="buttonsYellow" text="%Start.Game" HBox.hgrow="ALWAYS">
+               <Button fx:id="startGameButton" maxHeight="50.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#changeToIngame" prefHeight="50.0" styleClass="buttonsYellow" text="%START.GAME" HBox.hgrow="ALWAYS">
                   <font>
                      <Font name="Comic Sans MS Bold" size="17.0" />
                   </font>
