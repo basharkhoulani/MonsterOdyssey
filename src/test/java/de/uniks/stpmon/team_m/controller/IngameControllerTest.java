@@ -9,10 +9,12 @@ import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.control.Button;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -148,7 +150,8 @@ public class IngameControllerTest extends ApplicationTest {
 
     @Test
     void showHelp() {
-        clickOn("#helpSymbol");
+        Button helpSymbol = lookup("#helpSymbol").query();
+        clickOn(helpSymbol);
         final DialogPane dialogPane = lookup(".dialog-pane").query();
         assertNotNull(dialogPane);
         final Label helpLabel = dialogPane.getChildren().stream()

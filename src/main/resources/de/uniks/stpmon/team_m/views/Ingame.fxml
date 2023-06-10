@@ -14,15 +14,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="ingameVBox" alignment="CENTER_LEFT" cacheShape="false" centerShape="false" scaleShape="false" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
-   <StackPane cacheShape="false" centerShape="false" onMouseClicked="#paneClicked" scaleShape="false" style="-fx-background-color: black;" stylesheets="@../styles.css" VBox.vgrow="ALWAYS">
+<VBox fx:id="ingameVBox" alignment="CENTER_LEFT" cacheShape="false" centerShape="false" scaleShape="false" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
+   <StackPane cacheShape="false" centerShape="false" onMouseClicked="#paneClicked" scaleShape="false" style="-fx-background-color: black;" VBox.vgrow="ALWAYS">
       <Canvas fx:id="canvas" height="200.0" width="200.0" />
        <VBox alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
            <ImageView fx:id="playerSpriteImageView" fitHeight="30.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-               <Image url="@../charactermodels/Character_01.png" />
+
            </ImageView>
        </VBox>
-      <BorderPane prefHeight="200.0" prefWidth="200.0">
+      <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
          <top>
             <HBox alignment="TOP_RIGHT" fillHeight="false" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="40.0" BorderPane.alignment="TOP_RIGHT">
                <Button fx:id="helpSymbol" focusTraversable="false" mnemonicParsing="false" onAction="#showHelp" prefHeight="31.0" prefWidth="37.0" styleClass="helpSymbol" />
