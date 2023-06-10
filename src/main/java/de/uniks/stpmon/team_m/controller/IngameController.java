@@ -17,9 +17,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -47,7 +45,6 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -235,16 +232,17 @@ public class IngameController extends Controller {
         trainerStorageProvider.get().setY(trainerStorageProvider.get().getTrainer().y());
         trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());
         listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
-        messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
+
+        // Setup trainers
         disposables.add(trainersService.getTrainers(trainerStorage.getRegion()._id(), null, null).observeOn(FX_SCHEDULER).subscribe(
                 trainers -> {
                     this.trainers = FXCollections.observableArrayList(trainers);
                     listenToTrainers(this.trainers);
                 }
         ));
-        listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
 
         // Setup chat
+        messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
         listenToMessages(trainerStorageProvider.get().getTrainer().region());
         disposables.add(trainersService.getTrainers(trainerStorage.getRegion()._id(), null, null).observeOn(FX_SCHEDULER).subscribe());
         chatListView.setItems(messages);
@@ -690,12 +688,13 @@ public class IngameController extends Controller {
 
     public void listenToTrainers(ObservableList<Trainer> trainers) {
         disposables.add(eventListenerProvider.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers", Trainer.class).observeOn(FX_SCHEDULER).subscribe(event -> {
-            final Trainer trainer = event.data();
-            switch (event.suffix()) {
-                case "created" -> trainers.add(trainer);
-                case "updated" -> updateTrainer(trainers, trainer);
-                case "deleted" -> trainers.removeIf(t -> t._id().equals(trainer._id()));
-        }}, error -> showError(error.getMessage()))
+                    final Trainer trainer = event.data();
+                    switch (event.suffix()) {
+                        case "created" -> trainers.add(trainer);
+                        case "updated" -> updateTrainer(trainers, trainer);
+                        case "deleted" -> trainers.removeIf(t -> t._id().equals(trainer._id()));
+                    }
+                }, error -> showError(error.getMessage()))
         );
     }
 
@@ -716,7 +715,7 @@ public class IngameController extends Controller {
 
     private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {
         String trainerId = trainer._id();
-        trainers.stream().filter(t-> t._id().equals(trainerId)).findFirst().ifPresent(t -> trainers.set(trainers.indexOf(t), trainer));
+        trainers.stream().filter(t -> t._id().equals(trainerId)).findFirst().ifPresent(t -> trainers.set(trainers.indexOf(t), trainer));
     }
 
     private void updateMessage(ObservableList<Message> messages, Message message) {
@@ -726,10 +725,11 @@ public class IngameController extends Controller {
                 .findFirst()
                 .ifPresent(m -> messages.set(messages.indexOf(m), message));
     }
+
     public Trainer getTrainer(String userId) {
         for (Trainer trainer : trainers) {
             if (trainer.user().equals(userId)) {
-                return  trainer;
+                return trainer;
             }
         }
         return null;
