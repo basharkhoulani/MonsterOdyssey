@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import javafx.animation.*;
 import javafx.fxml.FXML;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -92,6 +93,8 @@ public class IngameController extends Controller {
     private Image[] trainerWalkingDown;
     private Image[] trainerWalkingLeft;
     private Image[] trainerWalkingRight;
+    private int totalMapWidth;
+    private int totalMapHeight;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -180,25 +183,25 @@ public class IngameController extends Controller {
                 case "up" -> {
                     spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingUp, true);
                     spriteWalkingAnimation.play();
-                    mapMovementTransition = getMapMovementTransition(canvas, 0, 16);
+                    mapMovementTransition = getMapMovementTransition(canvas, 0, TILE_SIZE);
                     mapMovementTransition.play();
                 }
                 case "down" -> {
                     spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingDown, true);
                     spriteWalkingAnimation.play();
-                    mapMovementTransition = getMapMovementTransition(canvas, 0, -16);
+                    mapMovementTransition = getMapMovementTransition(canvas, 0, -TILE_SIZE);
                     mapMovementTransition.play();
                 }
                 case "left" -> {
                     spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingLeft, true);
                     spriteWalkingAnimation.play();
-                    mapMovementTransition = getMapMovementTransition(canvas, 16, 0);
+                    mapMovementTransition = getMapMovementTransition(canvas, TILE_SIZE, 0);
                     mapMovementTransition.play();
                 }
                 case "right" -> {
                     spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingRight, true);
                     spriteWalkingAnimation.play();
-                    mapMovementTransition = getMapMovementTransition(canvas, -16, 0);
+                    mapMovementTransition = getMapMovementTransition(canvas, -TILE_SIZE, 0);
                     mapMovementTransition.play();
                 }
                 default -> {
@@ -224,12 +227,11 @@ public class IngameController extends Controller {
         // Start standing animation
         playerSpriteImageView.setScaleX(2.0);
         playerSpriteImageView.setScaleY(2.0);
-        System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + trainerStorageProvider.get().getX() + ", " + trainerStorageProvider.get().getY());
         spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingDown, false);
         if (!GraphicsEnvironment.isHeadless()) {
             spriteStandingAnimation.play();
         }
-        getMapMovementTransition(canvas, -trainerStorageProvider.get().getX(), -trainerStorageProvider.get().getY()).play();
+        System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + trainerStorageProvider.get().getX() + ", " + trainerStorageProvider.get().getY());
         app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, evt -> {
 
             if (spriteStandingAnimation != null) {
@@ -281,7 +283,6 @@ public class IngameController extends Controller {
                     stay("right");
                 }
             }
-
         });
         /*
         app.getStage().getScene().setOnKeyPressed(event -> {
@@ -332,7 +333,7 @@ public class IngameController extends Controller {
         });
          */
         Region region = trainerStorageProvider.get().getRegion();
-        disposables.add(areasService.getArea(region._id(), "645e32c7866ace359554a80d").observeOn(FX_SCHEDULER)
+        disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER)
                 .subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
         return parent;
     }
@@ -392,14 +393,11 @@ public class IngameController extends Controller {
                         int oldYValue = trainerStorageProvider.get().getY();
                         if (oldXValue < moveTrainerDto.x()) {
                             walk("right");
-                        }
-                        else if (oldXValue > moveTrainerDto.x()) {
+                        } else if (oldXValue > moveTrainerDto.x()) {
                             walk("left");
-                        }
-                        else if (oldYValue < moveTrainerDto.y()) {
+                        } else if (oldYValue < moveTrainerDto.y()) {
                             walk("down");
-                        }
-                        else if (oldYValue > moveTrainerDto.y()) {
+                        } else if (oldYValue > moveTrainerDto.y()) {
                             walk("up");
                         }
                         System.out.println("Old position X: " + trainerStorageProvider.get().getX() + ", Y: " + trainerStorageProvider.get().getY() + ", direction: " + trainerStorageProvider.get().getDirection());
@@ -427,9 +425,34 @@ public class IngameController extends Controller {
                 afterAllTileSetsLoaded(map);
             }, error -> showError(error.getMessage())));
         }
+        app.getStage().setX(0);
+        app.getStage().setY(0);
         app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);
         app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
+        getMapMovementTransition(canvas, (int) calculateInitialCameraXOffset(map.width()), (int) calculateInitialCameraYOffset(map.height())).play();
+
     }
+
+    /**
+     * This method is used to calculate the initial x offset for the camera to center the player at the right position
+     *
+     * @param mapWidth - width of the rendered map (in tiles)
+     * @return x offset that the map needs to be shifted
+     */
+    private double calculateInitialCameraXOffset(double mapWidth) {
+        return -TILE_SIZE + (int) ((((mapWidth * TILE_SIZE) / (double) TILE_SIZE) / 2.0) - trainerStorageProvider.get().getX()) * TILE_SIZE * 2;
+    }
+
+    /**
+     * This method is used to calculate the initial y offset for the camera to center the player at the right position
+     *
+     * @param mapHeight - height of the rendered map (in tiles)
+     * @return y offset that the map needs to be shifted
+     */
+    private double calculateInitialCameraYOffset(double mapHeight) {
+        return -TILE_SIZE + (int) (((((mapHeight * TILE_SIZE) / (double) TILE_SIZE) / 2.0) - trainerStorageProvider.get().getY()) * TILE_SIZE * 2)  - (TILE_SIZE / 2.0);
+    }
+
 
     private void loadPlayers() {
         disposables.add(trainersService.getTrainers(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer().area(), null).observeOn(FX_SCHEDULER).subscribe(
