@@ -13,18 +13,18 @@
     </VBox>
     <Label fx:id="timestamp" wrapText="true" prefHeight="40.0">
         <padding>
-            <Insets top="4.0" left="5.0" right="5.0"/>
+            <Insets top="3.0" left="5.0" right="5.0"/>
         </padding>
     </Label>
     <Label fx:id="name" wrapText="true" prefHeight="40.0">
         <padding>
-            <Insets top="4.0" left="5.0" right="5.0"/>
+            <Insets top="3.0" left="5.0" right="5.0"/>
         </padding>
     </Label>
     <VBox maxWidth="250.0" VBox.vgrow="ALWAYS">
         <Label fx:id="messageContent" wrapText="true" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
             <padding>
-            <Insets top="8.0"/>
+            <Insets top="9.0"/>
         </padding>
         </Label>
     </VBox>

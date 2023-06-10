@@ -17,7 +17,9 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -246,6 +248,7 @@ public class IngameController extends Controller {
         chatListView.setItems(chatMessages);
         chatListView.setCellFactory(param -> new IngameMessageCell(this));
         chatListView.setPlaceholder(new Label(resources.getString("NO.MESSAGES.YET")));
+        setupListViewAutoScroll();
         // Start standing animation
         playerSpriteImageView.setScaleX(2.0);
         playerSpriteImageView.setScaleY(2.0);
@@ -724,5 +727,14 @@ public class IngameController extends Controller {
             }
         }
         return null;
+    }
+    private void setupListViewAutoScroll() {
+        chatListView.getItems().addListener((ListChangeListener<Message>) c -> chatListView.scrollTo(c.getList().size() - 1));
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        chatListView.getItems().removeListener((ListChangeListener<Message>) c -> chatListView.scrollTo(c.getList().size() - 1));
     }
 }

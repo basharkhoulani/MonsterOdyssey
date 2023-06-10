@@ -56,6 +56,7 @@ public class IngameMessageCell extends ListCell<Message> {
                 name.setText(trainerName);
                 timestamp.setText(dateTime);
                 setGraphic(rootHBox);
+                setPadding(new javafx.geometry.Insets(0));
             }
         }
     private void loadFXML() {
