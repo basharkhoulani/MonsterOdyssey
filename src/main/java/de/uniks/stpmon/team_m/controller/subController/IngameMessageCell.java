@@ -12,10 +12,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
+import java.awt.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -49,7 +51,7 @@ public class IngameMessageCell extends ListCell<Message> {
                 Trainer trainer = ingameController.getTrainer(message.sender());
                 final String trainerName = trainer.name() + ":";
                 final String dateTime = formatTimeString(message.createdAt());
-                //final Image sprite = trainer.sprite();
+                loadAndSetTrainerImage(trainer);
                 messageContent.setText(message.body());
                 name.setText(trainerName);
                 timestamp.setText(dateTime);
@@ -72,5 +74,16 @@ public class IngameMessageCell extends ListCell<Message> {
 
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
         return localDateTime.format(outputFormatter);
+    }
+
+    private void loadAndSetTrainerImage(Trainer trainer) {
+        String trainerSprite = trainer.image();
+        if (!GraphicsEnvironment.isHeadless()) {
+            trainerSprite = trainerSprite.substring(8);
+            String path = Objects.requireNonNull(Main.class.getResource("charactermodels/" + trainerSprite)).toString();
+            Image trainerImage = new Image(path);
+            spriteImageView.setImage(trainerImage);
+        }
+
     }
 }

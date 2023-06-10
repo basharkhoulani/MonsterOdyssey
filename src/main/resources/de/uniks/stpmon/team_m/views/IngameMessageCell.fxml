@@ -8,18 +8,24 @@
 <HBox fx:id="rootHBox" minHeight="50.0" minWidth="400.0"
        prefWidth="400.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="de.uniks.stpmon.team_m.controller.subController.IngameMessageCell" >
-    <ImageView fx:id="spriteImageView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true"/>
-    <Label fx:id="timestamp" wrapText="true">
+    <VBox alignment="CENTER" minHeight="40.0" minWidth="40.0" maxHeight="40.0" maxWidth="40.0" styleClass="trainerAvatarImageView">
+        <ImageView fx:id="spriteImageView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true"/>
+    </VBox>
+    <Label fx:id="timestamp" wrapText="true" prefHeight="40.0">
         <padding>
-            <Insets left="5.0" right="5.0"/>
+            <Insets top="4.0" left="5.0" right="5.0"/>
         </padding>
     </Label>
-    <Label fx:id="name" wrapText="true">
+    <Label fx:id="name" wrapText="true" prefHeight="40.0">
         <padding>
-            <Insets left="5.0" right="5.0"/>
+            <Insets top="4.0" left="5.0" right="5.0"/>
         </padding>
     </Label>
     <VBox maxWidth="250.0" VBox.vgrow="ALWAYS">
-        <Label fx:id="messageContent" wrapText="true" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"/>
+        <Label fx:id="messageContent" wrapText="true" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+            <padding>
+            <Insets top="8.0"/>
+        </padding>
+        </Label>
     </VBox>
 </HBox>

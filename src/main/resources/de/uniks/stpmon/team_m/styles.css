@@ -232,6 +232,11 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: 5% 50%;
 }
+.image-view-with-border {
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+}
+
 /*********************************************************************************/
 /*************************** Autocomplete textfields *****************************/
 .auto-complete-popup > .list-view {
