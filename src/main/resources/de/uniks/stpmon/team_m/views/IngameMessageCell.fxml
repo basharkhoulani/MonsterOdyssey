@@ -7,7 +7,7 @@
 
 <?import javafx.scene.control.Label?>
 <HBox maxHeight="0.0" maxWidth="420.0" minHeight="50.0" minWidth="420.0" prefHeight="50.0" prefWidth="420.0"
-      xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER_LEFT">
+      xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER_LEFT" fx:controller="de.uniks.stpmon.team_m.controller.subController.IngameMessageCell">
    <ImageView fx:id="spriteImageView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true"/>
    <Label fx:id="timestamp" wrapText="true"/>
    <Label fx:id="name" wrapText="true"/>

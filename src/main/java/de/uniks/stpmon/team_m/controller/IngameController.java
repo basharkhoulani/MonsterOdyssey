@@ -7,6 +7,7 @@ import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.service.PresetsService;
+import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -41,6 +42,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -79,6 +81,8 @@ public class IngameController extends Controller {
     PresetsService presetsService;
     @Inject
     MessageService messageService;
+    @Inject
+    TrainersService trainersService;
     GraphicsContext graphicsContext;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     private boolean isChatting = false;
@@ -102,6 +106,7 @@ public class IngameController extends Controller {
     private Image[] trainerWalkingLeft;
     private Image[] trainerWalkingRight;
     private final ObservableList<Message> chatMessages = FXCollections.observableArrayList();
+    private List<Trainer> trainers;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -226,6 +231,7 @@ public class IngameController extends Controller {
         messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
         listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
 
+        disposables.add(trainersService.getTrainers(trainerStorage.getRegion()._id(), null, null).observeOn(FX_SCHEDULER).subscribe());
         chatListView.setItems(chatMessages);
         // Start standing animation
         playerSpriteImageView.setScaleX(2.0);
@@ -677,5 +683,13 @@ public class IngameController extends Controller {
     private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {
         String trainerId = trainer._id();
         trainers.stream().filter(t-> t._id().equals(trainerId)).findFirst().ifPresent(t -> trainers.set(trainers.indexOf(t), trainer));
+    }
+    public Trainer getTrainer(String userId) {
+        for (Trainer trainer : trainers) {
+            if (trainer.user().equals(userId)) {
+                return  trainer;
+            }
+        }
+        return null;
     }
 }
