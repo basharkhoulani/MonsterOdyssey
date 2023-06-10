@@ -40,6 +40,7 @@ public class Constants {
     public static final String BORDER_COLOR_BLACK = "-fx-border-color: black;";
     public static final String ZONE_ID_EUROPE_BERLIN = "Europe/Berlin";
     public static final String DATE_TIME_FORMAT = "HH:mm, dd.MM.yy";
+    public static final String TIME_FORMAT = "HH:mm";
     public static final int DURATION_OF_LOADING_SCREEN = 3;
 
     // LOGIN & SIGNUP

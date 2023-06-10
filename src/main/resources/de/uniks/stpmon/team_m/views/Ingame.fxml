@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="ingameVBox" alignment="CENTER_LEFT" cacheShape="false" centerShape="false" scaleShape="false" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
+<VBox fx:id="ingameVBox" alignment="CENTER_LEFT" cacheShape="false" centerShape="false" scaleShape="false" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
    <StackPane cacheShape="false" centerShape="false" onMouseClicked="#paneClicked" scaleShape="false" style="-fx-background-color: black;" stylesheets="@../styles.css" VBox.vgrow="ALWAYS">
       <Canvas fx:id="canvas" height="200.0" width="200.0" />
        <VBox alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
@@ -59,43 +59,37 @@
       </HBox>
       <VBox alignment="BOTTOM_LEFT" prefHeight="250.0" prefWidth="590.0" StackPane.alignment="BOTTOM_LEFT">
          <StackPane.margin>
-            <Insets/>
+            <Insets />
          </StackPane.margin>
-         <ListView fx:id="chatListView" maxWidth="440.0" minWidth="440.0" prefHeight="200.0" prefWidth="440.0" opacity="0" disable="true">
+         <ListView fx:id="chatListView" focusTraversable="false" maxWidth="440.0" minWidth="490.0" opacity="0" prefHeight="200.0" prefWidth="490.0">
             <VBox.margin>
-               <Insets left="5.0"/>
+               <Insets left="5.0" />
             </VBox.margin>
          </ListView>
-         <HBox alignment="BOTTOM_LEFT" fillHeight="false"  minHeight="50.0"
-               minWidth="270.0" prefHeight="50.0" prefWidth="400.0">
+         <HBox alignment="BOTTOM_LEFT" fillHeight="false" minHeight="50.0" minWidth="270.0" prefHeight="50.0" prefWidth="400.0">
             <padding>
-               <Insets bottom="5.0" left="5.0" right="5.0"/>
+               <Insets bottom="5.0" left="5.0" right="5.0" />
             </padding>
-            <TextField fx:id="messageField" focusTraversable="false" maxHeight="40.0" maxWidth="400.0"
-                       minHeight="40.0" minWidth="400.0" onMouseClicked="#messageFieldClicked"
-                       promptText="%SEND.MESSAGE">
+            <TextField fx:id="messageField" focusTraversable="false" maxHeight="40.0" maxWidth="450.0" minHeight="40.0" minWidth="450.0" onMouseClicked="#messageFieldClicked" promptText="%SEND.MESSAGE">
                <font>
-                  <Font name="Comic Sans MS" size="14.0"/>
+                  <Font name="Comic Sans MS" size="14.0" />
                </font>
             </TextField>
-            <Button fx:id="showChatButton" focusTraversable="false" maxHeight="40.0" maxWidth="40.0" minHeight="40.0"
-                    minWidth="40.0" mnemonicParsing="false" onMouseClicked="#showChat">
+            <Button fx:id="showChatButton" focusTraversable="false" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onMouseClicked="#showChat">
                <font>
-                  <Font name="Comic Sans MS Bold" size="17.0"/>
+                  <Font name="Comic Sans MS Bold" size="17.0" />
                </font>
                <styleClass>
-                  <String fx:value="buttonsWhite"/>
-                  <String fx:value="triangle"/>
+                  <String fx:value="buttonsWhite" />
+                  <String fx:value="triangle" />
                </styleClass>
             </Button>
-            <Button fx:id="sendMessageButton" focusTraversable="false" maxHeight="40.0" maxWidth="125.0"
-                    minHeight="40.0" minWidth="125.0" mnemonicParsing="false" onAction="#sendMessageButton"
-                    styleClass="buttonsYellow" text="%SEND">
+            <Button fx:id="sendMessageButton" focusTraversable="false" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0" mnemonicParsing="false" onAction="#sendMessageButton" styleClass="buttonsYellow" text="%SEND">
                <font>
-                  <Font name="Comic Sans MS Bold" size="17.0"/>
+                  <Font name="Comic Sans MS Bold" size="17.0" />
                </font>
                <HBox.margin>
-                  <Insets left="10.0"/>
+                  <Insets left="10.0" />
                </HBox.margin>
             </Button>
          </HBox>

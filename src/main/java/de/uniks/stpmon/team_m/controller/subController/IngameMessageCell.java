@@ -47,7 +47,7 @@ public class IngameMessageCell extends ListCell<Message> {
             } else {
                 loadFXML();
                 Trainer trainer = ingameController.getTrainer(message.sender());
-                final String trainerName = trainer.name();
+                final String trainerName = trainer.name() + ":";
                 final String dateTime = formatTimeString(message.createdAt());
                 //final Image sprite = trainer.sprite();
                 messageContent.setText(message.body());
@@ -70,7 +70,7 @@ public class IngameMessageCell extends ListCell<Message> {
     private String formatTimeString(String dateTime) {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(ZONE_ID_EUROPE_BERLIN));
 
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
         return localDateTime.format(outputFormatter);
     }
 }
