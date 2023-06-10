@@ -112,7 +112,7 @@ public class IngameController extends Controller {
     private Image[] trainerWalkingDown;
     private Image[] trainerWalkingLeft;
     private Image[] trainerWalkingRight;
-    private final ObservableList<Message> chatMessages = FXCollections.observableArrayList();
+    private final ObservableList<Message> messages = FXCollections.observableArrayList();
     private ObservableList<Trainer> trainers;
 
     /**
@@ -243,9 +243,9 @@ public class IngameController extends Controller {
                 }
         ));
         listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
-        listenToMessages(chatMessages, trainerStorageProvider.get().getTrainer().region());
+        listenToMessages(trainerStorageProvider.get().getTrainer().region());
         disposables.add(trainersService.getTrainers(trainerStorage.getRegion()._id(), null, null).observeOn(FX_SCHEDULER).subscribe());
-        chatListView.setItems(chatMessages);
+        chatListView.setItems(messages);
         chatListView.setCellFactory(param -> new IngameMessageCell(this));
         chatListView.setPlaceholder(new Label(resources.getString("NO.MESSAGES.YET")));
         setupListViewAutoScroll();
@@ -696,7 +696,7 @@ public class IngameController extends Controller {
         );
     }
 
-    public void listenToMessages(ObservableList<Message> messages, String id) {
+    public void listenToMessages(String id) {
         disposables.add(eventListener.get().listen("regions." + id + ".messages.*.*", Message.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Message message = event.data();
