@@ -18,9 +18,7 @@
    <StackPane cacheShape="false" centerShape="false" onMouseClicked="#paneClicked" scaleShape="false" style="-fx-background-color: black;" VBox.vgrow="ALWAYS">
       <Canvas fx:id="canvas" height="200.0" width="200.0" />
        <VBox alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-           <ImageView fx:id="playerSpriteImageView" fitHeight="30.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-
-           </ImageView>
+           <ImageView fx:id="playerSpriteImageView" fitHeight="30.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true"/>
        </VBox>
       <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
          <top>
