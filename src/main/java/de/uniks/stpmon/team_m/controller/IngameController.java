@@ -243,12 +243,15 @@ public class IngameController extends Controller {
                 }
         ));
         listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
+
+        // Setup chat
         listenToMessages(trainerStorageProvider.get().getTrainer().region());
         disposables.add(trainersService.getTrainers(trainerStorage.getRegion()._id(), null, null).observeOn(FX_SCHEDULER).subscribe());
         chatListView.setItems(messages);
         chatListView.setCellFactory(param -> new IngameMessageCell(this));
         chatListView.setPlaceholder(new Label(resources.getString("NO.MESSAGES.YET")));
-        setupListViewAutoScroll();
+
+
         // Start standing animation
         playerSpriteImageView.setScaleX(2.0);
         playerSpriteImageView.setScaleY(2.0);
@@ -701,7 +704,10 @@ public class IngameController extends Controller {
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Message message = event.data();
                     switch (event.suffix()) {
-                        case "created" -> messages.add(message);
+                        case "created" -> {
+                            messages.add(message);
+                            chatListView.scrollTo(chatListView.getItems().size() - 1);
+                        }
                         case "updated" -> updateMessage(messages, message);
                         case "deleted" -> messages.removeIf(m -> m._id().equals(message._id()));
                     }
@@ -727,14 +733,5 @@ public class IngameController extends Controller {
             }
         }
         return null;
-    }
-    private void setupListViewAutoScroll() {
-        chatListView.getItems().addListener((ListChangeListener<Message>) c -> chatListView.scrollTo(c.getList().size() - 1));
-    }
-
-    @Override
-    public void destroy() {
-        super.destroy();
-        chatListView.getItems().removeListener((ListChangeListener<Message>) c -> chatListView.scrollTo(c.getList().size() - 1));
     }
 }
