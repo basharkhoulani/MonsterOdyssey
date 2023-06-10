@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.subController.IngameMessageCell;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AreasService;
@@ -11,6 +12,7 @@ import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -23,6 +25,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -68,9 +71,11 @@ public class IngameController extends Controller {
     @FXML
     public Button sendMessageButton;
     @FXML
-    public ListView chatListView;
+    public ListView<Message> chatListView;
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
+    @Inject
+    Provider<EventListener> eventListener;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
@@ -106,7 +111,7 @@ public class IngameController extends Controller {
     private Image[] trainerWalkingLeft;
     private Image[] trainerWalkingRight;
     private final ObservableList<Message> chatMessages = FXCollections.observableArrayList();
-    private List<Trainer> trainers;
+    private ObservableList<Trainer> trainers;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -229,10 +234,18 @@ public class IngameController extends Controller {
         trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());
         listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
         messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
+        disposables.add(trainersService.getTrainers(trainerStorage.getRegion()._id(), null, null).observeOn(FX_SCHEDULER).subscribe(
+                trainers -> {
+                    this.trainers = FXCollections.observableArrayList(trainers);
+                    listenToTrainers(this.trainers);
+                }
+        ));
         listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
-
+        listenToMessages(chatMessages, trainerStorageProvider.get().getTrainer().region());
         disposables.add(trainersService.getTrainers(trainerStorage.getRegion()._id(), null, null).observeOn(FX_SCHEDULER).subscribe());
         chatListView.setItems(chatMessages);
+        chatListView.setCellFactory(param -> new IngameMessageCell(this));
+        chatListView.setPlaceholder(new Label(resources.getString("NO.MESSAGES.YET")));
         // Start standing animation
         playerSpriteImageView.setScaleX(2.0);
         playerSpriteImageView.setScaleY(2.0);
@@ -680,9 +693,29 @@ public class IngameController extends Controller {
         );
     }
 
+    public void listenToMessages(ObservableList<Message> messages, String id) {
+        disposables.add(eventListener.get().listen("regions." + id + ".messages.*.*", Message.class)
+                .observeOn(FX_SCHEDULER).subscribe(event -> {
+                    final Message message = event.data();
+                    switch (event.suffix()) {
+                        case "created" -> messages.add(message);
+                        case "updated" -> updateMessage(messages, message);
+                        case "deleted" -> messages.removeIf(m -> m._id().equals(message._id()));
+                    }
+                }, error -> showError(error.getMessage())));
+    }
+
     private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {
         String trainerId = trainer._id();
         trainers.stream().filter(t-> t._id().equals(trainerId)).findFirst().ifPresent(t -> trainers.set(trainers.indexOf(t), trainer));
+    }
+
+    private void updateMessage(ObservableList<Message> messages, Message message) {
+        String messageID = message._id();
+        messages.stream()
+                .filter(m -> m._id().equals(messageID))
+                .findFirst()
+                .ifPresent(m -> messages.set(messages.indexOf(m), message));
     }
     public Trainer getTrainer(String userId) {
         for (Trainer trainer : trainers) {

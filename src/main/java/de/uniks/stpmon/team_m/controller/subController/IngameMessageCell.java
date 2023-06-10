@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -28,6 +29,8 @@ public class IngameMessageCell extends ListCell<Message> {
     public Label name;
     @FXML
     public Label messageContent;
+    @FXML
+    public HBox rootHBox;
     private FXMLLoader loader;
 
         public IngameMessageCell(IngameController ingameController) {
@@ -50,6 +53,7 @@ public class IngameMessageCell extends ListCell<Message> {
                 messageContent.setText(message.body());
                 name.setText(trainerName);
                 timestamp.setText(dateTime);
+                setGraphic(rootHBox);
             }
         }
     private void loadFXML() {
