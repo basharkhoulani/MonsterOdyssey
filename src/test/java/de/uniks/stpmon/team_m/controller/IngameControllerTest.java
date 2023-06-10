@@ -4,8 +4,10 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.MessageService;
+import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
@@ -26,6 +28,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import static de.uniks.stpmon.team_m.Constants.HTTP_400;
+import static de.uniks.stpmon.team_m.Constants.HTTP_403;
+import static io.reactivex.rxjava3.core.Observable.error;
+import static io.reactivex.rxjava3.core.Observable.just;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -48,9 +54,13 @@ public class IngameControllerTest extends ApplicationTest {
     TrainerStorage trainerStorage;
 
     @Mock
+    TrainersService trainersService;
+    @Mock
     MessageService messageService;
     @InjectMocks
     IngameController ingameController;
+    @Mock
+    Provider<EventListener> eventListenerProvider;
 
     @Override
     public void start(Stage stage) {
@@ -126,7 +136,11 @@ public class IngameControllerTest extends ApplicationTest {
                                 List.of()))
 
         ));
+        when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(new Trainer("2023-05-30T12:02:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863", "6475e595ac3946b6a812d863", "6475e595ac3946b6a812d863", "Hans", "Premade_Character_1.png", 0, "6475e595ac3946b6a812d863", 0, 0, 0, new NPCInfo(false)))));
         ingameController.setValues(bundle, null, null, ingameController, app);
+        EventListener eventListener = mock(EventListener.class);
+        when(eventListener.listen(any(), any())).thenReturn(Observable.empty());
+        when(eventListenerProvider.get()).thenReturn(eventListener);
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
