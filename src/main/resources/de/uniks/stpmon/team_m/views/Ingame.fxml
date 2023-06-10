@@ -59,16 +59,16 @@
       </HBox>
       <VBox alignment="BOTTOM_LEFT" prefHeight="250.0" prefWidth="590.0" StackPane.alignment="BOTTOM_LEFT">
          <StackPane.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets  left="5.0" right="5.0" top="5.0" />
          </StackPane.margin>
          <ListView fx:id="chatListView" focusTraversable="false" maxWidth="440.0" minWidth="490.0" opacity="0" prefHeight="210.0" prefWidth="490.0">
             <VBox.margin>
-               <Insets left="5.0" bottom="-5.0"/>
+               <Insets left="5.0" />
             </VBox.margin>
          </ListView>
-         <HBox alignment="BOTTOM_LEFT" fillHeight="false" minHeight="50.0" minWidth="270.0" prefHeight="50.0" prefWidth="400.0">
+         <HBox fillHeight="false" minHeight="50.0" minWidth="270.0" prefHeight="50.0" prefWidth="400.0">
             <padding>
-               <Insets top="-5.0" bottom="5.0" left="5.0" right="5.0" />
+               <Insets bottom="5.0" left="5.0" right="5.0" />
             </padding>
             <TextField fx:id="messageField" focusTraversable="false" maxHeight="40.0" maxWidth="450.0" minHeight="40.0" minWidth="450.0" onMouseClicked="#messageFieldClicked" promptText="%SEND.MESSAGE">
                <font>

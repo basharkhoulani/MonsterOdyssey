@@ -42,7 +42,6 @@ public class IngameMessageCell extends ListCell<Message> {
         @Override
         protected void updateItem(Message message, boolean empty) {
             super.updateItem(message, empty);
-            setStyle(LIST_VIEW_STYLE_NO_INDEXING);
             if (empty || message == null) {
                 setText(null);
                 setGraphic(null);
@@ -78,9 +77,8 @@ public class IngameMessageCell extends ListCell<Message> {
     }
 
     private void loadAndSetTrainerImage(Trainer trainer) {
-        String trainerSprite = trainer.image();
+        String trainerSprite = trainer.image().substring(8);
         if (!GraphicsEnvironment.isHeadless()) {
-            trainerSprite = trainerSprite.substring(8);
             String path = Objects.requireNonNull(Main.class.getResource("charactermodels/" + trainerSprite)).toString();
             Image trainerImage = new Image(path);
             spriteImageView.setImage(trainerImage);
