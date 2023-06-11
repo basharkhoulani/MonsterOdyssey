@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -36,57 +37,48 @@ public class IngameMessageCell extends ListCell&lt;Message&gt; {
     public HBox rootHBox;
     private FXMLLoader loader;
 
-<span class="fc" id="L39">    public IngameMessageCell(IngameController ingameController) {</span>
-<span class="fc" id="L40">        this.ingameController = ingameController;</span>
-<span class="fc" id="L41">    }</span>
+<span class="fc" id="L40">    public IngameMessageCell(IngameController ingameController) {</span>
+<span class="fc" id="L41">        this.ingameController = ingameController;</span>
+<span class="fc" id="L42">    }</span>
 
     @Override
     protected void updateItem(Message message, boolean empty) {
-<span class="fc" id="L45">        super.updateItem(message, empty);</span>
-<span class="pc bpc" id="L46" title="1 of 4 branches missed.">        if (empty || message == null) {</span>
-<span class="fc" id="L47">            setText(null);</span>
-<span class="fc" id="L48">            setGraphic(null);</span>
+<span class="fc" id="L46">        super.updateItem(message, empty);</span>
+<span class="pc bpc" id="L47" title="1 of 4 branches missed.">        if (empty || message == null) {</span>
+<span class="fc" id="L48">            setText(null);</span>
+<span class="fc" id="L49">            setGraphic(null);</span>
         } else {
-<span class="fc" id="L50">            loadFXML();</span>
-<span class="fc" id="L51">            Trainer trainer = ingameController.getTrainer(message.sender());</span>
-<span class="fc" id="L52">            final String trainerName = trainer.name() + &quot;:&quot;;</span>
-<span class="fc" id="L53">            final String dateTime = formatTimeString(message.createdAt());</span>
-<span class="fc" id="L54">            loadAndSetTrainerImage(trainer);</span>
-<span class="fc" id="L55">            messageContent.setText(message.body());</span>
-<span class="fc" id="L56">            name.setText(trainerName);</span>
-<span class="fc" id="L57">            timestamp.setText(dateTime);</span>
-<span class="fc" id="L58">            setGraphic(rootHBox);</span>
-<span class="fc" id="L59">            setPadding(new javafx.geometry.Insets(0));</span>
+<span class="fc" id="L51">            loadFXML();</span>
+<span class="fc" id="L52">            Trainer trainer = ingameController.getTrainer(message.sender());</span>
+<span class="fc" id="L53">            final String trainerName = trainer.name() + &quot;:&quot;;</span>
+<span class="fc" id="L54">            final String dateTime = formatTimeString(message.createdAt());</span>
+<span class="fc" id="L55">            ingameController.setTrainerSpriteImageView(trainer, spriteImageView);</span>
+<span class="fc" id="L56">            messageContent.setText(message.body());</span>
+<span class="fc" id="L57">            name.setText(trainerName);</span>
+<span class="fc" id="L58">            timestamp.setText(dateTime);</span>
+<span class="fc" id="L59">            setGraphic(rootHBox);</span>
+<span class="fc" id="L60">            setPadding(new javafx.geometry.Insets(0));</span>
         }
-<span class="fc" id="L61">    }</span>
+<span class="fc" id="L62">    }</span>
 
     private void loadFXML() {
-<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if (loader == null) {</span>
-<span class="fc" id="L65">            loader = new FXMLLoader(Main.class.getResource(&quot;views/IngameMessageCell.fxml&quot;));</span>
-<span class="fc" id="L66">            loader.setControllerFactory(c -&gt; this);</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (loader == null) {</span>
+<span class="fc" id="L66">            loader = new FXMLLoader(Main.class.getResource(&quot;views/IngameMessageCell.fxml&quot;));</span>
+<span class="fc" id="L67">            loader.setControllerFactory(c -&gt; this);</span>
             try {
-<span class="fc" id="L68">                loader.load();</span>
-<span class="nc" id="L69">            } catch (Exception e) {</span>
-<span class="nc" id="L70">                e.printStackTrace();</span>
-<span class="fc" id="L71">            }</span>
+<span class="fc" id="L69">                loader.load();</span>
+<span class="nc" id="L70">            } catch (Exception e) {</span>
+<span class="nc" id="L71">                e.printStackTrace();</span>
+<span class="fc" id="L72">            }</span>
         }
-<span class="fc" id="L73">    }</span>
+<span class="fc" id="L74">    }</span>
 
     private String formatTimeString(String dateTime) {
-<span class="fc" id="L76">        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(ZONE_ID_EUROPE_BERLIN));</span>
+<span class="fc" id="L77">        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(ZONE_ID_EUROPE_BERLIN));</span>
 
-<span class="fc" id="L78">        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);</span>
-<span class="fc" id="L79">        return localDateTime.format(outputFormatter);</span>
+<span class="fc" id="L79">        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);</span>
+<span class="fc" id="L80">        return localDateTime.format(outputFormatter);</span>
     }
 
-    private void loadAndSetTrainerImage(Trainer trainer) {
-<span class="fc" id="L83">        String trainerSprite = trainer.image().substring(8);</span>
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L85">            String path = Objects.requireNonNull(Main.class.getResource(&quot;charactermodels/&quot; + trainerSprite)).toString();</span>
-<span class="nc" id="L86">            Image trainerImage = new Image(path);</span>
-<span class="nc" id="L87">            spriteImageView.setImage(trainerImage);</span>
-        }
-
-<span class="fc" id="L90">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

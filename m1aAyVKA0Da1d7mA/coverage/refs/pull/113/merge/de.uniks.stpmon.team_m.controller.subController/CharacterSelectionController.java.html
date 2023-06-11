@@ -3,14 +3,11 @@
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.WelcomeSceneController;
-import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -29,64 +26,81 @@ public class CharacterSelectionController extends Controller {
     @FXML
     public VBox chooseYourCharacterField;
     @FXML
-    public ImageView character1ImageView;
+    public ImageView characterImageView;
     @FXML
-    public RadioButton character1RadioButton;
+    public ImageView arrowRight;
     @FXML
-    public ImageView character2ImageView;
-    @FXML
-    public RadioButton character2RadioButton;
-    public ToggleGroup selectCharacter;
-<span class="fc" id="L40">    public String selectedCharacter = PREMADE_CHARACTERS[0];</span>
+    public ImageView arrowLeft;
     @Inject
     Provider&lt;WelcomeSceneController&gt; welcomeSceneControllerProvider;
-    @Inject
-    Provider&lt;PresetsService&gt; presetsServiceProvider;
     @Inject
     Provider&lt;TrainerStorage&gt; trainerStorageProvider;
 
     @Inject
-<span class="fc" id="L49">    public CharacterSelectionController() {</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L40">    public CharacterSelectionController() {</span>
+<span class="fc" id="L41">    }</span>
+
+<span class="fc" id="L43">    public int index = 1;</span>
+    /**
+     * characters holds the premade-character-models
+     */
+<span class="fc" id="L47">    final private String[] characters = PREMADE_CHARACTERS;</span>
+
+    /**
+     * selectedCharacter holds the selected character model
+     */
+<span class="fc" id="L52">    public String selectedCharacter = characters[index - 1];</span>
 
     @Override
     public Parent render() {
-<span class="fc" id="L54">        final Parent parent = super.render();</span>
+<span class="fc" id="L56">        final Parent parent = super.render();</span>
 
-<span class="fc" id="L56">        WelcomeSceneController welcomeSceneController = welcomeSceneControllerProvider.get();</span>
-<span class="fc" id="L57">        nextButton.setOnAction(event -&gt; {</span>
-<span class="fc" id="L58">            app.show(welcomeSceneController);</span>
-<span class="fc" id="L59">            welcomeSceneController.sceneNumber = 7;</span>
-<span class="fc" id="L60">            welcomeSceneController.switchScene();</span>
-<span class="fc" id="L61">            trainerStorageProvider.get().setTrainerSprite(selectedCharacter);</span>
-<span class="fc" id="L62">            disposables.add(presetsServiceProvider.get().getCharacter(selectedCharacter).observeOn(FX_SCHEDULER).subscribe(response -&gt; trainerStorageProvider.get().setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response))));</span>
-<span class="fc" id="L63">        });</span>
-<span class="fc" id="L64">        previousButton.setOnAction(event -&gt; {</span>
-<span class="fc" id="L65">            app.show(welcomeSceneController);</span>
-<span class="fc" id="L66">            welcomeSceneController.sceneNumber = 5;</span>
-<span class="fc" id="L67">            welcomeSceneController.switchScene();</span>
-<span class="fc" id="L68">        });</span>
+<span class="fc" id="L58">        WelcomeSceneController welcomeSceneController = welcomeSceneControllerProvider.get();</span>
+<span class="fc" id="L59">        nextButton.setOnAction(event -&gt; {</span>
+<span class="fc" id="L60">            app.show(welcomeSceneController);</span>
+<span class="fc" id="L61">            welcomeSceneController.sceneNumber = 7;</span>
+<span class="fc" id="L62">            welcomeSceneController.switchScene();</span>
+<span class="fc" id="L63">            trainerStorageProvider.get().setTrainerSprite(selectedCharacter);</span>
+<span class="fc" id="L64">        });</span>
+<span class="fc" id="L65">        previousButton.setOnAction(event -&gt; {</span>
+<span class="fc" id="L66">            app.show(welcomeSceneController);</span>
+<span class="fc" id="L67">            welcomeSceneController.sceneNumber = 5;</span>
+<span class="fc" id="L68">            welcomeSceneController.switchScene();</span>
+<span class="fc" id="L69">        });</span>
 
-<span class="fc" id="L70">        character1RadioButton.setSelected(true);</span>
-
-<span class="fc" id="L72">        character1ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(&quot;charactermodels/Character_01.png&quot;)).toString()));</span>
-<span class="fc" id="L73">        character2ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(&quot;charactermodels/Character_13.png&quot;)).toString()));</span>
-
-<span class="fc" id="L75">        return parent;</span>
+<span class="fc" id="L71">        showCharacter();</span>
+<span class="fc" id="L72">        return parent;</span>
     }
 
     /**
-     * This method selects the first character.
+     * this method sets the selected character and shows it in the imageView
      */
-    public void selectCharacter1() {
-<span class="fc" id="L82">        selectedCharacter = PREMADE_CHARACTERS[0];</span>
-<span class="fc" id="L83">    }</span>
+    public void showCharacter() {
+<span class="fc" id="L79">        Image[] character = ImageProcessor.cropTrainerImages(new Image(Objects.requireNonNull(App.class.getResource(&quot;charactermodels/&quot; + characters[index - 1])).toString()), &quot;down&quot;, false);</span>
+<span class="fc" id="L80">        characterImageView.setImage(character[0]);</span>
+<span class="fc" id="L81">        selectedCharacter = characters[index - 1];</span>
+<span class="fc" id="L82">    }</span>
 
     /**
-     * This method selects the second character.
+     * this method navigates to the next character
      */
-    public void selectCharacter2() {
-<span class="fc" id="L89">        selectedCharacter = PREMADE_CHARACTERS[12];</span>
-<span class="fc" id="L90">    }</span>
+    public void onArrowLeftClicked() {
+<span class="fc" id="L88">        index--;</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if (index &lt; 1) {</span>
+<span class="fc" id="L90">            index = index + characters.length;</span>
+        }
+<span class="fc" id="L92">        showCharacter();</span>
+<span class="fc" id="L93">    }</span>
+
+    /**
+     * this method navigates to the previous character
+     */
+    public void onArrowRightClicked() {
+<span class="fc" id="L99">        index++;</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if (index &gt; characters.length) {</span>
+<span class="fc" id="L101">            index = index - characters.length;</span>
+        }
+<span class="fc" id="L103">        showCharacter();</span>
+<span class="fc" id="L104">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
