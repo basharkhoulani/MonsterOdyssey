@@ -13,7 +13,6 @@
       <Canvas fx:id="canvas" height="200.0" width="200.0" />
        <VBox alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
            <ImageView fx:id="playerSpriteImageView" fitHeight="30.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-               <Image url="@../charactermodels/Character_01.png" />
            </ImageView>
        </VBox>
       <HBox alignment="TOP_RIGHT" fillHeight="false" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" prefHeight="40.0" prefWidth="40.0" StackPane.alignment="TOP_RIGHT">

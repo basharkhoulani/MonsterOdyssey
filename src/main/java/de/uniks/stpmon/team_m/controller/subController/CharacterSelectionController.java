@@ -3,14 +3,11 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.WelcomeSceneController;
-import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -29,25 +26,30 @@ public class CharacterSelectionController extends Controller {
     @FXML
     public VBox chooseYourCharacterField;
     @FXML
-    public ImageView character1ImageView;
+    public ImageView characterImageView;
     @FXML
-    public RadioButton character1RadioButton;
+    public ImageView arrowRight;
     @FXML
-    public ImageView character2ImageView;
-    @FXML
-    public RadioButton character2RadioButton;
-    public ToggleGroup selectCharacter;
-    public String selectedCharacter = PREMADE_CHARACTERS[0];
+    public ImageView arrowLeft;
     @Inject
     Provider<WelcomeSceneController> welcomeSceneControllerProvider;
-    @Inject
-    Provider<PresetsService> presetsServiceProvider;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
 
     @Inject
     public CharacterSelectionController() {
     }
+
+    public int index = 1;
+    /**
+     * characters holds the premade-character-models
+     */
+    final private String[] characters = PREMADE_CHARACTERS;
+
+    /**
+     * selectedCharacter holds the selected character model
+     */
+    public String selectedCharacter = characters[index - 1];
 
     @Override
     public Parent render() {
@@ -59,7 +61,6 @@ public class CharacterSelectionController extends Controller {
             welcomeSceneController.sceneNumber = 7;
             welcomeSceneController.switchScene();
             trainerStorageProvider.get().setTrainerSprite(selectedCharacter);
-            disposables.add(presetsServiceProvider.get().getCharacter(selectedCharacter).observeOn(FX_SCHEDULER).subscribe(response -> trainerStorageProvider.get().setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response))));
         });
         previousButton.setOnAction(event -> {
             app.show(welcomeSceneController);
@@ -67,25 +68,38 @@ public class CharacterSelectionController extends Controller {
             welcomeSceneController.switchScene();
         });
 
-        character1RadioButton.setSelected(true);
-
-        character1ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource("charactermodels/Character_01.png")).toString()));
-        character2ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource("charactermodels/Character_13.png")).toString()));
-
+        showCharacter();
         return parent;
     }
 
     /**
-     * This method selects the first character.
+     * this method sets the selected character and shows it in the imageView
      */
-    public void selectCharacter1() {
-        selectedCharacter = PREMADE_CHARACTERS[0];
+    public void showCharacter() {
+        Image[] character = ImageProcessor.cropTrainerImages(new Image(Objects.requireNonNull(App.class.getResource("charactermodels/" + characters[index - 1])).toString()), "down", false);
+        characterImageView.setImage(character[0]);
+        selectedCharacter = characters[index - 1];
     }
 
     /**
-     * This method selects the second character.
+     * this method navigates to the next character
      */
-    public void selectCharacter2() {
-        selectedCharacter = PREMADE_CHARACTERS[12];
+    public void onArrowLeftClicked() {
+        index--;
+        if (index < 1) {
+            index = index + characters.length;
+        }
+        showCharacter();
+    }
+
+    /**
+     * this method navigates to the previous character
+     */
+    public void onArrowRightClicked() {
+        index++;
+        if (index > characters.length) {
+            index = index - characters.length;
+        }
+        showCharacter();
     }
 }
