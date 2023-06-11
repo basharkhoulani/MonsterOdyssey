@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.service;
 
+import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.Spawn;
 import de.uniks.stpmon.team_m.rest.RegionsApiService;
@@ -33,7 +34,23 @@ public class RegionServiceTest {
                         "646bc436cfee07c0e408466f",
                         "Albertina",
                         new Spawn("646bc3c0a9ac1b375fb41d93", 1, 1),
-                        new Object()
+                        new Map(
+                                -1,
+                                true,
+                                1,
+                                1,
+                                "orthogonal",
+                                "right-down",
+                                "1.6.1",
+                                "map",
+                                "1.6",
+                                32,
+                                32,
+                                List.of(),
+                                16,
+                                16,
+                                List.of(),
+                                List.of())
                 ),
                 new Region(
                         "2023-05-16T17:51:15.772Z",
@@ -41,7 +58,23 @@ public class RegionServiceTest {
                         "646bc3c0a9ac1b375fb41d61",
                         "Sanitaire",
                         new Spawn("646bc3c0a9ac1b375fb41d61", 4, 6),
-                        new Object()
+                        new Map(
+                                -1,
+                                true,
+                                1,
+                                1,
+                                "orthogonal",
+                                "right-down",
+                                "1.6.1",
+                                "map",
+                                "1.6",
+                                32,
+                                32,
+                                List.of(),
+                                16,
+                                16,
+                                List.of(),
+                                List.of())
                 )
         )));
 
@@ -60,7 +93,23 @@ public class RegionServiceTest {
                         "646bc436cfee07c0e408466f",
                         "Albertina",
                         new Spawn("646bc3c0a9ac1b375fb41d93", 1, 1),
-                        new Object()
+                        new Map(
+                                -1,
+                                true,
+                                1,
+                                1,
+                                "orthogonal",
+                                "right-down",
+                                "1.6.1",
+                                "map",
+                                "1.6",
+                                32,
+                                32,
+                                List.of(),
+                                16,
+                                16,
+                                List.of(),
+                                List.of())
                 )));
 
         final Region region = regionsService.getRegion("646bc3c0a9ac1b375fb41d93").blockingFirst();

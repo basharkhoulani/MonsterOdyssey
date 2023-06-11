@@ -1,23 +1,25 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.CharacterSelectionController;
+import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.MESSAGEBOX_HEIGHT;
+import static de.uniks.stpmon.team_m.Constants.MESSAGEBOX_WIDTH;
 
 public class WelcomeSceneController extends Controller {
     @FXML
@@ -45,15 +47,19 @@ public class WelcomeSceneController extends Controller {
     @Inject
     Provider<TrainersService> trainersServiceProvider;
     @Inject
-    Provider<TrainerStorage> trainerStorageProvider;
+    TrainerStorage trainerStorage;
 
+    @Inject
+    Provider<PresetsService> presetsServiceProvider;
 
     @Inject
     public WelcomeSceneController() {
     }
 
     @Override
-    public String getTitle() {return resources.getString("INGAME.TITLE");}
+    public String getTitle() {
+        return resources.getString("INGAME.TITLE");
+    }
 
 
     @Override
@@ -132,7 +138,7 @@ public class WelcomeSceneController extends Controller {
                     alert.close();
                     changeCount(false);
                 } else if (result.isPresent() && result.get() == okButton) {
-                    trainerStorageProvider.get().setTrainerName(trainerName.get());
+                    trainerStorage.setTrainerName(trainerName.get());
                     changeCount(true);
                 }
             }
@@ -150,16 +156,24 @@ public class WelcomeSceneController extends Controller {
                 secondMessage.setPrefWidth(200);
             }
             case 8 -> {
-                String regionId = trainerStorageProvider.get().getRegionId();
+                Region region = trainerStorage.getRegion();
                 disposables.add(trainersServiceProvider.get().createTrainer(
-                        regionId,
-                        trainerStorageProvider.get().getTrainerName(),
-                        trainerStorageProvider.get().getTrainerSprite()
+                        region._id(),
+                        trainerStorage.getTrainerName(),
+                        trainerStorage.getTrainerSprite()
                 ).observeOn(FX_SCHEDULER).subscribe(result -> {
-                            trainerStorageProvider.get().setTrainer(result);
-                            IngameController ingameController = ingameControllerProvider.get();
-                            ingameController.setRegion(regionId);
-                            app.show(ingameController);
+                            trainerStorage.setTrainer(result);
+                            disposables.add(presetsServiceProvider.get().getCharacter(result.image()).observeOn(FX_SCHEDULER).subscribe(
+                                    response -> {
+                                        trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
+                                        app.show(ingameControllerProvider.get());
+                                    },
+                                    error -> {
+                                        showError(error.getMessage());
+                                        error.printStackTrace();
+                                    }
+                            ));
+                            app.show(ingameControllerProvider.get());
                         }, error -> showError(error.getMessage())
                 ));
             }

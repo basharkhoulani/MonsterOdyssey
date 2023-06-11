@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.WelcomeSceneController;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,9 +12,11 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
-import javafx.scene.control.RadioButton;
+
 import javax.inject.Provider;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +32,8 @@ public class CharacterSelectionControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        characterSelectionController.setValues(bundle, null, null, characterSelectionController, app);
         final WelcomeSceneController welcomeSceneController = mock(WelcomeSceneController.class);
         when(welcomeSceneControllerProvider.get()).thenReturn(welcomeSceneController);
         doNothing().when(app).show(welcomeSceneController);
@@ -47,16 +52,33 @@ public class CharacterSelectionControllerTest extends ApplicationTest {
         verify(app).show(welcomeSceneControllerProvider.get());
         clickOn("Next");
 
-        RadioButton radioButton1 = lookup("#character1RadioButton").query();
-        RadioButton radioButton2 = lookup("#character2RadioButton").query();
+        ImageView arrowLeft = lookup("#arrowLeft").query();
+        ImageView arrowRight = lookup("#arrowRight").query();
 
-        assertTrue(radioButton1.isSelected());
-        assertFalse(radioButton2.isSelected());
-        clickOn(radioButton2);
-        assertTrue(radioButton2.isSelected());
-        assertFalse(radioButton1.isSelected());
-        clickOn(radioButton1);
+        clickOn(arrowLeft);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
+        clickOn(arrowRight);
 
+        clickOn("Next");
     }
 
 }

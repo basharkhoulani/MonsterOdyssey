@@ -1,8 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
 
-import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
@@ -11,19 +9,13 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 
-import javax.imageio.IIOException;
 import javax.inject.Inject;
 import javax.inject.Provider;
-
-import java.io.IOException;
-import java.util.ResourceBundle;
-import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -93,7 +85,7 @@ public class LoginController extends Controller {
     @Override
     public void init() {
         super.init();
-        changeLanguageController= new ChangeLanguageController();
+        changeLanguageController = new ChangeLanguageController();
         changeLanguageController.init();
     }
 
@@ -210,13 +202,13 @@ public class LoginController extends Controller {
     /**
      * This method is used to open the Change Language Pop up
      */
-    public void changeLanguage(){
+    public void changeLanguage() {
         Dialog<?> dialog = new Dialog<>();
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
         closeButton.managedProperty().bind(closeButton.visibleProperty());
         closeButton.setVisible(false);
-        dialog.setTitle(resources.getString("Change.Language"));
+        dialog.setTitle(resources.getString("CHOOSE.LANGUAGE"));
         changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);
         dialog.getDialogPane().setContent(changeLanguageController.render());
         dialog.showAndWait();
