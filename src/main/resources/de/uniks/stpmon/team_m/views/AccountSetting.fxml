@@ -1,143 +1,157 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" styleClass="Background" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.AccountSettingController">
-    <VBox alignment="CENTER" maxHeight="600.0" maxWidth="1000.0" prefHeight="493.0" prefWidth="662.0" styleClass="ForegroundContainer" VBox.vgrow="ALWAYS">
+<VBox alignment="CENTER" styleClass="Background" xmlns="http://javafx.com/javafx/17.0.2-ea"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.AccountSettingController">
+    <VBox alignment="CENTER" maxHeight="600.0" maxWidth="1000.0" prefHeight="493.0" prefWidth="662.0"
+          styleClass="ForegroundContainer" VBox.vgrow="ALWAYS">
         <VBox.margin>
-            <Insets bottom="16.0" left="32.0" right="32.0" top="16.0" />
+            <Insets bottom="16.0" left="32.0" right="32.0" top="16.0"/>
         </VBox.margin>
         <padding>
-            <Insets left="8.0" right="8.0" />
+            <Insets left="8.0" right="8.0"/>
         </padding>
         <VBox alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
             <HBox alignment="CENTER">
                 <VBox.margin>
-                    <Insets top="16.0" />
+                    <Insets top="16.0"/>
                 </VBox.margin>
                 <VBox alignment="CENTER">
                     <ImageView fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../images/Monster1-without.png" />
+                        <Image url="@../images/Monster1-without.png"/>
                     </ImageView>
                 </VBox>
                 <Label fx:id="titleLabel" alignment="TOP_CENTER" text="%CHANGE.ACCOUNT.INFORMATION" HBox.hgrow="ALWAYS">
                     <font>
-                        <Font name="Comic Sans MS Bold" size="24.0" />
+                        <Font name="Comic Sans MS Bold" size="24.0"/>
                     </font>
                     <HBox.margin>
-                        <Insets left="10.0" />
+                        <Insets left="10.0"/>
                     </HBox.margin>
                 </Label>
             </HBox>
-            <Label fx:id="informationLabel" alignment="CENTER" prefHeight="17.0" prefWidth="490.0" styleClass="informationLabel" stylesheets="@../styles.css" />
+            <Label fx:id="informationLabel" alignment="CENTER" prefHeight="17.0" prefWidth="490.0"
+                   styleClass="informationLabel" stylesheets="@../styles.css"/>
         </VBox>
         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
             <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" prefWidth="375.0" HBox.hgrow="ALWAYS">
                 <HBox.margin>
-                    <Insets right="8.0" />
+                    <Insets right="8.0"/>
                 </HBox.margin>
                 <HBox.margin>
-                    <Insets left="8.0" />
+                    <Insets left="8.0"/>
                 </HBox.margin>
-                <ImageView fx:id="avatarImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+                <ImageView fx:id="avatarImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true"
+                           preserveRatio="true"/>
             </HBox>
-            <Button fx:id="editAvatarButton" minHeight="42.0" minWidth="42.0" mnemonicParsing="false" onAction="#editAvatar" styleClass="editSymbol" stylesheets="@../styles.css">
+            <Button fx:id="editAvatarButton" minHeight="42.0" minWidth="42.0" mnemonicParsing="false"
+                    onAction="#editAvatar" styleClass="editSymbol" stylesheets="@../styles.css">
                 <HBox.margin>
-                    <Insets left="8.0" />
+                    <Insets left="8.0"/>
                 </HBox.margin>
             </Button>
-            <SplitPane maxWidth="25.0" minWidth="2.0" prefHeight="74.0" prefWidth="2.0" visible="false" HBox.hgrow="ALWAYS" />
-            <Button fx:id="saveAvatarButton" mnemonicParsing="false" onAction="#saveAvatar" prefHeight="50.0" prefWidth="198.0" styleClass="buttonsYellow" text="%SAVE.AVATAR">
+            <SplitPane maxWidth="25.0" minWidth="2.0" prefHeight="74.0" prefWidth="2.0" visible="false"
+                       HBox.hgrow="ALWAYS"/>
+            <Button fx:id="saveAvatarButton" mnemonicParsing="false" onAction="#saveAvatar" prefHeight="50.0"
+                    prefWidth="198.0" styleClass="buttonsYellow" text="%SAVE.AVATAR" wrapText="true">
                 <font>
-                    <Font name="Comic Sans MS Bold" size="17.0" />
+                    <Font name="Comic Sans MS Bold" size="15.0"/>
                 </font>
                 <HBox.margin>
-                    <Insets />
+                    <Insets left="5.0"/>
                 </HBox.margin>
             </Button>
             <VBox.margin>
-                <Insets right="8.0" />
+                <Insets right="8.0"/>
             </VBox.margin>
         </HBox>
-        <Label fx:id="avatarErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel" stylesheets="@../styles.css" />
+        <Label fx:id="avatarErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel"
+               stylesheets="@../styles.css"/>
         <HBox alignment="CENTER" prefHeight="74.0" prefWidth="490.0" VBox.vgrow="ALWAYS">
-            <TextField fx:id="usernameField" maxHeight="50.0" minHeight="36.0" minWidth="375.0" promptText="%CURRENT.USERNAME" HBox.hgrow="ALWAYS">
+            <TextField fx:id="usernameField" maxHeight="50.0" minHeight="36.0" minWidth="375.0"
+                       promptText="%CURRENT.USERNAME" HBox.hgrow="ALWAYS">
                 <font>
-                    <Font name="Comic Sans MS Bold" size="17.0" />
+                    <Font name="Comic Sans MS Bold" size="15.0"/>
                 </font>
             </TextField>
-            <Button fx:id="usernameEditButton" minHeight="42.0" minWidth="42.0" mnemonicParsing="false" onAction="#editUsername" styleClass="editSymbol" stylesheets="@../styles.css">
+            <Button fx:id="usernameEditButton" minHeight="42.0" minWidth="42.0" mnemonicParsing="false"
+                    onAction="#editUsername" styleClass="editSymbol" stylesheets="@../styles.css">
                 <HBox.margin>
-                    <Insets left="8.0" />
+                    <Insets left="8.0"/>
                 </HBox.margin>
             </Button>
-            <SplitPane prefHeight="74.0" prefWidth="25.0" visible="false" />
-            <Button fx:id="saveUsernameButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#saveUsername" prefHeight="50.0" prefWidth="245.0" styleClass="buttonsYellow" text="%SAVE.USERNAME">
+            <SplitPane prefHeight="74.0" prefWidth="25.0" visible="false"/>
+            <Button fx:id="saveUsernameButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0"
+                    mnemonicParsing="false" onAction="#saveUsername" prefHeight="50.0" prefWidth="245.0"
+                    styleClass="buttonsYellow" text="%SAVE.USERNAME" wrapText="true">
                 <font>
-                    <Font name="Comic Sans MS Bold" size="17.0" />
+                    <Font name="Comic Sans MS Bold" size="15.0"/>
                 </font>
                 <HBox.margin>
-                    <Insets left="5.0" />
+                    <Insets left="5.0"/>
                 </HBox.margin>
             </Button>
             <padding>
-                <Insets left="8.0" right="8.0" />
+                <Insets left="8.0" right="8.0"/>
             </padding>
         </HBox>
         <HBox alignment="CENTER" prefHeight="74.0" prefWidth="311.0">
-            <PasswordField fx:id="passwordField" maxHeight="50.0" minHeight="36.0" minWidth="375.0" promptText="%NEW.PASSWORD" HBox.hgrow="ALWAYS">
+            <PasswordField fx:id="passwordField" maxHeight="50.0" minHeight="36.0" minWidth="375.0"
+                           promptText="%NEW.PASSWORD" HBox.hgrow="ALWAYS">
                 <HBox.margin>
-                    <Insets />
+                    <Insets/>
                 </HBox.margin>
                 <font>
-                    <Font name="Comic Sans MS Bold" size="17.0" />
+                    <Font name="Comic Sans MS Bold" size="15.0"/>
                 </font>
             </PasswordField>
-            <Button fx:id="showPasswordButton" minHeight="42.0" minWidth="42.0" mnemonicParsing="false" onAction="#showPassword" styleClass="hideSymbol" stylesheets="@../styles.css">
+            <Button fx:id="showPasswordButton" minHeight="42.0" minWidth="42.0" mnemonicParsing="false"
+                    onAction="#showPassword" styleClass="hideSymbol" stylesheets="@../styles.css">
                 <HBox.margin>
-                    <Insets left="-45.0" />
+                    <Insets left="-45.0"/>
                 </HBox.margin>
             </Button>
-            <Button fx:id="passwordEditButton" alignment="CENTER" minHeight="42.0" minWidth="42.0" mnemonicParsing="false" onAction="#editPassword" styleClass="editSymbol" stylesheets="@../styles.css">
+            <Button fx:id="passwordEditButton" alignment="CENTER" minHeight="42.0" minWidth="42.0"
+                    mnemonicParsing="false" onAction="#editPassword" styleClass="editSymbol"
+                    stylesheets="@../styles.css">
                 <HBox.margin>
-                    <Insets left="11.0" />
+                    <Insets left="11.0"/>
                 </HBox.margin>
             </Button>
-            <SplitPane layoutX="233.0" layoutY="10.0" prefHeight="74.0" prefWidth="25.0" visible="false" />
-            <Button fx:id="savePasswordButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#savePassword" prefHeight="50.0" prefWidth="250.0" styleClass="buttonsYellow" text="%SAVE.PASSWORD" HBox.hgrow="ALWAYS">
+            <SplitPane layoutX="233.0" layoutY="10.0" prefHeight="74.0" prefWidth="25.0" visible="false"/>
+            <Button fx:id="savePasswordButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0"
+                    mnemonicParsing="false" onAction="#savePassword" prefHeight="50.0" prefWidth="250.0"
+                    styleClass="buttonsYellow" text="%SAVE.PASSWORD" wrapText="true" HBox.hgrow="ALWAYS">
                 <font>
-                    <Font name="Comic Sans MS Bold" size="17.0" />
+                    <Font name="Comic Sans MS Bold" size="15.0"/>
                 </font>
                 <HBox.margin>
-                    <Insets left="5.0" />
+                    <Insets left="5.0"/>
                 </HBox.margin>
             </Button>
             <padding>
-                <Insets left="8.0" right="8.0" />
+                <Insets left="8.0" right="8.0"/>
             </padding>
         </HBox>
         <HBox alignment="CENTER" prefHeight="52.0" prefWidth="490.0" VBox.vgrow="ALWAYS">
-            <Button fx:id="changeLanguageButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0" mnemonicParsing="false" onAction="#changeLanguage" styleClass="buttonsYellow" text="%CHOOSE.LANGUAGE">
+            <Button fx:id="changeLanguageButton" maxHeight="50.0" minHeight="36.0" minWidth="150.0"
+                    mnemonicParsing="false" onAction="#changeLanguage" styleClass="buttonsYellow"
+                    text="%CHOOSE.LANGUAGE">
                 <font>
-                    <Font name="Comic Sans MS Bold" size="17.0" />
+                    <Font name="Comic Sans MS Bold" size="17.0"/>
                 </font>
-            <HBox.margin>
-               <Insets left="125.0" />
-            </HBox.margin>
+                <HBox.margin>
+                    <Insets left="125.0"/>
+                </HBox.margin>
             </Button>
-            <SplitPane prefHeight="52.0" prefWidth="124.0" visible="false" />
+            <SplitPane prefHeight="52.0" prefWidth="124.0" visible="false"/>
             <VBox.margin>
-                <Insets bottom="5.0" />
+                <Insets bottom="5.0"/>
             </VBox.margin>
         </HBox>
         <HBox alignment="CENTER" layoutX="18.0" layoutY="350.0" prefHeight="52.0" prefWidth="490.0">
@@ -160,6 +174,8 @@
             </Button>
         </HBox>
     </VBox>
-    <Label fx:id="usernameErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel" stylesheets="@../styles.css" />
-    <Label fx:id="passwordErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="509.0" styleClass="errorLabel" stylesheets="@../styles.css" />
+    <Label fx:id="usernameErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel"
+           stylesheets="@../styles.css"/>
+    <Label fx:id="passwordErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="509.0" styleClass="errorLabel"
+           stylesheets="@../styles.css"/>
 </VBox>
