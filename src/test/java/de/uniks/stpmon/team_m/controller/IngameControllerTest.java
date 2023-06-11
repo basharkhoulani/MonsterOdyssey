@@ -9,13 +9,8 @@ import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.scene.control.Button;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,8 +26,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static de.uniks.stpmon.team_m.Constants.HTTP_400;
-import static de.uniks.stpmon.team_m.Constants.HTTP_403;
 import static io.reactivex.rxjava3.core.Observable.error;
 import static io.reactivex.rxjava3.core.Observable.just;
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,7 +56,9 @@ public class IngameControllerTest extends ApplicationTest {
     @InjectMocks
     IngameController ingameController;
     @Mock
-    Provider<EventListener> eventListenerProvider;
+    Provider<EventListener> eventListener;
+    @Mock
+    EventListener eventListenerMock;
 
     @Override
     public void start(Stage stage) {
@@ -141,9 +136,8 @@ public class IngameControllerTest extends ApplicationTest {
         ));
         when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(new Trainer("2023-05-30T12:02:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863", "6475e595ac3946b6a812d863", "6475e595ac3946b6a812d863", "Hans", "Premade_Character_1.png", 0, "6475e595ac3946b6a812d863", 0, 0, 0, new NPCInfo(false)))));
         ingameController.setValues(bundle, null, null, ingameController, app);
-        EventListener eventListener = mock(EventListener.class);
-        when(eventListener.listen(any(), any())).thenReturn(Observable.empty());
-        when(eventListenerProvider.get()).thenReturn(eventListener);
+        eventListenerMock = mock(EventListener.class);
+        when(eventListener.get()).thenReturn(eventListenerMock);
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
@@ -151,8 +145,8 @@ public class IngameControllerTest extends ApplicationTest {
 
     @Test
     void showHelp() {
-        Button helpSymbol = lookup("#helpSymbol").query();
-        clickOn(helpSymbol);
+        when(eventListenerMock.listen(any(), any())).thenReturn(Observable.empty());
+        clickOn("#helpButton");
         final DialogPane dialogPane = lookup(".dialog-pane").query();
         assertNotNull(dialogPane);
         final Label helpLabel = dialogPane.getChildren().stream()
@@ -166,6 +160,7 @@ public class IngameControllerTest extends ApplicationTest {
 
     @Test
     void pauseGame() {
+        when(eventListenerMock.listen(any(), any())).thenReturn(Observable.empty());
         MainMenuController mainMenuController = mock(MainMenuController.class);
         when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
         doNothing().when(app).show(any());
@@ -196,6 +191,7 @@ public class IngameControllerTest extends ApplicationTest {
 
     @Test
     void sendMessageTest() {
+        when(eventListenerMock.listen(any(), any())).thenReturn(Observable.empty());
         final TextField messageField = lookup("#messageField").query();
         when(messageService.newMessage(any(), any(), any()))
                 .thenReturn(Observable.just(new Message(
@@ -218,5 +214,20 @@ public class IngameControllerTest extends ApplicationTest {
         clickOn("#sendMessageButton");
         assertEquals("", messageField.getText());
         verify(messageService, times(2)).newMessage(any(), any(), any());
+    }
+
+    @Test
+    void getMessages() {
+        Message message = new Message("2023-05-30T12:01:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863",
+                "6477bc8f27adf9b5b978401e", "Test1");
+        when(eventListenerMock.listen(any(), any())).thenReturn(just(
+                new Event<>("regions.*.messages.*.created", message)
+        )).thenReturn(just(
+                new Event<>("regions.*.messages.*.created", message)
+        ));;
+        ListView<Message> chat = lookup("#chatListView").query();
+        assertEquals(chat.getOpacity(), 0);
+        clickOn("#showChatButton");
+        assertEquals(chat.getOpacity(), 1);
     }
 }
