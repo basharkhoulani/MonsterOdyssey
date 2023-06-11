@@ -13,6 +13,8 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import javax.inject.Provider;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -55,30 +57,11 @@ public class CharacterSelectionControllerTest extends ApplicationTest {
         ImageView arrowLeft = lookup("#arrowLeft").query();
         ImageView arrowRight = lookup("#arrowRight").query();
 
+        String firstCharacter = characterSelectionController.selectedCharacter;
         clickOn(arrowLeft);
+        assertNotEquals(firstCharacter, characterSelectionController.selectedCharacter);
         clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-        clickOn(arrowRight);
-
+        assertEquals(firstCharacter, characterSelectionController.selectedCharacter);
         clickOn("Next");
     }
-
 }

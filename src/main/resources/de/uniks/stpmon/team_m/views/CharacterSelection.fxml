@@ -27,7 +27,7 @@
                 </BorderPane.margin>
                 <VBox fx:id="chooseYourCharacterField" alignment="TOP_CENTER" layoutX="105.0" layoutY="86.0"
                       prefHeight="375.0" prefWidth="590.0" styleClass="ForegroundContainer">
-                    <Label alignment="CENTER" minHeight="52.0" minWidth="234.0" text="%CHOSE.YOUR.CHARACTER"
+                    <Label alignment="CENTER" minHeight="52.0" minWidth="234.0" text="%CHOOSE.YOUR.CHARACTER"
                            textAlignment="CENTER" wrapText="true">
                         <font>
                             <Font name="Comic Sans MS Bold" size="32.0"/>
