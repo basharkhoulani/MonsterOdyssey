@@ -241,13 +241,13 @@ public class IngameController extends Controller {
                 trainers -> {
                     this.trainers = FXCollections.observableArrayList(trainers);
                     listenToTrainers(this.trainers);
-                }
-        ));
+                }, error -> {
+                    showError(error.getMessage());
+                }));
 
         // Setup chat
         messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
         listenToMessages(trainerStorageProvider.get().getTrainer().region());
-        disposables.add(trainersService.getTrainers(trainerStorageProvider.get().getRegion()._id(), null, null).observeOn(FX_SCHEDULER).subscribe());
         chatListView.setItems(messages);
         chatListView.setCellFactory(param -> new IngameMessageCell(this));
         chatListView.setPlaceholder(new Label(resources.getString("NO.MESSAGES.YET")));
@@ -437,6 +437,10 @@ public class IngameController extends Controller {
      */
 
     private void loadMap(Map map) {
+        app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);
+        app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
+        app.getStage().setMinWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);
+        app.getStage().setMinHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
         if (GraphicsEnvironment.isHeadless()) {
             return;
         }
@@ -448,10 +452,6 @@ public class IngameController extends Controller {
                 afterAllTileSetsLoaded(map);
             }, error -> showError(error.getMessage())));
         }
-        app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);
-        app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
-        app.getStage().setMinWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);
-        app.getStage().setMinHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
     }
 
     /**
@@ -692,7 +692,7 @@ public class IngameController extends Controller {
     }
 
     public void listenToTrainers(ObservableList<Trainer> trainers) {
-        disposables.add(eventListenerProvider.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers", Trainer.class).observeOn(FX_SCHEDULER).subscribe(event -> {
+        disposables.add(eventListenerProvider.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers.*.*", Trainer.class).observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Trainer trainer = event.data();
                     switch (event.suffix()) {
                         case "created" -> trainers.add(trainer);

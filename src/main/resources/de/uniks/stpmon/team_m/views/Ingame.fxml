@@ -20,7 +20,7 @@
        <VBox alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
            <ImageView fx:id="playerSpriteImageView" fitHeight="30.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true"/>
        </VBox>
-      <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
+      <BorderPane fx:id="borderPane">
          <top>
             <HBox alignment="TOP_RIGHT" fillHeight="false" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="40.0" BorderPane.alignment="TOP_RIGHT">
                <Button fx:id="helpSymbol" focusTraversable="false" mnemonicParsing="false" onAction="#showHelp" prefHeight="31.0" prefWidth="37.0" styleClass="helpSymbol" />
