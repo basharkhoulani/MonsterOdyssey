@@ -27,7 +27,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.ADD_MARK;
+import static de.uniks.stpmon.team_m.Constants.CHECK_MARK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -58,7 +59,7 @@ class EditGroupControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        groupController.setValues(bundle,null,null,groupController,app);
+        groupController.setValues(bundle, null, null, groupController, app);
         when(groupStorageProvider.get()).thenReturn(groupStorage);
         when(userStorageProvider.get()).thenReturn(userStorage);
         groupStorage.set_id("645f8d731c386bcd2204da39");

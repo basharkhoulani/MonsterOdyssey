@@ -3,6 +3,8 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.WelcomeSceneController;
+import de.uniks.stpmon.team_m.service.PresetsService;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -12,9 +14,11 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Objects;
+
 import static de.uniks.stpmon.team_m.Constants.*;
 
 public class CharacterSelectionController extends Controller {
@@ -33,11 +37,14 @@ public class CharacterSelectionController extends Controller {
     @FXML
     public RadioButton character2RadioButton;
     public ToggleGroup selectCharacter;
-    public String selectedCharacter = PREMADE_CHARACTER_1;
+    public String selectedCharacter = PREMADE_CHARACTERS[0];
     @Inject
     Provider<WelcomeSceneController> welcomeSceneControllerProvider;
     @Inject
+    Provider<PresetsService> presetsServiceProvider;
+    @Inject
     Provider<TrainerStorage> trainerStorageProvider;
+
     @Inject
     public CharacterSelectionController() {
     }
@@ -52,6 +59,7 @@ public class CharacterSelectionController extends Controller {
             welcomeSceneController.sceneNumber = 7;
             welcomeSceneController.switchScene();
             trainerStorageProvider.get().setTrainerSprite(selectedCharacter);
+            disposables.add(presetsServiceProvider.get().getCharacter(selectedCharacter).observeOn(FX_SCHEDULER).subscribe(response -> trainerStorageProvider.get().setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response))));
         });
         previousButton.setOnAction(event -> {
             app.show(welcomeSceneController);
@@ -61,8 +69,8 @@ public class CharacterSelectionController extends Controller {
 
         character1RadioButton.setSelected(true);
 
-        character1ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(CHARACTER_1)).toString()));
-        character2ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(CHARACTER_2)).toString()));
+        character1ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource("charactermodels/Character_01.png")).toString()));
+        character2ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource("charactermodels/Character_13.png")).toString()));
 
         return parent;
     }
@@ -71,13 +79,13 @@ public class CharacterSelectionController extends Controller {
      * This method selects the first character.
      */
     public void selectCharacter1() {
-        selectedCharacter = PREMADE_CHARACTER_1;
+        selectedCharacter = PREMADE_CHARACTERS[0];
     }
 
     /**
      * This method selects the second character.
      */
     public void selectCharacter2() {
-        selectedCharacter = PREMADE_CHARACTER_2;
+        selectedCharacter = PREMADE_CHARACTERS[12];
     }
 }

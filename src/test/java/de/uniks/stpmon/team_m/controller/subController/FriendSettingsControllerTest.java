@@ -50,7 +50,7 @@ class FriendSettingsControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        friendSettingsController.setValues(bundle,null,null,friendSettingsController,app);
+        friendSettingsController.setValues(bundle, null, null, friendSettingsController, app);
         app.start(stage);
         app.show(friendSettingsController);
         stage.requestFocus();
@@ -67,6 +67,7 @@ class FriendSettingsControllerTest extends ApplicationTest {
         verify(preferences, times(1)).put(BEST_FRIEND_PREF, "");
         assertNull(preferences.get(BEST_FRIEND_PREF, null));
     }
+
     @Test
     void bestFriendAction() {
         when(preferences.get(any(), any())).thenReturn("notWantedUserID").thenReturn("6477bc8f27adf9b5b978401e");
