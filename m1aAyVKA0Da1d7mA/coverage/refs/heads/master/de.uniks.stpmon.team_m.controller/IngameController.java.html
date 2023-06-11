@@ -588,9 +588,9 @@ public class IngameController extends Controller {
 <span class="fc" id="L588">        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);</span>
 
 <span class="fc" id="L590">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
-<span class="pc bpc" id="L591" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == resume) {</span>
+<span class="fc bfc" id="L591" title="All 4 branches covered.">        if (result.isPresent() &amp;&amp; result.get() == resume) {</span>
 <span class="fc" id="L592">            alert.close();</span>
-<span class="pc bpc" id="L593" title="2 of 4 branches missed.">        } else if (result.isPresent() &amp;&amp; result.get() == saveAndExit) {</span>
+<span class="pc bpc" id="L593" title="1 of 4 branches missed.">        } else if (result.isPresent() &amp;&amp; result.get() == saveAndExit) {</span>
 <span class="fc" id="L594">            alert.close();</span>
 <span class="fc" id="L595">            app.getStage().getScene().setOnKeyPressed(null);</span>
 <span class="fc" id="L596">            app.show(mainMenuControllerProvider.get());</span>
