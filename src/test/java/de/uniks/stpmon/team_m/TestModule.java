@@ -7,16 +7,28 @@ import dagger.Module;
 import dagger.Provides;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.rest.*;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
+import okhttp3.MediaType;
 import okhttp3.ResponseBody;
+import okio.BufferedSource;
 
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
+import javax.inject.Provider;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
@@ -30,8 +42,7 @@ public class TestModule {
     }
 
     @Provides
-    static ResourceBundle resourceBundle(){
-        final String locale = prefs().get("locale", Locale.ENGLISH.toLanguageTag());
+    static ResourceBundle resourceBundle() {
         return ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
     }
 
@@ -171,13 +182,45 @@ public class TestModule {
             @Override
             public Observable<List<Region>> getRegions() {
                 return Observable.just(List.of(new Region("2023-05-22T17:51:46.772Z",
-                        "2023-05-22T17:51:46.772Z", "646bc436cfee07c0e408466f", "Albertina", new Spawn("Albertina", 1, 1), new Object())));
+                        "2023-05-22T17:51:46.772Z", "646bc436cfee07c0e408466f", "Albertina", new Spawn("Albertina", 1, 1), new Map(
+                        -1,
+                        true,
+                        1,
+                        1,
+                        "orthogonal",
+                        "right-down",
+                        "1.6.1",
+                        "map",
+                        "1.6",
+                        32,
+                        32,
+                        List.of(),
+                        16,
+                        16,
+                        List.of(),
+                        List.of()))));
             }
 
             @Override
             public Observable<Region> getRegion(String id) {
                 return Observable.just(new Region("2023-05-22T17:51:46.772Z",
-                        "2023-05-22T17:51:46.772Z", "646bc436cfee07c0e408466f", "Albertina", new Spawn("Albertina", 1, 1), new Object()));
+                        "2023-05-22T17:51:46.772Z", "646bc436cfee07c0e408466f", "Albertina", new Spawn("Albertina", 1, 1), new Map(
+                        -1,
+                        true,
+                        1,
+                        1,
+                        "orthogonal",
+                        "right-down",
+                        "1.6.1",
+                        "map",
+                        "1.6",
+                        32,
+                        32,
+                        List.of(),
+                        16,
+                        16,
+                        List.of(),
+                        List.of())));
             }
         };
     }
@@ -265,7 +308,22 @@ public class TestModule {
 
             @Override
             public Observable<ResponseBody> getCharacter(String filename) {
-                return null;
+                return Observable.just(new ResponseBody() {
+                    @Override
+                    public MediaType contentType() {
+                        return null;
+                    }
+
+                    @Override
+                    public long contentLength() {
+                        return 0;
+                    }
+
+                    @Override
+                    public BufferedSource source() {
+                        return null;
+                    }
+                });
             }
 
             @Override
@@ -291,6 +349,57 @@ public class TestModule {
             @Override
             public Observable<AbilityDto> getAbility(int id) {
                 return null;
+            }
+        };
+    }
+
+    @Provides
+    static TrainerStorage trainerStorage() {
+        return new TrainerStorage() {
+            @Override
+            public void setTrainer(Trainer trainer) {
+            }
+
+            @Override
+            public void setRegion(Region region) {
+            }
+
+            @Override
+            public void setTrainerName(String name) {
+            }
+
+            @Override
+            public void setTrainerSprite(String url) {
+            }
+
+            @Override
+            public Trainer getTrainer() {
+                return new Trainer("123", "456", "789", "test", "max", "mustermann", getTrainerSprite(), 0, "Testina", 0, 0, 0, null);
+            }
+
+            @Override
+            public Region getRegion() {
+                return new Region("123", "456", "789", "test", new Spawn("Testina", 0, 0), null);
+            }
+
+            @Override
+            public String getTrainerName() {
+                return "Test";
+            }
+
+            @Override
+            public String getTrainerSprite() {
+                return Objects.requireNonNull(Main.class.getResource("images/Premade_Character_01.png")).toString();
+            }
+
+            @Override
+            public Image getTrainerSpriteChunk() {
+                String path = Objects.requireNonNull(Main.class.getResource("images/Premade_Character_01.png")).toString();
+                return new Image(path);
+            }
+
+            @Override
+            public void setTrainerSpriteChunk(Image trainerSpriteChunk) {
             }
         };
     }
@@ -322,12 +431,78 @@ public class TestModule {
 
             @Override
             public Observable<Trainer> getTrainer(String regionId, String _id) {
-                return null;
+                return Observable.just(new Trainer("123", "456", "789", "test", "max", "mustermann", Objects.requireNonNull(Main.class.getResource("images/Premade_Character_01.png")).toString(), 0, "Testina", 0, 0, 0, null));
             }
 
             @Override
             public Observable<Trainer> deleteTrainer(String regionId, String _id) {
                 return null;
+            }
+        };
+    }
+
+    @Provides
+    static AreasApiService areasApiService() {
+        return new AreasApiService() {
+
+            @Override
+            public Observable<List<Area>> getAreas(String regionId) {
+                return Observable.just(List.of(
+                        new Area(
+                                "2023-05-22T17:51:46.772Z",
+                                "2023-05-22T17:51:46.772Z",
+                                "646bc3c0a9ac1b375fb41d93",
+                                "646bc436cfee07c0e408466f",
+                                "Albertina",
+                                new Map(
+                                        -1,
+                                        true,
+                                        1,
+                                        1,
+                                        "orthogonal",
+                                        "right-down",
+                                        "1.6.1",
+                                        "map",
+                                        "1.6",
+                                        32,
+                                        32,
+                                        List.of(),
+                                        16,
+                                        16,
+                                        List.of(),
+                                        List.of()))
+
+                ));
+            }
+
+            @Override
+            public Observable<Area> getArea(String regionId, String _id) {
+                return Observable.just(
+                        new Area(
+                                "2023-05-22T17:51:46.772Z",
+                                "2023-05-22T17:51:46.772Z",
+                                "646bc3c0a9ac1b375fb41d93",
+                                "646bc436cfee07c0e408466f",
+                                "Albertina",
+                                new Map(
+                                        -1,
+                                        true,
+                                        1,
+                                        1,
+                                        "orthogonal",
+                                        "right-down",
+                                        "1.6.1",
+                                        "map",
+                                        "1.6",
+                                        32,
+                                        32,
+                                        List.of(),
+                                        16,
+                                        16,
+                                        List.of(),
+                                        List.of()))
+
+                );
             }
         };
     }

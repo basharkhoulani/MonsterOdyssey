@@ -16,11 +16,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
-
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.USER_STATUS_ONLINE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
@@ -46,7 +45,7 @@ class AccountSettingControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        accountSettingController.setValues(bundle,null,null,accountSettingController,app);
+        accountSettingController.setValues(bundle, null, null, accountSettingController, app);
         UserStorage userStorage = mock(UserStorage.class);
         when(userStorageProvider.get()).thenReturn(userStorage);
         app.start(stage);

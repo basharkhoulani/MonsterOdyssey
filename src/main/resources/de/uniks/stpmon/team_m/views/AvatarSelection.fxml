@@ -54,7 +54,7 @@
             <Insets top="20.0"/>
         </VBox.margin>
         <TextField fx:id="uploadTextField" disable="true" prefHeight="25.0" prefWidth="260.0"
-                   promptText="%Upload.your.avatar.picture.here">
+                   promptText="%UPLOAD.YOUR.AVATAR.PICTURE.HERE">
            <HBox.margin>
                <Insets right="60.0"/>
            </HBox.margin>

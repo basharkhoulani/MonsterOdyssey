@@ -1,12 +1,4 @@
 /********************************* General ***************************************/
-@font-face {
-    font-family: "Comic Sans MS";
-    src: url("fonts/COMIC.TTF") format('truetype');
-}
-@font-face {
-    font-family: "Comic Sans MS Bold";
-    src: url("fonts/COMICBD.TTF") format('truetype');
-}
 .root {
     -fx-font-family: "Comic Sans MS";
     -fx-font-size: 17px;
@@ -166,6 +158,12 @@
     -fx-border-color: #4f4f4f;
     -fx-border-width: 2;
 
+}
+.triangle {
+    -fx-background-image: url("images/triangle.png");
+    -fx-background-size: 40px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 50%;
 }
 /*********************************************************************************/
 /********************************** Login ****************************************/

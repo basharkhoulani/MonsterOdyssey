@@ -7,7 +7,7 @@
 <?import javafx.scene.text.*?>
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="friendSettingsPopOver" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.FriendSettingsController">
-   <Button fx:id="bestFriendButton" maxHeight="65.0" maxWidth="150.0" minHeight="65.0" minWidth="150.0" mnemonicParsing="false" onAction="#bestFriendAction" text="%Set./.Remove.Best.Friend" textAlignment="CENTER" wrapText="true">
+   <Button fx:id="bestFriendButton" maxHeight="65.0" maxWidth="150.0" minHeight="65.0" minWidth="150.0" mnemonicParsing="false" onAction="#bestFriendAction" text="%SET./.REMOVE.BEST.FRIEND" textAlignment="CENTER" wrapText="true">
       <VBox.margin>
          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
       </VBox.margin>
@@ -18,7 +18,7 @@
          <Font name="Comic Sans MS Bold" size="17.0" />
       </font>
    </Button>
-   <Button fx:id="deleteFriendButton" maxHeight="65.0" maxWidth="150.0" minHeight="65.0" minWidth="150.0" mnemonicParsing="false" onAction="#deleteFriendAction" styleClass="buttonsWhite" text="%Delete.Friend" textAlignment="CENTER" wrapText="true">
+   <Button fx:id="deleteFriendButton" maxHeight="65.0" maxWidth="150.0" minHeight="65.0" minWidth="150.0" mnemonicParsing="false" onAction="#deleteFriendAction" styleClass="buttonsWhite" text="%DELETE.FRIEND" textAlignment="CENTER" wrapText="true">
       <VBox.margin>
          <Insets bottom="10.0" />
       </VBox.margin>

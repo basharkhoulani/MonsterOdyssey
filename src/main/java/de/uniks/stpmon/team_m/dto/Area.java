@@ -6,6 +6,6 @@ public record Area(
         String _id,
         String region,
         String name,
-        Object map
+        Map map
 ) {
 }

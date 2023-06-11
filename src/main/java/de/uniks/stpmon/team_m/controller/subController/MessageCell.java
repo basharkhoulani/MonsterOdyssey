@@ -42,10 +42,9 @@ public class MessageCell extends ListCell<Message> {
     @FXML
     public ImageView avatar;
     private FXMLLoader loader;
-    private MessagesBoxController messagesBoxController;
+    private final MessagesBoxController messagesBoxController;
 
     public UserStorage user;
-
 
 
     /**
@@ -82,7 +81,7 @@ public class MessageCell extends ListCell<Message> {
             messageContent.setText(message.body());
             setDateAndEdited(message, senderName);
             setMessageOrientationAndStyle(message);
-            if (!GraphicsEnvironment.isHeadless()){
+            if (!GraphicsEnvironment.isHeadless()) {
                 avatar.setImage(ImageProcessor.fromBase64ToFXImage(base64avatar));
             }
             setGraphic(rootMessageHBox);
