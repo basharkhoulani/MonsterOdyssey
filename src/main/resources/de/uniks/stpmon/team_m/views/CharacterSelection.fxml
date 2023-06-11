@@ -21,7 +21,7 @@
                     <Insets />
                 </BorderPane.margin>
                 <VBox fx:id="chooseYourCharacterField" alignment="TOP_CENTER" layoutX="105.0" layoutY="86.0" prefHeight="375.0" prefWidth="590.0" styleClass="ForegroundContainer">
-                    <Label alignment="CENTER" minHeight="52.0" minWidth="234.0" text="%choose.your.character" textAlignment="CENTER" wrapText="true">
+                    <Label alignment="CENTER" minHeight="52.0" minWidth="234.0" text="%CHOSE.YOUR.CHARACTER" textAlignment="CENTER" wrapText="true">
                         <font>
                             <Font name="Comic Sans MS Bold" size="32.0" />
                         </font>
@@ -36,22 +36,20 @@
                         <ImageView fx:id="arrowLeft" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#onArrowLeftClicked" pickOnBounds="true" preserveRatio="true">
                             <Image url="@../images/arrowLeft.png" />
                      <HBox.margin>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                        <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
                      </HBox.margin>
                         </ImageView>
                         <VBox alignment="CENTER">
                             <HBox alignment="CENTER">
-                                <VBox styleClass="trainerAvatarImageView">
-                                    <ImageView fx:id="characterImageView" fitHeight="120.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                                        <Image url="@../charactermodels/Character_01.png" />
-                                    </ImageView>
+                                <VBox>
+                                    <ImageView fx:id="characterImageView" fitHeight="120.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
                                 </VBox>
                             </HBox>
                         </VBox>
                         <ImageView fx:id="arrowRight" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#onArrowRightClicked" pickOnBounds="true" preserveRatio="true">
                             <Image url="@../images/arrowRight.png" />
                      <HBox.margin>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                        <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
                      </HBox.margin>
                         </ImageView>
                     </HBox>

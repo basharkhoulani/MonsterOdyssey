@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.WelcomeSceneController;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -41,18 +42,14 @@ public class CharacterSelectionController extends Controller {
 
     public int index = 1;
     /**
-     * characters holds front-views of the character models
+     * characters holds the premade-character-models
      */
-    final private String[] characters = CHARACTERS_FRONT;
-    /**
-     * characterModels holds the premade character models
-     */
-    final private String[] characterModels = PREMADE_CHARACTERS;
+    final private String[] characters = PREMADE_CHARACTERS;
 
     /**
      * selectedCharacter holds the selected character model
      */
-    public String selectedCharacter = characterModels[index - 1];
+    public String selectedCharacter = characters[index - 1];
 
     @Override
     public Parent render() {
@@ -79,8 +76,9 @@ public class CharacterSelectionController extends Controller {
      * this method sets the selected character and shows it in the imageView
      */
     public void showCharacter() {
-        characterImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(characters[index - 1])).toString()));
-        selectedCharacter = characterModels[index - 1];
+        Image[] character = ImageProcessor.cropTrainerImages(new Image(Objects.requireNonNull(App.class.getResource("charactermodels/" + characters[index - 1])).toString()), "down", false);
+        characterImageView.setImage(character[0]);
+        selectedCharacter = characters[index - 1];
     }
 
     /**
