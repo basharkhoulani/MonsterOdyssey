@@ -85,6 +85,7 @@ public class IngameController extends Controller {
     TrainerStorage trainerStorage;
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
+    private String regionId;
     private final ObservableList<MoveTrainerDto> moveTrainerDtos = FXCollections.observableArrayList();
     HashMap<String, Image> tileSetImages = new HashMap<>();
     private Timeline spriteWalkingAnimation;

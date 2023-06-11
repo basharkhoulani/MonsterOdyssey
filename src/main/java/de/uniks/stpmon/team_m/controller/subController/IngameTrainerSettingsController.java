@@ -107,12 +107,12 @@ public class IngameTrainerSettingsController extends Controller {
             alert.close();
         } else if (result.isPresent() && result.get() == okButton) {
             onCancelButtonClick();
-            disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegionId(), trainerStorageProvider.get().getTrainer()._id()).
+            disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).
                     observeOn(FX_SCHEDULER).subscribe(end -> {
                         trainerStorageProvider.get().setTrainer(null);
                         trainerStorageProvider.get().setTrainerSprite(null);
                         trainerStorageProvider.get().setTrainerName(null);
-                        trainerStorageProvider.get().setRegionId(null);
+                        trainerStorageProvider.get().setRegion(null);
                     }, error -> this.showError(error.getMessage())));
             MainMenuController mainMenuController = mainMenuControllerProvider.get();
             mainMenuController.setTrainerDeletion();
