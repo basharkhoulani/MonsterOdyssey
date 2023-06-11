@@ -162,6 +162,7 @@ public class AppTest extends ApplicationTest {
 
         // test Ingame Pause
         type(KeyCode.P);
+        release(KeyCode.P);
         final DialogPane dialogPanePause = lookup(".dialog-pane").query();
         assertNotNull(dialogPanePause);
         final Label pauseLabel = dialogPanePause.getChildren().stream()
@@ -172,15 +173,16 @@ public class AppTest extends ApplicationTest {
         assertNotNull(pauseLabel);
         assertEquals("What do you want to do?", pauseLabel.getText());
 
-        // test Ingame Unpause With Key Code P
+        // test Ingame Unpause With Key Code
         type(KeyCode.P);
 
         // test Ingame Unpause With Button
         type(KeyCode.P);
+        type(KeyCode.P);
         clickOn("Resume Game");
 
-
         // test Ingame Back To Main Menu
+        type(KeyCode.P);
         type(KeyCode.P);
         clickOn("Save Game & Leave");
         assertEquals("Monster Odyssey - Main Menu", stage.getTitle());

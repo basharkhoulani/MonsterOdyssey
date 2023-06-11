@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.MessageService;
+import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -60,6 +61,8 @@ public class IngameControllerTest extends ApplicationTest {
     IngameController ingameController;
     @Mock
     Provider<EventListener> eventListener;
+    @Mock
+    PresetsService presetsService;
 
     @Override
     public void start(Stage stage) {
@@ -135,6 +138,7 @@ public class IngameControllerTest extends ApplicationTest {
                                 List.of()))
 
         ));
+        lenient().when(presetsService.getCharacter(any())).thenReturn(Observable.empty());
         when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(new Trainer("2023-05-30T12:02:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863", "6475e595ac3946b6a812d865", "6475e595ac3946b6a812d868", "Hans", "Premade_Character_01.png", 0, "6475e595ac3946b6a812d863", 0, 0, 0, new NPCInfo(false)))));
         ingameController.setValues(bundle, null, null, ingameController, app);
         EventListener eventListenerMock = mock(EventListener.class);

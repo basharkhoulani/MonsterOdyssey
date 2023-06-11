@@ -437,8 +437,6 @@ public class IngameController extends Controller {
     private void loadMap(Map map) {
         app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);
         app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
-        app.getStage().setMinWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);
-        app.getStage().setMinHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
         if (GraphicsEnvironment.isHeadless()) {
             return;
         }
@@ -623,6 +621,7 @@ public class IngameController extends Controller {
         } else if (result.isPresent() && result.get() == saveAndExit) {
             alert.close();
             app.getStage().getScene().setOnKeyPressed(null);
+            app.getStage().getScene().setOnKeyReleased(null);
             app.show(mainMenuControllerProvider.get());
         }
     }
