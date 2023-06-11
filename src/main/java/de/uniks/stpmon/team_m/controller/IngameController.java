@@ -249,7 +249,8 @@ public class IngameController extends Controller {
         chatListView.setItems(messages);
         chatListView.setCellFactory(param -> new IngameMessageCell(this));
         chatListView.setPlaceholder(new Label(resources.getString("NO.MESSAGES.YET")));
-
+        chatListView.setFocusModel(null);
+        chatListView.setSelectionModel(null);
 
         // Start standing animation
         playerSpriteImageView.setScaleX(2.0);
