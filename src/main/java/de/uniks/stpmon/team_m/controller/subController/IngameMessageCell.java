@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -51,7 +52,7 @@ public class IngameMessageCell extends ListCell<Message> {
             Trainer trainer = ingameController.getTrainer(message.sender());
             final String trainerName = trainer.name() + ":";
             final String dateTime = formatTimeString(message.createdAt());
-            loadAndSetTrainerImage(trainer);
+            ingameController.setTrainerSpriteImageView(trainer, spriteImageView);
             messageContent.setText(message.body());
             name.setText(trainerName);
             timestamp.setText(dateTime);
@@ -79,13 +80,4 @@ public class IngameMessageCell extends ListCell<Message> {
         return localDateTime.format(outputFormatter);
     }
 
-    private void loadAndSetTrainerImage(Trainer trainer) {
-        String trainerSprite = trainer.image().substring(8);
-        if (!GraphicsEnvironment.isHeadless()) {
-            String path = Objects.requireNonNull(Main.class.getResource("charactermodels/" + trainerSprite)).toString();
-            Image trainerImage = new Image(path);
-            spriteImageView.setImage(trainerImage);
-        }
-
-    }
 }

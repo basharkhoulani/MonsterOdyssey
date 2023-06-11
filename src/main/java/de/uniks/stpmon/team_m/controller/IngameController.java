@@ -737,4 +737,14 @@ public class IngameController extends Controller {
         }
         return null;
     }
+    public void setTrainerSpriteImageView (Trainer trainer, ImageView imageView) {
+        if (!GraphicsEnvironment.isHeadless()) {
+            disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
+                        Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
+                        Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, "down", false);
+                        imageView.setImage(character[0]);
+                    }, error -> showError(error.getMessage())
+            ));
+        }
+    }
 }
