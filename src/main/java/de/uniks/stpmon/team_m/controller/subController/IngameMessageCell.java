@@ -19,7 +19,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.TIME_FORMAT;
+import static de.uniks.stpmon.team_m.Constants.ZONE_ID_EUROPE_BERLIN;
 
 public class IngameMessageCell extends ListCell<Message> {
     private final IngameController ingameController;
@@ -35,29 +36,30 @@ public class IngameMessageCell extends ListCell<Message> {
     public HBox rootHBox;
     private FXMLLoader loader;
 
-        public IngameMessageCell(IngameController ingameController) {
-            this.ingameController = ingameController;
-        }
+    public IngameMessageCell(IngameController ingameController) {
+        this.ingameController = ingameController;
+    }
 
-        @Override
-        protected void updateItem(Message message, boolean empty) {
-            super.updateItem(message, empty);
-            if (empty || message == null) {
-                setText(null);
-                setGraphic(null);
-            } else {
-                loadFXML();
-                Trainer trainer = ingameController.getTrainer(message.sender());
-                final String trainerName = trainer.name() + ":";
-                final String dateTime = formatTimeString(message.createdAt());
-                loadAndSetTrainerImage(trainer);
-                messageContent.setText(message.body());
-                name.setText(trainerName);
-                timestamp.setText(dateTime);
-                setGraphic(rootHBox);
-                setPadding(new javafx.geometry.Insets(0));
-            }
+    @Override
+    protected void updateItem(Message message, boolean empty) {
+        super.updateItem(message, empty);
+        if (empty || message == null) {
+            setText(null);
+            setGraphic(null);
+        } else {
+            loadFXML();
+            Trainer trainer = ingameController.getTrainer(message.sender());
+            final String trainerName = trainer.name() + ":";
+            final String dateTime = formatTimeString(message.createdAt());
+            loadAndSetTrainerImage(trainer);
+            messageContent.setText(message.body());
+            name.setText(trainerName);
+            timestamp.setText(dateTime);
+            setGraphic(rootHBox);
+            setPadding(new javafx.geometry.Insets(0));
         }
+    }
+
     private void loadFXML() {
         if (loader == null) {
             loader = new FXMLLoader(Main.class.getResource("views/IngameMessageCell.fxml"));
@@ -69,6 +71,7 @@ public class IngameMessageCell extends ListCell<Message> {
             }
         }
     }
+
     private String formatTimeString(String dateTime) {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(ZONE_ID_EUROPE_BERLIN));
 

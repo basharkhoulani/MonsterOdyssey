@@ -9,9 +9,11 @@ import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.scene.control.*;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,11 +29,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static io.reactivex.rxjava3.core.Observable.*;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static io.reactivex.rxjava3.core.Observable.empty;
+import static io.reactivex.rxjava3.core.Observable.just;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class IngameControllerTest extends ApplicationTest {

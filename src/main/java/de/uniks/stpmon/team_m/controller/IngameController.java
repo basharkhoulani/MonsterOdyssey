@@ -241,9 +241,7 @@ public class IngameController extends Controller {
                 trainers -> {
                     this.trainers = FXCollections.observableArrayList(trainers);
                     listenToTrainers(this.trainers);
-                }, error -> {
-                    showError(error.getMessage());
-                }));
+                }, error -> showError(error.getMessage())));
 
         // Setup chat
         messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
