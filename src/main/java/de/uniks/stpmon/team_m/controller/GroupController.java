@@ -218,10 +218,18 @@ public class GroupController extends Controller {
         alert.setHeaderText(null);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.YES) {
-            disposables.add(groupService.delete(groupStorageProvider.get().get_id())
-                    .observeOn(FX_SCHEDULER)
-                    .subscribe(deleted -> app.show(messagesControllerProvider.get())
-                            , error -> showError(error.getMessage())));
+            if (groupStorageProvider.get().getMembers().size() > 1) {
+                groupStorageProvider.get().getMembers().remove(userStorage.get().get_id());
+                disposables.add(groupService.update(groupStorageProvider.get().get_id(),groupStorageProvider.get().getName(), groupStorageProvider.get().getMembers())
+                        .observeOn(FX_SCHEDULER)
+                        .subscribe(group -> app.show(messagesControllerProvider.get())
+                                , error -> showError(error.getMessage())));
+            } else {
+                disposables.add(groupService.delete(groupStorageProvider.get().get_id())
+                        .observeOn(FX_SCHEDULER)
+                        .subscribe(deleted -> app.show(messagesControllerProvider.get())
+                                , error -> showError(error.getMessage())));
+            }
         } else {
             alert.close();
         }

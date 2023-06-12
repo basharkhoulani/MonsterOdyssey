@@ -389,12 +389,12 @@ public class TestModule {
 
             @Override
             public String getTrainerSprite() {
-                return Objects.requireNonNull(Main.class.getResource("images/Premade_Character_01.png")).toString();
+                return Objects.requireNonNull(Main.class.getResource("charactermodels/Premade_Character_01.png")).toString();
             }
 
             @Override
             public Image getTrainerSpriteChunk() {
-                String path = Objects.requireNonNull(Main.class.getResource("images/Premade_Character_01.png")).toString();
+                String path = Objects.requireNonNull(Main.class.getResource("charactermodels/Premade_Character_01.png")).toString();
                 return new Image(path);
             }
 
@@ -431,7 +431,7 @@ public class TestModule {
 
             @Override
             public Observable<Trainer> getTrainer(String regionId, String _id) {
-                return Observable.just(new Trainer("123", "456", "789", "test", "max", "mustermann", Objects.requireNonNull(Main.class.getResource("images/Premade_Character_01.png")).toString(), 0, "Testina", 0, 0, 0, null));
+                return Observable.just(new Trainer("123", "456", "789", "test", "max", "mustermann", Objects.requireNonNull(Main.class.getResource("charactermodels/Premade_Character_01.png")).toString(), 0, "Testina", 0, 0, 0, null));
             }
 
             @Override

@@ -255,7 +255,6 @@ public class AccountSettingController extends Controller {
         if (base64Image.equals(resources.getString("IMAGE.PROCESSING.ERROR")))
             informationLabel.setText(resources.getString("IMAGE.PROCESSING.ERROR"));
         String avatarUpload = "data:image/png;base64, " + base64Image;
-        System.out.println(avatarUpload);
         disposables.add(usersService
                 .updateUser(null, null, avatarUpload, null, null)
                 .observeOn(FX_SCHEDULER)
