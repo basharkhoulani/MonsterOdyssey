@@ -8,6 +8,7 @@ import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.RegionsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -123,13 +124,10 @@ public class IngameTrainerSettingsController extends Controller {
     }
 
     private void loadAndSetTrainerImage() {
-        String trainerSprite = trainerStorageProvider.get().getTrainerSprite();
+        Image trainerChunk = trainerStorageProvider.get().getTrainerSpriteChunk();
         if (!GraphicsEnvironment.isHeadless()) {
-            trainerSprite = trainerSprite.substring(8);
-            String path = Objects.requireNonNull(Main.class.getResource("charactermodels/" + trainerSprite)).toString();
-            Image trainerImage = new Image(path);
-            trainerAvatarImageView.setImage(trainerImage);
+            Image[] character = ImageProcessor.cropTrainerImages(trainerChunk,"down" , false);
+            trainerAvatarImageView.setImage(character[0]);
         }
-
     }
 }

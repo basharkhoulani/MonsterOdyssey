@@ -40,6 +40,7 @@ public class Constants {
     public static final String BORDER_COLOR_BLACK = "-fx-border-color: black;";
     public static final String ZONE_ID_EUROPE_BERLIN = "Europe/Berlin";
     public static final String DATE_TIME_FORMAT = "HH:mm, dd.MM.yy";
+    public static final String TIME_FORMAT = "HH:mm";
     public static final int DURATION_OF_LOADING_SCREEN = 3;
 
     // LOGIN & SIGNUP
@@ -71,6 +72,8 @@ public class Constants {
     public static int TILE_SIZE = 16;
     public static int OFFSET_WIDTH = 50;
     public static int OFFSET_HEIGHT = 50;
+    public static double ZERO = 0;
+    public static double ONE = 1;
 
     // Error messages
     public static final String HTTP_400 = "400";
@@ -93,12 +96,4 @@ public class Constants {
             "Premade_Character_13.png", "Premade_Character_14.png", "Premade_Character_15.png", "Premade_Character_16.png",
             "Premade_Character_17.png", "Premade_Character_18.png", "Premade_Character_19.png", "Premade_Character_20.png"
     };
-    public static final String[] CHARACTERS_FRONT = {
-            "charactermodels/Character_01.png", "charactermodels/Character_02.png", "charactermodels/Character_03.png", "charactermodels/Character_04.png",
-            "charactermodels/Character_05.png", "charactermodels/Character_06.png", "charactermodels/Character_07.png", "charactermodels/Character_08.png",
-            "charactermodels/Character_09.png", "charactermodels/Character_10.png", "charactermodels/Character_11.png", "charactermodels/Character_12.png",
-            "charactermodels/Character_13.png", "charactermodels/Character_14.png", "charactermodels/Character_15.png", "charactermodels/Character_16.png",
-            "charactermodels/Character_17.png", "charactermodels/Character_18.png", "charactermodels/Character_19.png", "charactermodels/Character_20.png"
-    };
-
 }
