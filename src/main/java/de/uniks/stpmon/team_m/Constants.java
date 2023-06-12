@@ -74,6 +74,7 @@ public class Constants {
     public static int OFFSET_HEIGHT = 50;
     public static double ZERO = 0;
     public static double ONE = 1;
+    public static double SCALE_FACTOR = 3.0;
 
     // Error messages
     public static final String HTTP_400 = "400";

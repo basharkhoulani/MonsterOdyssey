@@ -198,26 +198,26 @@ public class IngameController extends Controller {
                 case "up" -> {
                     spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingUp, true);
                     spriteWalkingAnimation.play();
-                    groundCanvas.setTranslateY(groundCanvas.getTranslateY() + 16.0 / 2.0);
-                    overTrainerCanvas.setTranslateY(overTrainerCanvas.getTranslateY() + 16.0 / 2.0);
+                    groundCanvas.setTranslateY(groundCanvas.getTranslateY() + TILE_SIZE / 2.0);
+                    overTrainerCanvas.setTranslateY(overTrainerCanvas.getTranslateY() + TILE_SIZE / 2.0);
                 }
                 case "down" -> {
                     spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingDown, true);
                     spriteWalkingAnimation.play();
-                    groundCanvas.setTranslateY(groundCanvas.getTranslateY() - 16.0 / 2.0);
-                    overTrainerCanvas.setTranslateY(overTrainerCanvas.getTranslateY() - 16.0 / 2.0);
+                    groundCanvas.setTranslateY(groundCanvas.getTranslateY() - TILE_SIZE / 2.0);
+                    overTrainerCanvas.setTranslateY(overTrainerCanvas.getTranslateY() - TILE_SIZE / 2.0);
                 }
                 case "left" -> {
                     spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingLeft, true);
                     spriteWalkingAnimation.play();
-                    groundCanvas.setTranslateX(groundCanvas.getTranslateX() + 16.0 / 2.0);
-                    overTrainerCanvas.setTranslateX(overTrainerCanvas.getTranslateX() + 16.0 / 2.0);
+                    groundCanvas.setTranslateX(groundCanvas.getTranslateX() + TILE_SIZE / 2.0);
+                    overTrainerCanvas.setTranslateX(overTrainerCanvas.getTranslateX() + TILE_SIZE / 2.0);
                 }
                 case "right" -> {
                     spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingRight, true);
                     spriteWalkingAnimation.play();
-                    groundCanvas.setTranslateX(groundCanvas.getTranslateX() - 16.0 / 2.0);
-                    overTrainerCanvas.setTranslateX(overTrainerCanvas.getTranslateX() - 16.0 / 2.0);
+                    groundCanvas.setTranslateX(groundCanvas.getTranslateX() - TILE_SIZE / 2.0);
+                    overTrainerCanvas.setTranslateX(overTrainerCanvas.getTranslateX() - TILE_SIZE / 2.0);
                 }
                 default -> {
                 }
@@ -256,8 +256,8 @@ public class IngameController extends Controller {
         chatListView.setSelectionModel(null);
 
         // Start standing animation
-        playerSpriteImageView.setScaleX(3.0);
-        playerSpriteImageView.setScaleY(3.0);
+        playerSpriteImageView.setScaleX(SCALE_FACTOR);
+        playerSpriteImageView.setScaleY(SCALE_FACTOR);
         playerSpriteImageView.relocate(trainerStorage.getX(), trainerStorage.getY());
         spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingDown, false);
         if (!GraphicsEnvironment.isHeadless()) {
@@ -399,12 +399,12 @@ public class IngameController extends Controller {
             app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
             groundCanvas.setWidth(map.width() * TILE_SIZE);
             groundCanvas.setHeight(map.height() * TILE_SIZE);
-            groundCanvas.setScaleX(3.0);
-            groundCanvas.setScaleY(3.0);
+            groundCanvas.setScaleX(SCALE_FACTOR);
+            groundCanvas.setScaleY(SCALE_FACTOR);
             overTrainerCanvas.setWidth(map.width() * TILE_SIZE);
             overTrainerCanvas.setHeight(map.height() * TILE_SIZE);
-            overTrainerCanvas.setScaleX(3.0);
-            overTrainerCanvas.setScaleY(3.0);
+            overTrainerCanvas.setScaleX(SCALE_FACTOR);
+            overTrainerCanvas.setScaleY(SCALE_FACTOR);
             for (TileSet tileSet : map.tilesets()) {
                 renderMap(map, tileSetImages.get(getFileName(tileSet.source())), tileSetJsons.get(getFileName(tileSet.source())),
                         tileSet, map.tilesets().size() > 1);
