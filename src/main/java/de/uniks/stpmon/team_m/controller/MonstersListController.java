@@ -72,7 +72,7 @@ public class MonstersListController extends Controller{
 
     @Override
     public String getTitle() {
-        return resources.getString("Monsters");
+        return resources.getString("MONSTERS");
     }
 
     @Override

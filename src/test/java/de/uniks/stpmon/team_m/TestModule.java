@@ -506,4 +506,19 @@ public class TestModule {
             }
         };
     }
+
+    @Provides
+    static MonstersApiService monstersApiService() {
+        return new MonstersApiService() {
+            @Override
+            public Observable<List<Monster>> getMonsters(String regionId, String areaId) {
+                return Observable.just(List.of());
+            }
+
+            @Override
+            public Observable<Monster> getMonster(String regionId, String trainerId, String monsterId) {
+                return Observable.empty();
+            }
+        };
+    }
 }

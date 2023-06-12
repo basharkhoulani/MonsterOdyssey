@@ -86,9 +86,9 @@ public class MonsterCell extends ListCell<Monster> {
                     .subscribe(monsterType -> {
                         monsterTypeDto = monsterType;
                         monsterName.setText(monsterTypeDto.name());
-                        StringBuilder type = new StringBuilder("Type: ");
+                        StringBuilder type = new StringBuilder("Type:");
                         for (String s : monsterTypeDto.type()) {
-                            type.append(s).append(" ");
+                            type.append(" ").append(s);
                         }
                         this.monsterType.setText(type.toString());
                     }, Throwable::printStackTrace));
@@ -112,7 +112,7 @@ public class MonsterCell extends ListCell<Monster> {
         Node closeButton = monstersDialog.getDialogPane().lookupButton(ButtonType.CLOSE);
         closeButton.managedProperty().bind(closeButton.visibleProperty());
         closeButton.setVisible(false);
-        monstersDialog.setTitle(resources.getString("MONSTERS"));
+        monstersDialog.setTitle(resources.getString("MONSTER"));
         monstersDialog.getDialogPane().setContent(new MonstersDetailController().render());
         monstersDialog.showAndWait();
     }
