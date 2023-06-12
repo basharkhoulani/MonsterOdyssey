@@ -221,11 +221,11 @@ public class AccountSettingController extends Controller {
     public void editAvatar() {
 <span class="fc" id="L222">        AvatarSelectionController avatarSelectionController = avatarSelectionControllerProvider.get();</span>
 <span class="fc" id="L223">        avatarSelectionController.init();</span>
-<span class="fc" id="L224">        ButtonType cancelButton = new ButtonType(resources.getString(&quot;Cancel&quot;),ButtonBar.ButtonData.CANCEL_CLOSE);</span>
-<span class="fc" id="L225">        ButtonType okButton = new ButtonType(resources.getString(&quot;OK&quot;),ButtonBar.ButtonData.OK_DONE);</span>
+<span class="fc" id="L224">        ButtonType cancelButton = new ButtonType(resources.getString(&quot;Cancel&quot;), ButtonBar.ButtonData.CANCEL_CLOSE);</span>
+<span class="fc" id="L225">        ButtonType okButton = new ButtonType(resources.getString(&quot;OK&quot;), ButtonBar.ButtonData.OK_DONE);</span>
 
 <span class="fc" id="L227">        Dialog&lt;?&gt; dialog = new Dialog&lt;&gt;();</span>
-<span class="fc" id="L228">        dialog.setTitle(resources.getString(&quot;Choose.your.Avatar&quot;));</span>
+<span class="fc" id="L228">        dialog.setTitle(resources.getString(&quot;CHOOSE.YOUR.AVATAR&quot;));</span>
 <span class="fc" id="L229">        avatarSelectionController.setValues(resources, preferences, resourceBundleProvider, this, app);</span>
 <span class="fc" id="L230">        dialog.getDialogPane().setContent(avatarSelectionController.render());</span>
 <span class="fc" id="L231">        dialog.getDialogPane().getButtonTypes().add(okButton);</span>
@@ -255,18 +255,17 @@ public class AccountSettingController extends Controller {
 <span class="pc bpc" id="L255" title="1 of 2 branches missed.">        if (base64Image.equals(resources.getString(&quot;IMAGE.PROCESSING.ERROR&quot;)))</span>
 <span class="nc" id="L256">            informationLabel.setText(resources.getString(&quot;IMAGE.PROCESSING.ERROR&quot;));</span>
 <span class="fc" id="L257">        String avatarUpload = &quot;data:image/png;base64, &quot; + base64Image;</span>
-<span class="fc" id="L258">        System.out.println(avatarUpload);</span>
-<span class="fc" id="L259">        disposables.add(usersService</span>
-<span class="fc" id="L260">                .updateUser(null, null, avatarUpload, null, null)</span>
-<span class="fc" id="L261">                .observeOn(FX_SCHEDULER)</span>
-<span class="fc" id="L262">                .subscribe(userResult -&gt; {</span>
-<span class="fc" id="L263">                    userStorageProvider.get().setAvatar(userResult.avatar());</span>
-<span class="fc" id="L264">                    saveAvatarButton.setDisable(true);</span>
-<span class="fc" id="L265">                    informationLabel.setText(resources.getString(&quot;AVATAR.SUCCESS.CHANGED&quot;));</span>
-<span class="pc" id="L266">                }, error -&gt; avatarErrorLabel.setText(error.getMessage()))</span>
+<span class="fc" id="L258">        disposables.add(usersService</span>
+<span class="fc" id="L259">                .updateUser(null, null, avatarUpload, null, null)</span>
+<span class="fc" id="L260">                .observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L261">                .subscribe(userResult -&gt; {</span>
+<span class="fc" id="L262">                    userStorageProvider.get().setAvatar(userResult.avatar());</span>
+<span class="fc" id="L263">                    saveAvatarButton.setDisable(true);</span>
+<span class="fc" id="L264">                    informationLabel.setText(resources.getString(&quot;AVATAR.SUCCESS.CHANGED&quot;));</span>
+<span class="pc" id="L265">                }, error -&gt; avatarErrorLabel.setText(error.getMessage()))</span>
         );
 
-<span class="fc" id="L269">    }</span>
+<span class="fc" id="L268">    }</span>
 
 
     /**
@@ -277,36 +276,37 @@ public class AccountSettingController extends Controller {
      */
 
     public void deleteAccount(Alert alert) {
-<span class="fc" id="L280">        disposables.add(usersService.deleteUser().observeOn(FX_SCHEDULER).subscribe(delete -&gt; {</span>
-<span class="fc" id="L281">            LoginController loginController = loginControllerProvider.get();</span>
-<span class="fc" id="L282">            loginController.setInformation(resources.getString(&quot;DELETE.SUCCESS&quot;));</span>
-<span class="fc" id="L283">            app.show(loginController);</span>
-<span class="fc" id="L284">        }, error -&gt; errorAlert(alert)));</span>
-<span class="fc" id="L285">    }</span>
+<span class="fc" id="L279">        disposables.add(usersService.deleteUser().observeOn(FX_SCHEDULER).subscribe(delete -&gt; {</span>
+<span class="fc" id="L280">            LoginController loginController = loginControllerProvider.get();</span>
+<span class="fc" id="L281">            loginController.setInformation(resources.getString(&quot;DELETE.SUCCESS&quot;));</span>
+<span class="fc" id="L282">            app.show(loginController);</span>
+<span class="fc" id="L283">        }, error -&gt; errorAlert(alert)));</span>
+<span class="fc" id="L284">    }</span>
 
     /**
      * This method is used to leave the AccountSettingController and go back to the MainMenuController.
      */
 
     public void cancel() {
-<span class="fc" id="L292">        app.show(mainMenuControllerProvider.get());</span>
-<span class="fc" id="L293">    }</span>
+<span class="fc" id="L291">        app.show(mainMenuControllerProvider.get());</span>
+<span class="fc" id="L292">    }</span>
 
     /**
      * This method is used to show a pop-up to confirm the deletion of the account.
      */
 
     public void showDeletePopUp() {
-<span class="fc" id="L300">        Alert alert = new Alert(Alert.AlertType.WARNING, resources.getString(&quot;SURE&quot;), ButtonType.OK, ButtonType.CANCEL);</span>
-<span class="fc" id="L301">        alert.setTitle(resources.getString(&quot;Delete.Account&quot;));</span>
-<span class="fc" id="L302">        alert.setHeaderText(null);</span>
-<span class="fc" id="L303">        alert.initOwner(app.getStage());</span>
-<span class="fc" id="L304">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+<span class="fc" id="L299">        Alert alert = new Alert(Alert.AlertType.WARNING, resources.getString(&quot;SURE&quot;), ButtonType.OK, ButtonType.CANCEL);</span>
+<span class="fc" id="L300">        alert.setTitle(resources.getString(&quot;DELETE.ACCOUNT&quot;));</span>
+<span class="fc" id="L301">        alert.setHeaderText(null);</span>
+<span class="fc" id="L302">        alert.initOwner(app.getStage());</span>
+<span class="fc" id="L303">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
 
-<span class="pc bpc" id="L306" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK) {</span>
-<span class="fc" id="L307">            deleteAccount(alert);</span>
+<span class="pc bpc" id="L305" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK) {</span>
+<span class="fc" id="L306">            deleteAccount(alert);</span>
         }
-<span class="fc" id="L309">    }</span>
+<span class="fc" id="L308">    }</span>
+
     /**
      * This method is used to show a pop-up when an error occurs.
      *
@@ -338,13 +338,13 @@ public class AccountSettingController extends Controller {
     /**
      * This method is used to open the Change Language Pop up
      */
-    public void changeLanguage(){
+    public void changeLanguage() {
 <span class="fc" id="L342">        Dialog&lt;?&gt; dialog = new Dialog&lt;&gt;();</span>
 <span class="fc" id="L343">        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);</span>
 <span class="fc" id="L344">        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);</span>
 <span class="fc" id="L345">        closeButton.managedProperty().bind(closeButton.visibleProperty());</span>
 <span class="fc" id="L346">        closeButton.setVisible(false);</span>
-<span class="fc" id="L347">        dialog.setTitle(resources.getString(&quot;Change.Language&quot;));</span>
+<span class="fc" id="L347">        dialog.setTitle(resources.getString(&quot;CHOOSE.LANGUAGE&quot;));</span>
 <span class="fc" id="L348">        changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);</span>
 <span class="fc" id="L349">        dialog.getDialogPane().setContent(changeLanguageController.render());</span>
 <span class="fc" id="L350">        dialog.showAndWait();</span>
