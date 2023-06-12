@@ -324,27 +324,24 @@ public class IngameController extends Controller {
                 case 0 -> {
                     trainerSpriteAnimation.setImages(trainerWalkingUp);
                     mapMovementTransition = getMapMovementTransition(canvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
-                    mapMovementTransition.play();
                 }
                 case 1 -> {
                     trainerSpriteAnimation.setImages(trainerWalkingRight);
                     mapMovementTransition = getMapMovementTransition(canvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                    mapMovementTransition.play();
                 }
                 case 2 -> {
                     trainerSpriteAnimation.setImages(trainerWalkingDown);
                     mapMovementTransition = getMapMovementTransition(canvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
-                    mapMovementTransition.play();
                 }
                 case 3 -> {
                     trainerSpriteAnimation.setImages(trainerWalkingLeft);
                     mapMovementTransition = getMapMovementTransition(canvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                    mapMovementTransition.play();
                 }
                 default -> {
                 }
             }
             trainerSpriteAnimation.start();
+            mapMovementTransition.play();
         }
     }
 
