@@ -22,7 +22,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
@@ -30,7 +29,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -97,14 +95,17 @@ public class IngameController extends Controller {
     TrainerStorage trainerStorage;
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
-    List<Canvas> canvasList = new ArrayList<>();
-    public Canvas canvasGround = new Canvas(STANDARD_WIDTH, STANDARD_HEIGHT);
-    public boolean firstLayerRendered = false;
-    public int viewOrderCanvas = 10000;
+    @FXML
+    public Canvas groundCanvas;
+    @FXML
+    public Canvas trainerCanvas;
+    @FXML
+    public Canvas overTrainerCanvas;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     private boolean isChatting = false;
     private final ObservableList<MoveTrainerDto> moveTrainerDtos = FXCollections.observableArrayList();
     HashMap<String, Image> tileSetImages = new HashMap<>();
+    HashMap<String, TileSet> tileSetJsons = new HashMap<>();
     private Timeline spriteWalkingAnimation;
     private Timeline spriteStandingAnimation;
     private Image[] trainerStandingDown;
@@ -197,30 +198,26 @@ public class IngameController extends Controller {
                 case "up" -> {
                     spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingUp, true);
                     spriteWalkingAnimation.play();
-                    for (Canvas canvas : canvasList) {
-                        canvas.setTranslateY(canvas.getTranslateY() + 16.0 / 2.0);
-                    }
+                    groundCanvas.setTranslateY(groundCanvas.getTranslateY() + 16.0 / 2.0);
+                    overTrainerCanvas.setTranslateY(overTrainerCanvas.getTranslateY() + 16.0 / 2.0);
                 }
                 case "down" -> {
                     spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingDown, true);
                     spriteWalkingAnimation.play();
-                    for (Canvas canvas : canvasList) {
-                        canvas.setTranslateY(canvas.getTranslateY() - 16.0 / 2.0);
-                    }
+                    groundCanvas.setTranslateY(groundCanvas.getTranslateY() - 16.0 / 2.0);
+                    overTrainerCanvas.setTranslateY(overTrainerCanvas.getTranslateY() - 16.0 / 2.0);
                 }
                 case "left" -> {
                     spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingLeft, true);
                     spriteWalkingAnimation.play();
-                    for (Canvas canvas : canvasList) {
-                        canvas.setTranslateX(canvas.getTranslateX() + 16.0 / 2.0);
-                    }
+                    groundCanvas.setTranslateX(groundCanvas.getTranslateX() + 16.0 / 2.0);
+                    overTrainerCanvas.setTranslateX(overTrainerCanvas.getTranslateX() + 16.0 / 2.0);
                 }
                 case "right" -> {
                     spriteWalkingAnimation = getSpriteAnimationTimeLine(trainerWalkingRight, true);
                     spriteWalkingAnimation.play();
-                    for (Canvas canvas : canvasList) {
-                        canvas.setTranslateX(canvas.getTranslateX() - 16.0 / 2.0);
-                    }
+                    groundCanvas.setTranslateX(groundCanvas.getTranslateX() - 16.0 / 2.0);
+                    overTrainerCanvas.setTranslateX(overTrainerCanvas.getTranslateX() - 16.0 / 2.0);
                 }
                 default -> {
                 }
@@ -237,7 +234,6 @@ public class IngameController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
-        ingameStackPane.getChildren().add(canvasGround);
         trainerStorageProvider.get().setX(trainerStorageProvider.get().getTrainer().x());
         trainerStorageProvider.get().setY(trainerStorageProvider.get().getTrainer().y());
         trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());
@@ -260,8 +256,8 @@ public class IngameController extends Controller {
         chatListView.setSelectionModel(null);
 
         // Start standing animation
-        playerSpriteImageView.setScaleX(2.0);
-        playerSpriteImageView.setScaleY(2.0);
+        playerSpriteImageView.setScaleX(3.0);
+        playerSpriteImageView.setScaleY(3.0);
         playerSpriteImageView.relocate(trainerStorage.getX(), trainerStorage.getY());
         spriteStandingAnimation = getSpriteAnimationTimeLine(trainerStandingDown, false);
         if (!GraphicsEnvironment.isHeadless()) {
@@ -382,10 +378,11 @@ public class IngameController extends Controller {
         tileSetImages.clear();
         for (TileSet tileSet : map.tilesets()) {
             final String mapName = getFileName(tileSet.source());
-            disposables.add(presetsService.getTilesetImage(mapName).observeOn(FX_SCHEDULER).subscribe(image -> {
-                tileSetImages.put(mapName, image);
-                afterAllTileSetsLoaded(map);
-            }, error -> showError(error.getMessage())));
+            disposables.add(presetsService.getTilesetImage(mapName)
+                    .doOnNext(image -> tileSetImages.put(mapName, image))
+                    .flatMap(image -> presetsService.getTileset(mapName).observeOn(FX_SCHEDULER))
+                    .doOnNext(tileset -> tileSetJsons.put(mapName, tileset))
+                    .observeOn(FX_SCHEDULER).subscribe(image -> afterAllTileSetsLoaded(map), error -> showError(error.getMessage())));
         }
     }
 
@@ -397,11 +394,19 @@ public class IngameController extends Controller {
      */
 
     private void afterAllTileSetsLoaded(Map map) {
-        if (tileSetImages.size() == map.tilesets().size()) {
+        if ((tileSetImages.size() + tileSetJsons.size()) == 2 * map.tilesets().size()) {
             app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);
             app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
+            groundCanvas.setWidth(map.width() * TILE_SIZE);
+            groundCanvas.setHeight(map.height() * TILE_SIZE);
+            groundCanvas.setScaleX(3.0);
+            groundCanvas.setScaleY(3.0);
+            overTrainerCanvas.setWidth(map.width() * TILE_SIZE);
+            overTrainerCanvas.setHeight(map.height() * TILE_SIZE);
+            overTrainerCanvas.setScaleX(3.0);
+            overTrainerCanvas.setScaleY(3.0);
             for (TileSet tileSet : map.tilesets()) {
-                renderMap(map, tileSetImages.get(getFileName(tileSet.source())),
+                renderMap(map, tileSetImages.get(getFileName(tileSet.source())), tileSetJsons.get(getFileName(tileSet.source())),
                         tileSet, map.tilesets().size() > 1);
             }
         }
@@ -417,36 +422,13 @@ public class IngameController extends Controller {
      * @param multipleTileSets Boolean that is true if there are multiple tilesets.
      */
 
-    private void renderMap(Map map, Image image, TileSet tileSet, boolean multipleTileSets) {
-        // Must be done for first layer
-        if (!firstLayerRendered) {
-            canvasGround.setScaleX(2.0);
-            canvasGround.setScaleY(2.0);
-            canvasGround.setWidth(map.width() * TILE_SIZE);
-            canvasGround.setHeight(map.height() * TILE_SIZE);
-            canvasGround.setViewOrder(viewOrderCanvas);
-            ingameVBoxPlayer.setViewOrder(--viewOrderCanvas);
-            canvasList.add(canvasGround);
-            GraphicsContext graphicsContext = canvasGround.getGraphicsContext2D();
-            Layer layer = map.layers().get(0);
-            for (Chunk chunk : layer.chunks()) {
-                renderChunk(graphicsContext, map, image, tileSet, multipleTileSets, chunk);
-            }
-            firstLayerRendered = true;
-        }
-        for (Layer otherLayers : map.layers().subList(1, map.layers().size())) {
-            if (otherLayers.chunks() == null) {
+    private void renderMap(Map map, Image image, TileSet tileSetJson, TileSet tileSet, boolean multipleTileSets) {
+        for (Layer layer: map.layers()) {
+            if (layer.chunks() == null) {
                 continue;
             }
-            Canvas canvas = new Canvas(map.width() * TILE_SIZE, map.height() * TILE_SIZE);
-            canvasList.add(canvas);
-            canvas.setScaleX(2.0);
-            canvas.setScaleY(2.0);
-            canvas.setViewOrder(viewOrderCanvas--);
-            GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-            ingameStackPane.getChildren().add(canvas);
-            for (Chunk chunk : otherLayers.chunks()) {
-                renderChunk(graphicsContext, map, image, tileSet, multipleTileSets, chunk);
+            for (Chunk chunk : layer.chunks()) {
+                renderChunk(map, image, tileSet, tileSetJson, multipleTileSets, chunk);
             }
         }
     }
@@ -462,25 +444,46 @@ public class IngameController extends Controller {
      * @param chunk            Current chunk.
      */
 
-    private void renderChunk(GraphicsContext graphicsContext, Map map, Image image, TileSet tileSet, boolean multipleTileSets, Chunk chunk) {
-        WritableImage writableImage = new WritableImage(chunk.width() * TILE_SIZE, chunk.height() * TILE_SIZE);
+    private void renderChunk(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, Chunk chunk) {
+        WritableImage writableImageGround = new WritableImage(chunk.width() * TILE_SIZE, chunk.height() * TILE_SIZE);
+        WritableImage writableImageTop = new WritableImage(chunk.width() * TILE_SIZE, chunk.height() * TILE_SIZE);
         for (int y = 0; y < chunk.height(); y++) {
             for (int x = 0; x < chunk.width(); x++) {
                 int tileId = chunk.data().get(y * chunk.width() + x);
                 if (tileId == 0) {
                     continue;
                 }
-                if (multipleTileSets) {
-                    if (checkIfNotInTileSet(map, tileSet, tileId)) continue;
-                }
+                if (multipleTileSets) if (checkIfNotInTileSet(map, tileSet, tileId)) continue;
+
                 int tilesPerRow = (int) (image.getWidth() / TILE_SIZE);
                 int tileX = ((tileId - tileSet.firstgid()) % tilesPerRow) * TILE_SIZE;
                 int tileY = ((tileId - tileSet.firstgid()) / tilesPerRow) * TILE_SIZE;
-                PixelWriter pixelWriter = writableImage.getPixelWriter();
-                pixelWriter.setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, image.getPixelReader(), tileX, tileY);
+                if (isRoof(tileSet, tileSetJson, tileId)) {
+                    writableImageTop.getPixelWriter().setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
+                            image.getPixelReader(), tileX, tileY);
+                } else {
+                    writableImageGround.getPixelWriter().setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
+                            image.getPixelReader(), tileX, tileY);
+                }
             }
         }
-        graphicsContext.drawImage(writableImage, chunk.x() * TILE_SIZE, chunk.y() * TILE_SIZE);
+        groundCanvas.getGraphicsContext2D().drawImage(writableImageGround, chunk.x() * TILE_SIZE, chunk.y() * TILE_SIZE);
+        overTrainerCanvas.getGraphicsContext2D().drawImage(writableImageTop, chunk.x() * TILE_SIZE, chunk.y() * TILE_SIZE);
+    }
+
+    private boolean isRoof(TileSet tileSet, TileSet tileSetJson, int tileId) {
+        if (tileSetJson.tiles() == null) {
+            return false;
+        }
+        for (TileObject tile : tileSetJson.tiles()) {
+            if (tile.id() == tileId - tileSet.firstgid()) {
+                if (tile.properties() == null) {
+                    return false;
+                }
+                return tile.properties().stream().anyMatch(property -> property.name().equals("Roof") && property.value().equals("true"));
+            }
+        }
+        return false;
     }
 
     /**
@@ -587,7 +590,7 @@ public class IngameController extends Controller {
         Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();
         popUp.setOnCloseRequest(evt -> {
                     ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close();
-                    canvasGround.requestFocus();
+            groundCanvas.requestFocus();
                 }
         );
         trainerSettingsDialog.showAndWait();
@@ -599,7 +602,7 @@ public class IngameController extends Controller {
 
     private void sendMessage() {
         if (messageField.getText().isEmpty()) {
-            canvasGround.requestFocus();
+            groundCanvas.requestFocus();
             isChatting = false;
             return;
         }
@@ -609,7 +612,7 @@ public class IngameController extends Controller {
             disposables.add(messageService.newMessage(regionID, messageBody, MESSAGE_NAMESPACE_REGIONS).observeOn(FX_SCHEDULER).subscribe(message -> {
                 messageField.setText(EMPTY_STRING);
                 isChatting = false;
-                canvasGround.requestFocus();
+                groundCanvas.requestFocus();
             }, error -> showError(error.getMessage())));
         }
     }
@@ -622,7 +625,7 @@ public class IngameController extends Controller {
     }
 
     public void paneClicked() {
-        canvasGround.requestFocus();
+        groundCanvas.requestFocus();
         isChatting = false;
     }
 

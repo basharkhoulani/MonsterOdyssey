@@ -2,6 +2,7 @@
 
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
@@ -14,9 +15,12 @@
 
 <VBox fx:id="ingameVBox" alignment="CENTER_LEFT" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
     <StackPane fx:id="ingameStackPane" onMouseClicked="#paneClicked" style="-fx-background-color: black;" VBox.vgrow="ALWAYS">
+      <Canvas fx:id="groundCanvas" height="200.0" width="200.0" />
         <VBox fx:id="ingameVBoxPlayer" alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
             <ImageView fx:id="playerSpriteImageView" fitHeight="30.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" />
         </VBox>
+      <Canvas fx:id="trainerCanvas" height="200.0" width="200.0" />
+      <Canvas fx:id="overTrainerCanvas" height="200.0" width="200.0" />
         <BorderPane fx:id="borderPane">
             <top>
                 <HBox alignment="TOP_RIGHT" fillHeight="false" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="40.0" BorderPane.alignment="TOP_RIGHT">
