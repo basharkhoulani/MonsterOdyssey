@@ -435,8 +435,6 @@ public class IngameController extends Controller {
      */
 
     private void loadMap(Map map) {
-        app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);
-        app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
         if (GraphicsEnvironment.isHeadless()) {
             return;
         }
@@ -469,6 +467,8 @@ public class IngameController extends Controller {
 
     private void afterAllTileSetsLoaded(Map map) {
         if (tileSetImages.size() == map.tilesets().size()) {
+            app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);
+            app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
             for (TileSet tileSet : map.tilesets()) {
                 renderMap(map, tileSetImages.get(getFileName(tileSet.source())),
                         tileSet, map.tilesets().size() > 1);
