@@ -245,7 +245,7 @@ public class IngameController extends Controller {
                 /*
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX() - 1, trainerStorageProvider.get().getY(), 1)).subscribe());
+                        trainerStorageProvider.get().getX() - 1, trainerStorageProvider.get().getY(), 3)).subscribe());
                  */
                 walk(3);
             }
@@ -253,12 +253,11 @@ public class IngameController extends Controller {
                 /*
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 3)).subscribe());
+                        trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 1)).subscribe());
                  */
                 walk(1);
             }
         };
-
 
         keyReleasedHandler = event -> {
             if (isChatting) {
@@ -319,6 +318,7 @@ public class IngameController extends Controller {
      */
     private void walk(int direction) {
         if (!GraphicsEnvironment.isHeadless()) {
+            trainerSpriteAnimation.stop();
             trainerSpriteAnimation.setDuration(DELAY);
             switch (direction) {
                 case 0 -> {
@@ -344,7 +344,7 @@ public class IngameController extends Controller {
                 default -> {
                 }
             }
-
+            trainerSpriteAnimation.start();
         }
     }
 
@@ -455,10 +455,8 @@ public class IngameController extends Controller {
                 afterAllTileSetsLoaded(map);
             }, error -> showError(error.getMessage())));
         }
-        app.getStage().setX(0);
-        app.getStage().setY(0);
-        app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);
-        app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
+        //app.getStage().setX(0);
+        //app.getStage().setY(0);
         System.out.println("Map data: \nWidth:  " + map.width() + " Tiles \nHeight: " + map.height() + " Tiles");
         System.out.println("Current player position: (" + trainerStorageProvider.get().getX() + ", " + trainerStorageProvider.get().getY() + "), direction: " + trainerStorageProvider.get().getDirection());
 
@@ -487,7 +485,9 @@ public class IngameController extends Controller {
         return -TILE_SIZE + (int) (((((mapHeight * TILE_SIZE) / (double) TILE_SIZE) / SCALE_FACTOR) - trainerStorageProvider.get().getY()) * TILE_SIZE * SCALE_FACTOR) - (TILE_SIZE / (double) SCALE_FACTOR);
     }
 
-
+    /**
+     * loadPlayers is used to initially load all players on the map. For every trainer it loads the image of the player and sets its position.
+     */
     private void loadPlayers() {
         disposables.add(trainersService.getTrainers(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer().area(), null).observeOn(FX_SCHEDULER).subscribe(
                 trainers -> {
@@ -532,8 +532,8 @@ public class IngameController extends Controller {
      */
 
     private void afterAllTileSetsLoaded(Map map) {
-        canvas.setScaleX(2.0);
-        canvas.setScaleY(2.0);
+        canvas.setScaleX(SCALE_FACTOR);
+        canvas.setScaleY(SCALE_FACTOR);
         canvas.setWidth(map.width() * TILE_SIZE);
         canvas.setHeight(map.height() * TILE_SIZE);
         if (tileSetImages.size() == map.tilesets().size()) {
