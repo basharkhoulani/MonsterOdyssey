@@ -4,11 +4,15 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.MessageService;
+import de.uniks.stpmon.team_m.service.PresetsService;
+import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -26,6 +30,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import static io.reactivex.rxjava3.core.Observable.empty;
+import static io.reactivex.rxjava3.core.Observable.just;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -48,9 +54,15 @@ public class IngameControllerTest extends ApplicationTest {
     TrainerStorage trainerStorage;
 
     @Mock
+    TrainersService trainersService;
+    @Mock
     MessageService messageService;
     @InjectMocks
     IngameController ingameController;
+    @Mock
+    Provider<EventListener> eventListener;
+    @Mock
+    PresetsService presetsService;
 
     @Override
     public void start(Stage stage) {
@@ -126,7 +138,19 @@ public class IngameControllerTest extends ApplicationTest {
                                 List.of()))
 
         ));
+        lenient().when(presetsService.getCharacter(any())).thenReturn(Observable.empty());
+        when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(new Trainer("2023-05-30T12:02:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863", "6475e595ac3946b6a812d865", "6475e595ac3946b6a812d868", "Hans", "Premade_Character_01.png", 0, "6475e595ac3946b6a812d863", 0, 0, 0, new NPCInfo(false)))));
         ingameController.setValues(bundle, null, null, ingameController, app);
+        EventListener eventListenerMock = mock(EventListener.class);
+        when(eventListener.get()).thenReturn(eventListenerMock);
+        Message message = new Message("2023-05-30T12:01:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863",
+                "6475e595ac3946b6a812d868", "Test1");
+        when(eventListenerMock.listen("regions.646bab5cecf584e1be02598a.messages.*.*", Message.class)).thenReturn(just(
+                new Event<>("regions.646bab5cecf584e1be02598a.messages.6475e595ac3946b6a812d863.created", message)
+        ));
+        Trainer trainer = new Trainer("2023-05-30T12:02:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d865", "6475e595ac3946b6a812d865", "6475e595ac3946b6a812d868", "Peter", "Premade_Character_02.png", 0, "6475e595ac3946b6a812d863", 0, 0, 0, new NPCInfo(false));
+        when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers.*.*", Trainer.class)).thenReturn(just(
+                new Event<>("regions.646bab5cecf584e1be02598a.trainers.6475e595ac3946b6a812d865.created", trainer)));
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
@@ -148,6 +172,7 @@ public class IngameControllerTest extends ApplicationTest {
 
     @Test
     void pauseGame() {
+        when(udpEventListenerProvider.get().listen(any(), any())).thenReturn(empty());
         MainMenuController mainMenuController = mock(MainMenuController.class);
         when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
         doNothing().when(app).show(any());
@@ -200,5 +225,16 @@ public class IngameControllerTest extends ApplicationTest {
         clickOn("#sendMessageButton");
         assertEquals("", messageField.getText());
         verify(messageService, times(2)).newMessage(any(), any(), any());
+    }
+
+    @Test
+    void getMessages() {
+        ListView<Message> chat = lookup("#chatListView").query();
+        assertEquals(chat.getOpacity(), 0);
+        clickOn("#showChatButton");
+        assertEquals(chat.getOpacity(), 1);
+        moveTo("Test1");
+        clickOn("#showChatButton");
+        assertEquals(chat.getOpacity(), 0);
     }
 }
