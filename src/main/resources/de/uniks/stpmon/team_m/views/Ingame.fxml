@@ -13,8 +13,8 @@
 <?import javafx.scene.text.Font?>
 
 <VBox fx:id="ingameVBox" alignment="CENTER_LEFT" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
-    <StackPane onMouseClicked="#paneClicked" style="-fx-background-color: black;" VBox.vgrow="ALWAYS">
-        <VBox alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+    <StackPane fx:id="ingameStackPane" onMouseClicked="#paneClicked" style="-fx-background-color: black;" VBox.vgrow="ALWAYS">
+        <VBox fx:id="ingameVBoxPlayer" alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
             <ImageView fx:id="playerSpriteImageView" fitHeight="30.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" />
         </VBox>
         <BorderPane fx:id="borderPane">
