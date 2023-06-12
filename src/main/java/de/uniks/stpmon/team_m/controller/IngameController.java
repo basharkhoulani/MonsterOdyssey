@@ -95,8 +95,6 @@ public class IngameController extends Controller {
     PresetsService presetsService;
     @Inject
     MessageService messageService;
-    @Inject
-    TrainersService trainersService;
     GraphicsContext graphicsContext;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     private boolean isChatting = false;
@@ -140,14 +138,14 @@ public class IngameController extends Controller {
     public void init() {
         super.init();
         // Image arrays for sprite animations
-        trainerStandingDown = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "down", false);
-        trainerStandingUp = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "up", false);
-        trainerStandingLeft = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "left", false);
-        trainerStandingRight = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "right", false);
-        trainerWalkingUp = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "up", true);
-        trainerWalkingDown = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "down", true);
-        trainerWalkingLeft = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "left", true);
-        trainerWalkingRight = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), "right", true);
+        trainerStandingDown = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), 2, false);
+        trainerStandingUp = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), 0, false);
+        trainerStandingLeft = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), 3, false);
+        trainerStandingRight = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), 1, false);
+        trainerWalkingUp = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), 0, true);
+        trainerWalkingDown = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), 2, true);
+        trainerWalkingLeft = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), 3, true);
+        trainerWalkingRight = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), 1, true);
     }
 
     /**
@@ -206,34 +204,15 @@ public class IngameController extends Controller {
         if (!GraphicsEnvironment.isHeadless()) {
             trainerSpriteAnimation.start();
         }
-        playerSpriteImageView.setScaleX(2.0);
-        playerSpriteImageView.setScaleY(2.0);
-
-        // Get images for the stand animation of the trainers direction
-        Image[] initialImages;
-        switch (trainerStorageProvider.get().getDirection()) {
-            case 0 -> initialImages = trainerStandingUp;
-            case 1 -> initialImages = trainerStandingLeft;
-            case 3 -> initialImages = trainerStandingRight;
-            default -> initialImages = trainerStandingDown;
-        }
-
-        // Create and start standing animation
-        trainerSpriteAnimation = new SpriteAnimation(DELAY_LONG, playerSpriteImageView, initialImages);
-        if (!GraphicsEnvironment.isHeadless()) {
-            trainerSpriteAnimation.start();
-        }
-
 
         playerSpriteImageView.setScaleX(SCALE_FACTOR);
         playerSpriteImageView.setScaleY(SCALE_FACTOR);
-        app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, evt -> {
-            if (isChatting) {
-                return;
-            }
 
         // Initialize key event listeners
         keyPressedHandler = event -> {
+            if (isChatting) {
+                return;
+            }
             if (lastKeyEventTimeStamp != null) {
                 if (System.currentTimeMillis() - lastKeyEventTimeStamp < DELAY) {
                     return;
@@ -280,7 +259,11 @@ public class IngameController extends Controller {
             }
         };
 
+
         keyReleasedHandler = event -> {
+            if (isChatting) {
+                return;
+            }
             if ((event.getCode() == KeyCode.W)) {
                 stay(0);
             }
@@ -306,6 +289,7 @@ public class IngameController extends Controller {
         return parent;
     }
 
+
     /**
      * This method is used to play the stay animation for the given direction for the trainer character
      *
@@ -322,7 +306,8 @@ public class IngameController extends Controller {
                 case 1 -> trainerSpriteAnimation.setImages(trainerStandingRight);
                 case 2 -> trainerSpriteAnimation.setImages(trainerStandingDown);
                 case 3 -> trainerSpriteAnimation.setImages(trainerStandingLeft);
-                default -> {}
+                default -> {
+                }
             }
         }
     }
@@ -523,10 +508,20 @@ public class IngameController extends Controller {
     /**
      * loadPlayer is used to load the player on the map. It loads the image of the player and sets its position.
      */
-
-
     private void loadPlayer(Trainer trainer) {
-        graphicsContext.drawImage(playerSpriteImageView.getImage(), trainer.x() * TILE_SIZE, trainer.y() * TILE_SIZE);
+        // Other player characters
+        String path;
+        if (trainer.image().contains("Premade_Character")) {
+            path = Objects.requireNonNull(Main.class.getResource("charactermodels/" + trainer.image())).toString();
+        }
+        // NPC characters
+        else {
+            // TODO: Add ressources needed for NPCs
+            path = Objects.requireNonNull(Main.class.getResource("charactermodels/" + trainerStorageProvider.get().getTrainerSprite())).toString();
+        }
+        Image chunk = new Image(path);
+        Image[] images = ImageProcessor.cropTrainerImages(chunk, trainer.direction(), false);
+        graphicsContext.drawImage(images[0], trainer.x() * TILE_SIZE, trainer.y() * TILE_SIZE);
     }
 
     /**
@@ -807,11 +802,12 @@ public class IngameController extends Controller {
         }
         return null;
     }
-    public void setTrainerSpriteImageView (Trainer trainer, ImageView imageView) {
+
+    public void setTrainerSpriteImageView(Trainer trainer, ImageView imageView) {
         if (!GraphicsEnvironment.isHeadless()) {
             disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
                         Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
-                        Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, "down", false);
+                        Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, 2, false);
                         imageView.setImage(character[0]);
                     }, error -> showError(error.getMessage())
             ));
