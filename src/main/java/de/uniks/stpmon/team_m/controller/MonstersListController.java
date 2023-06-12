@@ -25,7 +25,7 @@ import java.util.List;
 
 
 public class MonstersListController extends Controller{
-    @FXML
+
     public ListView<Monster> monsterListView;
     @Inject
     Provider<TrainersService> trainersServiceProvider;

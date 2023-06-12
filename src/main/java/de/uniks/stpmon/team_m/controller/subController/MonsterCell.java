@@ -128,9 +128,5 @@ public class MonsterCell extends ListCell<Monster> {
             }
         }
     }
-
-    public void destroy() {
-        disposables.clear();
-    }
 }
 

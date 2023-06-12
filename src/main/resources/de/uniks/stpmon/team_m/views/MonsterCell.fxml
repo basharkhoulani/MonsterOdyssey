@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="rootmonsterHBox" maxWidth="350.0" prefHeight="122.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.MonsterCell">
+<HBox fx:id="rootmonsterHBox" maxWidth="350.0" prefHeight="100.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.MonsterCell">
    <ImageView fx:id="monsterImageView" fitHeight="120.0" fitWidth="106.0" pickOnBounds="true" preserveRatio="true" />
     <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
         <VBox fx:id="monsterVBox" maxWidth="300.0" VBox.vgrow="ALWAYS">

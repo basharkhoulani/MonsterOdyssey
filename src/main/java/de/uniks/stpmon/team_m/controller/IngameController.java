@@ -624,6 +624,7 @@ public class IngameController extends Controller {
         alert.setGraphic(null);
         alert.setContentText(resources.getString("PAUSE.MENU.LABEL"));
         alert.initStyle(StageStyle.UNDECORATED);
+        alert.initOwner(app.getStage());
         dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);
 
         Optional<ButtonType> result = alert.showAndWait();
@@ -645,6 +646,7 @@ public class IngameController extends Controller {
         trainerSettingsDialog.getDialogPane().setExpandableContent(null);
         trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
         trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");
+        trainerSettingsDialog.initOwner(app.getStage());
         Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();
         popUp.setOnCloseRequest(evt -> {
                     ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close();
@@ -773,6 +775,7 @@ public class IngameController extends Controller {
         monstersListControllerProvider.get().setValues(resources, preferences, resourceBundleProvider, this, app);
         monstersDialog.setTitle(resources.getString("MONSTERS"));
         monstersDialog.getDialogPane().setContent(monstersListControllerProvider.get().render());
+        monstersDialog.initOwner(app.getStage());
         monstersDialog.showAndWait();
     }
 }
