@@ -88,14 +88,8 @@ public class MonstersListController extends Controller{
     }
 
     private void initMonsterList() {
-        Monster monster1 = new Monster("TestCreated", "TestUpdated", "123456789", "Me", 1, 2, 2, new LinkedHashMap<String, Integer>(), new MonsterAttributes(10, 5, 5, 5), new MonsterAttributes(10, 3, 3, 3));
-        Monster monster2 = new Monster("TestCreated2", "TestUpdated2", "123456788", "Me", 1, 2, 2, new LinkedHashMap<String, Integer>(), new MonsterAttributes(10, 5, 5, 5), new MonsterAttributes(10, 3, 3, 3));
-        MonsterTypeDto monsterTypeDto = new MonsterTypeDto(20,"Monster1","bild", new ArrayList<>(),"hallo");
-        List<Monster> monsters = new ArrayList<>();
-        monsters.add(monster1);
-        monsters.add(monster2);
         monsterListView.setCellFactory(param -> new MonsterCell(resources));
-        monsterListView.getItems().addAll(monsters);
+        monsterListView.getItems().addAll(trainerStorageProvider.get().getMonsters());
     }
 
 
