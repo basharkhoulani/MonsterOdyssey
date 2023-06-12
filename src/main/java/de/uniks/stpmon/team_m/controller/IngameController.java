@@ -44,6 +44,7 @@ import javafx.util.Duration;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
+import java.security.ProviderException;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
@@ -103,6 +104,8 @@ public class IngameController extends Controller {
     TrainerStorage trainerStorage;
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
+    @Inject
+    Provider<MonstersListController> monstersListControllerProvider;
     private final ObservableList<MoveTrainerDto> moveTrainerDtos = FXCollections.observableArrayList();
     HashMap<String, Image> tileSetImages = new HashMap<>();
     private Timeline spriteWalkingAnimation;
@@ -131,8 +134,7 @@ public class IngameController extends Controller {
     @Override
     public void init() {
         super.init();
-        monstersListController = new MonstersListController();
-        monstersListController.init();
+
         // Image arrays for sprite animations
         trainerStandingDown = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "down", false);
         trainerStandingUp = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), "up", false);
@@ -374,6 +376,7 @@ public class IngameController extends Controller {
         disposables.add(areasService.getArea(region._id(), region.spawn().area()).observeOn(FX_SCHEDULER)
                 .subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
         canvas.requestFocus();
+        monstersListControllerProvider.get().init();
         return parent;
     }
 
@@ -756,14 +759,15 @@ public class IngameController extends Controller {
     }
 
     public void showMonsters(){
+
         Dialog<?> monstersDialog = new Dialog<>();
         monstersDialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         Node closeButton = monstersDialog.getDialogPane().lookupButton(ButtonType.CLOSE);
         closeButton.managedProperty().bind(closeButton.visibleProperty());
         closeButton.setVisible(false);
-        monstersListController.setValues(resources, preferences, resourceBundleProvider, this, app);
+        monstersListControllerProvider.get().setValues(resources, preferences, resourceBundleProvider, this, app);
         monstersDialog.setTitle(resources.getString("MONSTERS"));
-        monstersDialog.getDialogPane().setContent(monstersListController.render());
+        monstersDialog.getDialogPane().setContent(monstersListControllerProvider.get().render());
         monstersDialog.showAndWait();
     }
 }

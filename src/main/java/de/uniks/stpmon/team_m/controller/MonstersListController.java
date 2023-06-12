@@ -66,6 +66,13 @@ public class MonstersListController extends Controller{
     @Override
     public void init() {
         super.init();
+        disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id())
+                .subscribe(monsters -> {
+                    trainerStorageProvider.get().setMonsters(new ArrayList<>(monsters));
+                }, throwable -> {
+                    showError(throwable.getMessage());
+                    throwable.printStackTrace();
+                }));
     }
 
     @Override

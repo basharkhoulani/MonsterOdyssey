@@ -1,11 +1,13 @@
 package de.uniks.stpmon.team_m.utils;
 
+import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import javafx.scene.image.Image;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.List;
 
 
 @Singleton
@@ -19,6 +21,7 @@ public class TrainerStorage {
     private Trainer trainer;
     private String trainerImageUrl;
     private Image trainerSpriteChunk;
+    private List<Monster> monsters;
 
     @Inject
     public TrainerStorage() {
@@ -83,5 +86,13 @@ public class TrainerStorage {
 
     public void setDirection(int direction) {
         this.direction = direction;
+    }
+
+    public List<Monster> getMonsters() {
+        return monsters;
+    }
+
+    public void setMonsters(List<Monster> monsters) {
+        this.monsters = monsters;
     }
 }
