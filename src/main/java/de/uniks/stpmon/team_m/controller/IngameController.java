@@ -633,6 +633,7 @@ public class IngameController extends Controller {
             alert.close();
             app.getStage().getScene().setOnKeyPressed(null);
             app.getStage().getScene().setOnKeyReleased(null);
+            destroy();
             app.show(mainMenuControllerProvider.get());
         }
     }
@@ -717,6 +718,11 @@ public class IngameController extends Controller {
                     final Message message = event.data();
                     switch (event.suffix()) {
                         case "created" -> {
+                            for (Message m : messages) {
+                                if (m._id().equals(message._id())) {
+                                    return;
+                                }
+                            }
                             messages.add(message);
                             chatListView.scrollTo(chatListView.getItems().size() - 1);
                         }
@@ -759,7 +765,6 @@ public class IngameController extends Controller {
     }
 
     public void showMonsters(){
-
         Dialog<?> monstersDialog = new Dialog<>();
         monstersDialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         Node closeButton = monstersDialog.getDialogPane().lookupButton(ButtonType.CLOSE);
