@@ -17,7 +17,6 @@ import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -104,12 +103,10 @@ public class IngameController extends Controller {
     public int viewOrderCanvas = 10000;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     private boolean isChatting = false;
-    private String regionId;
     private final ObservableList<MoveTrainerDto> moveTrainerDtos = FXCollections.observableArrayList();
     HashMap<String, Image> tileSetImages = new HashMap<>();
     private Timeline spriteWalkingAnimation;
     private Timeline spriteStandingAnimation;
-    private Timeline mapMovementTransition;
     private Image[] trainerStandingDown;
     private Image[] trainerStandingUp;
     private Image[] trainerStandingLeft;
@@ -383,8 +380,9 @@ public class IngameController extends Controller {
      * @param isWalking      determines if the walking - or standing animation is requested.
      */
     private Timeline getSpriteAnimationTimeLine(Image[] movementImages, Boolean isWalking) {
+        Timeline timeline;// Calculate the index of the next image
         if (isWalking) {
-            Timeline timeline = new Timeline(
+            timeline = new Timeline(
                     new KeyFrame(Duration.millis(66), e -> {
                         // Calculate the index of the next image
                         int currentIndex = (int) (System.currentTimeMillis() / 66 % 6);
@@ -392,9 +390,8 @@ public class IngameController extends Controller {
                     })
             );
             timeline.setCycleCount(2);
-            return timeline;
         } else {
-            Timeline timeline = new Timeline(
+            timeline = new Timeline(
                     new KeyFrame(Duration.millis(300), e -> {
                         // Calculate the index of the next image
                         int currentIndex = (int) (System.currentTimeMillis() / 300 % 6);
@@ -402,24 +399,9 @@ public class IngameController extends Controller {
                     })
             );
             timeline.setCycleCount(Animation.INDEFINITE);
-            return timeline;
         }
+        return timeline;
     }
-
-    private Timeline getMapMovementTransition(Canvas map, Double x, Double y) {
-        return new Timeline(
-                new KeyFrame(Duration.millis(1), e -> {
-                    TranslateTransition translateTransition = new TranslateTransition();
-                    translateTransition.setDuration(Duration.millis(10));
-                    translateTransition.setNode(map);
-                    translateTransition.setByX(x);
-                    translateTransition.setByY(y);
-                    translateTransition.play();
-
-                })
-        );
-    }
-
 
     public void listenToMovement(ObservableList<MoveTrainerDto> moveTrainerDtos, String area) {
         disposables.add(udpEventListenerProvider.get().listen("areas." + area + ".trainers.*.*", MoveTrainerDto.class)
@@ -456,16 +438,6 @@ public class IngameController extends Controller {
     }
 
     /**
-     * loadPlayer is used to load the player on the map. It loads the image of the player and sets its position.
-     */
-
-    private void loadPlayer() {
-        //final Trainer trainer = trainerStorageProvider.get().getTrainer();
-        //Image image = new Image(Objects.requireNonNull(App.class.getResource("images/character.png")).toString());
-        //graphicsContext.drawImage(image, trainer.x() * TILE_SIZE, trainer.y() * TILE_SIZE);
-    }
-
-    /**
      * afterAllTileSetsLoaded is used to render the map. It renders every chunk of every layer of every tileset. After
      * rendering the map, it calls loadPlayer to load the player on the map.
      *
@@ -480,7 +452,6 @@ public class IngameController extends Controller {
                 renderMap(map, tileSetImages.get(getFileName(tileSet.source())),
                         tileSet, map.tilesets().size() > 1);
             }
-            loadPlayer();
         }
     }
 
@@ -653,11 +624,6 @@ public class IngameController extends Controller {
             app.show(mainMenuControllerProvider.get());
         }
     }
-
-    public void setRegion(String regionId) {
-        this.regionId = regionId;
-    }
-
 
     public void showTrainerSettings() {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
