@@ -2,24 +2,23 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.WelcomeSceneController;
-import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
-import io.reactivex.rxjava3.core.Observable;
-import javafx.scene.control.RadioButton;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import javax.inject.Provider;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import javax.inject.Provider;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,22 +29,19 @@ public class CharacterSelectionControllerTest extends ApplicationTest {
     Provider<WelcomeSceneController> welcomeSceneControllerProvider;
     @Mock
     Provider<TrainerStorage> trainerStorageProvider;
-    @Mock
-    Provider<PresetsService> presetsServiceProvider;
     @Spy
     App app = new App(null);
 
     @Override
     public void start(Stage stage) {
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        characterSelectionController.setValues(bundle, null, null, characterSelectionController, app);
         final WelcomeSceneController welcomeSceneController = mock(WelcomeSceneController.class);
         when(welcomeSceneControllerProvider.get()).thenReturn(welcomeSceneController);
         doNothing().when(app).show(welcomeSceneController);
 
         final TrainerStorage trainerStorage = mock(TrainerStorage.class);
-        final PresetsService presetsService = mock(PresetsService.class);
         when(trainerStorageProvider.get()).thenReturn(trainerStorage);
-        when(presetsServiceProvider.get()).thenReturn(presetsService);
-        when(presetsService.getCharacter(ArgumentMatchers.anyString())).thenReturn(Observable.empty());
 
         app.start(stage);
         app.show(characterSelectionController);
@@ -58,16 +54,14 @@ public class CharacterSelectionControllerTest extends ApplicationTest {
         verify(app).show(welcomeSceneControllerProvider.get());
         clickOn("Next");
 
-        RadioButton radioButton1 = lookup("#character1RadioButton").query();
-        RadioButton radioButton2 = lookup("#character2RadioButton").query();
+        ImageView arrowLeft = lookup("#arrowLeft").query();
+        ImageView arrowRight = lookup("#arrowRight").query();
 
-        assertTrue(radioButton1.isSelected());
-        assertFalse(radioButton2.isSelected());
-        clickOn(radioButton2);
-        assertTrue(radioButton2.isSelected());
-        assertFalse(radioButton1.isSelected());
-        clickOn(radioButton1);
-
+        String firstCharacter = characterSelectionController.selectedCharacter;
+        clickOn(arrowLeft);
+        assertNotEquals(firstCharacter, characterSelectionController.selectedCharacter);
+        clickOn(arrowRight);
+        assertEquals(firstCharacter, characterSelectionController.selectedCharacter);
+        clickOn("Next");
     }
-
 }

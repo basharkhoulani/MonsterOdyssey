@@ -2,7 +2,9 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.CharacterSelectionController;
 import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -47,6 +49,8 @@ public class WelcomeSceneController extends Controller {
     @Inject
     TrainerStorage trainerStorage;
 
+    @Inject
+    Provider<PresetsService> presetsServiceProvider;
 
     @Inject
     public WelcomeSceneController() {
@@ -159,6 +163,16 @@ public class WelcomeSceneController extends Controller {
                         trainerStorage.getTrainerSprite()
                 ).observeOn(FX_SCHEDULER).subscribe(result -> {
                             trainerStorage.setTrainer(result);
+                            disposables.add(presetsServiceProvider.get().getCharacter(result.image()).observeOn(FX_SCHEDULER).subscribe(
+                                    response -> {
+                                        trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
+                                        app.show(ingameControllerProvider.get());
+                                    },
+                                    error -> {
+                                        showError(error.getMessage());
+                                        error.printStackTrace();
+                                    }
+                            ));
                             app.show(ingameControllerProvider.get());
                         }, error -> showError(error.getMessage())
                 ));

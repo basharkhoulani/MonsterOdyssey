@@ -64,7 +64,7 @@ class EditGroupControllerTest extends ApplicationTest {
         when(userStorageProvider.get()).thenReturn(userStorage);
         groupStorage.set_id("645f8d731c386bcd2204da39");
         groupStorage.setName("TestGroup");
-        groupStorage.setMembers(List.of("6475e6121a0f21b9cd9fa708", "6475e6259cb7e1e7606c0dc6"));
+        groupStorage.setMembers(List.of("6475e6121a0f21b9cd9fa708"));
         userStorage.set_id("6475e51abff65ded36a854ae");
         userStorage.setFriends(List.of("6475e6121a0f21b9cd9fa708"));
         when(usersService.getUsers(any(), any())).thenReturn(Observable.just(List.of(
@@ -99,6 +99,7 @@ class EditGroupControllerTest extends ApplicationTest {
     @Test
     void errorAlertTest() {
         when(groupService.delete(any())).thenReturn(Observable.error(new Exception("Test")));
+        groupStorage.setMembers(List.of());
         clickOn("Delete group");
         clickOn(ButtonType.YES.getText());
         clickOn("Something went wrong! Please try again later!");
