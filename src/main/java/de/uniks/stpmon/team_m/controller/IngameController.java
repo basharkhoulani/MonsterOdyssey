@@ -237,6 +237,7 @@ public class IngameController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
+        ingameStackPane.getChildren().add(canvasGround);
         trainerStorageProvider.get().setX(trainerStorageProvider.get().getTrainer().x());
         trainerStorageProvider.get().setY(trainerStorageProvider.get().getTrainer().y());
         trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());
@@ -318,58 +319,9 @@ public class IngameController extends Controller {
             }
 
         });
-        /*
-        app.getStage().getScene().setOnKeyPressed(event -> {
-
-            if ((event.getCode() == PAUSE_MENU_KEY)) {
-                pauseGame();
-            }
-            if ((event.getCode() == KeyCode.W)) {
-                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
-                        trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() + 1, 0)).subscribe(
-                        res -> {
-                            playSpriteAnimation(trainerWalkingUp, trainerStandingUp[0]);
-                            // move camera/map down
-                        }
-                ));
-            }
-            if ((event.getCode() == KeyCode.A)) {
-                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
-                        trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX() - 1, trainerStorageProvider.get().getY(), 1)).subscribe(
-                        res -> {
-                            playSpriteAnimation(trainerWalkingLeft, trainerStandingLeft[0]);
-                            // move camera/map right
-                        }
-                ));
-            }
-            if ((event.getCode() == KeyCode.S)) {
-                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
-                        trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() - 1, 2)).subscribe(
-                        res -> {
-                            playSpriteAnimation(trainerWalkingDown, trainerStandingDown[0]);
-                            // move camera/map up
-                        }
-                ));
-            }
-            if ((event.getCode() == KeyCode.D)) {
-                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
-                        trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 3)).subscribe(
-                        res -> {
-                            playSpriteAnimation(trainerWalkingRight, trainerStandingRight[0]);
-                            // move camera/map left
-                        }
-                ));
-            }
-        });
-         */
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER)
                 .subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
-        canvasGround.requestFocus();
         return parent;
     }
 
@@ -476,7 +428,6 @@ public class IngameController extends Controller {
             ingameVBoxPlayer.setViewOrder(--viewOrderCanvas);
             canvasList.add(canvasGround);
             GraphicsContext graphicsContext = canvasGround.getGraphicsContext2D();
-            ingameStackPane.getChildren().add(canvasGround);
             Layer layer = map.layers().get(0);
             for (Chunk chunk : layer.chunks()) {
                 renderChunk(graphicsContext, map, image, tileSet, multipleTileSets, chunk);
