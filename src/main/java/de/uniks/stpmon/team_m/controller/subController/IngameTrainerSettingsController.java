@@ -10,6 +10,8 @@ import de.uniks.stpmon.team_m.service.RegionsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import javafx.fxml.FXML;
@@ -27,6 +29,8 @@ import javax.inject.Provider;
 import java.awt.*;
 import java.util.Objects;
 import javax.inject.Singleton;
+
+import java.text.MessageFormat;
 import java.util.Optional;
 
 @Singleton
@@ -87,15 +91,15 @@ public class IngameTrainerSettingsController extends Controller {
     public void onDeleteTrainerButtonClick() {
         final Alert alert = new Alert(Alert.AlertType.WARNING);
         final DialogPane dialogPane = alert.getDialogPane();
-        final ButtonType cancelButton = new ButtonType(resources.getString("Cancel"));
+        final ButtonType cancelButton = new ButtonType(resources.getString("CANCEL"));
         final ButtonType okButton = alert.getButtonTypes().stream()
                         .filter(buttonType -> buttonType.getButtonData().isDefaultButton()).findFirst().orElse(null);
 
         dialogPane.getButtonTypes().addAll(cancelButton);
 
-        final Button cancelButton2 = (Button) alert.getDialogPane().lookupButton(cancelButton);
-        final Button okButton2 = (Button) alert.getDialogPane().lookupButton(okButton);
-        okButton2.setOnAction(event -> onCancelButtonClick());
+        final String trainerName = trainerStorageProvider.get().getTrainer().name();
+        final String deleteTrainerText = resources.getString("DELETE.TRAINER.TEXT");
+        dialogPane.setContentText(MessageFormat.format(deleteTrainerText, trainerName));
 
         alert.setTitle(resources.getString("DELETE.YOUR.TRAINER"));
 
@@ -103,9 +107,20 @@ public class IngameTrainerSettingsController extends Controller {
         if (result.isPresent() && result.get() == cancelButton) {
             alert.close();
         } else if (result.isPresent() && result.get() == okButton) {
-            app.show(mainMenuControllerProvider.get());
+            onCancelButtonClick();
+            disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).
+                    observeOn(FX_SCHEDULER).subscribe(end -> {
+                        trainerStorageProvider.get().setTrainer(null);
+                        trainerStorageProvider.get().setTrainerSprite(null);
+                        trainerStorageProvider.get().setTrainerName(null);
+                        trainerStorageProvider.get().setRegion(null);
+                    }, error -> this.showError(error.getMessage())));
+            MainMenuController mainMenuController = mainMenuControllerProvider.get();
+            mainMenuController.setTrainerDeletion();
+            app.show(mainMenuController);
             alert.close();
         }
+
     }
 
     private void loadAndSetTrainerImage() {
