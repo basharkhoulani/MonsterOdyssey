@@ -5,26 +5,25 @@ import de.uniks.stpmon.team_m.controller.MonstersDetailController;
 import de.uniks.stpmon.team_m.controller.MonstersListController;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
-import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.control.Label;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -47,7 +46,7 @@ public class MonsterCell extends ListCell<Monster> {
 
     @FXML
     HBox rootmonsterHBox;
-    private ResourceBundle resources;
+    private final ResourceBundle resources;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
 
@@ -65,13 +64,8 @@ public class MonsterCell extends ListCell<Monster> {
     Provider<MonstersListController> monstersListControllerProvider;
     private FXMLLoader loader;
 
-    private final ObservableList<Monster> allMonsters = FXCollections.observableArrayList();
     protected final CompositeDisposable disposables = new CompositeDisposable();
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
-    private String regionId;
-    private String trainerId;
-    private Trainer trainer;
-    private Monster monster;
     private MonsterTypeDto monsterTypeDto;
     private Image monsterImage;
 
@@ -98,7 +92,12 @@ public class MonsterCell extends ListCell<Monster> {
                         }
                         this.monsterType.setText(type.toString());
                     }, Throwable::printStackTrace));
-            monsterLevel.setText("" + monster.level());
+            monsterLevel.setText("Level: " + monster.level());
+            disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
+                    .subscribe(monsterImage -> {
+                        this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
+                        monsterImageView.setImage(this.monsterImage);
+                    }, Throwable::printStackTrace));
             rootmonsterHBox.setOnMouseClicked(event -> {
                 showDetails(monster);
             });
@@ -128,6 +127,10 @@ public class MonsterCell extends ListCell<Monster> {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void destroy() {
+        disposables.clear();
     }
 }
 

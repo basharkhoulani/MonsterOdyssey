@@ -337,7 +337,7 @@ public class TestModule {
             }
 
             @Override
-            public Observable<ResponseBody> getMonsterImage(String id) {
+            public Observable<ResponseBody> getMonsterImage(int id) {
                 return null;
             }
 

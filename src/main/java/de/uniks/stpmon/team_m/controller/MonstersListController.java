@@ -25,31 +25,22 @@ import java.util.List;
 
 
 public class MonstersListController extends Controller{
-
     @FXML
     public ListView<Monster> monsterListView;
-
     @Inject
     Provider<TrainersService> trainersServiceProvider;
-
     @Inject
     Provider<MonstersDetailController> monstersDetailControllerProvider;
-
     @Inject
     UsersService usersService;
-
     @Inject
     RegionsService regionsService;
-
     @Inject
     TrainersService trainersService;
-
     @Inject
     MonstersService monstersService;
-
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
-
     @Inject
     Provider<UserStorage> userStorageProvider;
     @Inject
@@ -74,6 +65,7 @@ public class MonstersListController extends Controller{
                     showError(throwable.getMessage());
                     throwable.printStackTrace();
                 }));
+
     }
 
     @Override
@@ -101,6 +93,4 @@ public class MonstersListController extends Controller{
         }
         return null;
     }
-
-
 }
