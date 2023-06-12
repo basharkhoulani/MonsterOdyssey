@@ -92,8 +92,12 @@ public class MonsterCell extends ListCell<Monster> {
                     .subscribe(monsterType -> {
                         monsterTypeDto = monsterType;
                         monsterName.setText(monsterTypeDto.name());
+                        StringBuilder type = new StringBuilder("Type: ");
+                        for (String s : monsterTypeDto.type()) {
+                            type.append(s).append(" ");
+                        }
+                        this.monsterType.setText(type.toString());
                     }, Throwable::printStackTrace));
-            monsterType.setText("" + monster.type());
             monsterLevel.setText("" + monster.level());
             rootmonsterHBox.setOnMouseClicked(event -> {
                 showDetails(monster);
