@@ -22,6 +22,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -767,15 +768,11 @@ public class IngameController extends Controller {
     }
 
     public void showMonsters(){
-        Dialog<?> monstersDialog = new Dialog<>();
-        monstersDialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-        Node closeButton = monstersDialog.getDialogPane().lookupButton(ButtonType.CLOSE);
-        closeButton.managedProperty().bind(closeButton.visibleProperty());
-        closeButton.setVisible(false);
-        monstersListControllerProvider.get().setValues(resources, preferences, resourceBundleProvider, this, app);
-        monstersDialog.setTitle(resources.getString("MONSTERS"));
-        monstersDialog.getDialogPane().setContent(monstersListControllerProvider.get().render());
-        monstersDialog.initOwner(app.getStage());
-        monstersDialog.showAndWait();
+        Scene scene = new Scene(monstersListControllerProvider.get().render());
+        Stage popupStage = new Stage();
+        popupStage.initOwner(app.getStage());
+        popupStage.setScene(scene);
+        popupStage.setTitle(resources.getString("MONSTERS"));
+        popupStage.show();
     }
 }

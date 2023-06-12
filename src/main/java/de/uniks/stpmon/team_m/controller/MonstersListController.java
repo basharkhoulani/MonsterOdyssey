@@ -19,9 +19,11 @@ import javafx.scene.image.Image;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 
 
 public class MonstersListController extends Controller{
@@ -76,6 +78,9 @@ public class MonstersListController extends Controller{
     @Override
     public Parent render() {
         final Parent parent = super.render();
+        if (!GraphicsEnvironment.isHeadless()) {
+            parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../styles.css")).toExternalForm());
+        }
         initMonsterList();
         return parent;
     }
@@ -83,6 +88,8 @@ public class MonstersListController extends Controller{
     private void initMonsterList() {
         monsterListView.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get()));
         monsterListView.getItems().addAll(trainerStorageProvider.get().getMonsters());
+        monsterListView.setFocusModel(null);
+        monsterListView.setSelectionModel(null);
     }
 
     public MonsterTypeDto getMonsterTypeDto(int id) {
