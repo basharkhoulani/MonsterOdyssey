@@ -2,14 +2,22 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.subController.IngameMessageCell;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AreasService;
+import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.SpriteAnimation;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import de.uniks.stpmon.team_m.ws.EventListener;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
@@ -21,13 +29,14 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -62,8 +71,20 @@ public class IngameController extends Controller {
     public Canvas canvas;
     @FXML
     public VBox ingameVBox;
+    @FXML
+    public TextField messageField;
+    @FXML
+    public Button showChatButton;
+    @FXML
+    public Button sendMessageButton;
+    @FXML
+    public ListView<Message> chatListView;
+    @FXML
+    public BorderPane borderPane;
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
+    @Inject
+    Provider<EventListener> eventListener;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
@@ -72,8 +93,13 @@ public class IngameController extends Controller {
     AreasService areasService;
     @Inject
     PresetsService presetsService;
+    @Inject
+    MessageService messageService;
+    @Inject
+    TrainersService trainersService;
     GraphicsContext graphicsContext;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
+    private boolean isChatting = false;
 
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
@@ -95,6 +121,8 @@ public class IngameController extends Controller {
     private Image[] trainerWalkingDown;
     private Image[] trainerWalkingLeft;
     private Image[] trainerWalkingRight;
+    private final ObservableList<Message> messages = FXCollections.observableArrayList();
+    private ObservableList<Trainer> trainers;
 
     private Long lastKeyEventTimeStamp;
     private EventHandler<KeyEvent> keyReleasedHandler;
@@ -148,6 +176,39 @@ public class IngameController extends Controller {
         trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());
         listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
 
+        // Setup trainers
+        disposables.add(trainersService.getTrainers(trainerStorageProvider.get().getRegion()._id(), null, null).observeOn(FX_SCHEDULER).subscribe(
+                trainers -> {
+                    this.trainers = FXCollections.observableArrayList(trainers);
+                    listenToTrainers(this.trainers);
+                }, error -> showError(error.getMessage())));
+
+        // Setup chat
+        messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
+        listenToMessages(trainerStorageProvider.get().getTrainer().region());
+        chatListView.setItems(messages);
+        chatListView.setCellFactory(param -> new IngameMessageCell(this));
+        chatListView.setPlaceholder(new Label(resources.getString("NO.MESSAGES.YET")));
+        chatListView.setFocusModel(null);
+        chatListView.setSelectionModel(null);
+
+        // Get images for the stand animation of the trainers direction
+        Image[] initialImages;
+        switch (trainerStorageProvider.get().getDirection()) {
+            case 0 -> initialImages = trainerStandingUp;
+            case 1 -> initialImages = trainerStandingLeft;
+            case 3 -> initialImages = trainerStandingRight;
+            default -> initialImages = trainerStandingDown;
+        }
+
+        // Create and start standing animation
+        trainerSpriteAnimation = new SpriteAnimation(DELAY_LONG, playerSpriteImageView, initialImages);
+        if (!GraphicsEnvironment.isHeadless()) {
+            trainerSpriteAnimation.start();
+        }
+        playerSpriteImageView.setScaleX(2.0);
+        playerSpriteImageView.setScaleY(2.0);
+
         // Get images for the stand animation of the trainers direction
         Image[] initialImages;
         switch (trainerStorageProvider.get().getDirection()) {
@@ -166,6 +227,10 @@ public class IngameController extends Controller {
 
         playerSpriteImageView.setScaleX(SCALE_FACTOR);
         playerSpriteImageView.setScaleY(SCALE_FACTOR);
+        app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, evt -> {
+            if (isChatting) {
+                return;
+            }
 
         // Initialize key event listeners
         keyPressedHandler = event -> {
@@ -237,6 +302,7 @@ public class IngameController extends Controller {
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER)
                 .subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
+        canvas.requestFocus();
         return parent;
     }
 
@@ -391,6 +457,11 @@ public class IngameController extends Controller {
      */
 
     private void loadMap(Map map) {
+        app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);
+        app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
+        if (GraphicsEnvironment.isHeadless()) {
+            return;
+        }
         tileSetImages.clear();
         for (TileSet tileSet : map.tilesets()) {
             final String mapName = getFileName(tileSet.source());
@@ -634,9 +705,116 @@ public class IngameController extends Controller {
             trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");
         }
         Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();
-        popUp.setOnCloseRequest(evt ->
-                ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close()
+        popUp.setOnCloseRequest(evt -> {
+                    ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close();
+                    canvas.requestFocus();
+                }
         );
         trainerSettingsDialog.showAndWait();
+    }
+
+    public void sendMessageButton() {
+        sendMessage();
+    }
+
+    private void sendMessage() {
+        if (messageField.getText().isEmpty()) {
+            canvas.requestFocus();
+            isChatting = false;
+            return;
+        }
+        String regionID = trainerStorageProvider.get().getRegion()._id();
+        if (regionID != null) {
+            String messageBody = messageField.getText();
+            disposables.add(messageService.newMessage(regionID, messageBody, MESSAGE_NAMESPACE_REGIONS).observeOn(FX_SCHEDULER).subscribe(message -> {
+                messageField.setText(EMPTY_STRING);
+                isChatting = false;
+                canvas.requestFocus();
+            }, error -> showError(error.getMessage())));
+        }
+    }
+
+    private void enterButtonPressedToSend(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            event.consume();
+            sendMessage();
+        }
+    }
+
+    public void paneClicked() {
+        canvas.requestFocus();
+        isChatting = false;
+    }
+
+    public void messageFieldClicked() {
+        messageField.requestFocus();
+        isChatting = true;
+    }
+
+    public void showChat() {
+        if (chatListView.getOpacity() == ZERO) {
+            chatListView.setOpacity(ONE);
+        } else {
+            chatListView.setOpacity(ZERO);
+        }
+    }
+
+    public void listenToTrainers(ObservableList<Trainer> trainers) {
+        disposables.add(eventListenerProvider.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers.*.*", Trainer.class).observeOn(FX_SCHEDULER).subscribe(event -> {
+                    final Trainer trainer = event.data();
+                    switch (event.suffix()) {
+                        case "created" -> trainers.add(trainer);
+                        case "updated" -> updateTrainer(trainers, trainer);
+                        case "deleted" -> trainers.removeIf(t -> t._id().equals(trainer._id()));
+                    }
+                }, error -> showError(error.getMessage()))
+        );
+    }
+
+    public void listenToMessages(String id) {
+        disposables.add(eventListener.get().listen("regions." + id + ".messages.*.*", Message.class)
+                .observeOn(FX_SCHEDULER).subscribe(event -> {
+                    final Message message = event.data();
+                    switch (event.suffix()) {
+                        case "created" -> {
+                            messages.add(message);
+                            chatListView.scrollTo(chatListView.getItems().size() - 1);
+                        }
+                        case "updated" -> updateMessage(messages, message);
+                        case "deleted" -> messages.removeIf(m -> m._id().equals(message._id()));
+                    }
+                }, error -> showError(error.getMessage())));
+    }
+
+    private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {
+        String trainerId = trainer._id();
+        trainers.stream().filter(t -> t._id().equals(trainerId)).findFirst().ifPresent(t -> trainers.set(trainers.indexOf(t), trainer));
+    }
+
+    private void updateMessage(ObservableList<Message> messages, Message message) {
+        String messageID = message._id();
+        messages.stream()
+                .filter(m -> m._id().equals(messageID))
+                .findFirst()
+                .ifPresent(m -> messages.set(messages.indexOf(m), message));
+    }
+
+    public Trainer getTrainer(String userId) {
+        for (Trainer trainer : trainers) {
+            if (trainer.user().equals(userId)) {
+                return trainer;
+            }
+        }
+        return null;
+    }
+    public void setTrainerSpriteImageView (Trainer trainer, ImageView imageView) {
+        if (!GraphicsEnvironment.isHeadless()) {
+            disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
+                        Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
+                        Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, "down", false);
+                        imageView.setImage(character[0]);
+                    }, error -> showError(error.getMessage())
+            ));
+        }
     }
 }
