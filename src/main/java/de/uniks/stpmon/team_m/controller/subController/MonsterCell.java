@@ -8,7 +8,6 @@ import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.core.Scheduler;
@@ -30,9 +29,7 @@ import javafx.scene.control.Label;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ResourceBundle;
-import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.*;
 ;
 
 
@@ -60,10 +57,12 @@ public class MonsterCell extends ListCell<Monster> {
     public TrainersService trainersService;
     @Inject
     public UserStorage usersStorage;
-    @Inject
+
     public PresetsService presetsService;
     @Inject
     Provider<TrainersService> trainersServiceProvider;
+    @Inject
+    Provider<MonstersListController> monstersListControllerProvider;
     private FXMLLoader loader;
 
     private final ObservableList<Monster> allMonsters = FXCollections.observableArrayList();
@@ -76,8 +75,9 @@ public class MonsterCell extends ListCell<Monster> {
     private MonsterTypeDto monsterTypeDto;
     private Image monsterImage;
 
-    public MonsterCell(ResourceBundle resources) {
+    public MonsterCell(ResourceBundle resources, PresetsService presetsService) {
         this.resources = resources;
+        this.presetsService = presetsService;
     }
 
     @Override
@@ -88,7 +88,11 @@ public class MonsterCell extends ListCell<Monster> {
             setGraphic(null);
         } else {
             loadFXML();
-            monsterName.setText(monster.createdAt());
+            disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER)
+                    .subscribe(monsterType -> {
+                        monsterTypeDto = monsterType;
+                        monsterName.setText(monsterTypeDto.name());
+                    }, Throwable::printStackTrace));
             monsterType.setText("" + monster.type());
             monsterLevel.setText("" + monster.level());
             rootmonsterHBox.setOnMouseClicked(event -> {
@@ -121,7 +125,5 @@ public class MonsterCell extends ListCell<Monster> {
             }
         }
     }
-
-
 }
 

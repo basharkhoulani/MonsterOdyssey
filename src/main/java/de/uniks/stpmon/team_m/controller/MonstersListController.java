@@ -55,7 +55,8 @@ public class MonstersListController extends Controller{
     @Inject
     public UserStorage usersStorage;
     @Inject
-    public PresetsService presetsService;
+    public Provider<PresetsService> presetsServiceProvider;
+    private ObservableList<MonsterTypeDto> monsterTypeDtos;
 
 
 
@@ -66,7 +67,7 @@ public class MonstersListController extends Controller{
     @Override
     public void init() {
         super.init();
-        disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id())
+        disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
                 .subscribe(monsters -> {
                     trainerStorageProvider.get().setMonsters(new ArrayList<>(monsters));
                 }, throwable -> {
@@ -88,8 +89,17 @@ public class MonstersListController extends Controller{
     }
 
     private void initMonsterList() {
-        monsterListView.setCellFactory(param -> new MonsterCell(resources));
+        monsterListView.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get()));
         monsterListView.getItems().addAll(trainerStorageProvider.get().getMonsters());
+    }
+
+    public MonsterTypeDto getMonsterTypeDto(int id) {
+        for (MonsterTypeDto monsterTypeDto : monsterTypeDtos) {
+            if (monsterTypeDto.id() == id) {
+                return monsterTypeDto;
+            }
+        }
+        return null;
     }
 
 
