@@ -91,13 +91,4 @@ public class MonstersListController extends Controller{
         monsterListView.setFocusModel(null);
         monsterListView.setSelectionModel(null);
     }
-
-    public MonsterTypeDto getMonsterTypeDto(int id) {
-        for (MonsterTypeDto monsterTypeDto : monsterTypeDtos) {
-            if (monsterTypeDto.id() == id) {
-                return monsterTypeDto;
-            }
-        }
-        return null;
-    }
 }
