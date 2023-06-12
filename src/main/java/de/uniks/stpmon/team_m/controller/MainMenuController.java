@@ -43,6 +43,9 @@ public class MainMenuController extends Controller {
     public ListView<User> friendsListView;
     @FXML
     public ListView<Region> regionListView;
+    @FXML
+    public Label trainerDeletedSuccessfully;
+    public String information;
     @Inject
     Provider<LoginController> loginControllerProvider;
     @Inject
@@ -131,6 +134,7 @@ public class MainMenuController extends Controller {
         final Parent parent = super.render();
         initFriendslist();
         initRadioButtons();
+        showTrainerDeletion();
         return parent;
     }
 
@@ -239,5 +243,13 @@ public class MainMenuController extends Controller {
                     }
                 }, error -> showError(error.getMessage())
         ));
+    }
+
+    public void showTrainerDeletion() {
+        trainerDeletedSuccessfully.setText(this.information);
+    }
+
+    public void setTrainerDeletion() {
+        this.information = resources.getString("DELETE.TRAINER.SUCCESS");
     }
 }
