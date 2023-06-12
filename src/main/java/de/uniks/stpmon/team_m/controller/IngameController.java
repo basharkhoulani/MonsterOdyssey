@@ -60,8 +60,7 @@ public class IngameController extends Controller {
     public Button monstersButton;
     @FXML
     public Button settingsButton;
-    @FXML
-    public Canvas canvas;
+    public Canvas canvas = new Canvas(400, 400);
     @FXML
     public VBox ingameVBox;
     @FXML
@@ -93,7 +92,6 @@ public class IngameController extends Controller {
     GraphicsContext graphicsContext;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     private boolean isChatting = false;
-
     @Inject
     TrainerStorage trainerStorage;
     @Inject
@@ -470,10 +468,6 @@ public class IngameController extends Controller {
      */
 
     private void afterAllTileSetsLoaded(Map map) {
-        canvas.setScaleX(2.0);
-        canvas.setScaleY(2.0);
-        canvas.setWidth(map.width() * TILE_SIZE);
-        canvas.setHeight(map.height() * TILE_SIZE);
         if (tileSetImages.size() == map.tilesets().size()) {
             for (TileSet tileSet : map.tilesets()) {
                 renderMap(map, tileSetImages.get(getFileName(tileSet.source())),
