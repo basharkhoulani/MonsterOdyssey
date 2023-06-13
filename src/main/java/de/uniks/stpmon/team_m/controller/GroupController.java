@@ -107,7 +107,9 @@ public class GroupController extends Controller {
     private void initForeignListView() {
         foreignListView.setSelectionModel(null);
         foreignListView.setFocusModel(null);
-        foreignListView.setPlaceholder(new Label(resources.getString("NO.USERS.ADDED.TO.GROUP")));
+        Label placeholder = new Label(resources.getString("NO.USERS.ADDED.TO.GROUP"));
+        placeholder.setWrapText(true);
+        foreignListView.setPlaceholder(placeholder);
         foreignListView.setCellFactory(friendsListView.getCellFactory());
         foreignListView.setItems(foreign);
     }
