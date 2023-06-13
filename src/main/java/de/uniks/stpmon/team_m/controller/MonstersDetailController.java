@@ -12,6 +12,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
@@ -70,6 +71,7 @@ public class MonstersDetailController extends Controller{
     public Label power4;
     @FXML
     public Label description4;
+    public ImageView monsterImageView;
 
     @Inject
     Provider<IngameController> ingameControllerProvider;
@@ -81,7 +83,7 @@ public class MonstersDetailController extends Controller{
     @Override
     public Parent render() {
         final Parent parent = super.render();
-        //initMonsterDetails();
+        initMonsterDetails();
         return parent;
     }
 
@@ -96,14 +98,10 @@ public class MonstersDetailController extends Controller{
     @Inject
     public MonstersDetailController() {}
 
-    /*private void initMonsterDetails(){
-        Monster monster1 = new Monster("TestCreated", "TestUpdated", "123456789", "Me", 1, 2, 2, new LinkedHashMap<String, Integer>(), new MonsterAttributes(10, 5, 5, 5), new MonsterAttributes(10, 3, 3, 3));
-        monsterName.setText(monster.createdAt());
-        monsterLevel.setText("" + monster.level());
-        monsterType.setText("" + monster.type());
-        monsterExperience.setText("" + monster.experience());
+    private void initMonsterDetails(){
+        monsterImageView.setImage(monsterImage);
     }
-     */
+
 
     public void goBackToMonsters() {
         Stage stage = (Stage) goBackMonstersButton.getScene().getWindow();
