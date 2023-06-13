@@ -107,6 +107,7 @@ public class IngameController extends Controller {
     Provider<UDPEventListener> udpEventListenerProvider;
     @Inject
     Provider<MonstersListController> monstersListControllerProvider;
+    private String regionId;
     private final ObservableList<MoveTrainerDto> moveTrainerDtos = FXCollections.observableArrayList();
     HashMap<String, Image> tileSetImages = new HashMap<>();
     private Timeline spriteWalkingAnimation;
@@ -377,7 +378,6 @@ public class IngameController extends Controller {
         disposables.add(areasService.getArea(region._id(), region.spawn().area()).observeOn(FX_SCHEDULER)
                 .subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
         canvas.requestFocus();
-        monstersListControllerProvider.get().init();
         return parent;
     }
 
@@ -625,7 +625,6 @@ public class IngameController extends Controller {
         alert.setGraphic(null);
         alert.setContentText(resources.getString("PAUSE.MENU.LABEL"));
         alert.initStyle(StageStyle.UNDECORATED);
-        alert.initOwner(app.getStage());
         dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);
 
         Optional<ButtonType> result = alert.showAndWait();
@@ -640,9 +639,15 @@ public class IngameController extends Controller {
         }
     }
 
+    public void setRegion(String regionId) {
+        this.regionId = regionId;
+    }
+
+
     public void showTrainerSettings() {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
         trainerSettingsDialog.setTitle(resources.getString("TRAINER.PROFIL"));
+        ingameTrainerSettingsControllerProvider.get().setApp(this.app);
         trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());
         trainerSettingsDialog.getDialogPane().setExpandableContent(null);
         trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
