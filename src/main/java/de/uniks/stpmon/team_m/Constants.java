@@ -13,10 +13,10 @@ public class Constants {
 
     // GENERAL
     public static final String GAME_NAME = "Monster Odyssey";
-    public static final int STANDARD_HEIGHT = 600;
-    public static final int STANDARD_WIDTH = 800;
-    public static final int MINIMUM_HEIGHT = 590; // 540
-    public static final int MINIMUM_WIDTH = 750; // 700
+    public static final int STANDARD_HEIGHT = 768;
+    public static final int STANDARD_WIDTH = 1024;
+    public static final int MINIMUM_HEIGHT = 600;
+    public static final int MINIMUM_WIDTH = 800;
     public static final String APP_ICON = "images/Monster-durchsichtig.png";
     public static final String TASKBAR_ICON = "images/Monster-durchsichtig.png";
     public static final String EMPTY_STRING = "";
@@ -74,6 +74,7 @@ public class Constants {
     public static int OFFSET_HEIGHT = 50;
     public static double ZERO = 0;
     public static double ONE = 1;
+    public static double SCALE_FACTOR = 3.0;
 
     // Error messages
     public static final String HTTP_400 = "400";
