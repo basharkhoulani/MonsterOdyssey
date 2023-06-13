@@ -19,8 +19,8 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -45,7 +45,6 @@ import javafx.util.Duration;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
-import java.security.ProviderException;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
@@ -63,9 +62,6 @@ public class IngameController extends Controller {
     public Button monstersButton;
     @FXML
     public Button settingsButton;
-    private IngameTrainerSettingsController trainerSettingsController;
-
-    private MonstersListController monstersListController;
 
     @FXML
     public Canvas canvas;
@@ -107,7 +103,6 @@ public class IngameController extends Controller {
     Provider<UDPEventListener> udpEventListenerProvider;
     @Inject
     Provider<MonstersListController> monstersListControllerProvider;
-    private String regionId;
     private final ObservableList<MoveTrainerDto> moveTrainerDtos = FXCollections.observableArrayList();
     HashMap<String, Image> tileSetImages = new HashMap<>();
     private Timeline spriteWalkingAnimation;
@@ -124,6 +119,9 @@ public class IngameController extends Controller {
     private Image[] trainerWalkingRight;
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     private ObservableList<Trainer> trainers;
+
+    private EventHandler<KeyEvent> keyPressedEventHandler;
+    private EventHandler<KeyEvent> keyReleasedEventHandler;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -271,7 +269,7 @@ public class IngameController extends Controller {
         if (!GraphicsEnvironment.isHeadless()) {
             spriteStandingAnimation.play();
         }
-        app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, evt -> {
+        keyPressedEventHandler = evt -> {
             if (isChatting) {
                 return;
             }
@@ -298,9 +296,9 @@ public class IngameController extends Controller {
             if ((evt.getCode() == KeyCode.D)) {
                 walk("right");
             }
-        });
+        };
 
-        app.getStage().getScene().addEventHandler(KeyEvent.KEY_RELEASED, evt -> {
+        keyReleasedEventHandler = evt -> {
             if (isChatting) {
                 return;
             }
@@ -325,7 +323,10 @@ public class IngameController extends Controller {
                 }
             }
 
-        });
+        };
+
+        app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyPressedEventHandler);
+        app.getStage().getScene().addEventHandler(KeyEvent.KEY_RELEASED, keyReleasedEventHandler);
         /*
         app.getStage().getScene().setOnKeyPressed(event -> {
 
@@ -639,11 +640,6 @@ public class IngameController extends Controller {
         }
     }
 
-    public void setRegion(String regionId) {
-        this.regionId = regionId;
-    }
-
-
     public void showTrainerSettings() {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
         trainerSettingsDialog.setTitle(resources.getString("TRAINER.PROFIL"));
@@ -761,7 +757,8 @@ public class IngameController extends Controller {
         }
         return null;
     }
-    public void setTrainerSpriteImageView (Trainer trainer, ImageView imageView) {
+
+    public void setTrainerSpriteImageView(Trainer trainer, ImageView imageView) {
         if (!GraphicsEnvironment.isHeadless()) {
             disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
                         Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
@@ -772,12 +769,20 @@ public class IngameController extends Controller {
         }
     }
 
-    public void showMonsters(){
+    public void showMonsters() {
         Scene scene = new Scene(monstersListControllerProvider.get().render());
         Stage popupStage = new Stage();
         popupStage.initOwner(app.getStage());
         popupStage.setScene(scene);
         popupStage.setTitle(resources.getString("MONSTERS"));
         popupStage.show();
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        app.getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, keyPressedEventHandler);
+        app.getStage().getScene().removeEventHandler(KeyEvent.KEY_RELEASED, keyReleasedEventHandler);
+        messageField.removeEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
     }
 }
