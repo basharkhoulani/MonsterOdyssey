@@ -67,8 +67,8 @@ public class UDPClient {
 <span class="fc" id="L67">    }</span>
 
     public void removeMessageHandler(Consumer&lt;String&gt; msgHandler) {
-<span class="nc" id="L70">        this.messageHandlers.remove(msgHandler);</span>
-<span class="nc" id="L71">    }</span>
+<span class="fc" id="L70">        this.messageHandlers.remove(msgHandler);</span>
+<span class="fc" id="L71">    }</span>
 
     public void sendMessage(String message) throws IOException {
 <span class="fc" id="L74">        byte[] sendData = message.getBytes();</span>
@@ -94,7 +94,7 @@ public class UDPClient {
 <span class="fc" id="L94">    }</span>
 
     public boolean hasMessageHandler() {
-<span class="nc bnc" id="L97" title="All 2 branches missed.">        return !this.messageHandlers.isEmpty();</span>
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        return !this.messageHandlers.isEmpty();</span>
     }
 }
 
