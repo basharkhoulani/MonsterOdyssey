@@ -96,7 +96,7 @@ public class WelcomeSceneController extends Controller {
 <span class="fc" id="L96">                firstMessage.setText(resources.getString(&quot;THIRD.MESSAGE&quot;));</span>
 <span class="fc" id="L97">                secondMessage.setText(resources.getString(&quot;FOURTH.MESSAGE&quot;));</span>
 <span class="fc" id="L98">                final VBox messageVBox3 = new VBox();</span>
-<span class="fc" id="L99">                messageVBox3.getStyleClass().add(resources.getString(&quot;WELCOME.MESSAGE.STYLE&quot;));</span>
+<span class="fc" id="L99">                messageVBox3.getStyleClass().add(&quot;welcomeMessage&quot;);</span>
 <span class="fc" id="L100">                final Label thirdMessage = new Label();</span>
 <span class="fc" id="L101">                thirdMessage.setId(&quot;thirdMessage&quot;);</span>
 <span class="fc" id="L102">                thirdMessage.setText(resources.getString(&quot;FIFTH.MESSAGE&quot;));</span>
@@ -128,8 +128,8 @@ public class WelcomeSceneController extends Controller {
 
 <span class="fc" id="L129">                final Button cancelButton2 = (Button) alert.getDialogPane().lookupButton(cancelButton);</span>
 <span class="fc" id="L130">                final Button okButton2 = (Button) alert.getDialogPane().lookupButton(okButton);</span>
-<span class="fc" id="L131">                cancelButton2.getStyleClass().add(resources.getString(&quot;WELCOME.SCENE.BUTTON&quot;));</span>
-<span class="fc" id="L132">                okButton2.getStyleClass().add(resources.getString(&quot;WELCOME.SCENE.BUTTON&quot;));</span>
+<span class="fc" id="L131">                cancelButton2.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
+<span class="fc" id="L132">                okButton2.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
 
 <span class="fc" id="L134">                final VBox vbox = new VBox(textFieldName);</span>
 
@@ -182,27 +182,26 @@ public class WelcomeSceneController extends Controller {
 <span class="nc" id="L182">                                        error.printStackTrace();</span>
 <span class="nc" id="L183">                                    }</span>
                             ));
-<span class="fc" id="L185">                            app.show(ingameControllerProvider.get());</span>
-<span class="fc" id="L186">                        }, error -&gt; showError(error.getMessage())</span>
+<span class="fc" id="L185">                        }, error -&gt; showError(error.getMessage())</span>
                 ));
             }
         }
 
-<span class="fc" id="L191">    }</span>
+<span class="fc" id="L190">    }</span>
 
     public void enterButtonTrainerInput(KeyEvent event, Alert alert, TextField textFieldName, ButtonType okButton) {
-<span class="nc bnc" id="L194" title="All 2 branches missed.">        if(event.getCode() == KeyCode.ENTER) {</span>
-<span class="nc" id="L195">            event.consume();</span>
-<span class="nc" id="L196">            System.out.println(&quot;Enter gedrückt!&quot;);</span>
-<span class="nc" id="L197">            alert.setResult(okButton);</span>
-<span class="nc" id="L198">            textFieldName.removeEventHandler(KeyEvent.KEY_PRESSED, event1 -&gt; enterButtonTrainerInput(event, alert, textFieldName, okButton));</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">        if(event.getCode() == KeyCode.ENTER) {</span>
+<span class="nc" id="L194">            event.consume();</span>
+<span class="nc" id="L195">            System.out.println(&quot;Enter gedrückt!&quot;);</span>
+<span class="nc" id="L196">            alert.setResult(okButton);</span>
+<span class="nc" id="L197">            textFieldName.removeEventHandler(KeyEvent.KEY_PRESSED, event1 -&gt; enterButtonTrainerInput(event, alert, textFieldName, okButton));</span>
         }
-<span class="nc" id="L200">    }</span>
+<span class="nc" id="L199">    }</span>
     public int sceneCounter(int sceneNumber, boolean next) {
-<span class="fc bfc" id="L202" title="All 2 branches covered.">        if (next) {</span>
-<span class="fc" id="L203">            return sceneNumber + 1;</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        if (next) {</span>
+<span class="fc" id="L202">            return sceneNumber + 1;</span>
         } else {
-<span class="fc" id="L205">            return sceneNumber - 1;</span>
+<span class="fc" id="L204">            return sceneNumber - 1;</span>
         }
     }
 }
