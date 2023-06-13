@@ -312,5 +312,14 @@
     -fx-border-color: transparent;
 }
 .monstersDetail {
-    -fx-background-color: #F5F5F5;
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #000000;
+}
+.bottomLine {
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #000000;
+}
+.rightLine {
+    -fx-border-width: 0 1 0 0;
+    -fx-border-color: #000000;
 }

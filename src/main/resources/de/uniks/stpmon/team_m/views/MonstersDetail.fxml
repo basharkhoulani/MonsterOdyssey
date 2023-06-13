@@ -8,8 +8,8 @@
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0"
       prefWidth="800.0" styleClass="monstersDetail" xmlns="http://javafx.com/javafx/20"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MonstersDetailController">
-    <HBox prefHeight="156.0" prefWidth="800.0">
-        <HBox prefWidth="266.66">
+    <HBox prefHeight="156.0" prefWidth="800.0" styleClass="bottomLine">
+        <HBox prefWidth="266.66" styleClass="rightLine">
             <Button fx:id="goBackMonstersButton" mnemonicParsing="false" onAction="#goBackToMonsters" prefHeight="40.0"
                     prefWidth="40.0" styleClass="buttonsWhite" text="&lt;">
                 <HBox.margin>
@@ -26,13 +26,13 @@
                 </padding>
             </VBox>
         </HBox>
-        <VBox prefHeight="150.0" prefWidth="266.66">
+        <VBox prefHeight="150.0" prefWidth="266.66" styleClass="rightLine">
             <Label fx:id="monsterName" prefHeight="24.0" prefWidth="266.66">
                 <font>
                     <Font name="Comic Sans MS" size="24.0"/>
                 </font>
                 <VBox.margin>
-                    <Insets top="10.0"/>
+                    <Insets left="10" top="10"/>
                 </VBox.margin>
             </Label>
             <Label fx:id="monsterType" prefHeight="24.0" prefWidth="266.66">
@@ -40,7 +40,7 @@
                     <Font name="Comic Sans MS" size="17.0"/>
                 </font>
                 <VBox.margin>
-                    <Insets top="10.0"/>
+                    <Insets left="10"  top="10.0"/>
                 </VBox.margin>
             </Label>
             <Label fx:id="monsterExperience" prefHeight="24.0" prefWidth="266.66">
@@ -48,7 +48,7 @@
                     <Font name="Comic Sans MS" size="17.0"/>
                 </font>
                 <VBox.margin>
-                    <Insets top="10.0"/>
+                    <Insets left="10" top="10.0"/>
                 </VBox.margin>
             </Label>
             <Label fx:id="monsterLevel" prefHeight="24.0" prefWidth="266.66">
@@ -56,7 +56,7 @@
                     <Font name="Comic Sans MS" size="17.0"/>
                 </font>
                 <VBox.margin>
-                    <Insets top="10.0"/>
+                    <Insets left="10" top="10.0"/>
                 </VBox.margin>
             </Label>
         </VBox>
@@ -66,7 +66,7 @@
                     <Font name="Comic Sans MS" size="17.0"/>
                 </font>
                 <VBox.margin>
-                    <Insets top="10.0"/>
+                    <Insets left="10" top="10.0"/>
                 </VBox.margin>
             </Label>
             <Label fx:id="monsterAttack" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="266.66">
@@ -74,7 +74,7 @@
                     <Font name="Comic Sans MS" size="17.0"/>
                 </font>
                 <VBox.margin>
-                    <Insets top="10.0"/>
+                    <Insets left="10" top="10.0"/>
                 </VBox.margin>
             </Label>
             <Label fx:id="monsterDefense" layoutX="10.0" layoutY="34.0" prefHeight="24.0" prefWidth="266.66">
@@ -82,7 +82,7 @@
                     <Font name="Comic Sans MS" size="17.0"/>
                 </font>
                 <VBox.margin>
-                    <Insets top="10.0"/>
+                    <Insets left="10" top="10.0"/>
                 </VBox.margin>
             </Label>
             <Label fx:id="monsterSpeed" layoutX="10.0" layoutY="58.0" prefHeight="24.0" prefWidth="266.66">
@@ -90,34 +90,46 @@
                     <Font name="Comic Sans MS" size="17.0"/>
                 </font>
                 <VBox.margin>
-                    <Insets top="10.0"/>
+                    <Insets left="10" top="10.0"/>
                 </VBox.margin>
             </Label>
         </VBox>
     </HBox>
-    <HBox prefHeight="110.0" prefWidth="800.0">
-        <VBox prefHeight="110.0" prefWidth="400.0">
+    <HBox prefHeight="110.0" prefWidth="800.0" styleClass="bottomLine">
+        <VBox prefHeight="110.0" prefWidth="400.0" styleClass="rightLine">
             <HBox prefHeight="20.0" prefWidth="400.0">
                 <Label fx:id="ability1" prefHeight="24.0" prefWidth="180.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="17.0"/>
                     </font>
+                    <HBox.margin>
+                        <Insets left="5" top="5.0"/>
+                    </HBox.margin>
                 </Label>
                 <Label fx:id="accuracy1" prefHeight="24.0" prefWidth="140.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
+                    <HBox.margin>
+                        <Insets top="5.0"/>
+                    </HBox.margin>
                 </Label>
                 <Label fx:id="power1" prefHeight="24.0" prefWidth="80" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
+                    <HBox.margin>
+                        <Insets top="5.0"/>
+                    </HBox.margin>
                 </Label>
             </HBox>
             <Label fx:id="type1" prefHeight="24.0" prefWidth="400.0" wrapText="true">
                 <font>
                     <Font name="Comic Sans MS" size="14.0"/>
                 </font>
+                <VBox.margin>
+                    <Insets left="5"/>
+                </VBox.margin>
             </Label>
             <TextFlow prefHeight="50.0" prefWidth="400.0">
                 <Text fx:id="description1"
@@ -126,6 +138,9 @@
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
                 </Text>
+                <VBox.margin>
+                    <Insets left="5"/>
+                </VBox.margin>
             </TextFlow>
         </VBox>
         <VBox prefHeight="110.0" prefWidth="400.0">
@@ -134,22 +149,34 @@
                     <font>
                         <Font name="Comic Sans MS" size="17.0"/>
                     </font>
+                    <HBox.margin>
+                        <Insets left="5" top="5.0"/>
+                    </HBox.margin>
                 </Label>
                 <Label fx:id="accuracy2" prefHeight="24.0" prefWidth="140.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
+                    <HBox.margin>
+                        <Insets top="5.0"/>
+                    </HBox.margin>
                 </Label>
                 <Label fx:id="power2" prefHeight="24.0" prefWidth="80.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
                 </Label>
+                <HBox.margin>
+                    <Insets top="5.0"/>
+                </HBox.margin>
             </HBox>
             <Label fx:id="type2" prefHeight="24.0" prefWidth="400.0" wrapText="true">
                 <font>
                     <Font name="Comic Sans MS" size="14.0"/>
                 </font>
+                <VBox.margin>
+                    <Insets left="5"/>
+                </VBox.margin>
             </Label>
             <TextFlow prefHeight="50.0" prefWidth="400.0">
                 <Text fx:id="description2"
@@ -158,32 +185,47 @@
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
                 </Text>
+                <VBox.margin>
+                    <Insets left="5"/>
+                </VBox.margin>
             </TextFlow>
         </VBox>
     </HBox>
     <HBox prefHeight="110.0" prefWidth="800.0">
-        <VBox prefHeight="110.0" prefWidth="400.0">
+        <VBox prefHeight="110.0" prefWidth="400.0" styleClass="rightLine">
             <HBox prefHeight="20.0" prefWidth="400.0">
                 <Label fx:id="ability3" prefHeight="24.0" prefWidth="180.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="17.0"/>
                     </font>
+                    <HBox.margin>
+                        <Insets left="5" top="5.0"/>
+                    </HBox.margin>
                 </Label>
                 <Label fx:id="accuracy3" prefHeight="24.0" prefWidth="140.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
+                    <HBox.margin>
+                        <Insets top="5.0"/>
+                    </HBox.margin>
                 </Label>
                 <Label fx:id="power3" prefHeight="24.0" prefWidth="80.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
+                    <HBox.margin>
+                        <Insets top="5.0"/>
+                    </HBox.margin>
                 </Label>
             </HBox>
             <Label fx:id="type3" prefHeight="24.0" prefWidth="400.0" wrapText="true">
                 <font>
                     <Font name="Comic Sans MS" size="14.0"/>
                 </font>
+                <VBox.margin>
+                    <Insets left="5"/>
+                </VBox.margin>
             </Label>
             <TextFlow prefHeight="50.0" prefWidth="400.0">
                 <Text fx:id="description3"
@@ -192,6 +234,9 @@
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
                 </Text>
+                <VBox.margin>
+                    <Insets left="5"/>
+                </VBox.margin>
             </TextFlow>
         </VBox>
         <VBox prefHeight="110.0" prefWidth="400.0">
@@ -200,22 +245,34 @@
                     <font>
                         <Font name="Comic Sans MS" size="17.0"/>
                     </font>
+                    <HBox.margin>
+                        <Insets left="5" top="5.0"/>
+                    </HBox.margin>
                 </Label>
                 <Label fx:id="accuracy4" prefHeight="24.0" prefWidth="140.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
+                    <HBox.margin>
+                        <Insets top="5.0"/>
+                    </HBox.margin>
                 </Label>
                 <Label fx:id="power4" prefHeight="24.0" prefWidth="80.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
+                    <HBox.margin>
+                        <Insets top="5.0"/>
+                    </HBox.margin>
                 </Label>
             </HBox>
             <Label fx:id="type4" prefHeight="24.0" prefWidth="400.0" wrapText="true">
                 <font>
                     <Font name="Comic Sans MS" size="14.0"/>
                 </font>
+                <VBox.margin>
+                    <Insets left="5"/>
+                </VBox.margin>
             </Label>
             <TextFlow prefHeight="50.0" prefWidth="400.0">
                 <Text fx:id="description4"
@@ -224,6 +281,9 @@
                             <Font name="Comic Sans MS" size="14.0"/>
                         </font>
                 </Text>
+                <VBox.margin>
+                    <Insets left="5"/>
+                </VBox.margin>
             </TextFlow>
         </VBox>
     </HBox>
