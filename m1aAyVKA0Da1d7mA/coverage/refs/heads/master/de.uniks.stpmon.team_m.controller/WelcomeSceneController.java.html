@@ -91,7 +91,7 @@ public class WelcomeSceneController extends Controller {
 <span class="fc" id="L91">                firstMessage.setText(resources.getString(&quot;THIRD.MESSAGE&quot;));</span>
 <span class="fc" id="L92">                secondMessage.setText(resources.getString(&quot;FOURTH.MESSAGE&quot;));</span>
 <span class="fc" id="L93">                final VBox messageVBox3 = new VBox();</span>
-<span class="fc" id="L94">                messageVBox3.getStyleClass().add(resources.getString(&quot;WELCOME.MESSAGE.STYLE&quot;));</span>
+<span class="fc" id="L94">                messageVBox3.getStyleClass().add(&quot;welcomeMessage&quot;);</span>
 <span class="fc" id="L95">                final Label thirdMessage = new Label();</span>
 <span class="fc" id="L96">                thirdMessage.setId(&quot;thirdMessage&quot;);</span>
 <span class="fc" id="L97">                thirdMessage.setText(resources.getString(&quot;FIFTH.MESSAGE&quot;));</span>
@@ -122,8 +122,8 @@ public class WelcomeSceneController extends Controller {
 
 <span class="fc" id="L123">                final Button cancelButton2 = (Button) alert.getDialogPane().lookupButton(cancelButton);</span>
 <span class="fc" id="L124">                final Button okButton2 = (Button) alert.getDialogPane().lookupButton(okButton);</span>
-<span class="fc" id="L125">                cancelButton2.getStyleClass().add(resources.getString(&quot;WELCOME.SCENE.BUTTON&quot;));</span>
-<span class="fc" id="L126">                okButton2.getStyleClass().add(resources.getString(&quot;WELCOME.SCENE.BUTTON&quot;));</span>
+<span class="fc" id="L125">                cancelButton2.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
+<span class="fc" id="L126">                okButton2.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
 
 <span class="fc" id="L128">                final VBox vbox = new VBox(textFieldName);</span>
 
