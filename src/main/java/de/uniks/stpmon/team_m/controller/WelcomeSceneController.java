@@ -138,7 +138,9 @@ public class WelcomeSceneController extends Controller {
                 dialogPane.getStyleClass().add(resources.getString("ALERT.DIALOG.NAME"));
                 dialogPane.setContent(vbox);
 
-                textFieldName.addEventHandler(KeyEvent.KEY_PRESSED,event -> enterButtonTrainerInput(event, alert, textFieldName));
+                textFieldName.addEventHandler(KeyEvent.KEY_PRESSED,event -> {
+                    enterButtonTrainerInput(event, alert, textFieldName, okButton);
+                });
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == cancelButton) {
@@ -188,17 +190,14 @@ public class WelcomeSceneController extends Controller {
 
     }
 
-    public void enterButtonTrainerInput(KeyEvent event, Alert alert, TextField textFieldName) {
+    public void enterButtonTrainerInput(KeyEvent event, Alert alert, TextField textFieldName, ButtonType okButton) {
         if(event.getCode() == KeyCode.ENTER) {
             event.consume();
             System.out.println("Enter gedrückt!");
-            alert.close();
-            trainerStorage.setTrainerName(trainerName.get());
-            changeCount(true);
-            textFieldName.removeEventHandler(KeyEvent.KEY_PRESSED, event1 -> enterButtonTrainerInput(event, alert, textFieldName));
+            alert.setResult(okButton);
+            textFieldName.removeEventHandler(KeyEvent.KEY_PRESSED, event1 -> enterButtonTrainerInput(event, alert, textFieldName, okButton));
         }
     }
-
     public int sceneCounter(int sceneNumber, boolean next) {
         if (next) {
             return sceneNumber + 1;
