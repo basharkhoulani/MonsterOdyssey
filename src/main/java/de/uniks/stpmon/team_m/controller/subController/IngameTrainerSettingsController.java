@@ -1,15 +1,11 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
-import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.controller.MainMenuController;
-import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.RegionsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
@@ -26,10 +22,8 @@ import javafx.stage.Stage;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.awt.*;
-import java.util.Objects;
 import javax.inject.Singleton;
-
+import java.awt.*;
 import java.text.MessageFormat;
 import java.util.Optional;
 
@@ -61,10 +55,7 @@ public class IngameTrainerSettingsController extends Controller {
     @Inject
     public UserStorage usersStorage;
 
-    private String regionId;
     protected final CompositeDisposable disposables = new CompositeDisposable();
-    private Trainer trainer;
-    private Image trainerImage;
 
 
     @Inject
@@ -92,7 +83,7 @@ public class IngameTrainerSettingsController extends Controller {
         final DialogPane dialogPane = alert.getDialogPane();
         final ButtonType cancelButton = new ButtonType(resources.getString("CANCEL"));
         final ButtonType okButton = alert.getButtonTypes().stream()
-                        .filter(buttonType -> buttonType.getButtonData().isDefaultButton()).findFirst().orElse(null);
+                .filter(buttonType -> buttonType.getButtonData().isDefaultButton()).findFirst().orElse(null);
 
         dialogPane.getButtonTypes().addAll(cancelButton);
 
@@ -125,7 +116,7 @@ public class IngameTrainerSettingsController extends Controller {
     private void loadAndSetTrainerImage() {
         Image trainerChunk = trainerStorageProvider.get().getTrainerSpriteChunk();
         if (!GraphicsEnvironment.isHeadless()) {
-            Image[] character = ImageProcessor.cropTrainerImages(trainerChunk,"down" , false);
+            Image[] character = ImageProcessor.cropTrainerImages(trainerChunk, "down", false);
             trainerAvatarImageView.setImage(character[0]);
         }
     }
