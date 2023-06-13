@@ -86,13 +86,13 @@ public class MonsterCell extends ListCell<Monster> {
                             type.append(s).append(" ");
                         }
                         this.monsterType.setText(type.toString());
-                    }, Throwable::printStackTrace));
+                    }, error -> monstersListController.showError(error.getMessage())));
             monsterLevel.setText(resources.getString("LEVEL") + monster.level());
             disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
                     .subscribe(monsterImage -> {
                         this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
                         monsterImageView.setImage(this.monsterImage);
-                    }, Throwable::printStackTrace));
+                    }, error -> monstersListController.showError(error.getMessage())));
             rootmonsterHBox.setOnMouseClicked(event -> showDetails(monster));
             setGraphic(rootmonsterHBox);
             setText(null);
