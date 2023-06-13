@@ -103,6 +103,13 @@ public class MonstersDetailController extends Controller{
     private void initMonsterDetails(){
         monsterImageView.setImage(monsterImage);
         monsterName.setText(resources.getString("NAME") + monsterTypeDto.name());
+        StringBuilder type = new StringBuilder(resources.getString("TYPE"));
+        for (String s : monsterTypeDto.type()) {
+            type.append(s).append(" ");
+        }
+        monsterType.setText(type.toString());
+        monsterExperience.setText(resources.getString("EXPERIENCE") + monster.experience());
+        monsterLevel.setText(resources.getString("LEVEL") + monster.level());
     }
 
 
