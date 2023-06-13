@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="de.uniks.stpmon.team_m.controller.MonstersListController" prefHeight="-Infinity"
+      prefWidth="-Infinity">
+    <ListView fx:id="monsterListView" fixedCellSize="110.0" focusTraversable="false" minHeight="230.0"
+              prefHeight="230.0"
+              minWidth="500.0" prefWidth="500.0" maxHeight="340.0" styleClass="monsterList"/>
+</VBox>
+

@@ -114,7 +114,7 @@ public class AvatarSelectionController extends Controller {
 
     public void selectFile() {
         FileChooser fileChooser = fileChooserProvider.get();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(resources.getString("SELECT.AVATAR.PICTURE"), "*.png", "*.jpg", "*.jpeg"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(resources.getString("SELECT.AVATAR.PICTURE"), "*.png", "*.jpg", "*.jpeg", "*.JPG", "*.JPEG", "*.PNG"));
         fileChooser.setTitle(resources.getString("SELECT.AVATAR.PICTURE"));
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {

@@ -111,10 +111,10 @@ public class PresetsServiceTest {
 
     @Test
     void getMonsterImageTest() {
-        when(presetsApiService.getMonsterImage("salamander.png")).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
-        final ResponseBody responseBody = presetsService.getMonsterImage("salamander.png").blockingFirst();
+        when(presetsApiService.getMonsterImage(2)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
+        final ResponseBody responseBody = presetsService.getMonsterImage(2).blockingFirst();
         assertNotNull(responseBody);
-        verify(presetsApiService).getMonsterImage("salamander.png");
+        verify(presetsApiService).getMonsterImage(2);
     }
 
     @Test

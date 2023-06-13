@@ -93,7 +93,7 @@ public class PresetsService {
      * @return The monster type image.
      */
 
-    public Observable<ResponseBody> getMonsterImage(String id) {
+    public Observable<ResponseBody> getMonsterImage(int id) {
         return presetsApiService.getMonsterImage(id);
     }
 
