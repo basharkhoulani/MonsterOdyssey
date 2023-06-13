@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -133,6 +134,16 @@ public class AccountSettingController extends Controller {
         passwordField.textProperty().bindBidirectional(password);
 
         BooleanBinding isInvalidUsername = username.isEmpty();
+        usernameField.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER) {
+                saveUsername();
+            }
+        });
+        passwordField.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER) {
+                savePassword();
+            }
+        });
         saveUsernameButton.disableProperty().bind(isInvalidUsername);
 
         BooleanBinding isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);
