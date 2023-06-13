@@ -1,8 +1,10 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterAttributes;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import de.uniks.stpmon.team_m.service.PresetsService;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -18,9 +20,8 @@ import javafx.stage.Stage;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
-import java.util.LinkedHashMap;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.List;
 
 
 public class MonstersDetailController extends Controller{
@@ -78,6 +79,7 @@ public class MonstersDetailController extends Controller{
 
     @Inject
     Provider<IngameController> ingameControllerProvider;
+    PresetsService presetsService;
     MonstersListController monstersListController;
     private Monster monster;
     private MonsterTypeDto monsterTypeDto;
@@ -93,13 +95,14 @@ public class MonstersDetailController extends Controller{
         return parent;
     }
 
-    public void init(MonstersListController monstersListController, Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources) {
+    public void init(MonstersListController monstersListController, Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources, PresetsService presetsService) {
         super.init();
         this.monstersListController = monstersListController;
         this.monster = monster;
         this.monsterTypeDto = monsterTypeDto;
         this.monsterImage = monsterImage;
         this.resources = resources;
+        this.presetsService = presetsService;
     }
 
     @Inject
@@ -108,7 +111,7 @@ public class MonstersDetailController extends Controller{
     private void initMonsterDetails(){
         monsterImageView.setImage(monsterImage);
 
-        // Center Top
+        // Top Middle
         monsterName.setText(resources.getString("NAME") + monsterTypeDto.name());
         StringBuilder type = new StringBuilder(resources.getString("TYPE"));
         for (String s : monsterTypeDto.type()) {
@@ -118,11 +121,24 @@ public class MonstersDetailController extends Controller{
         monsterExperience.setText(resources.getString("EXPERIENCE") + monster.experience());
         monsterLevel.setText(resources.getString("LEVEL") + monster.level());
 
-        // Center Right
+        // Top Right
         monsterHealth.setText(resources.getString("HEALTH") + monster.currentAttributes().health() + "/" + monster.attributes().health());
         monsterAttack.setText(resources.getString("ATTACK") + monster.currentAttributes().attack() + "/" + monster.attributes().attack());
         monsterDefense.setText(resources.getString("DEFENSE") + monster.currentAttributes().defense() + "/" + monster.attributes().defense());
         monsterSpeed.setText(resources.getString("SPEED") + monster.currentAttributes().speed() + "/" + monster.attributes().speed());
+        // First Ability
+        List<Label> abilityLabels = new ArrayList<>(Arrays.asList(ability1, ability2, ability3, ability4));
+        List<Label> accuracyLabels = new ArrayList<>(Arrays.asList(accuracy1, accuracy2, accuracy3, accuracy4));
+        List<Label> powerLabels = new ArrayList<>(Arrays.asList(power1, power2, power3, power4));
+        List<Label> descriptionLabels = new ArrayList<>(Arrays.asList(description1, description2, description3, description4));
+
+        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> {
+            int i = 0;
+            for (Map.Entry<String, Integer> entry : monster.abilities().entrySet()) {
+                AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey()) - 1);
+                abilityLabels.get(i).setText(ability.name() + " " + entry.getValue() + "/" + ability.maxUses());
+                i++;
+            }}));
     }
 
 

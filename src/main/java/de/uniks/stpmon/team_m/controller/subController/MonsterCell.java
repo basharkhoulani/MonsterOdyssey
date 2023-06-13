@@ -108,7 +108,7 @@ public class MonsterCell extends ListCell<Monster> {
         Stage popup = (Stage) rootmonsterHBox.getScene().getWindow();
         popup.close();
         MonstersDetailController monstersDetailController = new MonstersDetailController();
-        monstersDetailController.init(monstersListController, monster, monsterTypeDto, monsterImage, resources);
+        monstersDetailController.init(monstersListController, monster, monsterTypeDto, monsterImage, resources, presetsService);
         Scene scene = new Scene(monstersDetailController.render());
         popup.setScene(scene);
         popup.show();
