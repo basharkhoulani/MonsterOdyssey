@@ -48,6 +48,8 @@ public class IngameControllerTest extends ApplicationTest {
     AreasService areasService;
     @Mock
     Provider<UDPEventListener> udpEventListenerProvider;
+    @Mock
+    Provider<MonstersListController> monstersListControllerProvider;
 
     // Leave this mock!! it ensures that tests run fine
     @Mock
@@ -152,7 +154,8 @@ public class IngameControllerTest extends ApplicationTest {
         Trainer trainer = new Trainer("2023-05-30T12:02:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d865", "6475e595ac3946b6a812d865", "6475e595ac3946b6a812d868", "Peter", "Premade_Character_02.png", 0, "6475e595ac3946b6a812d863", 0, 0, 0, new NPCInfo(false));
         when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers.*.*", Trainer.class)).thenReturn(just(
                 new Event<>("regions.646bab5cecf584e1be02598a.trainers.6475e595ac3946b6a812d865.created", trainer)));
-
+        MonstersListController monstersListController = mock(MonstersListController.class);
+        when(monstersListControllerProvider.get()).thenReturn(monstersListController);
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
