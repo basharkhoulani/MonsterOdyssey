@@ -5,7 +5,6 @@ import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.IngameMessageCell;
 import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
 import de.uniks.stpmon.team_m.dto.*;
-import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.service.PresetsService;
@@ -45,8 +44,10 @@ import javafx.util.Duration;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.awt.GraphicsEnvironment;
-import java.util.*;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -435,7 +436,7 @@ public class IngameController extends Controller {
      */
 
     private void renderMap(Map map, Image image, TileSet tileSetJson, TileSet tileSet, boolean multipleTileSets) {
-        for (Layer layer: map.layers()) {
+        for (Layer layer : map.layers()) {
             if (layer.chunks() == null) {
                 continue;
             }
@@ -597,6 +598,7 @@ public class IngameController extends Controller {
         trainerSettingsDialog.setTitle(resources.getString("TRAINER.PROFIL"));
         ingameTrainerSettingsControllerProvider.get().setApp(this.app);
         ingameTrainerSettingsControllerProvider.get().setValues(resources, preferences, resourceBundleProvider, ingameTrainerSettingsControllerProvider.get(), app);
+        ingameTrainerSettingsControllerProvider.get().setIngameController(this);
         trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());
         trainerSettingsDialog.getDialogPane().setExpandableContent(null);
         trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
@@ -605,7 +607,7 @@ public class IngameController extends Controller {
         Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();
         popUp.setOnCloseRequest(evt -> {
                     ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close();
-            groundCanvas.requestFocus();
+                    groundCanvas.requestFocus();
                 }
         );
         trainerSettingsDialog.showAndWait();
