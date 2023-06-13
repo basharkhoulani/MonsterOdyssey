@@ -13,10 +13,19 @@
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="519.0"
       prefWidth="694.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="de.uniks.stpmon.team_m.controller.MonstersDetailController">
-   <Button fx:id="goBackMonstersButton" mnemonicParsing="false" onAction="#goBackToMonsters" prefHeight="39.0"
-                 prefWidth="41.0" styleClass="buttonsWhite" text="&lt;"/>
    <HBox prefHeight="139.0" prefWidth="694.0">
-      <ImageView fx:id="monsterImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+      <Button fx:id="goBackMonstersButton" mnemonicParsing="false" onAction="#goBackToMonsters" prefHeight="39.0"
+              prefWidth="41.0" styleClass="buttonsWhite" text="&lt;">
+              <HBox.margin>
+                  <Insets left="5.0" top="5.0"/>
+                </HBox.margin>
+        </Button>
+      <VBox styleClass="trainerAvatarImageView">
+      <ImageView fx:id="monsterImageView" fitHeight="100.0" pickOnBounds="true" preserveRatio="true"/>
+         <HBox.margin>
+            <Insets left="5.0" top="5.0" bottom="5.0" right="5.0"/>
+         </HBox.margin>
+      </VBox>
       <Separator orientation="VERTICAL" prefHeight="200.0">
          <HBox.margin>
             <Insets/>
@@ -112,6 +121,11 @@
                </font>
             </Label>
          </HBox>
+         <Label fx:id="type1" prefHeight="24.0" prefWidth="348.0">
+            <font>
+               <Font name="Comic Sans MS" size="17.0"/>
+            </font>
+         </Label>
          <Label fx:id="description1" prefHeight="24.0" prefWidth="348.0">
             <font>
                <Font name="Comic Sans MS" size="17.0"/>
@@ -137,6 +151,11 @@
                </font>
             </Label>
          </HBox>
+         <Label fx:id="type2" prefHeight="24.0" prefWidth="348.0">
+            <font>
+               <Font name="Comic Sans MS" size="17.0"/>
+            </font>
+         </Label>
          <Label fx:id="description2" prefHeight="24.0" prefWidth="328.0">
             <font>
                <Font name="Comic Sans MS" size="17.0"/>
@@ -164,6 +183,11 @@
                </font>
             </Label>
          </HBox>
+         <Label fx:id="type3" prefHeight="24.0" prefWidth="348.0">
+            <font>
+               <Font name="Comic Sans MS" size="17.0"/>
+            </font>
+         </Label>
          <Label fx:id="description3" prefHeight="24.0" prefWidth="339.0">
             <font>
                <Font name="Comic Sans MS" size="17.0"/>
@@ -189,6 +213,11 @@
                </font>
             </Label>
          </HBox>
+         <Label fx:id="type4" prefHeight="24.0" prefWidth="348.0">
+            <font>
+               <Font name="Comic Sans MS" size="17.0"/>
+            </font>
+         </Label>
          <Label fx:id="description4" prefHeight="24.0" prefWidth="322.0">
             <font>
                <Font name="Comic Sans MS" size="17.0"/>

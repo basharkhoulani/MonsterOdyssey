@@ -2,16 +2,12 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.Monster;
-import de.uniks.stpmon.team_m.dto.MonsterAttributes;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,11 +16,11 @@ import javafx.stage.Stage;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 
-public class MonstersDetailController extends Controller{
+public class MonstersDetailController extends Controller {
     @FXML
     public Button goBackMonstersButton;
     @FXML
@@ -76,6 +72,10 @@ public class MonstersDetailController extends Controller{
     @FXML
     public Label description4;
     public ImageView monsterImageView;
+    public Label type4;
+    public Label type3;
+    public Label type2;
+    public Label type1;
 
     @Inject
     Provider<IngameController> ingameControllerProvider;
@@ -106,9 +106,10 @@ public class MonstersDetailController extends Controller{
     }
 
     @Inject
-    public MonstersDetailController() {}
+    public MonstersDetailController() {
+    }
 
-    private void initMonsterDetails(){
+    private void initMonsterDetails() {
         monsterImageView.setImage(monsterImage);
 
         // Top Middle
@@ -131,6 +132,7 @@ public class MonstersDetailController extends Controller{
         List<Label> accuracyLabels = new ArrayList<>(Arrays.asList(accuracy1, accuracy2, accuracy3, accuracy4));
         List<Label> powerLabels = new ArrayList<>(Arrays.asList(power1, power2, power3, power4));
         List<Label> descriptionLabels = new ArrayList<>(Arrays.asList(description1, description2, description3, description4));
+        List<Label> typeLabels = new ArrayList<>(Arrays.asList(type1, type2, type3, type4));
 
         disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> {
             int i = 0;
@@ -139,9 +141,11 @@ public class MonstersDetailController extends Controller{
                 abilityLabels.get(i).setText(ability.name() + " " + entry.getValue() + "/" + ability.maxUses());
                 accuracyLabels.get(i).setText(resources.getString("ACCURACY") + ability.accuracy());
                 powerLabels.get(i).setText(resources.getString("POWER") + ability.power());
+                typeLabels.get(i).setText(resources.getString("TYPE") + ability.type());
                 descriptionLabels.get(i).setText(ability.description());
                 i++;
-            }}));
+            }
+        }));
     }
 
 

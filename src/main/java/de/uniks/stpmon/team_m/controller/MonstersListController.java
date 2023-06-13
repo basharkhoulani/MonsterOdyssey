@@ -2,31 +2,20 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.MonsterCell;
 import de.uniks.stpmon.team_m.dto.Monster;
-import de.uniks.stpmon.team_m.dto.MonsterAttributes;
-import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
-import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.*;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Objects;
 
 
-public class MonstersListController extends Controller{
+public class MonstersListController extends Controller {
 
     public ListView<Monster> monsterListView;
     @Inject
