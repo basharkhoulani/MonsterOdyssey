@@ -47,7 +47,7 @@ public class UDPEventListener {
 <span class="fc" id="L47">            send(new Event&lt;&gt;(&quot;subscribe&quot;, pattern));</span>
 <span class="fc" id="L48">            final Consumer&lt;String&gt; handler = createPatternHandler(mapper, pattern, type, emitter);</span>
 <span class="fc" id="L49">            client.addMessageHandler(handler);</span>
-<span class="pc" id="L50">            emitter.setCancellable(() -&gt; removeEventHandler(pattern, handler));</span>
+<span class="fc" id="L50">            emitter.setCancellable(() -&gt; removeEventHandler(pattern, handler));</span>
 <span class="fc" id="L51">        });</span>
     }
 
@@ -79,16 +79,16 @@ public class UDPEventListener {
     }
 
     private void removeEventHandler(String pattern, Consumer&lt;String&gt; handler) {
-<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (client == null) {</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (client == null) {</span>
 <span class="nc" id="L83">            return;</span>
         }
 
-<span class="nc" id="L86">        send(new Event&lt;&gt;(&quot;unsubscribe&quot;, pattern));</span>
-<span class="nc" id="L87">        client.removeMessageHandler(handler);</span>
-<span class="nc bnc" id="L88" title="All 2 branches missed.">        if (!client.hasMessageHandler()) {</span>
+<span class="fc" id="L86">        send(new Event&lt;&gt;(&quot;unsubscribe&quot;, pattern));</span>
+<span class="fc" id="L87">        client.removeMessageHandler(handler);</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (!client.hasMessageHandler()) {</span>
 <span class="nc" id="L89">            close();</span>
         }
-<span class="nc" id="L91">    }</span>
+<span class="fc" id="L91">    }</span>
 
     private void close() {
 <span class="nc bnc" id="L94" title="All 2 branches missed.">        if (client != null) {</span>
