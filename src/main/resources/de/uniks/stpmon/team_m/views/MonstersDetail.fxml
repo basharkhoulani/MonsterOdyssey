@@ -6,23 +6,36 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0"
-      prefWidth="750.0" styleClass="monstersDetail" xmlns="http://javafx.com/javafx/20"
+      prefWidth="800.0" styleClass="monstersDetail" xmlns="http://javafx.com/javafx/20"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MonstersDetailController">
-    <HBox prefHeight="156.0" prefWidth="750.0">
-        <Button fx:id="goBackMonstersButton" mnemonicParsing="false" onAction="#goBackToMonsters" prefHeight="39.0"
-                prefWidth="41.0" styleClass="buttonsWhite" text="&lt;">
-            <HBox.margin>
-                <Insets left="5.0" top="5.0"/>
-            </HBox.margin>
-        </Button>
-        <VBox styleClass="trainerAvatarImageView">
-            <ImageView fx:id="monsterImageView" fitHeight="100.0" pickOnBounds="true" preserveRatio="true"/>
-            <HBox.margin>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-            </HBox.margin>
-        </VBox>
-        <VBox prefHeight="150.0" prefWidth="233.0">
-            <Label fx:id="monsterName" prefHeight="24.0" prefWidth="228.0">
+    <HBox prefHeight="156.0" prefWidth="800.0">
+        <HBox prefWidth="266.66">
+            <Button fx:id="goBackMonstersButton" mnemonicParsing="false" onAction="#goBackToMonsters" prefHeight="40.0"
+                    prefWidth="40.0" styleClass="buttonsWhite" text="&lt;">
+                <HBox.margin>
+                    <Insets left="5.0" top="5.0"/>
+                </HBox.margin>
+            </Button>
+            <VBox styleClass="trainerAvatarImageView">
+                <ImageView fx:id="monsterImageView" fitHeight="120.0" pickOnBounds="true" preserveRatio="true"/>
+                <HBox.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </HBox.margin>
+                <padding>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </padding>
+            </VBox>
+        </HBox>
+        <VBox prefHeight="150.0" prefWidth="266.66">
+            <Label fx:id="monsterName" prefHeight="24.0" prefWidth="266.66">
+                <font>
+                    <Font name="Comic Sans MS" size="24.0"/>
+                </font>
+                <VBox.margin>
+                    <Insets top="10.0"/>
+                </VBox.margin>
+            </Label>
+            <Label fx:id="monsterType" prefHeight="24.0" prefWidth="266.66">
                 <font>
                     <Font name="Comic Sans MS" size="17.0"/>
                 </font>
@@ -30,59 +43,51 @@
                     <Insets top="10.0"/>
                 </VBox.margin>
             </Label>
-            <Label fx:id="monsterType" prefHeight="24.0" prefWidth="228.0">
+            <Label fx:id="monsterExperience" prefHeight="24.0" prefWidth="266.66">
                 <font>
-                    <Font name="Comic Sans MS" size="14.0"/>
+                    <Font name="Comic Sans MS" size="17.0"/>
                 </font>
                 <VBox.margin>
                     <Insets top="10.0"/>
                 </VBox.margin>
             </Label>
-            <Label fx:id="monsterExperience" prefHeight="24.0" prefWidth="229.0">
+            <Label fx:id="monsterLevel" prefHeight="24.0" prefWidth="266.66">
                 <font>
-                    <Font name="Comic Sans MS" size="14.0"/>
-                </font>
-                <VBox.margin>
-                    <Insets top="10.0"/>
-                </VBox.margin>
-            </Label>
-            <Label fx:id="monsterLevel" prefHeight="24.0" prefWidth="230.0">
-                <font>
-                    <Font name="Comic Sans MS" size="14.0"/>
+                    <Font name="Comic Sans MS" size="17.0"/>
                 </font>
                 <VBox.margin>
                     <Insets top="10.0"/>
                 </VBox.margin>
             </Label>
         </VBox>
-        <VBox prefHeight="150.0" prefWidth="244.0">
-            <Label fx:id="monsterHealth" prefHeight="24.0" prefWidth="232.0">
+        <VBox prefHeight="150.0" prefWidth="266.66">
+            <Label fx:id="monsterHealth" prefHeight="24.0" prefWidth="266.66">
                 <font>
-                    <Font name="Comic Sans MS" size="14.0"/>
+                    <Font name="Comic Sans MS" size="17.0"/>
                 </font>
                 <VBox.margin>
                     <Insets top="10.0"/>
                 </VBox.margin>
             </Label>
-            <Label fx:id="monsterAttack" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="238.0">
+            <Label fx:id="monsterAttack" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="266.66">
                 <font>
-                    <Font name="Comic Sans MS" size="14.0"/>
+                    <Font name="Comic Sans MS" size="17.0"/>
                 </font>
                 <VBox.margin>
                     <Insets top="10.0"/>
                 </VBox.margin>
             </Label>
-            <Label fx:id="monsterDefense" layoutX="10.0" layoutY="34.0" prefHeight="24.0" prefWidth="241.0">
+            <Label fx:id="monsterDefense" layoutX="10.0" layoutY="34.0" prefHeight="24.0" prefWidth="266.66">
                 <font>
-                    <Font name="Comic Sans MS" size="14.0"/>
+                    <Font name="Comic Sans MS" size="17.0"/>
                 </font>
                 <VBox.margin>
                     <Insets top="10.0"/>
                 </VBox.margin>
             </Label>
-            <Label fx:id="monsterSpeed" layoutX="10.0" layoutY="58.0" prefHeight="24.0" prefWidth="244.0">
+            <Label fx:id="monsterSpeed" layoutX="10.0" layoutY="58.0" prefHeight="24.0" prefWidth="266.66">
                 <font>
-                    <Font name="Comic Sans MS" size="14.0"/>
+                    <Font name="Comic Sans MS" size="17.0"/>
                 </font>
                 <VBox.margin>
                     <Insets top="10.0"/>
@@ -90,31 +95,31 @@
             </Label>
         </VBox>
     </HBox>
-    <HBox prefHeight="110.0" prefWidth="750.0">
-        <VBox prefHeight="110.0" prefWidth="375.0">
-            <HBox prefHeight="20.0" prefWidth="375.0">
-                <Label fx:id="ability1" prefHeight="24.0" prefWidth="175.0" wrapText="true">
+    <HBox prefHeight="110.0" prefWidth="800.0">
+        <VBox prefHeight="110.0" prefWidth="400.0">
+            <HBox prefHeight="20.0" prefWidth="400.0">
+                <Label fx:id="ability1" prefHeight="24.0" prefWidth="180.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="17.0"/>
                     </font>
                 </Label>
-                <Label fx:id="accuracy1" prefHeight="24.0" prefWidth="100.0" wrapText="true">
+                <Label fx:id="accuracy1" prefHeight="24.0" prefWidth="140.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
                 </Label>
-                <Label fx:id="power1" prefHeight="24.0" prefWidth="100.0" wrapText="true">
+                <Label fx:id="power1" prefHeight="24.0" prefWidth="80" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
                 </Label>
             </HBox>
-            <Label fx:id="type1" prefHeight="24.0" prefWidth="375.0" wrapText="true">
+            <Label fx:id="type1" prefHeight="24.0" prefWidth="400.0" wrapText="true">
                 <font>
                     <Font name="Comic Sans MS" size="14.0"/>
                 </font>
             </Label>
-            <TextFlow prefHeight="50.0" prefWidth="375.0">
+            <TextFlow prefHeight="50.0" prefWidth="400.0">
                 <Text fx:id="description1"
                       wrappingWidth="348.0">
                     <font>
@@ -123,30 +128,30 @@
                 </Text>
             </TextFlow>
         </VBox>
-        <VBox prefHeight="110.0" prefWidth="375.0">
-            <HBox prefHeight="20.0" prefWidth="375.0">
-                <Label fx:id="ability2" prefHeight="24.0" prefWidth="175.0" wrapText="true">
+        <VBox prefHeight="110.0" prefWidth="400.0">
+            <HBox prefHeight="20.0" prefWidth="400.0">
+                <Label fx:id="ability2" prefHeight="24.0" prefWidth="180.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="17.0"/>
                     </font>
                 </Label>
-                <Label fx:id="accuracy2" prefHeight="24.0" prefWidth="100.0" wrapText="true">
+                <Label fx:id="accuracy2" prefHeight="24.0" prefWidth="140.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
                 </Label>
-                <Label fx:id="power2" prefHeight="24.0" prefWidth="100.0" wrapText="true">
+                <Label fx:id="power2" prefHeight="24.0" prefWidth="80.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
                 </Label>
             </HBox>
-            <Label fx:id="type2" prefHeight="24.0" prefWidth="375.0" wrapText="true">
+            <Label fx:id="type2" prefHeight="24.0" prefWidth="400.0" wrapText="true">
                 <font>
                     <Font name="Comic Sans MS" size="14.0"/>
                 </font>
             </Label>
-            <TextFlow prefHeight="50.0" prefWidth="375.0">
+            <TextFlow prefHeight="50.0" prefWidth="400.0">
                 <Text fx:id="description2"
                       wrappingWidth="348.0">
                     <font>
@@ -156,31 +161,31 @@
             </TextFlow>
         </VBox>
     </HBox>
-    <HBox prefHeight="110.0" prefWidth="750.0">
-        <VBox prefHeight="110.0" prefWidth="375.0">
-            <HBox prefHeight="20.0" prefWidth="375.0">
-                <Label fx:id="ability3" prefHeight="24.0" prefWidth="175.0" wrapText="true">
+    <HBox prefHeight="110.0" prefWidth="800.0">
+        <VBox prefHeight="110.0" prefWidth="400.0">
+            <HBox prefHeight="20.0" prefWidth="400.0">
+                <Label fx:id="ability3" prefHeight="24.0" prefWidth="180.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="17.0"/>
                     </font>
                 </Label>
-                <Label fx:id="accuracy3" prefHeight="24.0" prefWidth="100.0" wrapText="true">
+                <Label fx:id="accuracy3" prefHeight="24.0" prefWidth="140.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
                 </Label>
-                <Label fx:id="power3" prefHeight="24.0" prefWidth="100.0" wrapText="true">
+                <Label fx:id="power3" prefHeight="24.0" prefWidth="80.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
                 </Label>
             </HBox>
-            <Label fx:id="type3" prefHeight="24.0" prefWidth="375.0" wrapText="true">
+            <Label fx:id="type3" prefHeight="24.0" prefWidth="400.0" wrapText="true">
                 <font>
                     <Font name="Comic Sans MS" size="14.0"/>
                 </font>
             </Label>
-            <TextFlow prefHeight="50.0" prefWidth="348.0">
+            <TextFlow prefHeight="50.0" prefWidth="400.0">
                 <Text fx:id="description3"
                       wrappingWidth="348.0">
                     <font>
@@ -189,30 +194,30 @@
                 </Text>
             </TextFlow>
         </VBox>
-        <VBox prefHeight="110.0" prefWidth="375.0">
-            <HBox prefHeight="24.0" prefWidth="375.0">
-                <Label fx:id="ability4" prefHeight="24.0" prefWidth="175.0" wrapText="true">
+        <VBox prefHeight="110.0" prefWidth="400.0">
+            <HBox prefHeight="24.0" prefWidth="400.0">
+                <Label fx:id="ability4" prefHeight="24.0" prefWidth="180.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="17.0"/>
                     </font>
                 </Label>
-                <Label fx:id="accuracy4" prefHeight="24.0" prefWidth="100.0" wrapText="true">
+                <Label fx:id="accuracy4" prefHeight="24.0" prefWidth="140.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
                 </Label>
-                <Label fx:id="power4" prefHeight="24.0" prefWidth="100.0" wrapText="true">
+                <Label fx:id="power4" prefHeight="24.0" prefWidth="80.0" wrapText="true">
                     <font>
                         <Font name="Comic Sans MS" size="14.0"/>
                     </font>
                 </Label>
             </HBox>
-            <Label fx:id="type4" prefHeight="24.0" prefWidth="375.0" wrapText="true">
+            <Label fx:id="type4" prefHeight="24.0" prefWidth="400.0" wrapText="true">
                 <font>
                     <Font name="Comic Sans MS" size="14.0"/>
                 </font>
             </Label>
-            <TextFlow prefHeight="50.0" prefWidth="375.0">
+            <TextFlow prefHeight="50.0" prefWidth="400.0">
                 <Text fx:id="description4"
                         wrappingWidth="348.0">
                         <font>
