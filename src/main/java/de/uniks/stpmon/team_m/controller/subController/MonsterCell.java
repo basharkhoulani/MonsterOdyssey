@@ -85,14 +85,14 @@ public class MonsterCell extends ListCell<Monster> {
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER)
                     .subscribe(monsterType -> {
                         monsterTypeDto = monsterType;
-                        monsterName.setText(monsterTypeDto.name());
-                        StringBuilder type = new StringBuilder("Type:");
+                        monsterName.setText(resources.getString("NAME") + ": " + monsterTypeDto.name());
+                        StringBuilder type = new StringBuilder(resources.getString("TYPE") + ":");
                         for (String s : monsterTypeDto.type()) {
                             type.append(" ").append(s);
                         }
                         this.monsterType.setText(type.toString());
                     }, Throwable::printStackTrace));
-            monsterLevel.setText("Level: " + monster.level());
+            monsterLevel.setText(resources.getString("LEVEL") + ": " + monster.level());
             disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
                     .subscribe(monsterImage -> {
                         this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
