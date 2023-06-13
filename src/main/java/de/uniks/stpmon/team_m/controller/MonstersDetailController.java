@@ -137,6 +137,9 @@ public class MonstersDetailController extends Controller{
             for (Map.Entry<String, Integer> entry : monster.abilities().entrySet()) {
                 AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey()) - 1);
                 abilityLabels.get(i).setText(ability.name() + " " + entry.getValue() + "/" + ability.maxUses());
+                accuracyLabels.get(i).setText(resources.getString("ACCURACY") + ability.accuracy());
+                powerLabels.get(i).setText(resources.getString("POWER") + ability.power());
+                descriptionLabels.get(i).setText(ability.description());
                 i++;
             }}));
     }
