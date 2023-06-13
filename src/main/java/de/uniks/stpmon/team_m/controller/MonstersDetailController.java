@@ -17,7 +17,9 @@ import javafx.stage.Stage;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.LinkedHashMap;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 
@@ -84,6 +86,9 @@ public class MonstersDetailController extends Controller{
     @Override
     public Parent render() {
         final Parent parent = super.render();
+        if (!GraphicsEnvironment.isHeadless()) {
+            parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../styles.css")).toExternalForm());
+        }
         initMonsterDetails();
         return parent;
     }
@@ -102,6 +107,8 @@ public class MonstersDetailController extends Controller{
 
     private void initMonsterDetails(){
         monsterImageView.setImage(monsterImage);
+
+        // Center Top
         monsterName.setText(resources.getString("NAME") + monsterTypeDto.name());
         StringBuilder type = new StringBuilder(resources.getString("TYPE"));
         for (String s : monsterTypeDto.type()) {
@@ -110,6 +117,12 @@ public class MonstersDetailController extends Controller{
         monsterType.setText(type.toString());
         monsterExperience.setText(resources.getString("EXPERIENCE") + monster.experience());
         monsterLevel.setText(resources.getString("LEVEL") + monster.level());
+
+        // Center Right
+        monsterHealth.setText(resources.getString("HEALTH") + monster.currentAttributes().health() + "/" + monster.attributes().health());
+        monsterAttack.setText(resources.getString("ATTACK") + monster.currentAttributes().attack() + "/" + monster.attributes().attack());
+        monsterDefense.setText(resources.getString("DEFENSE") + monster.currentAttributes().defense() + "/" + monster.attributes().defense());
+        monsterSpeed.setText(resources.getString("SPEED") + monster.currentAttributes().speed() + "/" + monster.attributes().speed());
     }
 
 
