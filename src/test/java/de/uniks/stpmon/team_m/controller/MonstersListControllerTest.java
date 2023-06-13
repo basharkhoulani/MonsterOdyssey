@@ -120,7 +120,7 @@ public class MonstersListControllerTest extends ApplicationTest {
 
     @Test
     void controllerTest() {
-        moveTo("Flamander");
+        moveTo("Name: Flamander");
         moveTo("Type: fire");
         moveTo("Level: 1");
     }
