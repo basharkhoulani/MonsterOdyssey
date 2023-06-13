@@ -85,14 +85,14 @@ public class MonsterCell extends ListCell<Monster> {
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER)
                     .subscribe(monsterType -> {
                         monsterTypeDto = monsterType;
-                        monsterName.setText(resources.getString("NAME") + ": " + monsterTypeDto.name());
-                        StringBuilder type = new StringBuilder(resources.getString("TYPE") + ":");
+                        monsterName.setText(resources.getString("NAME") + monsterTypeDto.name());
+                        StringBuilder type = new StringBuilder(resources.getString("TYPE"));
                         for (String s : monsterTypeDto.type()) {
-                            type.append(" ").append(s);
+                            type.append(s).append(" ");
                         }
                         this.monsterType.setText(type.toString());
                     }, Throwable::printStackTrace));
-            monsterLevel.setText(resources.getString("LEVEL") + ": " + monster.level());
+            monsterLevel.setText(resources.getString("LEVEL") + monster.level());
             disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
                     .subscribe(monsterImage -> {
                         this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
@@ -108,7 +108,7 @@ public class MonsterCell extends ListCell<Monster> {
         Stage popup = (Stage) rootmonsterHBox.getScene().getWindow();
         popup.close();
         MonstersDetailController monstersDetailController = new MonstersDetailController();
-        monstersDetailController.init(monstersListController, monster, monsterTypeDto, monsterImage);
+        monstersDetailController.init(monstersListController, monster, monsterTypeDto, monsterImage, resources);
         Scene scene = new Scene(monstersDetailController.render());
         popup.setScene(scene);
         popup.show();

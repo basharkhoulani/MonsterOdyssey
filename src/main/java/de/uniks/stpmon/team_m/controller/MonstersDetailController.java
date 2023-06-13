@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.LinkedHashMap;
+import java.util.ResourceBundle;
 
 
 public class MonstersDetailController extends Controller{
@@ -87,12 +88,13 @@ public class MonstersDetailController extends Controller{
         return parent;
     }
 
-    public void init(MonstersListController monstersListController, Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage) {
+    public void init(MonstersListController monstersListController, Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources) {
         super.init();
         this.monstersListController = monstersListController;
         this.monster = monster;
         this.monsterTypeDto = monsterTypeDto;
         this.monsterImage = monsterImage;
+        this.resources = resources;
     }
 
     @Inject
@@ -100,6 +102,7 @@ public class MonstersDetailController extends Controller{
 
     private void initMonsterDetails(){
         monsterImageView.setImage(monsterImage);
+        monsterName.setText(resources.getString("NAME") + monsterTypeDto.name());
     }
 
 
