@@ -373,10 +373,8 @@ public class IngameController extends Controller {
             }
         });
          */
-        });
         Region region = trainerStorageProvider.get().getRegion();
-        disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER)
-                .subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
+        disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
         return parent;
     }
 
