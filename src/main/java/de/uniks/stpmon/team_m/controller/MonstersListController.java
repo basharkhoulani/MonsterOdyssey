@@ -49,9 +49,6 @@ public class MonstersListController extends Controller{
     public UserStorage usersStorage;
     @Inject
     public Provider<PresetsService> presetsServiceProvider;
-    private ObservableList<MonsterTypeDto> monsterTypeDtos;
-
-
 
     @Inject
     public MonstersListController() {
@@ -86,7 +83,7 @@ public class MonstersListController extends Controller{
     }
 
     private void initMonsterList() {
-        monsterListView.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get()));
+        monsterListView.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this));
         monsterListView.getItems().addAll(trainerStorageProvider.get().getMonsters());
         monsterListView.setFocusModel(null);
         monsterListView.setSelectionModel(null);

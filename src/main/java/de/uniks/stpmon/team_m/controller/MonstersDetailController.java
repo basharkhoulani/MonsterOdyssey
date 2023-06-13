@@ -2,13 +2,16 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterAttributes;
+import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
@@ -67,13 +70,13 @@ public class MonstersDetailController extends Controller{
     public Label power4;
     @FXML
     public Label description4;
-    @Inject
-    Provider<MonstersListController> monstersListControllerProvider;
 
     @Inject
     Provider<IngameController> ingameControllerProvider;
-    private MonstersListController monstersListController;
+    MonstersListController monstersListController;
     private Monster monster;
+    private MonsterTypeDto monsterTypeDto;
+    private Image monsterImage;
 
     @Override
     public Parent render() {
@@ -81,11 +84,13 @@ public class MonstersDetailController extends Controller{
         //initMonsterDetails();
         return parent;
     }
-    @Override
-    public void init() {
+
+    public void init(MonstersListController monstersListController, Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage) {
         super.init();
-        monstersListController= new MonstersListController();
-        monstersListController.init();
+        this.monstersListController = monstersListController;
+        this.monster = monster;
+        this.monsterTypeDto = monsterTypeDto;
+        this.monsterImage = monsterImage;
     }
 
     @Inject
@@ -103,5 +108,9 @@ public class MonstersDetailController extends Controller{
     public void goBackToMonsters() {
         Stage stage = (Stage) goBackMonstersButton.getScene().getWindow();
         stage.close();
+        monstersListController.init();
+        Scene scene = new Scene(monstersListController.render());
+        stage.setScene(scene);
+        stage.show();
     }
 }

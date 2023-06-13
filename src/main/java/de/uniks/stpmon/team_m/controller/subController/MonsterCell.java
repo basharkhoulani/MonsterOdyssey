@@ -17,6 +17,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
@@ -24,6 +25,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -57,8 +59,8 @@ public class MonsterCell extends ListCell<Monster> {
     public PresetsService presetsService;
     @Inject
     Provider<TrainersService> trainersServiceProvider;
-    @Inject
-    Provider<MonstersListController> monstersListControllerProvider;
+
+    MonstersListController monstersListController;
     private FXMLLoader loader;
 
     protected final CompositeDisposable disposables = new CompositeDisposable();
@@ -66,9 +68,10 @@ public class MonsterCell extends ListCell<Monster> {
     private MonsterTypeDto monsterTypeDto;
     private Image monsterImage;
 
-    public MonsterCell(ResourceBundle resources, PresetsService presetsService) {
+    public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController) {
         this.resources = resources;
         this.presetsService = presetsService;
+        this.monstersListController = monstersListController;
     }
 
     @Override
@@ -102,14 +105,21 @@ public class MonsterCell extends ListCell<Monster> {
     }
 
     private void showDetails(Monster monster) {
-        Dialog<?> monstersDialog = new Dialog<>();
-        monstersDialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-        Node closeButton = monstersDialog.getDialogPane().lookupButton(ButtonType.CLOSE);
-        closeButton.managedProperty().bind(closeButton.visibleProperty());
-        closeButton.setVisible(false);
-        monstersDialog.setTitle(resources.getString("MONSTER"));
-        monstersDialog.getDialogPane().setContent(new MonstersDetailController().render());
-        monstersDialog.showAndWait();
+        Stage popup = (Stage) rootmonsterHBox.getScene().getWindow();
+        popup.close();
+        MonstersDetailController monstersDetailController = new MonstersDetailController();
+        monstersDetailController.init(monstersListController, monster, monsterTypeDto, monsterImage);
+        Scene scene = new Scene(monstersDetailController.render());
+        popup.setScene(scene);
+        popup.show();
+//        Dialog<?> monstersDialog = new Dialog<>();
+//        monstersDialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+//        Node closeButton = monstersDialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+//        closeButton.managedProperty().bind(closeButton.visibleProperty());
+//        closeButton.setVisible(false);
+//        monstersDialog.setTitle(resources.getString("MONSTER"));
+//        monstersDialog.getDialogPane().setContent(new MonstersDetailController().render());
+//        monstersDialog.showAndWait();
     }
 
     private void loadFXML() {
