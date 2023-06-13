@@ -29,9 +29,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ResourceBundle;
 
-;
-
-
 public class MonsterCell extends ListCell<Monster> {
 
     @FXML
@@ -98,9 +95,7 @@ public class MonsterCell extends ListCell<Monster> {
                         this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
                         monsterImageView.setImage(this.monsterImage);
                     }, Throwable::printStackTrace));
-            rootmonsterHBox.setOnMouseClicked(event -> {
-                showDetails(monster);
-            });
+            rootmonsterHBox.setOnMouseClicked(event -> showDetails(monster));
             setGraphic(rootmonsterHBox);
             setText(null);
         }
