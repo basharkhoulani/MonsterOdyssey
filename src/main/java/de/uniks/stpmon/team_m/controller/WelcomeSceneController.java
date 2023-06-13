@@ -173,7 +173,6 @@ public class WelcomeSceneController extends Controller {
                                         error.printStackTrace();
                                     }
                             ));
-                            app.show(ingameControllerProvider.get());
                         }, error -> showError(error.getMessage())
                 ));
             }

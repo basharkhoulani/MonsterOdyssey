@@ -597,6 +597,7 @@ public class IngameController extends Controller {
         trainerSettingsDialog.setTitle(resources.getString("TRAINER.PROFIL"));
         ingameTrainerSettingsControllerProvider.get().setApp(this.app);
         ingameTrainerSettingsControllerProvider.get().setValues(resources, preferences, resourceBundleProvider, ingameTrainerSettingsControllerProvider.get(), app);
+        ingameTrainerSettingsControllerProvider.get().setIngameController(this);
         trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());
         trainerSettingsDialog.getDialogPane().setExpandableContent(null);
         trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());

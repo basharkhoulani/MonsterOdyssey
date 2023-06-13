@@ -46,8 +46,7 @@ public class IngameTrainerSettingsController extends Controller {
 
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
-    @Inject
-    Provider<IngameController> ingameControllerProvider;
+    private IngameController ingameController;
     @Inject
     public PresetsService presetsService;
 
@@ -116,7 +115,7 @@ public class IngameTrainerSettingsController extends Controller {
                         trainerStorageProvider.get().setRegion(null);
                     }, error -> this.showError(error.getMessage())));
             MainMenuController mainMenuController = mainMenuControllerProvider.get();
-            mainMenuController.setTrainerDeletion();
+            ingameController.destroy();
             app.show(mainMenuController);
             alert.close();
         }
@@ -129,5 +128,9 @@ public class IngameTrainerSettingsController extends Controller {
             Image[] character = ImageProcessor.cropTrainerImages(trainerChunk,"down" , false);
             trainerAvatarImageView.setImage(character[0]);
         }
+    }
+
+    public void setIngameController(IngameController ingameController) {
+        this.ingameController = ingameController;
     }
 }
