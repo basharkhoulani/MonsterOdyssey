@@ -19,8 +19,10 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
@@ -103,6 +105,8 @@ public class IngameController extends Controller {
     public Canvas overTrainerCanvas;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     private boolean isChatting = false;
+    @Inject
+    Provider<MonstersListController> monstersListControllerProvider;
     private final ObservableList<MoveTrainerDto> moveTrainerDtos = FXCollections.observableArrayList();
     HashMap<String, Image> tileSetImages = new HashMap<>();
     HashMap<String, TileSet> tileSetJsons = new HashMap<>();
@@ -118,6 +122,9 @@ public class IngameController extends Controller {
     private Image[] trainerWalkingRight;
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     private ObservableList<Trainer> trainers;
+
+    private EventHandler<KeyEvent> keyPressedEventHandler;
+    private EventHandler<KeyEvent> keyReleasedEventHandler;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -263,7 +270,8 @@ public class IngameController extends Controller {
         if (!GraphicsEnvironment.isHeadless()) {
             spriteStandingAnimation.play();
         }
-        app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, evt -> {
+        keyPressedEventHandler = evt -> {
+            evt.consume();
             if (isChatting) {
                 return;
             }
@@ -290,9 +298,10 @@ public class IngameController extends Controller {
             if ((evt.getCode() == KeyCode.D)) {
                 walk("right");
             }
-        });
+        };
 
-        app.getStage().getScene().addEventHandler(KeyEvent.KEY_RELEASED, evt -> {
+        keyReleasedEventHandler = evt -> {
+            evt.consume();
             if (isChatting) {
                 return;
             }
@@ -314,10 +323,13 @@ public class IngameController extends Controller {
                 }
             }
 
-        });
+        };
+
+        app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyPressedEventHandler);
+        app.getStage().getScene().addEventHandler(KeyEvent.KEY_RELEASED, keyReleasedEventHandler);
         Region region = trainerStorageProvider.get().getRegion();
-        disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER)
-                .subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
+        disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
+        monstersListControllerProvider.get().init();
         return parent;
     }
 
@@ -575,6 +587,7 @@ public class IngameController extends Controller {
             alert.close();
             app.getStage().getScene().setOnKeyPressed(null);
             app.getStage().getScene().setOnKeyReleased(null);
+            destroy();
             app.show(mainMenuControllerProvider.get());
         }
     }
@@ -583,10 +596,12 @@ public class IngameController extends Controller {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
         trainerSettingsDialog.setTitle(resources.getString("TRAINER.PROFIL"));
         ingameTrainerSettingsControllerProvider.get().setApp(this.app);
+        ingameTrainerSettingsControllerProvider.get().setValues(resources, preferences, resourceBundleProvider, ingameTrainerSettingsControllerProvider.get(), app);
         trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());
         trainerSettingsDialog.getDialogPane().setExpandableContent(null);
         trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
         trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");
+        trainerSettingsDialog.initOwner(app.getStage());
         Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();
         popUp.setOnCloseRequest(evt -> {
                     ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close();
@@ -660,6 +675,11 @@ public class IngameController extends Controller {
                     final Message message = event.data();
                     switch (event.suffix()) {
                         case "created" -> {
+                            for (Message m : messages) {
+                                if (m._id().equals(message._id())) {
+                                    return;
+                                }
+                            }
                             messages.add(message);
                             chatListView.scrollTo(chatListView.getItems().size() - 1);
                         }
@@ -690,7 +710,8 @@ public class IngameController extends Controller {
         }
         return null;
     }
-    public void setTrainerSpriteImageView (Trainer trainer, ImageView imageView) {
+
+    public void setTrainerSpriteImageView(Trainer trainer, ImageView imageView) {
         if (!GraphicsEnvironment.isHeadless()) {
             disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
                         Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
@@ -699,5 +720,22 @@ public class IngameController extends Controller {
                     }, error -> showError(error.getMessage())
             ));
         }
+    }
+
+    public void showMonsters() {
+        Scene scene = new Scene(monstersListControllerProvider.get().render());
+        Stage popupStage = new Stage();
+        popupStage.initOwner(app.getStage());
+        popupStage.setScene(scene);
+        popupStage.setTitle(resources.getString("MONSTERS"));
+        popupStage.show();
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        app.getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, keyPressedEventHandler);
+        app.getStage().getScene().removeEventHandler(KeyEvent.KEY_RELEASED, keyReleasedEventHandler);
+        messageField.removeEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
     }
 }

@@ -32,7 +32,8 @@
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </padding>
-                    <Button fx:id="monstersButton" focusTraversable="false" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0" mnemonicParsing="false" text="%MONSTER">
+                    <Button fx:id="monstersButton" focusTraversable="false" maxHeight="40.0" maxWidth="125.0"
+                            minHeight="40.0" minWidth="125.0" mnemonicParsing="false" text="%MONSTER" onAction="#showMonsters">
                         <font>
                             <Font name="Comic Sans MS Bold" size="17.0" />
                         </font>

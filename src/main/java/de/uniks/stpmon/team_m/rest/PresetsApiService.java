@@ -21,7 +21,7 @@ public interface PresetsApiService {
     @GET("presets/monsters/{id}")
     Observable<MonsterTypeDto> getMonster(@Path("id") int id);
     @GET("presets/monsters/{id}/image")
-    Observable<ResponseBody> getMonsterImage(@Path("id") String id);
+    Observable<ResponseBody> getMonsterImage(@Path("id") int id);
     @GET("presets/abilities")
     Observable<List<AbilityDto>> getAbilities();
     @GET("presets/abilities/{id}")
