@@ -1,8 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
-import de.uniks.stpmon.team_m.controller.subController.MonsterCell;
-import de.uniks.stpmon.team_m.controller.subController.MonstersDetailController;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;

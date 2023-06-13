@@ -3,7 +3,6 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.AppTest;
-import de.uniks.stpmon.team_m.controller.subController.AvatarSelectionController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.RadioButton;

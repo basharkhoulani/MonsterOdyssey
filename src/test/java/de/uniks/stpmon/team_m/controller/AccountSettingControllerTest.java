@@ -281,10 +281,5 @@ class AccountSettingControllerTest extends ApplicationTest {
 
         final DialogPane dialogPane = lookup(".dialog-pane").query();
         assertTrue(dialogPane.isVisible());
-
-        final RadioButton radioButtonLanguageEnglish = lookup("#radioButtonLanguageEnglish").query();
-        final RadioButton radioButtonLanguageGerman = lookup("#radioButtonLanguageGerman").query();
-        final RadioButton radioButtonLanguageChinese = lookup("#radioButtonLanguageChinese").query();
-        final Button applyLanguageButton = lookup("#applyLanguageButton").query();
     }
 }

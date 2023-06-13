@@ -61,15 +61,9 @@ public class ChangeLanguageController extends Controller {
         radioButtonLanguageChinese.setToggleGroup(languageToggleGroup);
         Locale locale = resources.getLocale();
         switch (locale.toLanguageTag()) {
-            case "de":
-                radioButtonLanguageGerman.setSelected(true);
-                break;
-            case "en":
-                radioButtonLanguageEnglish.setSelected(true);
-                break;
-            case "zh":
-                radioButtonLanguageChinese.setSelected(true);
-                break;
+            case "de" -> radioButtonLanguageGerman.setSelected(true);
+            case "en" -> radioButtonLanguageEnglish.setSelected(true);
+            case "zh" -> radioButtonLanguageChinese.setSelected(true);
         }
     }
 
