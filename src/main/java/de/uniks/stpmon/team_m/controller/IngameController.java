@@ -271,6 +271,7 @@ public class IngameController extends Controller {
             spriteStandingAnimation.play();
         }
         keyPressedEventHandler = evt -> {
+            evt.consume();
             if (isChatting) {
                 return;
             }
@@ -300,6 +301,7 @@ public class IngameController extends Controller {
         };
 
         keyReleasedEventHandler = evt -> {
+            evt.consume();
             if (isChatting) {
                 return;
             }
@@ -633,6 +635,7 @@ public class IngameController extends Controller {
             alert.close();
             app.getStage().getScene().setOnKeyPressed(null);
             app.getStage().getScene().setOnKeyReleased(null);
+            destroy();
             app.show(mainMenuControllerProvider.get());
         }
     }
@@ -641,6 +644,7 @@ public class IngameController extends Controller {
         Dialog<?> trainerSettingsDialog = new Dialog<>();
         trainerSettingsDialog.setTitle(resources.getString("TRAINER.PROFIL"));
         ingameTrainerSettingsControllerProvider.get().setApp(this.app);
+        ingameTrainerSettingsControllerProvider.get().setValues(resources, preferences, resourceBundleProvider, ingameTrainerSettingsControllerProvider.get(), app);
         trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());
         trainerSettingsDialog.getDialogPane().setExpandableContent(null);
         trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
