@@ -1,7 +1,6 @@
-package de.uniks.stpmon.team_m.controller;
+package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.controller.subController.MonstersListController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.MonstersService;
 import de.uniks.stpmon.team_m.service.PresetsService;
