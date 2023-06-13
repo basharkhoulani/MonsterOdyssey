@@ -1,5 +1,7 @@
-package de.uniks.stpmon.team_m.controller;
+package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
@@ -12,7 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
@@ -20,8 +21,6 @@ import javax.inject.Provider;
 import java.awt.*;
 import java.util.List;
 import java.util.*;
-
-import static de.uniks.stpmon.team_m.Constants.ONE;
 
 
 public class MonstersDetailController extends Controller {
@@ -93,7 +92,7 @@ public class MonstersDetailController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
         if (!GraphicsEnvironment.isHeadless()) {
-            parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../styles.css")).toExternalForm());
+            parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../../styles.css")).toExternalForm());
         }
         initMonsterDetails();
         return parent;
@@ -114,9 +113,12 @@ public class MonstersDetailController extends Controller {
     }
 
     private void initMonsterDetails() {
-        monsterImageView.setImage(monsterImage);
+        // Sprite
+        if (!GraphicsEnvironment.isHeadless()) {
+            monsterImageView.setImage(monsterImage);
+        }
 
-        // Top Middle
+        // Name, Type, Experience, Level
         monsterName.setText(resources.getString("NAME") + monsterTypeDto.name());
         StringBuilder type = new StringBuilder(resources.getString("TYPE"));
         for (String s : monsterTypeDto.type()) {
@@ -126,12 +128,13 @@ public class MonstersDetailController extends Controller {
         monsterExperience.setText(resources.getString("EXPERIENCE") + monster.experience());
         monsterLevel.setText(resources.getString("LEVEL") + monster.level());
 
-        // Top Right
+        // Attributes
         monsterHealth.setText(resources.getString("HEALTH") + monster.currentAttributes().health() + "/" + monster.attributes().health());
         monsterAttack.setText(resources.getString("ATTACK") + monster.currentAttributes().attack() + "/" + monster.attributes().attack());
         monsterDefense.setText(resources.getString("DEFENSE") + monster.currentAttributes().defense() + "/" + monster.attributes().defense());
         monsterSpeed.setText(resources.getString("SPEED") + monster.currentAttributes().speed() + "/" + monster.attributes().speed());
-        // First Ability
+
+        // Abilities
         List<Label> abilityLabels = new ArrayList<>(Arrays.asList(ability1, ability2, ability3, ability4));
         List<Label> accuracyLabels = new ArrayList<>(Arrays.asList(accuracy1, accuracy2, accuracy3, accuracy4));
         List<Label> powerLabels = new ArrayList<>(Arrays.asList(power1, power2, power3, power4));
@@ -149,7 +152,7 @@ public class MonstersDetailController extends Controller {
                 descriptionLabels.get(i).setText(ability.description());
                 i++;
             }
-        }));
+        }, error -> showError(error.getMessage())));
     }
 
 

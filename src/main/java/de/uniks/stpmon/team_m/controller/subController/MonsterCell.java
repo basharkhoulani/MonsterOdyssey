@@ -1,8 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.Main;
-import de.uniks.stpmon.team_m.controller.MonstersDetailController;
-import de.uniks.stpmon.team_m.controller.MonstersListController;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.service.PresetsService;
@@ -109,14 +107,6 @@ public class MonsterCell extends ListCell<Monster> {
         Scene scene = new Scene(monstersDetailController.render());
         popup.setScene(scene);
         popup.show();
-//        Dialog<?> monstersDialog = new Dialog<>();
-//        monstersDialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-//        Node closeButton = monstersDialog.getDialogPane().lookupButton(ButtonType.CLOSE);
-//        closeButton.managedProperty().bind(closeButton.visibleProperty());
-//        closeButton.setVisible(false);
-//        monstersDialog.setTitle(resources.getString("MONSTER"));
-//        monstersDialog.getDialogPane().setContent(new MonstersDetailController().render());
-//        monstersDialog.showAndWait();
     }
 
     private void loadFXML() {

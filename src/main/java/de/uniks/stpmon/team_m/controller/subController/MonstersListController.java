@@ -1,6 +1,8 @@
-package de.uniks.stpmon.team_m.controller;
+package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.subController.MonsterCell;
+import de.uniks.stpmon.team_m.controller.subController.MonstersDetailController;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -47,12 +49,7 @@ public class MonstersListController extends Controller {
     public void init() {
         super.init();
         disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
-                .subscribe(monsters -> {
-                    trainerStorageProvider.get().setMonsters(new ArrayList<>(monsters));
-                }, throwable -> {
-                    showError(throwable.getMessage());
-                    throwable.printStackTrace();
-                }));
+                .subscribe(monsters -> trainerStorageProvider.get().setMonsters(new ArrayList<>(monsters)), throwable -> showError(throwable.getMessage())));
 
     }
 
@@ -65,7 +62,7 @@ public class MonstersListController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
         if (!GraphicsEnvironment.isHeadless()) {
-            parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../styles.css")).toExternalForm());
+            parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../../styles.css")).toExternalForm());
         }
         initMonsterList();
         return parent;

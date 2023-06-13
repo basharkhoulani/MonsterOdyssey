@@ -311,7 +311,7 @@
 .monsterList {
     -fx-border-color: transparent;
 }
-.monstersDetail {
+.whiteBackgroundWithBorder {
     -fx-background-color: #FFFFFF;
     -fx-border-color: #000000;
 }

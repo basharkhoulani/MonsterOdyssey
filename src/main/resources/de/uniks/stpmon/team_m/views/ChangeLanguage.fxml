@@ -7,7 +7,7 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
       prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="de.uniks.stpmon.team_m.controller.ChangeLanguageController">
+      fx:controller="de.uniks.stpmon.team_m.controller.subController.ChangeLanguageController">
    <Label fx:id="changeLanguageLabel" alignment="CENTER" prefHeight="35.0" prefWidth="268.0" text="%CHOOSE.LANGUAGE"
           textAlignment="CENTER">
       <font>

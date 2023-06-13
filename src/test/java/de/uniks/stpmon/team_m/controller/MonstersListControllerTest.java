@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.controller.subController.MonstersListController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.MonstersService;
 import de.uniks.stpmon.team_m.service.PresetsService;
@@ -121,7 +122,7 @@ public class MonstersListControllerTest extends ApplicationTest {
     @Test
     void controllerTest() {
         moveTo("Name: Flamander");
-        moveTo("Type: fire");
+        moveTo("Type: fire ");
         moveTo("Level: 1");
     }
 }

@@ -6,8 +6,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0"
-      prefWidth="800.0" styleClass="monstersDetail" xmlns="http://javafx.com/javafx/20"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MonstersDetailController">
+      prefWidth="800.0" styleClass="whiteBackgroundWithBorder" xmlns="http://javafx.com/javafx/20"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.MonstersDetailController">
     <HBox prefHeight="156.0" prefWidth="800.0" styleClass="bottomLine">
         <HBox prefWidth="266.66" styleClass="rightLine">
             <Button fx:id="goBackMonstersButton" mnemonicParsing="false" onAction="#goBackToMonsters" prefHeight="40.0"

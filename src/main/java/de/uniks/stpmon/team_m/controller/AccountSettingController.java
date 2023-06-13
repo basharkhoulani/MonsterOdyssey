@@ -1,7 +1,8 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.subController.AvatarSelectionController;
+import de.uniks.stpmon.team_m.controller.subController.ChangeLanguageController;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
@@ -11,14 +12,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Modality;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -240,6 +240,7 @@ public class AccountSettingController extends Controller {
         dialog.initOwner(app.getStage());
         if (!GraphicsEnvironment.isHeadless()) {
             dialog.getDialogPane().getStyleClass().add("comicSans");
+            dialog.getDialogPane().getStyleClass().add("whiteBackgroundWithBorder");
             Button ok = (Button) dialog.getDialogPane().lookupButton(okButton);
             ok.getStyleClass().add("buttonsWhite");
             Button cancel = (Button) dialog.getDialogPane().lookupButton(cancelButton);
