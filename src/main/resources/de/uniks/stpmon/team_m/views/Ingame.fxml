@@ -7,15 +7,17 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
-<VBox fx:id="ingameVBox" alignment="CENTER_LEFT" cacheShape="false" centerShape="false" scaleShape="false" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
-    <StackPane cacheShape="false" centerShape="false" onMouseClicked="#paneClicked" scaleShape="false" style="-fx-background-color: black;" VBox.vgrow="ALWAYS">
-        <Canvas fx:id="canvas" height="200.0" width="200.0" />
-      <Canvas fx:id="trainersCanvas" height="200.0" width="200.0" />
-      <Canvas fx:id="userTrainerCanvas" height="200.0" width="200.0" />
-        <VBox alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-            <ImageView fx:id="playerSpriteImageView" fitHeight="25.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
-        </VBox>
+<?import java.lang.*?>
+<VBox fx:id="ingameVBox" alignment="CENTER_LEFT" cacheShape="false" centerShape="false" scaleShape="false"
+      xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
+    <StackPane cacheShape="false" centerShape="false" onMouseClicked="#paneClicked" scaleShape="false"
+               style="-fx-background-color: black;" VBox.vgrow="ALWAYS">
+        <Canvas fx:id="canvas" height="200.0" width="200.0"/>
+        <Canvas fx:id="trainersCanvas" height="200.0" width="200.0" />
+        <Canvas fx:id="userTrainerCanvas" height="200.0" width="200.0" />
+      <Canvas fx:id="trainerCanvas" height="200.0" width="200.0" />
+      <Canvas fx:id="overTrainerCanvas" height="200.0" width="200.0" />
         <BorderPane fx:id="borderPane">
             <top>
                 <HBox alignment="TOP_RIGHT" fillHeight="false" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="40.0" BorderPane.alignment="TOP_RIGHT">
@@ -27,7 +29,8 @@
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </padding>
-                    <Button fx:id="monstersButton" focusTraversable="false" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0" mnemonicParsing="false" text="%MONSTER">
+                    <Button fx:id="monstersButton" focusTraversable="false" maxHeight="40.0" maxWidth="125.0"
+                            minHeight="40.0" minWidth="125.0" mnemonicParsing="false" text="%MONSTER" onAction="#showMonsters">
                         <font>
                             <Font name="Comic Sans MS Bold" size="17.0" />
                         </font>
