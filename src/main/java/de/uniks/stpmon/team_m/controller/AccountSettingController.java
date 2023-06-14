@@ -20,7 +20,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.stage.Modality;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -143,12 +142,12 @@ public class AccountSettingController extends Controller {
 
         BooleanBinding isInvalidUsername = username.isEmpty();
         usernameField.setOnKeyPressed(event -> {
-            if(event.getCode() == KeyCode.ENTER) {
+            if (event.getCode() == KeyCode.ENTER) {
                 saveUsername();
             }
         });
         passwordField.setOnKeyPressed(event -> {
-            if(event.getCode() == KeyCode.ENTER) {
+            if (event.getCode() == KeyCode.ENTER) {
                 savePassword();
             }
         });

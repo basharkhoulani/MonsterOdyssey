@@ -121,7 +121,7 @@ public class MonstersListControllerTest extends ApplicationTest {
     @Test
     void controllerTest() {
         moveTo("Name: Flamander");
-        moveTo("Type: fire ");
+        moveTo("Type: fire");
         moveTo("Level: 1");
     }
 }

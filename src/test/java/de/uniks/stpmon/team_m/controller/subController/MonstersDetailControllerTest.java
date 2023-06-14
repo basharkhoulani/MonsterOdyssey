@@ -73,13 +73,13 @@ public class MonstersDetailControllerTest extends ApplicationTest {
     @Test
     void controllerTest() {
         moveTo("Name: Flamander");
-        moveTo("Type: fire ");
+        moveTo("Type: fire");
         moveTo("Level: 1");
         moveTo("Health: 14/14");
         moveTo("Attack: 8/8");
         moveTo("Defense: 8/8");
         moveTo("Speed: 5/5");
-        moveTo("Tackle 35/35");
+        moveTo("Tackle: 35/35");
         moveTo("Accuracy: 100%");
         moveTo("Power: 2");
         moveTo("Type: normal");

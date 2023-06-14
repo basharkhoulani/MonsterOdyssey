@@ -9,8 +9,6 @@ import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -118,7 +116,7 @@ public class LoginController extends Controller {
         passwordField.setPromptText(resources.getString("PASSWORD.LESS.THAN.8.CHARACTERS"));
 
         passwordField.setOnKeyPressed(event -> {
-            if(event.getCode() == KeyCode.ENTER) {
+            if (event.getCode() == KeyCode.ENTER) {
                 signIn();
             }
         });

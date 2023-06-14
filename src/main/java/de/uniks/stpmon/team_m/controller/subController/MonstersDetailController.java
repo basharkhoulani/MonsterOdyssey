@@ -119,20 +119,20 @@ public class MonstersDetailController extends Controller {
         }
 
         // Name, Type, Experience, Level
-        monsterName.setText(resources.getString("NAME") + monsterTypeDto.name());
+        monsterName.setText(resources.getString("NAME") + " " + monsterTypeDto.name());
         StringBuilder type = new StringBuilder(resources.getString("TYPE"));
         for (String s : monsterTypeDto.type()) {
-            type.append(s).append(" ");
+            type.append(" ").append(s);
         }
         monsterType.setText(type.toString());
-        monsterExperience.setText(resources.getString("EXPERIENCE") + monster.experience());
-        monsterLevel.setText(resources.getString("LEVEL") + monster.level());
+        monsterExperience.setText(resources.getString("EXPERIENCE") + " " + monster.experience());
+        monsterLevel.setText(resources.getString("LEVEL") + " " + monster.level());
 
         // Attributes
-        monsterHealth.setText(resources.getString("HEALTH") + monster.currentAttributes().health() + "/" + monster.attributes().health());
-        monsterAttack.setText(resources.getString("ATTACK") + monster.currentAttributes().attack() + "/" + monster.attributes().attack());
-        monsterDefense.setText(resources.getString("DEFENSE") + monster.currentAttributes().defense() + "/" + monster.attributes().defense());
-        monsterSpeed.setText(resources.getString("SPEED") + monster.currentAttributes().speed() + "/" + monster.attributes().speed());
+        monsterHealth.setText(resources.getString("HEALTH") + " " + monster.currentAttributes().health() + "/" + monster.attributes().health());
+        monsterAttack.setText(resources.getString("ATTACK") + " " + monster.currentAttributes().attack() + "/" + monster.attributes().attack());
+        monsterDefense.setText(resources.getString("DEFENSE") + " " + monster.currentAttributes().defense() + "/" + monster.attributes().defense());
+        monsterSpeed.setText(resources.getString("SPEED") + " " + monster.currentAttributes().speed() + "/" + monster.attributes().speed());
 
         // Abilities
         List<Label> abilityLabels = new ArrayList<>(Arrays.asList(ability1, ability2, ability3, ability4));
@@ -145,10 +145,10 @@ public class MonstersDetailController extends Controller {
             int i = 0;
             for (Map.Entry<String, Integer> entry : monster.abilities().entrySet()) {
                 AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey()) - 1);
-                abilityLabels.get(i).setText(ability.name() + " " + entry.getValue() + "/" + ability.maxUses());
-                accuracyLabels.get(i).setText(resources.getString("ACCURACY") + (int) (ability.accuracy() * 100) + "%");
-                powerLabels.get(i).setText(resources.getString("POWER") + ability.power());
-                typeLabels.get(i).setText(resources.getString("TYPE") + ability.type());
+                abilityLabels.get(i).setText(ability.name() + ": " + entry.getValue() + "/" + ability.maxUses());
+                accuracyLabels.get(i).setText(resources.getString("ACCURACY") + " " + (int) (ability.accuracy() * 100) + "%");
+                powerLabels.get(i).setText(resources.getString("POWER") + " " + ability.power());
+                typeLabels.get(i).setText(resources.getString("TYPE") + " " + ability.type());
                 descriptionLabels.get(i).setText(ability.description());
                 i++;
             }
