@@ -1,5 +1,8 @@
-package de.uniks.stpmon.team_m.controller;
+package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.controller.AccountSettingController;
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.LoginController;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -58,15 +61,9 @@ public class ChangeLanguageController extends Controller {
         radioButtonLanguageChinese.setToggleGroup(languageToggleGroup);
         Locale locale = resources.getLocale();
         switch (locale.toLanguageTag()) {
-            case "de":
-                radioButtonLanguageGerman.setSelected(true);
-                break;
-            case "en":
-                radioButtonLanguageEnglish.setSelected(true);
-                break;
-            case "zh":
-                radioButtonLanguageChinese.setSelected(true);
-                break;
+            case "de" -> radioButtonLanguageGerman.setSelected(true);
+            case "en" -> radioButtonLanguageEnglish.setSelected(true);
+            case "zh" -> radioButtonLanguageChinese.setSelected(true);
         }
     }
 

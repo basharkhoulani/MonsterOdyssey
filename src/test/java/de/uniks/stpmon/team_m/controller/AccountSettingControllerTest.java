@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.controller.subController.AvatarSelectionController;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.UserStorage;
@@ -280,10 +281,5 @@ class AccountSettingControllerTest extends ApplicationTest {
 
         final DialogPane dialogPane = lookup(".dialog-pane").query();
         assertTrue(dialogPane.isVisible());
-
-        final RadioButton radioButtonLanguageEnglish = lookup("#radioButtonLanguageEnglish").query();
-        final RadioButton radioButtonLanguageGerman = lookup("#radioButtonLanguageGerman").query();
-        final RadioButton radioButtonLanguageChinese = lookup("#radioButtonLanguageChinese").query();
-        final Button applyLanguageButton = lookup("#applyLanguageButton").query();
     }
 }

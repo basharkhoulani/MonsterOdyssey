@@ -304,10 +304,22 @@
 /*********************************************************************************/
 /*************************** Ingame - MonsterList ****************************/
 .monsterList .list-cell {
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: #F5F5F5;
     -fx-border-width: 0 0 1 0;
     -fx-border-color: #000000;
 }
 .monsterList {
     -fx-border-color: transparent;
+}
+.whiteBackgroundWithBorder {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #000000;
+}
+.bottomLine {
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #000000;
+}
+.rightLine {
+    -fx-border-width: 0 1 0 0;
+    -fx-border-color: #000000;
 }

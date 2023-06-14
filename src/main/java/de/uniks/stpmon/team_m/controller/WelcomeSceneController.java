@@ -7,8 +7,6 @@ import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -138,9 +136,7 @@ public class WelcomeSceneController extends Controller {
                 dialogPane.getStyleClass().add(resources.getString("ALERT.DIALOG.NAME"));
                 dialogPane.setContent(vbox);
 
-                textFieldName.addEventHandler(KeyEvent.KEY_PRESSED,event -> {
-                    enterButtonTrainerInput(event, alert, textFieldName, okButton);
-                });
+                textFieldName.addEventHandler(KeyEvent.KEY_PRESSED, event -> enterButtonTrainerInput(event, alert, textFieldName, okButton));
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == cancelButton) {
@@ -190,12 +186,13 @@ public class WelcomeSceneController extends Controller {
     }
 
     public void enterButtonTrainerInput(KeyEvent event, Alert alert, TextField textFieldName, ButtonType okButton) {
-        if(event.getCode() == KeyCode.ENTER) {
+        if (event.getCode() == KeyCode.ENTER) {
             event.consume();
             alert.setResult(okButton);
             textFieldName.removeEventHandler(KeyEvent.KEY_PRESSED, event1 -> enterButtonTrainerInput(event, alert, textFieldName, okButton));
         }
     }
+
     public int sceneCounter(int sceneNumber, boolean next) {
         if (next) {
             return sceneNumber + 1;

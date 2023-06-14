@@ -106,6 +106,7 @@ public class IngameTrainerSettingsController extends Controller {
                         trainerStorageProvider.get().setRegion(null);
                     }, error -> this.showError(error.getMessage())));
             MainMenuController mainMenuController = mainMenuControllerProvider.get();
+            mainMenuController.setTrainerDeletion();
             ingameController.destroy();
             app.show(mainMenuController);
             alert.close();

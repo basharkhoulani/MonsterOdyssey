@@ -1,16 +1,17 @@
-package de.uniks.stpmon.team_m.controller;
+package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.dto.NPCInfo;
 import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
@@ -40,7 +41,7 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
         Mockito.when(trainerStorageProvider.get()).thenReturn(trainerStorage);
         String path = "Premade_Character_01.png";
         Mockito.when(trainerStorageProvider.get().getTrainerSprite()).thenReturn(path);
-        trainerSettingsController.setValues(bundle,null,null,trainerSettingsController,app);
+        trainerSettingsController.setValues(bundle, null, null, trainerSettingsController, app);
         trainerSettingsController.setValues(bundle, null, null, trainerSettingsController, app);
         when(trainerStorageProvider.get().getTrainer()).thenReturn(new Trainer("2023-05-22T17:51:46.772Z",
                 "2023-05-22T17:51:46.772Z",
