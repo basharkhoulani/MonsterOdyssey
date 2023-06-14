@@ -28,8 +28,8 @@ public class UDPEventListener {
 <span class="fc" id="L28">    }</span>
 
     private void ensureOpen() {
-<span class="pc bpc" id="L31" title="1 of 4 branches missed.">        if (client != null &amp;&amp; client.isOpen()) {</span>
-<span class="fc" id="L32">            return;</span>
+<span class="pc bpc" id="L31" title="3 of 4 branches missed.">        if (client != null &amp;&amp; client.isOpen()) {</span>
+<span class="nc" id="L32">            return;</span>
         }
         try {
 <span class="fc" id="L35">            InetAddress address = InetAddress.getByName(UDP_URL);</span>
@@ -86,16 +86,16 @@ public class UDPEventListener {
 <span class="fc" id="L86">        send(new Event&lt;&gt;(&quot;unsubscribe&quot;, pattern));</span>
 <span class="fc" id="L87">        client.removeMessageHandler(handler);</span>
 <span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (!client.hasMessageHandler()) {</span>
-<span class="nc" id="L89">            close();</span>
+<span class="fc" id="L89">            close();</span>
         }
 <span class="fc" id="L91">    }</span>
 
     private void close() {
-<span class="nc bnc" id="L94" title="All 2 branches missed.">        if (client != null) {</span>
-<span class="nc" id="L95">            client.close();</span>
-<span class="nc" id="L96">            client = null;</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (client != null) {</span>
+<span class="fc" id="L95">            client.close();</span>
+<span class="fc" id="L96">            client = null;</span>
         }
-<span class="nc" id="L98">    }</span>
+<span class="fc" id="L98">    }</span>
 
 
     public &lt;T&gt; Observable&lt;Event&lt;T&gt;&gt; move(MoveTrainerDto moveTrainerDto) {
