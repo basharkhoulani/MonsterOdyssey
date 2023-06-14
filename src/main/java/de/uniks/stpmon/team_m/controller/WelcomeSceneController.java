@@ -193,7 +193,6 @@ public class WelcomeSceneController extends Controller {
     public void enterButtonTrainerInput(KeyEvent event, Alert alert, TextField textFieldName, ButtonType okButton) {
         if(event.getCode() == KeyCode.ENTER) {
             event.consume();
-            System.out.println("Enter gedrückt!");
             alert.setResult(okButton);
             textFieldName.removeEventHandler(KeyEvent.KEY_PRESSED, event1 -> enterButtonTrainerInput(event, alert, textFieldName, okButton));
         }
