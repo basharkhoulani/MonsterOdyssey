@@ -80,14 +80,14 @@ public class MonsterCell extends ListCell&lt;Monster&gt; {
 <span class="fc" id="L80">            disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER)</span>
 <span class="fc" id="L81">                    .subscribe(monsterType -&gt; {</span>
 <span class="fc" id="L82">                        monsterTypeDto = monsterType;</span>
-<span class="fc" id="L83">                        monsterName.setText(resources.getString(&quot;NAME&quot;) + monsterTypeDto.name());</span>
+<span class="fc" id="L83">                        monsterName.setText(resources.getString(&quot;NAME&quot;) + &quot; &quot; + monsterTypeDto.name());</span>
 <span class="fc" id="L84">                        StringBuilder type = new StringBuilder(resources.getString(&quot;TYPE&quot;));</span>
 <span class="fc bfc" id="L85" title="All 2 branches covered.">                        for (String s : monsterTypeDto.type()) {</span>
-<span class="fc" id="L86">                            type.append(s).append(&quot; &quot;);</span>
+<span class="fc" id="L86">                            type.append(&quot; &quot;).append(s);</span>
 <span class="fc" id="L87">                        }</span>
 <span class="fc" id="L88">                        this.monsterType.setText(type.toString());</span>
 <span class="pc" id="L89">                    }, error -&gt; monstersListController.showError(error.getMessage())));</span>
-<span class="fc" id="L90">            monsterLevel.setText(resources.getString(&quot;LEVEL&quot;) + monster.level());</span>
+<span class="fc" id="L90">            monsterLevel.setText(resources.getString(&quot;LEVEL&quot;) + &quot; &quot; + monster.level());</span>
 <span class="fc" id="L91">            disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)</span>
 <span class="fc" id="L92">                    .subscribe(monsterImage -&gt; {</span>
 <span class="fc" id="L93">                        this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);</span>
