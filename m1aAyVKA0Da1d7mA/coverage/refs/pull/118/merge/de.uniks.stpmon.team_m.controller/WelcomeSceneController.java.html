@@ -192,16 +192,15 @@ public class WelcomeSceneController extends Controller {
     public void enterButtonTrainerInput(KeyEvent event, Alert alert, TextField textFieldName, ButtonType okButton) {
 <span class="nc bnc" id="L193" title="All 2 branches missed.">        if(event.getCode() == KeyCode.ENTER) {</span>
 <span class="nc" id="L194">            event.consume();</span>
-<span class="nc" id="L195">            System.out.println(&quot;Enter gedrückt!&quot;);</span>
-<span class="nc" id="L196">            alert.setResult(okButton);</span>
-<span class="nc" id="L197">            textFieldName.removeEventHandler(KeyEvent.KEY_PRESSED, event1 -&gt; enterButtonTrainerInput(event, alert, textFieldName, okButton));</span>
+<span class="nc" id="L195">            alert.setResult(okButton);</span>
+<span class="nc" id="L196">            textFieldName.removeEventHandler(KeyEvent.KEY_PRESSED, event1 -&gt; enterButtonTrainerInput(event, alert, textFieldName, okButton));</span>
         }
-<span class="nc" id="L199">    }</span>
+<span class="nc" id="L198">    }</span>
     public int sceneCounter(int sceneNumber, boolean next) {
-<span class="fc bfc" id="L201" title="All 2 branches covered.">        if (next) {</span>
-<span class="fc" id="L202">            return sceneNumber + 1;</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        if (next) {</span>
+<span class="fc" id="L201">            return sceneNumber + 1;</span>
         } else {
-<span class="fc" id="L204">            return sceneNumber - 1;</span>
+<span class="fc" id="L203">            return sceneNumber - 1;</span>
         }
     }
 }
