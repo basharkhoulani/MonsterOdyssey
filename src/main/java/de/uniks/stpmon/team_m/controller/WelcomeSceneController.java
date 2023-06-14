@@ -136,9 +136,7 @@ public class WelcomeSceneController extends Controller {
                 dialogPane.getStyleClass().add(resources.getString("ALERT.DIALOG.NAME"));
                 dialogPane.setContent(vbox);
 
-                textFieldName.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-                    enterButtonTrainerInput(event, alert, textFieldName, okButton);
-                });
+                textFieldName.addEventHandler(KeyEvent.KEY_PRESSED, event -> enterButtonTrainerInput(event, alert, textFieldName, okButton));
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == cancelButton) {
