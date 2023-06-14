@@ -20,7 +20,6 @@ import javafx.scene.layout.VBox;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.prefs.Preferences;
-
 import static de.uniks.stpmon.team_m.Constants.*;
 
 public class MainMenuController extends Controller {

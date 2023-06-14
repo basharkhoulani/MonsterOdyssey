@@ -8,11 +8,14 @@ import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -112,6 +115,12 @@ public class LoginController extends Controller {
         signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));
 
         passwordField.setPromptText(resources.getString("PASSWORD.LESS.THAN.8.CHARACTERS"));
+
+        passwordField.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER) {
+                signIn();
+            }
+        });
 
         showInformation();
 
