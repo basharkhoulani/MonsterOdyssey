@@ -11,6 +11,8 @@
 <VBox fx:id="ingameVBox" alignment="CENTER_LEFT" cacheShape="false" centerShape="false" scaleShape="false" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
     <StackPane cacheShape="false" centerShape="false" onMouseClicked="#paneClicked" scaleShape="false" style="-fx-background-color: black;" VBox.vgrow="ALWAYS">
         <Canvas fx:id="canvas" height="200.0" width="200.0" />
+      <Canvas fx:id="trainersCanvas" height="200.0" width="200.0" />
+      <Canvas fx:id="userTrainerCanvas" height="200.0" width="200.0" />
         <VBox alignment="CENTER" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
             <ImageView fx:id="playerSpriteImageView" fitHeight="25.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
         </VBox>
