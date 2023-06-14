@@ -96,7 +96,7 @@ public class WelcomeSceneController extends Controller {
                 firstMessage.setText(resources.getString("THIRD.MESSAGE"));
                 secondMessage.setText(resources.getString("FOURTH.MESSAGE"));
                 final VBox messageVBox3 = new VBox();
-                messageVBox3.getStyleClass().add(resources.getString("WELCOME.MESSAGE.STYLE"));
+                messageVBox3.getStyleClass().add("welcomeMessage");
                 final Label thirdMessage = new Label();
                 thirdMessage.setId("thirdMessage");
                 thirdMessage.setText(resources.getString("FIFTH.MESSAGE"));
@@ -128,8 +128,8 @@ public class WelcomeSceneController extends Controller {
 
                 final Button cancelButton2 = (Button) alert.getDialogPane().lookupButton(cancelButton);
                 final Button okButton2 = (Button) alert.getDialogPane().lookupButton(okButton);
-                cancelButton2.getStyleClass().add(resources.getString("WELCOME.SCENE.BUTTON"));
-                okButton2.getStyleClass().add(resources.getString("WELCOME.SCENE.BUTTON"));
+                cancelButton2.getStyleClass().add("welcomeSceneButton");
+                okButton2.getStyleClass().add("welcomeSceneButton");
 
                 final VBox vbox = new VBox(textFieldName);
 
@@ -182,7 +182,6 @@ public class WelcomeSceneController extends Controller {
                                         error.printStackTrace();
                                     }
                             ));
-                            app.show(ingameControllerProvider.get());
                         }, error -> showError(error.getMessage())
                 ));
             }
