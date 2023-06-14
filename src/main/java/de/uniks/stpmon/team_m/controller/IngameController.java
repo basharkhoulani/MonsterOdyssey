@@ -318,10 +318,11 @@ public class IngameController extends Controller {
                     moveTrainerDtos.add(moveTrainerDto);
                     if (moveTrainerDto._id().equals(trainerStorageProvider.get().getTrainer()._id())) {
                         if (!Objects.equals(moveTrainerDto.area(), trainerStorageProvider.get().getTrainer().area())) {
-                            unregisterListeners();
                             disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER).subscribe(
                                     trainer -> {
                                         trainerStorageProvider.get().setTrainer(trainer);
+                                        unregisterListeners();
+                                        destroy();
                                         app.show(ingameControllerProvider.get());
                                     },
                                     error -> {
