@@ -19,6 +19,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.stage.Modality;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -140,6 +142,16 @@ public class AccountSettingController extends Controller {
         passwordField.textProperty().bindBidirectional(password);
 
         BooleanBinding isInvalidUsername = username.isEmpty();
+        usernameField.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER) {
+                saveUsername();
+            }
+        });
+        passwordField.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER) {
+                savePassword();
+            }
+        });
         saveUsernameButton.disableProperty().bind(isInvalidUsername);
 
         BooleanBinding isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);
@@ -240,7 +252,6 @@ public class AccountSettingController extends Controller {
         dialog.initOwner(app.getStage());
         if (!GraphicsEnvironment.isHeadless()) {
             dialog.getDialogPane().getStyleClass().add("comicSans");
-            dialog.getDialogPane().getStyleClass().add("whiteBackgroundWithBorder");
             Button ok = (Button) dialog.getDialogPane().lookupButton(okButton);
             ok.getStyleClass().add("buttonsWhite");
             Button cancel = (Button) dialog.getDialogPane().lookupButton(cancelButton);
