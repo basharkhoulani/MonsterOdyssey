@@ -11,9 +11,7 @@ import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
-import de.uniks.stpmon.team_m.utils.SpriteAnimation;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import de.uniks.stpmon.team_m.utils.*;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -24,6 +22,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -108,6 +107,9 @@ public class IngameController extends Controller {
     @Inject
     TrainersService trainersService;
 
+    @Inject
+    Provider<IngameController> ingameControllerProvider;
+
     GraphicsContext graphicsContext;
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     private boolean isChatting = false;
@@ -160,11 +162,12 @@ public class IngameController extends Controller {
                 pauseGame();
             }
             if ((event.getCode() == KeyCode.W)) {
-                 /*
+                ///*
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
                         trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() - 1, 0)).subscribe());
-                */
+                //*/
+                /*
                 trainerSpriteAnimation.walk(0);
                 mapMovementTransition = getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
                 Timeline trainerMovementTransition = getMapMovementTransition(trainersCanvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
@@ -172,14 +175,15 @@ public class IngameController extends Controller {
                 overTrainerMovementTransition.play();
                 trainerMovementTransition.play();
                 this.mapMovementTransition.play();
-
+                */
             }
             if ((event.getCode() == KeyCode.S)) {
-                /*
+                ///*
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
                         trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() + 1, 2)).subscribe());
-                 */
+                //*/
+                /*
                 trainerSpriteAnimation.walk(2);
                 mapMovementTransition = getMapMovementTransition(groundCanvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
                 Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
@@ -187,14 +191,17 @@ public class IngameController extends Controller {
                 overTrainerTransition.play();
                 mapMovementTransition.play();
                 this.mapMovementTransition.play();
+
+                 */
             }
             if ((event.getCode() == KeyCode.A)) {
-                /*
+                ///*
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
                         trainerStorageProvider.get().getX() - 1, trainerStorageProvider.get().getY(), 3)).subscribe());
 
-                */
+                //*/
+                /*
                 trainerSpriteAnimation.walk(3);
                 mapMovementTransition = getMapMovementTransition(groundCanvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
                 Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
@@ -202,14 +209,15 @@ public class IngameController extends Controller {
                 overTrainerTransition.play();
                 this.mapMovementTransition.play();
                 mapMovementTransition.play();
-
+                */
             }
             if ((event.getCode() == KeyCode.D)) {
-                /*
+                ///*
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
                         trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 1)).subscribe());
-                 */
+                //*/
+                /*
                 trainerSpriteAnimation.walk(1);
                 mapMovementTransition = getMapMovementTransition(groundCanvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
                 Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
@@ -219,6 +227,8 @@ public class IngameController extends Controller {
                 overTrainerTransition.play();
                 mapMovementTransition.play();
                 this.mapMovementTransition.play();
+
+                 */
             }
 
         };
@@ -307,25 +317,65 @@ public class IngameController extends Controller {
                     final MoveTrainerDto moveTrainerDto = event.data();
                     moveTrainerDtos.add(moveTrainerDto);
                     if (moveTrainerDto._id().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                        if (!Objects.equals(moveTrainerDto.area(), trainerStorageProvider.get().getTrainer().area())) {
+                            unregisterListeners();
+                            disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER).subscribe(
+                                    trainer -> {
+                                        trainerStorageProvider.get().setTrainer(trainer);
+                                        app.show(ingameControllerProvider.get());
+                                    },
+                                    error -> {
+                                        showError(error.getMessage());
+                                        error.printStackTrace();
+                                    }
+                                    ));
+
+
+                        }
                         int oldXValue = trainerStorageProvider.get().getX();
                         int oldYValue = trainerStorageProvider.get().getY();
                         if (oldXValue != moveTrainerDto.x() || oldYValue != moveTrainerDto.y()) {
                             trainerSpriteAnimation.walk(moveTrainerDto.direction());
                             if (oldXValue < moveTrainerDto.x()) {
                                 mapMovementTransition = getMapMovementTransition(groundCanvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
+                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
+                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
+                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
+                                trainerTransition.play();
+                                overTrainerTransition.play();
                                 mapMovementTransition.play();
+                                this.mapMovementTransition.play();
                             } else if (oldXValue > moveTrainerDto.x()) {
                                 mapMovementTransition = getMapMovementTransition(groundCanvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
+                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
+                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
+                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
+                                trainerTransition.play();
+                                overTrainerTransition.play();
                                 mapMovementTransition.play();
+                                this.mapMovementTransition.play();
                             } else if (oldYValue < moveTrainerDto.y()) {
                                 mapMovementTransition = getMapMovementTransition(groundCanvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
+                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
+                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
+                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
+                                trainerTransition.play();
+                                overTrainerTransition.play();
                                 mapMovementTransition.play();
-                            } else if (oldXValue > moveTrainerDto.y()) {
-                                mapMovementTransition = getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
-                                mapMovementTransition.play();
+                                this.mapMovementTransition.play();
                             } else {
-                                trainerSpriteAnimation.stay(moveTrainerDto.direction());
+                                mapMovementTransition = getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
+                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
+                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
+                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
+                                trainerTransition.play();
+                                overTrainerTransition.play();
+                                mapMovementTransition.play();
+                                this.mapMovementTransition.play();
                             }
+                        }
+                        else {
+                            trainerSpriteAnimation.stay(moveTrainerDto.direction());
                         }
                         System.out.println("New position X: " + moveTrainerDto.x() + ", Y: " + moveTrainerDto.y() + ", direction: " + moveTrainerDto.direction());
                         trainerStorageProvider.get().setX(moveTrainerDto.x());
@@ -387,11 +437,11 @@ public class IngameController extends Controller {
         // Shift map initially to match the trainers position
         int xOffset = (int) calculateInitialCameraXOffset(map.width());
         int yOffset = (int) calculateInitialCameraYOffset(map.height());
-        getMapMovementTransition(groundCanvas, xOffset, yOffset, DELAY).play();
-        getMapMovementTransition(userTrainerCanvas, xOffset, yOffset + TILE_SIZE, DELAY).play();
-        getMapMovementTransition(trainersCanvas, xOffset, yOffset + TILE_SIZE, DELAY).play();
-        getMapMovementTransition(trainerCanvas, xOffset, yOffset + TILE_SIZE, DELAY).play();
-        getMapMovementTransition(overTrainerCanvas, xOffset, yOffset, DELAY).play();
+        getMapMovementTransition(groundCanvas, xOffset, yOffset - 5 * TILE_SIZE, DELAY).play();
+        getMapMovementTransition(trainersCanvas, xOffset, yOffset - 8 * TILE_SIZE, DELAY).play();
+        getMapMovementTransition(userTrainerCanvas, xOffset, yOffset - 8 * TILE_SIZE, DELAY).play();
+        getMapMovementTransition(trainerCanvas, xOffset, yOffset -8 *  TILE_SIZE, DELAY).play();
+        getMapMovementTransition(overTrainerCanvas, xOffset, yOffset -5 *  TILE_SIZE, DELAY).play();
     }
 
     /**
