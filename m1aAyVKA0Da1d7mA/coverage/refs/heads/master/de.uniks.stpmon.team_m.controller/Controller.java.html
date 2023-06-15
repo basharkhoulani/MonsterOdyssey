@@ -168,8 +168,8 @@ import static de.uniks.stpmon.team_m.Constants.*;
 <span class="fc" id="L168">        Alert alert = new Alert(Alert.AlertType.ERROR);</span>
 <span class="fc" id="L169">        alert.setTitle(resources.getString(&quot;ERROR&quot;));</span>
 <span class="fc" id="L170">        alert.setHeaderText(null);</span>
-<span class="fc bfc" id="L171" title="All 2 branches covered.">        if (error.contains(HTTP_429)) {</span>
-<span class="fc" id="L172">            alert.setContentText(resources.getString(&quot;HTTP.429.MESSAGE&quot;));</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">        if (error.contains(HTTP_429)) {</span>
+<span class="nc" id="L172">            alert.setContentText(resources.getString(&quot;HTTP.429.MESSAGE&quot;));</span>
 <span class="fc bfc" id="L173" title="All 2 branches covered.">        } else if (error.contains(HTTP_409)) {</span>
 <span class="fc" id="L174">            alert.setContentText(resources.getString(&quot;HTTP.409.MESSAGE&quot;));</span>
 <span class="fc bfc" id="L175" title="All 2 branches covered.">        } else if (error.contains(HTTP_404)) {</span>

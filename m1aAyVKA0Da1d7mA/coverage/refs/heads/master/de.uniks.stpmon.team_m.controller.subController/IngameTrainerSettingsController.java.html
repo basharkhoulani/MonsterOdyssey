@@ -106,23 +106,24 @@ public class IngameTrainerSettingsController extends Controller {
 <span class="nc" id="L106">                        trainerStorageProvider.get().setRegion(null);</span>
 <span class="nc" id="L107">                    }, error -&gt; this.showError(error.getMessage())));</span>
 <span class="nc" id="L108">            MainMenuController mainMenuController = mainMenuControllerProvider.get();</span>
-<span class="nc" id="L109">            ingameController.destroy();</span>
-<span class="nc" id="L110">            app.show(mainMenuController);</span>
-<span class="nc" id="L111">            alert.close();</span>
+<span class="nc" id="L109">            mainMenuController.setTrainerDeletion();</span>
+<span class="nc" id="L110">            ingameController.destroy();</span>
+<span class="nc" id="L111">            app.show(mainMenuController);</span>
+<span class="nc" id="L112">            alert.close();</span>
         }
 
-<span class="fc" id="L114">    }</span>
+<span class="fc" id="L115">    }</span>
 
     private void loadAndSetTrainerImage() {
-<span class="fc" id="L117">        Image trainerChunk = trainerStorageProvider.get().getTrainerSpriteChunk();</span>
-<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L119">            Image[] character = ImageProcessor.cropTrainerImages(trainerChunk, &quot;down&quot;, false);</span>
-<span class="nc" id="L120">            trainerAvatarImageView.setImage(character[0]);</span>
+<span class="fc" id="L118">        Image trainerChunk = trainerStorageProvider.get().getTrainerSpriteChunk();</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L120">            Image[] character = ImageProcessor.cropTrainerImages(trainerChunk,2, false);</span>
+<span class="nc" id="L121">            trainerAvatarImageView.setImage(character[0]);</span>
         }
-<span class="fc" id="L122">    }</span>
+<span class="fc" id="L123">    }</span>
 
     public void setIngameController(IngameController ingameController) {
-<span class="nc" id="L125">        this.ingameController = ingameController;</span>
-<span class="nc" id="L126">    }</span>
+<span class="nc" id="L126">        this.ingameController = ingameController;</span>
+<span class="nc" id="L127">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
