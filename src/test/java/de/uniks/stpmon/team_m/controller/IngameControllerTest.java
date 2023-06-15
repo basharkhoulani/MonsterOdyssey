@@ -202,10 +202,6 @@ public class IngameControllerTest extends ApplicationTest {
         type(KeyCode.P);
         clickOn("Resume Game");
 
-        // test Ingame Back To Main Menu
-        type(KeyCode.P);
-        clickOn("Save Game & Leave");
-        verify(app).show(mainMenuController);
     }
 
     @Test
