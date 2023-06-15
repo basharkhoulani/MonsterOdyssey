@@ -1,32 +1,21 @@
-package de.uniks.stpmon.team_m.controller;
+package de.uniks.stpmon.team_m.controller.subController;
 
-import de.uniks.stpmon.team_m.controller.subController.MonsterCell;
+import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.Monster;
-import de.uniks.stpmon.team_m.dto.MonsterAttributes;
-import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
-import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.*;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Objects;
 
 
-public class MonstersListController extends Controller{
+public class MonstersListController extends Controller {
 
     public ListView<Monster> monsterListView;
     @Inject
@@ -49,9 +38,6 @@ public class MonstersListController extends Controller{
     public UserStorage usersStorage;
     @Inject
     public Provider<PresetsService> presetsServiceProvider;
-    private ObservableList<MonsterTypeDto> monsterTypeDtos;
-
-
 
     @Inject
     public MonstersListController() {
@@ -61,12 +47,7 @@ public class MonstersListController extends Controller{
     public void init() {
         super.init();
         disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
-                .subscribe(monsters -> {
-                    trainerStorageProvider.get().setMonsters(new ArrayList<>(monsters));
-                }, throwable -> {
-                    showError(throwable.getMessage());
-                    throwable.printStackTrace();
-                }));
+                .subscribe(monsters -> trainerStorageProvider.get().setMonsters(new ArrayList<>(monsters)), throwable -> showError(throwable.getMessage())));
 
     }
 
@@ -79,14 +60,14 @@ public class MonstersListController extends Controller{
     public Parent render() {
         final Parent parent = super.render();
         if (!GraphicsEnvironment.isHeadless()) {
-            parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../styles.css")).toExternalForm());
+            parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../../styles.css")).toExternalForm());
         }
         initMonsterList();
         return parent;
     }
 
     private void initMonsterList() {
-        monsterListView.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get()));
+        monsterListView.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this));
         monsterListView.getItems().addAll(trainerStorageProvider.get().getMonsters());
         monsterListView.setFocusModel(null);
         monsterListView.setSelectionModel(null);

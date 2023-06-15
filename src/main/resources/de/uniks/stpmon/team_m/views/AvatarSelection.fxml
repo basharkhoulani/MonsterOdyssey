@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.AvatarSelectionController">
+<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.AvatarSelectionController">
     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
             <ImageView fx:id="avatar1ImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">

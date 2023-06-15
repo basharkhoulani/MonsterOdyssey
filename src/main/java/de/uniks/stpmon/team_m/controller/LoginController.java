@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 
+import de.uniks.stpmon.team_m.controller.subController.ChangeLanguageController;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
@@ -13,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -112,6 +114,12 @@ public class LoginController extends Controller {
         signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));
 
         passwordField.setPromptText(resources.getString("PASSWORD.LESS.THAN.8.CHARACTERS"));
+
+        passwordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                signIn();
+            }
+        });
 
         showInformation();
 
