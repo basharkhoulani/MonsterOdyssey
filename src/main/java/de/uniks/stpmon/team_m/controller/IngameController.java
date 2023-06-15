@@ -385,7 +385,10 @@ public class IngameController extends Controller {
                         trainerStorageProvider.get().setY(moveTrainerDto.y());
                         trainerStorageProvider.get().setDirection(moveTrainerDto.direction());
                     }
-                }, error -> showError(error.getMessage())));
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
     }
 
     /**
@@ -428,7 +431,10 @@ public class IngameController extends Controller {
                     .doOnNext(image -> tileSetImages.put(mapName, image))
                     .flatMap(image -> presetsService.getTileset(mapName).observeOn(FX_SCHEDULER))
                     .doOnNext(tileset -> tileSetJsons.put(mapName, tileset))
-                    .observeOn(FX_SCHEDULER).subscribe(image -> afterAllTileSetsLoaded(map), error -> showError(error.getMessage())));
+                    .observeOn(FX_SCHEDULER).subscribe(image -> afterAllTileSetsLoaded(map), error -> {
+                        showError(error.getMessage());
+                        error.printStackTrace();
+                    }));
         }
         //app.getStage().setX(0);
         //app.getStage().setY(0);
@@ -822,7 +828,10 @@ public class IngameController extends Controller {
                         case "updated" -> updateMessage(messages, message);
                         case "deleted" -> messages.removeIf(m -> m._id().equals(message._id()));
                     }
-                }, error -> showError(error.getMessage())));
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
     }
 
     private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {
