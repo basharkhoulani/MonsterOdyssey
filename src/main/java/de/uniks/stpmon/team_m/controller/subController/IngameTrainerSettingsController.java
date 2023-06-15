@@ -117,7 +117,7 @@ public class IngameTrainerSettingsController extends Controller {
     private void loadAndSetTrainerImage() {
         Image trainerChunk = trainerStorageProvider.get().getTrainerSpriteChunk();
         if (!GraphicsEnvironment.isHeadless()) {
-            Image[] character = ImageProcessor.cropTrainerImages(trainerChunk, "down", false);
+            Image[] character = ImageProcessor.cropTrainerImages(trainerChunk,2, false);
             trainerAvatarImageView.setImage(character[0]);
         }
     }

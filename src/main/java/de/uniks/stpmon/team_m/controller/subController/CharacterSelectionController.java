@@ -76,7 +76,7 @@ public class CharacterSelectionController extends Controller {
      * this method sets the selected character and shows it in the imageView
      */
     public void showCharacter() {
-        Image[] character = ImageProcessor.cropTrainerImages(new Image(Objects.requireNonNull(App.class.getResource("charactermodels/" + characters[index - 1])).toString()), "down", false);
+        Image[] character = ImageProcessor.cropTrainerImages(new Image(Objects.requireNonNull(App.class.getResource("charactermodels/" + characters[index - 1])).toString()), 2, false);
         characterImageView.setImage(character[0]);
         selectedCharacter = characters[index - 1];
     }

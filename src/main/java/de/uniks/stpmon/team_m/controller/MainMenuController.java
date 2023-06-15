@@ -147,6 +147,7 @@ public class MainMenuController extends Controller {
         groupStorageProvider.get().setName(selectedUser.name());
         MessagesController messagesController = messagesControllerProvider.get();
         messagesController.setUserChosenFromMainMenu(true);
+        destroy();
         app.show(messagesController);
     }
 
@@ -178,6 +179,7 @@ public class MainMenuController extends Controller {
      */
 
     public void changeToFindNewFriends() {
+        destroy();
         app.show(newFriendControllerProvider.get());
     }
 
@@ -188,6 +190,7 @@ public class MainMenuController extends Controller {
     public void changeToMessages() {
         groupStorageProvider.get().set_id(null);
         groupStorageProvider.get().setName(null);
+        destroy();
         app.show(messagesControllerProvider.get());
     }
 
@@ -201,7 +204,10 @@ public class MainMenuController extends Controller {
                 .doOnNext(user -> {
                 })
                 .flatMap(user -> authenticationService.logout()).observeOn(FX_SCHEDULER)
-                .subscribe(event -> app.show(loginControllerProvider.get()), error -> showError(error.getMessage())));
+                .subscribe(event -> {
+                    destroy();
+                    app.show(loginControllerProvider.get());
+                }, error -> showError(error.getMessage())));
     }
 
     /**
@@ -209,6 +215,7 @@ public class MainMenuController extends Controller {
      */
 
     public void changeToSettings() {
+        destroy();
         app.show(accountSettingControllerProvider.get());
     }
 
@@ -224,6 +231,7 @@ public class MainMenuController extends Controller {
 
         disposables.add(trainersServiceProvider.get().getTrainers(selectedRegion._id(), null, userStorageProvider.get().get_id()).observeOn(FX_SCHEDULER).subscribe(result -> {
                     if (result.isEmpty()) {
+                        destroy();
                         app.show(welcomeSceneController);
                     } else {
                         trainerStorage.setTrainer(result.get(0));
@@ -232,6 +240,7 @@ public class MainMenuController extends Controller {
                         disposables.add(presetsServiceProvider.get().getCharacter(result.get(0).image()).observeOn(FX_SCHEDULER).subscribe(
                                 response -> {
                                     trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
+                                    destroy();
                                     app.show(ingameControllerProvider.get());
                                 },
                                 error -> {
