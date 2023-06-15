@@ -180,9 +180,6 @@ public class IngameControllerTest extends ApplicationTest {
     @Test
     void pauseGame() {
         when(udpEventListenerProvider.get().listen(any(), any())).thenReturn(empty());
-        MainMenuController mainMenuController = mock(MainMenuController.class);
-        when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
-        doNothing().when(app).show(any());
         // test Ingame Pause
         type(KeyCode.P);
         final DialogPane dialogPanePause = lookup(".dialog-pane").query();
