@@ -19,6 +19,7 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -91,6 +92,7 @@ public class IngameTrainerSettingsController extends Controller {
         final String deleteTrainerText = resources.getString("DELETE.TRAINER.TEXT");
         dialogPane.setContentText(MessageFormat.format(deleteTrainerText, trainerName));
 
+        alert.initStyle(StageStyle.UNDECORATED);
         alert.setTitle(resources.getString("DELETE.YOUR.TRAINER"));
 
         Optional<ButtonType> result = alert.showAndWait();
