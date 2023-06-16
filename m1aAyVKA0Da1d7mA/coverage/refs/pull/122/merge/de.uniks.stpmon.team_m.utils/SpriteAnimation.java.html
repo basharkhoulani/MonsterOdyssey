@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SpriteAnimation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.utils</a> &gt; <span class="el_source">SpriteAnimation.java</span></div><h1>SpriteAnimation.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.utils;
+
+import de.uniks.stpmon.team_m.dto.Trainer;
+import javafx.animation.AnimationTimer;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+
+import java.awt.*;
+
+import static de.uniks.stpmon.team_m.Constants.TILE_SIZE;
+
+
+public class SpriteAnimation extends AnimationTimer {
+    private static final int DELAY = 100;
+    private static final int DELAY_LONG = 500;
+
+    private Position currentPosition;
+    private Position lastPosition;
+    private final Image spriteChunk;
+    private final Trainer trainer;
+    public Image currentImage;
+    private Image[] images;
+    public boolean isPlaying;
+    private long duration;
+    private Long lastPlayedTimeStamp;
+<span class="fc" id="L26">    private int currentIndex = 0;</span>
+    GraphicsContext graphicsContext;
+
+    private Image[] trainerStandingUp;
+    private Image[] trainerStandingDown;
+    private Image[] trainerStandingLeft;
+    private Image[] trainerStandingRight;
+    private Image[] trainerWalkingUp;
+    private Image[] trainerWalkingDown;
+    private Image[] trainerWalkingLeft;
+    private Image[] trainerWalkingRight;
+
+    public SpriteAnimation(Image spriteChunk, Trainer trainer, long duration, GraphicsContext graphicsContext) { //ImageView root) {
+<span class="fc" id="L39">        super();</span>
+<span class="fc" id="L40">        this.spriteChunk = spriteChunk;</span>
+<span class="fc" id="L41">        this.trainer = trainer;</span>
+<span class="fc" id="L42">        this.duration = duration;</span>
+<span class="fc" id="L43">        this.graphicsContext = graphicsContext;</span>
+<span class="fc" id="L44">        init();</span>
+<span class="fc" id="L45">    }</span>
+
+    private void init() {
+<span class="fc" id="L48">        trainerStandingDown = ImageProcessor.cropTrainerImages(spriteChunk, 2, false);</span>
+<span class="fc" id="L49">        trainerStandingUp = ImageProcessor.cropTrainerImages(spriteChunk, 0, false);</span>
+<span class="fc" id="L50">        trainerStandingLeft = ImageProcessor.cropTrainerImages(spriteChunk, 3, false);</span>
+<span class="fc" id="L51">        trainerStandingRight = ImageProcessor.cropTrainerImages(spriteChunk, 1, false);</span>
+<span class="fc" id="L52">        trainerWalkingUp = ImageProcessor.cropTrainerImages(spriteChunk, 0, true);</span>
+<span class="fc" id="L53">        trainerWalkingDown = ImageProcessor.cropTrainerImages(spriteChunk, 2, true);</span>
+<span class="fc" id="L54">        trainerWalkingLeft = ImageProcessor.cropTrainerImages(spriteChunk, 3, true);</span>
+<span class="fc" id="L55">        trainerWalkingRight = ImageProcessor.cropTrainerImages(spriteChunk, 1, true);</span>
+<span class="fc" id="L56">        images = trainerWalkingDown;</span>
+<span class="fc" id="L57">        currentPosition = new Position(trainer.x(), trainer.y(), trainer.direction());</span>
+<span class="fc" id="L58">        currentImage = images[0];</span>
+
+<span class="fc" id="L60">    }</span>
+
+    @Override
+    public void handle(long now) {
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (lastPlayedTimeStamp == null) {</span>
+<span class="nc" id="L65">            lastPlayedTimeStamp = System.currentTimeMillis();</span>
+        }
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (System.currentTimeMillis() - lastPlayedTimeStamp &lt; duration) {</span>
+<span class="nc" id="L68">            return;</span>
+        }
+<span class="nc" id="L70">        lastPlayedTimeStamp = System.currentTimeMillis();</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (lastPosition != null) {</span>
+<span class="nc" id="L72">            graphicsContext.clearRect(lastPosition.getX() * TILE_SIZE, lastPosition.getY() * TILE_SIZE, 16,  28);</span>
+        }
+<span class="nc" id="L74">        graphicsContext.drawImage(images[currentIndex], currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  28);</span>
+<span class="nc" id="L75">        currentIndex = (currentIndex + 1) % 6;</span>
+<span class="nc" id="L76">        currentImage = images[currentIndex];</span>
+<span class="nc" id="L77">    }</span>
+
+    private void setImages(Image[] images) {
+<span class="nc" id="L80">        this.images = images;</span>
+<span class="nc" id="L81">    }</span>
+
+    private void setDuration(long duration) {
+<span class="nc" id="L84">        this.duration = duration;</span>
+<span class="nc" id="L85">    }</span>
+
+    public void walk(int direction) {
+<span class="nc" id="L88">        setupWalkAnimation(direction, DELAY, trainerWalkingUp, trainerWalkingRight, trainerWalkingDown, trainerWalkingLeft);</span>
+<span class="nc" id="L89">    }</span>
+
+    private void setupWalkAnimation(int direction, int delay, Image[] trainerWalkingUp, Image[] trainerWalkingRight, Image[] trainerWalkingDown, Image[] trainerWalkingLeft) {
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L93">            setDuration(delay);</span>
+<span class="nc bnc" id="L94" title="All 5 branches missed.">            switch (direction) {</span>
+<span class="nc" id="L95">                case 0 -&gt; setImages(trainerWalkingUp);</span>
+<span class="nc" id="L96">                case 1 -&gt; setImages(trainerWalkingRight);</span>
+<span class="nc" id="L97">                case 2 -&gt; setImages(trainerWalkingDown);</span>
+<span class="nc" id="L98">                case 3 -&gt; setImages(trainerWalkingLeft);</span>
+                default -&gt; {}
+            }
+        }
+<span class="nc" id="L102">    }</span>
+
+    public void stay(int direction) {
+<span class="nc" id="L105">        setupWalkAnimation(direction, DELAY_LONG, trainerStandingUp, trainerStandingRight, trainerStandingDown, trainerStandingLeft);</span>
+<span class="nc" id="L106">    }</span>
+
+    @Override
+    public void start() {
+<span class="nc" id="L110">        super.start();</span>
+<span class="nc" id="L111">        this.isPlaying = true;</span>
+<span class="nc" id="L112">    }</span>
+
+    @Override
+    public void stop() {
+<span class="nc" id="L116">        super.stop();</span>
+<span class="nc" id="L117">        this.isPlaying = false;</span>
+<span class="nc" id="L118">    }</span>
+
+    public Position getCurrentPosition() {
+<span class="nc" id="L121">        return currentPosition;</span>
+    }
+
+    public void setCurrentPosition(Position currentPosition) {
+<span class="nc" id="L125">        this.lastPosition = this.currentPosition;</span>
+<span class="nc" id="L126">        this.currentPosition = currentPosition;</span>
+<span class="nc" id="L127">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
