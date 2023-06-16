@@ -30,6 +30,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -657,6 +658,7 @@ public class IngameController extends Controller {
      */
 
     public void pauseGame() {
+        ingameVBox.setEffect(new BoxBlur(10,10,3));
         final Alert alert = new Alert(Alert.AlertType.NONE);
         final DialogPane dialogPane = alert.getDialogPane();
         final ButtonType resume = new ButtonType(resources.getString("RESUME.BUTTON.LABEL"));
@@ -689,6 +691,7 @@ public class IngameController extends Controller {
             destroy();
             app.show(mainMenuControllerProvider.get());
         }
+        ingameVBox.setEffect(null);
     }
 
     public void showTrainerSettings() {
@@ -712,6 +715,7 @@ public class IngameController extends Controller {
                     groundCanvas.requestFocus();
                 }
         );
+
         trainerSettingsDialog.showAndWait();
     }
 
