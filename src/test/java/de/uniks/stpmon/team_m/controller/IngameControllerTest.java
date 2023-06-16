@@ -206,6 +206,7 @@ public class IngameControllerTest extends ApplicationTest {
     @Test
     void sendMessageTest() {
         final TextField messageField = lookup("#messageField").query();
+        clickOn("OK");
         when(messageService.newMessage(any(), any(), any()))
                 .thenReturn(Observable.just(new Message(
                         "2023-05-30T12:03:57.510Z",
@@ -213,6 +214,8 @@ public class IngameControllerTest extends ApplicationTest {
                         "6475e595ac3946b6a812d868",
                         "6477bc8f27adf9b5b978401f",
                         "Hello World")));
+
+
         // Send with enter key
         clickOn("#messageField");
         write("Hello World");
