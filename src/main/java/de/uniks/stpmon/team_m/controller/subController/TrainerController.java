@@ -52,5 +52,7 @@ public class TrainerController extends Controller {
         this.graphicsContext = graphicsContext;
     }
 
-
+    public SpriteAnimation getSpriteAnimation() {
+        return spriteAnimation;
+    }
 }
