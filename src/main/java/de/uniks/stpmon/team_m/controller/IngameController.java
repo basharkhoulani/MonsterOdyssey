@@ -264,6 +264,7 @@ public class IngameController extends Controller {
         monstersListControllerProvider.get().init();
         return parent;
     }
+
     public void listenToMovement(ObservableList<MoveTrainerDto> moveTrainerDtos, String area) {
         disposables.add(udpEventListenerProvider.get().listen("areas." + area + ".trainers.*.*", MoveTrainerDto.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
@@ -281,7 +282,7 @@ public class IngameController extends Controller {
                                         showError(error.getMessage());
                                         error.printStackTrace();
                                     }
-                                    ));
+                            ));
 
 
                         }
@@ -332,25 +333,24 @@ public class IngameController extends Controller {
                         trainerStorageProvider.get().setX(moveTrainerDto.x());
                         trainerStorageProvider.get().setY(moveTrainerDto.y());
                         trainerStorageProvider.get().setDirection(moveTrainerDto.direction());
-                    }
-                    else {
-                        Trainer trainer = trainers.stream().filter(tr -> tr._id().equals(moveTrainerDto._id())).toList().get(0);
-                        Position oldPosition = trainerPositionHashMap.get(trainer);
-                        TrainerController trainerController = trainerControllerHashMap.get(trainer);
-                        if (oldPosition != null && trainerController != null) {
+                    } else {
+                        if (trainers != null) {
+                            Trainer trainer = trainers.stream().filter(tr -> tr._id().equals(moveTrainerDto._id())).toList().get(0);
+                            Position oldPosition = trainerPositionHashMap.get(trainer);
+                            TrainerController trainerController = trainerControllerHashMap.get(trainer);
+                            if (oldPosition != null && trainerController != null) {
 
-                            trainersCanvas.getGraphicsContext2D().clearRect(oldPosition.getX() * TILE_SIZE, oldPosition.getY() * TILE_SIZE, 16, 25);
-                            if (oldPosition.getX() != moveTrainerDto.x() || oldPosition.getY() != moveTrainerDto.y()) {
-                                trainerController.getSpriteAnimation().setCurrentPosition(new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction()));
-                                trainerController.getSpriteAnimation().walk(moveTrainerDto.direction());
+                                trainersCanvas.getGraphicsContext2D().clearRect(oldPosition.getX() * TILE_SIZE, oldPosition.getY() * TILE_SIZE, 16, 25);
+                                if (oldPosition.getX() != moveTrainerDto.x() || oldPosition.getY() != moveTrainerDto.y()) {
+                                    trainerController.getSpriteAnimation().setCurrentPosition(new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction()));
+                                    trainerController.getSpriteAnimation().walk(moveTrainerDto.direction());
+                                } else {
+                                    trainerController.getSpriteAnimation().stay(moveTrainerDto.direction());
+                                }
+                                trainerController.getSpriteAnimation().start();
+                                trainersCanvas.getGraphicsContext2D().drawImage(trainerController.getSpriteAnimation().currentImage, moveTrainerDto.x() * TILE_SIZE, moveTrainerDto.y() * TILE_SIZE, 16, 25);
+                                trainerPositionHashMap.put(trainer, new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction()));
                             }
-                            else {
-                                trainerController.getSpriteAnimation().stay(moveTrainerDto.direction());
-                            }
-                            trainerController.getSpriteAnimation().start();
-                            trainersCanvas.getGraphicsContext2D().drawImage(trainerController.getSpriteAnimation().currentImage, moveTrainerDto.x() * TILE_SIZE, moveTrainerDto.y() * TILE_SIZE, 16, 25);
-                            trainerPositionHashMap.put(trainer, new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction()));
-
                         }
 
                     }
@@ -405,8 +405,8 @@ public class IngameController extends Controller {
         getMapMovementTransition(groundCanvas, xOffset, yOffset - 5 * TILE_SIZE, DELAY).play();
         getMapMovementTransition(trainersCanvas, xOffset, yOffset - 8 * TILE_SIZE, DELAY).play();
         getMapMovementTransition(userTrainerCanvas, xOffset, yOffset - 7 * TILE_SIZE, DELAY).play();
-        getMapMovementTransition(trainerCanvas, xOffset, yOffset -8 *  TILE_SIZE, DELAY).play();
-        getMapMovementTransition(overTrainerCanvas, xOffset, yOffset -5 *  TILE_SIZE, DELAY).play();
+        getMapMovementTransition(trainerCanvas, xOffset, yOffset - 8 * TILE_SIZE, DELAY).play();
+        getMapMovementTransition(overTrainerCanvas, xOffset, yOffset - 5 * TILE_SIZE, DELAY).play();
     }
 
     /**
