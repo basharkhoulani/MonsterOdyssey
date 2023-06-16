@@ -48,6 +48,7 @@ import javafx.util.Duration;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
@@ -330,7 +331,6 @@ public class IngameController extends Controller {
                         else {
                             trainerSpriteAnimation.stay(moveTrainerDto.direction());
                         }
-                        System.out.println("New position X: " + moveTrainerDto.x() + ", Y: " + moveTrainerDto.y() + ", direction: " + moveTrainerDto.direction());
                         trainerStorageProvider.get().setX(moveTrainerDto.x());
                         trainerStorageProvider.get().setY(moveTrainerDto.y());
                         trainerStorageProvider.get().setDirection(moveTrainerDto.direction());
@@ -461,15 +461,13 @@ public class IngameController extends Controller {
         if (trainerControllerHashMap.containsKey(trainer)) {
             return;
         }
-        if (trainer.image().contains("Premade_Character") || trainer.image().equals("Nurse_2_16x16.png") || trainer.image().equals("Albert_16x16.png") || trainer.image().equals("Bob_16x16.png") || trainer.image().equals("Amelia_16x16.png") || trainer.image().equals("Adam_16x16.png")) {
-            Image trainerChunk = new Image(Objects.requireNonNull(Main.class.getResource("charactermodels/" + trainer.image())).toString());
+        URL resource = Main.class.getResource("charactermodels/" + trainer.image());
+        if (resource != null) {
+            Image trainerChunk = new Image(resource.toString());
             TrainerController trainerController = new TrainerController(trainer, trainerChunk, trainersCanvas.getGraphicsContext2D());
             trainerControllerHashMap.put(trainer, trainerController);
             trainerController.init();
         } else {
-            if (trainer.npc() != null) {
-                System.out.println(trainer.image());
-            }
             disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(
                     image -> {
                         Image trainerChunk = ImageProcessor.resonseBodyToJavaFXImage(image);
@@ -499,8 +497,6 @@ public class IngameController extends Controller {
             if ((tileSetImages.size() + tileSetJsons.size()) == 2 * map.tilesets().size()) {
                 app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);
                 app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
-                //app.getStage().setWidth(STANDARD_WIDTH + 100);
-                //app.getStage().setHeight(STANDARD_HEIGHT + 100);
                 userTrainerCanvas.setScaleX(SCALE_FACTOR);
                 userTrainerCanvas.setScaleY(SCALE_FACTOR);
                 userTrainerCanvas.setWidth(map.width() * TILE_SIZE);
