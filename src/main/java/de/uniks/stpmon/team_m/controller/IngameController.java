@@ -734,6 +734,10 @@ public class IngameController extends Controller {
         popupStage.show();
     }
 
+    public Map getMiniMap() {
+        return null;
+    }
+
     @Override
     public void destroy() {
         super.destroy();
