@@ -169,8 +169,6 @@ class MainMenuControllerTest extends ApplicationTest {
         verify(usersService).updateUser(null, "offline", null, null, null);
         verify(authenticationService).logout();
         verify(app).show(loginController);
-        clickOn("#logoutButton");
-        clickOn("OK");
     }
 
     @Test
