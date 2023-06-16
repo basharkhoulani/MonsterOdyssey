@@ -2,10 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.Main;
-import de.uniks.stpmon.team_m.controller.subController.IngameMessageCell;
-import de.uniks.stpmon.team_m.controller.subController.IngameTrainerSettingsController;
-import de.uniks.stpmon.team_m.controller.subController.MonstersListController;
-import de.uniks.stpmon.team_m.controller.subController.TrainerController;
+import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.MessageService;
@@ -90,7 +87,11 @@ public class IngameController extends Controller {
     public Canvas userTrainerCanvas;
     @FXML
     public Canvas trainersCanvas;
+    @FXML
+    public ImageView mapSymbol;
 
+    @Inject
+    Provider<IngameMiniMapController> ingameMiniMapControllerProvider;
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
     @Inject
@@ -313,6 +314,7 @@ public class IngameController extends Controller {
         monstersListControllerProvider.get().init();
         return parent;
     }
+
     public void listenToMovement(ObservableList<MoveTrainerDto> moveTrainerDtos, String area) {
         disposables.add(udpEventListenerProvider.get().listen("areas." + area + ".trainers.*.*", MoveTrainerDto.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
@@ -331,7 +333,7 @@ public class IngameController extends Controller {
                                         showError(error.getMessage());
                                         error.printStackTrace();
                                     }
-                                    ));
+                            ));
 
 
                         }
@@ -376,8 +378,7 @@ public class IngameController extends Controller {
                                 mapMovementTransition.play();
                                 this.mapMovementTransition.play();
                             }
-                        }
-                        else {
+                        } else {
                             trainerSpriteAnimation.stay(moveTrainerDto.direction());
                         }
                         System.out.println("New position X: " + moveTrainerDto.x() + ", Y: " + moveTrainerDto.y() + ", direction: " + moveTrainerDto.direction());
@@ -449,8 +450,8 @@ public class IngameController extends Controller {
         getMapMovementTransition(groundCanvas, xOffset, yOffset - 5 * TILE_SIZE, DELAY).play();
         getMapMovementTransition(trainersCanvas, xOffset, yOffset - 8 * TILE_SIZE, DELAY).play();
         getMapMovementTransition(userTrainerCanvas, xOffset, yOffset - 8 * TILE_SIZE, DELAY).play();
-        getMapMovementTransition(trainerCanvas, xOffset, yOffset -8 *  TILE_SIZE, DELAY).play();
-        getMapMovementTransition(overTrainerCanvas, xOffset, yOffset -5 *  TILE_SIZE, DELAY).play();
+        getMapMovementTransition(trainerCanvas, xOffset, yOffset - 8 * TILE_SIZE, DELAY).play();
+        getMapMovementTransition(overTrainerCanvas, xOffset, yOffset - 5 * TILE_SIZE, DELAY).play();
     }
 
     /**
@@ -694,7 +695,7 @@ public class IngameController extends Controller {
      */
 
     public void pauseGame() {
-        ingameVBox.setEffect(new BoxBlur(10,10,3));
+        ingameVBox.setEffect(new BoxBlur(10, 10, 3));
         final Alert alert = new Alert(Alert.AlertType.NONE);
         final DialogPane dialogPane = alert.getDialogPane();
         final ButtonType resume = new ButtonType(resources.getString("RESUME.BUTTON.LABEL"));
@@ -879,15 +880,25 @@ public class IngameController extends Controller {
         popupStage.show();
     }
 
-    public Map getMiniMap() {
-        return null;
-    }
-
     @Override
     public void destroy() {
         super.destroy();
         app.getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);
         app.getStage().getScene().removeEventHandler(KeyEvent.KEY_RELEASED, keyReleasedHandler);
         messageField.removeEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
+    }
+
+    public void showMap() {
+        Dialog<?> dialog = new Dialog<>();
+        dialog.setTitle(resources.getString("MAP"));
+        dialog.getDialogPane().setContent(ingameMiniMapControllerProvider.get().render());
+        dialog.initOwner(app.getStage());
+        Window popUp = dialog.getDialogPane().getScene().getWindow();
+        popUp.setOnCloseRequest(evt -> {
+                    ((Stage) dialog.getDialogPane().getScene().getWindow()).close();
+                    groundCanvas.requestFocus();
+                }
+        );
+        dialog.showAndWait();
     }
 }
