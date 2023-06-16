@@ -21,6 +21,7 @@ public class SpriteAnimation extends AnimationTimer {
     private final Image spriteChunk;
     private final Trainer trainer;
     private ImageView root;
+    public Image currentImage;
     private Image[] images;
     public boolean isPlaying;
     private long duration;
@@ -57,6 +58,7 @@ public class SpriteAnimation extends AnimationTimer {
         trainerWalkingLeft = ImageProcessor.cropTrainerImages(spriteChunk, 3, true);
         trainerWalkingRight = ImageProcessor.cropTrainerImages(spriteChunk, 1, true);
         images = trainerWalkingDown;
+        currentImage = images[0];
 
     }
 
@@ -72,6 +74,7 @@ public class SpriteAnimation extends AnimationTimer {
         graphicsContext.clearRect(trainer.x() * TILE_SIZE, trainer.y() * TILE_SIZE + 10, 16,  28);
         graphicsContext.drawImage(images[currentIndex], trainer.x() * TILE_SIZE, trainer.y() * TILE_SIZE + 10, 16,  28);
         currentIndex = (currentIndex + 1) % 6;
+        currentImage = images[currentIndex];
     }
 
     private void setImages(Image[] images) {
