@@ -2,13 +2,9 @@ package de.uniks.stpmon.team_m.utils;
 
 import de.uniks.stpmon.team_m.dto.Trainer;
 import javafx.animation.AnimationTimer;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
 import java.awt.*;
 
 import static de.uniks.stpmon.team_m.Constants.TILE_SIZE;
@@ -18,9 +14,10 @@ public class SpriteAnimation extends AnimationTimer {
     private static final int DELAY = 100;
     private static final int DELAY_LONG = 500;
 
+    private Position currentPosition;
+    private Position lastPosition;
     private final Image spriteChunk;
     private final Trainer trainer;
-    private ImageView root;
     public Image currentImage;
     private Image[] images;
     public boolean isPlaying;
@@ -44,7 +41,6 @@ public class SpriteAnimation extends AnimationTimer {
         this.trainer = trainer;
         this.duration = duration;
         this.graphicsContext = graphicsContext;
-        //this.root = root;
         init();
     }
 
@@ -58,6 +54,7 @@ public class SpriteAnimation extends AnimationTimer {
         trainerWalkingLeft = ImageProcessor.cropTrainerImages(spriteChunk, 3, true);
         trainerWalkingRight = ImageProcessor.cropTrainerImages(spriteChunk, 1, true);
         images = trainerWalkingDown;
+        currentPosition = new Position(trainer.x(), trainer.y(), trainer.direction());
         currentImage = images[0];
 
     }
@@ -71,8 +68,10 @@ public class SpriteAnimation extends AnimationTimer {
             return;
         }
         lastPlayedTimeStamp = System.currentTimeMillis();
-        graphicsContext.clearRect(trainer.x() * TILE_SIZE, trainer.y() * TILE_SIZE + 10, 16,  28);
-        graphicsContext.drawImage(images[currentIndex], trainer.x() * TILE_SIZE, trainer.y() * TILE_SIZE + 10, 16,  28);
+        if (lastPosition != null) {
+            graphicsContext.clearRect(lastPosition.getX() * TILE_SIZE, lastPosition.getY() * TILE_SIZE, 16,  28);
+        }
+        graphicsContext.drawImage(images[currentIndex], currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  28);
         currentIndex = (currentIndex + 1) % 6;
         currentImage = images[currentIndex];
     }
@@ -86,57 +85,24 @@ public class SpriteAnimation extends AnimationTimer {
     }
 
     public void walk(int direction) {
-        if (!GraphicsEnvironment.isHeadless()) {
-            setDuration(DELAY);
-            switch (direction) {
-                case 0 -> {
-                    setImages(trainerWalkingUp);
-                    //mapMovementTransition = getMapMovementTransition(canvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
-                }
-                case 1 -> {
-                    setImages(trainerWalkingRight);
-                    //mapMovementTransition = getMapMovementTransition(canvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                }
-                case 2 -> {
-                    setImages(trainerWalkingDown);
-                    //mapMovementTransition = getMapMovementTransition(canvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
-                }
-                case 3 -> {
-                    setImages(trainerWalkingLeft);
-                    //mapMovementTransition = getMapMovementTransition(canvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                }
-                default -> {
+        setupWalkAnimation(direction, DELAY, trainerWalkingUp, trainerWalkingRight, trainerWalkingDown, trainerWalkingLeft);
+    }
 
-                }
+    private void setupWalkAnimation(int direction, int delay, Image[] trainerWalkingUp, Image[] trainerWalkingRight, Image[] trainerWalkingDown, Image[] trainerWalkingLeft) {
+        if (!GraphicsEnvironment.isHeadless()) {
+            setDuration(delay);
+            switch (direction) {
+                case 0 -> setImages(trainerWalkingUp);
+                case 1 -> setImages(trainerWalkingRight);
+                case 2 -> setImages(trainerWalkingDown);
+                case 3 -> setImages(trainerWalkingLeft);
+                default -> {}
             }
         }
     }
 
     public void stay(int direction) {
-        if (!GraphicsEnvironment.isHeadless()) {
-            setDuration(DELAY_LONG);
-            switch (direction) {
-                case 0 -> {
-                    setImages(trainerStandingUp);
-                    //mapMovementTransition = getMapMovementTransition(canvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
-                }
-                case 1 -> {
-                    setImages(trainerStandingRight);
-                    //mapMovementTransition = getMapMovementTransition(canvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                }
-                case 2 -> {
-                    setImages(trainerStandingDown);
-                    //mapMovementTransition = getMapMovementTransition(canvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
-                }
-                case 3 -> {
-                    setImages(trainerStandingLeft);
-                    //mapMovementTransition = getMapMovementTransition(canvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                }
-                default -> {
-
-                }
-            }
-        }
+        setupWalkAnimation(direction, DELAY_LONG, trainerStandingUp, trainerStandingRight, trainerStandingDown, trainerStandingLeft);
     }
 
     @Override
@@ -149,5 +115,14 @@ public class SpriteAnimation extends AnimationTimer {
     public void stop() {
         super.stop();
         this.isPlaying = false;
+    }
+
+    public Position getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public void setCurrentPosition(Position currentPosition) {
+        this.lastPosition = this.currentPosition;
+        this.currentPosition = currentPosition;
     }
 }
