@@ -292,37 +292,37 @@ public class IngameController extends Controller {
                         if (oldXValue != moveTrainerDto.x() || oldYValue != moveTrainerDto.y()) {
                             trainerSpriteAnimation.walk(moveTrainerDto.direction());
                             if (oldXValue < moveTrainerDto.x()) {
-                                mapMovementTransition = getMapMovementTransition(groundCanvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
+                                mapMovementTransition = getMapMovementTransition(groundCanvas, -SCALE_FACTOR * TILE_SIZE, 0);
+                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, -SCALE_FACTOR * TILE_SIZE, 0);
+                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0);
+                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0);
                                 trainerTransition.play();
                                 overTrainerTransition.play();
                                 mapMovementTransition.play();
                                 this.mapMovementTransition.play();
                             } else if (oldXValue > moveTrainerDto.x()) {
-                                mapMovementTransition = getMapMovementTransition(groundCanvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
+                                mapMovementTransition = getMapMovementTransition(groundCanvas, SCALE_FACTOR * TILE_SIZE, 0);
+                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, SCALE_FACTOR * TILE_SIZE, 0);
+                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, SCALE_FACTOR * TILE_SIZE, 0);
+                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0);
                                 trainerTransition.play();
                                 overTrainerTransition.play();
                                 mapMovementTransition.play();
                                 this.mapMovementTransition.play();
                             } else if (oldYValue < moveTrainerDto.y()) {
-                                mapMovementTransition = getMapMovementTransition(groundCanvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
-                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
-                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
-                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
+                                mapMovementTransition = getMapMovementTransition(groundCanvas, 0, -SCALE_FACTOR * TILE_SIZE);
+                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, 0, -SCALE_FACTOR * TILE_SIZE);
+                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE);
+                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE);
                                 trainerTransition.play();
                                 overTrainerTransition.play();
                                 mapMovementTransition.play();
                                 this.mapMovementTransition.play();
                             } else {
-                                mapMovementTransition = getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
-                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
-                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
-                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
+                                mapMovementTransition = getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE);
+                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, 0, SCALE_FACTOR * TILE_SIZE);
+                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, 0, SCALE_FACTOR * TILE_SIZE);
+                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE);
                                 trainerTransition.play();
                                 overTrainerTransition.play();
                                 mapMovementTransition.play();
@@ -406,20 +406,15 @@ public class IngameController extends Controller {
         int xOffset = (int) calculateInitialCameraXOffset(map.width());
         int yOffset = (int) calculateInitialCameraYOffset(map.height());
                                                             //  - 5 * TILE_SIZE
-        getMapMovementTransition(groundCanvas, xOffset, yOffset, DELAY).play();
+        getMapMovementTransition(groundCanvas, xOffset, yOffset).play();
                                                             // - 7 * TILE_SIZE
-        getMapMovementTransition(trainersCanvas, xOffset, yOffset - TILE_SIZE , DELAY).play();
+        getMapMovementTransition(trainersCanvas, xOffset, yOffset - TILE_SIZE).play();
                                                             // - 7 * TILE_SIZE
-        getMapMovementTransition(userTrainerCanvas, xOffset, yOffset - TILE_SIZE, DELAY).play();
+        getMapMovementTransition(userTrainerCanvas, xOffset, yOffset - TILE_SIZE).play();
                                                             // - 7 * TILE_SIZE
-        getMapMovementTransition(trainerCanvas, xOffset, yOffset - TILE_SIZE, DELAY).play();
+        getMapMovementTransition(trainerCanvas, xOffset, yOffset - TILE_SIZE).play();
                                                             // - 5 * TILE_SIZE
-        getMapMovementTransition(overTrainerCanvas, xOffset, yOffset, DELAY).play();
-        getMapMovementTransition(groundCanvas, xOffset, yOffset - 5 * TILE_SIZE).play();
-        getMapMovementTransition(trainersCanvas, xOffset, yOffset - 8 * TILE_SIZE).play();
-        getMapMovementTransition(userTrainerCanvas, xOffset, yOffset - 7 * TILE_SIZE).play();
-        getMapMovementTransition(trainerCanvas, xOffset, yOffset - 8 * TILE_SIZE).play();
-        getMapMovementTransition(overTrainerCanvas, xOffset, (yOffset - 5 * TILE_SIZE) + 1).play();
+        getMapMovementTransition(overTrainerCanvas, xOffset, yOffset).play();
     }
 
     /**
