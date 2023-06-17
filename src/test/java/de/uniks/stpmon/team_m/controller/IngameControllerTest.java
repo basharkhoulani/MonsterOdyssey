@@ -181,8 +181,6 @@ public class IngameControllerTest extends ApplicationTest {
     void pauseGame() {
         when(udpEventListenerProvider.get().listen(any(), any())).thenReturn(empty());
         // test Ingame Pause
-        clickOn("OK");
-
         type(KeyCode.P);
         final DialogPane dialogPanePause = lookup(".dialog-pane").query();
         assertNotNull(dialogPanePause);
@@ -206,7 +204,6 @@ public class IngameControllerTest extends ApplicationTest {
     @Test
     void sendMessageTest() {
         final TextField messageField = lookup("#messageField").query();
-        clickOn("OK");
         when(messageService.newMessage(any(), any(), any()))
                 .thenReturn(Observable.just(new Message(
                         "2023-05-30T12:03:57.510Z",
@@ -234,7 +231,6 @@ public class IngameControllerTest extends ApplicationTest {
 
     @Test
     void getMessages() {
-        clickOn("OK");
         ListView<Message> chat = lookup("#chatListView").query();
         assertEquals(chat.getOpacity(), 0);
         clickOn("#showChatButton");
