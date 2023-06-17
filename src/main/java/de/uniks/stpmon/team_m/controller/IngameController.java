@@ -9,7 +9,10 @@ import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
-import de.uniks.stpmon.team_m.utils.*;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.Position;
+import de.uniks.stpmon.team_m.utils.SpriteAnimation;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -45,6 +48,7 @@ import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -291,37 +295,37 @@ public class IngameController extends Controller {
                         if (oldXValue != moveTrainerDto.x() || oldYValue != moveTrainerDto.y()) {
                             trainerSpriteAnimation.walk(moveTrainerDto.direction());
                             if (oldXValue < moveTrainerDto.x()) {
-                                mapMovementTransition = getMapMovementTransition(groundCanvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, DELAY);
+                                mapMovementTransition = getMapMovementTransition(groundCanvas, -SCALE_FACTOR * TILE_SIZE, 0);
+                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, -SCALE_FACTOR * TILE_SIZE, 0);
+                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0);
+                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0);
                                 trainerTransition.play();
                                 overTrainerTransition.play();
                                 mapMovementTransition.play();
                                 this.mapMovementTransition.play();
                             } else if (oldXValue > moveTrainerDto.x()) {
-                                mapMovementTransition = getMapMovementTransition(groundCanvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
-                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, DELAY);
+                                mapMovementTransition = getMapMovementTransition(groundCanvas, SCALE_FACTOR * TILE_SIZE, 0);
+                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, SCALE_FACTOR * TILE_SIZE, 0);
+                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, SCALE_FACTOR * TILE_SIZE, 0);
+                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0);
                                 trainerTransition.play();
                                 overTrainerTransition.play();
                                 mapMovementTransition.play();
                                 this.mapMovementTransition.play();
                             } else if (oldYValue < moveTrainerDto.y()) {
-                                mapMovementTransition = getMapMovementTransition(groundCanvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
-                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
-                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
-                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, DELAY);
+                                mapMovementTransition = getMapMovementTransition(groundCanvas, 0, -SCALE_FACTOR * TILE_SIZE);
+                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, 0, -SCALE_FACTOR * TILE_SIZE);
+                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE);
+                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE);
                                 trainerTransition.play();
                                 overTrainerTransition.play();
                                 mapMovementTransition.play();
                                 this.mapMovementTransition.play();
                             } else {
-                                mapMovementTransition = getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
-                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
-                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
-                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, DELAY);
+                                mapMovementTransition = getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE);
+                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, 0, SCALE_FACTOR * TILE_SIZE);
+                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, 0, SCALE_FACTOR * TILE_SIZE);
+                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE);
                                 trainerTransition.play();
                                 overTrainerTransition.play();
                                 mapMovementTransition.play();
@@ -361,11 +365,11 @@ public class IngameController extends Controller {
     }
 
 
-    private Timeline getMapMovementTransition(Canvas map, int x, int y, int durationMillis) {
+    private Timeline getMapMovementTransition(Canvas map, int x, int y) {
         return new Timeline(
-                new KeyFrame(Duration.millis(durationMillis), e -> {
+                new KeyFrame(Duration.millis(IngameController.DELAY), e -> {
                     TranslateTransition translateTransition = new TranslateTransition();
-                    translateTransition.setDuration(Duration.millis(durationMillis));
+                    translateTransition.setDuration(Duration.millis(IngameController.DELAY));
                     translateTransition.setNode(map);
                     translateTransition.setByX(x);
                     translateTransition.setByY(y);
@@ -402,11 +406,11 @@ public class IngameController extends Controller {
         // Shift map initially to match the trainers position
         int xOffset = (int) calculateInitialCameraXOffset(map.width());
         int yOffset = (int) calculateInitialCameraYOffset(map.height());
-        getMapMovementTransition(groundCanvas, xOffset, yOffset - 5 * TILE_SIZE, DELAY).play();
-        getMapMovementTransition(trainersCanvas, xOffset, yOffset - 8 * TILE_SIZE, DELAY).play();
-        getMapMovementTransition(userTrainerCanvas, xOffset, yOffset - 7 * TILE_SIZE, DELAY).play();
-        getMapMovementTransition(trainerCanvas, xOffset, yOffset - 8 * TILE_SIZE, DELAY).play();
-        getMapMovementTransition(overTrainerCanvas, xOffset, yOffset - 5 * TILE_SIZE, DELAY).play();
+        getMapMovementTransition(groundCanvas, xOffset, yOffset - 5 * TILE_SIZE).play();
+        getMapMovementTransition(trainersCanvas, xOffset, yOffset - 8 * TILE_SIZE).play();
+        getMapMovementTransition(userTrainerCanvas, xOffset, yOffset - 7 * TILE_SIZE).play();
+        getMapMovementTransition(trainerCanvas, xOffset, yOffset - 8 * TILE_SIZE).play();
+        getMapMovementTransition(overTrainerCanvas, xOffset, (yOffset - 5 * TILE_SIZE) + 1).play();
     }
 
     /**
@@ -493,24 +497,10 @@ public class IngameController extends Controller {
     private void afterAllTileSetsLoaded(Map map) {
         if (tileSetImages.size() == map.tilesets().size()) {
             if ((tileSetImages.size() + tileSetJsons.size()) == 2 * map.tilesets().size()) {
-                app.getStage().setWidth(Math.max(getWidth(), map.width() * TILE_SIZE) + OFFSET_WIDTH);
-                app.getStage().setHeight(Math.max(getHeight(), map.height() * TILE_SIZE) + OFFSET_HEIGHT);
-                userTrainerCanvas.setScaleX(SCALE_FACTOR);
-                userTrainerCanvas.setScaleY(SCALE_FACTOR);
-                userTrainerCanvas.setWidth(map.width() * TILE_SIZE);
-                userTrainerCanvas.setHeight(map.height() * TILE_SIZE);
-                trainersCanvas.setScaleX(SCALE_FACTOR);
-                trainersCanvas.setScaleY(SCALE_FACTOR);
-                trainersCanvas.setWidth(map.width() * TILE_SIZE);
-                trainersCanvas.setHeight(map.height() * TILE_SIZE);
-                groundCanvas.setWidth(map.width() * TILE_SIZE);
-                groundCanvas.setHeight(map.height() * TILE_SIZE);
-                groundCanvas.setScaleX(SCALE_FACTOR);
-                groundCanvas.setScaleY(SCALE_FACTOR);
-                overTrainerCanvas.setWidth(map.width() * TILE_SIZE);
-                overTrainerCanvas.setHeight(map.height() * TILE_SIZE);
-                overTrainerCanvas.setScaleX(SCALE_FACTOR);
-                overTrainerCanvas.setScaleY(SCALE_FACTOR);
+                setCanvasSettings(map, userTrainerCanvas);
+                setCanvasSettings(map, trainersCanvas);
+                setCanvasSettings(map, groundCanvas);
+                setCanvasSettings(map, overTrainerCanvas);
                 for (TileSet tileSet : map.tilesets()) {
                     renderMap(map, tileSetImages.get(getFileName(tileSet.source())), tileSetJsons.get(getFileName(tileSet.source())),
                             tileSet, map.tilesets().size() > 1);
@@ -518,6 +508,13 @@ public class IngameController extends Controller {
                 loadPlayers();
             }
         }
+    }
+
+    public void setCanvasSettings(Map map, Canvas canvas) {
+        canvas.setScaleX(SCALE_FACTOR);
+        canvas.setScaleY(SCALE_FACTOR);
+        canvas.setWidth(map.width() * TILE_SIZE);
+        canvas.setHeight(map.height() * TILE_SIZE);
     }
 
     /**
@@ -533,6 +530,9 @@ public class IngameController extends Controller {
     private void renderMap(Map map, Image image, TileSet tileSetJson, TileSet tileSet, boolean multipleTileSets) {
         for (Layer layer : map.layers()) {
             if (layer.chunks() == null) {
+                if (layer.data() != null) {
+                    renderData(map, image, tileSet, tileSetJson, multipleTileSets, layer);
+                }
                 continue;
             }
             for (Chunk chunk : layer.chunks()) {
@@ -541,23 +541,16 @@ public class IngameController extends Controller {
         }
     }
 
-    /**
-     * renderChunk is used to render a chunk of the map. It renders every tile of the chunk. It skips every tile that
-     * is not in the current tileset. It calls extractTile to extract the image of the tile.
-     *
-     * @param map              Tiled Map of the current area.
-     * @param image            Image of the current tileset.
-     * @param tileSet          Current tileset.
-     * @param multipleTileSets Boolean that is true if there are multiple tilesets.
-     * @param chunk            Current chunk.
-     */
+    private void renderData(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, Layer layer) {
+        renderTiles(map, image, tileSet, tileSetJson, multipleTileSets, layer.width(), layer.height(), layer.data(), layer.x(), layer.y());
+    }
 
-    private void renderChunk(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, Chunk chunk) {
-        WritableImage writableImageGround = new WritableImage(chunk.width() * TILE_SIZE, chunk.height() * TILE_SIZE);
-        WritableImage writableImageTop = new WritableImage(chunk.width() * TILE_SIZE, chunk.height() * TILE_SIZE);
-        for (int y = 0; y < chunk.height(); y++) {
-            for (int x = 0; x < chunk.width(); x++) {
-                int tileId = chunk.data().get(y * chunk.width() + x);
+    private void renderTiles(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, int width, int height, List<Integer> data, int x2, int y2) {
+        WritableImage writableImageGround = new WritableImage(width * TILE_SIZE, height * TILE_SIZE);
+        WritableImage writableImageTop = new WritableImage(width * TILE_SIZE, height * TILE_SIZE);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int tileId = data.get(y * width + x);
                 if (tileId == 0) {
                     continue;
                 }
@@ -575,8 +568,23 @@ public class IngameController extends Controller {
                 }
             }
         }
-        groundCanvas.getGraphicsContext2D().drawImage(writableImageGround, chunk.x() * TILE_SIZE, chunk.y() * TILE_SIZE);
-        overTrainerCanvas.getGraphicsContext2D().drawImage(writableImageTop, chunk.x() * TILE_SIZE, chunk.y() * TILE_SIZE);
+        groundCanvas.getGraphicsContext2D().drawImage(writableImageGround, x2 * TILE_SIZE, y2 * TILE_SIZE);
+        overTrainerCanvas.getGraphicsContext2D().drawImage(writableImageTop, x2 * TILE_SIZE, y2 * TILE_SIZE);
+    }
+
+    /**
+     * renderChunk is used to render a chunk of the map. It renders every tile of the chunk. It skips every tile that
+     * is not in the current tileset.
+     *
+     * @param map              Tiled Map of the current area.
+     * @param image            Image of the current tileset.
+     * @param tileSet          Current tileset.
+     * @param multipleTileSets Boolean that is true if there are multiple tilesets.
+     * @param chunk            Current chunk.
+     */
+
+    private void renderChunk(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, Chunk chunk) {
+        renderTiles(map, image, tileSet, tileSetJson, multipleTileSets, chunk.width(), chunk.height(), chunk.data(), chunk.x(), chunk.y());
     }
 
     private boolean isRoof(TileSet tileSet, TileSet tileSetJson, int tileId) {
