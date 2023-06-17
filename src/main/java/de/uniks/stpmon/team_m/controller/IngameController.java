@@ -21,7 +21,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
@@ -34,7 +33,6 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -49,6 +47,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -156,7 +156,7 @@ public class IngameController extends Controller {
         // Initialize key event listeners
         keyPressedHandler = event -> {
             event.consume();
-            if (isChatting || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < DELAY + 50)) {
+            if (isChatting || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < DELAY)) {
                 return;
             }
             lastKeyEventTimeStamp = System.currentTimeMillis();
@@ -407,11 +407,16 @@ public class IngameController extends Controller {
         // Shift map initially to match the trainers position
         int xOffset = (int) calculateInitialCameraXOffset(map.width());
         int yOffset = (int) calculateInitialCameraYOffset(map.height());
-        getMapMovementTransition(groundCanvas, xOffset, yOffset - 5 * TILE_SIZE, DELAY).play();
-        getMapMovementTransition(trainersCanvas, xOffset, yOffset - 8 * TILE_SIZE, DELAY).play();
-        getMapMovementTransition(userTrainerCanvas, xOffset, yOffset - 7 * TILE_SIZE, DELAY).play();
-        getMapMovementTransition(trainerCanvas, xOffset, yOffset - 8 * TILE_SIZE, DELAY).play();
-        getMapMovementTransition(overTrainerCanvas, xOffset, yOffset - 5 * TILE_SIZE, DELAY).play();
+                                                            //  - 5 * TILE_SIZE
+        getMapMovementTransition(groundCanvas, xOffset, yOffset, DELAY).play();
+                                                            // - 7 * TILE_SIZE
+        getMapMovementTransition(trainersCanvas, xOffset, yOffset - TILE_SIZE , DELAY).play();
+                                                            // - 7 * TILE_SIZE
+        getMapMovementTransition(userTrainerCanvas, xOffset, yOffset - TILE_SIZE, DELAY).play();
+                                                            // - 7 * TILE_SIZE
+        getMapMovementTransition(trainerCanvas, xOffset, yOffset - TILE_SIZE, DELAY).play();
+                                                            // - 5 * TILE_SIZE
+        getMapMovementTransition(overTrainerCanvas, xOffset, yOffset, DELAY).play();
     }
 
     /**
@@ -839,6 +844,20 @@ public class IngameController extends Controller {
         popupStage.setScene(scene);
         popupStage.setTitle(resources.getString("MONSTERS"));
         popupStage.show();
+    }
+
+    public void showMap() {
+        Dialog<?> dialog = new Dialog<>();
+        dialog.setTitle(resources.getString("MAP"));
+        dialog.getDialogPane().setContent(ingameMiniMapControllerProvider.get().render());
+        dialog.initOwner(app.getStage());
+        Window popUp = dialog.getDialogPane().getScene().getWindow();
+        popUp.setOnCloseRequest(evt -> {
+                    ((Stage) dialog.getDialogPane().getScene().getWindow()).close();
+                    groundCanvas.requestFocus();
+                }
+        );
+        dialog.showAndWait();
     }
 
     @Override
