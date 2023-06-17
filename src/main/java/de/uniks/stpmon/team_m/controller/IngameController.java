@@ -9,10 +9,7 @@ import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
-import de.uniks.stpmon.team_m.utils.Position;
-import de.uniks.stpmon.team_m.utils.SpriteAnimation;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import de.uniks.stpmon.team_m.utils.*;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -158,14 +155,18 @@ public class IngameController extends Controller {
         // Initialize key event listeners
         keyPressedHandler = event -> {
             event.consume();
-            if (isChatting || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < DELAY + 50)) {
+            if (isChatting || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < DELAY + 25)) {
                 return;
             }
-            lastKeyEventTimeStamp = System.currentTimeMillis();
-
+            if (event.getCode() == KeyCode.ENTER) {
+                messageField.requestFocus();
+                isChatting = true;
+            }
             if (event.getCode() == PAUSE_MENU_KEY) {
                 pauseGame();
             }
+            lastKeyEventTimeStamp = System.currentTimeMillis();
+
             if ((event.getCode() == KeyCode.W)) {
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
@@ -331,13 +332,15 @@ public class IngameController extends Controller {
                                 mapMovementTransition.play();
                                 this.mapMovementTransition.play();
                             }
-                        } else {
+                        }
+                        else {
                             trainerSpriteAnimation.stay(moveTrainerDto.direction());
                         }
                         trainerStorageProvider.get().setX(moveTrainerDto.x());
                         trainerStorageProvider.get().setY(moveTrainerDto.y());
                         trainerStorageProvider.get().setDirection(moveTrainerDto.direction());
-                    } else {
+                    }
+                    else {
                         if (trainers != null) {
                             Trainer trainer = trainers.stream().filter(tr -> tr._id().equals(moveTrainerDto._id())).toList().get(0);
                             Position oldPosition = trainerPositionHashMap.get(trainer);
@@ -406,11 +409,16 @@ public class IngameController extends Controller {
         // Shift map initially to match the trainers position
         int xOffset = (int) calculateInitialCameraXOffset(map.width());
         int yOffset = (int) calculateInitialCameraYOffset(map.height());
-        getMapMovementTransition(groundCanvas, xOffset, yOffset - 5 * TILE_SIZE).play();
-        getMapMovementTransition(trainersCanvas, xOffset, yOffset - 8 * TILE_SIZE).play();
-        getMapMovementTransition(userTrainerCanvas, xOffset, yOffset - 7 * TILE_SIZE).play();
-        getMapMovementTransition(trainerCanvas, xOffset, yOffset - 8 * TILE_SIZE).play();
-        getMapMovementTransition(overTrainerCanvas, xOffset, (yOffset - 5 * TILE_SIZE) + 1).play();
+                                                            //  - 5 * TILE_SIZE
+        getMapMovementTransition(groundCanvas, xOffset, yOffset).play();
+                                                            // - 7 * TILE_SIZE
+        getMapMovementTransition(trainersCanvas, xOffset, yOffset - TILE_SIZE).play();
+                                                            // - 7 * TILE_SIZE
+        getMapMovementTransition(userTrainerCanvas, xOffset, yOffset - TILE_SIZE).play();
+                                                            // - 7 * TILE_SIZE
+        getMapMovementTransition(trainerCanvas, xOffset, yOffset - TILE_SIZE).play();
+                                                            // - 5 * TILE_SIZE
+        getMapMovementTransition(overTrainerCanvas, xOffset, yOffset).play();
     }
 
     /**
@@ -660,7 +668,7 @@ public class IngameController extends Controller {
      */
 
     public void pauseGame() {
-        ingameVBox.setEffect(new BoxBlur(10, 10, 3));
+        ingameVBox.setEffect(new BoxBlur(10,10,3));
         final Alert alert = new Alert(Alert.AlertType.NONE);
         final DialogPane dialogPane = alert.getDialogPane();
         final ButtonType resume = new ButtonType(resources.getString("RESUME.BUTTON.LABEL"));

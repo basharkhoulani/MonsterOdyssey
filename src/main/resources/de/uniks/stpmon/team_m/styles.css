@@ -34,6 +34,9 @@
 .buttonsWhite:hover {
     -fx-background-color: #FFF2CC;
 }
+.buttonsTransparent {
+    -fx-background-color: transparent;
+}
 .errorLabel {
     -fx-text-fill: red;
 }

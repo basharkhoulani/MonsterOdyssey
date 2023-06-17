@@ -69,9 +69,10 @@ public class SpriteAnimation extends AnimationTimer {
         }
         lastPlayedTimeStamp = System.currentTimeMillis();
         if (lastPosition != null) {
-            graphicsContext.clearRect(lastPosition.getX() * TILE_SIZE, lastPosition.getY() * TILE_SIZE, 16,  28);
+            graphicsContext.clearRect(lastPosition.getX() * TILE_SIZE, lastPosition.getY() * TILE_SIZE, 16,  25);
         }
-        graphicsContext.drawImage(images[currentIndex], currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  28);
+        graphicsContext.clearRect(currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);
+        graphicsContext.drawImage(images[currentIndex], currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);
         currentIndex = (currentIndex + 1) % 6;
         currentImage = images[currentIndex];
     }

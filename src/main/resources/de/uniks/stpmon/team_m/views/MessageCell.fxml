@@ -23,10 +23,10 @@
                     <Label fx:id="senderTimeDate" text="Label" HBox.hgrow="ALWAYS" styleClass="messageMetaData" />
                 </HBox>
                 <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
-                    <Button fx:id="editMessage" mnemonicParsing="false" onAction="#editMessage" text="✏" visible="false" HBox.hgrow="NEVER" />
+                    <Button fx:id="editMessage" styleClass="buttonsTransparent" mnemonicParsing="false" onAction="#editMessage" text="✏" visible="false" HBox.hgrow="NEVER" />
                 </HBox>
                 <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
-                    <Button fx:id="deleteMessage" mnemonicParsing="false" onAction="#deleteMessage" text="🗑" visible="false" HBox.hgrow="NEVER" />
+                    <Button fx:id="deleteMessage" styleClass="buttonsTransparent" mnemonicParsing="false" onAction="#deleteMessage" text="🗑" visible="false" HBox.hgrow="NEVER" />
                 </HBox>
             </HBox>
         </VBox>
