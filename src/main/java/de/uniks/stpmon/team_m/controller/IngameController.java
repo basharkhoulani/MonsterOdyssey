@@ -155,14 +155,18 @@ public class IngameController extends Controller {
         // Initialize key event listeners
         keyPressedHandler = event -> {
             event.consume();
-            if (isChatting || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < DELAY + 50)) {
+            if (isChatting || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < DELAY + 25)) {
                 return;
             }
-            lastKeyEventTimeStamp = System.currentTimeMillis();
-
+            if (event.getCode() == KeyCode.ENTER) {
+                messageField.requestFocus();
+                isChatting = true;
+            }
             if (event.getCode() == PAUSE_MENU_KEY) {
                 pauseGame();
             }
+            lastKeyEventTimeStamp = System.currentTimeMillis();
+
             if ((event.getCode() == KeyCode.W)) {
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
