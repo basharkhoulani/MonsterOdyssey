@@ -133,7 +133,7 @@ public class WelcomeSceneController extends Controller {
 
                 alert.setTitle(resources.getString("NAME.ALERT.TITLE"));
                 alert.initStyle(StageStyle.UNDECORATED);
-                dialogPane.getStyleClass().add(resources.getString("ALERT.DIALOG.NAME"));
+                dialogPane.getStyleClass().add("alertDialogName");
                 dialogPane.setContent(vbox);
 
                 textFieldName.addEventHandler(KeyEvent.KEY_PRESSED, event -> enterButtonTrainerInput(event, alert, textFieldName, okButton));
