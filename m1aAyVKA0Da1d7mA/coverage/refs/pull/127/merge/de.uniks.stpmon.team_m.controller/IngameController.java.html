@@ -9,7 +9,10 @@ import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
-import de.uniks.stpmon.team_m.utils.*;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.Position;
+import de.uniks.stpmon.team_m.utils.SpriteAnimation;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -110,8 +113,8 @@ public class IngameController extends Controller {
     @Inject
     Provider&lt;IngameController&gt; ingameControllerProvider;
 
-<span class="fc" id="L113">    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;</span>
-<span class="fc" id="L114">    private boolean isChatting = false;</span>
+<span class="fc" id="L116">    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;</span>
+<span class="fc" id="L117">    private boolean isChatting = false;</span>
 
     @Inject
     Provider&lt;UDPEventListener&gt; udpEventListenerProvider;
@@ -120,15 +123,15 @@ public class IngameController extends Controller {
     @Inject
     Provider&lt;MonstersListController&gt; monstersListControllerProvider;
 
-<span class="fc" id="L123">    private final ObservableList&lt;MoveTrainerDto&gt; moveTrainerDtos = FXCollections.observableArrayList();</span>
-<span class="fc" id="L124">    HashMap&lt;String, Image&gt; tileSetImages = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L126">    private final ObservableList&lt;MoveTrainerDto&gt; moveTrainerDtos = FXCollections.observableArrayList();</span>
+<span class="fc" id="L127">    HashMap&lt;String, Image&gt; tileSetImages = new HashMap&lt;&gt;();</span>
 
 
     private SpriteAnimation trainerSpriteAnimation;
     private Timeline mapMovementTransition;
 
-<span class="fc" id="L130">    HashMap&lt;String, TileSet&gt; tileSetJsons = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L131">    private final ObservableList&lt;Message&gt; messages = FXCollections.observableArrayList();</span>
+<span class="fc" id="L133">    HashMap&lt;String, TileSet&gt; tileSetJsons = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L134">    private final ObservableList&lt;Message&gt; messages = FXCollections.observableArrayList();</span>
     private ObservableList&lt;Trainer&gt; trainers;
 
     private Long lastKeyEventTimeStamp;
@@ -143,70 +146,70 @@ public class IngameController extends Controller {
      */
 
     @Inject
-<span class="fc" id="L146">    public IngameController() {</span>
-<span class="fc" id="L147">    }</span>
+<span class="fc" id="L149">    public IngameController() {</span>
+<span class="fc" id="L150">    }</span>
 
     @Override
     public void init() {
-<span class="fc" id="L151">        super.init();</span>
-<span class="fc" id="L152">        trainerControllerHashMap = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L153">        trainerPositionHashMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L154">        super.init();</span>
+<span class="fc" id="L155">        trainerControllerHashMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L156">        trainerPositionHashMap = new HashMap&lt;&gt;();</span>
         // Initialize key event listeners
-<span class="fc" id="L155">        keyPressedHandler = event -&gt; {</span>
-<span class="fc" id="L156">            event.consume();</span>
-<span class="pc bpc" id="L157" title="1 of 6 branches missed.">            if (isChatting || (lastKeyEventTimeStamp != null &amp;&amp; System.currentTimeMillis() - lastKeyEventTimeStamp &lt; DELAY + 25)) {</span>
-<span class="fc" id="L158">                return;</span>
+<span class="fc" id="L158">        keyPressedHandler = event -&gt; {</span>
+<span class="fc" id="L159">            event.consume();</span>
+<span class="pc bpc" id="L160" title="1 of 6 branches missed.">            if (isChatting || (lastKeyEventTimeStamp != null &amp;&amp; System.currentTimeMillis() - lastKeyEventTimeStamp &lt; DELAY + 25)) {</span>
+<span class="fc" id="L161">                return;</span>
             }
-<span class="pc bpc" id="L160" title="1 of 2 branches missed.">            if (event.getCode() == KeyCode.ENTER) {</span>
-<span class="nc" id="L161">                messageField.requestFocus();</span>
-<span class="nc" id="L162">                isChatting = true;</span>
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">            if (event.getCode() == KeyCode.ENTER) {</span>
+<span class="nc" id="L164">                messageField.requestFocus();</span>
+<span class="nc" id="L165">                isChatting = true;</span>
             }
-<span class="fc bfc" id="L164" title="All 2 branches covered.">            if (event.getCode() == PAUSE_MENU_KEY) {</span>
-<span class="fc" id="L165">                pauseGame();</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">            if (event.getCode() == PAUSE_MENU_KEY) {</span>
+<span class="fc" id="L168">                pauseGame();</span>
             }
-<span class="fc" id="L167">            lastKeyEventTimeStamp = System.currentTimeMillis();</span>
+<span class="fc" id="L170">            lastKeyEventTimeStamp = System.currentTimeMillis();</span>
 
-<span class="pc bpc" id="L169" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.W)) {</span>
-<span class="nc" id="L170">                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),</span>
-<span class="nc" id="L171">                        trainerStorageProvider.get().getTrainer().area(),</span>
-<span class="nc" id="L172">                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() - 1, 0)).subscribe());</span>
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.W)) {</span>
+<span class="nc" id="L173">                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),</span>
+<span class="nc" id="L174">                        trainerStorageProvider.get().getTrainer().area(),</span>
+<span class="nc" id="L175">                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() - 1, 0)).subscribe());</span>
             }
-<span class="pc bpc" id="L174" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.S)) {</span>
-<span class="nc" id="L175">                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),</span>
-<span class="nc" id="L176">                        trainerStorageProvider.get().getTrainer().area(),</span>
-<span class="nc" id="L177">                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() + 1, 2)).subscribe());</span>
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.S)) {</span>
+<span class="nc" id="L178">                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),</span>
+<span class="nc" id="L179">                        trainerStorageProvider.get().getTrainer().area(),</span>
+<span class="nc" id="L180">                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() + 1, 2)).subscribe());</span>
             }
-<span class="pc bpc" id="L179" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.A)) {</span>
-<span class="nc" id="L180">                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),</span>
-<span class="nc" id="L181">                        trainerStorageProvider.get().getTrainer().area(),</span>
-<span class="nc" id="L182">                        trainerStorageProvider.get().getX() - 1, trainerStorageProvider.get().getY(), 3)).subscribe());</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.A)) {</span>
+<span class="nc" id="L183">                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),</span>
+<span class="nc" id="L184">                        trainerStorageProvider.get().getTrainer().area(),</span>
+<span class="nc" id="L185">                        trainerStorageProvider.get().getX() - 1, trainerStorageProvider.get().getY(), 3)).subscribe());</span>
             }
-<span class="pc bpc" id="L184" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.D)) {</span>
-<span class="nc" id="L185">                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),</span>
-<span class="nc" id="L186">                        trainerStorageProvider.get().getTrainer().area(),</span>
-<span class="nc" id="L187">                        trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 1)).subscribe());</span>
+<span class="pc bpc" id="L187" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.D)) {</span>
+<span class="nc" id="L188">                disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),</span>
+<span class="nc" id="L189">                        trainerStorageProvider.get().getTrainer().area(),</span>
+<span class="nc" id="L190">                        trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 1)).subscribe());</span>
             }
 
-<span class="fc" id="L190">        };</span>
+<span class="fc" id="L193">        };</span>
 
-<span class="fc" id="L192">        keyReleasedHandler = event -&gt; {</span>
-<span class="fc bfc" id="L193" title="All 2 branches covered.">            if (isChatting) {</span>
-<span class="fc" id="L194">                return;</span>
+<span class="fc" id="L195">        keyReleasedHandler = event -&gt; {</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">            if (isChatting) {</span>
+<span class="fc" id="L197">                return;</span>
             }
-<span class="pc bpc" id="L196" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.W)) {</span>
-<span class="nc" id="L197">                trainerSpriteAnimation.stay(0);</span>
+<span class="pc bpc" id="L199" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.W)) {</span>
+<span class="nc" id="L200">                trainerSpriteAnimation.stay(0);</span>
             }
-<span class="pc bpc" id="L199" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.S)) {</span>
-<span class="nc" id="L200">                trainerSpriteAnimation.stay(2);</span>
+<span class="pc bpc" id="L202" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.S)) {</span>
+<span class="nc" id="L203">                trainerSpriteAnimation.stay(2);</span>
             }
-<span class="pc bpc" id="L202" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.A)) {</span>
-<span class="nc" id="L203">                trainerSpriteAnimation.stay(3);</span>
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.A)) {</span>
+<span class="nc" id="L206">                trainerSpriteAnimation.stay(3);</span>
             }
-<span class="pc bpc" id="L205" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.D)) {</span>
-<span class="nc" id="L206">                trainerSpriteAnimation.stay(1);</span>
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.D)) {</span>
+<span class="nc" id="L209">                trainerSpriteAnimation.stay(1);</span>
             }
-<span class="fc" id="L208">        };</span>
-<span class="fc" id="L209">    }</span>
+<span class="fc" id="L211">        };</span>
+<span class="fc" id="L212">    }</span>
 
     /**
      * This method sets the title of the {@link IngameController}.
@@ -216,7 +219,7 @@ public class IngameController extends Controller {
 
     @Override
     public String getTitle() {
-<span class="fc" id="L219">        return resources.getString(&quot;INGAME.TITLE&quot;);</span>
+<span class="fc" id="L222">        return resources.getString(&quot;INGAME.TITLE&quot;);</span>
     }
 
 
@@ -228,154 +231,154 @@ public class IngameController extends Controller {
 
     @Override
     public Parent render() {
-<span class="fc" id="L231">        final Parent parent = super.render();</span>
-<span class="fc" id="L232">        trainerStorageProvider.get().setX(trainerStorageProvider.get().getTrainer().x());</span>
-<span class="fc" id="L233">        trainerStorageProvider.get().setY(trainerStorageProvider.get().getTrainer().y());</span>
-<span class="fc" id="L234">        trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());</span>
-<span class="fc" id="L235">        listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());</span>
+<span class="fc" id="L234">        final Parent parent = super.render();</span>
+<span class="fc" id="L235">        trainerStorageProvider.get().setX(trainerStorageProvider.get().getTrainer().x());</span>
+<span class="fc" id="L236">        trainerStorageProvider.get().setY(trainerStorageProvider.get().getTrainer().y());</span>
+<span class="fc" id="L237">        trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());</span>
+<span class="fc" id="L238">        listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());</span>
 
 
         // Setup trainers
-<span class="fc" id="L239">        disposables.add(trainersService.getTrainers(trainerStorageProvider.get().getRegion()._id(), null, null).observeOn(FX_SCHEDULER).subscribe(</span>
+<span class="fc" id="L242">        disposables.add(trainersService.getTrainers(trainerStorageProvider.get().getRegion()._id(), null, null).observeOn(FX_SCHEDULER).subscribe(</span>
                 trainers -&gt; {
-<span class="fc" id="L241">                    this.trainers = FXCollections.observableArrayList(trainers);</span>
-<span class="fc" id="L242">                    listenToTrainers(this.trainers);</span>
-<span class="pc" id="L243">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L244">                    this.trainers = FXCollections.observableArrayList(trainers);</span>
+<span class="fc" id="L245">                    listenToTrainers(this.trainers);</span>
+<span class="pc" id="L246">                }, error -&gt; showError(error.getMessage())));</span>
 
         // Setup chat
-<span class="fc" id="L246">        messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);</span>
-<span class="fc" id="L247">        listenToMessages(trainerStorageProvider.get().getTrainer().region());</span>
-<span class="fc" id="L248">        chatListView.setItems(messages);</span>
-<span class="fc" id="L249">        chatListView.setCellFactory(param -&gt; new IngameMessageCell(this));</span>
-<span class="fc" id="L250">        chatListView.setPlaceholder(new Label(resources.getString(&quot;NO.MESSAGES.YET&quot;)));</span>
-<span class="fc" id="L251">        chatListView.setFocusModel(null);</span>
-<span class="fc" id="L252">        chatListView.setSelectionModel(null);</span>
+<span class="fc" id="L249">        messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);</span>
+<span class="fc" id="L250">        listenToMessages(trainerStorageProvider.get().getTrainer().region());</span>
+<span class="fc" id="L251">        chatListView.setItems(messages);</span>
+<span class="fc" id="L252">        chatListView.setCellFactory(param -&gt; new IngameMessageCell(this));</span>
+<span class="fc" id="L253">        chatListView.setPlaceholder(new Label(resources.getString(&quot;NO.MESSAGES.YET&quot;)));</span>
+<span class="fc" id="L254">        chatListView.setFocusModel(null);</span>
+<span class="fc" id="L255">        chatListView.setSelectionModel(null);</span>
 
 
         // Create and start standing animation
-<span class="fc" id="L256">        trainerSpriteAnimation = new SpriteAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), trainerStorageProvider.get().getTrainer(), DELAY_LONG, userTrainerCanvas.getGraphicsContext2D());</span>
-<span class="pc bpc" id="L257" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L258">            trainerSpriteAnimation.stay(trainerStorageProvider.get().getDirection());</span>
-<span class="nc" id="L259">            trainerSpriteAnimation.start();</span>
+<span class="fc" id="L259">        trainerSpriteAnimation = new SpriteAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), trainerStorageProvider.get().getTrainer(), DELAY_LONG, userTrainerCanvas.getGraphicsContext2D());</span>
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L261">            trainerSpriteAnimation.stay(trainerStorageProvider.get().getDirection());</span>
+<span class="nc" id="L262">            trainerSpriteAnimation.start();</span>
         }
 
         // Add event handlers
-<span class="fc" id="L263">        app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);</span>
-<span class="fc" id="L264">        app.getStage().getScene().addEventHandler(KeyEvent.KEY_RELEASED, keyReleasedHandler);</span>
+<span class="fc" id="L266">        app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);</span>
+<span class="fc" id="L267">        app.getStage().getScene().addEventHandler(KeyEvent.KEY_RELEASED, keyReleasedHandler);</span>
 
-<span class="fc" id="L266">        Region region = trainerStorageProvider.get().getRegion();</span>
-<span class="pc" id="L267">        disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(area -&gt; loadMap(area.map()), error -&gt; showError(error.getMessage())));</span>
-<span class="fc" id="L268">        monstersListControllerProvider.get().init();</span>
-<span class="fc" id="L269">        return parent;</span>
+<span class="fc" id="L269">        Region region = trainerStorageProvider.get().getRegion();</span>
+<span class="pc" id="L270">        disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(area -&gt; loadMap(area.map()), error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L271">        monstersListControllerProvider.get().init();</span>
+<span class="fc" id="L272">        return parent;</span>
     }
 
     public void listenToMovement(ObservableList&lt;MoveTrainerDto&gt; moveTrainerDtos, String area) {
-<span class="fc" id="L273">        disposables.add(udpEventListenerProvider.get().listen(&quot;areas.&quot; + area + &quot;.trainers.*.*&quot;, MoveTrainerDto.class)</span>
-<span class="fc" id="L274">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
-<span class="fc" id="L275">                    final MoveTrainerDto moveTrainerDto = event.data();</span>
-<span class="fc" id="L276">                    moveTrainerDtos.add(moveTrainerDto);</span>
-<span class="pc bpc" id="L277" title="1 of 2 branches missed.">                    if (moveTrainerDto._id().equals(trainerStorageProvider.get().getTrainer()._id())) {</span>
-<span class="nc bnc" id="L278" title="All 2 branches missed.">                        if (!Objects.equals(moveTrainerDto.area(), trainerStorageProvider.get().getTrainer().area())) {</span>
-<span class="nc" id="L279">                            disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER).subscribe(</span>
+<span class="fc" id="L276">        disposables.add(udpEventListenerProvider.get().listen(&quot;areas.&quot; + area + &quot;.trainers.*.*&quot;, MoveTrainerDto.class)</span>
+<span class="fc" id="L277">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
+<span class="fc" id="L278">                    final MoveTrainerDto moveTrainerDto = event.data();</span>
+<span class="fc" id="L279">                    moveTrainerDtos.add(moveTrainerDto);</span>
+<span class="pc bpc" id="L280" title="1 of 2 branches missed.">                    if (moveTrainerDto._id().equals(trainerStorageProvider.get().getTrainer()._id())) {</span>
+<span class="nc bnc" id="L281" title="All 2 branches missed.">                        if (!Objects.equals(moveTrainerDto.area(), trainerStorageProvider.get().getTrainer().area())) {</span>
+<span class="nc" id="L282">                            disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER).subscribe(</span>
                                     trainer -&gt; {
-<span class="nc" id="L281">                                        trainerStorageProvider.get().setTrainer(trainer);</span>
-<span class="nc" id="L282">                                        destroy();</span>
-<span class="nc" id="L283">                                        app.show(ingameControllerProvider.get());</span>
-<span class="nc" id="L284">                                    },</span>
+<span class="nc" id="L284">                                        trainerStorageProvider.get().setTrainer(trainer);</span>
+<span class="nc" id="L285">                                        destroy();</span>
+<span class="nc" id="L286">                                        app.show(ingameControllerProvider.get());</span>
+<span class="nc" id="L287">                                    },</span>
                                     error -&gt; {
-<span class="nc" id="L286">                                        showError(error.getMessage());</span>
-<span class="nc" id="L287">                                        error.printStackTrace();</span>
-<span class="nc" id="L288">                                    }</span>
+<span class="nc" id="L289">                                        showError(error.getMessage());</span>
+<span class="nc" id="L290">                                        error.printStackTrace();</span>
+<span class="nc" id="L291">                                    }</span>
                             ));
 
 
                         }
-<span class="nc" id="L293">                        int oldXValue = trainerStorageProvider.get().getX();</span>
-<span class="nc" id="L294">                        int oldYValue = trainerStorageProvider.get().getY();</span>
-<span class="nc bnc" id="L295" title="All 4 branches missed.">                        if (oldXValue != moveTrainerDto.x() || oldYValue != moveTrainerDto.y()) {</span>
-<span class="nc" id="L296">                            trainerSpriteAnimation.walk(moveTrainerDto.direction());</span>
-<span class="nc bnc" id="L297" title="All 2 branches missed.">                            if (oldXValue &lt; moveTrainerDto.x()) {</span>
-<span class="nc" id="L298">                                mapMovementTransition = getMapMovementTransition(groundCanvas, -SCALE_FACTOR * TILE_SIZE, 0);</span>
-<span class="nc" id="L299">                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, -SCALE_FACTOR * TILE_SIZE, 0);</span>
-<span class="nc" id="L300">                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0);</span>
-<span class="nc" id="L301">                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0);</span>
-<span class="nc" id="L302">                                trainerTransition.play();</span>
-<span class="nc" id="L303">                                overTrainerTransition.play();</span>
-<span class="nc" id="L304">                                mapMovementTransition.play();</span>
-<span class="nc" id="L305">                                this.mapMovementTransition.play();</span>
-<span class="nc bnc" id="L306" title="All 2 branches missed.">                            } else if (oldXValue &gt; moveTrainerDto.x()) {</span>
-<span class="nc" id="L307">                                mapMovementTransition = getMapMovementTransition(groundCanvas, SCALE_FACTOR * TILE_SIZE, 0);</span>
-<span class="nc" id="L308">                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, SCALE_FACTOR * TILE_SIZE, 0);</span>
-<span class="nc" id="L309">                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, SCALE_FACTOR * TILE_SIZE, 0);</span>
-<span class="nc" id="L310">                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0);</span>
-<span class="nc" id="L311">                                trainerTransition.play();</span>
-<span class="nc" id="L312">                                overTrainerTransition.play();</span>
-<span class="nc" id="L313">                                mapMovementTransition.play();</span>
-<span class="nc" id="L314">                                this.mapMovementTransition.play();</span>
-<span class="nc bnc" id="L315" title="All 2 branches missed.">                            } else if (oldYValue &lt; moveTrainerDto.y()) {</span>
-<span class="nc" id="L316">                                mapMovementTransition = getMapMovementTransition(groundCanvas, 0, -SCALE_FACTOR * TILE_SIZE);</span>
-<span class="nc" id="L317">                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, 0, -SCALE_FACTOR * TILE_SIZE);</span>
-<span class="nc" id="L318">                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE);</span>
-<span class="nc" id="L319">                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE);</span>
-<span class="nc" id="L320">                                trainerTransition.play();</span>
-<span class="nc" id="L321">                                overTrainerTransition.play();</span>
-<span class="nc" id="L322">                                mapMovementTransition.play();</span>
-<span class="nc" id="L323">                                this.mapMovementTransition.play();</span>
-<span class="nc" id="L324">                            } else {</span>
-<span class="nc" id="L325">                                mapMovementTransition = getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE);</span>
-<span class="nc" id="L326">                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, 0, SCALE_FACTOR * TILE_SIZE);</span>
-<span class="nc" id="L327">                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, 0, SCALE_FACTOR * TILE_SIZE);</span>
-<span class="nc" id="L328">                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE);</span>
-<span class="nc" id="L329">                                trainerTransition.play();</span>
-<span class="nc" id="L330">                                overTrainerTransition.play();</span>
-<span class="nc" id="L331">                                mapMovementTransition.play();</span>
-<span class="nc" id="L332">                                this.mapMovementTransition.play();</span>
-<span class="nc" id="L333">                            }</span>
+<span class="nc" id="L296">                        int oldXValue = trainerStorageProvider.get().getX();</span>
+<span class="nc" id="L297">                        int oldYValue = trainerStorageProvider.get().getY();</span>
+<span class="nc bnc" id="L298" title="All 4 branches missed.">                        if (oldXValue != moveTrainerDto.x() || oldYValue != moveTrainerDto.y()) {</span>
+<span class="nc" id="L299">                            trainerSpriteAnimation.walk(moveTrainerDto.direction());</span>
+<span class="nc bnc" id="L300" title="All 2 branches missed.">                            if (oldXValue &lt; moveTrainerDto.x()) {</span>
+<span class="nc" id="L301">                                mapMovementTransition = getMapMovementTransition(groundCanvas, -SCALE_FACTOR * TILE_SIZE, 0);</span>
+<span class="nc" id="L302">                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, -SCALE_FACTOR * TILE_SIZE, 0);</span>
+<span class="nc" id="L303">                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0);</span>
+<span class="nc" id="L304">                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0);</span>
+<span class="nc" id="L305">                                trainerTransition.play();</span>
+<span class="nc" id="L306">                                overTrainerTransition.play();</span>
+<span class="nc" id="L307">                                mapMovementTransition.play();</span>
+<span class="nc" id="L308">                                this.mapMovementTransition.play();</span>
+<span class="nc bnc" id="L309" title="All 2 branches missed.">                            } else if (oldXValue &gt; moveTrainerDto.x()) {</span>
+<span class="nc" id="L310">                                mapMovementTransition = getMapMovementTransition(groundCanvas, SCALE_FACTOR * TILE_SIZE, 0);</span>
+<span class="nc" id="L311">                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, SCALE_FACTOR * TILE_SIZE, 0);</span>
+<span class="nc" id="L312">                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, SCALE_FACTOR * TILE_SIZE, 0);</span>
+<span class="nc" id="L313">                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0);</span>
+<span class="nc" id="L314">                                trainerTransition.play();</span>
+<span class="nc" id="L315">                                overTrainerTransition.play();</span>
+<span class="nc" id="L316">                                mapMovementTransition.play();</span>
+<span class="nc" id="L317">                                this.mapMovementTransition.play();</span>
+<span class="nc bnc" id="L318" title="All 2 branches missed.">                            } else if (oldYValue &lt; moveTrainerDto.y()) {</span>
+<span class="nc" id="L319">                                mapMovementTransition = getMapMovementTransition(groundCanvas, 0, -SCALE_FACTOR * TILE_SIZE);</span>
+<span class="nc" id="L320">                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, 0, -SCALE_FACTOR * TILE_SIZE);</span>
+<span class="nc" id="L321">                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE);</span>
+<span class="nc" id="L322">                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE);</span>
+<span class="nc" id="L323">                                trainerTransition.play();</span>
+<span class="nc" id="L324">                                overTrainerTransition.play();</span>
+<span class="nc" id="L325">                                mapMovementTransition.play();</span>
+<span class="nc" id="L326">                                this.mapMovementTransition.play();</span>
+<span class="nc" id="L327">                            } else {</span>
+<span class="nc" id="L328">                                mapMovementTransition = getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE);</span>
+<span class="nc" id="L329">                                Timeline mapMovementTransition = getMapMovementTransition(trainersCanvas, 0, SCALE_FACTOR * TILE_SIZE);</span>
+<span class="nc" id="L330">                                Timeline trainerTransition = getMapMovementTransition(trainerCanvas, 0, SCALE_FACTOR * TILE_SIZE);</span>
+<span class="nc" id="L331">                                Timeline overTrainerTransition = getMapMovementTransition(overTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE);</span>
+<span class="nc" id="L332">                                trainerTransition.play();</span>
+<span class="nc" id="L333">                                overTrainerTransition.play();</span>
+<span class="nc" id="L334">                                mapMovementTransition.play();</span>
+<span class="nc" id="L335">                                this.mapMovementTransition.play();</span>
+<span class="nc" id="L336">                            }</span>
                         } else {
-<span class="nc" id="L335">                            trainerSpriteAnimation.stay(moveTrainerDto.direction());</span>
+<span class="nc" id="L338">                            trainerSpriteAnimation.stay(moveTrainerDto.direction());</span>
                         }
-<span class="nc" id="L337">                        Position p = trainerSpriteAnimation.getCurrentPosition();</span>
-<span class="nc" id="L338">                        p.setDirection(trainerStorageProvider.get().getDirection());</span>
-<span class="nc" id="L339">                        trainerSpriteAnimation.setCurrentPosition(p);</span>
-<span class="nc" id="L340">                        trainerStorageProvider.get().setX(moveTrainerDto.x());</span>
-<span class="nc" id="L341">                        trainerStorageProvider.get().setY(moveTrainerDto.y());</span>
-<span class="nc" id="L342">                        trainerStorageProvider.get().setDirection(moveTrainerDto.direction());</span>
-<span class="nc" id="L343">                        Position position = new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction());</span>
-<span class="nc" id="L344">                        trainerPositionHashMap.put(trainerStorageProvider.get().getTrainer(), position);</span>
-<span class="nc" id="L345">                    } else {</span>
-<span class="pc bpc" id="L346" title="1 of 2 branches missed.">                        if (trainers != null) {</span>
-<span class="nc" id="L347">                            Trainer trainer = trainers.stream().filter(tr -&gt; tr._id().equals(moveTrainerDto._id())).toList().get(0);</span>
-<span class="nc" id="L348">                            Position oldPosition = trainerPositionHashMap.get(trainer);</span>
-<span class="nc" id="L349">                            TrainerController trainerController = trainerControllerHashMap.get(trainer);</span>
-<span class="nc bnc" id="L350" title="All 4 branches missed.">                            if (oldPosition != null &amp;&amp; trainerController != null) {</span>
-<span class="nc" id="L351">                                trainersCanvas.getGraphicsContext2D().clearRect(oldPosition.getX() * TILE_SIZE, oldPosition.getY() * TILE_SIZE, 16, 25);</span>
-<span class="nc bnc" id="L352" title="All 4 branches missed.">                                if (oldPosition.getX() != moveTrainerDto.x() || oldPosition.getY() != moveTrainerDto.y()) {</span>
-<span class="nc" id="L353">                                    trainerController.getSpriteAnimation().setCurrentPosition(new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction()));</span>
-<span class="nc" id="L354">                                    trainerController.getSpriteAnimation().walk(oldPosition.getDirection());</span>
+<span class="nc" id="L340">                        Position p = trainerSpriteAnimation.getCurrentPosition();</span>
+<span class="nc" id="L341">                        p.setDirection(trainerStorageProvider.get().getDirection());</span>
+<span class="nc" id="L342">                        trainerSpriteAnimation.setCurrentPosition(p);</span>
+<span class="nc" id="L343">                        trainerStorageProvider.get().setX(moveTrainerDto.x());</span>
+<span class="nc" id="L344">                        trainerStorageProvider.get().setY(moveTrainerDto.y());</span>
+<span class="nc" id="L345">                        trainerStorageProvider.get().setDirection(moveTrainerDto.direction());</span>
+<span class="nc" id="L346">                        Position position = new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction());</span>
+<span class="nc" id="L347">                        trainerPositionHashMap.put(trainerStorageProvider.get().getTrainer(), position);</span>
+<span class="nc" id="L348">                    } else {</span>
+<span class="pc bpc" id="L349" title="1 of 2 branches missed.">                        if (trainers != null) {</span>
+<span class="nc" id="L350">                            Trainer trainer = trainers.stream().filter(tr -&gt; tr._id().equals(moveTrainerDto._id())).toList().get(0);</span>
+<span class="nc" id="L351">                            Position oldPosition = trainerPositionHashMap.get(trainer);</span>
+<span class="nc" id="L352">                            TrainerController trainerController = trainerControllerHashMap.get(trainer);</span>
+<span class="nc bnc" id="L353" title="All 4 branches missed.">                            if (oldPosition != null &amp;&amp; trainerController != null) {</span>
+<span class="nc" id="L354">                                trainersCanvas.getGraphicsContext2D().clearRect(oldPosition.getX() * TILE_SIZE, oldPosition.getY() * TILE_SIZE, 16, 25);</span>
+<span class="nc bnc" id="L355" title="All 4 branches missed.">                                if (oldPosition.getX() != moveTrainerDto.x() || oldPosition.getY() != moveTrainerDto.y()) {</span>
+<span class="nc" id="L356">                                    trainerController.getSpriteAnimation().setCurrentPosition(new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction()));</span>
+<span class="nc" id="L357">                                    trainerController.getSpriteAnimation().walk(oldPosition.getDirection());</span>
                                 }
-<span class="nc" id="L356">                                trainersCanvas.getGraphicsContext2D().drawImage(trainerController.getSpriteAnimation().currentImage, moveTrainerDto.x() * TILE_SIZE, moveTrainerDto.y() * TILE_SIZE, 16, 25);</span>
-<span class="nc" id="L357">                                trainerPositionHashMap.put(trainer, new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction()));</span>
+<span class="nc" id="L359">                                trainersCanvas.getGraphicsContext2D().drawImage(trainerController.getSpriteAnimation().currentImage, moveTrainerDto.x() * TILE_SIZE, moveTrainerDto.y() * TILE_SIZE, 16, 25);</span>
+<span class="nc" id="L360">                                trainerPositionHashMap.put(trainer, new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction()));</span>
                             }
                         }
 
                     }
-<span class="fc" id="L362">                }, error -&gt; {</span>
-<span class="nc" id="L363">                    showError(error.getMessage());</span>
-<span class="nc" id="L364">                    error.printStackTrace();</span>
-<span class="nc" id="L365">                }));</span>
-<span class="fc" id="L366">    }</span>
+<span class="fc" id="L365">                }, error -&gt; {</span>
+<span class="nc" id="L366">                    showError(error.getMessage());</span>
+<span class="nc" id="L367">                    error.printStackTrace();</span>
+<span class="nc" id="L368">                }));</span>
+<span class="fc" id="L369">    }</span>
 
 
     private Timeline getMapMovementTransition(Canvas map, int x, int y) {
-<span class="nc" id="L370">        return new Timeline(</span>
-<span class="nc" id="L371">                new KeyFrame(Duration.millis(IngameController.DELAY), e -&gt; {</span>
-<span class="nc" id="L372">                    TranslateTransition translateTransition = new TranslateTransition();</span>
-<span class="nc" id="L373">                    translateTransition.setDuration(Duration.millis(IngameController.DELAY));</span>
-<span class="nc" id="L374">                    translateTransition.setNode(map);</span>
-<span class="nc" id="L375">                    translateTransition.setByX(x);</span>
-<span class="nc" id="L376">                    translateTransition.setByY(y);</span>
-<span class="nc" id="L377">                    translateTransition.play();</span>
-<span class="nc" id="L378">                })</span>
+<span class="nc" id="L373">        return new Timeline(</span>
+<span class="nc" id="L374">                new KeyFrame(Duration.millis(IngameController.DELAY), e -&gt; {</span>
+<span class="nc" id="L375">                    TranslateTransition translateTransition = new TranslateTransition();</span>
+<span class="nc" id="L376">                    translateTransition.setDuration(Duration.millis(IngameController.DELAY));</span>
+<span class="nc" id="L377">                    translateTransition.setNode(map);</span>
+<span class="nc" id="L378">                    translateTransition.setByX(x);</span>
+<span class="nc" id="L379">                    translateTransition.setByY(y);</span>
+<span class="nc" id="L380">                    translateTransition.play();</span>
+<span class="nc" id="L381">                })</span>
         );
     }
 
@@ -388,32 +391,32 @@ public class IngameController extends Controller {
      */
 
     private void loadMap(Map map) {
-<span class="pc bpc" id="L391" title="1 of 2 branches missed.">        if (GraphicsEnvironment.isHeadless()) {</span>
-<span class="fc" id="L392">            return;</span>
+<span class="pc bpc" id="L394" title="1 of 2 branches missed.">        if (GraphicsEnvironment.isHeadless()) {</span>
+<span class="fc" id="L395">            return;</span>
         }
-<span class="nc" id="L394">        tileSetImages.clear();</span>
-<span class="nc bnc" id="L395" title="All 2 branches missed.">        for (TileSet tileSet : map.tilesets()) {</span>
-<span class="nc" id="L396">            final String mapName = getFileName(tileSet.source());</span>
-<span class="nc" id="L397">            disposables.add(presetsService.getTilesetImage(mapName)</span>
-<span class="nc" id="L398">                    .doOnNext(image -&gt; tileSetImages.put(mapName, image))</span>
-<span class="nc" id="L399">                    .flatMap(image -&gt; presetsService.getTileset(mapName).observeOn(FX_SCHEDULER))</span>
-<span class="nc" id="L400">                    .doOnNext(tileset -&gt; tileSetJsons.put(mapName, tileset))</span>
-<span class="nc" id="L401">                    .observeOn(FX_SCHEDULER).subscribe(image -&gt; afterAllTileSetsLoaded(map), error -&gt; {</span>
-<span class="nc" id="L402">                        showError(error.getMessage());</span>
-<span class="nc" id="L403">                        error.printStackTrace();</span>
-<span class="nc" id="L404">                    }));</span>
-<span class="nc" id="L405">        }</span>
+<span class="nc" id="L397">        tileSetImages.clear();</span>
+<span class="nc bnc" id="L398" title="All 2 branches missed.">        for (TileSet tileSet : map.tilesets()) {</span>
+<span class="nc" id="L399">            final String mapName = getFileName(tileSet.source());</span>
+<span class="nc" id="L400">            disposables.add(presetsService.getTilesetImage(mapName)</span>
+<span class="nc" id="L401">                    .doOnNext(image -&gt; tileSetImages.put(mapName, image))</span>
+<span class="nc" id="L402">                    .flatMap(image -&gt; presetsService.getTileset(mapName).observeOn(FX_SCHEDULER))</span>
+<span class="nc" id="L403">                    .doOnNext(tileset -&gt; tileSetJsons.put(mapName, tileset))</span>
+<span class="nc" id="L404">                    .observeOn(FX_SCHEDULER).subscribe(image -&gt; afterAllTileSetsLoaded(map), error -&gt; {</span>
+<span class="nc" id="L405">                        showError(error.getMessage());</span>
+<span class="nc" id="L406">                        error.printStackTrace();</span>
+<span class="nc" id="L407">                    }));</span>
+<span class="nc" id="L408">        }</span>
 
         // Shift map initially to match the trainers position
-<span class="nc" id="L408">        int xOffset = (int) calculateInitialCameraXOffset(map.width());</span>
-<span class="nc" id="L409">        int yOffset = (int) calculateInitialCameraYOffset(map.height());</span>
+<span class="nc" id="L411">        int xOffset = (int) calculateInitialCameraXOffset(map.width());</span>
+<span class="nc" id="L412">        int yOffset = (int) calculateInitialCameraYOffset(map.height());</span>
         //
-<span class="nc" id="L411">        getMapMovementTransition(groundCanvas, xOffset, yOffset).play();</span>
-<span class="nc" id="L412">        getMapMovementTransition(trainersCanvas, xOffset, yOffset - TILE_SIZE).play();</span>
-<span class="nc" id="L413">        getMapMovementTransition(userTrainerCanvas, xOffset, yOffset - TILE_SIZE).play();</span>
-<span class="nc" id="L414">        getMapMovementTransition(trainerCanvas, xOffset, yOffset - TILE_SIZE).play();</span>
-<span class="nc" id="L415">        getMapMovementTransition(overTrainerCanvas, xOffset, (yOffset) + 3).play();</span>
-<span class="nc" id="L416">    }</span>
+<span class="nc" id="L414">        getMapMovementTransition(groundCanvas, xOffset, yOffset).play();</span>
+<span class="nc" id="L415">        getMapMovementTransition(trainersCanvas, xOffset, yOffset - TILE_SIZE).play();</span>
+<span class="nc" id="L416">        getMapMovementTransition(userTrainerCanvas, xOffset, yOffset - TILE_SIZE).play();</span>
+<span class="nc" id="L417">        getMapMovementTransition(trainerCanvas, xOffset, yOffset - TILE_SIZE).play();</span>
+<span class="nc" id="L418">        getMapMovementTransition(overTrainerCanvas, xOffset, (yOffset) + 3).play();</span>
+<span class="nc" id="L419">    }</span>
 
     /**
      * This method is used to calculate the initial x offset for the camera to center the player at the right position
@@ -422,7 +425,7 @@ public class IngameController extends Controller {
      * @return x offset that the map needs to be shifted
      */
     private double calculateInitialCameraXOffset(double mapWidth) {
-<span class="nc" id="L425">        return (int) ((((mapWidth * TILE_SIZE) / (double) TILE_SIZE) / SCALE_FACTOR) - trainerStorageProvider.get().getX()) * TILE_SIZE * SCALE_FACTOR;</span>
+<span class="nc" id="L428">        return (int) ((((mapWidth * TILE_SIZE) / (double) TILE_SIZE) / SCALE_FACTOR) - trainerStorageProvider.get().getX()) * TILE_SIZE * SCALE_FACTOR;</span>
     }
 
     /**
@@ -432,62 +435,62 @@ public class IngameController extends Controller {
      * @return y offset that the map needs to be shifted
      */
     private double calculateInitialCameraYOffset(double mapHeight) {
-<span class="nc" id="L435">        return (int) (((((mapHeight * TILE_SIZE) / (double) TILE_SIZE) / SCALE_FACTOR) - trainerStorageProvider.get().getY()) * TILE_SIZE * SCALE_FACTOR);</span>
+<span class="nc" id="L438">        return (int) (((((mapHeight * TILE_SIZE) / (double) TILE_SIZE) / SCALE_FACTOR) - trainerStorageProvider.get().getY()) * TILE_SIZE * SCALE_FACTOR);</span>
     }
 
     /**
      * loadPlayers is used to initially load all players on the map. For every trainer it loads the image of the player and sets its position.
      */
     private void loadPlayers() {
-<span class="nc" id="L442">        trainers.forEach(trainer -&gt; {</span>
-<span class="nc bnc" id="L443" title="All 2 branches missed.">            if (!Objects.equals(trainerStorageProvider.get().getTrainer()._id(), trainer._id())) {</span>
-<span class="nc bnc" id="L444" title="All 2 branches missed.">                if (trainer.area().equals(trainerStorageProvider.get().getTrainer().area())) {</span>
-<span class="nc" id="L445">                    loadPlayer(trainer);</span>
+<span class="nc" id="L445">        trainers.forEach(trainer -&gt; {</span>
+<span class="nc bnc" id="L446" title="All 2 branches missed.">            if (!Objects.equals(trainerStorageProvider.get().getTrainer()._id(), trainer._id())) {</span>
+<span class="nc bnc" id="L447" title="All 2 branches missed.">                if (trainer.area().equals(trainerStorageProvider.get().getTrainer().area())) {</span>
+<span class="nc" id="L448">                    loadPlayer(trainer);</span>
                 }
             }
-<span class="nc" id="L448">        });</span>
-<span class="nc" id="L449">        afterAllTrainersLoaded();</span>
-<span class="nc" id="L450">    }</span>
+<span class="nc" id="L451">        });</span>
+<span class="nc" id="L452">        afterAllTrainersLoaded();</span>
+<span class="nc" id="L453">    }</span>
 
     private void afterAllTrainersLoaded() {
-<span class="nc" id="L453">        trainers.forEach(trainer -&gt; {</span>
-<span class="nc bnc" id="L454" title="All 2 branches missed.">            if (trainerControllerHashMap.get(trainer) != null) {</span>
-<span class="nc" id="L455">                trainerControllerHashMap.get(trainer).startAnimations();</span>
+<span class="nc" id="L456">        trainers.forEach(trainer -&gt; {</span>
+<span class="nc bnc" id="L457" title="All 2 branches missed.">            if (trainerControllerHashMap.get(trainer) != null) {</span>
+<span class="nc" id="L458">                trainerControllerHashMap.get(trainer).startAnimations();</span>
             }
-<span class="nc" id="L457">        });</span>
-<span class="nc" id="L458">    }</span>
+<span class="nc" id="L460">        });</span>
+<span class="nc" id="L461">    }</span>
 
 
     /**
      * loadPlayer is used to load the player on the map. It loads the image of the player and sets its position.
      */
     private void loadPlayer(Trainer trainer) {
-<span class="nc bnc" id="L465" title="All 2 branches missed.">        if (trainerControllerHashMap.containsKey(trainer)) {</span>
-<span class="nc" id="L466">            return;</span>
+<span class="nc bnc" id="L468" title="All 2 branches missed.">        if (trainerControllerHashMap.containsKey(trainer)) {</span>
+<span class="nc" id="L469">            return;</span>
         }
-<span class="nc" id="L468">        URL resource = Main.class.getResource(&quot;charactermodels/&quot; + trainer.image());</span>
-<span class="nc bnc" id="L469" title="All 2 branches missed.">        if (resource != null) {</span>
-<span class="nc" id="L470">            Image trainerChunk = new Image(resource.toString());</span>
-<span class="nc" id="L471">            TrainerController trainerController = new TrainerController(trainer, trainerChunk, trainersCanvas.getGraphicsContext2D());</span>
-<span class="nc" id="L472">            trainerControllerHashMap.put(trainer, trainerController);</span>
-<span class="nc" id="L473">            trainerController.init();</span>
-<span class="nc" id="L474">        } else {</span>
-<span class="nc" id="L475">            disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(</span>
+<span class="nc" id="L471">        URL resource = Main.class.getResource(&quot;charactermodels/&quot; + trainer.image());</span>
+<span class="nc bnc" id="L472" title="All 2 branches missed.">        if (resource != null) {</span>
+<span class="nc" id="L473">            Image trainerChunk = new Image(resource.toString());</span>
+<span class="nc" id="L474">            TrainerController trainerController = new TrainerController(trainer, trainerChunk, trainersCanvas.getGraphicsContext2D());</span>
+<span class="nc" id="L475">            trainerControllerHashMap.put(trainer, trainerController);</span>
+<span class="nc" id="L476">            trainerController.init();</span>
+<span class="nc" id="L477">        } else {</span>
+<span class="nc" id="L478">            disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(</span>
                     image -&gt; {
-<span class="nc" id="L477">                        Image trainerChunk = ImageProcessor.resonseBodyToJavaFXImage(image);</span>
-<span class="nc" id="L478">                        TrainerController trainerController = new TrainerController(trainer, trainerChunk, trainersCanvas.getGraphicsContext2D());</span>
-<span class="nc" id="L479">                        trainerControllerHashMap.put(trainer, trainerController);</span>
-<span class="nc" id="L480">                        trainerController.init();</span>
-<span class="nc" id="L481">                    },</span>
+<span class="nc" id="L480">                        Image trainerChunk = ImageProcessor.resonseBodyToJavaFXImage(image);</span>
+<span class="nc" id="L481">                        TrainerController trainerController = new TrainerController(trainer, trainerChunk, trainersCanvas.getGraphicsContext2D());</span>
+<span class="nc" id="L482">                        trainerControllerHashMap.put(trainer, trainerController);</span>
+<span class="nc" id="L483">                        trainerController.init();</span>
+<span class="nc" id="L484">                    },</span>
                     error -&gt; {
-<span class="nc" id="L483">                        showError(error.getMessage());</span>
-<span class="nc" id="L484">                        error.printStackTrace();</span>
-<span class="nc" id="L485">                    }</span>
+<span class="nc" id="L486">                        showError(error.getMessage());</span>
+<span class="nc" id="L487">                        error.printStackTrace();</span>
+<span class="nc" id="L488">                    }</span>
             ));
         }
-<span class="nc" id="L488">        trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y(), trainer.direction()));</span>
+<span class="nc" id="L491">        trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y(), trainer.direction()));</span>
 
-<span class="nc" id="L490">    }</span>
+<span class="nc" id="L493">    }</span>
 
     /**
      * afterAllTileSetsLoaded is used to render the map. It renders every chunk of every layer of every tileset. After
@@ -497,27 +500,27 @@ public class IngameController extends Controller {
      */
 
     private void afterAllTileSetsLoaded(Map map) {
-<span class="nc bnc" id="L500" title="All 2 branches missed.">        if (tileSetImages.size() == map.tilesets().size()) {</span>
-<span class="nc bnc" id="L501" title="All 2 branches missed.">            if ((tileSetImages.size() + tileSetJsons.size()) == 2 * map.tilesets().size()) {</span>
-<span class="nc" id="L502">                setCanvasSettings(map, userTrainerCanvas);</span>
-<span class="nc" id="L503">                setCanvasSettings(map, trainersCanvas);</span>
-<span class="nc" id="L504">                setCanvasSettings(map, groundCanvas);</span>
-<span class="nc" id="L505">                setCanvasSettings(map, overTrainerCanvas);</span>
-<span class="nc bnc" id="L506" title="All 2 branches missed.">                for (TileSet tileSet : map.tilesets()) {</span>
-<span class="nc" id="L507">                    renderMap(map, tileSetImages.get(getFileName(tileSet.source())), tileSetJsons.get(getFileName(tileSet.source())),</span>
-<span class="nc bnc" id="L508" title="All 2 branches missed.">                            tileSet, map.tilesets().size() &gt; 1);</span>
-<span class="nc" id="L509">                }</span>
-<span class="nc" id="L510">                loadPlayers();</span>
+<span class="nc bnc" id="L503" title="All 2 branches missed.">        if (tileSetImages.size() == map.tilesets().size()) {</span>
+<span class="nc bnc" id="L504" title="All 2 branches missed.">            if ((tileSetImages.size() + tileSetJsons.size()) == 2 * map.tilesets().size()) {</span>
+<span class="nc" id="L505">                setCanvasSettings(map, userTrainerCanvas);</span>
+<span class="nc" id="L506">                setCanvasSettings(map, trainersCanvas);</span>
+<span class="nc" id="L507">                setCanvasSettings(map, groundCanvas);</span>
+<span class="nc" id="L508">                setCanvasSettings(map, overTrainerCanvas);</span>
+<span class="nc bnc" id="L509" title="All 2 branches missed.">                for (TileSet tileSet : map.tilesets()) {</span>
+<span class="nc" id="L510">                    renderMap(map, tileSetImages.get(getFileName(tileSet.source())), tileSetJsons.get(getFileName(tileSet.source())),</span>
+<span class="nc bnc" id="L511" title="All 2 branches missed.">                            tileSet, map.tilesets().size() &gt; 1);</span>
+<span class="nc" id="L512">                }</span>
+<span class="nc" id="L513">                loadPlayers();</span>
             }
         }
-<span class="nc" id="L513">    }</span>
+<span class="nc" id="L516">    }</span>
 
     public void setCanvasSettings(Map map, Canvas canvas) {
-<span class="nc" id="L516">        canvas.setScaleX(SCALE_FACTOR);</span>
-<span class="nc" id="L517">        canvas.setScaleY(SCALE_FACTOR);</span>
-<span class="nc" id="L518">        canvas.setWidth(map.width() * TILE_SIZE);</span>
-<span class="nc" id="L519">        canvas.setHeight(map.height() * TILE_SIZE);</span>
-<span class="nc" id="L520">    }</span>
+<span class="nc" id="L519">        canvas.setScaleX(SCALE_FACTOR);</span>
+<span class="nc" id="L520">        canvas.setScaleY(SCALE_FACTOR);</span>
+<span class="nc" id="L521">        canvas.setWidth(map.width() * TILE_SIZE);</span>
+<span class="nc" id="L522">        canvas.setHeight(map.height() * TILE_SIZE);</span>
+<span class="nc" id="L523">    }</span>
 
     /**
      * renderMap is used to render the map. It renders every chunk of every layer of the map. It skips every layer that
@@ -530,49 +533,49 @@ public class IngameController extends Controller {
      */
 
     private void renderMap(Map map, Image image, TileSet tileSetJson, TileSet tileSet, boolean multipleTileSets) {
-<span class="nc bnc" id="L533" title="All 2 branches missed.">        for (Layer layer : map.layers()) {</span>
-<span class="nc bnc" id="L534" title="All 2 branches missed.">            if (layer.chunks() == null) {</span>
-<span class="nc bnc" id="L535" title="All 2 branches missed.">                if (layer.data() != null) {</span>
-<span class="nc" id="L536">                    renderData(map, image, tileSet, tileSetJson, multipleTileSets, layer);</span>
+<span class="nc bnc" id="L536" title="All 2 branches missed.">        for (Layer layer : map.layers()) {</span>
+<span class="nc bnc" id="L537" title="All 2 branches missed.">            if (layer.chunks() == null) {</span>
+<span class="nc bnc" id="L538" title="All 2 branches missed.">                if (layer.data() != null) {</span>
+<span class="nc" id="L539">                    renderData(map, image, tileSet, tileSetJson, multipleTileSets, layer);</span>
                 }
                 continue;
             }
-<span class="nc bnc" id="L540" title="All 2 branches missed.">            for (Chunk chunk : layer.chunks()) {</span>
-<span class="nc" id="L541">                renderChunk(map, image, tileSet, tileSetJson, multipleTileSets, chunk);</span>
-<span class="nc" id="L542">            }</span>
-<span class="nc" id="L543">        }</span>
-<span class="nc" id="L544">    }</span>
+<span class="nc bnc" id="L543" title="All 2 branches missed.">            for (Chunk chunk : layer.chunks()) {</span>
+<span class="nc" id="L544">                renderChunk(map, image, tileSet, tileSetJson, multipleTileSets, chunk);</span>
+<span class="nc" id="L545">            }</span>
+<span class="nc" id="L546">        }</span>
+<span class="nc" id="L547">    }</span>
 
     private void renderData(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, Layer layer) {
-<span class="nc" id="L547">        renderTiles(map, image, tileSet, tileSetJson, multipleTileSets, layer.width(), layer.height(), layer.data(), layer.x(), layer.y());</span>
-<span class="nc" id="L548">    }</span>
+<span class="nc" id="L550">        renderTiles(map, image, tileSet, tileSetJson, multipleTileSets, layer.width(), layer.height(), layer.data(), layer.x(), layer.y());</span>
+<span class="nc" id="L551">    }</span>
 
     private void renderTiles(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, int width, int height, List&lt;Integer&gt; data, int x2, int y2) {
-<span class="nc" id="L551">        WritableImage writableImageGround = new WritableImage(width * TILE_SIZE, height * TILE_SIZE);</span>
-<span class="nc" id="L552">        WritableImage writableImageTop = new WritableImage(width * TILE_SIZE, height * TILE_SIZE);</span>
-<span class="nc bnc" id="L553" title="All 2 branches missed.">        for (int y = 0; y &lt; height; y++) {</span>
-<span class="nc bnc" id="L554" title="All 2 branches missed.">            for (int x = 0; x &lt; width; x++) {</span>
-<span class="nc" id="L555">                int tileId = data.get(y * width + x);</span>
-<span class="nc bnc" id="L556" title="All 2 branches missed.">                if (tileId == 0) {</span>
-<span class="nc" id="L557">                    continue;</span>
+<span class="nc" id="L554">        WritableImage writableImageGround = new WritableImage(width * TILE_SIZE, height * TILE_SIZE);</span>
+<span class="nc" id="L555">        WritableImage writableImageTop = new WritableImage(width * TILE_SIZE, height * TILE_SIZE);</span>
+<span class="nc bnc" id="L556" title="All 2 branches missed.">        for (int y = 0; y &lt; height; y++) {</span>
+<span class="nc bnc" id="L557" title="All 2 branches missed.">            for (int x = 0; x &lt; width; x++) {</span>
+<span class="nc" id="L558">                int tileId = data.get(y * width + x);</span>
+<span class="nc bnc" id="L559" title="All 2 branches missed.">                if (tileId == 0) {</span>
+<span class="nc" id="L560">                    continue;</span>
                 }
-<span class="nc bnc" id="L559" title="All 4 branches missed.">                if (multipleTileSets) if (checkIfNotInTileSet(map, tileSet, tileId)) continue;</span>
+<span class="nc bnc" id="L562" title="All 4 branches missed.">                if (multipleTileSets) if (checkIfNotInTileSet(map, tileSet, tileId)) continue;</span>
 
-<span class="nc" id="L561">                int tilesPerRow = (int) (image.getWidth() / TILE_SIZE);</span>
-<span class="nc" id="L562">                int tileX = ((tileId - tileSet.firstgid()) % tilesPerRow) * TILE_SIZE;</span>
-<span class="nc" id="L563">                int tileY = ((tileId - tileSet.firstgid()) / tilesPerRow) * TILE_SIZE;</span>
-<span class="nc bnc" id="L564" title="All 2 branches missed.">                if (isRoof(tileSet, tileSetJson, tileId)) {</span>
-<span class="nc" id="L565">                    writableImageTop.getPixelWriter().setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,</span>
-<span class="nc" id="L566">                            image.getPixelReader(), tileX, tileY);</span>
-                } else {
-<span class="nc" id="L568">                    writableImageGround.getPixelWriter().setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,</span>
+<span class="nc" id="L564">                int tilesPerRow = (int) (image.getWidth() / TILE_SIZE);</span>
+<span class="nc" id="L565">                int tileX = ((tileId - tileSet.firstgid()) % tilesPerRow) * TILE_SIZE;</span>
+<span class="nc" id="L566">                int tileY = ((tileId - tileSet.firstgid()) / tilesPerRow) * TILE_SIZE;</span>
+<span class="nc bnc" id="L567" title="All 2 branches missed.">                if (isRoof(tileSet, tileSetJson, tileId)) {</span>
+<span class="nc" id="L568">                    writableImageTop.getPixelWriter().setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,</span>
 <span class="nc" id="L569">                            image.getPixelReader(), tileX, tileY);</span>
+                } else {
+<span class="nc" id="L571">                    writableImageGround.getPixelWriter().setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,</span>
+<span class="nc" id="L572">                            image.getPixelReader(), tileX, tileY);</span>
                 }
             }
         }
-<span class="nc" id="L573">        groundCanvas.getGraphicsContext2D().drawImage(writableImageGround, x2 * TILE_SIZE, y2 * TILE_SIZE);</span>
-<span class="nc" id="L574">        overTrainerCanvas.getGraphicsContext2D().drawImage(writableImageTop, x2 * TILE_SIZE, y2 * TILE_SIZE);</span>
-<span class="nc" id="L575">    }</span>
+<span class="nc" id="L576">        groundCanvas.getGraphicsContext2D().drawImage(writableImageGround, x2 * TILE_SIZE, y2 * TILE_SIZE);</span>
+<span class="nc" id="L577">        overTrainerCanvas.getGraphicsContext2D().drawImage(writableImageTop, x2 * TILE_SIZE, y2 * TILE_SIZE);</span>
+<span class="nc" id="L578">    }</span>
 
     /**
      * renderChunk is used to render a chunk of the map. It renders every tile of the chunk. It skips every tile that
@@ -586,22 +589,22 @@ public class IngameController extends Controller {
      */
 
     private void renderChunk(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, Chunk chunk) {
-<span class="nc" id="L589">        renderTiles(map, image, tileSet, tileSetJson, multipleTileSets, chunk.width(), chunk.height(), chunk.data(), chunk.x(), chunk.y());</span>
-<span class="nc" id="L590">    }</span>
+<span class="nc" id="L592">        renderTiles(map, image, tileSet, tileSetJson, multipleTileSets, chunk.width(), chunk.height(), chunk.data(), chunk.x(), chunk.y());</span>
+<span class="nc" id="L593">    }</span>
 
     private boolean isRoof(TileSet tileSet, TileSet tileSetJson, int tileId) {
-<span class="nc bnc" id="L593" title="All 2 branches missed.">        if (tileSetJson.tiles() == null) {</span>
-<span class="nc" id="L594">            return false;</span>
+<span class="nc bnc" id="L596" title="All 2 branches missed.">        if (tileSetJson.tiles() == null) {</span>
+<span class="nc" id="L597">            return false;</span>
         }
-<span class="nc bnc" id="L596" title="All 2 branches missed.">        for (TileObject tile : tileSetJson.tiles()) {</span>
-<span class="nc bnc" id="L597" title="All 2 branches missed.">            if (tile.id() == tileId - tileSet.firstgid()) {</span>
-<span class="nc bnc" id="L598" title="All 2 branches missed.">                if (tile.properties() == null) {</span>
-<span class="nc" id="L599">                    return false;</span>
+<span class="nc bnc" id="L599" title="All 2 branches missed.">        for (TileObject tile : tileSetJson.tiles()) {</span>
+<span class="nc bnc" id="L600" title="All 2 branches missed.">            if (tile.id() == tileId - tileSet.firstgid()) {</span>
+<span class="nc bnc" id="L601" title="All 2 branches missed.">                if (tile.properties() == null) {</span>
+<span class="nc" id="L602">                    return false;</span>
                 }
-<span class="nc bnc" id="L601" title="All 4 branches missed.">                return tile.properties().stream().anyMatch(property -&gt; property.name().equals(&quot;Roof&quot;) &amp;&amp; property.value().equals(&quot;true&quot;));</span>
+<span class="nc bnc" id="L604" title="All 4 branches missed.">                return tile.properties().stream().anyMatch(property -&gt; property.name().equals(&quot;Roof&quot;) &amp;&amp; property.value().equals(&quot;true&quot;));</span>
             }
-<span class="nc" id="L603">        }</span>
-<span class="nc" id="L604">        return false;</span>
+<span class="nc" id="L606">        }</span>
+<span class="nc" id="L607">        return false;</span>
     }
 
     /**
@@ -614,11 +617,11 @@ public class IngameController extends Controller {
      */
 
     private boolean checkIfNotInTileSet(Map map, TileSet tileSet, int tileId) {
-<span class="nc" id="L617">        int tileSetIndex = map.tilesets().indexOf(tileSet);</span>
-<span class="nc bnc" id="L618" title="All 2 branches missed.">        if (tileSetIndex &lt; map.tilesets().size() - 1) {</span>
-<span class="nc" id="L619">            TileSet nextTileSet = map.tilesets().get(tileSetIndex + 1);</span>
-<span class="nc bnc" id="L620" title="All 2 branches missed.">            return tileId &gt;= nextTileSet.firstgid();</span>
-<span class="nc bnc" id="L621" title="All 2 branches missed.">        } else return tileId &lt; tileSet.firstgid();</span>
+<span class="nc" id="L620">        int tileSetIndex = map.tilesets().indexOf(tileSet);</span>
+<span class="nc bnc" id="L621" title="All 2 branches missed.">        if (tileSetIndex &lt; map.tilesets().size() - 1) {</span>
+<span class="nc" id="L622">            TileSet nextTileSet = map.tilesets().get(tileSetIndex + 1);</span>
+<span class="nc bnc" id="L623" title="All 2 branches missed.">            return tileId &gt;= nextTileSet.firstgid();</span>
+<span class="nc bnc" id="L624" title="All 2 branches missed.">        } else return tileId &lt; tileSet.firstgid();</span>
     }
 
     /**
@@ -629,9 +632,9 @@ public class IngameController extends Controller {
      */
 
     private static String getFileName(String name) {
-<span class="nc" id="L632">        name = name.substring(name.lastIndexOf(&quot;/&quot;) + 1);</span>
-<span class="nc" id="L633">        name = name.substring(0, name.lastIndexOf(&quot;.&quot;));</span>
-<span class="nc" id="L634">        return name;</span>
+<span class="nc" id="L635">        name = name.substring(name.lastIndexOf(&quot;/&quot;) + 1);</span>
+<span class="nc" id="L636">        name = name.substring(0, name.lastIndexOf(&quot;.&quot;));</span>
+<span class="nc" id="L637">        return name;</span>
     }
 
     /**
@@ -639,19 +642,19 @@ public class IngameController extends Controller {
      */
 
     public void showHelp() {
-<span class="fc" id="L642">        Alert alert = new Alert(Alert.AlertType.INFORMATION);</span>
-<span class="fc" id="L643">        alert.setTitle(null);</span>
-<span class="fc" id="L644">        alert.setHeaderText(null);</span>
-<span class="fc" id="L645">        alert.setGraphic(null);</span>
-<span class="fc" id="L646">        alert.initOwner(app.getStage());</span>
-<span class="fc" id="L647">        alert.initModality(Modality.APPLICATION_MODAL);</span>
-<span class="fc" id="L648">        alert.initStyle(StageStyle.UNDECORATED);</span>
-<span class="fc" id="L649">        alert.setContentText(resources.getString(&quot;HELP.LABEL&quot;));</span>
-<span class="fc" id="L650">        final DialogPane dialogPane = alert.getDialogPane();</span>
-<span class="fc" id="L651">        dialogPane.getStyleClass().add(&quot;comicSans&quot;);</span>
-<span class="fc" id="L652">        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);</span>
-<span class="fc" id="L653">        alert.showAndWait();</span>
-<span class="fc" id="L654">    }</span>
+<span class="fc" id="L645">        Alert alert = new Alert(Alert.AlertType.INFORMATION);</span>
+<span class="fc" id="L646">        alert.setTitle(null);</span>
+<span class="fc" id="L647">        alert.setHeaderText(null);</span>
+<span class="fc" id="L648">        alert.setGraphic(null);</span>
+<span class="fc" id="L649">        alert.initOwner(app.getStage());</span>
+<span class="fc" id="L650">        alert.initModality(Modality.APPLICATION_MODAL);</span>
+<span class="fc" id="L651">        alert.initStyle(StageStyle.UNDECORATED);</span>
+<span class="fc" id="L652">        alert.setContentText(resources.getString(&quot;HELP.LABEL&quot;));</span>
+<span class="fc" id="L653">        final DialogPane dialogPane = alert.getDialogPane();</span>
+<span class="fc" id="L654">        dialogPane.getStyleClass().add(&quot;comicSans&quot;);</span>
+<span class="fc" id="L655">        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);</span>
+<span class="fc" id="L656">        alert.showAndWait();</span>
+<span class="fc" id="L657">    }</span>
 
     /**
      * This method is used to pause the game. It shows a dialog with two buttons.
@@ -662,220 +665,220 @@ public class IngameController extends Controller {
      */
 
     public void pauseGame() {
-<span class="fc" id="L665">        ingameVBox.setEffect(new BoxBlur(10, 10, 3));</span>
-<span class="fc" id="L666">        final Alert alert = new Alert(Alert.AlertType.NONE);</span>
-<span class="fc" id="L667">        final DialogPane dialogPane = alert.getDialogPane();</span>
-<span class="fc" id="L668">        final ButtonType resume = new ButtonType(resources.getString(&quot;RESUME.BUTTON.LABEL&quot;));</span>
-<span class="fc" id="L669">        final ButtonType saveAndExit = new ButtonType(resources.getString(&quot;SAVE.GAME.AND.LEAVE.BUTTON.LABEL&quot;));</span>
-<span class="fc" id="L670">        dialogPane.getButtonTypes().addAll(resume, saveAndExit);</span>
-<span class="pc bpc" id="L671" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L672">            dialogPane.getStylesheets().add(Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString());</span>
-<span class="nc" id="L673">            dialogPane.getStyleClass().add(&quot;comicSans&quot;);</span>
+<span class="fc" id="L668">        ingameVBox.setEffect(new BoxBlur(10, 10, 3));</span>
+<span class="fc" id="L669">        final Alert alert = new Alert(Alert.AlertType.NONE);</span>
+<span class="fc" id="L670">        final DialogPane dialogPane = alert.getDialogPane();</span>
+<span class="fc" id="L671">        final ButtonType resume = new ButtonType(resources.getString(&quot;RESUME.BUTTON.LABEL&quot;));</span>
+<span class="fc" id="L672">        final ButtonType saveAndExit = new ButtonType(resources.getString(&quot;SAVE.GAME.AND.LEAVE.BUTTON.LABEL&quot;));</span>
+<span class="fc" id="L673">        dialogPane.getButtonTypes().addAll(resume, saveAndExit);</span>
+<span class="pc bpc" id="L674" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L675">            dialogPane.getStylesheets().add(Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString());</span>
+<span class="nc" id="L676">            dialogPane.getStyleClass().add(&quot;comicSans&quot;);</span>
         }
-<span class="fc" id="L675">        final Button resumeButton = (Button) dialogPane.lookupButton(resume);</span>
-<span class="fc" id="L676">        resumeButton.setOnKeyPressed(event -&gt; {</span>
-<span class="nc bnc" id="L677" title="All 2 branches missed.">            if (!(event.getCode() == PAUSE_MENU_KEY)) {</span>
-<span class="nc" id="L678">                return;</span>
+<span class="fc" id="L678">        final Button resumeButton = (Button) dialogPane.lookupButton(resume);</span>
+<span class="fc" id="L679">        resumeButton.setOnKeyPressed(event -&gt; {</span>
+<span class="nc bnc" id="L680" title="All 2 branches missed.">            if (!(event.getCode() == PAUSE_MENU_KEY)) {</span>
+<span class="nc" id="L681">                return;</span>
             }
-<span class="nc" id="L680">            alert.setResult(resume);</span>
-<span class="nc" id="L681">        });</span>
+<span class="nc" id="L683">            alert.setResult(resume);</span>
+<span class="nc" id="L684">        });</span>
 
-<span class="fc" id="L683">        alert.setTitle(resources.getString(&quot;PAUSE.MENU.TITLE&quot;));</span>
-<span class="fc" id="L684">        alert.setHeaderText(null);</span>
-<span class="fc" id="L685">        alert.setGraphic(null);</span>
-<span class="fc" id="L686">        alert.setContentText(resources.getString(&quot;PAUSE.MENU.LABEL&quot;));</span>
-<span class="fc" id="L687">        alert.initStyle(StageStyle.UNDECORATED);</span>
-<span class="fc" id="L688">        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);</span>
+<span class="fc" id="L686">        alert.setTitle(resources.getString(&quot;PAUSE.MENU.TITLE&quot;));</span>
+<span class="fc" id="L687">        alert.setHeaderText(null);</span>
+<span class="fc" id="L688">        alert.setGraphic(null);</span>
+<span class="fc" id="L689">        alert.setContentText(resources.getString(&quot;PAUSE.MENU.LABEL&quot;));</span>
+<span class="fc" id="L690">        alert.initStyle(StageStyle.UNDECORATED);</span>
+<span class="fc" id="L691">        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);</span>
 
-<span class="fc" id="L690">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
-<span class="pc bpc" id="L691" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == resume) {</span>
-<span class="fc" id="L692">            alert.close();</span>
-<span class="pc bpc" id="L693" title="3 of 4 branches missed.">        } else if (result.isPresent() &amp;&amp; result.get() == saveAndExit) {</span>
-<span class="nc" id="L694">            alert.close();</span>
-<span class="nc" id="L695">            destroy();</span>
-<span class="nc" id="L696">            app.show(mainMenuControllerProvider.get());</span>
+<span class="fc" id="L693">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+<span class="pc bpc" id="L694" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == resume) {</span>
+<span class="fc" id="L695">            alert.close();</span>
+<span class="pc bpc" id="L696" title="3 of 4 branches missed.">        } else if (result.isPresent() &amp;&amp; result.get() == saveAndExit) {</span>
+<span class="nc" id="L697">            alert.close();</span>
+<span class="nc" id="L698">            destroy();</span>
+<span class="nc" id="L699">            app.show(mainMenuControllerProvider.get());</span>
         }
-<span class="fc" id="L698">        ingameVBox.setEffect(null);</span>
-<span class="fc" id="L699">    }</span>
+<span class="fc" id="L701">        ingameVBox.setEffect(null);</span>
+<span class="fc" id="L702">    }</span>
 
     public void showTrainerSettings() {
-<span class="nc" id="L702">        Dialog&lt;?&gt; trainerSettingsDialog = new Dialog&lt;&gt;();</span>
-<span class="nc" id="L703">        trainerSettingsDialog.setTitle(resources.getString(&quot;TRAINER.PROFIL&quot;));</span>
-<span class="nc" id="L704">        ingameTrainerSettingsControllerProvider.get().setApp(this.app);</span>
-<span class="nc" id="L705">        ingameTrainerSettingsControllerProvider.get().setValues(resources, preferences, resourceBundleProvider, ingameTrainerSettingsControllerProvider.get(), app);</span>
-<span class="nc" id="L706">        ingameTrainerSettingsControllerProvider.get().setIngameController(this);</span>
-<span class="nc" id="L707">        trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());</span>
-<span class="nc" id="L708">        trainerSettingsDialog.getDialogPane().setExpandableContent(null);</span>
-<span class="nc bnc" id="L709" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L710">            trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString());</span>
-<span class="nc" id="L711">            trainerSettingsDialog.getDialogPane().getStyleClass().add(&quot;trainerSettingsDialog&quot;);</span>
+<span class="nc" id="L705">        Dialog&lt;?&gt; trainerSettingsDialog = new Dialog&lt;&gt;();</span>
+<span class="nc" id="L706">        trainerSettingsDialog.setTitle(resources.getString(&quot;TRAINER.PROFIL&quot;));</span>
+<span class="nc" id="L707">        ingameTrainerSettingsControllerProvider.get().setApp(this.app);</span>
+<span class="nc" id="L708">        ingameTrainerSettingsControllerProvider.get().setValues(resources, preferences, resourceBundleProvider, ingameTrainerSettingsControllerProvider.get(), app);</span>
+<span class="nc" id="L709">        ingameTrainerSettingsControllerProvider.get().setIngameController(this);</span>
+<span class="nc" id="L710">        trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());</span>
+<span class="nc" id="L711">        trainerSettingsDialog.getDialogPane().setExpandableContent(null);</span>
+<span class="nc bnc" id="L712" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L713">            trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString());</span>
+<span class="nc" id="L714">            trainerSettingsDialog.getDialogPane().getStyleClass().add(&quot;trainerSettingsDialog&quot;);</span>
         }
-<span class="nc" id="L713">        trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString());</span>
-<span class="nc" id="L714">        trainerSettingsDialog.getDialogPane().getStyleClass().add(&quot;trainerSettingsDialog&quot;);</span>
-<span class="nc" id="L715">        trainerSettingsDialog.initOwner(app.getStage());</span>
-<span class="nc" id="L716">        Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();</span>
-<span class="nc" id="L717">        popUp.setOnCloseRequest(evt -&gt; {</span>
-<span class="nc" id="L718">                    ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close();</span>
-<span class="nc" id="L719">                    groundCanvas.requestFocus();</span>
-<span class="nc" id="L720">                }</span>
+<span class="nc" id="L716">        trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource(&quot;styles.css&quot;)).toString());</span>
+<span class="nc" id="L717">        trainerSettingsDialog.getDialogPane().getStyleClass().add(&quot;trainerSettingsDialog&quot;);</span>
+<span class="nc" id="L718">        trainerSettingsDialog.initOwner(app.getStage());</span>
+<span class="nc" id="L719">        Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();</span>
+<span class="nc" id="L720">        popUp.setOnCloseRequest(evt -&gt; {</span>
+<span class="nc" id="L721">                    ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close();</span>
+<span class="nc" id="L722">                    groundCanvas.requestFocus();</span>
+<span class="nc" id="L723">                }</span>
         );
 
-<span class="nc" id="L723">        trainerSettingsDialog.showAndWait();</span>
-<span class="nc" id="L724">    }</span>
+<span class="nc" id="L726">        trainerSettingsDialog.showAndWait();</span>
+<span class="nc" id="L727">    }</span>
 
     public void sendMessageButton() {
-<span class="fc" id="L727">        sendMessage();</span>
-<span class="fc" id="L728">    }</span>
+<span class="fc" id="L730">        sendMessage();</span>
+<span class="fc" id="L731">    }</span>
 
     private void sendMessage() {
-<span class="pc bpc" id="L731" title="1 of 2 branches missed.">        if (messageField.getText().isEmpty()) {</span>
-<span class="nc" id="L732">            groundCanvas.requestFocus();</span>
-<span class="nc" id="L733">            isChatting = false;</span>
-<span class="nc" id="L734">            return;</span>
+<span class="pc bpc" id="L734" title="1 of 2 branches missed.">        if (messageField.getText().isEmpty()) {</span>
+<span class="nc" id="L735">            groundCanvas.requestFocus();</span>
+<span class="nc" id="L736">            isChatting = false;</span>
+<span class="nc" id="L737">            return;</span>
         }
-<span class="fc" id="L736">        String regionID = trainerStorageProvider.get().getRegion()._id();</span>
-<span class="pc bpc" id="L737" title="1 of 2 branches missed.">        if (regionID != null) {</span>
-<span class="fc" id="L738">            String messageBody = messageField.getText();</span>
-<span class="fc" id="L739">            disposables.add(messageService.newMessage(regionID, messageBody, MESSAGE_NAMESPACE_REGIONS).observeOn(FX_SCHEDULER).subscribe(message -&gt; {</span>
-<span class="fc" id="L740">                messageField.setText(EMPTY_STRING);</span>
-<span class="fc" id="L741">                isChatting = false;</span>
-<span class="fc" id="L742">                groundCanvas.requestFocus();</span>
-<span class="pc" id="L743">            }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L739">        String regionID = trainerStorageProvider.get().getRegion()._id();</span>
+<span class="pc bpc" id="L740" title="1 of 2 branches missed.">        if (regionID != null) {</span>
+<span class="fc" id="L741">            String messageBody = messageField.getText();</span>
+<span class="fc" id="L742">            disposables.add(messageService.newMessage(regionID, messageBody, MESSAGE_NAMESPACE_REGIONS).observeOn(FX_SCHEDULER).subscribe(message -&gt; {</span>
+<span class="fc" id="L743">                messageField.setText(EMPTY_STRING);</span>
+<span class="fc" id="L744">                isChatting = false;</span>
+<span class="fc" id="L745">                groundCanvas.requestFocus();</span>
+<span class="pc" id="L746">            }, error -&gt; showError(error.getMessage())));</span>
         }
-<span class="fc" id="L745">    }</span>
+<span class="fc" id="L748">    }</span>
 
     private void enterButtonPressedToSend(KeyEvent event) {
-<span class="fc bfc" id="L748" title="All 2 branches covered.">        if (event.getCode() == KeyCode.ENTER) {</span>
-<span class="fc" id="L749">            event.consume();</span>
-<span class="fc" id="L750">            sendMessage();</span>
+<span class="fc bfc" id="L751" title="All 2 branches covered.">        if (event.getCode() == KeyCode.ENTER) {</span>
+<span class="fc" id="L752">            event.consume();</span>
+<span class="fc" id="L753">            sendMessage();</span>
         }
-<span class="fc" id="L752">    }</span>
+<span class="fc" id="L755">    }</span>
 
     public void paneClicked() {
-<span class="nc" id="L755">        groundCanvas.requestFocus();</span>
-<span class="nc" id="L756">        isChatting = false;</span>
-<span class="nc" id="L757">    }</span>
+<span class="nc" id="L758">        groundCanvas.requestFocus();</span>
+<span class="nc" id="L759">        isChatting = false;</span>
+<span class="nc" id="L760">    }</span>
 
     public void messageFieldClicked() {
-<span class="fc" id="L760">        messageField.requestFocus();</span>
-<span class="fc" id="L761">        isChatting = true;</span>
-<span class="fc" id="L762">    }</span>
+<span class="fc" id="L763">        messageField.requestFocus();</span>
+<span class="fc" id="L764">        isChatting = true;</span>
+<span class="fc" id="L765">    }</span>
 
     public void showChat() {
-<span class="fc bfc" id="L765" title="All 2 branches covered.">        if (chatListView.getOpacity() == ZERO) {</span>
-<span class="fc" id="L766">            chatListView.setOpacity(ONE);</span>
+<span class="fc bfc" id="L768" title="All 2 branches covered.">        if (chatListView.getOpacity() == ZERO) {</span>
+<span class="fc" id="L769">            chatListView.setOpacity(ONE);</span>
         } else {
-<span class="fc" id="L768">            chatListView.setOpacity(ZERO);</span>
+<span class="fc" id="L771">            chatListView.setOpacity(ZERO);</span>
         }
-<span class="fc" id="L770">    }</span>
+<span class="fc" id="L773">    }</span>
 
     public void listenToTrainers(ObservableList&lt;Trainer&gt; trainers) {
-<span class="fc" id="L773">        disposables.add(eventListenerProvider.get().listen(&quot;regions.&quot; + trainerStorageProvider.get().getRegion()._id() + &quot;.trainers.*.*&quot;, Trainer.class).observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
-<span class="fc" id="L774">                    final Trainer trainer = event.data();</span>
-<span class="pc bpc" id="L775" title="3 of 4 branches missed.">                    switch (event.suffix()) {</span>
+<span class="fc" id="L776">        disposables.add(eventListenerProvider.get().listen(&quot;regions.&quot; + trainerStorageProvider.get().getRegion()._id() + &quot;.trainers.*.*&quot;, Trainer.class).observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
+<span class="fc" id="L777">                    final Trainer trainer = event.data();</span>
+<span class="pc bpc" id="L778" title="3 of 4 branches missed.">                    switch (event.suffix()) {</span>
                         case &quot;created&quot; -&gt; {
-<span class="fc" id="L777">                            trainers.add(trainer);</span>
-<span class="fc" id="L778">                            URL resource = Main.class.getResource(&quot;charactermodels/&quot; + trainer.image());</span>
-<span class="pc bpc" id="L779" title="1 of 2 branches missed.">                            if (resource != null) {</span>
-<span class="fc" id="L780">                                TrainerController trainerController = new TrainerController(trainer, new Image(resource.toString()), trainersCanvas.getGraphicsContext2D());</span>
-<span class="fc" id="L781">                                trainerController.init();</span>
-<span class="fc" id="L782">                                trainerController.startAnimations();</span>
-<span class="fc" id="L783">                                trainerControllerHashMap.put(trainer, trainerController);</span>
-<span class="fc" id="L784">                                trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y(), trainer.direction()));</span>
+<span class="fc" id="L780">                            trainers.add(trainer);</span>
+<span class="fc" id="L781">                            URL resource = Main.class.getResource(&quot;charactermodels/&quot; + trainer.image());</span>
+<span class="pc bpc" id="L782" title="1 of 2 branches missed.">                            if (resource != null) {</span>
+<span class="fc" id="L783">                                TrainerController trainerController = new TrainerController(trainer, new Image(resource.toString()), trainersCanvas.getGraphicsContext2D());</span>
+<span class="fc" id="L784">                                trainerController.init();</span>
+<span class="fc" id="L785">                                trainerController.startAnimations();</span>
+<span class="fc" id="L786">                                trainerControllerHashMap.put(trainer, trainerController);</span>
+<span class="fc" id="L787">                                trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y(), trainer.direction()));</span>
                             }
-<span class="fc" id="L786">                        }</span>
-<span class="nc" id="L787">                        case &quot;updated&quot; -&gt; updateTrainer(trainers, trainer);</span>
-<span class="nc" id="L788">                        case &quot;deleted&quot; -&gt; trainers.removeIf(t -&gt; t._id().equals(trainer._id()));</span>
+<span class="fc" id="L789">                        }</span>
+<span class="nc" id="L790">                        case &quot;updated&quot; -&gt; updateTrainer(trainers, trainer);</span>
+<span class="nc" id="L791">                        case &quot;deleted&quot; -&gt; trainers.removeIf(t -&gt; t._id().equals(trainer._id()));</span>
                     }
-<span class="pc" id="L790">                }, error -&gt; showError(error.getMessage()))</span>
+<span class="pc" id="L793">                }, error -&gt; showError(error.getMessage()))</span>
         );
-<span class="fc" id="L792">    }</span>
+<span class="fc" id="L795">    }</span>
 
     public void listenToMessages(String id) {
-<span class="fc" id="L795">        disposables.add(eventListener.get().listen(&quot;regions.&quot; + id + &quot;.messages.*.*&quot;, Message.class)</span>
-<span class="fc" id="L796">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
-<span class="fc" id="L797">                    final Message message = event.data();</span>
-<span class="pc bpc" id="L798" title="3 of 4 branches missed.">                    switch (event.suffix()) {</span>
+<span class="fc" id="L798">        disposables.add(eventListener.get().listen(&quot;regions.&quot; + id + &quot;.messages.*.*&quot;, Message.class)</span>
+<span class="fc" id="L799">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
+<span class="fc" id="L800">                    final Message message = event.data();</span>
+<span class="pc bpc" id="L801" title="3 of 4 branches missed.">                    switch (event.suffix()) {</span>
                         case &quot;created&quot; -&gt; {
-<span class="pc bpc" id="L800" title="1 of 2 branches missed.">                            for (Message m : messages) {</span>
-<span class="nc bnc" id="L801" title="All 2 branches missed.">                                if (m._id().equals(message._id())) {</span>
-<span class="nc" id="L802">                                    return;</span>
+<span class="pc bpc" id="L803" title="1 of 2 branches missed.">                            for (Message m : messages) {</span>
+<span class="nc bnc" id="L804" title="All 2 branches missed.">                                if (m._id().equals(message._id())) {</span>
+<span class="nc" id="L805">                                    return;</span>
                                 }
-<span class="nc" id="L804">                            }</span>
-<span class="fc" id="L805">                            messages.add(message);</span>
-<span class="fc" id="L806">                            chatListView.scrollTo(chatListView.getItems().size() - 1);</span>
-<span class="fc" id="L807">                        }</span>
-<span class="nc" id="L808">                        case &quot;updated&quot; -&gt; updateMessage(messages, message);</span>
-<span class="nc" id="L809">                        case &quot;deleted&quot; -&gt; messages.removeIf(m -&gt; m._id().equals(message._id()));</span>
+<span class="nc" id="L807">                            }</span>
+<span class="fc" id="L808">                            messages.add(message);</span>
+<span class="fc" id="L809">                            chatListView.scrollTo(chatListView.getItems().size() - 1);</span>
+<span class="fc" id="L810">                        }</span>
+<span class="nc" id="L811">                        case &quot;updated&quot; -&gt; updateMessage(messages, message);</span>
+<span class="nc" id="L812">                        case &quot;deleted&quot; -&gt; messages.removeIf(m -&gt; m._id().equals(message._id()));</span>
                     }
-<span class="fc" id="L811">                }, error -&gt; {</span>
-<span class="nc" id="L812">                    showError(error.getMessage());</span>
-<span class="nc" id="L813">                    error.printStackTrace();</span>
-<span class="nc" id="L814">                }));</span>
-<span class="fc" id="L815">    }</span>
+<span class="fc" id="L814">                }, error -&gt; {</span>
+<span class="nc" id="L815">                    showError(error.getMessage());</span>
+<span class="nc" id="L816">                    error.printStackTrace();</span>
+<span class="nc" id="L817">                }));</span>
+<span class="fc" id="L818">    }</span>
 
     private void updateTrainer(ObservableList&lt;Trainer&gt; trainers, Trainer trainer) {
-<span class="nc" id="L818">        String trainerId = trainer._id();</span>
-<span class="nc" id="L819">        trainers.stream().filter(t -&gt; t._id().equals(trainerId)).findFirst().ifPresent(t -&gt; trainers.set(trainers.indexOf(t), trainer));</span>
-<span class="nc" id="L820">    }</span>
+<span class="nc" id="L821">        String trainerId = trainer._id();</span>
+<span class="nc" id="L822">        trainers.stream().filter(t -&gt; t._id().equals(trainerId)).findFirst().ifPresent(t -&gt; trainers.set(trainers.indexOf(t), trainer));</span>
+<span class="nc" id="L823">    }</span>
 
     private void updateMessage(ObservableList&lt;Message&gt; messages, Message message) {
-<span class="nc" id="L823">        String messageID = message._id();</span>
-<span class="nc" id="L824">        messages.stream()</span>
-<span class="nc" id="L825">                .filter(m -&gt; m._id().equals(messageID))</span>
-<span class="nc" id="L826">                .findFirst()</span>
-<span class="nc" id="L827">                .ifPresent(m -&gt; messages.set(messages.indexOf(m), message));</span>
-<span class="nc" id="L828">    }</span>
+<span class="nc" id="L826">        String messageID = message._id();</span>
+<span class="nc" id="L827">        messages.stream()</span>
+<span class="nc" id="L828">                .filter(m -&gt; m._id().equals(messageID))</span>
+<span class="nc" id="L829">                .findFirst()</span>
+<span class="nc" id="L830">                .ifPresent(m -&gt; messages.set(messages.indexOf(m), message));</span>
+<span class="nc" id="L831">    }</span>
 
     public Trainer getTrainer(String userId) {
-<span class="pc bpc" id="L831" title="1 of 2 branches missed.">        for (Trainer trainer : trainers) {</span>
-<span class="pc bpc" id="L832" title="1 of 2 branches missed.">            if (trainer.user().equals(userId)) {</span>
-<span class="fc" id="L833">                return trainer;</span>
+<span class="pc bpc" id="L834" title="1 of 2 branches missed.">        for (Trainer trainer : trainers) {</span>
+<span class="pc bpc" id="L835" title="1 of 2 branches missed.">            if (trainer.user().equals(userId)) {</span>
+<span class="fc" id="L836">                return trainer;</span>
             }
-<span class="nc" id="L835">        }</span>
-<span class="nc" id="L836">        return null;</span>
+<span class="nc" id="L838">        }</span>
+<span class="nc" id="L839">        return null;</span>
     }
 
     public void setTrainerSpriteImageView(Trainer trainer, ImageView imageView) {
-<span class="pc bpc" id="L840" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L841">            disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody -&gt; {</span>
-<span class="nc" id="L842">                        Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);</span>
-<span class="nc" id="L843">                        Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, 2, false);</span>
-<span class="nc" id="L844">                        imageView.setImage(character[0]);</span>
-<span class="nc" id="L845">                    }, error -&gt; showError(error.getMessage())</span>
+<span class="pc bpc" id="L843" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L844">            disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody -&gt; {</span>
+<span class="nc" id="L845">                        Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);</span>
+<span class="nc" id="L846">                        Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, 2, false);</span>
+<span class="nc" id="L847">                        imageView.setImage(character[0]);</span>
+<span class="nc" id="L848">                    }, error -&gt; showError(error.getMessage())</span>
             ));
         }
-<span class="fc" id="L848">    }</span>
+<span class="fc" id="L851">    }</span>
 
     public void showMonsters() {
-<span class="nc" id="L851">        Scene scene = new Scene(monstersListControllerProvider.get().render());</span>
-<span class="nc" id="L852">        Stage popupStage = new Stage();</span>
-<span class="nc" id="L853">        popupStage.initOwner(app.getStage());</span>
-<span class="nc" id="L854">        popupStage.setScene(scene);</span>
-<span class="nc" id="L855">        popupStage.setTitle(resources.getString(&quot;MONSTERS&quot;));</span>
-<span class="nc" id="L856">        popupStage.show();</span>
-<span class="nc" id="L857">    }</span>
+<span class="nc" id="L854">        Scene scene = new Scene(monstersListControllerProvider.get().render());</span>
+<span class="nc" id="L855">        Stage popupStage = new Stage();</span>
+<span class="nc" id="L856">        popupStage.initOwner(app.getStage());</span>
+<span class="nc" id="L857">        popupStage.setScene(scene);</span>
+<span class="nc" id="L858">        popupStage.setTitle(resources.getString(&quot;MONSTERS&quot;));</span>
+<span class="nc" id="L859">        popupStage.show();</span>
+<span class="nc" id="L860">    }</span>
 
     @Override
     public void destroy() {
-<span class="nc" id="L861">        super.destroy();</span>
-<span class="nc" id="L862">        app.getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);</span>
-<span class="nc" id="L863">        app.getStage().getScene().removeEventHandler(KeyEvent.KEY_RELEASED, keyReleasedHandler);</span>
-<span class="nc" id="L864">        messageField.removeEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);</span>
-<span class="nc" id="L865">    }</span>
+<span class="nc" id="L864">        super.destroy();</span>
+<span class="nc" id="L865">        app.getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);</span>
+<span class="nc" id="L866">        app.getStage().getScene().removeEventHandler(KeyEvent.KEY_RELEASED, keyReleasedHandler);</span>
+<span class="nc" id="L867">        messageField.removeEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);</span>
+<span class="nc" id="L868">    }</span>
 
     public void showMap() {
-<span class="nc" id="L868">        Dialog&lt;?&gt; dialog = new Dialog&lt;&gt;();</span>
-<span class="nc" id="L869">        dialog.setTitle(resources.getString(&quot;MAP&quot;));</span>
-<span class="nc" id="L870">        dialog.getDialogPane().setContent(ingameMiniMapControllerProvider.get().render());</span>
-<span class="nc" id="L871">        dialog.initOwner(app.getStage());</span>
-<span class="nc" id="L872">        Window popUp = dialog.getDialogPane().getScene().getWindow();</span>
-<span class="nc" id="L873">        popUp.setOnCloseRequest(evt -&gt; {</span>
-<span class="nc" id="L874">                    ((Stage) dialog.getDialogPane().getScene().getWindow()).close();</span>
-<span class="nc" id="L875">                    groundCanvas.requestFocus();</span>
-<span class="nc" id="L876">                }</span>
+<span class="nc" id="L871">        Dialog&lt;?&gt; dialog = new Dialog&lt;&gt;();</span>
+<span class="nc" id="L872">        dialog.setTitle(resources.getString(&quot;MAP&quot;));</span>
+<span class="nc" id="L873">        dialog.getDialogPane().setContent(ingameMiniMapControllerProvider.get().render());</span>
+<span class="nc" id="L874">        dialog.initOwner(app.getStage());</span>
+<span class="nc" id="L875">        Window popUp = dialog.getDialogPane().getScene().getWindow();</span>
+<span class="nc" id="L876">        popUp.setOnCloseRequest(evt -&gt; {</span>
+<span class="nc" id="L877">                    ((Stage) dialog.getDialogPane().getScene().getWindow()).close();</span>
+<span class="nc" id="L878">                    groundCanvas.requestFocus();</span>
+<span class="nc" id="L879">                }</span>
         );
-<span class="nc" id="L878">        dialog.showAndWait();</span>
-<span class="nc" id="L879">    }</span>
+<span class="nc" id="L881">        dialog.showAndWait();</span>
+<span class="nc" id="L882">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
