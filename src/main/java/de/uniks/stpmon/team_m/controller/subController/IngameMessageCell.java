@@ -4,24 +4,20 @@ import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.Trainer;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
-import java.awt.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
+import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.TIME_FORMAT;
-import static de.uniks.stpmon.team_m.Constants.ZONE_ID_EUROPE_BERLIN;
 
 public class IngameMessageCell extends ListCell<Message> {
     private final IngameController ingameController;
@@ -74,9 +70,19 @@ public class IngameMessageCell extends ListCell<Message> {
     }
 
     private String formatTimeString(String dateTime) {
-        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(ZONE_ID_EUROPE_BERLIN));
+        return getZoneID(dateTime, ingameController.getResources(), TIME_FORMAT);
+    }
 
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
+    static String getZoneID(String dateTime, ResourceBundle resourceBundle, String timeFormat) {
+        String zone = String.valueOf(resourceBundle.getLocale());
+        String zoneId = switch (zone) {
+            case "de" -> "Europe/Berlin";
+            case "en" -> "Europe/London";
+            default -> "Asia/Shanghai";
+        };
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(zoneId));
+
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(timeFormat);
         return localDateTime.format(outputFormatter);
     }
 
