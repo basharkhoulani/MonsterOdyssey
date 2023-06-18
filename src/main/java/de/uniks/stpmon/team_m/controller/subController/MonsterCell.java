@@ -34,16 +34,14 @@ public class MonsterCell extends ListCell<Monster> {
     Label monsterType;
     @FXML
     Label monsterLevel;
-
     @FXML
     ImageView monsterImageView;
-
     @FXML
     HBox rootmonsterHBox;
+
     private final ResourceBundle resources;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
-
     @Inject
     Provider<UserStorage> userStorageProvider;
     @Inject
