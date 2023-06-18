@@ -140,6 +140,7 @@ public class IngameController extends Controller {
 
     private HashMap<Trainer, TrainerController> trainerControllerHashMap;
     private HashMap<Trainer, Position> trainerPositionHashMap;
+    Stage popupStage;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -295,6 +296,9 @@ public class IngameController extends Controller {
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
         monstersListControllerProvider.get().init();
+
+        popupStage = new Stage();
+        popupStage.initOwner(app.getStage());
         return parent;
     }
 
@@ -877,10 +881,8 @@ public class IngameController extends Controller {
     }
 
     public void showMonsters() {
-        Scene scene = new Scene(monstersListControllerProvider.get().render());
-        Stage popupStage = new Stage();
-        popupStage.initOwner(app.getStage());
-        popupStage.setScene(scene);
+        Scene popupScene = new Scene(monstersListControllerProvider.get().render());
+        popupStage.setScene(popupScene);
         popupStage.setTitle(resources.getString("MONSTERS"));
         popupStage.show();
     }
