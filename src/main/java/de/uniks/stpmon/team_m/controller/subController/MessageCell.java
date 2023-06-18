@@ -14,10 +14,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import javax.inject.Provider;
 import java.awt.*;
 import java.util.Optional;
-import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 import static de.uniks.stpmon.team_m.controller.subController.IngameMessageCell.getZoneID;
@@ -41,7 +39,6 @@ public class MessageCell extends ListCell<Message> {
     @FXML
     public ImageView avatar;
     private FXMLLoader loader;
-    private final Provider<ResourceBundle> resourceBundleProvider;
     private final MessagesBoxController messagesBoxController;
 
     public UserStorage user;
@@ -57,8 +54,7 @@ public class MessageCell extends ListCell<Message> {
      * @param user                  The user is used to identify the user.
      */
 
-    public MessageCell(Provider<ResourceBundle> resourceBundleProvider, MessagesBoxController messagesBoxController, UserStorage user) {
-        this.resourceBundleProvider = resourceBundleProvider;
+    public MessageCell(MessagesBoxController messagesBoxController, UserStorage user) {
         this.messagesBoxController = messagesBoxController;
         this.user = user;
     }
@@ -166,7 +162,7 @@ public class MessageCell extends ListCell<Message> {
      */
 
     private String formatTimeString(String dateTime) {
-        return getZoneID(dateTime, resourceBundleProvider, DATE_TIME_FORMAT);
+        return getZoneID(dateTime, messagesBoxController.getResources(), DATE_TIME_FORMAT);
     }
 
     /**

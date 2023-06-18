@@ -250,7 +250,7 @@ public class IngameController extends Controller {
         messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
         listenToMessages(trainerStorageProvider.get().getTrainer().region());
         chatListView.setItems(messages);
-        chatListView.setCellFactory(param -> new IngameMessageCell(resourceBundleProvider, this));
+        chatListView.setCellFactory(param -> new IngameMessageCell(this));
         chatListView.setPlaceholder(new Label(resources.getString("NO.MESSAGES.YET")));
         chatListView.setFocusModel(null);
         chatListView.setSelectionModel(null);
