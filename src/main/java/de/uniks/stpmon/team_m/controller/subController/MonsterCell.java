@@ -51,7 +51,6 @@ public class MonsterCell extends ListCell<Monster> {
     public PresetsService presetsService;
     @Inject
     Provider<TrainersService> trainersServiceProvider;
-
     MonstersListController monstersListController;
     private FXMLLoader loader;
 
