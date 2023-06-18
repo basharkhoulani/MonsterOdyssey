@@ -120,7 +120,7 @@ public class WelcomeSceneController extends Controller {
                 final ButtonType okButton = new ButtonType(resources.getString("OK"));
                 final TextField textFieldName = new TextField();
                 textFieldName.setId("nameField");
-                textFieldName.setPromptText("Name?");
+                textFieldName.setPromptText(resources.getString("NAMEASK"));
                 textFieldName.textProperty().bindBidirectional(trainerName);
                 dialogPane.getButtonTypes().addAll(cancelButton, okButton);
 
