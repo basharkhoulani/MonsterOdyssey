@@ -21,7 +21,6 @@ import javax.inject.Provider;
 import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.MESSAGE_NAMESPACE_GROUPS;
-import static de.uniks.stpmon.team_m.Constants.UNKNOWN_USER;
 
 public class MessagesBoxController extends Controller {
 
@@ -142,7 +141,7 @@ public class MessagesBoxController extends Controller {
                 return user.name();
             }
         }
-        return UNKNOWN_USER;
+        return resourceBundleProvider.get().getString("Unknown");
     }
 
     /**
@@ -158,7 +157,7 @@ public class MessagesBoxController extends Controller {
                 return user.avatar();
             }
         }
-        return UNKNOWN_USER;
+        return resourceBundleProvider.get().getString("Unknown");
     }
 
     /**

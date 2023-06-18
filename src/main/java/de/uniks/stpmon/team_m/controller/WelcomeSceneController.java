@@ -120,7 +120,7 @@ public class WelcomeSceneController extends Controller {
                 final ButtonType okButton = new ButtonType(resources.getString("OK"));
                 final TextField textFieldName = new TextField();
                 textFieldName.setId("nameField");
-                textFieldName.setPromptText("Name?");
+                textFieldName.setPromptText(resources.getString("NAMEASK"));
                 textFieldName.textProperty().bindBidirectional(trainerName);
                 dialogPane.getButtonTypes().addAll(cancelButton, okButton);
 
@@ -133,7 +133,7 @@ public class WelcomeSceneController extends Controller {
 
                 alert.setTitle(resources.getString("NAME.ALERT.TITLE"));
                 alert.initStyle(StageStyle.UNDECORATED);
-                dialogPane.getStyleClass().add(resources.getString("ALERT.DIALOG.NAME"));
+                dialogPane.getStyleClass().add("alertDialogName");
                 dialogPane.setContent(vbox);
 
                 textFieldName.addEventHandler(KeyEvent.KEY_PRESSED, event -> enterButtonTrainerInput(event, alert, textFieldName, okButton));
