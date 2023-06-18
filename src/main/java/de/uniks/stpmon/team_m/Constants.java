@@ -9,7 +9,6 @@ public class Constants {
     public static final String MESSAGE_NAMESPACE_GROUPS = "groups";
     public static final String MESSAGE_NAMESPACE_REGIONS = "regions";
     public static final String MESSAGE_NAMESPACE_GLOBAL = "global";
-
     // GENERAL
     public static final String GAME_NAME = "Monster Odyssey";
     public static final int STANDARD_HEIGHT = 768;
@@ -37,7 +36,6 @@ public class Constants {
     public static final String NOT_OWN_MESSAGE_STYLE = "-fx-background-color: lightgreen;";
     public static final String ROUNDED_CORNERS_STYLE = "-fx-border-radius: 10; -fx-background-radius: 10;";
     public static final String BORDER_COLOR_BLACK = "-fx-border-color: black;";
-    public static final String ZONE_ID_EUROPE_BERLIN = "Europe/Berlin";
     public static final String DATE_TIME_FORMAT = "HH:mm, dd.MM.yy";
     public static final String TIME_FORMAT = "HH:mm";
     public static final int DURATION_OF_LOADING_SCREEN = 3;
@@ -69,11 +67,8 @@ public class Constants {
 
     // INGAME
     public static int TILE_SIZE = 16;
-    public static int OFFSET_WIDTH = 50;
-    public static int OFFSET_HEIGHT = 50;
     public static double ZERO = 0;
     public static double ONE = 1;
-    public static double SCALE_FACTOR = 3.0;
 
     // Error messages
     public static final String HTTP_400 = "400";
@@ -82,7 +77,6 @@ public class Constants {
     public static final String HTTP_404 = "404";
     public static final String HTTP_409 = "409";
     public static final String HTTP_429 = "429";
-    public static final String UNKNOWN_USER = "Unknown";
 
     // Welcome Scene
     public static final int MESSAGEBOX_HEIGHT = 45;
