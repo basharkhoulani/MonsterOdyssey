@@ -48,7 +48,6 @@ public class MonsterCell extends ListCell<Monster> {
     public TrainersService trainersService;
     @Inject
     public UserStorage usersStorage;
-
     public PresetsService presetsService;
     @Inject
     Provider<TrainersService> trainersServiceProvider;
