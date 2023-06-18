@@ -34,7 +34,7 @@ public class SpriteAnimation extends AnimationTimer {
     private Image[] trainerWalkingDown;
     private Image[] trainerWalkingLeft;
     private Image[] trainerWalkingRight;
-
+    private boolean isWalking;
     public SpriteAnimation(Image spriteChunk, Trainer trainer, long duration, GraphicsContext graphicsContext) { //ImageView root) {
         super();
         this.spriteChunk = spriteChunk;
@@ -75,9 +75,16 @@ public class SpriteAnimation extends AnimationTimer {
         graphicsContext.drawImage(images[currentIndex], currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);
         currentIndex = (currentIndex + 1) % 6;
         currentImage = images[currentIndex];
+        if (isWalking && currentIndex == 0) {
+            isWalking = false;
+            stay(currentPosition.getDirection());
+        }
     }
 
     private void setImages(Image[] images) {
+        if (isWalking) {
+            return;
+        }
         this.images = images;
     }
 
@@ -86,10 +93,11 @@ public class SpriteAnimation extends AnimationTimer {
     }
 
     public void walk(int direction) {
-        setupWalkAnimation(direction, DELAY, trainerWalkingUp, trainerWalkingRight, trainerWalkingDown, trainerWalkingLeft);
+        setupAnimation(direction, DELAY, trainerWalkingUp, trainerWalkingRight, trainerWalkingDown, trainerWalkingLeft);
+        isWalking = true;
     }
 
-    private void setupWalkAnimation(int direction, int delay, Image[] trainerWalkingUp, Image[] trainerWalkingRight, Image[] trainerWalkingDown, Image[] trainerWalkingLeft) {
+    private void setupAnimation(int direction, int delay, Image[] trainerWalkingUp, Image[] trainerWalkingRight, Image[] trainerWalkingDown, Image[] trainerWalkingLeft) {
         if (!GraphicsEnvironment.isHeadless()) {
             setDuration(delay);
             switch (direction) {
@@ -103,7 +111,8 @@ public class SpriteAnimation extends AnimationTimer {
     }
 
     public void stay(int direction) {
-        setupWalkAnimation(direction, DELAY_LONG, trainerStandingUp, trainerStandingRight, trainerStandingDown, trainerStandingLeft);
+        isWalking = false;
+        setupAnimation(direction, DELAY_LONG, trainerStandingUp, trainerStandingRight, trainerStandingDown, trainerStandingLeft);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package de.uniks.stpmon.team_m.utils;
 
 public class Position {
-    private final int direction;
+    private int direction;
     private int x;
     private int y;
 
@@ -30,5 +30,9 @@ public class Position {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
     }
 }
