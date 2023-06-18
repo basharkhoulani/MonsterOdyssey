@@ -4,26 +4,24 @@ import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.Trainer;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
-import java.awt.*;
+import javax.inject.Provider;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
+import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.TIME_FORMAT;
-import static de.uniks.stpmon.team_m.Constants.ZONE_ID_EUROPE_BERLIN;
 
 public class IngameMessageCell extends ListCell<Message> {
+    private final Provider<ResourceBundle> resourceBundleProvider;
     private final IngameController ingameController;
     @FXML
     public ImageView spriteImageView;
@@ -37,7 +35,8 @@ public class IngameMessageCell extends ListCell<Message> {
     public HBox rootHBox;
     private FXMLLoader loader;
 
-    public IngameMessageCell(IngameController ingameController) {
+    public IngameMessageCell(Provider<ResourceBundle> resourceBundleProvider, IngameController ingameController) {
+        this.resourceBundleProvider = resourceBundleProvider;
         this.ingameController = ingameController;
     }
 
@@ -74,9 +73,19 @@ public class IngameMessageCell extends ListCell<Message> {
     }
 
     private String formatTimeString(String dateTime) {
-        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(ZONE_ID_EUROPE_BERLIN));
+        return getZoneID(dateTime, resourceBundleProvider, TIME_FORMAT);
+    }
 
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
+    static String getZoneID(String dateTime, Provider<ResourceBundle> resourceBundleProvider, String timeFormat) {
+        String zone = String.valueOf(resourceBundleProvider.get().getLocale());
+        String zoneId = switch (zone) {
+            case "de" -> "Europe/Berlin";
+            case "en" -> "America/New_York";
+            default -> "Asia/Shanghai";
+        };
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(zoneId));
+
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(timeFormat);
         return localDateTime.format(outputFormatter);
     }
 
