@@ -281,7 +281,6 @@ public class IngameController extends Controller {
         chatListView.setFocusModel(null);
         chatListView.setSelectionModel(null);
 
-
         // Create and start standing animation
         trainerSpriteAnimation = new SpriteAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), trainerStorageProvider.get().getTrainer(), DELAY_LONG, userTrainerCanvas.getGraphicsContext2D());
         if (!GraphicsEnvironment.isHeadless()) {
