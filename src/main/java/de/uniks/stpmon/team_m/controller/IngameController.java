@@ -35,7 +35,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -77,7 +77,7 @@ public class IngameController extends Controller {
     @FXML
     public ListView<Message> chatListView;
     @FXML
-    public BorderPane borderPane;
+    public AnchorPane anchorPane;
     @FXML
     public Canvas groundCanvas;
     @FXML
@@ -236,8 +236,35 @@ public class IngameController extends Controller {
         trainerStorageProvider.get().setY(trainerStorageProvider.get().getTrainer().y());
         trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());
         listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
+        app.getStage().widthProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.doubleValue() < MINIMUM_WIDTH) {
+                anchorPane.setMinWidth(MINIMUM_WIDTH - OFFSET_WIDTH_HEIGHT);
+                anchorPane.setPrefWidth(MINIMUM_WIDTH - OFFSET_WIDTH_HEIGHT);
+                anchorPane.setMaxWidth(MINIMUM_WIDTH - OFFSET_WIDTH_HEIGHT);
+            } else {
+                anchorPane.setMinWidth(newValue.doubleValue() - OFFSET_WIDTH_HEIGHT);
+                anchorPane.setPrefWidth(newValue.doubleValue() - OFFSET_WIDTH_HEIGHT);
+                anchorPane.setMaxWidth(newValue.doubleValue() - OFFSET_WIDTH_HEIGHT);
+            }
+        });
+        app.getStage().heightProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.doubleValue() < MINIMUM_HEIGHT) {
+                anchorPane.setMinHeight(MINIMUM_HEIGHT - OFFSET_WIDTH_HEIGHT);
+                anchorPane.setPrefHeight(MINIMUM_HEIGHT - OFFSET_WIDTH_HEIGHT);
+                anchorPane.setMaxHeight(MINIMUM_HEIGHT - OFFSET_WIDTH_HEIGHT);
+            } else {
+                anchorPane.setMinHeight(newValue.doubleValue() - OFFSET_WIDTH_HEIGHT);
+                anchorPane.setPrefHeight(newValue.doubleValue() - OFFSET_WIDTH_HEIGHT);
+                anchorPane.setMaxHeight(newValue.doubleValue() - OFFSET_WIDTH_HEIGHT);
+            }
+        });
+        anchorPane.setMinHeight(getHeight() - OFFSET_WIDTH_HEIGHT);
+        anchorPane.setPrefHeight(getHeight() - OFFSET_WIDTH_HEIGHT);
+        anchorPane.setMaxHeight(getHeight() - OFFSET_WIDTH_HEIGHT);
 
-
+        anchorPane.setMinWidth(getWidth() - OFFSET_WIDTH_HEIGHT);
+        anchorPane.setPrefWidth(getWidth() - OFFSET_WIDTH_HEIGHT);
+        anchorPane.setMaxWidth(getWidth() - OFFSET_WIDTH_HEIGHT);
         // Setup trainers
         disposables.add(trainersService.getTrainers(trainerStorageProvider.get().getRegion()._id(), null, null).observeOn(FX_SCHEDULER).subscribe(
                 trainers -> {

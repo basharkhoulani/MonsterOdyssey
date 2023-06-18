@@ -15,6 +15,7 @@ public class Constants {
     public static final int STANDARD_WIDTH = 1024;
     public static final int MINIMUM_HEIGHT = 600;
     public static final int MINIMUM_WIDTH = 800;
+    public static final int OFFSET_WIDTH_HEIGHT = 50;
     public static final String APP_ICON = "images/Monster-durchsichtig.png";
     public static final String TASKBAR_ICON = "images/Monster-durchsichtig.png";
     public static final String EMPTY_STRING = "";
