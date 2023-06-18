@@ -38,7 +38,6 @@ public class MonsterCell extends ListCell<Monster> {
     ImageView monsterImageView;
     @FXML
     HBox rootmonsterHBox;
-
     private final ResourceBundle resources;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
