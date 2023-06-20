@@ -202,11 +202,13 @@ class MainMenuControllerTest extends ApplicationTest {
                 "Hans",
                 "Premade_Character_01.png",
                 0,
+                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                List.of(1,2),
                 "646bacc568933551792bf3d5",
                 0,
                 0,
                 0,
-                new NPCInfo(false)))));
+                new NPCInfo(false, false, false, false, null, null)))));
         final ListView<Region> regionListView = lookup("#regionListView").query();
         clickOn(regionListView.getItems().get(0).name());
         clickOn("#startGameButton");
