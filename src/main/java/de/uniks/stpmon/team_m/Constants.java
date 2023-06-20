@@ -2,8 +2,8 @@ package de.uniks.stpmon.team_m;
 
 public class Constants {
     // SERVER
-    public static final String API_URL = "https://stpmon.uniks.de/api/v2";
-    public static final String WS_URL = "wss://stpmon.uniks.de/ws/v2";
+    public static final String API_URL = "https://stpmon.uniks.de/api/v3";
+    public static final String WS_URL = "wss://stpmon.uniks.de/ws/v3";
     public static final String UDP_URL = "stpmon.uniks.de";
     public static final int SERVER_PORT = 30011;
     public static final String MESSAGE_NAMESPACE_GROUPS = "groups";
