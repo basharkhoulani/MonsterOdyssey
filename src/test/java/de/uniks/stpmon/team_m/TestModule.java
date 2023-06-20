@@ -374,7 +374,22 @@ public class TestModule {
 
             @Override
             public Trainer getTrainer() {
-                return new Trainer("123", "456", "789", "test", "max", "mustermann", getTrainerSprite(), 0, "Testina", 0, 0, 0, null);
+                return new Trainer(
+                        "123",
+                        "456",
+                        "789",
+                        "test",
+                        "max",
+                        "mustermann",
+                        getTrainerSprite(),
+                        0,
+                        List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                        List.of(1,2),
+                        "Testina",
+                        0,
+                        0,
+                        0,
+                        null);
             }
 
             @Override
@@ -417,11 +432,13 @@ public class TestModule {
                         "Hans",
                         "Premade_Character_01.png",
                         0,
+                        null,
+                        null,
                         "646bacc568933551792bf3d5",
                         0,
                         0,
                         0,
-                        new NPCInfo(false)));
+                        new NPCInfo(false,false,false,false, null, null)));
             }
 
             @Override
@@ -431,7 +448,22 @@ public class TestModule {
 
             @Override
             public Observable<Trainer> getTrainer(String regionId, String _id) {
-                return Observable.just(new Trainer("123", "456", "789", "test", "max", "mustermann", Objects.requireNonNull(Main.class.getResource("charactermodels/Premade_Character_01.png")).toString(), 0, "Testina", 0, 0, 0, null));
+                return Observable.just(new Trainer(
+                        "123",
+                        "456",
+                        "789",
+                        "test",
+                        "max",
+                        "mustermann",
+                        Objects.requireNonNull(Main.class.getResource("charactermodels/Premade_Character_01.png")).toString(),
+                        0,
+                        List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                        List.of(1,2),
+                        "Testina",
+                        0,
+                        0,
+                        0,
+                        null));
             }
 
             @Override

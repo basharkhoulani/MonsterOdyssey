@@ -86,11 +86,13 @@ public class IngameControllerTest extends ApplicationTest {
                 "Hans",
                 "Premade_Character_01.png",
                 0,
+                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                List.of(1,2),
                 "646bacc568933551792bf3d5",
                 0,
                 0,
                 0,
-                new NPCInfo(false)
+                new NPCInfo(false, false, false, false, null, null)
         ));
         when(trainerStorageProvider.get().getRegion()).thenReturn(
                 new Region(
@@ -143,7 +145,23 @@ public class IngameControllerTest extends ApplicationTest {
         ));
         doNothing().when(trainerStorage).setMonsters(any());
         lenient().when(presetsService.getCharacter(any())).thenReturn(Observable.empty());
-        when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(new Trainer("2023-05-30T12:02:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863", "646bab5cecf584e1be02598a", "6475e595ac3946b6a812d868", "Hans", "Premade_Character_01.png", 0, "6475e595ac3946b6a812d863", 0, 0, 0, new NPCInfo(false)))));
+        when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(new Trainer(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "6475e595ac3946b6a812d863",
+                "646bab5cecf584e1be02598a",
+                "6475e595ac3946b6a812d868",
+                "Hans",
+                "Premade_Character_01.png",
+                0,
+                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                List.of(1,2),
+                "6475e595ac3946b6a812d863",
+                0,
+                0,
+                0,
+                new NPCInfo(false, false, false, false, null, null)
+        ))));
         ingameController.setValues(bundle, null, null, ingameController, app);
         EventListener eventListenerMock = mock(EventListener.class);
         when(eventListener.get()).thenReturn(eventListenerMock);
@@ -152,7 +170,23 @@ public class IngameControllerTest extends ApplicationTest {
         when(eventListener.get().listen("regions.646bab5cecf584e1be02598a.messages.*.*", Message.class)).thenReturn(just(
                 new Event<>("regions.646bab5cecf584e1be02598a.messages.6475e595ac3946b6a812d863.created", message)
         ));
-        Trainer trainer = new Trainer("2023-05-30T12:02:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d865", "646bab5cecf584e1be02598a", "6475e595ac3946b6a812d868", "Peter", "Premade_Character_02.png", 0, "6475e595ac3946b6a812d863", 0, 0, 0, new NPCInfo(false));
+        Trainer trainer = new Trainer(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "6475e595ac3946b6a812d865",
+                "646bab5cecf584e1be02598a",
+                "6475e595ac3946b6a812d868",
+                "Peter",
+                "Premade_Character_02.png",
+                0,
+                null,
+                null,
+                "6475e595ac3946b6a812d863",
+                0,
+                0,
+                0,
+                new NPCInfo(false, false,false, false, null,null));
+
         when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers.*.*", Trainer.class)).thenReturn(just(
                 new Event<>("regions.646bab5cecf584e1be02598a.trainers.6475e595ac3946b6a812d865.created", trainer)));
         MonstersListController monstersListController = mock(MonstersListController.class);
