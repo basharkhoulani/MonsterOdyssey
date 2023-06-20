@@ -120,7 +120,7 @@ public class WelcomeSceneController extends Controller {
 <span class="fc" id="L120">                final ButtonType okButton = new ButtonType(resources.getString(&quot;OK&quot;));</span>
 <span class="fc" id="L121">                final TextField textFieldName = new TextField();</span>
 <span class="fc" id="L122">                textFieldName.setId(&quot;nameField&quot;);</span>
-<span class="fc" id="L123">                textFieldName.setPromptText(&quot;Name?&quot;);</span>
+<span class="fc" id="L123">                textFieldName.setPromptText(resources.getString(&quot;NAMEASK&quot;));</span>
 <span class="fc" id="L124">                textFieldName.textProperty().bindBidirectional(trainerName);</span>
 <span class="fc" id="L125">                dialogPane.getButtonTypes().addAll(cancelButton, okButton);</span>
 
@@ -133,7 +133,7 @@ public class WelcomeSceneController extends Controller {
 
 <span class="fc" id="L134">                alert.setTitle(resources.getString(&quot;NAME.ALERT.TITLE&quot;));</span>
 <span class="fc" id="L135">                alert.initStyle(StageStyle.UNDECORATED);</span>
-<span class="fc" id="L136">                dialogPane.getStyleClass().add(resources.getString(&quot;ALERT.DIALOG.NAME&quot;));</span>
+<span class="fc" id="L136">                dialogPane.getStyleClass().add(&quot;alertDialogName&quot;);</span>
 <span class="fc" id="L137">                dialogPane.setContent(vbox);</span>
 
 <span class="pc" id="L139">                textFieldName.addEventHandler(KeyEvent.KEY_PRESSED, event -&gt; enterButtonTrainerInput(event, alert, textFieldName, okButton));</span>

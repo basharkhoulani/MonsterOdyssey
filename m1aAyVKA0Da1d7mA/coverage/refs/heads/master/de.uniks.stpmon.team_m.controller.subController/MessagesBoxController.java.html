@@ -21,7 +21,6 @@ import javax.inject.Provider;
 import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.MESSAGE_NAMESPACE_GROUPS;
-import static de.uniks.stpmon.team_m.Constants.UNKNOWN_USER;
 
 public class MessagesBoxController extends Controller {
 
@@ -35,7 +34,7 @@ public class MessagesBoxController extends Controller {
     Provider&lt;UserStorage&gt; userStorageProvider;
     @Inject
     Provider&lt;EventListener&gt; eventListener;
-<span class="fc" id="L38">    private final ObservableList&lt;Message&gt; messages = FXCollections.observableArrayList();</span>
+<span class="fc" id="L37">    private final ObservableList&lt;Message&gt; messages = FXCollections.observableArrayList();</span>
     private List&lt;User&gt; allUsers;
     private User user;
     private Group group;
@@ -48,8 +47,8 @@ public class MessagesBoxController extends Controller {
      */
 
     @Inject
-<span class="fc" id="L51">    public MessagesBoxController() {</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L50">    public MessagesBoxController() {</span>
+<span class="fc" id="L51">    }</span>
 
     /**
      * Initializes the messages box.
@@ -58,19 +57,19 @@ public class MessagesBoxController extends Controller {
 
     @Override
     public void init() {
-<span class="fc" id="L61">        messageListView = new ListView&lt;&gt;();</span>
-<span class="fc" id="L62">        messageListView.setItems(messages);</span>
-<span class="fc" id="L63">        messageListView.setCellFactory(param -&gt; new MessageCell(this, userStorageProvider.get()));</span>
-<span class="fc" id="L64">        messageListView.setPlaceholder(new Label(resources.getString(&quot;NO.MESSAGES.YET&quot;)));</span>
-<span class="fc" id="L65">        messageListView.setId(&quot;messageListView&quot;);</span>
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (group == null) {</span>
-<span class="fc" id="L67">            openFriendChat(&quot;userListView&quot;);</span>
+<span class="fc" id="L60">        messageListView = new ListView&lt;&gt;();</span>
+<span class="fc" id="L61">        messageListView.setItems(messages);</span>
+<span class="fc" id="L62">        messageListView.setCellFactory(param -&gt; new MessageCell(this, userStorageProvider.get()));</span>
+<span class="fc" id="L63">        messageListView.setPlaceholder(new Label(resources.getString(&quot;NO.MESSAGES.YET&quot;)));</span>
+<span class="fc" id="L64">        messageListView.setId(&quot;messageListView&quot;);</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (group == null) {</span>
+<span class="fc" id="L66">            openFriendChat(&quot;userListView&quot;);</span>
         }
-<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if (user == null) {</span>
-<span class="nc" id="L70">            openFriendChat(&quot;groupListView&quot;);</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L69">            openFriendChat(&quot;groupListView&quot;);</span>
         }
-<span class="fc" id="L72">        messageListView.setFocusTraversable(false);</span>
-<span class="fc" id="L73">    }</span>
+<span class="fc" id="L71">        messageListView.setFocusTraversable(false);</span>
+<span class="fc" id="L72">    }</span>
 
     /**
      * Opens a chat with a friend or a group. If the chat is with a friend, the group is created and the chatID is set.
@@ -81,20 +80,20 @@ public class MessagesBoxController extends Controller {
      */
 
     private void openFriendChat(String origin) {
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        if (!origin.equals(&quot;groupListView&quot;)) {</span>
-<span class="fc" id="L85">            group = new Group(null, null, List.of(user._id(), userStorageProvider.get().get_id()));</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (!origin.equals(&quot;groupListView&quot;)) {</span>
+<span class="fc" id="L84">            group = new Group(null, null, List.of(user._id(), userStorageProvider.get().get_id()));</span>
         }
 
-<span class="fc" id="L88">        disposables.add(groupService.getGroups(group.membersToString()).doOnNext(groups -&gt; {</span>
-<span class="fc" id="L89">                    findGroupID(groups);</span>
-<span class="fc" id="L90">                    groupStorageProvider.get().set_id(chatID);</span>
-<span class="fc" id="L91">                }).flatMap(groups -&gt; messageService.getGroupMessages(chatID).observeOn(FX_SCHEDULER))</span>
-<span class="fc" id="L92">                .doOnNext(this.messages::setAll)</span>
-<span class="fc" id="L93">                .flatMap(messages -&gt; Observable.just(messages).observeOn(FX_SCHEDULER))</span>
-<span class="fc" id="L94">                .doOnNext(messages1 -&gt; listenToMessages(this.messages, chatID))</span>
-<span class="fc" id="L95">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
-<span class="pc" id="L96">                }, error -&gt; showError(error.getMessage())));</span>
-<span class="fc" id="L97">    }</span>
+<span class="fc" id="L87">        disposables.add(groupService.getGroups(group.membersToString()).doOnNext(groups -&gt; {</span>
+<span class="fc" id="L88">                    findGroupID(groups);</span>
+<span class="fc" id="L89">                    groupStorageProvider.get().set_id(chatID);</span>
+<span class="fc" id="L90">                }).flatMap(groups -&gt; messageService.getGroupMessages(chatID).observeOn(FX_SCHEDULER))</span>
+<span class="fc" id="L91">                .doOnNext(this.messages::setAll)</span>
+<span class="fc" id="L92">                .flatMap(messages -&gt; Observable.just(messages).observeOn(FX_SCHEDULER))</span>
+<span class="fc" id="L93">                .doOnNext(messages1 -&gt; listenToMessages(this.messages, chatID))</span>
+<span class="fc" id="L94">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
+<span class="pc" id="L95">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L96">    }</span>
 
     /**
      * Finds the groupID of the chat.
@@ -103,18 +102,18 @@ public class MessagesBoxController extends Controller {
      */
 
     private void findGroupID(List&lt;Group&gt; groups) {
-<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        if (group.name() == null) {</span>
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">            for (Group group : groups) {</span>
-<span class="pc bpc" id="L108" title="2 of 4 branches missed.">                if (group.members().contains(user._id()) &amp;&amp; group.members().contains(userStorageProvider.get().get_id())) {</span>
-<span class="fc" id="L109">                    this.group = group;</span>
-<span class="fc" id="L110">                    chatID = group._id();</span>
-<span class="fc" id="L111">                    break;</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (group.name() == null) {</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">            for (Group group : groups) {</span>
+<span class="pc bpc" id="L107" title="2 of 4 branches missed.">                if (group.members().contains(user._id()) &amp;&amp; group.members().contains(userStorageProvider.get().get_id())) {</span>
+<span class="fc" id="L108">                    this.group = group;</span>
+<span class="fc" id="L109">                    chatID = group._id();</span>
+<span class="fc" id="L110">                    break;</span>
                 }
-<span class="pc" id="L113">            }</span>
+<span class="pc" id="L112">            }</span>
         } else {
-<span class="nc" id="L115">            chatID = group._id();</span>
+<span class="nc" id="L114">            chatID = group._id();</span>
         }
-<span class="fc" id="L117">    }</span>
+<span class="fc" id="L116">    }</span>
 
     /**
      * Renders the message listview.
@@ -124,9 +123,9 @@ public class MessagesBoxController extends Controller {
 
     @Override
     public Parent render() {
-<span class="fc" id="L127">        groupStorageProvider.get().set_id(chatID);</span>
-<span class="fc" id="L128">        messageListView.scrollTo(messageListView.getItems().size() - 1);</span>
-<span class="fc" id="L129">        return messageListView;</span>
+<span class="fc" id="L126">        groupStorageProvider.get().set_id(chatID);</span>
+<span class="fc" id="L127">        messageListView.scrollTo(messageListView.getItems().size() - 1);</span>
+<span class="fc" id="L128">        return messageListView;</span>
     }
 
     /**
@@ -137,12 +136,12 @@ public class MessagesBoxController extends Controller {
      */
 
     public String getUsername(String _id) {
-<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        for (User user : allUsers) {</span>
-<span class="fc bfc" id="L141" title="All 2 branches covered.">            if (user._id().equals(_id)) {</span>
-<span class="fc" id="L142">                return user.name();</span>
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">        for (User user : allUsers) {</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">            if (user._id().equals(_id)) {</span>
+<span class="fc" id="L141">                return user.name();</span>
             }
-<span class="fc" id="L144">        }</span>
-<span class="nc" id="L145">        return UNKNOWN_USER;</span>
+<span class="fc" id="L143">        }</span>
+<span class="nc" id="L144">        return resourceBundleProvider.get().getString(&quot;Unknown&quot;);</span>
     }
 
     /**
@@ -153,12 +152,12 @@ public class MessagesBoxController extends Controller {
      */
 
     public String getAvatar(String _id) {
-<span class="pc bpc" id="L156" title="1 of 2 branches missed.">        for (User user : allUsers) {</span>
-<span class="fc bfc" id="L157" title="All 2 branches covered.">            if (user._id().equals(_id)) {</span>
-<span class="fc" id="L158">                return user.avatar();</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        for (User user : allUsers) {</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">            if (user._id().equals(_id)) {</span>
+<span class="fc" id="L157">                return user.avatar();</span>
             }
-<span class="fc" id="L160">        }</span>
-<span class="nc" id="L161">        return UNKNOWN_USER;</span>
+<span class="fc" id="L159">        }</span>
+<span class="nc" id="L160">        return resourceBundleProvider.get().getString(&quot;Unknown&quot;);</span>
     }
 
     /**
@@ -169,10 +168,10 @@ public class MessagesBoxController extends Controller {
      */
 
     public void editMessage(String newBody, Message message) {
-<span class="fc" id="L172">        disposables.add(messageService.updateMessage(groupStorageProvider.get().get_id(), message._id(), newBody, MESSAGE_NAMESPACE_GROUPS)</span>
-<span class="fc" id="L173">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
-<span class="fc" id="L174">                }, error -&gt; showError(error.getMessage())));</span>
-<span class="fc" id="L175">    }</span>
+<span class="fc" id="L171">        disposables.add(messageService.updateMessage(groupStorageProvider.get().get_id(), message._id(), newBody, MESSAGE_NAMESPACE_GROUPS)</span>
+<span class="fc" id="L172">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
+<span class="fc" id="L173">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L174">    }</span>
 
     /**
      * Deletes a message from the server.
@@ -181,10 +180,10 @@ public class MessagesBoxController extends Controller {
      */
 
     public void deleteMessage(Message item) {
-<span class="fc" id="L184">        disposables.add(messageService.deleteMessage(item._id(), groupStorageProvider.get().get_id(), MESSAGE_NAMESPACE_GROUPS)</span>
-<span class="fc" id="L185">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
-<span class="fc" id="L186">                }, error -&gt; showError(error.getMessage())));</span>
-<span class="fc" id="L187">    }</span>
+<span class="fc" id="L183">        disposables.add(messageService.deleteMessage(item._id(), groupStorageProvider.get().get_id(), MESSAGE_NAMESPACE_GROUPS)</span>
+<span class="fc" id="L184">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
+<span class="fc" id="L185">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L186">    }</span>
 
     /**
      * Listens to messages from the server. If a message is created, updated or deleted, the listview is updated.
@@ -194,16 +193,16 @@ public class MessagesBoxController extends Controller {
      */
 
     public void listenToMessages(ObservableList&lt;Message&gt; messages, String id) {
-<span class="fc" id="L197">        disposables.add(eventListener.get().listen(&quot;groups.&quot; + id + &quot;.messages.*.*&quot;, Message.class)</span>
-<span class="fc" id="L198">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
-<span class="fc" id="L199">                    final Message message = event.data();</span>
-<span class="fc bfc" id="L200" title="All 4 branches covered.">                    switch (event.suffix()) {</span>
-<span class="fc" id="L201">                        case &quot;created&quot; -&gt; messages.add(message);</span>
-<span class="fc" id="L202">                        case &quot;updated&quot; -&gt; updateMessage(messages, message);</span>
-<span class="fc" id="L203">                        case &quot;deleted&quot; -&gt; messages.removeIf(m -&gt; m._id().equals(message._id()));</span>
+<span class="fc" id="L196">        disposables.add(eventListener.get().listen(&quot;groups.&quot; + id + &quot;.messages.*.*&quot;, Message.class)</span>
+<span class="fc" id="L197">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
+<span class="fc" id="L198">                    final Message message = event.data();</span>
+<span class="fc bfc" id="L199" title="All 4 branches covered.">                    switch (event.suffix()) {</span>
+<span class="fc" id="L200">                        case &quot;created&quot; -&gt; messages.add(message);</span>
+<span class="fc" id="L201">                        case &quot;updated&quot; -&gt; updateMessage(messages, message);</span>
+<span class="fc" id="L202">                        case &quot;deleted&quot; -&gt; messages.removeIf(m -&gt; m._id().equals(message._id()));</span>
                     }
-<span class="fc" id="L205">                }, error -&gt; showError(error.getMessage())));</span>
-<span class="fc" id="L206">    }</span>
+<span class="fc" id="L204">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L205">    }</span>
 
     /**
      * Updates the message in the listview.
@@ -213,12 +212,12 @@ public class MessagesBoxController extends Controller {
      */
 
     private void updateMessage(ObservableList&lt;Message&gt; messages, Message message) {
-<span class="fc" id="L216">        String messageID = message._id();</span>
-<span class="fc" id="L217">        messages.stream()</span>
-<span class="fc" id="L218">                .filter(m -&gt; m._id().equals(messageID))</span>
-<span class="fc" id="L219">                .findFirst()</span>
-<span class="fc" id="L220">                .ifPresent(m -&gt; messages.set(messages.indexOf(m), message));</span>
-<span class="fc" id="L221">    }</span>
+<span class="fc" id="L215">        String messageID = message._id();</span>
+<span class="fc" id="L216">        messages.stream()</span>
+<span class="fc" id="L217">                .filter(m -&gt; m._id().equals(messageID))</span>
+<span class="fc" id="L218">                .findFirst()</span>
+<span class="fc" id="L219">                .ifPresent(m -&gt; messages.set(messages.indexOf(m), message));</span>
+<span class="fc" id="L220">    }</span>
 
     /**
      * Sets all users
@@ -227,8 +226,8 @@ public class MessagesBoxController extends Controller {
      */
 
     public void setAllUsers(List&lt;User&gt; allUsers) {
-<span class="fc" id="L230">        this.allUsers = allUsers;</span>
-<span class="fc" id="L231">    }</span>
+<span class="fc" id="L229">        this.allUsers = allUsers;</span>
+<span class="fc" id="L230">    }</span>
 
     /**
      * Sets the user
@@ -237,8 +236,8 @@ public class MessagesBoxController extends Controller {
      */
 
     public void setUser(User user) {
-<span class="fc" id="L240">        this.user = user;</span>
-<span class="fc" id="L241">    }</span>
+<span class="fc" id="L239">        this.user = user;</span>
+<span class="fc" id="L240">    }</span>
 
     /**
      * Sets the group
@@ -247,11 +246,11 @@ public class MessagesBoxController extends Controller {
      */
 
     public void setGroup(Group group) {
-<span class="fc" id="L250">        this.group = group;</span>
-<span class="fc" id="L251">    }</span>
+<span class="fc" id="L249">        this.group = group;</span>
+<span class="fc" id="L250">    }</span>
 
     public ObservableList&lt;Message&gt; getMessages() {
-<span class="fc" id="L254">        return messages;</span>
+<span class="fc" id="L253">        return messages;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

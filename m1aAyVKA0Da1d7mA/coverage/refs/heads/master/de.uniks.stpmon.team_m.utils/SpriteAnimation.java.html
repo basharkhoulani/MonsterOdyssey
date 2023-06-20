@@ -34,7 +34,7 @@ public class SpriteAnimation extends AnimationTimer {
     private Image[] trainerWalkingDown;
     private Image[] trainerWalkingLeft;
     private Image[] trainerWalkingRight;
-
+    private boolean isWalking;
     public SpriteAnimation(Image spriteChunk, Trainer trainer, long duration, GraphicsContext graphicsContext) { //ImageView root) {
 <span class="fc" id="L39">        super();</span>
 <span class="fc" id="L40">        this.spriteChunk = spriteChunk;</span>
@@ -61,69 +61,79 @@ public class SpriteAnimation extends AnimationTimer {
 
     @Override
     public void handle(long now) {
-<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (lastPlayedTimeStamp == null) {</span>
-<span class="nc" id="L65">            lastPlayedTimeStamp = System.currentTimeMillis();</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (lastPlayedTimeStamp == null) {</span>
+<span class="fc" id="L65">            lastPlayedTimeStamp = System.currentTimeMillis();</span>
         }
-<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (System.currentTimeMillis() - lastPlayedTimeStamp &lt; duration) {</span>
-<span class="nc" id="L68">            return;</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (System.currentTimeMillis() - lastPlayedTimeStamp &lt; duration) {</span>
+<span class="fc" id="L68">            return;</span>
         }
-<span class="nc" id="L70">        lastPlayedTimeStamp = System.currentTimeMillis();</span>
-<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (lastPosition != null) {</span>
-<span class="nc" id="L72">            graphicsContext.clearRect(lastPosition.getX() * TILE_SIZE, lastPosition.getY() * TILE_SIZE, 16,  28);</span>
+<span class="fc" id="L70">        lastPlayedTimeStamp = System.currentTimeMillis();</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (lastPosition != null) {</span>
+<span class="nc" id="L72">            graphicsContext.clearRect(lastPosition.getX() * TILE_SIZE, lastPosition.getY() * TILE_SIZE, 16,  25);</span>
         }
-<span class="nc" id="L74">        graphicsContext.drawImage(images[currentIndex], currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  28);</span>
-<span class="nc" id="L75">        currentIndex = (currentIndex + 1) % 6;</span>
-<span class="nc" id="L76">        currentImage = images[currentIndex];</span>
-<span class="nc" id="L77">    }</span>
+<span class="fc" id="L74">        graphicsContext.clearRect(currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);</span>
+<span class="fc" id="L75">        graphicsContext.drawImage(images[currentIndex], currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);</span>
+<span class="fc" id="L76">        currentIndex = (currentIndex + 1) % 6;</span>
+<span class="fc" id="L77">        currentImage = images[currentIndex];</span>
+<span class="pc bpc" id="L78" title="3 of 4 branches missed.">        if (isWalking &amp;&amp; currentIndex == 0) {</span>
+<span class="nc" id="L79">            isWalking = false;</span>
+<span class="nc" id="L80">            stay(currentPosition.getDirection());</span>
+        }
+<span class="fc" id="L82">    }</span>
 
     private void setImages(Image[] images) {
-<span class="nc" id="L80">        this.images = images;</span>
-<span class="nc" id="L81">    }</span>
-
-    private void setDuration(long duration) {
-<span class="nc" id="L84">        this.duration = duration;</span>
-<span class="nc" id="L85">    }</span>
-
-    public void walk(int direction) {
-<span class="nc" id="L88">        setupWalkAnimation(direction, DELAY, trainerWalkingUp, trainerWalkingRight, trainerWalkingDown, trainerWalkingLeft);</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (isWalking) {</span>
+<span class="nc" id="L86">            return;</span>
+        }
+<span class="nc" id="L88">        this.images = images;</span>
 <span class="nc" id="L89">    }</span>
 
-    private void setupWalkAnimation(int direction, int delay, Image[] trainerWalkingUp, Image[] trainerWalkingRight, Image[] trainerWalkingDown, Image[] trainerWalkingLeft) {
-<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L93">            setDuration(delay);</span>
-<span class="nc bnc" id="L94" title="All 5 branches missed.">            switch (direction) {</span>
-<span class="nc" id="L95">                case 0 -&gt; setImages(trainerWalkingUp);</span>
-<span class="nc" id="L96">                case 1 -&gt; setImages(trainerWalkingRight);</span>
-<span class="nc" id="L97">                case 2 -&gt; setImages(trainerWalkingDown);</span>
-<span class="nc" id="L98">                case 3 -&gt; setImages(trainerWalkingLeft);</span>
+    private void setDuration(long duration) {
+<span class="nc" id="L92">        this.duration = duration;</span>
+<span class="nc" id="L93">    }</span>
+
+    public void walk(int direction) {
+<span class="nc" id="L96">        setupAnimation(direction, DELAY, trainerWalkingUp, trainerWalkingRight, trainerWalkingDown, trainerWalkingLeft);</span>
+<span class="nc" id="L97">        isWalking = true;</span>
+<span class="nc" id="L98">    }</span>
+
+    private void setupAnimation(int direction, int delay, Image[] trainerWalkingUp, Image[] trainerWalkingRight, Image[] trainerWalkingDown, Image[] trainerWalkingLeft) {
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L102">            setDuration(delay);</span>
+<span class="nc bnc" id="L103" title="All 5 branches missed.">            switch (direction) {</span>
+<span class="nc" id="L104">                case 0 -&gt; setImages(trainerWalkingUp);</span>
+<span class="nc" id="L105">                case 1 -&gt; setImages(trainerWalkingRight);</span>
+<span class="nc" id="L106">                case 2 -&gt; setImages(trainerWalkingDown);</span>
+<span class="nc" id="L107">                case 3 -&gt; setImages(trainerWalkingLeft);</span>
                 default -&gt; {}
             }
         }
-<span class="nc" id="L102">    }</span>
+<span class="fc" id="L111">    }</span>
 
     public void stay(int direction) {
-<span class="nc" id="L105">        setupWalkAnimation(direction, DELAY_LONG, trainerStandingUp, trainerStandingRight, trainerStandingDown, trainerStandingLeft);</span>
-<span class="nc" id="L106">    }</span>
+<span class="fc" id="L114">        isWalking = false;</span>
+<span class="fc" id="L115">        setupAnimation(direction, DELAY_LONG, trainerStandingUp, trainerStandingRight, trainerStandingDown, trainerStandingLeft);</span>
+<span class="fc" id="L116">    }</span>
 
     @Override
     public void start() {
-<span class="nc" id="L110">        super.start();</span>
-<span class="nc" id="L111">        this.isPlaying = true;</span>
-<span class="nc" id="L112">    }</span>
+<span class="fc" id="L120">        super.start();</span>
+<span class="fc" id="L121">        this.isPlaying = true;</span>
+<span class="fc" id="L122">    }</span>
 
     @Override
     public void stop() {
-<span class="nc" id="L116">        super.stop();</span>
-<span class="nc" id="L117">        this.isPlaying = false;</span>
-<span class="nc" id="L118">    }</span>
+<span class="nc" id="L126">        super.stop();</span>
+<span class="nc" id="L127">        this.isPlaying = false;</span>
+<span class="nc" id="L128">    }</span>
 
     public Position getCurrentPosition() {
-<span class="nc" id="L121">        return currentPosition;</span>
+<span class="nc" id="L131">        return currentPosition;</span>
     }
 
     public void setCurrentPosition(Position currentPosition) {
-<span class="nc" id="L125">        this.lastPosition = this.currentPosition;</span>
-<span class="nc" id="L126">        this.currentPosition = currentPosition;</span>
-<span class="nc" id="L127">    }</span>
+<span class="nc" id="L135">        this.lastPosition = this.currentPosition;</span>
+<span class="nc" id="L136">        this.currentPosition = currentPosition;</span>
+<span class="nc" id="L137">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

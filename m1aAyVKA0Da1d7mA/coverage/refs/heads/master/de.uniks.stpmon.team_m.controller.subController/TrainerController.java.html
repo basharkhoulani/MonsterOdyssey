@@ -21,36 +21,36 @@ public class TrainerController extends Controller {
 
     @Inject
     PresetsService presetsService;
-<span class="nc" id="L24">    private Boolean isWalking = false;</span>
+<span class="fc" id="L24">    private Boolean isWalking = false;</span>
 
 
     @Override
     public void init() {
-<span class="nc" id="L29">        super.init();</span>
+<span class="fc" id="L29">        super.init();</span>
         int duration;
-<span class="nc bnc" id="L31" title="All 2 branches missed.">        if (isWalking) {</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if (isWalking) {</span>
 <span class="nc" id="L32">            duration = DELAY;</span>
         } else {
-<span class="nc" id="L34">            duration = DELAY_LONG;</span>
+<span class="fc" id="L34">            duration = DELAY_LONG;</span>
         }
-<span class="nc" id="L36">        spriteAnimation = new SpriteAnimation(trainerChunk, trainer, duration, graphicsContext);</span>
-<span class="nc" id="L37">        spriteAnimation.stay(trainer.direction());</span>
-<span class="nc" id="L38">    }</span>
+<span class="fc" id="L36">        spriteAnimation = new SpriteAnimation(trainerChunk, trainer, duration, graphicsContext);</span>
+<span class="fc" id="L37">        spriteAnimation.stay(trainer.direction());</span>
+<span class="fc" id="L38">    }</span>
 
     public void startAnimations() {
-<span class="nc" id="L41">        spriteAnimation.start();</span>
-<span class="nc" id="L42">    }</span>
+<span class="fc" id="L41">        spriteAnimation.start();</span>
+<span class="fc" id="L42">    }</span>
 
     @Override
     public Parent render() {
 <span class="nc" id="L46">        return null;</span>
     }
 
-<span class="nc" id="L49">    public TrainerController(Trainer trainer, Image trainerChunk, GraphicsContext graphicsContext) {</span>
-<span class="nc" id="L50">        this.trainerChunk = trainerChunk;</span>
-<span class="nc" id="L51">        this.trainer = trainer;</span>
-<span class="nc" id="L52">        this.graphicsContext = graphicsContext;</span>
-<span class="nc" id="L53">    }</span>
+<span class="fc" id="L49">    public TrainerController(Trainer trainer, Image trainerChunk, GraphicsContext graphicsContext) {</span>
+<span class="fc" id="L50">        this.trainerChunk = trainerChunk;</span>
+<span class="fc" id="L51">        this.trainer = trainer;</span>
+<span class="fc" id="L52">        this.graphicsContext = graphicsContext;</span>
+<span class="fc" id="L53">    }</span>
 
     public SpriteAnimation getSpriteAnimation() {
 <span class="nc" id="L56">        return spriteAnimation;</span>
