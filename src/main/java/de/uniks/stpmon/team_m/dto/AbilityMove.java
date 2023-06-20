@@ -4,5 +4,5 @@ public record AbilityMove(
       String type,
       int ability,
       String target
-) {
+) implements Move{
 }

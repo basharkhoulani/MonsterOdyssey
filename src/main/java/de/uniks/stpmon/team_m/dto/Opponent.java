@@ -9,7 +9,7 @@ public record Opponent(
         boolean isAttacker,
         boolean isNPC,
         String monster,
-        Object move,
+        Move move,
         Result result,
         int coin
 ) {
