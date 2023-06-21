@@ -19,14 +19,20 @@ public class DialogController extends Controller {
     private final int amountOfTexts;
 
     @Inject
-    public DialogController(Trainer npc, TextFlow dialogTextFlow) {
+    public DialogController(Trainer npc, TextFlow dialogTextFlow, boolean alreadyEncountered) {
         NpcTextManager npcTextManager = NpcTextManager.getInstance();
-        this.npcTexts = npcTextManager.getNpcTexts(npc._id());
+        if (alreadyEncountered) {
+            this.npcTexts = npcTextManager.getNpcTexts(npc._id() + "alreadyEncountered");
+        } else {
+            this.npcTexts = npcTextManager.getNpcTexts(npc._id());
+        }
         this.currentTextIndex = 0;
         this.currentText = new Text(npcTexts[currentTextIndex]);
         this.amountOfTexts = npcTexts.length;
 
         dialogTextFlow.getChildren().add(currentText);
+
+        System.out.println(npc._id());
     }
 
 
