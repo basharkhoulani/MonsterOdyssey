@@ -11,11 +11,13 @@ import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.Node;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -277,9 +279,10 @@ public class IngameControllerTest extends ApplicationTest {
     }
 
     @Test
-    void testDialog() {
+    void testDialog() throws InterruptedException {
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(19);
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
 
         press(KeyCode.E);
         release(KeyCode.E);
@@ -290,15 +293,24 @@ public class IngameControllerTest extends ApplicationTest {
         final String firstDefaultText = dialogText.getText();
 
         assertNotEquals("", firstDefaultText);
-
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        
+        Thread.sleep(10);
 
         press(KeyCode.E);
+        release(KeyCode.E);
 
         assertNotEquals(firstDefaultText, dialogText.getText());
+
+        Thread.sleep(10);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(10);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(10);
     }
 }
