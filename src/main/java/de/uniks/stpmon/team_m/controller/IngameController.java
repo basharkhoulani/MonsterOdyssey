@@ -1019,6 +1019,7 @@ public class IngameController extends Controller {
         textPane.prefHeightProperty().bind(dialogVBox.heightProperty());
 
         TextFlow dialogTextFlow = new TextFlow();
+        dialogTextFlow.setId("dialogTextFlow");
 
         dialogTextFlow.prefWidthProperty().bind(textPane.widthProperty());
         dialogTextFlow.prefHeightProperty().bind(textPane.heightProperty());
