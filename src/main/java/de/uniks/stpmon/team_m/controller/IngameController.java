@@ -948,6 +948,14 @@ public class IngameController extends Controller {
         return null;
     }
 
+    public boolean checkIfNpcEncounteredPlayer(Trainer npc) {
+        if (npc.npc().encountered() == null) {
+            return false;
+        }
+
+        return npc.npc().encountered().contains(trainerStorageProvider.get().getTrainer()._id());
+    }
+
     /**
      * Sends a talk event to a specific npc to the UDP Client
      * @param npc The npc that has been talked to
@@ -958,10 +966,7 @@ public class IngameController extends Controller {
             return;
         }
 
-        if (npc.npc().encountered().contains(trainerStorageProvider.get().getTrainer()._id())) {
-            // lasse ich erstmal drin, falls man noch irgendwas machen will damit später
-            return;
-        } else {
+        if (!checkIfNpcEncounteredPlayer(npc)) {
             disposables.add(udpEventListenerProvider.get().talk(
                     npc.area(),
                     new TalkTrainerDto(
