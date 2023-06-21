@@ -320,6 +320,10 @@ public class IngameController extends Controller {
                 trainers -> {
                     this.trainers = FXCollections.observableArrayList(trainers);
                     listenToTrainers(this.trainers);
+
+                    for (Trainer trainer : trainers) {
+                        trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y(), trainer.direction()));
+                    }
                 }, error -> showError(error.getMessage())));
 
         // Setup chat
