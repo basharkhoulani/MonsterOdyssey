@@ -205,34 +205,26 @@ public class IngameController extends Controller {
             }
             lastKeyEventTimeStamp = System.currentTimeMillis();
 
+            if (inDialog) {
+                return;
+            }
+
             if ((event.getCode() == KeyCode.W)) {
-                if (inDialog) {
-                    return;
-                }
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
                         trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() - 1, 0)).subscribe());
             }
             if ((event.getCode() == KeyCode.S)) {
-                if (inDialog) {
-                    return;
-                }
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
                         trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() + 1, 2)).subscribe());
             }
             if ((event.getCode() == KeyCode.A)) {
-                if (inDialog) {
-                    return;
-                }
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
                         trainerStorageProvider.get().getX() - 1, trainerStorageProvider.get().getY(), 3)).subscribe());
             }
             if ((event.getCode() == KeyCode.D)) {
-                if (inDialog) {
-                    return;
-                }
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
                         trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 1)).subscribe());
