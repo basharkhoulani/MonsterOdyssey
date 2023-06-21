@@ -1,7 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 

@@ -42,7 +42,7 @@ public class DialogController extends Controller {
     /**
      * Method to continue the dialog.
      * There are 5 possible return values:
-     *  @-1: Dialog is finished and the npc wasn't Prof. Albert or he was already encountered
+     *  @-1: Dialog is finished and the npc wasn't Prof. Albert, or he was already encountered
      *  @0: Talked to Prof. Albert and selected the first monster  TODO
      *  @1: Talked to Prof. Albert and selected the second monster  TODO
      *  @2: Talked to Prof. Albert and selected the third monster  TODO

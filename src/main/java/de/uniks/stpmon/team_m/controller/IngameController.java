@@ -39,9 +39,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -952,17 +950,14 @@ public class IngameController extends Controller {
         int checkTileY = currentY;
 
         switch (direction) {
-            case 0:             // facing up
-                checkTileY--;
-                break;
-            case 1:             // facing right
-                checkTileX++;
-                break;
-            case 2:             // facing down
-                checkTileY++;
-                break;
-            case 3:             // facing left
-                checkTileX--;
+            case 0 ->             // facing up
+                    checkTileY--;
+            case 1 ->             // facing right
+                    checkTileX++;
+            case 2 ->             // facing down
+                    checkTileY++;
+            case 3 ->             // facing left
+                    checkTileX--;
         }
 
         for (Trainer trainer : trainers) {
