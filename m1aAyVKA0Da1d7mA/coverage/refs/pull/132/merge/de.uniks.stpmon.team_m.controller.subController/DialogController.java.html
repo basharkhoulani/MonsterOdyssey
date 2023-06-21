@@ -50,11 +50,11 @@ public class DialogController extends Controller {
      * @return An int based on some factors, see method description
      */
     public int continueDialog() {
-<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (++currentTextIndex == amountOfTexts) {</span>
-<span class="nc bnc" id="L54" title="All 4 branches missed.">            if (Objects.equals(this.npc._id(), &quot;645e32c6866ace359554a802&quot;) &amp;&amp; !this.alreadyEncountered) {</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (++currentTextIndex == amountOfTexts) {</span>
+<span class="pc bpc" id="L54" title="3 of 4 branches missed.">            if (Objects.equals(this.npc._id(), &quot;645e32c6866ace359554a802&quot;) &amp;&amp; !this.alreadyEncountered) {</span>
 <span class="nc" id="L55">                return new Random().nextInt(0, 2);</span>
             } else {
-<span class="nc" id="L57">                return -1;</span>
+<span class="fc" id="L57">                return -1;</span>
             }
         } else {
 <span class="fc" id="L60">            this.currentText.setText(npcTexts[currentTextIndex]);</span>

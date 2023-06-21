@@ -182,12 +182,12 @@ public class IngameController extends Controller {
 <span class="fc bfc" id="L182" title="All 2 branches covered.">            if (event.getCode() == INTERACT_KEY) {</span>
 <span class="fc bfc" id="L183" title="All 2 branches covered.">                if (inDialog) {</span>
 <span class="fc" id="L184">                    int continueDialogReturn = dialogController.continueDialog();</span>
-<span class="pc bpc" id="L185" title="1 of 2 branches missed.">                    if (continueDialogReturn &lt; 3) {</span>
-<span class="nc" id="L186">                        this.dialogController.destroy();</span>
-<span class="nc" id="L187">                        inDialog = false;</span>
-<span class="nc" id="L188">                        stackPane.getChildren().remove(dialogVBox);</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">                    if (continueDialogReturn &lt; 3) {</span>
+<span class="fc" id="L186">                        this.dialogController.destroy();</span>
+<span class="fc" id="L187">                        inDialog = false;</span>
+<span class="fc" id="L188">                        stackPane.getChildren().remove(dialogVBox);</span>
 
-<span class="nc" id="L190">                        encounterNPC(this.currentNpc, continueDialogReturn);</span>
+<span class="fc" id="L190">                        encounterNPC(this.currentNpc, continueDialogReturn);</span>
                     }
 <span class="fc" id="L192">                } else {</span>
 <span class="fc" id="L193">                    int currentXPosition = trainerStorageProvider.get().getX();</span>
@@ -987,23 +987,23 @@ public class IngameController extends Controller {
      * @param selection OPTIONAL: if npc has selection. Pass null if not
      */
     public void encounterNPC(Trainer npc, int selection) {
-<span class="nc bnc" id="L990" title="All 2 branches missed.">        if (npc.npc() == null) {</span>
+<span class="pc bpc" id="L990" title="1 of 2 branches missed.">        if (npc.npc() == null) {</span>
 <span class="nc" id="L991">            return;</span>
         }
 
-<span class="nc bnc" id="L994" title="All 2 branches missed.">        if (!checkIfNpcEncounteredPlayer(npc)) {</span>
-<span class="nc" id="L995">            String trainerID = trainerStorageProvider.get().getTrainer()._id();</span>
+<span class="pc bpc" id="L994" title="1 of 2 branches missed.">        if (!checkIfNpcEncounteredPlayer(npc)) {</span>
+<span class="fc" id="L995">            String trainerID = trainerStorageProvider.get().getTrainer()._id();</span>
 
-<span class="nc" id="L997">            disposables.add(udpEventListenerProvider.get().talk(</span>
-<span class="nc" id="L998">                    npc.area(),</span>
+<span class="fc" id="L997">            disposables.add(udpEventListenerProvider.get().talk(</span>
+<span class="fc" id="L998">                    npc.area(),</span>
                     new TalkTrainerDto(
                             trainerID,
-<span class="nc" id="L1001">                            npc._id(),</span>
+<span class="fc" id="L1001">                            npc._id(),</span>
                             selection
                     )
-<span class="nc" id="L1004">            ).subscribe());</span>
+<span class="fc" id="L1004">            ).subscribe());</span>
         }
-<span class="nc" id="L1006">    }</span>
+<span class="fc" id="L1006">    }</span>
 
     public TextFlow createDialogVBox() {
 <span class="fc" id="L1009">        VBox dialogVBox = new VBox();</span>
