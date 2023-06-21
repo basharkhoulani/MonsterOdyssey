@@ -293,24 +293,24 @@ public class IngameControllerTest extends ApplicationTest {
         final String firstDefaultText = dialogText.getText();
 
         assertNotEquals("", firstDefaultText);
-        
-        Thread.sleep(10);
+
+        Thread.sleep(30);
 
         press(KeyCode.E);
         release(KeyCode.E);
 
         assertNotEquals(firstDefaultText, dialogText.getText());
 
-        Thread.sleep(10);
+        Thread.sleep(30);
 
         press(KeyCode.E);
         release(KeyCode.E);
 
-        Thread.sleep(10);
+        Thread.sleep(30);
 
         press(KeyCode.E);
         release(KeyCode.E);
 
-        Thread.sleep(10);
+        Thread.sleep(30);
     }
 }
