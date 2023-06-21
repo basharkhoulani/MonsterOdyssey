@@ -124,6 +124,7 @@ public class IngameController extends Controller {
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     public static final KeyCode INTERACT_KEY = KeyCode.E;
     private boolean isChatting = false;
+    private boolean inDialog = false;
 
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
@@ -150,6 +151,8 @@ public class IngameController extends Controller {
     private HashMap<Trainer, TrainerController> trainerControllerHashMap;
     private HashMap<Trainer, Position> trainerPositionHashMap;
     Stage popupStage;
+    private VBox dialogVBox;
+    private DialogController dialogController;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -178,11 +181,25 @@ public class IngameController extends Controller {
                 pauseGame();
             }
             if (event.getCode() == INTERACT_KEY) {
-                int currentXPosition = trainerStorageProvider.get().getX();
-                int currentYPosition = trainerStorageProvider.get().getY();
-                int currentDirection = trainerStorageProvider.get().getDirection();
+                if (inDialog) {
+                    if (!this.dialogController.continueDialog()) {
+                        this.dialogController.destroy();
+                        inDialog = false;
+                        stackPane.getChildren().remove(dialogVBox);
+                    }
+                } else {
+                    int currentXPosition = trainerStorageProvider.get().getX();
+                    int currentYPosition = trainerStorageProvider.get().getY();
+                    int currentDirection = trainerStorageProvider.get().getDirection();
 
-                Trainer npc = checkTileInFront(currentXPosition, currentYPosition, currentDirection);
+                    Trainer npc = checkTileInFront(currentXPosition, currentYPosition, currentDirection);
+
+                    if (npc != null) {
+                        inDialog = true;
+
+                        this.dialogController = new DialogController(npc, createDialogVBox());
+                    }
+                }
             }
             lastKeyEventTimeStamp = System.currentTimeMillis();
 
@@ -315,8 +332,6 @@ public class IngameController extends Controller {
 
         popupStage = new Stage();
         popupStage.initOwner(app.getStage());
-
-        createDialogVBox();
 
         return parent;
     }
@@ -971,7 +986,7 @@ public class IngameController extends Controller {
         }
     }
 
-    public VBox createDialogVBox() {
+    public TextFlow createDialogVBox() {
         VBox dialogVBox = new VBox();
         dialogVBox.setMinWidth(700);
         dialogVBox.maxWidthProperty().bind(stackPane.widthProperty().divide(2));
@@ -991,8 +1006,6 @@ public class IngameController extends Controller {
         dialogTextFlow.prefHeightProperty().bind(textPane.heightProperty());
         dialogTextFlow.setPadding(new Insets(15));
 
-        dialogTextFlow.getChildren().add(new Text("hallo :)"));
-
         dialogTextFlow.getStyleClass().add("dialogTextFlow");
 
         textPane.getChildren().add(dialogTextFlow);
@@ -1001,8 +1014,9 @@ public class IngameController extends Controller {
         dialogVBox.getChildren().add(textPane);
 
         stackPane.getChildren().add(dialogVBox);
+        this.dialogVBox = dialogVBox;
 
-        return dialogVBox;
+        return dialogTextFlow;
     }
 
 
