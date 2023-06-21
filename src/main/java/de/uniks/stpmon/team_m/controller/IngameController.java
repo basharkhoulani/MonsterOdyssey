@@ -153,6 +153,7 @@ public class IngameController extends Controller {
     Stage popupStage;
     private VBox dialogVBox;
     private DialogController dialogController;
+    private Trainer currentNpc;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -186,18 +187,20 @@ public class IngameController extends Controller {
                         this.dialogController.destroy();
                         inDialog = false;
                         stackPane.getChildren().remove(dialogVBox);
+
+                        encounterNPC(this.currentNpc, 3);
                     }
                 } else {
                     int currentXPosition = trainerStorageProvider.get().getX();
                     int currentYPosition = trainerStorageProvider.get().getY();
                     int currentDirection = trainerStorageProvider.get().getDirection();
 
-                    Trainer npc = checkTileInFront(currentXPosition, currentYPosition, currentDirection);
+                    this.currentNpc = checkTileInFront(currentXPosition, currentYPosition, currentDirection);
 
-                    if (npc != null) {
+                    if (this.currentNpc != null) {
                         inDialog = true;
 
-                        this.dialogController = new DialogController(npc, createDialogVBox());
+                        this.dialogController = new DialogController(this.currentNpc, createDialogVBox(), checkIfNpcEncounteredPlayer(this.currentNpc));
                     }
                 }
             }
