@@ -990,10 +990,14 @@ public class IngameController extends Controller {
         }
 
         if (!checkIfNpcEncounteredPlayer(npc)) {
+            System.out.println("mach doch jetzt ma udp hier");
+            System.out.println(trainerStorageProvider.get().getTrainer()._id());
+            String trainerID = trainerStorageProvider.get().getTrainer()._id();
+
             disposables.add(udpEventListenerProvider.get().talk(
                     npc.area(),
                     new TalkTrainerDto(
-                            trainerStorageProvider.get().getTrainer()._id(),
+                            trainerID,
                             npc._id(),
                             selection
                     )
