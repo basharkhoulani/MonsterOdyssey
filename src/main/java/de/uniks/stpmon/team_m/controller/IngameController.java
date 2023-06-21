@@ -21,6 +21,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -36,6 +37,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -90,6 +92,8 @@ public class IngameController extends Controller {
     public Canvas trainersCanvas;
     @FXML
     public ImageView mapSymbol;
+    @FXML
+    public StackPane stackPane;
 
     @Inject
     Provider<IngameMiniMapController> ingameMiniMapControllerProvider;
@@ -307,6 +311,20 @@ public class IngameController extends Controller {
 
         popupStage = new Stage();
         popupStage.initOwner(app.getStage());
+
+        VBox testi = new VBox();
+        testi.setMinWidth(700);
+        testi.maxWidthProperty().bind(stackPane.widthProperty().divide(2));
+        testi.setMaxHeight(150);
+//        testi.layoutYProperty().bind(stackPane.heightProperty().divide(2));
+//        testi.setTranslateY(100);
+        int constantSpacer = 150;
+        testi.translateYProperty().bind((anchorPane.heightProperty().subtract(testi.maxHeightProperty()).subtract(constantSpacer)).divide(2));
+
+        testi.setStyle("-fx-background-color: rgba(0, 0, 255, 0.5);");
+//        stackPane.setAlignment(Pos.TOP_CENTER);
+        stackPane.getChildren().add(testi);
+
         return parent;
     }
 
