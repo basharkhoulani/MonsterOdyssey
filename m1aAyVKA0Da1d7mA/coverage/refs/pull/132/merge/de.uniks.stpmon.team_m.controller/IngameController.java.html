@@ -233,7 +233,7 @@ public class IngameController extends Controller {
 <span class="fc" id="L233">        };</span>
 
 <span class="fc" id="L235">        keyReleasedHandler = event -&gt; {</span>
-<span class="fc bfc" id="L236" title="All 2 branches covered.">            if (isChatting) {</span>
+<span class="fc bfc" id="L236" title="All 4 branches covered.">            if (isChatting || inDialog) {</span>
 <span class="fc" id="L237">                return;</span>
             }
 <span class="pc bpc" id="L239" title="1 of 2 branches missed.">            if ((event.getCode() == KeyCode.W)) {</span>
