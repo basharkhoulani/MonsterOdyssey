@@ -114,6 +114,7 @@ public class IngameController extends Controller {
     Provider<IngameController> ingameControllerProvider;
 
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
+    public static final KeyCode INTERACT_KEY = KeyCode.E;
     private boolean isChatting = false;
 
     @Inject
@@ -167,6 +168,18 @@ public class IngameController extends Controller {
             }
             if (event.getCode() == PAUSE_MENU_KEY) {
                 pauseGame();
+            }
+            if (event.getCode() == INTERACT_KEY) {
+                int currentXPosition = trainerStorageProvider.get().getX();
+                int currentYPosition = trainerStorageProvider.get().getY();
+                int currentDirection = trainerStorageProvider.get().getDirection();
+
+                Trainer npc = checkTileInFront(currentXPosition, currentYPosition, currentDirection);
+                if (npc != null) {
+                    if (npc.npc().encountered().contains(trainerStorageProvider.get().getTrainer()._id())) {
+                        System.out.println("dieser Trainer hat der npc encountered");
+                    }
+                }
             }
             lastKeyEventTimeStamp = System.currentTimeMillis();
 
@@ -885,6 +898,41 @@ public class IngameController extends Controller {
         popupStage.setScene(popupScene);
         popupStage.setTitle(resources.getString("MONSTERS"));
         popupStage.show();
+    }
+
+    /**
+     * This method checks the tile in front of the player, if a npc is standing on that tile.
+     * @param currentX current x coordinate of the player
+     * @param currentY current y coordinate of the player
+     * @param direction current direction of the player
+     * @return The npc TrainerDTO if true, else null
+     */
+    public Trainer checkTileInFront(int currentX, int currentY, int direction) {
+        int checkTileX = currentX;
+        int checkTileY = currentY;
+
+        switch (direction) {
+            case 0:             // facing up
+                checkTileY--;
+                break;
+            case 1:             // facing right
+                checkTileX++;
+                break;
+            case 2:             // facing down
+                checkTileY++;
+                break;
+            case 3:             // facing left
+                checkTileX--;
+        }
+
+        for (Trainer trainer : trainers) {
+            if (trainer.x() == checkTileX && trainer.y() == checkTileY) {
+                if (trainer.npc() != null) {
+                    return trainer;
+                }
+            }
+        }
+        return null;
     }
 
     @Override
