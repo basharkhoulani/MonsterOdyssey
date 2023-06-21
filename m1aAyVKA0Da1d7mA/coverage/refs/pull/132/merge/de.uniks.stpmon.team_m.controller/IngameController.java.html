@@ -1027,7 +1027,7 @@ public class IngameController extends Controller {
 <span class="fc" id="L1027">        textVBox.maxHeightProperty().bind(textPane.heightProperty());</span>
 <span class="fc" id="L1028">        textVBox.getStyleClass().add(&quot;dialogTextFlow&quot;);</span>
 
-<span class="fc" id="L1030">        Label dialogHelpLabel = new Label(&quot;Press E to continue&quot;);</span>
+<span class="fc" id="L1030">        Label dialogHelpLabel = new Label(resources.getString(&quot;NPC.DIALOG.HELP&quot;));</span>
 <span class="fc" id="L1031">        dialogHelpLabel.prefWidthProperty().bind(textVBox.widthProperty());</span>
 <span class="fc" id="L1032">        dialogHelpLabel.setFont(new Font(helpLabelFontSize));</span>
 <span class="fc" id="L1033">        dialogHelpLabel.setPadding(helpLabelInsets);</span>
