@@ -4,6 +4,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
+import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.service.PresetsService;
@@ -37,10 +38,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
@@ -1016,12 +1016,22 @@ public class IngameController extends Controller {
 
         dialogTextFlow.prefWidthProperty().bind(textPane.widthProperty());
         dialogTextFlow.prefHeightProperty().bind(textPane.heightProperty());
-        dialogTextFlow.setPadding(new Insets(15));
+        dialogTextFlow.setPadding(new Insets(20, 40, 20, 40));
 
-        dialogTextFlow.getStyleClass().add("dialogTextFlow");
+        VBox textVBox = new VBox();
+        textVBox.maxWidthProperty().bind(textPane.widthProperty());
+        textVBox.maxHeightProperty().bind(textPane.heightProperty());
+        textVBox.getStyleClass().add("dialogTextFlow");
 
-        textPane.getChildren().add(dialogTextFlow);
+        Label dialogHelpLabel = new Label("Press E to continue");
+        dialogHelpLabel.prefWidthProperty().bind(textVBox.widthProperty());
+        dialogHelpLabel.setFont(new Font(12));
+        dialogHelpLabel.setPadding(new Insets(0, 40, 20, 0));
+        dialogHelpLabel.setAlignment(Pos.CENTER_RIGHT);
 
+        textVBox.getChildren().addAll(dialogTextFlow, dialogHelpLabel);
+
+        textPane.getChildren().add(textVBox);
 
         dialogVBox.getChildren().add(textPane);
 
