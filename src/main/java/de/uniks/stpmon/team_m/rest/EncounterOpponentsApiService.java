@@ -3,10 +3,7 @@ package de.uniks.stpmon.team_m.rest;
 import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.dto.UpdateOpponentDto;
 import io.reactivex.rxjava3.core.Observable;
-import retrofit2.http.DELETE;
-import retrofit2.http.GET;
-import retrofit2.http.PATCH;
-import retrofit2.http.Path;
+import retrofit2.http.*;
 
 import java.util.List;
 
@@ -21,7 +18,7 @@ public interface EncounterOpponentsApiService {
     Observable<Opponent> getOpponent(@Path("regionId") String regionId, @Path("encounterId") String encounterId, @Path("opponentId") String opponentId);
 
     @PATCH("regions/{regionId}/trainers/{encounterId}/opponents/{opponentId}")
-    Observable<UpdateOpponentDto> updateOpponent(@Path("regionId") String regionId, @Path("encounterId") String encounterId, @Path("opponentId") String opponentId);
+    Observable<Opponent> updateOpponent(@Path("regionId") String regionId, @Path("encounterId") String encounterId, @Path("opponentId") String opponentId, @Body UpdateOpponentDto dto);
 
     @DELETE("regions/{regionId}/trainers/{encounterId}/opponents/{opponentId}")
     Observable<Opponent> deleteOpponent(@Path("regionId") String regionId, @Path("encounterId") String encounterId, @Path("opponentId") String opponentId);
