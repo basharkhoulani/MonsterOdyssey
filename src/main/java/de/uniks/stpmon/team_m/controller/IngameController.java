@@ -991,16 +991,15 @@ public class IngameController extends Controller {
         dialogTextFlow.prefHeightProperty().bind(textPane.heightProperty());
         dialogTextFlow.setPadding(new Insets(15));
 
-        dialogTextFlow.setStyle("-fx-background-color: rgba(0, 0, 255, 0.5);");
         dialogTextFlow.getChildren().add(new Text("hallo :)"));
 
+        dialogTextFlow.getStyleClass().add("dialogTextFlow");
+
         textPane.getChildren().add(dialogTextFlow);
-        textPane.setStyle("-fx-background-color: rgba(0, 255, 0, 0.5);");
 
 
         dialogVBox.getChildren().add(textPane);
 
-        dialogVBox.setStyle("-fx-background-color: rgba(255, 0, 0, 0.5);");
         stackPane.getChildren().add(dialogVBox);
 
         return dialogVBox;
