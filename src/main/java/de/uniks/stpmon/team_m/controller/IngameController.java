@@ -175,11 +175,6 @@ public class IngameController extends Controller {
                 int currentDirection = trainerStorageProvider.get().getDirection();
 
                 Trainer npc = checkTileInFront(currentXPosition, currentYPosition, currentDirection);
-                if (npc != null) {
-                    if (npc.npc().encountered().contains(trainerStorageProvider.get().getTrainer()._id())) {
-                        System.out.println("dieser Trainer hat der npc encountered");
-                    }
-                }
             }
             lastKeyEventTimeStamp = System.currentTimeMillis();
 
@@ -934,6 +929,33 @@ public class IngameController extends Controller {
         }
         return null;
     }
+
+    /**
+     * Sends a talk event to a specific npc to the UDP Client
+     * @param npc The npc that has been talked to
+     * @param selection OPTIONAL: if npc has selection. Pass null if not
+     */
+    public void encounterNPC(Trainer npc, int selection) {
+        if (npc.npc() == null) {
+            return;
+        }
+
+        if (npc.npc().encountered().contains(trainerStorageProvider.get().getTrainer()._id())) {
+            // lasse ich erstmal drin, falls man noch irgendwas machen will damit später
+            return;
+        } else {
+            disposables.add(udpEventListenerProvider.get().talk(
+                    npc.area(),
+                    new TalkTrainerDto(
+                            trainerStorageProvider.get().getTrainer()._id(),
+                            npc._id(),
+                            selection
+                    )
+            ).subscribe());
+        }
+    }
+
+
 
     @Override
     public void destroy() {
