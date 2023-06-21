@@ -154,6 +154,7 @@ public class IngameController extends Controller {
     private VBox dialogVBox;
     private DialogController dialogController;
     private Trainer currentNpc;
+    private NpcTextManager npcTextManager;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -201,7 +202,7 @@ public class IngameController extends Controller {
                     if (this.currentNpc != null) {
                         inDialog = true;
 
-                        this.dialogController = new DialogController(this.currentNpc, createDialogVBox(), checkIfNpcEncounteredPlayer(this.currentNpc));
+                        this.dialogController = new DialogController(this.currentNpc, createDialogVBox(), checkIfNpcEncounteredPlayer(this.currentNpc), npcTextManager);
                     }
                 }
             }
@@ -259,6 +260,8 @@ public class IngameController extends Controller {
                 trainerSpriteAnimation.stay(1);
             }
         };
+
+        this.npcTextManager = new NpcTextManager(resources);
     }
 
     /**

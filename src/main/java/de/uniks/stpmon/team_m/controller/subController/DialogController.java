@@ -23,11 +23,10 @@ public class DialogController extends Controller {
     private final int amountOfTexts;
 
     @Inject
-    public DialogController(Trainer npc, TextFlow dialogTextFlow, boolean alreadyEncountered) {
+    public DialogController(Trainer npc, TextFlow dialogTextFlow, boolean alreadyEncountered, NpcTextManager npcTextManager) {
         this.npc = npc;
         this.alreadyEncountered = alreadyEncountered;
 
-        NpcTextManager npcTextManager = NpcTextManager.getInstance();
         if (alreadyEncountered) {
             this.npcTexts = npcTextManager.getNpcTexts(npc._id() + "alreadyEncountered");
         } else {

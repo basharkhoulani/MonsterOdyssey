@@ -1,34 +1,31 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 public class NpcTextManager {
-    private static NpcTextManager instance;
-    private Map<String, String[]> npcTexts;
+    private final Map<String, String[]> npcTexts;
 
-    private NpcTextManager() {
+    public NpcTextManager(ResourceBundle resources) {
         npcTexts = new HashMap<>();
 
-//        String[] defaultTexts = {"%NPC_DEFAULT0", "%NPC_DEFAULT1","%NPC_DEFAULT2"};
-        String[] defaultTexts = {"Hey there, partner!", "How's your adventure going so far?", "I'm having a blast!"};
+        String[] defaultTexts = {
+                resources.getString("NPC.DEFAULT0"),
+                resources.getString("NPC.DEFAULT1"),
+                resources.getString("NPC.DEFAULT2")};
 
-        String[] ProfAlbert = {"Hello young fella! For the beginning of your adventure, I want to give you a partner.",
-                                "Please choose between these three cute, little bois:"};
-        String[] ProfAlbertAlreadyEncountered = {"Go into the wide, open world and explore to your hearts content!"};
+        String[] ProfAlbert = {
+                resources.getString("NPC.ALBERT0"),
+                resources.getString("NPC.ALBERT1"),
+                resources.getString("NPC.ALBERT2")};
+        String[] ProfAlbertAlreadyEncountered = {resources.getString("NPC.ALBERT.ALREADY.ENCOUNTERED")};
 
         npcTexts.put("Default", defaultTexts);
 
         npcTexts.put("645e32c6866ace359554a802", ProfAlbert);
         npcTexts.put("645e32c6866ace359554a802alreadyEncountered", ProfAlbertAlreadyEncountered);
-    }
-
-    public static NpcTextManager getInstance() {
-        if (instance == null) {
-            instance = new NpcTextManager();
-        }
-
-        return instance;
     }
 
     public String[] getNpcTexts(String npcID) {
