@@ -22,7 +22,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -1004,11 +1003,11 @@ public class IngameController extends Controller {
 
     public TextFlow createDialogVBox() {
         VBox dialogVBox = new VBox();
-        dialogVBox.setMinWidth(700);
+        dialogVBox.setMinWidth(dialogVBoxWidth);
         dialogVBox.maxWidthProperty().bind(stackPane.widthProperty().divide(2));
-        dialogVBox.setMaxHeight(150);
+        dialogVBox.setMaxHeight(getDialogVBoxHeight);
 
-        int constantSpacer = 150;
+        int constantSpacer = spacerToBottomOfScreen;
         dialogVBox.translateYProperty().bind((anchorPane.heightProperty().subtract(dialogVBox.maxHeightProperty()).subtract(constantSpacer)).divide(2));
 
         Pane textPane = new Pane();
@@ -1021,7 +1020,7 @@ public class IngameController extends Controller {
 
         dialogTextFlow.prefWidthProperty().bind(textPane.widthProperty());
         dialogTextFlow.prefHeightProperty().bind(textPane.heightProperty());
-        dialogTextFlow.setPadding(new Insets(20, 40, 20, 40));
+        dialogTextFlow.setPadding(dialogTextFlowInsets);
 
         VBox textVBox = new VBox();
         textVBox.maxWidthProperty().bind(textPane.widthProperty());
@@ -1030,8 +1029,8 @@ public class IngameController extends Controller {
 
         Label dialogHelpLabel = new Label("Press E to continue");
         dialogHelpLabel.prefWidthProperty().bind(textVBox.widthProperty());
-        dialogHelpLabel.setFont(new Font(12));
-        dialogHelpLabel.setPadding(new Insets(0, 40, 20, 0));
+        dialogHelpLabel.setFont(new Font(helpLabelFontSize));
+        dialogHelpLabel.setPadding(helpLabelInsets);
         dialogHelpLabel.setAlignment(Pos.CENTER_RIGHT);
 
         textVBox.getChildren().addAll(dialogTextFlow, dialogHelpLabel);
