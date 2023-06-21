@@ -959,10 +959,10 @@ public class IngameController extends Controller {
                     checkTileX--;
         }
 
-        for (Trainer trainer : trainers) {
-            if (trainer.x() == checkTileX && trainer.y() == checkTileY) {
-                if (trainer.npc() != null) {
-                    return trainer;
+        for (java.util.Map.Entry<Trainer, Position> set : trainerPositionHashMap.entrySet()) {
+            if (set.getValue().getX() == checkTileX && set.getValue().getY() == checkTileY) {
+                if (set.getKey().npc() != null) {
+                    return set.getKey();
                 }
             }
         }
