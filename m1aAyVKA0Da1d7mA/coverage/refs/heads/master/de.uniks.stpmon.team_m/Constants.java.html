@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Constants.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m</a> &gt; <span class="el_source">Constants.java</span></div><h1>Constants.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m;
 
-<span class="nc" id="L3">public class Constants {</span>
+import javafx.geometry.Insets;
+
+<span class="nc" id="L5">public class Constants {</span>
     // SERVER
     public static final String API_URL = &quot;https://stpmon.uniks.de/api/v3&quot;;
     public static final String WS_URL = &quot;wss://stpmon.uniks.de/ws/v3&quot;;
@@ -67,9 +69,17 @@
     public static final int AVATAR_SIZE = 30;
 
     // INGAME
-<span class="fc" id="L70">    public static int TILE_SIZE = 16;</span>
-<span class="fc" id="L71">    public static double ZERO = 0;</span>
-<span class="fc" id="L72">    public static double ONE = 1;</span>
+<span class="fc" id="L72">    public static int TILE_SIZE = 16;</span>
+<span class="fc" id="L73">    public static double ZERO = 0;</span>
+<span class="fc" id="L74">    public static double ONE = 1;</span>
+
+        // NPC DIALOG
+<span class="fc" id="L77">    public static int dialogVBoxWidth = 700;</span>
+<span class="fc" id="L78">    public static int getDialogVBoxHeight = 150;</span>
+<span class="fc" id="L79">    public static int spacerToBottomOfScreen = 150;</span>
+<span class="fc" id="L80">    public static Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);</span>
+<span class="fc" id="L81">    public static Insets helpLabelInsets = new Insets(0, 40, 20, 0);</span>
+<span class="fc" id="L82">    public static int helpLabelFontSize = 12;</span>
 
     // Error messages
     public static final String HTTP_400 = &quot;400&quot;;
@@ -84,7 +94,7 @@
     public static final int MESSAGEBOX_WIDTH = 170;
 
     // Characters
-<span class="fc" id="L87">    public static final String[] PREMADE_CHARACTERS = {</span>
+<span class="fc" id="L97">    public static final String[] PREMADE_CHARACTERS = {</span>
             &quot;Premade_Character_01.png&quot;, &quot;Premade_Character_02.png&quot;, &quot;Premade_Character_03.png&quot;, &quot;Premade_Character_04.png&quot;,
             &quot;Premade_Character_05.png&quot;, &quot;Premade_Character_06.png&quot;, &quot;Premade_Character_07.png&quot;, &quot;Premade_Character_08.png&quot;,
             &quot;Premade_Character_09.png&quot;, &quot;Premade_Character_10.png&quot;, &quot;Premade_Character_11.png&quot;, &quot;Premade_Character_12.png&quot;,
