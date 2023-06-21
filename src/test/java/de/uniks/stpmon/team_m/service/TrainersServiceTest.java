@@ -168,4 +168,9 @@ public class TrainersServiceTest {
         verify(trainersApiService).deleteTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5");
     }
 
+    @Test
+    void updateTrainerTest(){
+
+    }
+
 }
