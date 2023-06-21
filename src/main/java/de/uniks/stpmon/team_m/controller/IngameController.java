@@ -183,12 +183,13 @@ public class IngameController extends Controller {
             }
             if (event.getCode() == INTERACT_KEY) {
                 if (inDialog) {
-                    if (!this.dialogController.continueDialog()) {
+                    int continueDialogReturn = dialogController.continueDialog();
+                    if (continueDialogReturn < 3) {
                         this.dialogController.destroy();
                         inDialog = false;
                         stackPane.getChildren().remove(dialogVBox);
 
-                        encounterNPC(this.currentNpc, 3);
+                        encounterNPC(this.currentNpc, continueDialogReturn);
                     }
                 } else {
                     int currentXPosition = trainerStorageProvider.get().getX();
@@ -990,8 +991,6 @@ public class IngameController extends Controller {
         }
 
         if (!checkIfNpcEncounteredPlayer(npc)) {
-            System.out.println("mach doch jetzt ma udp hier");
-            System.out.println(trainerStorageProvider.get().getTrainer()._id());
             String trainerID = trainerStorageProvider.get().getTrainer()._id();
 
             disposables.add(udpEventListenerProvider.get().talk(
