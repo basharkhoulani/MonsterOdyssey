@@ -21,6 +21,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -37,8 +38,11 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -312,18 +316,7 @@ public class IngameController extends Controller {
         popupStage = new Stage();
         popupStage.initOwner(app.getStage());
 
-        VBox testi = new VBox();
-        testi.setMinWidth(700);
-        testi.maxWidthProperty().bind(stackPane.widthProperty().divide(2));
-        testi.setMaxHeight(150);
-//        testi.layoutYProperty().bind(stackPane.heightProperty().divide(2));
-//        testi.setTranslateY(100);
-        int constantSpacer = 150;
-        testi.translateYProperty().bind((anchorPane.heightProperty().subtract(testi.maxHeightProperty()).subtract(constantSpacer)).divide(2));
-
-        testi.setStyle("-fx-background-color: rgba(0, 0, 255, 0.5);");
-//        stackPane.setAlignment(Pos.TOP_CENTER);
-        stackPane.getChildren().add(testi);
+        createDialogVBox();
 
         return parent;
     }
@@ -976,6 +969,41 @@ public class IngameController extends Controller {
                     )
             ).subscribe());
         }
+    }
+
+    public VBox createDialogVBox() {
+        VBox dialogVBox = new VBox();
+        dialogVBox.setMinWidth(700);
+        dialogVBox.maxWidthProperty().bind(stackPane.widthProperty().divide(2));
+        dialogVBox.setMaxHeight(150);
+
+        int constantSpacer = 150;
+        dialogVBox.translateYProperty().bind((anchorPane.heightProperty().subtract(dialogVBox.maxHeightProperty()).subtract(constantSpacer)).divide(2));
+
+        Pane textPane = new Pane();
+
+        textPane.prefWidthProperty().bind(dialogVBox.widthProperty());
+        textPane.prefHeightProperty().bind(dialogVBox.heightProperty());
+
+        TextFlow dialogTextFlow = new TextFlow();
+
+        dialogTextFlow.prefWidthProperty().bind(textPane.widthProperty());
+        dialogTextFlow.prefHeightProperty().bind(textPane.heightProperty());
+        dialogTextFlow.setPadding(new Insets(15));
+
+        dialogTextFlow.setStyle("-fx-background-color: rgba(0, 0, 255, 0.5);");
+        dialogTextFlow.getChildren().add(new Text("hallo :)"));
+
+        textPane.getChildren().add(dialogTextFlow);
+        textPane.setStyle("-fx-background-color: rgba(0, 255, 0, 0.5);");
+
+
+        dialogVBox.getChildren().add(textPane);
+
+        dialogVBox.setStyle("-fx-background-color: rgba(255, 0, 0, 0.5);");
+        stackPane.getChildren().add(dialogVBox);
+
+        return dialogVBox;
     }
 
 
