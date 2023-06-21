@@ -233,7 +233,7 @@ public class IngameController extends Controller {
         };
 
         keyReleasedHandler = event -> {
-            if (isChatting) {
+            if (isChatting || inDialog) {
                 return;
             }
             if ((event.getCode() == KeyCode.W)) {
