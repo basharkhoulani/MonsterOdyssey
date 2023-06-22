@@ -36,6 +36,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -67,8 +68,6 @@ public class IngameController extends Controller {
     @FXML
     public Button settingsButton;
     @FXML
-    public VBox ingameVBox;
-    @FXML
     public TextField messageField;
     @FXML
     public Button showChatButton;
@@ -90,6 +89,8 @@ public class IngameController extends Controller {
     public Canvas trainersCanvas;
     @FXML
     public ImageView mapSymbol;
+    @FXML
+    public StackPane root;
 
     @Inject
     Provider<IngameMiniMapController> ingameMiniMapControllerProvider;
@@ -695,7 +696,7 @@ public class IngameController extends Controller {
      */
 
     public void pauseGame() {
-        ingameVBox.setEffect(new BoxBlur(10, 10, 3));
+        root.setEffect(new BoxBlur(10, 10, 3));
         final Alert alert = new Alert(Alert.AlertType.NONE);
         final DialogPane dialogPane = alert.getDialogPane();
         final ButtonType resume = new ButtonType(resources.getString("RESUME.BUTTON.LABEL"));
@@ -728,7 +729,7 @@ public class IngameController extends Controller {
             destroy();
             app.show(mainMenuControllerProvider.get());
         }
-        ingameVBox.setEffect(null);
+        root.setEffect(null);
     }
 
     public void showTrainerSettings() {
@@ -896,16 +897,11 @@ public class IngameController extends Controller {
     }
 
     public void showMap() {
-        Dialog<?> dialog = new Dialog<>();
-        dialog.setTitle(resources.getString("MAP"));
-        dialog.getDialogPane().setContent(ingameMiniMapControllerProvider.get().render());
-        dialog.initOwner(app.getStage());
-        Window popUp = dialog.getDialogPane().getScene().getWindow();
-        popUp.setOnCloseRequest(evt -> {
-                    ((Stage) dialog.getDialogPane().getScene().getWindow()).close();
-                    groundCanvas.requestFocus();
-                }
-        );
-        dialog.showAndWait();
+        StackPane stackPane = (StackPane) root.getChildren().get(0);
+        VBox miniMapVBox = new VBox();
+        miniMapVBox.getStyleClass().add("miniMapContainer");
+        miniMapVBox.getChildren().add(ingameMiniMapControllerProvider.get().render());
+        root.getChildren().add(miniMapVBox);
+        stackPane.setEffect(new BoxBlur(10, 10, 3));
     }
 }
