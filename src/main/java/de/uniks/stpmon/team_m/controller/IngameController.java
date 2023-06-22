@@ -4,6 +4,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
+import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.service.PresetsService;
@@ -21,6 +22,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -35,6 +37,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextFlow;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -90,6 +95,8 @@ public class IngameController extends Controller {
     @FXML
     public ImageView mapSymbol;
     @FXML
+    public StackPane stackPane;
+    @FXML
     public StackPane root;
 
     @Inject
@@ -115,7 +122,9 @@ public class IngameController extends Controller {
     Provider<IngameController> ingameControllerProvider;
 
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
+    public static final KeyCode INTERACT_KEY = KeyCode.E;
     private boolean isChatting = false;
+    private boolean inDialog = false;
 
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
@@ -142,6 +151,10 @@ public class IngameController extends Controller {
     private HashMap<Trainer, TrainerController> trainerControllerHashMap;
     private HashMap<Trainer, Position> trainerPositionHashMap;
     Stage popupStage;
+    private VBox dialogVBox;
+    private DialogController dialogController;
+    private Trainer currentNpc;
+    private NpcTextManager npcTextManager;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -169,7 +182,35 @@ public class IngameController extends Controller {
             if (event.getCode() == PAUSE_MENU_KEY) {
                 pauseGame();
             }
+            if (event.getCode() == INTERACT_KEY) {
+                if (inDialog) {
+                    int continueDialogReturn = dialogController.continueDialog();
+                    if (continueDialogReturn < 3) {
+                        this.dialogController.destroy();
+                        inDialog = false;
+                        stackPane.getChildren().remove(dialogVBox);
+
+                        encounterNPC(this.currentNpc, continueDialogReturn);
+                    }
+                } else {
+                    int currentXPosition = trainerStorageProvider.get().getX();
+                    int currentYPosition = trainerStorageProvider.get().getY();
+                    int currentDirection = trainerStorageProvider.get().getDirection();
+
+                    this.currentNpc = checkTileInFront(currentXPosition, currentYPosition, currentDirection);
+
+                    if (this.currentNpc != null) {
+                        inDialog = true;
+
+                        this.dialogController = new DialogController(this.currentNpc, createDialogVBox(), checkIfNpcEncounteredPlayer(this.currentNpc), npcTextManager);
+                    }
+                }
+            }
             lastKeyEventTimeStamp = System.currentTimeMillis();
+
+            if (inDialog) {
+                return;
+            }
 
             if ((event.getCode() == KeyCode.W)) {
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
@@ -195,7 +236,7 @@ public class IngameController extends Controller {
         };
 
         keyReleasedHandler = event -> {
-            if (isChatting) {
+            if (isChatting || inDialog) {
                 return;
             }
             if ((event.getCode() == KeyCode.W)) {
@@ -211,6 +252,8 @@ public class IngameController extends Controller {
                 trainerSpriteAnimation.stay(1);
             }
         };
+
+        this.npcTextManager = new NpcTextManager(resources);
     }
 
     /**
@@ -272,6 +315,10 @@ public class IngameController extends Controller {
                 trainers -> {
                     this.trainers = FXCollections.observableArrayList(trainers);
                     listenToTrainers(this.trainers);
+
+                    for (Trainer trainer : trainers) {
+                        trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y(), trainer.direction()));
+                    }
                 }, error -> showError(error.getMessage())));
 
         // Setup chat
@@ -300,6 +347,7 @@ public class IngameController extends Controller {
 
         popupStage = new Stage();
         popupStage.initOwner(app.getStage());
+
         return parent;
     }
 
@@ -887,6 +935,116 @@ public class IngameController extends Controller {
         popupStage.setTitle(resources.getString("MONSTERS"));
         popupStage.show();
     }
+
+    /**
+     * This method checks the tile in front of the player, if a npc is standing on that tile.
+     * @param currentX current x coordinate of the player
+     * @param currentY current y coordinate of the player
+     * @param direction current direction of the player
+     * @return The npc TrainerDTO if true, else null
+     */
+    public Trainer checkTileInFront(int currentX, int currentY, int direction) {
+        int checkTileX = currentX;
+        int checkTileY = currentY;
+
+        switch (direction) {
+            case 0 ->             // facing up
+                    checkTileY--;
+            case 1 ->             // facing right
+                    checkTileX++;
+            case 2 ->             // facing down
+                    checkTileY++;
+            case 3 ->             // facing left
+                    checkTileX--;
+        }
+
+        for (java.util.Map.Entry<Trainer, Position> set : trainerPositionHashMap.entrySet()) {
+            if (set.getValue().getX() == checkTileX && set.getValue().getY() == checkTileY) {
+                if (set.getKey().npc() != null) {
+                    return set.getKey();
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean checkIfNpcEncounteredPlayer(Trainer npc) {
+        if (npc.npc().encountered() == null) {
+            return false;
+        }
+
+        return npc.npc().encountered().contains(trainerStorageProvider.get().getTrainer()._id());
+    }
+
+    /**
+     * Sends a talk event to a specific npc to the UDP Client
+     * @param npc The npc that has been talked to
+     * @param selection OPTIONAL: if npc has selection. Pass null if not
+     */
+    public void encounterNPC(Trainer npc, int selection) {
+        if (npc.npc() == null) {
+            return;
+        }
+
+        if (!checkIfNpcEncounteredPlayer(npc)) {
+            String trainerID = trainerStorageProvider.get().getTrainer()._id();
+
+            disposables.add(udpEventListenerProvider.get().talk(
+                    npc.area(),
+                    new TalkTrainerDto(
+                            trainerID,
+                            npc._id(),
+                            selection
+                    )
+            ).subscribe());
+        }
+    }
+
+    public TextFlow createDialogVBox() {
+        VBox dialogVBox = new VBox();
+        dialogVBox.setMinWidth(dialogVBoxWidth);
+        dialogVBox.maxWidthProperty().bind(stackPane.widthProperty().divide(2));
+        dialogVBox.setMaxHeight(getDialogVBoxHeight);
+
+        int constantSpacer = spacerToBottomOfScreen;
+        dialogVBox.translateYProperty().bind((anchorPane.heightProperty().subtract(dialogVBox.maxHeightProperty()).subtract(constantSpacer)).divide(2));
+
+        Pane textPane = new Pane();
+
+        textPane.prefWidthProperty().bind(dialogVBox.widthProperty());
+        textPane.prefHeightProperty().bind(dialogVBox.heightProperty());
+
+        TextFlow dialogTextFlow = new TextFlow();
+        dialogTextFlow.setId("dialogTextFlow");
+
+        dialogTextFlow.prefWidthProperty().bind(textPane.widthProperty());
+        dialogTextFlow.prefHeightProperty().bind(textPane.heightProperty());
+        dialogTextFlow.setPadding(dialogTextFlowInsets);
+
+        VBox textVBox = new VBox();
+        textVBox.maxWidthProperty().bind(textPane.widthProperty());
+        textVBox.maxHeightProperty().bind(textPane.heightProperty());
+        textVBox.getStyleClass().add("dialogTextFlow");
+
+        Label dialogHelpLabel = new Label(resources.getString("NPC.DIALOG.HELP"));
+        dialogHelpLabel.prefWidthProperty().bind(textVBox.widthProperty());
+        dialogHelpLabel.setFont(new Font(helpLabelFontSize));
+        dialogHelpLabel.setPadding(helpLabelInsets);
+        dialogHelpLabel.setAlignment(Pos.CENTER_RIGHT);
+
+        textVBox.getChildren().addAll(dialogTextFlow, dialogHelpLabel);
+
+        textPane.getChildren().add(textVBox);
+
+        dialogVBox.getChildren().add(textPane);
+
+        stackPane.getChildren().add(dialogVBox);
+        this.dialogVBox = dialogVBox;
+
+        return dialogTextFlow;
+    }
+
+
 
     @Override
     public void destroy() {

@@ -1,11 +1,13 @@
 package de.uniks.stpmon.team_m;
 
+import javafx.geometry.Insets;
+
 public class Constants {
     // SERVER
-    public static final String API_URL = "https://stpmon.uniks.de/api/v2";
-    public static final String WS_URL = "wss://stpmon.uniks.de/ws/v2";
+    public static final String API_URL = "https://stpmon.uniks.de/api/v3";
+    public static final String WS_URL = "wss://stpmon.uniks.de/ws/v3";
     public static final String UDP_URL = "stpmon.uniks.de";
-    public static final int SERVER_PORT = 30011;
+    public static final int SERVER_PORT = 30013;
     public static final String MESSAGE_NAMESPACE_GROUPS = "groups";
     public static final String MESSAGE_NAMESPACE_REGIONS = "regions";
     public static final String MESSAGE_NAMESPACE_GLOBAL = "global";
@@ -70,6 +72,14 @@ public class Constants {
     public static int TILE_SIZE = 16;
     public static double ZERO = 0;
     public static double ONE = 1;
+
+        // NPC DIALOG
+    public static int dialogVBoxWidth = 700;
+    public static int getDialogVBoxHeight = 150;
+    public static int spacerToBottomOfScreen = 150;
+    public static Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);
+    public static Insets helpLabelInsets = new Insets(0, 40, 20, 0);
+    public static int helpLabelFontSize = 12;
 
     // Error messages
     public static final String HTTP_400 = "400";
