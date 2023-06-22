@@ -1044,7 +1044,13 @@ public class IngameController extends Controller {
         return dialogTextFlow;
     }
 
-
+    public void showMap() {
+        VBox miniMapVBox = new VBox();
+        miniMapVBox.getStyleClass().add("miniMapContainer");
+        miniMapVBox.getChildren().add(ingameMiniMapControllerProvider.get().render());
+        root.getChildren().add(miniMapVBox);
+        stackPane.setEffect(new BoxBlur(10, 10, 3));
+    }
 
     @Override
     public void destroy() {
@@ -1052,14 +1058,5 @@ public class IngameController extends Controller {
         app.getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);
         app.getStage().getScene().removeEventHandler(KeyEvent.KEY_RELEASED, keyReleasedHandler);
         messageField.removeEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
-    }
-
-    public void showMap() {
-        StackPane stackPane = (StackPane) root.getChildren().get(0);
-        VBox miniMapVBox = new VBox();
-        miniMapVBox.getStyleClass().add("miniMapContainer");
-        miniMapVBox.getChildren().add(ingameMiniMapControllerProvider.get().render());
-        root.getChildren().add(miniMapVBox);
-        stackPane.setEffect(new BoxBlur(10, 10, 3));
     }
 }

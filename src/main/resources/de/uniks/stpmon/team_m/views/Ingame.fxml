@@ -16,14 +16,17 @@
 
 <StackPane fx:id="root" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/17"
            xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
-    <StackPane fx:id="stackPane" cacheShape="false" centerShape="false" onMouseClicked="#paneClicked" scaleShape="false" style="-fx-background-color: black;" VBox.vgrow="ALWAYS">
-        <Canvas fx:id="groundCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER" />
-        <Canvas fx:id="trainersCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER" />
-        <Canvas fx:id="userTrainerCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER" />
-        <Canvas fx:id="trainerCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER" />
-        <Canvas fx:id="overTrainerCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER" />
-        <AnchorPane fx:id="anchorPane" cacheShape="false" centerShape="false" pickOnBounds="false" scaleShape="false" snapToPixel="false" StackPane.alignment="CENTER">
-            <HBox alignment="TOP_RIGHT" fillHeight="false" nodeOrientation="LEFT_TO_RIGHT" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <StackPane fx:id="stackPane" cacheShape="false" centerShape="false" onMouseClicked="#paneClicked" scaleShape="false"
+               style="-fx-background-color: black;" VBox.vgrow="ALWAYS">
+        <Canvas fx:id="groundCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER"/>
+        <Canvas fx:id="trainersCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER"/>
+        <Canvas fx:id="userTrainerCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER"/>
+        <Canvas fx:id="trainerCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER"/>
+        <Canvas fx:id="overTrainerCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER"/>
+        <AnchorPane fx:id="anchorPane" cacheShape="false" centerShape="false" pickOnBounds="false" scaleShape="false"
+                    snapToPixel="false" StackPane.alignment="CENTER">
+            <HBox alignment="TOP_RIGHT" fillHeight="false" nodeOrientation="LEFT_TO_RIGHT" AnchorPane.leftAnchor="0.0"
+                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 <HBox prefHeight="100.0" prefWidth="430.0" HBox.hgrow="SOMETIMES">
                     <ImageView fx:id="mapSymbol" fitHeight="60.0" fitWidth="79.0" onMouseClicked="#showMap"
                                pickOnBounds="true" preserveRatio="true">
