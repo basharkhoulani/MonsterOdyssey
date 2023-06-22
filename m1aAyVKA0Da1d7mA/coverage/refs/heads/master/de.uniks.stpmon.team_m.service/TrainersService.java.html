@@ -2,6 +2,7 @@
 
 import de.uniks.stpmon.team_m.dto.CreateTrainerDto;
 import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.dto.UpdateTrainerDto;
 import de.uniks.stpmon.team_m.rest.TrainersApiService;
 import io.reactivex.rxjava3.core.Observable;
 
@@ -16,9 +17,9 @@ public class TrainersService {
      */
 
     @Inject
-<span class="fc" id="L19">    public TrainersService(TrainersApiService trainersApiService) {</span>
-<span class="fc" id="L20">        this.trainersApiService = trainersApiService;</span>
-<span class="fc" id="L21">    }</span>
+<span class="fc" id="L20">    public TrainersService(TrainersApiService trainersApiService) {</span>
+<span class="fc" id="L21">        this.trainersApiService = trainersApiService;</span>
+<span class="fc" id="L22">    }</span>
 
     /**
      * createTrainer creates a new trainer.
@@ -30,7 +31,7 @@ public class TrainersService {
      */
 
     public Observable&lt;Trainer&gt; createTrainer(String regionId, String name, String image) {
-<span class="fc" id="L33">        return trainersApiService.createTrainer(regionId, new CreateTrainerDto(name, image));</span>
+<span class="fc" id="L34">        return trainersApiService.createTrainer(regionId, new CreateTrainerDto(name, image));</span>
     }
 
     /**
@@ -45,7 +46,7 @@ public class TrainersService {
      */
 
     public Observable&lt;List&lt;Trainer&gt;&gt; getTrainers(String regionId, String area, String user) {
-<span class="fc" id="L48">        return trainersApiService.getTrainers(regionId, area, user);</span>
+<span class="fc" id="L49">        return trainersApiService.getTrainers(regionId, area, user);</span>
     }
 
     /**
@@ -57,7 +58,7 @@ public class TrainersService {
      */
 
     public Observable&lt;Trainer&gt; getTrainer(String regionId, String _id) {
-<span class="fc" id="L60">        return trainersApiService.getTrainer(regionId, _id);</span>
+<span class="fc" id="L61">        return trainersApiService.getTrainer(regionId, _id);</span>
     }
 
     /**
@@ -68,8 +69,13 @@ public class TrainersService {
      * @return The trainer.
      */
 
+    public Observable&lt;Trainer&gt; updateTrainer(String regionId, String _id, String name, String image, List&lt;String&gt; team) {
+<span class="fc" id="L73">        UpdateTrainerDto updateTrainerDto = new UpdateTrainerDto(name, image, team);</span>
+<span class="fc" id="L74">        return trainersApiService.updateTrainer(regionId, _id, updateTrainerDto);</span>
+    }
+
     public Observable&lt;Trainer&gt; deleteTrainer(String regionId, String _id) {
-<span class="fc" id="L72">        return trainersApiService.deleteTrainer(regionId, _id);</span>
+<span class="fc" id="L78">        return trainersApiService.deleteTrainer(regionId, _id);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
