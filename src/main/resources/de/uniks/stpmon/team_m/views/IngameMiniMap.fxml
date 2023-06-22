@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="420.0"
-            prefWidth="490.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane fx:id="mapAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="de.uniks.stpmon.team_m.controller.subController.IngameMiniMapController">
-    <ImageView fitHeight="434.0" fitWidth="400.0" layoutX="45.0" layoutY="10.0" nodeOrientation="INHERIT"
-               pickOnBounds="true" preserveRatio="true">
+    <ImageView fx:id="mapImageView" fitHeight="434.0" fitWidth="400.0" layoutX="50.0" layoutY="50.0"
+               nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" styleClass="mapImageView">
         <Image url="@../images/Map.png"/>
     </ImageView>
+    <Button fx:id="closeButton" layoutX="346.0" layoutY="454.0" mnemonicParsing="false" onAction="#closeMap"
+            prefHeight="32.0" prefWidth="88.0" styleClass="welcomeSceneButton" text="%CLOSE"/>
+    <Label fx:id="regionName" layoutX="50.0" layoutY="14.0" prefHeight="35.0" prefWidth="400.0" text="Region"
+           wrapText="true">
+        <font>
+            <Font name="Comic Sans MS" size="24.0"/>
+        </font>
+    </Label>
 </AnchorPane>
