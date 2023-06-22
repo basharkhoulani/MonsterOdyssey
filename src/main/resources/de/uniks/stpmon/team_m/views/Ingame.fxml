@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox fx:id="ingameVBox" alignment="CENTER" cacheShape="false" centerShape="false" prefHeight="768.0" prefWidth="1024.0" scaleShape="false" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
-    <StackPane cacheShape="false" centerShape="false" onMouseClicked="#paneClicked" scaleShape="false" style="-fx-background-color: black;" VBox.vgrow="ALWAYS">
+    <StackPane fx:id="stackPane" cacheShape="false" centerShape="false" onMouseClicked="#paneClicked" scaleShape="false" style="-fx-background-color: black;" VBox.vgrow="ALWAYS">
         <Canvas fx:id="groundCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER" />
         <Canvas fx:id="trainersCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER" />
         <Canvas fx:id="userTrainerCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER" />
