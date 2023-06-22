@@ -1,5 +1,7 @@
 package de.uniks.stpmon.team_m.dto;
 
+import java.util.List;
+
 public record Opponent(
         String createdAt,
         String updatedAt,
@@ -10,7 +12,7 @@ public record Opponent(
         boolean isNPC,
         String monster,
         Move move,
-        Result result,
-        int coin
+        List<Result> results,
+        int coins
 ) {
 }
