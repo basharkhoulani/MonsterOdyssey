@@ -202,7 +202,12 @@ public class IngameController extends Controller {
                     if (this.currentNpc != null) {
                         inDialog = true;
 
-                        this.dialogController = new DialogController(this.currentNpc, createDialogVBox(), checkIfNpcEncounteredPlayer(this.currentNpc), npcTextManager);
+                        this.dialogController = new DialogController(
+                                this.currentNpc,
+                                createDialogVBox(),
+                                checkIfNpcEncounteredPlayer(this.currentNpc),
+                                npcTextManager,
+                                trainerStorageProvider.get().getTrainer());
                     }
                 }
             }
@@ -946,20 +951,60 @@ public class IngameController extends Controller {
     public Trainer checkTileInFront(int currentX, int currentY, int direction) {
         int checkTileX = currentX;
         int checkTileY = currentY;
+        int checkTileXForNurse = currentX;
+        int checkTileYForNurse = currentY;
 
         switch (direction) {
-            case 0 ->             // facing up
-                    checkTileY--;
-            case 1 ->             // facing right
-                    checkTileX++;
-            case 2 ->             // facing down
-                    checkTileY++;
-            case 3 ->             // facing left
-                    checkTileX--;
+            case 0 -> {                         // facing up
+                checkTileY--;
+                checkTileYForNurse -= 2;
+            }
+            case 1 -> {                         // facing right
+                checkTileX++;
+                checkTileXForNurse += 2;
+            }
+            case 2 -> {                         // facing down
+                checkTileY++;
+                checkTileY += 2;
+            }
+            case 3 -> {                         // facing left
+                checkTileX--;
+                checkTileXForNurse -= 2;
+            }
+            default -> System.err.println("Unknown direction for Trainer: " + direction);
         }
 
+        Trainer tileInFront = searchHashedMapForTrainer(checkTileX, checkTileY);
+
+        if (tileInFront != null) {
+            return tileInFront;
+        } else {
+            Trainer nurseBehindCounter = searchHashedMapForTrainer(checkTileXForNurse, checkTileYForNurse);
+
+            if (nurseBehindCounter == null) {
+                return null;
+            }
+
+            // maybe this if will throw an error in the future. I've looked into the server for all NPC's,
+            // apparently almost all NPC's have the canHeal() boolean, but some only have walkRandomly().
+            // If they don't have the canHeal(), it should be covered by this try/catch
+            try {
+                if (nurseBehindCounter.npc().canHeal()) {
+                    return nurseBehindCounter;
+                } else {
+                    return null;
+                }
+            } catch (Error e) {
+                System.err.println("NPC does not have the canHeal() attribute");
+                e.printStackTrace();
+                return null;
+            }
+        }
+    }
+
+    public Trainer searchHashedMapForTrainer(int checkX, int checkY) {
         for (java.util.Map.Entry<Trainer, Position> set : trainerPositionHashMap.entrySet()) {
-            if (set.getValue().getX() == checkTileX && set.getValue().getY() == checkTileY) {
+            if (set.getValue().getX() == checkX && set.getValue().getY() == checkY) {
                 if (set.getKey().npc() != null) {
                     return set.getKey();
                 }

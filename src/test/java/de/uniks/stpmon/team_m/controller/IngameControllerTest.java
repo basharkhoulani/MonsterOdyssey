@@ -149,23 +149,41 @@ public class IngameControllerTest extends ApplicationTest {
         ));
         doNothing().when(trainerStorage).setMonsters(any());
         lenient().when(presetsService.getCharacter(any())).thenReturn(Observable.empty());
-        when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(new Trainer(
-                "2023-05-30T12:02:57.510Z",
-                "2023-05-30T12:01:57.510Z",
-                "6475e595ac3946b6a812d863",
-                "646bab5cecf584e1be02598a",
-                "6475e595ac3946b6a812d868",
-                "Hans",
-                "Premade_Character_01.png",
-                0,
-                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
-                List.of(1,2),
-                "6475e595ac3946b6a812d863",
-                33,
-                18,
-                0,
-                new NPCInfo(false, false, false, false, null, null)
-        ))));
+        when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(
+                new Trainer(
+                    "2023-05-30T12:02:57.510Z",
+                    "2023-05-30T12:01:57.510Z",
+                    "6475e595ac3946b6a812d863",
+                    "646bab5cecf584e1be02598a",
+                    "6475e595ac3946b6a812d868",
+                    "Hans",
+                    "Premade_Character_01.png",
+                    0,
+                    List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                    List.of(1,2),
+                    "6475e595ac3946b6a812d863",
+                    33,
+                    18,
+                    0,
+                    new NPCInfo(false, false, false, false, null, null)),
+                new Trainer(
+                        "2023-05-30T12:02:57.510Z",
+                        "2023-05-30T12:01:57.510Z",
+                        "6475e595ac3946b6a812d863",
+                        "646bab5cecf584e1be02598a",
+                        "6475e595ac3946b6a812d868",
+                        "Krankenschwester Erna",
+                        "Nurse_2_16x16.png",
+                        0,
+                        List.of(),
+                        List.of(),
+                        "6475e595ac3946b6a812d863",
+                        20,
+                        18,
+                        2,
+                        new NPCInfo(false, false, false, true, null, null))
+                )
+        ));
         ingameController.setValues(bundle, null, null, ingameController, app);
         EventListener eventListenerMock = mock(EventListener.class);
         when(eventListener.get()).thenReturn(eventListenerMock);
@@ -183,11 +201,11 @@ public class IngameControllerTest extends ApplicationTest {
                 "Peter",
                 "Premade_Character_02.png",
                 0,
-                null,
+                List.of("1", "2"),
                 null,
                 "6475e595ac3946b6a812d863",
                 33,
-                19,
+                18,
                 0,
                 new NPCInfo(false, false,false, false, null,null));
 
@@ -312,5 +330,45 @@ public class IngameControllerTest extends ApplicationTest {
         release(KeyCode.E);
 
         Thread.sleep(30);
+    }
+
+    @Test
+    void testNurseDialog() throws InterruptedException {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(20);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(20);    // two tiles apart from Nurse
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        final TextFlow dialogTextFlow = lookup("#dialogTextFlow").query();
+
+        final Text dialogText = (Text) dialogTextFlow.getChildren().get(0);
+        final String firstNurseText = dialogText.getText();
+
+        assertNotEquals("", firstNurseText);
+
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        assertNotEquals(firstNurseText, dialogText.getText());
+    }
+
+    @Test
+    void testTalkToNPC2TilesAway() throws InterruptedException {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(20);
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("dialogTextFlow", node.getId());
+
     }
 }
