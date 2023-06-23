@@ -1146,6 +1146,7 @@ public class IngameController extends Controller {
         dialogVBox.setMinWidth(dialogVBoxWidth);
         dialogVBox.maxWidthProperty().bind(stackPane.widthProperty().divide(2));
         dialogVBox.setMaxHeight(getDialogVBoxHeight);
+        dialogVBox.setId("dialogVBox");
 
         int constantSpacer = spacerToBottomOfScreen;
         dialogVBox.translateYProperty().bind((anchorPane.heightProperty().subtract(dialogVBox.maxHeightProperty()).subtract(constantSpacer)).divide(2));
