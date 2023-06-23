@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChangeLanguageController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">ChangeLanguageController.java</span></div><h1>ChangeLanguageController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.controller.AccountSettingController;
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.LoginController;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.stage.Stage;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import java.util.Locale;
+
+
+public class ChangeLanguageController extends Controller {
+    @FXML
+    public Label changeLanguageLabel;
+
+    @FXML
+    public RadioButton radioButtonLanguageEnglish;
+
+    @FXML
+    public RadioButton radioButtonLanguageGerman;
+
+    @FXML
+    public RadioButton radioButtonLanguageChinese;
+    @FXML
+    public Button applyLanguageButton;
+
+    @Override
+    public Parent render() {
+<span class="fc" id="L36">        final Parent parent = super.render();</span>
+<span class="fc" id="L37">        initRadioButtons();</span>
+<span class="fc" id="L38">        return parent;</span>
+    }
+
+    @Inject
+    Provider&lt;AccountSettingController&gt; accountSettingControllerProvider;
+
+    @Inject
+    Provider&lt;LoginController&gt; loginControllerProvider;
+
+    @Inject
+<span class="fc" id="L48">    public ChangeLanguageController() {</span>
+
+<span class="fc" id="L50">    }</span>
+
+    @Override
+    public String getTitle() {
+<span class="nc" id="L54">        return resources.getString(&quot;CHANGE.LANGUAGE.TITLE&quot;);</span>
+    }
+
+    private void initRadioButtons() {
+<span class="fc" id="L58">        ToggleGroup languageToggleGroup = new ToggleGroup();</span>
+<span class="fc" id="L59">        radioButtonLanguageEnglish.setToggleGroup(languageToggleGroup);</span>
+<span class="fc" id="L60">        radioButtonLanguageGerman.setToggleGroup(languageToggleGroup);</span>
+<span class="fc" id="L61">        radioButtonLanguageChinese.setToggleGroup(languageToggleGroup);</span>
+<span class="fc" id="L62">        Locale locale = resources.getLocale();</span>
+<span class="pc bpc" id="L63" title="3 of 4 branches missed.">        switch (locale.toLanguageTag()) {</span>
+<span class="nc" id="L64">            case &quot;de&quot; -&gt; radioButtonLanguageGerman.setSelected(true);</span>
+<span class="fc" id="L65">            case &quot;en&quot; -&gt; radioButtonLanguageEnglish.setSelected(true);</span>
+<span class="nc" id="L66">            case &quot;zh&quot; -&gt; radioButtonLanguageChinese.setSelected(true);</span>
+        }
+<span class="fc" id="L68">    }</span>
+
+    public void applyLanguage() {
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (radioButtonLanguageEnglish.isSelected()) {</span>
+<span class="nc" id="L72">            setLanguageEnglish();</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        } else if (radioButtonLanguageGerman.isSelected()) {</span>
+<span class="nc" id="L74">            setLanguageGerman();</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        } else if (radioButtonLanguageChinese.isSelected()) {</span>
+<span class="nc" id="L76">            setLanguageChinese();</span>
+        }
+<span class="nc" id="L78">        Stage stage = (Stage) applyLanguageButton.getScene().getWindow();</span>
+<span class="nc" id="L79">        stage.close();</span>
+<span class="nc" id="L80">    }</span>
+
+    public void setLanguageEnglish() {
+<span class="nc" id="L83">        setLanguage(Locale.ENGLISH);</span>
+<span class="nc" id="L84">    }</span>
+
+    public void setLanguageGerman() {
+<span class="nc" id="L87">        setLanguage(Locale.GERMAN);</span>
+<span class="nc" id="L88">    }</span>
+
+    public void setLanguageChinese() {
+<span class="nc" id="L91">        setLanguage(Locale.SIMPLIFIED_CHINESE);</span>
+<span class="nc" id="L92">    }</span>
+
+
+    private void setLanguage(Locale locale) {
+<span class="nc" id="L96">        preferences.put(&quot;locale&quot;, locale.toLanguageTag());</span>
+<span class="nc" id="L97">        toReload.reload(toReload);</span>
+<span class="nc" id="L98">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
