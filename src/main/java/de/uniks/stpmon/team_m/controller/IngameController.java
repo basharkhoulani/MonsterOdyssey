@@ -1071,31 +1071,31 @@ public class IngameController extends Controller {
         // base VBox
         VBox nurseVBox = new VBox();
         nurseVBox.setId("nurseVBox");
-        nurseVBox.setMaxHeight(170);
-        nurseVBox.setMaxWidth(300);
+        nurseVBox.setMaxHeight(popupHeight);
+        nurseVBox.setMaxWidth(popupWidth);
         nurseVBox.getStyleClass().add("dialogTextFlow");
         this.nursePopupVBox = nurseVBox;
 
         // text field
         TextFlow nurseQuestion = new TextFlow(new Text(resources.getString("NURSE.HEAL.QUESTION")));
-        nurseQuestion.setPrefWidth(300);
-        nurseQuestion.setPrefHeight(120);
+        nurseQuestion.setPrefWidth(popupWidth);
+        nurseQuestion.setPrefHeight(textFieldHeight);
         nurseQuestion.setPadding(dialogTextFlowInsets);
         nurseQuestion.setTextAlignment(TextAlignment.CENTER);
 
         // buttonsHBox
         HBox buttonsHBox = new HBox();
-        buttonsHBox.setMaxHeight(50);
-        buttonsHBox.setMaxWidth(300);
+        buttonsHBox.setMaxHeight(buttonsHBoxHeight);
+        buttonsHBox.setMaxWidth(popupWidth);
         buttonsHBox.setAlignment(Pos.TOP_CENTER);
-        buttonsHBox.setSpacing(30);
+        buttonsHBox.setSpacing(buttonsHBoxSpacing);
 
         // yes button
         Button yesButton = new Button(resources.getString("NURSE.YES"));
-        yesButton.setMaxWidth(80);
-        yesButton.setMinWidth(80);
-        yesButton.setMaxHeight(40);
-        yesButton.setMinHeight(40);
+        yesButton.setMaxWidth(nurseButtonWidth);
+        yesButton.setMinWidth(nurseButtonWidth);
+        yesButton.setMaxHeight(nurseButtonHeight);
+        yesButton.setMinHeight(nurseButtonHeight);
         yesButton.getStyleClass().add("buttonsYellow");
         yesButton.setOnAction(event -> {
             continueTrainerDialog(DialogSpecialInteractions.nurseYes);
@@ -1104,10 +1104,10 @@ public class IngameController extends Controller {
 
         // no button
         Button noButton = new Button(resources.getString("NURSE.NO"));
-        noButton.setMaxWidth(80);
-        noButton.setMinWidth(80);
-        noButton.setMaxHeight(40);
-        noButton.setMinHeight(40);
+        noButton.setMaxWidth(nurseButtonWidth);
+        noButton.setMinWidth(nurseButtonWidth);
+        noButton.setMaxHeight(nurseButtonHeight);
+        noButton.setMinHeight(nurseButtonHeight);
         noButton.getStyleClass().add("buttonsWhite");
         noButton.setOnAction(event -> {
             continueTrainerDialog(DialogSpecialInteractions.nurseNo);

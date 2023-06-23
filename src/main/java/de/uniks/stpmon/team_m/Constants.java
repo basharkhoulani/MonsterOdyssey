@@ -87,6 +87,14 @@ public class Constants {
         starterSelection1,
         starterSelection2
     }
+        // Nurse Popup
+    public static int popupHeight = 170;
+    public static int popupWidth = 300;
+    public static int textFieldHeight = 120;
+    public static int buttonsHBoxHeight = 50;
+    public static int buttonsHBoxSpacing = 30;
+    public static int nurseButtonHeight = 40;
+    public static int nurseButtonWidth = 80;
 
     // Error messages
     public static final String HTTP_400 = "400";
