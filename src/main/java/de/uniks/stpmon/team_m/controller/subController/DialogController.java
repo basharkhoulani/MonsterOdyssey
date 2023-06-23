@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -17,15 +18,20 @@ public class DialogController extends Controller {
 
     private final Trainer npc;
     private final boolean alreadyEncountered;
+    private final NpcTextManager npcTextManager;
     private String[] npcTexts;
     private int currentTextIndex;
     private final Text currentText;
     private final int amountOfTexts;
+    private int starterSelection;
+    private boolean alreadySeenNurseDialog = false;
+    private boolean wantsHeal;
 
     @Inject
     public DialogController(Trainer npc, TextFlow dialogTextFlow, boolean alreadyEncountered, NpcTextManager npcTextManager, Trainer player) {
         this.npc = npc;
         this.alreadyEncountered = alreadyEncountered;
+        this.npcTextManager = npcTextManager;
 
         try {
             // check if npc can heal
@@ -61,6 +67,7 @@ public class DialogController extends Controller {
     /**
      * Method to continue the dialog.
      * There are 5 possible return values:
+     * @param specialInteraction Whether the player had a popup with a special interaction with a npc
      *  @-1: Dialog is finished and the npc wasn't Prof. Albert, or he was already encountered
      *  @0: Talked to Prof. Albert and selected the first monster  TODO
      *  @1: Talked to Prof. Albert and selected the second monster  TODO
@@ -68,9 +75,49 @@ public class DialogController extends Controller {
      *  @3: Dialog isn't finished yet
      * @return An int based on some factors, see method description
      */
-    public int continueDialog() {
-        if (++currentTextIndex == amountOfTexts) {
+    public int continueDialog(Constants.DialogSpecialInteractions specialInteraction) {
+        if (specialInteraction != null) {
+            switch (specialInteraction) {
+                case nurseYes -> {
+                    this.currentText.setText(npcTextManager.getSingleNpcText("NPC.NURSE.NO.DIALOG"));
+                    this.wantsHeal = true;
+                    this.alreadySeenNurseDialog = true;
+                }
+                case nurseNo -> {
+                    this.currentText.setText(npcTextManager.getSingleNpcText("NPC.NURSE.YES.DIALOG"));
+                    this.wantsHeal = false;
+                    this.alreadySeenNurseDialog = true;
+                }
+                case starterSelection0 -> {
+                    this.currentText.setText(npcTextManager.getSingleNpcText("NPC.ALBERT.CHOSE.MONSTER"));
+                    this.starterSelection = 0;
+                }
+                case starterSelection1 -> {
+                    this.currentText.setText(npcTextManager.getSingleNpcText("NPC.ALBERT.CHOSE.MONSTER"));
+                    this.starterSelection = 1;
+                }
+                case starterSelection2 -> {
+                    this.currentText.setText(npcTextManager.getSingleNpcText("NPC.ALBERT.CHOSE.MONSTER"));
+                    this.starterSelection = 2;
+                }
+            }
+            return 3;
+        }
+
+        if (++currentTextIndex >= amountOfTexts) {
+            if (alreadySeenNurseDialog) {
+                if (wantsHeal) {
+                    return -1;
+                } else {
+                    return -2;
+                }
+            }
+
+            if (npc.npc().canHeal()) {
+                return 4;
+            }
             if (Objects.equals(this.npc._id(), "645e32c6866ace359554a802") && !this.alreadyEncountered) {
+                // TODO needs to be replaced with this.starterSelection
                 return new Random().nextInt(0, 2);
             } else {
                 return -1;
