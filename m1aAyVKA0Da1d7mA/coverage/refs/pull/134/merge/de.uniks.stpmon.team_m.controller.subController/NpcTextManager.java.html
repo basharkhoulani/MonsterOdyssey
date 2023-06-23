@@ -21,19 +21,31 @@ public class NpcTextManager {
 <span class="fc" id="L21">                resources.getString(&quot;NPC.ALBERT2&quot;)};</span>
 <span class="fc" id="L22">        String[] ProfAlbertAlreadyEncountered = {resources.getString(&quot;NPC.ALBERT.ALREADY.ENCOUNTERED&quot;)};</span>
 
-<span class="fc" id="L24">        npcTexts.put(&quot;Default&quot;, defaultTexts);</span>
+<span class="fc" id="L24">        String[] Nurse = {</span>
+<span class="fc" id="L25">                resources.getString(&quot;NPC.NURSE0&quot;),</span>
+<span class="fc" id="L26">                resources.getString(&quot;NPC.NURSE1&quot;),</span>
+<span class="fc" id="L27">                resources.getString(&quot;NPC.NURSE2&quot;)};</span>
+<span class="fc" id="L28">        String[] NurseNoMons = {</span>
+<span class="fc" id="L29">                resources.getString(&quot;NPC.NURSE.NO.MONS0&quot;),</span>
+<span class="fc" id="L30">                resources.getString(&quot;NPC.NURSE.NO.MONS1&quot;),</span>
+<span class="fc" id="L31">                resources.getString(&quot;NPC.NURSE.NO.MONS2&quot;)};</span>
 
-<span class="fc" id="L26">        npcTexts.put(&quot;645e32c6866ace359554a802&quot;, ProfAlbert);</span>
-<span class="fc" id="L27">        npcTexts.put(&quot;645e32c6866ace359554a802alreadyEncountered&quot;, ProfAlbertAlreadyEncountered);</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L33">        npcTexts.put(&quot;Default&quot;, defaultTexts);</span>
+
+<span class="fc" id="L35">        npcTexts.put(&quot;645e32c6866ace359554a802&quot;, ProfAlbert);</span>
+<span class="fc" id="L36">        npcTexts.put(&quot;645e32c6866ace359554a802alreadyEncountered&quot;, ProfAlbertAlreadyEncountered);</span>
+
+<span class="fc" id="L38">        npcTexts.put(&quot;Nurse&quot;, Nurse);</span>
+<span class="fc" id="L39">        npcTexts.put(&quot;NurseNoMons&quot;, NurseNoMons);</span>
+<span class="fc" id="L40">    }</span>
 
     public String[] getNpcTexts(String npcID) {
-<span class="fc" id="L31">        String[] returnTexts = npcTexts.get(npcID);</span>
+<span class="fc" id="L43">        String[] returnTexts = npcTexts.get(npcID);</span>
 
-<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        if (returnTexts == null) {</span>
-<span class="fc" id="L34">            return npcTexts.get(&quot;Default&quot;);</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        if (returnTexts == null) {</span>
+<span class="fc" id="L46">            return npcTexts.get(&quot;Default&quot;);</span>
         } else {
-<span class="nc" id="L36">            return returnTexts;</span>
+<span class="fc" id="L48">            return returnTexts;</span>
         }
     }
 }
