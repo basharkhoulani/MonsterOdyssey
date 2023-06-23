@@ -87,6 +87,15 @@ public class Constants {
         starterSelection1,
         starterSelection2
     }
+    public enum ContinueDialogReturnValues {
+        dialogNotFinished,
+        dialogFinishedTalkToTrainer,
+        dialogFinishedNoTalkToTrainer,
+        albertDialogFinished0,
+        albertDialogFinished1,
+        albertDialogFinished2,
+        spokenToNurse
+    }
         // Nurse Popup
     public static int popupHeight = 170;
     public static int popupWidth = 300;

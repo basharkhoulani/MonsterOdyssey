@@ -1047,12 +1047,15 @@ public class IngameController extends Controller {
     }
 
     public void continueTrainerDialog(DialogSpecialInteractions specialInteractions) {
-        int continueDialogReturn = dialogController.continueDialog(specialInteractions);
+        ContinueDialogReturnValues continueDialogReturn = dialogController.continueDialog(specialInteractions);
 
         switch (continueDialogReturn) {
-            case -1, 0, 1, 2 -> endDialog(continueDialogReturn, true);
-            case -2 -> endDialog(continueDialogReturn, false);
-            case 4 -> createNurseHealPopup();
+            case dialogFinishedTalkToTrainer -> endDialog(-1, true);
+            case albertDialogFinished0 -> endDialog(0, true);
+            case albertDialogFinished1 -> endDialog(1, true);
+            case albertDialogFinished2 -> endDialog(2, true);
+            case dialogFinishedNoTalkToTrainer -> endDialog(0, false);
+            case spokenToNurse -> createNurseHealPopup();
             default -> {}
         }
     }

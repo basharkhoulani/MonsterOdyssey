@@ -12,6 +12,8 @@ import javax.inject.Provider;
 import java.util.Objects;
 import java.util.Random;
 
+import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
+
 public class DialogController extends Controller {
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
@@ -75,16 +77,17 @@ public class DialogController extends Controller {
      *  @3: Dialog isn't finished yet
      * @return An int based on some factors, see method description
      */
-    public int continueDialog(Constants.DialogSpecialInteractions specialInteraction) {
+    public Constants.ContinueDialogReturnValues continueDialog(Constants.DialogSpecialInteractions specialInteraction) {
+        // check if a special interaction has been triggered
         if (specialInteraction != null) {
             switch (specialInteraction) {
                 case nurseYes -> {
-                    this.currentText.setText(npcTextManager.getSingleNpcText("NPC.NURSE.NO.DIALOG"));
+                    this.currentText.setText(npcTextManager.getSingleNpcText("NPC.NURSE.YES.DIALOG"));
                     this.wantsHeal = true;
                     this.alreadySeenNurseDialog = true;
                 }
                 case nurseNo -> {
-                    this.currentText.setText(npcTextManager.getSingleNpcText("NPC.NURSE.YES.DIALOG"));
+                    this.currentText.setText(npcTextManager.getSingleNpcText("NPC.NURSE.NO.DIALOG"));
                     this.wantsHeal = false;
                     this.alreadySeenNurseDialog = true;
                 }
@@ -101,30 +104,44 @@ public class DialogController extends Controller {
                     this.starterSelection = 2;
                 }
             }
-            return 3;
+            return dialogNotFinished;
         }
 
+        // check if at the end of dialog
         if (++currentTextIndex >= amountOfTexts) {
             if (alreadySeenNurseDialog) {
                 if (wantsHeal) {
-                    return -1;
+                    return dialogFinishedTalkToTrainer;
                 } else {
-                    return -2;
+                    return dialogFinishedNoTalkToTrainer;
                 }
             }
 
             if (npc.npc().canHeal()) {
-                return 4;
+                return spokenToNurse;
             }
+
             if (Objects.equals(this.npc._id(), "645e32c6866ace359554a802") && !this.alreadyEncountered) {
-                // TODO needs to be replaced with this.starterSelection
-                return new Random().nextInt(0, 2);
+                // TODO remove this line when implementing albert special interaction
+                this.starterSelection = new Random().nextInt(0, 2);
+                switch (starterSelection) {
+                    case 0 -> {
+                        return albertDialogFinished0;
+                    }
+                    case 1 -> {
+                        return albertDialogFinished1;
+                    }
+                    case 2 -> {
+                        return albertDialogFinished2;
+                    }
+                }
             } else {
-                return -1;
+                return dialogFinishedTalkToTrainer;
             }
         } else {
             this.currentText.setText(npcTexts[currentTextIndex]);
-            return 3;
+            return dialogNotFinished;
         }
+        return dialogFinishedNoTalkToTrainer;
     }
 }
