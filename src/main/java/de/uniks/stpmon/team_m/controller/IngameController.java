@@ -124,6 +124,7 @@ public class IngameController extends Controller {
     public static final KeyCode INTERACT_KEY = KeyCode.E;
     private boolean isChatting = false;
     private boolean inDialog = false;
+    private boolean inNpcPopup = false;
 
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
@@ -183,7 +184,9 @@ public class IngameController extends Controller {
                 pauseGame();
             }
             if (event.getCode() == INTERACT_KEY) {
-                interactWithTrainer();
+                if (!inNpcPopup) {
+                    interactWithTrainer();
+                }
             }
             lastKeyEventTimeStamp = System.currentTimeMillis();
 
@@ -1102,6 +1105,7 @@ public class IngameController extends Controller {
         yesButton.getStyleClass().add("buttonsYellow");
         yesButton.setOnAction(event -> {
             continueTrainerDialog(DialogSpecialInteractions.nurseYes);
+            inNpcPopup = false;
             this.stackPane.getChildren().remove(nursePopupVBox);
         });
 
@@ -1114,6 +1118,7 @@ public class IngameController extends Controller {
         noButton.getStyleClass().add("buttonsWhite");
         noButton.setOnAction(event -> {
             continueTrainerDialog(DialogSpecialInteractions.nurseNo);
+            inNpcPopup = false;
             this.stackPane.getChildren().remove(nursePopupVBox);
         });
 
@@ -1125,6 +1130,7 @@ public class IngameController extends Controller {
 
         // add nuresVBox to stackPane
         stackPane.getChildren().add(nurseVBox);
+        inNpcPopup = true;
     }
 
     public TextFlow createDialogVBox() {
