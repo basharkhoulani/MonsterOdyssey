@@ -11,33 +11,52 @@ import javax.inject.Provider;
 import java.util.Objects;
 import java.util.Random;
 
-public class DialogController extends Controller {
+<span class="fc" id="L14">public class DialogController extends Controller {</span>
     @Inject
     Provider&lt;TrainerStorage&gt; trainerStorageProvider;
 
     private final Trainer npc;
     private final boolean alreadyEncountered;
-    private final String[] npcTexts;
+    private String[] npcTexts;
     private int currentTextIndex;
     private final Text currentText;
     private final int amountOfTexts;
 
     @Inject
-<span class="fc" id="L26">    public DialogController(Trainer npc, TextFlow dialogTextFlow, boolean alreadyEncountered, NpcTextManager npcTextManager) {</span>
+<span class="fc" id="L26">    public DialogController(Trainer npc, TextFlow dialogTextFlow, boolean alreadyEncountered, NpcTextManager npcTextManager, Trainer player) {</span>
 <span class="fc" id="L27">        this.npc = npc;</span>
 <span class="fc" id="L28">        this.alreadyEncountered = alreadyEncountered;</span>
 
-<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (alreadyEncountered) {</span>
-<span class="nc" id="L31">            this.npcTexts = npcTextManager.getNpcTexts(npc._id() + &quot;alreadyEncountered&quot;);</span>
-        } else {
-<span class="fc" id="L33">            this.npcTexts = npcTextManager.getNpcTexts(npc._id());</span>
-        }
-<span class="fc" id="L35">        this.currentTextIndex = 0;</span>
-<span class="fc" id="L36">        this.currentText = new Text(npcTexts[currentTextIndex]);</span>
-<span class="fc" id="L37">        this.amountOfTexts = npcTexts.length;</span>
+        try {
+            // check if npc can heal
+<span class="fc bfc" id="L32" title="All 2 branches covered.">            if (npc.npc().canHeal()) {</span>
+                // check if player has monsters
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">                if (player.team().size() == 0) {</span>
+<span class="nc" id="L35">                    this.npcTexts = npcTextManager.getNpcTexts(&quot;NurseNoMons&quot;);</span>
+                } else {
+<span class="fc" id="L37">                    this.npcTexts = npcTextManager.getNpcTexts(&quot;Nurse&quot;);</span>
+                }
+            } else {
+                // check if player already encountered player
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">                if (alreadyEncountered) {</span>
+<span class="nc" id="L42">                    this.npcTexts = npcTextManager.getNpcTexts(npc._id() + &quot;alreadyEncountered&quot;);</span>
+                } else {
+<span class="fc" id="L44">                    this.npcTexts = npcTextManager.getNpcTexts(npc._id());</span>
+                }
+            }
 
-<span class="fc" id="L39">        dialogTextFlow.getChildren().add(currentText);</span>
-<span class="fc" id="L40">    }</span>
+<span class="nc" id="L48">        } catch (Error e) {</span>
+<span class="nc" id="L49">            System.err.println(&quot;NPC does not have canHeal() attribute..&quot;);</span>
+<span class="nc" id="L50">            this.npcTexts = npcTextManager.getNpcTexts(npc._id());</span>
+<span class="fc" id="L51">        }</span>
+
+<span class="fc" id="L53">        this.currentTextIndex = 0;</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        assert this.npcTexts != null;</span>
+<span class="fc" id="L55">        this.currentText = new Text(this.npcTexts[currentTextIndex]);</span>
+<span class="fc" id="L56">        this.amountOfTexts = npcTexts.length;</span>
+
+<span class="fc" id="L58">        dialogTextFlow.getChildren().add(currentText);</span>
+<span class="fc" id="L59">    }</span>
 
     /**
      * Method to continue the dialog.
@@ -50,15 +69,15 @@ public class DialogController extends Controller {
      * @return An int based on some factors, see method description
      */
     public int continueDialog() {
-<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (++currentTextIndex == amountOfTexts) {</span>
-<span class="pc bpc" id="L54" title="3 of 4 branches missed.">            if (Objects.equals(this.npc._id(), &quot;645e32c6866ace359554a802&quot;) &amp;&amp; !this.alreadyEncountered) {</span>
-<span class="nc" id="L55">                return new Random().nextInt(0, 2);</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (++currentTextIndex == amountOfTexts) {</span>
+<span class="pc bpc" id="L73" title="3 of 4 branches missed.">            if (Objects.equals(this.npc._id(), &quot;645e32c6866ace359554a802&quot;) &amp;&amp; !this.alreadyEncountered) {</span>
+<span class="nc" id="L74">                return new Random().nextInt(0, 2);</span>
             } else {
-<span class="fc" id="L57">                return -1;</span>
+<span class="fc" id="L76">                return -1;</span>
             }
         } else {
-<span class="fc" id="L60">            this.currentText.setText(npcTexts[currentTextIndex]);</span>
-<span class="fc" id="L61">            return 3;</span>
+<span class="fc" id="L79">            this.currentText.setText(npcTexts[currentTextIndex]);</span>
+<span class="fc" id="L80">            return 3;</span>
         }
     }
 }
