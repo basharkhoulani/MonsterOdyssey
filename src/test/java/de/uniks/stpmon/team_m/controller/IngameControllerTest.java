@@ -353,7 +353,52 @@ public class IngameControllerTest extends ApplicationTest {
         press(KeyCode.E);
         release(KeyCode.E);
 
+        Thread.sleep(30);
+
         assertNotEquals(firstNurseText, dialogText.getText());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        clickOn("No");
+
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("nurseVBox", node.getId());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+
+        final StackPane stackPane2 = lookup("#stackPane").query();
+        final Node node2 = stackPane2.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("dialogTextFlow", node2.getId());
+
+        for (int i = 0; i < 4; i++) {
+            press(KeyCode.E);
+            release(KeyCode.E);
+
+            Thread.sleep(30);
+        }
+
+        clickOn("Yes");
+        // healing of monsters cannot be tested, since this should happen on the server, when you encounter the nurse
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
     }
 
     @Test
