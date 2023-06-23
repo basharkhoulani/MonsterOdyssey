@@ -24,6 +24,7 @@ public class TrainerStorage {
     private Image trainerSpriteChunk;
     private List<Monster> monsters;
     private List<MonsterTypeDto> monsterTypes;
+    private Image regionMap;
 
     @Inject
     public TrainerStorage() {
@@ -37,7 +38,9 @@ public class TrainerStorage {
         this.trainerName = trainerName;
     }
 
-    public void setTrainerSprite(String url) { this.trainerImageUrl = url; }
+    public void setTrainerSprite(String url) {
+        this.trainerImageUrl = url;
+    }
 
     public Trainer getTrainer() {
         return trainer;
@@ -46,6 +49,7 @@ public class TrainerStorage {
     public Region getRegion() {
         return region;
     }
+
     public void setRegion(Region region) {
         this.region = region;
     }
@@ -104,5 +108,13 @@ public class TrainerStorage {
 
     public void setMonsterTypes(List<MonsterTypeDto> monsterTypes) {
         this.monsterTypes = monsterTypes;
+    }
+
+    public Image getRegionMap() {
+        return regionMap;
+    }
+
+    public void setRegionMap(Image regionMap) {
+        this.regionMap = regionMap;
     }
 }

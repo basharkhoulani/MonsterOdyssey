@@ -35,6 +35,7 @@ public class IngameMiniMapController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
         regionName.setText(trainerStorageProvider.get().getRegion().name());
+        mapImageView.setImage(trainerStorageProvider.get().getRegionMap());
         return parent;
     }
 

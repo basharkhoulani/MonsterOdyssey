@@ -5,10 +5,7 @@ import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.dto.Region;
-import de.uniks.stpmon.team_m.service.AreasService;
-import de.uniks.stpmon.team_m.service.MessageService;
-import de.uniks.stpmon.team_m.service.PresetsService;
-import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.Position;
@@ -117,6 +114,8 @@ public class IngameController extends Controller {
     MessageService messageService;
     @Inject
     TrainersService trainersService;
+    @Inject
+    RegionsService regionsService;
 
     @Inject
     Provider<IngameController> ingameControllerProvider;
@@ -155,6 +154,7 @@ public class IngameController extends Controller {
     private DialogController dialogController;
     private Trainer currentNpc;
     private NpcTextManager npcTextManager;
+    public Canvas miniMapCanvas = new Canvas();
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -347,6 +347,8 @@ public class IngameController extends Controller {
 
         popupStage = new Stage();
         popupStage.initOwner(app.getStage());
+
+        loadMiniMap();
 
         return parent;
     }
@@ -587,7 +589,7 @@ public class IngameController extends Controller {
                 setCanvasSettings(map, overTrainerCanvas);
                 for (TileSet tileSet : map.tilesets()) {
                     renderMap(map, tileSetImages.get(getFileName(tileSet.source())), tileSetJsons.get(getFileName(tileSet.source())),
-                            tileSet, map.tilesets().size() > 1);
+                            tileSet, map.tilesets().size() > 1, false);
                 }
                 loadPlayers();
             }
@@ -609,27 +611,28 @@ public class IngameController extends Controller {
      * @param image            Image of the current tileset.
      * @param tileSet          Current tileset.
      * @param multipleTileSets Boolean that is true if there are multiple tilesets.
+     * @param forMiniMap       True if used for miniMap, else False
      */
 
-    private void renderMap(Map map, Image image, TileSet tileSetJson, TileSet tileSet, boolean multipleTileSets) {
+    private void renderMap(Map map, Image image, TileSet tileSetJson, TileSet tileSet, boolean multipleTileSets, boolean forMiniMap) {
         for (Layer layer : map.layers()) {
             if (layer.chunks() == null) {
                 if (layer.data() != null) {
-                    renderData(map, image, tileSet, tileSetJson, multipleTileSets, layer);
+                    renderData(map, image, tileSet, tileSetJson, multipleTileSets, layer, forMiniMap);
                 }
                 continue;
             }
             for (Chunk chunk : layer.chunks()) {
-                renderChunk(map, image, tileSet, tileSetJson, multipleTileSets, chunk);
+                renderChunk(map, image, tileSet, tileSetJson, multipleTileSets, chunk, forMiniMap);
             }
         }
     }
 
-    private void renderData(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, Layer layer) {
-        renderTiles(map, image, tileSet, tileSetJson, multipleTileSets, layer.width(), layer.height(), layer.data(), layer.x(), layer.y());
+    private void renderData(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, Layer layer, boolean forMiniMap) {
+        renderTiles(map, image, tileSet, tileSetJson, multipleTileSets, layer.width(), layer.height(), layer.data(), layer.x(), layer.y(), forMiniMap);
     }
 
-    private void renderTiles(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, int width, int height, List<Integer> data, int x2, int y2) {
+    private void renderTiles(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, int width, int height, List<Integer> data, int x2, int y2, boolean forMiniMap) {
         WritableImage writableImageGround = new WritableImage(width * TILE_SIZE, height * TILE_SIZE);
         WritableImage writableImageTop = new WritableImage(width * TILE_SIZE, height * TILE_SIZE);
         for (int y = 0; y < height; y++) {
@@ -652,8 +655,13 @@ public class IngameController extends Controller {
                 }
             }
         }
-        groundCanvas.getGraphicsContext2D().drawImage(writableImageGround, x2 * TILE_SIZE, y2 * TILE_SIZE);
-        overTrainerCanvas.getGraphicsContext2D().drawImage(writableImageTop, x2 * TILE_SIZE, y2 * TILE_SIZE);
+        if (forMiniMap) {
+            miniMapCanvas.getGraphicsContext2D().drawImage(writableImageGround, x2 * TILE_SIZE, y2 * TILE_SIZE);
+        } else {
+            groundCanvas.getGraphicsContext2D().drawImage(writableImageGround, x2 * TILE_SIZE, y2 * TILE_SIZE);
+            overTrainerCanvas.getGraphicsContext2D().drawImage(writableImageTop, x2 * TILE_SIZE, y2 * TILE_SIZE);
+        }
+
     }
 
     /**
@@ -665,10 +673,11 @@ public class IngameController extends Controller {
      * @param tileSet          Current tileset.
      * @param multipleTileSets Boolean that is true if there are multiple tilesets.
      * @param chunk            Current chunk.
+     * @param forMiniMap       True if used for miniMap, else False
      */
 
-    private void renderChunk(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, Chunk chunk) {
-        renderTiles(map, image, tileSet, tileSetJson, multipleTileSets, chunk.width(), chunk.height(), chunk.data(), chunk.x(), chunk.y());
+    private void renderChunk(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, Chunk chunk, boolean forMiniMap) {
+        renderTiles(map, image, tileSet, tileSetJson, multipleTileSets, chunk.width(), chunk.height(), chunk.data(), chunk.x(), chunk.y(), forMiniMap);
     }
 
     private boolean isRoof(TileSet tileSet, TileSet tileSetJson, int tileId) {
@@ -938,8 +947,9 @@ public class IngameController extends Controller {
 
     /**
      * This method checks the tile in front of the player, if a npc is standing on that tile.
-     * @param currentX current x coordinate of the player
-     * @param currentY current y coordinate of the player
+     *
+     * @param currentX  current x coordinate of the player
+     * @param currentY  current y coordinate of the player
      * @param direction current direction of the player
      * @return The npc TrainerDTO if true, else null
      */
@@ -978,7 +988,8 @@ public class IngameController extends Controller {
 
     /**
      * Sends a talk event to a specific npc to the UDP Client
-     * @param npc The npc that has been talked to
+     *
+     * @param npc       The npc that has been talked to
      * @param selection OPTIONAL: if npc has selection. Pass null if not
      */
     public void encounterNPC(Trainer npc, int selection) {
@@ -1042,6 +1053,41 @@ public class IngameController extends Controller {
         this.dialogVBox = dialogVBox;
 
         return dialogTextFlow;
+    }
+
+    public void loadMiniMap() {
+        if (trainerStorageProvider.get().getRegionMap() != null) {
+            return;
+        }
+        final Map[] map = {null};
+        disposables.add(regionsService.getRegion(
+                trainerStorageProvider.get().getRegion()._id()
+        ).observeOn(FX_SCHEDULER).subscribe(result -> {
+                    map[0] = result.map();
+                    for (TileSet tileSet : map[0].tilesets()) {
+                        final String mapName = getFileName(tileSet.source());
+                        disposables.add(presetsService.getTilesetImage(mapName)
+                                .doOnNext(image -> tileSetImages.put(mapName, image))
+                                .flatMap(image -> presetsService.getTileset(mapName).observeOn(FX_SCHEDULER))
+                                .doOnNext(tileset -> tileSetJsons.put(mapName, tileset))
+                                .observeOn(FX_SCHEDULER).subscribe(image -> {
+                                    setCanvasSettings(map[0], miniMapCanvas);
+                                    for (TileSet tileSet1 : map[0].tilesets()) {
+                                        renderMap(map[0], tileSetImages.get(getFileName(tileSet1.source())), tileSetJsons.get(getFileName(tileSet1.source())),
+                                                tileSet1, map[0].tilesets().size() > 1, true);
+                                    }
+                                    trainerStorageProvider.get().setRegionMap(miniMapCanvas.snapshot(null, null));
+                                }, error -> {
+                                    showError(error.getMessage());
+                                    error.printStackTrace();
+                                }));
+                    }
+                },
+                error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }
+        ));
     }
 
     public void showMap() {
