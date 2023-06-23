@@ -924,7 +924,15 @@ public class IngameController extends Controller {
 
     public void interactWithTrainer() {
         if (inDialog) {
-            continueTrainerDialog(null);
+            try {
+                if (this.currentNpc.npc().canHeal() && trainerStorageProvider.get().getTrainer().team().size() == 0) {
+                    continueTrainerDialog(DialogSpecialInteractions.nurseNoMons);
+                } else {
+                    continueTrainerDialog(null);
+                }
+            } catch (Error e) {
+                continueTrainerDialog(null);
+            }
         } else {
             int currentXPosition = trainerStorageProvider.get().getX();
             int currentYPosition = trainerStorageProvider.get().getY();
@@ -1128,7 +1136,7 @@ public class IngameController extends Controller {
         // add text and buttonsHBox to nurseVBox
         nurseVBox.getChildren().addAll(nurseQuestion, buttonsHBox);
 
-        // add nuresVBox to stackPane
+        // add nurseVBox to stackPane
         stackPane.getChildren().add(nurseVBox);
         inNpcPopup = true;
     }
