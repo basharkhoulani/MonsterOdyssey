@@ -28,6 +28,7 @@ public class DialogController extends Controller {
     private int starterSelection;
     private boolean alreadySeenNurseDialog = false;
     private boolean wantsHeal;
+    private boolean noMons;
 
     @Inject
     public DialogController(Trainer npc, TextFlow dialogTextFlow, boolean alreadyEncountered, NpcTextManager npcTextManager, Trainer player) {
@@ -92,8 +93,14 @@ public class DialogController extends Controller {
                     this.alreadySeenNurseDialog = true;
                 }
                 case nurseNoMons -> {
-                    this.currentText.setText(npcTextManager.getSingleNpcText("NPC.NURSE.NO.MONS1"));
-                    return dialogFinishedNoTalkToTrainer;
+                    if (!this.noMons) {
+                        this.currentText.setText(npcTextManager.getSingleNpcText("NPC.NURSE.NO.MONS1"));
+                        this.wantsHeal = false;
+                        this.alreadySeenNurseDialog = true;
+                        this.noMons = true;
+                    } else {
+                        return dialogFinishedNoTalkToTrainer;
+                    }
                 }
                 case starterSelection0 -> {
                     this.currentText.setText(npcTextManager.getSingleNpcText("NPC.ALBERT.CHOSE.MONSTER"));
