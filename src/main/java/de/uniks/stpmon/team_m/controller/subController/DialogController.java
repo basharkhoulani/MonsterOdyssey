@@ -28,8 +28,9 @@ public class DialogController extends Controller {
         this.alreadyEncountered = alreadyEncountered;
 
         try {
-            // check if player has monsters
+            // check if npc can heal
             if (npc.npc().canHeal()) {
+                // check if player has monsters
                 if (player.team().size() == 0) {
                     this.npcTexts = npcTextManager.getNpcTexts("NurseNoMons");
                 } else {
