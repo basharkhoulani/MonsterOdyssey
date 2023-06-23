@@ -7,7 +7,6 @@ import dagger.Module;
 import dagger.Provides;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.rest.*;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
@@ -20,12 +19,6 @@ import okhttp3.MediaType;
 import okhttp3.ResponseBody;
 import okio.BufferedSource;
 
-import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
-import javax.inject.Provider;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -464,6 +457,11 @@ public class TestModule {
                         0,
                         0,
                         null));
+            }
+
+            @Override
+            public Observable<Trainer> updateTrainer(String regionId, String _id, UpdateTrainerDto dto) {
+                return null;
             }
 
             @Override
