@@ -80,7 +80,7 @@ import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
     public Constants.ContinueDialogReturnValues continueDialog(Constants.DialogSpecialInteractions specialInteraction) {
         // check if a special interaction has been triggered
 <span class="fc bfc" id="L82" title="All 2 branches covered.">        if (specialInteraction != null) {</span>
-<span class="pc bpc" id="L83" title="4 of 6 branches missed.">            switch (specialInteraction) {</span>
+<span class="pc bpc" id="L83" title="5 of 7 branches missed.">            switch (specialInteraction) {</span>
                 case nurseYes -&gt; {
 <span class="fc" id="L85">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.NURSE.YES.DIALOG&quot;));</span>
 <span class="fc" id="L86">                    this.wantsHeal = true;</span>
@@ -91,58 +91,63 @@ import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
 <span class="fc" id="L91">                    this.wantsHeal = false;</span>
 <span class="fc" id="L92">                    this.alreadySeenNurseDialog = true;</span>
 <span class="fc" id="L93">                }</span>
+                case nurseNoMons -&gt; {
+<span class="nc" id="L95">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.NURSE.NO.MONS1&quot;));</span>
+<span class="nc" id="L96">                    this.wantsHeal = false;</span>
+<span class="nc" id="L97">                    this.alreadySeenNurseDialog = true;</span>
+<span class="nc" id="L98">                }</span>
                 case starterSelection0 -&gt; {
-<span class="nc" id="L95">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
-<span class="nc" id="L96">                    this.starterSelection = 0;</span>
-<span class="nc" id="L97">                }</span>
+<span class="nc" id="L100">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
+<span class="nc" id="L101">                    this.starterSelection = 0;</span>
+<span class="nc" id="L102">                }</span>
                 case starterSelection1 -&gt; {
-<span class="nc" id="L99">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
-<span class="nc" id="L100">                    this.starterSelection = 1;</span>
-<span class="nc" id="L101">                }</span>
+<span class="nc" id="L104">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
+<span class="nc" id="L105">                    this.starterSelection = 1;</span>
+<span class="nc" id="L106">                }</span>
                 case starterSelection2 -&gt; {
-<span class="nc" id="L103">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
-<span class="nc" id="L104">                    this.starterSelection = 2;</span>
+<span class="nc" id="L108">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
+<span class="nc" id="L109">                    this.starterSelection = 2;</span>
                 }
             }
-<span class="fc" id="L107">            return dialogNotFinished;</span>
+<span class="fc" id="L112">            return dialogNotFinished;</span>
         }
 
         // check if at the end of dialog
-<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (++currentTextIndex &gt;= amountOfTexts) {</span>
-<span class="fc bfc" id="L112" title="All 2 branches covered.">            if (alreadySeenNurseDialog) {</span>
-<span class="fc bfc" id="L113" title="All 2 branches covered.">                if (wantsHeal) {</span>
-<span class="fc" id="L114">                    return dialogFinishedTalkToTrainer;</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (++currentTextIndex &gt;= amountOfTexts) {</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">            if (alreadySeenNurseDialog) {</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">                if (wantsHeal) {</span>
+<span class="fc" id="L119">                    return dialogFinishedTalkToTrainer;</span>
                 } else {
-<span class="fc" id="L116">                    return dialogFinishedNoTalkToTrainer;</span>
+<span class="fc" id="L121">                    return dialogFinishedNoTalkToTrainer;</span>
                 }
             }
 
-<span class="fc bfc" id="L120" title="All 2 branches covered.">            if (npc.npc().canHeal()) {</span>
-<span class="fc" id="L121">                return spokenToNurse;</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">            if (npc.npc().canHeal()) {</span>
+<span class="fc" id="L126">                return spokenToNurse;</span>
             }
 
-<span class="pc bpc" id="L124" title="3 of 4 branches missed.">            if (Objects.equals(this.npc._id(), &quot;645e32c6866ace359554a802&quot;) &amp;&amp; !this.alreadyEncountered) {</span>
+<span class="pc bpc" id="L129" title="3 of 4 branches missed.">            if (Objects.equals(this.npc._id(), &quot;645e32c6866ace359554a802&quot;) &amp;&amp; !this.alreadyEncountered) {</span>
                 // TODO remove this line when implementing albert special interaction
-<span class="nc" id="L126">                this.starterSelection = new Random().nextInt(0, 2);</span>
-<span class="nc bnc" id="L127" title="All 4 branches missed.">                switch (starterSelection) {</span>
+<span class="nc" id="L131">                this.starterSelection = new Random().nextInt(0, 2);</span>
+<span class="nc bnc" id="L132" title="All 4 branches missed.">                switch (starterSelection) {</span>
                     case 0 -&gt; {
-<span class="nc" id="L129">                        return albertDialogFinished0;</span>
+<span class="nc" id="L134">                        return albertDialogFinished0;</span>
                     }
                     case 1 -&gt; {
-<span class="nc" id="L132">                        return albertDialogFinished1;</span>
+<span class="nc" id="L137">                        return albertDialogFinished1;</span>
                     }
                     case 2 -&gt; {
-<span class="nc" id="L135">                        return albertDialogFinished2;</span>
+<span class="nc" id="L140">                        return albertDialogFinished2;</span>
                     }
                 }
             } else {
-<span class="fc" id="L139">                return dialogFinishedTalkToTrainer;</span>
+<span class="fc" id="L144">                return dialogFinishedTalkToTrainer;</span>
             }
         } else {
-<span class="fc" id="L142">            this.currentText.setText(npcTexts[currentTextIndex]);</span>
-<span class="fc" id="L143">            return dialogNotFinished;</span>
+<span class="fc" id="L147">            this.currentText.setText(npcTexts[currentTextIndex]);</span>
+<span class="fc" id="L148">            return dialogNotFinished;</span>
         }
-<span class="nc" id="L145">        return dialogFinishedNoTalkToTrainer;</span>
+<span class="nc" id="L150">        return dialogFinishedNoTalkToTrainer;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
