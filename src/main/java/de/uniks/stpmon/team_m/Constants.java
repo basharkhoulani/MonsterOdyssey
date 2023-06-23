@@ -80,6 +80,13 @@ public class Constants {
     public static Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);
     public static Insets helpLabelInsets = new Insets(0, 40, 20, 0);
     public static int helpLabelFontSize = 12;
+    public enum DialogSpecialInteractions {
+        nurseYes,
+        nurseNo,
+        starterSelection0,
+        starterSelection1,
+        starterSelection2
+    }
 
     // Error messages
     public static final String HTTP_400 = "400";
