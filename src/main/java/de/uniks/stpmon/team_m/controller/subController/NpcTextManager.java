@@ -6,8 +6,10 @@ import java.util.ResourceBundle;
 
 public class NpcTextManager {
     private final Map<String, String[]> npcTexts;
+    private final ResourceBundle resources;
 
     public NpcTextManager(ResourceBundle resources) {
+        this.resources = resources;
         npcTexts = new HashMap<>();
 
         String[] defaultTexts = {
@@ -26,9 +28,7 @@ public class NpcTextManager {
                 resources.getString("NPC.NURSE1"),
                 resources.getString("NPC.NURSE2")};
         String[] NurseNoMons = {
-                resources.getString("NPC.NURSE.NO.MONS0"),
-                resources.getString("NPC.NURSE.NO.MONS1"),
-                resources.getString("NPC.NURSE.NO.MONS2")};
+                resources.getString("NPC.NURSE.NO.MONS0")};
 
         npcTexts.put("Default", defaultTexts);
 
@@ -47,5 +47,9 @@ public class NpcTextManager {
         } else {
             return returnTexts;
         }
+    }
+
+    public String getSingleNpcText(String resourceIdentifier) {
+        return resources.getString(resourceIdentifier);
     }
 }

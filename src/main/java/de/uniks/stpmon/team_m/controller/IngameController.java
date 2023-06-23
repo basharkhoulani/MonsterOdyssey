@@ -39,6 +39,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -122,6 +124,7 @@ public class IngameController extends Controller {
     public static final KeyCode INTERACT_KEY = KeyCode.E;
     private boolean isChatting = false;
     private boolean inDialog = false;
+    private boolean inNpcPopup = false;
 
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
@@ -149,6 +152,7 @@ public class IngameController extends Controller {
     private HashMap<Trainer, Position> trainerPositionHashMap;
     Stage popupStage;
     private VBox dialogVBox;
+    private VBox nursePopupVBox;
     private DialogController dialogController;
     private Trainer currentNpc;
     private NpcTextManager npcTextManager;
@@ -180,32 +184,8 @@ public class IngameController extends Controller {
                 pauseGame();
             }
             if (event.getCode() == INTERACT_KEY) {
-                if (inDialog) {
-                    int continueDialogReturn = dialogController.continueDialog();
-                    if (continueDialogReturn < 3) {
-                        this.dialogController.destroy();
-                        inDialog = false;
-                        stackPane.getChildren().remove(dialogVBox);
-
-                        encounterNPC(this.currentNpc, continueDialogReturn);
-                    }
-                } else {
-                    int currentXPosition = trainerStorageProvider.get().getX();
-                    int currentYPosition = trainerStorageProvider.get().getY();
-                    int currentDirection = trainerStorageProvider.get().getDirection();
-
-                    this.currentNpc = checkTileInFront(currentXPosition, currentYPosition, currentDirection);
-
-                    if (this.currentNpc != null) {
-                        inDialog = true;
-
-                        this.dialogController = new DialogController(
-                                this.currentNpc,
-                                createDialogVBox(),
-                                checkIfNpcEncounteredPlayer(this.currentNpc),
-                                npcTextManager,
-                                trainerStorageProvider.get().getTrainer());
-                    }
+                if (!inNpcPopup) {
+                    interactWithTrainer();
                 }
             }
             lastKeyEventTimeStamp = System.currentTimeMillis();
@@ -938,6 +918,41 @@ public class IngameController extends Controller {
         popupStage.show();
     }
 
+    /*
+        ** NPC methods **
+     */
+
+    public void interactWithTrainer() {
+        if (inDialog) {
+            try {
+                if (this.currentNpc.npc().canHeal() && trainerStorageProvider.get().getTrainer().team().size() == 0) {
+                    continueTrainerDialog(DialogSpecialInteractions.nurseNoMons);
+                } else {
+                    continueTrainerDialog(null);
+                }
+            } catch (Error e) {
+                continueTrainerDialog(null);
+            }
+        } else {
+            int currentXPosition = trainerStorageProvider.get().getX();
+            int currentYPosition = trainerStorageProvider.get().getY();
+            int currentDirection = trainerStorageProvider.get().getDirection();
+
+            this.currentNpc = checkTileInFront(currentXPosition, currentYPosition, currentDirection);
+
+            if (this.currentNpc != null) {
+                inDialog = true;
+
+                this.dialogController = new DialogController(
+                        this.currentNpc,
+                        createDialogVBox(),
+                        checkIfNpcEncounteredPlayer(this.currentNpc),
+                        npcTextManager,
+                        trainerStorageProvider.get().getTrainer());
+            }
+        }
+    }
+
     /**
      * This method checks the tile in front of the player, if a npc is standing on that tile.
      * @param currentX current x coordinate of the player
@@ -1042,11 +1057,96 @@ public class IngameController extends Controller {
         }
     }
 
+    public void continueTrainerDialog(DialogSpecialInteractions specialInteractions) {
+        ContinueDialogReturnValues continueDialogReturn = dialogController.continueDialog(specialInteractions);
+
+        switch (continueDialogReturn) {
+            case dialogFinishedTalkToTrainer -> endDialog(-1, true);
+            case albertDialogFinished0 -> endDialog(0, true);
+            case albertDialogFinished1 -> endDialog(1, true);
+            case albertDialogFinished2 -> endDialog(2, true);
+            case dialogFinishedNoTalkToTrainer -> endDialog(0, false);
+            case spokenToNurse -> createNurseHealPopup();
+            default -> {}
+        }
+    }
+
+    public void endDialog(int selectionValue, boolean encounterNpc) {
+        this.dialogController.destroy();
+        inDialog = false;
+        stackPane.getChildren().remove(dialogVBox);
+
+        if (encounterNpc) {
+            encounterNPC(this.currentNpc, selectionValue);
+        }
+    }
+
+    public void createNurseHealPopup() {
+        // base VBox
+        VBox nurseVBox = new VBox();
+        nurseVBox.setId("nurseVBox");
+        nurseVBox.setMaxHeight(popupHeight);
+        nurseVBox.setMaxWidth(popupWidth);
+        nurseVBox.getStyleClass().add("dialogTextFlow");
+        this.nursePopupVBox = nurseVBox;
+
+        // text field
+        TextFlow nurseQuestion = new TextFlow(new Text(resources.getString("NURSE.HEAL.QUESTION")));
+        nurseQuestion.setPrefWidth(popupWidth);
+        nurseQuestion.setPrefHeight(textFieldHeight);
+        nurseQuestion.setPadding(dialogTextFlowInsets);
+        nurseQuestion.setTextAlignment(TextAlignment.CENTER);
+
+        // buttonsHBox
+        HBox buttonsHBox = new HBox();
+        buttonsHBox.setMaxHeight(buttonsHBoxHeight);
+        buttonsHBox.setMaxWidth(popupWidth);
+        buttonsHBox.setAlignment(Pos.TOP_CENTER);
+        buttonsHBox.setSpacing(buttonsHBoxSpacing);
+
+        // yes button
+        Button yesButton = new Button(resources.getString("NURSE.YES"));
+        yesButton.setMaxWidth(nurseButtonWidth);
+        yesButton.setMinWidth(nurseButtonWidth);
+        yesButton.setMaxHeight(nurseButtonHeight);
+        yesButton.setMinHeight(nurseButtonHeight);
+        yesButton.getStyleClass().add("buttonsYellow");
+        yesButton.setOnAction(event -> {
+            continueTrainerDialog(DialogSpecialInteractions.nurseYes);
+            inNpcPopup = false;
+            this.stackPane.getChildren().remove(nursePopupVBox);
+        });
+
+        // no button
+        Button noButton = new Button(resources.getString("NURSE.NO"));
+        noButton.setMaxWidth(nurseButtonWidth);
+        noButton.setMinWidth(nurseButtonWidth);
+        noButton.setMaxHeight(nurseButtonHeight);
+        noButton.setMinHeight(nurseButtonHeight);
+        noButton.getStyleClass().add("buttonsWhite");
+        noButton.setOnAction(event -> {
+            continueTrainerDialog(DialogSpecialInteractions.nurseNo);
+            inNpcPopup = false;
+            this.stackPane.getChildren().remove(nursePopupVBox);
+        });
+
+        // add buttons to buttonHBox
+        buttonsHBox.getChildren().addAll(yesButton, noButton);
+
+        // add text and buttonsHBox to nurseVBox
+        nurseVBox.getChildren().addAll(nurseQuestion, buttonsHBox);
+
+        // add nurseVBox to stackPane
+        stackPane.getChildren().add(nurseVBox);
+        inNpcPopup = true;
+    }
+
     public TextFlow createDialogVBox() {
         VBox dialogVBox = new VBox();
         dialogVBox.setMinWidth(dialogVBoxWidth);
         dialogVBox.maxWidthProperty().bind(stackPane.widthProperty().divide(2));
         dialogVBox.setMaxHeight(getDialogVBoxHeight);
+        dialogVBox.setId("dialogVBox");
 
         int constantSpacer = spacerToBottomOfScreen;
         dialogVBox.translateYProperty().bind((anchorPane.heightProperty().subtract(dialogVBox.maxHeightProperty()).subtract(constantSpacer)).divide(2));
