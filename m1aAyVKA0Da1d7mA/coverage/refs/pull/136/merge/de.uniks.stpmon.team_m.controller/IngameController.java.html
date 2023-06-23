@@ -925,8 +925,8 @@ public class IngameController extends Controller {
     public void interactWithTrainer() {
 <span class="fc bfc" id="L926" title="All 2 branches covered.">        if (inDialog) {</span>
             try {
-<span class="pc bpc" id="L928" title="1 of 4 branches missed.">                if (this.currentNpc.npc().canHeal() &amp;&amp; trainerStorageProvider.get().getTrainer().team().size() == 0) {</span>
-<span class="nc" id="L929">                    continueTrainerDialog(DialogSpecialInteractions.nurseNoMons);</span>
+<span class="fc bfc" id="L928" title="All 4 branches covered.">                if (this.currentNpc.npc().canHeal() &amp;&amp; trainerStorageProvider.get().getTrainer().team().size() == 0) {</span>
+<span class="fc" id="L929">                    continueTrainerDialog(DialogSpecialInteractions.nurseNoMons);</span>
                 } else {
 <span class="fc" id="L931">                    continueTrainerDialog(null);</span>
                 }
@@ -1146,67 +1146,68 @@ public class IngameController extends Controller {
 <span class="fc" id="L1146">        dialogVBox.setMinWidth(dialogVBoxWidth);</span>
 <span class="fc" id="L1147">        dialogVBox.maxWidthProperty().bind(stackPane.widthProperty().divide(2));</span>
 <span class="fc" id="L1148">        dialogVBox.setMaxHeight(getDialogVBoxHeight);</span>
+<span class="fc" id="L1149">        dialogVBox.setId(&quot;dialogVBox&quot;);</span>
 
-<span class="fc" id="L1150">        int constantSpacer = spacerToBottomOfScreen;</span>
-<span class="fc" id="L1151">        dialogVBox.translateYProperty().bind((anchorPane.heightProperty().subtract(dialogVBox.maxHeightProperty()).subtract(constantSpacer)).divide(2));</span>
+<span class="fc" id="L1151">        int constantSpacer = spacerToBottomOfScreen;</span>
+<span class="fc" id="L1152">        dialogVBox.translateYProperty().bind((anchorPane.heightProperty().subtract(dialogVBox.maxHeightProperty()).subtract(constantSpacer)).divide(2));</span>
 
-<span class="fc" id="L1153">        Pane textPane = new Pane();</span>
+<span class="fc" id="L1154">        Pane textPane = new Pane();</span>
 
-<span class="fc" id="L1155">        textPane.prefWidthProperty().bind(dialogVBox.widthProperty());</span>
-<span class="fc" id="L1156">        textPane.prefHeightProperty().bind(dialogVBox.heightProperty());</span>
+<span class="fc" id="L1156">        textPane.prefWidthProperty().bind(dialogVBox.widthProperty());</span>
+<span class="fc" id="L1157">        textPane.prefHeightProperty().bind(dialogVBox.heightProperty());</span>
 
-<span class="fc" id="L1158">        TextFlow dialogTextFlow = new TextFlow();</span>
-<span class="fc" id="L1159">        dialogTextFlow.setId(&quot;dialogTextFlow&quot;);</span>
+<span class="fc" id="L1159">        TextFlow dialogTextFlow = new TextFlow();</span>
+<span class="fc" id="L1160">        dialogTextFlow.setId(&quot;dialogTextFlow&quot;);</span>
 
-<span class="fc" id="L1161">        dialogTextFlow.prefWidthProperty().bind(textPane.widthProperty());</span>
-<span class="fc" id="L1162">        dialogTextFlow.prefHeightProperty().bind(textPane.heightProperty());</span>
-<span class="fc" id="L1163">        dialogTextFlow.setPadding(dialogTextFlowInsets);</span>
+<span class="fc" id="L1162">        dialogTextFlow.prefWidthProperty().bind(textPane.widthProperty());</span>
+<span class="fc" id="L1163">        dialogTextFlow.prefHeightProperty().bind(textPane.heightProperty());</span>
+<span class="fc" id="L1164">        dialogTextFlow.setPadding(dialogTextFlowInsets);</span>
 
-<span class="fc" id="L1165">        VBox textVBox = new VBox();</span>
-<span class="fc" id="L1166">        textVBox.maxWidthProperty().bind(textPane.widthProperty());</span>
-<span class="fc" id="L1167">        textVBox.maxHeightProperty().bind(textPane.heightProperty());</span>
-<span class="fc" id="L1168">        textVBox.getStyleClass().add(&quot;dialogTextFlow&quot;);</span>
+<span class="fc" id="L1166">        VBox textVBox = new VBox();</span>
+<span class="fc" id="L1167">        textVBox.maxWidthProperty().bind(textPane.widthProperty());</span>
+<span class="fc" id="L1168">        textVBox.maxHeightProperty().bind(textPane.heightProperty());</span>
+<span class="fc" id="L1169">        textVBox.getStyleClass().add(&quot;dialogTextFlow&quot;);</span>
 
-<span class="fc" id="L1170">        Label dialogHelpLabel = new Label(resources.getString(&quot;NPC.DIALOG.HELP&quot;));</span>
-<span class="fc" id="L1171">        dialogHelpLabel.prefWidthProperty().bind(textVBox.widthProperty());</span>
-<span class="fc" id="L1172">        dialogHelpLabel.setFont(new Font(helpLabelFontSize));</span>
-<span class="fc" id="L1173">        dialogHelpLabel.setPadding(helpLabelInsets);</span>
-<span class="fc" id="L1174">        dialogHelpLabel.setAlignment(Pos.CENTER_RIGHT);</span>
+<span class="fc" id="L1171">        Label dialogHelpLabel = new Label(resources.getString(&quot;NPC.DIALOG.HELP&quot;));</span>
+<span class="fc" id="L1172">        dialogHelpLabel.prefWidthProperty().bind(textVBox.widthProperty());</span>
+<span class="fc" id="L1173">        dialogHelpLabel.setFont(new Font(helpLabelFontSize));</span>
+<span class="fc" id="L1174">        dialogHelpLabel.setPadding(helpLabelInsets);</span>
+<span class="fc" id="L1175">        dialogHelpLabel.setAlignment(Pos.CENTER_RIGHT);</span>
 
-<span class="fc" id="L1176">        textVBox.getChildren().addAll(dialogTextFlow, dialogHelpLabel);</span>
+<span class="fc" id="L1177">        textVBox.getChildren().addAll(dialogTextFlow, dialogHelpLabel);</span>
 
-<span class="fc" id="L1178">        textPane.getChildren().add(textVBox);</span>
+<span class="fc" id="L1179">        textPane.getChildren().add(textVBox);</span>
 
-<span class="fc" id="L1180">        dialogVBox.getChildren().add(textPane);</span>
+<span class="fc" id="L1181">        dialogVBox.getChildren().add(textPane);</span>
 
-<span class="fc" id="L1182">        stackPane.getChildren().add(dialogVBox);</span>
-<span class="fc" id="L1183">        this.dialogVBox = dialogVBox;</span>
+<span class="fc" id="L1183">        stackPane.getChildren().add(dialogVBox);</span>
+<span class="fc" id="L1184">        this.dialogVBox = dialogVBox;</span>
 
-<span class="fc" id="L1185">        return dialogTextFlow;</span>
+<span class="fc" id="L1186">        return dialogTextFlow;</span>
     }
 
 
 
     @Override
     public void destroy() {
-<span class="nc" id="L1192">        super.destroy();</span>
-<span class="nc" id="L1193">        app.getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);</span>
-<span class="nc" id="L1194">        app.getStage().getScene().removeEventHandler(KeyEvent.KEY_RELEASED, keyReleasedHandler);</span>
-<span class="nc" id="L1195">        messageField.removeEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);</span>
-<span class="nc" id="L1196">    }</span>
+<span class="nc" id="L1193">        super.destroy();</span>
+<span class="nc" id="L1194">        app.getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);</span>
+<span class="nc" id="L1195">        app.getStage().getScene().removeEventHandler(KeyEvent.KEY_RELEASED, keyReleasedHandler);</span>
+<span class="nc" id="L1196">        messageField.removeEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);</span>
+<span class="nc" id="L1197">    }</span>
 
     public void showMap() {
-<span class="nc" id="L1199">        Dialog&lt;?&gt; dialog = new Dialog&lt;&gt;();</span>
-<span class="nc" id="L1200">        dialog.setTitle(resources.getString(&quot;MAP&quot;));</span>
-<span class="nc" id="L1201">        dialog.getDialogPane().setContent(ingameMiniMapControllerProvider.get().render());</span>
-<span class="nc" id="L1202">        dialog.initOwner(app.getStage());</span>
-<span class="nc" id="L1203">        Window popUp = dialog.getDialogPane().getScene().getWindow();</span>
-<span class="nc" id="L1204">        popUp.setOnCloseRequest(evt -&gt; {</span>
-<span class="nc" id="L1205">                    ((Stage) dialog.getDialogPane().getScene().getWindow()).close();</span>
-<span class="nc" id="L1206">                    groundCanvas.requestFocus();</span>
-<span class="nc" id="L1207">                }</span>
+<span class="nc" id="L1200">        Dialog&lt;?&gt; dialog = new Dialog&lt;&gt;();</span>
+<span class="nc" id="L1201">        dialog.setTitle(resources.getString(&quot;MAP&quot;));</span>
+<span class="nc" id="L1202">        dialog.getDialogPane().setContent(ingameMiniMapControllerProvider.get().render());</span>
+<span class="nc" id="L1203">        dialog.initOwner(app.getStage());</span>
+<span class="nc" id="L1204">        Window popUp = dialog.getDialogPane().getScene().getWindow();</span>
+<span class="nc" id="L1205">        popUp.setOnCloseRequest(evt -&gt; {</span>
+<span class="nc" id="L1206">                    ((Stage) dialog.getDialogPane().getScene().getWindow()).close();</span>
+<span class="nc" id="L1207">                    groundCanvas.requestFocus();</span>
+<span class="nc" id="L1208">                }</span>
         );
-<span class="nc" id="L1209">        dialog.showAndWait();</span>
-<span class="nc" id="L1210">    }</span>
+<span class="nc" id="L1210">        dialog.showAndWait();</span>
+<span class="nc" id="L1211">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

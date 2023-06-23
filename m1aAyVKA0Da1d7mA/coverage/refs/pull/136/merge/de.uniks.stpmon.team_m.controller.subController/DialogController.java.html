@@ -40,8 +40,8 @@ import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
             // check if npc can heal
 <span class="fc bfc" id="L41" title="All 2 branches covered.">            if (npc.npc().canHeal()) {</span>
                 // check if player has monsters
-<span class="pc bpc" id="L43" title="1 of 2 branches missed.">                if (player.team().size() == 0) {</span>
-<span class="nc" id="L44">                    this.npcTexts = npcTextManager.getNpcTexts(&quot;NurseNoMons&quot;);</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">                if (player.team().size() == 0) {</span>
+<span class="fc" id="L44">                    this.npcTexts = npcTextManager.getNpcTexts(&quot;NurseNoMons&quot;);</span>
                 } else {
 <span class="fc" id="L46">                    this.npcTexts = npcTextManager.getNpcTexts(&quot;Nurse&quot;);</span>
                 }
@@ -81,7 +81,7 @@ import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
     public Constants.ContinueDialogReturnValues continueDialog(Constants.DialogSpecialInteractions specialInteraction) {
         // check if a special interaction has been triggered
 <span class="fc bfc" id="L83" title="All 2 branches covered.">        if (specialInteraction != null) {</span>
-<span class="pc bpc" id="L84" title="5 of 7 branches missed.">            switch (specialInteraction) {</span>
+<span class="pc bpc" id="L84" title="4 of 7 branches missed.">            switch (specialInteraction) {</span>
                 case nurseYes -&gt; {
 <span class="fc" id="L86">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.NURSE.YES.DIALOG&quot;));</span>
 <span class="fc" id="L87">                    this.wantsHeal = true;</span>
@@ -93,13 +93,13 @@ import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
 <span class="fc" id="L93">                    this.alreadySeenNurseDialog = true;</span>
 <span class="fc" id="L94">                }</span>
                 case nurseNoMons -&gt; {
-<span class="nc bnc" id="L96" title="All 2 branches missed.">                    if (!this.noMons) {</span>
-<span class="nc" id="L97">                        this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.NURSE.NO.MONS1&quot;));</span>
-<span class="nc" id="L98">                        this.wantsHeal = false;</span>
-<span class="nc" id="L99">                        this.alreadySeenNurseDialog = true;</span>
-<span class="nc" id="L100">                        this.noMons = true;</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">                    if (!this.noMons) {</span>
+<span class="fc" id="L97">                        this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.NURSE.NO.MONS1&quot;));</span>
+<span class="fc" id="L98">                        this.wantsHeal = false;</span>
+<span class="fc" id="L99">                        this.alreadySeenNurseDialog = true;</span>
+<span class="fc" id="L100">                        this.noMons = true;</span>
                     } else {
-<span class="nc" id="L102">                        return dialogFinishedNoTalkToTrainer;</span>
+<span class="fc" id="L102">                        return dialogFinishedNoTalkToTrainer;</span>
                     }
                 }
                 case starterSelection0 -&gt; {
