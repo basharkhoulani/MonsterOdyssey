@@ -83,6 +83,7 @@ public class Constants {
     public enum DialogSpecialInteractions {
         nurseYes,
         nurseNo,
+        nurseNoMons,
         starterSelection0,
         starterSelection1,
         starterSelection2
