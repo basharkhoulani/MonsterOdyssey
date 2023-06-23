@@ -17,23 +17,41 @@ public class DialogController extends Controller {
 
     private final Trainer npc;
     private final boolean alreadyEncountered;
-    private final String[] npcTexts;
+    private String[] npcTexts;
     private int currentTextIndex;
     private final Text currentText;
     private final int amountOfTexts;
 
     @Inject
-    public DialogController(Trainer npc, TextFlow dialogTextFlow, boolean alreadyEncountered, NpcTextManager npcTextManager) {
+    public DialogController(Trainer npc, TextFlow dialogTextFlow, boolean alreadyEncountered, NpcTextManager npcTextManager, Trainer player) {
         this.npc = npc;
         this.alreadyEncountered = alreadyEncountered;
 
-        if (alreadyEncountered) {
-            this.npcTexts = npcTextManager.getNpcTexts(npc._id() + "alreadyEncountered");
-        } else {
+        try {
+            // check if player has monsters
+            if (npc.npc().canHeal()) {
+                if (player.team().size() == 0) {
+                    this.npcTexts = npcTextManager.getNpcTexts("NurseNoMons");
+                } else {
+                    this.npcTexts = npcTextManager.getNpcTexts("Nurse");
+                }
+            } else {
+                // check if player already encountered player
+                if (alreadyEncountered) {
+                    this.npcTexts = npcTextManager.getNpcTexts(npc._id() + "alreadyEncountered");
+                } else {
+                    this.npcTexts = npcTextManager.getNpcTexts(npc._id());
+                }
+            }
+
+        } catch (Error e) {
+            System.err.println("NPC does not have canHeal() attribute..");
             this.npcTexts = npcTextManager.getNpcTexts(npc._id());
         }
+
         this.currentTextIndex = 0;
-        this.currentText = new Text(npcTexts[currentTextIndex]);
+        assert this.npcTexts != null;
+        this.currentText = new Text(this.npcTexts[currentTextIndex]);
         this.amountOfTexts = npcTexts.length;
 
         dialogTextFlow.getChildren().add(currentText);
