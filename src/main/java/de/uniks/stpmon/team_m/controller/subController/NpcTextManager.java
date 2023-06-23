@@ -6,8 +6,10 @@ import java.util.ResourceBundle;
 
 public class NpcTextManager {
     private final Map<String, String[]> npcTexts;
+    private final ResourceBundle resources;
 
     public NpcTextManager(ResourceBundle resources) {
+        this.resources = resources;
         npcTexts = new HashMap<>();
 
         String[] defaultTexts = {
@@ -47,5 +49,9 @@ public class NpcTextManager {
         } else {
             return returnTexts;
         }
+    }
+
+    public String getSingleNpcText(String resourceIdentifier) {
+        return resources.getString(resourceIdentifier);
     }
 }
