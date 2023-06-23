@@ -93,8 +93,7 @@ public class DialogController extends Controller {
                 }
                 case nurseNoMons -> {
                     this.currentText.setText(npcTextManager.getSingleNpcText("NPC.NURSE.NO.MONS1"));
-                    this.wantsHeal = false;
-                    this.alreadySeenNurseDialog = true;
+                    return dialogFinishedNoTalkToTrainer;
                 }
                 case starterSelection0 -> {
                     this.currentText.setText(npcTextManager.getSingleNpcText("NPC.ALBERT.CHOSE.MONSTER"));
