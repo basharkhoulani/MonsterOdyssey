@@ -5,18 +5,14 @@ import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 
 public class IngameMiniMapController extends Controller {
-    @FXML
-    public Button closeButton;
     @FXML
     public ImageView mapImageView;
     @FXML
@@ -29,19 +25,13 @@ public class IngameMiniMapController extends Controller {
     Provider&lt;TrainerStorage&gt; trainerStorageProvider;
 
     @Inject
-<span class="fc" id="L32">    public IngameMiniMapController() {</span>
-<span class="fc" id="L33">    }</span>
+<span class="fc" id="L28">    public IngameMiniMapController() {</span>
+<span class="fc" id="L29">    }</span>
 
     public Parent render() {
-<span class="fc" id="L36">        final Parent parent = super.render();</span>
-<span class="fc" id="L37">        regionName.setText(trainerStorageProvider.get().getRegion().name());</span>
-<span class="fc" id="L38">        return parent;</span>
+<span class="fc" id="L32">        final Parent parent = super.render();</span>
+<span class="fc" id="L33">        regionName.setText(trainerStorageProvider.get().getRegion().name());</span>
+<span class="fc" id="L34">        return parent;</span>
     }
-
-    public void closeMap() {
-<span class="fc" id="L42">        StackPane root = (StackPane) mapAnchorPane.getParent().getParent();</span>
-<span class="fc" id="L43">        root.getChildren().remove(1);</span>
-<span class="fc" id="L44">        root.getChildren().get(0).setEffect(null);</span>
-<span class="fc" id="L45">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

@@ -6,29 +6,29 @@ import java.util.ResourceBundle;
 
 public class NpcTextManager {
     private final Map&lt;String, String[]&gt; npcTexts;
+    private final ResourceBundle resources;
 
-<span class="fc" id="L10">    public NpcTextManager(ResourceBundle resources) {</span>
-<span class="fc" id="L11">        npcTexts = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L11">    public NpcTextManager(ResourceBundle resources) {</span>
+<span class="fc" id="L12">        this.resources = resources;</span>
+<span class="fc" id="L13">        npcTexts = new HashMap&lt;&gt;();</span>
 
-<span class="fc" id="L13">        String[] defaultTexts = {</span>
-<span class="fc" id="L14">                resources.getString(&quot;NPC.DEFAULT0&quot;),</span>
-<span class="fc" id="L15">                resources.getString(&quot;NPC.DEFAULT1&quot;),</span>
-<span class="fc" id="L16">                resources.getString(&quot;NPC.DEFAULT2&quot;)};</span>
+<span class="fc" id="L15">        String[] defaultTexts = {</span>
+<span class="fc" id="L16">                resources.getString(&quot;NPC.DEFAULT0&quot;),</span>
+<span class="fc" id="L17">                resources.getString(&quot;NPC.DEFAULT1&quot;),</span>
+<span class="fc" id="L18">                resources.getString(&quot;NPC.DEFAULT2&quot;)};</span>
 
-<span class="fc" id="L18">        String[] ProfAlbert = {</span>
-<span class="fc" id="L19">                resources.getString(&quot;NPC.ALBERT0&quot;),</span>
-<span class="fc" id="L20">                resources.getString(&quot;NPC.ALBERT1&quot;),</span>
-<span class="fc" id="L21">                resources.getString(&quot;NPC.ALBERT2&quot;)};</span>
-<span class="fc" id="L22">        String[] ProfAlbertAlreadyEncountered = {resources.getString(&quot;NPC.ALBERT.ALREADY.ENCOUNTERED&quot;)};</span>
+<span class="fc" id="L20">        String[] ProfAlbert = {</span>
+<span class="fc" id="L21">                resources.getString(&quot;NPC.ALBERT0&quot;),</span>
+<span class="fc" id="L22">                resources.getString(&quot;NPC.ALBERT1&quot;),</span>
+<span class="fc" id="L23">                resources.getString(&quot;NPC.ALBERT2&quot;)};</span>
+<span class="fc" id="L24">        String[] ProfAlbertAlreadyEncountered = {resources.getString(&quot;NPC.ALBERT.ALREADY.ENCOUNTERED&quot;)};</span>
 
-<span class="fc" id="L24">        String[] Nurse = {</span>
-<span class="fc" id="L25">                resources.getString(&quot;NPC.NURSE0&quot;),</span>
-<span class="fc" id="L26">                resources.getString(&quot;NPC.NURSE1&quot;),</span>
-<span class="fc" id="L27">                resources.getString(&quot;NPC.NURSE2&quot;)};</span>
-<span class="fc" id="L28">        String[] NurseNoMons = {</span>
-<span class="fc" id="L29">                resources.getString(&quot;NPC.NURSE.NO.MONS0&quot;),</span>
-<span class="fc" id="L30">                resources.getString(&quot;NPC.NURSE.NO.MONS1&quot;),</span>
-<span class="fc" id="L31">                resources.getString(&quot;NPC.NURSE.NO.MONS2&quot;)};</span>
+<span class="fc" id="L26">        String[] Nurse = {</span>
+<span class="fc" id="L27">                resources.getString(&quot;NPC.NURSE0&quot;),</span>
+<span class="fc" id="L28">                resources.getString(&quot;NPC.NURSE1&quot;),</span>
+<span class="fc" id="L29">                resources.getString(&quot;NPC.NURSE2&quot;)};</span>
+<span class="fc" id="L30">        String[] NurseNoMons = {</span>
+<span class="fc" id="L31">                resources.getString(&quot;NPC.NURSE.NO.MONS0&quot;)};</span>
 
 <span class="fc" id="L33">        npcTexts.put(&quot;Default&quot;, defaultTexts);</span>
 
@@ -47,6 +47,10 @@ public class NpcTextManager {
         } else {
 <span class="fc" id="L48">            return returnTexts;</span>
         }
+    }
+
+    public String getSingleNpcText(String resourceIdentifier) {
+<span class="fc" id="L53">        return resources.getString(resourceIdentifier);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
