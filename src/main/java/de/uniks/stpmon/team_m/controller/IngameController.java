@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
@@ -739,19 +740,18 @@ public class IngameController extends Controller {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/uniks/stpmon/team_m/views/IngamePauseMenu.fxml"));
             VBox pauseMenuVBox = loader.load();
             pauseMenuVBox.setStyle("-fx-background-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #CFE9DB");
-
-            AnchorPane.setTopAnchor(pauseMenuVBox, 220.0);
-            AnchorPane.setBottomAnchor(pauseMenuVBox,220.0);
-            AnchorPane.setLeftAnchor(pauseMenuVBox, 350.0);
-            AnchorPane.setRightAnchor(pauseMenuVBox, 350.0);
             pauseMenuVBox.setAlignment(Pos.CENTER);
             pauseMenuVBox.setSpacing(20);
+            pauseMenuVBox.setPrefWidth(250);
+            pauseMenuVBox.setPrefHeight(270);
 
             //Settings Button
             Button settings = new Button();
-            settings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;");
+            settings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: gray; -fx-border-width: 1px; -fx-border-radius: 10px;");
             ImageView imageView = new ImageView();
-            imageView.setImage(new Image("de/uniks/stpmon/team_m/images/SettingSymbol2.png"));
+            if(!GraphicsEnvironment.isHeadless()){
+                imageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(SETTINGSYMBOL2)).toString()));
+            }
             imageView.setFitWidth(40);
             imageView.setFitHeight(40);
             settings.setPrefHeight(50);
@@ -761,9 +761,11 @@ public class IngameController extends Controller {
 
             //Leave Game Button
             Button leaveGame = new Button();
-            leaveGame.setStyle("-fx-background-color: #FF6666; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;");
+            leaveGame.setStyle("-fx-background-color: #F8CECC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: #FF6666; -fx-border-width: 1px; -fx-border-radius: 10px;");
             ImageView imageView2 = new ImageView();
-            imageView2.setImage(new Image("de/uniks/stpmon/team_m/images/GoBackSymbol.PNG"));
+            if(!GraphicsEnvironment.isHeadless()){
+                imageView2.setImage(new Image(Objects.requireNonNull(App.class.getResource(GOBACKSYMBOL)).toString()));
+            }
             imageView2.setFitWidth(40);
             imageView2.setFitHeight(40);
             leaveGame.setPrefHeight(50);
@@ -773,9 +775,11 @@ public class IngameController extends Controller {
 
             //Resume Game Button
             Button resumeGame = new Button();
-            resumeGame.setStyle("-fx-background-color: #6495ED; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;");
+            resumeGame.setStyle("-fx-background-color: #DAE8FC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;-fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: #6495ED; -fx-border-width: 1px; -fx-border-radius: 10px;");
             ImageView imageView3 = new ImageView();
-            imageView3.setImage(new Image("de/uniks/stpmon/team_m/images/PlaySymbol.PNG"));
+            if(!GraphicsEnvironment.isHeadless()){
+                imageView3.setImage(new Image(Objects.requireNonNull(App.class.getResource(PLAYSYMBOL)).toString()));
+            }
             imageView3.setFitWidth(50);
             imageView3.setFitHeight(40);
             resumeGame.setPrefHeight(50);
@@ -783,19 +787,31 @@ public class IngameController extends Controller {
             resumeGame.setGraphic(imageView3);
             resumeGame.setText("  Resume Game");
 
-            pauseMenuVBox.getChildren().addAll(settings,leaveGame,resumeGame);
-            anchorPane.getChildren().add(pauseMenuVBox);
+            pauseMenuVBox.getChildren().addAll(resumeGame,leaveGame,settings);
+            root.getChildren().add(pauseMenuVBox);
+            pauseMenuVBox.requestFocus();
+            stackPane.setEffect(new BoxBlur(10,10,3));
+            buttonsDisableTrue();
+
 
             settings.setOnMouseClicked(event -> {
                 showSettings();
+                pauseMenuVBox.setVisible(false);
+                stackPane.setEffect(null);
+                buttonsDisableFalse();
+
             });
             leaveGame.setOnMouseClicked(event -> {
                 pauseMenuVBox.setVisible(false);
+                stackPane.setEffect(null);
+                buttonsDisableFalse();
                 destroy();
                 app.show(mainMenuControllerProvider.get());
             });
             resumeGame.setOnMouseClicked(event -> {
                 pauseMenuVBox.setVisible(false);
+                stackPane.setEffect(null);
+                buttonsDisableFalse();
             });
 
         } catch (Exception e) {
@@ -803,14 +819,14 @@ public class IngameController extends Controller {
         }
     }
 
-    public void showSettings(){
+    public void showSettings() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/uniks/stpmon/team_m/views/IngamePauseMenu.fxml"));
             VBox settingsMenu = loader.load();
             settingsMenu.setStyle("-fx-background-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #CFE9DB");
 
             AnchorPane.setTopAnchor(settingsMenu, 220.0);
-            AnchorPane.setBottomAnchor(settingsMenu,220.0);
+            AnchorPane.setBottomAnchor(settingsMenu, 220.0);
             AnchorPane.setLeftAnchor(settingsMenu, 350.0);
             AnchorPane.setRightAnchor(settingsMenu, 350.0);
             settingsMenu.setAlignment(Pos.CENTER);
@@ -864,7 +880,7 @@ public class IngameController extends Controller {
             goBack.setGraphic(imageView4);
             goBack.setText("   Go Back");
 
-            settingsMenu.getChildren().addAll(audioSettings,keybindings,trainerSettings,goBack);
+            settingsMenu.getChildren().addAll(audioSettings, keybindings, trainerSettings, goBack);
             anchorPane.getChildren().add(settingsMenu);
 
             audioSettings.setOnMouseClicked(event -> {
@@ -883,7 +899,26 @@ public class IngameController extends Controller {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+
+    public void buttonsDisableTrue(){
+        monstersButton.setDisable(true);
+        pauseButton.setDisable(true);
+        showChatButton.setDisable(true);
+        mapSymbol.setDisable(true);
+        helpSymbol.setDisable(true);
+        messageField.setDisable(true);
+        sendMessageButton.setDisable(true);
+    }
+    public void buttonsDisableFalse(){
+        monstersButton.setDisable(false);
+        pauseButton.setDisable(false);
+        showChatButton.setDisable(false);
+        mapSymbol.setDisable(false);
+        helpSymbol.setDisable(false);
+        messageField.setDisable(false);
+        sendMessageButton.setDisable(false);
     }
 
     public void showTrainerSettings() {
