@@ -229,6 +229,12 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: 0% 50%;
 }
+.pauseButton{
+    -fx-background-image: url("images/PauseSymbol.png");
+    -fx-background-size: 24px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 5% 50%;
+}
 .monstersButton {
     -fx-background-image: url("images/Monster1-without.png");
     -fx-background-size: 24px;

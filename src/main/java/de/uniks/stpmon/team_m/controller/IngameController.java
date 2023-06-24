@@ -23,6 +23,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -59,7 +60,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -74,7 +74,7 @@ public class IngameController extends Controller {
     @FXML
     public Button monstersButton;
     @FXML
-    public Button settingsButton;
+    public Button pauseButton;
     @FXML
     public TextField messageField;
     @FXML
@@ -735,40 +735,73 @@ public class IngameController extends Controller {
      */
 
     public void pauseGame() {
-        root.setEffect(new BoxBlur(10, 10, 3));
-        final Alert alert = new Alert(Alert.AlertType.NONE);
-        final DialogPane dialogPane = alert.getDialogPane();
-        final ButtonType resume = new ButtonType(resources.getString("RESUME.BUTTON.LABEL"));
-        final ButtonType saveAndExit = new ButtonType(resources.getString("SAVE.GAME.AND.LEAVE.BUTTON.LABEL"));
-        dialogPane.getButtonTypes().addAll(resume, saveAndExit);
-        if (!GraphicsEnvironment.isHeadless()) {
-            dialogPane.getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
-            dialogPane.getStyleClass().add("comicSans");
-        }
-        final Button resumeButton = (Button) dialogPane.lookupButton(resume);
-        resumeButton.setOnKeyPressed(event -> {
-            if (!(event.getCode() == PAUSE_MENU_KEY)) {
-                return;
-            }
-            alert.setResult(resume);
-        });
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/uniks/stpmon/team_m/views/IngamePauseMenu.fxml"));
+            VBox pauseMenuVBox = loader.load();
+            pauseMenuVBox.setStyle("-fx-background-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #CFE9DB");
 
-        alert.setTitle(resources.getString("PAUSE.MENU.TITLE"));
-        alert.setHeaderText(null);
-        alert.setGraphic(null);
-        alert.setContentText(resources.getString("PAUSE.MENU.LABEL"));
-        alert.initStyle(StageStyle.UNDECORATED);
-        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);
+            AnchorPane.setTopAnchor(pauseMenuVBox, 220.0);
+            AnchorPane.setBottomAnchor(pauseMenuVBox,220.0);
+            AnchorPane.setLeftAnchor(pauseMenuVBox, 350.0);
+            AnchorPane.setRightAnchor(pauseMenuVBox, 350.0);
+            pauseMenuVBox.setAlignment(Pos.CENTER);
+            pauseMenuVBox.setSpacing(20);
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == resume) {
-            alert.close();
-        } else if (result.isPresent() && result.get() == saveAndExit) {
-            alert.close();
-            destroy();
-            app.show(mainMenuControllerProvider.get());
+            //Settings Button
+            Button settings = new Button();
+            settings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;");
+            ImageView imageView = new ImageView();
+            imageView.setImage(new Image("de/uniks/stpmon/team_m/images/SettingSymbol2.png"));
+            imageView.setFitWidth(40);
+            imageView.setFitHeight(40);
+            settings.setPrefHeight(50);
+            settings.setPrefWidth(200);
+            settings.setGraphic(imageView);
+            settings.setText("    Settings");
+
+            //Leave Game Button
+            Button leaveGame = new Button();
+            leaveGame.setStyle("-fx-background-color: #FF6666; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;");
+            ImageView imageView2 = new ImageView();
+            imageView2.setImage(new Image("de/uniks/stpmon/team_m/images/GoBackSymbol.PNG"));
+            imageView2.setFitWidth(40);
+            imageView2.setFitHeight(40);
+            leaveGame.setPrefHeight(50);
+            leaveGame.setPrefWidth(200);
+            leaveGame.setGraphic(imageView2);
+            leaveGame.setText("  Leave Game");
+
+            //Resume Game Button
+            Button resumeGame = new Button();
+            resumeGame.setStyle("-fx-background-color: #6495ED; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;");
+            ImageView imageView3 = new ImageView();
+            imageView3.setImage(new Image("de/uniks/stpmon/team_m/images/PlaySymbol.PNG"));
+            imageView3.setFitWidth(50);
+            imageView3.setFitHeight(40);
+            resumeGame.setPrefHeight(50);
+            resumeGame.setPrefWidth(200);
+            resumeGame.setGraphic(imageView3);
+            resumeGame.setText("  Resume Game");
+
+            pauseMenuVBox.getChildren().addAll(settings,leaveGame,resumeGame);
+            anchorPane.getChildren().add(pauseMenuVBox);
+
+            settings.setOnMouseClicked(event -> {
+                pauseMenuVBox.setVisible(false);
+                showTrainerSettings();
+            });
+            leaveGame.setOnMouseClicked(event -> {
+                pauseMenuVBox.setVisible(false);
+                destroy();
+                app.show(mainMenuControllerProvider.get());
+            });
+            resumeGame.setOnMouseClicked(event -> {
+                pauseMenuVBox.setVisible(false);
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        root.setEffect(null);
     }
 
     public void showTrainerSettings() {
@@ -1215,7 +1248,7 @@ public class IngameController extends Controller {
                     miniMapVBox = null;
                     stackPane.setEffect(null);
                     monstersButton.setDisable(false);
-                    settingsButton.setDisable(false);
+                    pauseButton.setDisable(false);
                     showChatButton.setDisable(false);
                     mapSymbol.setDisable(false);
                     helpSymbol.setDisable(false);
@@ -1229,7 +1262,7 @@ public class IngameController extends Controller {
         stackPane.setEffect(new BoxBlur(10, 10, 3));
 
         monstersButton.setDisable(true);
-        settingsButton.setDisable(true);
+        pauseButton.setDisable(true);
         showChatButton.setDisable(true);
         mapSymbol.setDisable(true);
         helpSymbol.setDisable(true);
