@@ -353,7 +353,52 @@ public class IngameControllerTest extends ApplicationTest {
         press(KeyCode.E);
         release(KeyCode.E);
 
+        Thread.sleep(30);
+
         assertNotEquals(firstNurseText, dialogText.getText());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        clickOn("No");
+
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("nurseVBox", node.getId());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+
+        final StackPane stackPane2 = lookup("#stackPane").query();
+        final Node node2 = stackPane2.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("dialogVBox", node2.getId());
+
+        for (int i = 0; i < 4; i++) {
+            press(KeyCode.E);
+            release(KeyCode.E);
+
+            Thread.sleep(30);
+        }
+
+        clickOn("Yes");
+        // healing of monsters cannot be tested, since this should happen on the server, when you encounter the nurse
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
     }
 
     @Test
@@ -368,7 +413,49 @@ public class IngameControllerTest extends ApplicationTest {
         final StackPane stackPane = lookup("#stackPane").query();
         final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
 
-        assertNotEquals("dialogTextFlow", node.getId());
+        assertNotEquals("dialogVBox", node.getId());
+    }
 
+    @Test
+    void testNurseDialogWithNoMons() throws InterruptedException {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(20);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(20);    // two tiles apart from Nurse
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+        when(trainerStorageProvider.get().getTrainer()).thenReturn(new Trainer(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "6475e595ac3946b6a812d865",
+                "646bab5cecf584e1be02598a",
+                "6475e595ac3946b6a812d868",
+                "Peter",
+                "Premade_Character_02.png",
+                0,
+                List.of(),
+                null,
+                "6475e595ac3946b6a812d863",
+                33,
+                18,
+                0,
+                new NPCInfo(false, false,false, false, null,null)));
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("dialogVBox", node.getId());
     }
 }

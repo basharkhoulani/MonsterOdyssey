@@ -80,6 +80,31 @@ public class Constants {
     public static Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);
     public static Insets helpLabelInsets = new Insets(0, 40, 20, 0);
     public static int helpLabelFontSize = 12;
+    public enum DialogSpecialInteractions {
+        nurseYes,
+        nurseNo,
+        nurseNoMons,
+        starterSelection0,
+        starterSelection1,
+        starterSelection2
+    }
+    public enum ContinueDialogReturnValues {
+        dialogNotFinished,
+        dialogFinishedTalkToTrainer,
+        dialogFinishedNoTalkToTrainer,
+        albertDialogFinished0,
+        albertDialogFinished1,
+        albertDialogFinished2,
+        spokenToNurse
+    }
+        // Nurse Popup
+    public static int popupHeight = 170;
+    public static int popupWidth = 300;
+    public static int textFieldHeight = 120;
+    public static int buttonsHBoxHeight = 50;
+    public static int buttonsHBoxSpacing = 30;
+    public static int nurseButtonHeight = 40;
+    public static int nurseButtonWidth = 80;
 
     // Error messages
     public static final String HTTP_400 = "400";
