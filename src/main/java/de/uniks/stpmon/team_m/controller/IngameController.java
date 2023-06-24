@@ -796,10 +796,6 @@ public class IngameController extends Controller {
 
             settings.setOnMouseClicked(event -> {
                 showSettings();
-                pauseMenuVBox.setVisible(false);
-                stackPane.setEffect(null);
-                buttonsDisableFalse();
-
             });
             leaveGame.setOnMouseClicked(event -> {
                 pauseMenuVBox.setVisible(false);
@@ -831,12 +827,16 @@ public class IngameController extends Controller {
             AnchorPane.setRightAnchor(settingsMenu, 350.0);
             settingsMenu.setAlignment(Pos.CENTER);
             settingsMenu.setSpacing(20);
+            settingsMenu.setPrefWidth(300);
+            settingsMenu.setPrefHeight(300);
 
             //AudioSettings Button
             Button audioSettings = new Button();
-            audioSettings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;");
+            audioSettings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: gray; -fx-border-width: 1px; -fx-border-radius: 10px;");
             ImageView imageView = new ImageView();
-            imageView.setImage(new Image("de/uniks/stpmon/team_m/images/AudioSymbol.png"));
+            if(!GraphicsEnvironment.isHeadless()){
+                imageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AUDIOSYMBOL)).toString()));
+            }
             imageView.setFitWidth(40);
             imageView.setFitHeight(40);
             audioSettings.setPrefHeight(50);
@@ -846,9 +846,11 @@ public class IngameController extends Controller {
 
             //Keybindings Button
             Button keybindings = new Button();
-            keybindings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;");
+            keybindings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: gray; -fx-border-width: 1px; -fx-border-radius: 10px;");
             ImageView imageView2 = new ImageView();
-            imageView2.setImage(new Image("de/uniks/stpmon/team_m/images/KeybindingsSymbol.png"));
+            if(!GraphicsEnvironment.isHeadless()){
+                imageView2.setImage(new Image(Objects.requireNonNull(App.class.getResource(KEYBINDINGSSYMBOL)).toString()));
+            }
             imageView2.setFitWidth(40);
             imageView2.setFitHeight(40);
             keybindings.setPrefHeight(50);
@@ -858,9 +860,11 @@ public class IngameController extends Controller {
 
             //Trainer Settings Button
             Button trainerSettings = new Button();
-            trainerSettings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;");
+            trainerSettings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: gray; -fx-border-width: 1px; -fx-border-radius: 10px;");
             ImageView imageView3 = new ImageView();
-            imageView3.setImage(new Image("de/uniks/stpmon/team_m/images/SettingSymbol2.png"));
+            if(!GraphicsEnvironment.isHeadless()){
+                imageView3.setImage(new Image(Objects.requireNonNull(App.class.getResource(SETTINGSYMBOL2)).toString()));
+            }
             imageView3.setFitWidth(40);
             imageView3.setFitHeight(40);
             trainerSettings.setPrefHeight(50);
@@ -870,9 +874,11 @@ public class IngameController extends Controller {
 
             //Go back Button
             Button goBack = new Button();
-            goBack.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;");
+            goBack.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: gray; -fx-border-width: 1px; -fx-border-radius: 10px;");
             ImageView imageView4 = new ImageView();
-            imageView4.setImage(new Image("de/uniks/stpmon/team_m/images/GoBackSymbol.PNG"));
+            if(!GraphicsEnvironment.isHeadless()){
+                imageView4.setImage(new Image(Objects.requireNonNull(App.class.getResource(GOBACKSYMBOL)).toString()));
+            }
             imageView4.setFitWidth(40);
             imageView4.setFitHeight(40);
             goBack.setPrefHeight(50);
@@ -881,10 +887,15 @@ public class IngameController extends Controller {
             goBack.setText("   Go Back");
 
             settingsMenu.getChildren().addAll(audioSettings, keybindings, trainerSettings, goBack);
-            anchorPane.getChildren().add(settingsMenu);
+            root.getChildren().add(settingsMenu);
+            settingsMenu.requestFocus();
+            stackPane.setEffect(new BoxBlur(10,10,3));
+            buttonsDisableTrue();
 
             audioSettings.setOnMouseClicked(event -> {
                 settingsMenu.setVisible(false);
+                buttonsDisableFalse();
+                stackPane.setEffect(null);
             });
             keybindings.setOnMouseClicked(event -> {
                 showHelp();
@@ -894,6 +905,7 @@ public class IngameController extends Controller {
             });
             goBack.setOnMouseClicked(event -> {
                 settingsMenu.setVisible(false);
+                pauseGame();
             });
 
         } catch (Exception e) {
