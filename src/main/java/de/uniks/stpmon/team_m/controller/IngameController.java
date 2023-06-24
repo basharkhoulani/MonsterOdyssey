@@ -22,6 +22,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -42,6 +43,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -72,8 +76,6 @@ public class IngameController extends Controller {
     @FXML
     public Button settingsButton;
     @FXML
-    public VBox ingameVBox;
-    @FXML
     public TextField messageField;
     @FXML
     public Button showChatButton;
@@ -97,6 +99,8 @@ public class IngameController extends Controller {
     public ImageView mapSymbol;
     @FXML
     public StackPane stackPane;
+    @FXML
+    public StackPane root;
 
     @Inject
     Provider<IngameMiniMapController> ingameMiniMapControllerProvider;
@@ -156,6 +160,7 @@ public class IngameController extends Controller {
     private DialogController dialogController;
     private Trainer currentNpc;
     private NpcTextManager npcTextManager;
+    private VBox miniMapVBox;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -191,6 +196,10 @@ public class IngameController extends Controller {
             lastKeyEventTimeStamp = System.currentTimeMillis();
 
             if (inDialog) {
+                return;
+            }
+
+            if (miniMapVBox != null) {
                 return;
             }
 
@@ -726,7 +735,7 @@ public class IngameController extends Controller {
      */
 
     public void pauseGame() {
-        ingameVBox.setEffect(new BoxBlur(10, 10, 3));
+        root.setEffect(new BoxBlur(10, 10, 3));
         final Alert alert = new Alert(Alert.AlertType.NONE);
         final DialogPane dialogPane = alert.getDialogPane();
         final ButtonType resume = new ButtonType(resources.getString("RESUME.BUTTON.LABEL"));
@@ -759,7 +768,7 @@ public class IngameController extends Controller {
             destroy();
             app.show(mainMenuControllerProvider.get());
         }
-        ingameVBox.setEffect(null);
+        root.setEffect(null);
     }
 
     public void showTrainerSettings() {
@@ -955,8 +964,9 @@ public class IngameController extends Controller {
 
     /**
      * This method checks the tile in front of the player, if a npc is standing on that tile.
-     * @param currentX current x coordinate of the player
-     * @param currentY current y coordinate of the player
+     *
+     * @param currentX  current x coordinate of the player
+     * @param currentY  current y coordinate of the player
      * @param direction current direction of the player
      * @return The npc TrainerDTO if true, else null
      */
@@ -1035,7 +1045,8 @@ public class IngameController extends Controller {
 
     /**
      * Sends a talk event to a specific npc to the UDP Client
-     * @param npc The npc that has been talked to
+     *
+     * @param npc       The npc that has been talked to
      * @param selection OPTIONAL: if npc has selection. Pass null if not
      */
     public void encounterNPC(Trainer npc, int selection) {
@@ -1186,7 +1197,46 @@ public class IngameController extends Controller {
         return dialogTextFlow;
     }
 
+    public void showMap() {
+        IngameMiniMapController ingameMiniMapController = ingameMiniMapControllerProvider.get();
+        miniMapVBox = new VBox();
+        miniMapVBox.getStyleClass().add("miniMapContainer");
+        miniMapVBox.setPadding(new Insets(0, 0, 8, 0));
+        miniMapVBox.getChildren().add(ingameMiniMapController.render());
 
+        Button closeButton = new Button();
+        closeButton.setId("closeButton");
+        closeButton.setText(resources.getString("CLOSE"));
+        closeButton.setPrefHeight(32);
+        closeButton.setPrefWidth(128);
+        closeButton.getStyleClass().add("welcomeSceneButton");
+        closeButton.setOnAction(event -> {
+                    root.getChildren().remove(miniMapVBox);
+                    miniMapVBox = null;
+                    stackPane.setEffect(null);
+                    monstersButton.setDisable(false);
+                    settingsButton.setDisable(false);
+                    showChatButton.setDisable(false);
+                    mapSymbol.setDisable(false);
+                    helpSymbol.setDisable(false);
+                    messageField.setDisable(false);
+                    sendMessageButton.setDisable(false);
+                }
+        );
+        miniMapVBox.getChildren().add(closeButton);
+        root.getChildren().add(miniMapVBox);
+        miniMapVBox.requestFocus();
+        stackPane.setEffect(new BoxBlur(10, 10, 3));
+
+        monstersButton.setDisable(true);
+        settingsButton.setDisable(true);
+        showChatButton.setDisable(true);
+        mapSymbol.setDisable(true);
+        helpSymbol.setDisable(true);
+        messageField.setDisable(true);
+        sendMessageButton.setDisable(true);
+
+    }
 
     @Override
     public void destroy() {
@@ -1194,19 +1244,5 @@ public class IngameController extends Controller {
         app.getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);
         app.getStage().getScene().removeEventHandler(KeyEvent.KEY_RELEASED, keyReleasedHandler);
         messageField.removeEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
-    }
-
-    public void showMap() {
-        Dialog<?> dialog = new Dialog<>();
-        dialog.setTitle(resources.getString("MAP"));
-        dialog.getDialogPane().setContent(ingameMiniMapControllerProvider.get().render());
-        dialog.initOwner(app.getStage());
-        Window popUp = dialog.getDialogPane().getScene().getWindow();
-        popUp.setOnCloseRequest(evt -> {
-                    ((Stage) dialog.getDialogPane().getScene().getWindow()).close();
-                    groundCanvas.requestFocus();
-                }
-        );
-        dialog.showAndWait();
     }
 }

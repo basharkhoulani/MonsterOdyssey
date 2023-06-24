@@ -335,3 +335,19 @@
     -fx-border-width: 0 1 0 0;
     -fx-border-color: #000000;
 }
+/*********************************************************************************/
+/*************************** Ingame - MiniMap ****************************/
+.miniMapContainer {
+    -fx-alignment: CENTER;
+    -fx-background-color: #d3ebd3;
+    -fx-max-height: 500px;
+    -fx-max-width: 500px;
+    -fx-border-color: black;
+    -fx-border-style: solid;
+    -fx-border-width: 2px;
+}
+.mapImageView {
+    -fx-border-color: black;
+    -fx-border-style: solid;
+    -fx-border-width: 2px;
+}
