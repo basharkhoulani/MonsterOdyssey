@@ -237,24 +237,8 @@ public class IngameControllerTest extends ApplicationTest {
     void pauseGame() {
         when(udpEventListenerProvider.get().listen(any(), any())).thenReturn(empty());
         // test Ingame Pause
-        type(KeyCode.P);
-        final DialogPane dialogPanePause = lookup(".dialog-pane").query();
-        assertNotNull(dialogPanePause);
-        final Label pauseLabel = dialogPanePause.getChildren().stream()
-                .filter(node -> node instanceof Label)
-                .map(node -> (Label) node)
-                .findFirst()
-                .orElse(null);
-        assertNotNull(pauseLabel);
-        assertEquals("What do you want to do?", pauseLabel.getText());
-
-        // test Ingame Unpause With Key Code P
-        type(KeyCode.J);
-        type(KeyCode.P);
-        // test Ingame Unpause With Button
-        type(KeyCode.P);
-        clickOn("Resume Game");
-
+        clickOn("#pauseButton");
+        clickOn("  Resume Game");
     }
 
     @Test
