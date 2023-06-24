@@ -339,7 +339,7 @@
 /*************************** Ingame - MiniMap ****************************/
 .miniMapContainer {
     -fx-alignment: CENTER;
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: #d3ebd3;
     -fx-max-height: 500px;
     -fx-max-width: 500px;
     -fx-border-color: black;
