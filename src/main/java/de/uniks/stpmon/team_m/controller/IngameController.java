@@ -787,8 +787,7 @@ public class IngameController extends Controller {
             anchorPane.getChildren().add(pauseMenuVBox);
 
             settings.setOnMouseClicked(event -> {
-                pauseMenuVBox.setVisible(false);
-                showTrainerSettings();
+                showSettings();
             });
             leaveGame.setOnMouseClicked(event -> {
                 pauseMenuVBox.setVisible(false);
@@ -802,6 +801,89 @@ public class IngameController extends Controller {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void showSettings(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/uniks/stpmon/team_m/views/IngamePauseMenu.fxml"));
+            VBox settingsMenu = loader.load();
+            settingsMenu.setStyle("-fx-background-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #CFE9DB");
+
+            AnchorPane.setTopAnchor(settingsMenu, 220.0);
+            AnchorPane.setBottomAnchor(settingsMenu,220.0);
+            AnchorPane.setLeftAnchor(settingsMenu, 350.0);
+            AnchorPane.setRightAnchor(settingsMenu, 350.0);
+            settingsMenu.setAlignment(Pos.CENTER);
+            settingsMenu.setSpacing(20);
+
+            //AudioSettings Button
+            Button audioSettings = new Button();
+            audioSettings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;");
+            ImageView imageView = new ImageView();
+            imageView.setImage(new Image("de/uniks/stpmon/team_m/images/AudioSymbol.png"));
+            imageView.setFitWidth(40);
+            imageView.setFitHeight(40);
+            audioSettings.setPrefHeight(50);
+            audioSettings.setPrefWidth(250);
+            audioSettings.setGraphic(imageView);
+            audioSettings.setText("Audio Settings");
+
+            //Keybindings Button
+            Button keybindings = new Button();
+            keybindings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;");
+            ImageView imageView2 = new ImageView();
+            imageView2.setImage(new Image("de/uniks/stpmon/team_m/images/KeybindingsSymbol.png"));
+            imageView2.setFitWidth(40);
+            imageView2.setFitHeight(40);
+            keybindings.setPrefHeight(50);
+            keybindings.setPrefWidth(250);
+            keybindings.setGraphic(imageView2);
+            keybindings.setText("Keybindings");
+
+            //Trainer Settings Button
+            Button trainerSettings = new Button();
+            trainerSettings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;");
+            ImageView imageView3 = new ImageView();
+            imageView3.setImage(new Image("de/uniks/stpmon/team_m/images/SettingSymbol2.png"));
+            imageView3.setFitWidth(40);
+            imageView3.setFitHeight(40);
+            trainerSettings.setPrefHeight(50);
+            trainerSettings.setPrefWidth(250);
+            trainerSettings.setGraphic(imageView3);
+            trainerSettings.setText(" Trainer Settings");
+
+            //Go back Button
+            Button goBack = new Button();
+            goBack.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;");
+            ImageView imageView4 = new ImageView();
+            imageView4.setImage(new Image("de/uniks/stpmon/team_m/images/GoBackSymbol.PNG"));
+            imageView4.setFitWidth(40);
+            imageView4.setFitHeight(40);
+            goBack.setPrefHeight(50);
+            goBack.setPrefWidth(250);
+            goBack.setGraphic(imageView4);
+            goBack.setText("   Go Back");
+
+            settingsMenu.getChildren().addAll(audioSettings,keybindings,trainerSettings,goBack);
+            anchorPane.getChildren().add(settingsMenu);
+
+            audioSettings.setOnMouseClicked(event -> {
+                settingsMenu.setVisible(false);
+            });
+            keybindings.setOnMouseClicked(event -> {
+                showHelp();
+            });
+            trainerSettings.setOnMouseClicked(event -> {
+                showTrainerSettings();
+            });
+            goBack.setOnMouseClicked(event -> {
+                settingsMenu.setVisible(false);
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void showTrainerSettings() {
