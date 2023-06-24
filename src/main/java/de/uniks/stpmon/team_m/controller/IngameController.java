@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
@@ -748,7 +749,9 @@ public class IngameController extends Controller {
             Button settings = new Button();
             settings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: gray; -fx-border-width: 1px; -fx-border-radius: 10px;");
             ImageView imageView = new ImageView();
-            imageView.setImage(new Image("de/uniks/stpmon/team_m/images/SettingSymbol2.png"));
+            if(!GraphicsEnvironment.isHeadless()){
+                imageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(SETTINGSYMBOL2)).toString()));
+            }
             imageView.setFitWidth(40);
             imageView.setFitHeight(40);
             settings.setPrefHeight(50);
@@ -760,7 +763,9 @@ public class IngameController extends Controller {
             Button leaveGame = new Button();
             leaveGame.setStyle("-fx-background-color: #F8CECC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: #FF6666; -fx-border-width: 1px; -fx-border-radius: 10px;");
             ImageView imageView2 = new ImageView();
-            imageView2.setImage(new Image("de/uniks/stpmon/team_m/images/GoBackSymbol.PNG"));
+            if(!GraphicsEnvironment.isHeadless()){
+                imageView2.setImage(new Image(Objects.requireNonNull(App.class.getResource(GOBACKSYMBOL)).toString()));
+            }
             imageView2.setFitWidth(40);
             imageView2.setFitHeight(40);
             leaveGame.setPrefHeight(50);
@@ -772,7 +777,9 @@ public class IngameController extends Controller {
             Button resumeGame = new Button();
             resumeGame.setStyle("-fx-background-color: #DAE8FC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;-fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: #6495ED; -fx-border-width: 1px; -fx-border-radius: 10px;");
             ImageView imageView3 = new ImageView();
-            imageView3.setImage(new Image("de/uniks/stpmon/team_m/images/PlaySymbol.PNG"));
+            if(!GraphicsEnvironment.isHeadless()){
+                imageView3.setImage(new Image(Objects.requireNonNull(App.class.getResource(PLAYSYMBOL)).toString()));
+            }
             imageView3.setFitWidth(50);
             imageView3.setFitHeight(40);
             resumeGame.setPrefHeight(50);
