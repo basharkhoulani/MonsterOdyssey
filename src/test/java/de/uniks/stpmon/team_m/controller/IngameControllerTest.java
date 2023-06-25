@@ -238,7 +238,7 @@ public class IngameControllerTest extends ApplicationTest {
         when(udpEventListenerProvider.get().listen(any(), any())).thenReturn(empty());
         // test Ingame Pause
         clickOn("#pauseButton");
-        clickOn("  Resume Game");
+        clickOn("#resumeGameButton");
     }
 
     @Test
