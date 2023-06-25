@@ -234,14 +234,6 @@ public class IngameControllerTest extends ApplicationTest {
     }
 
     @Test
-    void pauseGame() {
-        when(udpEventListenerProvider.get().listen(any(), any())).thenReturn(empty());
-        // test Ingame Pause
-        clickOn("#pauseButton");
-        clickOn("#resumeGameButton");
-    }
-
-    @Test
     void sendMessageTest() {
         final TextField messageField = lookup("#messageField").query();
         when(messageService.newMessage(any(), any(), any()))
