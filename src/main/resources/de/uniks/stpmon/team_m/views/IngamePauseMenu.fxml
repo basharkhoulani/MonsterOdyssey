@@ -7,11 +7,12 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
 
 <VBox fx:id="pauseMenuVbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="252.0" prefWidth="354.0" style="-fx-background-color: #CFE9DB; -fx-background-radius: 10px;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.IngamePauseMenuController">
    <children>
-      <Button fx:id="resumeGameButton" mnemonicParsing="false" onAction="#resumeGame" prefHeight="54.0" prefWidth="257.0" style="-fx-background-color: #DAE8FC; -fx-background-radius: 10px; -fx-border-color: grey; -fx-border-radius: 10px; -fx-border-width: 1px;" text="Resume Game">
+      <Button fx:id="resumeGameButton" mnemonicParsing="false" onAction="#resumeGame" prefHeight="50.0" prefWidth="257.0" style="-fx-background-color: #DAE8FC; -fx-background-radius: 10px; -fx-border-color: grey; -fx-border-radius: 10px; -fx-border-width: 1px;">
          <font>
             <Font name="Comic Sans MS" size="17.0" />
          </font>
@@ -19,17 +20,20 @@
             <Insets left="50.0" top="20.0" />
          </VBox.margin>
          <graphic>
-            <ImageView fx:id="resumeGameImageView" fitHeight="39.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-               <viewport>
-                  <Rectangle2D />
-               </viewport>
-               <image>
-                  <Image url="@../images/PlaySymbol.PNG" />
-               </image>
-            </ImageView>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+               <ImageView fx:id="resumeGameImageView" fitHeight="39.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                  <viewport>
+                     <Rectangle2D />
+                  </viewport>
+                  <image>
+                     <Image url="@../images/PlaySymbol.PNG" />
+                  </image>
+               </ImageView>
+               <Label text="Resume Game" />
+            </HBox>
          </graphic>
       </Button>
-      <Button fx:id="settingsButton" layoutX="180.0" layoutY="30.0" mnemonicParsing="false" onAction="#settings" prefHeight="54.0" prefWidth="257.0" style="-fx-background-color: #FFF2CC; -fx-background-radius: 10px; -fx-border-color: grey; -fx-border-width: 1px; -fx-border-radius: 10px;" text="      Settings">
+      <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#settings" prefHeight="50.0" prefWidth="257.0" style="-fx-background-color: #FFF2CC; -fx-background-radius: 10px; -fx-border-color: grey; -fx-border-width: 1px; -fx-border-radius: 10px;">
          <font>
             <Font name="Comic Sans MS" size="17.0" />
          </font>
@@ -37,14 +41,17 @@
             <Insets left="50.0" top="20.0" />
          </VBox.margin>
          <graphic>
-            <ImageView fx:id="settingsImageView" fitHeight="39.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/SettingSymbol2.png" />
-               </image>
-            </ImageView>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+               <ImageView fx:id="settingsImageView" fitHeight="39.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../images/SettingSymbol2.png" />
+                  </image>
+               </ImageView>
+               <Label text="Settings" />
+            </HBox>
          </graphic>
       </Button>
-      <Button fx:id="leaveGameButton" layoutX="10.0" layoutY="84.0" mnemonicParsing="false" onAction="#leaveGame" prefHeight="54.0" prefWidth="257.0" style="-fx-background-color: #F8CECC; -fx-background-radius: 10px; -fx-border-color: grey; -fx-border-width: 1px; -fx-border-radius: 10px;" text="Leave Game">
+      <Button fx:id="leaveGameButton" mnemonicParsing="false" onAction="#leaveGame" prefHeight="50.0" prefWidth="257.0" style="-fx-background-color: #F8CECC; -fx-background-radius: 10px; -fx-border-color: grey; -fx-border-width: 1px; -fx-border-radius: 10px;">
          <font>
             <Font name="Comic Sans MS" size="17.0" />
          </font>
@@ -52,11 +59,14 @@
             <Insets left="50.0" top="20.0" />
          </VBox.margin>
          <graphic>
-            <ImageView fx:id="leaveGameImageView" fitHeight="39.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/GoBackSymbol.PNG" />
-               </image>
-            </ImageView>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+               <ImageView fx:id="leaveGameImageView" fitHeight="39.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../images/GoBackSymbol.png" />
+                  </image>
+               </ImageView>
+               <Label text="Leave Game" />
+            </HBox>
          </graphic>
       </Button>
    </children>
