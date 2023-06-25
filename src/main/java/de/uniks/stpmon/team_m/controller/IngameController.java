@@ -1127,7 +1127,8 @@ public class IngameController extends Controller {
         yesButton.setOnAction(event -> {
             continueTrainerDialog(DialogSpecialInteractions.nurseYes);
             inNpcPopup = false;
-            this.stackPane.getChildren().remove(nursePopupVBox);
+            this.root.getChildren().remove(nursePopupVBox);
+            buttonsDisable(false);
         });
 
         // no button
@@ -1140,7 +1141,8 @@ public class IngameController extends Controller {
         noButton.setOnAction(event -> {
             continueTrainerDialog(DialogSpecialInteractions.nurseNo);
             inNpcPopup = false;
-            this.stackPane.getChildren().remove(nursePopupVBox);
+            this.root.getChildren().remove(nursePopupVBox);
+            buttonsDisable(false);
         });
 
         // add buttons to buttonHBox
@@ -1150,7 +1152,8 @@ public class IngameController extends Controller {
         nurseVBox.getChildren().addAll(nurseQuestion, buttonsHBox);
 
         // add nurseVBox to stackPane
-        stackPane.getChildren().add(nurseVBox);
+        root.getChildren().add(nurseVBox);
+        buttonsDisable(true);
         inNpcPopup = true;
     }
 
