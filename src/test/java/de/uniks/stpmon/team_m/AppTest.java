@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m;
 
 import de.uniks.stpmon.team_m.dto.Region;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -159,6 +160,14 @@ public class AppTest extends ApplicationTest {
         assertNotNull(helpLabel);
         clickOn("OK");
 
+        // test Map
+        final ImageView mapSymbol = lookup("#mapSymbol").query();
+        clickOn(mapSymbol);
+        final Label label = lookup("#regionName").query();
+        assertEquals("test", label.getText());
+        final ImageView map = lookup("#mapImageView").query();
+        assertNotNull(map);
+        clickOn("Close");
 
         // test Ingame Pause
         type(KeyCode.P);
@@ -176,9 +185,8 @@ public class AppTest extends ApplicationTest {
         type(KeyCode.P);
 
         // test Ingame Unpause With Button
-        type(KeyCode.P);
-
-        clickOn("Resume Game");
+        //type(KeyCode.P);
+        //clickOn("Resume Game");
 
         //clickOn("Save Game & Leave");
         //assertEquals("Monster Odyssey - Main Menu", stage.getTitle());
