@@ -11,7 +11,6 @@
 <?import javafx.scene.text.Font?>
 
 <VBox fx:id="settingsVbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="339.0" prefWidth="354.0" style="-fx-background-color: #CFE9DB; -fx-background-radius: 10px;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.IngameSettingsController">
-   <children>
       <Button fx:id="audioSettingsButton" mnemonicParsing="false" onAction="#openAudioSettings" prefHeight="50.0" prefWidth="257.0" style="-fx-background-color: #FFF2CC; -fx-background-radius: 10px; -fx-border-color: grey; -fx-border-radius: 10px; -fx-border-width: 1px;">
          <font>
             <Font name="Comic Sans MS" size="17.0" />
@@ -25,9 +24,7 @@
                   <viewport>
                      <Rectangle2D />
                   </viewport>
-                  <image>
                      <Image url="@../images/AudioSymbol.png" />
-                  </image>
                </ImageView>
                <Label text="%AUDIO.SETTINGS" />
             </HBox>
@@ -43,9 +40,7 @@
          <graphic>
             <HBox alignment="CENTER_LEFT" spacing="20">
                <ImageView fx:id="keybindingsImageView" fitHeight="39.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
                      <Image url="@../images/KeybindingsSymbol.png" />
-                  </image>
                </ImageView>
                <Label text="%KEYBINDINGS" />
             </HBox>
@@ -57,14 +52,10 @@
          </font>
          <graphic>
             <HBox alignment="CENTER_LEFT" spacing="20">
-               <children>
                   <ImageView fx:id="trainerSettingsImageView" fitHeight="39.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
                         <Image url="@../images/SettingSymbol2.png" />
-                     </image>
                   </ImageView>
                   <Label text="%TRAINER.SETTINGS" />
-               </children>
             </HBox>
          </graphic>
          <VBox.margin>
@@ -81,14 +72,11 @@
          <graphic>
             <HBox alignment="CENTER_LEFT" spacing="10">
                <ImageView fx:id="goBackImageView" fitHeight="39.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
                      <Image url="@../images/GoBackSymbol.png" />
-                  </image>
                </ImageView>
                <Label text="%GO.BACK" />
             </HBox>
          </graphic>
       </Button>
-   </children>
    <spacing>10</spacing>
 </VBox>
