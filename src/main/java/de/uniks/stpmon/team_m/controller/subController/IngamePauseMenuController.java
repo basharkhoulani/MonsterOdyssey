@@ -58,7 +58,6 @@ public class IngamePauseMenuController extends Controller {
     }
 
     public void settings() {
-
     }
 
     public void leaveGame() {
