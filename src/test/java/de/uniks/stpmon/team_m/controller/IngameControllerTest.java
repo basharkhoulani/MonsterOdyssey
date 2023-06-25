@@ -345,8 +345,8 @@ public class IngameControllerTest extends ApplicationTest {
 
         clickOn("No");
 
-        final StackPane stackPane = lookup("#stackPane").query();
-        final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+        final StackPane rootStackPane = lookup("#root").query();
+        final Node node = rootStackPane.getChildren().get(rootStackPane.getChildren().size() - 1);
 
         assertNotEquals("nurseVBox", node.getId());
 
@@ -356,8 +356,8 @@ public class IngameControllerTest extends ApplicationTest {
         Thread.sleep(30);
 
 
-        final StackPane stackPane2 = lookup("#stackPane").query();
-        final Node node2 = stackPane2.getChildren().get(stackPane.getChildren().size() - 1);
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node2 = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
 
         assertNotEquals("dialogVBox", node2.getId());
 
