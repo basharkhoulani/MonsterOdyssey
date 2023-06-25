@@ -750,12 +750,11 @@ public class IngameController extends Controller {
     }
 
     public void buttonsDisable(Boolean set){
-        if(set){
+        if(set == true){
             stackPane.setEffect(new BoxBlur(10,10,3));
         }else {
             stackPane.setEffect(null);
         }
-        stackPane.setEffect(new BoxBlur(10,10,3));
         monstersButton.setDisable(set);
         pauseButton.setDisable(set);
         showChatButton.setDisable(set);
