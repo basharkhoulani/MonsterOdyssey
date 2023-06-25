@@ -26,10 +26,10 @@
                      <Rectangle2D />
                   </viewport>
                   <image>
-                     <Image url="@../images/PlaySymbol.PNG" />
+                     <Image url="@../images/PlaySymbol.png" />
                   </image>
                </ImageView>
-               <Label text="Resume Game" />
+               <Label text="%RESUME.BUTTON.LABEL" />
             </HBox>
          </graphic>
       </Button>
@@ -41,13 +41,13 @@
             <Insets left="50.0" top="20.0" />
          </VBox.margin>
          <graphic>
-            <HBox spacing="10" alignment="CENTER_LEFT">
+            <HBox spacing="20" alignment="CENTER_LEFT">
                <ImageView fx:id="settingsImageView" fitHeight="39.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                   <image>
                      <Image url="@../images/SettingSymbol2.png" />
                   </image>
                </ImageView>
-               <Label text="Settings" />
+               <Label text="%SETTINGS" />
             </HBox>
          </graphic>
       </Button>
@@ -65,9 +65,10 @@
                      <Image url="@../images/GoBackSymbol.png" />
                   </image>
                </ImageView>
-               <Label text="Leave Game" />
+               <Label text="%SAVE.GAME.AND.LEAVE.BUTTON.LABEL" />
             </HBox>
          </graphic>
       </Button>
    </children>
+   <spacing>10</spacing>
 </VBox>
