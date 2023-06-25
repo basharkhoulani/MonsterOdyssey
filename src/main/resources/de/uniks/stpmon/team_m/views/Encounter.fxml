@@ -12,14 +12,14 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane minHeight="786.0" minWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.EncounterController">
-   <AnchorPane minHeight="786.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<AnchorPane minHeight="786.0" minWidth="1024.0" styleClass="encounterBackground" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.EncounterController">
+   <AnchorPane minHeight="786.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" styleClass="ForegroundContainer" stylesheets="@../styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <VBox minHeight="284.0" minWidth="400.0" prefHeight="284.0" prefWidth="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
             <ImageView fitHeight="50.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
                <Image url="@../images/star.png" />
             </ImageView>
-            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0" styleClass="hBoxRed">
                <Label fx:id="opponentLevel">
                   <font>
                      <Font name="Comic Sans MS Bold" size="14.0" />
@@ -31,11 +31,11 @@
             <ImageView fitHeight="50.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
                <Image url="@../images/heart.png" />
             </ImageView>
-            <ProgressBar fx:id="opponentHealthBar" prefHeight="20.0" prefWidth="253.0" progress="0.64" />
+            <ProgressBar fx:id="opponentHealthBar" prefHeight="20.0" prefWidth="253.0" progress="0.64" styleClass="healthprogress-bar" />
          </HBox>
          <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
             <SplitPane prefHeight="100.0" prefWidth="52.0" visible="false" />
-            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0" styleClass="hBoxRed">
                <Label fx:id="opponentMonsterName">
                   <font>
                      <Font name="Comic Sans MS Bold" size="14.0" />
@@ -58,8 +58,8 @@
             <ImageView fitHeight="50.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
                <Image url="@../images/star.png" />
             </ImageView>
-            <ProgressBar fx:id="myLevelBar" prefHeight="20.0" prefWidth="250.0" progress="0.88" />
-            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="97.0">
+            <ProgressBar fx:id="myLevelBar" prefHeight="20.0" prefWidth="250.0" progress="0.88" styleClass="levelprogress-bar" />
+            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="97.0" styleClass="hBoxRed">
                <Label fx:id="myLevel">
                   <font>
                      <Font name="Comic Sans MS Bold" size="14.0" />
@@ -71,8 +71,8 @@
             <ImageView fitHeight="50.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
                <Image url="@../images/heart.png" />
             </ImageView>
-            <ProgressBar fx:id="myHealthBar" prefHeight="20.0" prefWidth="250.0" progress="0.78" />
-            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="97.0">
+            <ProgressBar fx:id="myHealthBar" prefHeight="20.0" prefWidth="250.0" progress="0.78" styleClass="healthprogress-bar" />
+            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="97.0" styleClass="hBoxRed">
                <Label fx:id="myHealth">
                   <font>
                      <Font name="Comic Sans MS Bold" size="14.0" />
@@ -82,7 +82,7 @@
          </HBox>
          <HBox prefHeight="100.0" prefWidth="200.0">
             <SplitPane prefHeight="100.0" prefWidth="50.0" visible="false" />
-            <HBox alignment="CENTER" prefHeight="78.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="78.0" prefWidth="200.0" styleClass="hBoxYellow">
                <Label fx:id="myMonsterName">
                   <font>
                      <Font name="Comic Sans MS Bold" size="14.0" />
@@ -92,8 +92,8 @@
          </HBox>
       </VBox>
       <VBox layoutY="308.0" prefHeight="284.0" prefWidth="400.0" AnchorPane.leftAnchor="0.0" />
-      <AnchorPane layoutY="602.0" prefHeight="166.0" prefWidth="1050.0" styleClass="ForegroundHeaderContainer" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <HBox alignment="CENTER" prefHeight="166.0" prefWidth="647.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="377.0">
+      <AnchorPane layoutY="602.0" prefHeight="166.0" prefWidth="1050.0" styleClass="hBoxDarkGreen" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <HBox alignment="CENTER" prefHeight="166.0" prefWidth="647.0" styleClass="hBoxLightGreen" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="377.0">
             <TextFlow prefHeight="166.0" prefWidth="645.0" textAlignment="CENTER">
                <Text fx:id="battleDescription" strokeType="OUTSIDE" strokeWidth="0.0">
                   <font>

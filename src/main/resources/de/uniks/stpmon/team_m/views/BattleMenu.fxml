@@ -6,16 +6,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="166.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.BattleMenuController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="166.0" prefWidth="350.0" styleClass="hBoxRed" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.BattleMenuController">
    <children>
       <HBox alignment="CENTER" prefHeight="83.0" prefWidth="350.0">
-         <Button fx:id="abilitiesButton" mnemonicParsing="false" text="%ABILITIES">
+         <Button fx:id="abilitiesButton" mnemonicParsing="false" styleClass="buttonsYellow" text="%ABILITIES">
             <font>
                <Font name="Comic Sans MS" size="14.0" />
             </font>
          </Button>
          <SplitPane prefHeight="83.0" prefWidth="46.0" visible="false" />
-         <Button fx:id="changeMonsterButton" mnemonicParsing="false" text="%CHANGE.MONSTER">
+         <Button fx:id="changeMonsterButton" mnemonicParsing="false" styleClass="buttonsBlue" text="%CHANGE.MONSTER">
             <font>
                <Font name="Comic Sans MS" size="14.0" />
             </font>
@@ -23,7 +23,7 @@
       </HBox>
       <HBox alignment="CENTER_LEFT" prefHeight="83.0" prefWidth="350.0">
          <SplitPane prefHeight="83.0" prefWidth="16.0" visible="false" />
-         <Button fx:id="currentInfoButton" mnemonicParsing="false" text="%CURRENT.MONSTER.INFORMATION">
+         <Button fx:id="currentInfoButton" mnemonicParsing="false" styleClass="buttonsWhite" text="%CURRENT.MONSTER.INFORMATION">
             <font>
                <Font name="Comic Sans MS" size="14.0" />
             </font>
