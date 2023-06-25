@@ -162,6 +162,7 @@ public class IngameController extends Controller {
     private Trainer currentNpc;
     private NpcTextManager npcTextManager;
     private VBox miniMapVBox;
+    private VBox pauseMenuVBox;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -737,80 +738,14 @@ public class IngameController extends Controller {
 
     public void pauseGame() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/uniks/stpmon/team_m/views/IngamePauseMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("de/uniks/stpmon/team_m/views/IngamePauseMenu.fxml"));
+            loader.setLocation(getClass().getResource("/de/uniks/stpmon/team_m/views/IngamePauseMenu.fxml"));
             VBox pauseMenuVBox = loader.load();
-            pauseMenuVBox.setStyle("-fx-background-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #CFE9DB");
-            pauseMenuVBox.setAlignment(Pos.CENTER);
-            pauseMenuVBox.setSpacing(20);
-            pauseMenuVBox.setPrefWidth(250);
-            pauseMenuVBox.setPrefHeight(270);
 
-            //Settings Button
-            Button settings = new Button();
-            settings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: gray; -fx-border-width: 1px; -fx-border-radius: 10px;");
-            ImageView imageView = new ImageView();
-            if(!GraphicsEnvironment.isHeadless()){
-                imageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(SETTINGSYMBOL2)).toString()));
-            }
-            imageView.setFitWidth(40);
-            imageView.setFitHeight(40);
-            settings.setPrefHeight(50);
-            settings.setPrefWidth(200);
-            settings.setGraphic(imageView);
-            settings.setText("    Settings");
-
-            //Leave Game Button
-            Button leaveGame = new Button();
-            leaveGame.setStyle("-fx-background-color: #F8CECC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: #FF6666; -fx-border-width: 1px; -fx-border-radius: 10px;");
-            ImageView imageView2 = new ImageView();
-            if(!GraphicsEnvironment.isHeadless()){
-                imageView2.setImage(new Image(Objects.requireNonNull(App.class.getResource(GOBACKSYMBOL)).toString()));
-            }
-            imageView2.setFitWidth(40);
-            imageView2.setFitHeight(40);
-            leaveGame.setPrefHeight(50);
-            leaveGame.setPrefWidth(200);
-            leaveGame.setGraphic(imageView2);
-            leaveGame.setText("  Leave Game");
-
-            //Resume Game Button
-            Button resumeGame = new Button();
-            resumeGame.setStyle("-fx-background-color: #DAE8FC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px;-fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: #6495ED; -fx-border-width: 1px; -fx-border-radius: 10px;");
-            ImageView imageView3 = new ImageView();
-            if(!GraphicsEnvironment.isHeadless()){
-                imageView3.setImage(new Image(Objects.requireNonNull(App.class.getResource(PLAYSYMBOL)).toString()));
-            }
-            imageView3.setFitWidth(50);
-            imageView3.setFitHeight(40);
-            resumeGame.setPrefHeight(50);
-            resumeGame.setPrefWidth(200);
-            resumeGame.setGraphic(imageView3);
-            resumeGame.setText("  Resume Game");
-
-            pauseMenuVBox.getChildren().addAll(resumeGame,leaveGame,settings);
             root.getChildren().add(pauseMenuVBox);
             pauseMenuVBox.requestFocus();
             stackPane.setEffect(new BoxBlur(10,10,3));
             buttonsDisableTrue();
-
-
-            settings.setOnMouseClicked(event -> {
-                pauseMenuVBox.setVisible(false);
-                stackPane.setEffect(null);
-                buttonsDisableFalse();
-            });
-            leaveGame.setOnMouseClicked(event -> {
-                pauseMenuVBox.setVisible(false);
-                stackPane.setEffect(null);
-                buttonsDisableFalse();
-                destroy();
-                app.show(mainMenuControllerProvider.get());
-            });
-            resumeGame.setOnMouseClicked(event -> {
-                pauseMenuVBox.setVisible(false);
-                stackPane.setEffect(null);
-                buttonsDisableFalse();
-            });
 
         } catch (Exception e) {
             e.printStackTrace();
