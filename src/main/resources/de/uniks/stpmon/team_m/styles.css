@@ -3,7 +3,6 @@
     -fx-font-family: "Comic Sans MS";
     -fx-font-size: 17px;
 }
-
 .Background {
     -fx-background-color: white;
     -fx-background-image: url("images/Background.jpg");
@@ -11,27 +10,22 @@
     -fx-background-size: 100%;
     -fx-background-position: center;
 }
-
 .ForegroundContainer {
     -fx-background-color: rgba(245, 245, 245, 0.7);
     -fx-background-radius: 10;
 }
-
 .ForegroundHeaderContainer {
     -fx-background-color: rgba(245, 245, 245, 0.8);
     -fx-background-radius: 10 10 0 0;
 }
-
 .messageText {
     -fx-text-fill: black;
 }
-
 .buttonsYellow {
     -fx-background-color: #FFF2CC;
     -fx-border-width: 1px;
     -fx-border-color: gray;
 }
-
 .buttonsWhite {
     -fx-background-color: #FFFFFF;
     -fx-border-width: 1px;
@@ -47,82 +41,69 @@
 .buttonsWhite:hover {
     -fx-background-color: #FFF2CC;
 }
-
 .buttonsTransparent {
     -fx-background-color: transparent;
 }
-
 .errorLabel {
     -fx-text-fill: red;
 }
-
 .informationLabel {
     -fx-text-fill: #25c625;
 }
-
 /*********************************************************************************/
 /******************************** Scroll bar *************************************/
 .scroll-bar:vertical {
     -fx-font-size: 12px;
 }
-
-.scroll-bar:vertical .track {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-background-radius: 0.0em;
-    -fx-border-radius: 5px;
-    -fx-padding: 0.0 5.0 0.0 5.0;
+.scroll-bar:vertical .track{
+    -fx-background-color :transparent;
+    -fx-border-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-border-radius : 5px;
+    -fx-padding :0.0 5.0 0.0 5.0;
 }
-
 .scroll-bar:vertical .increment-button,
 .scroll-bar:vertical .decrement-button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0.0em;
+    -fx-background-color :transparent;
+    -fx-background-radius : 0.0em;
     -fx-font-size: 14px;
     -fx-border-color: black;
     -fx-border-width: 1px;
     -fx-padding: 4px;
 }
-
 .scroll-bar:vertical .increment-arrow {
     -fx-shape: "M 100 100 L 300 100 L 200 300 z";
     -fx-border-color: black;
     -fx-border-width: 10px;
 }
-
 .scroll-bar:vertical .decrement-arrow {
     -fx-shape: "M 300 300 L 100 300 L 200 100 z";
     -fx-border-color: black;
     -fx-border-width: 10px;
 }
-
 .scroll-bar:vertical .thumb {
-    -fx-background-color: derive(#4D4C4F, 10.0%);
-    -fx-background-insets: 2.0, 0.0, 0.0;
-    -fx-background-radius: 5px;
+    -fx-background-color :derive(#4D4C4F,10.0%);
+    -fx-background-insets : 2.0, 0.0, 0.0;
+    -fx-background-radius : 5px;
     -fx-pref-height: 30;
     -fx-pref-width: 30;
 }
-
 .scroll-bar:vertical .thumb:hover {
-    -fx-background-color: derive(black, 25.0%);
-    -fx-background-insets: 2.0, 0.0, 0.0;
-    -fx-background-radius: 5px;
+    -fx-background-color : derive(black,25.0%);
+    -fx-background-insets : 2.0, 0.0, 0.0;
+    -fx-background-radius : 5px;
 }
-
 /*********************************************************************************/
 /******************************** List cells *************************************/
 .userCell {
     -fx-padding: 2px 8px 2px 8px;
     -fx-font-size: 17px;
 }
-
 .regionCell, .groupCell {
     -fx-padding: 8px;
     -fx-font-size: 17px;
     -fx-background-radius: 10px;
 }
-
 /*********************************************************************************/
 /*********************************** Symbols *************************************/
 .helpSymbol {
@@ -135,7 +116,6 @@
     -fx-border-radius: 17;
     -fx-border-width: 5;
 }
-
 .helpSymbol:hover {
     -fx-background-image: url("images/ingameHelpSymbol_yellow.png");
     -fx-border-color: transparent;
@@ -146,7 +126,6 @@
     -fx-border-radius: 17;
     -fx-border-width: 5;
 }
-
 .settingsSymbol {
     -fx-background-image: url("images/settingsSymbol.png");
     -fx-border-color: transparent;
@@ -158,7 +137,6 @@
     -fx-border-radius: 15;
     -fx-border-width: 5;
 }
-
 .hideSymbol {
     -fx-background-image: url("images/hideEye.png");
     -fx-border-color: transparent;
@@ -170,7 +148,6 @@
     -fx-border-radius: 15;
     -fx-border-width: 5;
 }
-
 .editSymbol {
     -fx-background-image: url("images/pencil.jpeg");
     -fx-border-style: solid;
@@ -183,7 +160,6 @@
     -fx-border-width: 1;
     -fx-border-color: darkgray;
 }
-
 .editSymbol:hover {
     -fx-background-image: url("images/pencil_yellow.jpg");
     -fx-background-size: 40px;
@@ -193,14 +169,12 @@
     -fx-border-width: 2;
 
 }
-
 .triangle {
     -fx-background-image: url("images/triangle.png");
     -fx-background-size: 40px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 50%;
 }
-
 /*********************************************************************************/
 /********************************** Login ****************************************/
 .loginButton {
@@ -208,28 +182,23 @@
     -fx-border-width: 1px;
     -fx-border-color: gray;
 }
-
 .hideSymbolContainer {
     -fx-border-width: 1px;
     -fx-border-color: black;
 }
-
 /*********************************************************************************/
 /********************************** Main Menu ************************************/
 .friendsListVBox {
     -fx-border-style: solid;
     -fx-border-width: 2px 0 0 0;
 }
-
 .regionListView {
     -fx-background-radius: 10px 0 0 10px;
 }
-
 .regionListView .list-cell, .regionListView .list-cell:focused {
     -fx-border-radius: 10px 0 0 10px;
     -fx-padding: 0 8px 0 16px;
 }
-
 /*********************************************************************************/
 /******************************* Friendslist *************************************/
 .normalFriendHBox {
@@ -237,21 +206,18 @@
     -fx-border-width: 2px;
     -fx-border-style: solid none none none;
 }
-
 .onHoverFriendHBox {
     -fx-border-color: black;
     -fx-border-width: 2px;
     -fx-border-style: solid none none none;
     -fx-background-color: lightblue;
 }
-
 /*********************************************************************************/
 /************************** friend settings popup ********************************/
 .popOverButton {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
 }
-
 .friendSettingsPopOver Button {
     -fx-background-color: #e8e8e8;
 }
@@ -261,7 +227,6 @@
 .messageMetaData {
     -fx-font-size: 14px;
 }
-
 /*********************************************************************************/
 /*********************************** Ingame *************************************/
 .settingsButton {
@@ -271,7 +236,12 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: 0% 50%;
 }
-
+.pauseButton{
+    -fx-background-image: url("images/PauseSymbol.png");
+    -fx-background-size: 24px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 5% 50%;
+}
 .monstersButton {
     -fx-background-image: url("images/Monster1-without.png");
     -fx-background-size: 24px;
@@ -287,15 +257,13 @@
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
 }
-
 /*********************************************************************************/
 /*************************** Autocomplete textfields *****************************/
 .auto-complete-popup > .list-view {
     -fx-background-color: white;
     -fx-background-insets: -1 -2 -1 -1, 0 -1 0 0;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 12, 0.0, 0, 8);
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 12, 0.0 , 0 , 8 );
 }
-
 .auto-complete-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
     -fx-padding: 4 0 4 5;
     /* No alternate highlighting */
@@ -303,22 +271,18 @@
     -fx-font-family: "Comic Sans MS";
     -fx-font-size: 17px;
 }
-
 .auto-complete-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
-    -fx-background: -fx-selection-bar-non-focused;
+    -fx-background:  -fx-selection-bar-non-focused;
     -fx-background-color: -fx-background;
 }
-
-.auto-complete-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:hover,
-.auto-complete-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected:hover {
+.auto-complete-popup  > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:hover,
+.auto-complete-popup  > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected:hover {
     -fx-background: -fx-accent;
     -fx-background-color: -fx-selection-bar;
 }
-
 .auto-complete-popup > .list-view > .placeholder > .label {
-    -fx-text-fill: derive(-fx-control-inner-background, -30%);
+    -fx-text-fill: derive(-fx-control-inner-background,-30%);
 }
-
 /*********************************************************************************/
 /********************************** Welcome scene ********************************/
 .worldMapBackground {
@@ -326,7 +290,6 @@
     -fx-background-size: cover;
     -fx-opacity: 0.50;
 }
-
 .welcomeSceneButton {
     -fx-background-color: #FFF2CC;
     -fx-font-family: "Comic Sans MS";
@@ -336,7 +299,6 @@
     -fx-border-color: #000000;
     -fx-font-size: 17px;
 }
-
 .welcomeMessage {
     -fx-background-color: #FFFFFF;
     -fx-border-color: #000000;
@@ -346,19 +308,16 @@
     -fx-font-size: 12px;
     -fx-padding: 0 0 0 3px;
 }
-
 .alertDialogName {
-    -fx-padding: 10 0 0 0;
+    -fx-padding: 10 0 0 0 ;
     -fx-pref-height: 90px;
     -fx-pref-width: 300px;
 }
-
 .comicSans {
     -fx-font-family: "Comic Sans MS";
     -fx-font-size: 17px;
     -fx-font-weight: bold;
 }
-
 /*********************************************************************************/
 /*************************** Ingame - TrainerSettings ****************************/
 .trainerAvatarImageView {
@@ -367,7 +326,6 @@
     -fx-border-width: 1px;
     -fx-padding: 8px;
 }
-
 /*********************************************************************************/
 /*************************** Ingame - MonsterList ****************************/
 .monsterList .list-cell {
@@ -375,26 +333,21 @@
     -fx-border-width: 0 0 1 0;
     -fx-border-color: #000000;
 }
-
 .monsterList {
     -fx-border-color: transparent;
 }
-
 .whiteBackgroundWithBorder {
     -fx-background-color: #FFFFFF;
     -fx-border-color: #000000;
 }
-
 .bottomLine {
     -fx-border-width: 0 0 1 0;
     -fx-border-color: #000000;
 }
-
 .rightLine {
     -fx-border-width: 0 1 0 0;
     -fx-border-color: #000000;
 }
-
 /*********************************************************************************/
 /*************************** Ingame - MiniMap ****************************/
 .miniMapContainer {
@@ -406,7 +359,6 @@
     -fx-border-style: solid;
     -fx-border-width: 2px;
 }
-
 .mapImageView {
     -fx-border-color: black;
     -fx-border-style: solid;

@@ -59,7 +59,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -74,7 +73,7 @@ public class IngameController extends Controller {
     @FXML
     public Button monstersButton;
     @FXML
-    public Button settingsButton;
+    public Button pauseButton;
     @FXML
     public TextField messageField;
     @FXML
@@ -106,6 +105,8 @@ public class IngameController extends Controller {
     Provider<IngameMiniMapController> ingameMiniMapControllerProvider;
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
+    @Inject
+    Provider<IngamePauseMenuController> ingamePauseMenuControllerProvider;
     @Inject
     Provider<EventListener> eventListener;
     @Inject
@@ -735,40 +736,29 @@ public class IngameController extends Controller {
      */
 
     public void pauseGame() {
-        root.setEffect(new BoxBlur(10, 10, 3));
-        final Alert alert = new Alert(Alert.AlertType.NONE);
-        final DialogPane dialogPane = alert.getDialogPane();
-        final ButtonType resume = new ButtonType(resources.getString("RESUME.BUTTON.LABEL"));
-        final ButtonType saveAndExit = new ButtonType(resources.getString("SAVE.GAME.AND.LEAVE.BUTTON.LABEL"));
-        dialogPane.getButtonTypes().addAll(resume, saveAndExit);
-        if (!GraphicsEnvironment.isHeadless()) {
-            dialogPane.getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
-            dialogPane.getStyleClass().add("comicSans");
-        }
-        final Button resumeButton = (Button) dialogPane.lookupButton(resume);
-        resumeButton.setOnKeyPressed(event -> {
-            if (!(event.getCode() == PAUSE_MENU_KEY)) {
-                return;
-            }
-            alert.setResult(resume);
-        });
+        IngamePauseMenuController ingamePauseMenuController = ingamePauseMenuControllerProvider.get();
+        VBox pauseMenuVBox = new VBox();
+        pauseMenuVBox.setAlignment(Pos.CENTER);
+        ingamePauseMenuController.init(this, pauseMenuVBox, mainMenuControllerProvider, app);
+        pauseMenuVBox.getChildren().add(ingamePauseMenuController.render());
+        root.getChildren().add(pauseMenuVBox);
+        pauseMenuVBox.requestFocus();
+        buttonsDisable(true);
+    }
 
-        alert.setTitle(resources.getString("PAUSE.MENU.TITLE"));
-        alert.setHeaderText(null);
-        alert.setGraphic(null);
-        alert.setContentText(resources.getString("PAUSE.MENU.LABEL"));
-        alert.initStyle(StageStyle.UNDECORATED);
-        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == resume) {
-            alert.close();
-        } else if (result.isPresent() && result.get() == saveAndExit) {
-            alert.close();
-            destroy();
-            app.show(mainMenuControllerProvider.get());
+    public void buttonsDisable(Boolean set){
+        if(set){
+            stackPane.setEffect(new BoxBlur(10,10,3));
+        }else {
+            stackPane.setEffect(null);
         }
-        root.setEffect(null);
+        monstersButton.setDisable(set);
+        pauseButton.setDisable(set);
+        showChatButton.setDisable(set);
+        mapSymbol.setDisable(set);
+        helpSymbol.setDisable(set);
+        messageField.setDisable(set);
+        sendMessageButton.setDisable(set);
     }
 
     public void showTrainerSettings() {
@@ -1213,29 +1203,13 @@ public class IngameController extends Controller {
         closeButton.setOnAction(event -> {
                     root.getChildren().remove(miniMapVBox);
                     miniMapVBox = null;
-                    stackPane.setEffect(null);
-                    monstersButton.setDisable(false);
-                    settingsButton.setDisable(false);
-                    showChatButton.setDisable(false);
-                    mapSymbol.setDisable(false);
-                    helpSymbol.setDisable(false);
-                    messageField.setDisable(false);
-                    sendMessageButton.setDisable(false);
+                    buttonsDisable(false);
                 }
         );
         miniMapVBox.getChildren().add(closeButton);
         root.getChildren().add(miniMapVBox);
         miniMapVBox.requestFocus();
-        stackPane.setEffect(new BoxBlur(10, 10, 3));
-
-        monstersButton.setDisable(true);
-        settingsButton.setDisable(true);
-        showChatButton.setDisable(true);
-        mapSymbol.setDisable(true);
-        helpSymbol.setDisable(true);
-        messageField.setDisable(true);
-        sendMessageButton.setDisable(true);
-
+        buttonsDisable(true);
     }
 
     @Override
