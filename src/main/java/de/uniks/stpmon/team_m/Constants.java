@@ -73,6 +73,10 @@ public class Constants {
     public static double ZERO = 0;
     public static double ONE = 1;
 
+    public static final String SETTINGSYMBOL2 = "images/SettingSymbol2.png";
+    public static final String GOBACKSYMBOL = "images/GoBackSymbol.PNG";
+    public static final String PLAYSYMBOL = "images/PlaySymbol.PNG";
+
         // NPC DIALOG
     public static int dialogVBoxWidth = 700;
     public static int getDialogVBoxHeight = 150;
