@@ -108,6 +108,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
     @Inject
+    Provider<IngamePauseMenuController> ingamePauseMenuControllerProvider;
+    @Inject
     Provider<EventListener> eventListener;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -737,22 +739,18 @@ public class IngameController extends Controller {
      */
 
     public void pauseGame() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("de/uniks/stpmon/team_m/views/IngamePauseMenu.fxml"));
-            loader.setLocation(getClass().getResource("/de/uniks/stpmon/team_m/views/IngamePauseMenu.fxml"));
-            VBox pauseMenuVBox = loader.load();
-
-            root.getChildren().add(pauseMenuVBox);
-            pauseMenuVBox.requestFocus();
-            stackPane.setEffect(new BoxBlur(10,10,3));
-            buttonsDisableTrue();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        IngamePauseMenuController ingamePauseMenuController = ingamePauseMenuControllerProvider.get();
+        pauseMenuVBox = new VBox();
+        pauseMenuVBox.setAlignment(Pos.CENTER);
+        ingamePauseMenuController.init(this, pauseMenuVBox, mainMenuControllerProvider, app);
+        pauseMenuVBox.getChildren().add(ingamePauseMenuController.render());
+        root.getChildren().add(pauseMenuVBox);
+        pauseMenuVBox.requestFocus();
+        buttonsDisableTrue();
     }
 
     public void buttonsDisableTrue(){
+        stackPane.setEffect(new BoxBlur(10,10,3));
         monstersButton.setDisable(true);
         pauseButton.setDisable(true);
         showChatButton.setDisable(true);
@@ -762,6 +760,7 @@ public class IngameController extends Controller {
         sendMessageButton.setDisable(true);
     }
     public void buttonsDisableFalse(){
+        stackPane.setEffect(null);
         monstersButton.setDisable(false);
         pauseButton.setDisable(false);
         showChatButton.setDisable(false);

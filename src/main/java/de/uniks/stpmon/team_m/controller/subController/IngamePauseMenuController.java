@@ -1,9 +1,9 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.controller.MainMenuController;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -31,6 +31,7 @@ public class IngamePauseMenuController extends Controller {
     public ImageView leaveGameImageView;
     @Inject
     IngameController ingameController;
+    private VBox ingameVbox;
     @Inject
     Provider<IngameController> ingameControllerProvider;
     @Inject
@@ -44,9 +45,16 @@ public class IngamePauseMenuController extends Controller {
         return parent;
     }
 
+    public void init(IngameController ingameController, VBox ingameVbox, Provider<MainMenuController> mainMenuControllerProvider, App app) {
+        this.ingameController = ingameController;
+        this.ingameVbox = ingameVbox;
+        this.mainMenuControllerProvider = mainMenuControllerProvider;
+        this.app = app;
+    }
+
+
     public void resumeGame() {
-        pauseMenuVbox.setVisible(false);
-        ingameController.stackPane.setEffect(null);
+        ingameController.root.getChildren().remove(ingameVbox);
         ingameController.buttonsDisableFalse();
     }
 
