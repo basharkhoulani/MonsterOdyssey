@@ -55,7 +55,7 @@ public class IngamePauseMenuController extends Controller {
 
     public void resumeGame() {
         ingameController.root.getChildren().remove(ingameVbox);
-        ingameController.buttonsDisableFalse();
+        ingameController.buttonsDisable(false);
     }
 
     public void settings() {
@@ -63,7 +63,7 @@ public class IngamePauseMenuController extends Controller {
     }
 
     public void leaveGame() {
-        pauseMenuVbox.setVisible(false);
+        ingameController.root.getChildren().remove(ingameVbox);
         app.show(mainMenuControllerProvider.get());
     }
 }

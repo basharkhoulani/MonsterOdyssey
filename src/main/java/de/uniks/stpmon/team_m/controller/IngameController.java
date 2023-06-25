@@ -746,28 +746,23 @@ public class IngameController extends Controller {
         pauseMenuVBox.getChildren().add(ingamePauseMenuController.render());
         root.getChildren().add(pauseMenuVBox);
         pauseMenuVBox.requestFocus();
-        buttonsDisableTrue();
+        buttonsDisable(true);
     }
 
-    public void buttonsDisableTrue(){
+    public void buttonsDisable(Boolean set){
+        if(set){
+            stackPane.setEffect(new BoxBlur(10,10,3));
+        }else {
+            stackPane.setEffect(null);
+        }
         stackPane.setEffect(new BoxBlur(10,10,3));
-        monstersButton.setDisable(true);
-        pauseButton.setDisable(true);
-        showChatButton.setDisable(true);
-        mapSymbol.setDisable(true);
-        helpSymbol.setDisable(true);
-        messageField.setDisable(true);
-        sendMessageButton.setDisable(true);
-    }
-    public void buttonsDisableFalse(){
-        stackPane.setEffect(null);
-        monstersButton.setDisable(false);
-        pauseButton.setDisable(false);
-        showChatButton.setDisable(false);
-        mapSymbol.setDisable(false);
-        helpSymbol.setDisable(false);
-        messageField.setDisable(false);
-        sendMessageButton.setDisable(false);
+        monstersButton.setDisable(set);
+        pauseButton.setDisable(set);
+        showChatButton.setDisable(set);
+        mapSymbol.setDisable(set);
+        helpSymbol.setDisable(set);
+        messageField.setDisable(set);
+        sendMessageButton.setDisable(set);
     }
 
     public void showTrainerSettings() {
@@ -1212,29 +1207,13 @@ public class IngameController extends Controller {
         closeButton.setOnAction(event -> {
                     root.getChildren().remove(miniMapVBox);
                     miniMapVBox = null;
-                    stackPane.setEffect(null);
-                    monstersButton.setDisable(false);
-                    pauseButton.setDisable(false);
-                    showChatButton.setDisable(false);
-                    mapSymbol.setDisable(false);
-                    helpSymbol.setDisable(false);
-                    messageField.setDisable(false);
-                    sendMessageButton.setDisable(false);
+                    buttonsDisable(false);
                 }
         );
         miniMapVBox.getChildren().add(closeButton);
         root.getChildren().add(miniMapVBox);
         miniMapVBox.requestFocus();
-        stackPane.setEffect(new BoxBlur(10, 10, 3));
-
-        monstersButton.setDisable(true);
-        pauseButton.setDisable(true);
-        showChatButton.setDisable(true);
-        mapSymbol.setDisable(true);
-        helpSymbol.setDisable(true);
-        messageField.setDisable(true);
-        sendMessageButton.setDisable(true);
-
+        buttonsDisable(true);
     }
 
     @Override
