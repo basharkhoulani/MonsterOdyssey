@@ -41,8 +41,7 @@ public class IngamePauseMenuController extends Controller {
     }
 
     public Parent render() {
-        final Parent parent = super.render();
-        return parent;
+        return super.render();
     }
 
     public void init(IngameController ingameController, VBox ingameVbox, Provider<MainMenuController> mainMenuControllerProvider, App app) {

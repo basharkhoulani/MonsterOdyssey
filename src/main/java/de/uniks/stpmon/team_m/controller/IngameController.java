@@ -1,7 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
 
-import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
@@ -24,7 +23,6 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -164,7 +162,6 @@ public class IngameController extends Controller {
     private Trainer currentNpc;
     private NpcTextManager npcTextManager;
     private VBox miniMapVBox;
-    private VBox pauseMenuVBox;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -740,7 +737,7 @@ public class IngameController extends Controller {
 
     public void pauseGame() {
         IngamePauseMenuController ingamePauseMenuController = ingamePauseMenuControllerProvider.get();
-        pauseMenuVBox = new VBox();
+        VBox pauseMenuVBox = new VBox();
         pauseMenuVBox.setAlignment(Pos.CENTER);
         ingamePauseMenuController.init(this, pauseMenuVBox, mainMenuControllerProvider, app);
         pauseMenuVBox.getChildren().add(ingamePauseMenuController.render());
@@ -750,7 +747,7 @@ public class IngameController extends Controller {
     }
 
     public void buttonsDisable(Boolean set){
-        if(set == true){
+        if(set){
             stackPane.setEffect(new BoxBlur(10,10,3));
         }else {
             stackPane.setEffect(null);
