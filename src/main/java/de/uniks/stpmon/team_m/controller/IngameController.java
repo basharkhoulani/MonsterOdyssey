@@ -108,6 +108,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<IngamePauseMenuController> ingamePauseMenuControllerProvider;
     @Inject
+    Provider<IngameSettingsController> ingameSettingsControllerProvider;
+    @Inject
     Provider<EventListener> eventListener;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -746,10 +748,10 @@ public class IngameController extends Controller {
         buttonsDisable(true);
     }
 
-    public void buttonsDisable(Boolean set){
-        if(set){
-            stackPane.setEffect(new BoxBlur(10,10,3));
-        }else {
+    public void buttonsDisable(Boolean set) {
+        if (set) {
+            stackPane.setEffect(new BoxBlur(10, 10, 3));
+        } else {
             stackPane.setEffect(null);
         }
         monstersButton.setDisable(set);
@@ -759,6 +761,16 @@ public class IngameController extends Controller {
         helpSymbol.setDisable(set);
         messageField.setDisable(set);
         sendMessageButton.setDisable(set);
+    }
+    public void showSettings() {
+        IngameSettingsController ingameSettingsController = ingameSettingsControllerProvider.get();
+         VBox settingsVBox = new VBox();
+        settingsVBox.setAlignment(Pos.CENTER);
+        ingameSettingsController.init(this, settingsVBox);
+        settingsVBox.getChildren().add(ingameSettingsController.render());
+        root.getChildren().add(settingsVBox);
+        settingsVBox.requestFocus();
+        buttonsDisable(true);
     }
 
     public void showTrainerSettings() {
