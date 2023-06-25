@@ -56,13 +56,9 @@ public class IngameSettingsController extends Controller {
     }
 
     public void openAudioSettings() {
-        ingameController.root.getChildren().remove(ingameVbox);
-        ingameController.buttonsDisable(false);
     }
 
     public void openKeybindings() {
-        //ingameController.root.getChildren().remove(ingameVbox);
-        //ingameController.buttonsDisable(false);
         ingameController.showHelp();
     }
 
