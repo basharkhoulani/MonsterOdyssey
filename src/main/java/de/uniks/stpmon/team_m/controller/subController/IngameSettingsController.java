@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.controller.MainMenuController;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -13,22 +14,25 @@ import javafx.scene.layout.VBox;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-public class IngamePauseMenuController extends Controller {
-
+public class IngameSettingsController extends Controller {
     @FXML
-    public VBox pauseMenuVbox;
+    public VBox settingsVbox;
     @FXML
-    public Button resumeGameButton;
+    public Button audioSettingsButton;
     @FXML
-    public Button settingsButton;
+    public Button keybindingsButton;
     @FXML
-    public Button leaveGameButton;
+    public Button trainerSettingsButton;
     @FXML
-    public ImageView resumeGameImageView;
+    public Button goBackButton;
     @FXML
-    public ImageView settingsImageView;
+    public ImageView audioSettingsImageView;
     @FXML
-    public ImageView leaveGameImageView;
+    public ImageView keybindingsImageView;
+    @FXML
+    public ImageView trainerSettingsImageView;
+    @FXML
+    public ImageView goBackImageView;
     @Inject
     IngameController ingameController;
     private VBox ingameVbox;
@@ -36,8 +40,9 @@ public class IngamePauseMenuController extends Controller {
     Provider<IngameController> ingameControllerProvider;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
+
     @Inject
-    public IngamePauseMenuController() {
+    public IngameSettingsController() {
     }
 
     public Parent render() {
@@ -45,28 +50,29 @@ public class IngamePauseMenuController extends Controller {
         return parent;
     }
 
-    public void init(IngameController ingameController, VBox ingameVbox, Provider<MainMenuController> mainMenuControllerProvider, App app) {
+    public void init(IngameController ingameController, VBox ingameVbox) {
         this.ingameController = ingameController;
         this.ingameVbox = ingameVbox;
-        this.mainMenuControllerProvider = mainMenuControllerProvider;
-        this.app = app;
     }
 
-
-    public void resumeGame() {
+    public void openAudioSettings() {
         ingameController.root.getChildren().remove(ingameVbox);
         ingameController.buttonsDisable(false);
     }
 
-    public void settings() {
-        ingameVbox.setVisible(false);
+    public void openKeybindings() {
         //ingameController.root.getChildren().remove(ingameVbox);
-        ingameController.buttonsDisable(false);
-        ingameController.showSettings();
+        //ingameController.buttonsDisable(false);
+        ingameController.showHelp();
     }
 
-    public void leaveGame() {
+    public void openTrainerSettings(){
+        ingameController.showTrainerSettings();
+    }
+
+    public void goBack() {
         ingameController.root.getChildren().remove(ingameVbox);
-        app.show(mainMenuControllerProvider.get());
+        ingameController.buttonsDisable(false);
+        ingameController.pauseGame();
     }
 }

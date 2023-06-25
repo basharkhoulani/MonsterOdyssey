@@ -110,6 +110,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<IngamePauseMenuController> ingamePauseMenuControllerProvider;
     @Inject
+    Provider<IngameSettingsController> ingameSettingsControllerProvider;
+    @Inject
     Provider<EventListener> eventListener;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -764,101 +766,14 @@ public class IngameController extends Controller {
         sendMessageButton.setDisable(set);
     }
     public void showSettings() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/uniks/stpmon/team_m/views/IngamePauseMenu.fxml"));
-            VBox settingsMenu = loader.load();
-            settingsMenu.setStyle("-fx-background-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #CFE9DB");
-
-            AnchorPane.setTopAnchor(settingsMenu, 220.0);
-            AnchorPane.setBottomAnchor(settingsMenu, 220.0);
-            AnchorPane.setLeftAnchor(settingsMenu, 350.0);
-            AnchorPane.setRightAnchor(settingsMenu, 350.0);
-            settingsMenu.setAlignment(Pos.CENTER);
-            settingsMenu.setSpacing(20);
-            settingsMenu.setPrefWidth(300);
-            settingsMenu.setPrefHeight(300);
-
-            //AudioSettings Button
-            Button audioSettings = new Button();
-            audioSettings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: gray; -fx-border-width: 1px; -fx-border-radius: 10px;");
-            ImageView imageView = new ImageView();
-            if(!GraphicsEnvironment.isHeadless()){
-                imageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AUDIOSYMBOL)).toString()));
-            }
-            imageView.setFitWidth(40);
-            imageView.setFitHeight(40);
-            audioSettings.setPrefHeight(50);
-            audioSettings.setPrefWidth(250);
-            audioSettings.setGraphic(imageView);
-            audioSettings.setText("Audio Settings");
-
-            //Keybindings Button
-            Button keybindings = new Button();
-            keybindings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: gray; -fx-border-width: 1px; -fx-border-radius: 10px;");
-            ImageView imageView2 = new ImageView();
-            if(!GraphicsEnvironment.isHeadless()){
-                imageView2.setImage(new Image(Objects.requireNonNull(App.class.getResource(KEYBINDINGSSYMBOL)).toString()));
-            }
-            imageView2.setFitWidth(40);
-            imageView2.setFitHeight(40);
-            keybindings.setPrefHeight(50);
-            keybindings.setPrefWidth(250);
-            keybindings.setGraphic(imageView2);
-            keybindings.setText("Keybindings");
-
-            //Trainer Settings Button
-            Button trainerSettings = new Button();
-            trainerSettings.setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: gray; -fx-border-width: 1px; -fx-border-radius: 10px;");
-            ImageView imageView3 = new ImageView();
-            if(!GraphicsEnvironment.isHeadless()){
-                imageView3.setImage(new Image(Objects.requireNonNull(App.class.getResource(SETTINGSYMBOL2)).toString()));
-            }
-            imageView3.setFitWidth(40);
-            imageView3.setFitHeight(40);
-            trainerSettings.setPrefHeight(50);
-            trainerSettings.setPrefWidth(250);
-            trainerSettings.setGraphic(imageView3);
-            trainerSettings.setText(" Trainer Settings");
-
-            //Go back Button
-            Button goBack = new Button();
-            goBack.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 17px; -fx-background-radius: 10px; -fx-background-radius: 10px; -fx-border-color: gray; -fx-border-width: 1px; -fx-border-radius: 10px;");
-            ImageView imageView4 = new ImageView();
-            if(!GraphicsEnvironment.isHeadless()){
-                imageView4.setImage(new Image(Objects.requireNonNull(App.class.getResource(GOBACKSYMBOL)).toString()));
-            }
-            imageView4.setFitWidth(40);
-            imageView4.setFitHeight(40);
-            goBack.setPrefHeight(50);
-            goBack.setPrefWidth(250);
-            goBack.setGraphic(imageView4);
-            goBack.setText("   Go Back");
-
-            settingsMenu.getChildren().addAll(audioSettings, keybindings, trainerSettings, goBack);
-            root.getChildren().add(settingsMenu);
-            settingsMenu.requestFocus();
-            stackPane.setEffect(new BoxBlur(10,10,3));
-            buttonsDisable(true);
-
-            audioSettings.setOnMouseClicked(event -> {
-                settingsMenu.setVisible(false);
-                buttonsDisable(false);
-                stackPane.setEffect(null);
-            });
-            keybindings.setOnMouseClicked(event -> {
-                showHelp();
-            });
-            trainerSettings.setOnMouseClicked(event -> {
-                showTrainerSettings();
-            });
-            goBack.setOnMouseClicked(event -> {
-                settingsMenu.setVisible(false);
-                pauseGame();
-            });
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        IngameSettingsController ingameSettingsController = ingameSettingsControllerProvider.get();
+         VBox settingsVBox = new VBox();
+        settingsVBox.setAlignment(Pos.CENTER);
+        ingameSettingsController.init(this, settingsVBox);
+        pauseMenuVBox.getChildren().add(ingameSettingsController.render());
+        root.getChildren().add(settingsVBox);
+        settingsVBox.requestFocus();
+        buttonsDisable(true);
     }
 
     public void showTrainerSettings() {
