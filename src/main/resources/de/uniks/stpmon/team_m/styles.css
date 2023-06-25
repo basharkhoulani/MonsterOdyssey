@@ -400,7 +400,3 @@
     -fx-background-size: cover;
     -fx-opacity: opacity;
 }
-
-.encounterTransparent {
-    -fx-background-color: rgba(255, 255, 255, 80%);
-}
