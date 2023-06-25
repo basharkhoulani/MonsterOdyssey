@@ -172,7 +172,7 @@ public class AppTest extends ApplicationTest {
 
         // test Ingame Pause
         clickOn("#pauseButton");
-        clickOn("  Resume Game");
+        clickOn("#resumeGameButton");
 
     }
 }
