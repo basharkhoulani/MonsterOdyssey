@@ -26,7 +26,7 @@
                      <Rectangle2D />
                   </viewport>
                   <image>
-                     <Image url="@../images/PlaySymbol.PNG" />
+                     <Image url="@../images/PlaySymbol.png" />
                   </image>
                </ImageView>
                <Label text="%RESUME.BUTTON.LABEL" />
@@ -44,7 +44,7 @@
             <HBox spacing="20" alignment="CENTER_LEFT">
                <ImageView fx:id="settingsImageView" fitHeight="39.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                     <Image url="@../images/SettingSymbol2.PNG" />
+                     <Image url="@../images/SettingSymbol2.png" />
                   </image>
                </ImageView>
                <Label text="%SETTINGS" />
@@ -62,7 +62,7 @@
             <HBox spacing="10" alignment="CENTER_LEFT">
                <ImageView fx:id="leaveGameImageView" fitHeight="39.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                     <Image url="@../images/GoBackSymbol.PNG" />
+                     <Image url="@../images/GoBackSymbol.png" />
                   </image>
                </ImageView>
                <Label text="%SAVE.GAME.AND.LEAVE.BUTTON.LABEL" />
