@@ -16,9 +16,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 
 import javax.inject.Inject;
@@ -31,11 +32,21 @@ import java.util.Optional;
 @Singleton
 public class IngameTrainerSettingsController extends Controller {
     @FXML
-    public ImageView trainerAvatarImageView;
-
+    public VBox trainerSettingsVbox;
     @FXML
-    public Button cancelButton;
-
+    public Button goBackButton;
+    @FXML
+    public TextField trainerNameTextfield;
+    @FXML
+    public Button trainerNameEditButton;
+    @FXML
+    public Button arrowLeftButton;
+    @FXML
+    public Button arrowRightButton;
+    @FXML
+    public ImageView trainerAvatarImageView;
+    @FXML
+    public Button UpdateTrainerButton;
     @FXML
     public Button deleteTrainerButton;
 
@@ -57,6 +68,7 @@ public class IngameTrainerSettingsController extends Controller {
     public UserStorage usersStorage;
 
     protected final CompositeDisposable disposables = new CompositeDisposable();
+    private VBox ingameVbox;
 
 
     @Inject
@@ -75,9 +87,9 @@ public class IngameTrainerSettingsController extends Controller {
         return parent;
     }
 
-    public void onCancelButtonClick() {
-        ((Stage) cancelButton.getScene().getWindow()).close();
-    }
+    //public void onCancelButtonClick() {
+        //((Stage) cancelButton.getScene().getWindow()).close();
+    //}
 
     public void onDeleteTrainerButtonClick() {
         final Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -99,7 +111,7 @@ public class IngameTrainerSettingsController extends Controller {
         if (result.isPresent() && result.get() == cancelButton) {
             alert.close();
         } else if (result.isPresent() && result.get() == okButton) {
-            onCancelButtonClick();
+            //onCancelButtonClick();
             disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).
                     observeOn(FX_SCHEDULER).subscribe(end -> {
                         trainerStorageProvider.get().setTrainer(null);
@@ -124,7 +136,24 @@ public class IngameTrainerSettingsController extends Controller {
         }
     }
 
-    public void setIngameController(IngameController ingameController) {
+    public void initIngame(IngameController ingameController, VBox ingameVbox) {
         this.ingameController = ingameController;
+        this.ingameVbox = ingameVbox;
+    }
+
+    public void goBackToSettings() {
+        ingameController.root.getChildren().remove(ingameVbox);
+    }
+
+    public void editTrainerName() {
+    }
+
+    public void arrowLeftClick() {
+    }
+
+    public void arrowRightClick() {
+    }
+
+    public void updateTrainer() {
     }
 }
