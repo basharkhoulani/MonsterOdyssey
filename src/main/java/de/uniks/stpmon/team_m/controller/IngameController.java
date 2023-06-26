@@ -21,6 +21,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -36,6 +39,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -75,6 +79,8 @@ public class IngameController extends Controller {
     @FXML
     public Button sendMessageButton;
     @FXML
+    public StackPane stackPane;
+    @FXML
     public ListView<Message> chatListView;
     @FXML
     public AnchorPane anchorPane;
@@ -109,6 +115,8 @@ public class IngameController extends Controller {
     MessageService messageService;
     @Inject
     TrainersService trainersService;
+    @Inject
+    Provider<ChangeAudioController> changeAudioControllerProvider;
 
     @Inject
     Provider<IngameController> ingameControllerProvider;
@@ -732,6 +740,8 @@ public class IngameController extends Controller {
     }
 
     public void showTrainerSettings() {
+        showChangeAudioSettings();
+        /*
         Dialog<?> trainerSettingsDialog = new Dialog<>();
         trainerSettingsDialog.setTitle(resources.getString("TRAINER.PROFIL"));
         ingameTrainerSettingsControllerProvider.get().setApp(this.app);
@@ -754,6 +764,7 @@ public class IngameController extends Controller {
         );
 
         trainerSettingsDialog.showAndWait();
+        */
     }
 
     public void sendMessageButton() {
@@ -907,5 +918,15 @@ public class IngameController extends Controller {
                 }
         );
         dialog.showAndWait();
+    }
+
+    public void showChangeAudioSettings() {
+        VBox changeAudioVBox = new VBox(changeAudioControllerProvider.get().render());
+        anchorPane.getChildren().add(changeAudioVBox);
+        AnchorPane.setTopAnchor(changeAudioVBox, 0.0);
+        AnchorPane.setBottomAnchor(changeAudioVBox, 0.0);
+        AnchorPane.setLeftAnchor(changeAudioVBox, 0.0);
+        AnchorPane.setRightAnchor(changeAudioVBox, 0.0);
+        changeAudioVBox.setAlignment(Pos.CENTER);
     }
 }
