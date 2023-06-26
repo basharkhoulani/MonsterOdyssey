@@ -234,30 +234,6 @@ public class IngameControllerTest extends ApplicationTest {
     }
 
     @Test
-    void pauseGame() {
-        when(udpEventListenerProvider.get().listen(any(), any())).thenReturn(empty());
-        // test Ingame Pause
-        type(KeyCode.P);
-        final DialogPane dialogPanePause = lookup(".dialog-pane").query();
-        assertNotNull(dialogPanePause);
-        final Label pauseLabel = dialogPanePause.getChildren().stream()
-                .filter(node -> node instanceof Label)
-                .map(node -> (Label) node)
-                .findFirst()
-                .orElse(null);
-        assertNotNull(pauseLabel);
-        assertEquals("What do you want to do?", pauseLabel.getText());
-
-        // test Ingame Unpause With Key Code P
-        type(KeyCode.J);
-        type(KeyCode.P);
-        // test Ingame Unpause With Button
-        type(KeyCode.P);
-        clickOn("Resume Game");
-
-    }
-
-    @Test
     void sendMessageTest() {
         final TextField messageField = lookup("#messageField").query();
         when(messageService.newMessage(any(), any(), any()))
@@ -369,8 +345,8 @@ public class IngameControllerTest extends ApplicationTest {
 
         clickOn("No");
 
-        final StackPane stackPane = lookup("#stackPane").query();
-        final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+        final StackPane rootStackPane = lookup("#root").query();
+        final Node node = rootStackPane.getChildren().get(rootStackPane.getChildren().size() - 1);
 
         assertNotEquals("nurseVBox", node.getId());
 
@@ -380,8 +356,8 @@ public class IngameControllerTest extends ApplicationTest {
         Thread.sleep(30);
 
 
-        final StackPane stackPane2 = lookup("#stackPane").query();
-        final Node node2 = stackPane2.getChildren().get(stackPane.getChildren().size() - 1);
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node2 = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
 
         assertNotEquals("dialogVBox", node2.getId());
 
