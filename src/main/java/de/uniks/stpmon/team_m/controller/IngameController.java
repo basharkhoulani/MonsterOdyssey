@@ -5,10 +5,7 @@ import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.dto.Region;
-import de.uniks.stpmon.team_m.service.AreasService;
-import de.uniks.stpmon.team_m.service.MessageService;
-import de.uniks.stpmon.team_m.service.PresetsService;
-import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.Position;
@@ -344,6 +341,8 @@ public class IngameController extends Controller {
 
         popupStage = new Stage();
         popupStage.initOwner(app.getStage());
+
+        specificSounds();
 
         return parent;
     }
@@ -1247,5 +1246,21 @@ public class IngameController extends Controller {
         root.getChildren().add(changeAudioVBox);
         changeAudioVBox.requestFocus();
         buttonsDisable(true);
+    }
+
+    public void specificSounds() {
+        disposables.add(areasService.getArea(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer().area()).
+                observeOn(FX_SCHEDULER).subscribe(area -> {
+                    if(area.name().contains("Route")) {
+                        AudioService.getInstance().stopSound();
+                        AudioService.getInstance().playSound(ROUTE_SOUND);
+                    } else if(area.map().infinite()) {
+                        AudioService.getInstance().pauseSound();
+                        AudioService.getInstance().playSound(CITY_SOUND);
+                    } else {
+                        AudioService.getInstance().stopSound();
+                        AudioService.getInstance().playSound(ROOMS_SOUND);
+                    }
+                }, error -> this.showError(error.getMessage())));
     }
 }
