@@ -746,6 +746,15 @@ public class IngameController extends Controller {
         root.getChildren().add(pauseMenuVBox);
         pauseMenuVBox.requestFocus();
         buttonsDisable(true);
+        EventHandler<KeyEvent> keyPressedHandler = event -> {
+            event.consume();
+            if (event.getCode() == PAUSE_MENU_KEY) {
+                root.getChildren().remove(pauseMenuVBox);
+                buttonsDisable(false);
+                root.removeEventHandler(KeyEvent.KEY_PRESSED, this.keyPressedHandler);
+            }
+        };
+        root.addEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);
     }
 
     public void buttonsDisable(Boolean set) {
