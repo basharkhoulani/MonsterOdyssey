@@ -73,6 +73,12 @@ public class Constants {
     public static double ZERO = 0;
     public static double ONE = 1;
 
+    public static final String SETTINGSYMBOL2 = "images/SettingSymbol2.png";
+    public static final String GOBACKSYMBOL = "images/GoBackSymbol.PNG";
+    public static final String PLAYSYMBOL = "images/PlaySymbol.PNG";
+    public static final String AUDIOSYMBOL = "images/AudioSymbol.png";
+    public static final String KEYBINDINGSSYMBOL = "images/KeybindingsSymbol.png";
+
         // NPC DIALOG
     public static int dialogVBoxWidth = 700;
     public static int getDialogVBoxHeight = 150;
@@ -80,6 +86,31 @@ public class Constants {
     public static Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);
     public static Insets helpLabelInsets = new Insets(0, 40, 20, 0);
     public static int helpLabelFontSize = 12;
+    public enum DialogSpecialInteractions {
+        nurseYes,
+        nurseNo,
+        nurseNoMons,
+        starterSelection0,
+        starterSelection1,
+        starterSelection2
+    }
+    public enum ContinueDialogReturnValues {
+        dialogNotFinished,
+        dialogFinishedTalkToTrainer,
+        dialogFinishedNoTalkToTrainer,
+        albertDialogFinished0,
+        albertDialogFinished1,
+        albertDialogFinished2,
+        spokenToNurse
+    }
+        // Nurse Popup
+    public static int popupHeight = 170;
+    public static int popupWidth = 300;
+    public static int textFieldHeight = 120;
+    public static int buttonsHBoxHeight = 50;
+    public static int buttonsHBoxSpacing = 30;
+    public static int nurseButtonHeight = 40;
+    public static int nurseButtonWidth = 80;
 
     // Error messages
     public static final String HTTP_400 = "400";
