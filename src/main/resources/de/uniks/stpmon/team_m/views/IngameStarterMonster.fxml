@@ -13,7 +13,7 @@
 <AnchorPane fx:id="starterSelectionAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="440.0" prefWidth="500.0" style="-fx-background-color: #d3ebd3;"
             xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="de.uniks.stpmon.team_m.controller.subController.IngameStarterSelectionController">
+            fx:controller="de.uniks.stpmon.team_m.controller.subController.IngameStarterMonsterController">
     <Label fx:id="starterSelectionLabel" alignment="CENTER" layoutX="50.0" layoutY="14.0" prefHeight="35.0"
            prefWidth="400.0" text="Selection" textAlignment="CENTER" wrapText="true">
         <font>

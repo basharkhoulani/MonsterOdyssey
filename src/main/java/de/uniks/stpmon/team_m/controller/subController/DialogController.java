@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.scene.text.Text;
@@ -17,6 +18,8 @@ import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
 public class DialogController extends Controller {
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
+    @Inject
+    Provider<IngameController> ingameControllerProvider;
 
     private final Trainer npc;
     private final boolean alreadyEncountered;
@@ -134,6 +137,8 @@ public class DialogController extends Controller {
 
             if (Objects.equals(this.npc._id(), "645e32c6866ace359554a802") && !this.alreadyEncountered) {
                 // TODO remove this line when implementing albert special interaction
+                IngameController ingameController = ingameControllerProvider.get();
+                //ingameController.showStarterSelection();
                 this.starterSelection = new Random().nextInt(0, 2);
                 switch (starterSelection) {
                     case 0 -> {

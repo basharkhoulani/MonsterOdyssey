@@ -120,7 +120,8 @@ public class IngameController extends Controller {
     MessageService messageService;
     @Inject
     TrainersService trainersService;
-
+    @Inject
+    Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
     @Inject
     Provider<IngameController> ingameControllerProvider;
 
@@ -161,6 +162,7 @@ public class IngameController extends Controller {
     private Trainer currentNpc;
     private NpcTextManager npcTextManager;
     private VBox miniMapVBox;
+    private VBox starterSelectionVBox;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -928,7 +930,7 @@ public class IngameController extends Controller {
     }
 
     /*
-        ** NPC methods **
+     ** NPC methods **
      */
 
     public void interactWithTrainer() {
@@ -1078,7 +1080,8 @@ public class IngameController extends Controller {
             case albertDialogFinished2 -> endDialog(2, true);
             case dialogFinishedNoTalkToTrainer -> endDialog(0, false);
             case spokenToNurse -> createNurseHealPopup();
-            default -> {}
+            default -> {
+            }
         }
     }
 
@@ -1236,6 +1239,45 @@ public class IngameController extends Controller {
         messageField.setDisable(true);
         sendMessageButton.setDisable(true);
 
+    }
+
+    public void showStarterSelection() {
+        starterSelectionVBox = new VBox();
+        starterSelectionVBox.getStyleClass().add("miniMapContainer");
+        starterSelectionVBox.setPadding(new Insets(0, 0, 8, 0));
+        starterSelectionVBox.getChildren().add(ingameStarterMonsterControllerProvider.get().render());
+
+        Button okButton = new Button();
+        okButton.setId("okButton");
+        okButton.setText(resources.getString("OK"));
+        okButton.setPrefHeight(32);
+        okButton.setPrefWidth(128);
+        okButton.getStyleClass().add("welcomeSceneButton");
+        okButton.setOnAction(event -> {
+                    root.getChildren().remove(starterSelectionVBox);
+                    starterSelectionVBox = null;
+                    stackPane.setEffect(null);
+                    monstersButton.setDisable(false);
+                    settingsButton.setDisable(false);
+                    showChatButton.setDisable(false);
+                    mapSymbol.setDisable(false);
+                    helpSymbol.setDisable(false);
+                    messageField.setDisable(false);
+                    sendMessageButton.setDisable(false);
+                }
+        );
+        starterSelectionVBox.getChildren().add(okButton);
+        root.getChildren().add(starterSelectionVBox);
+        starterSelectionVBox.requestFocus();
+        stackPane.setEffect(new BoxBlur(10, 10, 3));
+
+        monstersButton.setDisable(true);
+        settingsButton.setDisable(true);
+        showChatButton.setDisable(true);
+        mapSymbol.setDisable(true);
+        helpSymbol.setDisable(true);
+        messageField.setDisable(true);
+        sendMessageButton.setDisable(true);
     }
 
     @Override
