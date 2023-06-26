@@ -961,7 +961,9 @@ public class IngameController extends Controller {
                         createDialogVBox(),
                         checkIfNpcEncounteredPlayer(this.currentNpc),
                         npcTextManager,
-                        trainerStorageProvider.get().getTrainer());
+                        trainerStorageProvider.get().getTrainer(),
+                        this
+                );
             }
         }
     }
@@ -1231,10 +1233,12 @@ public class IngameController extends Controller {
     }
 
     public void showStarterSelection() {
+        IngameStarterMonsterController ingameStarterMonsterController = ingameStarterMonsterControllerProvider.get();
         starterSelectionVBox = new VBox();
         starterSelectionVBox.getStyleClass().add("miniMapContainer");
         starterSelectionVBox.setPadding(new Insets(0, 0, 8, 0));
-        starterSelectionVBox.getChildren().add(ingameStarterMonsterControllerProvider.get().render());
+        ingameStarterMonsterController.init(this, starterSelectionVBox, app);
+        starterSelectionVBox.getChildren().add(ingameStarterMonsterController.render());
 
         Button okButton = new Button();
         okButton.setId("okButton");
@@ -1245,28 +1249,13 @@ public class IngameController extends Controller {
         okButton.setOnAction(event -> {
                     root.getChildren().remove(starterSelectionVBox);
                     starterSelectionVBox = null;
-                    stackPane.setEffect(null);
-                    monstersButton.setDisable(false);
-                    settingsButton.setDisable(false);
-                    showChatButton.setDisable(false);
-                    mapSymbol.setDisable(false);
-                    helpSymbol.setDisable(false);
-                    messageField.setDisable(false);
-                    sendMessageButton.setDisable(false);
+                    buttonsDisable(false);
                 }
         );
         starterSelectionVBox.getChildren().add(okButton);
         root.getChildren().add(starterSelectionVBox);
         starterSelectionVBox.requestFocus();
-        stackPane.setEffect(new BoxBlur(10, 10, 3));
-
-        monstersButton.setDisable(true);
-        settingsButton.setDisable(true);
-        showChatButton.setDisable(true);
-        mapSymbol.setDisable(true);
-        helpSymbol.setDisable(true);
-        messageField.setDisable(true);
-        sendMessageButton.setDisable(true);
+        buttonsDisable(true);
     }
 
     @Override

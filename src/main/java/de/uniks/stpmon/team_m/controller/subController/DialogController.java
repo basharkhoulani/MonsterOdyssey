@@ -19,7 +19,7 @@ public class DialogController extends Controller {
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
-    Provider<IngameController> ingameControllerProvider;
+    IngameController ingameController;
 
     private final Trainer npc;
     private final boolean alreadyEncountered;
@@ -34,10 +34,11 @@ public class DialogController extends Controller {
     private boolean noMons;
 
     @Inject
-    public DialogController(Trainer npc, TextFlow dialogTextFlow, boolean alreadyEncountered, NpcTextManager npcTextManager, Trainer player) {
+    public DialogController(Trainer npc, TextFlow dialogTextFlow, boolean alreadyEncountered, NpcTextManager npcTextManager, Trainer player, IngameController ingameController) {
         this.npc = npc;
         this.alreadyEncountered = alreadyEncountered;
         this.npcTextManager = npcTextManager;
+        this.ingameController = ingameController;
 
         try {
             // check if npc can heal
@@ -137,8 +138,7 @@ public class DialogController extends Controller {
 
             if (Objects.equals(this.npc._id(), "645e32c6866ace359554a802") && !this.alreadyEncountered) {
                 // TODO remove this line when implementing albert special interaction
-                IngameController ingameController = ingameControllerProvider.get();
-                //ingameController.showStarterSelection();
+                ingameController.showStarterSelection();
                 this.starterSelection = new Random().nextInt(0, 2);
                 switch (starterSelection) {
                     case 0 -> {

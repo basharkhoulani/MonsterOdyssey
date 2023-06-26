@@ -1,6 +1,8 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -31,10 +33,19 @@ public class IngameStarterMonsterController extends Controller {
     public ImageView arrowLeft;
     @FXML
     public ImageView arrowRight;
+    @Inject
+    IngameController ingameController;
+    private VBox popUpVBox;
 
     @Inject
     public IngameStarterMonsterController() {
 
+    }
+
+    public void init(IngameController ingameController, VBox starterSelectionVBox, App app) {
+        this.ingameController = ingameController;
+        this.popUpVBox = starterSelectionVBox;
+        this.app = app;
     }
 
     public Parent render() {
