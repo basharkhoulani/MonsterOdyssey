@@ -253,6 +253,12 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: 0% 50%;
 }
+.pauseButton{
+    -fx-background-image: url("images/PauseSymbol.png");
+    -fx-background-size: 24px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 5% 50%;
+}
 .monstersButton {
     -fx-background-image: url("images/Monster1-without.png");
     -fx-background-size: 24px;
@@ -260,15 +266,14 @@
     -fx-background-position: 5% 50%;
 }
 
-.dialogBackground {
+.dialogTextFlow {
     -fx-background-color: #CFE9DB;
+    -fx-opacity: 1;
+    -fx-border-color: #279D27;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
 }
-
-
-.slider:hover {
-    opacity: 1;
-}
-
 /*********************************************************************************/
 /*************************** Autocomplete textfields *****************************/
 .auto-complete-popup > .list-view {
@@ -359,4 +364,23 @@
 .rightLine {
     -fx-border-width: 0 1 0 0;
     -fx-border-color: #000000;
+}
+/*********************************************************************************/
+/*************************** Ingame - MiniMap ****************************/
+.miniMapContainer {
+    -fx-alignment: CENTER;
+    -fx-background-color: #d3ebd3;
+    -fx-max-height: 500px;
+    -fx-max-width: 500px;
+    -fx-border-color: black;
+    -fx-border-style: solid;
+    -fx-border-width: 2px;
+}
+.mapImageView {
+    -fx-border-color: black;
+    -fx-border-style: solid;
+    -fx-border-width: 2px;
+}
+.dialogBackground {
+    -fx-background-color: #CFE9DB;
 }

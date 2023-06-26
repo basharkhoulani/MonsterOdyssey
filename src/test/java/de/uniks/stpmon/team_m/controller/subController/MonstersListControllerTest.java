@@ -108,6 +108,8 @@ public class MonstersListControllerTest extends ApplicationTest {
                 "Hans",
                 "Premade_Character_04.png",
                 0,
+                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                List.of(1,2),
                 "645e32c6866ace359554a7fa",
                 45,
                 23,
