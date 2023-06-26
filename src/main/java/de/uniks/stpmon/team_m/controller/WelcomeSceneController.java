@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.CharacterSelectionController;
 import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.service.AudioService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
@@ -21,8 +22,7 @@ import javax.inject.Provider;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.MESSAGEBOX_HEIGHT;
-import static de.uniks.stpmon.team_m.Constants.MESSAGEBOX_WIDTH;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class WelcomeSceneController extends Controller {
     @FXML
@@ -56,6 +56,9 @@ public class WelcomeSceneController extends Controller {
     Provider<PresetsService> presetsServiceProvider;
 
     @Inject
+    AudioService audioService;
+
+    @Inject
     public WelcomeSceneController() {
     }
 
@@ -64,11 +67,15 @@ public class WelcomeSceneController extends Controller {
         return resources.getString("INGAME.TITLE");
     }
 
+    @Override
+    public void init() {
+        AudioService.getInstance().stopSound();
+        AudioService.getInstance().playSound(WELCOME_SOUND);
+    }
 
     @Override
     public Parent render() {
         final Parent parent = super.render();
-
         nextButton.setOnAction(event -> changeCount(true));
         previousButton.setOnAction(event -> changeCount(false));
         return parent;
@@ -82,7 +89,11 @@ public class WelcomeSceneController extends Controller {
     public void switchScene() {
 
         switch (sceneNumber) {
-            case 0 -> app.show(mainMenuControllerProvider.get());
+            case 0 -> {
+                AudioService.getInstance().stopSound();
+                AudioService.getInstance().playSound(MENU_SOUND);
+                app.show(mainMenuControllerProvider.get());
+            }
             case 1 -> {
                 if (messagePane.getChildren().size() > 2) {
                     messagePane.getChildren().remove(2);
@@ -171,6 +182,8 @@ public class WelcomeSceneController extends Controller {
                             disposables.add(presetsServiceProvider.get().getCharacter(result.image()).observeOn(FX_SCHEDULER).subscribe(
                                     response -> {
                                         trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
+                                        AudioService.getInstance().stopSound();
+                                        AudioService.getInstance().playSound(CITY_SOUND);
                                         app.show(ingameControllerProvider.get());
                                     },
                                     error -> {
