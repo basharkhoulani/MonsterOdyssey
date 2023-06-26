@@ -101,7 +101,8 @@ public class Constants {
         albertDialogFinished0,
         albertDialogFinished1,
         albertDialogFinished2,
-        spokenToNurse
+        spokenToNurse,
+        encounterOnTalk
     }
         // Nurse Popup
     public static int popupHeight = 170;
