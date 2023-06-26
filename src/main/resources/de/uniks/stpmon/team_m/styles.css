@@ -326,3 +326,7 @@
     -fx-border-width: 0 1 0 0;
     -fx-border-color: #000000;
 }
+
+.dialogBackground {
+    -fx-background-color: #CFE9DB;
+}
