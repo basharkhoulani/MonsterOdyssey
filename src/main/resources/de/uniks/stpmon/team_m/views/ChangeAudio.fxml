@@ -8,18 +8,21 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="450.0" styleClass="dialogBackground" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="312.0" prefWidth="450.0" styleClass="dialogBackground" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.ChangeAudioController">
    <children>
-      <Label layoutX="150.0" layoutY="54.0" text="%CHANGE.VOLUME" />
-      <Slider fx:id="audioSlider" layoutX="103.0" layoutY="145.0" prefHeight="20.0" prefWidth="252.0" />
-      <HBox layoutX="11.0" layoutY="219.0" prefHeight="67.0" prefWidth="439.0">
+      <Label alignment="CENTER" layoutX="1.0" layoutY="54.0" prefHeight="24.0" prefWidth="450.0" text="%CHANGE.VOLUME" />
+      <Slider fx:id="audioSlider" layoutX="103.0" layoutY="145.0" onDragDetected="#getSliderValue" prefHeight="20.0" prefWidth="252.0" />
+      <HBox alignment="CENTER" layoutY="219.0" prefHeight="67.0" prefWidth="450.0">
          <children>
-            <Button mnemonicParsing="false" styleClass="buttonsYellow" text="Button">
+            <Button fx:id="closeButton" alignment="CENTER" mnemonicParsing="false" onAction="#onCloseButtonClick" styleClass="buttonsYellow" text="%CLOSE">
                <HBox.margin>
-                  <Insets left="175.0" top="16.0" />
+                  <Insets top="16.0" />
                </HBox.margin>
+               <font>
+                  <Font name="Comic Sans MS" size="13.0" />
+               </font>
             </Button>
          </children>
       </HBox>
