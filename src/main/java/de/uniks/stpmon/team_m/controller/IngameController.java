@@ -764,7 +764,7 @@ public class IngameController extends Controller {
     }
     public void showSettings() {
         IngameSettingsController ingameSettingsController = ingameSettingsControllerProvider.get();
-         VBox settingsVBox = new VBox();
+        VBox settingsVBox = new VBox();
         settingsVBox.setAlignment(Pos.CENTER);
         ingameSettingsController.init(this, settingsVBox);
         settingsVBox.getChildren().add(ingameSettingsController.render());
@@ -774,28 +774,18 @@ public class IngameController extends Controller {
     }
 
     public void showTrainerSettings() {
-        Dialog<?> trainerSettingsDialog = new Dialog<>();
-        trainerSettingsDialog.setTitle(resources.getString("TRAINER.PROFIL"));
+        IngameTrainerSettingsController ingameTrainerSettingsController = ingameTrainerSettingsControllerProvider.get();
+        VBox trainersettingsVBox = new VBox();
+        trainersettingsVBox.setAlignment(Pos.CENTER);
+        ingameTrainerSettingsController.initIngame(this, trainersettingsVBox);
+        trainersettingsVBox.getChildren().add(ingameTrainerSettingsController.render());
+        root.getChildren().add(trainersettingsVBox);
+        trainersettingsVBox.requestFocus();
+        buttonsDisable(true);
+
+
         ingameTrainerSettingsControllerProvider.get().setApp(this.app);
         ingameTrainerSettingsControllerProvider.get().setValues(resources, preferences, resourceBundleProvider, ingameTrainerSettingsControllerProvider.get(), app);
-        ingameTrainerSettingsControllerProvider.get().setIngameController(this);
-        trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());
-        trainerSettingsDialog.getDialogPane().setExpandableContent(null);
-        if (!GraphicsEnvironment.isHeadless()) {
-            trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
-            trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");
-        }
-        trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
-        trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");
-        trainerSettingsDialog.initOwner(app.getStage());
-        Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();
-        popUp.setOnCloseRequest(evt -> {
-                    ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close();
-                    groundCanvas.requestFocus();
-                }
-        );
-
-        trainerSettingsDialog.showAndWait();
     }
 
     public void sendMessageButton() {
