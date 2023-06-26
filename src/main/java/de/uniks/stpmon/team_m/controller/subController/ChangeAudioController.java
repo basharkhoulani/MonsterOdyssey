@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.service.AudioService;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -47,7 +48,7 @@ public class ChangeAudioController extends Controller {
     public void getSliderValue() {
         audioSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue <?extends Number>observable, Number oldValue, Number newValue){
-
+                AudioService.getInstance().setVolume(newValue.doubleValue() / 100);
             }
         });
     }
