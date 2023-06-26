@@ -138,6 +138,8 @@ public class DialogController extends Controller {
 
             if (Objects.equals(this.npc._id(), "645e32c6866ace359554a802") && !this.alreadyEncountered) {
                 // TODO remove this line when implementing albert special interaction
+
+
                 ingameController.showStarterSelection();
                 this.starterSelection = new Random().nextInt(0, 2);
                 switch (starterSelection) {

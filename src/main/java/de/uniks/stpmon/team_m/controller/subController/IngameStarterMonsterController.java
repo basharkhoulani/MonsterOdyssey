@@ -3,6 +3,8 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.Monster;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -13,6 +15,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
+import java.util.List;
 
 public class IngameStarterMonsterController extends Controller {
     @FXML
@@ -35,6 +39,8 @@ public class IngameStarterMonsterController extends Controller {
     public ImageView arrowRight;
     @Inject
     IngameController ingameController;
+    @Inject
+    Provider<TrainerStorage> trainerStorageProvider;
     private VBox popUpVBox;
 
     @Inject
