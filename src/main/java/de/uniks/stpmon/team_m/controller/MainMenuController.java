@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Objects;
 import java.util.prefs.Preferences;
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -34,6 +35,8 @@ public class MainMenuController extends Controller {
     public Button logoutButton;
     @FXML
     public Button settingsButton;
+    @FXML
+    public Button muteButton;
     @FXML
     public Button startGameButton;
     @FXML
@@ -61,6 +64,8 @@ public class MainMenuController extends Controller {
     RegionsService regionsService;
     @Inject
     UsersService usersService;
+    @Inject
+    AudioService audioService;
     @Inject
     AuthenticationService authenticationService;
     @Inject
@@ -241,6 +246,8 @@ public class MainMenuController extends Controller {
                                 response -> {
                                     trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
                                     destroy();
+                                    AudioService.getInstance().stopSound();
+                                    AudioService.getInstance().playSound(CITY_SOUND);
                                     app.show(ingameControllerProvider.get());
                                 },
                                 error -> {
@@ -259,5 +266,17 @@ public class MainMenuController extends Controller {
 
     public void setTrainerDeletion() {
         this.information = resources.getString("DELETE.TRAINER.SUCCESS");
+    }
+
+    public void muteOrUnmuteSound() {
+        if(AudioService.getInstance().checkMuted()) {
+            muteButton.getStyleClass().remove("unmuteSymbol");
+            muteButton.getStyleClass().add("muteSymbol");
+            AudioService.getInstance().unmuteSound();
+        } else {
+            muteButton.getStyleClass().remove("muteSymbol");
+            muteButton.getStyleClass().add("unmuteSymbol");
+            AudioService.getInstance().muteSound();
+        }
     }
 }
