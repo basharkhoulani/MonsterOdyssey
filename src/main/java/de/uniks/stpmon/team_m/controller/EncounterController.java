@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.Opponent;
+import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
@@ -54,11 +55,14 @@ public class EncounterController extends Controller {
 
     @Inject
     Provider<IngameController> ingameControllerProvider;
+    private BattleMenuController battleMenuController;
     @Inject
     Provider<PresetsService> presetsServiceProvider;
     @Inject
     Provider<EventListener> eventListener;
-    private BattleMenuController battleMenuController;
+    @Inject
+    EncounterOpponentsService encounterOpponentsService;
+
 
     @Inject
     public EncounterController() {
@@ -77,8 +81,14 @@ public class EncounterController extends Controller {
         if(!GraphicsEnvironment.isHeadless()){
             parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../styles.css")).toExternalForm());
         }
+        battleMenuController.init(this, battleMenu);
         battleMenu.getChildren().add(battleMenuController.render());
         return parent;
+    }
+
+    @Override
+    public void destroy(){
+        super.destroy();
     }
 
     public void listenToOpponents(ObservableList<Opponent> opponents, String encounterId) {
