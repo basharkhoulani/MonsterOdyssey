@@ -2,7 +2,12 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
+import de.uniks.stpmon.team_m.dto.Message;
+import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.service.PresetsService;
+import de.uniks.stpmon.team_m.ws.EventListener;
+import io.reactivex.rxjava3.core.Observable;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -51,6 +56,8 @@ public class EncounterController extends Controller {
     Provider<IngameController> ingameControllerProvider;
     @Inject
     Provider<PresetsService> presetsServiceProvider;
+    @Inject
+    Provider<EventListener> eventListener;
     private BattleMenuController battleMenuController;
 
     @Inject
@@ -74,6 +81,17 @@ public class EncounterController extends Controller {
         return parent;
     }
 
+    public void listenToOpponents(ObservableList<Opponent> opponents, String encounterId) {
+        disposables.add(eventListener.get().listen("encounters." + encounterId + "opponents.*.*", Opponent.class)
+                .observeOn(FX_SCHEDULER).subscribe(event -> {
+                    final Opponent opponent = event.data();
+                    switch (event.suffix()) {
+                        case "created" -> opponents.add(opponent);
+                        case "updated" -> opponents.add(opponent);
+                        case "deleted" -> opponents.removeIf(o -> o._id().equals(opponent._id()));
+                    }
+                }, error -> showError(error.getMessage())));
+    }
 
 }
     
