@@ -33,7 +33,6 @@ public class AudioService {
     public void stopSound() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
-            //isPaused = true;
         }
     }
 
