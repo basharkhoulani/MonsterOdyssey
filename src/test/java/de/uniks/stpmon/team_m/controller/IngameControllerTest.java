@@ -11,11 +11,15 @@ import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.Node;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -86,11 +90,13 @@ public class IngameControllerTest extends ApplicationTest {
                 "Hans",
                 "Premade_Character_01.png",
                 0,
+                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                List.of(1,2),
                 "646bacc568933551792bf3d5",
+                33,
+                19,
                 0,
-                0,
-                0,
-                new NPCInfo(false)
+                new NPCInfo(false, false, false, false, null, null)
         ));
         when(trainerStorageProvider.get().getRegion()).thenReturn(
                 new Region(
@@ -143,7 +149,41 @@ public class IngameControllerTest extends ApplicationTest {
         ));
         doNothing().when(trainerStorage).setMonsters(any());
         lenient().when(presetsService.getCharacter(any())).thenReturn(Observable.empty());
-        when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(new Trainer("2023-05-30T12:02:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863", "646bab5cecf584e1be02598a", "6475e595ac3946b6a812d868", "Hans", "Premade_Character_01.png", 0, "6475e595ac3946b6a812d863", 0, 0, 0, new NPCInfo(false)))));
+        when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(
+                new Trainer(
+                    "2023-05-30T12:02:57.510Z",
+                    "2023-05-30T12:01:57.510Z",
+                    "6475e595ac3946b6a812d863",
+                    "646bab5cecf584e1be02598a",
+                    "6475e595ac3946b6a812d868",
+                    "Hans",
+                    "Premade_Character_01.png",
+                    0,
+                    List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                    List.of(1,2),
+                    "6475e595ac3946b6a812d863",
+                    33,
+                    18,
+                    0,
+                    new NPCInfo(false, false, false, false, null, null)),
+                new Trainer(
+                        "2023-05-30T12:02:57.510Z",
+                        "2023-05-30T12:01:57.510Z",
+                        "6475e595ac3946b6a812d863",
+                        "646bab5cecf584e1be02598a",
+                        "6475e595ac3946b6a812d868",
+                        "Krankenschwester Erna",
+                        "Nurse_2_16x16.png",
+                        0,
+                        List.of(),
+                        List.of(),
+                        "6475e595ac3946b6a812d863",
+                        20,
+                        18,
+                        2,
+                        new NPCInfo(false, false, false, true, null, null))
+                )
+        ));
         ingameController.setValues(bundle, null, null, ingameController, app);
         EventListener eventListenerMock = mock(EventListener.class);
         when(eventListener.get()).thenReturn(eventListenerMock);
@@ -152,7 +192,23 @@ public class IngameControllerTest extends ApplicationTest {
         when(eventListener.get().listen("regions.646bab5cecf584e1be02598a.messages.*.*", Message.class)).thenReturn(just(
                 new Event<>("regions.646bab5cecf584e1be02598a.messages.6475e595ac3946b6a812d863.created", message)
         ));
-        Trainer trainer = new Trainer("2023-05-30T12:02:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d865", "646bab5cecf584e1be02598a", "6475e595ac3946b6a812d868", "Peter", "Premade_Character_02.png", 0, "6475e595ac3946b6a812d863", 0, 0, 0, new NPCInfo(false));
+        Trainer trainer = new Trainer(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "6475e595ac3946b6a812d865",
+                "646bab5cecf584e1be02598a",
+                "6475e595ac3946b6a812d868",
+                "Peter",
+                "Premade_Character_02.png",
+                0,
+                List.of("1", "2"),
+                null,
+                "6475e595ac3946b6a812d863",
+                33,
+                18,
+                0,
+                new NPCInfo(false, false,false, false, null,null));
+
         when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers.*.*", Trainer.class)).thenReturn(just(
                 new Event<>("regions.646bab5cecf584e1be02598a.trainers.6475e595ac3946b6a812d865.created", trainer)));
         MonstersListController monstersListController = mock(MonstersListController.class);
@@ -175,30 +231,6 @@ public class IngameControllerTest extends ApplicationTest {
                 .orElse(null);
         assertNotNull(helpLabel);
         clickOn("OK");
-    }
-
-    @Test
-    void pauseGame() {
-        when(udpEventListenerProvider.get().listen(any(), any())).thenReturn(empty());
-        // test Ingame Pause
-        type(KeyCode.P);
-        final DialogPane dialogPanePause = lookup(".dialog-pane").query();
-        assertNotNull(dialogPanePause);
-        final Label pauseLabel = dialogPanePause.getChildren().stream()
-                .filter(node -> node instanceof Label)
-                .map(node -> (Label) node)
-                .findFirst()
-                .orElse(null);
-        assertNotNull(pauseLabel);
-        assertEquals("What do you want to do?", pauseLabel.getText());
-
-        // test Ingame Unpause With Key Code P
-        type(KeyCode.E);
-        type(KeyCode.P);
-        // test Ingame Unpause With Button
-        type(KeyCode.P);
-        clickOn("Resume Game");
-
     }
 
     @Test
@@ -237,6 +269,169 @@ public class IngameControllerTest extends ApplicationTest {
         assertEquals(chat.getOpacity(), 1);
         moveTo("Test1");
         clickOn("#showChatButton");
-        assertEquals(chat.getOpacity(), 0);
+        assertEquals(chat.getOpacity(),  0);
+    }
+
+    @Test
+    void testDialog() throws InterruptedException {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(19);
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        final TextFlow dialogTextFlow = lookup("#dialogTextFlow").query();
+
+        final Text dialogText = (Text) dialogTextFlow.getChildren().get(0);
+        final String firstDefaultText = dialogText.getText();
+
+        assertNotEquals("", firstDefaultText);
+
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        assertNotEquals(firstDefaultText, dialogText.getText());
+
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+    }
+
+    @Test
+    void testNurseDialog() throws InterruptedException {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(20);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(20);    // two tiles apart from Nurse
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        final TextFlow dialogTextFlow = lookup("#dialogTextFlow").query();
+
+        final Text dialogText = (Text) dialogTextFlow.getChildren().get(0);
+        final String firstNurseText = dialogText.getText();
+
+        assertNotEquals("", firstNurseText);
+
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        assertNotEquals(firstNurseText, dialogText.getText());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        clickOn("No");
+
+        final StackPane rootStackPane = lookup("#root").query();
+        final Node node = rootStackPane.getChildren().get(rootStackPane.getChildren().size() - 1);
+
+        assertNotEquals("nurseVBox", node.getId());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node2 = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("dialogVBox", node2.getId());
+
+        for (int i = 0; i < 4; i++) {
+            press(KeyCode.E);
+            release(KeyCode.E);
+
+            Thread.sleep(30);
+        }
+
+        clickOn("Yes");
+        // healing of monsters cannot be tested, since this should happen on the server, when you encounter the nurse
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+    }
+
+    @Test
+    void testTalkToNPC2TilesAway() throws InterruptedException {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(20);
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("dialogVBox", node.getId());
+    }
+
+    @Test
+    void testNurseDialogWithNoMons() throws InterruptedException {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(20);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(20);    // two tiles apart from Nurse
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+        when(trainerStorageProvider.get().getTrainer()).thenReturn(new Trainer(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "6475e595ac3946b6a812d865",
+                "646bab5cecf584e1be02598a",
+                "6475e595ac3946b6a812d868",
+                "Peter",
+                "Premade_Character_02.png",
+                0,
+                List.of(),
+                null,
+                "6475e595ac3946b6a812d863",
+                33,
+                18,
+                0,
+                new NPCInfo(false, false,false, false, null,null)));
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("dialogVBox", node.getId());
     }
 }

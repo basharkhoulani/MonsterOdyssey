@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.service;
 
 import de.uniks.stpmon.team_m.dto.CreateTrainerDto;
 import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.dto.UpdateTrainerDto;
 import de.uniks.stpmon.team_m.rest.TrainersApiService;
 import io.reactivex.rxjava3.core.Observable;
 
@@ -67,6 +68,11 @@ public class TrainersService {
      * @param _id      The id of the trainer.
      * @return The trainer.
      */
+
+    public Observable<Trainer> updateTrainer(String regionId, String _id, String name, String image, List<String> team) {
+        UpdateTrainerDto updateTrainerDto = new UpdateTrainerDto(name, image, team);
+        return trainersApiService.updateTrainer(regionId, _id, updateTrainerDto);
+    }
 
     public Observable<Trainer> deleteTrainer(String regionId, String _id) {
         return trainersApiService.deleteTrainer(regionId, _id);

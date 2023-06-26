@@ -14,89 +14,106 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="ingameVBox" alignment="CENTER" cacheShape="false" centerShape="false" prefHeight="768.0" prefWidth="1024.0" scaleShape="false" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
-    <StackPane cacheShape="false" centerShape="false" onMouseClicked="#paneClicked" scaleShape="false" style="-fx-background-color: black;" VBox.vgrow="ALWAYS">
-        <Canvas fx:id="groundCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER" />
-        <Canvas fx:id="trainersCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER" />
-        <Canvas fx:id="userTrainerCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER" />
-        <Canvas fx:id="trainerCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER" />
-        <Canvas fx:id="overTrainerCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER" />
-        <AnchorPane fx:id="anchorPane" cacheShape="false" centerShape="false" pickOnBounds="false" scaleShape="false" snapToPixel="false" StackPane.alignment="CENTER">
-            <HBox alignment="TOP_RIGHT" fillHeight="false" nodeOrientation="LEFT_TO_RIGHT" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<StackPane fx:id="root" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.IngameController">
+    <StackPane fx:id="stackPane" cacheShape="false" centerShape="false" onMouseClicked="#paneClicked" scaleShape="false"
+               style="-fx-background-color: black;" VBox.vgrow="ALWAYS">
+        <Canvas fx:id="groundCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER"/>
+        <Canvas fx:id="trainersCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER"/>
+        <Canvas fx:id="userTrainerCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER"/>
+        <Canvas fx:id="trainerCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER"/>
+        <Canvas fx:id="overTrainerCanvas" height="200.0" width="200.0" StackPane.alignment="CENTER"/>
+        <AnchorPane fx:id="anchorPane" cacheShape="false" centerShape="false" pickOnBounds="false" scaleShape="false"
+                    snapToPixel="false" StackPane.alignment="CENTER">
+            <HBox alignment="TOP_RIGHT" fillHeight="false" nodeOrientation="LEFT_TO_RIGHT" AnchorPane.leftAnchor="0.0"
+                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 <HBox prefHeight="100.0" prefWidth="430.0" HBox.hgrow="SOMETIMES">
-                    <ImageView fx:id="mapSymbol" fitHeight="60.0" fitWidth="79.0" onMouseClicked="#showMap" pickOnBounds="true" preserveRatio="true">
+                    <ImageView fx:id="mapSymbol" fitHeight="60.0" fitWidth="79.0" onMouseClicked="#showMap"
+                               pickOnBounds="true" preserveRatio="true">
                         <HBox.margin>
-                            <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                            <Insets bottom="6.0" left="6.0" right="6.0" top="6.0"/>
                         </HBox.margin>
-                        <Image url="@../images/MapSymbol.png" />
+                        <Image url="@../images/MapSymbol.png"/>
                     </ImageView>
                 </HBox>
                 <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="430.0" HBox.hgrow="SOMETIMES">
-                    <Button fx:id="helpSymbol" focusTraversable="false" mnemonicParsing="false" onAction="#showHelp" prefHeight="31.0" prefWidth="37.0" styleClass="helpSymbol" />
+                    <Button fx:id="helpSymbol" focusTraversable="false" mnemonicParsing="false" onAction="#showHelp"
+                            prefHeight="31.0" prefWidth="37.0" styleClass="helpSymbol"/>
                 </HBox>
             </HBox>
-            <HBox alignment="BOTTOM_RIGHT" fillHeight="false" layoutX="740.0" layoutY="708.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
-                <Button fx:id="monstersButton" focusTraversable="false" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0" mnemonicParsing="false" onAction="#showMonsters" text="%MONSTER">
+            <HBox alignment="BOTTOM_RIGHT" fillHeight="false" layoutX="740.0" layoutY="708.0"
+                  AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                <Button fx:id="monstersButton" focusTraversable="false" maxHeight="40.0" maxWidth="125.0"
+                        minHeight="40.0" minWidth="125.0" mnemonicParsing="false" onAction="#showMonsters"
+                        text="%MONSTER">
                     <font>
-                        <Font name="Comic Sans MS Bold" size="17.0" />
+                        <Font name="Comic Sans MS Bold" size="17.0"/>
                     </font>
                     <styleClass>
-                        <String fx:value="buttonsYellow" />
-                        <String fx:value="monstersButton" />
+                        <String fx:value="buttonsYellow"/>
+                        <String fx:value="monstersButton"/>
                     </styleClass>
                     <padding>
-                        <Insets left="24.0" />
+                        <Insets left="24.0"/>
                     </padding>
                 </Button>
-                <Button fx:id="settingsButton" focusTraversable="false" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0" mnemonicParsing="false" onAction="#showTrainerSettings" text="%SETTINGS">
+                <Button fx:id="pauseButton" focusTraversable="false" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0" mnemonicParsing="false" onAction="#pauseGame" text="%PAUSE">
                     <font>
-                        <Font name="Comic Sans MS Bold" size="17.0" />
+                        <Font name="Comic Sans MS Bold" size="17.0"/>
                     </font>
                     <styleClass>
                         <String fx:value="buttonsYellow" />
-                        <String fx:value="settingsButton" />
+                        <String fx:value="pauseButton" />
                     </styleClass>
                     <padding>
-                        <Insets left="24.0" />
+                        <Insets left="24.0"/>
                     </padding>
                 </Button>
             </HBox>
-            <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="660.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
-                <ListView fx:id="chatListView" focusTraversable="false" maxWidth="490.0" minWidth="490.0" opacity="0" prefHeight="159.0" prefWidth="490.0">
+            <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="660.0" AnchorPane.bottomAnchor="0.0"
+                  AnchorPane.leftAnchor="0.0">
+                <ListView fx:id="chatListView" focusTraversable="false" maxWidth="490.0" minWidth="490.0" opacity="0"
+                          prefHeight="159.0" prefWidth="490.0">
                     <VBox.margin>
-                        <Insets />
+                        <Insets/>
                     </VBox.margin>
                 </ListView>
                 <HBox VBox.vgrow="ALWAYS">
-                    <HBox fillHeight="false" minHeight="50.0" minWidth="270.0" prefHeight="50.0" prefWidth="772.0" HBox.hgrow="ALWAYS">
-                        <TextField fx:id="messageField" focusTraversable="false" maxHeight="40.0" maxWidth="450.0" minHeight="40.0" minWidth="450.0" onMouseClicked="#messageFieldClicked" promptText="%SEND.MESSAGE">
+                    <HBox fillHeight="false" minHeight="50.0" minWidth="270.0" prefHeight="50.0" prefWidth="772.0"
+                          HBox.hgrow="ALWAYS">
+                        <TextField fx:id="messageField" focusTraversable="false" maxHeight="40.0" maxWidth="450.0"
+                                   minHeight="40.0" minWidth="450.0" onMouseClicked="#messageFieldClicked"
+                                   promptText="%SEND.MESSAGE">
                             <font>
-                                <Font name="Comic Sans MS" size="14.0" />
+                                <Font name="Comic Sans MS" size="14.0"/>
                             </font>
                         </TextField>
-                        <Button fx:id="showChatButton" focusTraversable="false" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onMouseClicked="#showChat">
+                        <Button fx:id="showChatButton" focusTraversable="false" maxHeight="40.0" maxWidth="40.0"
+                                minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onMouseClicked="#showChat">
                             <font>
-                                <Font name="Comic Sans MS Bold" size="17.0" />
+                                <Font name="Comic Sans MS Bold" size="17.0"/>
                             </font>
                             <styleClass>
-                                <String fx:value="buttonsWhite" />
-                                <String fx:value="triangle" />
+                                <String fx:value="buttonsWhite"/>
+                                <String fx:value="triangle"/>
                             </styleClass>
                         </Button>
-                        <Button fx:id="sendMessageButton" focusTraversable="false" maxHeight="40.0" maxWidth="125.0" minHeight="40.0" minWidth="125.0" mnemonicParsing="false" onAction="#sendMessageButton" styleClass="buttonsYellow" text="%SEND">
+                        <Button fx:id="sendMessageButton" focusTraversable="false" maxHeight="40.0" maxWidth="125.0"
+                                minHeight="40.0" minWidth="125.0" mnemonicParsing="false" onAction="#sendMessageButton"
+                                styleClass="buttonsYellow" text="%SEND">
                             <font>
-                                <Font name="Comic Sans MS Bold" size="17.0" />
+                                <Font name="Comic Sans MS Bold" size="17.0"/>
                             </font>
                             <HBox.margin>
-                                <Insets left="5.0" />
+                                <Insets left="5.0"/>
                             </HBox.margin>
                         </Button>
                     </HBox>
                 </HBox>
                 <padding>
-                    <Insets bottom="-5.0" left="5.0" right="5.0" />
+                    <Insets bottom="-5.0" left="5.0" right="5.0"/>
                 </padding>
             </VBox>
         </AnchorPane>
     </StackPane>
-</VBox>
+</StackPane>

@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.service;
 import de.uniks.stpmon.team_m.dto.CreateTrainerDto;
 import de.uniks.stpmon.team_m.dto.NPCInfo;
 import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.dto.UpdateTrainerDto;
 import de.uniks.stpmon.team_m.rest.TrainersApiService;
 import io.reactivex.rxjava3.core.Observable;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -38,11 +41,13 @@ public class TrainersServiceTest {
                         "Hans",
                         "Premade_Character_01.png",
                         0,
+                        null,
+                        null,
                         "646bacc568933551792bf3d5",
                         0,
                         0,
                         0,
-                        new NPCInfo(false)
+                        new NPCInfo(false, false, false, false, null, null)
                 )));
 
         final Trainer trainer = trainersService.createTrainer("646bab5cecf584e1be02598a", "Hans", "Premade_Character_01.png").blockingFirst();
@@ -76,11 +81,13 @@ public class TrainersServiceTest {
                         "Hans",
                         "Premade_Character_01.png",
                         0,
+                        List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                        List.of(1,2),
                         "646bacc568933551792bf3d5",
                         0,
                         0,
                         0,
-                        new NPCInfo(false)),
+                        new NPCInfo(false, false, false, false, null, null)),
                 new Trainer(
                         "2023-05-21T13:43:12.742Z",
                         "2023-05-21T13:43:12.742Z",
@@ -90,11 +97,13 @@ public class TrainersServiceTest {
                         "Peter",
                         "Premade_Character_03.png",
                         0,
+                        null,
+                        null,
                         "646baf8096dc75bef5ab7cae",
                         0,
                         0,
                         0,
-                        new NPCInfo(true))
+                        new NPCInfo(true, false, false, true, null, null))
         )));
 
         final List<Trainer> trainers = trainersService.getTrainers("646bab5cecf584e1be02598a", null, null).blockingFirst();
@@ -116,11 +125,13 @@ public class TrainersServiceTest {
                         "Peter",
                         "Premade_Character_03.png",
                         0,
+                        List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                        List.of(1,2),
                         "646baf8096dc75bef5ab7cae",
                         0,
                         0,
                         0,
-                        new NPCInfo(true))
+                        new NPCInfo(true, false, false, true, null, null))
         ));
 
         final Trainer trainer = trainersService.getTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5").blockingFirst();
@@ -143,11 +154,13 @@ public class TrainersServiceTest {
                         "Peter",
                         "Premade_Character_03.png",
                         0,
+                        List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                        List.of(1,2),
                         "646baf8096dc75bef5ab7cae",
                         0,
                         0,
                         0,
-                        new NPCInfo(false))
+                        new NPCInfo(false, false, false, false, null, null))
         ));
 
         final Trainer trainer = trainersService.deleteTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5").blockingFirst();
@@ -156,6 +169,36 @@ public class TrainersServiceTest {
         assertEquals("Peter", trainer.name());
 
         verify(trainersApiService).deleteTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5");
+    }
+
+    @Test
+    void updateTrainerTest(){
+        when(trainersApiService.updateTrainer(anyString(), anyString(), any())).thenReturn(Observable.just(new Trainer(
+                "2023-05-21T13:43:12.742Z",
+                "2023-05-21T13:43:12.742Z",
+                "646baf531f097a36fc1b8bc5",
+                "646bab5cecf584e1be02598a",
+                "646baf778eceac8ef458cc34",
+                "Hallo",
+                "Premade_Character_03.png",
+                0,
+                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                List.of(1,2),
+                "646baf8096dc75bef5ab7cae",
+                0,
+                0,
+                0,
+                new NPCInfo(false, false, false, false, null, null))
+        ));
+
+        final Trainer trainer = trainersService.updateTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5", "Hallo", "Premade_Character_03.png", List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a")).blockingFirst();
+
+        assertNotNull(trainer);
+        assertEquals("Hallo", trainer.name());
+
+        verify(trainersApiService).updateTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5",
+                new UpdateTrainerDto("Hallo", "Premade_Character_03.png", List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a")));
+
     }
 
 }

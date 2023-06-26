@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -51,11 +52,13 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
                 "Hans",
                 "Premade_Character_01.png",
                 0,
+                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                List.of(1,2),
                 "646bacc568933551792bf3d5",
                 0,
                 0,
                 0,
-                new NPCInfo(false)));
+                new NPCInfo(false, false,false, false,null, null)));
         app.start(stage);
         app.show(trainerSettingsController);
         stage.requestFocus();

@@ -82,11 +82,13 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
                 "Hans",
                 "Premade_Character_01.png",
                 0,
+                null,
+                null,
                 "646bacc568933551792bf3d5",
                 0,
                 0,
                 0,
-                new NPCInfo(false))));
+                new NPCInfo(false, false, false, false, null, null))));
 
 
         app.start(stage);
