@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.controller.subController.ChangeLanguageController;
+import de.uniks.stpmon.team_m.service.AudioService;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
@@ -51,6 +52,8 @@ public class LoginController extends Controller {
     public ImageView gameIcon;
     @FXML
     public Button languageSettings;
+    @FXML
+    public Button muteButton;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
@@ -89,6 +92,7 @@ public class LoginController extends Controller {
         super.init();
         changeLanguageController = new ChangeLanguageController();
         changeLanguageController.init();
+        AudioService.getInstance().playSound(MENU_SOUND);
     }
 
     /**
@@ -220,5 +224,17 @@ public class LoginController extends Controller {
         changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);
         dialog.getDialogPane().setContent(changeLanguageController.render());
         dialog.showAndWait();
+    }
+
+    public void muteOrUnmuteSound() {
+        if(AudioService.getInstance().checkMuted()) {
+            muteButton.getStyleClass().remove("unmuteSymbol");
+            muteButton.getStyleClass().add("muteSymbol");
+            AudioService.getInstance().unmuteSound();
+        } else {
+            muteButton.getStyleClass().remove("muteSymbol");
+            muteButton.getStyleClass().add("unmuteSymbol");
+            AudioService.getInstance().muteSound();
+        }
     }
 }
