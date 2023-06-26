@@ -1239,12 +1239,13 @@ public class IngameController extends Controller {
     }
 
     public void showChangeAudioSettings() {
-        VBox changeAudioVBox = new VBox(changeAudioControllerProvider.get().render());
-        anchorPane.getChildren().add(changeAudioVBox);
-        AnchorPane.setTopAnchor(changeAudioVBox, 0.0);
-        AnchorPane.setBottomAnchor(changeAudioVBox, 0.0);
-        AnchorPane.setLeftAnchor(changeAudioVBox, 0.0);
-        AnchorPane.setRightAnchor(changeAudioVBox, 0.0);
+        VBox changeAudioVBox = new VBox();
         changeAudioVBox.setAlignment(Pos.CENTER);
+        ChangeAudioController changeAudioController = changeAudioControllerProvider.get();
+        changeAudioController.init(this, changeAudioVBox);
+        changeAudioVBox.getChildren().add(changeAudioController.render());
+        root.getChildren().add(changeAudioVBox);
+        changeAudioVBox.requestFocus();
+        buttonsDisable(true);
     }
 }
