@@ -130,6 +130,30 @@
     -fx-border-radius: 15;
     -fx-border-width: 5;
 }
+.muteSymbol {
+    -fx-background-image: url("images/high-volume-icon.png");
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-background-size: 50px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 50%;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-border-width: 5;
+}
+
+.unmuteSymbol {
+    -fx-background-image: url("images/mute-icon.png");
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-background-size: 50px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 50%;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-border-width: 5;
+}
+
 .hideSymbol {
     -fx-background-image: url("images/hideEye.png");
     -fx-border-color: transparent;
@@ -235,6 +259,16 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: 5% 50%;
 }
+
+.dialogBackground {
+    -fx-background-color: #CFE9DB;
+}
+
+
+.slider:hover {
+    opacity: 1;
+}
+
 /*********************************************************************************/
 /*************************** Autocomplete textfields *****************************/
 .auto-complete-popup > .list-view {
