@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IngameSettingsController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">IngameSettingsController.java</span></div><h1>IngameSettingsController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.controller.MainMenuController;
+import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+
+public class IngameSettingsController extends Controller {
+    @FXML
+    public VBox settingsVbox;
+    @FXML
+    public Button audioSettingsButton;
+    @FXML
+    public Button keybindingsButton;
+    @FXML
+    public Button trainerSettingsButton;
+    @FXML
+    public Button goBackButton;
+    @FXML
+    public ImageView audioSettingsImageView;
+    @FXML
+    public ImageView keybindingsImageView;
+    @FXML
+    public ImageView trainerSettingsImageView;
+    @FXML
+    public ImageView goBackImageView;
+    @Inject
+    IngameController ingameController;
+    private VBox ingameVbox;
+    @Inject
+    Provider&lt;IngameController&gt; ingameControllerProvider;
+    @Inject
+    Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
+    @Inject
+    Provider&lt;ChangeAudioController&gt; changeAudioControllerProvider;
+
+    @Inject
+<span class="nc" id="L47">    public IngameSettingsController() {</span>
+<span class="nc" id="L48">    }</span>
+
+    public Parent render() {
+<span class="nc" id="L51">        return super.render();</span>
+    }
+
+    public void init(IngameController ingameController, VBox ingameVbox) {
+<span class="nc" id="L55">        this.ingameController = ingameController;</span>
+<span class="nc" id="L56">        this.ingameVbox = ingameVbox;</span>
+<span class="nc" id="L57">    }</span>
+
+    public void openAudioSettings() {
+<span class="nc" id="L60">        ingameController.showChangeAudioSettings();</span>
+<span class="nc" id="L61">    }</span>
+
+    public void openKeybindings() {
+<span class="nc" id="L64">        ingameController.showHelp();</span>
+<span class="nc" id="L65">    }</span>
+
+    public void openTrainerSettings(){
+<span class="nc" id="L68">        ingameController.showTrainerSettings();</span>
+<span class="nc" id="L69">    }</span>
+
+    public void goBack() {
+<span class="nc" id="L72">        ingameController.root.getChildren().remove(ingameVbox);</span>
+<span class="nc" id="L73">        ingameController.buttonsDisable(false);</span>
+<span class="nc" id="L74">        ingameController.pauseGame();</span>
+<span class="nc" id="L75">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
