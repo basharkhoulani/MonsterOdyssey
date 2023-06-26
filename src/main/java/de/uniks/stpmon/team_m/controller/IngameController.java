@@ -108,6 +108,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<IngamePauseMenuController> ingamePauseMenuControllerProvider;
     @Inject
+    Provider<IngameSettingsController> ingameSettingsControllerProvider;
+    @Inject
     Provider<EventListener> eventListener;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -746,10 +748,10 @@ public class IngameController extends Controller {
         buttonsDisable(true);
     }
 
-    public void buttonsDisable(Boolean set){
-        if(set){
-            stackPane.setEffect(new BoxBlur(10,10,3));
-        }else {
+    public void buttonsDisable(Boolean set) {
+        if (set) {
+            stackPane.setEffect(new BoxBlur(10, 10, 3));
+        } else {
             stackPane.setEffect(null);
         }
         monstersButton.setDisable(set);
@@ -759,6 +761,16 @@ public class IngameController extends Controller {
         helpSymbol.setDisable(set);
         messageField.setDisable(set);
         sendMessageButton.setDisable(set);
+    }
+    public void showSettings() {
+        IngameSettingsController ingameSettingsController = ingameSettingsControllerProvider.get();
+         VBox settingsVBox = new VBox();
+        settingsVBox.setAlignment(Pos.CENTER);
+        ingameSettingsController.init(this, settingsVBox);
+        settingsVBox.getChildren().add(ingameSettingsController.render());
+        root.getChildren().add(settingsVBox);
+        settingsVBox.requestFocus();
+        buttonsDisable(true);
     }
 
     public void showTrainerSettings() {
@@ -1068,6 +1080,10 @@ public class IngameController extends Controller {
             case albertDialogFinished2 -> endDialog(2, true);
             case dialogFinishedNoTalkToTrainer -> endDialog(0, false);
             case spokenToNurse -> createNurseHealPopup();
+            case encounterOnTalk -> {
+                // TODO @Cheng here you have to put your logic connected with the encounter
+                endDialog(0, true);
+            }
             default -> {}
         }
     }
@@ -1115,7 +1131,8 @@ public class IngameController extends Controller {
         yesButton.setOnAction(event -> {
             continueTrainerDialog(DialogSpecialInteractions.nurseYes);
             inNpcPopup = false;
-            this.stackPane.getChildren().remove(nursePopupVBox);
+            this.root.getChildren().remove(nursePopupVBox);
+            buttonsDisable(false);
         });
 
         // no button
@@ -1128,7 +1145,8 @@ public class IngameController extends Controller {
         noButton.setOnAction(event -> {
             continueTrainerDialog(DialogSpecialInteractions.nurseNo);
             inNpcPopup = false;
-            this.stackPane.getChildren().remove(nursePopupVBox);
+            this.root.getChildren().remove(nursePopupVBox);
+            buttonsDisable(false);
         });
 
         // add buttons to buttonHBox
@@ -1138,7 +1156,8 @@ public class IngameController extends Controller {
         nurseVBox.getChildren().addAll(nurseQuestion, buttonsHBox);
 
         // add nurseVBox to stackPane
-        stackPane.getChildren().add(nurseVBox);
+        root.getChildren().add(nurseVBox);
+        buttonsDisable(true);
         inNpcPopup = true;
     }
 

@@ -76,6 +76,8 @@ public class Constants {
     public static final String SETTINGSYMBOL2 = "images/SettingSymbol2.png";
     public static final String GOBACKSYMBOL = "images/GoBackSymbol.PNG";
     public static final String PLAYSYMBOL = "images/PlaySymbol.PNG";
+    public static final String AUDIOSYMBOL = "images/AudioSymbol.png";
+    public static final String KEYBINDINGSSYMBOL = "images/KeybindingsSymbol.png";
 
         // NPC DIALOG
     public static int dialogVBoxWidth = 700;
@@ -99,7 +101,8 @@ public class Constants {
         albertDialogFinished0,
         albertDialogFinished1,
         albertDialogFinished2,
-        spokenToNurse
+        spokenToNurse,
+        encounterOnTalk
     }
         // Nurse Popup
     public static int popupHeight = 170;
