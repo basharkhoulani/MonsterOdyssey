@@ -1214,7 +1214,7 @@ public class IngameController extends Controller {
 
         nameLabel.translateYProperty().bind(dialogVBox.translateYProperty().subtract(dialogVBox.heightProperty().divide(2)));
         nameLabel.translateXProperty().bind(dialogVBox.translateXProperty().subtract(dialogVBox.widthProperty()).divide(3));
-        nameLabel.getStyleClass().add("dialogTextFlow");
+        nameLabel.getStyleClass().add("npcNameLabel");
         dialogStackPane.getChildren().add(nameLabel);
 
         stackPane.getChildren().add(dialogStackPane);
