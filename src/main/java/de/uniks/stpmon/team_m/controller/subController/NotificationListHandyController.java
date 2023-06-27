@@ -2,7 +2,9 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
@@ -24,11 +26,16 @@ public class NotificationListHandyController extends Controller {
 
     @Inject
     public NotificationListHandyController() {
-
     }
 
     public void init(IngameController ingameController) {
         this.ingameController = ingameController;
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            ingameController.notificationBell.setVisible(true);
+        }));
+
+        timeline.play();
     }
 
     public void closeNotificationListHandy() {

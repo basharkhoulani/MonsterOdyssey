@@ -744,6 +744,7 @@ public class IngameController extends Controller {
 
     public void showHelp() {
         smallHandyButton.setVisible(false);
+        notificationBell.setVisible(false);
         /*Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(null);
         alert.setHeaderText(null);
