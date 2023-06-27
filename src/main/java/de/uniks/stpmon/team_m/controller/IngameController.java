@@ -1083,6 +1083,10 @@ public class IngameController extends Controller {
             case albertDialogFinished2 -> endDialog(2, true);
             case dialogFinishedNoTalkToTrainer -> endDialog(0, false);
             case spokenToNurse -> createNurseHealPopup();
+            case encounterOnTalk -> {
+                // TODO @Cheng here you have to put your logic connected with the encounter
+                endDialog(0, true);
+            }
             default -> {}
         }
     }
