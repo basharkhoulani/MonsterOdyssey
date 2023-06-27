@@ -10,10 +10,7 @@ import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
-import de.uniks.stpmon.team_m.utils.Position;
-import de.uniks.stpmon.team_m.utils.SpriteAnimation;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import de.uniks.stpmon.team_m.utils.*;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -116,6 +113,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
+    Provider<EncounterOpponentStorage> encounterOpponentStorageProvider;
+    @Inject
     AreasService areasService;
     @Inject
     PresetsService presetsService;
@@ -123,6 +122,8 @@ public class IngameController extends Controller {
     MessageService messageService;
     @Inject
     TrainersService trainersService;
+    @Inject
+    EncounterOpponentStorage encounterOpponentStorage;
 
     @Inject
     Provider<IngameController> ingameControllerProvider;
@@ -341,6 +342,9 @@ public class IngameController extends Controller {
 
         popupStage = new Stage();
         popupStage.initOwner(app.getStage());
+
+        //Setup Encounter
+
 
         return parent;
     }
@@ -764,7 +768,7 @@ public class IngameController extends Controller {
     }
     public void showSettings() {
         IngameSettingsController ingameSettingsController = ingameSettingsControllerProvider.get();
-         VBox settingsVBox = new VBox();
+        VBox settingsVBox = new VBox();
         settingsVBox.setAlignment(Pos.CENTER);
         ingameSettingsController.init(this, settingsVBox);
         settingsVBox.getChildren().add(ingameSettingsController.render());
@@ -888,6 +892,22 @@ public class IngameController extends Controller {
                     error.printStackTrace();
                 }));
     }
+
+    public void listenToOpponent(EncounterOpponentStorage encounterOpponentStorage, String trainerId) {
+        disposables.add(eventListener.get().listen("encounters.*.opponents." + trainerId + ".created", Opponent.class)
+                .observeOn(FX_SCHEDULER).subscribe(event -> {
+                    final Opponent opponent= event.data();
+                    encounterOpponentStorage.setEncounterId(opponent.encounter());
+                    encounterOpponentStorage.setTrainerId(opponent._id());
+                    encounterOpponentStorage.setOpponentMonsterId(opponent.monster());
+                    // TODO: show the start Encounter Info DialogFenster
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
+    }
+
+    //TODO: Bei dem Dialogfenster wenn man E drückt, wird die Scenen nach Encountercontroller rü
 
     private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {
         String trainerId = trainer._id();
