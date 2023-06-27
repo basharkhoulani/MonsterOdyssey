@@ -98,4 +98,13 @@ public class HttpModule {
     PresetsApiService presets(Retrofit retrofit) {
         return retrofit.create(PresetsApiService.class);
     }
+
+    @Provides
+    @Singleton
+    RegionEncountersApiService encounters(Retrofit retrofit) { return retrofit.create(RegionEncountersApiService.class); }
+
+    @Provides
+    @Singleton
+    EncounterOpponentsApiService opponents(Retrofit retrofit) { return retrofit.create(EncounterOpponentsApiService.class); }
+
 }
