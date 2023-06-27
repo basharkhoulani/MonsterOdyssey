@@ -125,6 +125,8 @@ public class IngameController extends Controller {
     @Inject
     TrainersService trainersService;
     @Inject
+    Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
+    @Inject
     Provider<ChangeAudioController> changeAudioControllerProvider;
 
     @Inject
@@ -167,6 +169,8 @@ public class IngameController extends Controller {
     private NpcTextManager npcTextManager;
     private VBox miniMapVBox;
     private StackPane dialogStackPane;
+    private VBox starterSelectionVBox;
+    private boolean movmentDisabled;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -205,7 +209,7 @@ public class IngameController extends Controller {
                 return;
             }
 
-            if (miniMapVBox != null) {
+            if (movmentDisabled) {
                 return;
             }
 
@@ -757,6 +761,7 @@ public class IngameController extends Controller {
         } else {
             stackPane.setEffect(null);
         }
+        movmentDisabled = set;
         monstersButton.setDisable(set);
         pauseButton.setDisable(set);
         showChatButton.setDisable(set);
@@ -765,9 +770,10 @@ public class IngameController extends Controller {
         messageField.setDisable(set);
         sendMessageButton.setDisable(set);
     }
+
     public void showSettings() {
         IngameSettingsController ingameSettingsController = ingameSettingsControllerProvider.get();
-         VBox settingsVBox = new VBox();
+        VBox settingsVBox = new VBox();
         settingsVBox.setAlignment(Pos.CENTER);
         ingameSettingsController.init(this, settingsVBox);
         settingsVBox.getChildren().add(ingameSettingsController.render());
@@ -933,7 +939,7 @@ public class IngameController extends Controller {
     }
 
     /*
-        ** NPC methods **
+     ** NPC methods **
      */
 
     public void interactWithTrainer() {
@@ -962,7 +968,9 @@ public class IngameController extends Controller {
                         createDialogVBox(),
                         checkIfNpcEncounteredPlayer(this.currentNpc),
                         npcTextManager,
-                        trainerStorageProvider.get().getTrainer());
+                        trainerStorageProvider.get().getTrainer(),
+                        this
+                );
             }
         }
     }
@@ -1228,26 +1236,52 @@ public class IngameController extends Controller {
 
     public void showMap() {
         IngameMiniMapController ingameMiniMapController = ingameMiniMapControllerProvider.get();
-        miniMapVBox = new VBox();
-        miniMapVBox.getStyleClass().add("miniMapContainer");
-        miniMapVBox.setPadding(new Insets(0, 0, 8, 0));
-        miniMapVBox.getChildren().add(ingameMiniMapController.render());
+        if (miniMapVBox == null) {
+            miniMapVBox = new VBox();
+            miniMapVBox.getStyleClass().add("miniMapContainer");
+            miniMapVBox.setPadding(new Insets(0, 0, 8, 0));
+            miniMapVBox.getChildren().add(ingameMiniMapController.render());
 
-        Button closeButton = new Button();
-        closeButton.setId("closeButton");
-        closeButton.setText(resources.getString("CLOSE"));
-        closeButton.setPrefHeight(32);
-        closeButton.setPrefWidth(128);
-        closeButton.getStyleClass().add("welcomeSceneButton");
-        closeButton.setOnAction(event -> {
-                    root.getChildren().remove(miniMapVBox);
-                    miniMapVBox = null;
-                    buttonsDisable(false);
-                }
-        );
-        miniMapVBox.getChildren().add(closeButton);
+            Button closeButton = new Button();
+            closeButton.setId("closeButton");
+            closeButton.setText(resources.getString("CLOSE"));
+            closeButton.getStyleClass().add("welcomeSceneButton");
+            closeButton.setOnAction(event -> {
+                        root.getChildren().remove(miniMapVBox);
+                        buttonsDisable(false);
+                    }
+            );
+            miniMapVBox.getChildren().add(closeButton);
+        }
         root.getChildren().add(miniMapVBox);
         miniMapVBox.requestFocus();
+        buttonsDisable(true);
+    }
+
+    public void showStarterSelection(List<String> starters) {
+        IngameStarterMonsterController ingameStarterMonsterController = ingameStarterMonsterControllerProvider.get();
+        if (starterSelectionVBox == null) {
+            starterSelectionVBox = new VBox();
+            starterSelectionVBox.getStyleClass().add("miniMapContainer");
+            starterSelectionVBox.setStyle("-fx-max-height: 350px; -fx-max-width: 550px");
+            starterSelectionVBox.setPadding(new Insets(0, 0, 8, 0));
+            ingameStarterMonsterController.init(this, starterSelectionVBox, app, starters);
+            starterSelectionVBox.getChildren().add(ingameStarterMonsterController.render());
+
+            Button okButton = new Button();
+            okButton.setId("okButton");
+            okButton.setText(resources.getString("OK"));
+            okButton.getStyleClass().add("welcomeSceneButton");
+            okButton.setStyle("-fx-background-color: #e0ecfc");
+            okButton.setOnAction(event -> {
+                        root.getChildren().remove(starterSelectionVBox);
+                        buttonsDisable(false);
+                    }
+            );
+            starterSelectionVBox.getChildren().add(okButton);
+        }
+        root.getChildren().add(starterSelectionVBox);
+        starterSelectionVBox.requestFocus();
         buttonsDisable(true);
     }
 
