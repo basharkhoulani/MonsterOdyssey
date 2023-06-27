@@ -551,4 +551,48 @@ public class TestModule {
             }
         };
     }
+
+    @Provides
+    static EncounterOpponentsApiService encounterOpponentsApiService() {
+        return new EncounterOpponentsApiService() {
+            @Override
+            public Observable<List<Opponent>> getTrainerOpponents(String regionId, String trainerId) {
+                return null;
+            }
+
+            @Override
+            public Observable<List<Opponent>> getEncounterOpponents(String regionId, String encounterId) {
+                return null;
+            }
+
+            @Override
+            public Observable<Opponent> getOpponent(String regionId, String encounterId, String opponentId) {
+                return null;
+            }
+
+            @Override
+            public Observable<Opponent> updateOpponent(String regionId, String encounterId, String opponentId, UpdateOpponentDto dto) {
+                return null;
+            }
+
+            @Override
+            public Observable<Opponent> deleteOpponent(String regionId, String encounterId, String opponentId) {
+                return null;
+            }
+        };
+    }
+
+    static RegionEncountersApiService regionEncountersApiService() {
+        return new RegionEncountersApiService() {
+            @Override
+            public Observable<List<Encounter>> getEncounters(String regionId) {
+                return null;
+            }
+
+            @Override
+            public Observable<Encounter> getEncounter(String regionId, String encounterId) {
+                return null;
+            }
+        };
+    }
 }
