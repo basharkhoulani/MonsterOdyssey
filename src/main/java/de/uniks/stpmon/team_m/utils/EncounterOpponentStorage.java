@@ -11,9 +11,11 @@ public class EncounterOpponentStorage {
     private String opponentId;
     private String trainerMonsterId;
     private String opponentMonsterId;
+    private String regionId;
+
 
     @Inject
-    public EncounterOpponentStorage(){
+    public EncounterOpponentStorage() {
 
     }
 
@@ -60,5 +62,13 @@ public class EncounterOpponentStorage {
 
     public void setOpponentMonsterId(String opponentMonsterId) {
         this.opponentMonsterId = opponentMonsterId;
+    }
+
+    public String getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
     }
 }
