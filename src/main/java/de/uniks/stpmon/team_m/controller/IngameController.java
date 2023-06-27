@@ -127,11 +127,15 @@ public class IngameController extends Controller {
     @Inject
     Provider<IngameController> ingameControllerProvider;
 
+    private IngamePauseMenuController ingamePauseMenuController;
+
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     public static final KeyCode INTERACT_KEY = KeyCode.E;
     private boolean isChatting = false;
     private boolean inDialog = false;
     private boolean inNpcPopup = false;
+    private boolean isPaused = false;
+    private boolean inSettings = false;
 
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
@@ -189,7 +193,16 @@ public class IngameController extends Controller {
                 isChatting = true;
             }
             if (event.getCode() == PAUSE_MENU_KEY) {
-                pauseGame();
+                if (inSettings) {
+                    return;
+                }
+                if(!isPaused){
+                    pauseGame();
+                    isPaused = true;
+                } else {
+                    ingamePauseMenuController.resumeGame();
+                    isPaused = false;
+                }
             }
             if (event.getCode() == INTERACT_KEY) {
                 if (!inNpcPopup) {
@@ -746,15 +759,7 @@ public class IngameController extends Controller {
         root.getChildren().add(pauseMenuVBox);
         pauseMenuVBox.requestFocus();
         buttonsDisable(true);
-        EventHandler<KeyEvent> keyPressedHandler = event -> {
-            event.consume();
-            if (event.getCode() == PAUSE_MENU_KEY) {
-                root.getChildren().remove(pauseMenuVBox);
-                buttonsDisable(false);
-                root.removeEventHandler(KeyEvent.KEY_PRESSED, this.keyPressedHandler);
-            }
-        };
-        root.addEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);
+        inSettings = false;
     }
 
     public void buttonsDisable(Boolean set) {
@@ -780,6 +785,7 @@ public class IngameController extends Controller {
         root.getChildren().add(settingsVBox);
         settingsVBox.requestFocus();
         buttonsDisable(true);
+        inSettings = true;
     }
 
     public void showTrainerSettings() {
