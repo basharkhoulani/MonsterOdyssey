@@ -46,8 +46,9 @@ public class DialogController extends Controller {
                     this.npcTexts = npcTextManager.getNpcTexts("Nurse");
                 }
             } else {
-                // check if player already encountered player
-                if (alreadyEncountered) {
+                // check if player already encountered albert
+                // -- maybe this can be swapped with starters == null, but not all npc's have the starters attribute
+                if (Objects.equals(npc._id(), "645e32c6866ace359554a802") && alreadyEncountered) {
                     this.npcTexts = npcTextManager.getNpcTexts(npc._id() + "alreadyEncountered");
                 } else {
                     this.npcTexts = npcTextManager.getNpcTexts(npc._id());
@@ -69,14 +70,8 @@ public class DialogController extends Controller {
 
     /**
      * Method to continue the dialog.
-     * There are 5 possible return values:
      * @param specialInteraction Whether the player had a popup with a special interaction with a npc
-     *  @-1: Dialog is finished and the npc wasn't Prof. Albert, or he was already encountered
-     *  @0: Talked to Prof. Albert and selected the first monster  TODO
-     *  @1: Talked to Prof. Albert and selected the second monster  TODO
-     *  @2: Talked to Prof. Albert and selected the third monster  TODO
-     *  @3: Dialog isn't finished yet
-     * @return An int based on some factors, see method description
+     * @return A continueDialogReturnValue, which determines what happens after the dialog
      */
     public Constants.ContinueDialogReturnValues continueDialog(Constants.DialogSpecialInteractions specialInteraction) {
         // check if a special interaction has been triggered
