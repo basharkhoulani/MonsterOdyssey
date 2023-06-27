@@ -1,7 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
@@ -37,15 +36,11 @@ public class IngameStarterMonsterController extends Controller {
     @FXML
     public ImageView starterImageView;
     @FXML
-    public ImageView typeImageView;
-    @FXML
     public TextFlow starterDescription;
     @FXML
     public ImageView arrowLeft;
     @FXML
     public ImageView arrowRight;
-    @FXML
-    public VBox typeVBox;
     @FXML
     public VBox typesVBox;
     @Inject
@@ -62,6 +57,7 @@ public class IngameStarterMonsterController extends Controller {
     private Image monster1Image;
     private Image monster2Image;
     private Image monster3Image;
+    private Integer index = 1;
 
 
     @Inject
@@ -83,22 +79,10 @@ public class IngameStarterMonsterController extends Controller {
             monster1 = monsterType.get(Integer.parseInt(starters.get(0)) - 1);
             monster2 = monsterType.get(Integer.parseInt(starters.get(1)) - 1);
             monster3 = monsterType.get(Integer.parseInt(starters.get(2)) - 1);
-            // add description
-            starterDescription.getChildren().add(new Text(resources.getString("NAME")));
-            starterDescription.getChildren().add(new Text(" " + monster1.name() + "\n"));
-            starterDescription.getChildren().add(new Text(monster1.description()));
-            // add type
-
-            monster1.type().forEach(type -> {
-                VBox typeVBox = createTypeVBox(type, null);
-                typesVBox.getChildren().add(typeVBox);
-            });
-
-
             // get Images
             disposables.add(presetsService.getMonsterImage(Integer.parseInt(starters.get(0))).observeOn(FX_SCHEDULER).subscribe(monsterImage -> {
                 monster1Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
-                starterImageView.setImage(monster1Image);
+                showMonster(1);
             }, error -> {
                 showError(error.getMessage());
                 error.printStackTrace();
@@ -138,11 +122,57 @@ public class IngameStarterMonsterController extends Controller {
         return typeVBox;
     }
 
-    public void rotateLeft() {
+    public void showMonster(int index) {
+        typesVBox.getChildren().clear();
+        starterDescription.getChildren().clear();
+        MonsterTypeDto monster;
+        Image monsterImage;
+        switch (index) {
+            default -> {
+                monster = monster1;
+                monsterImage = monster1Image;
+            }
+            case 2 -> {
+                monster = monster2;
+                monsterImage = monster2Image;
+            }
+            case 3 -> {
+                monster = monster3;
+                monsterImage = monster3Image;
+            }
+        }
 
+        // add description
+        starterDescription.getChildren().add(new Text(resources.getString("NAME")));
+        starterDescription.getChildren().add(new Text(" " + monster.name() + "\n"));
+        starterDescription.getChildren().add(new Text(monster.description()));
+
+        // add type
+        monster.type().forEach(type -> {
+            VBox typeVBox = createTypeVBox(type, null);
+            typesVBox.getChildren().add(typeVBox);
+        });
+
+        // set image
+        if (monsterImage == null) {
+            return;
+        }
+        starterImageView.setImage(monsterImage);
+    }
+
+    public void rotateLeft() {
+        index--;
+        if (index < 1) {
+            index = 3;
+        }
+        showMonster(index);
     }
 
     public void rotateRight() {
-
+        index++;
+        if (index > 3) {
+            index = 1;
+        }
+        showMonster(index);
     }
 }
