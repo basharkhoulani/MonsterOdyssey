@@ -158,12 +158,12 @@ public class IngameController extends Controller {
     private HashMap<Trainer, TrainerController> trainerControllerHashMap;
     private HashMap<Trainer, Position> trainerPositionHashMap;
     Stage popupStage;
-    private VBox dialogVBox;
     private VBox nursePopupVBox;
     private DialogController dialogController;
     private Trainer currentNpc;
     private NpcTextManager npcTextManager;
     private VBox miniMapVBox;
+    private StackPane dialogStackPane;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -1091,7 +1091,8 @@ public class IngameController extends Controller {
     public void endDialog(int selectionValue, boolean encounterNpc) {
         this.dialogController.destroy();
         inDialog = false;
-        stackPane.getChildren().remove(dialogVBox);
+//        stackPane.getChildren().remove(dialogVBox);
+        stackPane.getChildren().remove(dialogStackPane);
 
         if (encounterNpc) {
             encounterNPC(this.currentNpc, selectionValue);
@@ -1162,6 +1163,13 @@ public class IngameController extends Controller {
     }
 
     public TextFlow createDialogVBox() {
+        StackPane dialogStackPane = new StackPane();
+        dialogStackPane.setMaxHeight(160);
+        dialogStackPane.setMaxWidth(700);
+
+        Label nameLabel = new Label(this.currentNpc.name());
+        nameLabel.setPadding(new Insets(5, 10, 5, 10));
+
         VBox dialogVBox = new VBox();
         dialogVBox.setMinWidth(dialogVBoxWidth);
         dialogVBox.maxWidthProperty().bind(stackPane.widthProperty().divide(2));
@@ -1169,7 +1177,7 @@ public class IngameController extends Controller {
         dialogVBox.setId("dialogVBox");
 
         int constantSpacer = spacerToBottomOfScreen;
-        dialogVBox.translateYProperty().bind((anchorPane.heightProperty().subtract(dialogVBox.maxHeightProperty()).subtract(constantSpacer)).divide(2));
+        dialogVBox.translateYProperty().bind((anchorPane.heightProperty().subtract(dialogVBox.maxHeightProperty()).subtract(constantSpacer)).divide(2).add(10));
 
         Pane textPane = new Pane();
 
@@ -1200,8 +1208,16 @@ public class IngameController extends Controller {
 
         dialogVBox.getChildren().add(textPane);
 
-        stackPane.getChildren().add(dialogVBox);
-        this.dialogVBox = dialogVBox;
+
+        dialogStackPane.getChildren().add(dialogVBox);
+
+        nameLabel.translateYProperty().bind(dialogVBox.translateYProperty().subtract(dialogVBox.heightProperty().divide(2)));
+        nameLabel.translateXProperty().bind(dialogVBox.translateXProperty().subtract(dialogVBox.widthProperty()).divide(3));
+        nameLabel.getStyleClass().add("dialogTextFlow");
+        dialogStackPane.getChildren().add(nameLabel);
+
+        stackPane.getChildren().add(dialogStackPane);
+        this.dialogStackPane = dialogStackPane;
 
         return dialogTextFlow;
     }
