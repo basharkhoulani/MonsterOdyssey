@@ -370,3 +370,16 @@
 .dialogBackground {
     -fx-background-color: #CFE9DB;
 }
+
+/**************************** Ingame Notifications *****************************/
+.handyBase {
+    -fx-background-color: black;
+    -fx-background-radius: 40px;
+    -fx-border-color: black;
+    -fx-border-radius: 40px
+}
+
+.speaker {
+    -fx-background-color: grey;
+    -fx-background-radius: 20px;
+}
