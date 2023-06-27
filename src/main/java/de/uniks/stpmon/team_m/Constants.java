@@ -2,6 +2,11 @@ package de.uniks.stpmon.team_m;
 
 import javafx.geometry.Insets;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.Map.entry;
+
 public class Constants {
     // SERVER
     public static final String API_URL = "https://stpmon.uniks.de/api/v3";
@@ -79,13 +84,14 @@ public class Constants {
     public static final String AUDIOSYMBOL = "images/AudioSymbol.png";
     public static final String KEYBINDINGSSYMBOL = "images/KeybindingsSymbol.png";
 
-        // NPC DIALOG
+    // NPC DIALOG
     public static int dialogVBoxWidth = 700;
     public static int getDialogVBoxHeight = 150;
     public static int spacerToBottomOfScreen = 150;
     public static Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);
     public static Insets helpLabelInsets = new Insets(0, 40, 20, 0);
     public static int helpLabelFontSize = 12;
+
     public enum DialogSpecialInteractions {
         nurseYes,
         nurseNo,
@@ -94,6 +100,7 @@ public class Constants {
         starterSelection1,
         starterSelection2
     }
+
     public enum ContinueDialogReturnValues {
         dialogNotFinished,
         dialogFinishedTalkToTrainer,
@@ -104,7 +111,8 @@ public class Constants {
         spokenToNurse,
         encounterOnTalk
     }
-        // Nurse Popup
+
+    // Nurse Popup
     public static int popupHeight = 170;
     public static int popupWidth = 300;
     public static int textFieldHeight = 120;
@@ -125,6 +133,11 @@ public class Constants {
     public static final int MESSAGEBOX_HEIGHT = 45;
     public static final int MESSAGEBOX_WIDTH = 170;
 
+    // Change Audio Settings
+
+    public static final int DIALOG_WIDTH = 450;
+    public static final int DIALOG_HEIGHT = 300;
+
     // Characters
     public static final String[] PREMADE_CHARACTERS = {
             "Premade_Character_01.png", "Premade_Character_02.png", "Premade_Character_03.png", "Premade_Character_04.png",
@@ -133,4 +146,26 @@ public class Constants {
             "Premade_Character_13.png", "Premade_Character_14.png", "Premade_Character_15.png", "Premade_Character_16.png",
             "Premade_Character_17.png", "Premade_Character_18.png", "Premade_Character_19.png", "Premade_Character_20.png"
     };
+
+    // Colors
+    public static HashMap<String, String> TYPESCOLORPALETTE = new HashMap<>(Map.ofEntries(
+            entry("normal", "#BBBBAA"),
+            entry("fire", "#FF421C"),
+            entry("water", "#2C9BE3"),
+            entry("electric", "#FFDC00"),
+            entry("grass", "#62BC5A"),
+            entry("flying", "#96CAFF"),
+            entry("bug", "#92C12A"),
+            entry("poison", "#9553CD"),
+            entry("rock", "#BBAA66"),
+            entry("ground", "#A67439"),
+            entry("fighting", "#BB5544"),
+            entry("ice", "#74CFC0"),
+            entry("psychic", "#FF6380"),
+            entry("ghost", "#6E4370"),
+            entry("dragon", "#5670BE"),
+            entry("dark", "#353225"),
+            entry("steel", "#97A8AA"),
+            entry("fairy", "#D15F5F")
+    ));
 }
