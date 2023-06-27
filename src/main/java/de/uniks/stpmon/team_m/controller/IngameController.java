@@ -1164,6 +1164,7 @@ public class IngameController extends Controller {
 
     public TextFlow createDialogVBox() {
         StackPane dialogStackPane = new StackPane();
+        dialogStackPane.setId("dialogStackPane");
         dialogStackPane.setMaxHeight(160);
         dialogStackPane.setMaxWidth(700);
 

@@ -359,7 +359,7 @@ public class IngameControllerTest extends ApplicationTest {
         final StackPane stackPane = lookup("#stackPane").query();
         final Node node2 = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
 
-        assertNotEquals("dialogVBox", node2.getId());
+        assertNotEquals("dialogStackPane", node2.getId());
 
         for (int i = 0; i < 4; i++) {
             press(KeyCode.E);
@@ -389,7 +389,7 @@ public class IngameControllerTest extends ApplicationTest {
         final StackPane stackPane = lookup("#stackPane").query();
         final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
 
-        assertNotEquals("dialogVBox", node.getId());
+        assertNotEquals("dialogStackPane", node.getId());
     }
 
     @Test
@@ -432,6 +432,6 @@ public class IngameControllerTest extends ApplicationTest {
         final StackPane stackPane = lookup("#stackPane").query();
         final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
 
-        assertNotEquals("dialogVBox", node.getId());
+        assertNotEquals("dialogStackPane", node.getId());
     }
 }
