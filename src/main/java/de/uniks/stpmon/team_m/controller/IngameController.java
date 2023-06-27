@@ -751,7 +751,7 @@ public class IngameController extends Controller {
      */
 
     public void pauseGame() {
-        IngamePauseMenuController ingamePauseMenuController = ingamePauseMenuControllerProvider.get();
+        ingamePauseMenuController = ingamePauseMenuControllerProvider.get();
         VBox pauseMenuVBox = new VBox();
         pauseMenuVBox.setAlignment(Pos.CENTER);
         ingamePauseMenuController.init(this, pauseMenuVBox, mainMenuControllerProvider, app);
