@@ -131,14 +131,17 @@ public class IngameStarterMonsterController extends Controller {
             default -> {
                 monster = monster1;
                 monsterImage = monster1Image;
+                starterSelectionLabel.setText(resources.getString("FIRST.SELECTION"));
             }
             case 2 -> {
                 monster = monster2;
                 monsterImage = monster2Image;
+                starterSelectionLabel.setText(resources.getString("SECOND.SELECTION"));
             }
             case 3 -> {
                 monster = monster3;
                 monsterImage = monster3Image;
+                starterSelectionLabel.setText(resources.getString("THIRD.SELECTION"));
             }
         }
 
