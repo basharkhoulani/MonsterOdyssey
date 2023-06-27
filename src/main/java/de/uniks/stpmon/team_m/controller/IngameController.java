@@ -5,15 +5,9 @@ import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.dto.Region;
-import de.uniks.stpmon.team_m.service.AreasService;
-import de.uniks.stpmon.team_m.service.MessageService;
-import de.uniks.stpmon.team_m.service.PresetsService;
-import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
-import de.uniks.stpmon.team_m.utils.Position;
-import de.uniks.stpmon.team_m.utils.SpriteAnimation;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import de.uniks.stpmon.team_m.utils.*;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -117,6 +111,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
+    Provider<EncounterController> encounterControllerProvider;
+    @Inject
     AreasService areasService;
     @Inject
     PresetsService presetsService;
@@ -130,7 +126,6 @@ public class IngameController extends Controller {
     Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
     @Inject
     Provider<ChangeAudioController> changeAudioControllerProvider;
-
     @Inject
     Provider<IngameController> ingameControllerProvider;
 
@@ -912,11 +907,16 @@ public class IngameController extends Controller {
                     encounterOpponentStorage.setEncounterId(opponent.encounter());
                     encounterOpponentStorage.setTrainerId(opponent._id());
                     encounterOpponentStorage.setOpponentMonsterId(opponent.monster());
-                    // TODO: show the start Encounter Info DialogFenster
+                    System.out.println("EncounterId: " + encounterOpponentStorage.getEncounterId());
+                    showEncounterInfoWindow();
                 }, error -> {
                     showError(error.getMessage());
                     error.printStackTrace();
                 }));
+    }
+
+    private void showEncounterInfoWindow() {
+        System.out.println("show Dialogfenster");
     }
 
     //TODO: Bei dem Dialogfenster wenn man E drückt, wird die Scenen nach Encountercontroller rü

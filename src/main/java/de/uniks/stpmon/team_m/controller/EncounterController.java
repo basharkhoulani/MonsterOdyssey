@@ -1,15 +1,11 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
-import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.ObservableEmitter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,7 +20,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 public class EncounterController extends Controller {
     @FXML
@@ -56,17 +51,14 @@ public class EncounterController extends Controller {
     @FXML
     public Text battleDescription;
 
-    private BattleMenuController battleMenuController;
-    @Inject
-    EncounterOpponentsService encounterOpponentsService;
     @Inject
     Provider<IngameController> ingameControllerProvider;
-    @Inject
-    Provider<PresetsService> presetsServiceProvider;
     @Inject
     Provider<EventListener> eventListener;
     @Inject
     Provider<EncounterOpponentStorage> encounterOpponentStorageProvider;
+    @Inject
+    BattleMenuController battleMenuController;
 
     private ObservableList<Opponent> opponents = FXCollections.observableArrayList();
 
@@ -78,9 +70,6 @@ public class EncounterController extends Controller {
         super.init();
         String regionId = encounterOpponentStorageProvider.get().getRegionId();
         String encounterId = encounterOpponentStorageProvider.get().getEncounterId();
-        disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, encounterId)
-                .observeOn(FX_SCHEDULER).subscribe(this.opponents::setAll, error -> showError(error.getMessage())));
-        battleMenuController = new BattleMenuController();
         battleMenuController.init();
     }
 

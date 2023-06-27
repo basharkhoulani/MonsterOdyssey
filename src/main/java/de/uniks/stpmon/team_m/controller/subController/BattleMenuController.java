@@ -21,15 +21,13 @@ public class BattleMenuController extends Controller {
     public Button changeMonsterButton;
     @FXML
     public Button currentInfoButton;
-    @Inject
-    EncounterOpponentsService encounterOpponentsService;
     private EncounterController encounterController;
     private HBox battleMenuHBox;
 
 
     @Inject
-    public BattleMenuController(){
-    }
+    public BattleMenuController(
+    ) {}
 
     public void init(EncounterController encounterController, HBox battleMenuHBox) {
         super.init();
