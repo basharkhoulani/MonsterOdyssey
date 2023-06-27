@@ -4,9 +4,11 @@ import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.controller.MainMenuController;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
@@ -38,35 +40,39 @@ public class IngameSettingsController extends Controller {
     Provider&lt;IngameController&gt; ingameControllerProvider;
     @Inject
     Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
+    @Inject
+    Provider&lt;ChangeAudioController&gt; changeAudioControllerProvider;
 
     @Inject
-<span class="nc" id="L43">    public IngameSettingsController() {</span>
-<span class="nc" id="L44">    }</span>
+<span class="nc" id="L47">    public IngameSettingsController() {</span>
+<span class="nc" id="L48">    }</span>
 
     public Parent render() {
-<span class="nc" id="L47">        return super.render();</span>
+<span class="nc" id="L51">        return super.render();</span>
     }
 
     public void init(IngameController ingameController, VBox ingameVbox) {
-<span class="nc" id="L51">        this.ingameController = ingameController;</span>
-<span class="nc" id="L52">        this.ingameVbox = ingameVbox;</span>
-<span class="nc" id="L53">    }</span>
+<span class="nc" id="L55">        this.ingameController = ingameController;</span>
+<span class="nc" id="L56">        this.ingameVbox = ingameVbox;</span>
+<span class="nc" id="L57">    }</span>
 
     public void openAudioSettings() {
-<span class="nc" id="L56">    }</span>
+<span class="nc" id="L60">        ingameController.root.getChildren().remove(ingameVbox);</span>
+<span class="nc" id="L61">        ingameController.showChangeAudioSettings();</span>
+<span class="nc" id="L62">    }</span>
 
     public void openKeybindings() {
-<span class="nc" id="L59">        ingameController.showHelp();</span>
-<span class="nc" id="L60">    }</span>
+<span class="nc" id="L65">        ingameController.showHelp();</span>
+<span class="nc" id="L66">    }</span>
 
     public void openTrainerSettings(){
-<span class="nc" id="L63">        ingameController.showTrainerSettings();</span>
-<span class="nc" id="L64">    }</span>
+<span class="nc" id="L69">        ingameController.showTrainerSettings();</span>
+<span class="nc" id="L70">    }</span>
 
     public void goBack() {
-<span class="nc" id="L67">        ingameController.root.getChildren().remove(ingameVbox);</span>
-<span class="nc" id="L68">        ingameController.buttonsDisable(false);</span>
-<span class="nc" id="L69">        ingameController.pauseGame();</span>
-<span class="nc" id="L70">    }</span>
+<span class="nc" id="L73">        ingameController.root.getChildren().remove(ingameVbox);</span>
+<span class="nc" id="L74">        ingameController.buttonsDisable(false);</span>
+<span class="nc" id="L75">        ingameController.pauseGame();</span>
+<span class="nc" id="L76">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

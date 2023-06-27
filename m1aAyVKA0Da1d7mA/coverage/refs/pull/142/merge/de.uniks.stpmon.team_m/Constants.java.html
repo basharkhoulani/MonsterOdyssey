@@ -2,7 +2,12 @@
 
 import javafx.geometry.Insets;
 
-<span class="nc" id="L5">public class Constants {</span>
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.Map.entry;
+
+<span class="nc" id="L10">public class Constants {</span>
     // SERVER
     public static final String API_URL = &quot;https://stpmon.uniks.de/api/v3&quot;;
     public static final String WS_URL = &quot;wss://stpmon.uniks.de/ws/v3&quot;;
@@ -69,9 +74,9 @@ import javafx.geometry.Insets;
     public static final int AVATAR_SIZE = 30;
 
     // INGAME
-<span class="fc" id="L72">    public static int TILE_SIZE = 16;</span>
-<span class="fc" id="L73">    public static double ZERO = 0;</span>
-<span class="fc" id="L74">    public static double ONE = 1;</span>
+<span class="fc" id="L77">    public static int TILE_SIZE = 16;</span>
+<span class="fc" id="L78">    public static double ZERO = 0;</span>
+<span class="fc" id="L79">    public static double ONE = 1;</span>
 
     public static final String SETTINGSYMBOL2 = &quot;images/SettingSymbol2.png&quot;;
     public static final String GOBACKSYMBOL = &quot;images/GoBackSymbol.PNG&quot;;
@@ -79,39 +84,42 @@ import javafx.geometry.Insets;
     public static final String AUDIOSYMBOL = &quot;images/AudioSymbol.png&quot;;
     public static final String KEYBINDINGSSYMBOL = &quot;images/KeybindingsSymbol.png&quot;;
 
-        // NPC DIALOG
-<span class="fc" id="L83">    public static int dialogVBoxWidth = 700;</span>
-<span class="fc" id="L84">    public static int getDialogVBoxHeight = 150;</span>
-<span class="fc" id="L85">    public static int spacerToBottomOfScreen = 150;</span>
-<span class="fc" id="L86">    public static Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);</span>
-<span class="fc" id="L87">    public static Insets helpLabelInsets = new Insets(0, 40, 20, 0);</span>
-<span class="fc" id="L88">    public static int helpLabelFontSize = 12;</span>
-<span class="fc" id="L89">    public enum DialogSpecialInteractions {</span>
-<span class="fc" id="L90">        nurseYes,</span>
-<span class="fc" id="L91">        nurseNo,</span>
-<span class="fc" id="L92">        nurseNoMons,</span>
-<span class="fc" id="L93">        starterSelection0,</span>
-<span class="fc" id="L94">        starterSelection1,</span>
-<span class="fc" id="L95">        starterSelection2</span>
+    // NPC DIALOG
+<span class="fc" id="L88">    public static int dialogVBoxWidth = 700;</span>
+<span class="fc" id="L89">    public static int getDialogVBoxHeight = 150;</span>
+<span class="fc" id="L90">    public static int spacerToBottomOfScreen = 150;</span>
+<span class="fc" id="L91">    public static Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);</span>
+<span class="fc" id="L92">    public static Insets helpLabelInsets = new Insets(0, 40, 20, 0);</span>
+<span class="fc" id="L93">    public static int helpLabelFontSize = 12;</span>
+
+<span class="fc" id="L95">    public enum DialogSpecialInteractions {</span>
+<span class="fc" id="L96">        nurseYes,</span>
+<span class="fc" id="L97">        nurseNo,</span>
+<span class="fc" id="L98">        nurseNoMons,</span>
+<span class="fc" id="L99">        starterSelection0,</span>
+<span class="fc" id="L100">        starterSelection1,</span>
+<span class="fc" id="L101">        starterSelection2</span>
     }
-<span class="fc" id="L97">    public enum ContinueDialogReturnValues {</span>
-<span class="fc" id="L98">        dialogNotFinished,</span>
-<span class="fc" id="L99">        dialogFinishedTalkToTrainer,</span>
-<span class="fc" id="L100">        dialogFinishedNoTalkToTrainer,</span>
-<span class="fc" id="L101">        albertDialogFinished0,</span>
-<span class="fc" id="L102">        albertDialogFinished1,</span>
-<span class="fc" id="L103">        albertDialogFinished2,</span>
-<span class="fc" id="L104">        spokenToNurse,</span>
-<span class="fc" id="L105">        encounterOnTalk</span>
+
+<span class="fc" id="L104">    public enum ContinueDialogReturnValues {</span>
+<span class="fc" id="L105">        dialogNotFinished,</span>
+<span class="fc" id="L106">        dialogFinishedTalkToTrainer,</span>
+<span class="fc" id="L107">        dialogFinishedNoTalkToTrainer,</span>
+<span class="fc" id="L108">        albertDialogFinished0,</span>
+<span class="fc" id="L109">        albertDialogFinished1,</span>
+<span class="fc" id="L110">        albertDialogFinished2,</span>
+<span class="fc" id="L111">        spokenToNurse,</span>
+<span class="fc" id="L112">        encounterOnTalk</span>
     }
-        // Nurse Popup
-<span class="fc" id="L108">    public static int popupHeight = 170;</span>
-<span class="fc" id="L109">    public static int popupWidth = 300;</span>
-<span class="fc" id="L110">    public static int textFieldHeight = 120;</span>
-<span class="fc" id="L111">    public static int buttonsHBoxHeight = 50;</span>
-<span class="fc" id="L112">    public static int buttonsHBoxSpacing = 30;</span>
-<span class="fc" id="L113">    public static int nurseButtonHeight = 40;</span>
-<span class="fc" id="L114">    public static int nurseButtonWidth = 80;</span>
+
+    // Nurse Popup
+<span class="fc" id="L116">    public static int popupHeight = 170;</span>
+<span class="fc" id="L117">    public static int popupWidth = 300;</span>
+<span class="fc" id="L118">    public static int textFieldHeight = 120;</span>
+<span class="fc" id="L119">    public static int buttonsHBoxHeight = 50;</span>
+<span class="fc" id="L120">    public static int buttonsHBoxSpacing = 30;</span>
+<span class="fc" id="L121">    public static int nurseButtonHeight = 40;</span>
+<span class="fc" id="L122">    public static int nurseButtonWidth = 80;</span>
 
     // Error messages
     public static final String HTTP_400 = &quot;400&quot;;
@@ -125,13 +133,40 @@ import javafx.geometry.Insets;
     public static final int MESSAGEBOX_HEIGHT = 45;
     public static final int MESSAGEBOX_WIDTH = 170;
 
+    // Change Audio Settings
+
+    public static final int DIALOG_WIDTH = 450;
+    public static final int DIALOG_HEIGHT = 300;
+
     // Characters
-<span class="fc" id="L129">    public static final String[] PREMADE_CHARACTERS = {</span>
+<span class="fc" id="L142">    public static final String[] PREMADE_CHARACTERS = {</span>
             &quot;Premade_Character_01.png&quot;, &quot;Premade_Character_02.png&quot;, &quot;Premade_Character_03.png&quot;, &quot;Premade_Character_04.png&quot;,
             &quot;Premade_Character_05.png&quot;, &quot;Premade_Character_06.png&quot;, &quot;Premade_Character_07.png&quot;, &quot;Premade_Character_08.png&quot;,
             &quot;Premade_Character_09.png&quot;, &quot;Premade_Character_10.png&quot;, &quot;Premade_Character_11.png&quot;, &quot;Premade_Character_12.png&quot;,
             &quot;Premade_Character_13.png&quot;, &quot;Premade_Character_14.png&quot;, &quot;Premade_Character_15.png&quot;, &quot;Premade_Character_16.png&quot;,
             &quot;Premade_Character_17.png&quot;, &quot;Premade_Character_18.png&quot;, &quot;Premade_Character_19.png&quot;, &quot;Premade_Character_20.png&quot;
     };
+
+    // Colors
+<span class="fc" id="L151">    public static HashMap&lt;String, String&gt; TYPESCOLORPALETTE = new HashMap&lt;&gt;(Map.ofEntries(</span>
+<span class="fc" id="L152">            entry(&quot;normal&quot;, &quot;#BBBBAA&quot;),</span>
+<span class="fc" id="L153">            entry(&quot;fire&quot;, &quot;#FF421C&quot;),</span>
+<span class="fc" id="L154">            entry(&quot;water&quot;, &quot;#2C9BE3&quot;),</span>
+<span class="fc" id="L155">            entry(&quot;electric&quot;, &quot;#FFDC00&quot;),</span>
+<span class="fc" id="L156">            entry(&quot;grass&quot;, &quot;#62BC5A&quot;),</span>
+<span class="fc" id="L157">            entry(&quot;flying&quot;, &quot;#96CAFF&quot;),</span>
+<span class="fc" id="L158">            entry(&quot;bug&quot;, &quot;#92C12A&quot;),</span>
+<span class="fc" id="L159">            entry(&quot;poison&quot;, &quot;#9553CD&quot;),</span>
+<span class="fc" id="L160">            entry(&quot;rock&quot;, &quot;#BBAA66&quot;),</span>
+<span class="fc" id="L161">            entry(&quot;ground&quot;, &quot;#A67439&quot;),</span>
+<span class="fc" id="L162">            entry(&quot;fighting&quot;, &quot;#BB5544&quot;),</span>
+<span class="fc" id="L163">            entry(&quot;ice&quot;, &quot;#74CFC0&quot;),</span>
+<span class="fc" id="L164">            entry(&quot;psychic&quot;, &quot;#FF6380&quot;),</span>
+<span class="fc" id="L165">            entry(&quot;ghost&quot;, &quot;#6E4370&quot;),</span>
+<span class="fc" id="L166">            entry(&quot;dragon&quot;, &quot;#5670BE&quot;),</span>
+<span class="fc" id="L167">            entry(&quot;dark&quot;, &quot;#353225&quot;),</span>
+<span class="fc" id="L168">            entry(&quot;steel&quot;, &quot;#97A8AA&quot;),</span>
+<span class="fc" id="L169">            entry(&quot;fairy&quot;, &quot;#D15F5F&quot;)</span>
+    ));
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
