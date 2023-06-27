@@ -113,8 +113,6 @@ public class IngameController extends Controller {
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
-    Provider<EncounterOpponentStorage> encounterOpponentStorageProvider;
-    @Inject
     AreasService areasService;
     @Inject
     PresetsService presetsService;
@@ -344,6 +342,8 @@ public class IngameController extends Controller {
         popupStage.initOwner(app.getStage());
 
         //Setup Encounter
+        listenToOpponent(encounterOpponentStorage, trainerStorageProvider.get().getTrainer()._id());
+        encounterOpponentStorage.setRegionId(trainerStorageProvider.get().getRegion()._id());
 
 
         return parent;
