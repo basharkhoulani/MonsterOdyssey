@@ -59,6 +59,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -123,6 +124,8 @@ public class IngameController extends Controller {
     MessageService messageService;
     @Inject
     TrainersService trainersService;
+    @Inject
+    Provider<ChangeAudioController> changeAudioControllerProvider;
 
     @Inject
     Provider<IngameController> ingameControllerProvider;
@@ -1237,5 +1240,16 @@ public class IngameController extends Controller {
         app.getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);
         app.getStage().getScene().removeEventHandler(KeyEvent.KEY_RELEASED, keyReleasedHandler);
         messageField.removeEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
+    }
+
+    public void showChangeAudioSettings() {
+        VBox changeAudioVBox = new VBox();
+        changeAudioVBox.setAlignment(Pos.CENTER);
+        ChangeAudioController changeAudioController = changeAudioControllerProvider.get();
+        changeAudioController.init(this, changeAudioVBox);
+        changeAudioVBox.getChildren().add(changeAudioController.render());
+        root.getChildren().add(changeAudioVBox);
+        changeAudioVBox.requestFocus();
+        buttonsDisable(true);
     }
 }

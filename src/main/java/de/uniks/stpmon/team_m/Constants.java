@@ -125,6 +125,11 @@ public class Constants {
     public static final int MESSAGEBOX_HEIGHT = 45;
     public static final int MESSAGEBOX_WIDTH = 170;
 
+    // Change Audio Settings
+
+    public static final int DIALOG_WIDTH = 450;
+    public static final int DIALOG_HEIGHT = 300;
+
     // Characters
     public static final String[] PREMADE_CHARACTERS = {
             "Premade_Character_01.png", "Premade_Character_02.png", "Premade_Character_03.png", "Premade_Character_04.png",

@@ -357,3 +357,6 @@
     -fx-border-style: solid;
     -fx-border-width: 2px;
 }
+.dialogBackground {
+    -fx-background-color: #CFE9DB;
+}
