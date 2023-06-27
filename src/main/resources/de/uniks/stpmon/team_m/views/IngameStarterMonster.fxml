@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane fx:id="starterSelectionAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="440.0" prefWidth="500.0" style="-fx-background-color: #d3ebd3;"
-            xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+            minWidth="-Infinity" prefHeight="350.0" prefWidth="550.0" style="-fx-background-color: #d3ebd3;"
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="de.uniks.stpmon.team_m.controller.subController.IngameStarterMonsterController">
-    <Label fx:id="starterSelectionLabel" alignment="CENTER" layoutX="50.0" layoutY="14.0" prefHeight="35.0"
+    <Label fx:id="starterSelectionLabel" alignment="CENTER" layoutX="75.0" layoutY="-3.0" prefHeight="35.0"
            prefWidth="400.0" text="Selection" textAlignment="CENTER" wrapText="true">
         <font>
             <Font name="Comic Sans MS" size="24.0"/>
         </font>
     </Label>
-    <VBox fx:id="starterSelectionVBox" alignment="CENTER" layoutX="70.0" layoutY="70.0" prefHeight="320.0"
-          prefWidth="360.0" spacing="12.0" style="-fx-border-color: black;">
+    <VBox fx:id="starterSelectionVBox" alignment="CENTER" layoutX="55.0" layoutY="35.0" prefHeight="300.0"
+          prefWidth="440.0" spacing="12.0" style="-fx-border-color: black;">
         <padding>
             <Insets bottom="12.0" left="12.0" right="12.0" top="12.0"/>
         </padding>
@@ -37,18 +41,18 @@
             </VBox>
             <VBox fx:id="typesVBox" alignment="CENTER" spacing="10.0"/>
         </HBox>
-        <TextFlow fx:id="starterDescription" prefHeight="200.0" prefWidth="200.0"
+        <TextFlow fx:id="starterDescription" prefHeight="156.0" prefWidth="334.0"
                   style="-fx-border-color: black; -fx-background-color: #e0ecfc;">
             <padding>
                 <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
             </padding>
         </TextFlow>
     </VBox>
-    <ImageView fx:id="arrowLeft" fitHeight="32.0" fitWidth="32.0" layoutX="14.0" layoutY="214.0"
+    <ImageView fx:id="arrowLeft" fitHeight="32.0" fitWidth="32.0" layoutX="14.0" layoutY="169.0"
                onMouseClicked="#rotateLeft" pickOnBounds="true" preserveRatio="true">
         <Image url="@../images/arrowLeft.png"/>
     </ImageView>
-    <ImageView fx:id="arrowRight" fitHeight="32.0" fitWidth="32.0" layoutX="450.0" layoutY="214.0"
+    <ImageView fx:id="arrowRight" fitHeight="32.0" fitWidth="32.0" layoutX="504.0" layoutY="169.0"
                onMouseClicked="#rotateRight" pickOnBounds="true" preserveRatio="true">
         <Image url="@../images/arrowRight.png"/>
     </ImageView>

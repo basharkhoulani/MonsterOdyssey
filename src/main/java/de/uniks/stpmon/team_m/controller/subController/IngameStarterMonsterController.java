@@ -144,7 +144,7 @@ public class IngameStarterMonsterController extends Controller {
 
         // add description
         starterDescription.getChildren().add(new Text(resources.getString("NAME")));
-        starterDescription.getChildren().add(new Text(" " + monster.name() + "\n"));
+        starterDescription.getChildren().add(new Text(" " + monster.name() + "\n\n"));
         starterDescription.getChildren().add(new Text(monster.description()));
 
         // add type

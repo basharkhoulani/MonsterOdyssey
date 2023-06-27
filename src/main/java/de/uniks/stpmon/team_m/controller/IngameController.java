@@ -1243,6 +1243,7 @@ public class IngameController extends Controller {
         if (starterSelectionVBox == null) {
             starterSelectionVBox = new VBox();
             starterSelectionVBox.getStyleClass().add("miniMapContainer");
+            starterSelectionVBox.setStyle("-fx-max-height: 350px; -fx-max-width: 550px");
             starterSelectionVBox.setPadding(new Insets(0, 0, 8, 0));
             ingameStarterMonsterController.init(this, starterSelectionVBox, app, starters);
             starterSelectionVBox.getChildren().add(ingameStarterMonsterController.render());
@@ -1251,6 +1252,7 @@ public class IngameController extends Controller {
             okButton.setId("okButton");
             okButton.setText(resources.getString("OK"));
             okButton.getStyleClass().add("welcomeSceneButton");
+            okButton.setStyle("-fx-background-color: #e0ecfc");
             okButton.setOnAction(event -> {
                         root.getChildren().remove(starterSelectionVBox);
                         buttonsDisable(false);
