@@ -4,9 +4,11 @@ import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.controller.MainMenuController;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
@@ -38,6 +40,8 @@ public class IngameSettingsController extends Controller {
     Provider<IngameController> ingameControllerProvider;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
+    @Inject
+    Provider<ChangeAudioController> changeAudioControllerProvider;
 
     @Inject
     public IngameSettingsController() {
@@ -53,6 +57,8 @@ public class IngameSettingsController extends Controller {
     }
 
     public void openAudioSettings() {
+        ingameController.root.getChildren().remove(ingameVbox);
+        ingameController.showChangeAudioSettings();
     }
 
     public void openKeybindings() {
