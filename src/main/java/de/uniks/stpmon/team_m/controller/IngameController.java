@@ -941,7 +941,6 @@ public class IngameController extends Controller {
     public void interactWithTrainer() {
         if (inDialog) {
             try {
-                System.out.println(this.currentNpc.npc().starters());
                 if (this.currentNpc.npc().canHeal() && trainerStorageProvider.get().getTrainer().team().size() == 0) {
                     continueTrainerDialog(DialogSpecialInteractions.nurseNoMons);
                 } else {
@@ -1235,13 +1234,13 @@ public class IngameController extends Controller {
         buttonsDisable(true);
     }
 
-    public void showStarterSelection() {
+    public void showStarterSelection(List<String> starters) {
         IngameStarterMonsterController ingameStarterMonsterController = ingameStarterMonsterControllerProvider.get();
         if (starterSelectionVBox == null) {
             starterSelectionVBox = new VBox();
             starterSelectionVBox.getStyleClass().add("miniMapContainer");
             starterSelectionVBox.setPadding(new Insets(0, 0, 8, 0));
-            ingameStarterMonsterController.init(this, starterSelectionVBox, app);
+            ingameStarterMonsterController.init(this, starterSelectionVBox, app, starters);
             starterSelectionVBox.getChildren().add(ingameStarterMonsterController.render());
 
             Button okButton = new Button();
