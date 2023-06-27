@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
@@ -21,6 +22,8 @@ import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.List;
+
+import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
 public class IngameStarterMonsterController extends Controller {
     @FXML
@@ -43,6 +46,8 @@ public class IngameStarterMonsterController extends Controller {
     public ImageView arrowRight;
     @FXML
     public VBox typeVBox;
+    @FXML
+    public VBox typesVBox;
     @Inject
     IngameController ingameController;
     @Inject
@@ -83,7 +88,13 @@ public class IngameStarterMonsterController extends Controller {
             starterDescription.getChildren().add(new Text(" " + monster1.name() + "\n"));
             starterDescription.getChildren().add(new Text(monster1.description()));
             // add type
-            typeVBox.setStyle("-fx-background-color: red");
+
+            monster1.type().forEach(type -> {
+                VBox typeVBox = createTypeVBox(type, null);
+                typesVBox.getChildren().add(typeVBox);
+            });
+
+
             // get Images
             disposables.add(presetsService.getMonsterImage(Integer.parseInt(starters.get(0))).observeOn(FX_SCHEDULER).subscribe(monsterImage -> {
                 monster1Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
@@ -108,6 +119,23 @@ public class IngameStarterMonsterController extends Controller {
             error.printStackTrace();
         }));
         return parent;
+    }
+
+    public VBox createTypeVBox(String type, Image image) {
+        VBox typeVBox = new VBox();
+        typeVBox.setMaxSize(32, 32);
+        if (TYPESCOLORPALETTE.containsKey(type)) {
+            String color = TYPESCOLORPALETTE.get(type);
+            typeVBox.setStyle("-fx-background-color: " + color + ";-fx-border-color: black");
+        }
+        if (image == null) {
+            image = new Image(String.valueOf(App.class.getResource("images/ingameHelpSymbol.png")));
+        }
+        ImageView typeImageView = new ImageView(image);
+        typeImageView.setFitHeight(32);
+        typeImageView.setFitWidth(32);
+        typeVBox.getChildren().add(typeImageView);
+        return typeVBox;
     }
 
     public void rotateLeft() {

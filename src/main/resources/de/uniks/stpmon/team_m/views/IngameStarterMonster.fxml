@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane fx:id="starterSelectionAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="440.0" prefWidth="500.0" style="-fx-background-color: #d3ebd3;"
-            xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="de.uniks.stpmon.team_m.controller.subController.IngameStarterMonsterController">
     <Label fx:id="starterSelectionLabel" alignment="CENTER" layoutX="50.0" layoutY="14.0" prefHeight="35.0"
            prefWidth="400.0" text="Selection" textAlignment="CENTER" wrapText="true">
@@ -32,13 +36,7 @@
                     <Image url="@../images/Monster_mit_Farbe.png"/>
                 </ImageView>
             </VBox>
-            <VBox fx:id="typeVBox" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="32.0" prefWidth="32.0"
-                  style="-fx-border-color: black;">
-                <ImageView fx:id="typeImageView" fitHeight="32.0" fitWidth="32.0" nodeOrientation="INHERIT"
-                           pickOnBounds="true" preserveRatio="true">
-                    <Image url="@../images/ingameHelpSymbol.png"/>
-                </ImageView>
-            </VBox>
+            <VBox fx:id="typesVBox" alignment="CENTER" spacing="10.0"/>
         </HBox>
         <TextFlow fx:id="starterDescription" prefHeight="200.0" prefWidth="200.0"
                   style="-fx-border-color: black; -fx-background-color: #e0ecfc;"/>
