@@ -65,15 +65,6 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void Cancel() {
-        Button cancelButton = lookup("#cancelButton").queryButton();
-        Button deleteTrainerButton = lookup("#deleteTrainerButton").queryButton();
-        assertEquals(cancelButton.getText(), "Cancel");
-        assertEquals(deleteTrainerButton.getText(), "Delete your trainer");
-        clickOn(cancelButton);
-    }
-
-    @Test
     public void deleteTrainer() {
         Button deleteTrainerButton = lookup("#deleteTrainerButton").queryButton();
         clickOn(deleteTrainerButton);

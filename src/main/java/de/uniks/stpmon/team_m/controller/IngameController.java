@@ -132,11 +132,15 @@ public class IngameController extends Controller {
     @Inject
     Provider<IngameController> ingameControllerProvider;
 
+    private IngamePauseMenuController ingamePauseMenuController;
+
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     public static final KeyCode INTERACT_KEY = KeyCode.E;
     private boolean isChatting = false;
     private boolean inDialog = false;
     private boolean inNpcPopup = false;
+    private boolean isPaused = false;
+    private boolean inSettings = false;
 
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
@@ -196,7 +200,16 @@ public class IngameController extends Controller {
                 isChatting = true;
             }
             if (event.getCode() == PAUSE_MENU_KEY) {
-                pauseGame();
+                if (inSettings) {
+                    return;
+                }
+                if(!isPaused){
+                    pauseGame();
+                    isPaused = true;
+                } else {
+                    ingamePauseMenuController.resumeGame();
+                    isPaused = false;
+                }
             }
             if (event.getCode() == INTERACT_KEY) {
                 if (!inNpcPopup) {
@@ -745,7 +758,7 @@ public class IngameController extends Controller {
      */
 
     public void pauseGame() {
-        IngamePauseMenuController ingamePauseMenuController = ingamePauseMenuControllerProvider.get();
+        ingamePauseMenuController = ingamePauseMenuControllerProvider.get();
         VBox pauseMenuVBox = new VBox();
         pauseMenuVBox.setAlignment(Pos.CENTER);
         ingamePauseMenuController.init(this, pauseMenuVBox, mainMenuControllerProvider, app);
@@ -753,6 +766,7 @@ public class IngameController extends Controller {
         root.getChildren().add(pauseMenuVBox);
         pauseMenuVBox.requestFocus();
         buttonsDisable(true);
+        inSettings = false;
     }
 
     public void buttonsDisable(Boolean set) {
@@ -780,31 +794,22 @@ public class IngameController extends Controller {
         root.getChildren().add(settingsVBox);
         settingsVBox.requestFocus();
         buttonsDisable(true);
+        inSettings = true;
     }
 
     public void showTrainerSettings() {
-        Dialog<?> trainerSettingsDialog = new Dialog<>();
-        trainerSettingsDialog.setTitle(resources.getString("TRAINER.PROFIL"));
+        IngameTrainerSettingsController ingameTrainerSettingsController = ingameTrainerSettingsControllerProvider.get();
+        VBox trainersettingsVBox = new VBox();
+        trainersettingsVBox.setAlignment(Pos.CENTER);
+        ingameTrainerSettingsController.initIngame(this, trainersettingsVBox);
+        trainersettingsVBox.getChildren().add(ingameTrainerSettingsController.render());
+        root.getChildren().add(trainersettingsVBox);
+        trainersettingsVBox.requestFocus();
+        buttonsDisable(true);
+
+
         ingameTrainerSettingsControllerProvider.get().setApp(this.app);
         ingameTrainerSettingsControllerProvider.get().setValues(resources, preferences, resourceBundleProvider, ingameTrainerSettingsControllerProvider.get(), app);
-        ingameTrainerSettingsControllerProvider.get().setIngameController(this);
-        trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());
-        trainerSettingsDialog.getDialogPane().setExpandableContent(null);
-        if (!GraphicsEnvironment.isHeadless()) {
-            trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
-            trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");
-        }
-        trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
-        trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");
-        trainerSettingsDialog.initOwner(app.getStage());
-        Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();
-        popUp.setOnCloseRequest(evt -> {
-                    ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close();
-                    groundCanvas.requestFocus();
-                }
-        );
-
-        trainerSettingsDialog.showAndWait();
     }
 
     public void sendMessageButton() {
