@@ -42,14 +42,15 @@ public class ChangeAudioController extends Controller {
 
     public void onCloseButtonClick() {
 <span class="nc" id="L44">        ingameController.root.getChildren().remove(changeAudioVBox);</span>
-<span class="nc" id="L45">    }</span>
+<span class="nc" id="L45">        ingameController.showSettings();</span>
+<span class="nc" id="L46">    }</span>
 
     public void getSliderValue() {
-<span class="nc" id="L48">        audioSlider.valueProperty().addListener(new ChangeListener&lt;Number&gt;() {</span>
+<span class="nc" id="L49">        audioSlider.valueProperty().addListener(new ChangeListener&lt;Number&gt;() {</span>
             public void changed(ObservableValue &lt;?extends Number&gt;observable, Number oldValue, Number newValue){
 
-<span class="nc" id="L51">            }</span>
+<span class="nc" id="L52">            }</span>
         });
-<span class="nc" id="L53">    }</span>
+<span class="nc" id="L54">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

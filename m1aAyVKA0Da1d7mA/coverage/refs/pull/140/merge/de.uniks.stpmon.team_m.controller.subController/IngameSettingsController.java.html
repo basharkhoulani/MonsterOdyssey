@@ -57,21 +57,22 @@ public class IngameSettingsController extends Controller {
 <span class="nc" id="L57">    }</span>
 
     public void openAudioSettings() {
-<span class="nc" id="L60">        ingameController.showChangeAudioSettings();</span>
-<span class="nc" id="L61">    }</span>
+<span class="nc" id="L60">        ingameController.root.getChildren().remove(ingameVbox);</span>
+<span class="nc" id="L61">        ingameController.showChangeAudioSettings();</span>
+<span class="nc" id="L62">    }</span>
 
     public void openKeybindings() {
-<span class="nc" id="L64">        ingameController.showHelp();</span>
-<span class="nc" id="L65">    }</span>
+<span class="nc" id="L65">        ingameController.showHelp();</span>
+<span class="nc" id="L66">    }</span>
 
     public void openTrainerSettings(){
-<span class="nc" id="L68">        ingameController.showTrainerSettings();</span>
-<span class="nc" id="L69">    }</span>
+<span class="nc" id="L69">        ingameController.showTrainerSettings();</span>
+<span class="nc" id="L70">    }</span>
 
     public void goBack() {
-<span class="nc" id="L72">        ingameController.root.getChildren().remove(ingameVbox);</span>
-<span class="nc" id="L73">        ingameController.buttonsDisable(false);</span>
-<span class="nc" id="L74">        ingameController.pauseGame();</span>
-<span class="nc" id="L75">    }</span>
+<span class="nc" id="L73">        ingameController.root.getChildren().remove(ingameVbox);</span>
+<span class="nc" id="L74">        ingameController.buttonsDisable(false);</span>
+<span class="nc" id="L75">        ingameController.pauseGame();</span>
+<span class="nc" id="L76">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
