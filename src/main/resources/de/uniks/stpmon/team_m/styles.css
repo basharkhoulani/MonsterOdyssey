@@ -250,6 +250,16 @@
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
 }
+
+.npcNameLabel {
+    -fx-background-color: #C0F3A5;
+    -fx-opacity: 1;
+    -fx-border-color: #1C701C;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
 /*********************************************************************************/
 /*************************** Autocomplete textfields *****************************/
 .auto-complete-popup > .list-view {
