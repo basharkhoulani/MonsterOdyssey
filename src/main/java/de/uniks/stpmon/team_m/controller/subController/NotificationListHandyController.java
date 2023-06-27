@@ -51,6 +51,6 @@ public class NotificationListHandyController extends Controller {
             pause.play();
         }
 
-
+        ingameController.smallHandyButton.setVisible(true);
     }
 }

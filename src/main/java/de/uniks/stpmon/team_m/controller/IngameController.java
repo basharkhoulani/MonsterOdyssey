@@ -101,6 +101,10 @@ public class IngameController extends Controller {
     public StackPane stackPane;
     @FXML
     public StackPane root;
+    @FXML
+    public StackPane smallHandyButton;
+    @FXML
+    public ImageView notificationBell;
 
     @Inject
     Provider<IngameMiniMapController> ingameMiniMapControllerProvider;
@@ -739,6 +743,7 @@ public class IngameController extends Controller {
      */
 
     public void showHelp() {
+        smallHandyButton.setVisible(false);
         /*Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(null);
         alert.setHeaderText(null);
