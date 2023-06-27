@@ -136,6 +136,10 @@ public class DialogController extends Controller {
                 return spokenToNurse;
             }
 
+            if (npc.npc().encounterOnTalk()) {
+                return encounterOnTalk;
+            }
+
             if (Objects.equals(this.npc._id(), "645e32c6866ace359554a802") && !this.alreadyEncountered) {
                 // TODO remove this line when implementing albert special interaction
 
