@@ -10,7 +10,7 @@ public class AudioService {
     private MediaPlayer mediaPlayer;
     private boolean isMuted = false;
     private String currentSound;
-
+    private double soundVolume;
     @Inject
     public AudioService() {}
 
@@ -61,10 +61,11 @@ public class AudioService {
     }
 
     public double getVolume() {
-        return mediaPlayer.getVolume();
+        return this.soundVolume;
     }
 
     public void setVolume(double volume) {
+        this.soundVolume = volume;
         mediaPlayer.setVolume(volume);
     }
 }
