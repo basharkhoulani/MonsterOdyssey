@@ -6,8 +6,11 @@ import de.uniks.stpmon.team_m.dto.Message;
 import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.service.PresetsService;
+import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -53,16 +56,19 @@ public class EncounterController extends Controller {
     @FXML
     public Text battleDescription;
 
+    private BattleMenuController battleMenuController;
+    @Inject
+    EncounterOpponentsService encounterOpponentsService;
     @Inject
     Provider<IngameController> ingameControllerProvider;
-    private BattleMenuController battleMenuController;
     @Inject
     Provider<PresetsService> presetsServiceProvider;
     @Inject
     Provider<EventListener> eventListener;
     @Inject
-    EncounterOpponentsService encounterOpponentsService;
+    Provider<EncounterOpponentStorage> encounterOpponentStorageProvider;
 
+    private ObservableList<Opponent> opponents = FXCollections.observableArrayList();
 
     @Inject
     public EncounterController() {
@@ -70,6 +76,10 @@ public class EncounterController extends Controller {
 
     public void init(){
         super.init();
+        String regionId = encounterOpponentStorageProvider.get().getRegionId();
+        String encounterId = encounterOpponentStorageProvider.get().getEncounterId();
+        disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, encounterId)
+                .observeOn(FX_SCHEDULER).subscribe(this.opponents::setAll, error -> showError(error.getMessage())));
         battleMenuController = new BattleMenuController();
         battleMenuController.init();
     }
