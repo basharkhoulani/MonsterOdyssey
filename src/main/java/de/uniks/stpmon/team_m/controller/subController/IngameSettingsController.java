@@ -57,6 +57,7 @@ public class IngameSettingsController extends Controller {
     }
 
     public void openAudioSettings() {
+        ingameController.root.getChildren().remove(ingameVbox);
         ingameController.showChangeAudioSettings();
     }
 

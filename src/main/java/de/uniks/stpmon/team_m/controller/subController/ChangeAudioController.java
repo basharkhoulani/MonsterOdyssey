@@ -42,6 +42,7 @@ public class ChangeAudioController extends Controller {
 
     public void onCloseButtonClick() {
         ingameController.root.getChildren().remove(changeAudioVBox);
+        ingameController.showSettings();
     }
 
     public void getSliderValue() {
