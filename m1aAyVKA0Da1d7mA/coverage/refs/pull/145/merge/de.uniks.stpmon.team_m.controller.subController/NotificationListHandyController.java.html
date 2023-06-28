@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NotificationListHandyController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">NotificationListHandyController.java</span></div><h1>NotificationListHandyController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.Trainer;
+import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import java.sql.Time;
+
+import static de.uniks.stpmon.team_m.Constants.spaceBetweenPhoneAndWindowEdge;
+
+public class NotificationListHandyController extends Controller {
+    @FXML
+    public ListView&lt;String&gt; ingameNotificationListView;
+    @FXML
+    public StackPane notificationHandyStackPane;
+
+    @Inject
+    Provider&lt;NotificationListHandyController&gt; notificationListHandyControllerProvider;
+
+    private IngameController ingameController;
+    private Trainer trainer;
+
+    @Inject
+<span class="fc" id="L36">    public NotificationListHandyController() {</span>
+<span class="fc" id="L37">    }</span>
+
+    public void init(IngameController ingameController, Trainer currentTrainer) {
+<span class="fc" id="L40">        this.ingameController = ingameController;</span>
+
+<span class="fc" id="L42">        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -&gt; {</span>
+<span class="fc" id="L43">            ingameController.notificationBell.setVisible(true);</span>
+<span class="fc" id="L44">        }));</span>
+
+<span class="fc" id="L46">        timeline.play();</span>
+
+<span class="fc" id="L48">        this.trainer = currentTrainer;</span>
+<span class="fc" id="L49">    }</span>
+
+    @Override
+    public Parent render() {
+<span class="fc" id="L53">        Parent parent = super.render();</span>
+
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (trainer.encounteredMonsterTypes().size() == 0) {</span>
+<span class="fc" id="L56">            this.displayFirstTimeNotifications();</span>
+        }
+
+<span class="fc" id="L59">        ingameNotificationListView.setMouseTransparent(true);</span>
+
+<span class="fc" id="L61">        return parent;</span>
+    }
+
+    public void closeNotificationListHandy() {
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        for (int i = 0; i &lt; notificationHandyStackPane.getWidth() + spaceBetweenPhoneAndWindowEdge; i++) {</span>
+<span class="fc" id="L66">            int iterator = i;</span>
+
+<span class="fc" id="L68">            PauseTransition pause = new PauseTransition(Duration.millis(1));</span>
+<span class="fc" id="L69">            pause.setOnFinished(event -&gt; {</span>
+<span class="fc" id="L70">                notificationHandyStackPane.translateXProperty().bind(</span>
+                        ingameController.anchorPane.
+<span class="fc" id="L72">                                widthProperty().</span>
+<span class="fc" id="L73">                                add(notificationHandyStackPane.widthProperty()).</span>
+<span class="fc" id="L74">                                divide(2).</span>
+<span class="fc" id="L75">                                subtract(notificationHandyStackPane.widthProperty()).</span>
+<span class="fc" id="L76">                                add(iterator)</span>
+                );
+<span class="fc" id="L78">            });</span>
+<span class="fc" id="L79">            pause.setDelay(Duration.millis(i));</span>
+<span class="fc" id="L80">            pause.play();</span>
+        }
+
+<span class="fc" id="L83">        ingameController.smallHandyButton.setVisible(true);</span>
+<span class="fc" id="L84">    }</span>
+
+    private void displayFirstTimeNotifications() {
+<span class="fc" id="L87">        ObservableList&lt;String&gt; newTrainerNotificationMessages = FXCollections.observableArrayList();</span>
+
+<span class="fc" id="L89">        ingameNotificationListView.setSelectionModel(null);</span>
+<span class="fc" id="L90">        ingameNotificationListView.setFocusModel(null);</span>
+<span class="fc" id="L91">        ingameNotificationListView.setCellFactory(param -&gt; new IngameNotificationCell(this));</span>
+<span class="fc" id="L92">        ingameNotificationListView.setItems(newTrainerNotificationMessages);</span>
+
+<span class="fc" id="L94">        Timeline timeline = new Timeline();</span>
+<span class="fc" id="L95">        int duration = 1;</span>
+
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        for (int i = 0; i &lt; 4; i++) {</span>
+<span class="fc" id="L98">            int iterator = i;</span>
+<span class="fc" id="L99">            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -&gt; {</span>
+
+<span class="fc" id="L101">                newTrainerNotificationMessages.add(this.resources.getString(&quot;INGAME.NOTIFICATIONS.NEW.&quot;+iterator));</span>
+<span class="fc" id="L102">            });</span>
+<span class="fc" id="L103">            timeline.getKeyFrames().add(keyFrame);</span>
+<span class="fc" id="L104">            duration++;</span>
+        }
+
+<span class="fc" id="L107">        timeline.play();</span>
+<span class="fc" id="L108">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
