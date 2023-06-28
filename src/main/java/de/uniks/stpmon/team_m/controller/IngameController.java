@@ -204,7 +204,6 @@ public class IngameController extends Controller {
                     pauseGame();
                 } else {
                     ingamePauseMenuController.resumeGame();
-                    isPaused = false;
                 }
             }
             if (event.getCode() == INTERACT_KEY) {
