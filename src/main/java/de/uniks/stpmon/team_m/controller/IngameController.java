@@ -758,6 +758,7 @@ public class IngameController extends Controller {
     public void showHelp() {
         smallHandyButton.setVisible(false);
         notificationBell.setVisible(false);
+        // TODO: delete this comment after everything is cleaned up that was formerly used
         /*Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(null);
         alert.setHeaderText(null);
@@ -771,10 +772,7 @@ public class IngameController extends Controller {
         dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);
         alert.showAndWait();*/
 
-        int targetX = (int) (anchorPane.getWidth() / 2 + 17 - notificationHandyStackPane.getWidth() - 13);
-        int startX = (int) (anchorPane.getWidth() / 2 + 17);
-
-        for (int i = 0; i < notificationHandyStackPane.getWidth() + 13; i++) {
+        for (int i = 0; i < notificationHandyStackPane.getWidth(); i++) {
             int iterator = i;
 
             PauseTransition pause = new PauseTransition(Duration.millis(1));
@@ -784,7 +782,7 @@ public class IngameController extends Controller {
                                 widthProperty().
                                 add(notificationHandyStackPane.widthProperty()).
                                 divide(2).
-                                add(17).
+
                                 subtract(iterator)
                 );
             });

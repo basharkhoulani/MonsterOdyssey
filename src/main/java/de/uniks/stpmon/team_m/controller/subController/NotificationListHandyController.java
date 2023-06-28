@@ -18,6 +18,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.sql.Time;
 
+import static de.uniks.stpmon.team_m.Constants.spaceBetweenPhoneAndWindowEdge;
+
 public class NotificationListHandyController extends Controller {
     @FXML
     public ListView<String> ingameNotificationListView;
@@ -60,7 +62,7 @@ public class NotificationListHandyController extends Controller {
     }
 
     public void closeNotificationListHandy() {
-        for (int i = 0; i < notificationHandyStackPane.getWidth() + 13; i++) {
+        for (int i = 0; i < notificationHandyStackPane.getWidth() + spaceBetweenPhoneAndWindowEdge; i++) {
             int iterator = i;
 
             PauseTransition pause = new PauseTransition(Duration.millis(1));
@@ -70,7 +72,6 @@ public class NotificationListHandyController extends Controller {
                                 widthProperty().
                                 add(notificationHandyStackPane.widthProperty()).
                                 divide(2).
-                                add(17).
                                 subtract(notificationHandyStackPane.widthProperty()).
                                 add(iterator)
                 );
