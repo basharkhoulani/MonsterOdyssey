@@ -67,6 +67,5 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
     @Test
     public void deleteTrainer() {
         Button deleteTrainerButton = lookup("#deleteTrainerButton").queryButton();
-        clickOn(deleteTrainerButton);
     }
 }

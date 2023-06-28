@@ -30,7 +30,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
@@ -51,7 +50,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.Window;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
@@ -218,10 +216,8 @@ public class IngameController extends Controller {
                 }
                 if(!isPaused){
                     pauseGame();
-                    isPaused = true;
                 } else {
                     ingamePauseMenuController.resumeGame();
-                    isPaused = false;
                 }
             }
             if (event.getCode() == INTERACT_KEY) {
@@ -814,6 +810,7 @@ public class IngameController extends Controller {
         } else {
             stackPane.setEffect(null);
         }
+        isPaused = set;
         movmentDisabled = set;
         monstersButton.setDisable(set);
         pauseButton.setDisable(set);
