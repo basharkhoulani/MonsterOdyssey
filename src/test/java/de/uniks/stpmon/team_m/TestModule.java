@@ -582,6 +582,7 @@ public class TestModule {
         };
     }
 
+    @Provides
     static RegionEncountersApiService regionEncountersApiService() {
         return new RegionEncountersApiService() {
             @Override
