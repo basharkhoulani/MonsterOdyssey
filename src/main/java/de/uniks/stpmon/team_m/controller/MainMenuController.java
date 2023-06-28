@@ -248,6 +248,8 @@ public class MainMenuController extends Controller {
                                     destroy();
                                     AudioService.getInstance().stopSound();
                                     AudioService.getInstance().playSound(CITY_SOUND);
+                                    AudioService.getInstance().setVolume(preferences.getDouble("volume", 0.5));
+                                    AudioService.getInstance().setCurrentSound(CITY_SOUND);
                                     app.show(ingameControllerProvider.get());
                                 },
                                 error -> {
