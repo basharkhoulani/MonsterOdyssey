@@ -956,15 +956,10 @@ public class IngameController extends Controller {
                         encounterOpponentStorage.setEncounterId(opponents.get(0).encounter());
                         System.out.println("You are already in an encounter " + encounterOpponentStorage.getEncounterId());
                         // current solution: delete the opponents
-                        disposables.add(encounterOpponentsService.deleteOpponent(regionId, encounterOpponentStorage.getEncounterId(), opponents.get(0)._id())
-                                .observeOn(FX_SCHEDULER).subscribe(opponent -> {
-                                    System.out.println("The encounter would be deleted.");
-                                    }, error -> {
-                                    System.out.println(opponents.get(0)._id());
-                                    error.printStackTrace();
-                                    showEncounterInfoWindow();
-                                }));
-                        // in th future the encounter will be reproduced
+
+                        System.out.println(opponents.get(0)._id());
+
+                        showEncounterInfoWindow();
                     }
                 }, error -> {
                     showError(error.getMessage());

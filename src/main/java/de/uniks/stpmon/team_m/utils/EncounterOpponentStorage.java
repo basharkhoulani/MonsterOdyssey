@@ -68,7 +68,6 @@ public class EncounterOpponentStorage {
         this.opponentsInStorage = opponentsInStorage;
     }
 
-
     public Trainer getOpponentTrainer() {
         return opponentTrainer;
     }
