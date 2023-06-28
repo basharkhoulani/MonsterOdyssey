@@ -358,7 +358,7 @@ public class IngameController extends Controller {
         popupStage.initOwner(app.getStage());
 
         this.notificationListHandyController = notificationListHandyControllerProvider.get();
-        notificationListHandyController.init(this);
+        notificationListHandyController.init(this, trainerStorageProvider.get().getTrainer());
         stackPane.getChildren().add(notificationListHandyController.render());
         this.notificationHandyStackPane = (StackPane) stackPane.getChildren().get(stackPane.getChildren().size() - 1);
 
