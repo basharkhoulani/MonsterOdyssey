@@ -383,3 +383,16 @@
     -fx-background-color: grey;
     -fx-background-radius: 20px;
 }
+
+.borderOfMonsterAvatar {
+    -fx-border-color: black;
+    -fx-border-style: solid;
+    -fx-border-radius: 2px;
+}
+
+.ingameNotificationTextFlow {
+    -fx-border-color: darkblue;
+    -fx-border-radius: 10px;
+    -fx-background-color: lightblue;
+    -fx-background-radius: 10px;
+}
