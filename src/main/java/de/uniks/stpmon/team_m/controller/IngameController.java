@@ -385,7 +385,7 @@ public class IngameController extends Controller {
                         widthProperty().
                         add(notificationHandyStackPane.widthProperty()).
                         divide(2).
-                        add(17)
+                        add(offsetToNotShowPhoneInScreen)
         );
 
         if(!GraphicsEnvironment.isHeadless()){
@@ -769,19 +769,6 @@ public class IngameController extends Controller {
     public void showHelp() {
         smallHandyButton.setVisible(false);
         notificationBell.setVisible(false);
-        // TODO: delete this comment after everything is cleaned up that was formerly used
-        /*Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(null);
-        alert.setHeaderText(null);
-        alert.setGraphic(null);
-        alert.initOwner(app.getStage());
-        alert.initModality(Modality.APPLICATION_MODAL);
-        alert.initStyle(StageStyle.UNDECORATED);
-        alert.setContentText(resources.getString("HELP.LABEL"));
-        final DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStyleClass().add("comicSans");
-        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);
-        alert.showAndWait();*/
 
         for (int i = 0; i < notificationHandyStackPane.getWidth(); i++) {
             int iterator = i;
@@ -793,7 +780,6 @@ public class IngameController extends Controller {
                                 widthProperty().
                                 add(notificationHandyStackPane.widthProperty()).
                                 divide(2).
-
                                 subtract(iterator)
                 );
             });

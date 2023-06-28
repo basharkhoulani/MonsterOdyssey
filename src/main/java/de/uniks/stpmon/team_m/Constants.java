@@ -122,7 +122,8 @@ public class Constants {
     public static int nurseButtonWidth = 80;
 
     // Ingame Help
-    public static int spaceBetweenPhoneAndWindowEdge = 20;
+    public static int spaceBetweenPhoneAndWindowEdge = 25;
+    public static int offsetToNotShowPhoneInScreen = 30;
     public static final String smallHandyImage = "images/SmallHandy.png";
     public static final String notificationBellImage = "images/NotificationBell.png";
 
