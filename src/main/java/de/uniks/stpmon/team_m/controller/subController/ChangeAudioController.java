@@ -32,7 +32,9 @@ public class ChangeAudioController extends Controller {
 
     @Override
     public Parent render() {
-        return super.render();
+        final Parent parent = super.render();
+        audioSlider.setValue(AudioService.getInstance().getVolume() * 100);
+        return parent;
     }
 
 
@@ -49,6 +51,7 @@ public class ChangeAudioController extends Controller {
         audioSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue <?extends Number>observable, Number oldValue, Number newValue){
                 AudioService.getInstance().setVolume(newValue.doubleValue() / 100);
+                preferences.putDouble("volume", newValue.doubleValue() / 100);
             }
         });
     }
