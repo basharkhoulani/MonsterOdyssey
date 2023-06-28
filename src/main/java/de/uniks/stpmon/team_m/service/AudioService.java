@@ -53,11 +53,8 @@ public class AudioService {
     public String getCurrentSound() {
         return this.currentSound;
     }
-
-    public void pauseSound() {
-        if (mediaPlayer != null && mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-            mediaPlayer.pause();
-        }
+    public void setCurrentSound(String sound) {
+        this.currentSound = sound;
     }
 
     public double getVolume() {
