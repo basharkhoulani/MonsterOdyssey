@@ -4,6 +4,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
+import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.MessageService;
@@ -18,6 +19,7 @@ import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -56,10 +58,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -170,7 +170,7 @@ public class IngameController extends Controller {
     private VBox miniMapVBox;
     private StackPane dialogStackPane;
     private VBox starterSelectionVBox;
-    private boolean movmentDisabled;
+    private boolean movementDisabled;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -209,7 +209,7 @@ public class IngameController extends Controller {
                 return;
             }
 
-            if (movmentDisabled) {
+            if (movementDisabled) {
                 return;
             }
 
@@ -761,7 +761,8 @@ public class IngameController extends Controller {
         } else {
             stackPane.setEffect(null);
         }
-        movmentDisabled = set;
+        movementDisabled = set;
+        inNpcPopup = set;
         monstersButton.setDisable(set);
         pauseButton.setDisable(set);
         showChatButton.setDisable(set);
@@ -1095,7 +1096,8 @@ public class IngameController extends Controller {
                 // TODO @Cheng here you have to put your logic connected with the encounter
                 endDialog(0, true);
             }
-            default -> {}
+            default -> {
+            }
         }
     }
 
@@ -1108,6 +1110,15 @@ public class IngameController extends Controller {
         if (encounterNpc) {
             encounterNPC(this.currentNpc, selectionValue);
         }
+
+        if (Objects.equals(this.currentNpc._id(), "645e32c6866ace359554a802")) {
+            System.out.println("gesprochen");
+        }
+
+
+        // trainer position hashmap
+
+
     }
 
     public void createNurseHealPopup() {
@@ -1265,7 +1276,7 @@ public class IngameController extends Controller {
             starterSelectionVBox.getStyleClass().add("miniMapContainer");
             starterSelectionVBox.setStyle("-fx-max-height: 350px; -fx-max-width: 550px");
             starterSelectionVBox.setPadding(new Insets(0, 0, 8, 0));
-            ingameStarterMonsterController.init(this, starterSelectionVBox, app, starters);
+            ingameStarterMonsterController.init(this, app, starters);
             starterSelectionVBox.getChildren().add(ingameStarterMonsterController.render());
 
             Button okButton = new Button();
@@ -1273,17 +1284,24 @@ public class IngameController extends Controller {
             okButton.setText(resources.getString("OK"));
             okButton.getStyleClass().add("welcomeSceneButton");
             okButton.setStyle("-fx-background-color: #e0ecfc");
-            okButton.setOnAction(event -> {
-                        root.getChildren().remove(starterSelectionVBox);
-                        buttonsDisable(false);
-                    }
-            );
+            okButton.setOnAction(event -> selectStarter(ingameStarterMonsterController));
             starterSelectionVBox.getChildren().add(okButton);
         }
         root.getChildren().add(starterSelectionVBox);
         starterSelectionVBox.requestFocus();
         buttonsDisable(true);
     }
+
+    private void selectStarter(IngameStarterMonsterController ingameStarterMonsterController) {
+        root.getChildren().remove(starterSelectionVBox);
+        buttonsDisable(false);
+        switch (ingameStarterMonsterController.index - 1) {
+            case 0 -> continueTrainerDialog(DialogSpecialInteractions.starterSelection0);
+            case 1 -> continueTrainerDialog(DialogSpecialInteractions.starterSelection1);
+            case 2 -> continueTrainerDialog(DialogSpecialInteractions.starterSelection2);
+        }
+    }
+
 
     @Override
     public void destroy() {

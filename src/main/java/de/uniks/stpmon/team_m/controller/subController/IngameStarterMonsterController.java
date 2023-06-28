@@ -49,7 +49,6 @@ public class IngameStarterMonsterController extends Controller {
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
     PresetsService presetsService;
-    private VBox popUpVBox;
     private List<String> starters;
     private MonsterTypeDto monster1;
     private MonsterTypeDto monster2;
@@ -57,7 +56,7 @@ public class IngameStarterMonsterController extends Controller {
     private Image monster1Image;
     private Image monster2Image;
     private Image monster3Image;
-    private Integer index = 1;
+    public Integer index = 1;
 
 
     @Inject
@@ -65,9 +64,8 @@ public class IngameStarterMonsterController extends Controller {
 
     }
 
-    public void init(IngameController ingameController, VBox starterSelectionVBox, App app, List<String> starters) {
+    public void init(IngameController ingameController, App app, List<String> starters) {
         this.ingameController = ingameController;
-        this.popUpVBox = starterSelectionVBox;
         this.app = app;
         this.starters = starters;
     }
