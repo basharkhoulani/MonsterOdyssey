@@ -7,8 +7,6 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
 
 <VBox fx:id="deleteTrainerVbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="162.0" prefWidth="558.0" style="-fx-background-color: #F8CECC; -fx-border-color: #F78181;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.IngameDeleteTrainerWarningController">
    <children>
@@ -53,14 +51,14 @@
       </HBox>
       <HBox prefHeight="60.0" prefWidth="556.0">
          <children>
-            <Button fx:id="cancelButton" layoutX="10.0" layoutY="30.0" mnemonicParsing="false" onAction="#clickCancel" prefHeight="20.0" prefWidth="85.0" style="-fx-background-color: #CFE9DB; -fx-border-color: #279D27;" text="%Cancel">
+            <Button fx:id="cancelButton" layoutX="10.0" layoutY="30.0" mnemonicParsing="false" onAction="#clickCancel" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #CFE9DB; -fx-border-color: #279D27;" text="%Cancel">
                <HBox.margin>
-                  <Insets left="350.0" top="20.0" />
+                  <Insets left="280.0" top="20.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="okButton" layoutX="10.0" layoutY="30.0" mnemonicParsing="false" onAction="#clickOK" prefHeight="20.0" prefWidth="85.0" style="-fx-background-color: #FFF2CC; -fx-border-color: #F3F781;" text="%OK">
+            <Button fx:id="okButton" layoutX="10.0" layoutY="30.0" mnemonicParsing="false" onAction="#clickOK" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #FFF2CC; -fx-border-color: #F3F781;" text="%OK">
                <HBox.margin>
-                  <Insets bottom="20.0" left="20.0" top="20.0" />
+                  <Insets left="20.0" top="20.0" />
                </HBox.margin>
             </Button>
          </children>
