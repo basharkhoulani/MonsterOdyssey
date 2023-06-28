@@ -5,22 +5,21 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-
-<StackPane fx:id="notificationHandyStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="524.0"
-           prefWidth="282.0" styleClass="handyBase" xmlns="http://javafx.com/javafx/19" fx:controller="de.uniks.stpmon.team_m.controller.subController.NotificationListHandyController"
-           xmlns:fx="http://javafx.com/fxml/1">
-   <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="104.0" styleClass="buttonsYellow" text="\%CLOSE.HANDY"
-           StackPane.alignment="BOTTOM_CENTER" onAction="#closeNotificationListHandy">
+<StackPane fx:id="notificationHandyStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="524.0" prefWidth="282.0" styleClass="handyBase" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.NotificationListHandyController">
+   <Rectangle arcHeight="500.0" arcWidth="10.0" fill="#67696b" height="9.0" stroke="BLACK" strokeType="INSIDE" styleClass="speaker" width="69.0" StackPane.alignment="TOP_CENTER">
       <StackPane.margin>
-         <Insets bottom="11.0"/>
-      </StackPane.margin>
-   </Button>
-   <Rectangle arcHeight="500.0" arcWidth="10.0" fill="#67696b" height="9.0" stroke="BLACK" strokeType="INSIDE"
-              styleClass="speaker" width="69.0" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets top="20.0"/>
+         <Insets top="20.0" />
       </StackPane.margin>
    </Rectangle>
-   <ListView fx:id="ingameNotificationListView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="429.0" prefWidth="265.0"/>
+   <ListView fx:id="ingameNotificationListView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="429.0" prefWidth="265.0" />
+   <Button mnemonicParsing="false" onAction="#closeNotificationListHandy" prefHeight="38.0" prefWidth="119.0" styleClass="buttonsYellow" text="%INGAME.CLOSE.PHONE" textAlignment="CENTER" StackPane.alignment="BOTTOM_CENTER">
+      <StackPane.margin>
+         <Insets bottom="4.0" />
+      </StackPane.margin>
+      <font>
+         <Font size="12.0" />
+      </font>
+   </Button>
 </StackPane>
