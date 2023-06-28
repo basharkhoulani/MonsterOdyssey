@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EncounterOpponentsService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.service</a> &gt; <span class="el_source">EncounterOpponentsService.java</span></div><h1>EncounterOpponentsService.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.service;
+
+import de.uniks.stpmon.team_m.dto.Move;
+import de.uniks.stpmon.team_m.dto.Opponent;
+import de.uniks.stpmon.team_m.dto.UpdateOpponentDto;
+import de.uniks.stpmon.team_m.rest.EncounterOpponentsApiService;
+import io.reactivex.rxjava3.core.Observable;
+
+import javax.inject.Inject;
+import java.util.List;
+
+public class EncounterOpponentsService {
+    private final EncounterOpponentsApiService encounterOpponentsApiService;
+
+    @Inject
+<span class="fc" id="L16">    public EncounterOpponentsService(EncounterOpponentsApiService encounterOpponentsApiService) {</span>
+<span class="fc" id="L17">        this.encounterOpponentsApiService = encounterOpponentsApiService;</span>
+<span class="fc" id="L18">    }</span>
+
+    /**
+     * gets returns opponents of a specific trainer.
+     *
+     * @param regionId  The id of the current region.
+     * @param trainerId The id of the current trainer
+     * @return A list of opponents.
+     */
+    public Observable&lt;List&lt;Opponent&gt;&gt; getTrainerOpponents(String regionId, String trainerId) {
+<span class="fc" id="L28">        return encounterOpponentsApiService.getTrainerOpponents(regionId, trainerId);</span>
+    }
+
+    /**
+     * gets returns opponents of a specific encounter.
+     *
+     * @param regionId    The id of the current region.
+     * @param encounterId The id of the current encounter
+     * @return A list of opponents.
+     */
+    public Observable&lt;List&lt;Opponent&gt;&gt; getEncounterOpponents(String regionId, String encounterId) {
+<span class="fc" id="L39">        return encounterOpponentsApiService.getEncounterOpponents(regionId, encounterId);</span>
+    }
+
+    /**
+     * gets returns specific opponent .
+     *
+     * @param regionId    The id of the current region.
+     * @param encounterId The id of the current encounter
+     * @param opponentId  The id of this opponent
+     * @return The Information about this opponent.
+     */
+    public Observable&lt;Opponent&gt; getOpponent(String regionId, String encounterId, String opponentId) {
+<span class="fc" id="L51">        return encounterOpponentsApiService.getOpponent(regionId, encounterId, opponentId);</span>
+    }
+
+    /**
+     * update specific opponent .
+     *
+     * @param regionId    The id of the current region.
+     * @param encounterId The id of the current encounter
+     * @param opponentId  The id of this opponent
+     * @param monsterId   The id of the current monster
+     * @param move        whether AbilityMove or ChangeMonsterMove
+     * @return The Information about this opponent after update.
+     */
+    public Observable&lt;Opponent&gt; updateOpponent(String regionId, String encounterId, String opponentId, String monsterId, Move move) {
+<span class="fc" id="L65">        UpdateOpponentDto updateOpponentDto = new UpdateOpponentDto(monsterId, move);</span>
+<span class="fc" id="L66">        return encounterOpponentsApiService.updateOpponent(regionId, encounterId, opponentId, updateOpponentDto);</span>
+    }
+
+    /**
+     * delete specific opponent .
+     *
+     * @param regionId    The id of the current region.
+     * @param encounterId The id of the current encounter
+     * @param opponentId  The id of this opponent
+     * @return The Information about this deleted opponent.
+     */
+    public Observable&lt;Opponent&gt; deleteOpponent(String regionId, String encounterId, String opponentId) {
+<span class="fc" id="L78">        return encounterOpponentsApiService.deleteOpponent(regionId, encounterId, opponentId);</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ImageProcessor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.utils</a> &gt; <span class="el_source">ImageProcessor.java</span></div><h1>ImageProcessor.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.utils;
+
+
+import de.uniks.stpmon.team_m.App;
+import javafx.scene.image.Image;
+import okhttp3.ResponseBody;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.URISyntaxException;
+import java.util.Base64;
+import java.util.Objects;
+
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
+
+import java.io.InputStream;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+
+<span class="nc" id="L23">public class ImageProcessor {</span>
+    public static String toBase64(String inputImagePath) {
+        try {
+<span class="fc" id="L26">            BufferedImage originalImage = ImageIO.read(new File(inputImagePath));</span>
+<span class="fc" id="L27">            return getBase64(originalImage);</span>
+<span class="nc" id="L28">        } catch (IOException e) {</span>
+<span class="nc" id="L29">            return IMAGE_PROCESSING_ERROR;</span>
+        }
+    }
+
+    public static javafx.scene.image.Image fromBase64ToFXImage(String avatar) {
+        javafx.scene.image.Image image;
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (avatar == null) {</span>
+<span class="nc" id="L36">            image = new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString());</span>
+<span class="nc" id="L37">            return image;</span>
+        }
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        if (avatar.startsWith(&quot;data:image/png;base64, &quot;)) {</span>
+<span class="nc" id="L40">            byte[] imageBytes = Base64.getDecoder().decode(avatar.replaceFirst(&quot;data:image/png;base64, &quot;, &quot;&quot;));</span>
+<span class="nc" id="L41">            ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);</span>
+<span class="nc" id="L42">            image = new javafx.scene.image.Image(bis);</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        } else if (avatar.startsWith(&quot;data:image/jpg;base64, &quot;)) {</span>
+<span class="nc" id="L44">            byte[] imageBytes = Base64.getDecoder().decode(avatar.replaceFirst(&quot;data:image/jpg;base64, &quot;, &quot;&quot;));</span>
+<span class="nc" id="L45">            ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);</span>
+<span class="nc" id="L46">            image = new javafx.scene.image.Image(bis);</span>
+<span class="nc" id="L47">        } else {</span>
+<span class="nc" id="L48">            image = new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(AVATAR_2)).toString());</span>
+        }
+<span class="nc" id="L50">        return image;</span>
+    }
+
+    private static String getBase64(BufferedImage image) throws IOException {
+<span class="fc" id="L54">        double scaleFactor = 1.0;</span>
+        while (true) {
+<span class="fc" id="L56">            BufferedImage scaledImage = scaleImage(image, scaleFactor);</span>
+            String base64Image;
+<span class="fc" id="L58">            base64Image = convertToBase64(scaledImage);</span>
+
+<span class="fc bfc" id="L60" title="All 2 branches covered.">            if (base64Image.length() &lt;= MAX_BASE64_LENGTH) {</span>
+<span class="fc" id="L61">                return base64Image;</span>
+            }
+
+<span class="fc" id="L64">            scaleFactor *= 0.9;</span>
+<span class="fc" id="L65">        }</span>
+    }
+
+    private static BufferedImage scaleImage(BufferedImage image, double scaleFactor) {
+<span class="fc" id="L69">        int scaledWidth = (int) (image.getWidth() * scaleFactor);</span>
+<span class="fc" id="L70">        int scaledHeight = (int) (image.getHeight() * scaleFactor);</span>
+
+<span class="fc" id="L72">        java.awt.Image scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, java.awt.Image.SCALE_SMOOTH);</span>
+
+<span class="fc" id="L74">        BufferedImage bufferedImage = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);</span>
+
+<span class="fc" id="L76">        Graphics2D g2d = bufferedImage.createGraphics();</span>
+<span class="fc" id="L77">        g2d.drawImage(scaledImage, 0, 0, null);</span>
+<span class="fc" id="L78">        g2d.dispose();</span>
+
+<span class="fc" id="L80">        return bufferedImage;</span>
+    }
+
+    /**
+     * This method is used to crop the
+     *
+     * @param trainerChunk into 6 Images, that displays the player character moving in some direction
+     * @param direction    : either 0 [up], 1 [right], 2 [down], or 3 [left] are possible directions
+     * @param isWalking    : determine if the character is moving or not
+     */
+    public static Image[] cropTrainerImages(Image trainerChunk, int direction, Boolean isWalking) {
+<span class="fc" id="L91">        Image[] array = new Image[6];</span>
+        int x, y;
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (isWalking) {</span>
+<span class="fc" id="L94">            y = 71;</span>
+        } else {
+<span class="fc" id="L96">            y = 39;</span>
+        }
+<span class="fc bfc" id="L98" title="All 4 branches covered.">        switch (direction) {</span>
+<span class="fc" id="L99">            case 1 -&gt; x = 0;</span>
+<span class="fc" id="L100">            case 0 -&gt; x = 96;</span>
+<span class="fc" id="L101">            case 3 -&gt; x = 192;</span>
+<span class="fc" id="L102">            default -&gt; x = 288;</span>
+        }
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        for (int i = 0; i &lt; 6; i++) {</span>
+<span class="fc" id="L105">            array[i] = getSubImage(trainerChunk, x, y, 16, 25);</span>
+<span class="fc" id="L106">            x += 16;</span>
+        }
+<span class="fc" id="L108">        return array;</span>
+    }
+
+    public static Image getSubImage(Image img, int x, int y, int w, int h) {
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (img != null) {</span>
+<span class="fc" id="L113">            PixelReader reader = img.getPixelReader();</span>
+<span class="fc" id="L114">            return new WritableImage(reader, x, y, w, h);</span>
+        }
+<span class="fc" id="L116">        return null;</span>
+    }
+
+    /**
+     * This method is used to crop the
+     *
+     * @param premadeCharacter for instance &quot;Premade_Character_01.png&quot;, also found in Constants
+     */
+    public static WritableImage showScaledFrontCharacter(String premadeCharacter) {
+        try {
+<span class="fc" id="L126">            File imageFile = new File(Objects.requireNonNull(App.class.getResource(&quot;charactermodels/&quot; + premadeCharacter)).toURI());</span>
+<span class="fc" id="L127">            BufferedImage bufferedImage = ImageIO.read(imageFile);</span>
+<span class="fc" id="L128">            BufferedImage bufferedImageFrontView = bufferedImage.getSubimage(48, 7, 16, 25);</span>
+<span class="fc" id="L129">            BufferedImage scaledBufferedImage = ImageProcessor.scaleImage(bufferedImageFrontView, 6);</span>
+<span class="fc" id="L130">            javafx.scene.image.WritableImage writableImage = new javafx.scene.image.WritableImage(scaledBufferedImage.getWidth(), scaledBufferedImage.getHeight());</span>
+<span class="fc" id="L131">            javafx.scene.image.PixelWriter pixelWriter = writableImage.getPixelWriter();</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">            for (int y = 0; y &lt; scaledBufferedImage.getHeight(); y++) {</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">                for (int x = 0; x &lt; scaledBufferedImage.getWidth(); x++) {</span>
+<span class="fc" id="L134">                    pixelWriter.setArgb(x, y, scaledBufferedImage.getRGB(x, y));</span>
+                }
+            }
+<span class="fc" id="L137">            return writableImage;</span>
+<span class="nc" id="L138">        } catch (URISyntaxException | IOException e) {</span>
+<span class="nc" id="L139">            throw new RuntimeException(e);</span>
+        }
+    }
+
+    private static String convertToBase64(BufferedImage image) throws IOException {
+<span class="fc" id="L144">        ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
+<span class="fc" id="L145">        ImageIO.write(image, &quot;png&quot;, baos);</span>
+<span class="fc" id="L146">        baos.flush();</span>
+<span class="fc" id="L147">        byte[] imageBytes = baos.toByteArray();</span>
+<span class="fc" id="L148">        baos.close();</span>
+
+<span class="fc" id="L150">        return Base64.getEncoder().encodeToString(imageBytes);</span>
+    }
+
+    public static Image resonseBodyToJavaFXImage(ResponseBody responseBody) throws IOException {
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        if (responseBody.source() != null) {</span>
+<span class="fc" id="L155">            try (InputStream inputStream = responseBody.byteStream()) {</span>
+<span class="fc" id="L156">                byte[] imageData = toByteArray(inputStream);</span>
+<span class="fc" id="L157">                return new Image(new ByteArrayInputStream(imageData));</span>
+            }
+        }
+<span class="fc" id="L160">        return null;</span>
+    }
+
+    private static byte[] toByteArray(InputStream inputStream) throws IOException {
+<span class="fc" id="L164">        byte[] buffer = new byte[4096];</span>
+        int bytesRead;
+<span class="fc" id="L166">        ByteArrayOutputStream output = new ByteArrayOutputStream();</span>
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">        while ((bytesRead = inputStream.read(buffer)) != -1) {</span>
+<span class="nc" id="L168">            output.write(buffer, 0, bytesRead);</span>
+        }
+<span class="fc" id="L170">        return output.toByteArray();</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
