@@ -93,6 +93,8 @@ public class LoginController extends Controller {
         changeLanguageController = new ChangeLanguageController();
         changeLanguageController.init();
         AudioService.getInstance().playSound(MENU_SOUND);
+        AudioService.getInstance().setVolume(preferences.getDouble("volume", 0.5));
+        AudioService.getInstance().setCurrentSound(MENU_SOUND);
     }
 
     /**
