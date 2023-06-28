@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Constants.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m</a> &gt; <span class="el_source">Constants.java</span></div><h1>Constants.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m;
+
+import javafx.geometry.Insets;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.Map.entry;
+
+<span class="nc" id="L10">public class Constants {</span>
+    // SERVER
+    public static final String API_URL = &quot;https://stpmon.uniks.de/api/v3&quot;;
+    public static final String WS_URL = &quot;wss://stpmon.uniks.de/ws/v3&quot;;
+    public static final String UDP_URL = &quot;stpmon.uniks.de&quot;;
+    public static final int SERVER_PORT = 30013;
+    public static final String MESSAGE_NAMESPACE_GROUPS = &quot;groups&quot;;
+    public static final String MESSAGE_NAMESPACE_REGIONS = &quot;regions&quot;;
+    public static final String MESSAGE_NAMESPACE_GLOBAL = &quot;global&quot;;
+    // GENERAL
+    public static final String GAME_NAME = &quot;Monster Odyssey&quot;;
+    public static final int STANDARD_HEIGHT = 768;
+    public static final int STANDARD_WIDTH = 1024;
+    public static final int MINIMUM_HEIGHT = 600;
+    public static final int MINIMUM_WIDTH = 800;
+    public static final int OFFSET_WIDTH_HEIGHT = 50;
+    public static final String APP_ICON = &quot;images/Monster-durchsichtig.png&quot;;
+    public static final String TASKBAR_ICON = &quot;images/Monster-durchsichtig.png&quot;;
+    public static final String EMPTY_STRING = &quot;&quot;;
+    public static final String FX_STYLE_BORDER_COLOR_BLACK = &quot;-fx-border-color: black&quot;;
+    public static final String LOADING_ANIMATION = &quot;images/loading.gif&quot;;
+    public static final String ONLINE_IMG = &quot;images/online.png&quot;;
+    public static final String OFFLINE_IMG = &quot;images/offline.png&quot;;
+    public static final String ONLINE_STAR = &quot;images/online_star.png&quot;;
+    public static final String OFFLINE_STAR = &quot;images/offline_star.png&quot;;
+    public static final String USER_STATUS_OFFLINE = &quot;offline&quot;;
+    public static final String USER_STATUS_ONLINE = &quot;online&quot;;
+    public static final int HBOX_FRIENDS_SPACING = 15;
+    public static final String THREE_DOTS = &quot;\u2026&quot;;
+    public static final String BUTTON_TRANSPARENT_STYLE = &quot;-fx-background-color: transparent; -fx-border-color: transparent;&quot;;
+    public static final String BUTTON_BORDER_STYLE = &quot;-fx-border-color: black; -fx-border-width: 1px;&quot;;
+    public static final String BEST_FRIEND_PREF = &quot;bestFriend&quot;;
+    public static final String LIST_VIEW_STYLE_NO_INDEXING = &quot;-fx-background-color: #F4F4F4;&quot;;
+    public static final String OWN_MESSAGE_STYLE = &quot;-fx-background-color: lightblue;&quot;;
+    public static final String NOT_OWN_MESSAGE_STYLE = &quot;-fx-background-color: lightgreen;&quot;;
+    public static final String ROUNDED_CORNERS_STYLE = &quot;-fx-border-radius: 10; -fx-background-radius: 10;&quot;;
+    public static final String BORDER_COLOR_BLACK = &quot;-fx-border-color: black;&quot;;
+    public static final String DATE_TIME_FORMAT = &quot;HH:mm, dd.MM.yy&quot;;
+    public static final String TIME_FORMAT = &quot;HH:mm&quot;;
+    public static final int DURATION_OF_LOADING_SCREEN = 3;
+
+    // LOGIN &amp; SIGNUP
+    public static final int PASSWORD_CHARACTER_LIMIT = 8;
+    public static final char BULLET = '\u25cf';
+    public static final String REFRESH_TOKEN_PREF = &quot;refreshToken&quot;;
+
+
+    // NEW GROUP
+    public static final String CHECK_MARK = &quot;\u2713&quot;;
+    public static final String ADD_MARK = &quot;+&quot;;
+    public static final int BUTTON_PREF_SIZE = 42;
+    public static final int MAX_SUGGESTIONS_NEW_GROUP = 20;
+
+
+    // MESSAGES
+    public static final String PENCIL = &quot;\u270F&quot;;
+
+    // AVATAR
+    public static final String AVATAR_1 = &quot;images/monster.png&quot;;
+    public static final String AVATAR_2 = &quot;images/rabbit.png&quot;;
+    public static final String AVATAR_3 = &quot;images/sheep_icon.png&quot;;
+    public static final String AVATAR_4 = &quot;images/cat.jpeg&quot;;
+    public static final int MAX_BASE64_LENGTH = 16000;
+    public static final String IMAGE_PROCESSING_ERROR = &quot;Image could not be processed. Please try again.&quot;;
+    public static final int AVATAR_SIZE = 30;
+
+    // INGAME
+<span class="fc" id="L77">    public static int TILE_SIZE = 16;</span>
+<span class="fc" id="L78">    public static double ZERO = 0;</span>
+<span class="fc" id="L79">    public static double ONE = 1;</span>
+
+    public static final String SETTINGSYMBOL2 = &quot;images/SettingSymbol2.png&quot;;
+    public static final String GOBACKSYMBOL = &quot;images/GoBackSymbol.PNG&quot;;
+    public static final String PLAYSYMBOL = &quot;images/PlaySymbol.PNG&quot;;
+    public static final String AUDIOSYMBOL = &quot;images/AudioSymbol.png&quot;;
+    public static final String KEYBINDINGSSYMBOL = &quot;images/KeybindingsSymbol.png&quot;;
+
+    // NPC DIALOG
+<span class="fc" id="L88">    public static int dialogVBoxWidth = 700;</span>
+<span class="fc" id="L89">    public static int getDialogVBoxHeight = 150;</span>
+<span class="fc" id="L90">    public static int spacerToBottomOfScreen = 150;</span>
+<span class="fc" id="L91">    public static Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);</span>
+<span class="fc" id="L92">    public static Insets helpLabelInsets = new Insets(0, 40, 20, 0);</span>
+<span class="fc" id="L93">    public static int helpLabelFontSize = 12;</span>
+
+<span class="fc" id="L95">    public enum DialogSpecialInteractions {</span>
+<span class="fc" id="L96">        nurseYes,</span>
+<span class="fc" id="L97">        nurseNo,</span>
+<span class="fc" id="L98">        nurseNoMons,</span>
+<span class="fc" id="L99">        starterSelection0,</span>
+<span class="fc" id="L100">        starterSelection1,</span>
+<span class="fc" id="L101">        starterSelection2</span>
+    }
+
+<span class="fc" id="L104">    public enum ContinueDialogReturnValues {</span>
+<span class="fc" id="L105">        dialogNotFinished,</span>
+<span class="fc" id="L106">        dialogFinishedTalkToTrainer,</span>
+<span class="fc" id="L107">        dialogFinishedNoTalkToTrainer,</span>
+<span class="fc" id="L108">        albertDialogFinished0,</span>
+<span class="fc" id="L109">        albertDialogFinished1,</span>
+<span class="fc" id="L110">        albertDialogFinished2,</span>
+<span class="fc" id="L111">        spokenToNurse,</span>
+<span class="fc" id="L112">        encounterOnTalk</span>
+    }
+
+    // Nurse Popup
+<span class="fc" id="L116">    public static int popupHeight = 170;</span>
+<span class="fc" id="L117">    public static int popupWidth = 300;</span>
+<span class="fc" id="L118">    public static int textFieldHeight = 120;</span>
+<span class="fc" id="L119">    public static int buttonsHBoxHeight = 50;</span>
+<span class="fc" id="L120">    public static int buttonsHBoxSpacing = 30;</span>
+<span class="fc" id="L121">    public static int nurseButtonHeight = 40;</span>
+<span class="fc" id="L122">    public static int nurseButtonWidth = 80;</span>
+
+    // Error messages
+    public static final String HTTP_400 = &quot;400&quot;;
+    public static final String HTTP_401 = &quot;401&quot;;
+    public static final String HTTP_403 = &quot;403&quot;;
+    public static final String HTTP_404 = &quot;404&quot;;
+    public static final String HTTP_409 = &quot;409&quot;;
+    public static final String HTTP_429 = &quot;429&quot;;
+
+    // Welcome Scene
+    public static final int MESSAGEBOX_HEIGHT = 45;
+    public static final int MESSAGEBOX_WIDTH = 170;
+
+    // Change Audio Settings
+
+    public static final int DIALOG_WIDTH = 450;
+    public static final int DIALOG_HEIGHT = 300;
+
+    // Characters
+<span class="fc" id="L142">    public static final String[] PREMADE_CHARACTERS = {</span>
+            &quot;Premade_Character_01.png&quot;, &quot;Premade_Character_02.png&quot;, &quot;Premade_Character_03.png&quot;, &quot;Premade_Character_04.png&quot;,
+            &quot;Premade_Character_05.png&quot;, &quot;Premade_Character_06.png&quot;, &quot;Premade_Character_07.png&quot;, &quot;Premade_Character_08.png&quot;,
+            &quot;Premade_Character_09.png&quot;, &quot;Premade_Character_10.png&quot;, &quot;Premade_Character_11.png&quot;, &quot;Premade_Character_12.png&quot;,
+            &quot;Premade_Character_13.png&quot;, &quot;Premade_Character_14.png&quot;, &quot;Premade_Character_15.png&quot;, &quot;Premade_Character_16.png&quot;,
+            &quot;Premade_Character_17.png&quot;, &quot;Premade_Character_18.png&quot;, &quot;Premade_Character_19.png&quot;, &quot;Premade_Character_20.png&quot;
+    };
+
+    // Colors
+<span class="fc" id="L151">    public static HashMap&lt;String, String&gt; TYPESCOLORPALETTE = new HashMap&lt;&gt;(Map.ofEntries(</span>
+<span class="fc" id="L152">            entry(&quot;normal&quot;, &quot;#BBBBAA&quot;),</span>
+<span class="fc" id="L153">            entry(&quot;fire&quot;, &quot;#FF421C&quot;),</span>
+<span class="fc" id="L154">            entry(&quot;water&quot;, &quot;#2C9BE3&quot;),</span>
+<span class="fc" id="L155">            entry(&quot;electric&quot;, &quot;#FFDC00&quot;),</span>
+<span class="fc" id="L156">            entry(&quot;grass&quot;, &quot;#62BC5A&quot;),</span>
+<span class="fc" id="L157">            entry(&quot;flying&quot;, &quot;#96CAFF&quot;),</span>
+<span class="fc" id="L158">            entry(&quot;bug&quot;, &quot;#92C12A&quot;),</span>
+<span class="fc" id="L159">            entry(&quot;poison&quot;, &quot;#9553CD&quot;),</span>
+<span class="fc" id="L160">            entry(&quot;rock&quot;, &quot;#BBAA66&quot;),</span>
+<span class="fc" id="L161">            entry(&quot;ground&quot;, &quot;#A67439&quot;),</span>
+<span class="fc" id="L162">            entry(&quot;fighting&quot;, &quot;#BB5544&quot;),</span>
+<span class="fc" id="L163">            entry(&quot;ice&quot;, &quot;#74CFC0&quot;),</span>
+<span class="fc" id="L164">            entry(&quot;psychic&quot;, &quot;#FF6380&quot;),</span>
+<span class="fc" id="L165">            entry(&quot;ghost&quot;, &quot;#6E4370&quot;),</span>
+<span class="fc" id="L166">            entry(&quot;dragon&quot;, &quot;#5670BE&quot;),</span>
+<span class="fc" id="L167">            entry(&quot;dark&quot;, &quot;#353225&quot;),</span>
+<span class="fc" id="L168">            entry(&quot;steel&quot;, &quot;#97A8AA&quot;),</span>
+<span class="fc" id="L169">            entry(&quot;fairy&quot;, &quot;#D15F5F&quot;)</span>
+    ));
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
