@@ -121,6 +121,12 @@ public class Constants {
     public static int nurseButtonHeight = 40;
     public static int nurseButtonWidth = 80;
 
+    // Ingame Help
+    public static int spaceBetweenPhoneAndWindowEdge = 25;
+    public static int offsetToNotShowPhoneInScreen = 30;
+    public static final String smallHandyImage = "images/SmallHandy.png";
+    public static final String notificationBellImage = "images/NotificationBell.png";
+
     // Error messages
     public static final String HTTP_400 = "400";
     public static final String HTTP_401 = "401";
