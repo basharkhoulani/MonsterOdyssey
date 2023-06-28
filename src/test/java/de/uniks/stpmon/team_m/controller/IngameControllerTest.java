@@ -236,7 +236,7 @@ public class IngameControllerTest extends ApplicationTest {
     }
 
     @Test
-    void showHelp() {
+    void showHelp() throws InterruptedException {
         // TODO: apply asserts once we have the time
         clickOn("#smallHandyButton");
         /*final DialogPane dialogPane = lookup(".dialog-pane").query();
@@ -248,6 +248,8 @@ public class IngameControllerTest extends ApplicationTest {
                 .orElse(null);
         assertNotNull(helpLabel);
         clickOn("OK");*/
+
+        Thread.sleep(1000);
         clickOn("close");
     }
 
