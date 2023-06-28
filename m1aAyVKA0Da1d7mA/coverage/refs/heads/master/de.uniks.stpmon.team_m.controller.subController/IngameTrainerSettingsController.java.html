@@ -11,23 +11,20 @@ import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.StageStyle;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.awt.*;
-import java.text.MessageFormat;
-import java.util.Optional;
 
 @Singleton
 public class IngameTrainerSettingsController extends Controller {
@@ -46,9 +43,13 @@ public class IngameTrainerSettingsController extends Controller {
     @FXML
     public ImageView trainerAvatarImageView;
     @FXML
-    public Button UpdateTrainerButton;
+    public HBox trainerSettingsHbox;
+    @FXML
+    public Button updateTrainerButton;
     @FXML
     public Button deleteTrainerButton;
+    @FXML
+    public StackPane trainerSettingsStackpane;
 
     @Inject
     Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
@@ -66,95 +67,90 @@ public class IngameTrainerSettingsController extends Controller {
     public Provider&lt;TrainerStorage&gt; trainerStorageProvider;
     @Inject
     public UserStorage usersStorage;
+    @Inject
+    Provider&lt;IngameDeleteTrainerWarningController&gt; ingameDeleteTrainerWarningControllerProvider;
 
-<span class="fc" id="L70">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
+<span class="fc" id="L73">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
     private VBox ingameVbox;
+    private IngameDeleteTrainerWarningController ingameDeleteTrainerWarningController;
 
 
     @Inject
-<span class="fc" id="L75">    public IngameTrainerSettingsController() {</span>
-<span class="fc" id="L76">    }</span>
+<span class="fc" id="L79">    public IngameTrainerSettingsController() {</span>
+<span class="fc" id="L80">    }</span>
 
     @Override
     public void init() {
-<span class="fc" id="L80">        super.init();</span>
-<span class="fc" id="L81">    }</span>
+<span class="fc" id="L84">        super.init();</span>
+<span class="fc" id="L85">    }</span>
 
     @Override
     public Parent render() {
-<span class="fc" id="L85">        Parent parent = super.render();</span>
-<span class="fc" id="L86">        loadAndSetTrainerImage();</span>
-<span class="fc" id="L87">        return parent;</span>
+<span class="fc" id="L89">        Parent parent = super.render();</span>
+<span class="fc" id="L90">        loadAndSetTrainerImage();</span>
+<span class="fc" id="L91">        return parent;</span>
     }
 
-    //public void onCancelButtonClick() {
-        //((Stage) cancelButton.getScene().getWindow()).close();
-    //}
-
     public void onDeleteTrainerButtonClick() {
-<span class="fc" id="L95">        final Alert alert = new Alert(Alert.AlertType.WARNING);</span>
-<span class="fc" id="L96">        final DialogPane dialogPane = alert.getDialogPane();</span>
-<span class="fc" id="L97">        final ButtonType cancelButton = new ButtonType(resources.getString(&quot;CANCEL&quot;));</span>
-<span class="fc" id="L98">        final ButtonType okButton = alert.getButtonTypes().stream()</span>
-<span class="fc" id="L99">                .filter(buttonType -&gt; buttonType.getButtonData().isDefaultButton()).findFirst().orElse(null);</span>
+<span class="nc" id="L95">        ingameDeleteTrainerWarningController = ingameDeleteTrainerWarningControllerProvider.get();</span>
+<span class="nc" id="L96">        VBox deleteTrainerWarningVbox = new VBox();</span>
+<span class="nc" id="L97">        deleteTrainerWarningVbox.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L98">        ingameDeleteTrainerWarningController.init(this, deleteTrainerWarningVbox);</span>
+<span class="nc" id="L99">        deleteTrainerWarningVbox.getChildren().add(ingameDeleteTrainerWarningController.render());</span>
+<span class="nc" id="L100">        trainerSettingsStackpane.getChildren().add(deleteTrainerWarningVbox);</span>
+<span class="nc" id="L101">        deleteTrainerWarningVbox.requestFocus();</span>
+<span class="nc" id="L102">        buttonsDisableTrainer(true);</span>
+<span class="nc" id="L103">    }</span>
+    public void deleteTrainer(){
+<span class="nc" id="L105">        disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).</span>
+<span class="nc" id="L106">                observeOn(FX_SCHEDULER).subscribe(end -&gt; {</span>
+<span class="nc" id="L107">                    trainerStorageProvider.get().setTrainer(null);</span>
+<span class="nc" id="L108">                    trainerStorageProvider.get().setTrainerSprite(null);</span>
+<span class="nc" id="L109">                    trainerStorageProvider.get().setTrainerName(null);</span>
+<span class="nc" id="L110">                    trainerStorageProvider.get().setRegion(null);</span>
+<span class="nc" id="L111">                }, error -&gt; this.showError(error.getMessage())));</span>
+<span class="nc" id="L112">        MainMenuController mainMenuController = mainMenuControllerProvider.get();</span>
+<span class="nc" id="L113">        mainMenuController.setTrainerDeletion();</span>
+<span class="nc" id="L114">        ingameController.destroy();</span>
+<span class="nc" id="L115">        app.show(mainMenuController);</span>
+<span class="nc" id="L116">    }</span>
 
-<span class="fc" id="L101">        dialogPane.getButtonTypes().addAll(cancelButton);</span>
-
-<span class="fc" id="L103">        final String trainerName = trainerStorageProvider.get().getTrainer().name();</span>
-<span class="fc" id="L104">        final String deleteTrainerText = resources.getString(&quot;DELETE.TRAINER.TEXT&quot;);</span>
-<span class="fc" id="L105">        dialogPane.setContentText(MessageFormat.format(deleteTrainerText, trainerName));</span>
-
-<span class="fc" id="L107">        alert.initStyle(StageStyle.UNDECORATED);</span>
-<span class="fc" id="L108">        alert.setTitle(resources.getString(&quot;DELETE.YOUR.TRAINER&quot;));</span>
-
-<span class="fc" id="L110">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
-<span class="pc bpc" id="L111" title="3 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == cancelButton) {</span>
-<span class="nc" id="L112">            alert.close();</span>
-<span class="pc bpc" id="L113" title="3 of 4 branches missed.">        } else if (result.isPresent() &amp;&amp; result.get() == okButton) {</span>
-            //onCancelButtonClick();
-<span class="nc" id="L115">            disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).</span>
-<span class="nc" id="L116">                    observeOn(FX_SCHEDULER).subscribe(end -&gt; {</span>
-<span class="nc" id="L117">                        trainerStorageProvider.get().setTrainer(null);</span>
-<span class="nc" id="L118">                        trainerStorageProvider.get().setTrainerSprite(null);</span>
-<span class="nc" id="L119">                        trainerStorageProvider.get().setTrainerName(null);</span>
-<span class="nc" id="L120">                        trainerStorageProvider.get().setRegion(null);</span>
-<span class="nc" id="L121">                    }, error -&gt; this.showError(error.getMessage())));</span>
-<span class="nc" id="L122">            MainMenuController mainMenuController = mainMenuControllerProvider.get();</span>
-<span class="nc" id="L123">            mainMenuController.setTrainerDeletion();</span>
-<span class="nc" id="L124">            ingameController.destroy();</span>
-<span class="nc" id="L125">            app.show(mainMenuController);</span>
-<span class="nc" id="L126">            alert.close();</span>
-        }
-
-<span class="fc" id="L129">    }</span>
+    public void buttonsDisableTrainer(boolean set){
+<span class="nc" id="L119">        deleteTrainerButton.setDisable(set);</span>
+<span class="nc" id="L120">        updateTrainerButton.setDisable(set);</span>
+<span class="nc" id="L121">        trainerNameEditButton.setDisable(set);</span>
+<span class="nc" id="L122">        arrowLeftButton.setDisable(set);</span>
+<span class="nc" id="L123">        arrowRightButton.setDisable(set);</span>
+<span class="nc" id="L124">        goBackButton.setDisable(set);</span>
+<span class="nc" id="L125">    }</span>
 
     private void loadAndSetTrainerImage() {
-<span class="fc" id="L132">        Image trainerChunk = trainerStorageProvider.get().getTrainerSpriteChunk();</span>
-<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L134">            Image[] character = ImageProcessor.cropTrainerImages(trainerChunk,2, false);</span>
-<span class="nc" id="L135">            trainerAvatarImageView.setImage(character[0]);</span>
+<span class="fc" id="L128">        Image trainerChunk = trainerStorageProvider.get().getTrainerSpriteChunk();</span>
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L130">            Image[] character = ImageProcessor.cropTrainerImages(trainerChunk,2, false);</span>
+<span class="nc" id="L131">            trainerAvatarImageView.setImage(character[0]);</span>
         }
-<span class="fc" id="L137">    }</span>
+<span class="fc" id="L133">    }</span>
 
     public void initIngame(IngameController ingameController, VBox ingameVbox) {
-<span class="nc" id="L140">        this.ingameController = ingameController;</span>
-<span class="nc" id="L141">        this.ingameVbox = ingameVbox;</span>
-<span class="nc" id="L142">    }</span>
+<span class="nc" id="L136">        this.ingameController = ingameController;</span>
+<span class="nc" id="L137">        this.ingameVbox = ingameVbox;</span>
+<span class="nc" id="L138">    }</span>
 
     public void goBackToSettings() {
-<span class="nc" id="L145">        ingameController.root.getChildren().remove(ingameVbox);</span>
-<span class="nc" id="L146">    }</span>
+<span class="nc" id="L141">        ingameController.root.getChildren().remove(ingameVbox);</span>
+<span class="nc" id="L142">    }</span>
 
     public void editTrainerName() {
-<span class="nc" id="L149">    }</span>
+<span class="nc" id="L145">    }</span>
 
     public void arrowLeftClick() {
-<span class="nc" id="L152">    }</span>
+<span class="nc" id="L148">    }</span>
 
     public void arrowRightClick() {
-<span class="nc" id="L155">    }</span>
+<span class="nc" id="L151">    }</span>
 
     public void updateTrainer() {
-<span class="nc" id="L158">    }</span>
+<span class="nc" id="L154">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
