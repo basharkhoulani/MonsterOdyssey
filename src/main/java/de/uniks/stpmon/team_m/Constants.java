@@ -123,6 +123,8 @@ public class Constants {
 
     // Ingame Help
     public static int spaceBetweenPhoneAndWindowEdge = 20;
+    public static final String smallHandyImage = "images/SmallHandy.png";
+    public static final String notificationBellImage = "images/NotificationBell.png";
 
     // Error messages
     public static final String HTTP_400 = "400";

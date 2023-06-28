@@ -33,20 +33,11 @@
                 </HBox>
                 <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="430.0" HBox.hgrow="SOMETIMES">
                <ImageView fx:id="notificationBell" fitHeight="57.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                  <image>
-                     <Image url="@../images/NotificationBell.png" />
-                  </image>
                </ImageView>
                     <StackPane fx:id="smallHandyButton" maxHeight="150.0" maxWidth="125.0" onMouseClicked="#showHelp" prefHeight="119.0" prefWidth="58.0" styleClass="buttonsTransparent">
-                      <ImageView fitHeight="136.0" fitWidth="61.0" pickOnBounds="true" preserveRatio="true" styleClass="buttonsTransparent">
-                         <image>
-                            <Image url="@../images/SmallHandy.png" />
-                         </image>
+                      <ImageView fx:id="smallHandyImageView" fitHeight="136.0" fitWidth="61.0" pickOnBounds="true" preserveRatio="true" styleClass="buttonsTransparent">
                       </ImageView>
-                      <ImageView fitHeight="46.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" styleClass="buttonsTransparent">
-                         <image>
-                            <Image url="@../images/monster.png" />
-                         </image>
+                      <ImageView fx:id="monsterForHandyImageView" fitHeight="46.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" styleClass="buttonsTransparent">
                       </ImageView>
                     </StackPane>
                 </HBox>

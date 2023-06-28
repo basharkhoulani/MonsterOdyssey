@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
@@ -105,6 +106,10 @@ public class IngameController extends Controller {
     public StackPane smallHandyButton;
     @FXML
     public ImageView notificationBell;
+    @FXML
+    public ImageView smallHandyImageView;
+    @FXML
+    public ImageView monsterForHandyImageView;
 
     @Inject
     Provider<IngameMiniMapController> ingameMiniMapControllerProvider;
@@ -382,6 +387,12 @@ public class IngameController extends Controller {
                         divide(2).
                         add(17)
         );
+
+        if(!GraphicsEnvironment.isHeadless()){
+            smallHandyImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(smallHandyImage)).toString()));
+            monsterForHandyImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString()));
+            notificationBell.setImage(new Image(Objects.requireNonNull(App.class.getResource(notificationBellImage)).toString()));
+        }
 
         return parent;
     }
