@@ -822,7 +822,6 @@ public class IngameController extends Controller {
         pauseButton.setDisable(set);
         showChatButton.setDisable(set);
         mapSymbol.setDisable(set);
-        helpSymbol.setDisable(set);
         messageField.setDisable(set);
         sendMessageButton.setDisable(set);
     }
