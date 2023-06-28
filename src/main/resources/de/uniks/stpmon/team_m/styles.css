@@ -382,10 +382,12 @@
 /*************************** Ingame - Encounter ****************************/
 .hBoxRed {
     -fx-background-color: #F8CECC;
+    -fx-background-radius: 10;
 }
 
 .hBoxYellow {
     -fx-background-color: #FFF2CC;
+    -fx-background-radius: 10;
 }
 
 .hBoxDarkGreen {
@@ -411,5 +413,4 @@
 .encounterBackground {
     -fx-background-image: url("images/encounterBackground.png");
     -fx-background-size: cover;
-    -fx-opacity: opacity;
 }
