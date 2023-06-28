@@ -123,6 +123,8 @@ public class IngameController extends Controller {
     @Inject
     EncounterOpponentStorage encounterOpponentStorage;
     @Inject
+    EncounterOpponentsService encounterOpponentsService;
+    @Inject
     Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
     @Inject
     Provider<ChangeAudioController> changeAudioControllerProvider;
@@ -152,6 +154,7 @@ public class IngameController extends Controller {
     HashMap<String, TileSet> tileSetJsons = new HashMap<>();
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     private ObservableList<Trainer> trainers;
+    private ObservableList<Opponent> opponents = FXCollections.observableArrayList();
 
     private Long lastKeyEventTimeStamp;
     private EventHandler<KeyEvent> keyReleasedHandler;
@@ -347,7 +350,8 @@ public class IngameController extends Controller {
         popupStage.initOwner(app.getStage());
 
         //Setup Encounter
-        listenToOpponent(encounterOpponentStorage, trainerStorageProvider.get().getTrainer()._id());
+        checkIfEncounterAlreadyExist();
+        listenToEncounter();
         encounterOpponentStorage.setRegionId(trainerStorageProvider.get().getRegion()._id());
 
 
@@ -900,23 +904,72 @@ public class IngameController extends Controller {
                 }));
     }
 
-    public void listenToOpponent(EncounterOpponentStorage encounterOpponentStorage, String trainerId) {
-        disposables.add(eventListener.get().listen("encounters.*.opponents." + trainerId + ".created", Opponent.class)
+    public void listenToEncounter() {
+        String regionId = trainerStorageProvider.get().getRegion()._id();
+        String trainerId = trainerStorageProvider.get().getTrainer()._id();
+        encounterOpponentStorage.setTrainerId(trainerId);
+        encounterOpponentStorage.setRegionId(regionId);
+        disposables.add(eventListener.get().listen("regions." + regionId + ".encounters.*.*", Encounter.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
-                    final Opponent opponent= event.data();
-                    encounterOpponentStorage.setEncounterId(opponent.encounter());
-                    encounterOpponentStorage.setTrainerId(opponent._id());
-                    encounterOpponentStorage.setOpponentMonsterId(opponent.monster());
-                    System.out.println("EncounterId: " + encounterOpponentStorage.getEncounterId());
-                    showEncounterInfoWindow();
+                    final Encounter encounter = event.data();
+                    if(event.suffix().equals("created")) {
+                        System.out.println("Encounter created at Websocket encounterlistener: " + encounter._id());
+                        disposables.add(encounterOpponentsService.getTrainerOpponents(regionId, trainerId)
+                                .observeOn(FX_SCHEDULER).subscribe(os -> {
+                                    opponents.clear();
+                                    opponents.setAll(os);
+                                    System.out.println("Send the message to the server and get the response");
+                                    System.out.println("Size of Opponents" + opponents.size());
+                                    if(opponents.size() != 0){
+                                        encounterOpponentStorage.setEncounterId(opponents.get(0).encounter());
+                                        showEncounterInfoWindow();
+                                    }
+                                }
+                        ));
+                    }
                 }, error -> {
                     showError(error.getMessage());
                     error.printStackTrace();
-                }));
+                })
+        );
     }
 
     private void showEncounterInfoWindow() {
         System.out.println("show Dialogfenster");
+        showEncounterScene();
+    }
+
+    private void showEncounterScene() {
+        app.show(encounterControllerProvider.get());
+    }
+
+    private void checkIfEncounterAlreadyExist(){
+        String regionId = trainerStorageProvider.get().getRegion()._id();
+        String trainerId = trainerStorageProvider.get().getTrainer()._id();
+        disposables.add(encounterOpponentsService.getTrainerOpponents(regionId, trainerId)
+                .observeOn(FX_SCHEDULER).subscribe(opponentResults -> {
+                    opponents.clear();
+                    opponents.setAll(opponentResults);
+                    System.out.println("render send message and get response");
+                    System.out.println("Size of opponents: " + opponents.size());
+                    if(opponents.size() != 0) {
+                        // check if there is an encounter already
+                        encounterOpponentStorage.setEncounterId(opponents.get(0).encounter());
+                        System.out.println("You are already in an encounter " + encounterOpponentStorage.getEncounterId());
+                        // current solution: delete the opponents
+                        disposables.add(encounterOpponentsService.deleteOpponent(regionId, encounterOpponentStorage.getEncounterId(), opponents.get(0)._id())
+                                .observeOn(FX_SCHEDULER).subscribe(opponent -> {
+                                    System.out.println("The encounter would be deleted.");
+                                    }, error -> {
+                                    System.out.println("You are in a encounter with trainer, which can not be deleted");
+                                    showEncounterInfoWindow();
+                                }));
+                        // in th future the encounter will be reproduced
+                    }
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
     }
 
     //TODO: Bei dem Dialogfenster wenn man E drückt, wird die Scenen nach Encountercontroller rü
@@ -1115,7 +1168,11 @@ public class IngameController extends Controller {
             case dialogFinishedNoTalkToTrainer -> endDialog(0, false);
             case spokenToNurse -> createNurseHealPopup();
             case encounterOnTalk -> {
-                // TODO @Cheng here you have to put your logic connected with the encounter
+                disposables.add(udpEventListenerProvider.get().talk(trainerStorageProvider.get().getTrainer().area(), new TalkTrainerDto(
+                        trainerStorageProvider.get().getTrainer()._id(),
+                        this.currentNpc._id(),
+                        0
+                )).observeOn(FX_SCHEDULER).subscribe());
                 endDialog(0, true);
             }
             default -> {}
