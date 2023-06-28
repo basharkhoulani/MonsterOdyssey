@@ -6,10 +6,7 @@ import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.dto.Region;
-import de.uniks.stpmon.team_m.service.AreasService;
-import de.uniks.stpmon.team_m.service.MessageService;
-import de.uniks.stpmon.team_m.service.PresetsService;
-import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.Position;
@@ -124,6 +121,8 @@ public class IngameController extends Controller {
     MessageService messageService;
     @Inject
     TrainersService trainersService;
+    @Inject
+    MonstersService monstersService;
     @Inject
     Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
     @Inject
@@ -1112,13 +1111,21 @@ public class IngameController extends Controller {
         }
 
         if (Objects.equals(this.currentNpc._id(), "645e32c6866ace359554a802")) {
-            System.out.println("gesprochen");
+            disposables.add(trainersService.updateTrainer(
+                            trainerStorageProvider.get().getRegion()._id(),
+                            trainerStorageProvider.get().getTrainer()._id(),
+                            trainerStorageProvider.get().getTrainerName(),
+                            trainerStorageProvider.get().getTrainerSprite(),
+                            List.of("507f191e810c19729de860ea")
+                    ).observeOn(FX_SCHEDULER)
+                    .subscribe(result -> {
+                                disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
+                                        .subscribe(monsters -> {
+                                            trainerStorageProvider.get().setMonsters(new ArrayList<>(monsters));
+                                        }, Throwable::printStackTrace));
+                            }, Throwable::printStackTrace
+                    ));
         }
-
-
-        // trainer position hashmap
-
-
     }
 
     public void createNurseHealPopup() {
@@ -1296,9 +1303,15 @@ public class IngameController extends Controller {
         root.getChildren().remove(starterSelectionVBox);
         buttonsDisable(false);
         switch (ingameStarterMonsterController.index - 1) {
-            case 0 -> continueTrainerDialog(DialogSpecialInteractions.starterSelection0);
-            case 1 -> continueTrainerDialog(DialogSpecialInteractions.starterSelection1);
-            case 2 -> continueTrainerDialog(DialogSpecialInteractions.starterSelection2);
+            case 0 -> {
+                continueTrainerDialog(DialogSpecialInteractions.starterSelection0);
+            }
+            case 1 -> {
+                continueTrainerDialog(DialogSpecialInteractions.starterSelection1);
+            }
+            case 2 -> {
+                continueTrainerDialog(DialogSpecialInteractions.starterSelection2);
+            }
         }
     }
 
