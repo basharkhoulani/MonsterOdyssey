@@ -112,7 +112,7 @@ public class IngameTrainerSettingsController extends Controller {
         MainMenuController mainMenuController = mainMenuControllerProvider.get();
         mainMenuController.setTrainerDeletion();
         ingameController.destroy();
-        app.show(mainMenuControllerProvider.get());
+        app.show(mainMenuController);
     }
 
     public void buttonsDisableTrainer(boolean set){
