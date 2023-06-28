@@ -3,10 +3,9 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.dto.Trainer;
-import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
-import de.uniks.stpmon.team_m.service.PresetsService;
-import de.uniks.stpmon.team_m.service.RegionEncountersService;
+import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.collections.FXCollections;
@@ -63,6 +62,10 @@ public class EncounterController extends Controller {
     @Inject
     RegionEncountersService regionEncountersService;
     @Inject
+    TrainersService trainersService;
+    @Inject
+    MonstersService monstersService;
+    @Inject
     Provider<IngameController> ingameControllerProvider;
     @Inject
     Provider<EventListener> eventListener;
@@ -74,6 +77,9 @@ public class EncounterController extends Controller {
     Provider<TrainerStorage> trainerStorageProvider;
 
     private ObservableList<Opponent> opponents = FXCollections.observableArrayList();
+    String regionId;
+    String encounterId;
+    String trainerId;
 
     @Inject
     public EncounterController() {
@@ -81,16 +87,43 @@ public class EncounterController extends Controller {
 
     public void init() {
         super.init();
-        String regionId = encounterOpponentStorageProvider.get().getRegionId();
-        String encounterId = encounterOpponentStorageProvider.get().getEncounterId();
+        regionId = encounterOpponentStorageProvider.get().getRegionId();
+        encounterId = encounterOpponentStorageProvider.get().getEncounterId();
+        trainerId = trainerStorageProvider.get().getTrainer()._id();
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId)
                 .observeOn(FX_SCHEDULER).subscribe(encounter -> encounterOpponentStorageProvider.get().setWild(encounter.isWild())
                         , error -> showError(error.getMessage())));
         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, encounterId)
                 .observeOn(FX_SCHEDULER).subscribe(os -> {
-                    opponents.setAll(opponents);
+                    opponents.setAll(os);
+                    initEncounterStorage();
                 }, error -> showError(error.getMessage())));
+        initEncounterStorage();
         battleMenuController.init();
+    }
+
+    private void initEncounterStorage() {
+        encounterOpponentStorageProvider.get().setOpponentsInStorage(opponents);
+        for (Opponent o : opponents) {
+            if(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
+                encounterOpponentStorageProvider.get().setSelfOpponent(o);
+            } else {
+                encounterOpponentStorageProvider.get().setEnemyOpponent(o);
+            }
+        }
+        if(!encounterOpponentStorageProvider.get().isWild()){
+            String enemyTrainerId = encounterOpponentStorageProvider.get().getEnemyOpponent().trainer();
+            disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)
+                    .observeOn(FX_SCHEDULER).subscribe(trainer -> {
+                        encounterOpponentStorageProvider.get().setOpponentTrainer(trainer);
+                    }, Throwable::printStackTrace));
+        }
+        disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorageProvider.get().getSelfOpponent().monster())
+                .observeOn(FX_SCHEDULER).subscribe(monster -> encounterOpponentStorageProvider.get().setCurrentTrainerMonster(monster),
+                        Throwable::printStackTrace));
+        disposables.add(monstersService.getMonster(regionId, encounterOpponentStorageProvider.get().getEnemyOpponent().trainer(), encounterOpponentStorageProvider.get().getEnemyOpponent().monster())
+                .observeOn(FX_SCHEDULER).subscribe(monster -> encounterOpponentStorageProvider.get().setCurrentTrainerMonster(monster),
+                        Throwable::printStackTrace));
     }
 
     public String getTitle() {
@@ -100,13 +133,24 @@ public class EncounterController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
         if (!GraphicsEnvironment.isHeadless()) {
+            // Style sheet
             parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../styles.css")).toExternalForm());
+            // Sprite
+            mySprite.setImage(ImageProcessor.showScaledFrontCharacter(trainerStorageProvider.get().getTrainer().image()));
+            //opponentTrainer.setImage(ImageProcessor.showScaledFrontCharacter(encounterOpponentStorageProvider.get().getOpponentTrainer().image()));
+            //showMonsterImage();
         }
-        // render for
+        // render for subcontroller
         battleMenuController.init(this, battleMenu);
         battleMenu.getChildren().add(battleMenuController.render());
+
+        listenToOpponents(opponents, encounterOpponentStorageProvider.get().getEncounterId());
         return parent;
     }
+
+    private void showMonsterImage() {
+    }
+
 
     @Override
     public void destroy() {
@@ -120,7 +164,7 @@ public class EncounterController extends Controller {
                     switch (event.suffix()) {
                         case "created" -> opponents.add(opponent);
                         case "updated" -> opponents.add(opponent);
-                        case "deleted" -> opponents.removeIf(o -> o._id().equals(opponent._id()));
+                        case "deleted" -> app.show(ingameControllerProvider.get());
                     }
                 }, error -> showError(error.getMessage())));
     }

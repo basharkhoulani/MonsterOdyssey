@@ -907,7 +907,6 @@ public class IngameController extends Controller {
     public void listenToEncounter() {
         String regionId = trainerStorageProvider.get().getRegion()._id();
         String trainerId = trainerStorageProvider.get().getTrainer()._id();
-        encounterOpponentStorage.setTrainerId(trainerId);
         encounterOpponentStorage.setRegionId(regionId);
         disposables.add(eventListener.get().listen("regions." + regionId + ".encounters.*.*", Encounter.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
@@ -961,7 +960,8 @@ public class IngameController extends Controller {
                                 .observeOn(FX_SCHEDULER).subscribe(opponent -> {
                                     System.out.println("The encounter would be deleted.");
                                     }, error -> {
-                                    System.out.println("You are in a encounter with trainer, which can not be deleted");
+                                    System.out.println(opponents.get(0)._id());
+                                    error.printStackTrace();
                                     showEncounterInfoWindow();
                                 }));
                         // in th future the encounter will be reproduced

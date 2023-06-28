@@ -412,5 +412,8 @@
 
 .encounterBackground {
     -fx-background-image: url("images/encounterBackground.png");
+    -fx-background-color: white;;
+    -fx-background-repeat: no-repeat;
     -fx-background-size: cover;
+    -fx-background-position: center;
 }

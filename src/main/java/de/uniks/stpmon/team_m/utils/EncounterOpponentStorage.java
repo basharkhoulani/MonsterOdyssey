@@ -1,6 +1,8 @@
 package de.uniks.stpmon.team_m.utils;
 
+import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.Opponent;
+import de.uniks.stpmon.team_m.dto.Trainer;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -11,10 +13,13 @@ import java.util.List;
 public class EncounterOpponentStorage {
     private String encounterId;
     private List<Opponent> opponentsInStorage;
-    private String trainerId;
-    private String opponentTrainerId;
-    private String trainerMonsterId;
-    private String opponentMonsterId;
+    private Opponent selfOpponent;
+    // Die Opponent mit selben trainerId
+    private Opponent enemyOpponent;
+    //Die Opponent mit Id der Gegner
+    private Trainer opponentTrainer;
+    private Monster currentTrainerMonster;
+    private Monster currentEnemyMonster;
     private String regionId;
     private boolean isWild;
     private int encounterSize;
@@ -29,30 +34,6 @@ public class EncounterOpponentStorage {
 
     public void setEncounterId(String encounterId) {
         this.encounterId = encounterId;
-    }
-
-    public String getTrainerId() {
-        return trainerId;
-    }
-
-    public void setTrainerId(String trainerId) {
-        this.trainerId = trainerId;
-    }
-
-    public String getTrainerMonsterId() {
-        return trainerMonsterId;
-    }
-
-    public void setTrainerMonsterId(String trainerMonsterId) {
-        this.trainerMonsterId = trainerMonsterId;
-    }
-
-    public String getOpponentMonsterId() {
-        return opponentMonsterId;
-    }
-
-    public void setOpponentMonsterId(String opponentMonsterId) {
-        this.opponentMonsterId = opponentMonsterId;
     }
 
     public String getRegionId() {
@@ -87,11 +68,44 @@ public class EncounterOpponentStorage {
         this.opponentsInStorage = opponentsInStorage;
     }
 
-    public String getOpponentTrainerId() {
-        return opponentTrainerId;
+
+    public Trainer getOpponentTrainer() {
+        return opponentTrainer;
     }
 
-    public void setOpponentTrainerId(String opponentTrainerId) {
-        this.opponentTrainerId = opponentTrainerId;
+    public void setOpponentTrainer(Trainer opponentTrainer) {
+        this.opponentTrainer = opponentTrainer;
+    }
+
+    public Opponent getSelfOpponent() {
+        return selfOpponent;
+    }
+
+    public void setSelfOpponent(Opponent selfOpponent) {
+        this.selfOpponent = selfOpponent;
+    }
+
+    public Opponent getEnemyOpponent() {
+        return enemyOpponent;
+    }
+
+    public void setEnemyOpponent(Opponent enemyOpponent) {
+        this.enemyOpponent = enemyOpponent;
+    }
+
+    public Monster getCurrentTrainerMonster() {
+        return currentTrainerMonster;
+    }
+
+    public void setCurrentTrainerMonster(Monster currentTrainerMonster) {
+        this.currentTrainerMonster = currentTrainerMonster;
+    }
+
+    public Monster getCurrentEnemyMonster() {
+        return currentEnemyMonster;
+    }
+
+    public void setCurrentEnemyMonster(Monster currentEnemyMonster) {
+        this.currentEnemyMonster = currentEnemyMonster;
     }
 }
