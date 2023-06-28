@@ -1,23 +1,27 @@
 package de.uniks.stpmon.team_m.utils;
 
+import de.uniks.stpmon.team_m.dto.Opponent;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
+import java.util.List;
 
 @Singleton
 public class EncounterOpponentStorage {
     private String encounterId;
+    private List<Opponent> opponentsInStorage;
     private String trainerId;
-    private String opponentId;
+    private String opponentTrainerId;
     private String trainerMonsterId;
     private String opponentMonsterId;
     private String regionId;
+    private boolean isWild;
+    private int encounterSize;
 
 
     @Inject
-    public EncounterOpponentStorage() {
-
-    }
+    public EncounterOpponentStorage() { }
 
     public String getEncounterId() {
         return encounterId;
@@ -27,26 +31,13 @@ public class EncounterOpponentStorage {
         this.encounterId = encounterId;
     }
 
-    // Get the Id of self own trainer
     public String getTrainerId() {
         return trainerId;
     }
 
-    //Set the Id of self own trainer
     public void setTrainerId(String trainerId) {
         this.trainerId = trainerId;
     }
-
-    // Get the Id of oppenent
-    public String getOpponentId() {
-        return opponentId;
-    }
-
-    // Set the Id of Opponent
-    public void setOpponentId(String opponentId) {
-        this.opponentId = opponentId;
-    }
-
 
     public String getTrainerMonsterId() {
         return trainerMonsterId;
@@ -70,5 +61,37 @@ public class EncounterOpponentStorage {
 
     public void setRegionId(String regionId) {
         this.regionId = regionId;
+    }
+
+    public boolean isWild() {
+        return isWild;
+    }
+
+    public void setWild(boolean wild) {
+        isWild = wild;
+    }
+
+    public int getEncounterSize() {
+        return encounterSize;
+    }
+
+    public void setEncounterSize(int encounterSize) {
+        this.encounterSize = encounterSize;
+    }
+
+    public List<Opponent> getOpponentsInStorage() {
+        return opponentsInStorage;
+    }
+
+    public void setOpponentsInStorage(List<Opponent> opponentsInStorage) {
+        this.opponentsInStorage = opponentsInStorage;
+    }
+
+    public String getOpponentTrainerId() {
+        return opponentTrainerId;
+    }
+
+    public void setOpponentTrainerId(String opponentTrainerId) {
+        this.opponentTrainerId = opponentTrainerId;
     }
 }
