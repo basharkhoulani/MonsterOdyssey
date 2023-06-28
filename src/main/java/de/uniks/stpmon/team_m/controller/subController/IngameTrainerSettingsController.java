@@ -11,23 +11,20 @@ import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.StageStyle;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.awt.*;
-import java.text.MessageFormat;
-import java.util.Optional;
 
 @Singleton
 public class IngameTrainerSettingsController extends Controller {
@@ -46,9 +43,13 @@ public class IngameTrainerSettingsController extends Controller {
     @FXML
     public ImageView trainerAvatarImageView;
     @FXML
-    public Button UpdateTrainerButton;
+    public HBox trainerSettingsHbox;
+    @FXML
+    public Button updateTrainerButton;
     @FXML
     public Button deleteTrainerButton;
+    @FXML
+    public StackPane trainerSettingsStackpane;
 
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -66,9 +67,12 @@ public class IngameTrainerSettingsController extends Controller {
     public Provider<TrainerStorage> trainerStorageProvider;
     @Inject
     public UserStorage usersStorage;
+    @Inject
+    Provider<IngameDeleteTrainerWarningController> ingameDeleteTrainerWarningControllerProvider;
 
     protected final CompositeDisposable disposables = new CompositeDisposable();
     private VBox ingameVbox;
+    private IngameDeleteTrainerWarningController ingameDeleteTrainerWarningController;
 
 
     @Inject
@@ -87,45 +91,37 @@ public class IngameTrainerSettingsController extends Controller {
         return parent;
     }
 
-    //public void onCancelButtonClick() {
-        //((Stage) cancelButton.getScene().getWindow()).close();
-    //}
-
     public void onDeleteTrainerButtonClick() {
-        final Alert alert = new Alert(Alert.AlertType.WARNING);
-        final DialogPane dialogPane = alert.getDialogPane();
-        final ButtonType cancelButton = new ButtonType(resources.getString("CANCEL"));
-        final ButtonType okButton = alert.getButtonTypes().stream()
-                .filter(buttonType -> buttonType.getButtonData().isDefaultButton()).findFirst().orElse(null);
+        ingameDeleteTrainerWarningController = ingameDeleteTrainerWarningControllerProvider.get();
+        VBox deleteTrainerWarningVbox = new VBox();
+        deleteTrainerWarningVbox.setAlignment(Pos.CENTER);
+        ingameDeleteTrainerWarningController.init(this, deleteTrainerWarningVbox);
+        deleteTrainerWarningVbox.getChildren().add(ingameDeleteTrainerWarningController.render());
+        trainerSettingsStackpane.getChildren().add(deleteTrainerWarningVbox);
+        deleteTrainerWarningVbox.requestFocus();
+        buttonsDisableTrainer(true);
+    }
+    public void deleteTrainer(){
+        disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).
+                observeOn(FX_SCHEDULER).subscribe(end -> {
+                    trainerStorageProvider.get().setTrainer(null);
+                    trainerStorageProvider.get().setTrainerSprite(null);
+                    trainerStorageProvider.get().setTrainerName(null);
+                    trainerStorageProvider.get().setRegion(null);
+                }, error -> this.showError(error.getMessage())));
+        MainMenuController mainMenuController = mainMenuControllerProvider.get();
+        mainMenuController.setTrainerDeletion();
+        ingameController.destroy();
+        app.show(mainMenuControllerProvider.get());
+    }
 
-        dialogPane.getButtonTypes().addAll(cancelButton);
-
-        final String trainerName = trainerStorageProvider.get().getTrainer().name();
-        final String deleteTrainerText = resources.getString("DELETE.TRAINER.TEXT");
-        dialogPane.setContentText(MessageFormat.format(deleteTrainerText, trainerName));
-
-        alert.initStyle(StageStyle.UNDECORATED);
-        alert.setTitle(resources.getString("DELETE.YOUR.TRAINER"));
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == cancelButton) {
-            alert.close();
-        } else if (result.isPresent() && result.get() == okButton) {
-            //onCancelButtonClick();
-            disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).
-                    observeOn(FX_SCHEDULER).subscribe(end -> {
-                        trainerStorageProvider.get().setTrainer(null);
-                        trainerStorageProvider.get().setTrainerSprite(null);
-                        trainerStorageProvider.get().setTrainerName(null);
-                        trainerStorageProvider.get().setRegion(null);
-                    }, error -> this.showError(error.getMessage())));
-            MainMenuController mainMenuController = mainMenuControllerProvider.get();
-            mainMenuController.setTrainerDeletion();
-            ingameController.destroy();
-            app.show(mainMenuController);
-            alert.close();
-        }
-
+    public void buttonsDisableTrainer(boolean set){
+        deleteTrainerButton.setDisable(set);
+        updateTrainerButton.setDisable(set);
+        trainerNameEditButton.setDisable(set);
+        arrowLeftButton.setDisable(set);
+        arrowRightButton.setDisable(set);
+        goBackButton.setDisable(set);
     }
 
     private void loadAndSetTrainerImage() {
