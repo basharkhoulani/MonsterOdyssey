@@ -18,7 +18,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -29,7 +28,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
@@ -47,10 +45,7 @@ import javafx.scene.text.TextFlow;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.stage.Window;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
@@ -68,9 +63,6 @@ public class IngameController extends Controller {
     private static final int DELAY = 100;
     private static final int DELAY_LONG = 500;
     private static final int SCALE_FACTOR = 2;
-
-    @FXML
-    public Button helpSymbol;
     @FXML
     public Button monstersButton;
     @FXML
@@ -1148,7 +1140,6 @@ public class IngameController extends Controller {
     public void endDialog(int selectionValue, boolean encounterNpc) {
         this.dialogController.destroy();
         inDialog = false;
-//        stackPane.getChildren().remove(dialogVBox);
         stackPane.getChildren().remove(dialogStackPane);
 
         if (encounterNpc) {
@@ -1163,12 +1154,13 @@ public class IngameController extends Controller {
                             trainerStorageProvider.get().getTrainerSprite(),
                             List.of("507f191e810c19729de860ea")
                     ).observeOn(FX_SCHEDULER)
-                    .subscribe(result -> {
-                                disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
-                                        .subscribe(monsters -> {
-                                            trainerStorageProvider.get().setMonsters(new ArrayList<>(monsters));
-                                        }, Throwable::printStackTrace));
-                            }, Throwable::printStackTrace
+                    .subscribe(result ->
+                            disposables.add(monstersService.getMonsters(
+                                    trainerStorageProvider.get().getRegion()._id(),
+                                    trainerStorageProvider.get().getTrainer()._id()
+                            ).observeOn(FX_SCHEDULER).subscribe(monsters ->
+                                            trainerStorageProvider.get().setMonsters(new ArrayList<>(monsters)),
+                                    Throwable::printStackTrace)), Throwable::printStackTrace
                     ));
         }
     }
@@ -1353,7 +1345,6 @@ public class IngameController extends Controller {
                     case 2 -> continueTrainerDialog(DialogSpecialInteractions.starterSelection2);
                 }
             }
-
         });
         starterSelectionVBox.getChildren().add(okButton);
         root.getChildren().add(starterSelectionVBox);

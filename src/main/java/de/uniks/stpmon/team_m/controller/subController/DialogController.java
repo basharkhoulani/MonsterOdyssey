@@ -11,8 +11,6 @@ import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Objects;
-import java.util.Random;
-
 import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
 
 public class DialogController extends Controller {
@@ -154,7 +152,6 @@ public class DialogController extends Controller {
             }
 
             if (Objects.equals(this.npc._id(), "645e32c6866ace359554a802") && !this.alreadyEncountered) {
-                // TODO remove this line when implementing albert special interaction
                 ingameController.showStarterSelection(this.npc.npc().starters());
                 return dialogNotFinished;
             } else {
