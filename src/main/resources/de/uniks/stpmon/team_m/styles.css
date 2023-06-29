@@ -274,6 +274,16 @@
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
 }
+
+.npcNameLabel {
+    -fx-background-color: #C0F3A5;
+    -fx-opacity: 1;
+    -fx-border-color: #1C701C;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
 /*********************************************************************************/
 /*************************** Autocomplete textfields *****************************/
 .auto-complete-popup > .list-view {
@@ -383,4 +393,30 @@
 }
 .dialogBackground {
     -fx-background-color: #CFE9DB;
+}
+
+/**************************** Ingame Notifications *****************************/
+.handyBase {
+    -fx-background-color: black;
+    -fx-background-radius: 40px;
+    -fx-border-color: black;
+    -fx-border-radius: 40px
+}
+
+.speaker {
+    -fx-background-color: grey;
+    -fx-background-radius: 20px;
+}
+
+.borderOfMonsterAvatar {
+    -fx-border-color: black;
+    -fx-border-style: solid;
+    -fx-border-radius: 2px;
+}
+
+.ingameNotificationTextFlow {
+    -fx-border-color: darkblue;
+    -fx-border-radius: 10px;
+    -fx-background-color: lightblue;
+    -fx-background-radius: 10px;
 }

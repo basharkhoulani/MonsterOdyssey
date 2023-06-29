@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
@@ -13,6 +14,7 @@ import de.uniks.stpmon.team_m.utils.SpriteAnimation;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
@@ -25,7 +27,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
@@ -46,7 +47,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.Window;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
@@ -56,7 +56,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -98,11 +97,21 @@ public class IngameController extends Controller {
     public StackPane stackPane;
     @FXML
     public StackPane root;
+    @FXML
+    public StackPane smallHandyButton;
+    @FXML
+    public ImageView notificationBell;
+    @FXML
+    public ImageView smallHandyImageView;
+    @FXML
+    public ImageView monsterForHandyImageView;
 
     @Inject
     Provider<IngameMiniMapController> ingameMiniMapControllerProvider;
     @Inject
     Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
+    @Inject
+    Provider<NotificationListHandyController> notificationListHandyControllerProvider;
     @Inject
     Provider<IngamePauseMenuController> ingamePauseMenuControllerProvider;
     @Inject
@@ -122,16 +131,22 @@ public class IngameController extends Controller {
     @Inject
     TrainersService trainersService;
     @Inject
+    Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
+    @Inject
     Provider<ChangeAudioController> changeAudioControllerProvider;
 
     @Inject
     Provider<IngameController> ingameControllerProvider;
+
+    private IngamePauseMenuController ingamePauseMenuController;
 
     public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
     public static final KeyCode INTERACT_KEY = KeyCode.E;
     private boolean isChatting = false;
     private boolean inDialog = false;
     private boolean inNpcPopup = false;
+    private boolean isPaused = false;
+    private boolean inSettings = false;
 
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
@@ -158,12 +173,16 @@ public class IngameController extends Controller {
     private HashMap<Trainer, TrainerController> trainerControllerHashMap;
     private HashMap<Trainer, Position> trainerPositionHashMap;
     Stage popupStage;
-    private VBox dialogVBox;
     private VBox nursePopupVBox;
     private DialogController dialogController;
     private Trainer currentNpc;
     private NpcTextManager npcTextManager;
     private VBox miniMapVBox;
+    private StackPane dialogStackPane;
+    private VBox starterSelectionVBox;
+    private boolean movmentDisabled;
+    private NotificationListHandyController notificationListHandyController;
+    private StackPane notificationHandyStackPane;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -189,7 +208,14 @@ public class IngameController extends Controller {
                 isChatting = true;
             }
             if (event.getCode() == PAUSE_MENU_KEY) {
-                pauseGame();
+                if (inSettings) {
+                    return;
+                }
+                if(!isPaused){
+                    pauseGame();
+                } else {
+                    ingamePauseMenuController.resumeGame();
+                }
             }
             if (event.getCode() == INTERACT_KEY) {
                 if (!inNpcPopup) {
@@ -202,7 +228,7 @@ public class IngameController extends Controller {
                 return;
             }
 
-            if (miniMapVBox != null) {
+            if (movmentDisabled) {
                 return;
             }
 
@@ -341,6 +367,25 @@ public class IngameController extends Controller {
 
         popupStage = new Stage();
         popupStage.initOwner(app.getStage());
+
+        this.notificationListHandyController = notificationListHandyControllerProvider.get();
+        notificationListHandyController.init(this, trainerStorageProvider.get().getTrainer());
+        stackPane.getChildren().add(notificationListHandyController.render());
+        this.notificationHandyStackPane = (StackPane) stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+
+        this.notificationHandyStackPane.translateXProperty().bind(
+                anchorPane.
+                        widthProperty().
+                        add(notificationHandyStackPane.widthProperty()).
+                        divide(2).
+                        add(offsetToNotShowPhoneInScreen)
+        );
+
+        if(!GraphicsEnvironment.isHeadless()){
+            smallHandyImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(smallHandyImage)).toString()));
+            monsterForHandyImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString()));
+            notificationBell.setImage(new Image(Objects.requireNonNull(App.class.getResource(notificationBellImage)).toString()));
+        }
 
         specificSounds();
 
@@ -717,18 +762,25 @@ public class IngameController extends Controller {
      */
 
     public void showHelp() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(null);
-        alert.setHeaderText(null);
-        alert.setGraphic(null);
-        alert.initOwner(app.getStage());
-        alert.initModality(Modality.APPLICATION_MODAL);
-        alert.initStyle(StageStyle.UNDECORATED);
-        alert.setContentText(resources.getString("HELP.LABEL"));
-        final DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStyleClass().add("comicSans");
-        dialogPane.setStyle(FX_STYLE_BORDER_COLOR_BLACK);
-        alert.showAndWait();
+        smallHandyButton.setVisible(false);
+        notificationBell.setVisible(false);
+
+        for (int i = 0; i < notificationHandyStackPane.getWidth(); i++) {
+            int iterator = i;
+
+            PauseTransition pause = new PauseTransition(Duration.millis(1));
+            pause.setOnFinished(event -> {
+                notificationHandyStackPane.translateXProperty().bind(
+                        anchorPane.
+                                widthProperty().
+                                add(notificationHandyStackPane.widthProperty()).
+                                divide(2).
+                                subtract(iterator)
+                );
+            });
+            pause.setDelay(Duration.millis(i));
+            pause.play();
+        }
     }
 
     /**
@@ -740,7 +792,7 @@ public class IngameController extends Controller {
      */
 
     public void pauseGame() {
-        IngamePauseMenuController ingamePauseMenuController = ingamePauseMenuControllerProvider.get();
+        ingamePauseMenuController = ingamePauseMenuControllerProvider.get();
         VBox pauseMenuVBox = new VBox();
         pauseMenuVBox.setAlignment(Pos.CENTER);
         ingamePauseMenuController.init(this, pauseMenuVBox, mainMenuControllerProvider, app);
@@ -748,6 +800,7 @@ public class IngameController extends Controller {
         root.getChildren().add(pauseMenuVBox);
         pauseMenuVBox.requestFocus();
         buttonsDisable(true);
+        inSettings = false;
     }
 
     public void buttonsDisable(Boolean set) {
@@ -756,6 +809,8 @@ public class IngameController extends Controller {
         } else {
             stackPane.setEffect(null);
         }
+        isPaused = set;
+        movmentDisabled = set;
         monstersButton.setDisable(set);
         pauseButton.setDisable(set);
         showChatButton.setDisable(set);
@@ -764,40 +819,32 @@ public class IngameController extends Controller {
         messageField.setDisable(set);
         sendMessageButton.setDisable(set);
     }
+
     public void showSettings() {
         IngameSettingsController ingameSettingsController = ingameSettingsControllerProvider.get();
-         VBox settingsVBox = new VBox();
+        VBox settingsVBox = new VBox();
         settingsVBox.setAlignment(Pos.CENTER);
         ingameSettingsController.init(this, settingsVBox);
         settingsVBox.getChildren().add(ingameSettingsController.render());
         root.getChildren().add(settingsVBox);
         settingsVBox.requestFocus();
         buttonsDisable(true);
+        inSettings = true;
     }
 
     public void showTrainerSettings() {
-        Dialog<?> trainerSettingsDialog = new Dialog<>();
-        trainerSettingsDialog.setTitle(resources.getString("TRAINER.PROFIL"));
+        IngameTrainerSettingsController ingameTrainerSettingsController = ingameTrainerSettingsControllerProvider.get();
+        VBox trainersettingsVBox = new VBox();
+        trainersettingsVBox.setAlignment(Pos.CENTER);
+        ingameTrainerSettingsController.initIngame(this, trainersettingsVBox);
+        trainersettingsVBox.getChildren().add(ingameTrainerSettingsController.render());
+        root.getChildren().add(trainersettingsVBox);
+        trainersettingsVBox.requestFocus();
+        buttonsDisable(true);
+
+
         ingameTrainerSettingsControllerProvider.get().setApp(this.app);
         ingameTrainerSettingsControllerProvider.get().setValues(resources, preferences, resourceBundleProvider, ingameTrainerSettingsControllerProvider.get(), app);
-        ingameTrainerSettingsControllerProvider.get().setIngameController(this);
-        trainerSettingsDialog.getDialogPane().setContent(ingameTrainerSettingsControllerProvider.get().render());
-        trainerSettingsDialog.getDialogPane().setExpandableContent(null);
-        if (!GraphicsEnvironment.isHeadless()) {
-            trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
-            trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");
-        }
-        trainerSettingsDialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("styles.css")).toString());
-        trainerSettingsDialog.getDialogPane().getStyleClass().add("trainerSettingsDialog");
-        trainerSettingsDialog.initOwner(app.getStage());
-        Window popUp = trainerSettingsDialog.getDialogPane().getScene().getWindow();
-        popUp.setOnCloseRequest(evt -> {
-                    ((Stage) trainerSettingsDialog.getDialogPane().getScene().getWindow()).close();
-                    groundCanvas.requestFocus();
-                }
-        );
-
-        trainerSettingsDialog.showAndWait();
     }
 
     public void sendMessageButton() {
@@ -932,7 +979,7 @@ public class IngameController extends Controller {
     }
 
     /*
-        ** NPC methods **
+     ** NPC methods **
      */
 
     public void interactWithTrainer() {
@@ -961,7 +1008,9 @@ public class IngameController extends Controller {
                         createDialogVBox(),
                         checkIfNpcEncounteredPlayer(this.currentNpc),
                         npcTextManager,
-                        trainerStorageProvider.get().getTrainer());
+                        trainerStorageProvider.get().getTrainer(),
+                        this
+                );
             }
         }
     }
@@ -1082,6 +1131,10 @@ public class IngameController extends Controller {
             case albertDialogFinished2 -> endDialog(2, true);
             case dialogFinishedNoTalkToTrainer -> endDialog(0, false);
             case spokenToNurse -> createNurseHealPopup();
+            case encounterOnTalk -> {
+                // TODO @Cheng here you have to put your logic connected with the encounter
+                endDialog(0, true);
+            }
             default -> {}
         }
     }
@@ -1089,7 +1142,8 @@ public class IngameController extends Controller {
     public void endDialog(int selectionValue, boolean encounterNpc) {
         this.dialogController.destroy();
         inDialog = false;
-        stackPane.getChildren().remove(dialogVBox);
+//        stackPane.getChildren().remove(dialogVBox);
+        stackPane.getChildren().remove(dialogStackPane);
 
         if (encounterNpc) {
             encounterNPC(this.currentNpc, selectionValue);
@@ -1160,6 +1214,14 @@ public class IngameController extends Controller {
     }
 
     public TextFlow createDialogVBox() {
+        StackPane dialogStackPane = new StackPane();
+        dialogStackPane.setId("dialogStackPane");
+        dialogStackPane.setMaxHeight(160);
+        dialogStackPane.setMaxWidth(700);
+
+        Label nameLabel = new Label(this.currentNpc.name());
+        nameLabel.setPadding(new Insets(5, 10, 5, 10));
+
         VBox dialogVBox = new VBox();
         dialogVBox.setMinWidth(dialogVBoxWidth);
         dialogVBox.maxWidthProperty().bind(stackPane.widthProperty().divide(2));
@@ -1167,7 +1229,7 @@ public class IngameController extends Controller {
         dialogVBox.setId("dialogVBox");
 
         int constantSpacer = spacerToBottomOfScreen;
-        dialogVBox.translateYProperty().bind((anchorPane.heightProperty().subtract(dialogVBox.maxHeightProperty()).subtract(constantSpacer)).divide(2));
+        dialogVBox.translateYProperty().bind((anchorPane.heightProperty().subtract(dialogVBox.maxHeightProperty()).subtract(constantSpacer)).divide(2).add(10));
 
         Pane textPane = new Pane();
 
@@ -1198,34 +1260,68 @@ public class IngameController extends Controller {
 
         dialogVBox.getChildren().add(textPane);
 
-        stackPane.getChildren().add(dialogVBox);
-        this.dialogVBox = dialogVBox;
+
+        dialogStackPane.getChildren().add(dialogVBox);
+
+        nameLabel.translateYProperty().bind(dialogVBox.translateYProperty().subtract(dialogVBox.heightProperty().divide(2)));
+        nameLabel.translateXProperty().bind(dialogVBox.translateXProperty().subtract(dialogVBox.widthProperty()).divide(3));
+        nameLabel.getStyleClass().add("npcNameLabel");
+        dialogStackPane.getChildren().add(nameLabel);
+
+        stackPane.getChildren().add(dialogStackPane);
+        this.dialogStackPane = dialogStackPane;
 
         return dialogTextFlow;
     }
 
     public void showMap() {
         IngameMiniMapController ingameMiniMapController = ingameMiniMapControllerProvider.get();
-        miniMapVBox = new VBox();
-        miniMapVBox.getStyleClass().add("miniMapContainer");
-        miniMapVBox.setPadding(new Insets(0, 0, 8, 0));
-        miniMapVBox.getChildren().add(ingameMiniMapController.render());
+        if (miniMapVBox == null) {
+            miniMapVBox = new VBox();
+            miniMapVBox.getStyleClass().add("miniMapContainer");
+            miniMapVBox.setPadding(new Insets(0, 0, 8, 0));
+            miniMapVBox.getChildren().add(ingameMiniMapController.render());
 
-        Button closeButton = new Button();
-        closeButton.setId("closeButton");
-        closeButton.setText(resources.getString("CLOSE"));
-        closeButton.setPrefHeight(32);
-        closeButton.setPrefWidth(128);
-        closeButton.getStyleClass().add("welcomeSceneButton");
-        closeButton.setOnAction(event -> {
-                    root.getChildren().remove(miniMapVBox);
-                    miniMapVBox = null;
-                    buttonsDisable(false);
-                }
-        );
-        miniMapVBox.getChildren().add(closeButton);
+            Button closeButton = new Button();
+            closeButton.setId("closeButton");
+            closeButton.setText(resources.getString("CLOSE"));
+            closeButton.getStyleClass().add("welcomeSceneButton");
+            closeButton.setOnAction(event -> {
+                        root.getChildren().remove(miniMapVBox);
+                        buttonsDisable(false);
+                    }
+            );
+            miniMapVBox.getChildren().add(closeButton);
+        }
         root.getChildren().add(miniMapVBox);
         miniMapVBox.requestFocus();
+        buttonsDisable(true);
+    }
+
+    public void showStarterSelection(List<String> starters) {
+        IngameStarterMonsterController ingameStarterMonsterController = ingameStarterMonsterControllerProvider.get();
+        if (starterSelectionVBox == null) {
+            starterSelectionVBox = new VBox();
+            starterSelectionVBox.getStyleClass().add("miniMapContainer");
+            starterSelectionVBox.setStyle("-fx-max-height: 350px; -fx-max-width: 550px");
+            starterSelectionVBox.setPadding(new Insets(0, 0, 8, 0));
+            ingameStarterMonsterController.init(this, starterSelectionVBox, app, starters);
+            starterSelectionVBox.getChildren().add(ingameStarterMonsterController.render());
+
+            Button okButton = new Button();
+            okButton.setId("okButton");
+            okButton.setText(resources.getString("OK"));
+            okButton.getStyleClass().add("welcomeSceneButton");
+            okButton.setStyle("-fx-background-color: #e0ecfc");
+            okButton.setOnAction(event -> {
+                        root.getChildren().remove(starterSelectionVBox);
+                        buttonsDisable(false);
+                    }
+            );
+            starterSelectionVBox.getChildren().add(okButton);
+        }
+        root.getChildren().add(starterSelectionVBox);
+        starterSelectionVBox.requestFocus();
         buttonsDisable(true);
     }
 

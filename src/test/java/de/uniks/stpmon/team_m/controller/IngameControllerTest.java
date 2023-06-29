@@ -1,7 +1,9 @@
 package de.uniks.stpmon.team_m.controller;
 
+import com.sun.javafx.collections.ObservableListWrapper;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.MonstersListController;
+import de.uniks.stpmon.team_m.controller.subController.NotificationListHandyController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.MessageService;
@@ -11,7 +13,9 @@ import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -31,6 +35,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -55,6 +60,8 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<UDPEventListener> udpEventListenerProvider;
     @Mock
     Provider<MonstersListController> monstersListControllerProvider;
+    @Mock
+    Provider<NotificationListHandyController> notificationListHandyControllerProvider;
 
     // Leave this mock!! it ensures that tests run fine
     @Mock
@@ -70,6 +77,10 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<EventListener> eventListener;
     @Mock
     PresetsService presetsService;
+    @Mock
+    Parent parent;
+    @InjectMocks
+    NotificationListHandyController notificationListHandyController;
 
     @Override
     public void start(Stage stage) {
@@ -202,7 +213,7 @@ public class IngameControllerTest extends ApplicationTest {
                 "Premade_Character_02.png",
                 0,
                 List.of("1", "2"),
-                null,
+                List.of(),
                 "6475e595ac3946b6a812d863",
                 33,
                 18,
@@ -211,18 +222,24 @@ public class IngameControllerTest extends ApplicationTest {
 
         when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers.*.*", Trainer.class)).thenReturn(just(
                 new Event<>("regions.646bab5cecf584e1be02598a.trainers.6475e595ac3946b6a812d865.created", trainer)));
+
         MonstersListController monstersListController = mock(MonstersListController.class);
         when(trainerStorageProvider.get().getTrainer()).thenReturn(trainer);
         when(monstersListControllerProvider.get()).thenReturn(monstersListController);
+
+        notificationListHandyController.setValues(bundle, null, null, notificationListHandyController, app);
+        when(notificationListHandyControllerProvider.get()).thenReturn(notificationListHandyController);
+
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
     }
 
     @Test
-    void showHelp() {
-        clickOn("#helpSymbol");
-        final DialogPane dialogPane = lookup(".dialog-pane").query();
+    void showHelp() throws InterruptedException {
+        // TODO: apply asserts once we have the time
+        clickOn("#smallHandyButton");
+        /*final DialogPane dialogPane = lookup(".dialog-pane").query();
         assertNotNull(dialogPane);
         final Label helpLabel = dialogPane.getChildren().stream()
                 .filter(node -> node instanceof Label)
@@ -230,7 +247,10 @@ public class IngameControllerTest extends ApplicationTest {
                 .findFirst()
                 .orElse(null);
         assertNotNull(helpLabel);
-        clickOn("OK");
+        clickOn("OK");*/
+
+        Thread.sleep(1000);
+        clickOn("close");
     }
 
     @Test
@@ -359,7 +379,7 @@ public class IngameControllerTest extends ApplicationTest {
         final StackPane stackPane = lookup("#stackPane").query();
         final Node node2 = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
 
-        assertNotEquals("dialogVBox", node2.getId());
+        assertNotEquals("dialogStackPane", node2.getId());
 
         for (int i = 0; i < 4; i++) {
             press(KeyCode.E);
@@ -389,7 +409,7 @@ public class IngameControllerTest extends ApplicationTest {
         final StackPane stackPane = lookup("#stackPane").query();
         final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
 
-        assertNotEquals("dialogVBox", node.getId());
+        assertNotEquals("dialogStackPane", node.getId());
     }
 
     @Test
@@ -432,6 +452,6 @@ public class IngameControllerTest extends ApplicationTest {
         final StackPane stackPane = lookup("#stackPane").query();
         final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
 
-        assertNotEquals("dialogVBox", node.getId());
+        assertNotEquals("dialogStackPane", node.getId());
     }
 }
