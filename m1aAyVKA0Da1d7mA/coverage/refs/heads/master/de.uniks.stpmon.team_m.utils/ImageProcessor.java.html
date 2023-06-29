@@ -84,7 +84,7 @@ import static de.uniks.stpmon.team_m.Constants.*;
      * This method is used to crop the
      *
      * @param trainerChunk into 6 Images, that displays the player character moving in some direction
-     * @param direction    : either 0 [up], 1 [right], 2 [down], or 3 [left] are possible directions
+     * @param direction    : either 0 [right], 1 [up], 2 [left], or 3 [down] are possible directions
      * @param isWalking    : determine if the character is moving or not
      */
     public static Image[] cropTrainerImages(Image trainerChunk, int direction, Boolean isWalking) {
@@ -96,9 +96,9 @@ import static de.uniks.stpmon.team_m.Constants.*;
 <span class="fc" id="L96">            y = 39;</span>
         }
 <span class="fc bfc" id="L98" title="All 4 branches covered.">        switch (direction) {</span>
-<span class="fc" id="L99">            case 1 -&gt; x = 0;</span>
-<span class="fc" id="L100">            case 0 -&gt; x = 96;</span>
-<span class="fc" id="L101">            case 3 -&gt; x = 192;</span>
+<span class="fc" id="L99">            case 0 -&gt; x = 0;</span>
+<span class="fc" id="L100">            case 1 -&gt; x = 96;</span>
+<span class="fc" id="L101">            case 2 -&gt; x = 192;</span>
 <span class="fc" id="L102">            default -&gt; x = 288;</span>
         }
 <span class="fc bfc" id="L104" title="All 2 branches covered.">        for (int i = 0; i &lt; 6; i++) {</span>
