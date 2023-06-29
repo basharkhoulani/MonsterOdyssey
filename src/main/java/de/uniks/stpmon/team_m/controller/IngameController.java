@@ -1316,6 +1316,7 @@ public class IngameController extends Controller {
             okButton.setOnAction(event -> {
                         root.getChildren().remove(starterSelectionVBox);
                         buttonsDisable(false);
+                        notificationBell.setVisible(true);
                     }
             );
             starterSelectionVBox.getChildren().add(okButton);
