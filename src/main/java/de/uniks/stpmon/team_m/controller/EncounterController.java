@@ -73,7 +73,7 @@ public class EncounterController extends Controller {
     @Inject
     Provider<EventListener> eventListener;
     @Inject
-    Provider<EncounterOpponentStorage> encounterOpponentStorageProvider;
+    EncounterOpponentStorage encounterOpponentStorage;
     @Inject
     BattleMenuController battleMenuController;
     @Inject
@@ -91,29 +91,15 @@ public class EncounterController extends Controller {
 
     public void init() {
         super.init();
-        System.out.println("EncounterController init");
-        System.out.println(encounterOpponentStorageProvider.get().getSelfOpponent());
-        System.out.println(encounterOpponentStorageProvider.get().getEnemyOpponent());
-
+        regionId = encounterOpponentStorage.getRegionId();
+        encounterId = encounterOpponentStorage.getEncounterId();
+        trainerId = trainerStorageProvider.get().getTrainer()._id();
+        disposables.add(regionEncountersService.getEncounter(regionId, encounterId)
+                .observeOn(FX_SCHEDULER).subscribe(encounter -> {
+                    encounterOpponentStorage.setWild(encounter.isWild());
+                }, Throwable::printStackTrace));
         battleMenuController.init();
     }
-
-    public void ex(){
-        if(!encounterOpponentStorageProvider.get().isWild()){
-            String enemyTrainerId = encounterOpponentStorageProvider.get().getEnemyOpponent().trainer();
-            disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)
-                    .observeOn(FX_SCHEDULER).subscribe(trainer -> {
-                        encounterOpponentStorageProvider.get().setOpponentTrainer(trainer);
-                    }, Throwable::printStackTrace));
-        }
-        disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorageProvider.get().getSelfOpponent().monster())
-                .observeOn(FX_SCHEDULER).subscribe(monster -> encounterOpponentStorageProvider.get().setCurrentTrainerMonster(monster),
-                        Throwable::printStackTrace));
-        disposables.add(monstersService.getMonster(regionId, encounterOpponentStorageProvider.get().getEnemyOpponent().trainer(), encounterOpponentStorageProvider.get().getEnemyOpponent().monster())
-                .observeOn(FX_SCHEDULER).subscribe(monster -> encounterOpponentStorageProvider.get().setCurrentTrainerMonster(monster),
-                        Throwable::printStackTrace));
-    }
-
 
     public String getTitle() {
         return resources.getString("ENCOUNTER");
@@ -121,44 +107,68 @@ public class EncounterController extends Controller {
 
     public Parent render() {
         final Parent parent = super.render();
+        System.out.println("EncounterController.render");
         if (!GraphicsEnvironment.isHeadless()) {
-            // Style sheet
-            parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../styles.css")).toExternalForm());
             // Sprite
-            //showTrainerImage();
-            //showMonsterImage();
+            showTrainerImage();
+            showMonsterImage();
         }
         // render for subcontroller
         battleMenuController.init(this, battleMenu);
         battleMenu.getChildren().add(battleMenuController.render());
 
-        listenToOpponents(encounterOpponentStorageProvider.get().getEncounterId());
+        listenToOpponents(encounterOpponentStorage.getEncounterId());
         return parent;
     }
 
     private void showTrainerImage(){
         mySprite.setImage(ImageProcessor.showScaledFrontCharacter(trainerStorageProvider.get().getTrainer().image()));
-        if(encounterOpponentStorageProvider.get().isWild()){
-            opponentTrainer.setImage(ImageProcessor.showScaledFrontCharacter(encounterOpponentStorageProvider.get().getOpponentTrainer().image()));
+        if(!encounterOpponentStorage.isWild()){
+            String enemyTrainerId = encounterOpponentStorage.getEnemyOpponent().trainer();
+            disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)
+                    .observeOn(FX_SCHEDULER).subscribe(trainer -> {
+                        encounterOpponentStorage.setOpponentTrainer(trainer);
+                        opponentTrainer.setImage(ImageProcessor.showScaledFrontCharacter(trainer.image()));
+                    }, Throwable::printStackTrace));
         }
     }
 
+    public void initEncounterOpponentStorage(){
+        if(!encounterOpponentStorage.isWild()){
+            String enemyTrainerId = encounterOpponentStorage.getEnemyOpponent().trainer();
+            disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)
+                    .observeOn(FX_SCHEDULER).subscribe(trainer -> {
+                        encounterOpponentStorage.setOpponentTrainer(trainer);
+                    }, Throwable::printStackTrace));
+        }
+        disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getSelfOpponent().monster())
+                .observeOn(FX_SCHEDULER).subscribe(monster -> encounterOpponentStorage.setCurrentTrainerMonster(monster),
+                        Throwable::printStackTrace));
+        disposables.add(monstersService.getMonster(regionId, encounterOpponentStorage.getEnemyOpponent().trainer(), encounterOpponentStorage.getEnemyOpponent().monster())
+                .observeOn(FX_SCHEDULER).subscribe(monster -> encounterOpponentStorage.setCurrentTrainerMonster(monster),
+                        Throwable::printStackTrace));
+    }
+
     private void showMonsterImage() {
-        int myMonsterType = encounterOpponentStorageProvider.get().getCurrentTrainerMonster().type();
-        int enemyMonsterType = encounterOpponentStorageProvider.get().getCurrentEnemyMonster().type();
+        disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getSelfOpponent().monster())
+                .observeOn(FX_SCHEDULER).subscribe(monster -> {
+                    encounterOpponentStorage.setCurrentTrainerMonster(monster);
+                    disposables.add(presetsService.getMonsterImage(monster.type())
+                            .observeOn(FX_SCHEDULER).subscribe(mImage -> {
+                                myMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
+                                myMonster.setImage(myMonsterImage);
+                            }, Throwable::printStackTrace));
+                        }, Throwable::printStackTrace));
 
-        disposables.add(presetsService.getMonsterImage(myMonsterType)
-                .observeOn(FX_SCHEDULER).subscribe(mImage -> {
-                    myMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
-                    myMonster.setImage(myMonsterImage);
-                }));
-
-        disposables.add(presetsService.getMonsterImage(enemyMonsterType)
-                .observeOn(FX_SCHEDULER).subscribe(mImage -> {
-                    enemyMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
-                    myMonster.setImage(enemyMonsterImage);
-                }));
-
+        disposables.add(monstersService.getMonster(regionId, encounterOpponentStorage.getEnemyOpponent().trainer(), encounterOpponentStorage.getEnemyOpponent().monster())
+                .observeOn(FX_SCHEDULER).subscribe(monster -> {
+                    encounterOpponentStorage.setCurrentEnemyMonster(monster);
+                    disposables.add(presetsService.getMonsterImage(monster.type())
+                            .observeOn(FX_SCHEDULER).subscribe(mImage -> {
+                                enemyMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
+                                opponentMonster.setImage(enemyMonsterImage);
+                            }, Throwable::printStackTrace));
+                        }, Throwable::printStackTrace));
     }
 
 

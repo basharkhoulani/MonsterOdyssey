@@ -978,6 +978,7 @@ public class IngameController extends Controller {
     }
 
     public void listenToOpponents() {
+        encounterOpponentStorage.setRegionId(trainerStorageProvider.get().getRegion()._id());
         disposables.add(eventListener.get().listen("encounters.*.opponents.*.*", Opponent.class)
                 .observeOn(FX_SCHEDULER).subscribe(opponentEvent -> {
                     final Opponent opponent = opponentEvent.data();
@@ -1024,7 +1025,7 @@ public class IngameController extends Controller {
         disposables.add(encounterOpponentsService.getTrainerOpponents(regionId, trainerId)
                 .observeOn(FX_SCHEDULER).subscribe(opponentResults -> {
                     if (opponentResults.size() != 0) {
-                        encounterOpponentStorage.setEncounterId(opponents.get(0).encounter());
+                        encounterOpponentStorage.setEncounterId(opponentResults.get(0).encounter());
                         System.out.println("You are already in an encounter " + opponentResults.get(0).encounter());
                     }
                 }, error -> {
