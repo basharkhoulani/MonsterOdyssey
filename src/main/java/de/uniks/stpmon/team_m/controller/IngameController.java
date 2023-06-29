@@ -1033,19 +1033,19 @@ public class IngameController extends Controller {
         int checkTileYForNurse = currentY;
 
         switch (direction) {
-            case 1 -> {                         // facing up
+            case 0 -> {                         // facing up
                 checkTileY--;
                 checkTileYForNurse -= 2;
             }
-            case 0 -> {                         // facing right
+            case 1 -> {                         // facing right
                 checkTileX++;
                 checkTileXForNurse += 2;
             }
-            case 3 -> {                         // facing down
+            case 2 -> {                         // facing down
                 checkTileY++;
                 checkTileY += 2;
             }
-            case 2 -> {                         // facing left
+            case 3 -> {                         // facing left
                 checkTileX--;
                 checkTileXForNurse -= 2;
             }
