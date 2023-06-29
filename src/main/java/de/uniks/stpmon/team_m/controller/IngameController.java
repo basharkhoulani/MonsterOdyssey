@@ -46,6 +46,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
@@ -63,6 +64,9 @@ public class IngameController extends Controller {
     private static final int DELAY = 100;
     private static final int DELAY_LONG = 500;
     private static final int SCALE_FACTOR = 2;
+
+    @FXML
+    public Button helpSymbol;
     @FXML
     public Button monstersButton;
     @FXML
@@ -211,10 +215,8 @@ public class IngameController extends Controller {
                 }
                 if (!isPaused) {
                     pauseGame();
-                    isPaused = true;
                 } else {
                     ingamePauseMenuController.resumeGame();
-                    isPaused = false;
                 }
             }
             if (event.getCode() == INTERACT_KEY) {
@@ -807,6 +809,7 @@ public class IngameController extends Controller {
         } else {
             stackPane.setEffect(null);
         }
+        isPaused = set;
         movementDisabled = set;
         inNpcPopup = set;
         monstersButton.setDisable(set);
