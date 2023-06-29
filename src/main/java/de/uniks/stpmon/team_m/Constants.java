@@ -153,6 +153,14 @@ public class Constants {
             "Premade_Character_17.png", "Premade_Character_18.png", "Premade_Character_19.png", "Premade_Character_20.png"
     };
 
+    // Sounds
+    public static final String MENU_SOUND = "Nintendo_Style_Funny_Music_Loop_01.wav";
+    public static final String WELCOME_SOUND = "Nintendo_Style_Quirky_Music_Loop_01.wav";
+    public static final String CITY_SOUND = "Nintendo_Style_Upbeat_Music_Loop_03.wav";
+    public static final String ROOMS_SOUND = "Nintendo_Style_Funny_Music_Loop_02.wav";
+    public static final String ROUTE_SOUND = "Nintendo_Style_Upbeat_Music_Loop_05.wav";
+    public static final String FIGHT_SOUND = "Nintendo_Style_Battle_Music_Loop_02.wav";
+
     // Colors
     public static HashMap<String, String> TYPESCOLORPALETTE = new HashMap<>(Map.ofEntries(
             entry("normal", "#BBBBAA"),
