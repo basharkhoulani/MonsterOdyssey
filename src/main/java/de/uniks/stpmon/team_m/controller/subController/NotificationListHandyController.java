@@ -53,6 +53,11 @@ public class NotificationListHandyController extends Controller {
     public Parent render() {
         Parent parent = super.render();
 
+        ingameNotificationListView.setSelectionModel(null);
+        ingameNotificationListView.setFocusModel(null);
+        ingameNotificationListView.setCellFactory(param -> new IngameNotificationCell(this));
+        ingameNotificationListView.setItems(handyMessages);
+
         if (trainer.encounteredMonsterTypes().size() == 0) {
             this.displayFirstTimeNotifications();
         }
@@ -87,13 +92,6 @@ public class NotificationListHandyController extends Controller {
     }
 
     private void displayFirstTimeNotifications() {
-
-
-        ingameNotificationListView.setSelectionModel(null);
-        ingameNotificationListView.setFocusModel(null);
-        ingameNotificationListView.setCellFactory(param -> new IngameNotificationCell(this));
-        ingameNotificationListView.setItems(handyMessages);
-
         Timeline timeline = new Timeline();
         int duration = 1;
 
@@ -111,12 +109,7 @@ public class NotificationListHandyController extends Controller {
     }
 
     public void displayStarterMessages() {
-
-        ingameNotificationListView.setSelectionModel(null);
-        ingameNotificationListView.setFocusModel(null);
-        ingameNotificationListView.setCellFactory(param -> new IngameNotificationCell(this));
-        ingameNotificationListView.setItems(handyMessages);
-
+        handyMessages.clear();
         Timeline timeline = new Timeline();
         int duration = 1;
 
