@@ -28,7 +28,7 @@ public class NotificationListHandyController extends Controller {
 
     @Inject
     Provider<NotificationListHandyController> notificationListHandyControllerProvider;
-
+    ObservableList<String> handyMessages;
     private IngameController ingameController;
     private Trainer trainer;
 
@@ -37,6 +37,7 @@ public class NotificationListHandyController extends Controller {
     }
 
     public void init(IngameController ingameController, Trainer currentTrainer) {
+        handyMessages = FXCollections.observableArrayList();
         this.ingameController = ingameController;
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
@@ -52,10 +53,17 @@ public class NotificationListHandyController extends Controller {
     public Parent render() {
         Parent parent = super.render();
 
+        ingameNotificationListView.setSelectionModel(null);
+        ingameNotificationListView.setFocusModel(null);
+        ingameNotificationListView.setCellFactory(param -> new IngameNotificationCell(this));
+        ingameNotificationListView.setItems(handyMessages);
+
         if (trainer.encounteredMonsterTypes().size() == 0) {
             this.displayFirstTimeNotifications();
         }
-
+        if (trainer.encounteredMonsterTypes().size() == 1) {
+            this.displayStarterMessages();
+        }
         ingameNotificationListView.setMouseTransparent(true);
 
         return parent;
@@ -84,13 +92,6 @@ public class NotificationListHandyController extends Controller {
     }
 
     private void displayFirstTimeNotifications() {
-        ObservableList<String> newTrainerNotificationMessages = FXCollections.observableArrayList();
-
-        ingameNotificationListView.setSelectionModel(null);
-        ingameNotificationListView.setFocusModel(null);
-        ingameNotificationListView.setCellFactory(param -> new IngameNotificationCell(this));
-        ingameNotificationListView.setItems(newTrainerNotificationMessages);
-
         Timeline timeline = new Timeline();
         int duration = 1;
 
@@ -98,12 +99,28 @@ public class NotificationListHandyController extends Controller {
             int iterator = i;
             KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> {
 
-                newTrainerNotificationMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.NEW."+iterator));
+                handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.NEW."+iterator));
             });
             timeline.getKeyFrames().add(keyFrame);
             duration++;
         }
 
+        timeline.play();
+    }
+
+    public void displayStarterMessages() {
+        handyMessages.clear();
+        Timeline timeline = new Timeline();
+        int duration = 1;
+
+        for (int i = 0; i < 2; i++) {
+            int iter = i;
+            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> {
+                handyMessages.add(this.resources.getString("INGAME.NOTIICATIONS.STARTER."+ iter));
+            });
+            timeline.getKeyFrames().add(keyFrame);
+            duration++;
+        }
         timeline.play();
     }
 }
