@@ -128,7 +128,7 @@ public class EncounterController extends Controller {
             disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)
                     .observeOn(FX_SCHEDULER).subscribe(trainer -> {
                         encounterOpponentStorage.setOpponentTrainer(trainer);
-                        battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + trainer.name());
+                        battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + trainer.name());
                         opponentTrainer.setImage(ImageProcessor.showScaledFrontCharacter(trainer.image()));
                     }, Throwable::printStackTrace));
         }
@@ -139,9 +139,10 @@ public class EncounterController extends Controller {
         disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getSelfOpponent().monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
                     encounterOpponentStorage.setCurrentTrainerMonster(monster);
-                    myLevelBar.setProgress(monster.level() / requiredExperience(monster.level()));
+                    myLevelBar.setProgress(monster.experience() / requiredExperience(monster.level() + 1));
                     myLevel.setText(monster.level() + " LVL");
-
+                    myHealthBar.setProgress(monster.currentAttributes().health() / monster.attributes().health());
+                    myHealth.setText(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
                     //write monster name
                     disposables.add(presetsService.getMonster(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(m -> {
@@ -160,6 +161,7 @@ public class EncounterController extends Controller {
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
                     encounterOpponentStorage.setCurrentEnemyMonster(monster);
                     opponentLevel.setText(monster.level() + " LVL");
+                    opponentHealthBar.setProgress(monster.currentAttributes().health() / monster.attributes().health());
                     disposables.add(presetsService.getMonster(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(m -> {
                                 opponentMonsterName.setText(m.name());
