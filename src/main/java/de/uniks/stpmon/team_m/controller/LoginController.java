@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import java.awt.*;
+import java.awt.Menu;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -98,10 +99,11 @@ public class LoginController extends Controller {
         super.init();
         changeLanguageController = new ChangeLanguageController();
         changeLanguageController.init();
-        if (!GraphicsEnvironment.isHeadless()) {
-            AudioService.getInstance().playSound(MENU_SOUND);
-            AudioService.getInstance().setVolume(preferences.getDouble("volume", 0.5));
-            AudioService.getInstance().setCurrentSound(MENU_SOUND);
+        if (!GraphicsEnvironment.isHeadless()){
+            if(AudioService.getInstance() != null && (AudioService.getInstance().getCurrentSound() == null)) {
+                AudioService.getInstance().playSound(MENU_SOUND);
+            }
+            //AudioService.getInstance().setVolume(preferences.getDouble("volume", 0.5));
         }
     }
 

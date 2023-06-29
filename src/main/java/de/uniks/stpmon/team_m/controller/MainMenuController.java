@@ -114,9 +114,10 @@ public class MainMenuController extends Controller {
                     }, error -> showError(error.getMessage())));
 
         }
-        //AudioService.getInstance().pauseSound();
         if (!GraphicsEnvironment.isHeadless()) {
-            AudioService.getInstance().playSound(MENU_SOUND);
+            if (AudioService.getInstance() == null) {
+                AudioService.getInstance().playSound(MENU_SOUND);
+            }
         }
     }
 
