@@ -46,7 +46,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
@@ -136,7 +135,6 @@ public class IngameController extends Controller {
     Provider<ChangeAudioController> changeAudioControllerProvider;
     @Inject
     RegionsService regionsService;
-
     @Inject
     Provider<IngameController> ingameControllerProvider;
 
@@ -627,10 +625,10 @@ public class IngameController extends Controller {
     private void afterAllTileSetsLoaded(Map map) {
         if (tileSetImages.size() == map.tilesets().size()) {
             if ((tileSetImages.size() + tileSetJsons.size()) == 2 * map.tilesets().size()) {
-                setCanvasSettings(map, userTrainerCanvas);
-                setCanvasSettings(map, trainersCanvas);
-                setCanvasSettings(map, groundCanvas);
-                setCanvasSettings(map, overTrainerCanvas);
+                setCanvasSettings(map, userTrainerCanvas, false);
+                setCanvasSettings(map, trainersCanvas, false);
+                setCanvasSettings(map, groundCanvas, false);
+                setCanvasSettings(map, overTrainerCanvas, false);
                 for (TileSet tileSet : map.tilesets()) {
                     renderMap(map, tileSetImages.get(getFileName(tileSet.source())), tileSetJsons.get(getFileName(tileSet.source())),
                             tileSet, map.tilesets().size() > 1, false);
@@ -640,9 +638,11 @@ public class IngameController extends Controller {
         }
     }
 
-    public void setCanvasSettings(Map map, Canvas canvas) {
-        canvas.setScaleX(SCALE_FACTOR);
-        canvas.setScaleY(SCALE_FACTOR);
+    public void setCanvasSettings(Map map, Canvas canvas, boolean forMiniMap) {
+        if (!forMiniMap) {
+            canvas.setScaleX(SCALE_FACTOR);
+            canvas.setScaleY(SCALE_FACTOR);
+        }
         canvas.setWidth(map.width() * TILE_SIZE);
         canvas.setHeight(map.height() * TILE_SIZE);
     }
@@ -1308,22 +1308,19 @@ public class IngameController extends Controller {
     }
 
     public void loadMiniMap() {
-        if (trainerStorageProvider.get().getRegionMap() != null) {
-            return;
-        }
         final Map[] map = {null};
         disposables.add(regionsService.getRegion(
                 trainerStorageProvider.get().getRegion()._id()
-        ).observeOn(FX_SCHEDULER).subscribe(result -> {
-                    map[0] = result.map();
+        ).observeOn(FX_SCHEDULER).subscribe(region -> {
+                    map[0] = region.map();
                     for (TileSet tileSet : map[0].tilesets()) {
                         final String mapName = getFileName(tileSet.source());
                         disposables.add(presetsService.getTilesetImage(mapName)
                                 .doOnNext(image -> tileSetImages.put(mapName, image))
                                 .flatMap(image -> presetsService.getTileset(mapName).observeOn(FX_SCHEDULER))
                                 .doOnNext(tileset -> tileSetJsons.put(mapName, tileset))
-                                .observeOn(FX_SCHEDULER).subscribe(image -> {
-                                    setCanvasSettings(map[0], miniMapCanvas);
+                                .observeOn(FX_SCHEDULER).subscribe(result -> {
+                                    setCanvasSettings(map[0], miniMapCanvas, true);
                                     for (TileSet tileSet1 : map[0].tilesets()) {
                                         renderMap(map[0], tileSetImages.get(getFileName(tileSet1.source())), tileSetJsons.get(getFileName(tileSet1.source())),
                                                 tileSet1, map[0].tilesets().size() > 1, true);
@@ -1347,19 +1344,8 @@ public class IngameController extends Controller {
             miniMapVBox = new VBox();
             miniMapVBox.getStyleClass().add("miniMapContainer");
             miniMapVBox.setPadding(new Insets(0, 0, 8, 0));
-            ingameMiniMapController.init(this, app, miniMapCanvas);
+            ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox);
             miniMapVBox.getChildren().add(ingameMiniMapController.render());
-
-            Button closeButton = new Button();
-            closeButton.setId("closeButton");
-            closeButton.setText(resources.getString("CLOSE"));
-            closeButton.getStyleClass().add("welcomeSceneButton");
-            closeButton.setOnAction(event -> {
-                        root.getChildren().remove(miniMapVBox);
-                        buttonsDisable(false);
-                    }
-            );
-            miniMapVBox.getChildren().add(closeButton);
         }
         root.getChildren().add(miniMapVBox);
         miniMapVBox.requestFocus();
