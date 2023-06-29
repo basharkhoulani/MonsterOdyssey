@@ -18,6 +18,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.USER_STATUS_ONLINE;
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,7 +39,8 @@ class LoginControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        loginController.setValues(bundle, null, null, loginController, app);
+        Preferences preferences = mock(Preferences.class);
+        loginController.setValues(bundle, preferences, null, loginController, app);
         app.start(stage);
         app.show(loginController);
         stage.requestFocus();

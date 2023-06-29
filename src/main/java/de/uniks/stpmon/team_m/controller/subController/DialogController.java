@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.scene.text.Text;
@@ -10,13 +11,13 @@ import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Objects;
-import java.util.Random;
-
 import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
 
 public class DialogController extends Controller {
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
+    @Inject
+    IngameController ingameController;
 
     private final Trainer npc;
     private final boolean alreadyEncountered;
@@ -29,12 +30,14 @@ public class DialogController extends Controller {
     private boolean alreadySeenNurseDialog = false;
     private boolean wantsHeal;
     private boolean noMons;
+    private boolean starterSelected = false;
 
     @Inject
-    public DialogController(Trainer npc, TextFlow dialogTextFlow, boolean alreadyEncountered, NpcTextManager npcTextManager, Trainer player) {
+    public DialogController(Trainer npc, TextFlow dialogTextFlow, boolean alreadyEncountered, NpcTextManager npcTextManager, Trainer player, IngameController ingameController) {
         this.npc = npc;
         this.alreadyEncountered = alreadyEncountered;
         this.npcTextManager = npcTextManager;
+        this.ingameController = ingameController;
 
         try {
             // check if npc can heal
@@ -46,8 +49,9 @@ public class DialogController extends Controller {
                     this.npcTexts = npcTextManager.getNpcTexts("Nurse");
                 }
             } else {
-                // check if player already encountered player
-                if (alreadyEncountered) {
+                // check if player already encountered albert
+                // -- maybe this can be swapped with starters == null, but not all npc's have the starters attribute
+                if (Objects.equals(npc._id(), "645e32c6866ace359554a802") && alreadyEncountered) {
                     this.npcTexts = npcTextManager.getNpcTexts(npc._id() + "alreadyEncountered");
                 } else {
                     this.npcTexts = npcTextManager.getNpcTexts(npc._id());
@@ -69,14 +73,8 @@ public class DialogController extends Controller {
 
     /**
      * Method to continue the dialog.
-     * There are 5 possible return values:
      * @param specialInteraction Whether the player had a popup with a special interaction with a npc
-     *  @-1: Dialog is finished and the npc wasn't Prof. Albert, or he was already encountered
-     *  @0: Talked to Prof. Albert and selected the first monster  TODO
-     *  @1: Talked to Prof. Albert and selected the second monster  TODO
-     *  @2: Talked to Prof. Albert and selected the third monster  TODO
-     *  @3: Dialog isn't finished yet
-     * @return An int based on some factors, see method description
+     * @return A continueDialogReturnValue, which determines what happens after the dialog
      */
     public Constants.ContinueDialogReturnValues continueDialog(Constants.DialogSpecialInteractions specialInteraction) {
         // check if a special interaction has been triggered
@@ -105,14 +103,17 @@ public class DialogController extends Controller {
                 case starterSelection0 -> {
                     this.currentText.setText(npcTextManager.getSingleNpcText("NPC.ALBERT.CHOSE.MONSTER"));
                     this.starterSelection = 0;
+                    this.starterSelected = true;
                 }
                 case starterSelection1 -> {
                     this.currentText.setText(npcTextManager.getSingleNpcText("NPC.ALBERT.CHOSE.MONSTER"));
                     this.starterSelection = 1;
+                    this.starterSelected = true;
                 }
                 case starterSelection2 -> {
                     this.currentText.setText(npcTextManager.getSingleNpcText("NPC.ALBERT.CHOSE.MONSTER"));
                     this.starterSelection = 2;
+                    this.starterSelected = true;
                 }
             }
             return dialogNotFinished;
@@ -128,13 +129,7 @@ public class DialogController extends Controller {
                 }
             }
 
-            if (npc.npc().canHeal()) {
-                return spokenToNurse;
-            }
-
-            if (Objects.equals(this.npc._id(), "645e32c6866ace359554a802") && !this.alreadyEncountered) {
-                // TODO remove this line when implementing albert special interaction
-                this.starterSelection = new Random().nextInt(0, 2);
+            if (starterSelected) {
                 switch (starterSelection) {
                     case 0 -> {
                         return albertDialogFinished0;
@@ -146,6 +141,19 @@ public class DialogController extends Controller {
                         return albertDialogFinished2;
                     }
                 }
+            }
+
+            if (npc.npc().canHeal()) {
+                return spokenToNurse;
+            }
+
+            if (npc.npc().encounterOnTalk()) {
+                return encounterOnTalk;
+            }
+
+            if (Objects.equals(this.npc._id(), "645e32c6866ace359554a802") && !this.alreadyEncountered) {
+                ingameController.showStarterSelection(this.npc.npc().starters());
+                return dialogNotFinished;
             } else {
                 return dialogFinishedTalkToTrainer;
             }
@@ -153,6 +161,5 @@ public class DialogController extends Controller {
             this.currentText.setText(npcTexts[currentTextIndex]);
             return dialogNotFinished;
         }
-        return dialogFinishedNoTalkToTrainer;
     }
 }

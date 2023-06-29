@@ -38,6 +38,8 @@ public class IngameSettingsController extends Controller {
     Provider<IngameController> ingameControllerProvider;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
+    @Inject
+    Provider<ChangeAudioController> changeAudioControllerProvider;
 
     @Inject
     public IngameSettingsController() {
@@ -53,6 +55,8 @@ public class IngameSettingsController extends Controller {
     }
 
     public void openAudioSettings() {
+        ingameController.root.getChildren().remove(ingameVbox);
+        ingameController.showChangeAudioSettings();
     }
 
     public void openKeybindings() {
