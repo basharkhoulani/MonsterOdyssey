@@ -91,35 +91,14 @@ public class EncounterController extends Controller {
 
     public void init() {
         super.init();
-        regionId = encounterOpponentStorageProvider.get().getRegionId();
-        encounterId = encounterOpponentStorageProvider.get().getEncounterId();
-        trainerId = trainerStorageProvider.get().getTrainer()._id();
-        System.out.println("Region: " + regionId + " Encounter: " + encounterId);
-        disposables.add(regionEncountersService.getEncounter(regionId, encounterId)
-                .observeOn(FX_SCHEDULER).subscribe(encounter -> {
-                    encounterOpponentStorageProvider.get().setWild(encounter.isWild());
-                    System.out.println("response: " + encounter.isWild());
-                    System.out.println("saved: " + encounterOpponentStorageProvider.get().isWild());
-
-                    }, error -> error.printStackTrace()));
-
+        System.out.println("EncounterController init");
+        System.out.println(encounterOpponentStorageProvider.get().getSelfOpponent());
+        System.out.println(encounterOpponentStorageProvider.get().getEnemyOpponent());
 
         battleMenuController.init();
     }
 
-    /*
     public void ex(){
-        encounterOpponentStorageProvider.get().setOpponentsInStorage(os);
-        System.out.println(os.size());
-        for (Opponent o : os) {
-            if(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
-                encounterOpponentStorageProvider.get().setSelfOpponent(o);
-                System.out.println("Set SelfOpponent");
-            } else {
-                encounterOpponentStorageProvider.get().setEnemyOpponent(o);
-                System.out.println("Set EnemyOpponent");
-            }
-        }
         if(!encounterOpponentStorageProvider.get().isWild()){
             String enemyTrainerId = encounterOpponentStorageProvider.get().getEnemyOpponent().trainer();
             disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)
@@ -135,7 +114,6 @@ public class EncounterController extends Controller {
                         Throwable::printStackTrace));
     }
 
-     */
 
     public String getTitle() {
         return resources.getString("ENCOUNTER");

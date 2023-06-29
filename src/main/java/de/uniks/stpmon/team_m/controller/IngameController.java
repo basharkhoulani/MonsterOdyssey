@@ -395,6 +395,7 @@ public class IngameController extends Controller {
         //Setup Encounter
         checkIfEncounterAlreadyExist();
         listenToEncounter();
+        listenToOpponents();
         encounterOpponentStorage.setRegionId(trainerStorageProvider.get().getRegion()._id());
 
 
@@ -963,13 +964,8 @@ public class IngameController extends Controller {
                         System.out.println("Encounter created at Websocket encounterlistener: " + encounter._id());
                         disposables.add(encounterOpponentsService.getTrainerOpponents(regionId, trainerId)
                                 .observeOn(FX_SCHEDULER).subscribe(os -> {
-                                    opponents.clear();
-                                    opponents.setAll(os);
-                                    System.out.println("Send the message to the server and get the response");
-                                    System.out.println("Size of Opponents" + opponents.size());
-                                    if(opponents.size() != 0){
-                                        encounterOpponentStorage.setEncounterId(opponents.get(0).encounter());
-                                        showEncounterInfoWindow(opponents.get(0).encounter());
+                                    if(os.size() != 0){
+                                        encounterOpponentStorage.setEncounterId(os.get(0).encounter());
                                     }
                                 }
                         ));
@@ -981,38 +977,55 @@ public class IngameController extends Controller {
         );
     }
 
-    private void showEncounterInfoWindow(String encounterId) {
+    public void listenToOpponents() {
+        disposables.add(eventListener.get().listen("encounters.*.opponents.*.*", Opponent.class)
+                .observeOn(FX_SCHEDULER).subscribe(opponentEvent -> {
+                    final Opponent opponent = opponentEvent.data();
+                    switch (opponentEvent.suffix()) {
+                        case "created" -> {
+                            System.out.println("Opponent created at Websocket encounterlistener: " + opponent._id());
+                            opponents.add(opponent);
+                        }
+                        case "deleted" -> opponents.removeIf(o -> o._id().equals(opponent._id()));
+                    }
+                    for (Opponent o : opponents) {
+                        if(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
+                            encounterOpponentStorage.setSelfOpponent(o);
+                            encounterOpponentStorage.setEncounterId(o.encounter());
+                        }
+                    }
+                    for (Opponent o : opponents) {
+                        if(o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
+                            encounterOpponentStorage.setEnemyOpponent(o);
+                        }
+                    }
+                    if(encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponent() != null) {
+                        showEncounterInfoWindow();
+                    }
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                })
+        );
+    }
+
+    private void showEncounterInfoWindow() {
         System.out.println("show Dialogfenster");
-        showEncounterScene(encounterId);
+        showEncounterScene();
     }
 
-    private void showEncounterScene(String encounterId) {
-        String regionId = trainerStorageProvider.get().getTrainer().region();
-        disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, encounterId)
-                .observeOn(FX_SCHEDULER).subscribe(opponents -> {
-                    System.out.println(opponents.size());
-                    app.show(encounterControllerProvider.get());
-                }, error -> error.printStackTrace()));
+    private void showEncounterScene() {
+        app.show(encounterControllerProvider.get());
     }
 
-    private void checkIfEncounterAlreadyExist(){
+    private void checkIfEncounterAlreadyExist() {
         String regionId = trainerStorageProvider.get().getRegion()._id();
         String trainerId = trainerStorageProvider.get().getTrainer()._id();
         disposables.add(encounterOpponentsService.getTrainerOpponents(regionId, trainerId)
                 .observeOn(FX_SCHEDULER).subscribe(opponentResults -> {
-                    opponents.clear();
-                    opponents.setAll(opponentResults);
-                    System.out.println("render send message and get response");
-                    System.out.println("Size of opponents: " + opponents.size());
-                    if(opponents.size() != 0) {
-                        // check if there is an encounter already
+                    if (opponentResults.size() != 0) {
                         encounterOpponentStorage.setEncounterId(opponents.get(0).encounter());
-                        System.out.println("You are already in an encounter " + encounterOpponentStorage.getEncounterId());
-                        // current solution: delete the opponents
-
-                        System.out.println(opponents.get(0)._id());
-
-                        showEncounterInfoWindow(opponents.get(0).encounter());
+                        System.out.println("You are already in an encounter " + opponentResults.get(0).encounter());
                     }
                 }, error -> {
                     showError(error.getMessage());
