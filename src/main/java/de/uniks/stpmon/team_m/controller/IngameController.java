@@ -5,11 +5,9 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
+import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.dto.Region;
-import de.uniks.stpmon.team_m.service.AreasService;
-import de.uniks.stpmon.team_m.service.MessageService;
-import de.uniks.stpmon.team_m.service.PresetsService;
-import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.Position;
@@ -47,7 +45,6 @@ import javafx.scene.text.TextFlow;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -56,7 +53,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
 import java.util.Objects;
 
@@ -134,6 +131,8 @@ public class IngameController extends Controller {
     @Inject
     TrainersService trainersService;
     @Inject
+    MonstersService monstersService;
+    @Inject
     Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
     @Inject
     Provider<ChangeAudioController> changeAudioControllerProvider;
@@ -183,9 +182,9 @@ public class IngameController extends Controller {
     private VBox miniMapVBox;
     private StackPane dialogStackPane;
     private VBox starterSelectionVBox;
-    private boolean movmentDisabled;
     private NotificationListHandyController notificationListHandyController;
     private StackPane notificationHandyStackPane;
+    private boolean movementDisabled;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -214,7 +213,7 @@ public class IngameController extends Controller {
                 if (inSettings) {
                     return;
                 }
-                if(!isPaused){
+                if (!isPaused) {
                     pauseGame();
                 } else {
                     ingamePauseMenuController.resumeGame();
@@ -231,7 +230,7 @@ public class IngameController extends Controller {
                 return;
             }
 
-            if (movmentDisabled) {
+            if (movementDisabled) {
                 return;
             }
 
@@ -384,7 +383,7 @@ public class IngameController extends Controller {
                         add(offsetToNotShowPhoneInScreen)
         );
 
-        if(!GraphicsEnvironment.isHeadless()){
+        if (!GraphicsEnvironment.isHeadless()) {
             smallHandyImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(smallHandyImage)).toString()));
             monsterForHandyImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString()));
             notificationBell.setImage(new Image(Objects.requireNonNull(App.class.getResource(notificationBellImage)).toString()));
@@ -811,7 +810,8 @@ public class IngameController extends Controller {
             stackPane.setEffect(null);
         }
         isPaused = set;
-        movmentDisabled = set;
+        movementDisabled = set;
+        inNpcPopup = set;
         monstersButton.setDisable(set);
         pauseButton.setDisable(set);
         showChatButton.setDisable(set);
@@ -908,7 +908,12 @@ public class IngameController extends Controller {
                                 trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y(), trainer.direction()));
                             }
                         }
-                        case "updated" -> updateTrainer(trainers, trainer);
+                        case "updated" -> {
+                            updateTrainer(trainers, trainer);
+                            if (trainerStorageProvider.get().getTrainer()._id().equals(trainer._id())) {
+                                monstersListControllerProvider.get().init();
+                            }
+                        }
                         case "deleted" -> trainers.removeIf(t -> t._id().equals(trainer._id()));
                     }
                 }, error -> showError(error.getMessage()))
@@ -1117,7 +1122,7 @@ public class IngameController extends Controller {
                             npc._id(),
                             selection
                     )
-            ).subscribe());
+            ).observeOn(FX_SCHEDULER).subscribe());
         }
     }
 
@@ -1135,14 +1140,14 @@ public class IngameController extends Controller {
                 // TODO @Cheng here you have to put your logic connected with the encounter
                 endDialog(0, true);
             }
-            default -> {}
+            default -> {
+            }
         }
     }
 
     public void endDialog(int selectionValue, boolean encounterNpc) {
         this.dialogController.destroy();
         inDialog = false;
-//        stackPane.getChildren().remove(dialogVBox);
         stackPane.getChildren().remove(dialogStackPane);
 
         if (encounterNpc) {
@@ -1299,32 +1304,44 @@ public class IngameController extends Controller {
     }
 
     public void showStarterSelection(List<String> starters) {
+        final boolean[] isSelection = {true};
         IngameStarterMonsterController ingameStarterMonsterController = ingameStarterMonsterControllerProvider.get();
-        if (starterSelectionVBox == null) {
-            starterSelectionVBox = new VBox();
-            starterSelectionVBox.getStyleClass().add("miniMapContainer");
-            starterSelectionVBox.setStyle("-fx-max-height: 350px; -fx-max-width: 550px");
-            starterSelectionVBox.setPadding(new Insets(0, 0, 8, 0));
-            ingameStarterMonsterController.init(this, starterSelectionVBox, app, starters);
-            starterSelectionVBox.getChildren().add(ingameStarterMonsterController.render());
+        starterSelectionVBox = new VBox();
+        starterSelectionVBox.getStyleClass().add("miniMapContainer");
+        starterSelectionVBox.setStyle("-fx-max-height: 350px; -fx-max-width: 550px");
+        starterSelectionVBox.setPadding(new Insets(0, 0, 8, 0));
+        ingameStarterMonsterController.init(this, app, starters);
+        starterSelectionVBox.getChildren().add(ingameStarterMonsterController.render());
 
-            Button okButton = new Button();
-            okButton.setId("okButton");
-            okButton.setText(resources.getString("OK"));
-            okButton.getStyleClass().add("welcomeSceneButton");
-            okButton.setStyle("-fx-background-color: #e0ecfc");
-            okButton.setOnAction(event -> {
-                        root.getChildren().remove(starterSelectionVBox);
-                        buttonsDisable(false);
-                        notificationBell.setVisible(true);
-                    }
-            );
-            starterSelectionVBox.getChildren().add(okButton);
-        }
+        Button okButton = new Button();
+        okButton.setId("okButton");
+        okButton.setText(resources.getString("OK"));
+        okButton.getStyleClass().add("welcomeSceneButton");
+        okButton.setStyle("-fx-background-color: #e0ecfc");
+        okButton.setOnAction(event -> {
+            if (isSelection[0]) {
+                isSelection[0] = false;
+                AnchorPane starterAnchorPane = (AnchorPane) starterSelectionVBox.getChildren().get(0);
+                Label starterLabel = (Label) starterAnchorPane.getChildren().get(0);
+                starterLabel.setText(resources.getString("NEW.MONSTER.ADDED"));
+                starterAnchorPane.getChildren().remove(3);
+                starterAnchorPane.getChildren().remove(2);
+            } else {
+                root.getChildren().remove(starterSelectionVBox);
+                buttonsDisable(false);
+                switch (ingameStarterMonsterController.index - 1) {
+                    case 0 -> continueTrainerDialog(DialogSpecialInteractions.starterSelection0);
+                    case 1 -> continueTrainerDialog(DialogSpecialInteractions.starterSelection1);
+                    case 2 -> continueTrainerDialog(DialogSpecialInteractions.starterSelection2);
+                }
+            }
+        });
+        starterSelectionVBox.getChildren().add(okButton);
         root.getChildren().add(starterSelectionVBox);
         starterSelectionVBox.requestFocus();
         buttonsDisable(true);
     }
+
 
     @Override
     public void destroy() {
