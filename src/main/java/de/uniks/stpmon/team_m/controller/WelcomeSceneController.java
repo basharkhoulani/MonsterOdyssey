@@ -74,8 +74,11 @@ public class WelcomeSceneController extends Controller {
     @Override
     public void init() {
         if (!GraphicsEnvironment.isHeadless()) {
-            AudioService.getInstance().stopSound();
-            AudioService.getInstance().playSound(WELCOME_SOUND);
+            if (!AudioService.getInstance().getCurrentSound().equals(WELCOME_SOUND)) {
+                AudioService.getInstance().stopSound();
+                AudioService.getInstance().playSound(WELCOME_SOUND);
+                AudioService.getInstance().setCurrentSound(WELCOME_SOUND);
+            }
         }
     }
 
@@ -190,10 +193,6 @@ public class WelcomeSceneController extends Controller {
                             disposables.add(presetsServiceProvider.get().getCharacter(result.image()).observeOn(FX_SCHEDULER).subscribe(
                                     response -> {
                                         trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
-                                        if (!GraphicsEnvironment.isHeadless()) {
-                                            AudioService.getInstance().stopSound();
-                                            AudioService.getInstance().playSound(CITY_SOUND);
-                                        }
                                         app.show(ingameControllerProvider.get());
                                     },
                                     error -> {
