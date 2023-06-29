@@ -1129,9 +1129,22 @@ public class IngameController extends Controller {
 
         switch (continueDialogReturn) {
             case dialogFinishedTalkToTrainer -> endDialog(-1, true);
-            case albertDialogFinished0 -> endDialog(0, true);
-            case albertDialogFinished1 -> endDialog(1, true);
-            case albertDialogFinished2 -> endDialog(2, true);
+            case albertDialogFinished0 -> {
+                endDialog(0, true);
+                this.notificationListHandyController.displayStarterMessages();
+                notificationBell.setVisible(true);
+            }
+            case albertDialogFinished1 -> {
+                endDialog(1, true);
+                this.notificationListHandyController.displayStarterMessages();
+                notificationBell.setVisible(true);
+
+            }
+            case albertDialogFinished2 -> {
+                endDialog(2, true);
+                this.notificationListHandyController.displayStarterMessages();
+                notificationBell.setVisible(true);
+            }
             case dialogFinishedNoTalkToTrainer -> endDialog(0, false);
             case spokenToNurse -> createNurseHealPopup();
             case encounterOnTalk -> {
