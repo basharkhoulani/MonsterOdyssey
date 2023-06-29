@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.utils;
 
 import de.uniks.stpmon.team_m.dto.Monster;
+import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.dto.Trainer;
 
@@ -19,7 +20,9 @@ public class EncounterOpponentStorage {
     //Die Opponent mit Id der Gegner
     private Trainer opponentTrainer;
     private Monster currentTrainerMonster;
+    private MonsterTypeDto currentTrainerMonsterType;
     private Monster currentEnemyMonster;
+    private MonsterTypeDto currentEnemyMonsterType;
     private String regionId;
     private boolean isWild;
     private int encounterSize;
@@ -106,5 +109,21 @@ public class EncounterOpponentStorage {
 
     public void setCurrentEnemyMonster(Monster currentEnemyMonster) {
         this.currentEnemyMonster = currentEnemyMonster;
+    }
+
+    public MonsterTypeDto getCurrentTrainerMonsterType() {
+        return currentTrainerMonsterType;
+    }
+
+    public void setCurrentTrainerMonsterType(MonsterTypeDto currentTrainerMonsterType) {
+        this.currentTrainerMonsterType = currentTrainerMonsterType;
+    }
+
+    public MonsterTypeDto getCurrentEnemyMonsterType() {
+        return currentEnemyMonsterType;
+    }
+
+    public void setCurrentEnemyMonsterType(MonsterTypeDto currentEnemyMonsterType) {
+        this.currentEnemyMonsterType = currentEnemyMonsterType;
     }
 }

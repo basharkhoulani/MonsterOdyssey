@@ -110,8 +110,8 @@ public class EncounterController extends Controller {
         System.out.println("EncounterController.render");
         if (!GraphicsEnvironment.isHeadless()) {
             // Sprite
-            showTrainerImage();
-            showMonsterImage();
+            showTrainer();
+            showMonster();
         }
         // render for subcontroller
         battleMenuController.init(this, battleMenu);
@@ -121,38 +121,33 @@ public class EncounterController extends Controller {
         return parent;
     }
 
-    private void showTrainerImage(){
+    private void showTrainer(){
         mySprite.setImage(ImageProcessor.showScaledFrontCharacter(trainerStorageProvider.get().getTrainer().image()));
         if(!encounterOpponentStorage.isWild()){
             String enemyTrainerId = encounterOpponentStorage.getEnemyOpponent().trainer();
             disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)
                     .observeOn(FX_SCHEDULER).subscribe(trainer -> {
                         encounterOpponentStorage.setOpponentTrainer(trainer);
+                        battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + trainer.name());
                         opponentTrainer.setImage(ImageProcessor.showScaledFrontCharacter(trainer.image()));
                     }, Throwable::printStackTrace));
         }
     }
 
-    public void initEncounterOpponentStorage(){
-        if(!encounterOpponentStorage.isWild()){
-            String enemyTrainerId = encounterOpponentStorage.getEnemyOpponent().trainer();
-            disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)
-                    .observeOn(FX_SCHEDULER).subscribe(trainer -> {
-                        encounterOpponentStorage.setOpponentTrainer(trainer);
-                    }, Throwable::printStackTrace));
-        }
-        disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getSelfOpponent().monster())
-                .observeOn(FX_SCHEDULER).subscribe(monster -> encounterOpponentStorage.setCurrentTrainerMonster(monster),
-                        Throwable::printStackTrace));
-        disposables.add(monstersService.getMonster(regionId, encounterOpponentStorage.getEnemyOpponent().trainer(), encounterOpponentStorage.getEnemyOpponent().monster())
-                .observeOn(FX_SCHEDULER).subscribe(monster -> encounterOpponentStorage.setCurrentTrainerMonster(monster),
-                        Throwable::printStackTrace));
-    }
-
-    private void showMonsterImage() {
+    private void showMonster() {
+        // self monster
         disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getSelfOpponent().monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
                     encounterOpponentStorage.setCurrentTrainerMonster(monster);
+                    myLevelBar.setProgress(monster.level() / requiredExperience(monster.level()));
+                    myLevel.setText(monster.level() + " LVL");
+
+                    //write monster name
+                    disposables.add(presetsService.getMonster(monster.type())
+                            .observeOn(FX_SCHEDULER).subscribe(m -> {
+                                myMonsterName.setText(m.name());
+                                encounterOpponentStorage.setCurrentTrainerMonsterType(m);
+                            }, Throwable::printStackTrace));
                     disposables.add(presetsService.getMonsterImage(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(mImage -> {
                                 myMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
@@ -160,15 +155,29 @@ public class EncounterController extends Controller {
                             }, Throwable::printStackTrace));
                         }, Throwable::printStackTrace));
 
+        // enemy monster
         disposables.add(monstersService.getMonster(regionId, encounterOpponentStorage.getEnemyOpponent().trainer(), encounterOpponentStorage.getEnemyOpponent().monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
                     encounterOpponentStorage.setCurrentEnemyMonster(monster);
+                    opponentLevel.setText(monster.level() + " LVL");
+                    disposables.add(presetsService.getMonster(monster.type())
+                            .observeOn(FX_SCHEDULER).subscribe(m -> {
+                                opponentMonsterName.setText(m.name());
+                                encounterOpponentStorage.setCurrentEnemyMonsterType(m);
+                                if(encounterOpponentStorage.isWild()){
+                                    battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + m.name());
+                                }
+                            }, Throwable::printStackTrace));
                     disposables.add(presetsService.getMonsterImage(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(mImage -> {
                                 enemyMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
                                 opponentMonster.setImage(enemyMonsterImage);
                             }, Throwable::printStackTrace));
                         }, Throwable::printStackTrace));
+    }
+
+    public int requiredExperience(int currentLevel) {
+        return (int) (Math.pow(currentLevel, 3) - Math.pow(currentLevel - 1, 3));
     }
 
 
