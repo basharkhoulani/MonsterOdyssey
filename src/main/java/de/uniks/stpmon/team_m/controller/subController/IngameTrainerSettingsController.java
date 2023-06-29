@@ -15,7 +15,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -25,6 +24,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.awt.*;
+
+import static de.uniks.stpmon.team_m.Constants.PREMADE_CHARACTERS;
 
 @Singleton
 public class IngameTrainerSettingsController extends Controller {
@@ -73,6 +74,9 @@ public class IngameTrainerSettingsController extends Controller {
     protected final CompositeDisposable disposables = new CompositeDisposable();
     private VBox ingameVbox;
     private IngameDeleteTrainerWarningController ingameDeleteTrainerWarningController;
+    public int index = 1;
+    final private String[] characters = PREMADE_CHARACTERS;
+    public String selectedCharacter = characters[index - 1];
 
 
     @Inject
@@ -101,7 +105,8 @@ public class IngameTrainerSettingsController extends Controller {
         deleteTrainerWarningVbox.requestFocus();
         buttonsDisableTrainer(true);
     }
-    public void deleteTrainer(){
+
+    public void deleteTrainer() {
         disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).
                 observeOn(FX_SCHEDULER).subscribe(end -> {
                     trainerStorageProvider.get().setTrainer(null);
@@ -115,7 +120,7 @@ public class IngameTrainerSettingsController extends Controller {
         app.show(mainMenuController);
     }
 
-    public void buttonsDisableTrainer(boolean set){
+    public void buttonsDisableTrainer(boolean set) {
         deleteTrainerButton.setDisable(set);
         updateTrainerButton.setDisable(set);
         trainerNameEditButton.setDisable(set);
@@ -125,10 +130,11 @@ public class IngameTrainerSettingsController extends Controller {
     }
 
     private void loadAndSetTrainerImage() {
-        Image trainerChunk = trainerStorageProvider.get().getTrainerSpriteChunk();
+        String sprite = trainerStorageProvider.get().getTrainerSprite();
+        String subString = sprite.substring(sprite.length() - 6, sprite.length() - 4);
+        index = Integer.parseInt(subString);
         if (!GraphicsEnvironment.isHeadless()) {
-            Image[] character = ImageProcessor.cropTrainerImages(trainerChunk,2, false);
-            trainerAvatarImageView.setImage(character[0]);
+            trainerAvatarImageView.setImage(ImageProcessor.showScaledFrontCharacter(sprite));
         }
     }
 
@@ -144,10 +150,25 @@ public class IngameTrainerSettingsController extends Controller {
     public void editTrainerName() {
     }
 
+    public void showCharacter() {
+        trainerAvatarImageView.setImage(ImageProcessor.showScaledFrontCharacter(characters[index - 1]));
+        selectedCharacter = characters[index - 1];
+    }
+
     public void arrowLeftClick() {
+        index--;
+        if (index < 1) {
+            index = index + characters.length;
+        }
+        showCharacter();
     }
 
     public void arrowRightClick() {
+        index++;
+        if (index > characters.length) {
+            index = index - characters.length;
+        }
+        showCharacter();
     }
 
     public void updateTrainer() {
