@@ -913,6 +913,7 @@ public class IngameController extends Controller {
                             }
                             // albert
                             if (trainer._id().equals("645e32c6866ace359554a802")) {
+                                trainerPositionHashMap.entrySet().removeIf(trainerPositionEntry -> trainerPositionEntry.getKey()._id().equals(trainer._id()));
                                 trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y(), trainer.direction()));
                             }
                         }
