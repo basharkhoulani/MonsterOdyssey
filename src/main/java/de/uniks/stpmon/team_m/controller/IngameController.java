@@ -66,8 +66,6 @@ public class IngameController extends Controller {
     private static final int SCALE_FACTOR = 2;
 
     @FXML
-    public Button helpSymbol;
-    @FXML
     public Button monstersButton;
     @FXML
     public Button pauseButton;
@@ -388,6 +386,8 @@ public class IngameController extends Controller {
             monsterForHandyImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString()));
             notificationBell.setImage(new Image(Objects.requireNonNull(App.class.getResource(notificationBellImage)).toString()));
         }
+
+        specificSounds();
 
         return parent;
     }
@@ -1360,5 +1360,26 @@ public class IngameController extends Controller {
         root.getChildren().add(changeAudioVBox);
         changeAudioVBox.requestFocus();
         buttonsDisable(true);
+    }
+
+    public void specificSounds() {
+        if(!GraphicsEnvironment.isHeadless()) {
+            disposables.add(areasService.getArea(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer().area()).
+                    observeOn(FX_SCHEDULER).subscribe(area -> {
+                        if(area.name().contains("Route")) {
+                            AudioService.getInstance().stopSound();
+                            AudioService.getInstance().playSound(ROUTE_SOUND);
+                            AudioService.getInstance().setCurrentSound(ROOMS_SOUND);
+                        } else if(area.map().infinite()) {
+                            AudioService.getInstance().stopSound();
+                            AudioService.getInstance().playSound(CITY_SOUND);
+                            AudioService.getInstance().setCurrentSound(CITY_SOUND);
+                        } else {
+                            AudioService.getInstance().stopSound();
+                            AudioService.getInstance().playSound(ROOMS_SOUND);
+                            AudioService.getInstance().setCurrentSound(ROOMS_SOUND);
+                        }
+                    }, error -> this.showError(error.getMessage())));
+        }
     }
 }
