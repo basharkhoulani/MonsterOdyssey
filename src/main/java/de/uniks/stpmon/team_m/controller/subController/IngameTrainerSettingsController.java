@@ -26,8 +26,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.PREMADE_CHARACTERS;
 
@@ -182,9 +180,6 @@ public class IngameTrainerSettingsController extends Controller {
 
     public void updateTrainer() {
         TrainerStorage trainerStorage = trainerStorageProvider.get();
-        List<String> monsters = new ArrayList<>();
-        trainerStorage.getMonsters().forEach(monster -> monsters.add(monster._id()));
-
         String trainerName = trainerStorage.getTrainerName();
         if (!trainerNameTextfield.getText().equals(trainerStorage.getTrainerName())) {
             trainerName = trainerNameTextfield.getText();
@@ -196,7 +191,7 @@ public class IngameTrainerSettingsController extends Controller {
                     trainerStorage.getTrainer()._id(),
                     trainerName,
                     selectedCharacter,
-                    monsters
+                    null
             ).observeOn(FX_SCHEDULER).subscribe(trainer -> {
                 trainerStorage.setTrainer(trainer);
                 trainerStorage.setTrainerName(trainer.name());
