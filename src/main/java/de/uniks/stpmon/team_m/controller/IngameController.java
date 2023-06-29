@@ -1335,6 +1335,7 @@ public class IngameController extends Controller {
                     case 2 -> continueTrainerDialog(DialogSpecialInteractions.starterSelection2);
                 }
             }
+            notificationBell.setVisible(true);
         });
         starterSelectionVBox.getChildren().add(okButton);
         root.getChildren().add(starterSelectionVBox);
