@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 import static io.reactivex.rxjava3.core.Observable.empty;
 import static io.reactivex.rxjava3.core.Observable.just;
@@ -85,7 +86,8 @@ public class IngameControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        ingameController.setValues(bundle, null, null, ingameController, app);
+        Preferences preferences = mock(Preferences.class);
+        ingameController. setValues (bundle, preferences, null, ingameController, app);
 
         UDPEventListener udpEventListener = mock(UDPEventListener.class);
         Mockito.when(udpEventListenerProvider.get()).thenReturn(udpEventListener);
@@ -195,7 +197,6 @@ public class IngameControllerTest extends ApplicationTest {
                         new NPCInfo(false, false, false, true, null, null))
                 )
         ));
-        ingameController.setValues(bundle, null, null, ingameController, app);
         EventListener eventListenerMock = mock(EventListener.class);
         when(eventListener.get()).thenReturn(eventListenerMock);
         Message message = new Message("2023-05-30T12:01:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863",

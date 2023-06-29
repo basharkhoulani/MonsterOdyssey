@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.controller.MainMenuController;
+import de.uniks.stpmon.team_m.service.AudioService;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -12,6 +13,10 @@ import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import java.awt.*;
+
+import static de.uniks.stpmon.team_m.Constants.MENU_SOUND;
 
 public class IngamePauseMenuController extends Controller {
 
@@ -65,6 +70,8 @@ public class IngamePauseMenuController extends Controller {
 
     public void leaveGame() {
         ingameController.root.getChildren().remove(ingameVbox);
+        double volume = AudioService.getInstance().getVolume();
+        AudioService.getInstance().setVolume(volume);
         app.show(mainMenuControllerProvider.get());
     }
 }

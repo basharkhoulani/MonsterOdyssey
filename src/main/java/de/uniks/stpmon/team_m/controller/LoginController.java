@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.controller.subController.ChangeLanguageController;
+import de.uniks.stpmon.team_m.service.AudioService;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
@@ -13,11 +14,18 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import java.awt.*;
+import java.awt.Menu;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -51,6 +59,8 @@ public class LoginController extends Controller {
     public ImageView gameIcon;
     @FXML
     public Button languageSettings;
+    @FXML
+    public Button muteButton;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
@@ -89,6 +99,12 @@ public class LoginController extends Controller {
         super.init();
         changeLanguageController = new ChangeLanguageController();
         changeLanguageController.init();
+        if (!GraphicsEnvironment.isHeadless()){
+            if(AudioService.getInstance() != null && (AudioService.getInstance().getCurrentSound() == null)) {
+                AudioService.getInstance().playSound(MENU_SOUND);
+            }
+            //AudioService.getInstance().setVolume(preferences.getDouble("volume", 0.5));
+        }
     }
 
     /**
@@ -220,5 +236,17 @@ public class LoginController extends Controller {
         changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);
         dialog.getDialogPane().setContent(changeLanguageController.render());
         dialog.showAndWait();
+    }
+
+    public void muteOrUnmuteSound() {
+        if(AudioService.getInstance().checkMuted()) {
+            muteButton.getStyleClass().remove("unmuteSymbol");
+            muteButton.getStyleClass().add("muteSymbol");
+            AudioService.getInstance().unmuteSound();
+        } else {
+            muteButton.getStyleClass().remove("muteSymbol");
+            muteButton.getStyleClass().add("unmuteSymbol");
+            AudioService.getInstance().muteSound();
+        }
     }
 }
