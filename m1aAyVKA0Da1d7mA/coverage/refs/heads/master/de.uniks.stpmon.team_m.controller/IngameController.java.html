@@ -988,8 +988,8 @@ public class IngameController extends Controller {
     public void interactWithTrainer() {
 <span class="fc bfc" id="L989" title="All 2 branches covered.">        if (inDialog) {</span>
             try {
-<span class="fc bfc" id="L991" title="All 4 branches covered.">                if (this.currentNpc.npc().canHeal() &amp;&amp; trainerStorageProvider.get().getTrainer().team().size() == 0) {</span>
-<span class="fc" id="L992">                    continueTrainerDialog(DialogSpecialInteractions.nurseNoMons);</span>
+<span class="pc bpc" id="L991" title="1 of 4 branches missed.">                if (this.currentNpc.npc().canHeal() &amp;&amp; trainerStorageProvider.get().getTrainer().team().size() == 0) {</span>
+<span class="nc" id="L992">                    continueTrainerDialog(DialogSpecialInteractions.nurseNoMons);</span>
                 } else {
 <span class="fc" id="L994">                    continueTrainerDialog(null);</span>
                 }
@@ -1032,22 +1032,22 @@ public class IngameController extends Controller {
 <span class="fc" id="L1032">        int checkTileXForNurse = currentX;</span>
 <span class="fc" id="L1033">        int checkTileYForNurse = currentY;</span>
 
-<span class="pc bpc" id="L1035" title="4 of 5 branches missed.">        switch (direction) {</span>
-            case 0 -&gt; {                         // facing up
-<span class="fc" id="L1037">                checkTileY--;</span>
-<span class="fc" id="L1038">                checkTileYForNurse -= 2;</span>
+<span class="pc bpc" id="L1035" title="3 of 5 branches missed.">        switch (direction) {</span>
+            case 0 -&gt; {                         // facing right
+<span class="fc" id="L1037">                checkTileX++;</span>
+<span class="fc" id="L1038">                checkTileXForNurse += 2;</span>
 <span class="fc" id="L1039">            }</span>
-            case 1 -&gt; {                         // facing right
-<span class="nc" id="L1041">                checkTileX++;</span>
-<span class="nc" id="L1042">                checkTileXForNurse += 2;</span>
-<span class="nc" id="L1043">            }</span>
-            case 2 -&gt; {                         // facing down
-<span class="nc" id="L1045">                checkTileY++;</span>
-<span class="nc" id="L1046">                checkTileY += 2;</span>
+            case 1 -&gt; {                         // facing up
+<span class="fc" id="L1041">                checkTileY--;</span>
+<span class="fc" id="L1042">                checkTileYForNurse -= 2;</span>
+<span class="fc" id="L1043">            }</span>
+            case 2 -&gt; {                         // facing left
+<span class="nc" id="L1045">                checkTileX--;</span>
+<span class="nc" id="L1046">                checkTileXForNurse -= 2;</span>
 <span class="nc" id="L1047">            }</span>
-            case 3 -&gt; {                         // facing left
-<span class="nc" id="L1049">                checkTileX--;</span>
-<span class="nc" id="L1050">                checkTileXForNurse -= 2;</span>
+            case 3 -&gt; {                         // facing down
+<span class="nc" id="L1049">                checkTileY++;</span>
+<span class="nc" id="L1050">                checkTileYForNurse += 2;</span>
 <span class="nc" id="L1051">            }</span>
 <span class="nc" id="L1052">            default -&gt; System.err.println(&quot;Unknown direction for Trainer: &quot; + direction);</span>
         }
@@ -1059,18 +1059,18 @@ public class IngameController extends Controller {
         } else {
 <span class="fc" id="L1060">            Trainer nurseBehindCounter = searchHashedMapForTrainer(checkTileXForNurse, checkTileYForNurse);</span>
 
-<span class="pc bpc" id="L1062" title="1 of 2 branches missed.">            if (nurseBehindCounter == null) {</span>
-<span class="nc" id="L1063">                return null;</span>
+<span class="fc bfc" id="L1062" title="All 2 branches covered.">            if (nurseBehindCounter == null) {</span>
+<span class="fc" id="L1063">                return null;</span>
             }
 
             // maybe this if will throw an error in the future. I've looked into the server for all NPC's,
             // apparently almost all NPC's have the canHeal() boolean, but some only have walkRandomly().
             // If they don't have the canHeal(), it should be covered by this try/catch
             try {
-<span class="fc bfc" id="L1070" title="All 2 branches covered.">                if (nurseBehindCounter.npc().canHeal()) {</span>
+<span class="pc bpc" id="L1070" title="1 of 2 branches missed.">                if (nurseBehindCounter.npc().canHeal()) {</span>
 <span class="fc" id="L1071">                    return nurseBehindCounter;</span>
                 } else {
-<span class="fc" id="L1073">                    return null;</span>
+<span class="nc" id="L1073">                    return null;</span>
                 }
 <span class="nc" id="L1075">            } catch (Error e) {</span>
 <span class="nc" id="L1076">                System.err.println(&quot;NPC does not have the canHeal() attribute&quot;);</span>
