@@ -11,6 +11,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -19,6 +22,7 @@ import javafx.stage.StageStyle;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
@@ -69,8 +73,10 @@ public class WelcomeSceneController extends Controller {
 
     @Override
     public void init() {
-        AudioService.getInstance().stopSound();
-        AudioService.getInstance().playSound(WELCOME_SOUND);
+        if (!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().stopSound();
+            AudioService.getInstance().playSound(WELCOME_SOUND);
+        }
     }
 
     @Override
@@ -90,8 +96,10 @@ public class WelcomeSceneController extends Controller {
 
         switch (sceneNumber) {
             case 0 -> {
-                AudioService.getInstance().stopSound();
-                AudioService.getInstance().playSound(MENU_SOUND);
+                if(!GraphicsEnvironment.isHeadless()) {
+                    AudioService.getInstance().stopSound();
+                    AudioService.getInstance().playSound(MENU_SOUND);
+                }
                 app.show(mainMenuControllerProvider.get());
             }
             case 1 -> {
@@ -182,8 +190,10 @@ public class WelcomeSceneController extends Controller {
                             disposables.add(presetsServiceProvider.get().getCharacter(result.image()).observeOn(FX_SCHEDULER).subscribe(
                                     response -> {
                                         trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
-                                        AudioService.getInstance().stopSound();
-                                        AudioService.getInstance().playSound(CITY_SOUND);
+                                        if (!GraphicsEnvironment.isHeadless()) {
+                                            AudioService.getInstance().stopSound();
+                                            AudioService.getInstance().playSound(CITY_SOUND);
+                                        }
                                         app.show(ingameControllerProvider.get());
                                     },
                                     error -> {

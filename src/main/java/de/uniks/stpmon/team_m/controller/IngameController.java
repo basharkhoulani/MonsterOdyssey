@@ -64,7 +64,7 @@ public class IngameController extends Controller {
     private static final int DELAY = 100;
     private static final int DELAY_LONG = 500;
     private static final int SCALE_FACTOR = 2;
-    
+
     @FXML
     public Button monstersButton;
     @FXML
@@ -1342,18 +1342,20 @@ public class IngameController extends Controller {
     }
 
     public void specificSounds() {
-        disposables.add(areasService.getArea(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer().area()).
-                observeOn(FX_SCHEDULER).subscribe(area -> {
-                    if(area.name().contains("Route")) {
-                        AudioService.getInstance().stopSound();
-                        AudioService.getInstance().playSound(ROUTE_SOUND);
-                    } else if(area.map().infinite() && !(AudioService.getInstance().getCurrentSound().equals(CITY_SOUND))) {
-                        AudioService.getInstance().stopSound();
-                        AudioService.getInstance().playSound(CITY_SOUND);
-                    } else if (!area.map().infinite()){
-                        AudioService.getInstance().stopSound();
-                        AudioService.getInstance().playSound(ROOMS_SOUND);
-                    }
-                }, error -> this.showError(error.getMessage())));
+        if(!GraphicsEnvironment.isHeadless()) {
+            disposables.add(areasService.getArea(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer().area()).
+                    observeOn(FX_SCHEDULER).subscribe(area -> {
+                        if(area.name().contains("Route")) {
+                            AudioService.getInstance().stopSound();
+                            AudioService.getInstance().playSound(ROUTE_SOUND);
+                        } else if(area.map().infinite()) {
+                            AudioService.getInstance().stopSound();
+                            AudioService.getInstance().playSound(CITY_SOUND);
+                        } else {
+                            AudioService.getInstance().stopSound();
+                            AudioService.getInstance().playSound(ROOMS_SOUND);
+                        }
+                    }, error -> this.showError(error.getMessage())));
+        }
     }
 }

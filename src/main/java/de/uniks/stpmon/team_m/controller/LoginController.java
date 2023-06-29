@@ -14,11 +14,17 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import java.awt.*;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -92,9 +98,11 @@ public class LoginController extends Controller {
         super.init();
         changeLanguageController = new ChangeLanguageController();
         changeLanguageController.init();
-        AudioService.getInstance().playSound(MENU_SOUND);
-        AudioService.getInstance().setVolume(preferences.getDouble("volume", 0.5));
-        AudioService.getInstance().setCurrentSound(MENU_SOUND);
+        if (!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playSound(MENU_SOUND);
+            AudioService.getInstance().setVolume(preferences.getDouble("volume", 0.5));
+            AudioService.getInstance().setCurrentSound(MENU_SOUND);
+        }
     }
 
     /**

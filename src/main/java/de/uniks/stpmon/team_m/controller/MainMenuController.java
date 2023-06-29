@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.Objects;
 import java.util.prefs.Preferences;
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -112,6 +113,10 @@ public class MainMenuController extends Controller {
                         FriendListUtils.sortListView(friendsListView);
                     }, error -> showError(error.getMessage())));
 
+        }
+        //AudioService.getInstance().pauseSound();
+        if (!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playSound(MENU_SOUND);
         }
     }
 
@@ -246,10 +251,6 @@ public class MainMenuController extends Controller {
                                 response -> {
                                     trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
                                     destroy();
-                                    AudioService.getInstance().stopSound();
-                                    AudioService.getInstance().playSound(CITY_SOUND);
-                                    AudioService.getInstance().setVolume(preferences.getDouble("volume", 0.5));
-                                    AudioService.getInstance().setCurrentSound(CITY_SOUND);
                                     app.show(ingameControllerProvider.get());
                                 },
                                 error -> {
