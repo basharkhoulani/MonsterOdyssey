@@ -115,8 +115,7 @@ public class MainMenuController extends Controller {
 
         }
         if (!GraphicsEnvironment.isHeadless()) {
-            System.out.println(AudioService.getInstance().getCurrentSound());
-            if ((AudioService.getInstance().getCurrentSound() == null) || (AudioService.getInstance().getCurrentSound().equals("Nintendo_Style_Funny_Music_Loop_01.wav"))) {
+            if ((AudioService.getInstance().getCurrentSound() == null) || (AudioService.getInstance().getCurrentSound().equals(CITY_SOUND))) {
                 AudioService.getInstance().playSound(MENU_SOUND);
             }
         }

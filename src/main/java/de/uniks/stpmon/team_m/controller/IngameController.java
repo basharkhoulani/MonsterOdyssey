@@ -1348,12 +1348,15 @@ public class IngameController extends Controller {
                         if(area.name().contains("Route")) {
                             AudioService.getInstance().stopSound();
                             AudioService.getInstance().playSound(ROUTE_SOUND);
+                            AudioService.getInstance().setCurrentSound(ROOMS_SOUND);
                         } else if(area.map().infinite()) {
                             AudioService.getInstance().stopSound();
                             AudioService.getInstance().playSound(CITY_SOUND);
+                            AudioService.getInstance().setCurrentSound(CITY_SOUND);
                         } else {
                             AudioService.getInstance().stopSound();
                             AudioService.getInstance().playSound(ROOMS_SOUND);
+                            AudioService.getInstance().setCurrentSound(ROOMS_SOUND);
                         }
                     }, error -> this.showError(error.getMessage())));
         }
