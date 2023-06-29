@@ -45,14 +45,15 @@ public class SpriteAnimation extends AnimationTimer {
     }
 
     private void init() {
-        trainerStandingDown = ImageProcessor.cropTrainerImages(spriteChunk, 2, false);
-        trainerStandingUp = ImageProcessor.cropTrainerImages(spriteChunk, 0, false);
-        trainerStandingLeft = ImageProcessor.cropTrainerImages(spriteChunk, 3, false);
-        trainerStandingRight = ImageProcessor.cropTrainerImages(spriteChunk, 1, false);
-        trainerWalkingUp = ImageProcessor.cropTrainerImages(spriteChunk, 0, true);
-        trainerWalkingDown = ImageProcessor.cropTrainerImages(spriteChunk, 2, true);
-        trainerWalkingLeft = ImageProcessor.cropTrainerImages(spriteChunk, 3, true);
-        trainerWalkingRight = ImageProcessor.cropTrainerImages(spriteChunk, 1, true);
+        // right up left down
+        trainerStandingRight = ImageProcessor.cropTrainerImages(spriteChunk, 0, false);
+        trainerWalkingRight = ImageProcessor.cropTrainerImages(spriteChunk, 0, true);
+        trainerStandingUp = ImageProcessor.cropTrainerImages(spriteChunk, 1, false);
+        trainerWalkingUp = ImageProcessor.cropTrainerImages(spriteChunk, 1, true);
+        trainerStandingLeft = ImageProcessor.cropTrainerImages(spriteChunk, 2, false);
+        trainerWalkingLeft = ImageProcessor.cropTrainerImages(spriteChunk, 2, true);
+        trainerStandingDown = ImageProcessor.cropTrainerImages(spriteChunk, 3, false);
+        trainerWalkingDown = ImageProcessor.cropTrainerImages(spriteChunk, 3, true);
         images = trainerWalkingDown;
         currentPosition = new Position(trainer.x(), trainer.y(), trainer.direction());
         currentImage = images[0];
@@ -101,10 +102,10 @@ public class SpriteAnimation extends AnimationTimer {
         if (!GraphicsEnvironment.isHeadless()) {
             setDuration(delay);
             switch (direction) {
-                case 0 -> setImages(trainerWalkingUp);
-                case 1 -> setImages(trainerWalkingRight);
-                case 2 -> setImages(trainerWalkingDown);
-                case 3 -> setImages(trainerWalkingLeft);
+                case 1 -> setImages(trainerWalkingUp);
+                case 0 -> setImages(trainerWalkingRight);
+                case 2 -> setImages(trainerWalkingLeft);
+                case 3 -> setImages(trainerWalkingDown);
                 default -> {}
             }
         }

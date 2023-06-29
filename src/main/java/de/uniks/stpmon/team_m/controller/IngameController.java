@@ -235,22 +235,22 @@ public class IngameController extends Controller {
             if ((event.getCode() == KeyCode.W)) {
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() - 1, 0)).subscribe());
+                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() - 1, 1)).subscribe());
             }
             if ((event.getCode() == KeyCode.S)) {
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() + 1, 2)).subscribe());
+                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() + 1, 3)).subscribe());
             }
             if ((event.getCode() == KeyCode.A)) {
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX() - 1, trainerStorageProvider.get().getY(), 3)).subscribe());
+                        trainerStorageProvider.get().getX() - 1, trainerStorageProvider.get().getY(), 2)).subscribe());
             }
             if ((event.getCode() == KeyCode.D)) {
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 1)).subscribe());
+                        trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 0)).subscribe());
             }
 
         };
@@ -260,16 +260,16 @@ public class IngameController extends Controller {
                 return;
             }
             if ((event.getCode() == KeyCode.W)) {
-                trainerSpriteAnimation.stay(0);
+                trainerSpriteAnimation.stay(1);
             }
             if ((event.getCode() == KeyCode.S)) {
-                trainerSpriteAnimation.stay(2);
-            }
-            if ((event.getCode() == KeyCode.A)) {
                 trainerSpriteAnimation.stay(3);
             }
+            if ((event.getCode() == KeyCode.A)) {
+                trainerSpriteAnimation.stay(2);
+            }
             if ((event.getCode() == KeyCode.D)) {
-                trainerSpriteAnimation.stay(1);
+                trainerSpriteAnimation.stay(0);
             }
         };
 
@@ -474,7 +474,7 @@ public class IngameController extends Controller {
                                 trainersCanvas.getGraphicsContext2D().clearRect(oldPosition.getX() * TILE_SIZE, oldPosition.getY() * TILE_SIZE, 16, 25);
                                 if (oldPosition.getX() != moveTrainerDto.x() || oldPosition.getY() != moveTrainerDto.y()) {
                                     trainerController.getSpriteAnimation().setCurrentPosition(new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction()));
-                                    trainerController.getSpriteAnimation().walk(oldPosition.getDirection());
+                                    trainerController.getSpriteAnimation().walk(moveTrainerDto.direction());
                                 }
                                 trainersCanvas.getGraphicsContext2D().drawImage(trainerController.getSpriteAnimation().currentImage, moveTrainerDto.x() * TILE_SIZE, moveTrainerDto.y() * TILE_SIZE, 16, 25);
                                 trainerPositionHashMap.put(trainer, new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction()));
@@ -769,15 +769,13 @@ public class IngameController extends Controller {
             int iterator = i;
 
             PauseTransition pause = new PauseTransition(Duration.millis(1));
-            pause.setOnFinished(event -> {
-                notificationHandyStackPane.translateXProperty().bind(
-                        anchorPane.
-                                widthProperty().
-                                add(notificationHandyStackPane.widthProperty()).
-                                divide(2).
-                                subtract(iterator)
-                );
-            });
+            pause.setOnFinished(event -> notificationHandyStackPane.translateXProperty().bind(
+                    anchorPane.
+                            widthProperty().
+                            add(notificationHandyStackPane.widthProperty()).
+                            divide(2).
+                            subtract(iterator)
+            ));
             pause.setDelay(Duration.millis(i));
             pause.play();
         }
@@ -1035,19 +1033,19 @@ public class IngameController extends Controller {
         int checkTileYForNurse = currentY;
 
         switch (direction) {
-            case 0 -> {                         // facing up
+            case 1 -> {                         // facing up
                 checkTileY--;
                 checkTileYForNurse -= 2;
             }
-            case 1 -> {                         // facing right
+            case 0 -> {                         // facing right
                 checkTileX++;
                 checkTileXForNurse += 2;
             }
-            case 2 -> {                         // facing down
+            case 3 -> {                         // facing down
                 checkTileY++;
                 checkTileY += 2;
             }
-            case 3 -> {                         // facing left
+            case 2 -> {                         // facing left
                 checkTileX--;
                 checkTileXForNurse -= 2;
             }
