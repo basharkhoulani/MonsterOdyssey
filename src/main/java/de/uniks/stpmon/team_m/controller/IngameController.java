@@ -1047,7 +1047,7 @@ public class IngameController extends Controller {
             }
             case 3 -> {                         // facing down
                 checkTileY++;
-                checkTileY += 2;
+                checkTileYForNurse += 2;
             }
             default -> System.err.println("Unknown direction for Trainer: " + direction);
         }
