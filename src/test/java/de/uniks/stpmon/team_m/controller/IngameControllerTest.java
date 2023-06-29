@@ -218,7 +218,7 @@ public class IngameControllerTest extends ApplicationTest {
                 "6475e595ac3946b6a812d863",
                 33,
                 18,
-                0,
+                1,
                 new NPCInfo(false, false,false, false, null,null));
 
         when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers.*.*", Trainer.class)).thenReturn(just(
@@ -297,6 +297,7 @@ public class IngameControllerTest extends ApplicationTest {
     void testDialog() throws InterruptedException {
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(19);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
         when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
 
         press(KeyCode.E);
@@ -333,6 +334,7 @@ public class IngameControllerTest extends ApplicationTest {
     void testNurseDialog() throws InterruptedException {
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(20);
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(20);    // two tiles apart from Nurse
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
         when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
 
         press(KeyCode.E);
