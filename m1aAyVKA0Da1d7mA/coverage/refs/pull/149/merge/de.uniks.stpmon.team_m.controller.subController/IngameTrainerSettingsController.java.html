@@ -181,7 +181,7 @@ public class IngameTrainerSettingsController extends Controller {
     public void updateTrainer() {
 <span class="nc" id="L182">        TrainerStorage trainerStorage = trainerStorageProvider.get();</span>
 <span class="nc" id="L183">        String trainerName = trainerStorage.getTrainerName();</span>
-<span class="nc bnc" id="L184" title="All 2 branches missed.">        if (!trainerNameTextfield.getText().equals(trainerStorage.getTrainerName())) {</span>
+<span class="nc bnc" id="L184" title="All 4 branches missed.">        if (!trainerNameTextfield.getText().equals(trainerStorage.getTrainerName()) &amp;&amp; !trainerNameTextfield.getText().equals(&quot;&quot;)) {</span>
 <span class="nc" id="L185">            trainerName = trainerNameTextfield.getText();</span>
         }
 
