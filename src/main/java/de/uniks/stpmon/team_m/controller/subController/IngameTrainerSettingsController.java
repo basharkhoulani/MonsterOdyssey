@@ -11,9 +11,11 @@ import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -24,6 +26,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.PREMADE_CHARACTERS;
 
@@ -70,6 +74,8 @@ public class IngameTrainerSettingsController extends Controller {
     public UserStorage usersStorage;
     @Inject
     Provider<IngameDeleteTrainerWarningController> ingameDeleteTrainerWarningControllerProvider;
+    @Inject
+    Provider<IngameController> ingameControllerProvider;
 
     protected final CompositeDisposable disposables = new CompositeDisposable();
     private VBox ingameVbox;
@@ -92,6 +98,8 @@ public class IngameTrainerSettingsController extends Controller {
     public Parent render() {
         Parent parent = super.render();
         loadAndSetTrainerImage();
+        trainerNameTextfield.setPromptText(trainerStorageProvider.get().getTrainerName());
+        trainerNameTextfield.setDisable(true);
         return parent;
     }
 
@@ -148,6 +156,7 @@ public class IngameTrainerSettingsController extends Controller {
     }
 
     public void editTrainerName() {
+        trainerNameTextfield.setDisable(false);
     }
 
     public void showCharacter() {
@@ -172,5 +181,57 @@ public class IngameTrainerSettingsController extends Controller {
     }
 
     public void updateTrainer() {
+        TrainerStorage trainerStorage = trainerStorageProvider.get();
+        List<String> monsters = new ArrayList<>();
+        trainerStorage.getMonsters().forEach(monster -> monsters.add(monster._id()));
+
+        String trainerName = trainerStorage.getTrainerName();
+        if (!trainerNameTextfield.getText().equals(trainerStorage.getTrainerName())) {
+            trainerName = trainerNameTextfield.getText();
+        }
+
+        if (!trainerNameTextfield.getText().equals(trainerStorage.getTrainerName()) || !trainerStorage.getTrainerSprite().equals(selectedCharacter)) {
+            disposables.add(trainersService.updateTrainer(
+                    trainerStorage.getRegion()._id(),
+                    trainerStorage.getTrainer()._id(),
+                    trainerName,
+                    selectedCharacter,
+                    monsters
+            ).observeOn(FX_SCHEDULER).subscribe(trainer -> {
+                trainerStorage.setTrainer(trainer);
+                trainerStorage.setTrainerName(trainer.name());
+                trainerStorage.setTrainerSprite(trainer.image());
+                updatePopup();
+            }, Throwable::printStackTrace));
+        }
     }
+
+    private void updatePopup() {
+        buttonsDisableTrainer(true);
+        VBox updatePopupVBox = new VBox();
+        updatePopupVBox.getStyleClass().add("miniMapContainer");
+        updatePopupVBox.setStyle("-fx-max-height: 150px; -fx-max-width: 550px");
+        updatePopupVBox.setPadding(new Insets(10, 10, 10, 10));
+        updatePopupVBox.setSpacing(12);
+
+        Label notification = new Label(resources.getString("UPDATE.NOTIFICATION"));
+        notification.setWrapText(true);
+        notification.setStyle("-fx-font-family: \"Comic Sans MS\"; -fx-font-weight: bold");
+
+        Button okButton = new Button();
+        okButton.setText(resources.getString("OK"));
+        okButton.getStyleClass().add("welcomeSceneButton");
+        okButton.setOnAction(event -> restartGame());
+
+        updatePopupVBox.getChildren().add(notification);
+        updatePopupVBox.getChildren().add(okButton);
+        ingameController.root.getChildren().add(updatePopupVBox);
+    }
+
+    private void restartGame() {
+        MainMenuController mainMenuController = mainMenuControllerProvider.get();
+        ingameController.destroy();
+        app.show(mainMenuController);
+    }
+
 }
