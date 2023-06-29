@@ -1037,21 +1037,21 @@ public class IngameController extends Controller {
         int checkTileYForNurse = currentY;
 
         switch (direction) {
-            case 0 -> {                         // facing up
-                checkTileY--;
-                checkTileYForNurse -= 2;
-            }
-            case 1 -> {                         // facing right
+            case 0 -> {                         // facing right
                 checkTileX++;
                 checkTileXForNurse += 2;
             }
-            case 2 -> {                         // facing down
-                checkTileY++;
-                checkTileY += 2;
+            case 1 -> {                         // facing up
+                checkTileY--;
+                checkTileYForNurse -= 2;
             }
-            case 3 -> {                         // facing left
+            case 2 -> {                         // facing left
                 checkTileX--;
                 checkTileXForNurse -= 2;
+            }
+            case 3 -> {                         // facing down
+                checkTileY++;
+                checkTileYForNurse += 2;
             }
             default -> System.err.println("Unknown direction for Trainer: " + direction);
         }
