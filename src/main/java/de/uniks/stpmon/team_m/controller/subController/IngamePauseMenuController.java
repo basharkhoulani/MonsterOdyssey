@@ -72,6 +72,7 @@ public class IngamePauseMenuController extends Controller {
         ingameController.root.getChildren().remove(ingameVbox);
         double volume = AudioService.getInstance().getVolume();
         AudioService.getInstance().setVolume(volume);
+        ingameController.destroy();
         app.show(mainMenuControllerProvider.get());
     }
 }
