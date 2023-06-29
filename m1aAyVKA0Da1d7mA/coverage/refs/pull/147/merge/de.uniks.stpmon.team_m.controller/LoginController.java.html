@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import java.awt.*;
+import java.awt.Menu;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -69,9 +70,9 @@ public class LoginController extends Controller {
     @Inject
     UsersService usersService;
     private PasswordFieldSkin skin;
-<span class="fc" id="L72">    private final SimpleStringProperty username = new SimpleStringProperty();</span>
-<span class="fc" id="L73">    private final SimpleStringProperty password = new SimpleStringProperty();</span>
-<span class="fc" id="L74">    private final SimpleBooleanProperty rememberMe = new SimpleBooleanProperty();</span>
+<span class="fc" id="L73">    private final SimpleStringProperty username = new SimpleStringProperty();</span>
+<span class="fc" id="L74">    private final SimpleStringProperty password = new SimpleStringProperty();</span>
+<span class="fc" id="L75">    private final SimpleBooleanProperty rememberMe = new SimpleBooleanProperty();</span>
     private String information;
 
     private ChangeLanguageController changeLanguageController;
@@ -82,28 +83,29 @@ public class LoginController extends Controller {
      */
 
     @Inject
-<span class="fc" id="L85">    public LoginController() {</span>
-<span class="fc" id="L86">    }</span>
+<span class="fc" id="L86">    public LoginController() {</span>
+<span class="fc" id="L87">    }</span>
 
     /**
      * This method is used to set the title of the login screen.
      */
     @Override
     public String getTitle() {
-<span class="fc" id="L93">        return resources.getString(&quot;LOGIN.TITLE&quot;);</span>
+<span class="fc" id="L94">        return resources.getString(&quot;LOGIN.TITLE&quot;);</span>
     }
 
     @Override
     public void init() {
-<span class="fc" id="L98">        super.init();</span>
-<span class="fc" id="L99">        changeLanguageController = new ChangeLanguageController();</span>
-<span class="fc" id="L100">        changeLanguageController.init();</span>
-<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L102">            AudioService.getInstance().playSound(MENU_SOUND);</span>
-<span class="nc" id="L103">            AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, 0.5));</span>
-<span class="nc" id="L104">            AudioService.getInstance().setCurrentSound(MENU_SOUND);</span>
+<span class="fc" id="L99">        super.init();</span>
+<span class="fc" id="L100">        changeLanguageController = new ChangeLanguageController();</span>
+<span class="fc" id="L101">        changeLanguageController.init();</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()){</span>
+<span class="nc bnc" id="L103" title="All 4 branches missed.">            if(AudioService.getInstance() != null &amp;&amp; (AudioService.getInstance().getCurrentSound() == null)) {</span>
+<span class="nc" id="L104">                AudioService.getInstance().playSound(MENU_SOUND);</span>
+            }
+            //AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, 0.5));
         }
-<span class="fc" id="L106">    }</span>
+<span class="fc" id="L108">    }</span>
 
     /**
      * This method is used to render JavaFX elements of the login screen.
@@ -113,31 +115,31 @@ public class LoginController extends Controller {
 
     @Override
     public Parent render() {
-<span class="fc" id="L116">        final Parent parent = super.render();</span>
+<span class="fc" id="L118">        final Parent parent = super.render();</span>
 
-<span class="fc" id="L118">        skin = new PasswordFieldSkin(passwordField);</span>
-<span class="fc" id="L119">        passwordField.setSkin(skin);</span>
+<span class="fc" id="L120">        skin = new PasswordFieldSkin(passwordField);</span>
+<span class="fc" id="L121">        passwordField.setSkin(skin);</span>
 
-<span class="fc" id="L121">        usernameField.textProperty().bindBidirectional(username);</span>
-<span class="fc" id="L122">        passwordField.textProperty().bindBidirectional(password);</span>
-<span class="fc" id="L123">        rememberMeCheckbox.selectedProperty().bindBidirectional(rememberMe);</span>
+<span class="fc" id="L123">        usernameField.textProperty().bindBidirectional(username);</span>
+<span class="fc" id="L124">        passwordField.textProperty().bindBidirectional(password);</span>
+<span class="fc" id="L125">        rememberMeCheckbox.selectedProperty().bindBidirectional(rememberMe);</span>
 
-<span class="fc" id="L125">        BooleanBinding isInvalidUsername = username.isEmpty();</span>
-<span class="fc" id="L126">        BooleanBinding isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);</span>
-<span class="fc" id="L127">        signInButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
-<span class="fc" id="L128">        signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
+<span class="fc" id="L127">        BooleanBinding isInvalidUsername = username.isEmpty();</span>
+<span class="fc" id="L128">        BooleanBinding isInvalidPassword = password.length().lessThan(PASSWORD_CHARACTER_LIMIT);</span>
+<span class="fc" id="L129">        signInButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
+<span class="fc" id="L130">        signUpButton.disableProperty().bind(isInvalidPassword.or(isInvalidUsername));</span>
 
-<span class="fc" id="L130">        passwordField.setPromptText(resources.getString(&quot;PASSWORD.LESS.THAN.8.CHARACTERS&quot;));</span>
+<span class="fc" id="L132">        passwordField.setPromptText(resources.getString(&quot;PASSWORD.LESS.THAN.8.CHARACTERS&quot;));</span>
 
-<span class="fc" id="L132">        passwordField.setOnKeyPressed(event -&gt; {</span>
-<span class="pc bpc" id="L133" title="1 of 2 branches missed.">            if (event.getCode() == KeyCode.ENTER) {</span>
-<span class="nc" id="L134">                signIn();</span>
+<span class="fc" id="L134">        passwordField.setOnKeyPressed(event -&gt; {</span>
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">            if (event.getCode() == KeyCode.ENTER) {</span>
+<span class="nc" id="L136">                signIn();</span>
             }
-<span class="fc" id="L136">        });</span>
+<span class="fc" id="L138">        });</span>
 
-<span class="fc" id="L138">        showInformation();</span>
+<span class="fc" id="L140">        showInformation();</span>
 
-<span class="fc" id="L140">        return parent;</span>
+<span class="fc" id="L142">        return parent;</span>
     }
 
     /**
@@ -146,13 +148,13 @@ public class LoginController extends Controller {
      */
 
     public void signIn() {
-<span class="fc" id="L149">        passwordErrorLabel.setText(EMPTY_STRING);</span>
-<span class="fc" id="L150">        disposables.add(authenticationService.login(username.get(), password.get(), rememberMe.get())</span>
-<span class="fc" id="L151">                .observeOn(FX_SCHEDULER).subscribe(loginResult -&gt; {</span>
-<span class="fc" id="L152">                    userStatusUpdate(USER_STATUS_ONLINE);</span>
-<span class="fc" id="L153">                    app.show(mainMenuControllerProvider.get());</span>
-<span class="fc" id="L154">                }, error -&gt; errorHandle(error.getMessage())));</span>
-<span class="fc" id="L155">    }</span>
+<span class="fc" id="L151">        passwordErrorLabel.setText(EMPTY_STRING);</span>
+<span class="fc" id="L152">        disposables.add(authenticationService.login(username.get(), password.get(), rememberMe.get())</span>
+<span class="fc" id="L153">                .observeOn(FX_SCHEDULER).subscribe(loginResult -&gt; {</span>
+<span class="fc" id="L154">                    userStatusUpdate(USER_STATUS_ONLINE);</span>
+<span class="fc" id="L155">                    app.show(mainMenuControllerProvider.get());</span>
+<span class="fc" id="L156">                }, error -&gt; errorHandle(error.getMessage())));</span>
+<span class="fc" id="L157">    }</span>
 
     /**
      * This method is used to sign up the user and show the main menu screen.
@@ -160,27 +162,27 @@ public class LoginController extends Controller {
      */
 
     public void signUp() {
-<span class="fc" id="L163">        passwordErrorLabel.setText(EMPTY_STRING);</span>
-<span class="fc" id="L164">        disposables.add(usersService.createUser(username.get(), null, password.get())</span>
-<span class="fc" id="L165">                .observeOn(FX_SCHEDULER).subscribe(userResult -&gt; signIn(), error -&gt; errorHandle(error.getMessage())));</span>
-<span class="fc" id="L166">    }</span>
+<span class="fc" id="L165">        passwordErrorLabel.setText(EMPTY_STRING);</span>
+<span class="fc" id="L166">        disposables.add(usersService.createUser(username.get(), null, password.get())</span>
+<span class="fc" id="L167">                .observeOn(FX_SCHEDULER).subscribe(userResult -&gt; signIn(), error -&gt; errorHandle(error.getMessage())));</span>
+<span class="fc" id="L168">    }</span>
 
     /**
      * This method is used to show the password of the user in the PasswordField.
      */
 
     public void showPassword() {
-<span class="fc" id="L173">        skin.setMask(skin.getNotMask());</span>
-<span class="fc" id="L174">        passwordField.setText(passwordField.getText());</span>
-<span class="fc" id="L175">    }</span>
+<span class="fc" id="L175">        skin.setMask(skin.getNotMask());</span>
+<span class="fc" id="L176">        passwordField.setText(passwordField.getText());</span>
+<span class="fc" id="L177">    }</span>
 
     /**
      * This method is used to show a message when the user has been deleted from AccountSettingController
      */
 
     public void showInformation() {
-<span class="fc" id="L182">        informationLabel.setText(this.information);</span>
-<span class="fc" id="L183">    }</span>
+<span class="fc" id="L184">        informationLabel.setText(this.information);</span>
+<span class="fc" id="L185">    }</span>
 
     /**
      * This method is used to set the information if the user has been deleted from AccountSettingController
@@ -189,8 +191,8 @@ public class LoginController extends Controller {
      */
 
     public void setInformation(String information) {
-<span class="fc" id="L192">        this.information = information;</span>
-<span class="fc" id="L193">    }</span>
+<span class="fc" id="L194">        this.information = information;</span>
+<span class="fc" id="L195">    }</span>
 
     /**
      * This method is used to handle the error messages.
@@ -199,14 +201,14 @@ public class LoginController extends Controller {
      */
 
     public void errorHandle(String error) {
-<span class="fc bfc" id="L202" title="All 2 branches covered.">        if (error.contains(HTTP_401)) {</span>
-<span class="fc" id="L203">            passwordErrorLabel.setText(resources.getString(&quot;SIGNIN.ERROR&quot;));</span>
-<span class="fc bfc" id="L204" title="All 2 branches covered.">        } else if (error.contains(HTTP_409)) {</span>
-<span class="fc" id="L205">            passwordErrorLabel.setText(resources.getString(&quot;USERNAME.TAKEN&quot;));</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        if (error.contains(HTTP_401)) {</span>
+<span class="fc" id="L205">            passwordErrorLabel.setText(resources.getString(&quot;SIGNIN.ERROR&quot;));</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">        } else if (error.contains(HTTP_409)) {</span>
+<span class="fc" id="L207">            passwordErrorLabel.setText(resources.getString(&quot;USERNAME.TAKEN&quot;));</span>
         } else {
-<span class="fc" id="L207">            passwordErrorLabel.setText(resources.getString(&quot;CUSTOM.ERROR&quot;));</span>
+<span class="fc" id="L209">            passwordErrorLabel.setText(resources.getString(&quot;CUSTOM.ERROR&quot;));</span>
         }
-<span class="fc" id="L209">    }</span>
+<span class="fc" id="L211">    }</span>
 
     /**
      * This method is used to update the status of the user.
@@ -215,37 +217,37 @@ public class LoginController extends Controller {
      */
 
     public void userStatusUpdate(String status) {
-<span class="pc bpc" id="L218" title="1 of 2 branches missed.">        if (userStorage.get().get_id() != null) {</span>
-<span class="fc" id="L219">            disposables.add(usersService.updateUser(null, status, null, null, null).observeOn(FX_SCHEDULER)</span>
-<span class="pc" id="L220">                    .subscribe(user -&gt; userStorage.get().setStatus(user.status()), error -&gt; errorHandle(error.getMessage())));</span>
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">        if (userStorage.get().get_id() != null) {</span>
+<span class="fc" id="L221">            disposables.add(usersService.updateUser(null, status, null, null, null).observeOn(FX_SCHEDULER)</span>
+<span class="pc" id="L222">                    .subscribe(user -&gt; userStorage.get().setStatus(user.status()), error -&gt; errorHandle(error.getMessage())));</span>
         }
-<span class="fc" id="L222">    }</span>
+<span class="fc" id="L224">    }</span>
 
     /**
      * This method is used to open the Change Language Pop up
      */
     public void changeLanguage() {
-<span class="fc" id="L228">        Dialog&lt;?&gt; dialog = new Dialog&lt;&gt;();</span>
-<span class="fc" id="L229">        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);</span>
-<span class="fc" id="L230">        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);</span>
-<span class="fc" id="L231">        closeButton.managedProperty().bind(closeButton.visibleProperty());</span>
-<span class="fc" id="L232">        closeButton.setVisible(false);</span>
-<span class="fc" id="L233">        dialog.setTitle(resources.getString(&quot;CHOOSE.LANGUAGE&quot;));</span>
-<span class="fc" id="L234">        changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);</span>
-<span class="fc" id="L235">        dialog.getDialogPane().setContent(changeLanguageController.render());</span>
-<span class="fc" id="L236">        dialog.showAndWait();</span>
-<span class="fc" id="L237">    }</span>
+<span class="fc" id="L230">        Dialog&lt;?&gt; dialog = new Dialog&lt;&gt;();</span>
+<span class="fc" id="L231">        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);</span>
+<span class="fc" id="L232">        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);</span>
+<span class="fc" id="L233">        closeButton.managedProperty().bind(closeButton.visibleProperty());</span>
+<span class="fc" id="L234">        closeButton.setVisible(false);</span>
+<span class="fc" id="L235">        dialog.setTitle(resources.getString(&quot;CHOOSE.LANGUAGE&quot;));</span>
+<span class="fc" id="L236">        changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);</span>
+<span class="fc" id="L237">        dialog.getDialogPane().setContent(changeLanguageController.render());</span>
+<span class="fc" id="L238">        dialog.showAndWait();</span>
+<span class="fc" id="L239">    }</span>
 
     public void muteOrUnmuteSound() {
-<span class="nc bnc" id="L240" title="All 2 branches missed.">        if(AudioService.getInstance().checkMuted()) {</span>
-<span class="nc" id="L241">            muteButton.getStyleClass().remove(&quot;unmuteSymbol&quot;);</span>
-<span class="nc" id="L242">            muteButton.getStyleClass().add(&quot;muteSymbol&quot;);</span>
-<span class="nc" id="L243">            AudioService.getInstance().unmuteSound();</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">        if(AudioService.getInstance().checkMuted()) {</span>
+<span class="nc" id="L243">            muteButton.getStyleClass().remove(&quot;unmuteSymbol&quot;);</span>
+<span class="nc" id="L244">            muteButton.getStyleClass().add(&quot;muteSymbol&quot;);</span>
+<span class="nc" id="L245">            AudioService.getInstance().unmuteSound();</span>
         } else {
-<span class="nc" id="L245">            muteButton.getStyleClass().remove(&quot;muteSymbol&quot;);</span>
-<span class="nc" id="L246">            muteButton.getStyleClass().add(&quot;unmuteSymbol&quot;);</span>
-<span class="nc" id="L247">            AudioService.getInstance().muteSound();</span>
+<span class="nc" id="L247">            muteButton.getStyleClass().remove(&quot;muteSymbol&quot;);</span>
+<span class="nc" id="L248">            muteButton.getStyleClass().add(&quot;unmuteSymbol&quot;);</span>
+<span class="nc" id="L249">            AudioService.getInstance().muteSound();</span>
         }
-<span class="nc" id="L249">    }</span>
+<span class="nc" id="L251">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
