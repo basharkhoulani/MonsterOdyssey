@@ -55,7 +55,6 @@ public class NotificationListHandyController extends Controller {
         if (trainer.encounteredMonsterTypes().size() == 0) {
             this.displayFirstTimeNotifications();
         }
-
         ingameNotificationListView.setMouseTransparent(true);
 
         return parent;
@@ -104,6 +103,28 @@ public class NotificationListHandyController extends Controller {
             duration++;
         }
 
+        timeline.play();
+    }
+
+    public void displayStarterMessages() {
+        ObservableList<String> starterNotifications = FXCollections.observableArrayList();
+
+        ingameNotificationListView.setSelectionModel(null);
+        ingameNotificationListView.setFocusModel(null);
+        ingameNotificationListView.setCellFactory(param -> new IngameNotificationCell(this));
+        ingameNotificationListView.setItems(starterNotifications);
+
+        Timeline timeline = new Timeline();
+        int duration = 1;
+
+        for (int i = 0; i < 2; i++) {
+            int iter = i;
+            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> {
+                starterNotifications.add(this.resources.getString("INGAME.NOTIICATIONS.STARTER."+ iter));
+            });
+            timeline.getKeyFrames().add(keyFrame);
+            duration++;
+        }
         timeline.play();
     }
 }
