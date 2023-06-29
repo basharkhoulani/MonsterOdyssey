@@ -181,7 +181,7 @@ public class IngameTrainerSettingsController extends Controller {
     public void updateTrainer() {
         TrainerStorage trainerStorage = trainerStorageProvider.get();
         String trainerName = trainerStorage.getTrainerName();
-        if (!trainerNameTextfield.getText().equals(trainerStorage.getTrainerName())) {
+        if (!trainerNameTextfield.getText().equals(trainerStorage.getTrainerName()) && !trainerNameTextfield.getText().equals("")) {
             trainerName = trainerNameTextfield.getText();
         }
 
