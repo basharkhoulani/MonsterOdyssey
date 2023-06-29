@@ -108,7 +108,7 @@ public class IngameControllerTest extends ApplicationTest {
                 "646bacc568933551792bf3d5",
                 33,
                 19,
-                0,
+                1,
                 new NPCInfo(false, false, false, false, null, null)
         ));
         when(trainerStorageProvider.get().getRegion()).thenReturn(
@@ -177,7 +177,7 @@ public class IngameControllerTest extends ApplicationTest {
                     "6475e595ac3946b6a812d863",
                     33,
                     18,
-                    0,
+                    1,
                     new NPCInfo(false, false, false, false, null, null)),
                 new Trainer(
                         "2023-05-30T12:02:57.510Z",
@@ -193,7 +193,7 @@ public class IngameControllerTest extends ApplicationTest {
                         "6475e595ac3946b6a812d863",
                         20,
                         18,
-                        2,
+                        3,
                         new NPCInfo(false, false, false, true, null, null))
                 )
         ));
@@ -218,7 +218,7 @@ public class IngameControllerTest extends ApplicationTest {
                 "6475e595ac3946b6a812d863",
                 33,
                 18,
-                0,
+                1,
                 new NPCInfo(false, false,false, false, null,null));
 
         when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers.*.*", Trainer.class)).thenReturn(just(
