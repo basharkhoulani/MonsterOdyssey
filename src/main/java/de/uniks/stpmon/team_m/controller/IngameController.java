@@ -64,9 +64,7 @@ public class IngameController extends Controller {
     private static final int DELAY = 100;
     private static final int DELAY_LONG = 500;
     private static final int SCALE_FACTOR = 2;
-
-    @FXML
-    public Button helpSymbol;
+    
     @FXML
     public Button monstersButton;
     @FXML
@@ -815,7 +813,6 @@ public class IngameController extends Controller {
         pauseButton.setDisable(set);
         showChatButton.setDisable(set);
         mapSymbol.setDisable(set);
-        helpSymbol.setDisable(set);
         messageField.setDisable(set);
         sendMessageButton.setDisable(set);
     }
