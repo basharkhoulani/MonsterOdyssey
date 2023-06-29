@@ -49,15 +49,14 @@ public class IngameStarterMonsterController extends Controller {
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
     PresetsService presetsService;
-    private VBox popUpVBox;
     private List<String> starters;
-    private MonsterTypeDto monster1;
-    private MonsterTypeDto monster2;
-    private MonsterTypeDto monster3;
-    private Image monster1Image;
-    private Image monster2Image;
-    private Image monster3Image;
-    private Integer index = 1;
+    public MonsterTypeDto monster1;
+    public MonsterTypeDto monster2;
+    public MonsterTypeDto monster3;
+    public Image monster1Image;
+    public Image monster2Image;
+    public Image monster3Image;
+    public Integer index = 1;
 
 
     @Inject
@@ -65,9 +64,8 @@ public class IngameStarterMonsterController extends Controller {
 
     }
 
-    public void init(IngameController ingameController, VBox starterSelectionVBox, App app, List<String> starters) {
+    public void init(IngameController ingameController, App app, List<String> starters) {
         this.ingameController = ingameController;
-        this.popUpVBox = starterSelectionVBox;
         this.app = app;
         this.starters = starters;
     }
@@ -131,14 +129,17 @@ public class IngameStarterMonsterController extends Controller {
             default -> {
                 monster = monster1;
                 monsterImage = monster1Image;
+                starterSelectionLabel.setText(resources.getString("FIRST.SELECTION"));
             }
             case 2 -> {
                 monster = monster2;
                 monsterImage = monster2Image;
+                starterSelectionLabel.setText(resources.getString("SECOND.SELECTION"));
             }
             case 3 -> {
                 monster = monster3;
                 monsterImage = monster3Image;
+                starterSelectionLabel.setText(resources.getString("THIRD.SELECTION"));
             }
         }
 

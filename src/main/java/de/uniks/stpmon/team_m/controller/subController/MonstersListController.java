@@ -48,7 +48,6 @@ public class MonstersListController extends Controller {
         super.init();
         disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
                 .subscribe(monsters -> trainerStorageProvider.get().setMonsters(new ArrayList<>(monsters)), throwable -> showError(throwable.getMessage())));
-
     }
 
     @Override
