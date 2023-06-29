@@ -1328,7 +1328,6 @@ public class IngameController extends Controller {
                                         renderMap(map[0], tileSetImages.get(getFileName(tileSet1.source())), tileSetJsons.get(getFileName(tileSet1.source())),
                                                 tileSet1, map[0].tilesets().size() > 1, true);
                                     }
-                                    trainerStorageProvider.get().setRegionMap(miniMapCanvas.snapshot(null, null));
                                 }, error -> {
                                     showError(error.getMessage());
                                     error.printStackTrace();
@@ -1348,6 +1347,7 @@ public class IngameController extends Controller {
             miniMapVBox = new VBox();
             miniMapVBox.getStyleClass().add("miniMapContainer");
             miniMapVBox.setPadding(new Insets(0, 0, 8, 0));
+            ingameMiniMapController.init(this, app, miniMapCanvas);
             miniMapVBox.getChildren().add(ingameMiniMapController.render());
 
             Button closeButton = new Button();
