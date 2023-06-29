@@ -100,10 +100,6 @@ public class EncounterController extends Controller {
                     encounterOpponentStorageProvider.get().setWild(encounter.isWild());
                     System.out.println("response: " + encounter.isWild());
                     System.out.println("saved: " + encounterOpponentStorageProvider.get().isWild());
-                    disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, encounterId)
-                            .observeOn(FX_SCHEDULER).subscribe(opponents -> {
-                                System.out.println(opponents.size());
-                            }, error -> error.printStackTrace()));
 
                     }, error -> error.printStackTrace()));
 

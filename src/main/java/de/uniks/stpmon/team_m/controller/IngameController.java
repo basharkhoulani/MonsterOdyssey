@@ -921,7 +921,7 @@ public class IngameController extends Controller {
                                     System.out.println("Size of Opponents" + opponents.size());
                                     if(opponents.size() != 0){
                                         encounterOpponentStorage.setEncounterId(opponents.get(0).encounter());
-                                        showEncounterInfoWindow();
+                                        showEncounterInfoWindow(opponents.get(0).encounter());
                                     }
                                 }
                         ));
@@ -933,13 +933,18 @@ public class IngameController extends Controller {
         );
     }
 
-    private void showEncounterInfoWindow() {
+    private void showEncounterInfoWindow(String encounterId) {
         System.out.println("show Dialogfenster");
-        showEncounterScene();
+        showEncounterScene(encounterId);
     }
 
-    private void showEncounterScene() {
-        app.show(encounterControllerProvider.get());
+    private void showEncounterScene(String encounterId) {
+        String regionId = trainerStorageProvider.get().getTrainer().region();
+        disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, encounterId)
+                .observeOn(FX_SCHEDULER).subscribe(opponents -> {
+                    System.out.println(opponents.size());
+                    app.show(encounterControllerProvider.get());
+                }, error -> error.printStackTrace()));
     }
 
     private void checkIfEncounterAlreadyExist(){
@@ -959,7 +964,7 @@ public class IngameController extends Controller {
 
                         System.out.println(opponents.get(0)._id());
 
-                        showEncounterInfoWindow();
+                        showEncounterInfoWindow(opponents.get(0).encounter());
                     }
                 }, error -> {
                     showError(error.getMessage());
