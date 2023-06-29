@@ -908,7 +908,12 @@ public class IngameController extends Controller {
                                 trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y(), trainer.direction()));
                             }
                         }
-                        case "updated" -> updateTrainer(trainers, trainer);
+                        case "updated" -> {
+                            updateTrainer(trainers, trainer);
+                            if (trainerStorageProvider.get().getTrainer()._id().equals(trainer._id())) {
+                                monstersListControllerProvider.get().init();
+                            }
+                        }
                         case "deleted" -> trainers.removeIf(t -> t._id().equals(trainer._id()));
                     }
                 }, error -> showError(error.getMessage()))
@@ -1117,7 +1122,7 @@ public class IngameController extends Controller {
                             npc._id(),
                             selection
                     )
-            ).subscribe());
+            ).observeOn(FX_SCHEDULER).subscribe());
         }
     }
 
@@ -1147,24 +1152,6 @@ public class IngameController extends Controller {
 
         if (encounterNpc) {
             encounterNPC(this.currentNpc, selectionValue);
-        }
-
-        if (Objects.equals(this.currentNpc._id(), "645e32c6866ace359554a802")) {
-            disposables.add(trainersService.updateTrainer(
-                            trainerStorageProvider.get().getRegion()._id(),
-                            trainerStorageProvider.get().getTrainer()._id(),
-                            trainerStorageProvider.get().getTrainerName(),
-                            trainerStorageProvider.get().getTrainerSprite(),
-                            List.of("507f191e810c19729de860ea")
-                    ).observeOn(FX_SCHEDULER)
-                    .subscribe(result ->
-                            disposables.add(monstersService.getMonsters(
-                                    trainerStorageProvider.get().getRegion()._id(),
-                                    trainerStorageProvider.get().getTrainer()._id()
-                            ).observeOn(FX_SCHEDULER).subscribe(monsters ->
-                                            trainerStorageProvider.get().setMonsters(new ArrayList<>(monsters)),
-                                    Throwable::printStackTrace)), Throwable::printStackTrace
-                    ));
         }
     }
 
