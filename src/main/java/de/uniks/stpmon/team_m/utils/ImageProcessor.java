@@ -84,7 +84,7 @@ public class ImageProcessor {
      * This method is used to crop the
      *
      * @param trainerChunk into 6 Images, that displays the player character moving in some direction
-     * @param direction    : either 0 [up], 1 [right], 2 [down], or 3 [left] are possible directions
+     * @param direction    : either 0 [right], 1 [up], 2 [left], or 3 [down] are possible directions
      * @param isWalking    : determine if the character is moving or not
      */
     public static Image[] cropTrainerImages(Image trainerChunk, int direction, Boolean isWalking) {
@@ -96,9 +96,9 @@ public class ImageProcessor {
             y = 39;
         }
         switch (direction) {
-            case 1 -> x = 0;
-            case 0 -> x = 96;
-            case 3 -> x = 192;
+            case 0 -> x = 0;
+            case 1 -> x = 96;
+            case 2 -> x = 192;
             default -> x = 288;
         }
         for (int i = 0; i < 6; i++) {

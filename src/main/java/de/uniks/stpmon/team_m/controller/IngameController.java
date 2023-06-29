@@ -63,8 +63,6 @@ public class IngameController extends Controller {
     private static final int SCALE_FACTOR = 2;
 
     @FXML
-    public Button helpSymbol;
-    @FXML
     public Button monstersButton;
     @FXML
     public Button pauseButton;
@@ -240,22 +238,22 @@ public class IngameController extends Controller {
             if ((event.getCode() == KeyCode.W)) {
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() - 1, 0)).subscribe());
+                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() - 1, 1)).subscribe());
             }
             if ((event.getCode() == KeyCode.S)) {
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() + 1, 2)).subscribe());
+                        trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY() + 1, 3)).subscribe());
             }
             if ((event.getCode() == KeyCode.A)) {
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX() - 1, trainerStorageProvider.get().getY(), 3)).subscribe());
+                        trainerStorageProvider.get().getX() - 1, trainerStorageProvider.get().getY(), 2)).subscribe());
             }
             if ((event.getCode() == KeyCode.D)) {
                 disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                         trainerStorageProvider.get().getTrainer().area(),
-                        trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 1)).subscribe());
+                        trainerStorageProvider.get().getX() + 1, trainerStorageProvider.get().getY(), 0)).subscribe());
             }
 
         };
@@ -265,16 +263,16 @@ public class IngameController extends Controller {
                 return;
             }
             if ((event.getCode() == KeyCode.W)) {
-                trainerSpriteAnimation.stay(0);
+                trainerSpriteAnimation.stay(1);
             }
             if ((event.getCode() == KeyCode.S)) {
-                trainerSpriteAnimation.stay(2);
-            }
-            if ((event.getCode() == KeyCode.A)) {
                 trainerSpriteAnimation.stay(3);
             }
+            if ((event.getCode() == KeyCode.A)) {
+                trainerSpriteAnimation.stay(2);
+            }
             if ((event.getCode() == KeyCode.D)) {
-                trainerSpriteAnimation.stay(1);
+                trainerSpriteAnimation.stay(0);
             }
         };
 
@@ -399,6 +397,8 @@ public class IngameController extends Controller {
         encounterOpponentStorage.setRegionId(trainerStorageProvider.get().getRegion()._id());
 
 
+        specificSounds();
+
         return parent;
     }
 
@@ -484,7 +484,7 @@ public class IngameController extends Controller {
                                 trainersCanvas.getGraphicsContext2D().clearRect(oldPosition.getX() * TILE_SIZE, oldPosition.getY() * TILE_SIZE, 16, 25);
                                 if (oldPosition.getX() != moveTrainerDto.x() || oldPosition.getY() != moveTrainerDto.y()) {
                                     trainerController.getSpriteAnimation().setCurrentPosition(new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction()));
-                                    trainerController.getSpriteAnimation().walk(oldPosition.getDirection());
+                                    trainerController.getSpriteAnimation().walk(moveTrainerDto.direction());
                                 }
                                 trainersCanvas.getGraphicsContext2D().drawImage(trainerController.getSpriteAnimation().currentImage, moveTrainerDto.x() * TILE_SIZE, moveTrainerDto.y() * TILE_SIZE, 16, 25);
                                 trainerPositionHashMap.put(trainer, new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction()));
@@ -779,15 +779,13 @@ public class IngameController extends Controller {
             int iterator = i;
 
             PauseTransition pause = new PauseTransition(Duration.millis(1));
-            pause.setOnFinished(event -> {
-                notificationHandyStackPane.translateXProperty().bind(
-                        anchorPane.
-                                widthProperty().
-                                add(notificationHandyStackPane.widthProperty()).
-                                divide(2).
-                                subtract(iterator)
-                );
-            });
+            pause.setOnFinished(event -> notificationHandyStackPane.translateXProperty().bind(
+                    anchorPane.
+                            widthProperty().
+                            add(notificationHandyStackPane.widthProperty()).
+                            divide(2).
+                            subtract(iterator)
+            ));
             pause.setDelay(Duration.millis(i));
             pause.play();
         }
@@ -1224,9 +1222,22 @@ public class IngameController extends Controller {
 
         switch (continueDialogReturn) {
             case dialogFinishedTalkToTrainer -> endDialog(-1, true);
-            case albertDialogFinished0 -> endDialog(0, true);
-            case albertDialogFinished1 -> endDialog(1, true);
-            case albertDialogFinished2 -> endDialog(2, true);
+            case albertDialogFinished0 -> {
+                endDialog(0, true);
+                this.notificationListHandyController.displayStarterMessages();
+                notificationBell.setVisible(true);
+            }
+            case albertDialogFinished1 -> {
+                endDialog(1, true);
+                this.notificationListHandyController.displayStarterMessages();
+                notificationBell.setVisible(true);
+
+            }
+            case albertDialogFinished2 -> {
+                endDialog(2, true);
+                this.notificationListHandyController.displayStarterMessages();
+                notificationBell.setVisible(true);
+            }
             case dialogFinishedNoTalkToTrainer -> endDialog(0, false);
             case spokenToNurse -> createNurseHealPopup();
             case encounterOnTalk -> {
@@ -1457,5 +1468,26 @@ public class IngameController extends Controller {
         root.getChildren().add(changeAudioVBox);
         changeAudioVBox.requestFocus();
         buttonsDisable(true);
+    }
+
+    public void specificSounds() {
+        if(!GraphicsEnvironment.isHeadless()) {
+            disposables.add(areasService.getArea(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer().area()).
+                    observeOn(FX_SCHEDULER).subscribe(area -> {
+                        if(area.name().contains("Route")) {
+                            AudioService.getInstance().stopSound();
+                            AudioService.getInstance().playSound(ROUTE_SOUND);
+                            AudioService.getInstance().setCurrentSound(ROOMS_SOUND);
+                        } else if(area.map().infinite()) {
+                            AudioService.getInstance().stopSound();
+                            AudioService.getInstance().playSound(CITY_SOUND);
+                            AudioService.getInstance().setCurrentSound(CITY_SOUND);
+                        } else {
+                            AudioService.getInstance().stopSound();
+                            AudioService.getInstance().playSound(ROOMS_SOUND);
+                            AudioService.getInstance().setCurrentSound(ROOMS_SOUND);
+                        }
+                    }, error -> this.showError(error.getMessage())));
+        }
     }
 }

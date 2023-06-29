@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 import static io.reactivex.rxjava3.core.Observable.empty;
 import static io.reactivex.rxjava3.core.Observable.just;
@@ -85,7 +86,8 @@ public class IngameControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        ingameController.setValues(bundle, null, null, ingameController, app);
+        Preferences preferences = mock(Preferences.class);
+        ingameController. setValues (bundle, preferences, null, ingameController, app);
 
         UDPEventListener udpEventListener = mock(UDPEventListener.class);
         Mockito.when(udpEventListenerProvider.get()).thenReturn(udpEventListener);
@@ -106,7 +108,7 @@ public class IngameControllerTest extends ApplicationTest {
                 "646bacc568933551792bf3d5",
                 33,
                 19,
-                0,
+                1,
                 new NPCInfo(false, false, false, false, null, null)
         ));
         when(trainerStorageProvider.get().getRegion()).thenReturn(
@@ -175,7 +177,7 @@ public class IngameControllerTest extends ApplicationTest {
                     "6475e595ac3946b6a812d863",
                     33,
                     18,
-                    0,
+                    1,
                     new NPCInfo(false, false, false, false, null, null)),
                 new Trainer(
                         "2023-05-30T12:02:57.510Z",
@@ -191,11 +193,10 @@ public class IngameControllerTest extends ApplicationTest {
                         "6475e595ac3946b6a812d863",
                         20,
                         18,
-                        2,
+                        3,
                         new NPCInfo(false, false, false, true, null, null))
                 )
         ));
-        ingameController.setValues(bundle, null, null, ingameController, app);
         EventListener eventListenerMock = mock(EventListener.class);
         when(eventListener.get()).thenReturn(eventListenerMock);
         Message message = new Message("2023-05-30T12:01:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863",
@@ -217,7 +218,7 @@ public class IngameControllerTest extends ApplicationTest {
                 "6475e595ac3946b6a812d863",
                 33,
                 18,
-                0,
+                1,
                 new NPCInfo(false, false,false, false, null,null));
 
         when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers.*.*", Trainer.class)).thenReturn(just(

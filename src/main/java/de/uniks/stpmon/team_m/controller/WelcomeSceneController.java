@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.CharacterSelectionController;
 import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.service.AudioService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
@@ -10,6 +11,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -18,11 +22,11 @@ import javafx.stage.StageStyle;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.MESSAGEBOX_HEIGHT;
-import static de.uniks.stpmon.team_m.Constants.MESSAGEBOX_WIDTH;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class WelcomeSceneController extends Controller {
     @FXML
@@ -56,6 +60,9 @@ public class WelcomeSceneController extends Controller {
     Provider<PresetsService> presetsServiceProvider;
 
     @Inject
+    AudioService audioService;
+
+    @Inject
     public WelcomeSceneController() {
     }
 
@@ -64,11 +71,20 @@ public class WelcomeSceneController extends Controller {
         return resources.getString("INGAME.TITLE");
     }
 
+    @Override
+    public void init() {
+        if (!GraphicsEnvironment.isHeadless()) {
+            if (!AudioService.getInstance().getCurrentSound().equals(WELCOME_SOUND)) {
+                AudioService.getInstance().stopSound();
+                AudioService.getInstance().playSound(WELCOME_SOUND);
+                AudioService.getInstance().setCurrentSound(WELCOME_SOUND);
+            }
+        }
+    }
 
     @Override
     public Parent render() {
         final Parent parent = super.render();
-
         nextButton.setOnAction(event -> changeCount(true));
         previousButton.setOnAction(event -> changeCount(false));
         return parent;
@@ -82,7 +98,9 @@ public class WelcomeSceneController extends Controller {
     public void switchScene() {
 
         switch (sceneNumber) {
-            case 0 -> app.show(mainMenuControllerProvider.get());
+            case 0 -> {
+                app.show(mainMenuControllerProvider.get());
+            }
             case 1 -> {
                 if (messagePane.getChildren().size() > 2) {
                     messagePane.getChildren().remove(2);
