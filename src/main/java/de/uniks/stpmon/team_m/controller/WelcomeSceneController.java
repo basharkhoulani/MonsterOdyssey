@@ -99,10 +99,6 @@ public class WelcomeSceneController extends Controller {
 
         switch (sceneNumber) {
             case 0 -> {
-                if(!GraphicsEnvironment.isHeadless()) {
-                    AudioService.getInstance().stopSound();
-                    AudioService.getInstance().playSound(MENU_SOUND);
-                }
                 app.show(mainMenuControllerProvider.get());
             }
             case 1 -> {
