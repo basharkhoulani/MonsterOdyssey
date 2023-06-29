@@ -913,6 +913,10 @@ public class IngameController extends Controller {
                             if (trainerStorageProvider.get().getTrainer()._id().equals(trainer._id())) {
                                 monstersListControllerProvider.get().init();
                             }
+                            // albert
+                            if (trainer._id().equals("645e32c6866ace359554a802")) {
+                                trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y(), trainer.direction()));
+                            }
                         }
                         case "deleted" -> trainers.removeIf(t -> t._id().equals(trainer._id()));
                     }
