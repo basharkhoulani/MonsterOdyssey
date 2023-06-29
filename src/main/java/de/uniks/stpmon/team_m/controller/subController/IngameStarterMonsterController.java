@@ -50,12 +50,12 @@ public class IngameStarterMonsterController extends Controller {
     @Inject
     PresetsService presetsService;
     private List<String> starters;
-    private MonsterTypeDto monster1;
-    private MonsterTypeDto monster2;
-    private MonsterTypeDto monster3;
-    private Image monster1Image;
-    private Image monster2Image;
-    private Image monster3Image;
+    public MonsterTypeDto monster1;
+    public MonsterTypeDto monster2;
+    public MonsterTypeDto monster3;
+    public Image monster1Image;
+    public Image monster2Image;
+    public Image monster3Image;
     public Integer index = 1;
 
 

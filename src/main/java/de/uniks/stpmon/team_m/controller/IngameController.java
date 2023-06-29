@@ -217,7 +217,7 @@ public class IngameController extends Controller {
                 if (inSettings) {
                     return;
                 }
-                if(!isPaused){
+                if (!isPaused) {
                     pauseGame();
                     isPaused = true;
                 } else {
@@ -389,7 +389,7 @@ public class IngameController extends Controller {
                         add(offsetToNotShowPhoneInScreen)
         );
 
-        if(!GraphicsEnvironment.isHeadless()){
+        if (!GraphicsEnvironment.isHeadless()) {
             smallHandyImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(smallHandyImage)).toString()));
             monsterForHandyImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString()));
             notificationBell.setImage(new Image(Objects.requireNonNull(App.class.getResource(notificationBellImage)).toString()));
@@ -1140,7 +1140,8 @@ public class IngameController extends Controller {
                 // TODO @Cheng here you have to put your logic connected with the encounter
                 endDialog(0, true);
             }
-            default -> {}
+            default -> {
+            }
         }
     }
 
@@ -1321,42 +1322,43 @@ public class IngameController extends Controller {
     }
 
     public void showStarterSelection(List<String> starters) {
+        final boolean[] isSelection = {true};
         IngameStarterMonsterController ingameStarterMonsterController = ingameStarterMonsterControllerProvider.get();
-        if (starterSelectionVBox == null) {
-            starterSelectionVBox = new VBox();
-            starterSelectionVBox.getStyleClass().add("miniMapContainer");
-            starterSelectionVBox.setStyle("-fx-max-height: 350px; -fx-max-width: 550px");
-            starterSelectionVBox.setPadding(new Insets(0, 0, 8, 0));
-            ingameStarterMonsterController.init(this, app, starters);
-            starterSelectionVBox.getChildren().add(ingameStarterMonsterController.render());
+        starterSelectionVBox = new VBox();
+        starterSelectionVBox.getStyleClass().add("miniMapContainer");
+        starterSelectionVBox.setStyle("-fx-max-height: 350px; -fx-max-width: 550px");
+        starterSelectionVBox.setPadding(new Insets(0, 0, 8, 0));
+        ingameStarterMonsterController.init(this, app, starters);
+        starterSelectionVBox.getChildren().add(ingameStarterMonsterController.render());
 
-            Button okButton = new Button();
-            okButton.setId("okButton");
-            okButton.setText(resources.getString("OK"));
-            okButton.getStyleClass().add("welcomeSceneButton");
-            okButton.setStyle("-fx-background-color: #e0ecfc");
-            okButton.setOnAction(event -> selectStarter(ingameStarterMonsterController));
-            starterSelectionVBox.getChildren().add(okButton);
-        }
+        Button okButton = new Button();
+        okButton.setId("okButton");
+        okButton.setText(resources.getString("OK"));
+        okButton.getStyleClass().add("welcomeSceneButton");
+        okButton.setStyle("-fx-background-color: #e0ecfc");
+        okButton.setOnAction(event -> {
+            if (isSelection[0]) {
+                isSelection[0] = false;
+                AnchorPane starterAnchorPane = (AnchorPane) starterSelectionVBox.getChildren().get(0);
+                Label starterLabel = (Label) starterAnchorPane.getChildren().get(0);
+                starterLabel.setText(resources.getString("NEW.MONSTER.ADDED"));
+                starterAnchorPane.getChildren().remove(3);
+                starterAnchorPane.getChildren().remove(2);
+            } else {
+                root.getChildren().remove(starterSelectionVBox);
+                buttonsDisable(false);
+                switch (ingameStarterMonsterController.index - 1) {
+                    case 0 -> continueTrainerDialog(DialogSpecialInteractions.starterSelection0);
+                    case 1 -> continueTrainerDialog(DialogSpecialInteractions.starterSelection1);
+                    case 2 -> continueTrainerDialog(DialogSpecialInteractions.starterSelection2);
+                }
+            }
+
+        });
+        starterSelectionVBox.getChildren().add(okButton);
         root.getChildren().add(starterSelectionVBox);
         starterSelectionVBox.requestFocus();
         buttonsDisable(true);
-    }
-
-    private void selectStarter(IngameStarterMonsterController ingameStarterMonsterController) {
-        root.getChildren().remove(starterSelectionVBox);
-        buttonsDisable(false);
-        switch (ingameStarterMonsterController.index - 1) {
-            case 0 -> {
-                continueTrainerDialog(DialogSpecialInteractions.starterSelection0);
-            }
-            case 1 -> {
-                continueTrainerDialog(DialogSpecialInteractions.starterSelection1);
-            }
-            case 2 -> {
-                continueTrainerDialog(DialogSpecialInteractions.starterSelection2);
-            }
-        }
     }
 
 
