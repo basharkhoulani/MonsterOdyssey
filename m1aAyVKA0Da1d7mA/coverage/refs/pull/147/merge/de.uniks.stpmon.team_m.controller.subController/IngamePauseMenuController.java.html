@@ -70,13 +70,9 @@ public class IngamePauseMenuController extends Controller {
 
     public void leaveGame() {
 <span class="nc" id="L72">        ingameController.root.getChildren().remove(ingameVbox);</span>
-<span class="nc bnc" id="L73" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L74">            AudioService.getInstance().stopSound();</span>
-<span class="nc" id="L75">            AudioService.getInstance().playSound(MENU_SOUND);</span>
-        }
-<span class="nc" id="L77">        double volume = AudioService.getInstance().getVolume();</span>
-<span class="nc" id="L78">        AudioService.getInstance().setVolume(volume);</span>
-<span class="nc" id="L79">        app.show(mainMenuControllerProvider.get());</span>
-<span class="nc" id="L80">    }</span>
+<span class="nc" id="L73">        double volume = AudioService.getInstance().getVolume();</span>
+<span class="nc" id="L74">        AudioService.getInstance().setVolume(volume);</span>
+<span class="nc" id="L75">        app.show(mainMenuControllerProvider.get());</span>
+<span class="nc" id="L76">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

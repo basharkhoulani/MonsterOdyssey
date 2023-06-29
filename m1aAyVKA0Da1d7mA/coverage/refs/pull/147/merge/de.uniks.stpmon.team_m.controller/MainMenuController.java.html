@@ -115,7 +115,7 @@ public class MainMenuController extends Controller {
 
         }
 <span class="pc bpc" id="L117" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (AudioService.getInstance() == null) {</span>
+<span class="nc bnc" id="L118" title="All 4 branches missed.">            if ((AudioService.getInstance().getCurrentSound() == null) || (AudioService.getInstance().getCurrentSound().equals(CITY_SOUND))) {</span>
 <span class="nc" id="L119">                AudioService.getInstance().playSound(MENU_SOUND);</span>
             }
         }
