@@ -46,7 +46,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
@@ -351,7 +350,7 @@ public class IngameController extends Controller {
         chatListView.setSelectionModel(null);
 
         // Create and start standing animation
-        trainerSpriteAnimation = new SpriteAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), trainerStorageProvider.get().getTrainer(), DELAY_LONG, userTrainerCanvas.getGraphicsContext2D());
+        trainerSpriteAnimation = new SpriteAnimation(null, trainerStorageProvider.get().getTrainerSpriteChunk(), trainerStorageProvider.get().getTrainer(), DELAY_LONG, userTrainerCanvas.getGraphicsContext2D());
         if (!GraphicsEnvironment.isHeadless()) {
             trainerSpriteAnimation.stay(trainerStorageProvider.get().getDirection());
             trainerSpriteAnimation.start();
@@ -473,7 +472,8 @@ public class IngameController extends Controller {
                             if (oldPosition != null && trainerController != null) {
                                 trainersCanvas.getGraphicsContext2D().clearRect(oldPosition.getX() * TILE_SIZE, oldPosition.getY() * TILE_SIZE, 16, 25);
                                 if (oldPosition.getX() != moveTrainerDto.x() || oldPosition.getY() != moveTrainerDto.y()) {
-                                    trainerController.getSpriteAnimation().setCurrentPosition(new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction()));
+                                    trainerController.setTrainerTargetPosition(moveTrainerDto.x(), moveTrainerDto.y());
+                                    //trainerController.getSpriteAnimation().setCurrentPosition(new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction()));
                                     trainerController.getSpriteAnimation().walk(moveTrainerDto.direction());
                                 }
                                 trainersCanvas.getGraphicsContext2D().drawImage(trainerController.getSpriteAnimation().currentImage, moveTrainerDto.x() * TILE_SIZE, moveTrainerDto.y() * TILE_SIZE, 16, 25);

@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.utils;
 
+import de.uniks.stpmon.team_m.controller.subController.TrainerController;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
@@ -13,6 +14,7 @@ import static de.uniks.stpmon.team_m.Constants.TILE_SIZE;
 public class SpriteAnimation extends AnimationTimer {
     private static final int DELAY = 100;
     private static final int DELAY_LONG = 500;
+    private final TrainerController trainerController;
 
     private Position currentPosition;
     private Position lastPosition;
@@ -35,8 +37,9 @@ public class SpriteAnimation extends AnimationTimer {
     private Image[] trainerWalkingLeft;
     private Image[] trainerWalkingRight;
     private boolean isWalking;
-    public SpriteAnimation(Image spriteChunk, Trainer trainer, long duration, GraphicsContext graphicsContext) { //ImageView root) {
+    public SpriteAnimation(TrainerController trainerController, Image spriteChunk, Trainer trainer, long duration, GraphicsContext graphicsContext) { //ImageView root) {
         super();
+        this.trainerController = trainerController;
         this.spriteChunk = spriteChunk;
         this.trainer = trainer;
         this.duration = duration;
@@ -65,21 +68,31 @@ public class SpriteAnimation extends AnimationTimer {
         if (lastPlayedTimeStamp == null) {
             lastPlayedTimeStamp = System.currentTimeMillis();
         }
+        if (lastPosition != null) {
+            graphicsContext.clearRect(lastPosition.getX() * TILE_SIZE, lastPosition.getY() * TILE_SIZE, 16,  25);
+        }
+        if (trainerController != null) {
+            graphicsContext.clearRect(trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  25);
+            trainerController.walk();
+            graphicsContext.drawImage(images[currentIndex], trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  25);
+            if (trainer.name().equals("Adam")) {
+                System.out.println("X: " + trainerController.getTrainerX() + " Y: " + trainerController.getTrainerY());
+            }
+        }
+        else {
+            graphicsContext.clearRect(currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);
+            graphicsContext.drawImage(images[currentIndex], currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);
+            if (isWalking && currentIndex == 0) {
+                isWalking = false;
+                stay(currentPosition.getDirection());
+            }
+        }
         if (System.currentTimeMillis() - lastPlayedTimeStamp < duration) {
             return;
         }
         lastPlayedTimeStamp = System.currentTimeMillis();
-        if (lastPosition != null) {
-            graphicsContext.clearRect(lastPosition.getX() * TILE_SIZE, lastPosition.getY() * TILE_SIZE, 16,  25);
-        }
-        graphicsContext.clearRect(currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);
-        graphicsContext.drawImage(images[currentIndex], currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);
         currentIndex = (currentIndex + 1) % 6;
         currentImage = images[currentIndex];
-        if (isWalking && currentIndex == 0) {
-            isWalking = false;
-            stay(currentPosition.getDirection());
-        }
     }
 
     private void setImages(Image[] images) {
