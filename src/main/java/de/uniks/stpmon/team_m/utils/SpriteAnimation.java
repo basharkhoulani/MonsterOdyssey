@@ -69,16 +69,16 @@ public class SpriteAnimation extends AnimationTimer {
             lastPlayedTimeStamp = System.currentTimeMillis();
         }
         if (lastPosition != null) {
-            graphicsContext.clearRect(lastPosition.getX() * TILE_SIZE, lastPosition.getY() * TILE_SIZE, 16,  25);
+            graphicsContext.clearRect(lastPosition.getX() * TILE_SIZE, lastPosition.getY() * TILE_SIZE, 16,  27);
         }
         if (trainerController != null) {
-            graphicsContext.clearRect(trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  25);
+            graphicsContext.clearRect(trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  27);
             trainerController.walk();
-            graphicsContext.drawImage(images[currentIndex], trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  25);
+            graphicsContext.drawImage(images[currentIndex], trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  27);
         }
         else {
-            graphicsContext.clearRect(currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);
-            graphicsContext.drawImage(images[currentIndex], currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);
+            graphicsContext.clearRect(currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  27);
+            graphicsContext.drawImage(images[currentIndex], currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  27);
             if (isWalking && currentIndex == 0) {
                 isWalking = false;
                 stay(currentPosition.getDirection());

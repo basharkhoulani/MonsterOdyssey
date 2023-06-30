@@ -86,6 +86,11 @@ public class TrainerController extends Controller {
         trainerTargetY = y;
     }
 
+    public void turn(int direction) {
+        trainerDirection = direction;
+        spriteAnimation.stay(trainerDirection);
+    }
+
     public void walk() {
         if (trainerX != trainerTargetX * TILE_SIZE || trainerY != trainerTargetY * TILE_SIZE) {
             isWalking = true;
