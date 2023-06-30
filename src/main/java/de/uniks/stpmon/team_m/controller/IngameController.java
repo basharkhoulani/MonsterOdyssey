@@ -183,7 +183,8 @@ public class IngameController extends Controller {
     private NotificationListHandyController notificationListHandyController;
     private StackPane notificationHandyStackPane;
     private boolean movementDisabled;
-    public Canvas miniMapCanvas = new Canvas();
+    private final Canvas miniMapCanvas = new Canvas();
+    private Map miniMap;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -640,10 +641,9 @@ public class IngameController extends Controller {
 
     public void setCanvasSettings(Map map, Canvas canvas, boolean forMiniMap) {
         if (!forMiniMap) {
-
+            canvas.setScaleX(SCALE_FACTOR);
+            canvas.setScaleY(SCALE_FACTOR);
         }
-        canvas.setScaleX(SCALE_FACTOR);
-        canvas.setScaleY(SCALE_FACTOR);
         canvas.setWidth(map.width() * TILE_SIZE);
         canvas.setHeight(map.height() * TILE_SIZE);
     }
@@ -1309,28 +1309,22 @@ public class IngameController extends Controller {
     }
 
     public void loadMiniMap() {
-        final Map[] map = {null};
         disposables.add(regionsService.getRegion(
                 trainerStorageProvider.get().getRegion()._id()
         ).observeOn(FX_SCHEDULER).subscribe(region -> {
-                    map[0] = region.map();
-                    for (TileSet tileSet : map[0].tilesets()) {
+                    miniMap = region.map();
+                    for (TileSet tileSet : miniMap.tilesets()) {
                         final String mapName = getFileName(tileSet.source());
                         disposables.add(presetsService.getTilesetImage(mapName)
                                 .doOnNext(image -> tileSetImages.put(mapName, image))
                                 .flatMap(image -> presetsService.getTileset(mapName).observeOn(FX_SCHEDULER))
                                 .doOnNext(tileset -> tileSetJsons.put(mapName, tileset))
                                 .observeOn(FX_SCHEDULER).subscribe(result -> {
-                                    setCanvasSettings(map[0], miniMapCanvas, true);
-                                    for (TileSet tileSet1 : map[0].tilesets()) {
-                                        renderMap(map[0], tileSetImages.get(getFileName(tileSet1.source())), tileSetJsons.get(getFileName(tileSet1.source())),
-                                                tileSet1, map[0].tilesets().size() > 1, true);
+                                    setCanvasSettings(miniMap, miniMapCanvas, true);
+                                    for (TileSet tileSet1 : miniMap.tilesets()) {
+                                        renderMap(miniMap, tileSetImages.get(getFileName(tileSet1.source())), tileSetJsons.get(getFileName(tileSet1.source())),
+                                                tileSet1, miniMap.tilesets().size() > 1, true);
                                     }
-                                    Image pin = new Image(String.valueOf(App.class.getResource("images/pin.png")));
-                                    region.map().layers().get(2).objects().forEach(tileObject -> {
-                                        miniMapCanvas.getGraphicsContext2D().drawImage(pin, tileObject.x(), tileObject.y()-pin.getHeight()/20, pin.getWidth()/10, pin.getHeight()/10);
-                                    });
-
                                 }, error -> {
                                     showError(error.getMessage());
                                     error.printStackTrace();
@@ -1349,8 +1343,7 @@ public class IngameController extends Controller {
         if (miniMapVBox == null) {
             miniMapVBox = new VBox();
             miniMapVBox.getStyleClass().add("miniMapContainer");
-            miniMapVBox.setPadding(new Insets(0, 0, 8, 0));
-            ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox);
+            ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox, miniMap);
             miniMapVBox.getChildren().add(ingameMiniMapController.render());
         }
         root.getChildren().add(miniMapVBox);
