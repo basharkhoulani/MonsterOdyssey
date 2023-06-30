@@ -14,9 +14,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
 
 public class IngameMiniMapController extends Controller {
     @FXML
@@ -59,34 +62,44 @@ public class IngameMiniMapController extends Controller {
         double pinHeight = pin.getHeight() / 20;
         double xPinOffset = -pinWidth / 2;
         double yPinOffset = -pinHeight;
-
+        final VBox[] descriptionVBox = new VBox[1];
         miniMap.layers().get(2).objects().forEach(tileObject -> {
-            double width = 16;
-            double height = 16;
+            double width;
+            double height;
             if (tileObject.width() != 0) {
                 width = tileObject.width();
+            } else {
+                width = 16;
             }
             if (tileObject.height() != 0) {
                 height = tileObject.height();
+            } else {
+                height = 16;
             }
-
             VBox location = new VBox();
             location.setMinSize(width, height);
             location.setPrefSize(width, height);
             location.setMaxSize(width, height);
             location.setLayoutX(tileObject.x());
             location.setLayoutY(tileObject.y());
-            location.setStyle("-fx-border-color: black");
             location.setOnMouseEntered(event -> {
-                System.out.println("name: " + tileObject.name());
-                System.out.println("description: " + tileObject.properties().get(0).value());
+                TextFlow description = new TextFlow();
+                description.getChildren().add(new Text(tileObject.name() + "\n\n" + tileObject.properties().get(0).value()));
+
+                descriptionVBox[0] = new VBox();
+                descriptionVBox[0].setMaxSize(632, 40);
+                descriptionVBox[0].setStyle("-fx-padding: 4 4 4 4px;-fx-background-color: #d3ebd3;-fx-border-color: black;-fx-border-style: solid;-fx-font-family: \"Comic Sans MS\";-fx-font-weight: bold;");
+                descriptionVBox[0].setLayoutX(-60);
+                descriptionVBox[0].setLayoutY(-32);
+
+                descriptionVBox[0].getChildren().add(description);
+                mapContainer.getChildren().add(descriptionVBox[0]);
             });
-            location.setOnMouseExited(event -> {
-            });
+            location.setOnMouseExited(event -> mapContainer.getChildren().remove(descriptionVBox[0]));
+
             miniMapCanvas.getGraphicsContext2D().drawImage(pin, tileObject.x() + width / 2 + xPinOffset, tileObject.y() + height / 2 + yPinOffset, pinWidth, pinHeight);
             mapContainer.getChildren().add(location);
         });
-
 
         miniMapImageView.setImage(miniMapCanvas.snapshot(null, null));
         return parent;
