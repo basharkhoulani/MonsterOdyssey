@@ -116,7 +116,7 @@ public class NotificationListHandyController extends Controller {
         for (int i = 0; i < 2; i++) {
             int iter = i;
             KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> {
-                handyMessages.add(this.resources.getString("INGAME.NOTIICATIONS.STARTER."+ iter));
+                handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.STARTER."+ iter));
             });
             timeline.getKeyFrames().add(keyFrame);
             duration++;
