@@ -24,6 +24,7 @@ public class TrainerController extends Controller {
     private int oldTrainerY;
     private int trainerX;
     private int trainerY;
+    private int trainerDirection;
     private int trainerTargetX;
     private int trainerTargetY;
 
@@ -49,7 +50,7 @@ public class TrainerController extends Controller {
             duration = DELAY_LONG;
         }
         spriteAnimation = new SpriteAnimation(this, trainerChunk, trainer, duration, graphicsContext);
-        spriteAnimation.stay(trainer.direction());
+        spriteAnimation.stay(trainerDirection);
     }
 
     public void startAnimations() {
@@ -73,6 +74,7 @@ public class TrainerController extends Controller {
         this.oldTrainerY = trainerTargetY = trainer.y();
         this.trainerX = trainer.x() * TILE_SIZE;
         this.trainerY = trainer.y() * TILE_SIZE;
+        this.trainerDirection = trainer.direction();
     }
 
     public SpriteAnimation getSpriteAnimation() {
@@ -87,24 +89,24 @@ public class TrainerController extends Controller {
     public void walk() {
         if (trainerX != trainerTargetX * TILE_SIZE || trainerY != trainerTargetY * TILE_SIZE) {
             isWalking = true;
-            //spriteAnimation.walk(trainer.direction());
             if (trainerX < trainerTargetX * TILE_SIZE) {
                 trainerX++;
-                spriteAnimation.walk(0);
+                trainerDirection = 0;
             } else if (trainerX > trainerTargetX * TILE_SIZE) {
                 trainerX--;
-                spriteAnimation.walk(2);
+                trainerDirection = 2;
             } else if (trainerY < trainerTargetY * TILE_SIZE) {
                 trainerY++;
-                spriteAnimation.walk(3);
+                trainerDirection = 3;
             } else if (trainerY > trainerTargetY * TILE_SIZE) {
                 trainerY--;
-                spriteAnimation.walk(1);
+                trainerDirection = 1;
             }
+            spriteAnimation.walk(trainerDirection);
         }
         else {
             isWalking = false;
-            spriteAnimation.stay(trainer.direction());
+            spriteAnimation.stay(trainerDirection);
         }
     }
 }
