@@ -640,9 +640,10 @@ public class IngameController extends Controller {
 
     public void setCanvasSettings(Map map, Canvas canvas, boolean forMiniMap) {
         if (!forMiniMap) {
-            canvas.setScaleX(SCALE_FACTOR);
-            canvas.setScaleY(SCALE_FACTOR);
+
         }
+        canvas.setScaleX(SCALE_FACTOR);
+        canvas.setScaleY(SCALE_FACTOR);
         canvas.setWidth(map.width() * TILE_SIZE);
         canvas.setHeight(map.height() * TILE_SIZE);
     }
@@ -1325,6 +1326,11 @@ public class IngameController extends Controller {
                                         renderMap(map[0], tileSetImages.get(getFileName(tileSet1.source())), tileSetJsons.get(getFileName(tileSet1.source())),
                                                 tileSet1, map[0].tilesets().size() > 1, true);
                                     }
+                                    Image pin = new Image(String.valueOf(App.class.getResource("images/pin.png")));
+                                    region.map().layers().get(2).objects().forEach(tileObject -> {
+                                        miniMapCanvas.getGraphicsContext2D().drawImage(pin, tileObject.x(), tileObject.y()-pin.getHeight()/20, pin.getWidth()/10, pin.getHeight()/10);
+                                    });
+
                                 }, error -> {
                                     showError(error.getMessage());
                                     error.printStackTrace();
