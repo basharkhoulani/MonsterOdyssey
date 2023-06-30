@@ -10,6 +10,7 @@ import de.uniks.stpmon.team_m.service.MessageService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
+import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
@@ -67,6 +68,9 @@ public class IngameControllerTest extends ApplicationTest {
     // Leave this mock!! it ensures that tests run fine
     @Mock
     TrainerStorage trainerStorage;
+    // Please also keep this mock, it is needed for the tests
+    @Mock
+    EncounterOpponentStorage encounterOpponentStorage;
 
     @Mock
     TrainersService trainersService;
