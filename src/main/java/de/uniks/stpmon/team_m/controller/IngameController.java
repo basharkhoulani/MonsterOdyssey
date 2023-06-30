@@ -921,6 +921,11 @@ public class IngameController extends Controller {
                             if (trainerStorageProvider.get().getTrainer()._id().equals(trainer._id())) {
                                 monstersListControllerProvider.get().init();
                             }
+                            // albert
+                            if (trainer._id().equals("645e32c6866ace359554a802")) {
+                                trainerPositionHashMap.entrySet().removeIf(trainerPositionEntry -> trainerPositionEntry.getKey()._id().equals(trainer._id()));
+                                trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y(), trainer.direction()));
+                            }
                         }
                         case "deleted" -> trainers.removeIf(t -> t._id().equals(trainer._id()));
                     }
@@ -1119,21 +1124,21 @@ public class IngameController extends Controller {
         int checkTileYForNurse = currentY;
 
         switch (direction) {
-            case 0 -> {                         // facing up
-                checkTileY--;
-                checkTileYForNurse -= 2;
-            }
-            case 1 -> {                         // facing right
+            case 0 -> {                         // facing right
                 checkTileX++;
                 checkTileXForNurse += 2;
             }
-            case 2 -> {                         // facing down
-                checkTileY++;
-                checkTileY += 2;
+            case 1 -> {                         // facing up
+                checkTileY--;
+                checkTileYForNurse -= 2;
             }
-            case 3 -> {                         // facing left
+            case 2 -> {                         // facing left
                 checkTileX--;
                 checkTileXForNurse -= 2;
+            }
+            case 3 -> {                         // facing down
+                checkTileY++;
+                checkTileYForNurse += 2;
             }
             default -> System.err.println("Unknown direction for Trainer: " + direction);
         }
