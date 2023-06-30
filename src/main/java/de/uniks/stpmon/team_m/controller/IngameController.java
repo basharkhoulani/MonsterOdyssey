@@ -1018,16 +1018,8 @@ public class IngameController extends Controller {
     private void checkIfEncounterAlreadyExist() {
         String regionId = trainerStorageProvider.get().getRegion()._id();
         String trainerId = trainerStorageProvider.get().getTrainer()._id();
-        disposables.add(encounterOpponentsService.getTrainerOpponents(regionId, trainerId)
-                .observeOn(FX_SCHEDULER).subscribe(opponentResults -> {
-                    if (opponentResults.size() != 0) {
-                        encounterOpponentStorage.setEncounterId(opponentResults.get(0).encounter());
-                        System.out.println("You are already in an encounter " + opponentResults.get(0).encounter());
-                    }
-                }, error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }));
+
+        //TODO: Encounter wieder hesrstellen
     }
 
     //TODO: Bei dem Dialogfenster wenn man E drückt, wird die Scenen nach Encountercontroller rü
