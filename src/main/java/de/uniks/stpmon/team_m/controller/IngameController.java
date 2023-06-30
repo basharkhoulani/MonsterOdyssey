@@ -960,13 +960,6 @@ public class IngameController extends Controller {
                     final Encounter encounter = event.data();
                     if(event.suffix().equals("created")) {
                         System.out.println("Encounter created at Websocket encounterlistener: " + encounter._id());
-                        disposables.add(encounterOpponentsService.getTrainerOpponents(regionId, trainerId)
-                                .observeOn(FX_SCHEDULER).subscribe(os -> {
-                                    if(os.size() != 0){
-                                        encounterOpponentStorage.setEncounterId(os.get(0).encounter());
-                                    }
-                                }
-                        ));
                     }
                 }, error -> {
                     showError(error.getMessage());

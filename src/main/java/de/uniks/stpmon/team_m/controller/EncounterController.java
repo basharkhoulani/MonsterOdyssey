@@ -94,10 +94,6 @@ public class EncounterController extends Controller {
         regionId = encounterOpponentStorage.getRegionId();
         encounterId = encounterOpponentStorage.getEncounterId();
         trainerId = trainerStorageProvider.get().getTrainer()._id();
-        disposables.add(regionEncountersService.getEncounter(regionId, encounterId)
-                .observeOn(FX_SCHEDULER).subscribe(encounter -> {
-                    encounterOpponentStorage.setWild(encounter.isWild());
-                }, Throwable::printStackTrace));
         battleMenuController.init();
     }
 
@@ -108,11 +104,14 @@ public class EncounterController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
         System.out.println("EncounterController.render");
-        if (!GraphicsEnvironment.isHeadless()) {
-            // Sprite
-            showTrainer();
-            showMonster();
-        }
+        disposables.add(regionEncountersService.getEncounter(regionId,encounterId)
+                .observeOn(FX_SCHEDULER).subscribe(encounter -> {
+                    encounterOpponentStorage.setWild(encounter.isWild());
+                    // Sprite
+                    showTrainer();
+                    showMonster();
+                }, Throwable::printStackTrace));
+
         // render for subcontroller
         battleMenuController.init(this, battleMenu);
         battleMenu.getChildren().add(battleMenuController.render());
