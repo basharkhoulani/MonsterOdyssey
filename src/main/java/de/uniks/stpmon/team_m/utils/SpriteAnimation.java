@@ -75,13 +75,10 @@ public class SpriteAnimation extends AnimationTimer {
             graphicsContext.clearRect(trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  25);
             trainerController.walk();
             graphicsContext.drawImage(images[currentIndex], trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  25);
-            if (trainer.name().equals("Adam")) {
-                System.out.println("X: " + trainerController.getTrainerX() + " Y: " + trainerController.getTrainerY());
-            }
         }
         else {
-            //graphicsContext.clearRect(currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);
-            //graphicsContext.drawImage(images[currentIndex], currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);
+            graphicsContext.clearRect(currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);
+            graphicsContext.drawImage(images[currentIndex], currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);
             if (isWalking && currentIndex == 0) {
                 isWalking = false;
                 stay(currentPosition.getDirection());

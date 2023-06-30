@@ -109,4 +109,12 @@ public class TrainerController extends Controller {
             spriteAnimation.stay(trainerDirection);
         }
     }
+
+    public void setTrainerDirection(int direction) {
+        trainerDirection = direction;
+    }
+
+    public int getTrainerDirection() {
+        return trainerDirection;
+    }
 }
