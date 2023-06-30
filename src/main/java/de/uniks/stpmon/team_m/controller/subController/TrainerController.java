@@ -18,10 +18,8 @@ public class TrainerController extends Controller {
 
     private SpriteAnimation spriteAnimation;
     private final GraphicsContext graphicsContext;
-    private Trainer trainer;
-    private Image trainerChunk;
-    private int oldTrainerX;
-    private int oldTrainerY;
+    private final Trainer trainer;
+    private final Image trainerChunk;
     private int trainerX;
     private int trainerY;
     private int trainerDirection;
@@ -65,22 +63,21 @@ public class TrainerController extends Controller {
     /** Note: oldTrainerX, oldTrainerY, targetTrainerX and targetTrainerY are given in tiles, not in pixels!
      *  BUT trainerTargetX and trainerTargetY are given in pixels!
      */
-
     public TrainerController(Trainer trainer, Image trainerChunk, GraphicsContext graphicsContext) {
         this.trainerChunk = trainerChunk;
         this.trainer = trainer;
         this.graphicsContext = graphicsContext;
-        this.oldTrainerX = trainerTargetX = trainer.x();
-        this.oldTrainerY = trainerTargetY = trainer.y();
+        trainerTargetX = trainer.x();
+        trainerTargetY = trainer.y();
         this.trainerX = trainer.x() * TILE_SIZE;
         this.trainerY = trainer.y() * TILE_SIZE;
         this.trainerDirection = trainer.direction();
     }
 
-    public SpriteAnimation getSpriteAnimation() {
-        return spriteAnimation;
-    }
-
+    /**
+     * @param x x-coordinate of the trainer in tiles
+     * @param y y-coordinate of the trainer in tiles
+     */
     public void setTrainerTargetPosition(int x, int y) {
         trainerTargetX = x;
         trainerTargetY = y;
@@ -117,9 +114,5 @@ public class TrainerController extends Controller {
 
     public void setTrainerDirection(int direction) {
         trainerDirection = direction;
-    }
-
-    public int getTrainerDirection() {
-        return trainerDirection;
     }
 }
