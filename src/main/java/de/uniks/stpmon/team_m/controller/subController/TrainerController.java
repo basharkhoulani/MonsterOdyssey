@@ -1,23 +1,28 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.SpriteAnimation;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import static de.uniks.stpmon.team_m.Constants.TILE_SIZE;
 
 public class TrainerController extends Controller {
     private static final int DELAY = 100;
     private static final int DELAY_LONG = 500;
+    private final IngameController ingameController;
 
     private SpriteAnimation spriteAnimation;
     private final GraphicsContext graphicsContext;
+    private final GraphicsContext alternativeGraphicsContext;
     private final Trainer trainer;
     private final Image trainerChunk;
     private int trainerX;
@@ -28,6 +33,10 @@ public class TrainerController extends Controller {
 
     @Inject
     PresetsService presetsService;
+
+    @Inject
+    Provider<TrainerStorage> trainerStorageProvider;
+
     private Boolean isWalking = false;
 
     public int getTrainerX() {
@@ -47,7 +56,7 @@ public class TrainerController extends Controller {
         } else {
             duration = DELAY_LONG;
         }
-        spriteAnimation = new SpriteAnimation(this, trainerChunk, trainer, duration, graphicsContext);
+        spriteAnimation = new SpriteAnimation(this, trainerChunk, trainer, duration, graphicsContext, alternativeGraphicsContext);
         spriteAnimation.stay(trainerDirection);
     }
 
@@ -63,10 +72,12 @@ public class TrainerController extends Controller {
     /** Note: oldTrainerX, oldTrainerY, targetTrainerX and targetTrainerY are given in tiles, not in pixels!
      *  BUT trainerTargetX and trainerTargetY are given in pixels!
      */
-    public TrainerController(Trainer trainer, Image trainerChunk, GraphicsContext graphicsContext) {
+    public TrainerController(IngameController ingameController, Trainer trainer, Image trainerChunk, GraphicsContext graphicsContext, GraphicsContext alternateGraphicsContext) {
+        this.ingameController = ingameController;
         this.trainerChunk = trainerChunk;
         this.trainer = trainer;
         this.graphicsContext = graphicsContext;
+        this.alternativeGraphicsContext = alternateGraphicsContext;
         trainerTargetX = trainer.x();
         trainerTargetY = trainer.y();
         this.trainerX = trainer.x() * TILE_SIZE;
@@ -114,5 +125,15 @@ public class TrainerController extends Controller {
 
     public void setTrainerDirection(int direction) {
         trainerDirection = direction;
+    }
+
+    @Override
+    public void destroy() {
+        spriteAnimation.stop();
+        super.destroy();
+    }
+
+    public int getUserTrainerY() {
+        return ingameController.getUserTrainerY();
     }
 }
