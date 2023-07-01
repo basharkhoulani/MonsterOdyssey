@@ -983,13 +983,10 @@ public class IngameController extends Controller {
                     final Message message = event.data();
                     switch (event.suffix()) {
                         case "created" -> {
-                            for (Message m : messages) {
-                                if (m._id().equals(message._id())) {
-                                    return;
-                                }
+                            if (messages.stream().noneMatch(m -> m._id().equals(message._id()))) {
+                                messages.add(message);
+                                chatListView.scrollTo(chatListView.getItems().size() - 1);
                             }
-                            messages.add(message);
-                            chatListView.scrollTo(chatListView.getItems().size() - 1);
                         }
                         case "updated" -> updateMessage(messages, message);
                         case "deleted" -> messages.removeIf(m -> m._id().equals(message._id()));
