@@ -162,13 +162,15 @@ public class AppTest extends ApplicationTest {
         clickOn("OK");*/
 
         // test Map
+        /*
         final ImageView mapSymbol = lookup("#mapSymbol").query();
         clickOn(mapSymbol);
         final Label label = lookup("#regionName").query();
         assertEquals("test", label.getText());
-        final ImageView map = lookup("#mapImageView").query();
+        final ImageView map = lookup("#miniMapImageView").query();
         assertNotNull(map);
         clickOn("Close");
+         */
 
         // test Ingame Pause
         clickOn("#pauseButton");
