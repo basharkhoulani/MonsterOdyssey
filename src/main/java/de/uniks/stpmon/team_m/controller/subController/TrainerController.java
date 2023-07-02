@@ -13,11 +13,9 @@ import javafx.scene.image.Image;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import static de.uniks.stpmon.team_m.Constants.TILE_SIZE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class TrainerController extends Controller {
-    private static final int DELAY = 100;
-    private static final int DELAY_LONG = 500;
     private final IngameController ingameController;
 
     private SpriteAnimation spriteAnimation;
