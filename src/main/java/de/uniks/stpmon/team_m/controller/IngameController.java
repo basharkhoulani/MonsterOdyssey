@@ -750,16 +750,12 @@ public class IngameController extends Controller {
                 }
             }
         }
-        groundCanvas.getGraphicsContext2D().drawImage(writableImageGround, x2 * TILE_SIZE, y2 * TILE_SIZE);
-        roofCanvas.getGraphicsContext2D().drawImage(writableImageTop, x2 * TILE_SIZE, y2 * TILE_SIZE);
-    }
         if (forMiniMap) {
             miniMapCanvas.getGraphicsContext2D().drawImage(writableImageGround, x2 * TILE_SIZE, y2 * TILE_SIZE);
         } else {
             groundCanvas.getGraphicsContext2D().drawImage(writableImageGround, x2 * TILE_SIZE, y2 * TILE_SIZE);
             roofCanvas.getGraphicsContext2D().drawImage(writableImageTop, x2 * TILE_SIZE, y2 * TILE_SIZE);
         }
-
     }
 
     /**
@@ -1086,6 +1082,17 @@ public class IngameController extends Controller {
 
             if (this.currentNpc != null) {
                 inDialog = true;
+
+                if (trainerControllerHashMap.containsKey(this.currentNpc) && trainerControllerHashMap.get(this.currentNpc).getDirection() != currentDirection) {
+                    int turnDirection;
+                    switch (currentDirection) {
+                        case 0 ->  turnDirection = 2;
+                        case 1 ->  turnDirection = 3;
+                        case 2 ->  turnDirection = 0;
+                        default -> turnDirection = 1;
+                    }
+                    trainerControllerHashMap.get(this.currentNpc).turn(turnDirection);
+                }
 
                 this.dialogController = new DialogController(
                         this.currentNpc,
