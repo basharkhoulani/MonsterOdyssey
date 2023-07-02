@@ -8,12 +8,10 @@ import javafx.scene.image.Image;
 
 import java.awt.*;
 
-import static de.uniks.stpmon.team_m.Constants.TILE_SIZE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 
 public class SpriteAnimation extends AnimationTimer {
-    private static final int DELAY = 100;
-    private static final int DELAY_LONG = 500;
     private final TrainerController trainerController;
     private final GraphicsContext alternativeGraphicsContext;
     private final GraphicsContext graphicsContext;

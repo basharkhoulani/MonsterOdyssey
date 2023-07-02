@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
@@ -58,9 +59,6 @@ import static de.uniks.stpmon.team_m.Constants.*;
 
 
 public class IngameController extends Controller {
-    private static final int DELAY = 300;
-    private static final int SCALE_FACTOR = 2;
-
     @FXML
     public Button monstersButton;
     @FXML
@@ -206,13 +204,6 @@ public class IngameController extends Controller {
                     interactWithTrainer();
                 }
             }
-            if (isChatting || loadingMap || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < DELAY + 50)) {
-                return;
-            }
-            if (event.getCode() == KeyCode.ENTER) {
-                messageField.requestFocus();
-                isChatting = true;
-            }
             if (event.getCode() == PAUSE_MENU_KEY) {
                 if (inSettings) {
                     return;
@@ -223,7 +214,13 @@ public class IngameController extends Controller {
                     ingamePauseMenuController.resumeGame();
                 }
             }
-
+            if (isChatting || loadingMap || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < TRANSITION_DURATION + 50)) {
+                return;
+            }
+            if (event.getCode() == KeyCode.ENTER) {
+                messageField.requestFocus();
+                isChatting = true;
+            }
             lastKeyEventTimeStamp = System.currentTimeMillis();
 
             if (inDialog) {
@@ -528,9 +525,9 @@ public class IngameController extends Controller {
      */
     private Timeline getMapMovementTransition(Canvas map, int x, int y) {
         return new Timeline(
-                new KeyFrame(Duration.millis(IngameController.DELAY), e -> {
+                new KeyFrame(Duration.millis(TRANSITION_DURATION), e -> {
                     TranslateTransition translateTransition = new TranslateTransition();
-                    translateTransition.setDuration(Duration.millis(IngameController.DELAY));
+                    translateTransition.setDuration(Duration.millis(TRANSITION_DURATION));
                     translateTransition.setNode(map);
                     translateTransition.setByX(x);
                     translateTransition.setByY(y);

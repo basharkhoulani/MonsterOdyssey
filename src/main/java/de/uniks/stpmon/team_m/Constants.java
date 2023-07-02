@@ -74,9 +74,13 @@ public class Constants {
     public static final int AVATAR_SIZE = 30;
 
     // INGAME
-    public static int TILE_SIZE = 16;
-    public static double ZERO = 0;
-    public static double ONE = 1;
+    public static final int TILE_SIZE = 16;
+    public static final int TRANSITION_DURATION = 300;
+    public static final int SCALE_FACTOR = 2;
+    public static final int DELAY = 100;
+    public static final int DELAY_LONG = 500;
+    public static final double ZERO = 0;
+    public static final double ONE = 1;
 
     public static final String SETTINGSYMBOL2 = "images/SettingSymbol2.png";
     public static final String GOBACKSYMBOL = "images/GoBackSymbol.PNG";
