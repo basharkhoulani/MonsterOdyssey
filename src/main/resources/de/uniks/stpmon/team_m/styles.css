@@ -387,8 +387,8 @@
 .miniMapContainer {
     -fx-alignment: CENTER;
     -fx-background-color: #d3ebd3;
-    -fx-max-height: 500px;
-    -fx-max-width: 500px;
+    -fx-max-height: 550px;
+    -fx-max-width: 700px;
     -fx-border-color: black;
     -fx-border-style: solid;
     -fx-border-width: 2px;

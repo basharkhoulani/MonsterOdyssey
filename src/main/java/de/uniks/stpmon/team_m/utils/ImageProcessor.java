@@ -91,9 +91,9 @@ public class ImageProcessor {
         Image[] array = new Image[6];
         int x, y;
         if (isWalking) {
-            y = 71;
+            y = 69;
         } else {
-            y = 39;
+            y = 37;
         }
         switch (direction) {
             case 0 -> x = 0;
@@ -102,7 +102,7 @@ public class ImageProcessor {
             default -> x = 288;
         }
         for (int i = 0; i < 6; i++) {
-            array[i] = getSubImage(trainerChunk, x, y, 16, 25);
+            array[i] = getSubImage(trainerChunk, x, y, 16, 27);
             x += 16;
         }
         return array;
@@ -125,7 +125,7 @@ public class ImageProcessor {
         try {
             File imageFile = new File(Objects.requireNonNull(App.class.getResource("charactermodels/" + premadeCharacter)).toURI());
             BufferedImage bufferedImage = ImageIO.read(imageFile);
-            BufferedImage bufferedImageFrontView = bufferedImage.getSubimage(48, 7, 16, 25);
+            BufferedImage bufferedImageFrontView = bufferedImage.getSubimage(48, 7, 16, 27);
             BufferedImage scaledBufferedImage = ImageProcessor.scaleImage(bufferedImageFrontView, 6);
             javafx.scene.image.WritableImage writableImage = new javafx.scene.image.WritableImage(scaledBufferedImage.getWidth(), scaledBufferedImage.getHeight());
             javafx.scene.image.PixelWriter pixelWriter = writableImage.getPixelWriter();

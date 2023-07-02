@@ -5,10 +5,7 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.MonstersListController;
 import de.uniks.stpmon.team_m.controller.subController.NotificationListHandyController;
 import de.uniks.stpmon.team_m.dto.*;
-import de.uniks.stpmon.team_m.service.AreasService;
-import de.uniks.stpmon.team_m.service.MessageService;
-import de.uniks.stpmon.team_m.service.PresetsService;
-import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -76,6 +73,8 @@ public class IngameControllerTest extends ApplicationTest {
     TrainersService trainersService;
     @Mock
     MessageService messageService;
+    @Mock
+    RegionsService regionsService;
     @InjectMocks
     IngameController ingameController;
     @Mock
@@ -201,6 +200,31 @@ public class IngameControllerTest extends ApplicationTest {
                         new NPCInfo(false, false, false, true, null, null))
                 )
         ));
+        when(regionsService.getRegion(any())).thenReturn(Observable.just(
+                new Region(
+                        "2023-05-22T17:51:46.772Z",
+                        "2023-05-22T17:51:46.772Z",
+                        "646bc436cfee07c0e408466f",
+                        "Albertina",
+                        new Spawn("646bc3c0a9ac1b375fb41d93", 1, 1),
+                        new Map(
+                                -1,
+                                true,
+                                1,
+                                1,
+                                "orthogonal",
+                                "right-down",
+                                "1.6.1",
+                                "map",
+                                "1.6",
+                                32,
+                                32,
+                                List.of(),
+                                16,
+                                16,
+                                List.of(),
+                                List.of())
+                )));
         EventListener eventListenerMock = mock(EventListener.class);
         when(eventListener.get()).thenReturn(eventListenerMock);
         Message message = new Message("2023-05-30T12:01:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863",

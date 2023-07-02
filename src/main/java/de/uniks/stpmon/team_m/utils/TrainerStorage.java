@@ -37,7 +37,9 @@ public class TrainerStorage {
         this.trainerName = trainerName;
     }
 
-    public void setTrainerSprite(String url) { this.trainerImageUrl = url; }
+    public void setTrainerSprite(String url) {
+        this.trainerImageUrl = url;
+    }
 
     public Trainer getTrainer() {
         return trainer;
@@ -46,6 +48,7 @@ public class TrainerStorage {
     public Region getRegion() {
         return region;
     }
+
     public void setRegion(Region region) {
         this.region = region;
     }
@@ -105,4 +108,5 @@ public class TrainerStorage {
     public void setMonsterTypes(List<MonsterTypeDto> monsterTypes) {
         this.monsterTypes = monsterTypes;
     }
+
 }
