@@ -2,8 +2,11 @@
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.FriendListUtils;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -14,16 +17,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
-<span class="fc" id="L26">public abstract class Controller {</span>
+<span class="fc" id="L32">public abstract class Controller {</span>
 
     @Inject
     protected ResourceBundle resources;
@@ -31,43 +37,45 @@ import static de.uniks.stpmon.team_m.Constants.*;
     protected Preferences preferences;
     @Inject
     protected Provider&lt;ResourceBundle&gt; resourceBundleProvider;
+    @Inject
+    protected PresetsService presetsService;
     protected Controller toReload;
     protected App app;
     @Inject
     Provider&lt;EventListener&gt; eventListenerProvider;
-<span class="fc" id="L38">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
-<span class="fc" id="L39">    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);</span>
+<span class="fc" id="L46">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
+<span class="fc" id="L47">    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);</span>
 
     /**
      * This method is called when the controller is initialized. It is called before the render() method.
      */
 
     public void init() {
-<span class="fc" id="L46">    }</span>
-
-    public void setValues(ResourceBundle resources, Preferences preferences, Provider&lt;ResourceBundle&gt; resourceBundleProvider, Controller toReload, App app) {
-<span class="fc" id="L49">        this.resources = resources;</span>
-<span class="fc" id="L50">        this.preferences = preferences;</span>
-<span class="fc" id="L51">        this.resourceBundleProvider = resourceBundleProvider;</span>
-<span class="fc" id="L52">        this.toReload = toReload;</span>
-<span class="fc" id="L53">        this.app = app;</span>
 <span class="fc" id="L54">    }</span>
 
+    public void setValues(ResourceBundle resources, Preferences preferences, Provider&lt;ResourceBundle&gt; resourceBundleProvider, Controller toReload, App app) {
+<span class="fc" id="L57">        this.resources = resources;</span>
+<span class="fc" id="L58">        this.preferences = preferences;</span>
+<span class="fc" id="L59">        this.resourceBundleProvider = resourceBundleProvider;</span>
+<span class="fc" id="L60">        this.toReload = toReload;</span>
+<span class="fc" id="L61">        this.app = app;</span>
+<span class="fc" id="L62">    }</span>
+
     public void setApp(App app) {
-<span class="fc" id="L57">        this.app = app;</span>
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L65">        this.app = app;</span>
+<span class="fc" id="L66">    }</span>
 
     public void reload(Controller controller) {
-<span class="nc" id="L61">        resources = resourceBundleProvider.get();</span>
-<span class="nc" id="L62">        app.show(controller);</span>
-<span class="nc" id="L63">    }</span>
+<span class="nc" id="L69">        resources = resourceBundleProvider.get();</span>
+<span class="nc" id="L70">        app.show(controller);</span>
+<span class="nc" id="L71">    }</span>
 
     /**
      * This method is called when the controller title is needed and to be set.
      */
 
     public String getTitle() {
-<span class="fc" id="L70">        return EMPTY_STRING;</span>
+<span class="fc" id="L78">        return EMPTY_STRING;</span>
     }
 
     /**
@@ -75,8 +83,8 @@ import static de.uniks.stpmon.team_m.Constants.*;
      */
 
     public void destroy() {
-<span class="fc" id="L78">        disposables.dispose();</span>
-<span class="fc" id="L79">    }</span>
+<span class="fc" id="L86">        disposables.dispose();</span>
+<span class="fc" id="L87">    }</span>
 
     /**
      * This method is called when the controller is rendered.
@@ -86,17 +94,17 @@ import static de.uniks.stpmon.team_m.Constants.*;
      */
 
     public Parent render() {
-<span class="fc" id="L89">        return load(getClass().getSimpleName().replace(&quot;Controller&quot;, &quot;&quot;));</span>
+<span class="fc" id="L97">        return load(getClass().getSimpleName().replace(&quot;Controller&quot;, &quot;&quot;));</span>
     }
 
     protected Parent load(String view) {
-<span class="fc" id="L93">        final FXMLLoader loader = new FXMLLoader((Main.class.getResource(&quot;views/&quot; + view + &quot;.fxml&quot;)));</span>
-<span class="fc" id="L94">        loader.setControllerFactory(c -&gt; this);</span>
-<span class="fc" id="L95">        loader.setResources(resources);</span>
+<span class="fc" id="L101">        final FXMLLoader loader = new FXMLLoader((Main.class.getResource(&quot;views/&quot; + view + &quot;.fxml&quot;)));</span>
+<span class="fc" id="L102">        loader.setControllerFactory(c -&gt; this);</span>
+<span class="fc" id="L103">        loader.setResources(resources);</span>
         try {
-<span class="fc" id="L97">            return loader.load();</span>
-<span class="nc" id="L98">        } catch (IOException exception) {</span>
-<span class="nc" id="L99">            throw new RuntimeException(exception);</span>
+<span class="fc" id="L105">            return loader.load();</span>
+<span class="nc" id="L106">        } catch (IOException exception) {</span>
+<span class="nc" id="L107">            throw new RuntimeException(exception);</span>
         }
     }
 
@@ -107,7 +115,7 @@ import static de.uniks.stpmon.team_m.Constants.*;
      */
 
     public int getHeight() {
-<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        return STANDARD_HEIGHT != app.getStage().getHeight() ? (int) app.getStage().getHeight() : STANDARD_HEIGHT;</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        return STANDARD_HEIGHT != app.getStage().getHeight() ? (int) app.getStage().getHeight() : STANDARD_HEIGHT;</span>
     }
 
     /**
@@ -117,7 +125,7 @@ import static de.uniks.stpmon.team_m.Constants.*;
      */
 
     public int getWidth() {
-<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        return STANDARD_WIDTH != app.getStage().getWidth() ? (int) app.getStage().getWidth() : STANDARD_WIDTH;</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">        return STANDARD_WIDTH != app.getStage().getWidth() ? (int) app.getStage().getWidth() : STANDARD_WIDTH;</span>
     }
 
     /**
@@ -128,15 +136,15 @@ import static de.uniks.stpmon.team_m.Constants.*;
      */
 
     public void listenToUserUpdate(ObservableList&lt;User&gt; friends, ListView&lt;User&gt; friendsListView) {
-<span class="fc" id="L131">        disposables.add(eventListenerProvider.get().listen(&quot;users.*.*&quot;, User.class).observeOn(FX_SCHEDULER)</span>
-<span class="fc" id="L132">                .subscribe(event -&gt; {</span>
-<span class="fc" id="L133">                    final User user = event.data();</span>
-<span class="fc bfc" id="L134" title="All 3 branches covered.">                    switch (event.suffix()) {</span>
-<span class="fc" id="L135">                        case &quot;updated&quot; -&gt; updateUser(friends, friendsListView, user);</span>
-<span class="fc" id="L136">                        case &quot;deleted&quot; -&gt; friends.remove(user);</span>
+<span class="fc" id="L139">        disposables.add(eventListenerProvider.get().listen(&quot;users.*.*&quot;, User.class).observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L140">                .subscribe(event -&gt; {</span>
+<span class="fc" id="L141">                    final User user = event.data();</span>
+<span class="fc bfc" id="L142" title="All 3 branches covered.">                    switch (event.suffix()) {</span>
+<span class="fc" id="L143">                        case &quot;updated&quot; -&gt; updateUser(friends, friendsListView, user);</span>
+<span class="fc" id="L144">                        case &quot;deleted&quot; -&gt; friends.remove(user);</span>
                     }
-<span class="fc" id="L138">                }, error -&gt; showError(error.getMessage())));</span>
-<span class="fc" id="L139">    }</span>
+<span class="fc" id="L146">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L147">    }</span>
 
     /**
      * This method is called when the friend user has had a change. Its user cell will be updated with
@@ -148,15 +156,15 @@ import static de.uniks.stpmon.team_m.Constants.*;
      */
 
     private void updateUser(ObservableList&lt;User&gt; friends, ListView&lt;User&gt; friendsListView, User user) {
-<span class="fc" id="L151">        User userToUpdate = friends.stream()</span>
-<span class="fc" id="L152">                .filter(friend -&gt; friend._id().equals(user._id()))</span>
-<span class="fc" id="L153">                .findFirst()</span>
-<span class="fc" id="L154">                .orElse(null);</span>
-<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        if (userToUpdate != null) {</span>
-<span class="fc" id="L156">            friends.set(friends.indexOf(userToUpdate), user);</span>
-<span class="fc" id="L157">            FriendListUtils.sortListView(friendsListView);</span>
+<span class="fc" id="L159">        User userToUpdate = friends.stream()</span>
+<span class="fc" id="L160">                .filter(friend -&gt; friend._id().equals(user._id()))</span>
+<span class="fc" id="L161">                .findFirst()</span>
+<span class="fc" id="L162">                .orElse(null);</span>
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">        if (userToUpdate != null) {</span>
+<span class="fc" id="L164">            friends.set(friends.indexOf(userToUpdate), user);</span>
+<span class="fc" id="L165">            FriendListUtils.sortListView(friendsListView);</span>
         }
-<span class="fc" id="L159">    }</span>
+<span class="fc" id="L167">    }</span>
 
     /**
      * This method is called when there is an error and shows an alert with the error message.
@@ -165,30 +173,41 @@ import static de.uniks.stpmon.team_m.Constants.*;
      */
 
     public void showError(String error) {
-<span class="fc" id="L168">        Alert alert = new Alert(Alert.AlertType.ERROR);</span>
-<span class="fc" id="L169">        alert.setTitle(resources.getString(&quot;ERROR&quot;));</span>
-<span class="fc" id="L170">        alert.setHeaderText(null);</span>
-<span class="pc bpc" id="L171" title="1 of 2 branches missed.">        if (error.contains(HTTP_429)) {</span>
-<span class="nc" id="L172">            alert.setContentText(resources.getString(&quot;HTTP.429.MESSAGE&quot;));</span>
-<span class="fc bfc" id="L173" title="All 2 branches covered.">        } else if (error.contains(HTTP_409)) {</span>
-<span class="fc" id="L174">            alert.setContentText(resources.getString(&quot;HTTP.409.MESSAGE&quot;));</span>
-<span class="fc bfc" id="L175" title="All 2 branches covered.">        } else if (error.contains(HTTP_404)) {</span>
-<span class="fc" id="L176">            alert.setContentText(resources.getString(&quot;HTTP.404.MESSAGE&quot;));</span>
-<span class="fc bfc" id="L177" title="All 2 branches covered.">        } else if (error.contains(HTTP_403)) {</span>
-<span class="fc" id="L178">            alert.setContentText(resources.getString(&quot;HTTP.403.MESSAGE&quot;));</span>
-<span class="fc bfc" id="L179" title="All 2 branches covered.">        } else if (error.contains(HTTP_401)) {</span>
-<span class="fc" id="L180">            alert.setContentText(resources.getString(&quot;HTTP.401.MESSAGE&quot;));</span>
-<span class="fc bfc" id="L181" title="All 2 branches covered.">        } else if (error.contains(HTTP_400)) {</span>
-<span class="fc" id="L182">            alert.setContentText(resources.getString(&quot;HTTP.400.MESSAGE&quot;));</span>
+<span class="fc" id="L176">        Alert alert = new Alert(Alert.AlertType.ERROR);</span>
+<span class="fc" id="L177">        alert.setTitle(resources.getString(&quot;ERROR&quot;));</span>
+<span class="fc" id="L178">        alert.setHeaderText(null);</span>
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">        if (error.contains(HTTP_429)) {</span>
+<span class="nc" id="L180">            alert.setContentText(resources.getString(&quot;HTTP.429.MESSAGE&quot;));</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">        } else if (error.contains(HTTP_409)) {</span>
+<span class="fc" id="L182">            alert.setContentText(resources.getString(&quot;HTTP.409.MESSAGE&quot;));</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">        } else if (error.contains(HTTP_404)) {</span>
+<span class="fc" id="L184">            alert.setContentText(resources.getString(&quot;HTTP.404.MESSAGE&quot;));</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">        } else if (error.contains(HTTP_403)) {</span>
+<span class="fc" id="L186">            alert.setContentText(resources.getString(&quot;HTTP.403.MESSAGE&quot;));</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        } else if (error.contains(HTTP_401)) {</span>
+<span class="fc" id="L188">            alert.setContentText(resources.getString(&quot;HTTP.401.MESSAGE&quot;));</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">        } else if (error.contains(HTTP_400)) {</span>
+<span class="fc" id="L190">            alert.setContentText(resources.getString(&quot;HTTP.400.MESSAGE&quot;));</span>
         } else {
-<span class="fc" id="L184">            alert.setContentText(resources.getString(&quot;GENERIC.ERROR&quot;));</span>
+<span class="fc" id="L192">            alert.setContentText(resources.getString(&quot;GENERIC.ERROR&quot;));</span>
         }
-<span class="fc" id="L186">        alert.showAndWait();</span>
-<span class="fc" id="L187">    }</span>
+<span class="fc" id="L194">        alert.showAndWait();</span>
+<span class="fc" id="L195">    }</span>
 
     public ResourceBundle getResources() {
-<span class="fc" id="L190">        return resources;</span>
+<span class="fc" id="L198">        return resources;</span>
     }
+
+    public void setTrainerSpriteImageView(Trainer trainer, ImageView imageView, int direction) {
+<span class="nc bnc" id="L202" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L203">            disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody -&gt; {</span>
+<span class="nc" id="L204">                        javafx.scene.image.Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);</span>
+<span class="nc" id="L205">                        Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, direction, false);</span>
+<span class="nc" id="L206">                        imageView.setImage(character[0]);</span>
+<span class="nc" id="L207">                    }, error -&gt; showError(error.getMessage())</span>
+            ));
+        }
+<span class="nc" id="L210">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
