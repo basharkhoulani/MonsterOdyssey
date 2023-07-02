@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="160.0" minWidth="350.0" prefHeight="160.0" prefWidth="350.0"
+      styleClass="hBoxRed" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="de.uniks.stpmon.team_m.controller.subController.BattleMenuController">
+   <HBox alignment="CENTER" prefHeight="83.0" prefWidth="350.0">
+      <Button fx:id="abilitiesButton" mnemonicParsing="false" onAction="#showAbilities" prefHeight="54.0"
+              prefWidth="160.0" styleClass="buttonsYellow" text="%ABILITIES">
+         <font>
+            <Font name="Comic Sans MS" size="14.0"/>
+         </font>
+      </Button>
+      <SplitPane prefHeight="83.0" prefWidth="46.0" visible="false"/>
+      <Button fx:id="changeMonsterButton" mnemonicParsing="false" onAction="#changeMonster" prefHeight="52.0"
+              prefWidth="163.0" styleClass="buttonsBlue" text="%CHANGE.MONSTER" wrapText="true">
+         <font>
+            <Font name="Comic Sans MS" size="14.0"/>
+         </font>
+      </Button>
+   </HBox>
+   <HBox alignment="CENTER" prefHeight="83.0" prefWidth="350.0">
+      <Button fx:id="currentInfoButton" mnemonicParsing="false" onAction="#showMonsterInformation" prefHeight="55.0"
+              prefWidth="158.0" styleClass="buttonsWhite" text="%CURRENT.MONSTER.INFORMATION" wrapText="true">
+         <font>
+            <Font name="Comic Sans MS" size="14.0"/>
+         </font>
+      </Button>
+      <SplitPane prefHeight="80.0" prefWidth="40.0" visible="false"/>
+      <Button fx:id="fleeButton" layoutX="105.0" layoutY="17.0" mnemonicParsing="false" onAction="#changeToIngame"
+              prefHeight="53.0" prefWidth="157.0" styleClass="buttonsWhite" text="%FLEE" visible="false"
+              wrapText="true">
+         <font>
+            <Font name="Comic Sans MS" size="14.0"/>
+         </font>
+      </Button>
+   </HBox>
+</VBox>

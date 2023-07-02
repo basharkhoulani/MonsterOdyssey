@@ -48,7 +48,7 @@ public class IngameMessageCell extends ListCell<Message> {
             Trainer trainer = ingameController.getTrainer(message.sender());
             final String trainerName = trainer.name() + ":";
             final String dateTime = formatTimeString(message.createdAt());
-            ingameController.setTrainerSpriteImageView(trainer, spriteImageView);
+            ingameController.setTrainerSpriteImageView(trainer, spriteImageView, 3);
             messageContent.setText(message.body());
             name.setText(trainerName);
             timestamp.setText(dateTime);

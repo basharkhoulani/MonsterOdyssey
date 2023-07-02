@@ -7,6 +7,7 @@ import de.uniks.stpmon.team_m.controller.subController.NotificationListHandyCont
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
+import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
@@ -64,6 +65,9 @@ public class IngameControllerTest extends ApplicationTest {
     // Leave this mock!! it ensures that tests run fine
     @Mock
     TrainerStorage trainerStorage;
+    // Please also keep this mock, it is needed for the tests
+    @Mock
+    EncounterOpponentStorage encounterOpponentStorage;
 
     @Mock
     TrainersService trainersService;
@@ -254,6 +258,38 @@ public class IngameControllerTest extends ApplicationTest {
 
         notificationListHandyController.setValues(bundle, null, null, notificationListHandyController, app);
         when(notificationListHandyControllerProvider.get()).thenReturn(notificationListHandyController);
+
+        Encounter encounter = new Encounter(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "a98db973kwl8xp1lz94kjf0b",
+                "646bab5cecf584e1be02598a",
+                false
+        );
+
+        when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".encounters.*.*", Encounter.class)).thenReturn(just(
+                new Event<>("regions.646bab5cecf584e1be02598a.encounters.a98db973kwl8xp1lz94kjf0b.created", encounter)));
+
+        Opponent opponent = new Opponent(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "rqtjej4dcoqsm4e9yln1loy5",
+                "a98db973kwl8xp1lz94kjf0b",
+                "6475e595ac3946b6a812d865",
+                false,
+                false,
+                "pn2iz308akz07eau5iwa6ykq",
+                new AbilityMove(
+                        "ability",
+                        10,
+                        "hsvxr8je3qs6qt20oxffy4dw"
+                ),
+                List.of(),
+                0);
+
+        when(eventListener.get().listen("encounters.*.opponents.*.*", Opponent.class)).thenReturn(just(
+                new Event<>("encounters.a98db973kwl8xp1lz94kjf0b.opponents.rqtjej4dcoqsm4e9yln1loy5.created", opponent)));
+
 
         app.start(stage);
         app.show(ingameController);
