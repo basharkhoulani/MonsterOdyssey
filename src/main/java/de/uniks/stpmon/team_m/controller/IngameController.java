@@ -196,7 +196,12 @@ public class IngameController extends Controller {
         trainerPositionHashMap = new HashMap<>();
         // Initialize key event listeners
         keyPressedHandler = event -> {
-            event.consume();
+
+            if (event.getCode() == INTERACT_KEY) {
+                if (!inNpcPopup) {
+                    interactWithTrainer();
+                }
+            }
             if (isChatting || loadingMap || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < DELAY + 50)) {
                 return;
             }
@@ -214,11 +219,7 @@ public class IngameController extends Controller {
                     ingamePauseMenuController.resumeGame();
                 }
             }
-            if (event.getCode() == INTERACT_KEY) {
-                if (!inNpcPopup) {
-                    interactWithTrainer();
-                }
-            }
+
             lastKeyEventTimeStamp = System.currentTimeMillis();
 
             if (inDialog) {
@@ -240,8 +241,10 @@ public class IngameController extends Controller {
             if ((event.getCode() == KeyCode.D)) {
                 checkMovement(1, 0, 0);
             }
+            event.consume();
         };
         this.npcTextManager = new NpcTextManager(resources);
+
     }
 
     private void checkMovement(int x, int y, int direction) {
