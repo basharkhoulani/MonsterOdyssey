@@ -69,7 +69,7 @@ public class SpriteAnimation extends AnimationTimer {
         if (trainerController != null) {
             int y = trainerController.getUserTrainerY();
             GraphicsContext drawingContext;
-            if (trainerController.getTrainerY() / TILE_SIZE <= y && alternativeGraphicsContext != null) {
+            if (trainerController.getTrainerY() / TILE_SIZE > y && alternativeGraphicsContext != null) {
                 graphicsContext.clearRect(trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  27);
                 drawingContext = alternativeGraphicsContext;
             }
@@ -93,9 +93,6 @@ public class SpriteAnimation extends AnimationTimer {
     }
 
     private void setImages(Image[] images) {
-        if (isWalking) {
-            return;
-        }
         this.images = images;
     }
 

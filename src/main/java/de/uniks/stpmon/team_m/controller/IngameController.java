@@ -556,12 +556,12 @@ public class IngameController extends Controller {
     private void focusOnPlayerPosition(double mapWidth, double mapHeight, int tilePosX, int tilePosY) {
         int shiftX = (int) calculateInitialCameraXOffset(mapWidth, tilePosX);
         int shiftY = (int) calculateInitialCameraYOffset(mapHeight, tilePosY);
-        getMapMovementTransition(groundCanvas, shiftX, shiftY + TILE_SIZE * SCALE_FACTOR).play();
+        int additionalShiftY = TILE_SIZE * SCALE_FACTOR;
+        getMapMovementTransition(groundCanvas, shiftX, shiftY + additionalShiftY).play();
         getMapMovementTransition(behindUserTrainerCanvas, shiftX, shiftY).play();
         getMapMovementTransition(userTrainerCanvas, shiftX, shiftY).play();
         getMapMovementTransition(overUserTrainerCanvas, shiftX, shiftY).play();
-        getMapMovementTransition(roofCanvas, shiftX, shiftY + TILE_SIZE * SCALE_FACTOR + 1).play();
-
+        getMapMovementTransition(roofCanvas, shiftX, shiftY + additionalShiftY + 1).play();
     }
 
     /**
@@ -1061,6 +1061,16 @@ public class IngameController extends Controller {
 
             if (this.currentNpc != null) {
                 inDialog = true;
+
+                // Turn the NPC to face the player (only on client side)
+                int turnDirection;
+                switch (currentDirection) {
+                    case 0 -> turnDirection = 2;
+                    case 1 -> turnDirection = 3;
+                    case 2 -> turnDirection = 0;
+                    default -> turnDirection = 1;
+                }
+                trainerControllerHashMap.get(this.currentNpc).turn(turnDirection);
 
                 this.dialogController = new DialogController(
                         this.currentNpc,
