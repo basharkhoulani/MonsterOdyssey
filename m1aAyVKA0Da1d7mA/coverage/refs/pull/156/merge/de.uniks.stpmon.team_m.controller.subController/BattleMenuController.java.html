@@ -3,6 +3,7 @@
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
+import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -24,40 +25,42 @@ public class BattleMenuController extends Controller {
     public Button fleeButton;
     private EncounterController encounterController;
     private HBox battleMenuHBox;
+    EncounterOpponentStorage encounterOpponentStorage;
 
 
     @Inject
     public BattleMenuController(
-<span class="nc" id="L31">    ) {}</span>
+<span class="nc" id="L33">    ) {}</span>
 
-    public void init(EncounterController encounterController, HBox battleMenuHBox) {
-<span class="nc" id="L34">        super.init();</span>
-<span class="nc" id="L35">        this.encounterController = encounterController;</span>
-<span class="nc" id="L36">        this.battleMenuHBox = battleMenuHBox;</span>
-<span class="nc" id="L37">    }</span>
+    public void init(EncounterController encounterController, HBox battleMenuHBox, EncounterOpponentStorage encounterOpponentStorage) {
+<span class="nc" id="L36">        super.init();</span>
+<span class="nc" id="L37">        this.encounterController = encounterController;</span>
+<span class="nc" id="L38">        this.battleMenuHBox = battleMenuHBox;</span>
+<span class="nc" id="L39">        this.encounterOpponentStorage = encounterOpponentStorage;</span>
+<span class="nc" id="L40">    }</span>
 
     public Parent render(){
-<span class="nc" id="L40">        final Parent parent = super.render();</span>
-<span class="nc bnc" id="L41" title="All 2 branches missed.">        if(!GraphicsEnvironment.isHeadless()){</span>
-<span class="nc" id="L42">            parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource(&quot;../../styles.css&quot;)).toExternalForm());</span>
+<span class="nc" id="L43">        final Parent parent = super.render();</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if(encounterOpponentStorage.isWild()){</span>
+<span class="nc" id="L45">            fleeButton.setVisible(true);</span>
         }
-<span class="nc" id="L44">        return parent;</span>
+<span class="nc" id="L47">        return parent;</span>
     }
 
 
     public void showAbilities() {
         // change to AbilitiesSubView
-<span class="nc" id="L50">    }</span>
+<span class="nc" id="L53">    }</span>
 
     public void changeMonster(ActionEvent actionEvent) {
         // show the ChangeMonster VBox
-<span class="nc" id="L54">    }</span>
+<span class="nc" id="L57">    }</span>
 
     public void showMonsterInformation(ActionEvent actionEvent) {
         // show the MonsterInformation VBox
-<span class="nc" id="L58">    }</span>
+<span class="nc" id="L61">    }</span>
 
     public void changeToIngame(ActionEvent actionEvent) {
-<span class="nc" id="L61">    }</span>
+<span class="nc" id="L64">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

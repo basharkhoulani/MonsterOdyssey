@@ -112,7 +112,7 @@ public class EncounterController extends Controller {
 <span class="nc" id="L112">                }, Throwable::printStackTrace));</span>
 
         // render for subcontroller
-<span class="nc" id="L115">        battleMenuController.init(this, battleMenu);</span>
+<span class="nc" id="L115">        battleMenuController.init(this, battleMenu, encounterOpponentStorage);</span>
 <span class="nc" id="L116">        battleMenu.getChildren().add(battleMenuController.render());</span>
 
 <span class="nc" id="L118">        listenToOpponents(encounterOpponentStorage.getEncounterId());</span>
@@ -120,14 +120,14 @@ public class EncounterController extends Controller {
     }
 
     private void showTrainer(){
-<span class="nc" id="L123">        mySprite.setImage(ImageProcessor.showScaledFrontCharacter(trainerStorageProvider.get().getTrainer().image()));</span>
+<span class="nc" id="L123">        setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), mySprite,1);</span>
 <span class="nc bnc" id="L124" title="All 2 branches missed.">        if(!encounterOpponentStorage.isWild()){</span>
 <span class="nc" id="L125">            String enemyTrainerId = encounterOpponentStorage.getEnemyOpponent().trainer();</span>
 <span class="nc" id="L126">            disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)</span>
 <span class="nc" id="L127">                    .observeOn(FX_SCHEDULER).subscribe(trainer -&gt; {</span>
 <span class="nc" id="L128">                        encounterOpponentStorage.setOpponentTrainer(trainer);</span>
 <span class="nc" id="L129">                        battleDescription.setText(resources.getString(&quot;ENCOUNTER_DESCRIPTION_BEGIN&quot;) + &quot; &quot; + trainer.name());</span>
-<span class="nc" id="L130">                        opponentTrainer.setImage(ImageProcessor.showScaledFrontCharacter(trainer.image()));</span>
+<span class="nc" id="L130">                        setTrainerSpriteImageView(trainer, opponentTrainer,3);</span>
 <span class="nc" id="L131">                    }, Throwable::printStackTrace));</span>
         }
 <span class="nc" id="L133">    }</span>
@@ -199,6 +199,8 @@ public class EncounterController extends Controller {
     public void showIngameController() {
 <span class="nc" id="L200">        app.show(ingameControllerProvider.get());</span>
 <span class="nc" id="L201">    }</span>
+
+
 }
     
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

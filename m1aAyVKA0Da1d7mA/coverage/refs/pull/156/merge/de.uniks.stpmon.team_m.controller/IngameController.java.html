@@ -1115,11 +1115,11 @@ public class IngameController extends Controller {
 <span class="nc" id="L1115">        return null;</span>
     }
 
-    public void setTrainerSpriteImageView(Trainer trainer, ImageView imageView) {
+    public void setTrainerSpriteImageView(Trainer trainer, ImageView imageView, int direction) {
 <span class="pc bpc" id="L1119" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
 <span class="nc" id="L1120">            disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody -&gt; {</span>
 <span class="nc" id="L1121">                        Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);</span>
-<span class="nc" id="L1122">                        Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, 2, false);</span>
+<span class="nc" id="L1122">                        Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, direction, false);</span>
 <span class="nc" id="L1123">                        imageView.setImage(character[0]);</span>
 <span class="nc" id="L1124">                    }, error -&gt; showError(error.getMessage())</span>
             ));
