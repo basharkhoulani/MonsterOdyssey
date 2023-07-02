@@ -1,37 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IngameMiniMapController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">IngameMiniMapController.java</span></div><h1>IngameMiniMapController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+
 public class IngameMiniMapController extends Controller {
-    @FXML
-    public ImageView mapImageView;
     @FXML
     public Label regionName;
     @FXML
     public AnchorPane mapAnchorPane;
+    @FXML
+    public Button closeButton;
+    @FXML
+    public ImageView miniMapImageView;
+    @FXML
+    public AnchorPane mapContainer;
     @Inject
     Provider&lt;IngameController&gt; ingameControllerProvider;
     @Inject
     Provider&lt;TrainerStorage&gt; trainerStorageProvider;
+    private IngameController ingameController;
+    private VBox miniMapVBox;
+    private Canvas miniMapCanvas;
+    private Map miniMap;
 
     @Inject
-<span class="fc" id="L28">    public IngameMiniMapController() {</span>
-<span class="fc" id="L29">    }</span>
+<span class="nc" id="L45">    public IngameMiniMapController() {</span>
+<span class="nc" id="L46">    }</span>
+
+    public void init(IngameController ingameController, App app, Canvas miniMapCanvas, VBox miniMapVBox, Map miniMap) {
+<span class="nc" id="L49">        this.ingameController = ingameController;</span>
+<span class="nc" id="L50">        this.app = app;</span>
+<span class="nc" id="L51">        this.miniMapCanvas = miniMapCanvas;</span>
+<span class="nc" id="L52">        this.miniMapVBox = miniMapVBox;</span>
+<span class="nc" id="L53">        this.miniMap = miniMap;</span>
+<span class="nc" id="L54">    }</span>
 
     public Parent render() {
-<span class="fc" id="L32">        final Parent parent = super.render();</span>
-<span class="fc" id="L33">        regionName.setText(trainerStorageProvider.get().getRegion().name());</span>
-<span class="fc" id="L34">        return parent;</span>
+<span class="nc" id="L57">        final Parent parent = super.render();</span>
+<span class="nc" id="L58">        regionName.setText(trainerStorageProvider.get().getRegion().name());</span>
+
+<span class="nc" id="L60">        Image pin = new Image(String.valueOf(App.class.getResource(&quot;images/pin.png&quot;)));</span>
+<span class="nc" id="L61">        double pinWidth = pin.getWidth() / 20;</span>
+<span class="nc" id="L62">        double pinHeight = pin.getHeight() / 20;</span>
+<span class="nc" id="L63">        double xPinOffset = -pinWidth / 2;</span>
+<span class="nc" id="L64">        double yPinOffset = -pinHeight;</span>
+<span class="nc" id="L65">        final VBox[] descriptionVBox = new VBox[1];</span>
+<span class="nc" id="L66">        miniMap.layers().get(2).objects().forEach(tileObject -&gt; {</span>
+            double width;
+            double height;
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            if (tileObject.width() != 0) {</span>
+<span class="nc" id="L70">                width = tileObject.width();</span>
+            } else {
+<span class="nc" id="L72">                width = 16;</span>
+            }
+<span class="nc bnc" id="L74" title="All 2 branches missed.">            if (tileObject.height() != 0) {</span>
+<span class="nc" id="L75">                height = tileObject.height();</span>
+            } else {
+<span class="nc" id="L77">                height = 16;</span>
+            }
+<span class="nc" id="L79">            VBox location = new VBox();</span>
+<span class="nc" id="L80">            location.setMinSize(width, height);</span>
+<span class="nc" id="L81">            location.setPrefSize(width, height);</span>
+<span class="nc" id="L82">            location.setMaxSize(width, height);</span>
+<span class="nc" id="L83">            location.setLayoutX(tileObject.x());</span>
+<span class="nc" id="L84">            location.setLayoutY(tileObject.y());</span>
+<span class="nc" id="L85">            location.setOnMouseEntered(event -&gt; {</span>
+<span class="nc" id="L86">                TextFlow description = new TextFlow();</span>
+<span class="nc" id="L87">                description.getChildren().add(new Text(tileObject.name() + &quot;\n\n&quot; + tileObject.properties().get(0).value()));</span>
+
+<span class="nc" id="L89">                descriptionVBox[0] = new VBox();</span>
+<span class="nc" id="L90">                descriptionVBox[0].setMaxSize(632, 40);</span>
+<span class="nc" id="L91">                descriptionVBox[0].setStyle(&quot;-fx-padding: 4 4 4 4px;-fx-background-color: #d3ebd3;-fx-border-color: black;-fx-border-style: solid;-fx-font-family: \&quot;Comic Sans MS\&quot;;-fx-font-weight: bold;&quot;);</span>
+<span class="nc" id="L92">                descriptionVBox[0].setLayoutX(-60);</span>
+<span class="nc" id="L93">                descriptionVBox[0].setLayoutY(-32);</span>
+
+<span class="nc" id="L95">                descriptionVBox[0].getChildren().add(description);</span>
+<span class="nc" id="L96">                mapContainer.getChildren().add(descriptionVBox[0]);</span>
+<span class="nc" id="L97">            });</span>
+<span class="nc" id="L98">            location.setOnMouseExited(event -&gt; mapContainer.getChildren().remove(descriptionVBox[0]));</span>
+
+<span class="nc" id="L100">            miniMapCanvas.getGraphicsContext2D().drawImage(pin, tileObject.x() + width / 2 + xPinOffset, tileObject.y() + height / 2 + yPinOffset, pinWidth, pinHeight);</span>
+<span class="nc" id="L101">            mapContainer.getChildren().add(location);</span>
+<span class="nc" id="L102">        });</span>
+
+<span class="nc" id="L104">        miniMapImageView.setImage(miniMapCanvas.snapshot(null, null));</span>
+<span class="nc" id="L105">        return parent;</span>
     }
+
+    public void closeMiniMap() {
+<span class="nc" id="L109">        ingameController.root.getChildren().remove(miniMapVBox);</span>
+<span class="nc" id="L110">        ingameController.buttonsDisable(false);</span>
+<span class="nc" id="L111">    }</span>
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
