@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
+import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -24,22 +25,24 @@ public class BattleMenuController extends Controller {
     public Button fleeButton;
     private EncounterController encounterController;
     private HBox battleMenuHBox;
+    EncounterOpponentStorage encounterOpponentStorage;
 
 
     @Inject
     public BattleMenuController(
     ) {}
 
-    public void init(EncounterController encounterController, HBox battleMenuHBox) {
+    public void init(EncounterController encounterController, HBox battleMenuHBox, EncounterOpponentStorage encounterOpponentStorage) {
         super.init();
         this.encounterController = encounterController;
         this.battleMenuHBox = battleMenuHBox;
+        this.encounterOpponentStorage = encounterOpponentStorage;
     }
 
     public Parent render(){
         final Parent parent = super.render();
-        if(!GraphicsEnvironment.isHeadless()){
-            parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../../styles.css")).toExternalForm());
+        if(encounterOpponentStorage.isWild()){
+            fleeButton.setVisible(true);
         }
         return parent;
     }

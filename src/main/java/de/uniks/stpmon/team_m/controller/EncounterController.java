@@ -112,7 +112,7 @@ public class EncounterController extends Controller {
                 }, Throwable::printStackTrace));
 
         // render for subcontroller
-        battleMenuController.init(this, battleMenu);
+        battleMenuController.init(this, battleMenu, encounterOpponentStorage);
         battleMenu.getChildren().add(battleMenuController.render());
 
         listenToOpponents(encounterOpponentStorage.getEncounterId());
@@ -120,14 +120,14 @@ public class EncounterController extends Controller {
     }
 
     private void showTrainer(){
-        mySprite.setImage(ImageProcessor.showScaledFrontCharacter(trainerStorageProvider.get().getTrainer().image()));
+        setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), mySprite,1);
         if(!encounterOpponentStorage.isWild()){
             String enemyTrainerId = encounterOpponentStorage.getEnemyOpponent().trainer();
             disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)
                     .observeOn(FX_SCHEDULER).subscribe(trainer -> {
                         encounterOpponentStorage.setOpponentTrainer(trainer);
                         battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + trainer.name());
-                        opponentTrainer.setImage(ImageProcessor.showScaledFrontCharacter(trainer.image()));
+                        setTrainerSpriteImageView(trainer, opponentTrainer,3);
                     }, Throwable::printStackTrace));
         }
     }
@@ -199,5 +199,7 @@ public class EncounterController extends Controller {
     public void showIngameController() {
         app.show(ingameControllerProvider.get());
     }
+
+
 }
     
