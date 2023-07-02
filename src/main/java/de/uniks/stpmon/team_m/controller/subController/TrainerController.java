@@ -136,4 +136,8 @@ public class TrainerController extends Controller {
     public int getUserTrainerY() {
         return ingameController.getUserTrainerY();
     }
+
+    public int getDirection() {
+        return this.trainerDirection;
+    }
 }

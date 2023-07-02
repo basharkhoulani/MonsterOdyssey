@@ -487,7 +487,11 @@ public class IngameController extends Controller {
                         trainerPositionHashMap.put(trainerStorageProvider.get().getTrainer(), position);
                     } else {
                         if (trainers != null) {
-                            Trainer trainer = trainers.stream().filter(tr -> tr._id().equals(moveTrainerDto._id())).toList().get(0);
+                            List<Trainer> equalTrainers = this.trainers.stream().filter(tr -> tr._id().equals(moveTrainerDto._id())).toList();
+                            if (equalTrainers == null || equalTrainers.isEmpty()) {
+                                return;
+                            }
+                            Trainer trainer = equalTrainers.get(0);
                             Position oldPosition = trainerPositionHashMap.get(trainer);
                             TrainerController trainerController = trainerControllerHashMap.get(trainer);
                             if (oldPosition != null && trainerController != null) {
@@ -1062,15 +1066,17 @@ public class IngameController extends Controller {
             if (this.currentNpc != null) {
                 inDialog = true;
 
-                // Turn the NPC to face the player (only on client side)
-                int turnDirection;
-                switch (currentDirection) {
-                    case 0 -> turnDirection = 2;
-                    case 1 -> turnDirection = 3;
-                    case 2 -> turnDirection = 0;
-                    default -> turnDirection = 1;
+                if (trainerControllerHashMap.containsKey(this.currentNpc) && trainerControllerHashMap.get(this.currentNpc).getDirection() != currentDirection) {
+                    // Turn the NPC to face the player (only on client side)
+                    int turnDirection;
+                    switch (currentDirection) {
+                        case 0 -> turnDirection = 2;
+                        case 1 -> turnDirection = 3;
+                        case 2 -> turnDirection = 0;
+                        default -> turnDirection = 1;
+                    }
+                    trainerControllerHashMap.get(this.currentNpc).turn(turnDirection);
                 }
-                trainerControllerHashMap.get(this.currentNpc).turn(turnDirection);
 
                 this.dialogController = new DialogController(
                         this.currentNpc,
@@ -1225,6 +1231,13 @@ public class IngameController extends Controller {
     public void endDialog(int selectionValue, boolean encounterNpc) {
         this.dialogController.destroy();
         inDialog = false;
+
+        // Turn NPC back to original direction after finishing dialog
+        if (trainerControllerHashMap.containsKey(this.currentNpc)
+                && trainerControllerHashMap.get(this.currentNpc).getDirection() != this.currentNpc.direction()
+        ) {
+            trainerControllerHashMap.get(this.currentNpc).turn(this.currentNpc.direction());
+        }
         stackPane.getChildren().remove(dialogStackPane);
 
         if (encounterNpc) {
