@@ -21,6 +21,7 @@ public class BattleMenuController extends Controller {
     public Button changeMonsterButton;
     @FXML
     public Button currentInfoButton;
+    public Button fleeButton;
     private EncounterController encounterController;
     private HBox battleMenuHBox;
 
@@ -54,5 +55,8 @@ public class BattleMenuController extends Controller {
 
     public void showMonsterInformation(ActionEvent actionEvent) {
         // show the MonsterInformation VBox
+    }
+
+    public void changeToIngame(ActionEvent actionEvent) {
     }
 }

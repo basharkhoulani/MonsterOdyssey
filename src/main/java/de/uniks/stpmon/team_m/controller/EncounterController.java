@@ -103,11 +103,10 @@ public class EncounterController extends Controller {
 
     public Parent render() {
         final Parent parent = super.render();
-        System.out.println("EncounterController.render");
         disposables.add(regionEncountersService.getEncounter(regionId,encounterId)
                 .observeOn(FX_SCHEDULER).subscribe(encounter -> {
                     encounterOpponentStorage.setWild(encounter.isWild());
-                    // Sprite
+                    // Sprite and all relevante Information
                     showTrainer();
                     showMonster();
                 }, Throwable::printStackTrace));
@@ -166,7 +165,7 @@ public class EncounterController extends Controller {
                                 opponentMonsterName.setText(m.name());
                                 encounterOpponentStorage.setCurrentEnemyMonsterType(m);
                                 if(encounterOpponentStorage.isWild()){
-                                    battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + m.name());
+                                    battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + m.name());
                                 }
                             }, Throwable::printStackTrace));
                     disposables.add(presetsService.getMonsterImage(monster.type())
