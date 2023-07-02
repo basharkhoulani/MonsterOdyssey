@@ -960,7 +960,7 @@ public class IngameController extends Controller {
         String regionId = trainerStorageProvider.get().getRegion()._id();
         String trainerId = trainerStorageProvider.get().getTrainer()._id();
         encounterOpponentStorage.setRegionId(regionId);
-        disposables.add(eventListener.get().listen("regions." + regionId + ".encounters.*.*", Encounter.class)
+        disposables.add(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".encounters.*.*", Encounter.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Encounter encounter = event.data();
                     if(event.suffix().equals("created")) {
