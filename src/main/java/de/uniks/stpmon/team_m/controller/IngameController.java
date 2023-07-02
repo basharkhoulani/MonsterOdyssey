@@ -1034,7 +1034,7 @@ public class IngameController extends Controller {
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Encounter encounter = event.data();
                     if(event.suffix().equals("created")) {
-                        System.out.println("Encounter created at Websocket encounterlistener: " + encounter._id());
+                        // getEncounterOpponents(regionId, encounter._id()); isn't working
                     }
                 }, error -> {
                     showError(error.getMessage());
@@ -1050,7 +1050,6 @@ public class IngameController extends Controller {
                     final Opponent opponent = opponentEvent.data();
                     switch (opponentEvent.suffix()) {
                         case "created" -> {
-                            System.out.println("Opponent created at Websocket encounterlistener: " + opponent._id());
                             opponents.add(opponent);
                         }
                         case "deleted" -> opponents.removeIf(o -> o._id().equals(opponent._id()));
@@ -1077,7 +1076,7 @@ public class IngameController extends Controller {
     }
 
     private void showEncounterInfoWindow() {
-        System.out.println("show Dialogfenster");
+        //TODO: EncounterInfoWindow and Interaction with E
         showEncounterScene();
     }
 
