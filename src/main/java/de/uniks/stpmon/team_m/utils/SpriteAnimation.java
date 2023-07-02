@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.utils;
 
+import de.uniks.stpmon.team_m.controller.subController.TrainerController;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
@@ -7,15 +8,14 @@ import javafx.scene.image.Image;
 
 import java.awt.*;
 
-import static de.uniks.stpmon.team_m.Constants.TILE_SIZE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 
 public class SpriteAnimation extends AnimationTimer {
-    private static final int DELAY = 100;
-    private static final int DELAY_LONG = 500;
+    private final TrainerController trainerController;
+    private final GraphicsContext alternativeGraphicsContext;
+    private final GraphicsContext graphicsContext;
 
-    private Position currentPosition;
-    private Position lastPosition;
     private final Image spriteChunk;
     private final Trainer trainer;
     public Image currentImage;
@@ -24,7 +24,6 @@ public class SpriteAnimation extends AnimationTimer {
     private long duration;
     private Long lastPlayedTimeStamp;
     private int currentIndex = 0;
-    GraphicsContext graphicsContext;
 
     private Image[] trainerStandingUp;
     private Image[] trainerStandingDown;
@@ -35,17 +34,18 @@ public class SpriteAnimation extends AnimationTimer {
     private Image[] trainerWalkingLeft;
     private Image[] trainerWalkingRight;
     private boolean isWalking;
-    public SpriteAnimation(Image spriteChunk, Trainer trainer, long duration, GraphicsContext graphicsContext) { //ImageView root) {
+    public SpriteAnimation(TrainerController trainerController, Image spriteChunk, Trainer trainer, long duration, GraphicsContext graphicsContext, GraphicsContext alternativeGraphicsContext) {
         super();
+        this.trainerController = trainerController;
         this.spriteChunk = spriteChunk;
         this.trainer = trainer;
         this.duration = duration;
         this.graphicsContext = graphicsContext;
+        this.alternativeGraphicsContext = alternativeGraphicsContext;
         init();
     }
 
     private void init() {
-        // right up left down
         trainerStandingRight = ImageProcessor.cropTrainerImages(spriteChunk, 0, false);
         trainerWalkingRight = ImageProcessor.cropTrainerImages(spriteChunk, 0, true);
         trainerStandingUp = ImageProcessor.cropTrainerImages(spriteChunk, 1, false);
@@ -55,7 +55,6 @@ public class SpriteAnimation extends AnimationTimer {
         trainerStandingDown = ImageProcessor.cropTrainerImages(spriteChunk, 3, false);
         trainerWalkingDown = ImageProcessor.cropTrainerImages(spriteChunk, 3, true);
         images = trainerWalkingDown;
-        currentPosition = new Position(trainer.x(), trainer.y(), trainer.direction());
         currentImage = images[0];
 
     }
@@ -65,27 +64,33 @@ public class SpriteAnimation extends AnimationTimer {
         if (lastPlayedTimeStamp == null) {
             lastPlayedTimeStamp = System.currentTimeMillis();
         }
-        if (System.currentTimeMillis() - lastPlayedTimeStamp < duration) {
+        if (trainerController != null) {
+            int y = trainerController.getUserTrainerY();
+            GraphicsContext drawingContext;
+            if (trainerController.getTrainerY() / TILE_SIZE > y && alternativeGraphicsContext != null) {
+                graphicsContext.clearRect(trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  27);
+                drawingContext = alternativeGraphicsContext;
+            }
+            else {
+                if (alternativeGraphicsContext != null) {
+                    alternativeGraphicsContext.clearRect(trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  27);
+                }
+                drawingContext = graphicsContext;
+            }
+            drawingContext.clearRect(trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  27);
+            trainerController.walk();
+            drawingContext.drawImage(images[currentIndex], trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  27);
+        }
+
+        if (System.currentTimeMillis() - lastPlayedTimeStamp < duration + 50) {
             return;
         }
         lastPlayedTimeStamp = System.currentTimeMillis();
-        if (lastPosition != null) {
-            graphicsContext.clearRect(lastPosition.getX() * TILE_SIZE, lastPosition.getY() * TILE_SIZE, 16,  25);
-        }
-        graphicsContext.clearRect(currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);
-        graphicsContext.drawImage(images[currentIndex], currentPosition.getX() * TILE_SIZE, currentPosition.getY() * TILE_SIZE, 16,  25);
         currentIndex = (currentIndex + 1) % 6;
         currentImage = images[currentIndex];
-        if (isWalking && currentIndex == 0) {
-            isWalking = false;
-            stay(currentPosition.getDirection());
-        }
     }
 
     private void setImages(Image[] images) {
-        if (isWalking) {
-            return;
-        }
         this.images = images;
     }
 
@@ -126,14 +131,5 @@ public class SpriteAnimation extends AnimationTimer {
     public void stop() {
         super.stop();
         this.isPlaying = false;
-    }
-
-    public Position getCurrentPosition() {
-        return currentPosition;
-    }
-
-    public void setCurrentPosition(Position currentPosition) {
-        this.lastPosition = this.currentPosition;
-        this.currentPosition = currentPosition;
     }
 }
