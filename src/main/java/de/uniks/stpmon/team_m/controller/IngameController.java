@@ -231,16 +231,16 @@ public class IngameController extends Controller {
                 return;
             }
             if ((event.getCode() == KeyCode.W)) {
-                checkMovement(0, -1, 1);
+                checkMovement(0, -1, TRAINER_DIRECTION_UP);
             }
             if ((event.getCode() == KeyCode.S)) {
-                checkMovement(0, 1, 3);
+                checkMovement(0, 1, TRAINER_DIRECTION_DOWN);
             }
             if ((event.getCode() == KeyCode.A)) {
-                checkMovement(-1, 0, 2);
+                checkMovement(-1, 0, TRAINER_DIRECTION_LEFT);
             }
             if ((event.getCode() == KeyCode.D)) {
-                checkMovement(1, 0, 0);
+                checkMovement(1, 0, TRAINER_DIRECTION_RIGHT);
             }
             event.consume();
         };
@@ -413,6 +413,20 @@ public class IngameController extends Controller {
         return parent;
     }
 
+    private void changeRegion() {
+        disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER).subscribe(
+                trainer -> {
+                    trainerStorageProvider.get().setTrainer(trainer);
+                    destroy();
+                    app.show(ingameControllerProvider.get());
+                },
+                error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }
+        ));
+    }
+
     private void initMapShiftTransitions() {
         shiftMapLeftTransition = new ParallelTransition(
                 getMapMovementTransition(groundCanvas, -SCALE_FACTOR * TILE_SIZE, 0),
@@ -442,20 +456,6 @@ public class IngameController extends Controller {
                 getMapMovementTransition(overUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE),
                 getMapMovementTransition(roofCanvas, 0, SCALE_FACTOR * TILE_SIZE)
         );
-    }
-
-    private void changeRegion() {
-        disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER).subscribe(
-                trainer -> {
-                    trainerStorageProvider.get().setTrainer(trainer);
-                    destroy();
-                    app.show(ingameControllerProvider.get());
-                },
-                error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }
-        ));
     }
 
     public void listenToMovement(ObservableList<MoveTrainerDto> moveTrainerDtos, String area) {
@@ -1083,10 +1083,10 @@ public class IngameController extends Controller {
                 if (trainerControllerHashMap.containsKey(this.currentNpc) && trainerControllerHashMap.get(this.currentNpc).getDirection() != currentDirection) {
                     int turnDirection;
                     switch (currentDirection) {
-                        case 0 ->  turnDirection = 2;
-                        case 1 ->  turnDirection = 3;
-                        case 2 ->  turnDirection = 0;
-                        default -> turnDirection = 1;
+                        case TRAINER_DIRECTION_RIGHT    -> turnDirection = TRAINER_DIRECTION_LEFT;
+                        case TRAINER_DIRECTION_UP       -> turnDirection = TRAINER_DIRECTION_DOWN;
+                        case TRAINER_DIRECTION_LEFT     -> turnDirection = TRAINER_DIRECTION_RIGHT;
+                        default                         -> turnDirection = TRAINER_DIRECTION_UP;
                     }
                     trainerControllerHashMap.get(this.currentNpc).turn(turnDirection);
                 }
@@ -1118,19 +1118,19 @@ public class IngameController extends Controller {
         int checkTileYForNurse = currentY;
 
         switch (direction) {
-            case 0 -> {                         // facing right
+            case TRAINER_DIRECTION_RIGHT -> {
                 checkTileX++;
                 checkTileXForNurse += 2;
             }
-            case 1 -> {                         // facing up
+            case TRAINER_DIRECTION_UP -> {
                 checkTileY--;
                 checkTileYForNurse -= 2;
             }
-            case 2 -> {                         // facing left
+            case TRAINER_DIRECTION_LEFT -> {
                 checkTileX--;
                 checkTileXForNurse -= 2;
             }
-            case 3 -> {                         // facing down
+            case TRAINER_DIRECTION_DOWN -> {
                 checkTileY++;
                 checkTileYForNurse += 2;
             }
