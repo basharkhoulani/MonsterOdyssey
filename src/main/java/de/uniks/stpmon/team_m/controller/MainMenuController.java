@@ -118,6 +118,7 @@ public class MainMenuController extends Controller {
             if ((AudioService.getInstance().getCurrentSound() == null) || !(AudioService.getInstance().getCurrentSound().equals(MENU_SOUND))) {
                 AudioService.getInstance().stopSound();
                 AudioService.getInstance().playSound(MENU_SOUND);
+                AudioService.getInstance().setVolume(preferences.getDouble("volume", AudioService.getInstance().getVolume()));
             }
         }
     }
