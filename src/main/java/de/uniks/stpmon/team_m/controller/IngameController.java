@@ -1590,6 +1590,9 @@ public class IngameController extends Controller {
                             AudioService.getInstance().setCurrentSound(ROOMS_SOUND);
                             AudioService.getInstance().setVolume(preferences.getDouble("volume", AudioService.getInstance().getVolume()));
                         }
+                        if (preferences.getBoolean("mute", false)) {
+                            AudioService.getInstance().setVolume(0);
+                        }
                     }, error -> this.showError(error.getMessage())));
         }
     }
