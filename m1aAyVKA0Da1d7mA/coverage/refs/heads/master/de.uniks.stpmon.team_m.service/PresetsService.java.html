@@ -35,7 +35,7 @@ public class PresetsService {
      */
 
     public Observable&lt;Image&gt; getTilesetImage(String filename) {
-<span class="nc" id="L38">        return presetsApiService.getTileset(filename + &quot;.png&quot;).map(ImageProcessor::resonseBodyToJavaFXImage);</span>
+<span class="nc" id="L38">        return presetsApiService.getTileset(filename).map(ImageProcessor::resonseBodyToJavaFXImage);</span>
     }
 
     public Observable&lt;TileSet&gt; getTileset(String filename) {
