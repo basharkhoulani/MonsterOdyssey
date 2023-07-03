@@ -33,7 +33,7 @@ public class ChangeAudioController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
-        audioSlider.setValue(AudioService.getInstance().getVolume() * 100);
+        audioSlider.setValue(preferences.getDouble("volume", AudioService.getInstance().getVolume()) * 100);
         return parent;
     }
 
