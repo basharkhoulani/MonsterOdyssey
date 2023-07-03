@@ -33,7 +33,11 @@ public class ChangeAudioController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
-        audioSlider.setValue(preferences.getDouble("volume", AudioService.getInstance().getVolume()) * 100);
+        if (preferences.getBoolean("mute", false)) {
+            audioSlider.setValue(0);
+        } else {
+            audioSlider.setValue(preferences.getDouble("volume", AudioService.getInstance().getVolume()) * 100);
+        }
         return parent;
     }
 
@@ -51,8 +55,15 @@ public class ChangeAudioController extends Controller {
     public void getSliderValue() {
         audioSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue <?extends Number>observable, Number oldValue, Number newValue){
+                if (newValue.doubleValue() < 1) {
+                    preferences.putBoolean("mute", true);
+                } else {
+                    preferences.putBoolean("mute", false);
+                }
                 AudioService.getInstance().setVolume(newValue.doubleValue() / 100);
                 preferences.putDouble("volume", newValue.doubleValue() / 100);
+
+
             }
         });
     }
