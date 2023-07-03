@@ -148,12 +148,14 @@ public class MainMenuController extends Controller {
 <span class="fc" id="L148">        initRadioButtons();</span>
 <span class="fc" id="L149">        showTrainerDeletion();</span>
 
-<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        if (preferences.getBoolean(&quot;mute&quot;, false)) {</span>
-<span class="nc" id="L152">            AudioService.getInstance().unmuteSound();</span>
-<span class="nc" id="L153">            muteOrUnmuteSound();</span>
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">            if (preferences.getBoolean(&quot;mute&quot;, false)) {</span>
+<span class="nc" id="L153">                AudioService.getInstance().unmuteSound();</span>
+<span class="nc" id="L154">                muteOrUnmuteSound();</span>
+            }
         }
 
-<span class="fc" id="L156">        return parent;</span>
+<span class="fc" id="L158">        return parent;</span>
     }
 
     /**
@@ -161,14 +163,14 @@ public class MainMenuController extends Controller {
      */
 
     private void switchToMessageScreen() {
-<span class="fc" id="L164">        User selectedUser = friendsListView.getSelectionModel().getSelectedItem();</span>
-<span class="fc" id="L165">        groupStorageProvider.get().set_id(selectedUser._id());</span>
-<span class="fc" id="L166">        groupStorageProvider.get().setName(selectedUser.name());</span>
-<span class="fc" id="L167">        MessagesController messagesController = messagesControllerProvider.get();</span>
-<span class="fc" id="L168">        messagesController.setUserChosenFromMainMenu(true);</span>
-<span class="fc" id="L169">        destroy();</span>
-<span class="fc" id="L170">        app.show(messagesController);</span>
-<span class="fc" id="L171">    }</span>
+<span class="fc" id="L166">        User selectedUser = friendsListView.getSelectionModel().getSelectedItem();</span>
+<span class="fc" id="L167">        groupStorageProvider.get().set_id(selectedUser._id());</span>
+<span class="fc" id="L168">        groupStorageProvider.get().setName(selectedUser.name());</span>
+<span class="fc" id="L169">        MessagesController messagesController = messagesControllerProvider.get();</span>
+<span class="fc" id="L170">        messagesController.setUserChosenFromMainMenu(true);</span>
+<span class="fc" id="L171">        destroy();</span>
+<span class="fc" id="L172">        app.show(messagesController);</span>
+<span class="fc" id="L173">    }</span>
 
     /**
      * This method is used to initialize the radio buttons for the regions list.
@@ -176,42 +178,42 @@ public class MainMenuController extends Controller {
      */
 
     private void initRadioButtons() {
-<span class="fc" id="L179">        regionToggleGroup = new ToggleGroup();</span>
-<span class="fc" id="L180">        regionListView.setCellFactory(param -&gt; new RegionCell(regionToggleGroup));</span>
-<span class="fc" id="L181">        regionListView.setItems(regions);</span>
-<span class="fc" id="L182">        startGameButton.disableProperty().bind(regionToggleGroup.selectedToggleProperty().isNull());</span>
-<span class="fc" id="L183">    }</span>
+<span class="fc" id="L181">        regionToggleGroup = new ToggleGroup();</span>
+<span class="fc" id="L182">        regionListView.setCellFactory(param -&gt; new RegionCell(regionToggleGroup));</span>
+<span class="fc" id="L183">        regionListView.setItems(regions);</span>
+<span class="fc" id="L184">        startGameButton.disableProperty().bind(regionToggleGroup.selectedToggleProperty().isNull());</span>
+<span class="fc" id="L185">    }</span>
 
     private void initFriendslist() {
-<span class="fc" id="L186">        friendsListView.setCellFactory(param -&gt; new MainMenuUserCell(preferencesProvider.get(), friendSettingsControllerProvider));</span>
-<span class="fc" id="L187">        friendsListView.setPlaceholder(new Label(resources.getString(&quot;NO.FRIENDS.FOUND&quot;)));</span>
-<span class="fc" id="L188">        listenToUserUpdate(friends, friendsListView);</span>
-<span class="fc" id="L189">        friendsListView.setOnMouseClicked(event -&gt; {</span>
-<span class="pc bpc" id="L190" title="1 of 2 branches missed.">            if (!friendsListView.getSelectionModel().isEmpty()) {</span>
-<span class="fc" id="L191">                switchToMessageScreen();</span>
+<span class="fc" id="L188">        friendsListView.setCellFactory(param -&gt; new MainMenuUserCell(preferencesProvider.get(), friendSettingsControllerProvider));</span>
+<span class="fc" id="L189">        friendsListView.setPlaceholder(new Label(resources.getString(&quot;NO.FRIENDS.FOUND&quot;)));</span>
+<span class="fc" id="L190">        listenToUserUpdate(friends, friendsListView);</span>
+<span class="fc" id="L191">        friendsListView.setOnMouseClicked(event -&gt; {</span>
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">            if (!friendsListView.getSelectionModel().isEmpty()) {</span>
+<span class="fc" id="L193">                switchToMessageScreen();</span>
             }
-<span class="fc" id="L193">        });</span>
-<span class="fc" id="L194">    }</span>
+<span class="fc" id="L195">        });</span>
+<span class="fc" id="L196">    }</span>
 
     /**
      * This method is used to navigate to NewFriendsController.
      */
 
     public void changeToFindNewFriends() {
-<span class="fc" id="L201">        destroy();</span>
-<span class="fc" id="L202">        app.show(newFriendControllerProvider.get());</span>
-<span class="fc" id="L203">    }</span>
+<span class="fc" id="L203">        destroy();</span>
+<span class="fc" id="L204">        app.show(newFriendControllerProvider.get());</span>
+<span class="fc" id="L205">    }</span>
 
     /**
      * This method is used to navigate to MessagesController.
      */
 
     public void changeToMessages() {
-<span class="fc" id="L210">        groupStorageProvider.get().set_id(null);</span>
-<span class="fc" id="L211">        groupStorageProvider.get().setName(null);</span>
-<span class="fc" id="L212">        destroy();</span>
-<span class="fc" id="L213">        app.show(messagesControllerProvider.get());</span>
-<span class="fc" id="L214">    }</span>
+<span class="fc" id="L212">        groupStorageProvider.get().set_id(null);</span>
+<span class="fc" id="L213">        groupStorageProvider.get().setName(null);</span>
+<span class="fc" id="L214">        destroy();</span>
+<span class="fc" id="L215">        app.show(messagesControllerProvider.get());</span>
+<span class="fc" id="L216">    }</span>
 
     /**
      * This method is used to navigate to LoginController.
@@ -219,79 +221,79 @@ public class MainMenuController extends Controller {
      */
 
     public void changeToLogin() {
-<span class="fc" id="L222">        disposables.add(usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)</span>
-<span class="fc" id="L223">                .doOnNext(user -&gt; {</span>
-<span class="fc" id="L224">                })</span>
-<span class="fc" id="L225">                .flatMap(user -&gt; authenticationService.logout()).observeOn(FX_SCHEDULER)</span>
-<span class="fc" id="L226">                .subscribe(event -&gt; {</span>
-<span class="fc" id="L227">                    destroy();</span>
-<span class="fc" id="L228">                    app.show(loginControllerProvider.get());</span>
-<span class="pc" id="L229">                }, error -&gt; showError(error.getMessage())));</span>
-<span class="fc" id="L230">    }</span>
+<span class="fc" id="L224">        disposables.add(usersService.updateUser(null, USER_STATUS_OFFLINE, null, null, null)</span>
+<span class="fc" id="L225">                .doOnNext(user -&gt; {</span>
+<span class="fc" id="L226">                })</span>
+<span class="fc" id="L227">                .flatMap(user -&gt; authenticationService.logout()).observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L228">                .subscribe(event -&gt; {</span>
+<span class="fc" id="L229">                    destroy();</span>
+<span class="fc" id="L230">                    app.show(loginControllerProvider.get());</span>
+<span class="pc" id="L231">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L232">    }</span>
 
     /**
      * This method is used to navigate to AccountSettingController.
      */
 
     public void changeToSettings() {
-<span class="fc" id="L237">        destroy();</span>
-<span class="fc" id="L238">        app.show(accountSettingControllerProvider.get());</span>
-<span class="fc" id="L239">    }</span>
+<span class="fc" id="L239">        destroy();</span>
+<span class="fc" id="L240">        app.show(accountSettingControllerProvider.get());</span>
+<span class="fc" id="L241">    }</span>
 
     /**
      * This method is used to navigate to IngameController.
      */
 
     public void changeToIngame() {
-<span class="fc" id="L246">        Region selectedRegion = (Region) regionToggleGroup.getSelectedToggle().getUserData();</span>
-<span class="fc" id="L247">        WelcomeSceneController welcomeSceneController = welcomeSceneControllerProvider.get();</span>
-<span class="fc" id="L248">        trainerStorage.setRegion(selectedRegion);</span>
+<span class="fc" id="L248">        Region selectedRegion = (Region) regionToggleGroup.getSelectedToggle().getUserData();</span>
+<span class="fc" id="L249">        WelcomeSceneController welcomeSceneController = welcomeSceneControllerProvider.get();</span>
+<span class="fc" id="L250">        trainerStorage.setRegion(selectedRegion);</span>
 
 
-<span class="fc" id="L251">        disposables.add(trainersServiceProvider.get().getTrainers(selectedRegion._id(), null, userStorageProvider.get().get_id()).observeOn(FX_SCHEDULER).subscribe(result -&gt; {</span>
-<span class="fc bfc" id="L252" title="All 2 branches covered.">                    if (result.isEmpty()) {</span>
-<span class="fc" id="L253">                        destroy();</span>
-<span class="fc" id="L254">                        app.show(welcomeSceneController);</span>
+<span class="fc" id="L253">        disposables.add(trainersServiceProvider.get().getTrainers(selectedRegion._id(), null, userStorageProvider.get().get_id()).observeOn(FX_SCHEDULER).subscribe(result -&gt; {</span>
+<span class="fc bfc" id="L254" title="All 2 branches covered.">                    if (result.isEmpty()) {</span>
+<span class="fc" id="L255">                        destroy();</span>
+<span class="fc" id="L256">                        app.show(welcomeSceneController);</span>
                     } else {
-<span class="fc" id="L256">                        trainerStorage.setTrainer(result.get(0));</span>
-<span class="fc" id="L257">                        trainerStorage.setTrainerName(result.get(0).name());</span>
-<span class="fc" id="L258">                        trainerStorage.setTrainerSprite(result.get(0).image());</span>
-<span class="fc" id="L259">                        disposables.add(presetsServiceProvider.get().getCharacter(result.get(0).image()).observeOn(FX_SCHEDULER).subscribe(</span>
+<span class="fc" id="L258">                        trainerStorage.setTrainer(result.get(0));</span>
+<span class="fc" id="L259">                        trainerStorage.setTrainerName(result.get(0).name());</span>
+<span class="fc" id="L260">                        trainerStorage.setTrainerSprite(result.get(0).image());</span>
+<span class="fc" id="L261">                        disposables.add(presetsServiceProvider.get().getCharacter(result.get(0).image()).observeOn(FX_SCHEDULER).subscribe(</span>
                                 response -&gt; {
-<span class="fc" id="L261">                                    trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));</span>
-<span class="fc" id="L262">                                    destroy();</span>
-<span class="fc" id="L263">                                    app.show(ingameControllerProvider.get());</span>
-<span class="fc" id="L264">                                },</span>
+<span class="fc" id="L263">                                    trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));</span>
+<span class="fc" id="L264">                                    destroy();</span>
+<span class="fc" id="L265">                                    app.show(ingameControllerProvider.get());</span>
+<span class="fc" id="L266">                                },</span>
                                 error -&gt; {
-<span class="nc" id="L266">                                    showError(error.getMessage());</span>
-<span class="nc" id="L267">                                    error.printStackTrace();</span>
-<span class="nc" id="L268">                                }</span>
+<span class="nc" id="L268">                                    showError(error.getMessage());</span>
+<span class="nc" id="L269">                                    error.printStackTrace();</span>
+<span class="nc" id="L270">                                }</span>
                         ));
                     }
-<span class="pc" id="L271">                }, error -&gt; showError(error.getMessage())</span>
+<span class="pc" id="L273">                }, error -&gt; showError(error.getMessage())</span>
         ));
-<span class="fc" id="L273">    }</span>
+<span class="fc" id="L275">    }</span>
 
     public void showTrainerDeletion() {
-<span class="fc" id="L276">        trainerDeletedSuccessfully.setText(this.information);</span>
-<span class="fc" id="L277">    }</span>
+<span class="fc" id="L278">        trainerDeletedSuccessfully.setText(this.information);</span>
+<span class="fc" id="L279">    }</span>
 
     public void setTrainerDeletion() {
-<span class="nc" id="L280">        this.information = resources.getString(&quot;DELETE.TRAINER.SUCCESS&quot;);</span>
-<span class="nc" id="L281">    }</span>
+<span class="nc" id="L282">        this.information = resources.getString(&quot;DELETE.TRAINER.SUCCESS&quot;);</span>
+<span class="nc" id="L283">    }</span>
 
     public void muteOrUnmuteSound() {
-<span class="nc bnc" id="L284" title="All 2 branches missed.">        if(AudioService.getInstance().checkMuted()) {</span>
-<span class="nc" id="L285">            muteButton.getStyleClass().remove(&quot;unmuteSymbol&quot;);</span>
-<span class="nc" id="L286">            muteButton.getStyleClass().add(&quot;muteSymbol&quot;);</span>
-<span class="nc" id="L287">            preferences.putBoolean(&quot;mute&quot;, false);</span>
-<span class="nc" id="L288">            AudioService.getInstance().unmuteSound();</span>
+<span class="nc bnc" id="L286" title="All 2 branches missed.">        if(AudioService.getInstance().checkMuted()) {</span>
+<span class="nc" id="L287">            muteButton.getStyleClass().remove(&quot;unmuteSymbol&quot;);</span>
+<span class="nc" id="L288">            muteButton.getStyleClass().add(&quot;muteSymbol&quot;);</span>
+<span class="nc" id="L289">            preferences.putBoolean(&quot;mute&quot;, false);</span>
+<span class="nc" id="L290">            AudioService.getInstance().unmuteSound();</span>
         } else {
-<span class="nc" id="L290">            muteButton.getStyleClass().remove(&quot;muteSymbol&quot;);</span>
-<span class="nc" id="L291">            muteButton.getStyleClass().add(&quot;unmuteSymbol&quot;);</span>
-<span class="nc" id="L292">            preferences.putBoolean(&quot;mute&quot;, true);</span>
-<span class="nc" id="L293">            AudioService.getInstance().muteSound();</span>
+<span class="nc" id="L292">            muteButton.getStyleClass().remove(&quot;muteSymbol&quot;);</span>
+<span class="nc" id="L293">            muteButton.getStyleClass().add(&quot;unmuteSymbol&quot;);</span>
+<span class="nc" id="L294">            preferences.putBoolean(&quot;mute&quot;, true);</span>
+<span class="nc" id="L295">            AudioService.getInstance().muteSound();</span>
         }
-<span class="nc" id="L295">    }</span>
+<span class="nc" id="L297">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
