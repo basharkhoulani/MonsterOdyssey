@@ -10,10 +10,7 @@ import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
-import de.uniks.stpmon.team_m.utils.Position;
-import de.uniks.stpmon.team_m.utils.SpriteAnimation;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import de.uniks.stpmon.team_m.utils.*;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.*;
 import javafx.collections.FXCollections;
@@ -115,6 +112,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
+    Provider<EncounterController> encounterControllerProvider;
+    @Inject
     AreasService areasService;
     @Inject
     PresetsService presetsService;
@@ -124,6 +123,10 @@ public class IngameController extends Controller {
     TrainersService trainersService;
     @Inject
     MonstersService monstersService;
+    @Inject
+    EncounterOpponentStorage encounterOpponentStorage;
+    @Inject
+    EncounterOpponentsService encounterOpponentsService;
     @Inject
     Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
     @Inject
@@ -156,6 +159,7 @@ public class IngameController extends Controller {
     HashMap<String, TileSet> tileSetJsons = new HashMap<>();
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     private ObservableList<Trainer> trainers;
+    private ObservableList<Opponent> opponents = FXCollections.observableArrayList();
 
     private Long lastKeyEventTimeStamp;
     private EventHandler<KeyEvent> keyPressedHandler;
@@ -405,6 +409,13 @@ public class IngameController extends Controller {
             monsterForHandyImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString()));
             notificationBell.setImage(new Image(Objects.requireNonNull(App.class.getResource(notificationBellImage)).toString()));
         }
+
+        //Setup Encounter
+        checkIfEncounterAlreadyExist();
+        listenToEncounter();
+        listenToOpponents();
+        encounterOpponentStorage.setRegionId(trainerStorageProvider.get().getRegion()._id());
+
 
         specificSounds();
 
@@ -1015,6 +1026,73 @@ public class IngameController extends Controller {
                 }));
     }
 
+    public void listenToEncounter() {
+        String regionId = trainerStorageProvider.get().getRegion()._id();
+        String trainerId = trainerStorageProvider.get().getTrainer()._id();
+        encounterOpponentStorage.setRegionId(regionId);
+        disposables.add(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".encounters.*.*", Encounter.class)
+                .observeOn(FX_SCHEDULER).subscribe(event -> {
+                    final Encounter encounter = event.data();
+                    if(event.suffix().equals("created")) {
+                        // getEncounterOpponents(regionId, encounter._id()); isn't working
+                    }
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                })
+        );
+    }
+
+    public void listenToOpponents() {
+        encounterOpponentStorage.setRegionId(trainerStorageProvider.get().getRegion()._id());
+        disposables.add(eventListener.get().listen("encounters.*.opponents.*.*", Opponent.class)
+                .observeOn(FX_SCHEDULER).subscribe(opponentEvent -> {
+                    final Opponent opponent = opponentEvent.data();
+                    switch (opponentEvent.suffix()) {
+                        case "created" -> {
+                            opponents.add(opponent);
+                        }
+                        case "deleted" -> opponents.removeIf(o -> o._id().equals(opponent._id()));
+                    }
+                    for (Opponent o : opponents) {
+                        if(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
+                            encounterOpponentStorage.setSelfOpponent(o);
+                            encounterOpponentStorage.setEncounterId(o.encounter());
+                        }
+                    }
+                    for (Opponent o : opponents) {
+                        if(o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
+                            encounterOpponentStorage.setEnemyOpponent(o);
+                        }
+                    }
+                    if(encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponent() != null) {
+                        showEncounterInfoWindow();
+                    }
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                })
+        );
+    }
+
+    private void showEncounterInfoWindow() {
+        //TODO: EncounterInfoWindow and Interaction with E
+        showEncounterScene();
+    }
+
+    private void showEncounterScene() {
+        app.show(encounterControllerProvider.get());
+    }
+
+    private void checkIfEncounterAlreadyExist() {
+        String regionId = trainerStorageProvider.get().getRegion()._id();
+        String trainerId = trainerStorageProvider.get().getTrainer()._id();
+
+        //TODO: Encounter wieder hesrstellen
+    }
+
+    //TODO: Bei dem Dialogfenster wenn man E drückt, wird die Scenen nach Encountercontroller rü
+
     private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {
         String trainerId = trainer._id();
         trainers.stream().filter(t -> t._id().equals(trainerId)).findFirst().ifPresent(t -> trainers.set(trainers.indexOf(t), trainer));
@@ -1037,11 +1115,11 @@ public class IngameController extends Controller {
         return null;
     }
 
-    public void setTrainerSpriteImageView(Trainer trainer, ImageView imageView) {
+    public void setTrainerSpriteImageView(Trainer trainer, ImageView imageView, int direction) {
         if (!GraphicsEnvironment.isHeadless()) {
             disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
                         Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
-                        Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, 2, false);
+                        Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, direction, false);
                         imageView.setImage(character[0]);
                     }, error -> showError(error.getMessage())
             ));
@@ -1233,7 +1311,11 @@ public class IngameController extends Controller {
             case dialogFinishedNoTalkToTrainer -> endDialog(0, false);
             case spokenToNurse -> createNurseHealPopup();
             case encounterOnTalk -> {
-                // TODO @Cheng here you have to put your logic connected with the encounter
+                disposables.add(udpEventListenerProvider.get().talk(trainerStorageProvider.get().getTrainer().area(), new TalkTrainerDto(
+                        trainerStorageProvider.get().getTrainer()._id(),
+                        this.currentNpc._id(),
+                        0
+                )).observeOn(FX_SCHEDULER).subscribe());
                 endDialog(0, true);
             }
             default -> {

@@ -2,8 +2,11 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.FriendListUtils;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -14,9 +17,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
@@ -31,6 +37,8 @@ public abstract class Controller {
     protected Preferences preferences;
     @Inject
     protected Provider<ResourceBundle> resourceBundleProvider;
+    @Inject
+    protected PresetsService presetsService;
     protected Controller toReload;
     protected App app;
     @Inject
@@ -188,6 +196,17 @@ public abstract class Controller {
 
     public ResourceBundle getResources() {
         return resources;
+    }
+
+    public void setTrainerSpriteImageView(Trainer trainer, ImageView imageView, int direction) {
+        if (!GraphicsEnvironment.isHeadless()) {
+            disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
+                        javafx.scene.image.Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
+                        Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, direction, false);
+                        imageView.setImage(character[0]);
+                    }, error -> showError(error.getMessage())
+            ));
+        }
     }
 
 }

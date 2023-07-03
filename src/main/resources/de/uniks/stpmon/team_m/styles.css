@@ -31,6 +31,13 @@
     -fx-border-width: 1px;
     -fx-border-color: gray;
 }
+
+.buttonsBlue {
+    -fx-background-color: #DAE8FC;
+    -fx-border-width: 1px;
+    -fx-border-color: gray;
+}
+
 .buttonsWhite:hover {
     -fx-background-color: #FFF2CC;
 }
@@ -419,4 +426,43 @@
     -fx-border-radius: 10px;
     -fx-background-color: lightblue;
     -fx-background-radius: 10px;
+}
+/*********************************************************************************/
+/*************************** Ingame - Encounter ****************************/
+.hBoxRed {
+    -fx-background-color: #F8CECC;
+    -fx-background-radius: 10;
+}
+
+.hBoxYellow {
+    -fx-background-color: #FFF2CC;
+    -fx-background-radius: 10;
+}
+
+.hBoxDarkGreen {
+    -fx-background-color: #2B8B03;
+    -fx-background-radius: 10;
+}
+
+.hBoxLightGreen {
+    -fx-background-color: #D5E8D4;
+    -fx-background-radius: 10;
+}
+
+.levelprogress-bar {
+    -fx-accent: #2B8B03;
+    -fx-control-inner-background: #2073FF;
+}
+
+.healthprogress-bar {
+    -fx-accent: #430000;
+    -fx-control-inner-background: #2073FF
+}
+
+.encounterBackground {
+    -fx-background-image: url("images/encounterBackground.png");
+    -fx-background-color: white;;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+    -fx-background-position: center;
 }
