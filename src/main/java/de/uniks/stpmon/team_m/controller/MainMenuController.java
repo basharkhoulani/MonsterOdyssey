@@ -148,9 +148,11 @@ public class MainMenuController extends Controller {
         initRadioButtons();
         showTrainerDeletion();
 
-        if (preferences.getBoolean("mute", false)) {
-            AudioService.getInstance().unmuteSound();
-            muteOrUnmuteSound();
+        if (!GraphicsEnvironment.isHeadless()) {
+            if (preferences.getBoolean("mute", false)) {
+                AudioService.getInstance().unmuteSound();
+                muteOrUnmuteSound();
+            }
         }
 
         return parent;
