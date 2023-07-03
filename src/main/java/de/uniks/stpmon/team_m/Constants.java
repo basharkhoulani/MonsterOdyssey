@@ -81,6 +81,11 @@ public class Constants {
     public static final int DELAY_LONG = 500;
     public static final double ZERO = 0;
     public static final double ONE = 1;
+    public static final int TRAINER_DIRECTION_RIGHT = 0;
+    public static final int TRAINER_DIRECTION_UP = 1;
+    public static final int TRAINER_DIRECTION_LEFT = 2;
+    public static final int TRAINER_DIRECTION_DOWN = 3;
+
 
     public static final String SETTINGSYMBOL2 = "images/SettingSymbol2.png";
     public static final String GOBACKSYMBOL = "images/GoBackSymbol.PNG";
