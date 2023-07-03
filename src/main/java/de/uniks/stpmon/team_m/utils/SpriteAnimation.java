@@ -50,8 +50,8 @@ public class SpriteAnimation extends AnimationTimer {
         trainerWalkingUp = ImageProcessor.cropTrainerImages(spriteChunk, TRAINER_DIRECTION_UP, true);
         trainerStandingLeft = ImageProcessor.cropTrainerImages(spriteChunk, TRAINER_DIRECTION_LEFT, false);
         trainerWalkingLeft = ImageProcessor.cropTrainerImages(spriteChunk, TRAINER_DIRECTION_LEFT, true);
-        trainerStandingDown = ImageProcessor.cropTrainerImages(spriteChunk, TRAINER_DIRECTION_RIGHT, false);
-        trainerWalkingDown = ImageProcessor.cropTrainerImages(spriteChunk, TRAINER_DIRECTION_RIGHT, true);
+        trainerStandingDown = ImageProcessor.cropTrainerImages(spriteChunk, TRAINER_DIRECTION_DOWN, false);
+        trainerWalkingDown = ImageProcessor.cropTrainerImages(spriteChunk, TRAINER_DIRECTION_DOWN, true);
         images = trainerWalkingDown;
         currentImage = images[0];
     }
