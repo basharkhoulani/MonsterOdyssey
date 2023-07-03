@@ -1138,10 +1138,20 @@ public class IngameController extends Controller {
     public void interactWithTrainer() {
         if (inDialog) {
             try {
-                if (this.currentNpc.npc().canHeal() && trainerStorageProvider.get().getTrainer().team().size() == 0) {
-                    continueTrainerDialog(DialogSpecialInteractions.nurseNoMons);
+                if (this.currentNpc.npc() != null) {
+                    if (this.currentNpc.npc().canHeal() && trainerStorageProvider.get().getTrainer().team().size() == 0) {
+                        continueTrainerDialog(DialogSpecialInteractions.nurseNoMons);
+                    } else {
+                        continueTrainerDialog(null);
+                    }
                 } else {
-                    continueTrainerDialog(null);
+                    disposables.add(udpEventListenerProvider.get().talk(trainerStorageProvider.get().getTrainer().area(), new TalkTrainerDto(
+                            trainerStorageProvider.get().getTrainer()._id(),
+                            this.currentNpc._id(),
+                            0
+                    )).observeOn(FX_SCHEDULER).subscribe());
+                    System.out.println("Talked to " + this.currentNpc._id());
+                    endDialog(0,false);
                 }
             } catch (Error e) {
                 continueTrainerDialog(null);
@@ -1178,13 +1188,8 @@ public class IngameController extends Controller {
                             this
                     );
                 } else {
-                    disposables.add(udpEventListenerProvider.get().talk(trainerStorageProvider.get().getTrainer().area(), new TalkTrainerDto(
-                            trainerStorageProvider.get().getTrainer()._id(),
-                            this.currentNpc._id(),
-                            0
-                    )).observeOn(FX_SCHEDULER).subscribe());
-                    System.out.println("Talked to " + this.currentNpc._id());
-                    this.inDialog = false;
+                    TextFlow textFlow = createDialogVBox();
+                    textFlow.getChildren().add(new Text(resources.getString("WANT.TO.FIGHT")));
                 }
 
             }
@@ -1192,7 +1197,7 @@ public class IngameController extends Controller {
     }
 
     /**
-     * This method checks the tile in front of the player, if a npc is standing on that tile.
+     * This method checks the tile in front of the player, if a trainer (npc or normal trainer) is standing on that tile.
      *
      * @param currentX  current x coordinate of the player
      * @param currentY  current y coordinate of the player
@@ -1253,6 +1258,7 @@ public class IngameController extends Controller {
         }
     }
 
+    // This Methode returns all kind of trainer (npcs and normal trainers) that are standing on a specific tile
     public Trainer searchHashedMapForTrainer(int checkX, int checkY) {
         for (java.util.Map.Entry<Trainer, Position> set : trainerPositionHashMap.entrySet()) {
             if (set.getValue().getX() == checkX && set.getValue().getY() == checkY) {
@@ -1332,7 +1338,9 @@ public class IngameController extends Controller {
     }
 
     public void endDialog(int selectionValue, boolean encounterNpc) {
-        this.dialogController.destroy();
+        if(this.dialogController !=null){
+            this.dialogController.destroy();
+        }
         inDialog = false;
 
         // Turn NPC back to original direction after finishing dialog
