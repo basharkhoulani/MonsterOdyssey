@@ -140,7 +140,7 @@ public class IngameTrainerSettingsController extends Controller {
         String subString = sprite.substring(sprite.length() - 6, sprite.length() - 4);
         index = Integer.parseInt(subString);
         if (!GraphicsEnvironment.isHeadless()) {
-            trainerAvatarImageView.setImage(ImageProcessor.showScaledFrontCharacter(sprite, 48, 7, 16, 27));
+            trainerAvatarImageView.setImage(ImageProcessor.showScaledCharacter(sprite, 48, 7, 16, 27));
         }
     }
 
@@ -158,7 +158,7 @@ public class IngameTrainerSettingsController extends Controller {
     }
 
     public void showCharacter() {
-        trainerAvatarImageView.setImage(ImageProcessor.showScaledFrontCharacter(characters[index - 1], 48, 7, 16, 27));
+        trainerAvatarImageView.setImage(ImageProcessor.showScaledCharacter(characters[index - 1], 48, 7, 16, 27));
         selectedCharacter = characters[index - 1];
     }
 

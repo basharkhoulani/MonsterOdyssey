@@ -120,12 +120,12 @@ public class ImageProcessor {
      * This method is used to crop the
      *
      * @param premadeCharacter for instance "Premade_Character_01.png", also found in Constants
-     * @param x coordinate of upper right corner of image
-     * @param y coordinate of upper right corner of image
-     * @param w width of image
-     * @param h height of image
+     * @param x                coordinate of upper right corner of image
+     * @param y                coordinate of upper right corner of image
+     * @param w                width of image
+     * @param h                height of image
      */
-    public static WritableImage showScaledFrontCharacter(String premadeCharacter, int x, int y, int w, int h) {
+    public static WritableImage showScaledCharacter(String premadeCharacter, int x, int y, int w, int h) {
         try {
             File imageFile = new File(Objects.requireNonNull(App.class.getResource("charactermodels/" + premadeCharacter)).toURI());
             BufferedImage bufferedImage = ImageIO.read(imageFile);
