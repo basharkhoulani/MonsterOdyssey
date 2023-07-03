@@ -145,6 +145,7 @@ public class IngameController extends Controller {
     private boolean inNpcPopup = false;
     private boolean isPaused = false;
     private boolean inSettings = false;
+    private boolean inEncounterInfoBox = false;
 
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
@@ -204,8 +205,12 @@ public class IngameController extends Controller {
         keyPressedHandler = event -> {
 
             if (event.getCode() == INTERACT_KEY) {
-                if (!inNpcPopup) {
+                if (!inNpcPopup && !inEncounterInfoBox) {
                     interactWithTrainer();
+                } else if(inEncounterInfoBox){
+                    stackPane.getChildren().remove(dialogStackPane);
+                    this.inEncounterInfoBox = false;
+                    showEncounterScene();
                 }
             }
             if (event.getCode() == PAUSE_MENU_KEY) {
@@ -1076,8 +1081,10 @@ public class IngameController extends Controller {
     }
 
     private void showEncounterInfoWindow() {
-        //TODO: EncounterInfoWindow and Interaction with E
-        showEncounterScene();
+        inDialog = false;
+        TextFlow dialogTextFlow = createDialogVBox();
+        dialogTextFlow.getChildren().add(new Text("An encounter will start shortly..."));
+        this.inEncounterInfoBox = true;
     }
 
     private void showEncounterScene() {
