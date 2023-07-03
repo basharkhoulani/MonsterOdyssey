@@ -2,7 +2,6 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
@@ -390,7 +389,10 @@ public class IngameController extends Controller {
         app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);
 
         Region region = trainerStorageProvider.get().getRegion();
-        disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(area -> loadMap(area.map()), error -> showError(error.getMessage())));
+        disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(area -> {
+            loadMap(area.map());
+            ;
+        }, error -> showError(error.getMessage())));
         monstersListControllerProvider.get().init();
 
         popupStage = new Stage();
@@ -423,8 +425,6 @@ public class IngameController extends Controller {
 
 
         specificSounds();
-
-        loadMiniMap();
 
         return parent;
     }
@@ -567,10 +567,10 @@ public class IngameController extends Controller {
         tileSetImages.clear();
         for (TileSet tileSet : map.tilesets()) {
             final String mapName = getFileName(tileSet.source());
-            disposables.add(presetsService.getTilesetImage(mapName)
-                    .doOnNext(image -> tileSetImages.put(mapName, image))
-                    .flatMap(image -> presetsService.getTileset(mapName).observeOn(FX_SCHEDULER))
+            disposables.add(presetsService.getTileset(mapName)
                     .doOnNext(tileset -> tileSetJsons.put(mapName, tileset))
+                    .flatMap(tileset -> presetsService.getTilesetImage(tileset.image()))
+                    .doOnNext(image -> tileSetImages.put(mapName, image))
                     .observeOn(FX_SCHEDULER).subscribe(image -> afterAllTileSetsLoaded(map), error -> {
                         showError(error.getMessage());
                         error.printStackTrace();
@@ -697,6 +697,7 @@ public class IngameController extends Controller {
                             tileSet, map.tilesets().size() > 1, false);
                 }
                 loadPlayers();
+                loadMiniMap();
                 loadingMap = false;
             }
         }
@@ -1038,7 +1039,7 @@ public class IngameController extends Controller {
         disposables.add(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".encounters.*.*", Encounter.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Encounter encounter = event.data();
-                    if(event.suffix().equals("created")) {
+                    if (event.suffix().equals("created")) {
                         // getEncounterOpponents(regionId, encounter._id()); isn't working
                     }
                 }, error -> {
@@ -1060,17 +1061,17 @@ public class IngameController extends Controller {
                         case "deleted" -> opponents.removeIf(o -> o._id().equals(opponent._id()));
                     }
                     for (Opponent o : opponents) {
-                        if(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
+                        if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                             encounterOpponentStorage.setSelfOpponent(o);
                             encounterOpponentStorage.setEncounterId(o.encounter());
                         }
                     }
                     for (Opponent o : opponents) {
-                        if(o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
+                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                             encounterOpponentStorage.setEnemyOpponent(o);
                         }
                     }
-                    if(encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponent() != null) {
+                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponent() != null) {
                         showEncounterInfoWindow();
                     }
                 }, error -> {
@@ -1177,9 +1178,9 @@ public class IngameController extends Controller {
                 if (trainerControllerHashMap.containsKey(this.currentNpc) && trainerControllerHashMap.get(this.currentNpc).getDirection() != currentDirection) {
                     int turnDirection;
                     switch (currentDirection) {
-                        case 0 ->  turnDirection = 2;
-                        case 1 ->  turnDirection = 3;
-                        case 2 ->  turnDirection = 0;
+                        case 0 -> turnDirection = 2;
+                        case 1 -> turnDirection = 3;
+                        case 2 -> turnDirection = 0;
                         default -> turnDirection = 1;
                     }
                     trainerControllerHashMap.get(this.currentNpc).turn(turnDirection);
@@ -1500,11 +1501,11 @@ public class IngameController extends Controller {
                     miniMap = region.map();
                     for (TileSet tileSet : miniMap.tilesets()) {
                         final String mapName = getFileName(tileSet.source());
-                        disposables.add(presetsService.getTilesetImage(mapName)
-                                .doOnNext(image -> tileSetImages.put(mapName, image))
-                                .flatMap(image -> presetsService.getTileset(mapName).observeOn(FX_SCHEDULER))
+                        disposables.add(presetsService.getTileset(mapName)
                                 .doOnNext(tileset -> tileSetJsons.put(mapName, tileset))
-                                .observeOn(FX_SCHEDULER).subscribe(result -> {
+                                .flatMap(tileset -> presetsService.getTilesetImage(tileset.image()))
+                                .doOnNext(image -> tileSetImages.put(mapName, image))
+                                .observeOn(FX_SCHEDULER).subscribe(image -> {
                                     setCanvasSettings(miniMap, miniMapCanvas, true);
                                     for (TileSet tileSet1 : miniMap.tilesets()) {
                                         renderMap(miniMap, tileSetImages.get(getFileName(tileSet1.source())), tileSetJsons.get(getFileName(tileSet1.source())),
