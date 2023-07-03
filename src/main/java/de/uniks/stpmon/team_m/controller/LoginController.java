@@ -139,6 +139,10 @@ public class LoginController extends Controller {
 
         showInformation();
 
+        if (preferences.getBoolean("mute", false)) {
+            muteOrUnmuteSound();
+        }
+
         return parent;
     }
 
@@ -242,10 +246,12 @@ public class LoginController extends Controller {
         if(AudioService.getInstance().checkMuted()) {
             muteButton.getStyleClass().remove("unmuteSymbol");
             muteButton.getStyleClass().add("muteSymbol");
+            preferences.putBoolean("mute", false);
             AudioService.getInstance().unmuteSound();
         } else {
             muteButton.getStyleClass().remove("muteSymbol");
             muteButton.getStyleClass().add("unmuteSymbol");
+            preferences.putBoolean("mute", true);
             AudioService.getInstance().muteSound();
         }
     }

@@ -147,6 +147,12 @@ public class MainMenuController extends Controller {
         initFriendslist();
         initRadioButtons();
         showTrainerDeletion();
+
+        if (preferences.getBoolean("mute", false)) {
+            AudioService.getInstance().unmuteSound();
+            muteOrUnmuteSound();
+        }
+
         return parent;
     }
 
@@ -278,10 +284,12 @@ public class MainMenuController extends Controller {
         if(AudioService.getInstance().checkMuted()) {
             muteButton.getStyleClass().remove("unmuteSymbol");
             muteButton.getStyleClass().add("muteSymbol");
+            preferences.putBoolean("mute", false);
             AudioService.getInstance().unmuteSound();
         } else {
             muteButton.getStyleClass().remove("muteSymbol");
             muteButton.getStyleClass().add("unmuteSymbol");
+            preferences.putBoolean("mute", true);
             AudioService.getInstance().muteSound();
         }
     }
