@@ -1082,7 +1082,8 @@ public class IngameController extends Controller {
 
     private void showEncounterInfoWindow() {
         inDialog = false;
-        TextFlow dialogTextFlow = createDialogVBox();
+        //TODO: EncounterInfoWindow without name
+        TextFlow dialogTextFlow = createDialogVBox(true);
         dialogTextFlow.getChildren().add(new Text("An encounter will start shortly..."));
         this.inEncounterInfoBox = true;
     }
@@ -1188,14 +1189,14 @@ public class IngameController extends Controller {
                 if (currentNpc.npc() != null) {
                     this.dialogController = new DialogController(
                             this.currentNpc,
-                            createDialogVBox(),
+                            createDialogVBox(false),
                             checkIfNpcEncounteredPlayer(this.currentNpc),
                             npcTextManager,
                             trainerStorageProvider.get().getTrainer(),
                             this
                     );
                 } else {
-                    TextFlow textFlow = createDialogVBox();
+                    TextFlow textFlow = createDialogVBox(false);
                     textFlow.getChildren().add(new Text(resources.getString("WANT.TO.FIGHT")));
                 }
 
@@ -1426,13 +1427,18 @@ public class IngameController extends Controller {
         inNpcPopup = true;
     }
 
-    public TextFlow createDialogVBox() {
+    public TextFlow createDialogVBox(boolean isEncounter) {
         StackPane dialogStackPane = new StackPane();
         dialogStackPane.setId("dialogStackPane");
         dialogStackPane.setMaxHeight(160);
         dialogStackPane.setMaxWidth(700);
 
-        Label nameLabel = new Label(this.currentNpc.name());
+        Label nameLabel = new Label();
+        if(isEncounter){
+            nameLabel.setText(resources.getString("ENCOUNTER"));
+        } else {
+            nameLabel.setText(this.currentNpc.name());
+        }
         nameLabel.setPadding(new Insets(5, 10, 5, 10));
 
         VBox dialogVBox = new VBox();
