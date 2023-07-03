@@ -1091,8 +1091,6 @@ public class IngameController extends Controller {
         //TODO: Encounter wieder hesrstellen
     }
 
-    //TODO: Bei dem Dialogfenster wenn man E drückt, wird die Scenen nach Encountercontroller rü
-
     private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {
         String trainerId = trainer._id();
         trainers.stream().filter(t -> t._id().equals(trainerId)).findFirst().ifPresent(t -> trainers.set(trainers.indexOf(t), trainer));
@@ -1169,14 +1167,26 @@ public class IngameController extends Controller {
                     trainerControllerHashMap.get(this.currentNpc).turn(turnDirection);
                 }
 
-                this.dialogController = new DialogController(
-                        this.currentNpc,
-                        createDialogVBox(),
-                        checkIfNpcEncounteredPlayer(this.currentNpc),
-                        npcTextManager,
-                        trainerStorageProvider.get().getTrainer(),
-                        this
-                );
+
+                if (currentNpc.npc() != null) {
+                    this.dialogController = new DialogController(
+                            this.currentNpc,
+                            createDialogVBox(),
+                            checkIfNpcEncounteredPlayer(this.currentNpc),
+                            npcTextManager,
+                            trainerStorageProvider.get().getTrainer(),
+                            this
+                    );
+                } else {
+                    disposables.add(udpEventListenerProvider.get().talk(trainerStorageProvider.get().getTrainer().area(), new TalkTrainerDto(
+                            trainerStorageProvider.get().getTrainer()._id(),
+                            this.currentNpc._id(),
+                            0
+                    )).observeOn(FX_SCHEDULER).subscribe());
+                    System.out.println("Talked to " + this.currentNpc._id());
+                    this.inDialog = false;
+                }
+
             }
         }
     }
@@ -1246,9 +1256,7 @@ public class IngameController extends Controller {
     public Trainer searchHashedMapForTrainer(int checkX, int checkY) {
         for (java.util.Map.Entry<Trainer, Position> set : trainerPositionHashMap.entrySet()) {
             if (set.getValue().getX() == checkX && set.getValue().getY() == checkY) {
-                if (set.getKey().npc() != null) {
-                    return set.getKey();
-                }
+                return set.getKey();
             }
         }
         return null;
