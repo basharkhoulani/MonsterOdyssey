@@ -120,18 +120,22 @@ public class ImageProcessor {
      * This method is used to crop the
      *
      * @param premadeCharacter for instance "Premade_Character_01.png", also found in Constants
+     * @param x coordinate of upper right corner of image
+     * @param y coordinate of upper right corner of image
+     * @param w width of image
+     * @param h height of image
      */
-    public static WritableImage showScaledFrontCharacter(String premadeCharacter) {
+    public static WritableImage showScaledFrontCharacter(String premadeCharacter, int x, int y, int w, int h) {
         try {
             File imageFile = new File(Objects.requireNonNull(App.class.getResource("charactermodels/" + premadeCharacter)).toURI());
             BufferedImage bufferedImage = ImageIO.read(imageFile);
-            BufferedImage bufferedImageFrontView = bufferedImage.getSubimage(48, 7, 16, 27);
+            BufferedImage bufferedImageFrontView = bufferedImage.getSubimage(x, y, w, h);
             BufferedImage scaledBufferedImage = ImageProcessor.scaleImage(bufferedImageFrontView, 6);
             javafx.scene.image.WritableImage writableImage = new javafx.scene.image.WritableImage(scaledBufferedImage.getWidth(), scaledBufferedImage.getHeight());
             javafx.scene.image.PixelWriter pixelWriter = writableImage.getPixelWriter();
-            for (int y = 0; y < scaledBufferedImage.getHeight(); y++) {
-                for (int x = 0; x < scaledBufferedImage.getWidth(); x++) {
-                    pixelWriter.setArgb(x, y, scaledBufferedImage.getRGB(x, y));
+            for (int y1 = 0; y1 < scaledBufferedImage.getHeight(); y1++) {
+                for (int x1 = 0; x1 < scaledBufferedImage.getWidth(); x1++) {
+                    pixelWriter.setArgb(x1, y1, scaledBufferedImage.getRGB(x1, y1));
                 }
             }
             return writableImage;

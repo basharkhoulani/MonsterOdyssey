@@ -73,7 +73,7 @@ public class CharacterSelectionController extends Controller {
      * this method sets the selected character and shows it in the imageView
      */
     public void showCharacter() {
-        characterImageView.setImage(ImageProcessor.showScaledFrontCharacter(characters[index - 1]));
+        characterImageView.setImage(ImageProcessor.showScaledFrontCharacter(characters[index - 1], 48, 7, 16, 27));
         selectedCharacter = characters[index - 1];
     }
 
