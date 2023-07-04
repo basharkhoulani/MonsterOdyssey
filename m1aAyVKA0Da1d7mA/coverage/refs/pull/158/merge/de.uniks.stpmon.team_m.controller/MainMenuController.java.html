@@ -289,12 +289,13 @@ public class MainMenuController extends Controller {
 <span class="nc" id="L289">            preferences.putBoolean(&quot;mute&quot;, false);</span>
 <span class="nc" id="L290">            AudioService.getInstance().unmuteSound();</span>
 <span class="nc" id="L291">            AudioService.getInstance().setVolume(0.5);</span>
+<span class="nc" id="L292">            preferences.putDouble(&quot;volume&quot;, 0.5);</span>
         } else {
-<span class="nc" id="L293">            muteButton.getStyleClass().remove(&quot;muteSymbol&quot;);</span>
-<span class="nc" id="L294">            muteButton.getStyleClass().add(&quot;unmuteSymbol&quot;);</span>
-<span class="nc" id="L295">            preferences.putBoolean(&quot;mute&quot;, true);</span>
-<span class="nc" id="L296">            AudioService.getInstance().muteSound();</span>
+<span class="nc" id="L294">            muteButton.getStyleClass().remove(&quot;muteSymbol&quot;);</span>
+<span class="nc" id="L295">            muteButton.getStyleClass().add(&quot;unmuteSymbol&quot;);</span>
+<span class="nc" id="L296">            preferences.putBoolean(&quot;mute&quot;, true);</span>
+<span class="nc" id="L297">            AudioService.getInstance().muteSound();</span>
         }
-<span class="nc" id="L298">    }</span>
+<span class="nc" id="L299">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
