@@ -15,6 +15,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
@@ -28,6 +29,10 @@ import java.util.ResourceBundle;
 
 public class MonsterCell extends ListCell<Monster> {
 
+    @FXML
+    public Button removeFromTeamButton;
+    @FXML
+    public Button viewDetailsButton;
     @FXML
     Label monsterName;
     @FXML
