@@ -243,7 +243,7 @@ public class LoginController extends Controller {
 <span class="fc" id="L243">    }</span>
 
     public void muteOrUnmuteSound() {
-<span class="nc bnc" id="L246" title="All 2 branches missed.">        if(AudioService.getInstance().checkMuted()) {</span>
+<span class="nc bnc" id="L246" title="All 2 branches missed.">        if(preferences.getBoolean(&quot;mute&quot;, true)) {</span>
 <span class="nc" id="L247">            muteButton.getStyleClass().remove(&quot;unmuteSymbol&quot;);</span>
 <span class="nc" id="L248">            muteButton.getStyleClass().add(&quot;muteSymbol&quot;);</span>
 <span class="nc" id="L249">            preferences.putBoolean(&quot;mute&quot;, false);</span>

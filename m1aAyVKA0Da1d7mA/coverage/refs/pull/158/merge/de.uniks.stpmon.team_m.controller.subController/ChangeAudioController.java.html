@@ -55,7 +55,7 @@ public class ChangeAudioController extends Controller {
     public void getSliderValue() {
 <span class="nc" id="L56">        audioSlider.valueProperty().addListener(new ChangeListener&lt;Number&gt;() {</span>
             public void changed(ObservableValue &lt;?extends Number&gt;observable, Number oldValue, Number newValue){
-<span class="nc bnc" id="L58" title="All 2 branches missed.">                if (newValue.doubleValue() &lt; 1) {</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                if (newValue.doubleValue() == 0) {</span>
 <span class="nc" id="L59">                    preferences.putBoolean(&quot;mute&quot;, true);</span>
                 } else {
 <span class="nc" id="L61">                    preferences.putBoolean(&quot;mute&quot;, false);</span>
