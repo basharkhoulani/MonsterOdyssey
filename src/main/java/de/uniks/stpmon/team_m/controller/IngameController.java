@@ -419,7 +419,6 @@ public class IngameController extends Controller {
 
         //Setup Encounter
         checkIfEncounterAlreadyExist();
-        listenToEncounter();
         listenToOpponents();
         encounterOpponentStorage.setRegionId(trainerStorageProvider.get().getRegion()._id());
 
@@ -1032,47 +1031,27 @@ public class IngameController extends Controller {
                 }));
     }
 
-    public void listenToEncounter() {
-        String regionId = trainerStorageProvider.get().getRegion()._id();
-        String trainerId = trainerStorageProvider.get().getTrainer()._id();
-        encounterOpponentStorage.setRegionId(regionId);
-        disposables.add(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".encounters.*.*", Encounter.class)
-                .observeOn(FX_SCHEDULER).subscribe(event -> {
-                    final Encounter encounter = event.data();
-                    if (event.suffix().equals("created")) {
-                        // getEncounterOpponents(regionId, encounter._id()); isn't working
-                    }
-                }, error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                })
-        );
-    }
-
     public void listenToOpponents() {
+        String regionId = trainerStorageProvider.get().getRegion()._id();
         encounterOpponentStorage.setRegionId(trainerStorageProvider.get().getRegion()._id());
-        disposables.add(eventListener.get().listen("encounters.*.opponents.*.*", Opponent.class)
+        disposables.add(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() +".opponents.*.*", Opponent.class)
                 .observeOn(FX_SCHEDULER).subscribe(opponentEvent -> {
                     final Opponent opponent = opponentEvent.data();
-                    switch (opponentEvent.suffix()) {
-                        case "created" -> {
-                            opponents.add(opponent);
-                        }
-                        case "deleted" -> opponents.removeIf(o -> o._id().equals(opponent._id()));
-                    }
-                    for (Opponent o : opponents) {
-                        if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                            encounterOpponentStorage.setSelfOpponent(o);
-                            encounterOpponentStorage.setEncounterId(o.encounter());
-                        }
-                    }
-                    for (Opponent o : opponents) {
-                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                            encounterOpponentStorage.setEnemyOpponent(o);
-                        }
-                    }
-                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponent() != null) {
-                        showEncounterInfoWindow();
+                    if (opponentEvent.suffix().equals("created")) {
+                        System.out.println("Opponent created" + opponent);
+                        encounterOpponentStorage.setSelfOpponent(opponent);
+                        encounterOpponentStorage.setEncounterId(opponent.encounter());
+                        disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
+                                .observeOn(FX_SCHEDULER).subscribe(opts -> {
+                                    for (Opponent o : opts) {
+                                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                                            encounterOpponentStorage.setEnemyOpponent(o);
+                                        }
+                                    }
+                                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponent() != null) {
+                                        showEncounterInfoWindow();
+                                    }
+                                }));
                     }
                 }, error -> {
                     showError(error.getMessage());
@@ -1097,7 +1076,19 @@ public class IngameController extends Controller {
         String regionId = trainerStorageProvider.get().getRegion()._id();
         String trainerId = trainerStorageProvider.get().getTrainer()._id();
 
-        //TODO: Encounter wieder hesrstellen
+        disposables.add(encounterOpponentsService.getTrainerOpponents(regionId, trainerId)
+                .observeOn(FX_SCHEDULER).subscribe(opt -> {
+                    System.out.println("opponents from Region-Trainer: " + opt);
+                    if (opt.size() > 0) {
+                        System.out.println("opponents from Region-Trainer in if branch" + opt);
+                        String encounterId = opt.get(0).encounter();
+                        disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, encounterId)
+                                .observeOn(FX_SCHEDULER).subscribe(opts ->{
+                                    System.out.println("opponents from Region Encounter: " + opts);
+                                }, Throwable::printStackTrace));
+                    }
+                }, Throwable::printStackTrace));
+        
     }
 
     private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {
