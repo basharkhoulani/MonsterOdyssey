@@ -1038,7 +1038,6 @@ public class IngameController extends Controller {
                 .observeOn(FX_SCHEDULER).subscribe(opponentEvent -> {
                     final Opponent opponent = opponentEvent.data();
                     if (opponentEvent.suffix().equals("created")) {
-                        System.out.println("Opponent created" + opponent);
                         encounterOpponentStorage.setSelfOpponent(opponent);
                         encounterOpponentStorage.setEncounterId(opponent.encounter());
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
@@ -1078,13 +1077,11 @@ public class IngameController extends Controller {
 
         disposables.add(encounterOpponentsService.getTrainerOpponents(regionId, trainerId)
                 .observeOn(FX_SCHEDULER).subscribe(opt -> {
-                    System.out.println("opponents from Region-Trainer: " + opt);
                     if (opt.size() > 0) {
-                        System.out.println("opponents from Region-Trainer in if branch" + opt);
                         String encounterId = opt.get(0).encounter();
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, encounterId)
                                 .observeOn(FX_SCHEDULER).subscribe(opts ->{
-                                    System.out.println("opponents from Region Encounter: " + opts);
+                                    //TODO: rebuild the encounter Scene
                                 }, Throwable::printStackTrace));
                     }
                 }, Throwable::printStackTrace));
