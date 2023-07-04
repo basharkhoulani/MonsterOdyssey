@@ -61,12 +61,14 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<MonstersListController> monstersListControllerProvider;
     @Mock
     Provider<NotificationListHandyController> notificationListHandyControllerProvider;
+    @Mock
+    Provider<EncounterController> encounterControllerProvider;
 
     // Leave this mock!! it ensures that tests run fine
     @Mock
     TrainerStorage trainerStorage;
     // Please also keep this mock, it is needed for the tests
-    @Mock
+    @Spy
     EncounterOpponentStorage encounterOpponentStorage;
 
     @Mock
@@ -241,75 +243,20 @@ public class IngameControllerTest extends ApplicationTest {
                 "2023-05-30T12:01:57.510Z",
                 "rqtjej4dcoqsm4e9yln1loy5",
                 "a98db973kwl8xp1lz94kjf0b",
-                "6475e595ac3946b6a812d865",
+                "646bac223b4804b87c0b8054",
                 false,
                 false,
                 "pn2iz308akz07eau5iwa6ykq",
-                new AbilityMove(
-                        "ability",
-                        10,
-                        "hsvxr8je3qs6qt20oxffy4dw"
-                ),
+                null,
                 List.of(),
                 0);
 
+        //Mocking the opponent (Situation)
         when(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() +".opponents.*.*", Opponent.class)).thenReturn(just(
-                new Event<>("encounters.a98db973kwl8xp1lz94kjf0b.trainers.6475e595ac3946b6a812d865.opponents.rqtjej4dcoqsm4e9yln1loy5.created", opponent)));
+                new Event<>("encounters.*.trainers.6475e595ac3946b6a812d865,opponents.*.nothappening", null)))
+                .thenReturn(just(new Event<>("encounters.a98db973kwl8xp1lz94kjf0b.trainers.646bac223b4804b87c0b8054.opponents.rqtjej4dcoqsm4e9yln1loy5.created", opponent)));;
 
-        when(encounterOpponentsService.getTrainerOpponents(anyString(), anyString())).thenReturn(Observable.just(List.of(
-                new Opponent(
-                        "2023-05-30T12:02:57.510Z",
-                        "2023-05-30T12:01:57.510Z",
-                        "rqtjej4dcoqsm4e9yln1loy5",
-                        "a98db973kwl8xp1lz94kjf0b",
-                        "6475e595ac3946b6a812d865",
-                        false,
-                        false,
-                        "pn2iz308akz07eau5iwa6ykq",
-                        new AbilityMove(
-                                "ability",
-                                10,
-                                "hsvxr8je3qs6qt20oxffy4dw"
-                        ),
-                        List.of(),
-                        0)
-        )));
-
-        when(encounterOpponentsService.getEncounterOpponents(anyString(),anyString())).thenReturn(Observable.just(List.of(
-                new Opponent(
-                        "2023-05-30T12:02:57.510Z",
-                        "2023-05-30T12:01:57.510Z",
-                        "rqtjej4dcoqsm4e9yln1loy5",
-                        "a98db973kwl8xp1lz94kjf0b",
-                        "6475e595ac3946b6a812d865",
-                        false,
-                        false,
-                        "pn2iz308akz07eau5iwa6ykq",
-                        new AbilityMove(
-                                "ability",
-                                10,
-                                "hsvxr8je3qs6qt20oxffy4dw"
-                        ),
-                        List.of(),
-                        0),
-                new Opponent(
-                        "2023-05-30T12:02:57.510Z",
-                        "2023-05-30T12:01:57.510Z",
-                        "rp5k153bdn239gdx8lzc81nt",
-                        "a98db973kwl8xp1lz94kjf0b",
-                        "pmesmfpwkkb2l09j6i8btljf",
-                        true,
-                        true,
-                        "pn2iz308akz07eau5iwa6ykq",
-                        new AbilityMove(
-                                "ability",
-                                10,
-                                "hsvxr8je3qs6qt20oxffy4dw"
-                        ),
-                        List.of(),
-                        0)
-        )));
-
+        when(encounterOpponentsService.getTrainerOpponents(anyString(), anyString())).thenReturn(Observable.just(List.of()));
 
         app.start(stage);
         app.show(ingameController);
