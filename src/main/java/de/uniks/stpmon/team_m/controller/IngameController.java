@@ -1128,10 +1128,22 @@ public class IngameController extends Controller {
     }
 
     public void showMonsters() {
-        Scene popupScene = new Scene(monstersListControllerProvider.get().render());
+        VBox monsterListVBox = new VBox();
+        monsterListVBox.maxWidth(600);
+        monsterListVBox.maxHeight(410);
+        monsterListVBox.setAlignment(Pos.CENTER);
+        MonstersListController monstersListController = monstersListControllerProvider.get();
+        monstersListController.init(this, monsterListVBox);
+        monsterListVBox.getChildren().add(monstersListController.render());
+        root.getChildren().add(monsterListVBox);
+        monsterListVBox.requestFocus();
+        buttonsDisable(true);
+
+        /*Scene popupScene = new Scene(monstersListControllerProvider.get().render());
         popupStage.setScene(popupScene);
         popupStage.setTitle(resources.getString("MONSTERS"));
         popupStage.show();
+         */
     }
 
     /*
