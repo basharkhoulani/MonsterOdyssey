@@ -208,7 +208,6 @@ public class IngameController extends Controller {
                 } else if(inEncounterInfoBox){
                     stackPane.getChildren().remove(dialogStackPane);
                     this.inEncounterInfoBox = false;
-                    destroy();
                     showEncounterScene();
                 }
             }
@@ -1066,6 +1065,7 @@ public class IngameController extends Controller {
     }
 
     private void showEncounterScene() {
+        destroy();
         app.show(encounterControllerProvider.get());
     }
 
