@@ -1,12 +1,15 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
+import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -16,8 +19,6 @@ import java.util.Objects;
 
 
 public class MonstersListController extends Controller {
-
-    public ListView<Monster> monsterListView;
     @Inject
     Provider<TrainersService> trainersServiceProvider;
     @Inject
@@ -38,16 +39,23 @@ public class MonstersListController extends Controller {
     public UserStorage usersStorage;
     @Inject
     public Provider<PresetsService> presetsServiceProvider;
+    @Inject
+    IngameController ingameController;
+
+    @FXML
+    public ListView<Monster> monsterListViewActive;
+    public VBox monsterListVBox;
 
     @Inject
     public MonstersListController() {
     }
 
-    @Override
-    public void init() {
+    public void init(IngameController ingameController, VBox monsterListVBox) {
         super.init();
         disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
                 .subscribe(monsters -> trainerStorageProvider.get().setMonsters(new ArrayList<>(monsters)), throwable -> showError(throwable.getMessage())));
+        this.ingameController = ingameController;
+        this.monsterListVBox = monsterListVBox;
     }
 
     @Override
@@ -66,9 +74,9 @@ public class MonstersListController extends Controller {
     }
 
     private void initMonsterList() {
-        monsterListView.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this));
-        monsterListView.getItems().addAll(trainerStorageProvider.get().getMonsters());
-        monsterListView.setFocusModel(null);
-        monsterListView.setSelectionModel(null);
+        monsterListViewActive.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this));
+        monsterListViewActive.getItems().addAll(trainerStorageProvider.get().getMonsters());
+        monsterListViewActive.setFocusModel(null);
+        monsterListViewActive.setSelectionModel(null);
     }
 }
