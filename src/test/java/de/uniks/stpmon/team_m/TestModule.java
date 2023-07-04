@@ -557,12 +557,12 @@ public class TestModule {
         return new EncounterOpponentsApiService() {
             @Override
             public Observable<List<Opponent>> getTrainerOpponents(String regionId, String trainerId) {
-                return null;
+                return Observable.just(List.of());
             }
 
             @Override
             public Observable<List<Opponent>> getEncounterOpponents(String regionId, String encounterId) {
-                return null;
+                return Observable.just(List.of());
             }
 
             @Override
