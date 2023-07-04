@@ -1578,7 +1578,7 @@ public class IngameController extends Controller {
 <span class="nc bnc" id="L1578" title="All 2 branches missed.">                        if (area.name().contains(&quot;Route&quot;)) {</span>
 <span class="nc" id="L1579">                            AudioService.getInstance().stopSound();</span>
 <span class="nc" id="L1580">                            AudioService.getInstance().playSound(ROUTE_SOUND);</span>
-<span class="nc" id="L1581">                            AudioService.getInstance().setCurrentSound(ROOMS_SOUND);</span>
+<span class="nc" id="L1581">                            AudioService.getInstance().setCurrentSound(ROUTE_SOUND);</span>
 <span class="nc" id="L1582">                            AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()));</span>
 <span class="nc bnc" id="L1583" title="All 2 branches missed.">                        } else if (area.map().infinite()) {</span>
 <span class="nc" id="L1584">                            AudioService.getInstance().stopSound();</span>

@@ -248,12 +248,18 @@ public class LoginController extends Controller {
 <span class="nc" id="L248">            muteButton.getStyleClass().add(&quot;muteSymbol&quot;);</span>
 <span class="nc" id="L249">            preferences.putBoolean(&quot;mute&quot;, false);</span>
 <span class="nc" id="L250">            AudioService.getInstance().unmuteSound();</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">            if (preferences.getDouble(&quot;volume&quot;, 0.5) &lt;= 0.05) {</span>
+<span class="nc" id="L252">                AudioService.getInstance().setVolume(0.5);</span>
+<span class="nc" id="L253">                preferences.putDouble(&quot;volume&quot;, 0.5);</span>
+            } else {
+<span class="nc" id="L255">                AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, 0.5));</span>
+            }
         } else {
-<span class="nc" id="L252">            muteButton.getStyleClass().remove(&quot;muteSymbol&quot;);</span>
-<span class="nc" id="L253">            muteButton.getStyleClass().add(&quot;unmuteSymbol&quot;);</span>
-<span class="nc" id="L254">            preferences.putBoolean(&quot;mute&quot;, true);</span>
-<span class="nc" id="L255">            AudioService.getInstance().muteSound();</span>
+<span class="nc" id="L258">            muteButton.getStyleClass().remove(&quot;muteSymbol&quot;);</span>
+<span class="nc" id="L259">            muteButton.getStyleClass().add(&quot;unmuteSymbol&quot;);</span>
+<span class="nc" id="L260">            preferences.putBoolean(&quot;mute&quot;, true);</span>
+<span class="nc" id="L261">            AudioService.getInstance().muteSound();</span>
         }
-<span class="nc" id="L257">    }</span>
+<span class="nc" id="L263">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
