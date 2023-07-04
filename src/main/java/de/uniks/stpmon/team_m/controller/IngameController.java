@@ -1061,7 +1061,6 @@ public class IngameController extends Controller {
 
     private void showEncounterInfoWindow() {
         inDialog = false;
-        //TODO: EncounterInfoWindow without name
         TextFlow dialogTextFlow = createDialogVBox(true);
         dialogTextFlow.getChildren().add(new Text("An encounter will start shortly..."));
         this.inEncounterInfoBox = true;

@@ -75,6 +75,8 @@ public class IngameControllerTest extends ApplicationTest {
     MessageService messageService;
     @Mock
     RegionsService regionsService;
+    @Mock
+    EncounterOpponentsService encounterOpponentsService;
     @InjectMocks
     IngameController ingameController;
     @Mock
@@ -234,17 +236,6 @@ public class IngameControllerTest extends ApplicationTest {
         notificationListHandyController.setValues(bundle, null, null, notificationListHandyController, app);
         when(notificationListHandyControllerProvider.get()).thenReturn(notificationListHandyController);
 
-        Encounter encounter = new Encounter(
-                "2023-05-30T12:02:57.510Z",
-                "2023-05-30T12:01:57.510Z",
-                "a98db973kwl8xp1lz94kjf0b",
-                "646bab5cecf584e1be02598a",
-                false
-        );
-
-        when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".encounters.*.*", Encounter.class)).thenReturn(just(
-                new Event<>("regions.646bab5cecf584e1be02598a.encounters.a98db973kwl8xp1lz94kjf0b.created", encounter)));
-
         Opponent opponent = new Opponent(
                 "2023-05-30T12:02:57.510Z",
                 "2023-05-30T12:01:57.510Z",
@@ -262,8 +253,62 @@ public class IngameControllerTest extends ApplicationTest {
                 List.of(),
                 0);
 
-        when(eventListener.get().listen("encounters.*.opponents.*.*", Opponent.class)).thenReturn(just(
-                new Event<>("encounters.a98db973kwl8xp1lz94kjf0b.opponents.rqtjej4dcoqsm4e9yln1loy5.created", opponent)));
+        when(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() +".opponents.*.*", Opponent.class)).thenReturn(just(
+                new Event<>("encounters.a98db973kwl8xp1lz94kjf0b.trainers.6475e595ac3946b6a812d865.opponents.rqtjej4dcoqsm4e9yln1loy5.created", opponent)));
+
+        when(encounterOpponentsService.getTrainerOpponents(anyString(), anyString())).thenReturn(Observable.just(List.of(
+                new Opponent(
+                        "2023-05-30T12:02:57.510Z",
+                        "2023-05-30T12:01:57.510Z",
+                        "rqtjej4dcoqsm4e9yln1loy5",
+                        "a98db973kwl8xp1lz94kjf0b",
+                        "6475e595ac3946b6a812d865",
+                        false,
+                        false,
+                        "pn2iz308akz07eau5iwa6ykq",
+                        new AbilityMove(
+                                "ability",
+                                10,
+                                "hsvxr8je3qs6qt20oxffy4dw"
+                        ),
+                        List.of(),
+                        0)
+        )));
+
+        when(encounterOpponentsService.getEncounterOpponents(anyString(),anyString())).thenReturn(Observable.just(List.of(
+                new Opponent(
+                        "2023-05-30T12:02:57.510Z",
+                        "2023-05-30T12:01:57.510Z",
+                        "rqtjej4dcoqsm4e9yln1loy5",
+                        "a98db973kwl8xp1lz94kjf0b",
+                        "6475e595ac3946b6a812d865",
+                        false,
+                        false,
+                        "pn2iz308akz07eau5iwa6ykq",
+                        new AbilityMove(
+                                "ability",
+                                10,
+                                "hsvxr8je3qs6qt20oxffy4dw"
+                        ),
+                        List.of(),
+                        0),
+                new Opponent(
+                        "2023-05-30T12:02:57.510Z",
+                        "2023-05-30T12:01:57.510Z",
+                        "rp5k153bdn239gdx8lzc81nt",
+                        "a98db973kwl8xp1lz94kjf0b",
+                        "pmesmfpwkkb2l09j6i8btljf",
+                        true,
+                        true,
+                        "pn2iz308akz07eau5iwa6ykq",
+                        new AbilityMove(
+                                "ability",
+                                10,
+                                "hsvxr8je3qs6qt20oxffy4dw"
+                        ),
+                        List.of(),
+                        0)
+        )));
 
 
         app.start(stage);
