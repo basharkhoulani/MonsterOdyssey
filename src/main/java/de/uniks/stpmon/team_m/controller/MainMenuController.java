@@ -283,7 +283,7 @@ public class MainMenuController extends Controller {
     }
 
     public void muteOrUnmuteSound() {
-        if(AudioService.getInstance().checkMuted()) {
+        if(preferences.getBoolean("mute", true)) {
             muteButton.getStyleClass().remove("unmuteSymbol");
             muteButton.getStyleClass().add("muteSymbol");
             preferences.putBoolean("mute", false);

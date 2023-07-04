@@ -55,7 +55,7 @@ public class ChangeAudioController extends Controller {
     public void getSliderValue() {
         audioSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue <?extends Number>observable, Number oldValue, Number newValue){
-                if (newValue.doubleValue() < 1) {
+                if (newValue.doubleValue() == 0) {
                     preferences.putBoolean("mute", true);
                 } else {
                     preferences.putBoolean("mute", false);
