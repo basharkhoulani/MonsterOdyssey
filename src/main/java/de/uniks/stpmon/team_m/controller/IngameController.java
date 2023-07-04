@@ -208,6 +208,7 @@ public class IngameController extends Controller {
                 } else if(inEncounterInfoBox){
                     stackPane.getChildren().remove(dialogStackPane);
                     this.inEncounterInfoBox = false;
+                    destroy();
                     showEncounterScene();
                 }
             }
@@ -390,7 +391,6 @@ public class IngameController extends Controller {
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(area -> {
             loadMap(area.map());
-            ;
         }, error -> showError(error.getMessage())));
         monstersListControllerProvider.get().init();
 
@@ -1061,7 +1061,7 @@ public class IngameController extends Controller {
     private void showEncounterInfoWindow() {
         inDialog = false;
         TextFlow dialogTextFlow = createDialogVBox(true);
-        dialogTextFlow.getChildren().add(new Text("An encounter will start shortly..."));
+        dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.INFO")));
         this.inEncounterInfoBox = true;
     }
 
@@ -1145,7 +1145,6 @@ public class IngameController extends Controller {
                             this.currentNpc._id(),
                             0
                     )).observeOn(FX_SCHEDULER).subscribe());
-                    System.out.println("Talked to " + this.currentNpc._id());
                     endDialog(0,false);
                 }
             } catch (Error e) {
