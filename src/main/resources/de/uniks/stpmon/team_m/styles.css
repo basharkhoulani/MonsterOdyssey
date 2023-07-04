@@ -32,6 +32,13 @@
     -fx-border-color: gray;
 }
 
+.buttonsRed {
+    -fx-background-color: #FF421C;
+    -fx-opacity: 0.7;
+    -fx-border-width: 1px;
+    -fx-border-color: #FF421C;
+}
+
 .buttonsBlue {
     -fx-background-color: #DAE8FC;
     -fx-border-width: 1px;
@@ -381,6 +388,10 @@
 .rightLine {
     -fx-border-width: 0 1 0 0;
     -fx-border-color: #000000;
+}
+.abilityIcon {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
 }
 /*********************************************************************************/
 /*************************** Ingame - MiniMap ****************************/
