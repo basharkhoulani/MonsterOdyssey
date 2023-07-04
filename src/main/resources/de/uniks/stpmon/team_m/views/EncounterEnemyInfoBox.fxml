@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="de.uniks.stpmon.team_m.controller.subController.EncounterEnemyInfoBoxController">
+   <HBox alignment="CENTER_LEFT" prefHeight="67.0" prefWidth="400.0">
+      <padding>
+         <Insets bottom="8.0" left="8.0" right="4.0" top="8.0"/>
+      </padding>
+      <VBox.margin>
+         <Insets top="16.0"/>
+      </VBox.margin>
+      <ImageView fitHeight="50.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+         <Image url="@../images/star.png"/>
+      </ImageView>
+      <HBox alignment="CENTER" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="150.0"
+            styleClass="hBoxRed">
+         <HBox.margin>
+            <Insets left="8.0"/>
+         </HBox.margin>
+         <Label fx:id="opponentLevel">
+            <font>
+               <Font name="Comic Sans MS Bold" size="14.0"/>
+            </font>
+         </Label>
+      </HBox>
+   </HBox>
+   <HBox alignment="CENTER_LEFT">
+      <padding>
+         <Insets bottom="8.0" left="8.0" top="8.0"/>
+      </padding>
+      <ImageView fitHeight="50.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+         <HBox.margin>
+            <Insets right="8.0"/>
+         </HBox.margin>
+         <Image url="@../images/heart.png"/>
+      </ImageView>
+      <ProgressBar fx:id="opponentHealthBar" prefHeight="20.0" prefWidth="200.0" progress="0.64"
+                   styleClass="healthprogress-bar"/>
+   </HBox>
+   <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="400.0">
+      <HBox alignment="CENTER" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="200.0"
+            styleClass="hBoxRed">
+         <HBox.margin>
+            <Insets bottom="8.0" left="60.0" top="8.0"/>
+         </HBox.margin>
+         <Label fx:id="opponentMonsterName">
+            <font>
+               <Font name="Comic Sans MS Bold" size="14.0"/>
+            </font>
+         </Label>
+      </HBox>
+   </HBox>
+</VBox>

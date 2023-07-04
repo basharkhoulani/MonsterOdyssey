@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox minHeight="284.0" minWidth="400.0" prefHeight="284.0" prefWidth="400.0" stylesheets="@../styles.css"
+      xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.EncounterTeamInfoBoxController">
+   <padding>
+      <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+   </padding>
+   <HBox alignment="CENTER_LEFT" prefWidth="400.0">
+      <ImageView fitHeight="50.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+         <HBox.margin>
+            <Insets right="8.0"/>
+         </HBox.margin>
+         <Image url="@../images/star.png"/>
+      </ImageView>
+      <ProgressBar fx:id="myLevelBar" prefHeight="20.0" prefWidth="200.0" progress="0.88"
+                   styleClass="levelprogress-bar">
+         <HBox.margin>
+            <Insets right="16.0"/>
+         </HBox.margin>
+      </ProgressBar>
+      <HBox alignment="CENTER" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="97.0"
+            styleClass="hBoxRed">
+         <HBox.margin>
+            <Insets bottom="8.0" right="8.0" top="8.0"/>
+         </HBox.margin>
+         <Label fx:id="myLevel">
+            <font>
+               <Font name="Comic Sans MS Bold" size="17.0"/>
+            </font>
+         </Label>
+      </HBox>
+   </HBox>
+   <HBox alignment="CENTER_LEFT" prefWidth="400.0">
+      <VBox.margin>
+         <Insets top="16.0"/>
+      </VBox.margin>
+      <ImageView fitHeight="50.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+         <HBox.margin>
+            <Insets right="8.0"/>
+         </HBox.margin>
+         <Image url="@../images/heart.png"/>
+      </ImageView>
+      <ProgressBar fx:id="myHealthBar" prefHeight="20.0" prefWidth="200.0" progress="0.78"
+                   styleClass="healthprogress-bar">
+         <HBox.margin>
+            <Insets right="16.0"/>
+         </HBox.margin>
+      </ProgressBar>
+      <HBox alignment="CENTER" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="97.0"
+            styleClass="hBoxRed">
+         <HBox.margin>
+            <Insets bottom="8.0" right="8.0" top="8.0"/>
+         </HBox.margin>
+         <Label fx:id="myHealth">
+            <font>
+               <Font name="Comic Sans MS Bold" size="14.0"/>
+            </font>
+         </Label>
+      </HBox>
+   </HBox>
+   <SplitPane layoutX="10.0" layoutY="80.0" minHeight="30.0" minWidth="400.0" prefHeight="30.0" prefWidth="400.0"
+              visible="false"/>
+   <HBox prefWidth="200.0">
+      <HBox alignment="CENTER" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="200.0"
+            styleClass="hBoxYellow">
+         <HBox.margin>
+            <Insets left="60.0"/>
+         </HBox.margin>
+         <Label fx:id="myMonsterName">
+            <font>
+               <Font name="Comic Sans MS Bold" size="14.0"/>
+            </font>
+         </Label>
+      </HBox>
+   </HBox>
+</VBox>
