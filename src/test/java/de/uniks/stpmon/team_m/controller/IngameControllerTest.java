@@ -66,7 +66,7 @@ public class IngameControllerTest extends ApplicationTest {
     @Mock
     TrainerStorage trainerStorage;
     // Please also keep this mock, it is needed for the tests
-    @Mock
+    @Spy
     EncounterOpponentStorage encounterOpponentStorage;
 
     @Mock
