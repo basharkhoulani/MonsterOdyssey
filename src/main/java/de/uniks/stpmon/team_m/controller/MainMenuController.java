@@ -118,6 +118,7 @@ public class MainMenuController extends Controller {
             if ((AudioService.getInstance().getCurrentSound() == null) || !(AudioService.getInstance().getCurrentSound().equals(MENU_SOUND))) {
                 AudioService.getInstance().stopSound();
                 AudioService.getInstance().playSound(MENU_SOUND);
+                AudioService.getInstance().setVolume(preferences.getDouble("volume", AudioService.getInstance().getVolume()));
             }
         }
     }
@@ -146,6 +147,14 @@ public class MainMenuController extends Controller {
         initFriendslist();
         initRadioButtons();
         showTrainerDeletion();
+
+        if (!GraphicsEnvironment.isHeadless()) {
+            if (preferences.getBoolean("mute", false)) {
+                AudioService.getInstance().unmuteSound();
+                muteOrUnmuteSound();
+            }
+        }
+
         return parent;
     }
 
@@ -274,13 +283,21 @@ public class MainMenuController extends Controller {
     }
 
     public void muteOrUnmuteSound() {
-        if(AudioService.getInstance().checkMuted()) {
+        if(preferences.getBoolean("mute", true)) {
             muteButton.getStyleClass().remove("unmuteSymbol");
             muteButton.getStyleClass().add("muteSymbol");
+            preferences.putBoolean("mute", false);
             AudioService.getInstance().unmuteSound();
+            if (preferences.getDouble("volume", 0.5) <= 0.05) {
+                AudioService.getInstance().setVolume(0.5);
+                preferences.putDouble("volume", 0.5);
+            } else {
+                AudioService.getInstance().setVolume(preferences.getDouble("volume", 0.5));
+            }
         } else {
             muteButton.getStyleClass().remove("muteSymbol");
             muteButton.getStyleClass().add("unmuteSymbol");
+            preferences.putBoolean("mute", true);
             AudioService.getInstance().muteSound();
         }
     }

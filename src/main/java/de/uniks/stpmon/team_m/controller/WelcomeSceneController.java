@@ -78,6 +78,9 @@ public class WelcomeSceneController extends Controller {
                 AudioService.getInstance().stopSound();
                 AudioService.getInstance().playSound(WELCOME_SOUND);
                 AudioService.getInstance().setCurrentSound(WELCOME_SOUND);
+                if (preferences.getBoolean("mute", false)) {
+                    AudioService.getInstance().setVolume(0);
+                }
             }
         }
     }
