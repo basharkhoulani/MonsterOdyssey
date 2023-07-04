@@ -159,7 +159,6 @@ public class IngameController extends Controller {
     HashMap<String, TileSet> tileSetJsons = new HashMap<>();
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     private ObservableList<Trainer> trainers;
-    private ObservableList<Opponent> opponents = FXCollections.observableArrayList();
 
     private Long lastKeyEventTimeStamp;
     private EventHandler<KeyEvent> keyPressedHandler;
@@ -1423,7 +1422,7 @@ public class IngameController extends Controller {
 
         Label nameLabel = new Label();
         if(isEncounter){
-            nameLabel.setText(resources.getString("ENCOUNTER"));
+            nameLabel.setText(resources.getString("ANNOUNCEMENT"));
         } else {
             nameLabel.setText(this.currentNpc.name());
         }
