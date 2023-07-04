@@ -62,8 +62,6 @@ public class ChangeAudioController extends Controller {
                 }
                 AudioService.getInstance().setVolume(newValue.doubleValue() / 100);
                 preferences.putDouble("volume", newValue.doubleValue() / 100);
-
-
             }
         });
     }
