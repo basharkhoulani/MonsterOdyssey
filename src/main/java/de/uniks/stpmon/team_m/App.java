@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m;
 
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.Encounter2Controller;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -57,6 +58,8 @@ public class App extends Application {
 
         PauseTransition pause = new PauseTransition(Duration.seconds(DURATION_OF_LOADING_SCREEN));
         pause.setOnFinished(event -> {
+            show(new Encounter2Controller());
+            /*
             if (component == null) {
                 return;
             }
@@ -70,6 +73,8 @@ public class App extends Application {
             } else {
                 show(component.loginController());
             }
+
+             */
         });
         pause.play();
         stage.show();
