@@ -1,9 +1,11 @@
 package de.uniks.stpmon.team_m.service;
 import de.uniks.stpmon.team_m.Main;
+import javafx.scene.control.Button;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import javax.inject.Inject;
+import java.util.prefs.Preferences;
 
 public class AudioService {
     private static AudioService instance;
@@ -11,6 +13,7 @@ public class AudioService {
     private boolean isMuted = false;
     private String currentSound;
     private double soundVolume;
+
     @Inject
     public AudioService() {}
 
@@ -64,5 +67,25 @@ public class AudioService {
     public void setVolume(double volume) {
         this.soundVolume = volume;
         mediaPlayer.setVolume(volume);
+    }
+
+    public void muteOrUnmuteSound(Button muteButton, Preferences preferences) {
+        if(AudioService.getInstance().checkMuted()) {
+            muteButton.getStyleClass().remove("unmuteSymbol");
+            muteButton.getStyleClass().add("muteSymbol");
+            preferences.putBoolean("mute", false);
+            AudioService.getInstance().unmuteSound();
+            if (preferences.getDouble("volume", 0.5) <= 0.05) {
+                AudioService.getInstance().setVolume(0.5);
+                preferences.putDouble("volume", 0.5);
+            } else {
+                AudioService.getInstance().setVolume(preferences.getDouble("volume", 0.5));
+            }
+        } else {
+            muteButton.getStyleClass().remove("muteSymbol");
+            muteButton.getStyleClass().add("unmuteSymbol");
+            preferences.putBoolean("mute", true);
+            AudioService.getInstance().muteSound();
+        }
     }
 }
