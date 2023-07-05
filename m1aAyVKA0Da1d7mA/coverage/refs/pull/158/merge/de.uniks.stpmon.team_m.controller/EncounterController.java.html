@@ -123,82 +123,85 @@ public class EncounterController extends Controller {
 <span class="nc" id="L123">        setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), mySprite,1);</span>
 <span class="nc bnc" id="L124" title="All 2 branches missed.">        if(!encounterOpponentStorage.isWild()){</span>
 <span class="nc" id="L125">            String enemyTrainerId = encounterOpponentStorage.getEnemyOpponent().trainer();</span>
-<span class="nc" id="L126">            disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)</span>
-<span class="nc" id="L127">                    .observeOn(FX_SCHEDULER).subscribe(trainer -&gt; {</span>
-<span class="nc" id="L128">                        encounterOpponentStorage.setOpponentTrainer(trainer);</span>
-<span class="nc" id="L129">                        battleDescription.setText(resources.getString(&quot;ENCOUNTER_DESCRIPTION_BEGIN&quot;) + &quot; &quot; + trainer.name());</span>
-<span class="nc" id="L130">                        setTrainerSpriteImageView(trainer, opponentTrainer,3);</span>
-<span class="nc" id="L131">                    }, Throwable::printStackTrace));</span>
+<span class="nc" id="L126">            battleMenuController.showFleeButton(false);</span>
+<span class="nc" id="L127">            disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)</span>
+<span class="nc" id="L128">                    .observeOn(FX_SCHEDULER).subscribe(trainer -&gt; {</span>
+<span class="nc" id="L129">                        encounterOpponentStorage.setOpponentTrainer(trainer);</span>
+<span class="nc" id="L130">                        battleDescription.setText(resources.getString(&quot;ENCOUNTER_DESCRIPTION_BEGIN&quot;) + &quot; &quot; + trainer.name());</span>
+<span class="nc" id="L131">                        setTrainerSpriteImageView(trainer, opponentTrainer,3);</span>
+<span class="nc" id="L132">                    }, Throwable::printStackTrace));</span>
+<span class="nc" id="L133">        } else {</span>
+<span class="nc" id="L134">            battleMenuController.showFleeButton(true);</span>
         }
-<span class="nc" id="L133">    }</span>
+<span class="nc" id="L136">    }</span>
 
     private void showMonster() {
         // self monster
-<span class="nc" id="L137">        disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getSelfOpponent().monster())</span>
-<span class="nc" id="L138">                .observeOn(FX_SCHEDULER).subscribe(monster -&gt; {</span>
-<span class="nc" id="L139">                    encounterOpponentStorage.setCurrentTrainerMonster(monster);</span>
-<span class="nc" id="L140">                    myLevelBar.setProgress(monster.experience() / requiredExperience(monster.level() + 1));</span>
-<span class="nc" id="L141">                    myLevel.setText(monster.level() + &quot; LVL&quot;);</span>
-<span class="nc" id="L142">                    myHealthBar.setProgress(monster.currentAttributes().health() / monster.attributes().health());</span>
-<span class="nc" id="L143">                    myHealth.setText(monster.currentAttributes().health() + &quot;/&quot; + monster.attributes().health() + &quot; HP&quot;);</span>
+<span class="nc" id="L140">        disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getSelfOpponent().monster())</span>
+<span class="nc" id="L141">                .observeOn(FX_SCHEDULER).subscribe(monster -&gt; {</span>
+<span class="nc" id="L142">                    encounterOpponentStorage.setCurrentTrainerMonster(monster);</span>
+<span class="nc" id="L143">                    myLevelBar.setProgress(monster.experience() / requiredExperience(monster.level() + 1));</span>
+<span class="nc" id="L144">                    myLevel.setText(monster.level() + &quot; LVL&quot;);</span>
+<span class="nc" id="L145">                    myHealthBar.setProgress(monster.currentAttributes().health() / monster.attributes().health());</span>
+<span class="nc" id="L146">                    myHealth.setText(monster.currentAttributes().health() + &quot;/&quot; + monster.attributes().health() + &quot; HP&quot;);</span>
                     //write monster name
-<span class="nc" id="L145">                    disposables.add(presetsService.getMonster(monster.type())</span>
-<span class="nc" id="L146">                            .observeOn(FX_SCHEDULER).subscribe(m -&gt; {</span>
-<span class="nc" id="L147">                                myMonsterName.setText(m.name());</span>
-<span class="nc" id="L148">                                encounterOpponentStorage.setCurrentTrainerMonsterType(m);</span>
-<span class="nc" id="L149">                            }, Throwable::printStackTrace));</span>
-<span class="nc" id="L150">                    disposables.add(presetsService.getMonsterImage(monster.type())</span>
-<span class="nc" id="L151">                            .observeOn(FX_SCHEDULER).subscribe(mImage -&gt; {</span>
-<span class="nc" id="L152">                                myMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);</span>
-<span class="nc" id="L153">                                myMonster.setImage(myMonsterImage);</span>
-<span class="nc" id="L154">                            }, Throwable::printStackTrace));</span>
-<span class="nc" id="L155">                        }, Throwable::printStackTrace));</span>
+<span class="nc" id="L148">                    disposables.add(presetsService.getMonster(monster.type())</span>
+<span class="nc" id="L149">                            .observeOn(FX_SCHEDULER).subscribe(m -&gt; {</span>
+<span class="nc" id="L150">                                myMonsterName.setText(m.name());</span>
+<span class="nc" id="L151">                                encounterOpponentStorage.setCurrentTrainerMonsterType(m);</span>
+<span class="nc" id="L152">                            }, Throwable::printStackTrace));</span>
+<span class="nc" id="L153">                    disposables.add(presetsService.getMonsterImage(monster.type())</span>
+<span class="nc" id="L154">                            .observeOn(FX_SCHEDULER).subscribe(mImage -&gt; {</span>
+<span class="nc" id="L155">                                myMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);</span>
+<span class="nc" id="L156">                                myMonster.setImage(myMonsterImage);</span>
+<span class="nc" id="L157">                            }, Throwable::printStackTrace));</span>
+<span class="nc" id="L158">                        }, Throwable::printStackTrace));</span>
 
         // enemy monster
-<span class="nc" id="L158">        disposables.add(monstersService.getMonster(regionId, encounterOpponentStorage.getEnemyOpponent().trainer(), encounterOpponentStorage.getEnemyOpponent().monster())</span>
-<span class="nc" id="L159">                .observeOn(FX_SCHEDULER).subscribe(monster -&gt; {</span>
-<span class="nc" id="L160">                    encounterOpponentStorage.setCurrentEnemyMonster(monster);</span>
-<span class="nc" id="L161">                    opponentLevel.setText(monster.level() + &quot; LVL&quot;);</span>
-<span class="nc" id="L162">                    opponentHealthBar.setProgress(monster.currentAttributes().health() / monster.attributes().health());</span>
-<span class="nc" id="L163">                    disposables.add(presetsService.getMonster(monster.type())</span>
-<span class="nc" id="L164">                            .observeOn(FX_SCHEDULER).subscribe(m -&gt; {</span>
-<span class="nc" id="L165">                                opponentMonsterName.setText(m.name());</span>
-<span class="nc" id="L166">                                encounterOpponentStorage.setCurrentEnemyMonsterType(m);</span>
-<span class="nc bnc" id="L167" title="All 2 branches missed.">                                if(encounterOpponentStorage.isWild()){</span>
-<span class="nc" id="L168">                                    battleDescription.setText(resources.getString(&quot;ENCOUNTER_DESCRIPTION_BEGIN&quot;) + &quot; &quot; + m.name());</span>
+<span class="nc" id="L161">        disposables.add(monstersService.getMonster(regionId, encounterOpponentStorage.getEnemyOpponent().trainer(), encounterOpponentStorage.getEnemyOpponent().monster())</span>
+<span class="nc" id="L162">                .observeOn(FX_SCHEDULER).subscribe(monster -&gt; {</span>
+<span class="nc" id="L163">                    encounterOpponentStorage.setCurrentEnemyMonster(monster);</span>
+<span class="nc" id="L164">                    opponentLevel.setText(monster.level() + &quot; LVL&quot;);</span>
+<span class="nc" id="L165">                    opponentHealthBar.setProgress(monster.currentAttributes().health() / monster.attributes().health());</span>
+<span class="nc" id="L166">                    disposables.add(presetsService.getMonster(monster.type())</span>
+<span class="nc" id="L167">                            .observeOn(FX_SCHEDULER).subscribe(m -&gt; {</span>
+<span class="nc" id="L168">                                opponentMonsterName.setText(m.name());</span>
+<span class="nc" id="L169">                                encounterOpponentStorage.setCurrentEnemyMonsterType(m);</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">                                if(encounterOpponentStorage.isWild()){</span>
+<span class="nc" id="L171">                                    battleDescription.setText(resources.getString(&quot;ENCOUNTER_DESCRIPTION_BEGIN&quot;) + &quot; &quot; + m.name());</span>
                                 }
-<span class="nc" id="L170">                            }, Throwable::printStackTrace));</span>
-<span class="nc" id="L171">                    disposables.add(presetsService.getMonsterImage(monster.type())</span>
-<span class="nc" id="L172">                            .observeOn(FX_SCHEDULER).subscribe(mImage -&gt; {</span>
-<span class="nc" id="L173">                                enemyMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);</span>
-<span class="nc" id="L174">                                opponentMonster.setImage(enemyMonsterImage);</span>
-<span class="nc" id="L175">                            }, Throwable::printStackTrace));</span>
-<span class="nc" id="L176">                        }, Throwable::printStackTrace));</span>
-<span class="nc" id="L177">    }</span>
+<span class="nc" id="L173">                            }, Throwable::printStackTrace));</span>
+<span class="nc" id="L174">                    disposables.add(presetsService.getMonsterImage(monster.type())</span>
+<span class="nc" id="L175">                            .observeOn(FX_SCHEDULER).subscribe(mImage -&gt; {</span>
+<span class="nc" id="L176">                                enemyMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);</span>
+<span class="nc" id="L177">                                opponentMonster.setImage(enemyMonsterImage);</span>
+<span class="nc" id="L178">                            }, Throwable::printStackTrace));</span>
+<span class="nc" id="L179">                        }, Throwable::printStackTrace));</span>
+<span class="nc" id="L180">    }</span>
 
     public int requiredExperience(int currentLevel) {
-<span class="nc" id="L180">        return (int) (Math.pow(currentLevel, 3) - Math.pow(currentLevel - 1, 3));</span>
+<span class="nc" id="L183">        return (int) (Math.pow(currentLevel, 3) - Math.pow(currentLevel - 1, 3));</span>
     }
 
 
     @Override
     public void destroy() {
-<span class="nc" id="L186">        super.destroy();</span>
-<span class="nc" id="L187">    }</span>
+<span class="nc" id="L189">        super.destroy();</span>
+<span class="nc" id="L190">    }</span>
 
     public void listenToOpponents(String encounterId) {
-<span class="nc" id="L190">        disposables.add(eventListener.get().listen(&quot;encounters.&quot; + encounterId + &quot;opponents.*.*&quot;, Opponent.class)</span>
-<span class="nc" id="L191">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
-<span class="nc" id="L192">                    final Opponent opponent = event.data();</span>
-<span class="nc bnc" id="L193" title="All 2 branches missed.">                    switch (event.suffix()) {</span>
-<span class="nc" id="L194">                        case &quot;deleted&quot; -&gt; app.show(ingameControllerProvider.get());</span>
+<span class="nc" id="L193">        disposables.add(eventListener.get().listen(&quot;encounters.&quot; + encounterId + &quot;opponents.*.*&quot;, Opponent.class)</span>
+<span class="nc" id="L194">                .observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
+<span class="nc" id="L195">                    final Opponent opponent = event.data();</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">                    switch (event.suffix()) {</span>
+<span class="nc" id="L197">                        case &quot;deleted&quot; -&gt; app.show(ingameControllerProvider.get());</span>
                     }
-<span class="nc" id="L196">                }, error -&gt; showError(error.getMessage())));</span>
-<span class="nc" id="L197">    }</span>
+<span class="nc" id="L199">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="nc" id="L200">    }</span>
 
     public void showIngameController() {
-<span class="nc" id="L200">        app.show(ingameControllerProvider.get());</span>
-<span class="nc" id="L201">    }</span>
+<span class="nc" id="L203">        app.show(ingameControllerProvider.get());</span>
+<span class="nc" id="L204">    }</span>
 
 
 }
