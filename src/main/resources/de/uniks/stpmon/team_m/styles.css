@@ -432,11 +432,19 @@
 .hBoxRed {
     -fx-background-color: #F8CECC;
     -fx-background-radius: 10;
+    -fx-border-color: #696969;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-border-radius: 10;
 }
 
 .hBoxYellow {
     -fx-background-color: #FFF2CC;
     -fx-background-radius: 10;
+    -fx-border-color: #696969;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-border-radius: 10;
 }
 
 .hBoxDarkGreen {
@@ -450,13 +458,23 @@
 }
 
 .levelprogress-bar {
-    -fx-accent: #2B8B03;
-    -fx-control-inner-background: #2073FF;
+    -fx-accent: #009900;
+    -fx-control-inner-background: #FFFFFF;
+    -fx-border-color: #696969;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-padding: 2px;
+    -fx-border-radius: 10;
 }
 
 .healthprogress-bar {
-    -fx-accent: #430000;
-    -fx-control-inner-background: #2073FF
+    -fx-accent: #FF0000;
+    -fx-control-inner-background: #FFFFFF;
+    -fx-border-color: #696969;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-padding: 2px;
+    -fx-border-radius: 10;
 }
 
 .encounterBackground {
