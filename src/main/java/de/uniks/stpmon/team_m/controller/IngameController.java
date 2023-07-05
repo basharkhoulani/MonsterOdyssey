@@ -144,6 +144,7 @@ public class IngameController extends Controller {
     private boolean inNpcPopup = false;
     private boolean isPaused = false;
     private boolean inSettings = false;
+    private boolean inEncounterInfoBox = false;
 
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
@@ -158,7 +159,6 @@ public class IngameController extends Controller {
     HashMap<String, TileSet> tileSetJsons = new HashMap<>();
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     private ObservableList<Trainer> trainers;
-    private ObservableList<Opponent> opponents = FXCollections.observableArrayList();
 
     private Long lastKeyEventTimeStamp;
     private EventHandler<KeyEvent> keyPressedHandler;
@@ -203,8 +203,12 @@ public class IngameController extends Controller {
         keyPressedHandler = event -> {
 
             if (event.getCode() == INTERACT_KEY) {
-                if (!inNpcPopup) {
+                if (!inNpcPopup && !inEncounterInfoBox) {
                     interactWithTrainer();
+                } else if(inEncounterInfoBox){
+                    stackPane.getChildren().remove(dialogStackPane);
+                    this.inEncounterInfoBox = false;
+                    showEncounterScene();
                 }
             }
             if (event.getCode() == PAUSE_MENU_KEY) {
@@ -386,7 +390,6 @@ public class IngameController extends Controller {
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(area -> {
             loadMap(area.map());
-            ;
         }, error -> showError(error.getMessage())));
         monstersListControllerProvider.get().init();
 
@@ -414,7 +417,6 @@ public class IngameController extends Controller {
 
         //Setup Encounter
         checkIfEncounterAlreadyExist();
-        listenToEncounter();
         listenToOpponents();
         encounterOpponentStorage.setRegionId(trainerStorageProvider.get().getRegion()._id());
 
@@ -1027,47 +1029,26 @@ public class IngameController extends Controller {
                 }));
     }
 
-    public void listenToEncounter() {
-        String regionId = trainerStorageProvider.get().getRegion()._id();
-        String trainerId = trainerStorageProvider.get().getTrainer()._id();
-        encounterOpponentStorage.setRegionId(regionId);
-        disposables.add(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".encounters.*.*", Encounter.class)
-                .observeOn(FX_SCHEDULER).subscribe(event -> {
-                    final Encounter encounter = event.data();
-                    if (event.suffix().equals("created")) {
-                        // getEncounterOpponents(regionId, encounter._id()); isn't working
-                    }
-                }, error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                })
-        );
-    }
-
     public void listenToOpponents() {
+        String regionId = trainerStorageProvider.get().getRegion()._id();
         encounterOpponentStorage.setRegionId(trainerStorageProvider.get().getRegion()._id());
-        disposables.add(eventListener.get().listen("encounters.*.opponents.*.*", Opponent.class)
+        disposables.add(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() +".opponents.*.*", Opponent.class)
                 .observeOn(FX_SCHEDULER).subscribe(opponentEvent -> {
                     final Opponent opponent = opponentEvent.data();
-                    switch (opponentEvent.suffix()) {
-                        case "created" -> {
-                            opponents.add(opponent);
-                        }
-                        case "deleted" -> opponents.removeIf(o -> o._id().equals(opponent._id()));
-                    }
-                    for (Opponent o : opponents) {
-                        if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                            encounterOpponentStorage.setSelfOpponent(o);
-                            encounterOpponentStorage.setEncounterId(o.encounter());
-                        }
-                    }
-                    for (Opponent o : opponents) {
-                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                            encounterOpponentStorage.setEnemyOpponent(o);
-                        }
-                    }
-                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponent() != null) {
-                        showEncounterInfoWindow();
+                    if (opponentEvent.suffix().equals("created")) {
+                        encounterOpponentStorage.setSelfOpponent(opponent);
+                        encounterOpponentStorage.setEncounterId(opponent.encounter());
+                        disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
+                                .observeOn(FX_SCHEDULER).subscribe(opts -> {
+                                    for (Opponent o : opts) {
+                                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                                            encounterOpponentStorage.setEnemyOpponent(o);
+                                        }
+                                    }
+                                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponent() != null) {
+                                        showEncounterInfoWindow();
+                                    }
+                                }));
                     }
                 }, error -> {
                     showError(error.getMessage());
@@ -1077,11 +1058,14 @@ public class IngameController extends Controller {
     }
 
     private void showEncounterInfoWindow() {
-        //TODO: EncounterInfoWindow and Interaction with E
-        showEncounterScene();
+        inDialog = false;
+        TextFlow dialogTextFlow = createDialogVBox(true);
+        dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.INFO")));
+        this.inEncounterInfoBox = true;
     }
 
     private void showEncounterScene() {
+        destroy();
         app.show(encounterControllerProvider.get());
     }
 
@@ -1089,10 +1073,18 @@ public class IngameController extends Controller {
         String regionId = trainerStorageProvider.get().getRegion()._id();
         String trainerId = trainerStorageProvider.get().getTrainer()._id();
 
-        //TODO: Encounter wieder hesrstellen
+        disposables.add(encounterOpponentsService.getTrainerOpponents(regionId, trainerId)
+                .observeOn(FX_SCHEDULER).subscribe(opt -> {
+                    if (opt.size() > 0) {
+                        String encounterId = opt.get(0).encounter();
+                        disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, encounterId)
+                                .observeOn(FX_SCHEDULER).subscribe(opts ->{
+                                    //TODO: rebuild the encounter Scene
+                                }, Throwable::printStackTrace));
+                    }
+                }, Throwable::printStackTrace));
+        
     }
-
-    //TODO: Bei dem Dialogfenster wenn man E drückt, wird die Scenen nach Encountercontroller rü
 
     private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {
         String trainerId = trainer._id();
@@ -1147,10 +1139,19 @@ public class IngameController extends Controller {
     public void interactWithTrainer() {
         if (inDialog) {
             try {
-                if (this.currentNpc.npc().canHeal() && trainerStorageProvider.get().getTrainer().team().size() == 0) {
-                    continueTrainerDialog(DialogSpecialInteractions.nurseNoMons);
+                if (this.currentNpc.npc() != null) {
+                    if (this.currentNpc.npc().canHeal() && trainerStorageProvider.get().getTrainer().team().size() == 0) {
+                        continueTrainerDialog(DialogSpecialInteractions.nurseNoMons);
+                    } else {
+                        continueTrainerDialog(null);
+                    }
                 } else {
-                    continueTrainerDialog(null);
+                    disposables.add(udpEventListenerProvider.get().talk(trainerStorageProvider.get().getTrainer().area(), new TalkTrainerDto(
+                            trainerStorageProvider.get().getTrainer()._id(),
+                            this.currentNpc._id(),
+                            0
+                    )).observeOn(FX_SCHEDULER).subscribe());
+                    endDialog(0,false);
                 }
             } catch (Error e) {
                 continueTrainerDialog(null);
@@ -1176,20 +1177,27 @@ public class IngameController extends Controller {
                     trainerControllerHashMap.get(this.currentNpc).turn(turnDirection);
                 }
 
-                this.dialogController = new DialogController(
-                        this.currentNpc,
-                        createDialogVBox(),
-                        checkIfNpcEncounteredPlayer(this.currentNpc),
-                        npcTextManager,
-                        trainerStorageProvider.get().getTrainer(),
-                        this
-                );
+
+                if (currentNpc.npc() != null) {
+                    this.dialogController = new DialogController(
+                            this.currentNpc,
+                            createDialogVBox(false),
+                            checkIfNpcEncounteredPlayer(this.currentNpc),
+                            npcTextManager,
+                            trainerStorageProvider.get().getTrainer(),
+                            this
+                    );
+                } else {
+                    TextFlow textFlow = createDialogVBox(false);
+                    textFlow.getChildren().add(new Text(resources.getString("WANT.TO.FIGHT")));
+                }
+
             }
         }
     }
 
     /**
-     * This method checks the tile in front of the player, if a npc is standing on that tile.
+     * This method checks the tile in front of the player, if a trainer (npc or normal trainer) is standing on that tile.
      *
      * @param currentX  current x coordinate of the player
      * @param currentY  current y coordinate of the player
@@ -1250,12 +1258,11 @@ public class IngameController extends Controller {
         }
     }
 
+    // This Methode returns all kind of trainer (npcs and normal trainers) that are standing on a specific tile
     public Trainer searchHashedMapForTrainer(int checkX, int checkY) {
         for (java.util.Map.Entry<Trainer, Position> set : trainerPositionHashMap.entrySet()) {
             if (set.getValue().getX() == checkX && set.getValue().getY() == checkY) {
-                if (set.getKey().npc() != null) {
-                    return set.getKey();
-                }
+                return set.getKey();
             }
         }
         return null;
@@ -1331,7 +1338,9 @@ public class IngameController extends Controller {
     }
 
     public void endDialog(int selectionValue, boolean encounterNpc) {
-        this.dialogController.destroy();
+        if(this.dialogController !=null){
+            this.dialogController.destroy();
+        }
         inDialog = false;
 
         // Turn NPC back to original direction after finishing dialog
@@ -1410,13 +1419,18 @@ public class IngameController extends Controller {
         inNpcPopup = true;
     }
 
-    public TextFlow createDialogVBox() {
+    public TextFlow createDialogVBox(boolean isEncounter) {
         StackPane dialogStackPane = new StackPane();
         dialogStackPane.setId("dialogStackPane");
         dialogStackPane.setMaxHeight(160);
         dialogStackPane.setMaxWidth(700);
 
-        Label nameLabel = new Label(this.currentNpc.name());
+        Label nameLabel = new Label();
+        if(isEncounter){
+            nameLabel.setText(resources.getString("ANNOUNCEMENT"));
+        } else {
+            nameLabel.setText(this.currentNpc.name());
+        }
         nameLabel.setPadding(new Insets(5, 10, 5, 10));
 
         VBox dialogVBox = new VBox();
