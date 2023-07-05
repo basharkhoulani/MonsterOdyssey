@@ -41,9 +41,6 @@ public class BattleMenuController extends Controller {
 
     public Parent render(){
         final Parent parent = super.render();
-        if(encounterOpponentStorage.isWild()){
-            fleeButton.setVisible(true);
-        }
         return parent;
     }
 
@@ -60,6 +57,11 @@ public class BattleMenuController extends Controller {
         // show the MonsterInformation VBox
     }
 
-    public void changeToIngame(ActionEvent actionEvent) {
+    public void changeToIngame() {
+
+    }
+
+    public void showFleeButton(boolean isWild){
+        fleeButton.setVisible(isWild);
     }
 }

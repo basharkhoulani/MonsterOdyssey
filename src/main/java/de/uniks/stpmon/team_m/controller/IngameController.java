@@ -1040,6 +1040,7 @@ public class IngameController extends Controller {
                         encounterOpponentStorage.setEncounterId(opponent.encounter());
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
+                                    encounterOpponentStorage.setEncounterSize(opts.size());
                                     for (Opponent o : opts) {
                                         if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                                             encounterOpponentStorage.setEnemyOpponent(o);
@@ -1062,6 +1063,7 @@ public class IngameController extends Controller {
         TextFlow dialogTextFlow = createDialogVBox(true);
         dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.INFO")));
         this.inEncounterInfoBox = true;
+        movementDisabled = true;
     }
 
     private void showEncounterScene() {
