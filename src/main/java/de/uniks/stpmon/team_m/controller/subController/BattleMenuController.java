@@ -41,9 +41,6 @@ public class BattleMenuController extends Controller {
 
     public Parent render(){
         final Parent parent = super.render();
-        if(encounterOpponentStorage.isWild()){
-            fleeButton.setVisible(true);
-        }
         return parent;
     }
 
@@ -61,5 +58,9 @@ public class BattleMenuController extends Controller {
     }
 
     public void changeToIngame(ActionEvent actionEvent) {
+    }
+
+    public void showFleeButton(){
+        fleeButton.setVisible(true);
     }
 }

@@ -129,6 +129,8 @@ public class EncounterController extends Controller {
                         battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + trainer.name());
                         setTrainerSpriteImageView(trainer, opponentTrainer,3);
                     }, Throwable::printStackTrace));
+        } else {
+            battleMenuController.showFleeButton();
         }
     }
 
