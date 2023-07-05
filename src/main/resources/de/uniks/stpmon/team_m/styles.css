@@ -47,6 +47,10 @@
 .buttonsWhite:hover {
     -fx-background-color: #FFF2CC;
 }
+.buttonsRed:hover {
+    -fx-background-color: #D63818;
+    -fx-text-fill: #FFFFFF;
+}
 .buttonsTransparent {
     -fx-background-color: transparent;
 }
