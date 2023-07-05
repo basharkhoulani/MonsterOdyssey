@@ -37,6 +37,10 @@ import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 public class MonsterCell extends ListCell<Monster> {
 
     @FXML
+    public ImageView arrowUp;
+    @FXML
+    public ImageView arrowDown;
+    @FXML
     public Button removeFromTeamButton;
     @FXML
     public Button viewDetailsButton;
@@ -115,6 +119,7 @@ public class MonsterCell extends ListCell<Monster> {
                         this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
                         monsterImageView.setImage(this.monsterImage);
                     }, error -> monstersListController.showError(error.getMessage())));
+            viewDetailsButton.setOnAction(event -> showDetails(monster));
             setGraphic(rootmonsterHBox);
             setText(null);
         }
