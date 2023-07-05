@@ -283,7 +283,7 @@ public class MainMenuController extends Controller {
 <span class="nc" id="L283">    }</span>
 
     public void muteOrUnmuteSound() {
-<span class="nc bnc" id="L286" title="All 2 branches missed.">        if(preferences.getBoolean(&quot;mute&quot;, true)) {</span>
+<span class="nc bnc" id="L286" title="All 2 branches missed.">        if(AudioService.getInstance().checkMuted()) {</span>
 <span class="nc" id="L287">            muteButton.getStyleClass().remove(&quot;unmuteSymbol&quot;);</span>
 <span class="nc" id="L288">            muteButton.getStyleClass().add(&quot;muteSymbol&quot;);</span>
 <span class="nc" id="L289">            preferences.putBoolean(&quot;mute&quot;, false);</span>
