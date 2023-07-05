@@ -134,4 +134,8 @@ public class EncounterOpponentController extends Controller {
         return this;
     }
 
+    public ImageView getTrainerImageView() {
+        return trainerImageView;
+    }
+
 }

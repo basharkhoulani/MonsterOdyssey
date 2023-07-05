@@ -5,13 +5,16 @@ import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController;
 import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
+import de.uniks.stpmon.team_m.service.MonstersService;
 import de.uniks.stpmon.team_m.service.RegionEncountersService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -52,6 +55,8 @@ public class Encounter2Controller extends Controller {
     EncounterOpponentsService encounterOpponentsService;
     @Inject
     RegionEncountersService regionEncountersService;
+    @Inject
+    MonstersService monstersService;
 
     @Inject
     EncounterOpponentStorage encounterOpponentStorage;
@@ -67,6 +72,7 @@ public class Encounter2Controller extends Controller {
 
     private String regionId;
     private String encounterId;
+    private String trainerId;
 
     @Inject
     public Encounter2Controller() {
@@ -78,6 +84,7 @@ public class Encounter2Controller extends Controller {
         opponentsSize = encounterOpponentStorage.getEncounterSize();
         regionId = trainerStorage.getRegion()._id();
         encounterId = encounterOpponentStorage.getEncounterId();
+        trainerId = trainerStorage.getTrainer()._id();
     }
 
     @Override
@@ -112,6 +119,11 @@ public class Encounter2Controller extends Controller {
                     }
                 }));
         return parent;
+    }
+
+    @Override
+    public String getTitle() {
+        return resources.getString("ENCOUNTER");
     }
 
     private void renderForWild(Parent ownTrainerParent) {
@@ -192,7 +204,23 @@ public class Encounter2Controller extends Controller {
 
     // Hier soll allen Serveranfragen kommen
     private void showWildMonster(EncounterOpponentController encounterOpponentController, Opponent opponent){
-        encounterOpponentController.setMonsterImage(new Image(String.valueOf(Main.class.getResource("images/Monster2-color.png"))));
+        disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster())
+                .observeOn(FX_SCHEDULER).subscribe(monster -> {
+                    encounterOpponentStorage.setCurrentEnemyMonster(monster);
+                    encounterOpponentController.setLevelLabel(monster.level() + " LVL")
+                            .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
+                    disposables.add(presetsService.getMonster(monster.type())
+                            .observeOn(FX_SCHEDULER).subscribe(m -> {
+                                encounterOpponentController.setMonsterNameLabel(m.name());
+                                encounterOpponentStorage.setCurrentEnemyMonsterType(m);
+                                battleDialogText.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + m.name());
+                            }, Throwable::printStackTrace));
+                    disposables.add(presetsService.getMonsterImage(monster.type())
+                            .observeOn(FX_SCHEDULER).subscribe(mImage -> {
+                                Image enemyMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
+                                encounterOpponentController.setMonsterImage(enemyMonsterImage);
+                            }, Throwable::printStackTrace));
+                }, Throwable::printStackTrace));
     }
 
     private void showEnemyInfo(EncounterOpponentController encounterOpponentController, Opponent opponent) {
@@ -202,14 +230,37 @@ public class Encounter2Controller extends Controller {
     }
 
     private void showOwnInfo(EncounterOpponentController encounterOpponentController, Opponent opponent) {
-        encounterOpponentController.setMonsterNameLabel(teamMonsterName)
-                .setHealthBarValue(teamMonsterHeathBarValue)
-                .setLevelLabel(String.valueOf(teamLevel))
-                .setHealthLabel(String.valueOf(teamHeath))
-                .setExperienceBarValue(teamLevelBarValue);
+        // Monster
+        disposables.add(monstersService.getMonster(regionId, trainerId, opponent.monster())
+                .observeOn(FX_SCHEDULER).subscribe(monster -> {
+                    encounterOpponentStorage.setCurrentTrainerMonster(monster);
+                    encounterOpponentController.setLevelLabel(monster.level() + " LVL")
+                            .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1))
+                            .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health())
+                            .setHealthLabel(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
+                    //write monster name
+                    disposables.add(presetsService.getMonster(monster.type())
+                            .observeOn(FX_SCHEDULER).subscribe(m -> {
+                                encounterOpponentController.setMonsterNameLabel(m.name());
+                                encounterOpponentStorage.setCurrentTrainerMonsterType(m);
+                            }, Throwable::printStackTrace));
+                    disposables.add(presetsService.getMonsterImage(monster.type())
+                            .observeOn(FX_SCHEDULER).subscribe(mImage -> {
+                                Image myMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
+                                encounterOpponentController.setMonsterImage(myMonsterImage);
+                            }, Throwable::printStackTrace));
+                }, Throwable::printStackTrace));
+
+        // Own
+        ImageView sprite = encounterOpponentController.getTrainerImageView();
+        setTrainerSpriteImageView(trainerStorage.getTrainer(), sprite,1);
     }
 
     private void showCoopInfo(EncounterOpponentController encounterOpponentController, Opponent opponent) {
         encounterOpponentController.setMonsterImage(new Image(String.valueOf(Main.class.getResource("images/Monster2-color.png"))));
+    }
+
+    public int requiredExperience(int currentLevel) {
+        return (int) (Math.pow(currentLevel, 3) - Math.pow(currentLevel - 1, 3));
     }
 }
