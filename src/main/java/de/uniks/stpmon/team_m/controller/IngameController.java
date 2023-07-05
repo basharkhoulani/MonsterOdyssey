@@ -1063,6 +1063,7 @@ public class IngameController extends Controller {
         TextFlow dialogTextFlow = createDialogVBox(true);
         dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.INFO")));
         this.inEncounterInfoBox = true;
+        movementDisabled = true;
     }
 
     private void showEncounterScene() {
