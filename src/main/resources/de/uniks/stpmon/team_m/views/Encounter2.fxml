@@ -4,9 +4,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="768.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.Encounter2Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="768.0" styleClass="encounterBackground" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.Encounter2Controller">
    <center>
-      <VBox fx:id="battleBackgroundVBox" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="battleBackgroundVBox" prefHeight="200.0" prefWidth="100.0" styleClass="ForegroundContainer">
          <HBox fx:id="enemyHBox" alignment="CENTER" VBox.vgrow="ALWAYS">
             <padding>
                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
@@ -20,22 +20,26 @@
       </VBox>
    </center>
    <bottom>
-      <HBox prefWidth="200.0" style="-fx-border-width: 1px; -fx-border-style: solid; -fx-border-radius: 8px 8px 0 0;" BorderPane.alignment="CENTER">
+      <HBox prefWidth="200.0" spacing="8.0" styleClass="hBoxDarkGreen" BorderPane.alignment="CENTER">
          <VBox HBox.hgrow="ALWAYS">
-            <TextFlow fx:id="battleDialogTextFlow"
-                      style="-fx-border-radius: 8px 0 0 0; -fx-border-style: solid; -fx-border-width: 1px; -fx-border-color: green;"
-                      textAlignment="CENTER" VBox.vgrow="ALWAYS">
+            <TextFlow fx:id="battleDialogTextFlow" styleClass="hBoxLightGreen" textAlignment="CENTER" VBox.vgrow="ALWAYS">
                <padding>
-                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                </padding>
                <Text fx:id="battleDialogText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
                   <font>
-                     <Font name="Comic Sans MS Bold" size="17.0"/>
+                     <Font name="Comic Sans MS Bold" size="17.0" />
                   </font>
                </Text>
             </TextFlow>
          </VBox>
-         <VBox fx:id="actionButtonVBox" prefHeight="125.0" prefWidth="250.0" style="-fx-border-color: red; -fx-border-width: 2px; -fx-border-radius: 0 8px 0 0; -fx-border-style: solid;" HBox.hgrow="NEVER" />
+         <VBox fx:id="actionButtonVBox" prefHeight="125.0" prefWidth="250.0" HBox.hgrow="NEVER">
+            <HBox.margin>
+               <Insets />
+            </HBox.margin></VBox>
+         <padding>
+            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+         </padding>
       </HBox>
    </bottom>
 </BorderPane>

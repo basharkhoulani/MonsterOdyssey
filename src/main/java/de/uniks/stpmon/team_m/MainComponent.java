@@ -2,6 +2,8 @@ package de.uniks.stpmon.team_m;
 
 import dagger.BindsInstance;
 import dagger.Component;
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.Encounter2Controller;
 import de.uniks.stpmon.team_m.controller.LoginController;
 import de.uniks.stpmon.team_m.controller.MainMenuController;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
@@ -16,6 +18,8 @@ public interface MainComponent {
     LoginController loginController();
 
     MainMenuController mainMenuController();
+
+    Encounter2Controller encounterController();
 
     @Component.Builder
     interface Builder {

@@ -112,7 +112,7 @@ public class EncounterController extends Controller {
                 }, Throwable::printStackTrace));
 
         // render for subcontroller
-        battleMenuController.init(this, battleMenu, encounterOpponentStorage);
+        //battleMenuController.init(this, battleMenu, encounterOpponentStorage);
         battleMenu.getChildren().add(battleMenuController.render());
 
         listenToOpponents(encounterOpponentStorage.getEncounterId());
