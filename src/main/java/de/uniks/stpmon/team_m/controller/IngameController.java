@@ -1038,14 +1038,19 @@ public class IngameController extends Controller {
                     if (opponentEvent.suffix().equals("created")) {
                         encounterOpponentStorage.setSelfOpponent(opponent);
                         encounterOpponentStorage.setEncounterId(opponent.encounter());
+                        encounterOpponentStorage.setAttacker(opponent.isAttacker());
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
                                     for (Opponent o : opts) {
-                                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                                            encounterOpponentStorage.setEnemyOpponent(o);
+                                        if (!o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                                            if (o.isAttacker() != encounterOpponentStorage.isAttacker()) {
+                                                encounterOpponentStorage.addEnemyOpponent(o);
+                                            } else{
+                                                encounterOpponentStorage.setCoopOpponent(o);
+                                            }
                                         }
                                     }
-                                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponent() != null) {
+                                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponents().size() != 0) {
                                         showEncounterInfoWindow();
                                     }
                                 }));
