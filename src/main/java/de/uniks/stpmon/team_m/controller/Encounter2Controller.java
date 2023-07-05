@@ -19,7 +19,7 @@ import javax.inject.Singleton;
 @Singleton
 public class Encounter2Controller extends Controller {
     // Sample data
-    int opponentsSize = 4;
+    int opponentsSize = 2;
     boolean isWild = false;
     String enemyMonsterName = "Flamuntel";
     double enemyHealthBarValue = 0.93;
@@ -63,7 +63,7 @@ public class Encounter2Controller extends Controller {
     @Override
     public void init() {
         super.init();
-        opponentsSize = encounterOpponentStorage.getEncounterSize();
+        //opponentsSize = encounterOpponentStorage.getEncounterSize();
     }
 
     @Override
@@ -104,11 +104,11 @@ public class Encounter2Controller extends Controller {
     }
 
     private void renderForDuel(Parent enemy1Parent, Parent ownTrainerParent) {
-        enemyHBox.setPadding(new Insets(0, 400, 0, 0));
+        enemyHBox.setPadding(new Insets(0, 450, 0, 0));
         enemyHBox.getChildren().add(enemy1Parent);
         // TODO: setup controllers with data
 
-        teamHBox.setPadding(new Insets(0, 0, 0, 400));
+        teamHBox.setPadding(new Insets(0, 0, 0, 450));
         teamHBox.getChildren().add(ownTrainerParent);
         // TODO: setup controllers with data
 
@@ -124,7 +124,7 @@ public class Encounter2Controller extends Controller {
         enemyHBox.getChildren().add(enemy2Parent);
         // TODO: setup controllers with data
 
-        teamHBox.setPadding(new Insets(0, 0, 0, 400));
+        teamHBox.setPadding(new Insets(0, 0, 0, 450));
         teamHBox.getChildren().add(ownTrainerParent);
         // TODO: setup controllers with data
     }

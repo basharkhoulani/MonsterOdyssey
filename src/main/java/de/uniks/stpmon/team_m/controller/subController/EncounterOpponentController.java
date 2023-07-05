@@ -36,7 +36,6 @@ public class EncounterOpponentController extends Controller {
     @FXML
     public Label monsterNameLabel;
     @FXML
-
     public VBox trainerMonsterVBox;
     @FXML
     public ImageView monsterImageView;
@@ -44,6 +43,8 @@ public class EncounterOpponentController extends Controller {
     public ImageView trainerImageView;
     @FXML
     public VBox splitterVBox;
+
+    private int monsterMaxHealth = 100;
 
     public EncounterOpponentController(Boolean isEnemy, Boolean isWild, Boolean invertX) {
         this.isEnemy = isEnemy;
@@ -116,7 +117,7 @@ public class EncounterOpponentController extends Controller {
 
     public EncounterOpponentController setHealthLabel(String value) {
         if (!healthLabel.isDisabled()) {
-            healthLabel.setText(value + " HP");
+            healthLabel.setText(value + "/" + monsterMaxHealth + "HP");
         }
         return this;
     }
