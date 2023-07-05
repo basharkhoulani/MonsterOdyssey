@@ -27,8 +27,11 @@ import javafx.stage.Stage;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.io.File;
+import java.net.URL;
 import java.util.ResourceBundle;
 
+import static de.uniks.stpmon.team_m.Constants.ABILITYPALETTE;
 import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
 public class MonsterCell extends ListCell<Monster> {
@@ -50,7 +53,7 @@ public class MonsterCell extends ListCell<Monster> {
     @FXML
     VBox abilityIcon;
     @FXML
-    ImageView abilityImage;
+    ImageView abilityImageView;
     private final ResourceBundle resources;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
@@ -71,6 +74,8 @@ public class MonsterCell extends ListCell<Monster> {
     private MonsterTypeDto monsterTypeDto;
     private Image monsterImage;
     private String abilityColor;
+    private String abilityImagePath;
+    private Image abilityImage;
 
     public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController) {
         this.resources = resources;
@@ -98,6 +103,11 @@ public class MonsterCell extends ListCell<Monster> {
                         abilityColor = TYPESCOLORPALETTE.get(ability.toString());
                         String style = "-fx-background-color: " + abilityColor + ";";
                         abilityIcon.setStyle(style);
+
+                        abilityImagePath = ABILITYPALETTE.get(ability.toString());
+                        URL resource = Main.class.getResource("images/" + abilityImagePath);
+                        abilityImage = new Image(resource.toString());
+                        abilityImageView.setImage(abilityImage);
                     }, error -> monstersListController.showError(error.getMessage())));
             monsterLevel.setText(resources.getString("LEVEL") + " " + monster.level());
             disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
@@ -105,12 +115,8 @@ public class MonsterCell extends ListCell<Monster> {
                         this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
                         monsterImageView.setImage(this.monsterImage);
                     }, error -> monstersListController.showError(error.getMessage())));
-            //rootmonsterHBox.setOnMouseClicked(event -> showDetails(monster));
             setGraphic(rootmonsterHBox);
             setText(null);
-        }
-        if (abilityColor != null) {
-            abilityIcon.setStyle("-fx-background-color: abilityColor");
         }
     }
 
