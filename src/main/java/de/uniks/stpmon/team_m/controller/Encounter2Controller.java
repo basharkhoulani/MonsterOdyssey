@@ -26,19 +26,6 @@ import javax.inject.Singleton;
 
 @Singleton
 public class Encounter2Controller extends Controller {
-    // Sample data
-    int opponentsSize = 4;
-    boolean isWild = true;
-    String enemyMonsterName = "Flamuntel";
-    double enemyHealthBarValue = 0.93;
-    int enemyLevel = 8;
-    String teamMonsterName = "Envias";
-    double teamMonsterHeathBarValue = 0.93;
-    int teamLevel = 9;
-    int teamHeath = 100;
-    double teamLevelBarValue = 0.93;
-
-
     @FXML
     public Text battleDialogText;
     @FXML
@@ -73,6 +60,7 @@ public class Encounter2Controller extends Controller {
     private EncounterOpponentController ownTrainerController;
     private EncounterOpponentController coopTrainerController;
 
+    private int opponentsSize;
     private String regionId;
     private String encounterId;
     private String trainerId;
