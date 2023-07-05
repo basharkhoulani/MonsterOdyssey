@@ -99,7 +99,7 @@ public class Encounter2Controller extends Controller {
                     encounterOpponentStorage.setWild(encounter.isWild());
                     if (encounter.isWild()) {
                         renderForWild(ownTrainerParent);
-                        //battleMenuController.showFleeButton();
+                        battleMenuController.showFleeButton(true);
                     } else {
                         if (opponentsSize == 2) {
                             renderFor1vs1(ownTrainerParent);
@@ -108,6 +108,7 @@ public class Encounter2Controller extends Controller {
                         } else {
                             renderFor2vs2(ownTrainerParent);
                         }
+                        battleMenuController.showFleeButton(false);
                     }
                 }));
         return parent;
