@@ -65,6 +65,9 @@ public class Encounter2Controller extends Controller {
     private EncounterOpponentController ownTrainerController;
     private EncounterOpponentController coopTrainerController;
 
+    private String regionId;
+    private String encounterId;
+
     @Inject
     public Encounter2Controller() {
     }
