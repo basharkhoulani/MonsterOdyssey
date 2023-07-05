@@ -20,7 +20,7 @@ import javax.inject.Singleton;
 public class Encounter2Controller extends Controller {
     // Sample data
     int opponentsSize = 4;
-    boolean isWild = true;
+    boolean isWild = false;
     String enemyMonsterName = "Flamuntel";
     double enemyHealthBarValue = 0.93;
     int enemyLevel = 8;
@@ -72,7 +72,8 @@ public class Encounter2Controller extends Controller {
         // Init opponent controller for own trainer
         ownTrainerController = new EncounterOpponentController(false, false, true);
         ownTrainerController.init();
-        Parent ownTrainerParent = ownTrainerController.render();
+        VBox ownTrainerParent = (VBox) ownTrainerController.render();
+        HBox.setHgrow(ownTrainerParent, javafx.scene.layout.Priority.ALWAYS);
         ownTrainerController.setMonsterNameLabel(teamMonsterName)
                             .setHealthBarValue(teamMonsterHeathBarValue)
                             .setLevelLabel(String.valueOf(teamLevel))
@@ -80,9 +81,10 @@ public class Encounter2Controller extends Controller {
                             .setExperienceBarValue(teamLevelBarValue);
 
         // Init opponent controller for the enemy
-        enemy1Controller = new EncounterOpponentController(true, false, false);
+        enemy1Controller = new EncounterOpponentController(true, isWild, false);
         enemy1Controller.init();
         Parent enemy1Parent = enemy1Controller.render();
+        HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
         enemy1Controller.setHealthBarValue(enemyHealthBarValue)
                 .setLevelLabel(String.valueOf(enemyLevel))
                 .setMonsterNameLabel(enemyMonsterName);
@@ -95,12 +97,9 @@ public class Encounter2Controller extends Controller {
         }
         else {
             renderFor2vs2(enemy1Parent, ownTrainerParent);
-
         }
-
         battleMenuController.init(this, actionButtonVBox, encounterOpponentStorage);
         actionButtonVBox.getChildren().add(battleMenuController.render());
-
         return parent;
     }
 
@@ -120,7 +119,9 @@ public class Encounter2Controller extends Controller {
         enemy2Controller = new EncounterOpponentController(true, false, true);
         enemy2Controller.init();
         enemyHBox.getChildren().add(enemy1Parent);
-        enemyHBox.getChildren().add(enemy2Controller.render());
+        VBox enemy2Parent = (VBox) enemy2Controller.render();
+        HBox.setHgrow(enemy2Parent, javafx.scene.layout.Priority.ALWAYS);
+        enemyHBox.getChildren().add(enemy2Parent);
         // TODO: setup controllers with data
 
         teamHBox.setPadding(new Insets(0, 0, 0, 400));
@@ -132,15 +133,21 @@ public class Encounter2Controller extends Controller {
         // 2 vs 2 situation
         enemy2Controller = new EncounterOpponentController(true, false, true);
         enemy2Controller.init();
+        VBox enemy2Parent = (VBox) enemy2Controller.render();
+        HBox.setHgrow(enemy2Parent, javafx.scene.layout.Priority.ALWAYS);
+
         enemyHBox.getChildren().add(enemy1Parent);
-        enemyHBox.getChildren().add(enemy2Controller.render());
+        enemyHBox.getChildren().add(enemy2Parent);
         // TODO: setup controllers with data
 
         coopTrainerController = new EncounterOpponentController(false, false, false);
         coopTrainerController.init();
-        teamHBox.getChildren().add(coopTrainerController.render());
-        coopTrainerController.setMonsterImage(new Image(String.valueOf(Main.class.getResource("images/Monster2-color.png"))));
+        VBox coopTrainerParent = (VBox) coopTrainerController.render();
+        HBox.setHgrow(coopTrainerParent, javafx.scene.layout.Priority.ALWAYS);
+
+        teamHBox.getChildren().add(coopTrainerParent);
         teamHBox.getChildren().add(ownTrainerParent);
         // TODO: setup controllers with data
+        coopTrainerController.setMonsterImage(new Image(String.valueOf(Main.class.getResource("images/Monster2-color.png"))));
     }
 }

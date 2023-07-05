@@ -42,6 +42,8 @@ public class EncounterOpponentController extends Controller {
     public ImageView monsterImageView;
     @FXML
     public ImageView trainerImageView;
+    @FXML
+    public VBox splitterVBox;
 
     public EncounterOpponentController(Boolean isEnemy, Boolean isWild, Boolean invertX) {
         this.isEnemy = isEnemy;
@@ -55,6 +57,7 @@ public class EncounterOpponentController extends Controller {
         if (isEnemy) {
             experienceBar.setVisible(false);
             experienceBar.setDisable(true);
+            experienceBar.setMinWidth(0);
             experienceBar.setMaxWidth(0);
             healthHBox.setVisible(false);
             healthLabel.setVisible(false);
@@ -76,7 +79,8 @@ public class EncounterOpponentController extends Controller {
         if (invertX) {
             opponentHBox.getChildren().clear();
             opponentHBox.getChildren().add(0, trainerMonsterVBox);
-            opponentHBox.getChildren().add(1, monsterInfoBox);
+            opponentHBox.getChildren().add(1, splitterVBox);
+            opponentHBox.getChildren().add(2, monsterInfoBox);
         }
         return parent;
     }
