@@ -40,7 +40,7 @@
                   <Insets left="5.0" />
                </HBox.margin>
                <children>
-                  <ImageView fx:id="abilityImage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="abilityImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </VBox>
          </children>
