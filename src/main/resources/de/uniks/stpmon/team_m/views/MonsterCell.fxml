@@ -76,7 +76,7 @@
                <Insets top="27.0" />
             </VBox.margin>
          </Button>
-         <Button fx:id="viewDetailsButton" alignment="CENTER" mnemonicParsing="false" onAction="#showDetails" prefWidth="153.0" styleClass="buttonsWhite" text="%VIEW.DETAILS">
+         <Button fx:id="viewDetailsButton" alignment="CENTER" mnemonicParsing="false" prefWidth="153.0" styleClass="buttonsWhite" text="%VIEW.DETAILS">
             <VBox.margin>
                <Insets top="8.0" />
             </VBox.margin>
