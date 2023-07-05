@@ -11,15 +11,15 @@ public interface EncounterOpponentsApiService {
     @GET("regions/{regionId}/trainers/{trainerId}/opponents")
     Observable<List<Opponent>> getTrainerOpponents(@Path("regionId") String regionId, @Path("trainerId") String trainerId);
 
-    @GET("regions/{regionId}/trainers/{encounterId}/opponents")
+    @GET("regions/{regionId}/encounters/{encounterId}/opponents")
     Observable<List<Opponent>> getEncounterOpponents(@Path("regionId") String regionId, @Path("encounterId") String encounterId);
 
-    @GET("regions/{regionId}/trainers/{encounterId}/opponents/{opponentId}")
+    @GET("regions/{regionId}/encounters/{encounterId}/opponents/{opponentId}")
     Observable<Opponent> getOpponent(@Path("regionId") String regionId, @Path("encounterId") String encounterId, @Path("opponentId") String opponentId);
 
-    @PATCH("regions/{regionId}/trainers/{encounterId}/opponents/{opponentId}")
+    @PATCH("regions/{regionId}/encounters/{encounterId}/opponents/{opponentId}")
     Observable<Opponent> updateOpponent(@Path("regionId") String regionId, @Path("encounterId") String encounterId, @Path("opponentId") String opponentId, @Body UpdateOpponentDto dto);
 
-    @DELETE("regions/{regionId}/trainers/{encounterId}/opponents/{opponentId}")
+    @DELETE("regions/{regionId}/encounters/{encounterId}/opponents/{opponentId}")
     Observable<Opponent> deleteOpponent(@Path("regionId") String regionId, @Path("encounterId") String encounterId, @Path("opponentId") String opponentId);
 }
