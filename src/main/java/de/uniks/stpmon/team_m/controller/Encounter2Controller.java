@@ -7,6 +7,7 @@ import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.service.MonstersService;
 import de.uniks.stpmon.team_m.service.RegionEncountersService;
+import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -57,6 +58,8 @@ public class Encounter2Controller extends Controller {
     RegionEncountersService regionEncountersService;
     @Inject
     MonstersService monstersService;
+    @Inject
+    TrainersService trainersService;
 
     @Inject
     EncounterOpponentStorage encounterOpponentStorage;
@@ -207,7 +210,7 @@ public class Encounter2Controller extends Controller {
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
                     encounterOpponentStorage.setCurrentEnemyMonster(monster);
-                    encounterOpponentController.setLevelLabel(monster.level() + " LVL")
+                    encounterOpponentController.setLevelLabel(String.valueOf(monster.level()))
                             .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
                     disposables.add(presetsService.getMonster(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(m -> {
@@ -224,9 +227,16 @@ public class Encounter2Controller extends Controller {
     }
 
     private void showEnemyInfo(EncounterOpponentController encounterOpponentController, Opponent opponent) {
-        encounterOpponentController.setHealthBarValue(enemyHealthBarValue)
-                .setLevelLabel(String.valueOf(enemyLevel))
-                .setMonsterNameLabel(enemyMonsterName);
+        // Trainer Sprite
+        disposables.add(trainersService.getTrainer(regionId, opponent.trainer())
+                .observeOn(FX_SCHEDULER).subscribe(trainer -> {
+                    battleDialogText.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + trainer.name());
+                    ImageView opponentTrainer = encounterOpponentController.getTrainerImageView();
+                    setTrainerSpriteImageView(trainer, opponentTrainer,3);
+                }, Throwable::printStackTrace));
+
+        // Monster
+        showWildMonster(encounterOpponentController, opponent);
     }
 
     private void showOwnInfo(EncounterOpponentController encounterOpponentController, Opponent opponent) {
