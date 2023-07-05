@@ -41,26 +41,28 @@ public class BattleMenuController extends Controller {
 
     public Parent render(){
 <span class="nc" id="L43">        final Parent parent = super.render();</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">        if(encounterOpponentStorage.isWild()){</span>
-<span class="nc" id="L45">            fleeButton.setVisible(true);</span>
-        }
-<span class="nc" id="L47">        return parent;</span>
+<span class="nc" id="L44">        return parent;</span>
     }
 
 
     public void showAbilities() {
         // change to AbilitiesSubView
-<span class="nc" id="L53">    }</span>
+<span class="nc" id="L50">    }</span>
 
     public void changeMonster(ActionEvent actionEvent) {
         // show the ChangeMonster VBox
-<span class="nc" id="L57">    }</span>
+<span class="nc" id="L54">    }</span>
 
     public void showMonsterInformation(ActionEvent actionEvent) {
         // show the MonsterInformation VBox
-<span class="nc" id="L61">    }</span>
+<span class="nc" id="L58">    }</span>
 
-    public void changeToIngame(ActionEvent actionEvent) {
-<span class="nc" id="L64">    }</span>
+    public void changeToIngame() {
+
+<span class="nc" id="L62">    }</span>
+
+    public void showFleeButton(boolean isWild){
+<span class="nc" id="L65">        fleeButton.setVisible(isWild);</span>
+<span class="nc" id="L66">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
