@@ -23,7 +23,7 @@ import javax.inject.Singleton;
 @Singleton
 public class Encounter2Controller extends Controller {
     // Sample data
-    int opponentsSize = 3;
+    int opponentsSize = 4;
     boolean isWild = true;
     String enemyMonsterName = "Flamuntel";
     double enemyHealthBarValue = 0.93;
@@ -64,9 +64,6 @@ public class Encounter2Controller extends Controller {
     private EncounterOpponentController enemy2Controller;
     private EncounterOpponentController ownTrainerController;
     private EncounterOpponentController coopTrainerController;
-
-    String regionId;
-    String encounterId;
 
     @Inject
     public Encounter2Controller() {
