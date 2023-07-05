@@ -21,6 +21,7 @@ import javax.inject.Provider;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -45,7 +46,8 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        welcomeSceneController.setValues(bundle, null, null, welcomeSceneController, app);
+        Preferences preferences = mock(Preferences.class);
+        welcomeSceneController.setValues(bundle, preferences, null, welcomeSceneController, app);
         final CharacterSelectionController characterSelectionController = mock(CharacterSelectionController.class);
         when(characterSelectionControllerProvider.get()).thenReturn(characterSelectionController);
         doNothing().when(app).show(characterSelectionController);
