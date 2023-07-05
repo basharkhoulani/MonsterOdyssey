@@ -58,7 +58,7 @@ public class App extends Application {
 
         PauseTransition pause = new PauseTransition(Duration.seconds(DURATION_OF_LOADING_SCREEN));
         pause.setOnFinished(event -> {
-            show(new Encounter2Controller());
+            show(component.encounterController());
             /*
             if (component == null) {
                 return;
