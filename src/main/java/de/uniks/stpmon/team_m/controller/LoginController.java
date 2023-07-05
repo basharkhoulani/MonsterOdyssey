@@ -139,8 +139,11 @@ public class LoginController extends Controller {
 
         showInformation();
 
-        if (preferences.getBoolean("mute", false)) {
-            muteOrUnmuteSound();
+        if (!GraphicsEnvironment.isHeadless()) {
+            if (preferences.getBoolean("mute", false)) {
+                AudioService.getInstance().unmuteSound();
+                muteOrUnmuteSound();
+            }
         }
 
         return parent;
@@ -243,22 +246,6 @@ public class LoginController extends Controller {
     }
 
     public void muteOrUnmuteSound() {
-        if(AudioService.getInstance().checkMuted()) {
-            muteButton.getStyleClass().remove("unmuteSymbol");
-            muteButton.getStyleClass().add("muteSymbol");
-            preferences.putBoolean("mute", false);
-            AudioService.getInstance().unmuteSound();
-            if (preferences.getDouble("volume", 0.5) <= 0.05) {
-                AudioService.getInstance().setVolume(0.5);
-                preferences.putDouble("volume", 0.5);
-            } else {
-                AudioService.getInstance().setVolume(preferences.getDouble("volume", 0.5));
-            }
-        } else {
-            muteButton.getStyleClass().remove("muteSymbol");
-            muteButton.getStyleClass().add("unmuteSymbol");
-            preferences.putBoolean("mute", true);
-            AudioService.getInstance().muteSound();
-        }
+        AudioService.getInstance().muteOrUnmuteSound(muteButton, preferences);
     }
 }
