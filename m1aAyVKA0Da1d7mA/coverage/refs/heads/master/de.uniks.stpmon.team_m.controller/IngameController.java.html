@@ -1594,22 +1594,28 @@ public class IngameController extends Controller {
 <span class="nc bnc" id="L1594" title="All 2 branches missed.">                        if (area.name().contains(&quot;Route&quot;)) {</span>
 <span class="nc" id="L1595">                            AudioService.getInstance().stopSound();</span>
 <span class="nc" id="L1596">                            AudioService.getInstance().playSound(ROUTE_SOUND);</span>
-<span class="nc" id="L1597">                            AudioService.getInstance().setCurrentSound(ROOMS_SOUND);</span>
-<span class="nc bnc" id="L1598" title="All 2 branches missed.">                        } else if (area.map().infinite()) {</span>
-<span class="nc" id="L1599">                            AudioService.getInstance().stopSound();</span>
-<span class="nc" id="L1600">                            AudioService.getInstance().playSound(CITY_SOUND);</span>
-<span class="nc" id="L1601">                            AudioService.getInstance().setCurrentSound(CITY_SOUND);</span>
+<span class="nc" id="L1597">                            AudioService.getInstance().setCurrentSound(ROUTE_SOUND);</span>
+<span class="nc" id="L1598">                            AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()));</span>
+<span class="nc bnc" id="L1599" title="All 2 branches missed.">                        } else if (area.map().infinite()) {</span>
+<span class="nc" id="L1600">                            AudioService.getInstance().stopSound();</span>
+<span class="nc" id="L1601">                            AudioService.getInstance().playSound(CITY_SOUND);</span>
+<span class="nc" id="L1602">                            AudioService.getInstance().setCurrentSound(CITY_SOUND);</span>
+<span class="nc" id="L1603">                            AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()));</span>
                         } else {
-<span class="nc" id="L1603">                            AudioService.getInstance().stopSound();</span>
-<span class="nc" id="L1604">                            AudioService.getInstance().playSound(ROOMS_SOUND);</span>
-<span class="nc" id="L1605">                            AudioService.getInstance().setCurrentSound(ROOMS_SOUND);</span>
+<span class="nc" id="L1605">                            AudioService.getInstance().stopSound();</span>
+<span class="nc" id="L1606">                            AudioService.getInstance().playSound(ROOMS_SOUND);</span>
+<span class="nc" id="L1607">                            AudioService.getInstance().setCurrentSound(ROOMS_SOUND);</span>
+<span class="nc" id="L1608">                            AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()));</span>
                         }
-<span class="nc" id="L1607">                    }, error -&gt; this.showError(error.getMessage())));</span>
+<span class="nc bnc" id="L1610" title="All 2 branches missed.">                        if (preferences.getBoolean(&quot;mute&quot;, false)) {</span>
+<span class="nc" id="L1611">                            AudioService.getInstance().setVolume(0);</span>
+                        }
+<span class="nc" id="L1613">                    }, error -&gt; this.showError(error.getMessage())));</span>
         }
-<span class="fc" id="L1609">    }</span>
+<span class="fc" id="L1615">    }</span>
 
     public int getUserTrainerY() {
-<span class="nc" id="L1612">        return trainerStorageProvider.get().getY();</span>
+<span class="nc" id="L1618">        return trainerStorageProvider.get().getY();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
