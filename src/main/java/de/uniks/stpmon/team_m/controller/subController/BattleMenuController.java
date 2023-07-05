@@ -1,19 +1,15 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
-import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.Encounter2Controller;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
-import java.io.IOException;
-import java.util.Objects;
 
 public class BattleMenuController extends Controller {
 
@@ -42,24 +38,20 @@ public class BattleMenuController extends Controller {
 
     public Parent render(){
         final Parent parent = super.render();
-        /*if(encounterOpponentStorage.isWild()){
-            fleeButton.setVisible(true);
+        if(encounterOpponentStorage.isWild()){
+            showFleeButton();
+        } else {
+            hideFleeButton();
         }
-
-         */
-        /*
-        final Parent parent;
-        try {
-            parent = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("views/BattleMenu.fxml")));
-            return parent;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-         */
-
         return parent;
+    }
+
+    public void hideFleeButton() {
+        fleeButton.setVisible(false);
+    }
+
+    public void showFleeButton() {
+        fleeButton.setVisible(true);
     }
 
 
