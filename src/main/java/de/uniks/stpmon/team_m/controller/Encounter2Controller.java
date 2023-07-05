@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController;
 import de.uniks.stpmon.team_m.dto.Opponent;
@@ -212,7 +211,9 @@ public class Encounter2Controller extends Controller {
                             .observeOn(FX_SCHEDULER).subscribe(m -> {
                                 encounterOpponentController.setMonsterNameLabel(m.name());
                                 encounterOpponentStorage.setCurrentEnemyMonsterType(m);
-                                battleDialogText.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + m.name());
+                                if(encounterOpponentStorage.isWild()) {
+                                    battleDialogText.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + m.name());
+                                }
                             }, Throwable::printStackTrace));
                     disposables.add(presetsService.getMonsterImage(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(mImage -> {
