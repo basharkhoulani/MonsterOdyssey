@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -52,8 +53,6 @@ public class MonstersListController extends Controller {
 
     public void init(IngameController ingameController, VBox monsterListVBox) {
         super.init();
-        disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
-                .subscribe(monsters -> trainerStorageProvider.get().setMonsters(new ArrayList<>(monsters)), throwable -> showError(throwable.getMessage())));
         this.ingameController = ingameController;
         this.monsterListVBox = monsterListVBox;
     }
@@ -69,14 +68,20 @@ public class MonstersListController extends Controller {
         if (!GraphicsEnvironment.isHeadless()) {
             parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../../styles.css")).toExternalForm());
         }
-        initMonsterList();
+        disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
+                .subscribe(this::initMonsterList, throwable -> showError(throwable.getMessage())));
         return parent;
     }
 
-    private void initMonsterList() {
+    private void initMonsterList(List<Monster> monsters) {
         monsterListViewActive.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this));
-        monsterListViewActive.getItems().addAll(trainerStorageProvider.get().getMonsters());
+        monsterListViewActive.getItems().addAll(monsters);
         monsterListViewActive.setFocusModel(null);
         monsterListViewActive.setSelectionModel(null);
+    }
+
+    public void onCloseMonsterList() {
+        ingameController.root.getChildren().remove(monsterListVBox);
+        ingameController.buttonsDisable(false);
     }
 }

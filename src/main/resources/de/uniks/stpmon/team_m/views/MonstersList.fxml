@@ -32,7 +32,7 @@
           </Tab>
         </tabs>
       </TabPane>
-      <Button fx:id="closeButton" mnemonicParsing="false" styleClass="buttonsYellow" text="%CLOSE">
+      <Button fx:id="closeButton" mnemonicParsing="false" onAction="#onCloseMonsterList" styleClass="buttonsYellow" text="%CLOSE">
          <VBox.margin>
             <Insets left="11.0" top="13.0" />
          </VBox.margin>
