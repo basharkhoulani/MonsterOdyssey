@@ -243,7 +243,7 @@ public class LoginController extends Controller {
     }
 
     public void muteOrUnmuteSound() {
-        if(preferences.getBoolean("mute", true)) {
+        if(AudioService.getInstance().checkMuted()) {
             muteButton.getStyleClass().remove("unmuteSymbol");
             muteButton.getStyleClass().add("muteSymbol");
             preferences.putBoolean("mute", false);

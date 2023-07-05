@@ -59,6 +59,7 @@ public class ChangeAudioController extends Controller {
                     preferences.putBoolean("mute", true);
                 } else {
                     preferences.putBoolean("mute", false);
+                    AudioService.getInstance().unmuteSound();
                 }
                 AudioService.getInstance().setVolume(newValue.doubleValue() / 100);
                 preferences.putDouble("volume", newValue.doubleValue() / 100);
