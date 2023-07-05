@@ -17,6 +17,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 public class MonstersListController extends Controller {
@@ -47,12 +48,16 @@ public class MonstersListController extends Controller {
     public ListView<Monster> monsterListViewActive;
     public VBox monsterListVBox;
 
+    public List<Monster> monsterList;
+    public List<Monster> activeMonstersList;
+
     @Inject
     public MonstersListController() {
     }
 
     public void init(IngameController ingameController, VBox monsterListVBox) {
         super.init();
+        activeMonstersList = new ArrayList<>();
         this.ingameController = ingameController;
         this.monsterListVBox = monsterListVBox;
     }
@@ -69,7 +74,17 @@ public class MonstersListController extends Controller {
             parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../../styles.css")).toExternalForm());
         }
         disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
-                .subscribe(this::initMonsterList, throwable -> showError(throwable.getMessage())));
+                .subscribe(list -> {
+                    monsterList = list;
+                }, throwable -> showError(throwable.getMessage())));
+
+        disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
+                .subscribe(trainer -> {
+                    activeMonstersList = monsterList.stream()
+                            .filter(monster -> trainer.team().contains(monster._id()))
+                            .collect(Collectors.toList());
+                    initMonsterList(activeMonstersList);
+                }));
         return parent;
     }
 
