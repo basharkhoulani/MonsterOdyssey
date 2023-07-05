@@ -123,13 +123,14 @@ public class EncounterController extends Controller {
         setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), mySprite,1);
         if(!encounterOpponentStorage.isWild()){
             String enemyTrainerId = encounterOpponentStorage.getEnemyOpponents().get(0).trainer();
+            battleMenuController.showFleeButton(false);
             disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)
                     .observeOn(FX_SCHEDULER).subscribe(trainer -> {
                         battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + trainer.name());
                         setTrainerSpriteImageView(trainer, opponentTrainer,3);
                     }, Throwable::printStackTrace));
         } else {
-            battleMenuController.showFleeButton();
+            battleMenuController.showFleeButton(true);
         }
     }
 

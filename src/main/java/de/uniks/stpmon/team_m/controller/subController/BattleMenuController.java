@@ -58,10 +58,11 @@ public class BattleMenuController extends Controller {
         // show the MonsterInformation VBox
     }
 
-    public void changeToIngame(ActionEvent actionEvent) {
+    public void changeToIngame() {
+
     }
 
-    public void showFleeButton(){
-        fleeButton.setVisible(true);
+    public void showFleeButton(boolean isWild){
+        fleeButton.setVisible(isWild);
     }
 }
