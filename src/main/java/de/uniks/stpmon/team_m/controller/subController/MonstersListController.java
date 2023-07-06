@@ -75,16 +75,13 @@ public class MonstersListController extends Controller {
         }
         disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
                 .subscribe(list -> {
-                    monsterList = list;
-                }, throwable -> showError(throwable.getMessage())));
-
-        disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
-                .subscribe(trainer -> {
-                    activeMonstersList = monsterList.stream()
-                            .filter(monster -> trainer.team().contains(monster._id()))
+                    activeMonstersList = list.stream()
+                            .filter(monster -> trainerStorageProvider.get().getTrainer().team().contains(monster._id()))
                             .collect(Collectors.toList());
                     initMonsterList(activeMonstersList);
-                }));
+                }, throwable -> showError(throwable.getMessage())));
+
+
         return parent;
     }
 
