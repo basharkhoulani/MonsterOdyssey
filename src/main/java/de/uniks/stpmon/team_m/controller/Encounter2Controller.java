@@ -112,10 +112,10 @@ public class Encounter2Controller extends Controller {
         Parent ownTrainerParent = ownTrainerController.render();
         HBox.setHgrow(ownTrainerParent, javafx.scene.layout.Priority.ALWAYS);
         // show My Monster
-        showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent());
+        showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent(), true);
         // showMySprite
         ImageView sprite = ownTrainerController.getTrainerImageView();
-        setTrainerSpriteImageView(trainerStorage.getTrainer(), sprite,1);
+        setTrainerSpriteImageView(trainerStorage.getTrainer(), sprite, 1);
 
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId)
                 .observeOn(FX_SCHEDULER)
@@ -232,24 +232,24 @@ public class Encounter2Controller extends Controller {
         HBox.setHgrow(coopTrainerParent, javafx.scene.layout.Priority.ALWAYS);
         teamHBox.getChildren().add(coopTrainerParent);
         showCoopImage(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
-        showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
+        showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent(), false);
 
         // Own trainer
         teamHBox.getChildren().add(ownTrainerParent);
     }
 
     // Hier soll allen Serveranfragen kommen
-    private void showWildMonster(EncounterOpponentController encounterOpponentController, Opponent opponent){
+    private void showWildMonster(EncounterOpponentController encounterOpponentController, Opponent opponent) {
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
-                    encounterOpponentStorage.setCurrentEnemyMonster(monster);
+                    encounterOpponentStorage.addCurrentMonster(monster);
                     encounterOpponentController.setLevelLabel(String.valueOf(monster.level()))
                             .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
                     disposables.add(presetsService.getMonster(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(m -> {
                                 encounterOpponentController.setMonsterNameLabel(m.name());
-                                encounterOpponentStorage.setCurrentEnemyMonsterType(m);
-                                if(encounterOpponentStorage.isWild()) {
+                                encounterOpponentStorage.addCurrentMonsterType(m);
+                                if (encounterOpponentStorage.isWild()) {
                                     battleDialogText.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + m.name());
                                 }
                             }, Throwable::printStackTrace));
@@ -274,11 +274,14 @@ public class Encounter2Controller extends Controller {
                 }, Throwable::printStackTrace));
     }
 
-    private void showTeamMonster(EncounterOpponentController encounterOpponentController, Opponent opponent) {
+    private void showTeamMonster(EncounterOpponentController encounterOpponentController, Opponent opponent, boolean isSelf) {
         // Monster
         disposables.add(monstersService.getMonster(regionId, trainerId, opponent.monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
-                    encounterOpponentStorage.setCurrentTrainerMonster(monster);
+                    if (isSelf) {
+                        encounterOpponentStorage.setCurrentTrainerMonster(monster);
+                    }
+                    encounterOpponentStorage.addCurrentMonster(monster);
                     encounterOpponentController.setLevelLabel("LVL " + monster.level())
                             .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1))
                             .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health())
@@ -287,7 +290,10 @@ public class Encounter2Controller extends Controller {
                     disposables.add(presetsService.getMonster(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(m -> {
                                 encounterOpponentController.setMonsterNameLabel(m.name());
-                                encounterOpponentStorage.setCurrentTrainerMonsterType(m);
+                                if (isSelf) {
+                                    encounterOpponentStorage.setCurrentTrainerMonsterType(m);
+                                }
+                                encounterOpponentStorage.addCurrentMonsterType(m);
                             }, Throwable::printStackTrace));
                     disposables.add(presetsService.getMonsterImage(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(mImage -> {
@@ -301,7 +307,7 @@ public class Encounter2Controller extends Controller {
         disposables.add(trainersService.getTrainer(regionId, opponent.trainer())
                 .observeOn(FX_SCHEDULER).subscribe(trainer -> {
                     ImageView opponentTrainer = encounterOpponentController.getTrainerImageView();
-                    setTrainerSpriteImageView(trainer, opponentTrainer,3);
+                    setTrainerSpriteImageView(trainer, opponentTrainer, 3);
                 }, Throwable::printStackTrace));
     }
 

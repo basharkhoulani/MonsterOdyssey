@@ -20,11 +20,10 @@ public class EncounterOpponentStorage {
     // Die Opponent mit Id der Gegner
     private Opponent coopOpponent;
     // Die Opponent mit Id des Coop-Partners
-    private Trainer opponentTrainer;
     private Monster currentTrainerMonster;
     private MonsterTypeDto currentTrainerMonsterType;
-    private Monster currentEnemyMonster;
-    private MonsterTypeDto currentEnemyMonsterType;
+    private List<Monster> currentMonsters = FXCollections.observableArrayList();
+    private List<MonsterTypeDto> currentMonsterTypes = FXCollections.observableArrayList();
     private String regionId;
     private boolean isWild;
     private int encounterSize;
@@ -66,11 +65,6 @@ public class EncounterOpponentStorage {
         this.encounterSize = encounterSize;
     }
 
-
-    public void setOpponentTrainer(Trainer opponentTrainer) {
-        this.opponentTrainer = opponentTrainer;
-    }
-
     public Opponent getSelfOpponent() {
         return selfOpponent;
     }
@@ -87,28 +81,12 @@ public class EncounterOpponentStorage {
         this.currentTrainerMonster = currentTrainerMonster;
     }
 
-    public Monster getCurrentEnemyMonster() {
-        return currentEnemyMonster;
-    }
-
-    public void setCurrentEnemyMonster(Monster currentEnemyMonster) {
-        this.currentEnemyMonster = currentEnemyMonster;
-    }
-
     public MonsterTypeDto getCurrentTrainerMonsterType() {
         return currentTrainerMonsterType;
     }
 
     public void setCurrentTrainerMonsterType(MonsterTypeDto currentTrainerMonsterType) {
         this.currentTrainerMonsterType = currentTrainerMonsterType;
-    }
-
-    public MonsterTypeDto getCurrentEnemyMonsterType() {
-        return currentEnemyMonsterType;
-    }
-
-    public void setCurrentEnemyMonsterType(MonsterTypeDto currentEnemyMonsterType) {
-        this.currentEnemyMonsterType = currentEnemyMonsterType;
     }
 
     public List<Opponent> getEnemyOpponents() {
@@ -133,5 +111,21 @@ public class EncounterOpponentStorage {
 
     public void setAttacker(boolean attack) {
         isAttacker = attack;
+    }
+
+    public List<Monster> getCurrentMonsters() {
+        return currentMonsters;
+    }
+
+    public void addCurrentMonster(Monster monster) {
+        this.currentMonsters.add(monster);
+    }
+
+    public List<MonsterTypeDto> getCurrentMonsterTypes() {
+        return currentMonsterTypes;
+    }
+
+    public void addCurrentMonsterType(MonsterTypeDto monsterType) {
+        this.currentMonsterTypes.add(monsterType);
     }
 }
