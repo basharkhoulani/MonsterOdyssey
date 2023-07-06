@@ -19,8 +19,6 @@ public interface MainComponent {
 
     MainMenuController mainMenuController();
 
-    Encounter2Controller encounterController();
-
     @Component.Builder
     interface Builder {
         @BindsInstance

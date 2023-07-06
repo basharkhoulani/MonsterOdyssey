@@ -61,12 +61,14 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<MonstersListController> monstersListControllerProvider;
     @Mock
     Provider<NotificationListHandyController> notificationListHandyControllerProvider;
+    @Mock
+    Provider<EncounterController> encounterControllerProvider;
 
     // Leave this mock!! it ensures that tests run fine
     @Mock
     TrainerStorage trainerStorage;
     // Please also keep this mock, it is needed for the tests
-    @Mock
+    @Spy
     EncounterOpponentStorage encounterOpponentStorage;
 
     @Mock
@@ -75,6 +77,8 @@ public class IngameControllerTest extends ApplicationTest {
     MessageService messageService;
     @Mock
     RegionsService regionsService;
+    @Mock
+    EncounterOpponentsService encounterOpponentsService;
     @InjectMocks
     IngameController ingameController;
     @Mock
@@ -200,31 +204,6 @@ public class IngameControllerTest extends ApplicationTest {
                         new NPCInfo(false, false, false, true, null, null))
                 )
         ));
-        when(regionsService.getRegion(any())).thenReturn(Observable.just(
-                new Region(
-                        "2023-05-22T17:51:46.772Z",
-                        "2023-05-22T17:51:46.772Z",
-                        "646bc436cfee07c0e408466f",
-                        "Albertina",
-                        new Spawn("646bc3c0a9ac1b375fb41d93", 1, 1),
-                        new Map(
-                                -1,
-                                true,
-                                1,
-                                1,
-                                "orthogonal",
-                                "right-down",
-                                "1.6.1",
-                                "map",
-                                "1.6",
-                                32,
-                                32,
-                                List.of(),
-                                16,
-                                16,
-                                List.of(),
-                                List.of())
-                )));
         EventListener eventListenerMock = mock(EventListener.class);
         when(eventListener.get()).thenReturn(eventListenerMock);
         Message message = new Message("2023-05-30T12:01:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863",
@@ -259,37 +238,25 @@ public class IngameControllerTest extends ApplicationTest {
         notificationListHandyController.setValues(bundle, null, null, notificationListHandyController, app);
         when(notificationListHandyControllerProvider.get()).thenReturn(notificationListHandyController);
 
-        Encounter encounter = new Encounter(
-                "2023-05-30T12:02:57.510Z",
-                "2023-05-30T12:01:57.510Z",
-                "a98db973kwl8xp1lz94kjf0b",
-                "646bab5cecf584e1be02598a",
-                false
-        );
-
-        when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".encounters.*.*", Encounter.class)).thenReturn(just(
-                new Event<>("regions.646bab5cecf584e1be02598a.encounters.a98db973kwl8xp1lz94kjf0b.created", encounter)));
-
         Opponent opponent = new Opponent(
                 "2023-05-30T12:02:57.510Z",
                 "2023-05-30T12:01:57.510Z",
                 "rqtjej4dcoqsm4e9yln1loy5",
                 "a98db973kwl8xp1lz94kjf0b",
-                "6475e595ac3946b6a812d865",
+                "646bac223b4804b87c0b8054",
                 false,
                 false,
                 "pn2iz308akz07eau5iwa6ykq",
-                new AbilityMove(
-                        "ability",
-                        10,
-                        "hsvxr8je3qs6qt20oxffy4dw"
-                ),
+                null,
                 List.of(),
                 0);
 
-        when(eventListener.get().listen("encounters.*.opponents.*.*", Opponent.class)).thenReturn(just(
-                new Event<>("encounters.a98db973kwl8xp1lz94kjf0b.opponents.rqtjej4dcoqsm4e9yln1loy5.created", opponent)));
+        //Mocking the opponent (Situation)
+        when(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() +".opponents.*.*", Opponent.class)).thenReturn(just(
+                new Event<>("encounters.*.trainers.6475e595ac3946b6a812d865,opponents.*.nothappening", null)))
+                .thenReturn(just(new Event<>("encounters.a98db973kwl8xp1lz94kjf0b.trainers.646bac223b4804b87c0b8054.opponents.rqtjej4dcoqsm4e9yln1loy5.created", opponent)));;
 
+        when(encounterOpponentsService.getTrainerOpponents(anyString(), anyString())).thenReturn(Observable.just(List.of()));
 
         app.start(stage);
         app.show(ingameController);

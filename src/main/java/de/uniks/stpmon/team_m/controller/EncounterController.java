@@ -112,7 +112,7 @@ public class EncounterController extends Controller {
                 }, Throwable::printStackTrace));
 
         // render for subcontroller
-        //battleMenuController.init(this, battleMenu, encounterOpponentStorage);
+        // battleMenuController.init(this, battleMenu, encounterOpponentStorage);
         battleMenu.getChildren().add(battleMenuController.render());
 
         listenToOpponents(encounterOpponentStorage.getEncounterId());
@@ -122,13 +122,15 @@ public class EncounterController extends Controller {
     private void showTrainer(){
         setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), mySprite,1);
         if(!encounterOpponentStorage.isWild()){
-            String enemyTrainerId = encounterOpponentStorage.getEnemyOpponent().trainer();
+            String enemyTrainerId = encounterOpponentStorage.getEnemyOpponents().get(0).trainer();
+            battleMenuController.showFleeButton(false);
             disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)
                     .observeOn(FX_SCHEDULER).subscribe(trainer -> {
-                        encounterOpponentStorage.setOpponentTrainer(trainer);
                         battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + trainer.name());
                         setTrainerSpriteImageView(trainer, opponentTrainer,3);
                     }, Throwable::printStackTrace));
+        } else {
+            battleMenuController.showFleeButton(true);
         }
     }
 
@@ -155,7 +157,7 @@ public class EncounterController extends Controller {
                         }, Throwable::printStackTrace));
 
         // enemy monster
-        disposables.add(monstersService.getMonster(regionId, encounterOpponentStorage.getEnemyOpponent().trainer(), encounterOpponentStorage.getEnemyOpponent().monster())
+        disposables.add(monstersService.getMonster(regionId, encounterOpponentStorage.getEnemyOpponents().get(0).trainer(), encounterOpponentStorage.getEnemyOpponents().get(0).monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
                     encounterOpponentStorage.setCurrentEnemyMonster(monster);
                     opponentLevel.setText(monster.level() + " LVL");

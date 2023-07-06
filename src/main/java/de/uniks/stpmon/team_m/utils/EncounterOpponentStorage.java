@@ -4,9 +4,9 @@ import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.dto.Trainer;
+import javafx.collections.FXCollections;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.util.List;
 
@@ -16,8 +16,10 @@ public class EncounterOpponentStorage {
     private List<Opponent> opponentsInStorage;
     private Opponent selfOpponent;
     // Die Opponent mit selben trainerId
-    private Opponent enemyOpponent;
-    //Die Opponent mit Id der Gegner
+    private List<Opponent> enemyOpponents = FXCollections.observableArrayList();
+    // Die Opponent mit Id der Gegner
+    private Opponent coopOpponent;
+    // Die Opponent mit Id des Coop-Partners
     private Trainer opponentTrainer;
     private Monster currentTrainerMonster;
     private MonsterTypeDto currentTrainerMonsterType;
@@ -26,6 +28,7 @@ public class EncounterOpponentStorage {
     private String regionId;
     private boolean isWild;
     private int encounterSize;
+    private boolean isAttacker;
 
 
     @Inject
@@ -63,17 +66,6 @@ public class EncounterOpponentStorage {
         this.encounterSize = encounterSize;
     }
 
-    public List<Opponent> getOpponentsInStorage() {
-        return opponentsInStorage;
-    }
-
-    public void setOpponentsInStorage(List<Opponent> opponentsInStorage) {
-        this.opponentsInStorage = opponentsInStorage;
-    }
-
-    public Trainer getOpponentTrainer() {
-        return opponentTrainer;
-    }
 
     public void setOpponentTrainer(Trainer opponentTrainer) {
         this.opponentTrainer = opponentTrainer;
@@ -85,14 +77,6 @@ public class EncounterOpponentStorage {
 
     public void setSelfOpponent(Opponent selfOpponent) {
         this.selfOpponent = selfOpponent;
-    }
-
-    public Opponent getEnemyOpponent() {
-        return enemyOpponent;
-    }
-
-    public void setEnemyOpponent(Opponent enemyOpponent) {
-        this.enemyOpponent = enemyOpponent;
     }
 
     public Monster getCurrentTrainerMonster() {
@@ -125,5 +109,29 @@ public class EncounterOpponentStorage {
 
     public void setCurrentEnemyMonsterType(MonsterTypeDto currentEnemyMonsterType) {
         this.currentEnemyMonsterType = currentEnemyMonsterType;
+    }
+
+    public List<Opponent> getEnemyOpponents() {
+        return enemyOpponents;
+    }
+
+    public void addEnemyOpponent(Opponent enemyOpponent) {
+        this.enemyOpponents.add(enemyOpponent);
+    }
+
+    public Opponent getCoopOpponent() {
+        return coopOpponent;
+    }
+
+    public void setCoopOpponent(Opponent coopOpponent) {
+        this.coopOpponent = coopOpponent;
+    }
+
+    public boolean isAttacker() {
+        return isAttacker;
+    }
+
+    public void setAttacker(boolean attack) {
+        isAttacker = attack;
     }
 }

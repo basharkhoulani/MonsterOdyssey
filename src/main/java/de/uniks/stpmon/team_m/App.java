@@ -58,8 +58,6 @@ public class App extends Application {
 
         PauseTransition pause = new PauseTransition(Duration.seconds(DURATION_OF_LOADING_SCREEN));
         pause.setOnFinished(event -> {
-            show(component.encounterController());
-            /*
             if (component == null) {
                 return;
             }
@@ -73,8 +71,6 @@ public class App extends Application {
             } else {
                 show(component.loginController());
             }
-
-             */
         });
         pause.play();
         stage.show();

@@ -19,6 +19,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
 import java.util.*;
+import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.HTTP_409;
 import static io.reactivex.rxjava3.core.Observable.error;
@@ -54,7 +55,8 @@ class NewFriendControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        newFriendController.setValues(bundle, null, null, newFriendController, app);
+        Preferences preferences = mock(Preferences.class);
+        newFriendController.setValues(bundle, preferences, null, newFriendController, app);
         app.start(stage);
         app.show(newFriendController);
         stage.requestFocus();

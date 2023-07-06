@@ -42,12 +42,20 @@
     -fx-border-radius: 10px !important;
 }
 
+.buttonsRed {
+    -fx-background-color: #FF2F00;
+    -fx-border-width: 1px;
+    -fx-border-color: gray;
+}
+
 .buttonsWhite:hover {
     -fx-background-color: #FFF2CC;
 }
+
 .buttonsTransparent {
     -fx-background-color: transparent;
 }
+
 .errorLabel {
     -fx-text-fill: red;
 }
