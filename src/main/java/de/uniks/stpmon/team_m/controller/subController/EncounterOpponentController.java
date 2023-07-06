@@ -108,7 +108,7 @@ public class EncounterOpponentController extends Controller {
     }
 
     public EncounterOpponentController setLevelLabel(String value) {
-        levelLabel.setText("Lvl " + value);
+        levelLabel.setText(value);
         return this;
     }
 
@@ -119,7 +119,7 @@ public class EncounterOpponentController extends Controller {
 
     public EncounterOpponentController setHealthLabel(String value) {
         if (!healthLabel.isDisabled()) {
-            healthLabel.setText(value + "/" + monsterMaxHealth + "HP");
+            healthLabel.setText(value);
         }
         return this;
     }

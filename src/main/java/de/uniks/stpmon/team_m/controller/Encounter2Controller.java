@@ -274,7 +274,7 @@ public class Encounter2Controller extends Controller {
         disposables.add(monstersService.getMonster(regionId, trainerId, opponent.monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
                     encounterOpponentStorage.setCurrentTrainerMonster(monster);
-                    encounterOpponentController.setLevelLabel(monster.level() + " LVL")
+                    encounterOpponentController.setLevelLabel("LVL " + monster.level())
                             .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1))
                             .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health())
                             .setHealthLabel(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
