@@ -2,16 +2,13 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
+import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.Opponent;
-import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -24,9 +21,6 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.awt.*;
-import java.util.List;
-import java.util.Objects;
 
 public class EncounterController extends Controller {
     @FXML
@@ -79,7 +73,7 @@ public class EncounterController extends Controller {
     @Inject
     BattleMenuController battleMenuController;
     @Inject
-    Provider<AbilitiesMenuController> abilitiesMenuControllerProvider;
+    AbilitiesMenuController abilitiesMenuController;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
 
@@ -116,7 +110,7 @@ public class EncounterController extends Controller {
                 }, Throwable::printStackTrace));
 
         // render for subcontroller
-        battleMenuController.init(this, battleMenu, encounterOpponentStorage);
+        battleMenuController.init(this, battleMenu, encounterOpponentStorage, app);
         battleMenu.getChildren().add(battleMenuController.render());
 
         listenToOpponents(encounterOpponentStorage.getEncounterId());
@@ -207,9 +201,11 @@ public class EncounterController extends Controller {
         app.show(ingameControllerProvider.get());
     }
 
-    public void showAbilies() {
-        AbilitiesMenuController abilitiesMenuController = abilitiesMenuControllerProvider.get();
-        abilitiesMenuController.init();
+    public void showAbilities() {
+        System.out.println("show abilities in encounter");
+        battleMenu.getChildren().clear();
+        Monster monster = encounterOpponentStorage.getCurrentTrainerMonster();
+        abilitiesMenuController.init(monster, presetsService, battleMenu, this);
         battleMenu.getChildren().add(abilitiesMenuController.render());
     }
 

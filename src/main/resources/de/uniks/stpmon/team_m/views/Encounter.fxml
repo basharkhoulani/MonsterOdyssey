@@ -49,9 +49,8 @@
          <ImageView fx:id="opponentTrainer" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
          <ImageView fx:id="opponentMonster" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
       </VBox>
-      <VBox layoutX="624.0" layoutY="8.0" minHeight="284.0" minWidth="400.0" prefHeight="284.0" prefWidth="400.0"
-            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <Button fx:id="goBack" mnemonicParsing="false" onAction="#showIngameController" text="Go Back"/>
+      <VBox layoutX="624.0" layoutY="8.0" minHeight="284.0" minWidth="400.0" prefHeight="284.0" prefWidth="400.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <Button fx:id="goBack" mnemonicParsing="false" onAction="#showIngameController" text="Go Back" />
       </VBox>
       <VBox alignment="CENTER" layoutX="412.0" layoutY="300.0" minHeight="300.0" minWidth="200.0" prefHeight="300.0" prefWidth="200.0" AnchorPane.leftAnchor="412.0" AnchorPane.rightAnchor="412.0" AnchorPane.topAnchor="300.0">
          <ImageView fx:id="myMonster" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
@@ -108,7 +107,7 @@
                </Text>
             </TextFlow>
          </HBox>
-         <HBox fx:id="battleMenu" layoutX="674.0" layoutY="3.0" minHeight="160.0" minWidth="350.0" prefHeight="160.0" prefWidth="364.0" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="3.0" />
+         <HBox fx:id="battleMenu" layoutX="674.0" layoutY="3.0" minHeight="160.0" minWidth="350.0" prefHeight="160.0" prefWidth="350.0" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="3.0" />
       </AnchorPane>
    </AnchorPane>
 </AnchorPane>

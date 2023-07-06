@@ -3,7 +3,6 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.dto.AbilityDto;
-import de.uniks.stpmon.team_m.dto.AbilityMove;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.Result;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
@@ -13,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -24,49 +24,47 @@ public class AbilitiesMenuController extends Controller {
     @FXML
     public Button goBackButton;
     @FXML
-    public Button ability1;
+    public Button abilityButton1;
     @FXML
-    public Button ability2;
+    public Button abilityButton2;
     @FXML
-    public Button ability3;
+    public Button abilityButton3;
     @FXML
-    public Button ability4;
+    public Button abilityButton4;
 
-    @Inject
-    Provider<EncounterController> encounterControllerProvider;
     @Inject
     Provider<EncounterOpponentStorage> encounterOpponentStorageProvider;
     @Inject
     EncounterOpponentsService encounterOpponentsService;
     PresetsService presetsService;
     private Monster monster;
+    private HBox battleMenuHBox;
     private List<Result> results;
+    private EncounterController encounterController;
 
 
     @Inject
     public AbilitiesMenuController() {
     }
 
-    public void init(Monster monster, PresetsService presetsService, ResourceBundle resources){
+    public void init(Monster monster, PresetsService presetsService, HBox battleMenuHBox, EncounterController encounterController) {
         super.init();
         this.monster = monster;
         this.presetsService = presetsService;
-        this.resources = resources;
+        this.battleMenuHBox = battleMenuHBox;
+        this.encounterController = encounterController;
     }
 
     @Override
     public Parent render() {
-        final Parent parent = super.render();
-
+        Parent parent = super.render();
         initButtons();
-
         return parent;
-
     }
 
     private void initButtons() {
         // Abilities
-        List<Button> abilityButtons = new ArrayList<>(Arrays.asList(ability1, ability2, ability3, ability4));
+        List<Button> abilityButtons = new ArrayList<>(Arrays.asList(abilityButton1, abilityButton2, abilityButton4, abilityButton4));
 
         disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(
                 abilities -> {
@@ -98,23 +96,7 @@ public class AbilitiesMenuController extends Controller {
     }
 
     private void useAbility(AbilityDto ability, Button abilityButton) {
-
-        String target = encounterOpponentStorageProvider.get().getEnemyOpponent()._id();
-        int abilityId = ability.id();
-        String regionId = encounterOpponentStorageProvider.get().getRegionId();
-        String encounterId = encounterOpponentStorageProvider.get().getEncounterId();
-        String opponentId = encounterOpponentStorageProvider.get().getSelfOpponent()._id();
-        String selfIdmonsterId = encounterOpponentStorageProvider.get().getSelfOpponent().monster();
-        AbilityMove abilityMove = new AbilityMove("ability", abilityId, target);
-
-
-        disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, selfIdmonsterId, abilityMove)
-                .observeOn(FX_SCHEDULER).subscribe( encounterOpponent -> {
-                    results = encounterOpponent.results();
-                    updateButton(ability, abilityButton);
-                }
-        ));
-
+        System.out.println("Use Ability: " + ability.name());
     }
 
     private void updateButton(AbilityDto ability, Button abilityButton) {
@@ -126,11 +108,10 @@ public class AbilitiesMenuController extends Controller {
                     abilityButton.setDisable(true);
                 }
             }
-        };
+        }
     }
 
 
-    public void goBackBattleMenu(ActionEvent actionEvent) {
+    public void goBack() {
     }
-
 }
