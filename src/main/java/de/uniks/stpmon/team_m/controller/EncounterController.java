@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.dto.Trainer;
@@ -24,6 +25,7 @@ import javafx.scene.text.Text;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
+import java.util.List;
 import java.util.Objects;
 
 public class EncounterController extends Controller {
@@ -76,6 +78,8 @@ public class EncounterController extends Controller {
     EncounterOpponentStorage encounterOpponentStorage;
     @Inject
     BattleMenuController battleMenuController;
+    @Inject
+    Provider<AbilitiesMenuController> abilitiesMenuControllerProvider;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
 
@@ -203,6 +207,11 @@ public class EncounterController extends Controller {
         app.show(ingameControllerProvider.get());
     }
 
+    public void showAbilies() {
+        AbilitiesMenuController abilitiesMenuController = abilitiesMenuControllerProvider.get();
+        abilitiesMenuController.init();
+        battleMenu.getChildren().add(abilitiesMenuController.render());
+    }
 
 }
     
