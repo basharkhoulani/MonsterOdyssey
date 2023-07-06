@@ -3,8 +3,12 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.dto.AbilityDto;
+import de.uniks.stpmon.team_m.dto.AbilityMove;
 import de.uniks.stpmon.team_m.dto.Monster;
+import de.uniks.stpmon.team_m.dto.Result;
+import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.service.PresetsService;
+import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -13,6 +17,8 @@ import javafx.scene.control.Button;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.*;
+
+import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
 public class AbilitiesMenuController extends Controller {
     @FXML
@@ -28,8 +34,13 @@ public class AbilitiesMenuController extends Controller {
 
     @Inject
     Provider<EncounterController> encounterControllerProvider;
+    @Inject
+    Provider<EncounterOpponentStorage> encounterOpponentStorageProvider;
+    @Inject
+    EncounterOpponentsService encounterOpponentsService;
     PresetsService presetsService;
     private Monster monster;
+    private List<Result> results;
 
 
     @Inject
@@ -62,10 +73,20 @@ public class AbilitiesMenuController extends Controller {
                     int i = 0;
                     for (Map.Entry<String, Integer> entry: monster.abilities().entrySet()) {
                         AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey()));
-                        abilityButtons.get(i).setText(ability.name() + " " + entry.getValue() + "/" + ability.maxUses());
+                        Button abilityButton = abilityButtons.get(i);
+                        abilityButton.setText(ability.name() + " " + entry.getValue() + "/" + ability.maxUses());
+                        // Disable Button if no uses left
+                        if(entry.getValue() == 0){
+                            abilityButton.setDisable(true);
+                        }
                         // Change Color
-
+                        if (TYPESCOLORPALETTE.containsKey(ability.type())) {
+                            abilityButton.setStyle("-fx-background-color: " + TYPESCOLORPALETTE.get(ability.type()) + ";-fx-border-color: black");
+                        }
                         // setOnAction
+                        abilityButton.setOnAction(actionEvent -> {
+                            useAbility(ability, abilityButton);
+                        });
                         i++;
                     }
                     while(i<4){
@@ -76,18 +97,40 @@ public class AbilitiesMenuController extends Controller {
         ));
     }
 
+    private void useAbility(AbilityDto ability, Button abilityButton) {
+
+        String target = encounterOpponentStorageProvider.get().getEnemyOpponent()._id();
+        int abilityId = ability.id();
+        String regionId = encounterOpponentStorageProvider.get().getRegionId();
+        String encounterId = encounterOpponentStorageProvider.get().getEncounterId();
+        String opponentId = encounterOpponentStorageProvider.get().getSelfOpponent()._id();
+        String selfIdmonsterId = encounterOpponentStorageProvider.get().getSelfOpponent().monster();
+        AbilityMove abilityMove = new AbilityMove("ability", abilityId, target);
+
+
+        disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, selfIdmonsterId, abilityMove)
+                .observeOn(FX_SCHEDULER).subscribe( encounterOpponent -> {
+                    results = encounterOpponent.results();
+                    updateButton(ability, abilityButton);
+                }
+        ));
+
+    }
+
+    private void updateButton(AbilityDto ability, Button abilityButton) {
+        for (Map.Entry<String, Integer> entry: monster.abilities().entrySet()) {
+            if(entry.getKey().equals(String.valueOf(ability.id()))){
+                entry.setValue(entry.getValue()-1);
+                abilityButton.setText(ability.name() + " " + entry.getValue() + "/" + ability.maxUses());
+                if(entry.getValue() == 0){
+                    abilityButton.setDisable(true);
+                }
+            }
+        };
+    }
+
+
     public void goBackBattleMenu(ActionEvent actionEvent) {
     }
 
-    public void useAbility1(ActionEvent actionEvent) {
-    }
-
-    public void useAbility2(ActionEvent actionEvent) {
-    }
-
-    public void useAbility3(ActionEvent actionEvent) {
-    }
-
-    public void useAbility4(ActionEvent actionEvent) {
-    }
 }
