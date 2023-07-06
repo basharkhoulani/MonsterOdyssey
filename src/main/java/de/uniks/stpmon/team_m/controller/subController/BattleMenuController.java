@@ -77,8 +77,10 @@ public class BattleMenuController extends Controller {
 
     }
 
-    public void showFleeButton(boolean isWild){
+    public void showFleeButton(boolean isWild) {
         fleeButton.setVisible(isWild);
+    }
+
     public void changeToIngame(ActionEvent actionEvent) {
         if (onFleeButtonClick != null) {
             onFleeButtonClick.run();

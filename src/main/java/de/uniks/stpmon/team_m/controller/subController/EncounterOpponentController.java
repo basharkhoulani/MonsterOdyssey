@@ -148,4 +148,8 @@ public class EncounterOpponentController extends Controller {
     public void setCurrentTarget(Opponent currentTarget) {
         this.currentTarget = currentTarget;
     }
+
+    public ImageView getTrainerImageView() {
+        return trainerImageView;
+    }
 }
