@@ -202,12 +202,15 @@ public class EncounterController extends Controller {
     }
 
     public void showAbilities() {
-        System.out.println("show abilities in encounter");
         battleMenu.getChildren().clear();
         Monster monster = encounterOpponentStorage.getCurrentTrainerMonster();
         abilitiesMenuController.init(monster, presetsService, battleMenu, this);
         battleMenu.getChildren().add(abilitiesMenuController.render());
     }
 
+    public void goBackToBattleMenu() {
+        battleMenu.getChildren().clear();
+        battleMenu.getChildren().add(battleMenuController.render());
+    }
 }
     

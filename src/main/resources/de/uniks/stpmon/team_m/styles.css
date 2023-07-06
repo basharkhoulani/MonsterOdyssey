@@ -209,7 +209,7 @@
 }
 
 .goBackSymbol {
-    -fx-background-image: url("images/GoBackSymbol.png");
+    -fx-background-image: url("images/GoBackSymbol-White.png");
     -fx-border-style: solid;
     -fx-background-color: transparent;
     -fx-background-size: 40px;

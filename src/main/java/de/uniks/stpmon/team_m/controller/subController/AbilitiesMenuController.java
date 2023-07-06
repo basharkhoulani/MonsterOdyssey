@@ -64,13 +64,13 @@ public class AbilitiesMenuController extends Controller {
 
     private void initButtons() {
         // Abilities
-        List<Button> abilityButtons = new ArrayList<>(Arrays.asList(abilityButton1, abilityButton2, abilityButton4, abilityButton4));
+        List<Button> abilityButtons = new ArrayList<>(Arrays.asList(abilityButton1, abilityButton2, abilityButton3, abilityButton4));
 
         disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(
                 abilities -> {
                     int i = 0;
                     for (Map.Entry<String, Integer> entry: monster.abilities().entrySet()) {
-                        AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey()));
+                        AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey())-1);
                         Button abilityButton = abilityButtons.get(i);
                         abilityButton.setText(ability.name() + " " + entry.getValue() + "/" + ability.maxUses());
                         // Disable Button if no uses left
@@ -96,7 +96,7 @@ public class AbilitiesMenuController extends Controller {
     }
 
     private void useAbility(AbilityDto ability, Button abilityButton) {
-        System.out.println("Use Ability: " + ability.name());
+
     }
 
     private void updateButton(AbilityDto ability, Button abilityButton) {
@@ -113,5 +113,6 @@ public class AbilitiesMenuController extends Controller {
 
 
     public void goBack() {
+        encounterController.goBackToBattleMenu();
     }
 }
