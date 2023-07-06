@@ -138,9 +138,9 @@ public class EncounterController extends Controller {
         disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getSelfOpponent().monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
                     encounterOpponentStorage.setCurrentTrainerMonster(monster);
-                    myLevelBar.setProgress(monster.experience() / requiredExperience(monster.level() + 1));
+                    myLevelBar.setProgress((double) monster.experience() / requiredExperience(monster.level() + 1));
                     myLevel.setText(monster.level() + " LVL");
-                    myHealthBar.setProgress(monster.currentAttributes().health() / monster.attributes().health());
+                    myHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
                     myHealth.setText(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
                     //write monster name
                     disposables.add(presetsService.getMonster(monster.type())
@@ -160,7 +160,7 @@ public class EncounterController extends Controller {
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
                     encounterOpponentStorage.setCurrentEnemyMonster(monster);
                     opponentLevel.setText(monster.level() + " LVL");
-                    opponentHealthBar.setProgress(monster.currentAttributes().health() / monster.attributes().health());
+                    opponentHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
                     disposables.add(presetsService.getMonster(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(m -> {
                                 opponentMonsterName.setText(m.name());
