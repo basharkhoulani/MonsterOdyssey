@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.dto.Opponent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -45,6 +46,7 @@ public class EncounterOpponentController extends Controller {
     public VBox splitterVBox;
 
     private int monsterMaxHealth = 100;
+    private Opponent currentTarget;
 
     public EncounterOpponentController(Boolean isEnemy, Boolean isWild, Boolean invertX) {
         this.isEnemy = isEnemy;
@@ -132,11 +134,18 @@ public class EncounterOpponentController extends Controller {
         return this;
     }
 
-    public EncounterOpponentController setTrainerImageView(ImageView imageView) {
+    public EncounterOpponentController setTrainerImage(Image image) {
         if (!trainerImageView.isDisabled()) {
-            trainerImageView = imageView;
+            trainerImageView.setImage(image);
         }
         return this;
     }
 
+    public Opponent getCurrentTarget() {
+        return currentTarget;
+    }
+
+    public void setCurrentTarget(Opponent currentTarget) {
+        this.currentTarget = currentTarget;
+    }
 }

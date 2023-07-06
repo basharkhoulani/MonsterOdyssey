@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.Encounter2Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,10 +21,10 @@ public class BattleMenuController extends Controller {
     @FXML
     public Button currentInfoButton;
     public Button fleeButton;
+    public Runnable onFleeButtonClick;
     private Encounter2Controller encounterController;
     private VBox battleMenuVBox;
     private EncounterOpponentStorage encounterOpponentStorage;
-
 
     @Inject
     public BattleMenuController(
@@ -68,5 +69,8 @@ public class BattleMenuController extends Controller {
     }
 
     public void changeToIngame(ActionEvent actionEvent) {
+        if (onFleeButtonClick != null) {
+            onFleeButtonClick.run();
+        }
     }
 }
