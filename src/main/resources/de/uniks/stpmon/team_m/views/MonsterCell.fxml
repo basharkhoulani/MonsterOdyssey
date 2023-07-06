@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="rootmonsterHBox" alignment="CENTER_LEFT" maxHeight="152.0" maxWidth="600.0" minHeight="110.0" prefHeight="133.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.MonsterCell">
+<HBox fx:id="rootmonsterHBox" alignment="CENTER_LEFT" maxHeight="152.0" maxWidth="600.0" minHeight="110.0" prefHeight="133.0" prefWidth="550.0" style="-fx-background-color: #CFE9DB;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.MonsterCell">
     <VBox maxHeight="112.0" maxWidth="90.0" prefHeight="112.0" prefWidth="90.0" styleClass="trainerAvatarImageView">
         <ImageView fx:id="monsterImageView" fitHeight="118.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true" smooth="false" HBox.hgrow="ALWAYS" />
     </VBox>

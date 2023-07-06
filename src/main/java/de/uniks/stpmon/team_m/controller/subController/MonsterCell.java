@@ -93,6 +93,7 @@ public class MonsterCell extends ListCell<Monster> {
         if (monster == null || empty) {
             setText(null);
             setGraphic(null);
+            setStyle("-fx-background-color: #CFE9DB;");
         } else {
             loadFXML();
             viewDetailsButton.prefWidthProperty().bind(removeFromTeamButton.widthProperty());
@@ -112,6 +113,8 @@ public class MonsterCell extends ListCell<Monster> {
                         URL resource = Main.class.getResource("images/" + abilityImagePath);
                         abilityImage = new Image(resource.toString());
                         abilityImageView.setImage(abilityImage);
+                        abilityImageView.setFitHeight(45);
+                        abilityImageView.setFitWidth(45);
                     }, error -> monstersListController.showError(error.getMessage())));
             monsterLevel.setText(resources.getString("LEVEL") + " " + monster.level());
             disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
@@ -122,6 +125,7 @@ public class MonsterCell extends ListCell<Monster> {
             viewDetailsButton.setOnAction(event -> showDetails(monster));
             setGraphic(rootmonsterHBox);
             setText(null);
+            setStyle("-fx-background-color: #CFE9DB;  -fx-border-color: #1C701C; -fx-border-width: 2px");
         }
     }
 
