@@ -396,6 +396,20 @@
     -fx-border-color: black;
     -fx-border-width: 2px;
 }
+.tab-pane .tab:selected .tab-label {
+    -fx-background-color: #1C701C;
+    -fx-text-fill: #FFFFFF;
+}
+.tab-pane .tab:selected {
+    -fx-background-color: #1C701C;
+}
+.tab-pane *.tab-header-area *.tab-header-background {
+    -fx-background-color: #CFE9DB;
+}
+.tab-pane .tab {
+    -fx-background-color: #CFE9DB;
+    -fx-border-color: #1C701C;
+}
 /*********************************************************************************/
 /*************************** Ingame - MiniMap ****************************/
 .miniMapContainer {
