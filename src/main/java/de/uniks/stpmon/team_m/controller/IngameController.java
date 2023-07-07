@@ -105,6 +105,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<IngameSettingsController> ingameSettingsControllerProvider;
     @Inject
+    Provider<IngameKeybindingsController> ingameKeybindingsControllerProvider;
+    @Inject
     Provider<EventListener> eventListener;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -916,6 +918,16 @@ public class IngameController extends Controller {
 
         ingameTrainerSettingsControllerProvider.get().setApp(this.app);
         ingameTrainerSettingsControllerProvider.get().setValues(resources, preferences, resourceBundleProvider, ingameTrainerSettingsControllerProvider.get(), app);
+    }
+
+    public void showKeybindings() {
+        IngameKeybindingsController ingameKeybindingsController = ingameKeybindingsControllerProvider.get();
+        VBox keybindingsVBox = new VBox();
+        keybindingsVBox.setAlignment(Pos.CENTER);
+        ingameKeybindingsController.init(this, keybindingsVBox);
+        keybindingsVBox.getChildren().add(ingameKeybindingsController.render());
+        root.getChildren().add(keybindingsVBox);
+        keybindingsVBox.requestFocus();
     }
 
     public void sendMessageButton() {
