@@ -60,7 +60,7 @@ public class IngameSettingsController extends Controller {
     }
 
     public void openKeybindings() {
-        ingameController.showHelp();
+        ingameController.showKeybindings();
     }
 
     public void openTrainerSettings(){
