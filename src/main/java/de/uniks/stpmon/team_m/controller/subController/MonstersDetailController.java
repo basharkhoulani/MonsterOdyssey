@@ -85,7 +85,7 @@ public class MonstersDetailController extends Controller {
     @FXML
     public ProgressBar speedProgressBar;
     @FXML
-    public ProgressBar defProgressBar;
+    public ProgressBar defenseProgressBar;
     public ImageView monsterImageView;
     public Label type4;
     public Label type3;
@@ -141,14 +141,28 @@ public class MonstersDetailController extends Controller {
             type.append(" ").append(s);
         }
         //monsterType.setText(type.toString());
-        //monsterExperience.setText(resources.getString("EXPERIENCE") + " " + monster.experience());
-        //monsterLevel.setText(resources.getString("LEVEL") + " " + monster.level());
+        lvlProgressBar.setProgress(monster.experience() / getMaxExp(monster.level()));
+        lvlProgressBar.setStyle("-fx-background-color: #FFFFFF; -fx-accent: #2B8B03;");
+
+        attackProgressBar.setProgress((double) monster.currentAttributes().attack() / monster.attributes().attack());
+        attackProgressBar.setStyle("-fx-background-color: #FFFFFF; -fx-accent: #999900;");
+
+        healthProgressBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
+        healthProgressBar.setStyle("-fx-background-color: #FFFFFF; -fx-accent: #430000;");
+
+        speedProgressBar.setProgress((double) monster.currentAttributes().speed() / monster.attributes().speed());
+        speedProgressBar.setStyle("-fx-background-color: #FFFFFF; -fx-accent: #FFC88F;");
+
+        defenseProgressBar.setProgress((double) monster.currentAttributes().defense() / monster.attributes().defense());
+        defenseProgressBar.setStyle("-fx-background-color: #FFFFFF; -fx-accent: #848480;");
+
+        monsterLevel.setText(resources.getString("LEVEL") + " " + monster.level());
 
         // Attributes
-        //monsterHealth.setText(resources.getString("HEALTH") + " " + monster.currentAttributes().health() + "/" + monster.attributes().health());
-        //monsterAttack.setText(resources.getString("ATTACK") + " " + monster.currentAttributes().attack() + "/" + monster.attributes().attack());
-        //monsterDefense.setText(resources.getString("DEFENSE") + " " + monster.currentAttributes().defense() + "/" + monster.attributes().defense());
-        //monsterSpeed.setText(resources.getString("SPEED") + " " + monster.currentAttributes().speed() + "/" + monster.attributes().speed());
+        monsterHealth.setText(resources.getString("HEALTH") + " " + monster.currentAttributes().health() + "/" + monster.attributes().health());
+        monsterAttack.setText(resources.getString("ATTACK") + " " + monster.currentAttributes().attack() + "/" + monster.attributes().attack());
+        monsterDefense.setText(resources.getString("DEFENSE") + " " + monster.currentAttributes().defense() + "/" + monster.attributes().defense());
+        monsterSpeed.setText(resources.getString("SPEED") + " " + monster.currentAttributes().speed() + "/" + monster.attributes().speed());
 
         // Abilities
         List<Label> abilityLabels = new ArrayList<>(Arrays.asList(ability1, ability2, ability3, ability4));
@@ -174,5 +188,9 @@ public class MonstersDetailController extends Controller {
 
     public void goBackToMonsters() {
         ingameController.root.getChildren().remove(monsterDetailVBox);
+    }
+
+    public double getMaxExp(int lvl) {
+        return Math.pow(lvl, 3) - Math.pow((lvl - 1), 3);
     }
 }
