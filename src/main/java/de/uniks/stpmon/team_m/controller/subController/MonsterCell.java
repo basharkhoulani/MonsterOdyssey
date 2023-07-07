@@ -55,9 +55,9 @@ public class MonsterCell extends ListCell<Monster> {
     @FXML
     HBox rootmonsterHBox;
     @FXML
-    VBox abilityIcon;
+    VBox typeIcon;
     @FXML
-    ImageView abilityImageView;
+    ImageView typeImageView;
     private final ResourceBundle resources;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
@@ -107,14 +107,14 @@ public class MonsterCell extends ListCell<Monster> {
                         }
                         typeColor = TYPESCOLORPALETTE.get(ability.toString());
                         String style = "-fx-background-color: " + typeColor + ";";
-                        abilityIcon.setStyle(style);
+                        typeIcon.setStyle(style);
 
                         typeImagePath = ABILITYPALETTE.get(ability.toString());
                         URL resource = Main.class.getResource("images/" + typeImagePath);
                         typeImage = new Image(resource.toString());
-                        abilityImageView.setImage(typeImage);
-                        abilityImageView.setFitHeight(45);
-                        abilityImageView.setFitWidth(45);
+                        typeImageView.setImage(typeImage);
+                        typeImageView.setFitHeight(45);
+                        typeImageView.setFitWidth(45);
                     }, error -> monstersListController.showError(error.getMessage())));
             monsterLevel.setText(resources.getString("LEVEL") + " " + monster.level());
             disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
