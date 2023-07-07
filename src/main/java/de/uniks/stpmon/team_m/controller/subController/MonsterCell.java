@@ -77,9 +77,9 @@ public class MonsterCell extends ListCell<Monster> {
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
     private MonsterTypeDto monsterTypeDto;
     private Image monsterImage;
-    private String abilityColor;
-    private String abilityImagePath;
-    private Image abilityImage;
+    private String typeColor;
+    private String typeImagePath;
+    private Image typeImage;
 
     public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController) {
         this.resources = resources;
@@ -105,14 +105,14 @@ public class MonsterCell extends ListCell<Monster> {
                         for (String s : monsterTypeDto.type()) {
                             ability.append("").append(s);
                         }
-                        abilityColor = TYPESCOLORPALETTE.get(ability.toString());
-                        String style = "-fx-background-color: " + abilityColor + ";";
+                        typeColor = TYPESCOLORPALETTE.get(ability.toString());
+                        String style = "-fx-background-color: " + typeColor + ";";
                         abilityIcon.setStyle(style);
 
-                        abilityImagePath = ABILITYPALETTE.get(ability.toString());
-                        URL resource = Main.class.getResource("images/" + abilityImagePath);
-                        abilityImage = new Image(resource.toString());
-                        abilityImageView.setImage(abilityImage);
+                        typeImagePath = ABILITYPALETTE.get(ability.toString());
+                        URL resource = Main.class.getResource("images/" + typeImagePath);
+                        typeImage = new Image(resource.toString());
+                        abilityImageView.setImage(typeImage);
                         abilityImageView.setFitHeight(45);
                         abilityImageView.setFitWidth(45);
                     }, error -> monstersListController.showError(error.getMessage())));
