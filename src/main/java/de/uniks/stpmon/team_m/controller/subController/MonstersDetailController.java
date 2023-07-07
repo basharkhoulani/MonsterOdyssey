@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -75,6 +76,16 @@ public class MonstersDetailController extends Controller {
     public Label power4;
     @FXML
     public Text description4;
+    @FXML
+    public ProgressBar lvlProgressBar;
+    @FXML
+    public ProgressBar attackProgressBar;
+    @FXML
+    public ProgressBar healthProgressBar;
+    @FXML
+    public ProgressBar speedProgressBar;
+    @FXML
+    public ProgressBar defProgressBar;
     public ImageView monsterImageView;
     public Label type4;
     public Label type3;
