@@ -56,9 +56,9 @@ public class MonsterCell extends ListCell<Monster> {
     @FXML
     HBox rootmonsterHBox;
     @FXML
-    VBox abilityIcon;
+    VBox typeIcon;
     @FXML
-    ImageView abilityImageView;
+    ImageView typeImageView;
     private final ResourceBundle resources;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
@@ -79,9 +79,9 @@ public class MonsterCell extends ListCell<Monster> {
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
     private MonsterTypeDto monsterTypeDto;
     private Image monsterImage;
-    private String abilityColor;
-    private String abilityImagePath;
-    private Image abilityImage;
+    private String typeColor;
+    private String typeImagePath;
+    private Image typeImage;
 
     public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController, IngameController ingameController) {
         this.ingameController = ingameController;
@@ -108,16 +108,16 @@ public class MonsterCell extends ListCell<Monster> {
                         for (String s : monsterTypeDto.type()) {
                             ability.append("").append(s);
                         }
-                        abilityColor = TYPESCOLORPALETTE.get(ability.toString());
-                        String style = "-fx-background-color: " + abilityColor + ";";
-                        abilityIcon.setStyle(style);
+                        typeColor = TYPESCOLORPALETTE.get(ability.toString());
+                        String style = "-fx-background-color: " + typeColor + ";";
+                        typeIcon.setStyle(style);
 
-                        abilityImagePath = ABILITYPALETTE.get(ability.toString());
-                        URL resource = Main.class.getResource("images/" + abilityImagePath);
-                        abilityImage = new Image(resource.toString());
-                        abilityImageView.setImage(abilityImage);
-                        abilityImageView.setFitHeight(45);
-                        abilityImageView.setFitWidth(45);
+                        typeImagePath = ABILITYPALETTE.get(ability.toString());
+                        URL resource = Main.class.getResource("images/" + typeImagePath);
+                        typeImage = new Image(resource.toString());
+                        typeImageView.setImage(typeImage);
+                        typeImageView.setFitHeight(45);
+                        typeImageView.setFitWidth(45);
                     }, error -> monstersListController.showError(error.getMessage())));
             monsterLevel.setText(resources.getString("LEVEL") + " " + monster.level());
             disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)

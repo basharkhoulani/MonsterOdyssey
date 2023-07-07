@@ -35,12 +35,12 @@
             <Insets top="9.0" />
          </VBox.margin>
          <children>
-            <VBox fx:id="abilityIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="48.0" styleClass="abilityIcon" stylesheets="@../styles.css">
+            <VBox fx:id="typeIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="48.0" styleClass="typeIcon" stylesheets="@../styles.css">
                <HBox.margin>
                   <Insets left="5.0" />
                </HBox.margin>
                <children>
-                  <ImageView fx:id="abilityImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="typeImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </VBox>
          </children>
