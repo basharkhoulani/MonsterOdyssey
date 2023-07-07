@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -87,6 +88,8 @@ public class MonstersDetailController extends Controller {
     private Monster monster;
     private MonsterTypeDto monsterTypeDto;
     private Image monsterImage;
+    public IngameController ingameController;
+    public VBox monsterDetailVBox;
 
     @Override
     public Parent render() {
@@ -98,8 +101,10 @@ public class MonstersDetailController extends Controller {
         return parent;
     }
 
-    public void init(MonstersListController monstersListController, Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources, PresetsService presetsService) {
+    public void init(IngameController ingameController, VBox monsterDetailVBox, MonstersListController monstersListController, Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources, PresetsService presetsService) {
         super.init();
+        this.ingameController = ingameController;
+        this.monsterDetailVBox = monsterDetailVBox;
         this.monstersListController = monstersListController;
         this.monster = monster;
         this.monsterTypeDto = monsterTypeDto;
@@ -119,20 +124,20 @@ public class MonstersDetailController extends Controller {
         }
 
         // Name, Type, Experience, Level
-        monsterName.setText(resources.getString("NAME") + " " + monsterTypeDto.name());
+        //monsterName.setText(resources.getString("NAME") + " " + monsterTypeDto.name());
         StringBuilder type = new StringBuilder(resources.getString("TYPE"));
         for (String s : monsterTypeDto.type()) {
             type.append(" ").append(s);
         }
-        monsterType.setText(type.toString());
-        monsterExperience.setText(resources.getString("EXPERIENCE") + " " + monster.experience());
-        monsterLevel.setText(resources.getString("LEVEL") + " " + monster.level());
+        //monsterType.setText(type.toString());
+        //monsterExperience.setText(resources.getString("EXPERIENCE") + " " + monster.experience());
+        //monsterLevel.setText(resources.getString("LEVEL") + " " + monster.level());
 
         // Attributes
-        monsterHealth.setText(resources.getString("HEALTH") + " " + monster.currentAttributes().health() + "/" + monster.attributes().health());
-        monsterAttack.setText(resources.getString("ATTACK") + " " + monster.currentAttributes().attack() + "/" + monster.attributes().attack());
-        monsterDefense.setText(resources.getString("DEFENSE") + " " + monster.currentAttributes().defense() + "/" + monster.attributes().defense());
-        monsterSpeed.setText(resources.getString("SPEED") + " " + monster.currentAttributes().speed() + "/" + monster.attributes().speed());
+        //monsterHealth.setText(resources.getString("HEALTH") + " " + monster.currentAttributes().health() + "/" + monster.attributes().health());
+        //monsterAttack.setText(resources.getString("ATTACK") + " " + monster.currentAttributes().attack() + "/" + monster.attributes().attack());
+        //monsterDefense.setText(resources.getString("DEFENSE") + " " + monster.currentAttributes().defense() + "/" + monster.attributes().defense());
+        //monsterSpeed.setText(resources.getString("SPEED") + " " + monster.currentAttributes().speed() + "/" + monster.attributes().speed());
 
         // Abilities
         List<Label> abilityLabels = new ArrayList<>(Arrays.asList(ability1, ability2, ability3, ability4));
@@ -157,11 +162,6 @@ public class MonstersDetailController extends Controller {
 
 
     public void goBackToMonsters() {
-        Stage stage = (Stage) goBackMonstersButton.getScene().getWindow();
-        stage.close();
-        monstersListController.init();
-        Scene scene = new Scene(monstersListController.render());
-        stage.setScene(scene);
-        stage.show();
+        ingameController.root.getChildren().remove(monsterDetailVBox);
     }
 }

@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.service.PresetsService;
@@ -68,6 +69,7 @@ public class MonsterCell extends ListCell<Monster> {
     @Inject
     public UserStorage usersStorage;
     public PresetsService presetsService;
+    public IngameController ingameController;
     @Inject
     Provider<TrainersService> trainersServiceProvider;
     MonstersListController monstersListController;
@@ -81,7 +83,8 @@ public class MonsterCell extends ListCell<Monster> {
     private String abilityImagePath;
     private Image abilityImage;
 
-    public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController) {
+    public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController, IngameController ingameController) {
+        this.ingameController = ingameController;
         this.resources = resources;
         this.presetsService = presetsService;
         this.monstersListController = monstersListController;
@@ -130,13 +133,7 @@ public class MonsterCell extends ListCell<Monster> {
     }
 
     private void showDetails(Monster monster) {
-        Stage popup = (Stage) rootmonsterHBox.getScene().getWindow();
-        popup.close();
-        MonstersDetailController monstersDetailController = new MonstersDetailController();
-        monstersDetailController.init(monstersListController, monster, monsterTypeDto, monsterImage, resources, presetsService);
-        Scene scene = new Scene(monstersDetailController.render());
-        popup.setScene(scene);
-        popup.show();
+        this.ingameController.showMonsterDetails(monstersListController, monster, monsterTypeDto, monsterImage, resources, presetsService);
     }
 
     private void loadFXML() {
