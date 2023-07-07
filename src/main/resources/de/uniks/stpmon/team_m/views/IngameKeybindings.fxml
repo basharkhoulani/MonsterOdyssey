@@ -106,12 +106,12 @@
          </VBox>
          <HBox prefHeight="37.0" prefWidth="693.0">
             <children>
-               <Label fx:id="informationLabel" prefHeight="37.0" prefWidth="581.0" text="%KEYBINDINGS.INFORMATION">
+               <Label fx:id="informationLabel" prefHeight="34.0" prefWidth="555.0" text="%KEYBINDINGS.INFORMATION">
                   <font>
                      <Font name="Comic Sans MS" size="17.0" />
                   </font>
                   <HBox.margin>
-                     <Insets left="50.0" />
+                     <Insets left="120.0" />
                   </HBox.margin>
                </Label>
             </children>
