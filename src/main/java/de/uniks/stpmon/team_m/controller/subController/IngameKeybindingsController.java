@@ -47,6 +47,7 @@ public class IngameKeybindingsController extends Controller {
     }
 
     public void goBack() {
+        ingameController.root.getChildren().remove(ingameVbox);
     }
 
     public void setDefault() {
