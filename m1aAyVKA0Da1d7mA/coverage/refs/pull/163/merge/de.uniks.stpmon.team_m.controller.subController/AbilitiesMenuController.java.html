@@ -90,29 +90,28 @@ public class AbilitiesMenuController extends Controller {
 <span class="nc" id="L90">                        abilityButtons.get(i).setVisible(false);</span>
 <span class="nc" id="L91">                        i++;</span>
                     }
-<span class="nc" id="L93">                }</span>
-        ));
-<span class="nc" id="L95">    }</span>
+<span class="nc" id="L93">                }, Throwable::printStackTrace));</span>
+<span class="nc" id="L94">    }</span>
 
     private void useAbility(AbilityDto ability, Button abilityButton) {
 
-<span class="nc" id="L99">    }</span>
+<span class="nc" id="L98">    }</span>
 
     private void updateButton(AbilityDto ability, Button abilityButton) {
-<span class="nc bnc" id="L102" title="All 2 branches missed.">        for (Map.Entry&lt;String, Integer&gt; entry: monster.abilities().entrySet()) {</span>
-<span class="nc bnc" id="L103" title="All 2 branches missed.">            if(entry.getKey().equals(String.valueOf(ability.id()))){</span>
-<span class="nc" id="L104">                entry.setValue(entry.getValue()-1);</span>
-<span class="nc" id="L105">                abilityButton.setText(ability.name() + &quot; &quot; + entry.getValue() + &quot;/&quot; + ability.maxUses());</span>
-<span class="nc bnc" id="L106" title="All 2 branches missed.">                if(entry.getValue() == 0){</span>
-<span class="nc" id="L107">                    abilityButton.setDisable(true);</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        for (Map.Entry&lt;String, Integer&gt; entry: monster.abilities().entrySet()) {</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">            if(entry.getKey().equals(String.valueOf(ability.id()))){</span>
+<span class="nc" id="L103">                entry.setValue(entry.getValue()-1);</span>
+<span class="nc" id="L104">                abilityButton.setText(ability.name() + &quot; &quot; + entry.getValue() + &quot;/&quot; + ability.maxUses());</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">                if(entry.getValue() == 0){</span>
+<span class="nc" id="L106">                    abilityButton.setDisable(true);</span>
                 }
             }
-<span class="nc" id="L110">        }</span>
-<span class="nc" id="L111">    }</span>
+<span class="nc" id="L109">        }</span>
+<span class="nc" id="L110">    }</span>
 
 
     public void goBack() {
-<span class="nc" id="L115">        encounterController.goBackToBattleMenu();</span>
-<span class="nc" id="L116">    }</span>
+<span class="nc" id="L114">        encounterController.goBackToBattleMenu();</span>
+<span class="nc" id="L115">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
