@@ -8,7 +8,6 @@ import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -16,8 +15,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -30,12 +27,6 @@ public class MonstersDetailController extends Controller {
     @FXML
     public Button goBackMonstersButton;
     @FXML
-    public Label monsterName;
-    @FXML
-    public Label monsterType;
-    @FXML
-    public Label monsterExperience;
-    @FXML
     public Label monsterLevel;
     @FXML
     public Label monsterHealth;
@@ -45,38 +36,6 @@ public class MonstersDetailController extends Controller {
     public Label monsterDefense;
     @FXML
     public Label monsterSpeed;
-    @FXML
-    public Label ability1;
-    @FXML
-    public Label accuracy1;
-    @FXML
-    public Label power1;
-    @FXML
-    public Text description1;
-    @FXML
-    public Label ability2;
-    @FXML
-    public Label accuracy2;
-    @FXML
-    public Label power2;
-    @FXML
-    public Text description2;
-    @FXML
-    public Label ability3;
-    @FXML
-    public Label accuracy3;
-    @FXML
-    public Label power3;
-    @FXML
-    public Text description3;
-    @FXML
-    public Label ability4;
-    @FXML
-    public Label accuracy4;
-    @FXML
-    public Label power4;
-    @FXML
-    public Text description4;
     @FXML
     public ProgressBar lvlProgressBar;
     @FXML
@@ -90,10 +49,6 @@ public class MonstersDetailController extends Controller {
     @FXML
     public ListView<AbilityDto> abilityListView;
     public ImageView monsterImageView;
-    public Label type4;
-    public Label type3;
-    public Label type2;
-    public Label type1;
 
     @Inject
     Provider<IngameController> ingameControllerProvider;
@@ -184,9 +139,6 @@ public class MonstersDetailController extends Controller {
 
 
     private void initMonsterAbilities(List<AbilityDto> abilities) {
-        for(AbilityDto ability: abilities) {
-            System.out.println(ability.name());
-        }
         abilityListView.setCellFactory(param -> new AbilityCell(resources, presetsServiceProvider.get(), this, this.ingameController));
         abilityListView.getItems().addAll(abilities);
         abilityListView.setFocusModel(null);
