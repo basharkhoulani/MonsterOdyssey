@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -86,6 +87,8 @@ public class MonstersDetailController extends Controller {
     public ProgressBar speedProgressBar;
     @FXML
     public ProgressBar defenseProgressBar;
+    @FXML
+    public ListView<AbilityDto> abilityListView;
     public ImageView monsterImageView;
     public Label type4;
     public Label type3;
@@ -101,6 +104,9 @@ public class MonstersDetailController extends Controller {
     private Image monsterImage;
     public IngameController ingameController;
     public VBox monsterDetailVBox;
+    public List<AbilityDto> monsterAbilities = new ArrayList<>();
+    @Inject
+    public Provider<PresetsService> presetsServiceProvider;
 
     @Override
     public Parent render() {
@@ -164,27 +170,28 @@ public class MonstersDetailController extends Controller {
         monsterDefense.setText(resources.getString("DEFENSE") + " " + monster.currentAttributes().defense() + "/" + monster.attributes().defense());
         monsterSpeed.setText(resources.getString("SPEED") + " " + monster.currentAttributes().speed() + "/" + monster.attributes().speed());
 
-        // Abilities
-        List<Label> abilityLabels = new ArrayList<>(Arrays.asList(ability1, ability2, ability3, ability4));
-        List<Label> accuracyLabels = new ArrayList<>(Arrays.asList(accuracy1, accuracy2, accuracy3, accuracy4));
-        List<Label> powerLabels = new ArrayList<>(Arrays.asList(power1, power2, power3, power4));
-        List<Text> descriptionLabels = new ArrayList<>(Arrays.asList(description1, description2, description3, description4));
-        List<Label> typeLabels = new ArrayList<>(Arrays.asList(type1, type2, type3, type4));
-
         disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> {
-            int i = 0;
             for (Map.Entry<String, Integer> entry : monster.abilities().entrySet()) {
                 AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey()) - 1);
-                abilityLabels.get(i).setText(ability.name() + ": " + entry.getValue() + "/" + ability.maxUses());
-                accuracyLabels.get(i).setText(resources.getString("ACCURACY") + " " + (int) (ability.accuracy() * 100) + "%");
-                powerLabels.get(i).setText(resources.getString("POWER") + " " + ability.power());
-                typeLabels.get(i).setText(resources.getString("TYPE") + " " + ability.type());
-                descriptionLabels.get(i).setText(ability.description());
-                i++;
+                monsterAbilities.add(ability);
             }
-        }, error -> showError(error.getMessage())));
+            initMonsterAbilities(monsterAbilities);
+        }, error -> {
+            //showError(error.getMessage())
+            System.out.println(error);
+        }));
     }
 
+
+    private void initMonsterAbilities(List<AbilityDto> abilities) {
+        for(AbilityDto ability: abilities) {
+            System.out.println(ability.name());
+        }
+        abilityListView.setCellFactory(param -> new AbilityCell(resources, presetsServiceProvider.get(), this, this.ingameController));
+        abilityListView.getItems().addAll(abilities);
+        abilityListView.setFocusModel(null);
+        abilityListView.setSelectionModel(null);
+    }
 
     public void goBackToMonsters() {
         ingameController.root.getChildren().remove(monsterDetailVBox);
