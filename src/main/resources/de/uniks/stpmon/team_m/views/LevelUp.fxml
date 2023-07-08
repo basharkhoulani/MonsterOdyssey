@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
+
+
+<VBox fx:id="levelUpVBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="de.uniks.stpmon.team_m.controller.subController.LevelUpController">
+    <padding>
+        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+    </padding>
+    <Label fx:id="levelUpLabel" alignment="CENTER" prefHeight="34.0" prefWidth="160.0" text="level up"
+           textAlignment="CENTER" wrapText="true">
+        <font>
+            <Font name="Comic Sans MS Bold" size="16.0"/>
+        </font>
+    </Label>
+    <TextFlow fx:id="levelUpTextFlow" lineSpacing="4.0" prefHeight="265.0" prefWidth="560.0"
+              textAlignment="CENTER"/>
+    <Button fx:id="okButton" mnemonicParsing="false" onAction="#okButtonPressed" prefHeight="32.0" prefWidth="95.0"
+            styleClass="welcomeSceneButton" text="OK">
+        <font>
+            <Font size="16.0"/>
+        </font>
+    </Button>
+</VBox>
