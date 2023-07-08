@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.AbilityDto;
@@ -19,8 +20,12 @@ import javafx.scene.layout.VBox;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
+import java.net.URL;
 import java.util.List;
 import java.util.*;
+
+import static de.uniks.stpmon.team_m.Constants.ABILITYPALETTE;
+import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
 
 public class MonstersDetailController extends Controller {
@@ -49,7 +54,6 @@ public class MonstersDetailController extends Controller {
     @FXML
     public ListView<AbilityDto> abilityListView;
     public ImageView monsterImageView;
-
     @Inject
     Provider<IngameController> ingameControllerProvider;
     PresetsService presetsService;
@@ -62,6 +66,11 @@ public class MonstersDetailController extends Controller {
     public List<AbilityDto> monsterAbilities = new ArrayList<>();
     @Inject
     public Provider<PresetsService> presetsServiceProvider;
+    private String monsterType;
+    private String typeColor;
+    private String typeImagePath;
+    private Image typeImage;
+
 
     @Override
     public Parent render() {
@@ -73,8 +82,11 @@ public class MonstersDetailController extends Controller {
         return parent;
     }
 
-    public void init(IngameController ingameController, VBox monsterDetailVBox, MonstersListController monstersListController, Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources, PresetsService presetsService) {
+    public void init(IngameController ingameController, VBox monsterDetailVBox, MonstersListController monstersListController,
+                     Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources, PresetsService presetsService,
+                     String type) {
         super.init();
+        this.monsterType = type;
         this.ingameController = ingameController;
         this.monsterDetailVBox = monsterDetailVBox;
         this.monstersListController = monstersListController;
@@ -96,12 +108,13 @@ public class MonstersDetailController extends Controller {
         }
 
         // Name, Type, Experience, Level
-        //monsterName.setText(resources.getString("NAME") + " " + monsterTypeDto.name());
         StringBuilder type = new StringBuilder(resources.getString("TYPE"));
         for (String s : monsterTypeDto.type()) {
             type.append(" ").append(s);
         }
-        //monsterType.setText(type.toString());
+
+
+        // Attribute bars
         lvlProgressBar.setProgress(monster.experience() / getMaxExp(monster.level()));
         lvlProgressBar.setStyle("-fx-background-color: #FFFFFF; -fx-accent: #2B8B03;");
 
@@ -119,7 +132,7 @@ public class MonstersDetailController extends Controller {
 
         monsterLevel.setText(resources.getString("LEVEL") + " " + monster.level());
 
-        // Attributes
+        // Attribute values
         monsterHealth.setText(resources.getString("HEALTH") + " " + monster.currentAttributes().health() + "/" + monster.attributes().health());
         monsterAttack.setText(resources.getString("ATTACK") + " " + monster.currentAttributes().attack() + "/" + monster.attributes().attack());
         monsterDefense.setText(resources.getString("DEFENSE") + " " + monster.currentAttributes().defense() + "/" + monster.attributes().defense());
