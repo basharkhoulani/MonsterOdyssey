@@ -19,12 +19,17 @@
                     <Insets left="5.0" top="5.0" />
                 </HBox.margin>
             </Button>
-            <VBox prefHeight="252.0" prefWidth="103.0">
+            <VBox prefHeight="250.0" prefWidth="147.0">
             <HBox prefHeight="100.0" prefWidth="200.0" styleClass="trainerAvatarImageView">
                <children>
                       <ImageView fx:id="monsterImageView" fitHeight="120.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </HBox>
+            <Label fx:id="monsterName" alignment="CENTER" prefHeight="17.0" prefWidth="153.0">
+               <VBox.margin>
+                  <Insets top="65.0" />
+               </VBox.margin>
+            </Label>
                 <HBox.margin>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </HBox.margin>
