@@ -186,7 +186,7 @@
     </HBox>
     <HBox prefHeight="247.0" prefWidth="800.0" styleClass="bottomLine">
       <children>
-         <ListView fx:id="abilityList" prefHeight="219.0" prefWidth="773.0" style="-fx-background-color: #CFE9DB;">
+         <ListView fx:id="abilityListView" prefHeight="219.0" prefWidth="773.0" style="-fx-background-color: #CFE9DB;">
             <HBox.margin>
                <Insets left="14.0" />
             </HBox.margin>
