@@ -74,6 +74,8 @@ public class MonstersDetailController extends Controller {
     private String typeColor;
     private String typeImagePath;
     private Image typeImage;
+    @FXML
+    public Label monsterName;
 
 
     @Override
@@ -127,6 +129,7 @@ public class MonstersDetailController extends Controller {
             type.append(" ").append(s);
         }
 
+        monsterName.setText(monsterTypeDto.name());
 
         // Attribute bars
         lvlProgressBar.setProgress(monster.experience() / getMaxExp(monster.level()));
@@ -158,10 +161,8 @@ public class MonstersDetailController extends Controller {
                 monsterAbilities.add(ability);
             }
             initMonsterAbilities(monsterAbilities);
-        }, error -> {
-            //showError(error.getMessage())
-            System.out.println(error);
-        }));
+        }, error ->
+            showError(error.getMessage())));
     }
 
 
