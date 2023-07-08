@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<HBox fx:id="rootAbilityBox" alignment="CENTER_LEFT" maxHeight="152.0" maxWidth="773.0" minHeight="110.0" prefHeight="133.0" prefWidth="735.0" style="-fx-background-color: #d6e8fe;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.AbilityCell">
+<HBox fx:id="rootAbilityBox" alignment="CENTER_LEFT" maxHeight="152.0" maxWidth="773.0" minHeight="110.0" prefHeight="133.0" prefWidth="689.0" style="-fx-background-color: #d6e8fe; -fx-border-color: #7ea5c7; -fx-border-width: 2;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.AbilityCell">
    <children>
-      <VBox prefHeight="133.0" prefWidth="683.0">
+      <VBox prefHeight="133.0" prefWidth="545.0">
          <children>
             <Label fx:id="abilityName" prefHeight="17.0" prefWidth="370.0">
                <VBox.margin>
@@ -75,10 +75,13 @@
          <children>
             <VBox fx:id="typeIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="48.0" styleClass="typeIcon" stylesheets="@../styles.css">
                <children>
-                  <ImageView fx:id="typeImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="typeImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin></ImageView>
                </children>
                <VBox.margin>
-                  <Insets top="1.0" />
+                  <Insets right="1.0" top="1.0" />
                </VBox.margin>
             </VBox>
          </children>
