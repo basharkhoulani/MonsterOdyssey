@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="505.0" prefWidth="800.0" style="-fx-background-color: #CFE9DB;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.MonstersDetailController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="517.0" prefWidth="800.0" style="-fx-background-color: #CFE9DB;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.MonstersDetailController">
     <HBox prefHeight="270.0" prefWidth="800.0" styleClass="bottomLine">
         <HBox prefWidth="266.66" styleClass="rightLine">
             <Button fx:id="goBackMonstersButton" mnemonicParsing="false" onAction="#goBackToMonsters" prefHeight="40.0" prefWidth="40.0" styleClass="buttonsYellow" text="&lt;">
@@ -205,13 +205,14 @@
       </HBox>
     </HBox>
    <HBox prefHeight="13.0" prefWidth="800.0" />
-    <HBox prefHeight="247.0" prefWidth="800.0" styleClass="bottomLine">
+    <HBox prefHeight="257.0" prefWidth="800.0" styleClass="bottomLine">
       <children>
-         <ListView fx:id="abilityListView" prefHeight="200.0" prefWidth="773.0" style="-fx-background-color: #CFE9DB;">
+         <ListView fx:id="abilityListView" prefHeight="64.0" prefWidth="773.0" style="-fx-background-color: #CFE9DB;">
             <HBox.margin>
                <Insets left="14.0" />
             </HBox.margin>
          </ListView>
       </children>
     </HBox>
+   <HBox prefHeight="18.0" prefWidth="800.0" />
 </VBox>

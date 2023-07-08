@@ -1596,11 +1596,11 @@ public class IngameController extends Controller {
     }
 
     public void showMonsterDetails(MonstersListController monstersListController, Monster monster, MonsterTypeDto monsterTypeDto,
-                                   Image monsterImage, ResourceBundle resources,  PresetsService presetsService) {
+                                   Image monsterImage, ResourceBundle resources,  PresetsService presetsService, String type) {
         VBox monsterDetailVBox = new VBox();
         monsterDetailVBox.setAlignment(Pos.CENTER);
         MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();
-        monstersDetailController.init(this, monsterDetailVBox, monstersListController, monster, monsterTypeDto, monsterImage, resources, presetsService);
+        monstersDetailController.init(this, monsterDetailVBox, monstersListController, monster, monsterTypeDto, monsterImage, resources, presetsService, type);
         monsterDetailVBox.getChildren().add(monstersDetailController.render());
         root.getChildren().add(monsterDetailVBox);
         monsterDetailVBox.requestFocus();

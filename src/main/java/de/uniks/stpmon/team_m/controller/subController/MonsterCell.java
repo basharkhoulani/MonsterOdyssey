@@ -93,6 +93,7 @@ public class MonsterCell extends ListCell<Monster> {
     @Override
     protected void updateItem(Monster monster, boolean empty) {
         super.updateItem(monster, empty);
+        StringBuilder type = new StringBuilder();
         if (monster == null || empty) {
             setText(null);
             setGraphic(null);
@@ -104,15 +105,14 @@ public class MonsterCell extends ListCell<Monster> {
                     .subscribe(monsterType -> {
                         monsterTypeDto = monsterType;
                         monsterName.setText(resources.getString("NAME") + " " + monsterTypeDto.name());
-                        StringBuilder ability = new StringBuilder();
                         for (String s : monsterTypeDto.type()) {
-                            ability.append("").append(s);
+                            type.append("").append(s);
                         }
-                        typeColor = TYPESCOLORPALETTE.get(ability.toString());
+                        typeColor = TYPESCOLORPALETTE.get(type.toString());
                         String style = "-fx-background-color: " + typeColor + ";";
                         typeIcon.setStyle(style);
 
-                        typeImagePath = ABILITYPALETTE.get(ability.toString());
+                        typeImagePath = ABILITYPALETTE.get(type.toString());
                         URL resource = Main.class.getResource("images/" + typeImagePath);
                         typeImage = new Image(resource.toString());
                         typeImageView.setImage(typeImage);
@@ -125,15 +125,15 @@ public class MonsterCell extends ListCell<Monster> {
                         this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
                         monsterImageView.setImage(this.monsterImage);
                     }, error -> monstersListController.showError(error.getMessage())));
-            viewDetailsButton.setOnAction(event -> showDetails(monster));
+            viewDetailsButton.setOnAction(event -> showDetails(monster, type.toString()));
             setGraphic(rootmonsterHBox);
             setText(null);
             setStyle("-fx-background-color: #CFE9DB;  -fx-border-color: #1C701C; -fx-border-width: 2px");
         }
     }
 
-    private void showDetails(Monster monster) {
-        this.ingameController.showMonsterDetails(monstersListController, monster, monsterTypeDto, monsterImage, resources, presetsService);
+    private void showDetails(Monster monster, String type) {
+        this.ingameController.showMonsterDetails(monstersListController, monster, monsterTypeDto, monsterImage, resources, presetsService, type);
     }
 
     private void loadFXML() {

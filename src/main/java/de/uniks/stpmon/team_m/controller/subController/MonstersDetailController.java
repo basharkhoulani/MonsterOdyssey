@@ -54,6 +54,10 @@ public class MonstersDetailController extends Controller {
     @FXML
     public ListView<AbilityDto> abilityListView;
     public ImageView monsterImageView;
+    @FXML
+    public ImageView typeImageView;
+    @FXML
+    public VBox typeIcon;
     @Inject
     Provider<IngameController> ingameControllerProvider;
     PresetsService presetsService;
@@ -105,6 +109,16 @@ public class MonstersDetailController extends Controller {
         // Sprite
         if (!GraphicsEnvironment.isHeadless()) {
             monsterImageView.setImage(monsterImage);
+            typeColor = TYPESCOLORPALETTE.get(monsterType);
+            String style = "-fx-background-color: " + typeColor + ";";
+            typeIcon.setStyle(style);
+
+            typeImagePath = ABILITYPALETTE.get(monsterType);
+            URL resource = Main.class.getResource("images/" + typeImagePath);
+            typeImage = new Image(resource.toString());
+            typeImageView.setImage(typeImage);
+            typeImageView.setFitHeight(45);
+            typeImageView.setFitWidth(45);
         }
 
         // Name, Type, Experience, Level
