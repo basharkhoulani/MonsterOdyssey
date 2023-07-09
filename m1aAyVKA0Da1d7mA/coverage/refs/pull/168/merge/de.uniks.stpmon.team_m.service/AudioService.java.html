@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AudioService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.service</a> &gt; <span class="el_source">AudioService.java</span></div><h1>AudioService.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.service;
+import de.uniks.stpmon.team_m.Main;
+import javafx.scene.control.Button;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
+import javax.inject.Inject;
+import java.util.prefs.Preferences;
+
+public class AudioService {
+    private static AudioService instance;
+    private MediaPlayer mediaPlayer;
+<span class="fc" id="L13">    private boolean isMuted = false;</span>
+    private String currentSound;
+    private double soundVolume;
+
+    @Inject
+<span class="fc" id="L18">    public AudioService() {}</span>
+
+    public static AudioService getInstance() {
+<span class="nc bnc" id="L21" title="All 2 branches missed.">        if (instance == null) {</span>
+<span class="nc" id="L22">            instance = new AudioService();</span>
+        }
+<span class="nc" id="L24">        return instance;</span>
+    }
+
+    public void playSound(String soundPath) {
+<span class="nc" id="L28">        final Media sound = new Media((Main.class.getResource(&quot;sounds/&quot; + soundPath)).toString());</span>
+<span class="nc" id="L29">        mediaPlayer = new MediaPlayer(sound);</span>
+<span class="nc" id="L30">        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);</span>
+<span class="nc" id="L31">        mediaPlayer.play();</span>
+<span class="nc" id="L32">        this.currentSound = soundPath;</span>
+
+<span class="nc" id="L34">    }</span>
+
+    public void stopSound() {
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        if (mediaPlayer != null) {</span>
+<span class="nc" id="L38">            mediaPlayer.stop();</span>
+        }
+<span class="nc" id="L40">    }</span>
+
+    public void muteSound() {
+<span class="nc" id="L43">        this.isMuted = true;</span>
+<span class="nc" id="L44">        mediaPlayer.setMute(true);</span>
+<span class="nc" id="L45">    }</span>
+
+    public boolean checkMuted() {
+<span class="nc" id="L48">        return this.isMuted;</span>
+    }
+
+    public void unmuteSound() {
+<span class="nc" id="L52">        this.isMuted = false;</span>
+<span class="nc" id="L53">        mediaPlayer.setMute(false);</span>
+<span class="nc" id="L54">    }</span>
+
+    public String getCurrentSound() {
+<span class="nc" id="L57">        return this.currentSound;</span>
+    }
+    public void setCurrentSound(String sound) {
+<span class="nc" id="L60">        this.currentSound = sound;</span>
+<span class="nc" id="L61">    }</span>
+
+    public double getVolume() {
+<span class="nc" id="L64">        return this.soundVolume;</span>
+    }
+
+    public void setVolume(double volume) {
+<span class="nc" id="L68">        this.soundVolume = volume;</span>
+<span class="nc" id="L69">        mediaPlayer.setVolume(volume);</span>
+<span class="nc" id="L70">    }</span>
+
+    public void muteOrUnmuteSound(Button muteButton, Preferences preferences) {
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        if(AudioService.getInstance().checkMuted()) {</span>
+<span class="nc" id="L74">            muteButton.getStyleClass().remove(&quot;unmuteSymbol&quot;);</span>
+<span class="nc" id="L75">            muteButton.getStyleClass().add(&quot;muteSymbol&quot;);</span>
+<span class="nc" id="L76">            preferences.putBoolean(&quot;mute&quot;, false);</span>
+<span class="nc" id="L77">            AudioService.getInstance().unmuteSound();</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">            if (preferences.getDouble(&quot;volume&quot;, 0.5) &lt;= 0.05) {</span>
+<span class="nc" id="L79">                AudioService.getInstance().setVolume(0.5);</span>
+<span class="nc" id="L80">                preferences.putDouble(&quot;volume&quot;, 0.5);</span>
+            } else {
+<span class="nc" id="L82">                AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, 0.5));</span>
+            }
+        } else {
+<span class="nc" id="L85">            muteButton.getStyleClass().remove(&quot;muteSymbol&quot;);</span>
+<span class="nc" id="L86">            muteButton.getStyleClass().add(&quot;unmuteSymbol&quot;);</span>
+<span class="nc" id="L87">            preferences.putBoolean(&quot;mute&quot;, true);</span>
+<span class="nc" id="L88">            AudioService.getInstance().muteSound();</span>
+        }
+<span class="nc" id="L90">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
