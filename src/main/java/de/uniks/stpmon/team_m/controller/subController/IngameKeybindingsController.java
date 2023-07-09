@@ -73,10 +73,10 @@ public class IngameKeybindingsController extends Controller {
         keyPressedHandler = event -> {
             if(event.getCode() == KeyCode.ESCAPE){
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
-                pauseMenuButton.setText("");
-                pauseMenuButton.setText("ESC");
+                walkLeftButton.setText("");
+                walkLeftButton.setText("ESC");
             }else{
-                if(Character.isLetterOrDigit(event.getText().charAt(0))){
+                if(event.getText().length() != 0 && Character.isLetterOrDigit(event.getText().charAt(0))){
                     informationLabel.setText(resources.getString("CLICK.CHECK"));
                     walkLeftButton.setText("");
                     walkLeftButton.setText(event.getText().toUpperCase());
@@ -109,7 +109,7 @@ public class IngameKeybindingsController extends Controller {
                 pauseMenuButton.setText("");
                 pauseMenuButton.setText("ESC");
             }else{
-                if(Character.isLetterOrDigit(event.getText().charAt(0))){
+                if(event.getText().length() != 0 && Character.isLetterOrDigit(event.getText().charAt(0))){
                     informationLabel.setText(resources.getString("CLICK.CHECK"));
                     pauseMenuButton.setText("");
                     pauseMenuButton.setText(event.getText().toUpperCase());
@@ -139,10 +139,10 @@ public class IngameKeybindingsController extends Controller {
         keyPressedHandler = event -> {
             if(event.getCode() == KeyCode.ESCAPE){
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
-                pauseMenuButton.setText("");
-                pauseMenuButton.setText("ESC");
+                walkRightButton.setText("");
+                walkRightButton.setText("ESC");
             }else{
-                if(Character.isLetterOrDigit(event.getText().charAt(0))){
+                if(event.getText().length() != 0 && Character.isLetterOrDigit(event.getText().charAt(0))){
                     informationLabel.setText(resources.getString("CLICK.CHECK"));
                     walkRightButton.setText("");
                     walkRightButton.setText(event.getText().toUpperCase());
@@ -172,10 +172,10 @@ public class IngameKeybindingsController extends Controller {
         keyPressedHandler = event -> {
             if(event.getCode() == KeyCode.ESCAPE){
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
-                pauseMenuButton.setText("");
-                pauseMenuButton.setText("ESC");
+                interactionButton.setText("");
+                interactionButton.setText("ESC");
             }else{
-                if(Character.isLetterOrDigit(event.getText().charAt(0))){
+                if(event.getText().length() != 0 && Character.isLetterOrDigit(event.getText().charAt(0))){
                     informationLabel.setText(resources.getString("CLICK.CHECK"));
                     interactionButton.setText("");
                     interactionButton.setText(event.getText().toUpperCase());
@@ -205,10 +205,10 @@ public class IngameKeybindingsController extends Controller {
         keyPressedHandler = event -> {
             if(event.getCode() == KeyCode.ESCAPE){
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
-                pauseMenuButton.setText("");
-                pauseMenuButton.setText("ESC");
+                walkDownButton.setText("");
+                walkDownButton.setText("ESC");
             }else{
-                if(Character.isLetterOrDigit(event.getText().charAt(0))){
+                if(event.getText().length() != 0 && Character.isLetterOrDigit(event.getText().charAt(0))){
                     informationLabel.setText(resources.getString("CLICK.CHECK"));
                     walkDownButton.setText("");
                     walkDownButton.setText(event.getText().toUpperCase());
@@ -238,10 +238,10 @@ public class IngameKeybindingsController extends Controller {
         keyPressedHandler = event -> {
             if(event.getCode() == KeyCode.ESCAPE){
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
-                pauseMenuButton.setText("");
-                pauseMenuButton.setText("ESC");
+                walkUpButton.setText("");
+                walkUpButton.setText("ESC");
             }else{
-                if(Character.isLetterOrDigit(event.getText().charAt(0))){
+                if(event.getText().length() != 0 && Character.isLetterOrDigit(event.getText().charAt(0))){
                     informationLabel.setText(resources.getString("CLICK.CHECK"));
                     walkUpButton.setText("");
                     walkUpButton.setText(event.getText().toUpperCase());
