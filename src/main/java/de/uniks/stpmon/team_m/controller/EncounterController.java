@@ -2,10 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
-import de.uniks.stpmon.team_m.dto.AbilityMove;
-import de.uniks.stpmon.team_m.dto.Monster;
-import de.uniks.stpmon.team_m.dto.Opponent;
-import de.uniks.stpmon.team_m.dto.Result;
+import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
@@ -87,6 +84,7 @@ public class EncounterController extends Controller {
     private Image myMonsterImage;
     private Image enemyMonsterImage;
     private List<Controller> subControllers = new ArrayList<>();
+    private List<AbilityDto> abilityDtos = new ArrayList<>();
 
     @Inject
     public EncounterController() {
@@ -121,6 +119,10 @@ public class EncounterController extends Controller {
         battleMenu.getChildren().add(battleMenuController.render());
 
         listenToOpponents(encounterOpponentStorage.getEncounterId());
+
+        disposables.add(presetsService.getAbilities()
+                .observeOn(FX_SCHEDULER).subscribe(as -> {this.abilityDtos = as;}, Throwable::printStackTrace));
+
         return parent;
     }
 
@@ -212,27 +214,50 @@ public class EncounterController extends Controller {
         if(opponent.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
             encounterOpponentStorage.setSelfOpponent(opponent);
             if(opponent.move() != null) {
-                System.out.println("You used" + opponent.move());
+                Move move = opponent.move();
+                if(move instanceof AbilityMove){
+                    updateDescription("You used " + abilityDtos.get(((AbilityMove) move).ability()- 1).name(), false);
+                }
+                // else for change monster move
             } else {
                 if(opponent.results().size() != 0){
                     for(Result r: opponent.results()){
-                        System.out.println("Your Result type: " + r.type() + " ability: " + r.ability() + "effectiveness: " + r.effectiveness());
+                        switch(r.type()){
+                            case "ability-success":
+                                updateDescription(abilityDtos.get(r.ability() -1).name() + "is " + r.effectiveness(), false);
+                                System.out.println("Your Result type: " + r.type() + " ability: " + r.ability() + "effectiveness: " + r.effectiveness());
+                                break;
+                            default:
+                                updateDescription("Unknown",false);
+                                break;
+                        }
                     }
                 }
             }
         } else {
             encounterOpponentStorage.setEnemyOpponent(opponent);
             if(opponent.move() != null) {
-                System.out.println("Enemy used" + opponent.move());
+                Move move = opponent.move();
+                if(move instanceof AbilityMove){
+                    updateDescription("Enemy used " + abilityDtos.get(((AbilityMove) move).ability()- 1).name(), false);
+                }
+                // else for change monster move
             } else {
                 if(opponent.results().size() != 0){
                     for(Result r: opponent.results()){
-                        System.out.println("Their Result type: " + r.type() + " ability: " + r.ability() + "effectiveness: " + r.effectiveness());
+                        switch(r.type()){
+                            case "ability-success":
+                                updateDescription(abilityDtos.get(r.ability() -1).name() + "is " + r.effectiveness(), false);
+                                System.out.println("Your Result type: " + r.type() + " ability: " + r.ability() + "effectiveness: " + r.effectiveness());
+                                break;
+                            default:
+                                updateDescription("Unknown",false);
+                                break;
+                        }
                     }
                 }
             }
         }
-
     }
 
     public void showIngameController() {
@@ -257,6 +282,9 @@ public class EncounterController extends Controller {
         if(isUpdated){
             battleDescription.setText(information);
         } else {
+            if (battleDescription.getText().contains(information)){
+                return;
+            }
             battleDescription.setText(battleDescription.getText() + "\n" + information);
         }
     }
