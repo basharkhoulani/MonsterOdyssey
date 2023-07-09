@@ -1093,7 +1093,15 @@ public class IngameController extends Controller {
                         String encounterId = opt.get(0).encounter();
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, encounterId)
                                 .observeOn(FX_SCHEDULER).subscribe(opts ->{
-                                    //TODO: rebuild the encounter Scene
+                                    encounterOpponentStorage.setEncounterSize(opts.size());
+                                    for (Opponent o : opts) {
+                                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                                            encounterOpponentStorage.setEnemyOpponent(o);
+                                        }
+                                    }
+                                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponent() != null) {
+                                        showEncounterScene();
+                                    }
                                 }, Throwable::printStackTrace));
                     }
                 }, Throwable::printStackTrace));
