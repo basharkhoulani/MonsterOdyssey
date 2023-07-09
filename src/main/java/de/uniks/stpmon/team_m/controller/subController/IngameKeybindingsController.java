@@ -71,35 +71,27 @@ public class IngameKeybindingsController extends Controller {
 
     public void setWalkLeft() {
         keyPressedHandler = event -> {
-            if(event.getCode() == KeyCode.ESCAPE){
+            if (event.getCode() == KeyCode.ESCAPE) {
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
                 walkLeftButton.setText("");
                 walkLeftButton.setText("ESC");
-            }else{
-                if(event.getText().length() != 0 && Character.isLetterOrDigit(event.getText().charAt(0))){
+            } else {
+                if (event.getText().length() != 0 && Character.isLetterOrDigit(event.getText().charAt(0))) {
                     informationLabel.setText(resources.getString("CLICK.CHECK"));
                     walkLeftButton.setText("");
                     walkLeftButton.setText(event.getText().toUpperCase());
-                }else{
+                } else {
                     informationLabel.setText(resources.getString("WRONG.INPUT"));
                     walkLeftButton.setText("A");
                 }
             }
-            walkLeftButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
-            walkUpButton.setDisable(false);
-            walkRightButton.setDisable(false);
-            walkDownButton.setDisable(false);
-            pauseMenuButton.setDisable(false);
-            interactionButton.setDisable(false);
+            walkLeftButton.removeEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
+            buttonsDisable(false, walkLeftButton);
         };
-        walkUpButton.setDisable(true);
-        walkRightButton.setDisable(true);
-        walkDownButton.setDisable(true);
-        pauseMenuButton.setDisable(true);
-        interactionButton.setDisable(true);
+        buttonsDisable(true, walkLeftButton);
         walkLeftButton.setText("...");
         informationLabel.setText(resources.getString("WAITING.INPUT"));
-        walkLeftButton.addEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
+        walkLeftButton.addEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);
     }
 
     public void setPauseMenu() {
@@ -118,21 +110,13 @@ public class IngameKeybindingsController extends Controller {
                     pauseMenuButton.setText("ESC");
                 }
             }
-         pauseMenuButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
-         walkUpButton.setDisable(false);
-         walkRightButton.setDisable(false);
-         walkDownButton.setDisable(false);
-         walkLeftButton.setDisable(false);
-         interactionButton.setDisable(false);
+         pauseMenuButton.removeEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);
+         buttonsDisable(false, pauseMenuButton);
         };
-        walkUpButton.setDisable(true);
-        walkRightButton.setDisable(true);
-        walkDownButton.setDisable(true);
-        walkLeftButton.setDisable(true);
-        interactionButton.setDisable(true);
+        buttonsDisable(true, pauseMenuButton);
         pauseMenuButton.setText("...");
         informationLabel.setText(resources.getString("WAITING.INPUT"));
-        pauseMenuButton.addEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
+        pauseMenuButton.addEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);
     }
 
     public void setWalkRight() {
@@ -151,21 +135,13 @@ public class IngameKeybindingsController extends Controller {
                     walkRightButton.setText("D");
                 }
             }
-            walkRightButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
-            walkUpButton.setDisable(false);
-            pauseMenuButton.setDisable(false);
-            walkDownButton.setDisable(false);
-            walkLeftButton.setDisable(false);
-            interactionButton.setDisable(false);
+            walkRightButton.removeEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);
+            buttonsDisable(false, walkRightButton);
         };
-        walkUpButton.setDisable(true);
-        walkLeftButton.setDisable(true);
-        walkDownButton.setDisable(true);
-        pauseMenuButton.setDisable(true);
-        interactionButton.setDisable(true);
+        buttonsDisable(true, walkRightButton);
         walkRightButton.setText("...");
         informationLabel.setText(resources.getString("WAITING.INPUT"));
-        walkRightButton.addEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
+        walkRightButton.addEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);
     }
 
     public void setInteraction() {
@@ -184,21 +160,13 @@ public class IngameKeybindingsController extends Controller {
                     interactionButton.setText("E");
                 }
             }
-            interactionButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
-            walkUpButton.setDisable(false);
-            pauseMenuButton.setDisable(false);
-            walkDownButton.setDisable(false);
-            walkLeftButton.setDisable(false);
-            walkRightButton.setDisable(false);
+            interactionButton.removeEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);
+            buttonsDisable(false, interactionButton);
         };
-        walkUpButton.setDisable(true);
-        walkLeftButton.setDisable(true);
-        walkDownButton.setDisable(true);
-        pauseMenuButton.setDisable(true);
-        walkRightButton.setDisable(true);
+        buttonsDisable(true, interactionButton);
         interactionButton.setText("...");
         informationLabel.setText(resources.getString("WAITING.INPUT"));
-        interactionButton.addEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
+        interactionButton.addEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);
     }
 
     public void setWalkDown() {
@@ -217,21 +185,13 @@ public class IngameKeybindingsController extends Controller {
                     walkDownButton.setText("S");
                 }
             }
-            walkDownButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
-            walkUpButton.setDisable(false);
-            pauseMenuButton.setDisable(false);
-            interactionButton.setDisable(false);
-            walkLeftButton.setDisable(false);
-            walkRightButton.setDisable(false);
+            walkDownButton.removeEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);
+            buttonsDisable(false, walkDownButton);
         };
-        walkUpButton.setDisable(true);
-        walkRightButton.setDisable(true);
-        walkLeftButton.setDisable(true);
-        pauseMenuButton.setDisable(true);
-        interactionButton.setDisable(true);
+        buttonsDisable(true, walkDownButton);
         walkDownButton.setText("...");
         informationLabel.setText(resources.getString("WAITING.INPUT"));
-        walkDownButton.addEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
+        walkDownButton.addEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);
     }
 
     public void setWalkUp() {
@@ -250,20 +210,28 @@ public class IngameKeybindingsController extends Controller {
                     walkUpButton.setText("W");
                 }
             }
-            walkUpButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
-            walkDownButton.setDisable(false);
-            pauseMenuButton.setDisable(false);
-            interactionButton.setDisable(false);
-            walkLeftButton.setDisable(false);
-            walkRightButton.setDisable(false);
+            walkUpButton.removeEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);
+            buttonsDisable(false, walkUpButton);
         };
-        walkDownButton.setDisable(true);
-        walkRightButton.setDisable(true);
-        walkLeftButton.setDisable(true);
-        pauseMenuButton.setDisable(true);
-        interactionButton.setDisable(true);
+        buttonsDisable(true, walkUpButton);
         walkUpButton.setText("...");
         informationLabel.setText(resources.getString("WAITING.INPUT"));
-        walkUpButton.addEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
+        walkUpButton.addEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);
+    }
+
+    public void buttonsDisable(boolean set, Button currentbutton){
+        walkUpButton.setDisable(set);
+        walkRightButton.setDisable(set);
+        walkLeftButton.setDisable(set);
+        walkDownButton.setDisable(set);
+        pauseMenuButton.setDisable(set);
+        interactionButton.setDisable(set);
+        if(set){
+            currentbutton.setDisable(false);
+        }
+    }
+
+    public void keyAlreadyUsed(Button currentButton){
+
     }
 }
