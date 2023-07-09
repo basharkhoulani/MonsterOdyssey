@@ -32,14 +32,14 @@
     -fx-border-color: gray;
 }
 
-.buttonsBlue {
-    -fx-background-color: #DAE8FC;
+.buttonsRed {
+    -fx-background-color:#F8CECC;
     -fx-border-width: 1px;
-    -fx-border-color: gray;
+    -fx-border-color: #D63818;
 }
 
-.buttonsRed {
-    -fx-background-color: #FF2F00;
+.buttonsBlue {
+    -fx-background-color: #DAE8FC;
     -fx-border-width: 1px;
     -fx-border-color: gray;
 }
@@ -47,11 +47,13 @@
 .buttonsWhite:hover {
     -fx-background-color: #FFF2CC;
 }
-
+.buttonsRed:hover {
+    -fx-background-color: #D63818;
+    -fx-text-fill: #FFFFFF;
+}
 .buttonsTransparent {
     -fx-background-color: transparent;
 }
-
 .errorLabel {
     -fx-text-fill: red;
 }
@@ -402,6 +404,24 @@
 .rightLine {
     -fx-border-width: 0 1 0 0;
     -fx-border-color: #000000;
+}
+.typeIcon {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+}
+.tab-pane .tab:selected .tab-label {
+    -fx-background-color: #1C701C;
+    -fx-text-fill: #FFFFFF;
+}
+.tab-pane .tab:selected {
+    -fx-background-color: #1C701C;
+}
+.tab-pane *.tab-header-area *.tab-header-background {
+    -fx-background-color: #CFE9DB;
+}
+.tab-pane .tab {
+    -fx-background-color: #CFE9DB;
+    -fx-border-color: #1C701C;
 }
 /*********************************************************************************/
 /*************************** Ingame - MiniMap ****************************/
