@@ -197,12 +197,31 @@ public class EncounterController extends Controller {
         disposables.add(eventListener.get().listen("encounters." + encounterId + ".trainers.*.opponents.*.*", Opponent.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Opponent opponent = event.data();
-                    System.out.println("Event: " + event.suffix() + " " + event.data());
-                    System.out.println("Opponent: " + opponent);
                     if(event.suffix().contains("updated")){
                         System.out.println("Opponent updated: " + opponent);
+                        //only considered the ability move, change monster move should also ask the server for the new monster
+                        updateMonster(opponent.encounter());
                     }
                 }, error -> showError(error.getMessage())));
+    }
+
+    private void updateMonster(String encounterId) {
+        disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, encounterId)
+                .observeOn(FX_SCHEDULER).subscribe(encounterOpponents -> {
+                    System.out.println("Encounter Opponents: " + encounterOpponents);
+                    for (Opponent o : encounterOpponents) {
+                        if(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
+                            encounterOpponentStorage.setSelfOpponent(o);
+
+
+                        } else {
+                            encounterOpponentStorage.setEnemyOpponent(o);
+                        }
+                    }
+                    //showMonster();
+                    // here don't why the own monster is null after I used two times of an ability
+                }, Throwable::printStackTrace));
+
     }
 
     public void showIngameController() {
@@ -221,6 +240,14 @@ public class EncounterController extends Controller {
         battleMenu.getChildren().clear();
         battleMenuController.init(this, battleMenu, encounterOpponentStorage, app);
         battleMenu.getChildren().add(battleMenuController.render());
+    }
+
+    public void updateDescription(String information, boolean isUpdated) {
+        if(isUpdated){
+            battleDescription.setText(information);
+        } else {
+            battleDescription.setText(battleDescription.getText() + "\n" + information);
+        }
     }
 }
     
