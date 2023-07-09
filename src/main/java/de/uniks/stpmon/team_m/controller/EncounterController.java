@@ -122,7 +122,8 @@ public class EncounterController extends Controller {
         // render for subcontroller
         battleMenuController.init(this, battleMenu, encounterOpponentStorage, app);
         battleMenu.getChildren().add(battleMenuController.render());
-        battleMenuController.fleeButton.setOnAction(this::onFleeButtonClick);
+        battleMenuController.onFleeButtonClick = this::onFleeButtonClick;
+        //battleMenuController.fleeButton.setOnAction(this::onFleeButtonClick);
 
         listenToOpponents(encounterOpponentStorage.getEncounterId());
         return parent;
@@ -224,7 +225,7 @@ public class EncounterController extends Controller {
         battleMenu.getChildren().add(battleMenuController.render());
     }
 
-    public void onFleeButtonClick(Event event) {
+    public void onFleeButtonClick() {
         SequentialTransition fleeAnimation = buildFleeAnimation();
         PauseTransition firstPause = new PauseTransition(Duration.millis(500));
         battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_FLEE"));
