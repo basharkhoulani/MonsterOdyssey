@@ -70,315 +70,88 @@ public class IngameKeybindingsController extends Controller {
 <span class="nc" id="L70">    }</span>
 
     public void setWalkLeft() {
-<span class="nc" id="L73">        keyPressedHandler = event -&gt; {</span>
-<span class="nc bnc" id="L74" title="All 2 branches missed.">            if(event.getCode() == KeyCode.SPACE){</span>
-<span class="nc" id="L75">                walkLeftButton.setText(preferences.get(&quot;walkLeft&quot;,&quot;A&quot;));</span>
-<span class="nc" id="L76">                informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
-<span class="nc" id="L77">                event.consume();</span>
-            }
-<span class="nc bnc" id="L79" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.UP) {</span>
-<span class="nc" id="L80">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L81">                walkLeftButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L82">                walkLeftButton.setText(&quot;\u2191&quot;);</span>
-            }
-<span class="nc bnc" id="L84" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.DOWN){</span>
-<span class="nc" id="L85">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L86">                walkLeftButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L87">                walkLeftButton.setText(&quot;\u2193&quot;);</span>
-            }
-<span class="nc bnc" id="L89" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.RIGHT){</span>
-<span class="nc" id="L90">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L91">                walkLeftButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L92">                walkLeftButton.setText(&quot;\u2192&quot;);</span>
-            }
-<span class="nc bnc" id="L94" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.LEFT){</span>
-<span class="nc" id="L95">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L96">                walkLeftButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L97">                walkLeftButton.setText(&quot;\u2190&quot;);</span>
-            }
-<span class="nc bnc" id="L99" title="All 2 branches missed.">            else if (event.getCode() == KeyCode.ESCAPE) {</span>
-<span class="nc" id="L100">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L101">                walkLeftButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L102">                walkLeftButton.setText(&quot;ESC&quot;);</span>
-            } else {
-<span class="nc bnc" id="L104" title="All 4 branches missed.">                if (event.getText().length() != 0 &amp;&amp; Character.isLetterOrDigit(event.getText().charAt(0))) {</span>
-<span class="nc" id="L105">                    informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L106">                    walkLeftButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L107">                    walkLeftButton.setText(event.getText().toUpperCase());</span>
-                } else {
-<span class="nc" id="L109">                    informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
-<span class="nc" id="L110">                    walkLeftButton.setText(&quot;A&quot;);</span>
-                }
-            }
-<span class="nc" id="L113">            walkLeftButton.removeEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);</span>
-<span class="nc" id="L114">            buttonsDisable(false, walkLeftButton);</span>
-<span class="nc" id="L115">        };</span>
-<span class="nc" id="L116">        buttonsDisable(true, walkLeftButton);</span>
-<span class="nc" id="L117">        walkLeftButton.setText(&quot;...&quot;);</span>
-<span class="nc" id="L118">        informationLabel.setText(resources.getString(&quot;WAITING.INPUT&quot;));</span>
-<span class="nc" id="L119">        walkLeftButton.addEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
-<span class="nc" id="L120">    }</span>
+<span class="nc" id="L73">        setKeyPressedHandler(walkLeftButton);</span>
+<span class="nc" id="L74">    }</span>
 
     public void setPauseMenu() {
-<span class="nc" id="L123">        keyPressedHandler = event -&gt; {</span>
-<span class="nc bnc" id="L124" title="All 2 branches missed.">            if(event.getCode() == KeyCode.SPACE){</span>
-<span class="nc" id="L125">                pauseMenuButton.setText(preferences.get(&quot;pauseMenu&quot;,&quot;ESC&quot;));</span>
-<span class="nc" id="L126">                informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
-<span class="nc" id="L127">                event.consume();</span>
-            }
-<span class="nc bnc" id="L129" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.UP) {</span>
-<span class="nc" id="L130">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L131">                pauseMenuButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L132">                pauseMenuButton.setText(&quot;\u2191&quot;);</span>
-            }
-<span class="nc bnc" id="L134" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.DOWN){</span>
-<span class="nc" id="L135">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L136">                pauseMenuButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L137">                pauseMenuButton.setText(&quot;\u2193&quot;);</span>
-            }
-<span class="nc bnc" id="L139" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.RIGHT){</span>
-<span class="nc" id="L140">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L141">                pauseMenuButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L142">                pauseMenuButton.setText(&quot;\u2192&quot;);</span>
-            }
-<span class="nc bnc" id="L144" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.LEFT){</span>
-<span class="nc" id="L145">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L146">                pauseMenuButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L147">                pauseMenuButton.setText(&quot;\u2190&quot;);</span>
-            }
-<span class="nc bnc" id="L149" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.ESCAPE){</span>
-<span class="nc" id="L150">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L151">                pauseMenuButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L152">                pauseMenuButton.setText(&quot;ESC&quot;);</span>
-            }else{
-<span class="nc bnc" id="L154" title="All 4 branches missed.">                if(event.getText().length() != 0 &amp;&amp; Character.isLetterOrDigit(event.getText().charAt(0))){</span>
-<span class="nc" id="L155">                    informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L156">                    pauseMenuButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L157">                    pauseMenuButton.setText(event.getText().toUpperCase());</span>
-                }else{
-<span class="nc" id="L159">                    informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
-<span class="nc" id="L160">                    pauseMenuButton.setText(&quot;ESC&quot;);</span>
-                }
-            }
-<span class="nc" id="L163">         pauseMenuButton.removeEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
-<span class="nc" id="L164">         buttonsDisable(false, pauseMenuButton);</span>
-<span class="nc" id="L165">        };</span>
-<span class="nc" id="L166">        buttonsDisable(true, pauseMenuButton);</span>
-<span class="nc" id="L167">        pauseMenuButton.setText(&quot;...&quot;);</span>
-<span class="nc" id="L168">        informationLabel.setText(resources.getString(&quot;WAITING.INPUT&quot;));</span>
-<span class="nc" id="L169">        pauseMenuButton.addEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
-<span class="nc" id="L170">    }</span>
+<span class="nc" id="L77">        setKeyPressedHandler(pauseMenuButton);</span>
+<span class="nc" id="L78">    }</span>
 
     public void setWalkRight() {
-<span class="nc" id="L173">        keyPressedHandler = event -&gt; {</span>
-<span class="nc bnc" id="L174" title="All 2 branches missed.">            if(event.getCode() == KeyCode.SPACE){</span>
-<span class="nc" id="L175">                walkRightButton.setText(preferences.get(&quot;walkRight&quot;,&quot;D&quot;));</span>
-<span class="nc" id="L176">                informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
-<span class="nc" id="L177">                event.consume();</span>
-            }
-<span class="nc bnc" id="L179" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.UP) {</span>
-<span class="nc" id="L180">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L181">                walkRightButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L182">                walkRightButton.setText(&quot;\u2191&quot;);</span>
-            }
-<span class="nc bnc" id="L184" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.DOWN){</span>
-<span class="nc" id="L185">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L186">                walkRightButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L187">                walkRightButton.setText(&quot;\u2193&quot;);</span>
-            }
-<span class="nc bnc" id="L189" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.RIGHT){</span>
-<span class="nc" id="L190">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L191">                walkRightButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L192">                walkRightButton.setText(&quot;\u2192&quot;);</span>
-            }
-<span class="nc bnc" id="L194" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.LEFT){</span>
-<span class="nc" id="L195">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L196">                walkRightButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L197">                walkRightButton.setText(&quot;\u2190&quot;);</span>
-            }
-<span class="nc bnc" id="L199" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.ESCAPE){</span>
-<span class="nc" id="L200">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L201">                walkRightButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L202">                walkRightButton.setText(&quot;ESC&quot;);</span>
-            }else{
-<span class="nc bnc" id="L204" title="All 4 branches missed.">                if(event.getText().length() != 0 &amp;&amp; Character.isLetterOrDigit(event.getText().charAt(0))){</span>
-<span class="nc" id="L205">                    informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L206">                    walkRightButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L207">                    walkRightButton.setText(event.getText().toUpperCase());</span>
-                }else{
-<span class="nc" id="L209">                    informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
-<span class="nc" id="L210">                    walkRightButton.setText(&quot;D&quot;);</span>
-                }
-            }
-<span class="nc" id="L213">            walkRightButton.removeEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
-<span class="nc" id="L214">            buttonsDisable(false, walkRightButton);</span>
-<span class="nc" id="L215">        };</span>
-<span class="nc" id="L216">        buttonsDisable(true, walkRightButton);</span>
-<span class="nc" id="L217">        walkRightButton.setText(&quot;...&quot;);</span>
-<span class="nc" id="L218">        informationLabel.setText(resources.getString(&quot;WAITING.INPUT&quot;));</span>
-<span class="nc" id="L219">        walkRightButton.addEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
-<span class="nc" id="L220">    }</span>
+<span class="nc" id="L81">        setKeyPressedHandler(walkRightButton);</span>
+<span class="nc" id="L82">    }</span>
 
     public void setInteraction() {
-<span class="nc" id="L223">        keyPressedHandler = event -&gt; {</span>
-<span class="nc bnc" id="L224" title="All 2 branches missed.">            if(event.getCode() == KeyCode.SPACE){</span>
-<span class="nc" id="L225">                interactionButton.setText(preferences.get(&quot;interaction&quot;,&quot;E&quot;));</span>
-<span class="nc" id="L226">                informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
-<span class="nc" id="L227">                event.consume();</span>
-            }
-<span class="nc bnc" id="L229" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.UP) {</span>
-<span class="nc" id="L230">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L231">                interactionButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L232">                interactionButton.setText(&quot;\u2191&quot;);</span>
-            }
-<span class="nc bnc" id="L234" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.DOWN){</span>
-<span class="nc" id="L235">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L236">                interactionButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L237">                interactionButton.setText(&quot;\u2193&quot;);</span>
-            }
-<span class="nc bnc" id="L239" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.RIGHT){</span>
-<span class="nc" id="L240">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L241">                interactionButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L242">                interactionButton.setText(&quot;\u2192&quot;);</span>
-            }
-<span class="nc bnc" id="L244" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.LEFT){</span>
-<span class="nc" id="L245">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L246">                interactionButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L247">                interactionButton.setText(&quot;\u2190&quot;);</span>
-            }
-<span class="nc bnc" id="L249" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.ESCAPE){</span>
-<span class="nc" id="L250">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L251">                interactionButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L252">                interactionButton.setText(&quot;ESC&quot;);</span>
-            }else{
-<span class="nc bnc" id="L254" title="All 4 branches missed.">                if(event.getText().length() != 0 &amp;&amp; Character.isLetterOrDigit(event.getText().charAt(0))){</span>
-<span class="nc" id="L255">                    informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L256">                    interactionButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L257">                    interactionButton.setText(event.getText().toUpperCase());</span>
-                }else{
-<span class="nc" id="L259">                    informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
-<span class="nc" id="L260">                    interactionButton.setText(&quot;E&quot;);</span>
-                }
-            }
-<span class="nc" id="L263">            interactionButton.removeEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
-<span class="nc" id="L264">            buttonsDisable(false, interactionButton);</span>
-<span class="nc" id="L265">        };</span>
-<span class="nc" id="L266">        buttonsDisable(true, interactionButton);</span>
-<span class="nc" id="L267">        interactionButton.setText(&quot;...&quot;);</span>
-<span class="nc" id="L268">        informationLabel.setText(resources.getString(&quot;WAITING.INPUT&quot;));</span>
-<span class="nc" id="L269">        interactionButton.addEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
-<span class="nc" id="L270">    }</span>
+<span class="nc" id="L85">        setKeyPressedHandler(interactionButton);</span>
+<span class="nc" id="L86">    }</span>
 
     public void setWalkDown() {
-<span class="nc" id="L273">        keyPressedHandler = event -&gt; {</span>
-<span class="nc bnc" id="L274" title="All 2 branches missed.">            if(event.getCode() == KeyCode.SPACE){</span>
-<span class="nc" id="L275">                walkDownButton.setText(preferences.get(&quot;walkDown&quot;,&quot;S&quot;));</span>
-<span class="nc" id="L276">                informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
-<span class="nc" id="L277">                event.consume();</span>
-            }
-<span class="nc bnc" id="L279" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.UP) {</span>
-<span class="nc" id="L280">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L281">                walkDownButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L282">                walkDownButton.setText(&quot;\u2191&quot;);</span>
-            }
-<span class="nc bnc" id="L284" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.DOWN){</span>
-<span class="nc" id="L285">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L286">                walkDownButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L287">                walkDownButton.setText(&quot;\u2193&quot;);</span>
-            }
-<span class="nc bnc" id="L289" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.RIGHT){</span>
-<span class="nc" id="L290">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L291">                walkDownButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L292">                walkDownButton.setText(&quot;\u2192&quot;);</span>
-            }
-<span class="nc bnc" id="L294" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.LEFT){</span>
-<span class="nc" id="L295">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L296">                walkDownButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L297">                walkDownButton.setText(&quot;\u2190&quot;);</span>
-            }
-<span class="nc bnc" id="L299" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.ESCAPE){</span>
-<span class="nc" id="L300">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L301">                walkDownButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L302">                walkDownButton.setText(&quot;ESC&quot;);</span>
-            }else{
-<span class="nc bnc" id="L304" title="All 4 branches missed.">                if(event.getText().length() != 0 &amp;&amp; Character.isLetterOrDigit(event.getText().charAt(0))){</span>
-<span class="nc" id="L305">                    informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L306">                    walkDownButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L307">                    walkDownButton.setText(event.getText().toUpperCase());</span>
-                }else{
-<span class="nc" id="L309">                    informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
-<span class="nc" id="L310">                    walkDownButton.setText(&quot;S&quot;);</span>
-                }
-            }
-<span class="nc" id="L313">            walkDownButton.removeEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
-<span class="nc" id="L314">            buttonsDisable(false, walkDownButton);</span>
-<span class="nc" id="L315">        };</span>
-<span class="nc" id="L316">        buttonsDisable(true, walkDownButton);</span>
-<span class="nc" id="L317">        walkDownButton.setText(&quot;...&quot;);</span>
-<span class="nc" id="L318">        informationLabel.setText(resources.getString(&quot;WAITING.INPUT&quot;));</span>
-<span class="nc" id="L319">        walkDownButton.addEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
-<span class="nc" id="L320">    }</span>
+<span class="nc" id="L89">        setKeyPressedHandler(walkDownButton);</span>
+<span class="nc" id="L90">    }</span>
 
     public void setWalkUp() {
-<span class="nc" id="L323">        keyPressedHandler = event -&gt; {</span>
-<span class="nc bnc" id="L324" title="All 2 branches missed.">            if(event.getCode() == KeyCode.SPACE){</span>
-<span class="nc" id="L325">                walkUpButton.setText(preferences.get(&quot;walkUp&quot;,&quot;W&quot;));</span>
-<span class="nc" id="L326">                informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
-<span class="nc" id="L327">                event.consume();</span>
+<span class="nc" id="L93">        setKeyPressedHandler(walkUpButton);</span>
+<span class="nc" id="L94">    }</span>
+
+    private void setKeyPressedHandler(Button button){
+<span class="nc" id="L97">        keyPressedHandler = event -&gt; {</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">            if(event.getCode() == KeyCode.SPACE){</span>
+<span class="nc" id="L99">                button.setText(preferences.get(&quot;walkLeft&quot;,&quot;A&quot;));</span>
+<span class="nc" id="L100">                informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
+<span class="nc" id="L101">                event.consume();</span>
             }
-<span class="nc bnc" id="L329" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.UP) {</span>
-<span class="nc" id="L330">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L331">                walkUpButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L332">                walkUpButton.setText(&quot;\u2191&quot;);</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.UP) {</span>
+<span class="nc" id="L104">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L105">                button.setText(&quot;&quot;);</span>
+<span class="nc" id="L106">                button.setText(&quot;\u2191&quot;);</span>
             }
-<span class="nc bnc" id="L334" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.DOWN){</span>
-<span class="nc" id="L335">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L336">                walkUpButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L337">                walkUpButton.setText(&quot;\u2193&quot;);</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.DOWN){</span>
+<span class="nc" id="L109">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L110">                button.setText(&quot;&quot;);</span>
+<span class="nc" id="L111">                button.setText(&quot;\u2193&quot;);</span>
             }
-<span class="nc bnc" id="L339" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.RIGHT){</span>
-<span class="nc" id="L340">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L341">                walkUpButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L342">                walkUpButton.setText(&quot;\u2192&quot;);</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.RIGHT){</span>
+<span class="nc" id="L114">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L115">                button.setText(&quot;&quot;);</span>
+<span class="nc" id="L116">                button.setText(&quot;\u2192&quot;);</span>
             }
-<span class="nc bnc" id="L344" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.LEFT){</span>
-<span class="nc" id="L345">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L346">                walkUpButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L347">                walkUpButton.setText(&quot;\u2190&quot;);</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.LEFT){</span>
+<span class="nc" id="L119">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L120">                button.setText(&quot;&quot;);</span>
+<span class="nc" id="L121">                button.setText(&quot;\u2190&quot;);</span>
             }
-<span class="nc bnc" id="L349" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.ESCAPE){</span>
-<span class="nc" id="L350">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L351">                walkUpButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L352">                walkUpButton.setText(&quot;ESC&quot;);</span>
-            }else{
-<span class="nc bnc" id="L354" title="All 4 branches missed.">                if(event.getText().length() != 0 &amp;&amp; Character.isLetterOrDigit(event.getText().charAt(0))){</span>
-<span class="nc" id="L355">                    informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
-<span class="nc" id="L356">                    walkUpButton.setText(&quot;&quot;);</span>
-<span class="nc" id="L357">                    walkUpButton.setText(event.getText().toUpperCase());</span>
-                }else{
-<span class="nc" id="L359">                    informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
-<span class="nc" id="L360">                    walkUpButton.setText(&quot;W&quot;);</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">            else if (event.getCode() == KeyCode.ESCAPE) {</span>
+<span class="nc" id="L124">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L125">                button.setText(&quot;&quot;);</span>
+<span class="nc" id="L126">                button.setText(&quot;ESC&quot;);</span>
+            } else {
+<span class="nc bnc" id="L128" title="All 4 branches missed.">                if (event.getText().length() != 0 &amp;&amp; Character.isLetterOrDigit(event.getText().charAt(0))) {</span>
+<span class="nc" id="L129">                    informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L130">                    button.setText(&quot;&quot;);</span>
+<span class="nc" id="L131">                    button.setText(event.getText().toUpperCase());</span>
+                } else {
+<span class="nc" id="L133">                    informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
+<span class="nc" id="L134">                    button.setText(&quot;A&quot;);</span>
                 }
             }
-<span class="nc" id="L363">            walkUpButton.removeEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
-<span class="nc" id="L364">            buttonsDisable(false, walkUpButton);</span>
-<span class="nc" id="L365">        };</span>
-<span class="nc" id="L366">        buttonsDisable(true, walkUpButton);</span>
-<span class="nc" id="L367">        walkUpButton.setText(&quot;...&quot;);</span>
-<span class="nc" id="L368">        informationLabel.setText(resources.getString(&quot;WAITING.INPUT&quot;));</span>
-<span class="nc" id="L369">        walkUpButton.addEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
-<span class="nc" id="L370">    }</span>
-
+<span class="nc" id="L137">            button.removeEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);</span>
+<span class="nc" id="L138">            buttonsDisable(false, button);</span>
+<span class="nc" id="L139">        };</span>
+<span class="nc" id="L140">        buttonsDisable(true, button);</span>
+<span class="nc" id="L141">        button.setText(&quot;...&quot;);</span>
+<span class="nc" id="L142">        informationLabel.setText(resources.getString(&quot;WAITING.INPUT&quot;));</span>
+<span class="nc" id="L143">        button.addEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
+<span class="nc" id="L144">    }</span>
     public void buttonsDisable(boolean set, Button currentbutton){
-<span class="nc" id="L373">        walkUpButton.setDisable(set);</span>
-<span class="nc" id="L374">        walkRightButton.setDisable(set);</span>
-<span class="nc" id="L375">        walkLeftButton.setDisable(set);</span>
-<span class="nc" id="L376">        walkDownButton.setDisable(set);</span>
-<span class="nc" id="L377">        pauseMenuButton.setDisable(set);</span>
-<span class="nc" id="L378">        interactionButton.setDisable(set);</span>
-<span class="nc bnc" id="L379" title="All 2 branches missed.">        if(set){</span>
-<span class="nc" id="L380">            currentbutton.setDisable(false);</span>
+<span class="nc" id="L146">        walkUpButton.setDisable(set);</span>
+<span class="nc" id="L147">        walkRightButton.setDisable(set);</span>
+<span class="nc" id="L148">        walkLeftButton.setDisable(set);</span>
+<span class="nc" id="L149">        walkDownButton.setDisable(set);</span>
+<span class="nc" id="L150">        pauseMenuButton.setDisable(set);</span>
+<span class="nc" id="L151">        interactionButton.setDisable(set);</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        if(set){</span>
+<span class="nc" id="L153">            currentbutton.setDisable(false);</span>
         }
-<span class="nc" id="L382">    }</span>
+<span class="nc" id="L155">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
