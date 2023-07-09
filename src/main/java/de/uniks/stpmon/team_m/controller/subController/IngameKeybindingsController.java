@@ -44,8 +44,14 @@ public class IngameKeybindingsController extends Controller {
     }
 
     public Parent render() {
-        return super.render();
-
+        Parent parent = super.render();
+        walkUpButton.setText(preferences.get("walkUp","W"));
+        walkDownButton.setText(preferences.get("walkDown","S"));
+        walkRightButton.setText(preferences.get("walkRight","D"));
+        walkLeftButton.setText(preferences.get("walkLeft","A"));
+        interactionButton.setText(preferences.get("interaction","E"));
+        pauseMenuButton.setText(preferences.get("pauseMenu","ESC"));
+        return parent;
     }
 
     public void init(IngameController ingameController, VBox ingameVbox) {
