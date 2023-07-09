@@ -14,7 +14,6 @@ import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.*;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -119,7 +118,7 @@ public class EncounterController extends Controller {
 
     public Parent render() {
         final Parent parent = super.render();
-        disposables.add(regionEncountersService.getEncounter(regionId,encounterId)
+        disposables.add(regionEncountersService.getEncounter(regionId, encounterId)
                 .observeOn(FX_SCHEDULER).subscribe(encounter -> {
                     encounterOpponentStorage.setWild(encounter.isWild());
                     // Sprite and all relevante Information
@@ -136,16 +135,16 @@ public class EncounterController extends Controller {
         return parent;
     }
 
-    private void showTrainer(){
-        setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), mySprite,1);
-        if(!encounterOpponentStorage.isWild()){
+    private void showTrainer() {
+        setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), mySprite, 1);
+        if (!encounterOpponentStorage.isWild()) {
             String enemyTrainerId = encounterOpponentStorage.getEnemyOpponent().trainer();
             battleMenuController.showFleeButton(false);
             disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)
                     .observeOn(FX_SCHEDULER).subscribe(trainer -> {
                         encounterOpponentStorage.setOpponentTrainer(trainer);
                         battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + trainer.name());
-                        setTrainerSpriteImageView(trainer, opponentTrainer,3);
+                        setTrainerSpriteImageView(trainer, opponentTrainer, 3);
                     }, Throwable::printStackTrace));
         } else {
             battleMenuController.showFleeButton(true);
@@ -172,7 +171,7 @@ public class EncounterController extends Controller {
                                 myMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
                                 myMonster.setImage(myMonsterImage);
                             }, Throwable::printStackTrace));
-                        }, Throwable::printStackTrace));
+                }, Throwable::printStackTrace));
 
         // enemy monster
         disposables.add(monstersService.getMonster(regionId, encounterOpponentStorage.getEnemyOpponent().trainer(), encounterOpponentStorage.getEnemyOpponent().monster())
@@ -184,7 +183,7 @@ public class EncounterController extends Controller {
                             .observeOn(FX_SCHEDULER).subscribe(m -> {
                                 opponentMonsterName.setText(m.name());
                                 encounterOpponentStorage.setCurrentEnemyMonsterType(m);
-                                if(encounterOpponentStorage.isWild()){
+                                if (encounterOpponentStorage.isWild()) {
                                     battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + m.name());
                                 }
                             }, Throwable::printStackTrace));
@@ -193,7 +192,7 @@ public class EncounterController extends Controller {
                                 enemyMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
                                 opponentMonster.setImage(enemyMonsterImage);
                             }, Throwable::printStackTrace));
-                        }, Throwable::printStackTrace));
+                }, Throwable::printStackTrace));
     }
 
     public int requiredExperience(int currentLevel) {
@@ -286,7 +285,8 @@ public class EncounterController extends Controller {
         LevelUpController levelUpController = levelUpControllerProvider.get();
         VBox popUpVBox = new VBox();
         popUpVBox.getStyleClass().add("miniMapContainer");
-        levelUpController.init(popUpVBox, root, this, encounterOpponentStorage.getCurrentTrainerMonster(), encounterOpponentStorage.getCurrentTrainerMonsterType());
+        // TODO: give old monster
+        levelUpController.init(popUpVBox, root, this, encounterOpponentStorage.getCurrentTrainerMonster(), encounterOpponentStorage.getCurrentTrainerMonsterType(), encounterOpponentStorage.getCurrentTrainerMonster());
         popUpVBox.getChildren().add(levelUpController.render());
         root.getChildren().add(popUpVBox);
     }
