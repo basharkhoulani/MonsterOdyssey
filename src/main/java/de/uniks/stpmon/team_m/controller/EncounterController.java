@@ -12,8 +12,10 @@ import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.*;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,12 +26,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.List;
+
+import static de.uniks.stpmon.team_m.Constants.*;
 
 
 public class EncounterController extends Controller {
@@ -65,6 +71,8 @@ public class EncounterController extends Controller {
     public Button goBack;
     @FXML
     public StackPane root;
+    @FXML
+    public StackPane rootStackPane;
 
     @Inject
     EncounterOpponentsService encounterOpponentsService;
@@ -129,22 +137,23 @@ public class EncounterController extends Controller {
         // render for subcontroller
         battleMenuController.init(this, battleMenu, encounterOpponentStorage, app);
         battleMenu.getChildren().add(battleMenuController.render());
-        battleMenuController.fleeButton.setOnAction(this::onFleeButtonClick);
+        battleMenuController.onFleeButtonClick = this::onFleeButtonClick;
 
         listenToOpponents(encounterOpponentStorage.getEncounterId());
         return parent;
     }
 
-    private void showTrainer() {
-        setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), mySprite, 1);
-        if (!encounterOpponentStorage.isWild()) {
+
+    private void showTrainer(){
+        setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), mySprite,1);
+        if(!encounterOpponentStorage.isWild()){
             String enemyTrainerId = encounterOpponentStorage.getEnemyOpponent().trainer();
             battleMenuController.showFleeButton(false);
             disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)
                     .observeOn(FX_SCHEDULER).subscribe(trainer -> {
                         encounterOpponentStorage.setOpponentTrainer(trainer);
                         battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + trainer.name());
-                        setTrainerSpriteImageView(trainer, opponentTrainer, 3);
+                        setTrainerSpriteImageView(trainer, opponentTrainer,3);
                     }, Throwable::printStackTrace));
         } else {
             battleMenuController.showFleeButton(true);
@@ -231,7 +240,11 @@ public class EncounterController extends Controller {
         battleMenu.getChildren().add(battleMenuController.render());
     }
 
-    public void onFleeButtonClick(Event event) {
+    public void onFleeButtonClick() {
+        rootStackPane.getChildren().add(this.buildFleePopup());
+    }
+
+    public void fleeFromBattle(Event event) {
         SequentialTransition fleeAnimation = buildFleeAnimation();
         PauseTransition firstPause = new PauseTransition(Duration.millis(500));
         battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_FLEE"));
@@ -279,6 +292,68 @@ public class EncounterController extends Controller {
             transition.getChildren().add(parallelTransition);
         }
         return transition;
+    }
+
+    private VBox buildFleePopup() {
+        // base VBox
+        VBox fleeVBox = new VBox();
+        fleeVBox.setId("fleePopup");
+        fleeVBox.setMaxWidth(fleePopupWidth);
+        fleeVBox.setMaxHeight(fleePopupHeight);
+        fleeVBox.getStyleClass().add("dialogTextFlow");
+        fleeVBox.setAlignment(Pos.CENTER);
+
+        // flee TextFlow
+        TextFlow fleeTextFlow = new TextFlow();
+        fleeTextFlow.setMaxWidth(fleePopupWidth);
+        fleeTextFlow.setMaxHeight(fleeTextHeight);
+        fleeTextFlow.setPrefWidth(fleePopupWidth);
+        fleeTextFlow.setPrefHeight(fleeTextHeight);
+        fleeTextFlow.setPadding(fleeTextInsets);
+        fleeTextFlow.setTextAlignment(TextAlignment.CENTER);
+
+        // flee Text
+        Text fleeText = new Text(this.resources.getString("ENCOUNTER_FLEE_TEXT"));
+        fleeTextFlow.getChildren().add(fleeText);
+
+        // buttons HBox
+        HBox buttonHBox = new HBox();
+        buttonHBox.setMaxWidth(fleePopupWidth);
+        buttonHBox.setMaxHeight(fleeButtonsHBoxHeight);
+        buttonHBox.setPrefWidth(fleePopupWidth);
+        buttonHBox.setPrefHeight(fleeButtonsHBoxHeight);
+        buttonHBox.setPadding(fleeButtonsHBoxInsets);
+        buttonHBox.setAlignment(Pos.TOP_CENTER);
+        buttonHBox.setSpacing(buttonsHBoxSpacing);
+
+        // yes Button
+        Button yesButton = new Button(this.resources.getString("ENCOUNTER_FLEE_CONFIRM_BUTTON"));
+        yesButton.setMaxWidth(fleeButtonWidth);
+        yesButton.setMinHeight(fleeButtonHeight);
+        yesButton.setPrefWidth(fleeButtonWidth);
+        yesButton.setPrefHeight(fleeButtonHeight);
+        yesButton.getStyleClass().add("hBoxRed");
+        yesButton.setOnAction(event -> {
+            rootStackPane.getChildren().remove(fleeVBox);
+            this.fleeFromBattle(event);
+        });
+
+        // no Button
+        Button noButton = new Button(this.resources.getString("ENCOUNTER_FLEE_CANCEL_BUTTON"));
+        noButton.setMaxWidth(fleeButtonWidth);
+        noButton.setMinHeight(fleeButtonHeight);
+        noButton.setPrefWidth(fleeButtonWidth);
+        noButton.setPrefHeight(fleeButtonHeight);
+        noButton.getStyleClass().add("hBoxYellow");
+        noButton.setOnAction(event -> rootStackPane.getChildren().remove(fleeVBox));
+
+        // add buttons to hbox
+        buttonHBox.getChildren().addAll(yesButton, noButton);
+
+        // add textFlow and buttonHBox to VBox
+        fleeVBox.getChildren().addAll(fleeTextFlow, buttonHBox);
+
+        return  fleeVBox;
     }
 
     public void showLevelUpPopUp() {

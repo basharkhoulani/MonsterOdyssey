@@ -6,6 +6,7 @@ import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -25,6 +26,7 @@ public class BattleMenuController extends Controller {
     public Button currentInfoButton;
     @FXML
     public Button fleeButton;
+    public Runnable onFleeButtonClick;
     private EncounterController encounterController;
     private HBox battleMenuHBox;
     EncounterOpponentStorage encounterOpponentStorage;
@@ -46,6 +48,7 @@ public class BattleMenuController extends Controller {
     public Parent render(){
         final Parent parent = super.render();
         fleeButton.setVisible(encounterOpponentStorage.isWild());
+        fleeButton.setOnAction(this::changeToIngame);
         return parent;
     }
 
@@ -63,11 +66,14 @@ public class BattleMenuController extends Controller {
         // show the MonsterInformation VBox
     }
 
-    public void changeToIngame() {
-
+    public void changeToIngame(ActionEvent event) {
+        if (onFleeButtonClick != null) {
+            onFleeButtonClick.run();
+        }
     }
 
     public void showFleeButton(boolean isWild){
         fleeButton.setVisible(isWild);
+        fleeButton.setOnAction(this::changeToIngame);
     }
 }
