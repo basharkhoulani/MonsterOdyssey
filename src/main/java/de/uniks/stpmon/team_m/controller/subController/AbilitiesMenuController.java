@@ -2,10 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
-import de.uniks.stpmon.team_m.dto.AbilityDto;
-import de.uniks.stpmon.team_m.dto.AbilityMove;
-import de.uniks.stpmon.team_m.dto.Monster;
-import de.uniks.stpmon.team_m.dto.Result;
+import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
@@ -17,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.*;
+import java.util.Map;
 
 import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
@@ -100,12 +98,10 @@ public class AbilitiesMenuController extends Controller {
         String opponentId = encounterOpponentStorageProvider.get().getSelfOpponent()._id();
         System.out.println("OpponentId: " + opponentId);
         String targetId = encounterOpponentStorageProvider.get().getEnemyOpponent()._id();
-        AbilityMove move = new AbilityMove("ability", ability.id(), targetId);
+        Move move = new AbilityMove("ability", ability.id(), targetId);
         System.out.println("Move: " + move);
-        String monsterId = monster._id();
-        System.out.println("MonsterId: " + monsterId);
 
-        disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, monster._id(), move).observeOn(FX_SCHEDULER).subscribe(
+        disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(
                 opponent -> {
                     System.out.println("Opponent: " + opponent);
                     updateButton(ability, abilityButton, currentUse-1);
