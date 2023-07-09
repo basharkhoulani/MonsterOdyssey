@@ -11,8 +11,10 @@ import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.*;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -131,11 +133,11 @@ public class EncounterController extends Controller {
         battleMenuController.init(this, battleMenu, encounterOpponentStorage, app);
         battleMenu.getChildren().add(battleMenuController.render());
         battleMenuController.onFleeButtonClick = this::onFleeButtonClick;
-        //battleMenuController.fleeButton.setOnAction(this::onFleeButtonClick);
 
         listenToOpponents(encounterOpponentStorage.getEncounterId());
         return parent;
     }
+
 
     private void showTrainer(){
         setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), mySprite,1);
@@ -233,7 +235,7 @@ public class EncounterController extends Controller {
         battleMenu.getChildren().add(battleMenuController.render());
     }
 
-    public void onFleeButtonClick(Event event) {
+    public void onFleeButtonClick() {
         rootStackPane.getChildren().add(this.buildFleePopup());
     }
 
