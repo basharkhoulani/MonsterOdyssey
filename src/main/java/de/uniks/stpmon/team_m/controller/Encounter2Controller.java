@@ -1,7 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.Constants;
-import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController;
 import de.uniks.stpmon.team_m.dto.Opponent;
@@ -9,19 +8,13 @@ import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.service.MonstersService;
 import de.uniks.stpmon.team_m.service.RegionEncountersService;
 import de.uniks.stpmon.team_m.service.TrainersService;
-import de.uniks.stpmon.team_m.dto.Opponent;
-import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -111,7 +104,7 @@ public class Encounter2Controller extends Controller {
         battleMenuController.onFleeButtonClick = this::onFleeButtonClick;
 
         // Init opponent controller for own trainer
-        ownTrainerController = new EncounterOpponentController(false, false, true);
+        ownTrainerController = new EncounterOpponentController(false, false, true, false);
         ownTrainerController.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getSelfOpponent(), ownTrainerController);
         Parent ownTrainerParent = ownTrainerController.render();
@@ -151,7 +144,7 @@ public class Encounter2Controller extends Controller {
         // Wild situation
 
         // Wild monster (init opponent controller for enemy)
-        enemy1Controller = new EncounterOpponentController(true, true, false);
+        enemy1Controller = new EncounterOpponentController(true, true, false, false);
         enemy1Controller.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0), enemy1Controller);
         enemyHBox.setPadding(new Insets(0, 400, 0, 0));
@@ -170,7 +163,7 @@ public class Encounter2Controller extends Controller {
         // 1 vs 1 situation
 
         // Enemy as a trainer (init opponent controller for the enemy)
-        enemy1Controller = new EncounterOpponentController(true, false, false);
+        enemy1Controller = new EncounterOpponentController(true, false, false, false);
         enemy1Controller.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0), enemy1Controller);
         Parent enemy1Parent = enemy1Controller.render();
@@ -188,7 +181,7 @@ public class Encounter2Controller extends Controller {
         // 1 vs 2 situation
 
         // 1st enemy as a trainer
-        enemy1Controller = new EncounterOpponentController(true, false, false);
+        enemy1Controller = new EncounterOpponentController(true, false, false, true);
         enemy1Controller.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0), enemy1Controller);
         VBox enemy1Parent = (VBox) enemy1Controller.render();
@@ -198,7 +191,7 @@ public class Encounter2Controller extends Controller {
         showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
 
         // 2nd enemy as a trainer
-        enemy2Controller = new EncounterOpponentController(true, false, true);
+        enemy2Controller = new EncounterOpponentController(true, false, true, true);
         enemy2Controller.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(1), enemy2Controller);
         VBox enemy2Parent = (VBox) enemy2Controller.render();
@@ -215,9 +208,10 @@ public class Encounter2Controller extends Controller {
         if (encounterOpponentControllerHashMap.containsKey(opponent)) {
             if (ownTrainerController.getCurrentTarget() != opponent) {
                 ownTrainerController.setCurrentTarget(opponent);
-
             }
-            encounterOpponentControllerHashMap.get(opponent).onTarget();
+            if (encounterOpponentControllerHashMap.get(opponent).isMultipleEnemyEncounter) {
+                encounterOpponentControllerHashMap.get(opponent).onTarget();
+            }
 
         }
     }
@@ -226,7 +220,7 @@ public class Encounter2Controller extends Controller {
         // 2 vs 2 situation
 
         // 1st enemy as a trainer
-        enemy1Controller = new EncounterOpponentController(true, false, false);
+        enemy1Controller = new EncounterOpponentController(true, false, false, true);
         enemy1Controller.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0), enemy1Controller);
         VBox enemy1Parent = (VBox) enemy1Controller.render();
@@ -236,7 +230,7 @@ public class Encounter2Controller extends Controller {
         showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
 
         // 2nd enemy as a trainer
-        enemy2Controller = new EncounterOpponentController(true, false, true);
+        enemy2Controller = new EncounterOpponentController(true, false, true, true);
         enemy2Controller.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(1), enemy2Controller);
         VBox enemy2Parent = (VBox) enemy2Controller.render();
@@ -245,7 +239,7 @@ public class Encounter2Controller extends Controller {
         showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(1));
 
         // Coop Trainer
-        coopTrainerController = new EncounterOpponentController(false, false, false);
+        coopTrainerController = new EncounterOpponentController(false, false, false, false);
         coopTrainerController.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getCoopOpponent(), coopTrainerController);
         Parent coopTrainerParent = coopTrainerController.render();

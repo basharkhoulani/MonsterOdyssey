@@ -84,21 +84,19 @@
          </padding>
          <HBox fx:id="trainerMonsterHBox">
             <VBox.margin>
-               <Insets bottom="8.0" left="16.0" right="16.0" top="8.0"/>
+               <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
             </VBox.margin>
             <VBox fx:id="monsterImageViewVBox" alignment="CENTER">
-               <ImageView fx:id="monsterImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true"
-                          preserveRatio="true">
-                  <Image url="@../images/Monster1-color.png"/>
+               <ImageView fx:id="monsterImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                  <Image url="@../images/Monster1-color.png" />
                </ImageView>
             </VBox>
          </HBox>
-         <ImageView fx:id="trainerImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true"
-                    preserveRatio="true">
+         <ImageView fx:id="trainerImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
             <VBox.margin>
-               <Insets bottom="8.0" left="16.0" right="16.0" top="8.0"/>
+               <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
             </VBox.margin>
-            <Image url="@../images/character.png"/>
+            <Image url="@../images/character.png" />
          </ImageView>
       </VBox>
    </HBox>

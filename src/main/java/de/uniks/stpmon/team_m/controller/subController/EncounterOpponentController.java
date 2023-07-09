@@ -18,6 +18,7 @@ public class EncounterOpponentController extends Controller {
     private final Boolean isEnemy;
     private final Boolean isWild;
     private final Boolean invertX;
+    public final Boolean isMultipleEnemyEncounter;
 
     @FXML
     public HBox opponentHBox;
@@ -54,10 +55,11 @@ public class EncounterOpponentController extends Controller {
     private int monsterMaxHealth = 100;
     private Opponent currentTarget;
 
-    public EncounterOpponentController(Boolean isEnemy, Boolean isWild, Boolean invertX) {
+    public EncounterOpponentController(Boolean isEnemy, Boolean isWild, Boolean invertX, Boolean isMultipleEnemyEncounter) {
         this.isEnemy = isEnemy;
         this.isWild = isWild;
         this.invertX = invertX;
+        this.isMultipleEnemyEncounter = isMultipleEnemyEncounter;
     }
 
     @Override
@@ -78,11 +80,11 @@ public class EncounterOpponentController extends Controller {
                 trainerMonsterVBox.setAlignment(Pos.BOTTOM_CENTER);
                 trainerImageView.setDisable(true);
                 trainerImageView.setVisible(false);
-                trainerMonsterVBox.getChildren().add(monsterImageView);
+                trainerMonsterVBox.getChildren().add(monsterImageViewVBox);
             } else {
                 trainerMonsterVBox.setAlignment(Pos.CENTER);
                 trainerMonsterVBox.getChildren().add(0, trainerImageView);
-                trainerMonsterVBox.getChildren().add(1, monsterImageView);
+                trainerMonsterVBox.getChildren().add(1, trainerMonsterHBox);
             }
         }
         if (invertX) {
@@ -150,9 +152,7 @@ public class EncounterOpponentController extends Controller {
     public EncounterOpponentController onTarget() {
         monsterNameHBox.getStyleClass().clear();
         monsterNameHBox.getStyleClass().add("hBoxGreen");
-        monsterImageViewVBox.setStyle("-fx-background-color: green; -fx-border-width: 5px; -fx-border-style: solid;");
-        monsterImageView.setEffect(new Glow(0.5));
-        System.out.println("targeted");
+        monsterImageViewVBox.setStyle("-fx-padding: 16px; -fx-border-color: red; -fx-border-radius: 100;");
         return this;
     }
 
