@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.dto.*;
@@ -8,6 +9,8 @@ import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
+import javafx.animation.*;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -17,11 +20,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class EncounterController extends Controller {
     @FXML
@@ -84,6 +89,7 @@ public class EncounterController extends Controller {
     private Image myMonsterImage;
     private Image enemyMonsterImage;
     private List<Controller> subControllers = new ArrayList<>();
+    private int currentImageIndex = 0;
     private List<AbilityDto> abilityDtos = new ArrayList<>();
 
     @Inject
@@ -117,6 +123,7 @@ public class EncounterController extends Controller {
         // render for subcontroller
         battleMenuController.init(this, battleMenu, encounterOpponentStorage, app);
         battleMenu.getChildren().add(battleMenuController.render());
+        battleMenuController.fleeButton.setOnAction(this::onFleeButtonClick);
 
         listenToOpponents(encounterOpponentStorage.getEncounterId());
 
@@ -263,6 +270,56 @@ public class EncounterController extends Controller {
         battleMenu.getChildren().clear();
         battleMenuController.init(this, battleMenu, encounterOpponentStorage, app);
         battleMenu.getChildren().add(battleMenuController.render());
+    }
+
+    public void onFleeButtonClick(Event event) {
+        SequentialTransition fleeAnimation = buildFleeAnimation();
+        PauseTransition firstPause = new PauseTransition(Duration.millis(500));
+        battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_FLEE"));
+
+        firstPause.setOnFinished(evt -> {
+            myMonster.setVisible(false);
+            fleeAnimation.play();
+        });
+        fleeAnimation.setOnFinished(evt -> disposables.add(encounterOpponentsService.deleteOpponent(
+                encounterOpponentStorage.getRegionId(),
+                encounterOpponentStorage.getEncounterId(),
+                encounterOpponentStorage.getSelfOpponent()._id()
+        ).observeOn(FX_SCHEDULER).subscribe(
+                result -> {
+                    destroy();
+                    app.show(ingameControllerProvider.get());
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                })));
+        firstPause.play();
+    }
+
+    private SequentialTransition buildFleeAnimation() {
+        SequentialTransition transition = new SequentialTransition();
+
+        Image[] images = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), 3, true);
+
+        KeyFrame animationFrame = new KeyFrame(Duration.millis(Constants.DELAY), event -> {
+            mySprite.setImage(images[currentImageIndex]);
+            currentImageIndex = (currentImageIndex + 1) % 6;
+        });
+        KeyFrame movementFrame = new KeyFrame(Duration.millis(Constants.DELAY), evt -> {
+            TranslateTransition translateTransition = new TranslateTransition();
+            translateTransition.setNode(mySprite);
+            translateTransition.setByY(16);
+            translateTransition.setDuration(Duration.millis(Constants.DELAY));
+            translateTransition.setCycleCount(1);
+            translateTransition.play();
+        });
+        for (int i = 0; i < 12; i++) {
+            Timeline fleeAnimation = new Timeline(animationFrame);
+            Timeline trainerMovement = new Timeline(movementFrame);
+            ParallelTransition parallelTransition = new ParallelTransition(fleeAnimation, trainerMovement);
+            transition.getChildren().add(parallelTransition);
+        }
+        return transition;
     }
 
     public boolean updateDescription(String information, boolean isUpdated) {

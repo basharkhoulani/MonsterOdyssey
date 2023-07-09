@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
@@ -15,19 +16,34 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.io.File;
+import java.net.URL;
 import java.util.ResourceBundle;
+
+import static de.uniks.stpmon.team_m.Constants.ABILITYPALETTE;
+import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
 public class MonsterCell extends ListCell<Monster> {
 
+    @FXML
+    public ImageView arrowUp;
+    @FXML
+    public ImageView arrowDown;
+    @FXML
+    public Button removeFromTeamButton;
+    @FXML
+    public Button viewDetailsButton;
     @FXML
     Label monsterName;
     @FXML
@@ -38,6 +54,10 @@ public class MonsterCell extends ListCell<Monster> {
     ImageView monsterImageView;
     @FXML
     HBox rootmonsterHBox;
+    @FXML
+    VBox typeIcon;
+    @FXML
+    ImageView typeImageView;
     private final ResourceBundle resources;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
@@ -57,6 +77,9 @@ public class MonsterCell extends ListCell<Monster> {
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
     private MonsterTypeDto monsterTypeDto;
     private Image monsterImage;
+    private String typeColor;
+    private String typeImagePath;
+    private Image typeImage;
 
     public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController) {
         this.resources = resources;
@@ -70,17 +93,28 @@ public class MonsterCell extends ListCell<Monster> {
         if (monster == null || empty) {
             setText(null);
             setGraphic(null);
+            setStyle("-fx-background-color: #CFE9DB;");
         } else {
             loadFXML();
+            viewDetailsButton.prefWidthProperty().bind(removeFromTeamButton.widthProperty());
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER)
                     .subscribe(monsterType -> {
                         monsterTypeDto = monsterType;
                         monsterName.setText(resources.getString("NAME") + " " + monsterTypeDto.name());
-                        StringBuilder type = new StringBuilder(resources.getString("TYPE"));
+                        StringBuilder ability = new StringBuilder();
                         for (String s : monsterTypeDto.type()) {
-                            type.append(" ").append(s);
+                            ability.append("").append(s);
                         }
-                        this.monsterType.setText(type.toString());
+                        typeColor = TYPESCOLORPALETTE.get(ability.toString());
+                        String style = "-fx-background-color: " + typeColor + ";";
+                        typeIcon.setStyle(style);
+
+                        typeImagePath = ABILITYPALETTE.get(ability.toString());
+                        URL resource = Main.class.getResource("images/" + typeImagePath);
+                        typeImage = new Image(resource.toString());
+                        typeImageView.setImage(typeImage);
+                        typeImageView.setFitHeight(45);
+                        typeImageView.setFitWidth(45);
                     }, error -> monstersListController.showError(error.getMessage())));
             monsterLevel.setText(resources.getString("LEVEL") + " " + monster.level());
             disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
@@ -88,9 +122,10 @@ public class MonsterCell extends ListCell<Monster> {
                         this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
                         monsterImageView.setImage(this.monsterImage);
                     }, error -> monstersListController.showError(error.getMessage())));
-            rootmonsterHBox.setOnMouseClicked(event -> showDetails(monster));
+            viewDetailsButton.setOnAction(event -> showDetails(monster));
             setGraphic(rootmonsterHBox);
             setText(null);
+            setStyle("-fx-background-color: #CFE9DB;  -fx-border-color: #1C701C; -fx-border-width: 2px");
         }
     }
 
@@ -107,6 +142,7 @@ public class MonsterCell extends ListCell<Monster> {
     private void loadFXML() {
         if (loader == null) {
             loader = new FXMLLoader(Main.class.getResource("views/MonsterCell.fxml"));
+            loader.setResources(resources);
             loader.setControllerFactory(c -> this);
             try {
                 loader.load();
