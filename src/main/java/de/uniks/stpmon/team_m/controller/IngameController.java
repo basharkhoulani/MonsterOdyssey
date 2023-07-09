@@ -1002,7 +1002,7 @@ public class IngameController extends Controller {
                         case "updated" -> {
                             updateTrainer(trainers, trainer);
                             if (trainerStorageProvider.get().getTrainer()._id().equals(trainer._id())) {
-                                monstersListControllerProvider.get().init();
+                                trainerStorageProvider.get().setTrainer(trainer);
                             }
                             // albert
                             if (trainer._id().equals("645e32c6866ace359554a802")) {
@@ -1134,10 +1134,16 @@ public class IngameController extends Controller {
     }
 
     public void showMonsters() {
-        Scene popupScene = new Scene(monstersListControllerProvider.get().render());
-        popupStage.setScene(popupScene);
-        popupStage.setTitle(resources.getString("MONSTERS"));
-        popupStage.show();
+        VBox monsterListVBox = new VBox();
+        monsterListVBox.setMinWidth(600);
+        monsterListVBox.setMinHeight(410);
+        monsterListVBox.setAlignment(Pos.CENTER);
+        MonstersListController monstersListController = monstersListControllerProvider.get();
+        monstersListController.init(this, monsterListVBox);
+        monsterListVBox.getChildren().add(monstersListController.render());
+        root.getChildren().add(monsterListVBox);
+        monsterListVBox.requestFocus();
+        buttonsDisable(true);
     }
 
     /*

@@ -186,4 +186,26 @@ public class Constants {
             entry("steel", "#97A8AA"),
             entry("fairy", "#D15F5F")
     ));
+
+    // Abilities
+    public static HashMap<String, String> ABILITYPALETTE = new HashMap<>(Map.ofEntries(
+            entry("normal", "ability-normal.png"),
+            entry("fire", "ability-fire.png"),
+            entry("water", "ability-water.png"),
+            entry("electric", "ability-electic.png"),
+            entry("grass", "ability-grass.png"),
+            entry("flying", "ability-flying.png"),
+            entry("bug", "ability-bug"),
+            entry("poison", "ability-poison"),
+            entry("rock", "ability-rock"),
+            entry("ground", "ability-ground"),
+            entry("fighting", "ability-fighting"),
+            entry("ice", "ability-ice"),
+            entry("psychic", "ability-psychic"),
+            entry("ghost", "ability-ghost"),
+            entry("dragon", "ability-dragon"),
+            entry("dark", "ability-dragon"),
+            entry("steel", "ability-steel"),
+            entry("fairy", "ability-fairy")
+    ));
 }
