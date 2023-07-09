@@ -70,8 +70,6 @@ public class EncounterController extends Controller {
     @FXML
     public Button goBack;
     @FXML
-    public StackPane root;
-    @FXML
     public StackPane rootStackPane;
 
     @Inject
@@ -361,9 +359,9 @@ public class EncounterController extends Controller {
         VBox popUpVBox = new VBox();
         popUpVBox.getStyleClass().add("miniMapContainer");
         // TODO: give old monster
-        levelUpController.init(popUpVBox, root, this, encounterOpponentStorage.getCurrentTrainerMonster(), encounterOpponentStorage.getCurrentTrainerMonsterType(), encounterOpponentStorage.getCurrentTrainerMonster());
+        levelUpController.init(popUpVBox, rootStackPane, this, encounterOpponentStorage.getCurrentTrainerMonster(), encounterOpponentStorage.getCurrentTrainerMonsterType(), encounterOpponentStorage.getCurrentTrainerMonster());
         popUpVBox.getChildren().add(levelUpController.render());
-        root.getChildren().add(popUpVBox);
+        rootStackPane.getChildren().add(popUpVBox);
     }
 }
     
