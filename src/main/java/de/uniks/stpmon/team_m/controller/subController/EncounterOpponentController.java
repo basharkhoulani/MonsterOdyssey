@@ -7,6 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.Effect;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -39,11 +41,15 @@ public class EncounterOpponentController extends Controller {
     @FXML
     public VBox trainerMonsterVBox;
     @FXML
+    public VBox monsterImageViewVBox;
+    @FXML
     public ImageView monsterImageView;
     @FXML
     public ImageView trainerImageView;
     @FXML
     public VBox splitterVBox;
+    @FXML
+    public HBox trainerMonsterHBox;
 
     private int monsterMaxHealth = 100;
     private Opponent currentTarget;
@@ -138,6 +144,15 @@ public class EncounterOpponentController extends Controller {
         if (!trainerImageView.isDisabled()) {
             trainerImageView.setImage(image);
         }
+        return this;
+    }
+
+    public EncounterOpponentController onTarget() {
+        monsterNameHBox.getStyleClass().clear();
+        monsterNameHBox.getStyleClass().add("hBoxGreen");
+        monsterImageViewVBox.setStyle("-fx-background-color: green; -fx-border-width: 5px; -fx-border-style: solid;");
+        monsterImageView.setEffect(new Glow(0.5));
+        System.out.println("targeted");
         return this;
     }
 
