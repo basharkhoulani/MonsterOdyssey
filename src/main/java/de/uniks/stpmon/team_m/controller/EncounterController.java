@@ -21,6 +21,8 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EncounterController extends Controller {
     @FXML
@@ -82,6 +84,7 @@ public class EncounterController extends Controller {
     private String trainerId;
     private Image myMonsterImage;
     private Image enemyMonsterImage;
+    private List<Controller> subControllers = new ArrayList<>();
 
     @Inject
     public EncounterController() {
@@ -93,6 +96,7 @@ public class EncounterController extends Controller {
         encounterId = encounterOpponentStorage.getEncounterId();
         trainerId = trainerStorageProvider.get().getTrainer()._id();
         battleMenuController.init();
+        subControllers.addAll(List.of(battleMenuController, abilitiesMenuController));
     }
 
     public String getTitle() {
@@ -185,19 +189,18 @@ public class EncounterController extends Controller {
     @Override
     public void destroy() {
         super.destroy();
+        subControllers.forEach(Controller::destroy);
     }
 
     public void listenToOpponents(String encounterId) {
         disposables.add(eventListener.get().listen("encounters." + encounterId + "opponents.*.*", Opponent.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Opponent opponent = event.data();
-                    switch (event.suffix()) {
-                        case "deleted" -> app.show(ingameControllerProvider.get());
-                    }
                 }, error -> showError(error.getMessage())));
     }
 
     public void showIngameController() {
+        destroy();
         app.show(ingameControllerProvider.get());
     }
 
@@ -210,6 +213,7 @@ public class EncounterController extends Controller {
 
     public void goBackToBattleMenu() {
         battleMenu.getChildren().clear();
+        battleMenuController.init(this, battleMenu, encounterOpponentStorage, app);
         battleMenu.getChildren().add(battleMenuController.render());
     }
 }

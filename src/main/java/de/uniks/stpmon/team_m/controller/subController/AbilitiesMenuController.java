@@ -90,8 +90,7 @@ public class AbilitiesMenuController extends Controller {
                         abilityButtons.get(i).setVisible(false);
                         i++;
                     }
-                }
-        ));
+                }, Throwable::printStackTrace));
     }
 
     private void useAbility(AbilityDto ability, Button abilityButton) {
