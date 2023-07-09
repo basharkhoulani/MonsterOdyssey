@@ -56,6 +56,7 @@ public class BattleMenuController extends Controller {
 
     public void changeMonster(ActionEvent actionEvent) {
         // show the ChangeMonster VBox
+        encounterController.showLevelUpPopUp();
     }
 
     public void showMonsterInformation(ActionEvent actionEvent) {

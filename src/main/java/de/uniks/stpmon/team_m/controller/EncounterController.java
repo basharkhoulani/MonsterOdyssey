@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
+import de.uniks.stpmon.team_m.controller.subController.LevelUpController;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.service.*;
@@ -13,6 +14,7 @@ import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.*;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -20,6 +22,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -60,6 +64,8 @@ public class EncounterController extends Controller {
     public Text battleDescription;
     @FXML
     public Button goBack;
+    @FXML
+    public StackPane root;
 
     @Inject
     EncounterOpponentsService encounterOpponentsService;
@@ -83,6 +89,8 @@ public class EncounterController extends Controller {
     AbilitiesMenuController abilitiesMenuController;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
+    @Inject
+    Provider<LevelUpController> levelUpControllerProvider;
 
     private String regionId;
     private String encounterId;
@@ -272,6 +280,15 @@ public class EncounterController extends Controller {
             transition.getChildren().add(parallelTransition);
         }
         return transition;
+    }
+
+    public void showLevelUpPopUp() {
+        LevelUpController levelUpController = levelUpControllerProvider.get();
+        VBox popUpVBox = new VBox();
+        popUpVBox.getStyleClass().add("miniMapContainer");
+        levelUpController.init(popUpVBox, root, this, encounterOpponentStorage.getCurrentTrainerMonster(), encounterOpponentStorage.getCurrentTrainerMonsterType());
+        popUpVBox.getChildren().add(levelUpController.render());
+        root.getChildren().add(popUpVBox);
     }
 }
     
