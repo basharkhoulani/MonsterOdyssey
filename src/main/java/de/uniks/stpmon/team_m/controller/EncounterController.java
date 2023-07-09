@@ -202,8 +202,7 @@ public class EncounterController extends Controller {
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Opponent opponent = event.data();
                     if(event.suffix().contains("updated")){
-                        System.out.println("Opponent updated: " + opponent);
-                        //only considered the ability move, change monster move should also ask the server for the new monster
+                        //only considered the ability move, change monster move should also ask the server for the new monster (change it in updateOpponent)
                         updateOpponent(opponent);
                     }
                 }, error -> showError(error.getMessage())));
@@ -219,20 +218,6 @@ public class EncounterController extends Controller {
                     updateDescription("You used " + abilityDtos.get(((AbilityMove) move).ability()- 1).name(), false);
                 }
                 // else for change monster move
-            } else {
-                if(opponent.results().size() != 0){
-                    for(Result r: opponent.results()){
-                        switch(r.type()){
-                            case "ability-success":
-                                updateDescription(abilityDtos.get(r.ability() -1).name() + "is " + r.effectiveness(), false);
-                                System.out.println("Your Result type: " + r.type() + " ability: " + r.ability() + "effectiveness: " + r.effectiveness());
-                                break;
-                            default:
-                                updateDescription("Unknown",false);
-                                break;
-                        }
-                    }
-                }
             }
         } else {
             encounterOpponentStorage.setEnemyOpponent(opponent);
@@ -242,22 +227,21 @@ public class EncounterController extends Controller {
                     updateDescription("Enemy used " + abilityDtos.get(((AbilityMove) move).ability()- 1).name(), false);
                 }
                 // else for change monster move
-            } else {
-                if(opponent.results().size() != 0){
-                    for(Result r: opponent.results()){
-                        switch(r.type()){
-                            case "ability-success":
-                                updateDescription(abilityDtos.get(r.ability() -1).name() + "is " + r.effectiveness(), false);
-                                System.out.println("Your Result type: " + r.type() + " ability: " + r.ability() + "effectiveness: " + r.effectiveness());
-                                break;
-                            default:
-                                updateDescription("Unknown",false);
-                                break;
+            }
+        }
+        if(opponent.results().size() != 0){
+            for(Result r: opponent.results()){
+                switch(r.type()){
+                    case "ability-success":
+                        updateDescription(abilityDtos.get(r.ability() -1).name() + " is " + r.effectiveness(), false);
+                        if(opponent.monster() != null){
+                            updateMonsterValues(opponent.trainer(), opponent.monster());
                         }
-                    }
+                        break;
                 }
             }
         }
+
     }
 
     public void showIngameController() {
@@ -287,6 +271,25 @@ public class EncounterController extends Controller {
             }
             battleDescription.setText(battleDescription.getText() + "\n" + information);
         }
+    }
+
+    private void updateMonsterValues(String trainerId, String monsterId) {
+        boolean isMe = trainerId.equals(trainerStorageProvider.get().getTrainer()._id());
+        disposables.add(monstersService.getMonster(regionId, trainerId, monsterId)
+                .observeOn(FX_SCHEDULER).subscribe(monster -> {
+                    if (isMe){
+                        encounterOpponentStorage.setCurrentTrainerMonster(monster);
+                        myLevelBar.setProgress((double) monster.experience() / requiredExperience(monster.level() + 1));
+                        myLevel.setText(monster.level() + " LVL");
+                        myHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
+                        myHealth.setText(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
+                    } else {
+                        encounterOpponentStorage.setCurrentEnemyMonster(monster);
+                        opponentLevel.setText(monster.level() + " LVL");
+                        opponentHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
+                    }
+                }, Throwable::printStackTrace));
+
     }
 }
     
