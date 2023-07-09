@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.dto.AbilityDto;
+import de.uniks.stpmon.team_m.dto.AbilityMove;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.Result;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
@@ -81,9 +82,7 @@ public class AbilitiesMenuController extends Controller {
                             abilityButton.setStyle("-fx-background-color: " + TYPESCOLORPALETTE.get(ability.type()) + ";-fx-border-color: black");
                         }
                         // setOnAction
-                        abilityButton.setOnAction(actionEvent -> {
-                            useAbility(ability, abilityButton);
-                        });
+                        abilityButton.setOnAction(actionEvent -> useAbility(ability, abilityButton, entry.getValue()));
                         i++;
                     }
                     while(i<4){
@@ -93,19 +92,30 @@ public class AbilitiesMenuController extends Controller {
                 }, Throwable::printStackTrace));
     }
 
-    private void useAbility(AbilityDto ability, Button abilityButton) {
+    private void useAbility(AbilityDto ability, Button abilityButton, int currentUse) {
+        String regionId = encounterOpponentStorageProvider.get().getRegionId();
+        System.out.println("RegionId: " + regionId);
+        String encounterId = encounterOpponentStorageProvider.get().getEncounterId();
+        System.out.println("EncounterId: " + encounterId);
+        String opponentId = encounterOpponentStorageProvider.get().getSelfOpponent()._id();
+        System.out.println("OpponentId: " + opponentId);
+        String targetId = encounterOpponentStorageProvider.get().getEnemyOpponent()._id();
+        AbilityMove move = new AbilityMove("ability", ability.id(), targetId);
+        System.out.println("Move: " + move);
+        String monsterId = monster._id();
+        System.out.println("MonsterId: " + monsterId);
 
+        disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, monster._id(), move).observeOn(FX_SCHEDULER).subscribe(
+                opponent -> {
+                    System.out.println("Opponent: " + opponent);
+                    updateButton(ability, abilityButton, currentUse-1);
+                }, Throwable::printStackTrace));
     }
 
-    private void updateButton(AbilityDto ability, Button abilityButton) {
-        for (Map.Entry<String, Integer> entry: monster.abilities().entrySet()) {
-            if(entry.getKey().equals(String.valueOf(ability.id()))){
-                entry.setValue(entry.getValue()-1);
-                abilityButton.setText(ability.name() + " " + entry.getValue() + "/" + ability.maxUses());
-                if(entry.getValue() == 0){
-                    abilityButton.setDisable(true);
-                }
-            }
+    private void updateButton(AbilityDto ability, Button abilityButton, int currentUse) {
+        abilityButton.setText(ability.name() + " " + currentUse + "/" + ability.maxUses());
+        if(currentUse == 0){
+            abilityButton.setDisable(true);
         }
     }
 

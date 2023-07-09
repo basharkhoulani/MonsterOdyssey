@@ -95,6 +95,7 @@ public class EncounterController extends Controller {
         regionId = encounterOpponentStorage.getRegionId();
         encounterId = encounterOpponentStorage.getEncounterId();
         trainerId = trainerStorageProvider.get().getTrainer()._id();
+        listenToOpponents(encounterId);
         battleMenuController.init();
         subControllers.addAll(List.of(battleMenuController, abilitiesMenuController));
     }
@@ -193,9 +194,14 @@ public class EncounterController extends Controller {
     }
 
     public void listenToOpponents(String encounterId) {
-        disposables.add(eventListener.get().listen("encounters." + encounterId + "opponents.*.*", Opponent.class)
+        disposables.add(eventListener.get().listen("encounters." + encounterId + ".trainers.*.opponents.*.*", Opponent.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Opponent opponent = event.data();
+                    System.out.println("Event: " + event.suffix() + " " + event.data());
+                    System.out.println("Opponent: " + opponent);
+                    if(event.suffix().contains("updated")){
+                        System.out.println("Opponent updated: " + opponent);
+                    }
                 }, error -> showError(error.getMessage())));
     }
 
