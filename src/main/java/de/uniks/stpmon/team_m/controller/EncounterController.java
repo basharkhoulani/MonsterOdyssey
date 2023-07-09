@@ -34,7 +34,7 @@ import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.List;
 
-import static de.uniks.stpmon.team_m.Constants.buttonsHBoxSpacing;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 
 public class EncounterController extends Controller {
@@ -235,7 +235,6 @@ public class EncounterController extends Controller {
     }
 
     public void onFleeButtonClick(Event event) {
-        System.out.println("wombat");
         rootStackPane.getChildren().add(this.buildFleePopup());
     }
 
@@ -293,18 +292,18 @@ public class EncounterController extends Controller {
         // base VBox
         VBox fleeVBox = new VBox();
         fleeVBox.setId("fleePopup");
-        fleeVBox.setMaxWidth(300);
-        fleeVBox.setMaxHeight(200);
+        fleeVBox.setMaxWidth(fleePopupWidth);
+        fleeVBox.setMaxHeight(fleePopupHeight);
         fleeVBox.getStyleClass().add("dialogTextFlow");
         fleeVBox.setAlignment(Pos.CENTER);
 
         // flee TextFlow
         TextFlow fleeTextFlow = new TextFlow();
-        fleeTextFlow.setMaxWidth(300);
-        fleeTextFlow.setMaxHeight(150);
-        fleeTextFlow.setPrefWidth(300);
-        fleeTextFlow.setPrefHeight(150);
-        fleeTextFlow.setPadding(new Insets(20, 10, 0, 10));
+        fleeTextFlow.setMaxWidth(fleePopupWidth);
+        fleeTextFlow.setMaxHeight(fleeTextHeight);
+        fleeTextFlow.setPrefWidth(fleePopupWidth);
+        fleeTextFlow.setPrefHeight(fleeTextHeight);
+        fleeTextFlow.setPadding(fleeTextInsets);
         fleeTextFlow.setTextAlignment(TextAlignment.CENTER);
 
         // flee Text
@@ -313,20 +312,20 @@ public class EncounterController extends Controller {
 
         // buttons HBox
         HBox buttonHBox = new HBox();
-        buttonHBox.setMaxWidth(300);
-        buttonHBox.setMaxHeight(50);
-        buttonHBox.setPrefWidth(300);
-        buttonHBox.setPrefHeight(50);
-        buttonHBox.setPadding(new Insets(0, 10, 10,10));
+        buttonHBox.setMaxWidth(fleePopupWidth);
+        buttonHBox.setMaxHeight(fleeButtonsHBoxHeight);
+        buttonHBox.setPrefWidth(fleePopupWidth);
+        buttonHBox.setPrefHeight(fleeButtonsHBoxHeight);
+        buttonHBox.setPadding(fleeButtonsHBoxInsets);
         buttonHBox.setAlignment(Pos.TOP_CENTER);
         buttonHBox.setSpacing(buttonsHBoxSpacing);
 
         // yes Button
         Button yesButton = new Button(this.resources.getString("ENCOUNTER_FLEE_CONFIRM_BUTTON"));
-        yesButton.setMaxWidth(100);
-        yesButton.setMinHeight(40);
-        yesButton.setPrefWidth(100);
-        yesButton.setPrefHeight(40);
+        yesButton.setMaxWidth(fleeButtonWidth);
+        yesButton.setMinHeight(fleeButtonHeight);
+        yesButton.setPrefWidth(fleeButtonWidth);
+        yesButton.setPrefHeight(fleeButtonHeight);
         yesButton.getStyleClass().add("hBoxRed");
         yesButton.setOnAction(event -> {
             rootStackPane.getChildren().remove(fleeVBox);
@@ -335,10 +334,10 @@ public class EncounterController extends Controller {
 
         // no Button
         Button noButton = new Button(this.resources.getString("ENCOUNTER_FLEE_CANCEL_BUTTON"));
-        noButton.setMaxWidth(100);
-        noButton.setMinHeight(40);
-        noButton.setPrefWidth(100);
-        noButton.setPrefHeight(40);
+        noButton.setMaxWidth(fleeButtonWidth);
+        noButton.setMinHeight(fleeButtonHeight);
+        noButton.setPrefWidth(fleeButtonWidth);
+        noButton.setPrefHeight(fleeButtonHeight);
         noButton.getStyleClass().add("hBoxYellow");
         noButton.setOnAction(event -> rootStackPane.getChildren().remove(fleeVBox));
 
