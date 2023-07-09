@@ -2,8 +2,10 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
+import de.uniks.stpmon.team_m.dto.AbilityMove;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.Opponent;
+import de.uniks.stpmon.team_m.dto.Result;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
@@ -200,27 +202,36 @@ public class EncounterController extends Controller {
                     if(event.suffix().contains("updated")){
                         System.out.println("Opponent updated: " + opponent);
                         //only considered the ability move, change monster move should also ask the server for the new monster
-                        updateMonster(opponent.encounter());
+                        updateOpponent(opponent);
                     }
                 }, error -> showError(error.getMessage())));
     }
 
-    private void updateMonster(String encounterId) {
-        disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, encounterId)
-                .observeOn(FX_SCHEDULER).subscribe(encounterOpponents -> {
-                    System.out.println("Encounter Opponents: " + encounterOpponents);
-                    for (Opponent o : encounterOpponents) {
-                        if(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
-                            encounterOpponentStorage.setSelfOpponent(o);
-
-
-                        } else {
-                            encounterOpponentStorage.setEnemyOpponent(o);
-                        }
+    private void updateOpponent(Opponent opponent) {
+        // For komplexer Situation for exsample with more opponents should be considered in the future
+        if(opponent.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
+            encounterOpponentStorage.setSelfOpponent(opponent);
+            if(opponent.move() != null) {
+                System.out.println("You used" + opponent.move());
+            } else {
+                if(opponent.results().size() != 0){
+                    for(Result r: opponent.results()){
+                        System.out.println("Your Result type: " + r.type() + " ability: " + r.ability() + "effectiveness: " + r.effectiveness());
                     }
-                    //showMonster();
-                    // here don't why the own monster is null after I used two times of an ability
-                }, Throwable::printStackTrace));
+                }
+            }
+        } else {
+            encounterOpponentStorage.setEnemyOpponent(opponent);
+            if(opponent.move() != null) {
+                System.out.println("Enemy used" + opponent.move());
+            } else {
+                if(opponent.results().size() != 0){
+                    for(Result r: opponent.results()){
+                        System.out.println("Their Result type: " + r.type() + " ability: " + r.ability() + "effectiveness: " + r.effectiveness());
+                    }
+                }
+            }
+        }
 
     }
 

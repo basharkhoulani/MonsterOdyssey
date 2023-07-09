@@ -37,7 +37,6 @@ public class AbilitiesMenuController extends Controller {
     PresetsService presetsService;
     private Monster monster;
     private HBox battleMenuHBox;
-    private List<Result> results;
     private EncounterController encounterController;
 
 
@@ -97,14 +96,14 @@ public class AbilitiesMenuController extends Controller {
         System.out.println("EncounterId: " + encounterId);
         String opponentId = encounterOpponentStorageProvider.get().getSelfOpponent()._id();
         System.out.println("OpponentId: " + opponentId);
-        String targetId = encounterOpponentStorageProvider.get().getEnemyOpponent()._id();
+        String targetId = encounterOpponentStorageProvider.get().getEnemyOpponent().trainer();
         Move move = new AbilityMove("ability", ability.id(), targetId);
         System.out.println("Move: " + move);
 
         disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(
                 opponent -> {
                     updateButton(ability, abilityButton, currentUse-1);
-                    encounterController.updateDescription(resources.getString("YOU.USED") + ability.name() + "!", true);
+                    encounterController.updateDescription("", true);
                 }, Throwable::printStackTrace));
     }
 
