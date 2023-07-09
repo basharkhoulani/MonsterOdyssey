@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IngameKeybindingsController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">IngameKeybindingsController.java</span></div><h1>IngameKeybindingsController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.scene.input.KeyEvent;
+import javax.inject.Inject;
+
+public class IngameKeybindingsController extends Controller {
+
+    @FXML
+    public Button walkUpButton;
+    @FXML
+    public Button walkDownButton;
+    @FXML
+    public Button walkRightButton;
+    @FXML
+    public Button walkLeftButton;
+    @FXML
+    public Button interactionButton;
+    @FXML
+    public Button pauseMenuButton;
+    @FXML
+    public Button goBackButton;
+    @FXML
+    public Button defaultButton;
+    @FXML
+    public Button checkButton;
+    @FXML
+    public Label informationLabel;
+    @Inject
+    IngameController ingameController;
+    private VBox ingameVbox;
+    private EventHandler&lt;KeyEvent&gt; keyPressedHandler;
+
+    @Inject
+<span class="nc" id="L42">    public IngameKeybindingsController() {</span>
+<span class="nc" id="L43">    }</span>
+
+    public Parent render() {
+<span class="nc" id="L46">        return super.render();</span>
+    }
+
+    public void init(IngameController ingameController, VBox ingameVbox) {
+<span class="nc" id="L50">        this.ingameController = ingameController;</span>
+<span class="nc" id="L51">        this.ingameVbox = ingameVbox;</span>
+<span class="nc" id="L52">    }</span>
+
+    public void goBack() {
+<span class="nc" id="L55">        ingameController.root.getChildren().remove(ingameVbox);</span>
+<span class="nc" id="L56">    }</span>
+
+    public void setDefault() {
+<span class="nc" id="L59">    }</span>
+
+    public void check() {
+<span class="nc" id="L62">    }</span>
+
+    public void setWalkLeft() {
+<span class="nc" id="L65">        keyPressedHandler = event -&gt; {</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">            if(Character.isLetterOrDigit(event.getText().charAt(0))){</span>
+<span class="nc" id="L67">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L68">                walkLeftButton.setText(&quot;&quot;);</span>
+<span class="nc" id="L69">                walkLeftButton.setText(event.getText().toUpperCase());</span>
+            }else{
+<span class="nc" id="L71">                informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
+<span class="nc" id="L72">                walkLeftButton.setText(&quot;A&quot;);</span>
+            }
+<span class="nc" id="L74">            walkLeftButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
+<span class="nc" id="L75">            walkUpButton.setDisable(false);</span>
+<span class="nc" id="L76">            walkRightButton.setDisable(false);</span>
+<span class="nc" id="L77">            walkDownButton.setDisable(false);</span>
+<span class="nc" id="L78">            pauseMenuButton.setDisable(false);</span>
+<span class="nc" id="L79">            interactionButton.setDisable(false);</span>
+<span class="nc" id="L80">        };</span>
+<span class="nc" id="L81">        walkUpButton.setDisable(true);</span>
+<span class="nc" id="L82">        walkRightButton.setDisable(true);</span>
+<span class="nc" id="L83">        walkDownButton.setDisable(true);</span>
+<span class="nc" id="L84">        pauseMenuButton.setDisable(true);</span>
+<span class="nc" id="L85">        interactionButton.setDisable(true);</span>
+<span class="nc" id="L86">        walkLeftButton.setText(&quot;...&quot;);</span>
+<span class="nc" id="L87">        informationLabel.setText(resources.getString(&quot;WAITING.INPUT&quot;));</span>
+<span class="nc" id="L88">        walkLeftButton.addEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
+<span class="nc" id="L89">    }</span>
+
+    public void setPauseMenu() {
+<span class="nc" id="L92">        keyPressedHandler = event -&gt; {</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">            if(Character.isLetterOrDigit(event.getText().charAt(0))){</span>
+<span class="nc" id="L94">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L95">                pauseMenuButton.setText(&quot;&quot;);</span>
+<span class="nc" id="L96">                pauseMenuButton.setText(event.getText().toUpperCase());</span>
+            }else{
+<span class="nc" id="L98">                informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
+<span class="nc" id="L99">                pauseMenuButton.setText(&quot;ESC&quot;);</span>
+            }
+<span class="nc" id="L101">            pauseMenuButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
+<span class="nc" id="L102">            walkUpButton.setDisable(false);</span>
+<span class="nc" id="L103">            walkRightButton.setDisable(false);</span>
+<span class="nc" id="L104">            walkDownButton.setDisable(false);</span>
+<span class="nc" id="L105">            walkLeftButton.setDisable(false);</span>
+<span class="nc" id="L106">            interactionButton.setDisable(false);</span>
+<span class="nc" id="L107">        };</span>
+<span class="nc" id="L108">        walkUpButton.setDisable(true);</span>
+<span class="nc" id="L109">        walkRightButton.setDisable(true);</span>
+<span class="nc" id="L110">        walkDownButton.setDisable(true);</span>
+<span class="nc" id="L111">        walkLeftButton.setDisable(true);</span>
+<span class="nc" id="L112">        interactionButton.setDisable(true);</span>
+<span class="nc" id="L113">        walkLeftButton.setText(&quot;...&quot;);</span>
+<span class="nc" id="L114">        informationLabel.setText(resources.getString(&quot;WAITING.INPUT&quot;));</span>
+<span class="nc" id="L115">        pauseMenuButton.addEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
+<span class="nc" id="L116">    }</span>
+
+    public void setWalkRight() {
+<span class="nc" id="L119">        keyPressedHandler = event -&gt; {</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">            if(Character.isLetterOrDigit(event.getText().charAt(0))){</span>
+<span class="nc" id="L121">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L122">                walkRightButton.setText(&quot;&quot;);</span>
+<span class="nc" id="L123">                walkRightButton.setText(event.getText().toUpperCase());</span>
+            }else{
+<span class="nc" id="L125">                informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
+<span class="nc" id="L126">                walkRightButton.setText(&quot;D&quot;);</span>
+            }
+<span class="nc" id="L128">            walkRightButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
+<span class="nc" id="L129">            walkUpButton.setDisable(false);</span>
+<span class="nc" id="L130">            pauseMenuButton.setDisable(false);</span>
+<span class="nc" id="L131">            walkDownButton.setDisable(false);</span>
+<span class="nc" id="L132">            walkLeftButton.setDisable(false);</span>
+<span class="nc" id="L133">            interactionButton.setDisable(false);</span>
+<span class="nc" id="L134">        };</span>
+<span class="nc" id="L135">        walkUpButton.setDisable(true);</span>
+<span class="nc" id="L136">        walkLeftButton.setDisable(true);</span>
+<span class="nc" id="L137">        walkDownButton.setDisable(true);</span>
+<span class="nc" id="L138">        pauseMenuButton.setDisable(true);</span>
+<span class="nc" id="L139">        interactionButton.setDisable(true);</span>
+<span class="nc" id="L140">        walkRightButton.setText(&quot;...&quot;);</span>
+<span class="nc" id="L141">        informationLabel.setText(resources.getString(&quot;WAITING.INPUT&quot;));</span>
+<span class="nc" id="L142">        walkRightButton.addEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
+<span class="nc" id="L143">    }</span>
+
+    public void setInteraction() {
+<span class="nc" id="L146">        keyPressedHandler = event -&gt; {</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">            if(Character.isLetterOrDigit(event.getText().charAt(0))){</span>
+<span class="nc" id="L148">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L149">                interactionButton.setText(&quot;&quot;);</span>
+<span class="nc" id="L150">                interactionButton.setText(event.getText().toUpperCase());</span>
+            }else{
+<span class="nc" id="L152">                informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
+<span class="nc" id="L153">                interactionButton.setText(&quot;E&quot;);</span>
+            }
+<span class="nc" id="L155">            interactionButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
+<span class="nc" id="L156">            walkUpButton.setDisable(false);</span>
+<span class="nc" id="L157">            pauseMenuButton.setDisable(false);</span>
+<span class="nc" id="L158">            walkDownButton.setDisable(false);</span>
+<span class="nc" id="L159">            walkLeftButton.setDisable(false);</span>
+<span class="nc" id="L160">            walkRightButton.setDisable(false);</span>
+<span class="nc" id="L161">        };</span>
+<span class="nc" id="L162">        walkUpButton.setDisable(true);</span>
+<span class="nc" id="L163">        walkLeftButton.setDisable(true);</span>
+<span class="nc" id="L164">        walkDownButton.setDisable(true);</span>
+<span class="nc" id="L165">        pauseMenuButton.setDisable(true);</span>
+<span class="nc" id="L166">        walkRightButton.setDisable(true);</span>
+<span class="nc" id="L167">        interactionButton.setText(&quot;...&quot;);</span>
+<span class="nc" id="L168">        informationLabel.setText(resources.getString(&quot;WAITING.INPUT&quot;));</span>
+<span class="nc" id="L169">        interactionButton.addEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
+<span class="nc" id="L170">    }</span>
+
+    public void setWalkDown() {
+<span class="nc" id="L173">        keyPressedHandler = event -&gt; {</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">            if(Character.isLetterOrDigit(event.getText().charAt(0))){</span>
+<span class="nc" id="L175">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L176">                walkDownButton.setText(&quot;&quot;);</span>
+<span class="nc" id="L177">                walkDownButton.setText(event.getText().toUpperCase());</span>
+            }else{
+<span class="nc" id="L179">                informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
+<span class="nc" id="L180">                walkDownButton.setText(&quot;S&quot;);</span>
+            }
+<span class="nc" id="L182">            walkDownButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
+<span class="nc" id="L183">            walkUpButton.setDisable(false);</span>
+<span class="nc" id="L184">            pauseMenuButton.setDisable(false);</span>
+<span class="nc" id="L185">            interactionButton.setDisable(false);</span>
+<span class="nc" id="L186">            walkLeftButton.setDisable(false);</span>
+<span class="nc" id="L187">            walkRightButton.setDisable(false);</span>
+<span class="nc" id="L188">        };</span>
+<span class="nc" id="L189">        walkUpButton.setDisable(true);</span>
+<span class="nc" id="L190">        walkRightButton.setDisable(true);</span>
+<span class="nc" id="L191">        walkLeftButton.setDisable(true);</span>
+<span class="nc" id="L192">        pauseMenuButton.setDisable(true);</span>
+<span class="nc" id="L193">        interactionButton.setDisable(true);</span>
+<span class="nc" id="L194">        walkDownButton.setText(&quot;...&quot;);</span>
+<span class="nc" id="L195">        informationLabel.setText(resources.getString(&quot;WAITING.INPUT&quot;));</span>
+<span class="nc" id="L196">        walkDownButton.addEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
+<span class="nc" id="L197">    }</span>
+
+    public void setWalkUp() {
+<span class="nc" id="L200">        keyPressedHandler = event -&gt; {</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">            if(Character.isLetterOrDigit(event.getText().charAt(0))){</span>
+<span class="nc" id="L202">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L203">                walkUpButton.setText(&quot;&quot;);</span>
+<span class="nc" id="L204">                walkUpButton.setText(event.getText().toUpperCase());</span>
+            }else{
+<span class="nc" id="L206">                informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
+<span class="nc" id="L207">                walkUpButton.setText(&quot;W&quot;);</span>
+            }
+<span class="nc" id="L209">            walkUpButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
+<span class="nc" id="L210">            walkDownButton.setDisable(false);</span>
+<span class="nc" id="L211">            pauseMenuButton.setDisable(false);</span>
+<span class="nc" id="L212">            interactionButton.setDisable(false);</span>
+<span class="nc" id="L213">            walkLeftButton.setDisable(false);</span>
+<span class="nc" id="L214">            walkRightButton.setDisable(false);</span>
+<span class="nc" id="L215">        };</span>
+<span class="nc" id="L216">        walkDownButton.setDisable(true);</span>
+<span class="nc" id="L217">        walkRightButton.setDisable(true);</span>
+<span class="nc" id="L218">        walkLeftButton.setDisable(true);</span>
+<span class="nc" id="L219">        pauseMenuButton.setDisable(true);</span>
+<span class="nc" id="L220">        interactionButton.setDisable(true);</span>
+<span class="nc" id="L221">        walkUpButton.setText(&quot;...&quot;);</span>
+<span class="nc" id="L222">        informationLabel.setText(resources.getString(&quot;WAITING.INPUT&quot;));</span>
+<span class="nc" id="L223">        walkUpButton.addEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
+<span class="nc" id="L224">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
