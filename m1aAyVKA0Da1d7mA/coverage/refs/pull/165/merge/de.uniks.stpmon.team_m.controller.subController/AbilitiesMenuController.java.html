@@ -2,9 +2,7 @@
 
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
-import de.uniks.stpmon.team_m.dto.AbilityDto;
-import de.uniks.stpmon.team_m.dto.Monster;
-import de.uniks.stpmon.team_m.dto.Result;
+import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
@@ -16,7 +14,9 @@ import javafx.scene.layout.HBox;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.*;
+import java.util.Map;
 
+import static de.uniks.stpmon.team_m.Constants.EMPTY_STRING;
 import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
 public class AbilitiesMenuController extends Controller {
@@ -38,80 +38,87 @@ public class AbilitiesMenuController extends Controller {
     PresetsService presetsService;
     private Monster monster;
     private HBox battleMenuHBox;
-    private List&lt;Result&gt; results;
     private EncounterController encounterController;
 
 
     @Inject
-<span class="nc" id="L46">    public AbilitiesMenuController() {</span>
-<span class="nc" id="L47">    }</span>
+<span class="nc" id="L45">    public AbilitiesMenuController() {</span>
+<span class="nc" id="L46">    }</span>
 
     public void init(Monster monster, PresetsService presetsService, HBox battleMenuHBox, EncounterController encounterController) {
-<span class="nc" id="L50">        super.init();</span>
-<span class="nc" id="L51">        this.monster = monster;</span>
-<span class="nc" id="L52">        this.presetsService = presetsService;</span>
-<span class="nc" id="L53">        this.battleMenuHBox = battleMenuHBox;</span>
-<span class="nc" id="L54">        this.encounterController = encounterController;</span>
-<span class="nc" id="L55">    }</span>
+<span class="nc" id="L49">        super.init();</span>
+<span class="nc" id="L50">        this.monster = monster;</span>
+<span class="nc" id="L51">        this.presetsService = presetsService;</span>
+<span class="nc" id="L52">        this.battleMenuHBox = battleMenuHBox;</span>
+<span class="nc" id="L53">        this.encounterController = encounterController;</span>
+<span class="nc" id="L54">    }</span>
 
     @Override
     public Parent render() {
-<span class="nc" id="L59">        Parent parent = super.render();</span>
-<span class="nc" id="L60">        initButtons();</span>
-<span class="nc" id="L61">        return parent;</span>
+<span class="nc" id="L58">        Parent parent = super.render();</span>
+<span class="nc" id="L59">        initButtons();</span>
+<span class="nc" id="L60">        return parent;</span>
     }
 
     private void initButtons() {
         // Abilities
-<span class="nc" id="L66">        List&lt;Button&gt; abilityButtons = new ArrayList&lt;&gt;(Arrays.asList(abilityButton1, abilityButton2, abilityButton3, abilityButton4));</span>
+<span class="nc" id="L65">        List&lt;Button&gt; abilityButtons = new ArrayList&lt;&gt;(Arrays.asList(abilityButton1, abilityButton2, abilityButton3, abilityButton4));</span>
 
-<span class="nc" id="L68">        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(</span>
+<span class="nc" id="L67">        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(</span>
                 abilities -&gt; {
-<span class="nc" id="L70">                    int i = 0;</span>
-<span class="nc bnc" id="L71" title="All 2 branches missed.">                    for (Map.Entry&lt;String, Integer&gt; entry: monster.abilities().entrySet()) {</span>
-<span class="nc" id="L72">                        AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey())-1);</span>
-<span class="nc" id="L73">                        Button abilityButton = abilityButtons.get(i);</span>
-<span class="nc" id="L74">                        abilityButton.setText(ability.name() + &quot; &quot; + entry.getValue() + &quot;/&quot; + ability.maxUses());</span>
-                        // Disable Button if no uses left
-<span class="nc bnc" id="L76" title="All 2 branches missed.">                        if(entry.getValue() == 0){</span>
-<span class="nc" id="L77">                            abilityButton.setDisable(true);</span>
-                        }
-                        // Change Color
-<span class="nc bnc" id="L80" title="All 2 branches missed.">                        if (TYPESCOLORPALETTE.containsKey(ability.type())) {</span>
-<span class="nc" id="L81">                            abilityButton.setStyle(&quot;-fx-background-color: &quot; + TYPESCOLORPALETTE.get(ability.type()) + &quot;;-fx-border-color: black&quot;);</span>
-                        }
-                        // setOnAction
-<span class="nc" id="L84">                        abilityButton.setOnAction(actionEvent -&gt; {</span>
-<span class="nc" id="L85">                            useAbility(ability, abilityButton);</span>
-<span class="nc" id="L86">                        });</span>
-<span class="nc" id="L87">                        i++;</span>
-<span class="nc" id="L88">                    }</span>
-<span class="nc bnc" id="L89" title="All 2 branches missed.">                    while(i&lt;4){</span>
-<span class="nc" id="L90">                        abilityButtons.get(i).setVisible(false);</span>
-<span class="nc" id="L91">                        i++;</span>
+<span class="nc" id="L69">                    int i = 0;</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">                    if(monster != null){</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">                        for (Map.Entry&lt;String, Integer&gt; entry: monster.abilities().entrySet()) {</span>
+<span class="nc" id="L72">                            AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey())-1);</span>
+<span class="nc" id="L73">                            Button abilityButton = abilityButtons.get(i);</span>
+<span class="nc" id="L74">                            abilityButton.setText(ability.name() + &quot; &quot; + entry.getValue() + &quot;/&quot; + ability.maxUses());</span>
+                            // Disable Button if no uses left
+<span class="nc bnc" id="L76" title="All 2 branches missed.">                            if(entry.getValue() == 0){</span>
+<span class="nc" id="L77">                                abilityButton.setDisable(true);</span>
+                            }
+                            // Change Color
+<span class="nc bnc" id="L80" title="All 2 branches missed.">                            if (TYPESCOLORPALETTE.containsKey(ability.type())) {</span>
+<span class="nc" id="L81">                                abilityButton.setStyle(&quot;-fx-background-color: &quot; + TYPESCOLORPALETTE.get(ability.type()) + &quot;;-fx-border-color: black&quot;);</span>
+                            }
+                            // setOnAction
+<span class="nc" id="L84">                            abilityButton.setOnAction(actionEvent -&gt; useAbility(ability, abilityButton, entry.getValue()));</span>
+<span class="nc" id="L85">                            i++;</span>
+<span class="nc" id="L86">                        }</span>
                     }
-<span class="nc" id="L93">                }, Throwable::printStackTrace));</span>
-<span class="nc" id="L94">    }</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                    while(i&lt;4){</span>
+<span class="nc" id="L89">                        abilityButtons.get(i).setVisible(false);</span>
+<span class="nc" id="L90">                        i++;</span>
+                    }
+<span class="nc" id="L92">                }, Throwable::printStackTrace));</span>
+<span class="nc" id="L93">    }</span>
 
-    private void useAbility(AbilityDto ability, Button abilityButton) {
+    private void useAbility(AbilityDto ability, Button abilityButton, int currentUse) {
+<span class="nc" id="L96">        String regionId = encounterOpponentStorageProvider.get().getRegionId();</span>
+<span class="nc" id="L97">        String encounterId = encounterOpponentStorageProvider.get().getEncounterId();</span>
+<span class="nc" id="L98">        String opponentId = encounterOpponentStorageProvider.get().getSelfOpponent()._id();</span>
+<span class="nc" id="L99">        String targetId = encounterOpponentStorageProvider.get().getEnemyOpponent().trainer();</span>
+<span class="nc" id="L100">        Move move = new AbilityMove(&quot;ability&quot;, ability.id(), targetId);</span>
 
-<span class="nc" id="L98">    }</span>
-
-    private void updateButton(AbilityDto ability, Button abilityButton) {
-<span class="nc bnc" id="L101" title="All 2 branches missed.">        for (Map.Entry&lt;String, Integer&gt; entry: monster.abilities().entrySet()) {</span>
-<span class="nc bnc" id="L102" title="All 2 branches missed.">            if(entry.getKey().equals(String.valueOf(ability.id()))){</span>
-<span class="nc" id="L103">                entry.setValue(entry.getValue()-1);</span>
-<span class="nc" id="L104">                abilityButton.setText(ability.name() + &quot; &quot; + entry.getValue() + &quot;/&quot; + ability.maxUses());</span>
-<span class="nc bnc" id="L105" title="All 2 branches missed.">                if(entry.getValue() == 0){</span>
-<span class="nc" id="L106">                    abilityButton.setDisable(true);</span>
-                }
-            }
-<span class="nc" id="L109">        }</span>
+<span class="nc" id="L102">        disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(</span>
+                opponent -&gt; {
+<span class="nc" id="L104">                    updateButton(ability, abilityButton, currentUse-1);</span>
+<span class="nc" id="L105">                    encounterController.updateDescription(EMPTY_STRING, true);</span>
+<span class="nc" id="L106">                    encounterController.resetOppoenentUpdate();</span>
+<span class="nc" id="L107">                    encounterController.resetRepeatedTimes();</span>
+<span class="nc" id="L108">                    encounterController.goBackToBattleMenu();</span>
+<span class="nc" id="L109">                }, Throwable::printStackTrace));</span>
 <span class="nc" id="L110">    }</span>
+
+    private void updateButton(AbilityDto ability, Button abilityButton, int currentUse) {
+<span class="nc" id="L113">        abilityButton.setText(ability.name() + &quot; &quot; + currentUse + &quot;/&quot; + ability.maxUses());</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        if(currentUse == 0){</span>
+<span class="nc" id="L115">            abilityButton.setDisable(true);</span>
+        }
+<span class="nc" id="L117">    }</span>
 
 
     public void goBack() {
-<span class="nc" id="L114">        encounterController.goBackToBattleMenu();</span>
-<span class="nc" id="L115">    }</span>
+<span class="nc" id="L121">        encounterController.goBackToBattleMenu();</span>
+<span class="nc" id="L122">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
