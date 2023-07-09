@@ -116,7 +116,7 @@ public class Encounter2Controller extends Controller {
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getSelfOpponent(), ownTrainerController);
         Parent ownTrainerParent = ownTrainerController.render();
         HBox.setHgrow(ownTrainerParent, javafx.scene.layout.Priority.ALWAYS);
-        showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent());
+        showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent(), true);
         // showMySprite
         ImageView sprite = ownTrainerController.getTrainerImageView();
         setTrainerSpriteImageView(trainerStorage.getTrainer(), sprite, 1);
