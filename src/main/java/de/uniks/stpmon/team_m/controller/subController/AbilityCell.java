@@ -50,6 +50,12 @@ public class AbilityCell extends ListCell<AbilityDto> {
     public Text abilityDescription;
     @FXML
     public HBox rootAbilityBox;
+    @FXML
+    public Label damageLabel;
+    @FXML
+    public Label accuracyLabel;
+    @FXML
+    public Label usesLabel;
     public AbilityCell(ResourceBundle resources, PresetsService presetsService, MonstersDetailController monstersDetailController, IngameController ingameController) {
         this.ingameController = ingameController;
         this.resources = resources;
@@ -82,10 +88,11 @@ public class AbilityCell extends ListCell<AbilityDto> {
 
                         abilityName.setText(abilityDto.name());
                         abilityDescription.setText(abilityDto.description());
-                    }, error -> {
-                        System.out.println(error);
-                        //monstersDetailController.showError(error.getMessage());
-                    }));
+
+                        damageLabel.setText(abilityDto.power() + " DMG");
+                        accuracyLabel.setText((abilityDto.accuracy() * 100) + " %");
+                        usesLabel.setText(abilityDto.maxUses() + "/"+ abilityDto.maxUses());
+                    }, error -> monstersDetailController.showError(error.getMessage())));
             setGraphic(rootAbilityBox);
             setText(null);
         }
