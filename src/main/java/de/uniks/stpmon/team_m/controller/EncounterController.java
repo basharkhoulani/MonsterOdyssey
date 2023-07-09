@@ -323,7 +323,7 @@ public class EncounterController extends Controller {
         rootStackPane.getChildren().add(this.buildFleePopup());
     }
 
-    public void fleeFromBattle() {
+    public void fleeFromBattle(Event event) {
         SequentialTransition fleeAnimation = buildFleeAnimation();
         PauseTransition firstPause = new PauseTransition(Duration.millis(500));
         battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_FLEE"));
