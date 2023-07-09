@@ -159,13 +159,13 @@ public class EncounterController extends Controller {
         // enemy monster
         disposables.add(monstersService.getMonster(regionId, encounterOpponentStorage.getEnemyOpponents().get(0).trainer(), encounterOpponentStorage.getEnemyOpponents().get(0).monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
-                    encounterOpponentStorage.setCurrentEnemyMonster(monster);
+                    encounterOpponentStorage.addCurrentMonster(monster);
                     opponentLevel.setText(monster.level() + " LVL");
                     opponentHealthBar.setProgress(monster.currentAttributes().health() / monster.attributes().health());
                     disposables.add(presetsService.getMonster(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(m -> {
                                 opponentMonsterName.setText(m.name());
-                                encounterOpponentStorage.setCurrentEnemyMonsterType(m);
+                                encounterOpponentStorage.addCurrentMonsterType(m);
                                 if(encounterOpponentStorage.isWild()){
                                     battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + m.name());
                                 }

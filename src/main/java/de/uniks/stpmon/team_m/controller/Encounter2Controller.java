@@ -119,7 +119,7 @@ public class Encounter2Controller extends Controller {
         showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent());
         // showMySprite
         ImageView sprite = ownTrainerController.getTrainerImageView();
-        setTrainerSpriteImageView(trainerStorage.getTrainer(), sprite,1);
+        setTrainerSpriteImageView(trainerStorage.getTrainer(), sprite, 1);
 
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId)
                 .observeOn(FX_SCHEDULER)
@@ -160,6 +160,7 @@ public class Encounter2Controller extends Controller {
         enemyHBox.getChildren().add(enemy1Parent);
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
         showWildMonster(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
+
         // Own trainer
         teamHBox.setPadding(new Insets(0, 0, 0, 400));
         teamHBox.getChildren().add(ownTrainerParent);
@@ -178,14 +179,15 @@ public class Encounter2Controller extends Controller {
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
         showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
 
+        // Own trainer
         teamHBox.setPadding(new Insets(0, 0, 0, 400));
         teamHBox.getChildren().add(ownTrainerParent);
-
     }
 
-
-        // 2nd Enemy
     private void renderFor1vs2(Parent ownTrainerParent) {
+        // 1 vs 2 situation
+
+        // 1st enemy as a trainer
         enemy1Controller = new EncounterOpponentController(true, false, false);
         enemy1Controller.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0), enemy1Controller);
@@ -195,6 +197,7 @@ public class Encounter2Controller extends Controller {
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
         showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
 
+        // 2nd enemy as a trainer
         enemy2Controller = new EncounterOpponentController(true, false, true);
         enemy2Controller.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(1), enemy2Controller);
@@ -202,10 +205,10 @@ public class Encounter2Controller extends Controller {
         HBox.setHgrow(enemy2Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy2Parent);
         showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(1));
+
         // Own trainer
         teamHBox.setPadding(new Insets(0, 0, 0, 450));
         teamHBox.getChildren().add(ownTrainerParent);
-        // TODO: setup controllers with data
     }
 
     private void targetOpponent(Opponent opponent) {
@@ -219,8 +222,10 @@ public class Encounter2Controller extends Controller {
         }
     }
 
-      // 2nd Enemy
     private void renderFor2vs2(Parent ownTrainerParent) {
+        // 2 vs 2 situation
+
+        // 1st enemy as a trainer
         enemy1Controller = new EncounterOpponentController(true, false, false);
         enemy1Controller.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0), enemy1Controller);
@@ -230,6 +235,7 @@ public class Encounter2Controller extends Controller {
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
         showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
 
+        // 2nd enemy as a trainer
         enemy2Controller = new EncounterOpponentController(true, false, true);
         enemy2Controller.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(1), enemy2Controller);
@@ -246,24 +252,24 @@ public class Encounter2Controller extends Controller {
         HBox.setHgrow(coopTrainerParent, javafx.scene.layout.Priority.ALWAYS);
         teamHBox.getChildren().add(coopTrainerParent);
         showCoopImage(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
-        showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
+        showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent(), false);
 
         // Own trainer
         teamHBox.getChildren().add(ownTrainerParent);
     }
 
     // Hier soll allen Serveranfragen kommen
-    private void showWildMonster(EncounterOpponentController encounterOpponentController, Opponent opponent){
+    private void showWildMonster(EncounterOpponentController encounterOpponentController, Opponent opponent) {
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
-                    encounterOpponentStorage.setCurrentEnemyMonster(monster);
+                    encounterOpponentStorage.addCurrentMonster(monster);
                     encounterOpponentController.setLevelLabel(String.valueOf(monster.level()))
                             .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
                     disposables.add(presetsService.getMonster(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(m -> {
                                 encounterOpponentController.setMonsterNameLabel(m.name());
-                                encounterOpponentStorage.setCurrentEnemyMonsterType(m);
-                                if(encounterOpponentStorage.isWild()) {
+                                encounterOpponentStorage.addCurrentMonsterType(m);
+                                if (encounterOpponentStorage.isWild()) {
                                     battleDialogText.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + m.name());
                                 }
                             }, Throwable::printStackTrace));
@@ -288,11 +294,14 @@ public class Encounter2Controller extends Controller {
                 }, Throwable::printStackTrace));
     }
 
-    private void showTeamMonster(EncounterOpponentController encounterOpponentController, Opponent opponent) {
+    private void showTeamMonster(EncounterOpponentController encounterOpponentController, Opponent opponent, boolean isSelf) {
         // Monster
         disposables.add(monstersService.getMonster(regionId, trainerId, opponent.monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
-                    encounterOpponentStorage.setCurrentTrainerMonster(monster);
+                    if (isSelf) {
+                        encounterOpponentStorage.setCurrentTrainerMonster(monster);
+                    }
+                    encounterOpponentStorage.addCurrentMonster(monster);
                     encounterOpponentController.setLevelLabel("LVL " + monster.level())
                             .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1))
                             .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health())
@@ -301,7 +310,10 @@ public class Encounter2Controller extends Controller {
                     disposables.add(presetsService.getMonster(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(m -> {
                                 encounterOpponentController.setMonsterNameLabel(m.name());
-                                encounterOpponentStorage.setCurrentTrainerMonsterType(m);
+                                if (isSelf) {
+                                    encounterOpponentStorage.setCurrentTrainerMonsterType(m);
+                                }
+                                encounterOpponentStorage.addCurrentMonsterType(m);
                             }, Throwable::printStackTrace));
                     disposables.add(presetsService.getMonsterImage(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(mImage -> {
@@ -315,7 +327,7 @@ public class Encounter2Controller extends Controller {
         disposables.add(trainersService.getTrainer(regionId, opponent.trainer())
                 .observeOn(FX_SCHEDULER).subscribe(trainer -> {
                     ImageView opponentTrainer = encounterOpponentController.getTrainerImageView();
-                    setTrainerSpriteImageView(trainer, opponentTrainer,3);
+                    setTrainerSpriteImageView(trainer, opponentTrainer, 3);
                 }, Throwable::printStackTrace));
     }
 
