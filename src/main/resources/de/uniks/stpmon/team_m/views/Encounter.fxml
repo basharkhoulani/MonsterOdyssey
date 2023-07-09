@@ -12,8 +12,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
-
-<AnchorPane minHeight="786.0" minWidth="1024.0" prefHeight="786.0" prefWidth="1024.0" styleClass="encounterBackground" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.EncounterController">
+<?import javafx.scene.layout.StackPane?>
+<StackPane fx:id="rootStackPane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.EncounterController">
+<AnchorPane minHeight="786.0" minWidth="1024.0" prefHeight="786.0" prefWidth="1024.0" styleClass="encounterBackground" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" >
    <AnchorPane minHeight="786.0" minWidth="1024.0" prefHeight="786.0" prefWidth="1024.0" styleClass="ForegroundContainer" stylesheets="@../styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <VBox minHeight="284.0" minWidth="400.0" prefHeight="284.0" prefWidth="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <HBox alignment="CENTER_LEFT" prefHeight="67.0" prefWidth="400.0">
@@ -111,3 +112,4 @@
       </AnchorPane>
    </AnchorPane>
 </AnchorPane>
+</StackPane>
