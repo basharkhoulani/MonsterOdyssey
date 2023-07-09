@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.input.KeyEvent;
 import javax.inject.Inject;
@@ -44,6 +45,7 @@ public class IngameKeybindingsController extends Controller {
 
     public Parent render() {
         return super.render();
+
     }
 
     public void init(IngameController ingameController, VBox ingameVbox) {
@@ -63,13 +65,19 @@ public class IngameKeybindingsController extends Controller {
 
     public void setWalkLeft() {
         keyPressedHandler = event -> {
-            if(Character.isLetterOrDigit(event.getText().charAt(0))){
+            if(event.getCode() == KeyCode.ESCAPE){
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
-                walkLeftButton.setText("");
-                walkLeftButton.setText(event.getText().toUpperCase());
+                pauseMenuButton.setText("");
+                pauseMenuButton.setText("ESC");
             }else{
-                informationLabel.setText(resources.getString("WRONG.INPUT"));
-                walkLeftButton.setText("A");
+                if(Character.isLetterOrDigit(event.getText().charAt(0))){
+                    informationLabel.setText(resources.getString("CLICK.CHECK"));
+                    walkLeftButton.setText("");
+                    walkLeftButton.setText(event.getText().toUpperCase());
+                }else{
+                    informationLabel.setText(resources.getString("WRONG.INPUT"));
+                    walkLeftButton.setText("A");
+                }
             }
             walkLeftButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
             walkUpButton.setDisable(false);
@@ -90,40 +98,52 @@ public class IngameKeybindingsController extends Controller {
 
     public void setPauseMenu() {
         keyPressedHandler = event -> {
-            if(Character.isLetterOrDigit(event.getText().charAt(0))){
+            if(event.getCode() == KeyCode.ESCAPE){
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
                 pauseMenuButton.setText("");
-                pauseMenuButton.setText(event.getText().toUpperCase());
-            }else{
-                informationLabel.setText(resources.getString("WRONG.INPUT"));
                 pauseMenuButton.setText("ESC");
+            }else{
+                if(Character.isLetterOrDigit(event.getText().charAt(0))){
+                    informationLabel.setText(resources.getString("CLICK.CHECK"));
+                    pauseMenuButton.setText("");
+                    pauseMenuButton.setText(event.getText().toUpperCase());
+                }else{
+                    informationLabel.setText(resources.getString("WRONG.INPUT"));
+                    pauseMenuButton.setText("ESC");
+                }
             }
-            pauseMenuButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
-            walkUpButton.setDisable(false);
-            walkRightButton.setDisable(false);
-            walkDownButton.setDisable(false);
-            walkLeftButton.setDisable(false);
-            interactionButton.setDisable(false);
+         pauseMenuButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
+         walkUpButton.setDisable(false);
+         walkRightButton.setDisable(false);
+         walkDownButton.setDisable(false);
+         walkLeftButton.setDisable(false);
+         interactionButton.setDisable(false);
         };
         walkUpButton.setDisable(true);
         walkRightButton.setDisable(true);
         walkDownButton.setDisable(true);
         walkLeftButton.setDisable(true);
         interactionButton.setDisable(true);
-        walkLeftButton.setText("...");
+        pauseMenuButton.setText("...");
         informationLabel.setText(resources.getString("WAITING.INPUT"));
         pauseMenuButton.addEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
     }
 
     public void setWalkRight() {
         keyPressedHandler = event -> {
-            if(Character.isLetterOrDigit(event.getText().charAt(0))){
+            if(event.getCode() == KeyCode.ESCAPE){
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
-                walkRightButton.setText("");
-                walkRightButton.setText(event.getText().toUpperCase());
+                pauseMenuButton.setText("");
+                pauseMenuButton.setText("ESC");
             }else{
-                informationLabel.setText(resources.getString("WRONG.INPUT"));
-                walkRightButton.setText("D");
+                if(Character.isLetterOrDigit(event.getText().charAt(0))){
+                    informationLabel.setText(resources.getString("CLICK.CHECK"));
+                    walkRightButton.setText("");
+                    walkRightButton.setText(event.getText().toUpperCase());
+                }else{
+                    informationLabel.setText(resources.getString("WRONG.INPUT"));
+                    walkRightButton.setText("D");
+                }
             }
             walkRightButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
             walkUpButton.setDisable(false);
@@ -144,13 +164,19 @@ public class IngameKeybindingsController extends Controller {
 
     public void setInteraction() {
         keyPressedHandler = event -> {
-            if(Character.isLetterOrDigit(event.getText().charAt(0))){
+            if(event.getCode() == KeyCode.ESCAPE){
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
-                interactionButton.setText("");
-                interactionButton.setText(event.getText().toUpperCase());
+                pauseMenuButton.setText("");
+                pauseMenuButton.setText("ESC");
             }else{
-                informationLabel.setText(resources.getString("WRONG.INPUT"));
-                interactionButton.setText("E");
+                if(Character.isLetterOrDigit(event.getText().charAt(0))){
+                    informationLabel.setText(resources.getString("CLICK.CHECK"));
+                    interactionButton.setText("");
+                    interactionButton.setText(event.getText().toUpperCase());
+                }else{
+                    informationLabel.setText(resources.getString("WRONG.INPUT"));
+                    interactionButton.setText("E");
+                }
             }
             interactionButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
             walkUpButton.setDisable(false);
@@ -171,13 +197,19 @@ public class IngameKeybindingsController extends Controller {
 
     public void setWalkDown() {
         keyPressedHandler = event -> {
-            if(Character.isLetterOrDigit(event.getText().charAt(0))){
+            if(event.getCode() == KeyCode.ESCAPE){
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
-                walkDownButton.setText("");
-                walkDownButton.setText(event.getText().toUpperCase());
+                pauseMenuButton.setText("");
+                pauseMenuButton.setText("ESC");
             }else{
-                informationLabel.setText(resources.getString("WRONG.INPUT"));
-                walkDownButton.setText("S");
+                if(Character.isLetterOrDigit(event.getText().charAt(0))){
+                    informationLabel.setText(resources.getString("CLICK.CHECK"));
+                    walkDownButton.setText("");
+                    walkDownButton.setText(event.getText().toUpperCase());
+                }else{
+                    informationLabel.setText(resources.getString("WRONG.INPUT"));
+                    walkDownButton.setText("S");
+                }
             }
             walkDownButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
             walkUpButton.setDisable(false);
@@ -198,13 +230,19 @@ public class IngameKeybindingsController extends Controller {
 
     public void setWalkUp() {
         keyPressedHandler = event -> {
-            if(Character.isLetterOrDigit(event.getText().charAt(0))){
+            if(event.getCode() == KeyCode.ESCAPE){
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
-                walkUpButton.setText("");
-                walkUpButton.setText(event.getText().toUpperCase());
+                pauseMenuButton.setText("");
+                pauseMenuButton.setText("ESC");
             }else{
-                informationLabel.setText(resources.getString("WRONG.INPUT"));
-                walkUpButton.setText("W");
+                if(Character.isLetterOrDigit(event.getText().charAt(0))){
+                    informationLabel.setText(resources.getString("CLICK.CHECK"));
+                    walkUpButton.setText("");
+                    walkUpButton.setText(event.getText().toUpperCase());
+                }else{
+                    informationLabel.setText(resources.getString("WRONG.INPUT"));
+                    walkUpButton.setText("W");
+                }
             }
             walkUpButton.removeEventHandler(KeyEvent.KEY_PRESSED,keyPressedHandler);
             walkDownButton.setDisable(false);
