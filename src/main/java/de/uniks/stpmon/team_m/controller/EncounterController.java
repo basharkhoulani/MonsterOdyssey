@@ -215,7 +215,7 @@ public class EncounterController extends Controller {
             if(opponent.move() != null) {
                 Move move = opponent.move();
                 if(move instanceof AbilityMove){
-                    updateDescription("You used " + abilityDtos.get(((AbilityMove) move).ability()- 1).name(), false);
+                    updateDescription(resources.getString("YOU.USED") + abilityDtos.get(((AbilityMove) move).ability()- 1).name(), false);
                 }
                 // else for change monster move
             }
@@ -224,7 +224,7 @@ public class EncounterController extends Controller {
             if(opponent.move() != null) {
                 Move move = opponent.move();
                 if(move instanceof AbilityMove){
-                    updateDescription("Enemy used " + abilityDtos.get(((AbilityMove) move).ability()- 1).name(), false);
+                    updateDescription(resources.getString("ENEMY.USED") + abilityDtos.get(((AbilityMove) move).ability()- 1).name(), false);
                 }
                 // else for change monster move
             }
@@ -233,10 +233,13 @@ public class EncounterController extends Controller {
             for(Result r: opponent.results()){
                 switch(r.type()){
                     case "ability-success":
-                        updateDescription(abilityDtos.get(r.ability() -1).name() + " is " + r.effectiveness(), false);
-                        if(opponent.monster() != null){
+                        boolean isExecuted = updateDescription(abilityDtos.get(r.ability() -1).name() + " " + resources.getString("IS") + r.effectiveness(), false);
+                        if(opponent.monster() != null && !isExecuted){
                             updateMonsterValues(opponent.trainer(), opponent.monster());
                         }
+                        break;
+                    case "target-defeated":
+                        updateDescription(resources.getString("TARGET.DEFEATED"), false);
                         break;
                 }
             }
@@ -262,15 +265,16 @@ public class EncounterController extends Controller {
         battleMenu.getChildren().add(battleMenuController.render());
     }
 
-    public void updateDescription(String information, boolean isUpdated) {
+    public boolean updateDescription(String information, boolean isUpdated) {
         if(isUpdated){
             battleDescription.setText(information);
         } else {
             if (battleDescription.getText().contains(information)){
-                return;
+                return true;
             }
             battleDescription.setText(battleDescription.getText() + "\n" + information);
         }
+        return false;
     }
 
     private void updateMonsterValues(String trainerId, String monsterId) {

@@ -91,14 +91,10 @@ public class AbilitiesMenuController extends Controller {
 
     private void useAbility(AbilityDto ability, Button abilityButton, int currentUse) {
         String regionId = encounterOpponentStorageProvider.get().getRegionId();
-        System.out.println("RegionId: " + regionId);
         String encounterId = encounterOpponentStorageProvider.get().getEncounterId();
-        System.out.println("EncounterId: " + encounterId);
         String opponentId = encounterOpponentStorageProvider.get().getSelfOpponent()._id();
-        System.out.println("OpponentId: " + opponentId);
         String targetId = encounterOpponentStorageProvider.get().getEnemyOpponent().trainer();
         Move move = new AbilityMove("ability", ability.id(), targetId);
-        System.out.println("Move: " + move);
 
         disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(
                 opponent -> {
