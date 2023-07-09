@@ -16,6 +16,7 @@ import javax.inject.Provider;
 import java.util.*;
 import java.util.Map;
 
+import static de.uniks.stpmon.team_m.Constants.EMPTY_STRING;
 import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
 public class AbilitiesMenuController extends Controller {
@@ -99,7 +100,9 @@ public class AbilitiesMenuController extends Controller {
         disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(
                 opponent -> {
                     updateButton(ability, abilityButton, currentUse-1);
-                    encounterController.updateDescription("", true);
+                    encounterController.updateDescription(EMPTY_STRING, true);
+                    encounterController.resetOppoenentUpdate();
+                    encounterController.resetRepeatedTimes();
                 }, Throwable::printStackTrace));
     }
 
