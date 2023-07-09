@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
@@ -22,6 +23,7 @@ public class BattleMenuController extends Controller {
     public Button changeMonsterButton;
     @FXML
     public Button currentInfoButton;
+    @FXML
     public Button fleeButton;
     private EncounterController encounterController;
     private HBox battleMenuHBox;
@@ -32,21 +34,24 @@ public class BattleMenuController extends Controller {
     public BattleMenuController(
     ) {}
 
-    public void init(EncounterController encounterController, HBox battleMenuHBox, EncounterOpponentStorage encounterOpponentStorage) {
+    public void init(EncounterController encounterController, HBox battleMenuHBox, EncounterOpponentStorage encounterOpponentStorage, App app) {
         super.init();
         this.encounterController = encounterController;
         this.battleMenuHBox = battleMenuHBox;
         this.encounterOpponentStorage = encounterOpponentStorage;
+        this.app = app;
     }
 
+    @Override
     public Parent render(){
         final Parent parent = super.render();
+        fleeButton.setVisible(encounterOpponentStorage.isWild());
         return parent;
     }
 
 
     public void showAbilities() {
-        // change to AbilitiesSubView
+        encounterController.showAbilities();
     }
 
     public void changeMonster(ActionEvent actionEvent) {
