@@ -990,7 +990,7 @@ public class IngameController extends Controller {
                         case "updated" -> {
                             updateTrainer(trainers, trainer);
                             if (trainerStorageProvider.get().getTrainer()._id().equals(trainer._id())) {
-                                monstersListControllerProvider.get().init();
+                                trainerStorageProvider.get().setTrainer(trainer);
                             }
                             // albert
                             if (trainer._id().equals("645e32c6866ace359554a802")) {
