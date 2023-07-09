@@ -1002,7 +1002,7 @@ public class IngameController extends Controller {
                         case &quot;updated&quot; -&gt; {
 <span class="nc" id="L1003">                            updateTrainer(trainers, trainer);</span>
 <span class="nc bnc" id="L1004" title="All 2 branches missed.">                            if (trainerStorageProvider.get().getTrainer()._id().equals(trainer._id())) {</span>
-<span class="nc" id="L1005">                                monstersListControllerProvider.get().init();</span>
+<span class="nc" id="L1005">                                trainerStorageProvider.get().setTrainer(trainer);</span>
                             }
                             // albert
 <span class="nc bnc" id="L1008" title="All 2 branches missed.">                            if (trainer._id().equals(&quot;645e32c6866ace359554a802&quot;)) {</span>
