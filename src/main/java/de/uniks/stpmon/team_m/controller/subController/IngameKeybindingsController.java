@@ -71,7 +71,32 @@ public class IngameKeybindingsController extends Controller {
 
     public void setWalkLeft() {
         keyPressedHandler = event -> {
-            if (event.getCode() == KeyCode.ESCAPE) {
+            if(event.getCode() == KeyCode.SPACE){
+                walkLeftButton.setText(preferences.get("walkLeft","A"));
+                informationLabel.setText(resources.getString("WRONG.INPUT"));
+                event.consume();
+            }
+            else if(event.getCode() == KeyCode.UP) {
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                walkLeftButton.setText("");
+                walkLeftButton.setText("\u2191");
+            }
+            else if(event.getCode() == KeyCode.DOWN){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                walkLeftButton.setText("");
+                walkLeftButton.setText("\u2193");
+            }
+            else if(event.getCode() == KeyCode.RIGHT){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                walkLeftButton.setText("");
+                walkLeftButton.setText("\u2192");
+            }
+            else if(event.getCode() == KeyCode.LEFT){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                walkLeftButton.setText("");
+                walkLeftButton.setText("\u2190");
+            }
+            else if (event.getCode() == KeyCode.ESCAPE) {
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
                 walkLeftButton.setText("");
                 walkLeftButton.setText("ESC");
@@ -96,7 +121,32 @@ public class IngameKeybindingsController extends Controller {
 
     public void setPauseMenu() {
         keyPressedHandler = event -> {
-            if(event.getCode() == KeyCode.ESCAPE){
+            if(event.getCode() == KeyCode.SPACE){
+                pauseMenuButton.setText(preferences.get("pauseMenu","ESC"));
+                informationLabel.setText(resources.getString("WRONG.INPUT"));
+                event.consume();
+            }
+            else if(event.getCode() == KeyCode.UP) {
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                pauseMenuButton.setText("");
+                pauseMenuButton.setText("\u2191");
+            }
+            else if(event.getCode() == KeyCode.DOWN){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                pauseMenuButton.setText("");
+                pauseMenuButton.setText("\u2193");
+            }
+            else if(event.getCode() == KeyCode.RIGHT){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                pauseMenuButton.setText("");
+                pauseMenuButton.setText("\u2192");
+            }
+            else if(event.getCode() == KeyCode.LEFT){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                pauseMenuButton.setText("");
+                pauseMenuButton.setText("\u2190");
+            }
+            else if(event.getCode() == KeyCode.ESCAPE){
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
                 pauseMenuButton.setText("");
                 pauseMenuButton.setText("ESC");
@@ -121,7 +171,32 @@ public class IngameKeybindingsController extends Controller {
 
     public void setWalkRight() {
         keyPressedHandler = event -> {
-            if(event.getCode() == KeyCode.ESCAPE){
+            if(event.getCode() == KeyCode.SPACE){
+                walkRightButton.setText(preferences.get("walkRight","D"));
+                informationLabel.setText(resources.getString("WRONG.INPUT"));
+                event.consume();
+            }
+            else if(event.getCode() == KeyCode.UP) {
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                walkRightButton.setText("");
+                walkRightButton.setText("\u2191");
+            }
+            else if(event.getCode() == KeyCode.DOWN){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                walkRightButton.setText("");
+                walkRightButton.setText("\u2193");
+            }
+            else if(event.getCode() == KeyCode.RIGHT){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                walkRightButton.setText("");
+                walkRightButton.setText("\u2192");
+            }
+            else if(event.getCode() == KeyCode.LEFT){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                walkRightButton.setText("");
+                walkRightButton.setText("\u2190");
+            }
+            else if(event.getCode() == KeyCode.ESCAPE){
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
                 walkRightButton.setText("");
                 walkRightButton.setText("ESC");
@@ -146,7 +221,32 @@ public class IngameKeybindingsController extends Controller {
 
     public void setInteraction() {
         keyPressedHandler = event -> {
-            if(event.getCode() == KeyCode.ESCAPE){
+            if(event.getCode() == KeyCode.SPACE){
+                interactionButton.setText(preferences.get("interaction","E"));
+                informationLabel.setText(resources.getString("WRONG.INPUT"));
+                event.consume();
+            }
+            else if(event.getCode() == KeyCode.UP) {
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                interactionButton.setText("");
+                interactionButton.setText("\u2191");
+            }
+            else if(event.getCode() == KeyCode.DOWN){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                interactionButton.setText("");
+                interactionButton.setText("\u2193");
+            }
+            else if(event.getCode() == KeyCode.RIGHT){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                interactionButton.setText("");
+                interactionButton.setText("\u2192");
+            }
+            else if(event.getCode() == KeyCode.LEFT){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                interactionButton.setText("");
+                interactionButton.setText("\u2190");
+            }
+            else if(event.getCode() == KeyCode.ESCAPE){
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
                 interactionButton.setText("");
                 interactionButton.setText("ESC");
@@ -171,7 +271,32 @@ public class IngameKeybindingsController extends Controller {
 
     public void setWalkDown() {
         keyPressedHandler = event -> {
-            if(event.getCode() == KeyCode.ESCAPE){
+            if(event.getCode() == KeyCode.SPACE){
+                walkDownButton.setText(preferences.get("walkDown","S"));
+                informationLabel.setText(resources.getString("WRONG.INPUT"));
+                event.consume();
+            }
+            else if(event.getCode() == KeyCode.UP) {
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                walkDownButton.setText("");
+                walkDownButton.setText("\u2191");
+            }
+            else if(event.getCode() == KeyCode.DOWN){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                walkDownButton.setText("");
+                walkDownButton.setText("\u2193");
+            }
+            else if(event.getCode() == KeyCode.RIGHT){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                walkDownButton.setText("");
+                walkDownButton.setText("\u2192");
+            }
+            else if(event.getCode() == KeyCode.LEFT){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                walkDownButton.setText("");
+                walkDownButton.setText("\u2190");
+            }
+            else if(event.getCode() == KeyCode.ESCAPE){
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
                 walkDownButton.setText("");
                 walkDownButton.setText("ESC");
@@ -196,7 +321,32 @@ public class IngameKeybindingsController extends Controller {
 
     public void setWalkUp() {
         keyPressedHandler = event -> {
-            if(event.getCode() == KeyCode.ESCAPE){
+            if(event.getCode() == KeyCode.SPACE){
+                walkUpButton.setText(preferences.get("walkUp","W"));
+                informationLabel.setText(resources.getString("WRONG.INPUT"));
+                event.consume();
+            }
+            else if(event.getCode() == KeyCode.UP) {
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                walkUpButton.setText("");
+                walkUpButton.setText("\u2191");
+            }
+            else if(event.getCode() == KeyCode.DOWN){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                walkUpButton.setText("");
+                walkUpButton.setText("\u2193");
+            }
+            else if(event.getCode() == KeyCode.RIGHT){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                walkUpButton.setText("");
+                walkUpButton.setText("\u2192");
+            }
+            else if(event.getCode() == KeyCode.LEFT){
+                informationLabel.setText(resources.getString("CLICK.CHECK"));
+                walkUpButton.setText("");
+                walkUpButton.setText("\u2190");
+            }
+            else if(event.getCode() == KeyCode.ESCAPE){
                 informationLabel.setText(resources.getString("CLICK.CHECK"));
                 walkUpButton.setText("");
                 walkUpButton.setText("ESC");
@@ -229,9 +379,5 @@ public class IngameKeybindingsController extends Controller {
         if(set){
             currentbutton.setDisable(false);
         }
-    }
-
-    public void keyAlreadyUsed(Button currentButton){
-
     }
 }
