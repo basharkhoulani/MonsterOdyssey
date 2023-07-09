@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
@@ -20,8 +21,11 @@ import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 
+import static de.uniks.stpmon.team_m.Constants.ABILITYPALETTE;
 import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
 public class IngameStarterMonsterController extends Controller {
@@ -103,15 +107,12 @@ public class IngameStarterMonsterController extends Controller {
         return parent;
     }
 
-    public VBox createTypeVBox(String type, Image image) {
+    public VBox createTypeVBox(String type, String image) {
         VBox typeVBox = new VBox();
         typeVBox.setMaxSize(32, 32);
         if (TYPESCOLORPALETTE.containsKey(type)) {
             String color = TYPESCOLORPALETTE.get(type);
             typeVBox.setStyle("-fx-background-color: " + color + ";-fx-border-color: black");
-        }
-        if (image == null) {
-            image = new Image(String.valueOf(App.class.getResource("images/ingameHelpSymbol.png")));
         }
         ImageView typeImageView = new ImageView(image);
         typeImageView.setFitHeight(32);
@@ -150,7 +151,9 @@ public class IngameStarterMonsterController extends Controller {
 
         // add type
         monster.type().forEach(type -> {
-            VBox typeVBox = createTypeVBox(type, null);
+            String typeImagePath = ABILITYPALETTE.get(type);
+            URL resource = Main.class.getResource("images/" + typeImagePath);
+            VBox typeVBox = createTypeVBox(type, Objects.requireNonNull(resource).toString());
             typesVBox.getChildren().add(typeVBox);
         });
 
