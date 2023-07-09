@@ -13,6 +13,8 @@ import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.*;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -20,13 +22,19 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.List;
+
+import static de.uniks.stpmon.team_m.Constants.buttonsHBoxSpacing;
 
 
 public class EncounterController extends Controller {
@@ -60,6 +68,8 @@ public class EncounterController extends Controller {
     public Text battleDescription;
     @FXML
     public Button goBack;
+    @FXML
+    public StackPane rootStackPane;
 
     @Inject
     EncounterOpponentsService encounterOpponentsService;
@@ -225,6 +235,11 @@ public class EncounterController extends Controller {
     }
 
     public void onFleeButtonClick(Event event) {
+        System.out.println("wombat");
+        rootStackPane.getChildren().add(this.buildFleePopup());
+    }
+
+    public void fleeFromBattle(Event event) {
         SequentialTransition fleeAnimation = buildFleeAnimation();
         PauseTransition firstPause = new PauseTransition(Duration.millis(500));
         battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_FLEE"));
@@ -272,6 +287,68 @@ public class EncounterController extends Controller {
             transition.getChildren().add(parallelTransition);
         }
         return transition;
+    }
+
+    private VBox buildFleePopup() {
+        // base VBox
+        VBox fleeVBox = new VBox();
+        fleeVBox.setId("fleePopup");
+        fleeVBox.setMaxWidth(300);
+        fleeVBox.setMaxHeight(200);
+        fleeVBox.getStyleClass().add("dialogTextFlow");
+        fleeVBox.setAlignment(Pos.CENTER);
+
+        // flee TextFlow
+        TextFlow fleeTextFlow = new TextFlow();
+        fleeTextFlow.setMaxWidth(300);
+        fleeTextFlow.setMaxHeight(150);
+        fleeTextFlow.setPrefWidth(300);
+        fleeTextFlow.setPrefHeight(150);
+        fleeTextFlow.setPadding(new Insets(20, 10, 0, 10));
+        fleeTextFlow.setTextAlignment(TextAlignment.CENTER);
+
+        // flee Text
+        Text fleeText = new Text(this.resources.getString("ENCOUNTER_FLEE_TEXT"));
+        fleeTextFlow.getChildren().add(fleeText);
+
+        // buttons HBox
+        HBox buttonHBox = new HBox();
+        buttonHBox.setMaxWidth(300);
+        buttonHBox.setMaxHeight(50);
+        buttonHBox.setPrefWidth(300);
+        buttonHBox.setPrefHeight(50);
+        buttonHBox.setPadding(new Insets(0, 10, 10,10));
+        buttonHBox.setAlignment(Pos.TOP_CENTER);
+        buttonHBox.setSpacing(buttonsHBoxSpacing);
+
+        // yes Button
+        Button yesButton = new Button(this.resources.getString("ENCOUNTER_FLEE_CONFIRM_BUTTON"));
+        yesButton.setMaxWidth(100);
+        yesButton.setMinHeight(40);
+        yesButton.setPrefWidth(100);
+        yesButton.setPrefHeight(40);
+        yesButton.getStyleClass().add("hBoxRed");
+        yesButton.setOnAction(event -> {
+            rootStackPane.getChildren().remove(fleeVBox);
+            this.fleeFromBattle(event);
+        });
+
+        // no Button
+        Button noButton = new Button(this.resources.getString("ENCOUNTER_FLEE_CANCEL_BUTTON"));
+        noButton.setMaxWidth(100);
+        noButton.setMinHeight(40);
+        noButton.setPrefWidth(100);
+        noButton.setPrefHeight(40);
+        noButton.getStyleClass().add("hBoxYellow");
+        noButton.setOnAction(event -> rootStackPane.getChildren().remove(fleeVBox));
+
+        // add buttons to hbox
+        buttonHBox.getChildren().addAll(yesButton, noButton);
+
+        // add textFlow and buttonHBox to VBox
+        fleeVBox.getChildren().addAll(fleeTextFlow, buttonHBox);
+
+        return  fleeVBox;
     }
 }
     
