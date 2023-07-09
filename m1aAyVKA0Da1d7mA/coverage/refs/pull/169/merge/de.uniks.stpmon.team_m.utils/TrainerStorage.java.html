@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TrainerStorage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.utils</a> &gt; <span class="el_source">TrainerStorage.java</span></div><h1>TrainerStorage.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.utils;
+
+import de.uniks.stpmon.team_m.dto.Monster;
+import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.dto.Trainer;
+import javafx.scene.image.Image;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.List;
+
+
+@Singleton
+public class TrainerStorage {
+
+    private Region region;
+    private String trainerName;
+    private int x;
+    private int y;
+    private int direction;
+    private Trainer trainer;
+    private String trainerImageUrl;
+    private Image trainerSpriteChunk;
+    private List&lt;Monster&gt; monsters;
+    private List&lt;MonsterTypeDto&gt; monsterTypes;
+
+    @Inject
+<span class="fc" id="L29">    public TrainerStorage() {</span>
+<span class="fc" id="L30">    }</span>
+
+    public void setTrainer(Trainer trainer) {
+<span class="fc" id="L33">        this.trainer = trainer;</span>
+<span class="fc" id="L34">    }</span>
+
+    public void setTrainerName(String trainerName) {
+<span class="fc" id="L37">        this.trainerName = trainerName;</span>
+<span class="fc" id="L38">    }</span>
+
+    public void setTrainerSprite(String url) {
+<span class="fc" id="L41">        this.trainerImageUrl = url;</span>
+<span class="fc" id="L42">    }</span>
+
+    public Trainer getTrainer() {
+<span class="nc" id="L45">        return trainer;</span>
+    }
+
+    public Region getRegion() {
+<span class="fc" id="L49">        return region;</span>
+    }
+
+    public void setRegion(Region region) {
+<span class="nc" id="L53">        this.region = region;</span>
+<span class="nc" id="L54">    }</span>
+
+    public String getTrainerName() {
+<span class="fc" id="L57">        return this.trainerName;</span>
+    }
+
+    public String getTrainerSprite() {
+<span class="fc" id="L61">        return this.trainerImageUrl;</span>
+    }
+
+    public Image getTrainerSpriteChunk() {
+<span class="nc" id="L65">        return trainerSpriteChunk;</span>
+    }
+
+    public void setTrainerSpriteChunk(Image trainerSpriteChunk) {
+<span class="fc" id="L69">        this.trainerSpriteChunk = trainerSpriteChunk;</span>
+<span class="fc" id="L70">    }</span>
+
+    public int getX() {
+<span class="nc" id="L73">        return x;</span>
+    }
+
+    public void setX(int x) {
+<span class="fc" id="L77">        this.x = x;</span>
+<span class="fc" id="L78">    }</span>
+
+    public int getY() {
+<span class="nc" id="L81">        return y;</span>
+    }
+
+    public void setY(int y) {
+<span class="fc" id="L85">        this.y = y;</span>
+<span class="fc" id="L86">    }</span>
+
+    public int getDirection() {
+<span class="nc" id="L89">        return direction;</span>
+    }
+
+    public void setDirection(int direction) {
+<span class="fc" id="L93">        this.direction = direction;</span>
+<span class="fc" id="L94">    }</span>
+
+    public List&lt;Monster&gt; getMonsters() {
+<span class="nc" id="L97">        return monsters;</span>
+    }
+
+    public void setMonsters(List&lt;Monster&gt; monsters) {
+<span class="nc" id="L101">        this.monsters = monsters;</span>
+<span class="nc" id="L102">    }</span>
+
+    public List&lt;MonsterTypeDto&gt; getMonsterTypes() {
+<span class="nc" id="L105">        return monsterTypes;</span>
+    }
+
+    public void setMonsterTypes(List&lt;MonsterTypeDto&gt; monsterTypes) {
+<span class="nc" id="L109">        this.monsterTypes = monsterTypes;</span>
+<span class="nc" id="L110">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
