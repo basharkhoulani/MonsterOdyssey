@@ -67,21 +67,23 @@ public class AbilitiesMenuController extends Controller {
         disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(
                 abilities -> {
                     int i = 0;
-                    for (Map.Entry<String, Integer> entry: monster.abilities().entrySet()) {
-                        AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey())-1);
-                        Button abilityButton = abilityButtons.get(i);
-                        abilityButton.setText(ability.name() + " " + entry.getValue() + "/" + ability.maxUses());
-                        // Disable Button if no uses left
-                        if(entry.getValue() == 0){
-                            abilityButton.setDisable(true);
+                    if(monster != null){
+                        for (Map.Entry<String, Integer> entry: monster.abilities().entrySet()) {
+                            AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey())-1);
+                            Button abilityButton = abilityButtons.get(i);
+                            abilityButton.setText(ability.name() + " " + entry.getValue() + "/" + ability.maxUses());
+                            // Disable Button if no uses left
+                            if(entry.getValue() == 0){
+                                abilityButton.setDisable(true);
+                            }
+                            // Change Color
+                            if (TYPESCOLORPALETTE.containsKey(ability.type())) {
+                                abilityButton.setStyle("-fx-background-color: " + TYPESCOLORPALETTE.get(ability.type()) + ";-fx-border-color: black");
+                            }
+                            // setOnAction
+                            abilityButton.setOnAction(actionEvent -> useAbility(ability, abilityButton, entry.getValue()));
+                            i++;
                         }
-                        // Change Color
-                        if (TYPESCOLORPALETTE.containsKey(ability.type())) {
-                            abilityButton.setStyle("-fx-background-color: " + TYPESCOLORPALETTE.get(ability.type()) + ";-fx-border-color: black");
-                        }
-                        // setOnAction
-                        abilityButton.setOnAction(actionEvent -> useAbility(ability, abilityButton, entry.getValue()));
-                        i++;
                     }
                     while(i<4){
                         abilityButtons.get(i).setVisible(false);
@@ -103,6 +105,7 @@ public class AbilitiesMenuController extends Controller {
                     encounterController.updateDescription(EMPTY_STRING, true);
                     encounterController.resetOppoenentUpdate();
                     encounterController.resetRepeatedTimes();
+                    encounterController.goBackToBattleMenu();
                 }, Throwable::printStackTrace));
     }
 

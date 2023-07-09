@@ -277,6 +277,11 @@ public class EncounterController extends Controller {
                 } // else for change monster move
             } else {
                 if (o.results().size() != 0) {
+                    if(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
+                        encounterOpponentStorage.setSelfOpponent(o);
+                    } else {
+                        encounterOpponentStorage.setEnemyOpponent(o);
+                    }
                     for (Result r : o.results()) {
                         switch (r.type()) {
                             case "ability-success" -> {
@@ -301,7 +306,11 @@ public class EncounterController extends Controller {
     public void showAbilities() {
         battleMenu.getChildren().clear();
         Monster monster = encounterOpponentStorage.getCurrentTrainerMonster();
-        abilitiesMenuController.init(monster, presetsService, battleMenu, this);
+        if(encounterOpponentStorage.getSelfOpponent().monster() != null){
+            abilitiesMenuController.init(monster, presetsService, battleMenu, this);
+        } else {
+            abilitiesMenuController.init(null, presetsService, battleMenu, this);
+        }
         battleMenu.getChildren().add(abilitiesMenuController.render());
     }
 
