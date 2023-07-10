@@ -20,7 +20,7 @@
                 </HBox.margin>
             </Button>
             <VBox prefHeight="250.0" prefWidth="147.0">
-            <HBox prefHeight="100.0" prefWidth="200.0" styleClass="trainerAvatarImageView">
+            <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF;" styleClass="trainerAvatarImageView">
                <children>
                       <ImageView fx:id="monsterImageView" fitHeight="120.0" pickOnBounds="true" preserveRatio="true" />
                </children>
@@ -152,6 +152,9 @@
                </VBox.margin>
             </Label>
             </children>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
         </VBox>
       <HBox prefHeight="256.0" prefWidth="263.0">
          <children>
