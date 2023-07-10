@@ -209,6 +209,19 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: 50%;
 }
+
+.goBackSymbol {
+    -fx-background-image: url("images/GoBackSymbol-White.png");
+    -fx-border-style: solid;
+    -fx-background-color: transparent;
+    -fx-background-size: 40px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 50%;
+    -fx-background-radius: 0;
+    -fx-border-radius: 5;
+    -fx-border-width: 1;
+    -fx-border-color: darkgray;
+}
 /*********************************************************************************/
 /********************************** Login ****************************************/
 .loginButton {
