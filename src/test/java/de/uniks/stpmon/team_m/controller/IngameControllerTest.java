@@ -21,6 +21,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -270,35 +271,35 @@ public class IngameControllerTest extends ApplicationTest {
                         "Monster1",
                         "Flamander_1.png",
                         List.of("fire"),
-                        "Teeeest"
+                        "Monster1lololol"
                 ),
                 new MonsterTypeDto(
                         2,
                         "Monster2",
                         "Flamander_1.png",
                         List.of("fire"),
-                        "Teeeest"
+                        "ich bin ein echter gangster"
                 ),
                 new MonsterTypeDto(
                         3,
                         "Monster3",
                         "Flamander_1.png",
                         List.of("fire"),
-                        "Teeeest"
+                        "waaas willst du tun"
                 ),
                 new MonsterTypeDto(
                         4,
                         "Monster4",
                         "Flamander_1.png",
                         List.of("fire"),
-                        "Teeeest"
+                        "dieser big tasty hat nichts mehr mit einem big tasty zu tun"
                 ),
                 new MonsterTypeDto(
                         5,
                         "Monster5",
                         "Flamander_1.png",
                         List.of("fire"),
-                        "Teeeest"
+                        "auch ein blindes schaf findet manchmal ein huhn"
                 )
         )));
 
@@ -595,6 +596,39 @@ public class IngameControllerTest extends ApplicationTest {
         press(KeyCode.E);
         release(KeyCode.E);
         Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        final VBox starterSelectionVBox = lookup("#starterSelectionVBox").query();
+        assertNotNull(starterSelectionVBox);
+
+        final TextFlow starterDescription = lookup("#starterDescription").query();
+        final Text starterDescriptionText0 = (Text) starterDescription.getChildren().get(0);
+        final String monsterDescription0 = starterDescriptionText0.getText();
+
+        clickOn("#arrowRight");
+
+        final Text starterDescriptionText1 = (Text) starterDescription.getChildren().get(0);
+        final String monsterDescription1 = starterDescriptionText1.getText();
+        System.out.println(monsterDescription0);
+        System.out.println(monsterDescription1);
+        assertNotEquals(monsterDescription0, monsterDescription1);
+
+        clickOn("#arrowLeft");
+
+        final Text starterDescriptionText2 = (Text) starterDescription.getChildren().get(0);
+        final String monsterDescription2 = starterDescriptionText2.getText();
+        assertEquals(monsterDescription0, monsterDescription2);
 
         Thread.sleep(1000000000);
     }
