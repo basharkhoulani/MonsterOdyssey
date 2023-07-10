@@ -425,6 +425,25 @@ public class IngameController extends Controller {
 
         specificSounds();
 
+        //Keybindings
+        if(preferences.get("walkUp",null) == null){
+            preferences.put("walkUp",KeyCode.W.getChar());
+        }
+        if(preferences.get("walkDown",null) == null){
+            preferences.put("walkDown",KeyCode.S.getChar());
+        }
+        if(preferences.get("walkLeft",null) == null){
+            preferences.put("walkLeft",KeyCode.A.getChar());
+        }
+        if(preferences.get("walkRight",null) == null){
+            preferences.put("walkRight",KeyCode.D.getChar());
+        }
+        if(preferences.get("interaction",null) == null){
+            preferences.put("interaction",KeyCode.E.getChar());
+        }
+        if(preferences.get("pauseMenu",null) == null){
+            preferences.put("pauseMenu","ESC");
+        }
         return parent;
     }
 

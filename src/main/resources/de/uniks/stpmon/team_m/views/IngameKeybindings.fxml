@@ -106,7 +106,7 @@
          </VBox>
          <HBox prefHeight="37.0" prefWidth="693.0">
             <children>
-               <Label fx:id="informationLabel" prefHeight="34.0" prefWidth="555.0" text="%KEYBINDINGS.INFORMATION">
+               <Label fx:id="informationLabel" prefHeight="34.0" prefWidth="555.0" text="%KEYBINDINGS.INFORMATION" textAlignment="CENTER">
                   <font>
                      <Font name="Comic Sans MS" size="17.0" />
                   </font>
