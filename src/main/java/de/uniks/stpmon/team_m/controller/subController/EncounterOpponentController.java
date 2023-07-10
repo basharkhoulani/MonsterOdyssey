@@ -19,10 +19,10 @@ public class EncounterOpponentController extends Controller {
     private final Boolean isWild;
     private final Boolean invertX;
     public final Boolean isMultipleEnemyEncounter;
+    private Boolean isTargeted = false;
 
     @FXML
     public HBox opponentHBox;
-
     @FXML
     public VBox monsterInfoBox;
     @FXML
@@ -52,7 +52,6 @@ public class EncounterOpponentController extends Controller {
     @FXML
     public HBox trainerMonsterHBox;
 
-    private int monsterMaxHealth = 100;
     private Opponent currentTarget;
 
     public EncounterOpponentController(Boolean isEnemy, Boolean isWild, Boolean invertX, Boolean isMultipleEnemyEncounter) {
@@ -93,6 +92,15 @@ public class EncounterOpponentController extends Controller {
             opponentHBox.getChildren().add(1, splitterVBox);
             opponentHBox.getChildren().add(2, monsterInfoBox);
         }
+        monsterImageViewVBox.setOnMouseClicked(event -> {
+            if (isEnemy && isMultipleEnemyEncounter) {
+                if (!isTargeted) {
+                    onTarget();
+                } else {
+                    unTarget();
+                }
+            }
+        });
         return parent;
     }
 
@@ -153,6 +161,19 @@ public class EncounterOpponentController extends Controller {
         monsterNameHBox.getStyleClass().clear();
         monsterNameHBox.getStyleClass().add("hBoxGreen");
         monsterImageViewVBox.setStyle("-fx-padding: 16px; -fx-border-color: red; -fx-border-radius: 100;");
+        isTargeted = true;
+        return this;
+    }
+
+    public EncounterOpponentController unTarget() {
+        monsterNameHBox.getStyleClass().clear();
+        if (isEnemy) {
+            monsterNameHBox.getStyleClass().add("hBoxRed");
+        } else {
+            monsterNameHBox.getStyleClass().add("hBoxYellow");
+        }
+        monsterImageViewVBox.setStyle("-fx-padding: 0px; -fx-border-color: transparent; -fx-border-radius: 0;");
+        isTargeted = false;
         return this;
     }
 
