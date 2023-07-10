@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import com.sun.javafx.collections.ObservableListWrapper;
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.controller.subController.IngameStarterMonsterController;
 import de.uniks.stpmon.team_m.controller.subController.MonstersListController;
 import de.uniks.stpmon.team_m.controller.subController.NotificationListHandyController;
 import de.uniks.stpmon.team_m.dto.*;
@@ -23,6 +24,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import okhttp3.MediaType;
+import okhttp3.ResponseBody;
+import okio.BufferedSource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -62,6 +66,8 @@ public class IngameControllerTest extends ApplicationTest {
     @Mock
     Provider<NotificationListHandyController> notificationListHandyControllerProvider;
     @Mock
+    Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
+    @Mock
     Provider<EncounterController> encounterControllerProvider;
 
     // Leave this mock!! it ensures that tests run fine
@@ -79,16 +85,18 @@ public class IngameControllerTest extends ApplicationTest {
     RegionsService regionsService;
     @Mock
     EncounterOpponentsService encounterOpponentsService;
+    @Mock
+    PresetsService presetsService;
     @InjectMocks
     IngameController ingameController;
     @Mock
     Provider<EventListener> eventListener;
     @Mock
-    PresetsService presetsService;
-    @Mock
     Parent parent;
     @InjectMocks
     NotificationListHandyController notificationListHandyController;
+    @InjectMocks
+    IngameStarterMonsterController ingameStarterMonsterController;
 
     @Override
     public void start(Stage stage) {
@@ -201,7 +209,23 @@ public class IngameControllerTest extends ApplicationTest {
                         20,
                         18,
                         2,
-                        new NPCInfo(false, false, false, true, null, null))
+                        new NPCInfo(false, false, false, true, null, null)),
+                new Trainer(
+                        "2023-05-30T12:02:57.510Z",
+                        "2023-05-30T12:01:57.510Z",
+                        "6475e595ac3946b6a812d869",
+                        "646bab5cecf584e1be02598a",
+                        "6475e595ac3946b6a812d868",
+                        "Prof. Testikus Maximus",
+                        "Premade_Character_02.png",
+                        0,
+                        List.of(),
+                        List.of(),
+                        "6475e595ac3946b6a812d863",
+                        69,
+                        69,
+                        2,
+                        new NPCInfo(false, false, false, false, null, List.of("1", "3", "5")))
                 )
         ));
         EventListener eventListenerMock = mock(EventListener.class);
@@ -237,6 +261,65 @@ public class IngameControllerTest extends ApplicationTest {
 
         notificationListHandyController.setValues(bundle, null, null, notificationListHandyController, app);
         when(notificationListHandyControllerProvider.get()).thenReturn(notificationListHandyController);
+        ingameStarterMonsterController.setValues(bundle, null, null, ingameStarterMonsterController, app);
+        when(ingameStarterMonsterControllerProvider.get()).thenReturn(ingameStarterMonsterController);
+
+        when(presetsService.getMonsters()).thenReturn(Observable.just(List.of(
+                new MonsterTypeDto(
+                        1,
+                        "Monster1",
+                        "Flamander_1.png",
+                        List.of("fire"),
+                        "Teeeest"
+                ),
+                new MonsterTypeDto(
+                        2,
+                        "Monster2",
+                        "Flamander_1.png",
+                        List.of("fire"),
+                        "Teeeest"
+                ),
+                new MonsterTypeDto(
+                        3,
+                        "Monster3",
+                        "Flamander_1.png",
+                        List.of("fire"),
+                        "Teeeest"
+                ),
+                new MonsterTypeDto(
+                        4,
+                        "Monster4",
+                        "Flamander_1.png",
+                        List.of("fire"),
+                        "Teeeest"
+                ),
+                new MonsterTypeDto(
+                        5,
+                        "Monster5",
+                        "Flamander_1.png",
+                        List.of("fire"),
+                        "Teeeest"
+                )
+        )));
+
+        when(presetsService.getMonsterImage(anyInt())).thenReturn(Observable.just(
+                new ResponseBody() {
+                    @Override
+                    public MediaType contentType() {
+                        return null;
+                    }
+
+                    @Override
+                    public long contentLength() {
+                        return 0;
+                    }
+
+                    @Override
+                    public BufferedSource source() {
+                        return null;
+                    }
+                }
+        ));
 
         Opponent opponent = new Opponent(
                 "2023-05-30T12:02:57.510Z",
@@ -483,5 +566,36 @@ public class IngameControllerTest extends ApplicationTest {
         final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
 
         assertNotEquals("dialogStackPane", node.getId());
+    }
+
+    @Test
+    void testStarterMonsterNpcDialog() throws InterruptedException {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(69);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(70);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+        when(trainerStorageProvider.get().getTrainer()).thenReturn(new Trainer(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "6475e595ac3946b6a812d865",
+                "646bab5cecf584e1be02598a",
+                "6475e595ac3946b6a812d868",
+                "Peter",
+                "Premade_Character_02.png",
+                0,
+                List.of(),
+                null,
+                "6475e595ac3946b6a812d863",
+                33,
+                18,
+                0,
+                new NPCInfo(false, false,false, false, null,null)));
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        Thread.sleep(1000000000);
     }
 }
