@@ -35,6 +35,7 @@ import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -228,6 +229,20 @@ public class EncounterController extends Controller {
                     final Opponent opponent = event.data();
                     if(event.suffix().contains("updated")){
                         updateOpponent(opponent);
+                        if (opponent.results().size() > 0) {
+                            opponent.results().forEach(result -> {
+                                if (Objects.equals(result.type(), "monster-levelup")) {
+                                    showLevelUpPopUp();
+                                }
+                                if (Objects.equals(result.type(), "monster-learned")) {
+                                    System.out.println("new ability" + result);
+                                }
+                                if (Objects.equals(result.type(), "target-defeated")) {
+                                    fleeFromBattle(new Event(null));
+                                }
+                                System.out.println(result);
+                            });
+                        }
                     }
                 }, error -> showError(error.getMessage())));
     }
@@ -483,7 +498,13 @@ public class EncounterController extends Controller {
         VBox popUpVBox = new VBox();
         popUpVBox.getStyleClass().add("miniMapContainer");
         // TODO: give old monster
-        levelUpController.init(popUpVBox, rootStackPane, this, encounterOpponentStorage.getCurrentTrainerMonster(), encounterOpponentStorage.getCurrentTrainerMonsterType(), encounterOpponentStorage.getCurrentTrainerMonster());
+        levelUpController.init(
+                popUpVBox,
+                rootStackPane,
+                this,
+                encounterOpponentStorage.getCurrentTrainerMonster(),
+                encounterOpponentStorage.getCurrentTrainerMonsterType(),
+                encounterOpponentStorage.getCurrentTrainerMonster());
         popUpVBox.getChildren().add(levelUpController.render());
         rootStackPane.getChildren().add(popUpVBox);
     }
