@@ -151,7 +151,7 @@ public class DialogController extends Controller {
                 return encounterOnTalk;
             }
 
-            if (Objects.equals(this.npc._id(), "645e32c6866ace359554a802") && !this.alreadyEncountered) {
+            if (this.npc.npc().starters() != null) {
                 ingameController.showStarterSelection(this.npc.npc().starters());
                 return dialogNotFinished;
             } else {
