@@ -160,14 +160,14 @@ public class MonstersDetailController extends Controller {
                 AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey()) - 1);
                 monsterAbilities.add(ability);
             }
-            initMonsterAbilities(monsterAbilities);
+            initMonsterAbilities(monsterAbilities, monster);
         }, error ->
             showError(error.getMessage())));
     }
 
 
-    private void initMonsterAbilities(List<AbilityDto> abilities) {
-        abilityListView.setCellFactory(param -> new AbilityCell(resources, presetsServiceProvider.get(), this, this.ingameController));
+    private void initMonsterAbilities(List<AbilityDto> abilities, Monster monster) {
+        abilityListView.setCellFactory(param -> new AbilityCell(monster, resources, presetsServiceProvider.get(), this, this.ingameController));
         abilityListView.getItems().addAll(abilities);
         abilityListView.setFocusModel(null);
         abilityListView.setSelectionModel(null);

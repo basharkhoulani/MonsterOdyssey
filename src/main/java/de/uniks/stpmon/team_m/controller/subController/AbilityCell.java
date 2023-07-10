@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.ABILITYPALETTE;
@@ -56,11 +57,15 @@ public class AbilityCell extends ListCell<AbilityDto> {
     public Label accuracyLabel;
     @FXML
     public Label usesLabel;
-    public AbilityCell(ResourceBundle resources, PresetsService presetsService, MonstersDetailController monstersDetailController, IngameController ingameController) {
+    Monster monster;
+    List<Integer> uses;
+    public AbilityCell(Monster monster, ResourceBundle resources, PresetsService presetsService, MonstersDetailController monstersDetailController, IngameController ingameController) {
+        this.monster = monster;
         this.ingameController = ingameController;
         this.resources = resources;
         this.presetsService = presetsService;
         this.monstersDetailController = monstersDetailController;
+
     }
 
     @Override
@@ -91,7 +96,8 @@ public class AbilityCell extends ListCell<AbilityDto> {
 
                         damageLabel.setText(abilityDto.power() + " DMG");
                         accuracyLabel.setText((abilityDto.accuracy() * 100) + " %");
-                        usesLabel.setText(abilityDto.maxUses() + "/"+ abilityDto.maxUses());
+                        Integer uses = monster.abilities().get(String.valueOf(ability.id()));
+                        usesLabel.setText(resources.getString("USES") + ": " + uses + "/"+ abilityDto.maxUses());
                     }, error -> monstersDetailController.showError(error.getMessage())));
             setGraphic(rootAbilityBox);
             setText(null);
