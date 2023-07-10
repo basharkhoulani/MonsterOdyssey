@@ -1319,7 +1319,7 @@ public class IngameController extends Controller {
         ContinueDialogReturnValues continueDialogReturn = dialogController.continueDialog(specialInteractions);
 
         switch (continueDialogReturn) {
-            case dialogFinishedTalkToTrainer -> endDialog(-1, true);
+            case dialogFinishedTalkToTrainer -> endDialog(0, true);
             case albertDialogFinished0 -> {
                 endDialog(0, true);
                 this.notificationListHandyController.displayStarterMessages();
