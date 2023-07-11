@@ -15,7 +15,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.TIME_FORMAT;
 import static de.uniks.stpmon.team_m.Constants.ZONE_ID_EUROPE_BERLIN;
