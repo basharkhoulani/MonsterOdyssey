@@ -9,7 +9,7 @@ import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -37,7 +37,7 @@ public class AbilitiesMenuController extends Controller {
     EncounterOpponentsService encounterOpponentsService;
     PresetsService presetsService;
     private Monster monster;
-    private HBox battleMenuHBox;
+    private VBox battleMenuVBox;
     private EncounterController encounterController;
 
 
@@ -45,11 +45,11 @@ public class AbilitiesMenuController extends Controller {
     public AbilitiesMenuController() {
     }
 
-    public void init(Monster monster, PresetsService presetsService, HBox battleMenuHBox, EncounterController encounterController) {
+    public void init(Monster monster, PresetsService presetsService, VBox battleMenuVBox, EncounterController encounterController) {
         super.init();
         this.monster = monster;
         this.presetsService = presetsService;
-        this.battleMenuHBox = battleMenuHBox;
+        this.battleMenuVBox = battleMenuVBox;
         this.encounterController = encounterController;
     }
 
@@ -96,7 +96,8 @@ public class AbilitiesMenuController extends Controller {
         String regionId = encounterOpponentStorageProvider.get().getRegionId();
         String encounterId = encounterOpponentStorageProvider.get().getEncounterId();
         String opponentId = encounterOpponentStorageProvider.get().getSelfOpponent()._id();
-        String targetId = encounterOpponentStorageProvider.get().getEnemyOpponent().trainer();
+        // targetId muss considered for complexer Situation
+        String targetId = "encounterOpponentStorageProvider.get().getEnemyOpponent().trainer()" ;
         Move move = new AbilityMove("ability", ability.id(), targetId);
 
         disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(

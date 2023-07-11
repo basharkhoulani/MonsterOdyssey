@@ -87,8 +87,6 @@ public class EncounterController extends Controller {
     private String regionId;
     private String encounterId;
     private String trainerId;
-    private Image myMonsterImage;
-    private Image enemyMonsterImage;
 
     private List<Controller> subControllers = new ArrayList<>();
     private int currentImageIndex = 0;
@@ -125,7 +123,7 @@ public class EncounterController extends Controller {
         // init battle menu
         battleMenuController.init(this, battleMenu, encounterOpponentStorage, app);
         battleMenu.getChildren().add(battleMenuController.render());
-        battleMenuController.onFleeButtonClick = this::onFleeButtonClick;
+        battleMenuController.onFleeButtonClick = this::onFleeButtonClick; // There are two methodes one from master, another from branch
 
         // Init opponent controller for own trainer
         ownTrainerController = new EncounterOpponentController(false, false, true, false);
@@ -133,10 +131,11 @@ public class EncounterController extends Controller {
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getSelfOpponent(), ownTrainerController);
         Parent ownTrainerParent = ownTrainerController.render();
         HBox.setHgrow(ownTrainerParent, javafx.scene.layout.Priority.ALWAYS);
+        //showMyMonster
         showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent(), true);
         // showMySprite
         ImageView sprite = ownTrainerController.getTrainerImageView();
-        setTrainerSpriteImageView(trainerStorage.getTrainer(), sprite, 1);
+        setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), sprite, 1);
 
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId)
                 .observeOn(FX_SCHEDULER)
@@ -279,7 +278,7 @@ public class EncounterController extends Controller {
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
                     encounterOpponentStorage.addCurrentMonster(monster);
-                    encounterOpponentController.setLevelLabel(String.valueOf(monster.level()))
+                    encounterOpponentController.setLevelLabel("Lvl " + monster.level())
                             .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
                     disposables.add(presetsService.getMonster(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(m -> {
@@ -354,6 +353,7 @@ public class EncounterController extends Controller {
         return (int) (Math.pow(currentLevel, 3) - Math.pow(currentLevel - 1, 3));
     }
 
+    // There are two different methodes for the flee Button click
     public void onFleeButtonClick() {
         SequentialTransition fleeAnimation = buildFleeAnimation();
         PauseTransition firstPause = new PauseTransition(Duration.millis(500));
@@ -379,10 +379,17 @@ public class EncounterController extends Controller {
         firstPause.play();
     }
 
+    /*
+    public void onFleeButtonClick() {
+        rootStackPane.getChildren().add(this.buildFleePopup());
+    }
+     */
+
     @Override
     public void destroy() {
         super.destroy();
         subControllers.forEach(Controller::destroy);
+        //add destroy methode for the elements in encounterOpponentControllerHashMap
     }
 
     public void listenToOpponents(String encounterId) {
@@ -395,6 +402,7 @@ public class EncounterController extends Controller {
                 }, error -> showError(error.getMessage())));
     }
 
+    // manage the response of all the opponents (include the move and all results after the move, there are 2 Updates per opponent)
     private void updateOpponent(Opponent opponent) {
         // For komplexer Situation for example with more opponents should be considered in the future
         if (opponent.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
@@ -439,6 +447,7 @@ public class EncounterController extends Controller {
                     if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                         updateDescription(resources.getString("YOU.USED") + abilityDtos.get((abilityMove).ability() - 1).name() + ". ", false);
                     } else {
+                        // need to change for complexer Situation
                         updateDescription(resources.getString("ENEMY.USED") + abilityDtos.get((abilityMove).ability() - 1).name() + ". ", false);
                     }
                 } // else for change monster move
@@ -447,14 +456,15 @@ public class EncounterController extends Controller {
                     if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                         encounterOpponentStorage.setSelfOpponent(o);
                     } else {
-                        encounterOpponentStorage.setEnemyOpponent(o);
+                        // need to change for complexer Situation
+                        // encounterOpponentStorage.setEnemyOpponent(o);
                     }
                     for (Result r : o.results()) {
                         switch (r.type()) {
                             case "ability-success" -> {
                                 updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + r.effectiveness() + ".\n", false);
                                 if (o.monster() != null) {
-                                    updateMonsterValues(o.trainer(), o.monster());
+                                    //updateMonsterValues(o.trainer(), o.monster());
                                 }
                             }
                             case "target-defeated" -> updateDescription(resources.getString("TARGET.DEFEATED"), false);
@@ -487,17 +497,14 @@ public class EncounterController extends Controller {
         battleMenu.getChildren().add(battleMenuController.render());
     }
 
-    public void onFleeButtonClick() {
-        rootStackPane.getChildren().add(this.buildFleePopup());
-    }
-
     public void fleeFromBattle(Event event) {
         SequentialTransition fleeAnimation = buildFleeAnimation();
         PauseTransition firstPause = new PauseTransition(Duration.millis(500));
-        battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_FLEE"));
+        battleDialogText.setText(resources.getString("ENCOUNTER_DESCRIPTION_FLEE"));
 
         firstPause.setOnFinished(evt -> {
-            myMonster.setVisible(false);
+            //setVisible the image of the own monster
+            //myMonster.setVisible(false);
             fleeAnimation.play();
         });
         fleeAnimation.setOnFinished(evt -> disposables.add(encounterOpponentsService.deleteOpponent(
@@ -518,7 +525,7 @@ public class EncounterController extends Controller {
     private SequentialTransition buildFleeAnimation() {
         SequentialTransition transition = new SequentialTransition();
 
-        Image[] images = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), TRAINER_DIRECTION_DOWN, true);
+        Image[] images = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), TRAINER_DIRECTION_DOWN, true);
 
         KeyFrame animationFrame = new KeyFrame(Duration.millis(Constants.DELAY), event -> {
             ownTrainerController.setTrainerImage(images[currentImageIndex]);
@@ -581,7 +588,8 @@ public class EncounterController extends Controller {
         yesButton.setPrefHeight(fleeButtonHeight);
         yesButton.getStyleClass().add("hBoxRed");
         yesButton.setOnAction(event -> {
-            rootStackPane.getChildren().remove(fleeVBox);
+            //remove the fleeVox from the root BorderPane
+            //rootStackPane.getChildren().remove(fleeVBox);
             this.fleeFromBattle(event);
         });
 
@@ -592,7 +600,7 @@ public class EncounterController extends Controller {
         noButton.setPrefWidth(fleeButtonWidth);
         noButton.setPrefHeight(fleeButtonHeight);
         noButton.getStyleClass().add("hBoxYellow");
-        noButton.setOnAction(event -> rootStackPane.getChildren().remove(fleeVBox));
+        //noButton.setOnAction(event -> rootStackPane.getChildren().remove(fleeVBox));
 
         // add buttons to hbox
         buttonHBox.getChildren().addAll(yesButton, noButton);
@@ -605,25 +613,22 @@ public class EncounterController extends Controller {
 
     public void updateDescription(String information, boolean isUpdated) {
         if (isUpdated) {
-            battleDescription.setText(information);
+            battleDialogText.setText(information);
         } else {
-            if (battleDescription.getText().contains(information)) {
+            if (battleDialogText.getText().contains(information)) {
                 return;
             }
-            battleDescription.setText(battleDescription.getText() + information);
+            battleDialogText.setText(battleDialogText.getText() + information);
         }
     }
 
-    private void updateMonsterValues(String trainerId, String monsterId) {
+    /*
+    private void updateMonsterValues(String trainerId, String monsterId, Opponent opponent) {
         boolean isMe = trainerId.equals(trainerStorageProvider.get().getTrainer()._id());
         disposables.add(monstersService.getMonster(regionId, trainerId, monsterId)
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
                     if (isMe) {
-                        encounterOpponentStorage.setCurrentTrainerMonster(monster);
-                        myLevelBar.setProgress((double) monster.experience() / requiredExperience(monster.level() + 1));
-                        myLevel.setText(monster.level() + " LVL");
-                        myHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
-                        myHealth.setText(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
+                        showTeamMonster(ownTrainerController, opppnent);
                     } else {
                         encounterOpponentStorage.setCurrentEnemyMonster(monster);
                         opponentLevel.setText(monster.level() + " LVL");
@@ -632,6 +637,7 @@ public class EncounterController extends Controller {
                 }, Throwable::printStackTrace));
 
     }
+     */
 
     public void resetOppoenentUpdate() {
         opponentsUpdate.clear();
