@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -112,12 +113,14 @@ public class MonsterCell extends ListCell<Monster> {
                         String style = "-fx-background-color: " + typeColor + ";";
                         typeIcon.setStyle(style);
 
-                        typeImagePath = ABILITYPALETTE.get(type.toString());
-                        URL resource = Main.class.getResource("images/" + typeImagePath);
-                        typeImage = new Image(resource.toString());
-                        typeImageView.setImage(typeImage);
-                        typeImageView.setFitHeight(45);
-                        typeImageView.setFitWidth(45);
+                        if(!GraphicsEnvironment.isHeadless()) {
+                            typeImagePath = ABILITYPALETTE.get(type.toString());
+                            URL resource = Main.class.getResource("images/" + typeImagePath);
+                            typeImage = new Image(resource.toString());
+                            typeImageView.setImage(typeImage);
+                            typeImageView.setFitHeight(45);
+                            typeImageView.setFitWidth(45);
+                        }
                     }, error -> monstersListController.showError(error.getMessage())));
             monsterLevel.setText(resources.getString("LEVEL") + " " + monster.level());
             disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)

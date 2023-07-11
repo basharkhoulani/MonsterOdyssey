@@ -84,9 +84,9 @@ public class AbilityCell extends ListCell<AbilityDto> {
                         String style = "-fx-background-color: " + typeColor + ";";
                         typeIcon.setStyle(style);
 
-                        typeImagePath = ABILITYPALETTE.get(abilityDto.type());
-                        URL resource = Main.class.getResource("images/" + typeImagePath);
                         if (!GraphicsEnvironment.isHeadless()) {
+                            typeImagePath = ABILITYPALETTE.get(abilityDto.type());
+                            URL resource = Main.class.getResource("images/" + typeImagePath);
                             typeImage = new Image(resource.toString());
                             typeImageView.setImage(typeImage);
                             typeImageView.setFitHeight(45);
