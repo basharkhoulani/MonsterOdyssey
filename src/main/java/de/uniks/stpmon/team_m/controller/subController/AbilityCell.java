@@ -77,33 +77,31 @@ public class AbilityCell extends ListCell<AbilityDto> {
             setGraphic(null);
             setStyle("-fx-background-color: #D6E8FE;");
         } else {
-            if(!GraphicsEnvironment.isHeadless()) {
-                loadFXML();
-                disposables.add(presetsService.getAbility(abilityDto.id()).observeOn(FX_SCHEDULER)
-                        .subscribe(ability -> {
-                            typeColor = TYPESCOLORPALETTE.get(ability.type());
-                            String style = "-fx-background-color: " + typeColor + ";";
-                            typeIcon.setStyle(style);
+            loadFXML();
+            disposables.add(presetsService.getAbility(abilityDto.id()).observeOn(FX_SCHEDULER)
+                    .subscribe(ability -> {
+                        typeColor = TYPESCOLORPALETTE.get(ability.type());
+                        String style = "-fx-background-color: " + typeColor + ";";
+                        typeIcon.setStyle(style);
 
-                            typeImagePath = ABILITYPALETTE.get(abilityDto.type());
-                            URL resource = Main.class.getResource("images/" + typeImagePath);
+                        typeImagePath = ABILITYPALETTE.get(abilityDto.type());
+                        URL resource = Main.class.getResource("images/" + typeImagePath);
 
-                            typeImage = new Image(resource.toString());
-                            typeImageView.setImage(typeImage);
-                            typeImageView.setFitHeight(45);
-                            typeImageView.setFitWidth(45);
+                        typeImage = new Image(resource.toString());
+                        typeImageView.setImage(typeImage);
+                        typeImageView.setFitHeight(45);
+                        typeImageView.setFitWidth(45);
 
-                            abilityName.setText(abilityDto.name());
-                            abilityDescription.setText(abilityDto.description());
+                        abilityName.setText(abilityDto.name());
+                        abilityDescription.setText(abilityDto.description());
 
-                            damageLabel.setText(abilityDto.power() + " DMG");
-                            accuracyLabel.setText((abilityDto.accuracy() * 100) + " %");
-                            Integer uses = monster.abilities().get(String.valueOf(ability.id()));
-                            usesLabel.setText(resources.getString("USES") + ": " + uses + "/"+ abilityDto.maxUses());
-                        }, error -> monstersDetailController.showError(error.getMessage())));
-                setGraphic(rootAbilityBox);
-                setText(null);
-            }
+                        damageLabel.setText(abilityDto.power() + " DMG");
+                        accuracyLabel.setText((abilityDto.accuracy() * 100) + " %");
+                        Integer uses = monster.abilities().get(String.valueOf(ability.id()));
+                        usesLabel.setText(resources.getString("USES") + ": " + uses + "/"+ abilityDto.maxUses());
+                    }, error -> monstersDetailController.showError(error.getMessage())));
+            setGraphic(rootAbilityBox);
+            setText(null);
         }
     }
 
