@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -28,13 +27,10 @@
          <children>
             <HBox prefHeight="43.0" prefWidth="149.0">
                <children>
-                  <ImageView fitHeight="35.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="damageImageView" fitHeight="35.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
                         <Insets left="6.0" top="5.0" />
                      </HBox.margin>
-                     <image>
-                        <Image url="@../images/ability-electic.png" />
-                     </image>
                   </ImageView>
                   <Label fx:id="damageLabel" prefHeight="17.0" prefWidth="134.0">
                      <HBox.margin>
@@ -48,13 +44,10 @@
             </HBox>
             <HBox prefHeight="43.0" prefWidth="200.0">
                <children>
-                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="accuracyImageView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>
-                     <image>
-                        <Image url="@../images/accuracy.png" />
-                     </image>
                   </ImageView>
                   <Label fx:id="accuracyLabel" prefHeight="17.0" prefWidth="134.0">
                      <HBox.margin>

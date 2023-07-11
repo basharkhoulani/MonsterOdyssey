@@ -10,7 +10,7 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="409.0" prefWidth="600.0" style="-fx-background-color: #CFE9DB;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.MonstersListController">
    <children>
-      <TabPane prefHeight="360.0" prefWidth="600.0" stylesheets="@../styles.css" tabClosingPolicy="UNAVAILABLE">
+      <TabPane prefHeight="360.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab fx:id="activeTeamTab" text="%ACTIVE.TEAM">
             <content>

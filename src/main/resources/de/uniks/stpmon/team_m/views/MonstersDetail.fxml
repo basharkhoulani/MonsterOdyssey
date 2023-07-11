@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -45,11 +44,7 @@
                         <Insets top="8.0" />
                     </VBox.margin>
                     <children>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../images/star.png" />
-                            </image>
-                        </ImageView>
+                        <ImageView fx:id="starImageView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                   <ProgressBar fx:id="lvlProgressBar" prefWidth="200.0" progress="0.0" styleClass="levelprogress-bar">
                      <opaqueInsets>
                         <Insets />
@@ -65,10 +60,7 @@
                         <Insets top="5.0" />
                     </VBox.margin>
                     <children>
-                        <ImageView fitHeight="41.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../images/attack.png" />
-                            </image>
+                        <ImageView fx:id="attackImageView" fitHeight="41.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
                         <Insets left="-4.0" top="2.0" />
                      </HBox.margin>
@@ -91,11 +83,7 @@
                         <Insets top="-3.0" />
                     </VBox.margin>
                     <children>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../images/heart.png" />
-                            </image>
-                        </ImageView>
+                        <ImageView fx:id="heartImageView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                   <ProgressBar fx:id="healthProgressBar" prefWidth="200.0" progress="0.0">
                      <opaqueInsets>
                         <Insets />
@@ -111,11 +99,7 @@
                         <Insets top="5.0" />
                     </VBox.margin>
                     <children>
-                        <ImageView fitHeight="36.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../images/speed.png" />
-                            </image>
-                        </ImageView>
+                        <ImageView fx:id="speedImageView" fitHeight="36.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                   <ProgressBar fx:id="speedProgressBar" prefWidth="200.0" progress="0.0">
                      <opaqueInsets>
                         <Insets />
@@ -131,11 +115,7 @@
                         <Insets top="5.0" />
                     </VBox.margin>
                     <children>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../images/defense.png" />
-                            </image>
-                        </ImageView>
+                        <ImageView fx:id="defenseImageView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                   <ProgressBar fx:id="defenseProgressBar" prefWidth="200.0" progress="0.0">
                      <opaqueInsets>
                         <Insets />
@@ -197,7 +177,7 @@
                   </VBox.margin>
                </Label>
               </VBox>
-            <VBox fx:id="typeIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="48.0" styleClass="typeIcon" stylesheets="@../styles.css">
+            <VBox fx:id="typeIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="48.0" styleClass="typeIcon">
                <children>
                   <ImageView fx:id="typeImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                      <VBox.margin>
