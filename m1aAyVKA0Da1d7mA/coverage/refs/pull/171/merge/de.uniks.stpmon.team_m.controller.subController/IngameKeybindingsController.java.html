@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IngameKeybindingsController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">IngameKeybindingsController.java</span></div><h1>IngameKeybindingsController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
+import javafx.scene.input.KeyEvent;
+import javax.inject.Inject;
+
+public class IngameKeybindingsController extends Controller {
+
+    @FXML
+    public Button walkUpButton;
+    @FXML
+    public Button walkDownButton;
+    @FXML
+    public Button walkRightButton;
+    @FXML
+    public Button walkLeftButton;
+    @FXML
+    public Button interactionButton;
+    @FXML
+    public Button pauseMenuButton;
+    @FXML
+    public Button goBackButton;
+    @FXML
+    public Button defaultButton;
+    @FXML
+    public Button checkButton;
+    @FXML
+    public Label informationLabel;
+    @Inject
+    IngameController ingameController;
+    private VBox ingameVbox;
+    private EventHandler&lt;KeyEvent&gt; keyPressedHandler;
+
+    @Inject
+<span class="nc" id="L43">    public IngameKeybindingsController() {</span>
+<span class="nc" id="L44">    }</span>
+
+    public Parent render() {
+<span class="nc" id="L47">        Parent parent = super.render();</span>
+<span class="nc" id="L48">        walkUpButton.setText(preferences.get(&quot;walkUp&quot;,&quot;W&quot;));</span>
+<span class="nc" id="L49">        walkDownButton.setText(preferences.get(&quot;walkDown&quot;,&quot;S&quot;));</span>
+<span class="nc" id="L50">        walkRightButton.setText(preferences.get(&quot;walkRight&quot;,&quot;D&quot;));</span>
+<span class="nc" id="L51">        walkLeftButton.setText(preferences.get(&quot;walkLeft&quot;,&quot;A&quot;));</span>
+<span class="nc" id="L52">        interactionButton.setText(preferences.get(&quot;interaction&quot;,&quot;E&quot;));</span>
+<span class="nc" id="L53">        pauseMenuButton.setText(preferences.get(&quot;pauseMenu&quot;,&quot;ESC&quot;));</span>
+<span class="nc" id="L54">        return parent;</span>
+    }
+
+    public void init(IngameController ingameController, VBox ingameVbox) {
+<span class="nc" id="L58">        this.ingameController = ingameController;</span>
+<span class="nc" id="L59">        this.ingameVbox = ingameVbox;</span>
+<span class="nc" id="L60">    }</span>
+
+    public void goBack() {
+<span class="nc" id="L63">        ingameController.root.getChildren().remove(ingameVbox);</span>
+<span class="nc" id="L64">    }</span>
+
+    public void setDefault() {
+<span class="nc" id="L67">    }</span>
+
+    public void check() {
+<span class="nc" id="L70">    }</span>
+
+    public void setWalkLeft() {
+<span class="nc" id="L73">        setKeyPressedHandler(walkLeftButton);</span>
+<span class="nc" id="L74">    }</span>
+
+    public void setPauseMenu() {
+<span class="nc" id="L77">        setKeyPressedHandler(pauseMenuButton);</span>
+<span class="nc" id="L78">    }</span>
+
+    public void setWalkRight() {
+<span class="nc" id="L81">        setKeyPressedHandler(walkRightButton);</span>
+<span class="nc" id="L82">    }</span>
+
+    public void setInteraction() {
+<span class="nc" id="L85">        setKeyPressedHandler(interactionButton);</span>
+<span class="nc" id="L86">    }</span>
+
+    public void setWalkDown() {
+<span class="nc" id="L89">        setKeyPressedHandler(walkDownButton);</span>
+<span class="nc" id="L90">    }</span>
+
+    public void setWalkUp() {
+<span class="nc" id="L93">        setKeyPressedHandler(walkUpButton);</span>
+<span class="nc" id="L94">    }</span>
+
+    private void setKeyPressedHandler(Button button){
+<span class="nc" id="L97">        keyPressedHandler = event -&gt; {</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">            if(event.getCode() == KeyCode.SPACE){</span>
+<span class="nc" id="L99">                button.setText(preferences.get(&quot;walkLeft&quot;,&quot;A&quot;));</span>
+<span class="nc" id="L100">                informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
+<span class="nc" id="L101">                event.consume();</span>
+            }
+<span class="nc bnc" id="L103" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.UP) {</span>
+<span class="nc" id="L104">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L105">                button.setText(&quot;&quot;);</span>
+<span class="nc" id="L106">                button.setText(&quot;\u2191&quot;);</span>
+            }
+<span class="nc bnc" id="L108" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.DOWN){</span>
+<span class="nc" id="L109">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L110">                button.setText(&quot;&quot;);</span>
+<span class="nc" id="L111">                button.setText(&quot;\u2193&quot;);</span>
+            }
+<span class="nc bnc" id="L113" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.RIGHT){</span>
+<span class="nc" id="L114">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L115">                button.setText(&quot;&quot;);</span>
+<span class="nc" id="L116">                button.setText(&quot;\u2192&quot;);</span>
+            }
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            else if(event.getCode() == KeyCode.LEFT){</span>
+<span class="nc" id="L119">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L120">                button.setText(&quot;&quot;);</span>
+<span class="nc" id="L121">                button.setText(&quot;\u2190&quot;);</span>
+            }
+<span class="nc bnc" id="L123" title="All 2 branches missed.">            else if (event.getCode() == KeyCode.ESCAPE) {</span>
+<span class="nc" id="L124">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L125">                button.setText(&quot;&quot;);</span>
+<span class="nc" id="L126">                button.setText(&quot;ESC&quot;);</span>
+            } else {
+<span class="nc bnc" id="L128" title="All 4 branches missed.">                if (event.getText().length() != 0 &amp;&amp; Character.isLetterOrDigit(event.getText().charAt(0))) {</span>
+<span class="nc" id="L129">                    informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="nc" id="L130">                    button.setText(&quot;&quot;);</span>
+<span class="nc" id="L131">                    button.setText(event.getText().toUpperCase());</span>
+                } else {
+<span class="nc" id="L133">                    informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
+<span class="nc" id="L134">                    button.setText(&quot;A&quot;);</span>
+                }
+            }
+<span class="nc" id="L137">            button.removeEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);</span>
+<span class="nc" id="L138">            buttonsDisable(false, button);</span>
+<span class="nc" id="L139">        };</span>
+<span class="nc" id="L140">        buttonsDisable(true, button);</span>
+<span class="nc" id="L141">        button.setText(&quot;...&quot;);</span>
+<span class="nc" id="L142">        informationLabel.setText(resources.getString(&quot;WAITING.INPUT&quot;));</span>
+<span class="nc" id="L143">        button.addEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
+<span class="nc" id="L144">    }</span>
+    public void buttonsDisable(boolean set, Button currentbutton){
+<span class="nc" id="L146">        walkUpButton.setDisable(set);</span>
+<span class="nc" id="L147">        walkRightButton.setDisable(set);</span>
+<span class="nc" id="L148">        walkLeftButton.setDisable(set);</span>
+<span class="nc" id="L149">        walkDownButton.setDisable(set);</span>
+<span class="nc" id="L150">        pauseMenuButton.setDisable(set);</span>
+<span class="nc" id="L151">        interactionButton.setDisable(set);</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        if(set){</span>
+<span class="nc" id="L153">            currentbutton.setDisable(false);</span>
+        }
+<span class="nc" id="L155">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
