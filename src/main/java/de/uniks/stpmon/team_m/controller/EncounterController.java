@@ -31,11 +31,11 @@ import javafx.util.Duration;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.inject.Singleton;
 import java.util.HashMap;
+
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -91,10 +91,12 @@ public class EncounterController extends Controller {
     private List<Controller> subControllers = new ArrayList<>();
     private int currentImageIndex = 0;
     private List<AbilityDto> abilityDtos = new ArrayList<>();
-    private List<Opponent> opponentsUpdate = new ArrayList<>();
+    private HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
+    private List<Opponent> opponentsDelete = new ArrayList<>();
     private int repeatedTimes = 0;
 
-    private HashMap<Opponent, EncounterOpponentController> encounterOpponentControllerHashMap;
+    // Hier finde ich mit dem Key (Opponent id) besser
+    private HashMap<String, EncounterOpponentController> encounterOpponentControllerHashMap;
 
     @Inject
     public EncounterController() {
@@ -128,7 +130,7 @@ public class EncounterController extends Controller {
         // Init opponent controller for own trainer
         ownTrainerController = new EncounterOpponentController(false, false, true, false);
         ownTrainerController.init();
-        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getSelfOpponent(), ownTrainerController);
+        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getSelfOpponent()._id(), ownTrainerController);
         Parent ownTrainerParent = ownTrainerController.render();
         HBox.setHgrow(ownTrainerParent, javafx.scene.layout.Priority.ALWAYS);
         //showMyMonster
@@ -164,7 +166,7 @@ public class EncounterController extends Controller {
         // Wild monster (init opponent controller for enemy)
         enemy1Controller = new EncounterOpponentController(true, true, false, false);
         enemy1Controller.init();
-        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0), enemy1Controller);
+        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0)._id(), enemy1Controller);
         enemyHBox.setPadding(new Insets(0, 400, 0, 0));
         Parent enemy1Parent = enemy1Controller.render();
         HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
@@ -183,7 +185,7 @@ public class EncounterController extends Controller {
         // Enemy as a trainer (init opponent controller for the enemy)
         enemy1Controller = new EncounterOpponentController(true, false, false, false);
         enemy1Controller.init();
-        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0), enemy1Controller);
+        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0)._id(), enemy1Controller);
         Parent enemy1Parent = enemy1Controller.render();
         HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy1Parent);
@@ -201,7 +203,7 @@ public class EncounterController extends Controller {
         // 1st enemy as a trainer
         enemy1Controller = new EncounterOpponentController(true, false, false, true);
         enemy1Controller.init();
-        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0), enemy1Controller);
+        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0)._id(), enemy1Controller);
         VBox enemy1Parent = (VBox) enemy1Controller.render();
         HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy1Parent);
@@ -211,7 +213,7 @@ public class EncounterController extends Controller {
         // 2nd enemy as a trainer
         enemy2Controller = new EncounterOpponentController(true, false, true, true);
         enemy2Controller.init();
-        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(1), enemy2Controller);
+        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(1)._id(), enemy2Controller);
         VBox enemy2Parent = (VBox) enemy2Controller.render();
         HBox.setHgrow(enemy2Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy2Parent);
@@ -228,7 +230,7 @@ public class EncounterController extends Controller {
         // 1st enemy as a trainer
         enemy1Controller = new EncounterOpponentController(true, false, false, true);
         enemy1Controller.init();
-        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0), enemy1Controller);
+        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0)._id(), enemy1Controller);
         VBox enemy1Parent = (VBox) enemy1Controller.render();
         HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy1Parent);
@@ -238,7 +240,7 @@ public class EncounterController extends Controller {
         // 2nd enemy as a trainer
         enemy2Controller = new EncounterOpponentController(true, false, true, true);
         enemy2Controller.init();
-        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(1), enemy2Controller);
+        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(1)._id(), enemy2Controller);
         VBox enemy2Parent = (VBox) enemy2Controller.render();
         HBox.setHgrow(enemy2Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy2Parent);
@@ -247,7 +249,7 @@ public class EncounterController extends Controller {
         // Coop Trainer
         coopTrainerController = new EncounterOpponentController(false, false, false, false);
         coopTrainerController.init();
-        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getCoopOpponent(), coopTrainerController);
+        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getCoopOpponent()._id(), coopTrainerController);
         Parent coopTrainerParent = coopTrainerController.render();
         HBox.setHgrow(coopTrainerParent, javafx.scene.layout.Priority.ALWAYS);
         teamHBox.getChildren().add(coopTrainerParent);
@@ -259,15 +261,15 @@ public class EncounterController extends Controller {
     }
 
     private void targetOpponent(Opponent opponent) {
-        if (encounterOpponentControllerHashMap.containsKey(opponent)) {
-            if (ownTrainerController.getCurrentTarget() == null && encounterOpponentControllerHashMap.containsKey(ownTrainerController.getCurrentTarget())) {
-                encounterOpponentControllerHashMap.get(ownTrainerController.getCurrentTarget()).unTarget();
+        if (encounterOpponentControllerHashMap.containsKey(opponent._id())) {
+            if (ownTrainerController.getCurrentTarget() != null && encounterOpponentControllerHashMap.containsKey(ownTrainerController.getCurrentTarget()._id())) {
+                encounterOpponentControllerHashMap.get(ownTrainerController.getCurrentTarget()._id()).unTarget();
             }
             if (ownTrainerController.getCurrentTarget() != opponent) {
                 ownTrainerController.setCurrentTarget(opponent);
             }
-            if (encounterOpponentControllerHashMap.get(opponent).isMultipleEnemyEncounter) {
-                encounterOpponentControllerHashMap.get(opponent).onTarget();
+            if (encounterOpponentControllerHashMap.get(opponent._id()).isMultipleEnemyEncounter) {
+                encounterOpponentControllerHashMap.get(opponent._id()).onTarget();
             }
 
         }
@@ -396,6 +398,7 @@ public class EncounterController extends Controller {
         disposables.add(eventListener.get().listen("encounters." + encounterOpponentStorage.getEncounterId() + ".trainers.*.opponents.*.*", Opponent.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Opponent opponent = event.data();
+                    System.out.println("Opponent "+ event.suffix() + " :" + opponent);
                     if (event.suffix().contains("updated")) {
                         updateOpponent(opponent);
                     }
@@ -405,72 +408,48 @@ public class EncounterController extends Controller {
     // manage the response of all the opponents (include the move and all results after the move, there are 2 Updates per opponent)
     private void updateOpponent(Opponent opponent) {
         // For komplexer Situation for example with more opponents should be considered in the future
-        if (opponent.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-            if (opponent.move() != null) {
-                opponentsUpdate.add(0, opponent);
-                // else for change monster move
+        String trainerId = trainerStorageProvider.get().getTrainer()._id();
+        if(opponent.move() != null){
+            opponentsUpdate.put(opponent._id() + "Move", opponent);
+        } else if (opponent.results().size() != 0){
+            if (opponent.trainer().equals(trainerId)) {
+                encounterOpponentStorage.setSelfOpponent(opponent);
+            } else if (opponent.isAttacker() == encounterOpponentStorage.isAttacker()){
+                encounterOpponentStorage.setCoopOpponent(opponent);
             } else {
-                if (opponent.results().size() != 0) {
-                    opponentsUpdate.add(1, opponent);
-                }
+                encounterOpponentStorage.getEnemyOpponents().removeIf(o -> o._id().equals(opponent._id()));
+                encounterOpponentStorage.addEnemyOpponent(opponent);
             }
-        } else {
-            if (opponent.move() != null) {
-                Move move = opponent.move();
-                if (move instanceof AbilityMove) {
-                    opponentsUpdate.add(opponent);
-                }
-                // else for change monster move
-            } else {
-                if (opponent.results().size() != 0) {
-                    opponentsUpdate.add(opponent);
-                }
-            }
+            opponentsUpdate.put(opponent._id() + "Results", opponent);
         }
-        LinkedHashSet<Opponent> opponentsHashSet = new LinkedHashSet<>(opponentsUpdate);
-        ArrayList<Opponent> forDescription = new ArrayList<>(opponentsHashSet);
 
         // this magic number is two time the size of oppenents in this encounter
-        if (forDescription.size() >= 4) {
-            if (repeatedTimes == 0) {
-                writeBattleDescription(forDescription);
-            }
-            repeatedTimes++;
+        if (opponentsUpdate.size() >= 2 * encounterOpponentStorage.getEncounterSize()) {
+            writeBattleDescription(opponentsUpdate);
         }
     }
 
-    private void writeBattleDescription(ArrayList<Opponent> forDescription) {
-        for (Opponent o : forDescription) {
-            if (o.move() != null) {
-                Move move = o.move();
-                if (move instanceof AbilityMove abilityMove) {
-                    if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                        updateDescription(resources.getString("YOU.USED") + abilityDtos.get((abilityMove).ability() - 1).name() + ". ", false);
-                    } else {
-                        // need to change for complexer Situation
-                        updateDescription(resources.getString("ENEMY.USED") + abilityDtos.get((abilityMove).ability() - 1).name() + ". ", false);
-                    }
-                } // else for change monster move
+    private void writeBattleDescription(HashMap<String, Opponent> forDescription) {
+        System.out.println("Write Battle Description" + forDescription);
+        System.out.println("Opponents in Storage: " + encounterOpponentStorage.getOpponentsInStorage());
+        List<String> opponentsInStorage = encounterOpponentStorage.getOpponentsInStorage();
+        for (String opponentId:opponentsInStorage){
+            System.out.println("OpponentId: " + opponentId);
+            Opponent o = forDescription.get(opponentId + "Move");
+            System.out.println("Opponent: " + o);
+            Move move = o.move();
+            System.out.println("Move: " + move);
+            System.out.println("Size of encounterOpponentStorage: " + opponentsInStorage.size());
+            if (move instanceof AbilityMove abilityMove) {
+                System.out.println("AbilityMove: " + abilityMove);
             } else {
-                if (o.results().size() != 0) {
-                    if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                        encounterOpponentStorage.setSelfOpponent(o);
-                    } else {
-                        // need to change for complexer Situation
-                        // encounterOpponentStorage.setEnemyOpponent(o);
-                    }
-                    for (Result r : o.results()) {
-                        switch (r.type()) {
-                            case "ability-success" -> {
-                                updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + r.effectiveness() + ".\n", false);
-                                if (o.monster() != null) {
-                                    //updateMonsterValues(o.trainer(), o.monster());
-                                }
-                            }
-                            case "target-defeated" -> updateDescription(resources.getString("TARGET.DEFEATED"), false);
-                        }
-                    }
-                }
+                System.out.println("Change Monster");
+            } // else for change monster move
+
+            Opponent oResults = forDescription.get(opponentId + "Results");
+            System.out.println("Opponent Results: " + oResults);
+            for (Result r : oResults.results()) {
+                System.out.println("Result: " + r);
             }
         }
     }
@@ -616,29 +595,32 @@ public class EncounterController extends Controller {
         if (isUpdated) {
             battleDialogText.setText(information);
         } else {
-            if (battleDialogText.getText().contains(information)) {
-                return;
-            }
             battleDialogText.setText(battleDialogText.getText() + information);
         }
     }
 
-    /*
+
     private void updateMonsterValues(String trainerId, String monsterId, Opponent opponent) {
-        boolean isMe = trainerId.equals(trainerStorageProvider.get().getTrainer()._id());
-        disposables.add(monstersService.getMonster(regionId, trainerId, monsterId)
-                .observeOn(FX_SCHEDULER).subscribe(monster -> {
-                    if (isMe) {
-                        showTeamMonster(ownTrainerController, opppnent);
-                    } else {
-                        encounterOpponentStorage.setCurrentEnemyMonster(monster);
-                        opponentLevel.setText(monster.level() + " LVL");
-                        opponentHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
-                    }
-                }, Throwable::printStackTrace));
+        EncounterOpponentController e = encounterOpponentControllerHashMap.get(opponent._id());
+        if(monsterId == null) {
+            if(e.getEnemy()){
+                e.setHealthBarValue(0);
+            } else {
+                e.setHealthBarValue(0)
+                        .setHealthLabel(0 + " HP");
+            }
+        } else {
+            if (e.getEnemy()) {
+                showWildMonster(e, opponent);
+            } else if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
+                showTeamMonster(e, opponent, true);
+            } else {
+                showTeamMonster(e, opponent, false);
+            }
+        }
 
     }
-     */
+
 
     public void resetOppoenentUpdate() {
         opponentsUpdate.clear();

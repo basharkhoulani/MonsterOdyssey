@@ -188,4 +188,8 @@ public class EncounterOpponentController extends Controller {
     public ImageView getTrainerImageView() {
         return trainerImageView;
     }
+
+    public String getMonsterName() {
+        return monsterNameLabel.getText();
+    }
 }

@@ -57,7 +57,7 @@ class EncounterControllerTest extends ApplicationTest {
     @Mock
     Provider<TrainerStorage> trainerStorageProvider;
     // Controller
-    @Mock
+    @Spy
     BattleMenuController battleMenuController;
     @Mock
     Parent parent;

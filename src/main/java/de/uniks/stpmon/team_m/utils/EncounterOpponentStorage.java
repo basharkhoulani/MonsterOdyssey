@@ -8,12 +8,13 @@ import javafx.collections.FXCollections;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
 public class EncounterOpponentStorage {
     private String encounterId;
-    private List<Opponent> opponentsInStorage;
+    private List<String> opponentsInStorage = new ArrayList<>();
     private Opponent selfOpponent;
     // Die Opponent mit selben trainerId
     private List<Opponent> enemyOpponents = FXCollections.observableArrayList();
@@ -127,5 +128,13 @@ public class EncounterOpponentStorage {
 
     public void addCurrentMonsterType(MonsterTypeDto monsterType) {
         this.currentMonsterTypes.add(monsterType);
+    }
+
+    public List<String> getOpponentsInStorage() {
+        return opponentsInStorage;
+    }
+
+    public void addOpponentsInStorage(String opponentsInStorage) {
+        this.opponentsInStorage.add(opponentsInStorage);
     }
 }
