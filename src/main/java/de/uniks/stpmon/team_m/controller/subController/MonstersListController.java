@@ -48,7 +48,6 @@ public class MonstersListController extends Controller {
     public ListView<Monster> monsterListViewActive;
     public VBox monsterListVBox;
 
-    public List<Monster> monsterList;
     public List<Monster> activeMonstersList;
 
     @Inject
@@ -70,9 +69,6 @@ public class MonstersListController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
-        if (!GraphicsEnvironment.isHeadless()) {
-            parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../../styles.css")).toExternalForm());
-        }
         disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
                 .subscribe(list -> {
                     activeMonstersList = list.stream()

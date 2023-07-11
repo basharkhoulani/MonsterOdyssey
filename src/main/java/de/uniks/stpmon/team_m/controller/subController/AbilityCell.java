@@ -58,6 +58,10 @@ public class AbilityCell extends ListCell<AbilityDto> {
     public Label accuracyLabel;
     @FXML
     public Label usesLabel;
+    @FXML
+    public ImageView damageImageView;
+    @FXML
+    public ImageView accuracyImageView;
     Monster monster;
     List<Integer> uses;
     public AbilityCell(Monster monster, ResourceBundle resources, PresetsService presetsService, MonstersDetailController monstersDetailController, IngameController ingameController) {
@@ -86,13 +90,20 @@ public class AbilityCell extends ListCell<AbilityDto> {
 
                         if (!GraphicsEnvironment.isHeadless()) {
                             typeImagePath = ABILITYPALETTE.get(abilityDto.type());
-                            URL resource = Main.class.getResource("images/" + typeImagePath);
-                            typeImage = new Image(resource.toString());
+                            URL resourceType = Main.class.getResource("images/" + typeImagePath);
+                            typeImage = new Image(resourceType.toString());
                             typeImageView.setImage(typeImage);
                             typeImageView.setFitHeight(45);
                             typeImageView.setFitWidth(45);
-                        }
 
+                            URL resourceDamage = Main.class.getResource("images/ability-electic.png");
+                            Image damageImage = new Image(resourceDamage.toString());
+                            damageImageView.setImage(damageImage);
+
+                            URL resourceAccuracy = Main.class.getResource("images/accuracy.png");
+                            Image accuracyImage = new Image(resourceAccuracy.toString());
+                            accuracyImageView.setImage(accuracyImage);
+                        }
                         abilityName.setText(abilityDto.name());
                         abilityDescription.setText(abilityDto.description());
 

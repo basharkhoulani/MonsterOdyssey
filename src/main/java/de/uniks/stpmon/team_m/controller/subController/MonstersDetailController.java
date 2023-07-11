@@ -24,8 +24,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.*;
 
-import static de.uniks.stpmon.team_m.Constants.ABILITYPALETTE;
-import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 
 public class MonstersDetailController extends Controller {
@@ -76,14 +75,20 @@ public class MonstersDetailController extends Controller {
     private Image typeImage;
     @FXML
     public Label monsterName;
-
+    @FXML
+    public ImageView starImageView;
+    @FXML
+    public ImageView attackImageView;
+    @FXML
+    public ImageView heartImageView;
+    @FXML
+    public ImageView speedImageView;
+    @FXML
+    public ImageView defenseImageView;
 
     @Override
     public Parent render() {
         final Parent parent = super.render();
-        if (!GraphicsEnvironment.isHeadless()) {
-            parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../../styles.css")).toExternalForm());
-        }
         initMonsterDetails();
         return parent;
     }
@@ -116,11 +121,24 @@ public class MonstersDetailController extends Controller {
             typeIcon.setStyle(style);
 
             typeImagePath = ABILITYPALETTE.get(monsterType);
-            URL resource = Main.class.getResource("images/" + typeImagePath);
-            typeImage = new Image(resource.toString());
+            URL resourceType = Main.class.getResource("images/" + typeImagePath);
+            typeImage = new Image(resourceType.toString());
             typeImageView.setImage(typeImage);
             typeImageView.setFitHeight(45);
             typeImageView.setFitWidth(45);
+
+            for (String imagePath: ATTRIBUTE_IMAGES) {
+                URL resourceImage = Main.class.getResource("images/" + imagePath);
+                Image attributeImage = new Image(resourceImage.toString());
+
+                switch(imagePath) {
+                    case "star.png" -> starImageView.setImage(attributeImage);
+                    case "attack.png" -> attackImageView.setImage(attributeImage);
+                    case "heart.png" -> heartImageView.setImage(attributeImage);
+                    case "speed.png" -> speedImageView.setImage(attributeImage);
+                    case "defense.png" -> defenseImageView.setImage(attributeImage);
+                }
+            }
         }
 
         // Name, Type, Experience, Level

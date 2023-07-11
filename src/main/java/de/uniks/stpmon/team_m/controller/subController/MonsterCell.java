@@ -25,6 +25,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import retrofit2.http.Url;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -48,8 +49,6 @@ public class MonsterCell extends ListCell<Monster> {
     public Button viewDetailsButton;
     @FXML
     Label monsterName;
-    @FXML
-    Label monsterType;
     @FXML
     Label monsterLevel;
     @FXML
@@ -115,11 +114,16 @@ public class MonsterCell extends ListCell<Monster> {
 
                         if(!GraphicsEnvironment.isHeadless()) {
                             typeImagePath = ABILITYPALETTE.get(type.toString());
-                            URL resource = Main.class.getResource("images/" + typeImagePath);
-                            typeImage = new Image(resource.toString());
+                            URL resourceType = Main.class.getResource("images/" + typeImagePath);
+                            typeImage = new Image(resourceType.toString());
                             typeImageView.setImage(typeImage);
                             typeImageView.setFitHeight(45);
                             typeImageView.setFitWidth(45);
+
+                            URL resourseArrowUp = Main.class.getResource("images/monster-arrange-up.png");
+                            Image arrowUpImage = new Image(resourseArrowUp.toString());
+                            arrowUp.setImage(arrowUpImage);
+                            arrowDown.setImage(arrowUpImage);
                         }
                     }, error -> monstersListController.showError(error.getMessage())));
             monsterLevel.setText(resources.getString("LEVEL") + " " + monster.level());
