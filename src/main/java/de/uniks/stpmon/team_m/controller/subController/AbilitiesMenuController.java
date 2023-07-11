@@ -96,8 +96,8 @@ public class AbilitiesMenuController extends Controller {
         String regionId = encounterOpponentStorageProvider.get().getRegionId();
         String encounterId = encounterOpponentStorageProvider.get().getEncounterId();
         String opponentId = encounterOpponentStorageProvider.get().getSelfOpponent()._id();
-        // targetId muss considered for complexer Situation
-        String targetId = "encounterOpponentStorageProvider.get().getEnemyOpponent().trainer()" ;
+        // targetId muss considered for complexer Situation (default the fist enemy)
+        String targetId = encounterOpponentStorageProvider.get().getEnemyOpponents().get(0).trainer();
         Move move = new AbilityMove("ability", ability.id(), targetId);
 
         disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(
