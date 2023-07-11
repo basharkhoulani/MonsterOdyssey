@@ -139,6 +139,10 @@ public class EncounterController extends Controller {
         ImageView sprite = ownTrainerController.getTrainerImageView();
         setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), sprite, 1);
 
+        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> {
+            abilityDtos.addAll(abilities);
+        }));
+
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId)
                 .observeOn(FX_SCHEDULER)
                 .subscribe(encounter -> {
@@ -172,7 +176,7 @@ public class EncounterController extends Controller {
         HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy1Parent);
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
-        showWildMonster(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
+        showWildMonster(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0), true);
 
         // Own trainer
         teamHBox.setPadding(new Insets(0, 0, 0, 400));
@@ -276,7 +280,7 @@ public class EncounterController extends Controller {
     }
 
     // Hier soll allen Serveranfragen kommen
-    private void showWildMonster(EncounterOpponentController encounterOpponentController, Opponent opponent) {
+    private void showWildMonster(EncounterOpponentController encounterOpponentController, Opponent opponent, boolean isInit) {
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
                     encounterOpponentStorage.addCurrentMonster(monster);
@@ -286,7 +290,7 @@ public class EncounterController extends Controller {
                             .observeOn(FX_SCHEDULER).subscribe(m -> {
                                 encounterOpponentController.setMonsterNameLabel(m.name());
                                 encounterOpponentStorage.addCurrentMonsterType(m);
-                                if (encounterOpponentStorage.isWild()) {
+                                if (encounterOpponentStorage.isWild() && isInit) {
                                     battleDialogText.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + m.name());
                                 }
                             }, Throwable::printStackTrace));
@@ -301,7 +305,7 @@ public class EncounterController extends Controller {
     private void showEnemyInfo(EncounterOpponentController encounterOpponentController, Opponent opponent) {
         if (opponent != null) {
             // Monster
-            showWildMonster(encounterOpponentController, opponent);
+            showWildMonster(encounterOpponentController, opponent, true);
 
             // Trainer Sprite
             disposables.add(trainersService.getTrainer(regionId, opponent.trainer())
@@ -430,26 +434,40 @@ public class EncounterController extends Controller {
     }
 
     private void writeBattleDescription(HashMap<String, Opponent> forDescription) {
-        System.out.println("Write Battle Description" + forDescription);
-        System.out.println("Opponents in Storage: " + encounterOpponentStorage.getOpponentsInStorage());
+        updateDescription(EMPTY_STRING, true);
         List<String> opponentsInStorage = encounterOpponentStorage.getOpponentsInStorage();
         for (String opponentId:opponentsInStorage){
-            System.out.println("OpponentId: " + opponentId);
             Opponent o = forDescription.get(opponentId + "Move");
-            System.out.println("Opponent: " + o);
             Move move = o.move();
-            System.out.println("Move: " + move);
-            System.out.println("Size of encounterOpponentStorage: " + opponentsInStorage.size());
             if (move instanceof AbilityMove abilityMove) {
-                System.out.println("AbilityMove: " + abilityMove);
+                if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                    updateDescription(resources.getString("YOU.USED")+ " " + abilityDtos.get(abilityMove.ability()-1).name() + ". ", false);
+                } else if (o.isAttacker() == encounterOpponentStorage.isAttacker()) {
+                    updateDescription(resources.getString("MATE.USED")+ " " + abilityDtos.get(abilityMove.ability()-1).name() + ". ", false);
+                } else {
+                    updateDescription(resources.getString("ENEMY.USED")+ " " + abilityDtos.get(abilityMove.ability()-1).name() + ". ", false);
+                }
             } else {
+                // else for change monster move
+                // here for the situation that change Monster Move
                 System.out.println("Change Monster");
-            } // else for change monster move
+            }
 
             Opponent oResults = forDescription.get(opponentId + "Results");
             System.out.println("Opponent Results: " + oResults);
             for (Result r : oResults.results()) {
                 System.out.println("Result: " + r);
+                switch (r.type()){
+                    case "ability-success" -> {
+                        updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + r.effectiveness() + ".\n", false);
+                        if (o.monster() != null) {
+                            updateMonsterValues(o.trainer(), o.monster(), o);
+                        }
+                    }
+                    case "target-defeated" -> updateDescription(resources.getString("TARGET.DEFEATED"), false);
+                    // @Tobias: Here you can add the other cases
+                    default -> updateDescription(resources.getString("NOTHING.HAPPENED"), false);
+                }
             }
         }
     }
@@ -611,7 +629,7 @@ public class EncounterController extends Controller {
             }
         } else {
             if (e.getEnemy()) {
-                showWildMonster(e, opponent);
+                showWildMonster(e, opponent, false);
             } else if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
                 showTeamMonster(e, opponent, true);
             } else {
