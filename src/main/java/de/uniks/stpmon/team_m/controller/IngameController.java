@@ -599,6 +599,7 @@ public class IngameController extends Controller {
             if (layer.width() != 0) {
                 focusOnPlayerPosition(layer.width(), layer.height(), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
                 layerFound = true;
+                break;
             }
         }
         if (!layerFound) {
