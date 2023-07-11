@@ -86,11 +86,12 @@ public class AbilityCell extends ListCell<AbilityDto> {
 
                         typeImagePath = ABILITYPALETTE.get(abilityDto.type());
                         URL resource = Main.class.getResource("images/" + typeImagePath);
-
-                        typeImage = new Image(resource.toString());
-                        typeImageView.setImage(typeImage);
-                        typeImageView.setFitHeight(45);
-                        typeImageView.setFitWidth(45);
+                        if (!GraphicsEnvironment.isHeadless()) {
+                            typeImage = new Image(resource.toString());
+                            typeImageView.setImage(typeImage);
+                            typeImageView.setFitHeight(45);
+                            typeImageView.setFitWidth(45);
+                        }
 
                         abilityName.setText(abilityDto.name());
                         abilityDescription.setText(abilityDto.description());
