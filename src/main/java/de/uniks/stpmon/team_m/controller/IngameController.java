@@ -113,8 +113,6 @@ public class IngameController extends Controller {
     @Inject
     Provider<EncounterController> encounterControllerProvider;
     @Inject
-    Provider<Encounter2Controller> encounter2ControllerProvider;
-    @Inject
     AreasService areasService;
     @Inject
     PresetsService presetsService;
@@ -1075,7 +1073,7 @@ public class IngameController extends Controller {
 
     private void showEncounterScene() {
         destroy();
-        app.show(encounter2ControllerProvider.get());
+        app.show(encounterControllerProvider.get());
     }
 
     private void checkIfEncounterAlreadyExist() {

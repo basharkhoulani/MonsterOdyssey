@@ -1,7 +1,6 @@
 package de.uniks.stpmon.team_m;
 
 import de.uniks.stpmon.team_m.controller.Controller;
-import de.uniks.stpmon.team_m.controller.Encounter2Controller;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
