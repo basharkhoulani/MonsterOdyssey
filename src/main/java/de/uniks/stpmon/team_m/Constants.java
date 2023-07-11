@@ -2,8 +2,7 @@ package de.uniks.stpmon.team_m;
 
 import javafx.geometry.Insets;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Map.entry;
 
@@ -219,4 +218,12 @@ public class Constants {
             entry("steel", "ability-steel"),
             entry("fairy", "ability-fairy")
     ));
+
+    public static List<String> ATTRIBUTE_IMAGES = Arrays.asList(
+            "star.png",
+            "attack.png",
+            "heart.png",
+            "speed.png",
+            "defense.png"
+            );
 }

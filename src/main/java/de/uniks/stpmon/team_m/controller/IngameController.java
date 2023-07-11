@@ -133,6 +133,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<ChangeAudioController> changeAudioControllerProvider;
     @Inject
+    Provider<MonstersDetailController> monstersDetailControllerProvider;
+    @Inject
     RegionsService regionsService;
     @Inject
     Provider<IngameController> ingameControllerProvider;
@@ -1642,6 +1644,18 @@ public class IngameController extends Controller {
         changeAudioVBox.getChildren().add(changeAudioController.render());
         root.getChildren().add(changeAudioVBox);
         changeAudioVBox.requestFocus();
+        buttonsDisable(true);
+    }
+
+    public void showMonsterDetails(MonstersListController monstersListController, Monster monster, MonsterTypeDto monsterTypeDto,
+                                   Image monsterImage, ResourceBundle resources,  PresetsService presetsService, String type) {
+        VBox monsterDetailVBox = new VBox();
+        monsterDetailVBox.setAlignment(Pos.CENTER);
+        MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();
+        monstersDetailController.init(this, monsterDetailVBox, monstersListController, monster, monsterTypeDto, monsterImage, resources, presetsService, type);
+        monsterDetailVBox.getChildren().add(monstersDetailController.render());
+        root.getChildren().add(monsterDetailVBox);
+        monsterDetailVBox.requestFocus();
         buttonsDisable(true);
     }
 
