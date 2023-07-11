@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox alignment="CENTER" styleClass="hBoxRed" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController">
+   <VBox alignment="CENTER" minHeight="160.0" minWidth="50.0" prefHeight="160.0" prefWidth="50.0">
+      <HBox.margin>
+         <Insets />
+      </HBox.margin>
+      <Button fx:id="goBackButton" maxHeight="35.0" maxWidth="35.0" minHeight="35.0" minWidth="35.0" mnemonicParsing="false" onAction="#goBack" prefHeight="35.0" prefWidth="35.0" styleClass="goBackSymbol" />
+      <padding>
+         <Insets left="8.0" right="8.0" />
+      </padding>
+   </VBox>
+   <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="160.0" minWidth="300.0" prefHeight="160.0" prefWidth="300.0">
+      <HBox alignment="CENTER" minHeight="80.0" minWidth="300.0" prefHeight="80.0" prefWidth="300.0">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <Button fx:id="abilityButton1" minHeight="60.0" minWidth="140.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="140.0" wrapText="true">
+            <font>
+               <Font name="Comic Sans MS" size="14.0" />
+            </font>
+            <padding>
+               <Insets left="8.0" right="8.0" />
+            </padding>
+            <HBox.margin>
+               <Insets />
+            </HBox.margin>
+         </Button>
+         <Button fx:id="abilityButton2" minHeight="60.0" minWidth="140.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="140.0" wrapText="true">
+            <font>
+               <Font name="Comic Sans MS" size="14.0" />
+            </font>
+            <HBox.margin>
+               <Insets left="8.0" right="8.0" />
+            </HBox.margin>
+         </Button>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="82.0" prefWidth="300.0">
+         <VBox.margin>
+            <Insets/>
+         </VBox.margin>
+         <Button fx:id="abilityButton3" minHeight="60.0" minWidth="140.0" mnemonicParsing="false" prefHeight="60.0"
+                 prefWidth="140.0" wrapText="true">
+            <font>
+               <Font name="Comic Sans MS" size="14.0"/>
+            </font>
+            <HBox.margin>
+               <Insets/>
+            </HBox.margin>
+         </Button>
+         <Button fx:id="abilityButton4" layoutX="105.0" layoutY="17.0" minHeight="60.0" minWidth="140.0"
+                 mnemonicParsing="false" prefHeight="60.0" prefWidth="140.0" wrapText="true">
+            <font>
+               <Font name="Comic Sans MS" size="14.0"/>
+            </font>
+            <HBox.margin>
+               <Insets left="8.0" right="8.0"/>
+            </HBox.margin>
+         </Button>
+      </HBox>
+   </VBox>
+</HBox>

@@ -131,6 +131,16 @@ public class Constants {
     public static final String smallHandyImage = "images/SmallHandy.png";
     public static final String notificationBellImage = "images/NotificationBell.png";
 
+    // Encounter
+    public static int fleePopupWidth = 300;
+    public static int fleePopupHeight = 200;
+    public static int fleeTextHeight = 150;
+    public static Insets fleeTextInsets = new Insets(20, 10, 0, 10);
+    public static int fleeButtonsHBoxHeight = 50;
+    public static Insets fleeButtonsHBoxInsets = new Insets(0, 10, 10, 10);
+    public static int fleeButtonWidth = 100;
+    public static int fleeButtonHeight = 40;
+
     // Error messages
     public static final String HTTP_400 = "400";
     public static final String HTTP_401 = "401";
