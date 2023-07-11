@@ -77,8 +77,8 @@ public class AbilityCell extends ListCell<AbilityDto> {
             setGraphic(null);
             setStyle("-fx-background-color: #D6E8FE;");
         } else {
-            loadFXML();
             if(!GraphicsEnvironment.isHeadless()) {
+                loadFXML();
                 disposables.add(presetsService.getAbility(abilityDto.id()).observeOn(FX_SCHEDULER)
                         .subscribe(ability -> {
                             typeColor = TYPESCOLORPALETTE.get(ability.type());

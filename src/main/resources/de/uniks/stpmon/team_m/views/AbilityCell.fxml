@@ -76,7 +76,7 @@
       </VBox>
       <VBox prefHeight="133.0" prefWidth="53.0">
          <children>
-            <VBox fx:id="typeIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="48.0" styleClass="typeIcon" stylesheets="@../styles.css">
+            <VBox fx:id="typeIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="48.0" styleClass="typeIcon">
                <children>
                   <ImageView fx:id="typeImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                      <VBox.margin>
