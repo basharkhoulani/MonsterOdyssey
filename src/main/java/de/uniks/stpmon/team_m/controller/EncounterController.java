@@ -107,9 +107,9 @@ public class EncounterController extends Controller {
         regionId = trainerStorageProvider.get().getRegion()._id();
         encounterId = encounterOpponentStorage.getEncounterId();
         trainerId = trainerStorageProvider.get().getTrainer()._id();
-        listenToOpponents(encounterId);
+        listenToOpponents();
         battleMenuController.init();
-        subControllers.addAll(List.of(battleMenuController, abilitiesMenuController));
+        subControllers.addAll(List.of(battleMenuController));
         encounterOpponentControllerHashMap = new HashMap<>();
     }
 
@@ -392,8 +392,8 @@ public class EncounterController extends Controller {
         //add destroy methode for the elements in encounterOpponentControllerHashMap
     }
 
-    public void listenToOpponents(String encounterId) {
-        disposables.add(eventListener.get().listen("encounters." + encounterId + ".trainers.*.opponents.*.*", Opponent.class)
+    public void listenToOpponents() {
+        disposables.add(eventListener.get().listen("encounters." + encounterOpponentStorage.getEncounterId() + ".trainers.*.opponents.*.*", Opponent.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Opponent opponent = event.data();
                     if (event.suffix().contains("updated")) {
@@ -483,6 +483,7 @@ public class EncounterController extends Controller {
     public void showAbilities() {
         battleMenu.getChildren().clear();
         Monster monster = encounterOpponentStorage.getCurrentTrainerMonster();
+        subControllers.add(abilitiesMenuController);
         if (encounterOpponentStorage.getSelfOpponent().monster() != null) {
             abilitiesMenuController.init(monster, presetsService, battleMenu, this);
         } else {
