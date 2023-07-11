@@ -136,6 +136,16 @@ public class Constants {
     public static final String smallHandyImage = "images/SmallHandy.png";
     public static final String notificationBellImage = "images/NotificationBell.png";
 
+    // Encounter
+    public static int fleePopupWidth = 300;
+    public static int fleePopupHeight = 200;
+    public static int fleeTextHeight = 150;
+    public static Insets fleeTextInsets = new Insets(20, 10, 0, 10);
+    public static int fleeButtonsHBoxHeight = 50;
+    public static Insets fleeButtonsHBoxInsets = new Insets(0, 10, 10, 10);
+    public static int fleeButtonWidth = 100;
+    public static int fleeButtonHeight = 40;
+
     // Error messages
     public static final String HTTP_400 = "400";
     public static final String HTTP_401 = "401";
@@ -190,5 +200,27 @@ public class Constants {
             entry("dark", "#353225"),
             entry("steel", "#97A8AA"),
             entry("fairy", "#D15F5F")
+    ));
+
+    // Abilities
+    public static HashMap<String, String> ABILITYPALETTE = new HashMap<>(Map.ofEntries(
+            entry("normal", "ability-normal.png"),
+            entry("fire", "ability-fire.png"),
+            entry("water", "ability-water.png"),
+            entry("electric", "ability-electic.png"),
+            entry("grass", "ability-grass.png"),
+            entry("flying", "ability-flying.png"),
+            entry("bug", "ability-bug"),
+            entry("poison", "ability-poison"),
+            entry("rock", "ability-rock"),
+            entry("ground", "ability-ground"),
+            entry("fighting", "ability-fighting"),
+            entry("ice", "ability-ice"),
+            entry("psychic", "ability-psychic"),
+            entry("ghost", "ability-ghost"),
+            entry("dragon", "ability-dragon"),
+            entry("dark", "ability-dragon"),
+            entry("steel", "ability-steel"),
+            entry("fairy", "ability-fairy")
     ));
 }

@@ -49,7 +49,7 @@
                </Text>
             </TextFlow>
          </VBox>
-         <VBox fx:id="actionButtonVBox" prefHeight="125.0" prefWidth="250.0" HBox.hgrow="NEVER">
+         <VBox fx:id="battleMenu" prefHeight="125.0" prefWidth="250.0" HBox.hgrow="NEVER">
             <HBox.margin>
                <Insets />
             </HBox.margin></VBox>

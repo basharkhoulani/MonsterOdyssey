@@ -105,6 +105,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<IngameSettingsController> ingameSettingsControllerProvider;
     @Inject
+    Provider<IngameKeybindingsController> ingameKeybindingsControllerProvider;
+    @Inject
     Provider<EventListener> eventListener;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -423,6 +425,25 @@ public class IngameController extends Controller {
 
         specificSounds();
 
+        //Keybindings
+        if(preferences.get("walkUp",null) == null){
+            preferences.put("walkUp",KeyCode.W.getChar());
+        }
+        if(preferences.get("walkDown",null) == null){
+            preferences.put("walkDown",KeyCode.S.getChar());
+        }
+        if(preferences.get("walkLeft",null) == null){
+            preferences.put("walkLeft",KeyCode.A.getChar());
+        }
+        if(preferences.get("walkRight",null) == null){
+            preferences.put("walkRight",KeyCode.D.getChar());
+        }
+        if(preferences.get("interaction",null) == null){
+            preferences.put("interaction",KeyCode.E.getChar());
+        }
+        if(preferences.get("pauseMenu",null) == null){
+            preferences.put("pauseMenu","ESC");
+        }
         return parent;
     }
 
@@ -918,6 +939,16 @@ public class IngameController extends Controller {
         ingameTrainerSettingsControllerProvider.get().setValues(resources, preferences, resourceBundleProvider, ingameTrainerSettingsControllerProvider.get(), app);
     }
 
+    public void showKeybindings() {
+        IngameKeybindingsController ingameKeybindingsController = ingameKeybindingsControllerProvider.get();
+        VBox keybindingsVBox = new VBox();
+        keybindingsVBox.setAlignment(Pos.CENTER);
+        ingameKeybindingsController.init(this, keybindingsVBox);
+        keybindingsVBox.getChildren().add(ingameKeybindingsController.render());
+        root.getChildren().add(keybindingsVBox);
+        keybindingsVBox.requestFocus();
+    }
+
     public void sendMessageButton() {
         sendMessage();
     }
@@ -990,7 +1021,7 @@ public class IngameController extends Controller {
                         case "updated" -> {
                             updateTrainer(trainers, trainer);
                             if (trainerStorageProvider.get().getTrainer()._id().equals(trainer._id())) {
-                                monstersListControllerProvider.get().init();
+                                trainerStorageProvider.get().setTrainer(trainer);
                             }
                             // albert
                             if (trainer._id().equals("645e32c6866ace359554a802")) {
@@ -1127,10 +1158,16 @@ public class IngameController extends Controller {
     }
 
     public void showMonsters() {
-        Scene popupScene = new Scene(monstersListControllerProvider.get().render());
-        popupStage.setScene(popupScene);
-        popupStage.setTitle(resources.getString("MONSTERS"));
-        popupStage.show();
+        VBox monsterListVBox = new VBox();
+        monsterListVBox.setMinWidth(600);
+        monsterListVBox.setMinHeight(410);
+        monsterListVBox.setAlignment(Pos.CENTER);
+        MonstersListController monstersListController = monstersListControllerProvider.get();
+        monstersListController.init(this, monsterListVBox);
+        monsterListVBox.getChildren().add(monstersListController.render());
+        root.getChildren().add(monsterListVBox);
+        monsterListVBox.requestFocus();
+        buttonsDisable(true);
     }
 
     /*
