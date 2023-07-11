@@ -15,10 +15,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.awt.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import static de.uniks.stpmon.team_m.Constants.*;
-import static de.uniks.stpmon.team_m.controller.subController.IngameMessageCell.getZoneID;
 import static javafx.geometry.Pos.CENTER_LEFT;
 import static javafx.geometry.Pos.CENTER_RIGHT;
 
@@ -162,7 +165,10 @@ public class MessageCell extends ListCell<Message> {
      */
 
     private String formatTimeString(String dateTime) {
-        return getZoneID(dateTime, messagesBoxController.getResources(), DATE_TIME_FORMAT);
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(ZONE_ID_EUROPE_BERLIN));
+
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
+        return localDateTime.format(outputFormatter);
     }
 
     /**

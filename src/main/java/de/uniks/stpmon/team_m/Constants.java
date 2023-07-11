@@ -63,6 +63,7 @@ public class Constants {
 
     // MESSAGES
     public static final String PENCIL = "\u270F";
+    public static final String ZONE_ID_EUROPE_BERLIN = "Europe/Berlin";
 
     // AVATAR
     public static final String AVATAR_1 = "images/monster.png";
