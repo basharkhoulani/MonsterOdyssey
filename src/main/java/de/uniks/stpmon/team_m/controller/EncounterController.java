@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
+import de.uniks.stpmon.team_m.controller.subController.EncounterResultController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
@@ -30,7 +31,7 @@ import javafx.util.Duration;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.HashMap;
 import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -89,6 +90,8 @@ public class EncounterController extends Controller {
     @Inject
     BattleMenuController battleMenuController;
     @Inject
+    EncounterResultController encounterResultController;
+    @Inject
     AbilitiesMenuController abilitiesMenuController;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
@@ -102,6 +105,7 @@ public class EncounterController extends Controller {
     private int currentImageIndex = 0;
     private List<AbilityDto> abilityDtos = new ArrayList<>();
     private HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
+    private HashMap<String, Opponent> opponentsDelete = new HashMap<>();
     private int repeatedTimes = 0;
 
     @Inject
@@ -221,8 +225,13 @@ public class EncounterController extends Controller {
         disposables.add(eventListener.get().listen("encounters." + encounterId + ".trainers.*.opponents.*.*", Opponent.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Opponent opponent = event.data();
-                    if(event.suffix().contains("updated")){
+                    if(event.suffix().contains("updated")) {
                         updateOpponent(opponent);
+                    } else if (event.suffix().contains("deleted")){
+                        opponentsDelete.put(opponent._id(), opponent);
+                        if (opponentsDelete.size() >= encounterOpponentStorage.getEncounterSize()) {
+                            showResult();
+                        }
                     }
                 }, error -> showError(error.getMessage())));
     }
@@ -235,18 +244,18 @@ public class EncounterController extends Controller {
         } else if (opponent.results().size() != 0){
             if (opponent.trainer().equals(trainerId)) {
                 encounterOpponentStorage.setSelfOpponent(opponent);
-            } else if (opponent.isAttacker() == encounterOpponentStorage.isAttacker()){
-                encounterOpponentStorage.setCoopOpponent(opponent);
             } else {
-                encounterOpponentStorage.getEnemyOpponents().removeIf(o -> o._id().equals(opponent._id()));
-                encounterOpponentStorage.addEnemyOpponent(opponent);
+                encounterOpponentStorage.setEnemyOpponent(opponent);
             }
             opponentsUpdate.put(opponent._id() + "Results", opponent);
         }
 
         // this magic number is two time the size of oppenents in this encounter
         if (opponentsUpdate.size() >= 2 * encounterOpponentStorage.getEncounterSize()) {
-            writeBattleDescription(opponentsUpdate);
+            if(repeatedTimes == 0){
+                writeBattleDescription(opponentsUpdate);
+            }
+            repeatedTimes++;
         }
     }
 
@@ -259,27 +268,20 @@ public class EncounterController extends Controller {
             if (move instanceof AbilityMove abilityMove) {
                 if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                     updateDescription(resources.getString("YOU.USED")+ " " + abilityDtos.get(abilityMove.ability()-1).name() + ". ", false);
-                } else if (o.isAttacker() == encounterOpponentStorage.isAttacker()) {
-                    updateDescription(resources.getString("MATE.USED")+ " " + abilityDtos.get(abilityMove.ability()-1).name() + ". ", false);
-                } else {
+                }else {
                     updateDescription(resources.getString("ENEMY.USED")+ " " + abilityDtos.get(abilityMove.ability()-1).name() + ". ", false);
                 }
             } else {
                 // else for change monster move
                 // here for the situation that change Monster Move
-                System.out.println("Change Monster");
             }
 
             Opponent oResults = forDescription.get(opponentId + "Results");
-            System.out.println("Opponent Results: " + oResults);
             for (Result r : oResults.results()) {
-                System.out.println("Result: " + r);
                 switch (r.type()){
                     case "ability-success" -> {
                         updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + r.effectiveness() + ".\n", false);
-                        if (o.monster() != null) {
-                            updateMonsterValues(o.trainer(), o.monster(), o);
-                        }
+                        updateMonsterValues(o.trainer(), o.monster());
                     }
                     case "target-defeated" -> updateDescription(resources.getString("TARGET.DEFEATED"), false);
                     // @Tobias: Here you can add the other cases
@@ -287,6 +289,31 @@ public class EncounterController extends Controller {
                 }
             }
         }
+    }
+
+    private void showResult() {
+        List<String> opponentsInStorage = encounterOpponentStorage.getOpponentsInStorage();
+        for(String id:opponentsInStorage){
+            Opponent o = opponentsDelete.get(id);
+            if(o.monster() == null){
+                if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                    showResultPopUp(resources.getString("YOU.FAILED"));
+                } else {
+                    showResultPopUp(resources.getString("YOU.WON"));
+                }
+            }
+        }
+    }
+
+    private void showResultPopUp(String string) {
+        VBox resultBox = new VBox();
+        resultBox.setAlignment(Pos.CENTER);
+        encounterResultController.init(resultBox, app);
+        resultBox.getChildren().add(encounterResultController.render());
+        rootStackPane.getChildren().add(resultBox);
+        resultBox.requestFocus();
+        buttonsDisableEncounter(true);
+        encounterResultController.setInformationText(string);
     }
 
 
@@ -441,21 +468,29 @@ public class EncounterController extends Controller {
 
     private void updateMonsterValues(String trainerId, String monsterId) {
         boolean isMe = trainerId.equals(trainerStorageProvider.get().getTrainer()._id());
-        disposables.add(monstersService.getMonster(regionId, trainerId, monsterId)
-                .observeOn(FX_SCHEDULER).subscribe(monster -> {
-                    if (isMe){
-                        encounterOpponentStorage.setCurrentTrainerMonster(monster);
-                        myLevelBar.setProgress((double) monster.experience() / requiredExperience(monster.level() + 1));
-                        myLevel.setText(monster.level() + " LVL");
-                        myHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
-                        myHealth.setText(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
-                    } else {
-                        encounterOpponentStorage.setCurrentEnemyMonster(monster);
-                        opponentLevel.setText(monster.level() + " LVL");
-                        opponentHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
-                    }
-                }, Throwable::printStackTrace));
-
+        if (monsterId == null){
+            if(isMe){
+                myHealthBar.setProgress(0);
+                myHealth.setText("0 HP");
+            } else {
+                opponentHealthBar.setProgress(0);
+            }
+        } else {
+            disposables.add(monstersService.getMonster(regionId, trainerId, monsterId)
+                    .observeOn(FX_SCHEDULER).subscribe(monster -> {
+                        if (isMe) {
+                            encounterOpponentStorage.setCurrentTrainerMonster(monster);
+                            myLevelBar.setProgress((double) monster.experience() / requiredExperience(monster.level() + 1));
+                            myLevel.setText(monster.level() + " LVL");
+                            myHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
+                            myHealth.setText(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
+                        } else {
+                            encounterOpponentStorage.setCurrentEnemyMonster(monster);
+                            opponentLevel.setText(monster.level() + " LVL");
+                            opponentHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
+                        }
+                    }, Throwable::printStackTrace));
+        }
     }
 
     public void resetOppoenentUpdate(){
@@ -464,6 +499,10 @@ public class EncounterController extends Controller {
 
     public void resetRepeatedTimes() {
         this.repeatedTimes = 0;
+    }
+
+    public void buttonsDisableEncounter(boolean isDisable) {
+        battleMenuController.buttonDisable(isDisable);
     }
 }
     

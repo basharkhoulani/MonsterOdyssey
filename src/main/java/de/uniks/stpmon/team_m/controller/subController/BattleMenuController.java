@@ -3,18 +3,14 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
-import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 
 import javax.inject.Inject;
-import java.awt.*;
-import java.util.Objects;
 
 public class BattleMenuController extends Controller {
 
@@ -57,11 +53,11 @@ public class BattleMenuController extends Controller {
         encounterController.showAbilities();
     }
 
-    public void changeMonster(ActionEvent actionEvent) {
+    public void changeMonster() {
         // show the ChangeMonster VBox
     }
 
-    public void showMonsterInformation(ActionEvent actionEvent) {
+    public void showMonsterInformation() {
         // show the MonsterInformation VBox
     }
 
@@ -74,5 +70,12 @@ public class BattleMenuController extends Controller {
     public void showFleeButton(boolean isWild){
         fleeButton.setVisible(isWild);
         fleeButton.setOnAction(this::changeToIngame);
+    }
+
+    public void buttonDisable(boolean isDisable) {
+        abilitiesButton.setDisable(isDisable);
+        changeMonsterButton.setDisable(isDisable);
+        currentInfoButton.setDisable(isDisable);
+        fleeButton.setDisable(isDisable);
     }
 }
