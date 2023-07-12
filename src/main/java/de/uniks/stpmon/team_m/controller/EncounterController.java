@@ -25,8 +25,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.text.TextFlow;
-import javafx.util.Duration;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -47,7 +45,7 @@ public class EncounterController extends Controller {
     @FXML
     public TextFlow battleDialogTextFlow;
     @FXML
-    public VBox battleMenu;
+    public VBox battleMenuVBox;
     @FXML
     public VBox battleBackgroundVBox;
     @FXML
@@ -123,8 +121,8 @@ public class EncounterController extends Controller {
     public Parent render() {
         Parent parent = super.render();
         // init battle menu
-        battleMenuController.init(this, battleMenu, encounterOpponentStorage, app);
-        battleMenu.getChildren().add(battleMenuController.render());
+        battleMenuController.init(this, battleMenuVBox, encounterOpponentStorage, app);
+        battleMenuVBox.getChildren().add(battleMenuController.render());
         battleMenuController.onFleeButtonClick = this::onFleeButtonClick; // There are two methodes one from master, another from branch
 
         // Init opponent controller for own trainer
@@ -272,9 +270,9 @@ public class EncounterController extends Controller {
             if (ownTrainerController.getCurrentTarget() != opponent) {
                 ownTrainerController.setCurrentTarget(opponent);
             }
-            if (encounterOpponentControllerHashMap.get(opponent._id()).isMultipleEnemyEncounter) {
+            //if (encounterOpponentControllerHashMap.get(opponent._id()).isMultipleEnemyEncounter) {
                 encounterOpponentControllerHashMap.get(opponent._id()).onTarget();
-            }
+            //}
 
         }
     }
@@ -363,7 +361,6 @@ public class EncounterController extends Controller {
     public void onFleeButtonClick() {
         SequentialTransition fleeAnimation = buildFleeAnimation();
         PauseTransition firstPause = new PauseTransition(Duration.millis(500));
-
         firstPause.setOnFinished(event -> {
             ownTrainerController.setMonsterImage(null);
             fleeAnimation.play();
@@ -478,21 +475,21 @@ public class EncounterController extends Controller {
     }
 
     public void showAbilities() {
-        battleMenu.getChildren().clear();
+        battleMenuVBox.getChildren().clear();
         Monster monster = encounterOpponentStorage.getCurrentTrainerMonster();
         subControllers.add(abilitiesMenuController);
         if (encounterOpponentStorage.getSelfOpponent().monster() != null) {
-            abilitiesMenuController.init(monster, presetsService, battleMenu, this);
+            abilitiesMenuController.init(monster, presetsService, battleMenuVBox, this);
         } else {
-            abilitiesMenuController.init(null, presetsService, battleMenu, this);
+            abilitiesMenuController.init(null, presetsService, battleMenuVBox, this);
         }
-        battleMenu.getChildren().add(abilitiesMenuController.render());
+        battleMenuVBox.getChildren().add(abilitiesMenuController.render());
     }
 
     public void goBackToBattleMenu() {
-        battleMenu.getChildren().clear();
-        battleMenuController.init(this, battleMenu, encounterOpponentStorage, app);
-        battleMenu.getChildren().add(battleMenuController.render());
+        battleMenuVBox.getChildren().clear();
+        battleMenuController.init(this, battleMenuVBox, encounterOpponentStorage, app);
+        battleMenuVBox.getChildren().add(battleMenuController.render());
     }
 
     public void fleeFromBattle(Event event) {
