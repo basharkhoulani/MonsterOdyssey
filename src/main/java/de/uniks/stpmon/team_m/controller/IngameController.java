@@ -1096,8 +1096,8 @@ public class IngameController extends Controller {
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
                                     encounterOpponentStorage.setEncounterSize(opts.size());
+                                    encounterOpponentStorage.setOpponentsInStorage(opts);
                                     for (Opponent o : opts) {
-                                        encounterOpponentStorage.addOpponentsInStorage(o._id());
                                         if (!o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                                             if (o.isAttacker() != encounterOpponentStorage.isAttacker()) {
                                                 encounterOpponentStorage.addEnemyOpponent(o);

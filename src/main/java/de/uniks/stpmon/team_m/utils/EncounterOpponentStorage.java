@@ -134,7 +134,11 @@ public class EncounterOpponentStorage {
         return opponentsInStorage;
     }
 
-    public void addOpponentsInStorage(String opponentsInStorage) {
-        this.opponentsInStorage.add(opponentsInStorage);
+    public void setOpponentsInStorage(List<Opponent> opponents) {
+        this.opponentsInStorage.clear();
+        for (Opponent opponent : opponents) {
+            this.opponentsInStorage.add(opponent._id());
+        }
+
     }
 }
