@@ -126,7 +126,7 @@ public class EncounterController extends Controller {
         // init battle menu
         battleMenuController.init(this, battleMenuVBox, encounterOpponentStorage, app);
         battleMenuVBox.getChildren().add(battleMenuController.render());
-        battleMenuController.onFleeButtonClick = this::onFleeButtonClick; // There are two methodes one from master, another from branch
+        battleMenuController.onFleeButtonClick = this::onFleeButtonClick;
 
         // Init opponent controller for own trainer
         ownTrainerController = new EncounterOpponentController(false, false, true, false);
@@ -140,9 +140,7 @@ public class EncounterController extends Controller {
         ImageView sprite = ownTrainerController.getTrainerImageView();
         setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), sprite, 1);
 
-        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> {
-            abilityDtos.addAll(abilities);
-        }));
+        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> abilityDtos.addAll(abilities)));
 
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId)
                 .observeOn(FX_SCHEDULER)
@@ -370,6 +368,7 @@ public class EncounterController extends Controller {
         super.destroy();
         subControllers.forEach(Controller::destroy);
         //add destroy methode for the elements in encounterOpponentControllerHashMap
+        encounterOpponentControllerHashMap.values().forEach(Controller::destroy);
     }
 
     public void listenToOpponents() {
@@ -444,11 +443,6 @@ public class EncounterController extends Controller {
                 }
             }
         }
-    }
-
-    public void showIngameController() {
-        destroy();
-        app.show(ingameControllerProvider.get());
     }
 
     public void showAbilities() {
@@ -559,11 +553,9 @@ public class EncounterController extends Controller {
         yesButton.setPrefWidth(fleeButtonWidth);
         yesButton.setPrefHeight(fleeButtonHeight);
         yesButton.getStyleClass().add("hBoxRed");
-        yesButton.setOnAction(event -> {
-            //remove the fleeVox from the root BorderPane
-            //rootStackPane.getChildren().remove(fleeVBox);
-            this.fleeFromBattle(event);
-        });
+        //remove the fleeVox from the root BorderPane
+        //rootStackPane.getChildren().remove(fleeVBox);
+        yesButton.setOnAction(this::fleeFromBattle);
 
         // no Button
         Button noButton = new Button(this.resources.getString("ENCOUNTER_FLEE_CANCEL_BUTTON"));
@@ -604,11 +596,7 @@ public class EncounterController extends Controller {
         } else {
             if (e.getEnemy()) {
                 showWildMonster(e, opponent, false);
-            } else if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
-                showTeamMonster(e, opponent, true);
-            } else {
-                showTeamMonster(e, opponent, false);
-            }
+            } else showTeamMonster(e, opponent, trainerId.equals(trainerStorageProvider.get().getTrainer()._id()));
         }
 
     }
