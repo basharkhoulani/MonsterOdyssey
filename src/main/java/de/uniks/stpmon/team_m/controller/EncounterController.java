@@ -20,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -40,6 +41,8 @@ import static de.uniks.stpmon.team_m.Constants.*;
 
 @Singleton
 public class EncounterController extends Controller {
+    @FXML
+    public StackPane rootStackPane;
     @FXML
     public Text battleDialogText;
     @FXML
@@ -270,9 +273,9 @@ public class EncounterController extends Controller {
             if (ownTrainerController.getCurrentTarget() != opponent) {
                 ownTrainerController.setCurrentTarget(opponent);
             }
-            //if (encounterOpponentControllerHashMap.get(opponent._id()).isMultipleEnemyEncounter) {
+            if (encounterOpponentControllerHashMap.get(opponent._id()).isMultipleEnemyEncounter) {
                 encounterOpponentControllerHashMap.get(opponent._id()).onTarget();
-            //}
+            }
 
         }
     }
@@ -357,36 +360,10 @@ public class EncounterController extends Controller {
         return (int) (Math.pow(currentLevel, 3) - Math.pow(currentLevel - 1, 3));
     }
 
-    // There are two different methodes for the flee Button click
-    public void onFleeButtonClick() {
-        SequentialTransition fleeAnimation = buildFleeAnimation();
-        PauseTransition firstPause = new PauseTransition(Duration.millis(500));
-        firstPause.setOnFinished(event -> {
-            ownTrainerController.setMonsterImage(null);
-            fleeAnimation.play();
-        });
-
-        fleeAnimation.setOnFinished(evt -> disposables.add(encounterOpponentsService.deleteOpponent(
-                encounterOpponentStorage.getRegionId(),
-                encounterOpponentStorage.getEncounterId(),
-                encounterOpponentStorage.getSelfOpponent()._id()
-        ).observeOn(FX_SCHEDULER).subscribe(
-                result -> {
-                    app.show(ingameControllerProvider.get());
-                    System.out.println("Deleted opponent: " + encounterOpponentStorage.getEnemyOpponents().get(0));
-                }, error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                })));
-
-        firstPause.play();
-    }
-
-    /*
     public void onFleeButtonClick() {
         rootStackPane.getChildren().add(this.buildFleePopup());
     }
-     */
+
 
     @Override
     public void destroy() {
