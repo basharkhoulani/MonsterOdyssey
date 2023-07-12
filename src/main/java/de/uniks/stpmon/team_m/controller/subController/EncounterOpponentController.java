@@ -97,14 +97,6 @@ public class EncounterOpponentController extends Controller {
         monsterImageViewVBox.setOnMouseClicked(event -> {
             if (isEnemy && isMultipleEnemyEncounter && onTargetChange != null) {
                 onTargetChange.run();
-                /*
-                if (!isTargeted) {
-                    onTarget();
-                } else {
-                    unTarget();
-                }
-
-                 */
             }
         });
         return parent;
