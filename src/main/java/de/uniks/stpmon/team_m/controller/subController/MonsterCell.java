@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.service.PresetsService;
@@ -24,9 +25,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import retrofit2.http.Url;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -47,8 +50,6 @@ public class MonsterCell extends ListCell<Monster> {
     @FXML
     Label monsterName;
     @FXML
-    Label monsterType;
-    @FXML
     Label monsterLevel;
     @FXML
     ImageView monsterImageView;
@@ -68,6 +69,7 @@ public class MonsterCell extends ListCell<Monster> {
     @Inject
     public UserStorage usersStorage;
     public PresetsService presetsService;
+    public IngameController ingameController;
     @Inject
     Provider<TrainersService> trainersServiceProvider;
     MonstersListController monstersListController;
@@ -81,7 +83,8 @@ public class MonsterCell extends ListCell<Monster> {
     private String typeImagePath;
     private Image typeImage;
 
-    public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController) {
+    public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController, IngameController ingameController) {
+        this.ingameController = ingameController;
         this.resources = resources;
         this.presetsService = presetsService;
         this.monstersListController = monstersListController;
@@ -90,6 +93,7 @@ public class MonsterCell extends ListCell<Monster> {
     @Override
     protected void updateItem(Monster monster, boolean empty) {
         super.updateItem(monster, empty);
+        StringBuilder type = new StringBuilder();
         if (monster == null || empty) {
             setText(null);
             setGraphic(null);
@@ -101,20 +105,26 @@ public class MonsterCell extends ListCell<Monster> {
                     .subscribe(monsterType -> {
                         monsterTypeDto = monsterType;
                         monsterName.setText(resources.getString("NAME") + " " + monsterTypeDto.name());
-                        StringBuilder ability = new StringBuilder();
                         for (String s : monsterTypeDto.type()) {
-                            ability.append("").append(s);
+                            type.append("").append(s);
                         }
-                        typeColor = TYPESCOLORPALETTE.get(ability.toString());
+                        typeColor = TYPESCOLORPALETTE.get(type.toString());
                         String style = "-fx-background-color: " + typeColor + ";";
                         typeIcon.setStyle(style);
 
-                        typeImagePath = ABILITYPALETTE.get(ability.toString());
-                        URL resource = Main.class.getResource("images/" + typeImagePath);
-                        typeImage = new Image(resource.toString());
-                        typeImageView.setImage(typeImage);
-                        typeImageView.setFitHeight(45);
-                        typeImageView.setFitWidth(45);
+                        if(!GraphicsEnvironment.isHeadless()) {
+                            typeImagePath = ABILITYPALETTE.get(type.toString());
+                            URL resourceType = Main.class.getResource("images/" + typeImagePath);
+                            typeImage = new Image(resourceType.toString());
+                            typeImageView.setImage(typeImage);
+                            typeImageView.setFitHeight(45);
+                            typeImageView.setFitWidth(45);
+
+                            URL resourseArrowUp = Main.class.getResource("images/monster-arrange-up.png");
+                            Image arrowUpImage = new Image(resourseArrowUp.toString());
+                            arrowUp.setImage(arrowUpImage);
+                            arrowDown.setImage(arrowUpImage);
+                        }
                     }, error -> monstersListController.showError(error.getMessage())));
             monsterLevel.setText(resources.getString("LEVEL") + " " + monster.level());
             disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
@@ -122,21 +132,15 @@ public class MonsterCell extends ListCell<Monster> {
                         this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
                         monsterImageView.setImage(this.monsterImage);
                     }, error -> monstersListController.showError(error.getMessage())));
-            viewDetailsButton.setOnAction(event -> showDetails(monster));
+            viewDetailsButton.setOnAction(event -> showDetails(monster, type.toString()));
             setGraphic(rootmonsterHBox);
             setText(null);
             setStyle("-fx-background-color: #CFE9DB;  -fx-border-color: #1C701C; -fx-border-width: 2px");
         }
     }
 
-    private void showDetails(Monster monster) {
-        Stage popup = (Stage) rootmonsterHBox.getScene().getWindow();
-        popup.close();
-        MonstersDetailController monstersDetailController = new MonstersDetailController();
-        monstersDetailController.init(monstersListController, monster, monsterTypeDto, monsterImage, resources, presetsService);
-        Scene scene = new Scene(monstersDetailController.render());
-        popup.setScene(scene);
-        popup.show();
+    private void showDetails(Monster monster, String type) {
+        this.ingameController.showMonsterDetails(monstersListController, monster, monsterTypeDto, monsterImage, resources, presetsService, type);
     }
 
     private void loadFXML() {
