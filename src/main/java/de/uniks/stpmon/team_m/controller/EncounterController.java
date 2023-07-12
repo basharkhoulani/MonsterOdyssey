@@ -107,6 +107,7 @@ public class EncounterController extends Controller {
     private HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
     private HashMap<String, Opponent> opponentsDelete = new HashMap<>();
     private int repeatedTimes = 0;
+    private boolean inEncounter = true;
 
     @Inject
     public EncounterController() {
@@ -226,14 +227,17 @@ public class EncounterController extends Controller {
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Opponent opponent = event.data();
                     if(event.suffix().contains("updated")) {
+                        inEncounter = true;
                         updateOpponent(opponent);
                     } else if (event.suffix().contains("deleted")){
                         opponentsDelete.put(opponent._id(), opponent);
-                        if (opponentsDelete.size() >= encounterOpponentStorage.getEncounterSize()) {
+                        if (opponentsDelete.size() >= encounterOpponentStorage.getEncounterSize() && !inEncounter) {
                             showResult();
                         }
                     }
-                }, error -> showError(error.getMessage())));
+                }, error -> {
+                    error.printStackTrace();
+                }));
     }
 
     private void updateOpponent(Opponent opponent) {
@@ -256,6 +260,7 @@ public class EncounterController extends Controller {
                 writeBattleDescription(opponentsUpdate);
             }
             repeatedTimes++;
+            inEncounter = false;
         }
     }
 
@@ -280,15 +285,15 @@ public class EncounterController extends Controller {
             for (Result r : oResults.results()) {
                 switch (r.type()){
                     case "ability-success" -> {
-                        updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + r.effectiveness() + ".\n", false);
+                        updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
                         updateMonsterValues(o.trainer(), o.monster());
                     }
-                    case "target-defeated" -> updateDescription(resources.getString("TARGET.DEFEATED"), false);
                     // @Tobias: Here you can add the other cases
-                    default -> updateDescription(resources.getString("NOTHING.HAPPENED"), false);
+                    default -> updateDescription("", false);
                 }
             }
         }
+        inEncounter = false;
     }
 
     private void showResult() {
@@ -489,7 +494,7 @@ public class EncounterController extends Controller {
                             opponentLevel.setText(monster.level() + " LVL");
                             opponentHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
                         }
-                    }, Throwable::printStackTrace));
+                    }));
         }
     }
 
