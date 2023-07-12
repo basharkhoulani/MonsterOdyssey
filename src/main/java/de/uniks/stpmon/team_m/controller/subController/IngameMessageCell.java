@@ -15,9 +15,9 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.TIME_FORMAT;
+import static de.uniks.stpmon.team_m.Constants.ZONE_ID_EUROPE_BERLIN;
 
 public class IngameMessageCell extends ListCell<Message> {
     private final IngameController ingameController;
@@ -70,20 +70,12 @@ public class IngameMessageCell extends ListCell<Message> {
     }
 
     private String formatTimeString(String dateTime) {
-        return getZoneID(dateTime, ingameController.getResources(), TIME_FORMAT);
-    }
 
-    static String getZoneID(String dateTime, ResourceBundle resourceBundle, String timeFormat) {
-        String zone = String.valueOf(resourceBundle.getLocale());
-        String zoneId = switch (zone) {
-            case "de" -> "Europe/Berlin";
-            case "en" -> "Europe/London";
-            default -> "Asia/Shanghai";
-        };
-        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(zoneId));
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(ZONE_ID_EUROPE_BERLIN));
 
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(timeFormat);
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
         return localDateTime.format(outputFormatter);
     }
+
 
 }
