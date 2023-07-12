@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.controller.MainMenuController;
@@ -11,6 +12,10 @@ import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
+import java.util.Objects;
+
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class IngameSettingsController extends Controller {
     @FXML
@@ -46,7 +51,14 @@ public class IngameSettingsController extends Controller {
     }
 
     public Parent render() {
-        return super.render();
+        final Parent parent = super.render();
+        if(!GraphicsEnvironment.isHeadless()){
+            audioSettingsImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(AUDIOSYMBOL)).toString()));
+            keybindingsImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(KEYBINDINGSSYMBOL)).toString()));
+            goBackImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(GOBACKSYMBOL)).toString()));
+            trainerSettingsImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(SETTINGSYMBOL2)).toString()));
+        }
+        return parent;
     }
 
     public void init(IngameController ingameController, VBox ingameVbox) {

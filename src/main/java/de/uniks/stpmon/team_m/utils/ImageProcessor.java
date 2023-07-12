@@ -9,7 +9,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.URISyntaxException;
 import java.util.Base64;
 import java.util.Objects;
 
@@ -127,8 +126,7 @@ public class ImageProcessor {
      */
     public static WritableImage showScaledCharacter(String premadeCharacter, int x, int y, int w, int h) {
         try {
-            File imageFile = new File(Objects.requireNonNull(App.class.getResource("charactermodels/" + premadeCharacter)).toURI());
-            BufferedImage bufferedImage = ImageIO.read(imageFile);
+            BufferedImage bufferedImage = ImageIO.read(Objects.requireNonNull(App.class.getResource("charactermodels/" + premadeCharacter)));
             BufferedImage bufferedImageFrontView = bufferedImage.getSubimage(x, y, w, h);
             BufferedImage scaledBufferedImage = ImageProcessor.scaleImage(bufferedImageFrontView, 6);
             javafx.scene.image.WritableImage writableImage = new javafx.scene.image.WritableImage(scaledBufferedImage.getWidth(), scaledBufferedImage.getHeight());
@@ -139,7 +137,7 @@ public class ImageProcessor {
                 }
             }
             return writableImage;
-        } catch (URISyntaxException | IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

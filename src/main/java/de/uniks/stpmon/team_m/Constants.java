@@ -2,8 +2,7 @@ package de.uniks.stpmon.team_m;
 
 import javafx.geometry.Insets;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Map.entry;
 
@@ -63,6 +62,7 @@ public class Constants {
 
     // MESSAGES
     public static final String PENCIL = "\u270F";
+    public static final String ZONE_ID_EUROPE_BERLIN = "Europe/Berlin";
 
     // AVATAR
     public static final String AVATAR_1 = "images/monster.png";
@@ -87,6 +87,11 @@ public class Constants {
     public static final String PLAYSYMBOL = "images/PlaySymbol.PNG";
     public static final String AUDIOSYMBOL = "images/AudioSymbol.png";
     public static final String KEYBINDINGSSYMBOL = "images/KeybindingsSymbol.png";
+    public static final String CHECKSYMBOL = "images/checkSymbol.png";
+    public static final String WARNING = "images/Warning.png";
+    public static final String PENCIL2SYMBOL = "images/Pencil2.png";
+    public static final String ARROWLEFTSYMBOL = "images/arrowLeft.png";
+    public static final String ARROWRIGHTSYMBOL = "images/arrowRight.png";
 
     // NPC DIALOG
     public static int dialogVBoxWidth = 700;
@@ -130,6 +135,16 @@ public class Constants {
     public static int offsetToNotShowPhoneInScreen = 30;
     public static final String smallHandyImage = "images/SmallHandy.png";
     public static final String notificationBellImage = "images/NotificationBell.png";
+
+    // Encounter
+    public static int fleePopupWidth = 300;
+    public static int fleePopupHeight = 200;
+    public static int fleeTextHeight = 150;
+    public static Insets fleeTextInsets = new Insets(20, 10, 0, 10);
+    public static int fleeButtonsHBoxHeight = 50;
+    public static Insets fleeButtonsHBoxInsets = new Insets(0, 10, 10, 10);
+    public static int fleeButtonWidth = 100;
+    public static int fleeButtonHeight = 40;
 
     // Error messages
     public static final String HTTP_400 = "400";
@@ -186,4 +201,34 @@ public class Constants {
             entry("steel", "#97A8AA"),
             entry("fairy", "#D15F5F")
     ));
+
+    // Abilities
+    public static HashMap<String, String> ABILITYPALETTE = new HashMap<>(Map.ofEntries(
+            entry("normal", "ability-normal.png"),
+            entry("fire", "ability-fire.png"),
+            entry("water", "ability-water.png"),
+            entry("electric", "ability-electic.png"),
+            entry("grass", "ability-grass.png"),
+            entry("flying", "ability-flying.png"),
+            entry("bug", "ability-bug"),
+            entry("poison", "ability-poison"),
+            entry("rock", "ability-rock"),
+            entry("ground", "ability-ground"),
+            entry("fighting", "ability-fighting"),
+            entry("ice", "ability-ice"),
+            entry("psychic", "ability-psychic"),
+            entry("ghost", "ability-ghost"),
+            entry("dragon", "ability-dragon"),
+            entry("dark", "ability-dragon"),
+            entry("steel", "ability-steel"),
+            entry("fairy", "ability-fairy")
+    ));
+
+    public static List<String> ATTRIBUTE_IMAGES = Arrays.asList(
+            "star.png",
+            "attack.png",
+            "heart.png",
+            "speed.png",
+            "defense.png"
+            );
 }
