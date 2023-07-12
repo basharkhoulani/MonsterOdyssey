@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.Monster;
@@ -65,6 +66,7 @@ public class MonstersDetailController extends Controller {
     private MonsterTypeDto monsterTypeDto;
     private Image monsterImage;
     public IngameController ingameController;
+    public EncounterController encounterController;
     public VBox monsterDetailVBox;
     public List<AbilityDto> monsterAbilities = new ArrayList<>();
     @Inject
@@ -94,8 +96,8 @@ public class MonstersDetailController extends Controller {
     }
 
     public void init(IngameController ingameController, VBox monsterDetailVBox, MonstersListController monstersListController,
-                     Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources, PresetsService presetsService,
-                     String type) {
+                     Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources,
+                     PresetsService presetsService, String type) {
         super.init();
         this.monsterType = type;
         this.ingameController = ingameController;
@@ -107,6 +109,20 @@ public class MonstersDetailController extends Controller {
         this.resources = resources;
         this.presetsService = presetsService;
     }
+
+    public void initFromBattleMenu(EncounterController encounterController, VBox monsterDetailVBox, Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage,
+                                   ResourceBundle resources, PresetsService presetsService, String type) {
+        super.init();
+        this.monsterType = type;
+        this.encounterController = encounterController;
+        this.monsterDetailVBox = monsterDetailVBox;
+        this.monster = monster;
+        this.monsterTypeDto = monsterTypeDto;
+        this.monsterImage = monsterImage;
+        this.resources = resources;
+        this.presetsService = presetsService;
+    }
+
 
     @Inject
     public MonstersDetailController() {
@@ -142,10 +158,6 @@ public class MonstersDetailController extends Controller {
         }
 
         // Name, Type, Experience, Level
-        StringBuilder type = new StringBuilder(resources.getString("TYPE"));
-        for (String s : monsterTypeDto.type()) {
-            type.append(" ").append(s);
-        }
 
         monsterName.setText(monsterTypeDto.name());
 
@@ -192,7 +204,11 @@ public class MonstersDetailController extends Controller {
     }
 
     public void goBackToMonsters() {
-        ingameController.root.getChildren().remove(monsterDetailVBox);
+        if (monsterDetailVBox.getParent().getId().equals("root")) {
+            ingameController.root.getChildren().remove(monsterDetailVBox);
+        } else {
+            encounterController.rootStackPane.getChildren().remove(monsterDetailVBox);
+        }
     }
 
     public double getMaxExp(int lvl) {
