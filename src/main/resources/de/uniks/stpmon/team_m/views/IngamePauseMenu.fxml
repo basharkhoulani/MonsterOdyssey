@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -11,7 +10,6 @@
 <?import javafx.scene.control.Label?>
 
 <VBox fx:id="pauseMenuVbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="252.0" prefWidth="354.0" style="-fx-background-color: #CFE9DB; -fx-background-radius: 10px;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.IngamePauseMenuController">
-   <children>
       <Button fx:id="resumeGameButton" mnemonicParsing="false" onAction="#resumeGame" prefHeight="50.0" prefWidth="257.0" style="-fx-background-color: #DAE8FC; -fx-background-radius: 10px; -fx-border-color: grey; -fx-border-radius: 10px; -fx-border-width: 1px;">
          <font>
             <Font name="Comic Sans MS" size="17.0" />
@@ -25,9 +23,6 @@
                   <viewport>
                      <Rectangle2D />
                   </viewport>
-                  <image>
-                     <Image url="@../images/PlaySymbol.png" />
-                  </image>
                </ImageView>
                <Label text="%RESUME.BUTTON.LABEL" />
             </HBox>
@@ -43,9 +38,6 @@
          <graphic>
             <HBox spacing="20" alignment="CENTER_LEFT">
                <ImageView fx:id="settingsImageView" fitHeight="39.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image url="@../images/SettingSymbol2.png" />
-                  </image>
                </ImageView>
                <Label text="%SETTINGS" />
             </HBox>
@@ -61,14 +53,10 @@
          <graphic>
             <HBox spacing="10" alignment="CENTER_LEFT">
                <ImageView fx:id="leaveGameImageView" fitHeight="39.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image url="@../images/GoBackSymbol.png" />
-                  </image>
                </ImageView>
                <Label text="%SAVE.GAME.AND.LEAVE.BUTTON.LABEL" />
             </HBox>
          </graphic>
       </Button>
-   </children>
    <spacing>10</spacing>
 </VBox>

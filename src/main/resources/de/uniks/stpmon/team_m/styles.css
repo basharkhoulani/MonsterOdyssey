@@ -492,12 +492,12 @@
 
 .levelprogress-bar {
     -fx-accent: #2B8B03;
-    -fx-control-inner-background: #2073FF;
+    -fx-control-inner-background: #FFFFFF;
 }
 
 .healthprogress-bar {
     -fx-accent: #430000;
-    -fx-control-inner-background: #2073FF
+    -fx-control-inner-background: #FFFFFF;
 }
 
 .encounterBackground {

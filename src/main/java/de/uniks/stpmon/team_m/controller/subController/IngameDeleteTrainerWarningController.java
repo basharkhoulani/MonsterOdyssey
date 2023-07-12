@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import javafx.fxml.FXML;
@@ -10,6 +11,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
+import java.awt.*;
+import java.util.Objects;
+
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class IngameDeleteTrainerWarningController extends Controller {
     @FXML
@@ -34,7 +39,11 @@ public class IngameDeleteTrainerWarningController extends Controller {
     }
 
     public Parent render() {
-        return super.render();
+        final Parent parent = super.render();
+        if(!GraphicsEnvironment.isHeadless()) {
+            warningImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(WARNING)).toString()));
+        }
+        return parent;
     }
     public void init(IngameTrainerSettingsController ingameTrainerSettingsController, VBox ingameVbox) {
         this.ingameTrainerSettingsController = ingameTrainerSettingsController;

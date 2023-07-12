@@ -20,9 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class IngameTrainerSettingsControllerTest extends ApplicationTest {
@@ -31,6 +29,10 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
 
     @Mock
     Provider<TrainerStorage> trainerStorageProvider;
+    @Mock
+    Provider<IngameDeleteTrainerWarningController> ingameDeleteTrainerWarningControllerProvider;
+    @InjectMocks
+    IngameDeleteTrainerWarningController ingameDeleteTrainerWarningController;
 
     @InjectMocks
     IngameTrainerSettingsController trainerSettingsController;
@@ -66,6 +68,14 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
 
     @Test
     public void deleteTrainer() {
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        ingameDeleteTrainerWarningController.setValues(bundle, null, null, ingameDeleteTrainerWarningController, app);
+        when(ingameDeleteTrainerWarningControllerProvider.get()).thenReturn(ingameDeleteTrainerWarningController);
+
         Button deleteTrainerButton = lookup("#deleteTrainerButton").queryButton();
+        clickOn("#deleteTrainerButton");
+        clickOn("#cancelButton");
+        verify(app).show(trainerSettingsController);
+        clickOn("#deleteTrainerButton");
     }
 }
