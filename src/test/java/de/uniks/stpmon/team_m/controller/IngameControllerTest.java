@@ -2,8 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import com.sun.javafx.collections.ObservableListWrapper;
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.controller.subController.MonstersListController;
-import de.uniks.stpmon.team_m.controller.subController.NotificationListHandyController;
+import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
@@ -20,6 +19,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -70,7 +70,8 @@ public class IngameControllerTest extends ApplicationTest {
     // Please also keep this mock, it is needed for the tests
     @Spy
     EncounterOpponentStorage encounterOpponentStorage;
-
+    @Mock
+    Provider<IngamePauseMenuController> pauseMenuControllerProvider;
     @Mock
     TrainersService trainersService;
     @Mock
@@ -89,11 +90,15 @@ public class IngameControllerTest extends ApplicationTest {
     Parent parent;
     @InjectMocks
     NotificationListHandyController notificationListHandyController;
+    @InjectMocks
+    IngamePauseMenuController pauseMenuController;
+    @InjectMocks
+    MainMenuController mainMenuController;
 
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        Preferences preferences = mock(Preferences.class);
+        Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
         ingameController. setValues (bundle, preferences, null, ingameController, app);
 
         UDPEventListener udpEventListener = mock(UDPEventListener.class);
@@ -238,6 +243,8 @@ public class IngameControllerTest extends ApplicationTest {
         notificationListHandyController.setValues(bundle, null, null, notificationListHandyController, app);
         when(notificationListHandyControllerProvider.get()).thenReturn(notificationListHandyController);
 
+
+
         Opponent opponent = new Opponent(
                 "2023-05-30T12:02:57.510Z",
                 "2023-05-30T12:01:57.510Z",
@@ -331,10 +338,8 @@ public class IngameControllerTest extends ApplicationTest {
         release(KeyCode.E);
 
         final TextFlow dialogTextFlow = lookup("#dialogTextFlow").query();
-
         final Text dialogText = (Text) dialogTextFlow.getChildren().get(0);
         final String firstDefaultText = dialogText.getText();
-
         assertNotEquals("", firstDefaultText);
 
         Thread.sleep(30);
@@ -483,5 +488,22 @@ public class IngameControllerTest extends ApplicationTest {
         final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
 
         assertNotEquals("dialogStackPane", node.getId());
+    }
+
+    @Test
+    void testPauseMenu(){
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        pauseMenuController.setValues(bundle, null, null, pauseMenuController, app);
+        when(pauseMenuControllerProvider.get()).thenReturn(pauseMenuController);
+
+        mainMenuController.setValues(bundle, null, null, mainMenuController, app);
+        when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
+        doNothing().when(app).show(mainMenuController);
+        clickOn("#pauseButton");
+        final VBox pauseMenuVbox = lookup("#pauseMenuVbox").query();
+        clickOn("#resumeGameButton");
+        clickOn("#pauseButton");
+        clickOn("#leaveGameButton");
+        verify(app).show(mainMenuController);
     }
 }
