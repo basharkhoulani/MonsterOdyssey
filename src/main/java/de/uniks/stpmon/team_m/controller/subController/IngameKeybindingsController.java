@@ -65,6 +65,19 @@ public class IngameKeybindingsController extends Controller {
     }
 
     public void setDefault() {
+        preferences.put("walkUp",KeyCode.W.getChar());
+        walkUpButton.setText("W");
+        preferences.put("walkDown",KeyCode.S.getChar() );
+        walkDownButton.setText("S");
+        preferences.put("walkLeft",KeyCode.A.getChar());
+        walkLeftButton.setText("A");
+        preferences.put("walkRight",KeyCode.D.getChar());
+        walkRightButton.setText("D");
+        preferences.put("pauseMenu","ESCAPE");
+        pauseMenuButton.setText("ESCAPE");
+        preferences.put("interaction",KeyCode.E.getChar());
+        interactionButton.setText("E");
+        informationLabel.setText(resources.getString("KEYBINDINGS.DEFAULT"));
     }
 
     public void check() {
