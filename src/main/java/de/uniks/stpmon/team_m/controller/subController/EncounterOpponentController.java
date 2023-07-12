@@ -186,4 +186,8 @@ public class EncounterOpponentController extends Controller {
     public String getMonsterName() {
         return monsterNameLabel.getText();
     }
+
+    public boolean getEnemy() {
+        return isEnemy;
+    }
 }
