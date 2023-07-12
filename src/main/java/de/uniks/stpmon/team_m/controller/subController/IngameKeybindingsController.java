@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import javafx.event.EventHandler;
@@ -7,10 +8,15 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.input.KeyEvent;
 import javax.inject.Inject;
+import java.awt.*;
+import java.util.Objects;
+
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class IngameKeybindingsController extends Controller {
 
@@ -34,6 +40,10 @@ public class IngameKeybindingsController extends Controller {
     public Button checkButton;
     @FXML
     public Label informationLabel;
+    @FXML
+    public ImageView checkImageView;
+    @FXML
+    public ImageView goBackImageView;
     @Inject
     IngameController ingameController;
     private VBox ingameVbox;
@@ -46,6 +56,10 @@ public class IngameKeybindingsController extends Controller {
 
     public Parent render() {
         Parent parent = super.render();
+        if(!GraphicsEnvironment.isHeadless()){
+            checkImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(CHECKSYMBOL)).toString()));
+            goBackImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(GOBACKSYMBOL)).toString()));
+        }
         walkUpButton.setText(preferences.get("walkUp","W"));
         walkDownButton.setText(preferences.get("walkDown","S"));
         walkRightButton.setText(preferences.get("walkRight","D"));
