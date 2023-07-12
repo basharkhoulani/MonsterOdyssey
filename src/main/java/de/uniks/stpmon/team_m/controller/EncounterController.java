@@ -1,207 +1,416 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
+import de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController;
+import de.uniks.stpmon.team_m.dto.AbilityDto;
+import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.Opponent;
-import de.uniks.stpmon.team_m.dto.Trainer;
-import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
+import de.uniks.stpmon.team_m.service.MonstersService;
+import de.uniks.stpmon.team_m.service.RegionEncountersService;
+import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
-import de.uniks.stpmon.team_m.ws.EventListener;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
+import javafx.animation.*;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.awt.*;
-import java.util.Objects;
+import javax.inject.Singleton;
+import java.util.HashMap;
 
+import static de.uniks.stpmon.team_m.Constants.TRAINER_DIRECTION_DOWN;
+import static de.uniks.stpmon.team_m.Constants.TRAINER_DIRECTION_UP;
+
+
+@Singleton
 public class EncounterController extends Controller {
     @FXML
-    public Label opponentLevel;
+    public Text battleDialogText;
     @FXML
-    public ProgressBar opponentHealthBar;
+    public TextFlow battleDialogTextFlow;
     @FXML
-    public Label opponentMonsterName;
+    public VBox actionButtonVBox;
     @FXML
-    public ImageView opponentTrainer;
+    public VBox battleBackgroundVBox;
     @FXML
-    public ImageView opponentMonster;
+    public HBox enemyHBox;
     @FXML
-    public ImageView myMonster;
-    @FXML
-    public ImageView mySprite;
-    @FXML
-    public ProgressBar myLevelBar;
-    @FXML
-    public Label myLevel;
-    @FXML
-    public ProgressBar myHealthBar;
-    @FXML
-    public Label myHealth;
-    @FXML
-    public Label myMonsterName;
-    @FXML
-    public HBox battleMenu;
-    @FXML
-    public Text battleDescription;
-    @FXML
-    public Button goBack;
+    public HBox teamHBox;
 
     @Inject
     EncounterOpponentsService encounterOpponentsService;
     @Inject
     RegionEncountersService regionEncountersService;
     @Inject
-    TrainersService trainersService;
-    @Inject
     MonstersService monstersService;
     @Inject
-    PresetsService presetsService;
-    @Inject
-    Provider<IngameController> ingameControllerProvider;
-    @Inject
-    Provider<EventListener> eventListener;
+    TrainersService trainersService;
+
     @Inject
     EncounterOpponentStorage encounterOpponentStorage;
     @Inject
-    BattleMenuController battleMenuController;
+    TrainerStorage trainerStorage;
     @Inject
-    Provider<TrainerStorage> trainerStorageProvider;
+    public BattleMenuController battleMenuController;
 
+    @Inject
+    public Provider<TrainerStorage> trainerStorageProvider;
+
+    @Inject
+    public IngameController ingameController;
+
+    private EncounterOpponentController enemy1Controller;
+    private EncounterOpponentController enemy2Controller;
+    private EncounterOpponentController ownTrainerController;
+    private EncounterOpponentController coopTrainerController;
+    private int currentImageIndex;
+
+    private int opponentsSize;
     private String regionId;
     private String encounterId;
     private String trainerId;
-    private Image myMonsterImage;
-    private Image enemyMonsterImage;
+
+    private HashMap<Opponent, EncounterOpponentController> encounterOpponentControllerHashMap;
+    private HashMap<Monster, Monster> monsterTargetMap;
 
     @Inject
     public EncounterController() {
     }
 
+    @Override
     public void init() {
         super.init();
-        regionId = encounterOpponentStorage.getRegionId();
+        opponentsSize = encounterOpponentStorage.getEncounterSize();
+        regionId = trainerStorage.getRegion()._id();
         encounterId = encounterOpponentStorage.getEncounterId();
-        trainerId = trainerStorageProvider.get().getTrainer()._id();
-        battleMenuController.init();
+        trainerId = trainerStorage.getTrainer()._id();
+        encounterOpponentControllerHashMap = new HashMap<>();
+        monsterTargetMap = new HashMap<>();
     }
 
+    @Override
+    public Parent render() {
+        Parent parent = super.render();
+        // init battle menu
+        battleMenuController.init(this, actionButtonVBox, encounterOpponentStorage);
+        actionButtonVBox.getChildren().add(battleMenuController.render());
+        battleMenuController.onFleeButtonClick = this::onFleeButtonClick;
+
+        // Init opponent controller for own trainer
+        ownTrainerController = new EncounterOpponentController(false, false, true, false);
+        ownTrainerController.init();
+        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getSelfOpponent(), ownTrainerController);
+        Parent ownTrainerParent = ownTrainerController.render();
+        HBox.setHgrow(ownTrainerParent, javafx.scene.layout.Priority.ALWAYS);
+        showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent(), true);
+        // showMySprite
+        ImageView sprite = ownTrainerController.getTrainerImageView();
+        setTrainerSpriteImageView(trainerStorage.getTrainer(), sprite, TRAINER_DIRECTION_UP);
+
+        disposables.add(regionEncountersService.getEncounter(regionId, encounterId)
+                .observeOn(FX_SCHEDULER)
+                .subscribe(encounter -> {
+                    encounterOpponentStorage.setWild(encounter.isWild());
+                    if (encounter.isWild()) {
+                        renderForWild(ownTrainerParent);
+                        battleMenuController.showFleeButton(true);
+                    } else {
+                        if (opponentsSize == 2) {
+                            renderFor1vs1(ownTrainerParent);
+                        } else if (opponentsSize == 3) {
+                            renderFor1vs2(ownTrainerParent);
+                        } else {
+                            renderFor2vs2(ownTrainerParent);
+                        }
+                        battleMenuController.showFleeButton(false);
+                    }
+                }));
+        return parent;
+    }
+
+    @Override
     public String getTitle() {
         return resources.getString("ENCOUNTER");
     }
 
-    public Parent render() {
-        final Parent parent = super.render();
-        disposables.add(regionEncountersService.getEncounter(regionId,encounterId)
-                .observeOn(FX_SCHEDULER).subscribe(encounter -> {
-                    encounterOpponentStorage.setWild(encounter.isWild());
-                    // Sprite and all relevante Information
-                    showTrainer();
-                    showMonster();
-                }, Throwable::printStackTrace));
+    private void renderForWild(Parent ownTrainerParent) {
+        // Wild situation
 
-        // render for subcontroller
-        // battleMenuController.init(this, battleMenu, encounterOpponentStorage);
-        battleMenu.getChildren().add(battleMenuController.render());
+        // Wild monster (init opponent controller for enemy)
+        enemy1Controller = new EncounterOpponentController(true, true, false, false);
+        enemy1Controller.init();
+        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0), enemy1Controller);
+        enemyHBox.setPadding(new Insets(0, 400, 0, 0));
+        Parent enemy1Parent = enemy1Controller.render();
+        HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
+        enemyHBox.getChildren().add(enemy1Parent);
+        targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
+        showWildMonster(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
 
-        listenToOpponents(encounterOpponentStorage.getEncounterId());
-        return parent;
+        // Own trainer
+        teamHBox.setPadding(new Insets(0, 0, 0, 400));
+        teamHBox.getChildren().add(ownTrainerParent);
     }
 
-    private void showTrainer(){
-        setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), mySprite,1);
-        if(!encounterOpponentStorage.isWild()){
-            String enemyTrainerId = encounterOpponentStorage.getEnemyOpponents().get(0).trainer();
-            battleMenuController.showFleeButton(false);
-            disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)
-                    .observeOn(FX_SCHEDULER).subscribe(trainer -> {
-                        battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + trainer.name());
-                        setTrainerSpriteImageView(trainer, opponentTrainer,3);
-                    }, Throwable::printStackTrace));
-        } else {
-            battleMenuController.showFleeButton(true);
+    private void renderFor1vs1(Parent ownTrainerParent) {
+        // 1 vs 1 situation
+
+        // Enemy as a trainer (init opponent controller for the enemy)
+        enemy1Controller = new EncounterOpponentController(true, false, false, false);
+        enemy1Controller.init();
+        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0), enemy1Controller);
+        Parent enemy1Parent = enemy1Controller.render();
+        HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
+        enemyHBox.getChildren().add(enemy1Parent);
+        targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
+        showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
+
+        // Own trainer
+        teamHBox.setPadding(new Insets(0, 0, 0, 400));
+        teamHBox.getChildren().add(ownTrainerParent);
+    }
+
+    private void renderFor1vs2(Parent ownTrainerParent) {
+        // 1 vs 2 situation
+
+        // Add slot for second monster
+        VBox monster2ImageViewVBox = new VBox();
+        // TODO: replace later on
+        ImageView monster2ImageView = new ImageView(trainerStorage.getTrainerSpriteChunk());
+        monster2ImageView.setFitWidth(60);
+        monster2ImageView.setFitHeight(60);
+        monster2ImageViewVBox.getChildren().add(monster2ImageView);
+        ownTrainerController.trainerMonsterHBox.getChildren().add(monster2ImageViewVBox);
+
+        // 1st enemy as a trainer
+        enemy1Controller = new EncounterOpponentController(true, false, false, true);
+        enemy1Controller.init();
+        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0), enemy1Controller);
+        VBox enemy1Parent = (VBox) enemy1Controller.render();
+        HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
+        enemyHBox.getChildren().add(enemy1Parent);
+        targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
+        showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
+        enemy1Controller.onTargetChange = this::onTargetChange;
+
+        // 2nd enemy as a trainer
+        enemy2Controller = new EncounterOpponentController(true, false, true, true);
+        enemy2Controller.init();
+        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(1), enemy2Controller);
+        VBox enemy2Parent = (VBox) enemy2Controller.render();
+        HBox.setHgrow(enemy2Parent, javafx.scene.layout.Priority.ALWAYS);
+        enemyHBox.getChildren().add(enemy2Parent);
+        showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(1));
+        enemy2Controller.onTargetChange = this::onTargetChange;
+
+        // Own trainer
+        teamHBox.setPadding(new Insets(0, 0, 0, 450));
+        teamHBox.getChildren().add(ownTrainerParent);
+    }
+
+    private void renderFor2vs2(Parent ownTrainerParent) {
+        // 2 vs 2 situation
+
+        // 1st enemy as a trainer
+        enemy1Controller = new EncounterOpponentController(true, false, false, true);
+        enemy1Controller.init();
+        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0), enemy1Controller);
+        VBox enemy1Parent = (VBox) enemy1Controller.render();
+        HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
+        enemyHBox.getChildren().add(enemy1Parent);
+        targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
+        showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
+        enemy1Controller.onTargetChange = this::onTargetChange;
+
+        // 2nd enemy as a trainer
+        enemy2Controller = new EncounterOpponentController(true, false, true, true);
+        enemy2Controller.init();
+        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(1), enemy2Controller);
+        VBox enemy2Parent = (VBox) enemy2Controller.render();
+        HBox.setHgrow(enemy2Parent, javafx.scene.layout.Priority.ALWAYS);
+        enemyHBox.getChildren().add(enemy2Parent);
+        showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(1));
+        enemy2Controller.onTargetChange = this::onTargetChange;
+
+        // Coop Trainer
+        coopTrainerController = new EncounterOpponentController(false, false, false, false);
+        coopTrainerController.init();
+        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getCoopOpponent(), coopTrainerController);
+        Parent coopTrainerParent = coopTrainerController.render();
+        HBox.setHgrow(coopTrainerParent, javafx.scene.layout.Priority.ALWAYS);
+        teamHBox.getChildren().add(coopTrainerParent);
+        showCoopImage(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
+        showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent(), false);
+
+        // Own trainer
+        teamHBox.getChildren().add(ownTrainerParent);
+    }
+
+    private void targetOpponent(Opponent opponent) {
+        if (encounterOpponentControllerHashMap.containsKey(opponent)) {
+            if (ownTrainerController.getCurrentTarget() == null && encounterOpponentControllerHashMap.containsKey(ownTrainerController.getCurrentTarget())) {
+                encounterOpponentControllerHashMap.get(ownTrainerController.getCurrentTarget()).unTarget();
+            }
+            if (ownTrainerController.getCurrentTarget() != opponent) {
+                ownTrainerController.setCurrentTarget(opponent);
+            }
+            if (encounterOpponentControllerHashMap.get(opponent).isMultipleEnemyEncounter) {
+                encounterOpponentControllerHashMap.get(opponent).onTarget();
+            }
         }
     }
 
-    private void showMonster() {
-        // self monster
-        disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getSelfOpponent().monster())
-                .observeOn(FX_SCHEDULER).subscribe(monster -> {
-                    encounterOpponentStorage.setCurrentTrainerMonster(monster);
-                    myLevelBar.setProgress(monster.experience() / requiredExperience(monster.level() + 1));
-                    myLevel.setText(monster.level() + " LVL");
-                    myHealthBar.setProgress(monster.currentAttributes().health() / monster.attributes().health());
-                    myHealth.setText(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
-                    //write monster name
-                    disposables.add(presetsService.getMonster(monster.type())
-                            .observeOn(FX_SCHEDULER).subscribe(m -> {
-                                myMonsterName.setText(m.name());
-                                encounterOpponentStorage.setCurrentTrainerMonsterType(m);
-                            }, Throwable::printStackTrace));
-                    disposables.add(presetsService.getMonsterImage(monster.type())
-                            .observeOn(FX_SCHEDULER).subscribe(mImage -> {
-                                myMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
-                                myMonster.setImage(myMonsterImage);
-                            }, Throwable::printStackTrace));
-                        }, Throwable::printStackTrace));
+    private void onTargetChange() {
+        System.out.println("Changing target");
+    }
 
-        // enemy monster
-        disposables.add(monstersService.getMonster(regionId, encounterOpponentStorage.getEnemyOpponents().get(0).trainer(), encounterOpponentStorage.getEnemyOpponents().get(0).monster())
+    private void useAbility(AbilityDto ability) {
+        if (ownTrainerController.getCurrentTarget() == null) {
+            // TODO: display message
+            return;
+        }
+        // TODO: Send ability move to sever
+    }
+
+    // Hier soll allen Serveranfragen kommen
+    private void showWildMonster(EncounterOpponentController encounterOpponentController, Opponent opponent) {
+        disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
                     encounterOpponentStorage.addCurrentMonster(monster);
-                    opponentLevel.setText(monster.level() + " LVL");
-                    opponentHealthBar.setProgress(monster.currentAttributes().health() / monster.attributes().health());
+                    encounterOpponentController.setLevelLabel(String.valueOf(monster.level()))
+                            .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
                     disposables.add(presetsService.getMonster(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(m -> {
-                                opponentMonsterName.setText(m.name());
+                                encounterOpponentController.setMonsterNameLabel(m.name());
                                 encounterOpponentStorage.addCurrentMonsterType(m);
-                                if(encounterOpponentStorage.isWild()){
-                                    battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + m.name());
+                                if (encounterOpponentStorage.isWild()) {
+                                    battleDialogText.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + m.name());
                                 }
                             }, Throwable::printStackTrace));
                     disposables.add(presetsService.getMonsterImage(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(mImage -> {
-                                enemyMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
-                                opponentMonster.setImage(enemyMonsterImage);
+                                Image enemyMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
+                                encounterOpponentController.setMonsterImage(enemyMonsterImage);
                             }, Throwable::printStackTrace));
-                        }, Throwable::printStackTrace));
+                }, Throwable::printStackTrace));
     }
+
+    private void showEnemyInfo(EncounterOpponentController encounterOpponentController, Opponent opponent) {
+        if (opponent != null) {
+            // Monster
+            showWildMonster(encounterOpponentController, opponent);
+
+            // Trainer Sprite
+            disposables.add(trainersService.getTrainer(regionId, opponent.trainer())
+                    .observeOn(FX_SCHEDULER).subscribe(trainer -> {
+                        battleDialogText.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + trainer.name());
+                        ImageView opponentTrainer = encounterOpponentController.getTrainerImageView();
+                        setTrainerSpriteImageView(trainer, opponentTrainer, TRAINER_DIRECTION_DOWN);
+                    }, Throwable::printStackTrace));
+        }
+    }
+
+    private void showTeamMonster(EncounterOpponentController encounterOpponentController, Opponent opponent, boolean isSelf) {
+        // Monster
+        disposables.add(monstersService.getMonster(regionId, trainerId, opponent.monster())
+                .observeOn(FX_SCHEDULER).subscribe(monster -> {
+                    if (isSelf) {
+                        encounterOpponentStorage.setCurrentTrainerMonster(monster);
+                    }
+                    encounterOpponentStorage.addCurrentMonster(monster);
+                    encounterOpponentController.setLevelLabel("LVL " + monster.level())
+                            .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1))
+                            .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health())
+                            .setHealthLabel(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
+                    //write monster name
+                    disposables.add(presetsService.getMonster(monster.type())
+                            .observeOn(FX_SCHEDULER).subscribe(m -> {
+                                encounterOpponentController.setMonsterNameLabel(m.name());
+                                if (isSelf) {
+                                    encounterOpponentStorage.setCurrentTrainerMonsterType(m);
+                                }
+                                encounterOpponentStorage.addCurrentMonsterType(m);
+                            }, Throwable::printStackTrace));
+                    disposables.add(presetsService.getMonsterImage(monster.type())
+                            .observeOn(FX_SCHEDULER).subscribe(mImage -> {
+                                Image myMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
+                                encounterOpponentController.setMonsterImage(myMonsterImage);
+                            }, Throwable::printStackTrace));
+                }, Throwable::printStackTrace));
+    }
+
+    private void showCoopImage(EncounterOpponentController encounterOpponentController, Opponent opponent) {
+        disposables.add(trainersService.getTrainer(regionId, opponent.trainer())
+                .observeOn(FX_SCHEDULER).subscribe(trainer -> {
+                    ImageView opponentTrainer = encounterOpponentController.getTrainerImageView();
+                    setTrainerSpriteImageView(trainer, opponentTrainer, TRAINER_DIRECTION_UP);
+                }, Throwable::printStackTrace));
+    }
+
 
     public int requiredExperience(int currentLevel) {
         return (int) (Math.pow(currentLevel, 3) - Math.pow(currentLevel - 1, 3));
     }
 
+    public void onFleeButtonClick() {
+        SequentialTransition fleeAnimation = buildFleeAnimation();
+        PauseTransition firstPause = new PauseTransition(Duration.millis(500));
 
-    @Override
-    public void destroy() {
-        super.destroy();
+        firstPause.setOnFinished(event -> {
+            ownTrainerController.setMonsterImage(null);
+            fleeAnimation.play();
+        });
+
+        fleeAnimation.setOnFinished(evt -> disposables.add(encounterOpponentsService.deleteOpponent(
+                encounterOpponentStorage.getRegionId(),
+                encounterOpponentStorage.getEncounterId(),
+                encounterOpponentStorage.getSelfOpponent()._id()
+        ).observeOn(FX_SCHEDULER).subscribe(
+                result -> {
+                    app.show(ingameController);
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                })));
+
+        firstPause.play();
     }
 
-    public void listenToOpponents(String encounterId) {
-        disposables.add(eventListener.get().listen("encounters." + encounterId + "opponents.*.*", Opponent.class)
-                .observeOn(FX_SCHEDULER).subscribe(event -> {
-                    final Opponent opponent = event.data();
-                    switch (event.suffix()) {
-                        case "deleted" -> app.show(ingameControllerProvider.get());
-                    }
-                }, error -> showError(error.getMessage())));
+    private SequentialTransition buildFleeAnimation() {
+        SequentialTransition transition = new SequentialTransition();
+
+        Image[] images = ImageProcessor.cropTrainerImages(trainerStorage.getTrainerSpriteChunk(), TRAINER_DIRECTION_DOWN, true);
+
+        KeyFrame animationFrame = new KeyFrame(Duration.millis(Constants.DELAY), event -> {
+            ownTrainerController.setTrainerImage(images[currentImageIndex]);
+            currentImageIndex = (currentImageIndex + 1) % 6;
+        });
+        KeyFrame movementFrame = new KeyFrame(Duration.millis(Constants.DELAY), evt -> {
+            TranslateTransition translateTransition = new TranslateTransition();
+            translateTransition.setNode(ownTrainerController.trainerMonsterVBox);
+            translateTransition.setByY(16);
+            translateTransition.setDuration(Duration.millis(Constants.DELAY));
+            translateTransition.setCycleCount(1);
+            translateTransition.play();
+        });
+        for (int i = 0; i < 12; i++) {
+            Timeline fleeAnimation = new Timeline(animationFrame);
+            Timeline trainerMovement = new Timeline(movementFrame);
+            ParallelTransition parallelTransition = new ParallelTransition(fleeAnimation, trainerMovement);
+            transition.getChildren().add(parallelTransition);
+        }
+        return transition;
     }
-
-    public void showIngameController() {
-        app.show(ingameControllerProvider.get());
-    }
-
-
 }
-    

@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.Opponent;
+import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -53,6 +54,7 @@ public class EncounterOpponentController extends Controller {
     public HBox trainerMonsterHBox;
 
     private Opponent currentTarget;
+    public Runnable onTargetChange;
 
     public EncounterOpponentController(Boolean isEnemy, Boolean isWild, Boolean invertX, Boolean isMultipleEnemyEncounter) {
         this.isEnemy = isEnemy;
@@ -93,27 +95,19 @@ public class EncounterOpponentController extends Controller {
             opponentHBox.getChildren().add(2, monsterInfoBox);
         }
         monsterImageViewVBox.setOnMouseClicked(event -> {
-            if (isEnemy && isMultipleEnemyEncounter) {
+            if (isEnemy && isMultipleEnemyEncounter && onTargetChange != null) {
+                onTargetChange.run();
+                /*
                 if (!isTargeted) {
                     onTarget();
                 } else {
                     unTarget();
                 }
+
+                 */
             }
         });
         return parent;
-    }
-
-    public Boolean getEnemy() {
-        return isEnemy;
-    }
-
-    public Boolean getWild() {
-        return isWild;
-    }
-
-    public Boolean getInvertX() {
-        return invertX;
     }
 
     public EncounterOpponentController setExperienceBarValue(double value) {

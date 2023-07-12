@@ -113,7 +113,7 @@ public class IngameController extends Controller {
     @Inject
     Provider<EncounterController> encounterControllerProvider;
     @Inject
-    Provider<Encounter2Controller> encounter2ControllerProvider;
+    Provider<EncounterController> encounter2ControllerProvider;
     @Inject
     AreasService areasService;
     @Inject
