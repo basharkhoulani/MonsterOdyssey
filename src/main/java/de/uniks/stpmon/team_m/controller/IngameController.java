@@ -20,7 +20,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -138,9 +137,6 @@ public class IngameController extends Controller {
     Provider<IngameController> ingameControllerProvider;
 
     private IngamePauseMenuController ingamePauseMenuController;
-
-    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
-    public static final KeyCode INTERACT_KEY = KeyCode.E;
     private boolean isChatting = false;
     private boolean inDialog = false;
     private boolean inNpcPopup = false;
@@ -203,8 +199,8 @@ public class IngameController extends Controller {
         trainerPositionHashMap = new HashMap<>();
         // Initialize key event listeners
         keyPressedHandler = event -> {
-
-            if (event.getCode() == INTERACT_KEY) {
+            //if(event.getCode() == KeyCode.E){
+            if (event.getCode().toString().equals(preferences.get("interaction", "E"))) {
                 if (!inNpcPopup && !inEncounterInfoBox) {
                     interactWithTrainer();
                 } else if(inEncounterInfoBox){
@@ -213,7 +209,7 @@ public class IngameController extends Controller {
                     showEncounterScene();
                 }
             }
-            if (event.getCode() == PAUSE_MENU_KEY) {
+            if (event.getCode().toString().equals(preferences.get("pauseMenu","ESCAPE"))) {
                 if (inSettings) {
                     return;
                 }
@@ -239,16 +235,16 @@ public class IngameController extends Controller {
             if (movementDisabled) {
                 return;
             }
-            if ((event.getCode() == KeyCode.W)) {
+            if ((event.getCode().toString().equals(preferences.get("walkUp", "W")))) {
                 checkMovement(0, -1, 1);
             }
-            if ((event.getCode() == KeyCode.S)) {
+            if ((event.getCode().toString().equals(preferences.get("walkDown", "S")))) {
                 checkMovement(0, 1, 3);
             }
-            if ((event.getCode() == KeyCode.A)) {
+            if ((event.getCode().toString().equals(preferences.get("walkLeft", "A")))) {
                 checkMovement(-1, 0, 2);
             }
-            if ((event.getCode() == KeyCode.D)) {
+            if ((event.getCode().toString().equals(preferences.get("walkRight", "D")))) {
                 checkMovement(1, 0, 0);
             }
             event.consume();
@@ -387,7 +383,7 @@ public class IngameController extends Controller {
         }
 
         // Add event handlers
-        app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);
+        app.getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
 
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(area -> {
@@ -427,7 +423,7 @@ public class IngameController extends Controller {
 
         //Keybindings
         if(preferences.get("walkUp",null) == null){
-            preferences.put("walkUp",KeyCode.W.getChar());
+            preferences.put("walkUp", KeyCode.W.getChar());
         }
         if(preferences.get("walkDown",null) == null){
             preferences.put("walkDown",KeyCode.S.getChar());
@@ -442,8 +438,9 @@ public class IngameController extends Controller {
             preferences.put("interaction",KeyCode.E.getChar());
         }
         if(preferences.get("pauseMenu",null) == null){
-            preferences.put("pauseMenu","ESC");
+            preferences.put("pauseMenu","ESCAPE");
         }
+
         return parent;
     }
 
@@ -1604,7 +1601,7 @@ public class IngameController extends Controller {
     @Override
     public void destroy() {
         super.destroy();
-        app.getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);
+        app.getStage().getScene().removeEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
         for (var trainerController : trainerControllerHashMap.values()) {
             trainerController.destroy();
         }
