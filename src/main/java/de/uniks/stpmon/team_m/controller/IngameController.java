@@ -133,6 +133,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<ChangeAudioController> changeAudioControllerProvider;
     @Inject
+    Provider<MonstersDetailController> monstersDetailControllerProvider;
+    @Inject
     RegionsService regionsService;
     @Inject
     Provider<IngameController> ingameControllerProvider;
@@ -594,7 +596,18 @@ public class IngameController extends Controller {
                         error.printStackTrace();
                     }));
         }
-        focusOnPlayerPosition(map.width(), map.height(), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
+        boolean layerFound = false;
+        for (Layer layer: map.layers()) {
+            if (layer.width() != 0) {
+                focusOnPlayerPosition(layer.width(), layer.height(), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
+                layerFound = true;
+                break;
+            }
+        }
+        if (!layerFound) {
+            focusOnPlayerPosition(map.width(), map.height(), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
+        }
+
     }
 
     private void focusOnPlayerPosition(double mapWidth, double mapHeight, int tilePosX, int tilePosY) {
@@ -726,8 +739,18 @@ public class IngameController extends Controller {
             canvas.setScaleX(SCALE_FACTOR);
             canvas.setScaleY(SCALE_FACTOR);
         }
-        canvas.setWidth(map.width() * TILE_SIZE);
-        canvas.setHeight(map.height() * TILE_SIZE);
+        boolean layerFound = false;
+        for (Layer layer: map.layers()) {
+            if (layer.width() != 0) {
+                canvas.setWidth(layer.width() * TILE_SIZE);
+                canvas.setHeight(layer.height() * TILE_SIZE);
+                layerFound = true;
+            }
+        }
+        if (!layerFound) {
+            canvas.setWidth(map.width() * TILE_SIZE);
+            canvas.setHeight(map.height() * TILE_SIZE);
+        }
     }
 
     /**
@@ -764,7 +787,7 @@ public class IngameController extends Controller {
         WritableImage writableImageTop = new WritableImage(width * TILE_SIZE, height * TILE_SIZE);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                int tileId = data.get(y * width + x);
+                int tileId = data.get(y * width + x) & 0x0FFFFFFF;
                 if (tileId == 0) {
                     continue;
                 }
@@ -1116,7 +1139,7 @@ public class IngameController extends Controller {
                                 }, Throwable::printStackTrace));
                     }
                 }, Throwable::printStackTrace));
-        
+
     }
 
     private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {
@@ -1621,6 +1644,18 @@ public class IngameController extends Controller {
         changeAudioVBox.getChildren().add(changeAudioController.render());
         root.getChildren().add(changeAudioVBox);
         changeAudioVBox.requestFocus();
+        buttonsDisable(true);
+    }
+
+    public void showMonsterDetails(MonstersListController monstersListController, Monster monster, MonsterTypeDto monsterTypeDto,
+                                   Image monsterImage, ResourceBundle resources,  PresetsService presetsService, String type) {
+        VBox monsterDetailVBox = new VBox();
+        monsterDetailVBox.setAlignment(Pos.CENTER);
+        MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();
+        monstersDetailController.init(this, monsterDetailVBox, monstersListController, monster, monsterTypeDto, monsterImage, resources, presetsService, type);
+        monsterDetailVBox.getChildren().add(monstersDetailController.render());
+        root.getChildren().add(monsterDetailVBox);
+        monsterDetailVBox.requestFocus();
         buttonsDisable(true);
     }
 
