@@ -201,7 +201,6 @@ public class IngameController extends Controller {
         trainerPositionHashMap = new HashMap<>();
         // Initialize key event listeners
         keyPressedHandler = event -> {
-            //if(event.getCode() == KeyCode.E){
             if (event.getCode().toString().equals(preferences.get("interaction", "E"))) {
                 if (!inNpcPopup && !inEncounterInfoBox) {
                     interactWithTrainer();

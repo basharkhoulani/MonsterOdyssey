@@ -98,7 +98,7 @@ public class IngameControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        Preferences preferences = mock(Preferences.class);
+        Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
         ingameController. setValues (bundle, preferences, null, ingameController, app);
 
         UDPEventListener udpEventListener = mock(UDPEventListener.class);
