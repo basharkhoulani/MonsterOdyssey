@@ -20,7 +20,7 @@ public class EncounterOpponentController extends Controller {
     private final Boolean isWild;
     private final Boolean invertX;
     public final Boolean isMultipleEnemyEncounter;
-    private Boolean isTargeted = false;
+    public Boolean isTargeted = false;
 
     @FXML
     public HBox opponentHBox;
