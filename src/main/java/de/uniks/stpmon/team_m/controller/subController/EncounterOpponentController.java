@@ -15,6 +15,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.awt.*;
+
 public class EncounterOpponentController extends Controller {
     private final Boolean isEnemy;
     private final Boolean isWild;
@@ -132,13 +134,17 @@ public class EncounterOpponentController extends Controller {
     }
 
     public EncounterOpponentController setMonsterImage(Image image) {
-        monsterImageView.setImage(image);
+        if (!GraphicsEnvironment.isHeadless()) {
+            monsterImageView.setImage(image);
+        }
         return this;
     }
 
     public EncounterOpponentController setTrainerImage(Image image) {
-        if (!trainerImageView.isDisabled()) {
-            trainerImageView.setImage(image);
+        if (!GraphicsEnvironment.isHeadless()) {
+            if (!trainerImageView.isDisabled()) {
+                trainerImageView.setImage(image);
+            }
         }
         return this;
     }
