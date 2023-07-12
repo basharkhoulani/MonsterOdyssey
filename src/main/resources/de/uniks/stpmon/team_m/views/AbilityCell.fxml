@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<HBox fx:id="rootAbilityBox" alignment="CENTER_LEFT" maxHeight="152.0" maxWidth="773.0" minHeight="110.0" prefHeight="133.0" prefWidth="689.0" style="-fx-background-color: #d6e8fe; -fx-border-color: #7ea5c7; -fx-border-width: 2;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.AbilityCell">
+   <children>
+      <VBox prefHeight="133.0" prefWidth="545.0">
+         <children>
+            <Label fx:id="abilityName" prefHeight="17.0" prefWidth="370.0">
+               <VBox.margin>
+                  <Insets top="13.0" />
+               </VBox.margin>
+            </Label>
+            <Text fx:id="abilityDescription" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="365.21630859375">
+               <VBox.margin>
+                  <Insets top="24.0" />
+               </VBox.margin>
+            </Text>
+         </children>
+      </VBox>
+      <VBox prefHeight="133.0" prefWidth="220.0">
+         <children>
+            <HBox prefHeight="43.0" prefWidth="149.0">
+               <children>
+                  <ImageView fx:id="damageImageView" fitHeight="35.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets left="6.0" top="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label fx:id="damageLabel" prefHeight="17.0" prefWidth="134.0">
+                     <HBox.margin>
+                        <Insets left="15.0" top="12.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox prefHeight="43.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="accuracyImageView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label fx:id="accuracyLabel" prefHeight="17.0" prefWidth="134.0">
+                     <HBox.margin>
+                        <Insets left="15.0" top="12.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="43.0" prefWidth="200.0">
+               <children>
+                  <Label fx:id="usesLabel" prefHeight="17.0" prefWidth="152.0">
+                     <HBox.margin>
+                        <Insets top="14.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox prefHeight="133.0" prefWidth="53.0">
+         <children>
+            <VBox fx:id="typeIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="48.0" styleClass="typeIcon">
+               <children>
+                  <ImageView fx:id="typeImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin></ImageView>
+               </children>
+               <VBox.margin>
+                  <Insets right="1.0" top="1.0" />
+               </VBox.margin>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</HBox>
