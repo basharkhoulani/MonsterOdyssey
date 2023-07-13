@@ -61,6 +61,8 @@ public class IngameTrainerSettingsController extends Controller {
     public ImageView arrowRightImageView;
     @FXML
     public ImageView arrowLeftImageView;
+    @FXML
+    public VBox trainerAvatarImageVbox;
 
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;

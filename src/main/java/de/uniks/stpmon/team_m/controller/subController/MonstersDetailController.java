@@ -15,6 +15,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
@@ -57,6 +58,16 @@ public class MonstersDetailController extends Controller {
     public ImageView typeImageView;
     @FXML
     public VBox typeIcon;
+    @FXML
+    public HBox levelBox;
+    @FXML
+    public HBox attackBox;
+    @FXML
+    public HBox hpBox;
+    @FXML
+    public HBox speedBox;
+    @FXML
+    public HBox defenseBox;
     @Inject
     Provider<IngameController> ingameControllerProvider;
     PresetsService presetsService;

@@ -43,6 +43,8 @@ public class MonsterCell extends ListCell<Monster> {
     @FXML
     public Button viewDetailsButton;
     @FXML
+    public VBox monsterVBox;
+    @FXML
     Label monsterName;
     @FXML
     Label monsterLevel;
