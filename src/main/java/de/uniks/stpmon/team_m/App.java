@@ -124,10 +124,6 @@ public class App extends Application {
 
     }
 
-    public Controller getController() {
-        return controller;
-    }
-
     private void cleanup() {
         component.loginController().userStatusUpdate(USER_STATUS_OFFLINE);
         disposables.dispose();

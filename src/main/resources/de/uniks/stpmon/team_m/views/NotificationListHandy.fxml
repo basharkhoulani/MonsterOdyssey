@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="notificationHandyStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="524.0" prefWidth="282.0" styleClass="handyBase" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.NotificationListHandyController">
+<StackPane fx:id="notificationHandyStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="524.0" prefWidth="282.0" styleClass="handyBase" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.NotificationListHandyController">
    <Rectangle arcHeight="500.0" arcWidth="10.0" fill="#67696b" height="9.0" stroke="BLACK" strokeType="INSIDE" styleClass="speaker" width="69.0" StackPane.alignment="TOP_CENTER">
       <StackPane.margin>
          <Insets top="20.0" />

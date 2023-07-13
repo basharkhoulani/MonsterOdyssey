@@ -31,6 +31,7 @@ class LoginControllerTest extends ApplicationTest {
     @Mock
     UsersService usersService;
     @Spy
+    final
     App app = new App(null);
 
     @InjectMocks
@@ -183,10 +184,5 @@ class LoginControllerTest extends ApplicationTest {
 
         final DialogPane dialogPane = lookup(".dialog-pane").query();
         assertTrue(dialogPane.isVisible());
-
-        final RadioButton radioButtonLanguageEnglish = lookup("#radioButtonLanguageEnglish").query();
-        final RadioButton radioButtonLanguageGerman = lookup("#radioButtonLanguageGerman").query();
-        final RadioButton radioButtonLanguageChinese = lookup("#radioButtonLanguageChinese").query();
-        final Button applyLanguageButton = lookup("#applyLanguageButton").query();
     }
 }

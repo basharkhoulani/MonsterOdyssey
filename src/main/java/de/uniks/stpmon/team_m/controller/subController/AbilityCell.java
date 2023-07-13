@@ -1,11 +1,9 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.Main;
-import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.service.PresetsService;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -22,7 +20,6 @@ import javafx.scene.text.Text;
 
 import java.awt.*;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.ABILITYPALETTE;
@@ -31,9 +28,8 @@ import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
 public class AbilityCell extends ListCell<AbilityDto> {
 
-    public PresetsService presetsService;
-    public IngameController ingameController;
-    public MonstersDetailController monstersDetailController;
+    public final PresetsService presetsService;
+    public final MonstersDetailController monstersDetailController;
     private final ResourceBundle resources;
     private FXMLLoader loader;
     protected final CompositeDisposable disposables = new CompositeDisposable();
@@ -62,11 +58,9 @@ public class AbilityCell extends ListCell<AbilityDto> {
     public ImageView damageImageView;
     @FXML
     public ImageView accuracyImageView;
-    Monster monster;
-    List<Integer> uses;
-    public AbilityCell(Monster monster, ResourceBundle resources, PresetsService presetsService, MonstersDetailController monstersDetailController, IngameController ingameController) {
+    final Monster monster;
+    public AbilityCell(Monster monster, ResourceBundle resources, PresetsService presetsService, MonstersDetailController monstersDetailController) {
         this.monster = monster;
-        this.ingameController = ingameController;
         this.resources = resources;
         this.presetsService = presetsService;
         this.monstersDetailController = monstersDetailController;
@@ -91,16 +85,19 @@ public class AbilityCell extends ListCell<AbilityDto> {
                         if (!GraphicsEnvironment.isHeadless()) {
                             typeImagePath = ABILITYPALETTE.get(abilityDto.type());
                             URL resourceType = Main.class.getResource("images/" + typeImagePath);
+                            assert resourceType != null;
                             typeImage = new Image(resourceType.toString());
                             typeImageView.setImage(typeImage);
                             typeImageView.setFitHeight(45);
                             typeImageView.setFitWidth(45);
 
                             URL resourceDamage = Main.class.getResource("images/ability-electic.png");
+                            assert resourceDamage != null;
                             Image damageImage = new Image(resourceDamage.toString());
                             damageImageView.setImage(damageImage);
 
                             URL resourceAccuracy = Main.class.getResource("images/accuracy.png");
+                            assert resourceAccuracy != null;
                             Image accuracyImage = new Image(resourceAccuracy.toString());
                             accuracyImageView.setImage(accuracyImage);
                         }
