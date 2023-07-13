@@ -40,6 +40,7 @@ class EncounterResultControllerTest extends ApplicationTest {
         encounterResultController.init(app);
         app.start(stage);
         app.show(encounterResultController);
+        stage.requestFocus();
     }
 
     @Test
@@ -55,5 +56,6 @@ class EncounterResultControllerTest extends ApplicationTest {
 
         clickOn(okButton);
 
+        verify(app).show(ingameControllerProvider.get());
     }
 }
