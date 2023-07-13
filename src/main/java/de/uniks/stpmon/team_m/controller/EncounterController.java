@@ -109,6 +109,10 @@ public class EncounterController extends Controller {
     private List<AbilityDto> abilityDtos = new ArrayList<>();
     private List<Opponent> opponentsUpdate = new ArrayList<>();
     private int repeatedTimes = 0;
+    private boolean resultDefeated = false;
+    private boolean resultLevelUP = false;
+
+    private ArrayList<Opponent> battleLog = new ArrayList<>();
 
     @Inject
     public EncounterController() {
@@ -152,16 +156,16 @@ public class EncounterController extends Controller {
     }
 
 
-    private void showTrainer(){
-        setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), mySprite,1);
-        if(!encounterOpponentStorage.isWild()){
+    private void showTrainer() {
+        setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), mySprite, 1);
+        if (!encounterOpponentStorage.isWild()) {
             String enemyTrainerId = encounterOpponentStorage.getEnemyOpponent().trainer();
             battleMenuController.showFleeButton(false);
             disposables.add(trainersService.getTrainer(regionId, enemyTrainerId)
                     .observeOn(FX_SCHEDULER).subscribe(trainer -> {
                         encounterOpponentStorage.setOpponentTrainer(trainer);
                         battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + trainer.name());
-                        setTrainerSpriteImageView(trainer, opponentTrainer,3);
+                        setTrainerSpriteImageView(trainer, opponentTrainer, 3);
                     }, Throwable::printStackTrace));
         } else {
             battleMenuController.showFleeButton(true);
@@ -227,46 +231,60 @@ public class EncounterController extends Controller {
         disposables.add(eventListener.get().listen("encounters." + encounterId + ".trainers.*.opponents.*.*", Opponent.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Opponent opponent = event.data();
-                    if(event.suffix().contains("updated")){
+                    if (battleLog.contains(opponent)) {
+                        return;
+                    }
+                    battleLog.add(opponent);
+                    if (event.suffix().contains("updated")) {
                         updateOpponent(opponent);
+                        System.out.println(opponent);
                         if (opponent.results().size() > 0) {
                             opponent.results().forEach(result -> {
                                 if (Objects.equals(result.type(), "monster-levelup")) {
-                                    showLevelUpPopUp();
-                                }
-                                if (Objects.equals(result.type(), "monster-learned")) {
-                                    System.out.println("new ability" + result);
+                                    if (!resultLevelUP) {
+                                        showLevelUpPopUp();
+                                        System.out.println("levelupPopup------------------------------");
+                                        resultLevelUP = true;
+                                    }
                                 }
                                 if (Objects.equals(result.type(), "target-defeated")) {
-                                    fleeFromBattle(new Event(null));
+                                    if (!resultDefeated) {
+                                        monsterDefeated();
+                                        System.out.println("monsterDefeated-----------------------------");
+                                        resultDefeated = true;
+                                    }
+
                                 }
-                                System.out.println(result);
+
                             });
                         }
                     }
-                }, error -> showError(error.getMessage())));
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
     }
 
     private void updateOpponent(Opponent opponent) {
         // For komplexer Situation for example with more opponents should be considered in the future
-        if(opponent.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
-            if(opponent.move() != null) {
+        if (opponent.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+            if (opponent.move() != null) {
                 opponentsUpdate.add(0, opponent);
                 // else for change monster move
             } else {
-                if(opponent.results().size() != 0){
+                if (opponent.results().size() != 0) {
                     opponentsUpdate.add(1, opponent);
                 }
             }
         } else {
-            if(opponent.move() != null) {
+            if (opponent.move() != null) {
                 Move move = opponent.move();
-                if(move instanceof AbilityMove){
+                if (move instanceof AbilityMove) {
                     opponentsUpdate.add(opponent);
                 }
                 // else for change monster move
             } else {
-                if(opponent.results().size() != 0){
+                if (opponent.results().size() != 0) {
                     opponentsUpdate.add(opponent);
                 }
             }
@@ -275,8 +293,8 @@ public class EncounterController extends Controller {
         ArrayList<Opponent> forDescription = new ArrayList<>(opponentsHashSet);
 
         // this magic number is two time the size of oppenents in this encounter
-        if(forDescription.size() >= 4){
-            if(repeatedTimes == 0){
+        if (forDescription.size() >= 4) {
+            if (repeatedTimes == 0) {
                 writeBattleDescription(forDescription);
             }
             repeatedTimes++;
@@ -284,11 +302,12 @@ public class EncounterController extends Controller {
     }
 
     private void writeBattleDescription(ArrayList<Opponent> forDescription) {
-        for(Opponent o: forDescription) {
+        for (Opponent o : forDescription) {
             if (o.move() != null) {
+                resultLevelUP = false;
                 Move move = o.move();
                 if (move instanceof AbilityMove abilityMove) {
-                    if(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
+                    if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                         updateDescription(resources.getString("YOU.USED") + abilityDtos.get((abilityMove).ability() - 1).name() + ". ", false);
                     } else {
                         updateDescription(resources.getString("ENEMY.USED") + abilityDtos.get((abilityMove).ability() - 1).name() + ". ", false);
@@ -296,7 +315,7 @@ public class EncounterController extends Controller {
                 } // else for change monster move
             } else {
                 if (o.results().size() != 0) {
-                    if(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
+                    if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                         encounterOpponentStorage.setSelfOpponent(o);
                     } else {
                         encounterOpponentStorage.setEnemyOpponent(o);
@@ -325,7 +344,7 @@ public class EncounterController extends Controller {
     public void showAbilities() {
         battleMenu.getChildren().clear();
         Monster monster = encounterOpponentStorage.getCurrentTrainerMonster();
-        if(encounterOpponentStorage.getSelfOpponent().monster() != null){
+        if (encounterOpponentStorage.getSelfOpponent().monster() != null) {
             abilitiesMenuController.init(monster, presetsService, battleMenu, this);
         } else {
             abilitiesMenuController.init(null, presetsService, battleMenu, this);
@@ -341,6 +360,23 @@ public class EncounterController extends Controller {
 
     public void onFleeButtonClick() {
         rootStackPane.getChildren().add(this.buildFleePopup());
+    }
+
+    public void monsterDefeated() {
+        opponentMonster.setVisible(false);
+        battleDescription.setText(resources.getString("TARGET.DEFEATED"));
+
+        if (encounterOpponentStorage.getEnemyOpponent().monster() == null) {
+
+            SequentialTransition fleeAnimation = buildFleeAnimation();
+            PauseTransition firstPause = new PauseTransition(Duration.millis(2000));
+            firstPause.setOnFinished(evt -> {
+                myMonster.setVisible(false);
+                fleeAnimation.play();
+            });
+            firstPause.play();
+            fleeAnimation.setOnFinished(evt -> showIngameController());
+        }
     }
 
     public void fleeFromBattle(Event event) {
@@ -452,14 +488,14 @@ public class EncounterController extends Controller {
         // add textFlow and buttonHBox to VBox
         fleeVBox.getChildren().addAll(fleeTextFlow, buttonHBox);
 
-        return  fleeVBox;
+        return fleeVBox;
     }
 
     public void updateDescription(String information, boolean isUpdated) {
-        if(isUpdated){
+        if (isUpdated) {
             battleDescription.setText(information);
         } else {
-            if (battleDescription.getText().contains(information)){
+            if (battleDescription.getText().contains(information)) {
                 return;
             }
             battleDescription.setText(battleDescription.getText() + information);
@@ -470,7 +506,7 @@ public class EncounterController extends Controller {
         boolean isMe = trainerId.equals(trainerStorageProvider.get().getTrainer()._id());
         disposables.add(monstersService.getMonster(regionId, trainerId, monsterId)
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
-                    if (isMe){
+                    if (isMe) {
                         encounterOpponentStorage.setCurrentTrainerMonster(monster);
                         myLevelBar.setProgress((double) monster.experience() / requiredExperience(monster.level() + 1));
                         myLevel.setText(monster.level() + " LVL");
@@ -485,7 +521,7 @@ public class EncounterController extends Controller {
 
     }
 
-    public void resetOppoenentUpdate(){
+    public void resetOppoenentUpdate() {
         opponentsUpdate.clear();
     }
 
