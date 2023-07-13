@@ -15,8 +15,9 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import java.awt.*;
+import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.MENU_SOUND;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class IngamePauseMenuController extends Controller {
 
@@ -46,7 +47,13 @@ public class IngamePauseMenuController extends Controller {
     }
 
     public Parent render() {
-        return super.render();
+        final Parent parent = super.render();
+        if(!GraphicsEnvironment.isHeadless()){
+            resumeGameImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(PLAYSYMBOL)).toString()));
+            settingsImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(SETTINGSYMBOL2)).toString()));
+            leaveGameImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(GOBACKSYMBOL)).toString()));
+        }
+        return parent;
     }
 
     public void init(IngameController ingameController, VBox ingameVbox, Provider<MainMenuController> mainMenuControllerProvider, App app) {
@@ -71,7 +78,9 @@ public class IngamePauseMenuController extends Controller {
     public void leaveGame() {
         ingameController.root.getChildren().remove(ingameVbox);
         double volume = AudioService.getInstance().getVolume();
-        AudioService.getInstance().setVolume(volume);
+        if(!GraphicsEnvironment.isHeadless()){
+            AudioService.getInstance().setVolume(volume);
+        }
         ingameController.destroy();
         app.show(mainMenuControllerProvider.get());
     }
