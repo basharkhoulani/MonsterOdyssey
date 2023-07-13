@@ -3,7 +3,6 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.dto.Opponent;
-import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -88,7 +87,8 @@ public class EncounterOpponentControllerTest extends ApplicationTest {
     @Test
     void setHealthLabel() {
         encounterOpponentController.setHealthLabel("100/150");
-        assertEquals("100/150", encounterOpponentController.healthLabel.getText());
+        String text = encounterOpponentController.healthLabel.getText();
+        assertEquals("100/150", text);
     }
 
     @Test

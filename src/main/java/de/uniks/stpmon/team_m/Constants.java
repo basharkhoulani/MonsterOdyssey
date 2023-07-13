@@ -179,6 +179,7 @@ public class Constants {
     public static final String CITY_SOUND = "Nintendo_Style_Upbeat_Music_Loop_03.wav";
     public static final String ROOMS_SOUND = "Nintendo_Style_Funny_Music_Loop_02.wav";
     public static final String ROUTE_SOUND = "Nintendo_Style_Upbeat_Music_Loop_05.wav";
+    public static final String FIGHT_SOUND = "Nintendo_Style_Battle_Music_Loop_02.wav";
 
     // Colors
     public static final HashMap<String, String> TYPESCOLORPALETTE = new HashMap<>(Map.ofEntries(

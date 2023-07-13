@@ -111,12 +111,12 @@ public class EncounterController extends Controller {
         regionId = trainerStorageProvider.get().getRegion()._id();
         encounterId = encounterOpponentStorage.getEncounterId();
         trainerId = trainerStorageProvider.get().getTrainer()._id();
-        listenToOpponents();
+        listenToOpponents(encounterId);
         battleMenuController.setValues(resources, preferences, resourceBundleProvider, battleMenuController, app);
         battleMenuController.init();
-        subControllers.addAll(List.of(battleMenuController));
+        subControllers.addAll(List.of(battleMenuController, abilitiesMenuController));
         encounterOpponentControllerHashMap = new HashMap<>();
-        if (!GraphicsEnvironment.isHeadless()) {
+        if (!GraphicsEnvironment.isHeadless() && !AudioService.getInstance().checkMuted()) {
             AudioService.getInstance().stopSound();
             AudioService.getInstance().playSound(FIGHT_SOUND);
             AudioService.getInstance().setCurrentSound(FIGHT_SOUND);
@@ -379,12 +379,11 @@ public class EncounterController extends Controller {
         encounterOpponentControllerHashMap.values().forEach(Controller::destroy);
     }
 
-    public void listenToOpponents() {
-        disposables.add(eventListener.get().listen("encounters." + encounterOpponentStorage.getEncounterId() + ".trainers.*.opponents.*.*", Opponent.class)
+    public void listenToOpponents(String encounterId) {
+        disposables.add(eventListener.get().listen("encounters." + encounterId + ".trainers.*.opponents.*.*", Opponent.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Opponent opponent = event.data();
-                    System.out.println("Opponent "+ event.suffix() + " :" + opponent);
-                    if (event.suffix().contains("updated")) {
+                    if(event.suffix().contains("updated")){
                         updateOpponent(opponent);
                     }
                 }, error -> showError(error.getMessage())));
