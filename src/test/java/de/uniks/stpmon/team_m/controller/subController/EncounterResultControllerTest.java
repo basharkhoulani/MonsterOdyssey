@@ -3,7 +3,6 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
-import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,6 @@ import javax.inject.Provider;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
