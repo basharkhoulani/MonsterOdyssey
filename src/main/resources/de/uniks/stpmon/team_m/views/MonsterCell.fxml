@@ -29,51 +29,48 @@
                 <Font name="Comic Sans MS" size="17.0" />
             </font>
         </Label>
-      <HBox prefHeight="60.0" prefWidth="179.0">
-         <VBox.margin>
-            <Insets top="9.0" />
-         </VBox.margin>
-         <children>
-            <VBox fx:id="typeIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="48.0" styleClass="typeIcon">
-               <HBox.margin>
-                  <Insets left="5.0" />
-               </HBox.margin>
-               <children>
-                  <ImageView fx:id="typeImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" />
-               </children>
+        <HBox prefHeight="60.0" prefWidth="179.0">
+            <VBox.margin>
+                <Insets top="9.0"/>
+            </VBox.margin>
+            <VBox fx:id="typeIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                  prefHeight="48.0" prefWidth="48.0" styleClass="typeIcon">
+                <HBox.margin>
+                    <Insets left="5.0"/>
+                </HBox.margin>
+                <ImageView fx:id="typeImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true"
+                           preserveRatio="true"/>
             </VBox>
-         </children>
-      </HBox>
+        </HBox>
       <HBox.margin>
          <Insets left="15.0" />
       </HBox.margin>
     </VBox>
-   <VBox prefHeight="120.0" prefWidth="87.0">
-      <children>
-         <ImageView fx:id="arrowUp" fitHeight="30.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
-            <VBox.margin>
-               <Insets left="45.0" top="39.0" />
-            </VBox.margin>
-         </ImageView>
-         <ImageView fx:id="arrowDown" fitHeight="30.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" scaleY="-1.0">
-            <VBox.margin>
-               <Insets left="45.0" />
-            </VBox.margin>
-         </ImageView>
-      </children>
-   </VBox>
-   <VBox prefHeight="120.0" prefWidth="177.0">
-      <children>
-         <Button fx:id="removeFromTeamButton" alignment="CENTER" mnemonicParsing="false" styleClass="buttonsRed" text="%REMOVE.FROM.TEAM">
-            <VBox.margin>
-               <Insets top="27.0" />
-            </VBox.margin>
-         </Button>
-         <Button fx:id="viewDetailsButton" alignment="CENTER" mnemonicParsing="false" prefWidth="153.0" styleClass="buttonsWhite" text="%VIEW.DETAILS">
-            <VBox.margin>
-               <Insets top="8.0" />
-            </VBox.margin>
-         </Button>
-      </children>
-   </VBox>
+    <VBox prefHeight="120.0" prefWidth="87.0">
+        <ImageView fx:id="arrowUp" fitHeight="30.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+           <VBox.margin>
+               <Insets left="45.0" top="39.0"/>
+           </VBox.margin>
+        </ImageView>
+        <ImageView fx:id="arrowDown" fitHeight="30.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true"
+                   scaleY="-1.0">
+           <VBox.margin>
+               <Insets left="45.0"/>
+           </VBox.margin>
+        </ImageView>
+    </VBox>
+    <VBox prefHeight="120.0" prefWidth="177.0">
+        <Button fx:id="removeFromTeamButton" alignment="CENTER" mnemonicParsing="false" styleClass="buttonsRed"
+                text="%REMOVE.FROM.TEAM">
+           <VBox.margin>
+               <Insets top="27.0"/>
+           </VBox.margin>
+        </Button>
+        <Button fx:id="viewDetailsButton" alignment="CENTER" mnemonicParsing="false" prefWidth="153.0"
+                styleClass="buttonsWhite" text="%VIEW.DETAILS">
+           <VBox.margin>
+               <Insets top="8.0"/>
+           </VBox.margin>
+        </Button>
+    </VBox>
 </HBox>

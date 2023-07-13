@@ -39,7 +39,7 @@
                     </HBox.margin>
                 </Label>
             </HBox>
-            <Label fx:id="informationLabel" alignment="CENTER" prefHeight="17.0" prefWidth="490.0" styleClass="informationLabel" stylesheets="@../styles.css" />
+            <Label fx:id="informationLabel" alignment="CENTER" prefHeight="17.0" prefWidth="490.0" styleClass="informationLabel" />
         </VBox>
         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
             <HBox alignment="CENTER" minHeight="36.0" minWidth="375.0" HBox.hgrow="ALWAYS">
@@ -51,7 +51,7 @@
                 </HBox.margin>
                 <ImageView fx:id="avatarImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
             </HBox>
-            <Button fx:id="editAvatarButton" minHeight="42.0" minWidth="42.0" mnemonicParsing="false" onAction="#editAvatar" styleClass="editSymbol" stylesheets="@../styles.css">
+            <Button fx:id="editAvatarButton" minHeight="42.0" minWidth="42.0" mnemonicParsing="false" onAction="#editAvatar" styleClass="editSymbol">
                 <HBox.margin>
                     <Insets left="10.0" />
                 </HBox.margin>
@@ -68,14 +68,14 @@
                 <Insets right="8.0" />
             </VBox.margin>
         </HBox>
-        <Label fx:id="avatarErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel" stylesheets="@../styles.css" />
+        <Label fx:id="avatarErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel" />
         <HBox alignment="CENTER" prefHeight="74.0" prefWidth="490.0" VBox.vgrow="ALWAYS">
             <TextField fx:id="usernameField" maxHeight="50.0" minHeight="36.0" minWidth="375.0" promptText="%CURRENT.USERNAME" HBox.hgrow="ALWAYS">
                 <font>
                     <Font name="Comic Sans MS Bold" size="15.0" />
                 </font>
             </TextField>
-            <Button fx:id="usernameEditButton" minHeight="42.0" minWidth="42.0" mnemonicParsing="false" onAction="#editUsername" styleClass="editSymbol" stylesheets="@../styles.css">
+            <Button fx:id="usernameEditButton" minHeight="42.0" minWidth="42.0" mnemonicParsing="false" onAction="#editUsername" styleClass="editSymbol" >
                 <HBox.margin>
                     <Insets left="10.0" />
                 </HBox.margin>
@@ -101,12 +101,12 @@
                     <Font name="Comic Sans MS Bold" size="15.0" />
                 </font>
             </PasswordField>
-            <Button fx:id="showPasswordButton" minHeight="42.0" minWidth="42.0" mnemonicParsing="false" onAction="#showPassword" styleClass="hideSymbol" stylesheets="@../styles.css">
+            <Button fx:id="showPasswordButton" minHeight="42.0" minWidth="42.0" mnemonicParsing="false" onAction="#showPassword" styleClass="hideSymbol" >
                 <HBox.margin>
                     <Insets left="-43.0" />
                 </HBox.margin>
             </Button>
-            <Button fx:id="passwordEditButton" alignment="CENTER" minHeight="42.0" minWidth="42.0" mnemonicParsing="false" onAction="#editPassword" styleClass="editSymbol" stylesheets="@../styles.css">
+            <Button fx:id="passwordEditButton" alignment="CENTER" minHeight="42.0" minWidth="42.0" mnemonicParsing="false" onAction="#editPassword" styleClass="editSymbol" >
                 <HBox.margin>
                     <Insets left="10.0" />
                 </HBox.margin>
@@ -154,6 +154,6 @@
             </Button>
         </HBox>
     </VBox>
-    <Label fx:id="usernameErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel" stylesheets="@../styles.css" />
-    <Label fx:id="passwordErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="509.0" styleClass="errorLabel" stylesheets="@../styles.css" />
+    <Label fx:id="usernameErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="506.0" styleClass="errorLabel" />
+    <Label fx:id="passwordErrorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="509.0" styleClass="errorLabel" />
 </VBox>

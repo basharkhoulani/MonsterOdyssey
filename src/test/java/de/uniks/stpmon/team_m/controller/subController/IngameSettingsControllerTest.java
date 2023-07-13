@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 @ExtendWith(MockitoExtension.class)
 public class IngameSettingsControllerTest extends ApplicationTest {
     @Spy
+    final
     App app = new App(null);
     @InjectMocks
     IngameSettingsController ingameSettingsController;

@@ -14,9 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
-import okhttp3.MediaType;
 import okhttp3.ResponseBody;
-import okio.BufferedSource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -73,12 +71,11 @@ class MainMenuControllerTest extends ApplicationTest {
     @Mock
     UsersService usersService;
     @Spy
-    Preferences preferences;
-    @Spy
     UserStorage userStorage;
     @Spy
     GroupStorage groupStorage;
     @Spy
+    final
     App app = new App(null);
     @InjectMocks
     MainMenuController mainMenuController;

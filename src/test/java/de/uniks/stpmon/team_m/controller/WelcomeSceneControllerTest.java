@@ -32,6 +32,7 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
 
 
     @Spy
+    final
     App app = new App(null);
     @InjectMocks
     WelcomeSceneController welcomeSceneController;

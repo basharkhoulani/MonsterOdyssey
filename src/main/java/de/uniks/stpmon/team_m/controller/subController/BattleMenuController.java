@@ -15,9 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.awt.*;
-import java.util.Objects;
+
 
 public class BattleMenuController extends Controller {
 
@@ -31,8 +29,8 @@ public class BattleMenuController extends Controller {
     public Button fleeButton;
     public Runnable onFleeButtonClick;
     private EncounterController encounterController;
-    private VBox battleMenuVBox;
     private EncounterOpponentStorage encounterOpponentStorage;
+    private VBox battleMenuVBox;
 
 
     @Inject

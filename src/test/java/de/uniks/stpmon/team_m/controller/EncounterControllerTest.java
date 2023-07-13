@@ -37,6 +37,7 @@ class EncounterControllerTest extends ApplicationTest {
     @InjectMocks
     EncounterController encounterController;
     @Spy
+    final
     App app = new App(null);
     @Mock
     Preferences preferences;
