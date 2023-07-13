@@ -78,8 +78,8 @@ public class AccountSettingController extends Controller {
     UsersService usersService;
     @Inject
     Provider<AvatarSelectionController> avatarSelectionControllerProvider;
-    private ChangeLanguageController changeLanguageController;
     private PasswordFieldSkin skin;
+    private ChangeLanguageController changeLanguageController;
     private final SimpleStringProperty username = new SimpleStringProperty();
     private final SimpleStringProperty password = new SimpleStringProperty();
     private String selectedFilePath;
@@ -92,6 +92,13 @@ public class AccountSettingController extends Controller {
     AccountSettingController() {
     }
 
+    @Override
+    public void init() {
+        super.init();
+        this.changeLanguageController = new ChangeLanguageController();
+        changeLanguageController.init();
+    }
+
     /**
      * This method is used to define the title of the AccountSettingController
      *
@@ -101,13 +108,6 @@ public class AccountSettingController extends Controller {
     @Override
     public String getTitle() {
         return resources.getString("ACCOUNT.SETTINGS.TITLE");
-    }
-
-    @Override
-    public void init() {
-        super.init();
-        changeLanguageController = new ChangeLanguageController();
-        changeLanguageController.init();
     }
 
     /**
@@ -366,7 +366,7 @@ public class AccountSettingController extends Controller {
      * This method is used to open the Change Language Pop up
      */
     public void changeLanguage() {
-        Dialog<?> dialog = new Dialog<>();
+        javafx.scene.control.Dialog<?> dialog = new Dialog<>();
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
         closeButton.managedProperty().bind(closeButton.visibleProperty());

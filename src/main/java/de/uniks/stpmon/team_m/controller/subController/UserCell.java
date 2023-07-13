@@ -18,7 +18,7 @@ import static de.uniks.stpmon.team_m.Constants.*;
 import static javafx.geometry.Pos.CENTER;
 
 public class UserCell extends ListCell<User> {
-    Preferences preferences;
+    final Preferences preferences;
 
     /**
      * UserCell is used to handle user cells in every ListView. It is the parent class for every user cell.
