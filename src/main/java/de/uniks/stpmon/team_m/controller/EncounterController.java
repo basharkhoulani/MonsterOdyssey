@@ -1,8 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.Constants;
-import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
-import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
+import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.controller.subController.EncounterResultController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
@@ -32,6 +31,7 @@ import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -94,6 +94,11 @@ public class EncounterController extends Controller {
     AbilitiesMenuController abilitiesMenuController;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
+    @Inject
+    Provider<MonstersDetailController> monstersDetailControllerProvider;
+    @Inject
+    Provider<ChangeMonsterListController> changeMonsterListControllerProvider;
+    IngameController ingameController;
 
     private String regionId;
     private String encounterId;
@@ -223,6 +228,35 @@ public class EncounterController extends Controller {
         return (int) (Math.pow(currentLevel, 3) - Math.pow(currentLevel - 1, 3));
     }
 
+    public void showMonsterDetailsInEncounter() {
+        VBox monsterDetailVBox = new VBox();
+        monsterDetailVBox.setAlignment(Pos.CENTER);
+        MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();
+        Monster monster = encounterOpponentStorage.getCurrentTrainerMonster();
+        MonsterTypeDto monsterTypeDto = encounterOpponentStorage.getCurrentTrainerMonsterType();
+
+        StringBuilder type = new StringBuilder();
+        for (String s : monsterTypeDto.type()) {
+            type.append("").append(s);
+        }
+
+        monstersDetailController.initFromBattleMenu(this, monsterDetailVBox, monster, monsterTypeDto, myMonsterImage, resources, presetsService, type.toString());
+        monsterDetailVBox.getChildren().add(monstersDetailController.render());
+        rootStackPane.getChildren().add(monsterDetailVBox);
+        monsterDetailVBox.requestFocus();
+    }
+
+    public void showChangeMonsterList() {
+        VBox monsterListVBox = new VBox();
+        monsterListVBox.setMinWidth(600);
+        monsterListVBox.setMinHeight(410);
+        monsterListVBox.setAlignment(Pos.CENTER);
+        ChangeMonsterListController changeMonsterListController = changeMonsterListControllerProvider.get();
+        changeMonsterListController.init(this, monsterListVBox, ingameController);
+        monsterListVBox.getChildren().add(changeMonsterListController.render());
+        rootStackPane.getChildren().add(monsterListVBox);
+        monsterListVBox.requestFocus();
+    }
 
     @Override
     public void destroy() {

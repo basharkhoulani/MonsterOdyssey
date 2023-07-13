@@ -76,39 +76,36 @@ public class AbilityCell extends ListCell<AbilityDto> {
             setStyle("-fx-background-color: #D6E8FE;");
         } else {
             loadFXML();
-            disposables.add(presetsService.getAbility(abilityDto.id()).observeOn(FX_SCHEDULER)
-                    .subscribe(ability -> {
-                        typeColor = TYPESCOLORPALETTE.get(ability.type());
-                        String style = "-fx-background-color: " + typeColor + ";";
-                        typeIcon.setStyle(style);
+            typeColor = TYPESCOLORPALETTE.get(abilityDto.type());
+            String style = "-fx-background-color: " + typeColor + ";";
+            typeIcon.setStyle(style);
 
-                        if (!GraphicsEnvironment.isHeadless()) {
-                            typeImagePath = ABILITYPALETTE.get(abilityDto.type());
-                            URL resourceType = Main.class.getResource("images/" + typeImagePath);
-                            assert resourceType != null;
-                            typeImage = new Image(resourceType.toString());
-                            typeImageView.setImage(typeImage);
-                            typeImageView.setFitHeight(45);
-                            typeImageView.setFitWidth(45);
+            if (!GraphicsEnvironment.isHeadless()) {
+                typeImagePath = ABILITYPALETTE.get(abilityDto.type());
+                URL resourceType = Main.class.getResource("images/" + typeImagePath);
+                assert resourceType != null;
+                typeImage = new Image(resourceType.toString());
+                typeImageView.setImage(typeImage);
+                typeImageView.setFitHeight(45);
+                typeImageView.setFitWidth(45);
 
-                            URL resourceDamage = Main.class.getResource("images/ability-electic.png");
-                            assert resourceDamage != null;
-                            Image damageImage = new Image(resourceDamage.toString());
-                            damageImageView.setImage(damageImage);
+                URL resourceDamage = Main.class.getResource("images/ability-electic.png");
+                assert resourceDamage != null;
+                Image damageImage = new Image(resourceDamage.toString());
+                damageImageView.setImage(damageImage);
 
-                            URL resourceAccuracy = Main.class.getResource("images/accuracy.png");
-                            assert resourceAccuracy != null;
-                            Image accuracyImage = new Image(resourceAccuracy.toString());
-                            accuracyImageView.setImage(accuracyImage);
-                        }
-                        abilityName.setText(abilityDto.name());
-                        abilityDescription.setText(abilityDto.description());
+                URL resourceAccuracy = Main.class.getResource("images/accuracy.png");
+                assert resourceAccuracy != null;
+                Image accuracyImage = new Image(resourceAccuracy.toString());
+                accuracyImageView.setImage(accuracyImage);
+            }
+            abilityName.setText(abilityDto.name());
+            abilityDescription.setText(abilityDto.description());
 
-                        damageLabel.setText(abilityDto.power() + " DMG");
-                        accuracyLabel.setText((abilityDto.accuracy() * 100) + " %");
-                        Integer uses = monster.abilities().get(String.valueOf(ability.id()));
-                        usesLabel.setText(resources.getString("USES") + ": " + uses + "/"+ abilityDto.maxUses());
-                    }, error -> monstersDetailController.showError(error.getMessage())));
+            damageLabel.setText(abilityDto.power() + " DMG");
+            accuracyLabel.setText((abilityDto.accuracy() * 100) + " %");
+            Integer uses = monster.abilities().get(String.valueOf(abilityDto.id()));
+            usesLabel.setText(resources.getString("USES") + ": " + uses + "/"+ abilityDto.maxUses());
             setGraphic(rootAbilityBox);
             setText(null);
         }
