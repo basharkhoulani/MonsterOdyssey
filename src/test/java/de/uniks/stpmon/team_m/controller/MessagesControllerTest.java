@@ -67,6 +67,7 @@ public class MessagesControllerTest extends ApplicationTest {
     @InjectMocks
     MessagesController messagesController;
     @Spy
+    final
     App app = new App(null);
 
 

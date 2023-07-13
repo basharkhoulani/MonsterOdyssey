@@ -4,12 +4,14 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
-import de.uniks.stpmon.team_m.dto.*;
-import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
-import de.uniks.stpmon.team_m.utils.*;
+import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.Position;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.*;
 import javafx.collections.FXCollections;
@@ -20,12 +22,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.*;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -37,9 +38,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -47,9 +45,10 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -140,9 +139,6 @@ public class IngameController extends Controller {
     Provider<IngameController> ingameControllerProvider;
 
     private IngamePauseMenuController ingamePauseMenuController;
-
-    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
-    public static final KeyCode INTERACT_KEY = KeyCode.E;
     private boolean isChatting = false;
     private boolean inDialog = false;
     private boolean inNpcPopup = false;
@@ -158,9 +154,9 @@ public class IngameController extends Controller {
     Provider<MonstersListController> monstersListControllerProvider;
 
     private final ObservableList<MoveTrainerDto> moveTrainerDtos = FXCollections.observableArrayList();
-    HashMap<String, Image> tileSetImages = new HashMap<>();
+    final HashMap<String, Image> tileSetImages = new HashMap<>();
 
-    HashMap<String, TileSet> tileSetJsons = new HashMap<>();
+    final HashMap<String, TileSet> tileSetJsons = new HashMap<>();
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     private ObservableList<Trainer> trainers;
 
@@ -205,8 +201,7 @@ public class IngameController extends Controller {
         trainerPositionHashMap = new HashMap<>();
         // Initialize key event listeners
         keyPressedHandler = event -> {
-
-            if (event.getCode() == INTERACT_KEY) {
+            if (event.getCode().toString().equals(preferences.get("interaction", "E"))) {
                 if (!inNpcPopup && !inEncounterInfoBox) {
                     interactWithTrainer();
                 } else if(inEncounterInfoBox){
@@ -215,7 +210,7 @@ public class IngameController extends Controller {
                     showEncounterScene();
                 }
             }
-            if (event.getCode() == PAUSE_MENU_KEY) {
+            if (event.getCode().toString().equals(preferences.get("pauseMenu","ESCAPE"))) {
                 if (inSettings) {
                     return;
                 }
@@ -241,16 +236,16 @@ public class IngameController extends Controller {
             if (movementDisabled) {
                 return;
             }
-            if ((event.getCode() == KeyCode.W)) {
+            if ((event.getCode().toString().equals(preferences.get("walkUp", "W")))) {
                 checkMovement(0, -1, 1);
             }
-            if ((event.getCode() == KeyCode.S)) {
+            if ((event.getCode().toString().equals(preferences.get("walkDown", "S")))) {
                 checkMovement(0, 1, 3);
             }
-            if ((event.getCode() == KeyCode.A)) {
+            if ((event.getCode().toString().equals(preferences.get("walkLeft", "A")))) {
                 checkMovement(-1, 0, 2);
             }
-            if ((event.getCode() == KeyCode.D)) {
+            if ((event.getCode().toString().equals(preferences.get("walkRight", "D")))) {
                 checkMovement(1, 0, 0);
             }
             event.consume();
@@ -351,7 +346,7 @@ public class IngameController extends Controller {
                     listenToTrainers(this.trainers);
 
                     for (Trainer trainer : trainers) {
-                        trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y(), trainer.direction()));
+                        trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y()));
                     }
                 }, error -> showError(error.getMessage())));
 
@@ -389,12 +384,12 @@ public class IngameController extends Controller {
         }
 
         // Add event handlers
-        app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);
+        app.getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
 
         Region region = trainerStorageProvider.get().getRegion();
-        disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(area -> {
-            loadMap(area.map());
-        }, error -> showError(error.getMessage())));
+        disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(
+                area -> loadMap(area.map()), error -> showError(error.getMessage())
+        ));
         monstersListControllerProvider.get().init();
 
         popupStage = new Stage();
@@ -429,7 +424,7 @@ public class IngameController extends Controller {
 
         //Keybindings
         if(preferences.get("walkUp",null) == null){
-            preferences.put("walkUp",KeyCode.W.getChar());
+            preferences.put("walkUp", KeyCode.W.getChar());
         }
         if(preferences.get("walkDown",null) == null){
             preferences.put("walkDown",KeyCode.S.getChar());
@@ -444,8 +439,9 @@ public class IngameController extends Controller {
             preferences.put("interaction",KeyCode.E.getChar());
         }
         if(preferences.get("pauseMenu",null) == null){
-            preferences.put("pauseMenu","ESC");
+            preferences.put("pauseMenu","ESCAPE");
         }
+
         return parent;
     }
 
@@ -525,12 +521,12 @@ public class IngameController extends Controller {
                         trainerStorageProvider.get().setX(moveTrainerDto.x());
                         trainerStorageProvider.get().setY(moveTrainerDto.y());
                         trainerStorageProvider.get().setDirection(moveTrainerDto.direction());
-                        Position position = new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction());
+                        Position position = new Position(moveTrainerDto.x(), moveTrainerDto.y());
                         trainerPositionHashMap.put(trainerStorageProvider.get().getTrainer(), position);
                     } else {
                         if (trainers != null) {
                             List<Trainer> equalTrainers = this.trainers.stream().filter(tr -> tr._id().equals(moveTrainerDto._id())).toList();
-                            if (equalTrainers == null || equalTrainers.isEmpty()) {
+                            if (equalTrainers.isEmpty()) {
                                 return;
                             }
                             Trainer trainer = equalTrainers.get(0);
@@ -540,7 +536,7 @@ public class IngameController extends Controller {
                                 if (oldPosition.getX() != moveTrainerDto.x() || oldPosition.getY() != moveTrainerDto.y()) {
                                     trainerController.setTrainerTargetPosition(moveTrainerDto.x(), moveTrainerDto.y());
                                 }
-                                trainerPositionHashMap.put(trainer, new Position(moveTrainerDto.x(), moveTrainerDto.y(), moveTrainerDto.direction()));
+                                trainerPositionHashMap.put(trainer, new Position(moveTrainerDto.x(), moveTrainerDto.y()));
                             }
                         }
 
@@ -704,7 +700,7 @@ public class IngameController extends Controller {
                     }
             ));
         }
-        trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y(), trainer.direction()));
+        trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y()));
 
     }
 
@@ -1038,7 +1034,7 @@ public class IngameController extends Controller {
                                     trainerController.startAnimations();
                                 }
                                 trainerControllerHashMap.put(trainer, trainerController);
-                                trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y(), trainer.direction()));
+                                trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y()));
                             }
                         }
                         case "updated" -> {
@@ -1049,7 +1045,7 @@ public class IngameController extends Controller {
                             // albert
                             if (trainer._id().equals("645e32c6866ace359554a802")) {
                                 trainerPositionHashMap.entrySet().removeIf(trainerPositionEntry -> trainerPositionEntry.getKey()._id().equals(trainer._id()));
-                                trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y(), trainer.direction()));
+                                trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y()));
                             }
                         }
                         case "deleted" -> {
@@ -1495,8 +1491,11 @@ public class IngameController extends Controller {
         dialogVBox.setMaxHeight(getDialogVBoxHeight);
         dialogVBox.setId("dialogVBox");
 
-        int constantSpacer = spacerToBottomOfScreen;
-        dialogVBox.translateYProperty().bind((anchorPane.heightProperty().subtract(dialogVBox.maxHeightProperty()).subtract(constantSpacer)).divide(2).add(10));
+        dialogVBox.translateYProperty().
+                bind((anchorPane.heightProperty().
+                        subtract(dialogVBox.maxHeightProperty()).
+                        subtract(spacerToBottomOfScreen))
+                        .divide(2).add(10));
 
         Pane textPane = new Pane();
 
@@ -1627,7 +1626,7 @@ public class IngameController extends Controller {
     @Override
     public void destroy() {
         super.destroy();
-        app.getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);
+        app.getStage().getScene().removeEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
         for (var trainerController : trainerControllerHashMap.values()) {
             trainerController.destroy();
         }
@@ -1647,12 +1646,12 @@ public class IngameController extends Controller {
         buttonsDisable(true);
     }
 
-    public void showMonsterDetails(MonstersListController monstersListController, Monster monster, MonsterTypeDto monsterTypeDto,
+    public void showMonsterDetails(Monster monster, MonsterTypeDto monsterTypeDto,
                                    Image monsterImage, ResourceBundle resources,  PresetsService presetsService, String type) {
         VBox monsterDetailVBox = new VBox();
         monsterDetailVBox.setAlignment(Pos.CENTER);
         MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();
-        monstersDetailController.init(this, monsterDetailVBox, monstersListController, monster, monsterTypeDto, monsterImage, resources, presetsService, type);
+        monstersDetailController.init(this, monsterDetailVBox, monster, monsterTypeDto, monsterImage, resources, presetsService, type);
         monsterDetailVBox.getChildren().add(monstersDetailController.render());
         root.getChildren().add(monsterDetailVBox);
         monsterDetailVBox.requestFocus();

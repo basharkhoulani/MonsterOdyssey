@@ -17,12 +17,12 @@
 
    <VBox alignment="CENTER" maxHeight="650.0" maxWidth="1000.0" minHeight="-Infinity" minWidth="-Infinity" styleClass="ForegroundContainer" HBox.hgrow="ALWAYS">
       <VBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
-         <Button fx:id="muteButton" mnemonicParsing="false" onAction="#muteOrUnmuteSound" prefHeight="36.0" prefWidth="41.0" styleClass="muteSymbol" stylesheets="@../styles.css">
+         <Button fx:id="muteButton" mnemonicParsing="false" onAction="#muteOrUnmuteSound" prefHeight="36.0" prefWidth="41.0" styleClass="muteSymbol" >
             <VBox.margin>
                <Insets bottom="-45.0" left="560.0" />
             </VBox.margin>
          </Button>
-         <Button fx:id="languageSettings" mnemonicParsing="false" onAction="#changeLanguage" styleClass="settingsSymbol" stylesheets="@../styles.css">
+         <Button fx:id="languageSettings" mnemonicParsing="false" onAction="#changeLanguage" styleClass="settingsSymbol" >
             <VBox.margin>
                <Insets bottom="-50.0" left="490.0" />
             </VBox.margin>

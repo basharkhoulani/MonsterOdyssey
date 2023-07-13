@@ -1,7 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
-import com.sun.javafx.collections.ObservableListWrapper;
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.controller.subController.IngamePauseMenuController;
 import de.uniks.stpmon.team_m.controller.subController.MonstersListController;
 import de.uniks.stpmon.team_m.controller.subController.NotificationListHandyController;
 import de.uniks.stpmon.team_m.dto.*;
@@ -11,11 +11,7 @@ import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -33,7 +29,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -48,6 +43,7 @@ import static org.mockito.Mockito.*;
 public class IngameControllerTest extends ApplicationTest {
 
     @Spy
+    final
     App app = new App(null);
     @Mock
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -61,22 +57,18 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<MonstersListController> monstersListControllerProvider;
     @Mock
     Provider<NotificationListHandyController> notificationListHandyControllerProvider;
-    @Mock
-    Provider<EncounterController> encounterControllerProvider;
-
     // Leave this mock!! it ensures that tests run fine
     @Mock
     TrainerStorage trainerStorage;
     // Please also keep this mock, it is needed for the tests
     @Spy
     EncounterOpponentStorage encounterOpponentStorage;
-
+    @Mock
+    Provider<IngamePauseMenuController> pauseMenuControllerProvider;
     @Mock
     TrainersService trainersService;
     @Mock
     MessageService messageService;
-    @Mock
-    RegionsService regionsService;
     @Mock
     EncounterOpponentsService encounterOpponentsService;
     @InjectMocks
@@ -85,15 +77,17 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<EventListener> eventListener;
     @Mock
     PresetsService presetsService;
-    @Mock
-    Parent parent;
     @InjectMocks
     NotificationListHandyController notificationListHandyController;
+    @InjectMocks
+    IngamePauseMenuController pauseMenuController;
+    @InjectMocks
+    MainMenuController mainMenuController;
 
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        Preferences preferences = mock(Preferences.class);
+        Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
         ingameController. setValues (bundle, preferences, null, ingameController, app);
 
         UDPEventListener udpEventListener = mock(UDPEventListener.class);
@@ -238,6 +232,8 @@ public class IngameControllerTest extends ApplicationTest {
         notificationListHandyController.setValues(bundle, null, null, notificationListHandyController, app);
         when(notificationListHandyControllerProvider.get()).thenReturn(notificationListHandyController);
 
+
+
         Opponent opponent = new Opponent(
                 "2023-05-30T12:02:57.510Z",
                 "2023-05-30T12:01:57.510Z",
@@ -254,7 +250,7 @@ public class IngameControllerTest extends ApplicationTest {
         //Mocking the opponent (Situation)
         when(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() +".opponents.*.*", Opponent.class)).thenReturn(just(
                 new Event<>("encounters.*.trainers.6475e595ac3946b6a812d865,opponents.*.nothappening", null)))
-                .thenReturn(just(new Event<>("encounters.a98db973kwl8xp1lz94kjf0b.trainers.646bac223b4804b87c0b8054.opponents.rqtjej4dcoqsm4e9yln1loy5.created", opponent)));;
+                .thenReturn(just(new Event<>("encounters.a98db973kwl8xp1lz94kjf0b.trainers.646bac223b4804b87c0b8054.opponents.rqtjej4dcoqsm4e9yln1loy5.created", opponent)));
 
         when(encounterOpponentsService.getTrainerOpponents(anyString(), anyString())).thenReturn(Observable.just(List.of()));
 
@@ -267,15 +263,6 @@ public class IngameControllerTest extends ApplicationTest {
     void showHelp() throws InterruptedException {
         // TODO: apply asserts once we have the time
         clickOn("#smallHandyButton");
-        /*final DialogPane dialogPane = lookup(".dialog-pane").query();
-        assertNotNull(dialogPane);
-        final Label helpLabel = dialogPane.getChildren().stream()
-                .filter(node -> node instanceof Label)
-                .map(node -> (Label) node)
-                .findFirst()
-                .orElse(null);
-        assertNotNull(helpLabel);
-        clickOn("OK");*/
 
         Thread.sleep(1000);
         clickOn("close");
@@ -331,10 +318,8 @@ public class IngameControllerTest extends ApplicationTest {
         release(KeyCode.E);
 
         final TextFlow dialogTextFlow = lookup("#dialogTextFlow").query();
-
         final Text dialogText = (Text) dialogTextFlow.getChildren().get(0);
         final String firstDefaultText = dialogText.getText();
-
         assertNotEquals("", firstDefaultText);
 
         Thread.sleep(30);
@@ -483,5 +468,21 @@ public class IngameControllerTest extends ApplicationTest {
         final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
 
         assertNotEquals("dialogStackPane", node.getId());
+    }
+
+    @Test
+    void testPauseMenu(){
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        pauseMenuController.setValues(bundle, null, null, pauseMenuController, app);
+        when(pauseMenuControllerProvider.get()).thenReturn(pauseMenuController);
+
+        mainMenuController.setValues(bundle, null, null, mainMenuController, app);
+        when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
+        doNothing().when(app).show(mainMenuController);
+        clickOn("#pauseButton");
+        clickOn("#resumeGameButton");
+        clickOn("#pauseButton");
+        clickOn("#leaveGameButton");
+        verify(app).show(mainMenuController);
     }
 }

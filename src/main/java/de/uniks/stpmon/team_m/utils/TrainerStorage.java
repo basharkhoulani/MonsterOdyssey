@@ -100,13 +100,4 @@ public class TrainerStorage {
     public void setMonsters(List<Monster> monsters) {
         this.monsters = monsters;
     }
-
-    public List<MonsterTypeDto> getMonsterTypes() {
-        return monsterTypes;
-    }
-
-    public void setMonsterTypes(List<MonsterTypeDto> monsterTypes) {
-        this.monsterTypes = monsterTypes;
-    }
-
 }

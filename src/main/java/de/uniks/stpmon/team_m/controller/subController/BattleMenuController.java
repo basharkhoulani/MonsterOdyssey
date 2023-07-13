@@ -18,8 +18,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
-import java.awt.*;
-import java.util.Objects;
 
 public class BattleMenuController extends Controller {
 
@@ -33,7 +31,6 @@ public class BattleMenuController extends Controller {
     public Button fleeButton;
     public Runnable onFleeButtonClick;
     private EncounterController encounterController;
-    private HBox battleMenuHBox;
     EncounterOpponentStorage encounterOpponentStorage;
     IngameController ingameController;
     MonstersListController monsterListController;
@@ -45,10 +42,9 @@ public class BattleMenuController extends Controller {
     public BattleMenuController(
     ) {}
 
-    public void init(EncounterController encounterController, HBox battleMenuHBox, EncounterOpponentStorage encounterOpponentStorage, App app) {
+    public void init(EncounterController encounterController, EncounterOpponentStorage encounterOpponentStorage, App app) {
         super.init();
         this.encounterController = encounterController;
-        this.battleMenuHBox = battleMenuHBox;
         this.encounterOpponentStorage = encounterOpponentStorage;
         this.app = app;
     }

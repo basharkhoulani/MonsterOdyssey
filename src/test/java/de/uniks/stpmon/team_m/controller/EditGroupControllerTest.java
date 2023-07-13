@@ -30,7 +30,6 @@ import java.util.ResourceBundle;
 import static de.uniks.stpmon.team_m.Constants.ADD_MARK;
 import static de.uniks.stpmon.team_m.Constants.CHECK_MARK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,6 +51,7 @@ class EditGroupControllerTest extends ApplicationTest {
     @Mock
     UsersService usersService;
     @Spy
+    final
     App app = new App(null);
     @InjectMocks
     GroupController groupController;

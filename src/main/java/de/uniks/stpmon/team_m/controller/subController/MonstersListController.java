@@ -8,19 +8,27 @@ import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 
 public class MonstersListController extends Controller {
+    @FXML
+    public Tab othersTab;
+    @FXML
+    public Tab activeTeamTab;
+    @FXML
+    public ListView monsterListViewOther;
+    @FXML
+    public Button closeButton;
     @Inject
     Provider<TrainersService> trainersServiceProvider;
     @Inject

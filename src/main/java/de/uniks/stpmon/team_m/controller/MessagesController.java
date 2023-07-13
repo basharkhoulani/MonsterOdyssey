@@ -87,8 +87,8 @@ public class MessagesController extends Controller {
     private final ObservableList<Group> groups = FXCollections.observableArrayList();
     private final ObservableList<User> allUsers = FXCollections.observableArrayList();
     private final List<Controller> subControllers = new ArrayList<>();
-    Map<User, MessagesBoxController> messagesBoxControllerUserMap = new HashMap<>();
-    Map<Group, MessagesBoxController> messagesBoxControllerGroupMap = new HashMap<>();
+    final Map<User, MessagesBoxController> messagesBoxControllerUserMap = new HashMap<>();
+    final Map<Group, MessagesBoxController> messagesBoxControllerGroupMap = new HashMap<>();
     private boolean userChosenFromMainMenu;
     private boolean userChosenFromNewFriend;
 

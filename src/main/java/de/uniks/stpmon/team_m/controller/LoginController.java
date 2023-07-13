@@ -13,19 +13,17 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
 import java.awt.*;
-import java.awt.Menu;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -74,7 +72,6 @@ public class LoginController extends Controller {
     private final SimpleStringProperty password = new SimpleStringProperty();
     private final SimpleBooleanProperty rememberMe = new SimpleBooleanProperty();
     private String information;
-
     private ChangeLanguageController changeLanguageController;
 
 
@@ -97,7 +94,7 @@ public class LoginController extends Controller {
     @Override
     public void init() {
         super.init();
-        changeLanguageController = new ChangeLanguageController();
+        this.changeLanguageController = new ChangeLanguageController();
         changeLanguageController.init();
         if (!GraphicsEnvironment.isHeadless()){
             if(AudioService.getInstance() != null && (AudioService.getInstance().getCurrentSound() == null)) {
@@ -230,11 +227,12 @@ public class LoginController extends Controller {
         }
     }
 
-    /**
-     * This method is used to open the Change Language Pop up
-     */
+    public void muteOrUnmuteSound() {
+        AudioService.getInstance().muteOrUnmuteSound(muteButton, preferences);
+    }
+
     public void changeLanguage() {
-        Dialog<?> dialog = new Dialog<>();
+        javafx.scene.control.Dialog<?> dialog = new Dialog<>();
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
         closeButton.managedProperty().bind(closeButton.visibleProperty());
@@ -243,9 +241,5 @@ public class LoginController extends Controller {
         changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);
         dialog.getDialogPane().setContent(changeLanguageController.render());
         dialog.showAndWait();
-    }
-
-    public void muteOrUnmuteSound() {
-        AudioService.getInstance().muteOrUnmuteSound(muteButton, preferences);
     }
 }

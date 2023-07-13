@@ -9,7 +9,6 @@ import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.*;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -103,10 +102,10 @@ public class EncounterController extends Controller {
     private String trainerId;
     private Image myMonsterImage;
     private Image enemyMonsterImage;
-    private List<Controller> subControllers = new ArrayList<>();
+    private final List<Controller> subControllers = new ArrayList<>();
     private int currentImageIndex = 0;
     private List<AbilityDto> abilityDtos = new ArrayList<>();
-    private List<Opponent> opponentsUpdate = new ArrayList<>();
+    private final List<Opponent> opponentsUpdate = new ArrayList<>();
     private int repeatedTimes = 0;
 
     @Inject
@@ -138,7 +137,7 @@ public class EncounterController extends Controller {
                 }, Throwable::printStackTrace));
 
         // render for subcontroller
-        battleMenuController.init(this, battleMenu, encounterOpponentStorage, app);
+        battleMenuController.init(this, encounterOpponentStorage, app);
         battleMenu.getChildren().add(battleMenuController.render());
         battleMenuController.onFleeButtonClick = this::onFleeButtonClick;
 
@@ -171,11 +170,7 @@ public class EncounterController extends Controller {
         // self monster
         disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getSelfOpponent().monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
-                    encounterOpponentStorage.setCurrentTrainerMonster(monster);
-                    myLevelBar.setProgress((double) monster.experience() / requiredExperience(monster.level() + 1));
-                    myLevel.setText(monster.level() + " LVL");
-                    myHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
-                    myHealth.setText(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
+                    initMonsterDetails(monster);
                     //write monster name
                     disposables.add(presetsService.getMonster(monster.type())
                             .observeOn(FX_SCHEDULER).subscribe(m -> {
@@ -209,6 +204,14 @@ public class EncounterController extends Controller {
                                 opponentMonster.setImage(enemyMonsterImage);
                             }, Throwable::printStackTrace));
                         }, Throwable::printStackTrace));
+    }
+
+    private void initMonsterDetails(Monster monster) {
+        encounterOpponentStorage.setCurrentTrainerMonster(monster);
+        myLevelBar.setProgress((double) monster.experience() / requiredExperience(monster.level() + 1));
+        myLevel.setText(monster.level() + " LVL");
+        myHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
+        myHealth.setText(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
     }
 
     public int requiredExperience(int currentLevel) {
@@ -340,16 +343,16 @@ public class EncounterController extends Controller {
         battleMenu.getChildren().clear();
         Monster monster = encounterOpponentStorage.getCurrentTrainerMonster();
         if(encounterOpponentStorage.getSelfOpponent().monster() != null){
-            abilitiesMenuController.init(monster, presetsService, battleMenu, this);
+            abilitiesMenuController.init(monster, presetsService, this);
         } else {
-            abilitiesMenuController.init(null, presetsService, battleMenu, this);
+            abilitiesMenuController.init(null, presetsService, this);
         }
         battleMenu.getChildren().add(abilitiesMenuController.render());
     }
 
     public void goBackToBattleMenu() {
         battleMenu.getChildren().clear();
-        battleMenuController.init(this, battleMenu, encounterOpponentStorage, app);
+        battleMenuController.init(this, encounterOpponentStorage, app);
         battleMenu.getChildren().add(battleMenuController.render());
     }
 
@@ -357,7 +360,7 @@ public class EncounterController extends Controller {
         rootStackPane.getChildren().add(this.buildFleePopup());
     }
 
-    public void fleeFromBattle(Event event) {
+    public void fleeFromBattle() {
         SequentialTransition fleeAnimation = buildFleeAnimation();
         PauseTransition firstPause = new PauseTransition(Duration.millis(500));
         battleDescription.setText(resources.getString("ENCOUNTER_DESCRIPTION_FLEE"));
@@ -448,7 +451,7 @@ public class EncounterController extends Controller {
         yesButton.getStyleClass().add("hBoxRed");
         yesButton.setOnAction(event -> {
             rootStackPane.getChildren().remove(fleeVBox);
-            this.fleeFromBattle(event);
+            this.fleeFromBattle();
         });
 
         // no Button
@@ -485,11 +488,7 @@ public class EncounterController extends Controller {
         disposables.add(monstersService.getMonster(regionId, trainerId, monsterId)
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
                     if (isMe){
-                        encounterOpponentStorage.setCurrentTrainerMonster(monster);
-                        myLevelBar.setProgress((double) monster.experience() / requiredExperience(monster.level() + 1));
-                        myLevel.setText(monster.level() + " LVL");
-                        myHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
-                        myHealth.setText(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
+                        initMonsterDetails(monster);
                     } else {
                         encounterOpponentStorage.setCurrentEnemyMonster(monster);
                         opponentLevel.setText(monster.level() + " LVL");

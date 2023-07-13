@@ -4,7 +4,6 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.dto.NPCInfo;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,17 +19,20 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class IngameTrainerSettingsControllerTest extends ApplicationTest {
     @Spy
+    final
     App app = new App(null);
 
     @Mock
     Provider<TrainerStorage> trainerStorageProvider;
+    @Mock
+    Provider<IngameDeleteTrainerWarningController> ingameDeleteTrainerWarningControllerProvider;
+    @InjectMocks
+    IngameDeleteTrainerWarningController ingameDeleteTrainerWarningController;
 
     @InjectMocks
     IngameTrainerSettingsController trainerSettingsController;
@@ -66,6 +68,13 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
 
     @Test
     public void deleteTrainer() {
-        Button deleteTrainerButton = lookup("#deleteTrainerButton").queryButton();
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        ingameDeleteTrainerWarningController.setValues(bundle, null, null, ingameDeleteTrainerWarningController, app);
+        when(ingameDeleteTrainerWarningControllerProvider.get()).thenReturn(ingameDeleteTrainerWarningController);
+
+        clickOn("#deleteTrainerButton");
+        clickOn("#cancelButton");
+        verify(app).show(trainerSettingsController);
+        clickOn("#deleteTrainerButton");
     }
 }

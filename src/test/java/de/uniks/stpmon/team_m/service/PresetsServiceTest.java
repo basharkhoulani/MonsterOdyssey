@@ -26,17 +26,6 @@ public class PresetsServiceTest {
     PresetsService presetsService;
 
     @Test
-    void getTilesetTest() {
-        /*when(presetsApiService.getTileset("Modern_Exteriors_16x16.json")).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
-
-        final ResponseBody responseBody = presetsService.getTileset("Modern_Exteriors_16x16.json").blockingFirst();
-
-        assertNotNull(responseBody);
-
-        verify(presetsApiService).getTileset("Modern_Exteriors_16x16.json");*/
-    }
-
-    @Test
     void getCharactersTest() {
         when(presetsApiService.getCharacters()).thenReturn(Observable.just(List.of(
 

@@ -16,6 +16,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
@@ -58,23 +59,29 @@ public class MonstersDetailController extends Controller {
     public ImageView typeImageView;
     @FXML
     public VBox typeIcon;
+    @FXML
+    public HBox levelBox;
+    @FXML
+    public HBox attackBox;
+    @FXML
+    public HBox hpBox;
+    @FXML
+    public HBox speedBox;
+    @FXML
+    public HBox defenseBox;
     @Inject
     Provider<IngameController> ingameControllerProvider;
     PresetsService presetsService;
-    MonstersListController monstersListController;
     private Monster monster;
     private MonsterTypeDto monsterTypeDto;
     private Image monsterImage;
     public IngameController ingameController;
     public EncounterController encounterController;
     public VBox monsterDetailVBox;
-    public List<AbilityDto> monsterAbilities = new ArrayList<>();
+    public final List<AbilityDto> monsterAbilities = new ArrayList<>();
     @Inject
     public Provider<PresetsService> presetsServiceProvider;
     private String monsterType;
-    private String typeColor;
-    private String typeImagePath;
-    private Image typeImage;
     @FXML
     public Label monsterName;
     @FXML
@@ -95,14 +102,13 @@ public class MonstersDetailController extends Controller {
         return parent;
     }
 
-    public void init(IngameController ingameController, VBox monsterDetailVBox, MonstersListController monstersListController,
-                     Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources,
-                     PresetsService presetsService, String type) {
+    public void init(IngameController ingameController, VBox monsterDetailVBox,
+                     Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources, PresetsService presetsService,
+                     String type) {
         super.init();
         this.monsterType = type;
         this.ingameController = ingameController;
         this.monsterDetailVBox = monsterDetailVBox;
-        this.monstersListController = monstersListController;
         this.monster = monster;
         this.monsterTypeDto = monsterTypeDto;
         this.monsterImage = monsterImage;
@@ -132,19 +138,21 @@ public class MonstersDetailController extends Controller {
         // Sprite
         if (!GraphicsEnvironment.isHeadless()) {
             monsterImageView.setImage(monsterImage);
-            typeColor = TYPESCOLORPALETTE.get(monsterType);
+            String typeColor = TYPESCOLORPALETTE.get(monsterType);
             String style = "-fx-background-color: " + typeColor + ";";
             typeIcon.setStyle(style);
 
-            typeImagePath = ABILITYPALETTE.get(monsterType);
+            String typeImagePath = ABILITYPALETTE.get(monsterType);
             URL resourceType = Main.class.getResource("images/" + typeImagePath);
-            typeImage = new Image(resourceType.toString());
+            assert resourceType != null;
+            Image typeImage = new Image(resourceType.toString());
             typeImageView.setImage(typeImage);
             typeImageView.setFitHeight(45);
             typeImageView.setFitWidth(45);
 
             for (String imagePath: ATTRIBUTE_IMAGES) {
                 URL resourceImage = Main.class.getResource("images/" + imagePath);
+                assert resourceImage != null;
                 Image attributeImage = new Image(resourceImage.toString());
 
                 switch(imagePath) {
@@ -197,7 +205,7 @@ public class MonstersDetailController extends Controller {
 
 
     private void initMonsterAbilities(List<AbilityDto> abilities, Monster monster) {
-        abilityListView.setCellFactory(param -> new AbilityCell(monster, resources, presetsServiceProvider.get(), this, this.ingameController));
+        abilityListView.setCellFactory(param -> new AbilityCell(monster, resources, presetsServiceProvider.get(), this));
         abilityListView.getItems().addAll(abilities);
         abilityListView.setFocusModel(null);
         abilityListView.setSelectionModel(null);

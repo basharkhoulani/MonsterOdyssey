@@ -1,7 +1,7 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
-import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
@@ -43,6 +43,8 @@ public class MonsterCell extends ListCell<Monster> {
     public Button removeFromTeamButton;
     @FXML
     public Button viewDetailsButton;
+    @FXML
+    public VBox monsterVBox;
     @FXML
     Label monsterName;
     @FXML
@@ -117,7 +119,7 @@ public class MonsterCell extends ListCell<Monster> {
                         monsterTypeDto = monsterType;
                         monsterName.setText(resources.getString("NAME") + " " + monsterTypeDto.name());
                         for (String s : monsterTypeDto.type()) {
-                            type.append("").append(s);
+                            type.append(s);
                         }
                         typeColor = TYPESCOLORPALETTE.get(type.toString());
                         String style = "-fx-background-color: " + typeColor + ";";
@@ -126,12 +128,14 @@ public class MonsterCell extends ListCell<Monster> {
                         if(!GraphicsEnvironment.isHeadless()) {
                             typeImagePath = ABILITYPALETTE.get(type.toString());
                             URL resourceType = Main.class.getResource("images/" + typeImagePath);
+                            assert resourceType != null;
                             typeImage = new Image(resourceType.toString());
                             typeImageView.setImage(typeImage);
                             typeImageView.setFitHeight(45);
                             typeImageView.setFitWidth(45);
 
                             URL resourseArrowUp = Main.class.getResource("images/monster-arrange-up.png");
+                            assert resourseArrowUp != null;
                             Image arrowUpImage = new Image(resourseArrowUp.toString());
                             arrowUp.setImage(arrowUpImage);
                             arrowDown.setImage(arrowUpImage);
