@@ -10,6 +10,7 @@ import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -47,8 +48,6 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
     @Mock
     Provider<EncounterOpponentStorage> encounterOpponentStorageProvider;
     @Mock
-    Provider<IngameDeleteTrainerWarningController> ingameDeleteTrainerWarningControllerProvider;
-    @Mock
     Provider<PresetsService> presetsServiceProvider;
     @InjectMocks
     EncounterController encounterController;
@@ -81,7 +80,7 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
                 35,
                 1.0,
                 2))));
-        abilitiesMenuController.init(monster, presetsService, battelMenu, encounterController);
+        abilitiesMenuController.init(monster, presetsService, encounterController);
         app.start(stage);
         app.show(abilitiesMenuController);
         stage.requestFocus();
@@ -89,6 +88,15 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
 
     @Test
     void controllerTest() {
+        final Button abilityButton1 = lookup("#abilityButton1").query();
+        final Button abilityButton2 = lookup("#abilityButton2").query();
+        final Button abilityButton3 = lookup("#abilityButton3").query();
+        final Button abilityButton4 = lookup("#abilityButton4").query();
 
+        assertEquals("Tackle 35/35", abilityButton1.getText());
+        assertFalse(abilityButton2.isVisible());
+        assertFalse(abilityButton3.isVisible());
+        assertFalse(abilityButton4.isVisible());
     }
+
 }
