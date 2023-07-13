@@ -1,14 +1,12 @@
 package de.uniks.stpmon.team_m.utils;
 
 public class Position {
-    private int direction;
     private int x;
     private int y;
 
-    public Position(int x, int y, int direction) {
+    public Position(int x, int y) {
         this.x = x;
         this.y = y;
-        this.direction = direction;
     }
 
 
@@ -20,19 +18,11 @@ public class Position {
         this.x = x;
     }
 
-    public int getDirection() {
-        return direction;
-    }
-
     public int getY() {
         return y;
     }
 
     public void setY(int y) {
         this.y = y;
-    }
-
-    public void setDirection(int direction) {
-        this.direction = direction;
     }
 }

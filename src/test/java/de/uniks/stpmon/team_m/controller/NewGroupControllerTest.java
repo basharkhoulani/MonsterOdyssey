@@ -50,6 +50,7 @@ public class NewGroupControllerTest extends ApplicationTest {
     @Mock
     Provider<EventListener> eventListenerProvider;
     @Spy
+    final
     App app = new App(null);
     @InjectMocks
     GroupController groupController;

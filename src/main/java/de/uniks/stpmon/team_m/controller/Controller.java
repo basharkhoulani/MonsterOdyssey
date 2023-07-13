@@ -45,7 +45,6 @@ public abstract class Controller {
     Provider<EventListener> eventListenerProvider;
     protected final CompositeDisposable disposables = new CompositeDisposable();
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
-
     /**
      * This method is called when the controller is initialized. It is called before the render() method.
      */
@@ -204,5 +203,4 @@ public abstract class Controller {
             imageView.setImage(character);
         }
     }
-
 }

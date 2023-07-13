@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class MonstersListControllerTest extends ApplicationTest {
     @Spy
+    final
     App app = new App(null);
     @InjectMocks
     MonstersListController monsterListController;

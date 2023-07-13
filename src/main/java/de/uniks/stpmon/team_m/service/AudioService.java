@@ -5,6 +5,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import javax.inject.Inject;
+import java.util.Objects;
 import java.util.prefs.Preferences;
 
 public class AudioService {
@@ -25,7 +26,7 @@ public class AudioService {
     }
 
     public void playSound(String soundPath) {
-        final Media sound = new Media((Main.class.getResource("sounds/" + soundPath)).toString());
+        final Media sound = new Media((Objects.requireNonNull(Main.class.getResource("sounds/" + soundPath))).toString());
         mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
