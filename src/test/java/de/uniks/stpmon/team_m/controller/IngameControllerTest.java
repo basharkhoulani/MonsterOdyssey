@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m.controller;
 
-import com.sun.javafx.collections.ObservableListWrapper;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
@@ -10,10 +9,7 @@ import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -26,6 +22,7 @@ import javafx.stage.Stage;
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
 import okio.BufferedSource;
+import org.assertj.core.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,7 +33,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -70,9 +66,11 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<EncounterController> encounterControllerProvider;
 
     // Leave this mock!! it ensures that tests run fine
+    // -- WHY?????? add explanation
     @Mock
     TrainerStorage trainerStorage;
     // Please also keep this mock, it is needed for the tests
+    // -- which ones????
     @Spy
     EncounterOpponentStorage encounterOpponentStorage;
     @Mock
@@ -82,8 +80,6 @@ public class IngameControllerTest extends ApplicationTest {
     @Mock
     MessageService messageService;
     @Mock
-    RegionsService regionsService;
-    @Mock
     EncounterOpponentsService encounterOpponentsService;
     @Mock
     PresetsService presetsService;
@@ -91,8 +87,6 @@ public class IngameControllerTest extends ApplicationTest {
     IngameController ingameController;
     @Mock
     Provider<EventListener> eventListener;
-    @Mock
-    Parent parent;
     @InjectMocks
     NotificationListHandyController notificationListHandyController;
     @InjectMocks
@@ -266,9 +260,9 @@ public class IngameControllerTest extends ApplicationTest {
         notificationListHandyController.setValues(bundle, null, null, notificationListHandyController, app);
         when(notificationListHandyControllerProvider.get()).thenReturn(notificationListHandyController);
         ingameStarterMonsterController.setValues(bundle, null, null, ingameStarterMonsterController, app);
-        when(ingameStarterMonsterControllerProvider.get()).thenReturn(ingameStarterMonsterController);
+        lenient().when(ingameStarterMonsterControllerProvider.get()).thenReturn(ingameStarterMonsterController);
 
-        when(presetsService.getMonsters()).thenReturn(Observable.just(List.of(
+        lenient().when(presetsService.getMonsters()).thenReturn(Observable.just(List.of(
                 new MonsterTypeDto(
                         1,
                         "Monster1",
@@ -306,7 +300,7 @@ public class IngameControllerTest extends ApplicationTest {
                 )
         )));
 
-        when(presetsService.getMonsterImage(anyInt())).thenReturn(Observable.just(
+        lenient().when(presetsService.getMonsterImage(anyInt())).thenReturn(Observable.just(
                 new ResponseBody() {
                     @Override
                     public MediaType contentType() {
@@ -319,9 +313,7 @@ public class IngameControllerTest extends ApplicationTest {
                     }
 
                     @Override
-                    public BufferedSource source() {
-                        return null;
-                    }
+                    public BufferedSource source() { return null; }
                 }
         ));
 
@@ -580,7 +572,6 @@ public class IngameControllerTest extends ApplicationTest {
         when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
         doNothing().when(app).show(mainMenuController);
         clickOn("#pauseButton");
-        final VBox pauseMenuVbox = lookup("#pauseMenuVbox").query();
         clickOn("#resumeGameButton");
         clickOn("#pauseButton");
         clickOn("#leaveGameButton");
@@ -630,24 +621,28 @@ public class IngameControllerTest extends ApplicationTest {
         final VBox starterSelectionVBox = lookup("#starterSelectionVBox").query();
         assertNotNull(starterSelectionVBox);
 
-        final TextFlow starterDescription = lookup("#starterDescription").query();
-        final Text starterDescriptionText0 = (Text) starterDescription.getChildren().get(0);
-        final String monsterDescription0 = starterDescriptionText0.getText();
+        final Label starterSelectionLabel0 = lookup("#starterSelectionLabel").query();
+        final String starterSelectionLabelText0 = starterSelectionLabel0.getText();
 
         clickOn("#arrowRight");
 
-        final Text starterDescriptionText1 = (Text) starterDescription.getChildren().get(0);
-        final String monsterDescription1 = starterDescriptionText1.getText();
-        System.out.println(monsterDescription0);
-        System.out.println(monsterDescription1);
-        assertNotEquals(monsterDescription0, monsterDescription1);
+        final Label starterSelectionLabel1 = lookup("#starterSelectionLabel").query();
+        final String starterSelectionLabelText1 = starterSelectionLabel1.getText();
+
+        assertNotEquals(starterSelectionLabelText0, starterSelectionLabelText1);
 
         clickOn("#arrowLeft");
 
-        final Text starterDescriptionText2 = (Text) starterDescription.getChildren().get(0);
-        final String monsterDescription2 = starterDescriptionText2.getText();
-        assertEquals(monsterDescription0, monsterDescription2);
+        final Label starterSelectionLabel2 = lookup("#starterSelectionLabel").query();
+        final String starterSelectionLabelText2 = starterSelectionLabel2.getText();
 
-        Thread.sleep(1000000000);
+        assertEquals(starterSelectionLabelText0, starterSelectionLabelText2);
+
+        clickOn("#starterSelectionOkButton");
+        clickOn("#starterSelectionOkButton");
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
     }
 }
