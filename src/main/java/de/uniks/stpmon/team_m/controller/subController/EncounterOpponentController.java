@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.Opponent;
+import javafx.application.Platform;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;

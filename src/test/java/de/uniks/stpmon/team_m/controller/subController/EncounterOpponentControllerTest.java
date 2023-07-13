@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EncounterOpponentControllerTest extends ApplicationTest {
+
     App app = new App(null);
     private EncounterOpponentController encounterOpponentController;
 
@@ -42,6 +43,7 @@ public class EncounterOpponentControllerTest extends ApplicationTest {
         assertEquals(encounterOpponentController.opponentHBox.getChildren().get(0), encounterOpponentController.monsterInfoBox);
         assertEquals(encounterOpponentController.opponentHBox.getChildren().get(1), encounterOpponentController.splitterVBox);
         assertEquals(encounterOpponentController.opponentHBox.getChildren().get(2), encounterOpponentController.trainerMonsterVBox);
+        encounterOpponentController.destroy();
     }
 
     @Test
@@ -56,10 +58,11 @@ public class EncounterOpponentControllerTest extends ApplicationTest {
         assertEquals(encounterOpponentController.opponentHBox.getChildren().get(0), encounterOpponentController.trainerMonsterVBox);
         assertEquals(encounterOpponentController.opponentHBox.getChildren().get(1), encounterOpponentController.splitterVBox);
         assertEquals(encounterOpponentController.opponentHBox.getChildren().get(2), encounterOpponentController.monsterInfoBox);
+        encounterOpponentController.destroy();
     }
 
     @Test
-    public void renderForEnemyTrainer() {
+    public void renderForEnemyTrainerTest() {
         encounterOpponentController = new EncounterOpponentController(true, false, true, false);
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
         encounterOpponentController.setValues(bundle, null, null, encounterOpponentController, app);
@@ -78,48 +81,38 @@ public class EncounterOpponentControllerTest extends ApplicationTest {
     @Test
     void setHealthBarValue() {
         encounterOpponentController.setHealthBarValue(0.75);
-        // Perform assertions
         ProgressBar healthBar = encounterOpponentController.HealthBar;
         assertEquals(0.75, healthBar.getProgress());
     }
 
     @Test
     void setHealthLabel() {
-        Platform.runLater(() -> {
-            encounterOpponentController.setHealthLabel("100/150");
-            // Perform assertions
-            assertEquals("100/150", encounterOpponentController.healthLabel.getText());
-        });
+        encounterOpponentController.setHealthLabel("100/150");
+        assertEquals("100/150", encounterOpponentController.healthLabel.getText());
     }
 
     @Test
     void setMonsterNameLabel() {
-        Platform.runLater(() -> {
-            encounterOpponentController.setMonsterNameLabel("Pikachu");
-            // Perform assertions
-            assertEquals("Pikachu", encounterOpponentController.monsterNameLabel.getText());
-        });
+        encounterOpponentController.setMonsterNameLabel("Pikachu");
+        assertEquals("Pikachu", encounterOpponentController.monsterNameLabel.getText());
     }
 
     @Test
     void setMonsterImage() {
-        Platform.runLater(() -> {
+        if (!GraphicsEnvironment.isHeadless()) {
             Image image = new Image(Objects.requireNonNull(Main.class.getResource("images/Monster.png")).toString());
             encounterOpponentController.setMonsterImage(image);
-            // Perform assertions
-            if (!GraphicsEnvironment.isHeadless()) {
-                ImageView monsterImageView = encounterOpponentController.monsterImageView;
-                assertEquals(image, monsterImageView.getImage());
-            }
-        });
+            ImageView monsterImageView = encounterOpponentController.monsterImageView;
+            assertEquals(image, monsterImageView.getImage());
+        }
+
     }
 
     @Test
     void setTrainerImage() {
-        Image image = new Image(Objects.requireNonNull(Main.class.getResource("images/Monster.png")).toString());
-        encounterOpponentController.setTrainerImage(image);
-        // Perform assertions
         if (!GraphicsEnvironment.isHeadless()) {
+            Image image = new Image(Objects.requireNonNull(Main.class.getResource("images/Monster.png")).toString());
+            encounterOpponentController.setTrainerImage(image);
             ImageView trainerImageView = encounterOpponentController.trainerImageView;
             assertEquals(image, trainerImageView.getImage());
         }
@@ -128,14 +121,12 @@ public class EncounterOpponentControllerTest extends ApplicationTest {
     @Test
     void onTarget() {
         encounterOpponentController.onTarget();
-        // Perform assertions on the visual effects
         assertTrue(encounterOpponentController.isTargeted);
     }
 
     @Test
     void unTarget() {
         encounterOpponentController.unTarget();
-        // Perform assertions on the visual effects
         assertFalse(encounterOpponentController.isTargeted);
     }
 
@@ -148,7 +139,6 @@ public class EncounterOpponentControllerTest extends ApplicationTest {
     void setCurrentTarget() {
         Opponent target = new Opponent("1", "Pikachu", "42", "1", "100", true, true, "1", null, null, 0);
         encounterOpponentController.setCurrentTarget(target);
-        // Perform assertions
         assertEquals(target, encounterOpponentController.getCurrentTarget());
     }
 
@@ -160,21 +150,17 @@ public class EncounterOpponentControllerTest extends ApplicationTest {
 
     @Test
     void setLevelLabel() {
-        Platform.runLater(() -> {
-            encounterOpponentController.setLevelLabel("1");
-            // Perform assertions
-            assertEquals("1", encounterOpponentController.levelLabel.getText());
-        });
+        encounterOpponentController.setLevelLabel("1");
+        // Perform assertions
+        assertEquals("1", encounterOpponentController.levelLabel.getText());
     }
 
 
     @Test
     void getMonsterName() {
-        Platform.runLater(() -> {
-            encounterOpponentController.setMonsterNameLabel("Pikachu");
-            String monsterName = encounterOpponentController.getMonsterName();
-            assertEquals("Pikachu", monsterName);
-        });
+        encounterOpponentController.setMonsterNameLabel("Pikachu");
+        String monsterName = encounterOpponentController.getMonsterName();
+        assertEquals("Pikachu", monsterName);
     }
 
     @Test

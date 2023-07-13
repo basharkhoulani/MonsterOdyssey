@@ -29,6 +29,7 @@ import javafx.scene.text.TextAlignment;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,6 +116,12 @@ public class EncounterController extends Controller {
         battleMenuController.init();
         subControllers.addAll(List.of(battleMenuController));
         encounterOpponentControllerHashMap = new HashMap<>();
+        if (!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().stopSound();
+            AudioService.getInstance().playSound(FIGHT_SOUND);
+            AudioService.getInstance().setCurrentSound(FIGHT_SOUND);
+            AudioService.getInstance().setVolume(preferences.getDouble("volume", AudioService.getInstance().getVolume()));
+        }
     }
 
     public String getTitle() {

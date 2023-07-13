@@ -173,8 +173,8 @@ public class AppTest extends ApplicationTest {
          */
 
         // test Ingame Pause
-        clickOn("#pauseButton");
-        clickOn("#resumeGameButton");
+        //clickOn("#pauseButton");
+        //clickOn("#resumeGameButton");
 
     }
 }

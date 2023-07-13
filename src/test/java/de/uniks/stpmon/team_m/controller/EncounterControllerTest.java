@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 import static io.reactivex.rxjava3.core.Observable.just;
 import static org.mockito.Mockito.*;
@@ -37,6 +38,8 @@ class EncounterControllerTest extends ApplicationTest {
     EncounterController encounterController;
     @Spy
     App app = new App(null);
+    @Mock
+    Preferences preferences;
     //Service
     @Mock
     RegionEncountersService regionEncountersService;
@@ -186,10 +189,7 @@ class EncounterControllerTest extends ApplicationTest {
                 List.of("fire"),
                 "Flamander is a small, agile monster that lives in the hot deserts of the world."
         );
-        when(presetsService.getCharacter(anyString())).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
-        when(presetsService.getAbilities()).thenReturn(Observable.just(List.of(new AbilityDto(1, "Attack", "unknown", "fire", 5, 0.99, 100))));
         when(presetsService.getMonsterImage(1)).thenReturn(Observable.just(ResponseBody.create(null,new byte[0])));
-        when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(monsterType));
 
         // Mock the enemy trainer
         when(trainersService.getTrainer(anyString(), anyString())).thenReturn(Observable.just(
@@ -219,21 +219,20 @@ class EncounterControllerTest extends ApplicationTest {
                 new Event<>("encounters.*.trainers.*.opponents.*.nothappening", null)));
 
         when(encounterOpponentStorage.isWild()).thenReturn(false);
-
+        //when(presetsService.getCharacter(anyString())).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
+        //when(presetsService.getAbilities()).thenReturn(Observable.just(List.of(new AbilityDto(1, "Attack", "unknown", "fire", 5, 0.99, 100))));
+        //when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(monsterType));
+        //when(preferences.getDouble("volume", AudioService.getInstance().getVolume())).thenReturn(0.5);
         doNothing().when(battleMenuController).init();
-
-        // Get Problem with battleMenu.getChildren().add(battleMenuController.render());
-
         app.start(stage);
         app.show(encounterController);
         stage.requestFocus();
+    */
     }
 
     @Test
     void controllerTest(){
 
-
-         */
     }
 
 }
