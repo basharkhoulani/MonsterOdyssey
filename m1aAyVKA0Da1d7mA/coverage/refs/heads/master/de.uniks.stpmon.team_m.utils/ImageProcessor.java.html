@@ -3,6 +3,8 @@
 
 import de.uniks.stpmon.team_m.App;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
 import okhttp3.ResponseBody;
 
 import javax.imageio.ImageIO;
@@ -12,71 +14,66 @@ import java.io.*;
 import java.util.Base64;
 import java.util.Objects;
 
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
-
-import java.io.InputStream;
-
 import static de.uniks.stpmon.team_m.Constants.*;
 
-<span class="nc" id="L22">public class ImageProcessor {</span>
+<span class="nc" id="L19">public class ImageProcessor {</span>
     public static String toBase64(String inputImagePath) {
         try {
-<span class="fc" id="L25">            BufferedImage originalImage = ImageIO.read(new File(inputImagePath));</span>
-<span class="fc" id="L26">            return getBase64(originalImage);</span>
-<span class="nc" id="L27">        } catch (IOException e) {</span>
-<span class="nc" id="L28">            return IMAGE_PROCESSING_ERROR;</span>
+<span class="fc" id="L22">            BufferedImage originalImage = ImageIO.read(new File(inputImagePath));</span>
+<span class="fc" id="L23">            return getBase64(originalImage);</span>
+<span class="nc" id="L24">        } catch (IOException e) {</span>
+<span class="nc" id="L25">            return IMAGE_PROCESSING_ERROR;</span>
         }
     }
 
     public static javafx.scene.image.Image fromBase64ToFXImage(String avatar) {
         javafx.scene.image.Image image;
-<span class="nc bnc" id="L34" title="All 2 branches missed.">        if (avatar == null) {</span>
-<span class="nc" id="L35">            image = new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString());</span>
-<span class="nc" id="L36">            return image;</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        if (avatar == null) {</span>
+<span class="nc" id="L32">            image = new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString());</span>
+<span class="nc" id="L33">            return image;</span>
         }
-<span class="nc bnc" id="L38" title="All 2 branches missed.">        if (avatar.startsWith(&quot;data:image/png;base64, &quot;)) {</span>
-<span class="nc" id="L39">            byte[] imageBytes = Base64.getDecoder().decode(avatar.replaceFirst(&quot;data:image/png;base64, &quot;, &quot;&quot;));</span>
-<span class="nc" id="L40">            ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);</span>
-<span class="nc" id="L41">            image = new javafx.scene.image.Image(bis);</span>
-<span class="nc bnc" id="L42" title="All 2 branches missed.">        } else if (avatar.startsWith(&quot;data:image/jpg;base64, &quot;)) {</span>
-<span class="nc" id="L43">            byte[] imageBytes = Base64.getDecoder().decode(avatar.replaceFirst(&quot;data:image/jpg;base64, &quot;, &quot;&quot;));</span>
-<span class="nc" id="L44">            ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);</span>
-<span class="nc" id="L45">            image = new javafx.scene.image.Image(bis);</span>
-<span class="nc" id="L46">        } else {</span>
-<span class="nc" id="L47">            image = new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(AVATAR_2)).toString());</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (avatar.startsWith(&quot;data:image/png;base64, &quot;)) {</span>
+<span class="nc" id="L36">            byte[] imageBytes = Base64.getDecoder().decode(avatar.replaceFirst(&quot;data:image/png;base64, &quot;, &quot;&quot;));</span>
+<span class="nc" id="L37">            ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);</span>
+<span class="nc" id="L38">            image = new javafx.scene.image.Image(bis);</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        } else if (avatar.startsWith(&quot;data:image/jpg;base64, &quot;)) {</span>
+<span class="nc" id="L40">            byte[] imageBytes = Base64.getDecoder().decode(avatar.replaceFirst(&quot;data:image/jpg;base64, &quot;, &quot;&quot;));</span>
+<span class="nc" id="L41">            ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);</span>
+<span class="nc" id="L42">            image = new javafx.scene.image.Image(bis);</span>
+<span class="nc" id="L43">        } else {</span>
+<span class="nc" id="L44">            image = new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(AVATAR_2)).toString());</span>
         }
-<span class="nc" id="L49">        return image;</span>
+<span class="nc" id="L46">        return image;</span>
     }
 
     private static String getBase64(BufferedImage image) throws IOException {
-<span class="fc" id="L53">        double scaleFactor = 1.0;</span>
+<span class="fc" id="L50">        double scaleFactor = 1.0;</span>
         while (true) {
-<span class="fc" id="L55">            BufferedImage scaledImage = scaleImage(image, scaleFactor);</span>
+<span class="fc" id="L52">            BufferedImage scaledImage = scaleImage(image, scaleFactor);</span>
             String base64Image;
-<span class="fc" id="L57">            base64Image = convertToBase64(scaledImage);</span>
+<span class="fc" id="L54">            base64Image = convertToBase64(scaledImage);</span>
 
-<span class="fc bfc" id="L59" title="All 2 branches covered.">            if (base64Image.length() &lt;= MAX_BASE64_LENGTH) {</span>
-<span class="fc" id="L60">                return base64Image;</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">            if (base64Image.length() &lt;= MAX_BASE64_LENGTH) {</span>
+<span class="fc" id="L57">                return base64Image;</span>
             }
 
-<span class="fc" id="L63">            scaleFactor *= 0.9;</span>
-<span class="fc" id="L64">        }</span>
+<span class="fc" id="L60">            scaleFactor *= 0.9;</span>
+<span class="fc" id="L61">        }</span>
     }
 
     private static BufferedImage scaleImage(BufferedImage image, double scaleFactor) {
-<span class="fc" id="L68">        int scaledWidth = (int) (image.getWidth() * scaleFactor);</span>
-<span class="fc" id="L69">        int scaledHeight = (int) (image.getHeight() * scaleFactor);</span>
+<span class="fc" id="L65">        int scaledWidth = (int) (image.getWidth() * scaleFactor);</span>
+<span class="fc" id="L66">        int scaledHeight = (int) (image.getHeight() * scaleFactor);</span>
 
-<span class="fc" id="L71">        java.awt.Image scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, java.awt.Image.SCALE_SMOOTH);</span>
+<span class="fc" id="L68">        java.awt.Image scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, java.awt.Image.SCALE_SMOOTH);</span>
 
-<span class="fc" id="L73">        BufferedImage bufferedImage = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);</span>
+<span class="fc" id="L70">        BufferedImage bufferedImage = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);</span>
 
-<span class="fc" id="L75">        Graphics2D g2d = bufferedImage.createGraphics();</span>
-<span class="fc" id="L76">        g2d.drawImage(scaledImage, 0, 0, null);</span>
-<span class="fc" id="L77">        g2d.dispose();</span>
+<span class="fc" id="L72">        Graphics2D g2d = bufferedImage.createGraphics();</span>
+<span class="fc" id="L73">        g2d.drawImage(scaledImage, 0, 0, null);</span>
+<span class="fc" id="L74">        g2d.dispose();</span>
 
-<span class="fc" id="L79">        return bufferedImage;</span>
+<span class="fc" id="L76">        return bufferedImage;</span>
     }
 
     /**
@@ -87,32 +84,32 @@ import static de.uniks.stpmon.team_m.Constants.*;
      * @param isWalking    : determine if the character is moving or not
      */
     public static Image[] cropTrainerImages(Image trainerChunk, int direction, Boolean isWalking) {
-<span class="fc" id="L90">        Image[] array = new Image[6];</span>
+<span class="fc" id="L87">        Image[] array = new Image[6];</span>
         int x, y;
-<span class="fc bfc" id="L92" title="All 2 branches covered.">        if (isWalking) {</span>
-<span class="fc" id="L93">            y = 69;</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (isWalking) {</span>
+<span class="fc" id="L90">            y = 69;</span>
         } else {
-<span class="fc" id="L95">            y = 37;</span>
+<span class="fc" id="L92">            y = 37;</span>
         }
-<span class="fc bfc" id="L97" title="All 4 branches covered.">        switch (direction) {</span>
-<span class="fc" id="L98">            case 0 -&gt; x = 0;</span>
-<span class="fc" id="L99">            case 1 -&gt; x = 96;</span>
-<span class="fc" id="L100">            case 2 -&gt; x = 192;</span>
-<span class="fc" id="L101">            default -&gt; x = 288;</span>
+<span class="fc bfc" id="L94" title="All 4 branches covered.">        switch (direction) {</span>
+<span class="fc" id="L95">            case 0 -&gt; x = 0;</span>
+<span class="fc" id="L96">            case 1 -&gt; x = 96;</span>
+<span class="fc" id="L97">            case 2 -&gt; x = 192;</span>
+<span class="fc" id="L98">            default -&gt; x = 288;</span>
         }
-<span class="fc bfc" id="L103" title="All 2 branches covered.">        for (int i = 0; i &lt; 6; i++) {</span>
-<span class="fc" id="L104">            array[i] = getSubImage(trainerChunk, x, y, 16, 27);</span>
-<span class="fc" id="L105">            x += 16;</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        for (int i = 0; i &lt; 6; i++) {</span>
+<span class="fc" id="L101">            array[i] = getSubImage(trainerChunk, x, y, 16, 27);</span>
+<span class="fc" id="L102">            x += 16;</span>
         }
-<span class="fc" id="L107">        return array;</span>
+<span class="fc" id="L104">        return array;</span>
     }
 
     public static Image getSubImage(Image img, int x, int y, int w, int h) {
-<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (img != null) {</span>
-<span class="fc" id="L112">            PixelReader reader = img.getPixelReader();</span>
-<span class="fc" id="L113">            return new WritableImage(reader, x, y, w, h);</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (img != null) {</span>
+<span class="fc" id="L109">            PixelReader reader = img.getPixelReader();</span>
+<span class="fc" id="L110">            return new WritableImage(reader, x, y, w, h);</span>
         }
-<span class="fc" id="L115">        return null;</span>
+<span class="fc" id="L112">        return null;</span>
     }
 
     /**
@@ -126,50 +123,48 @@ import static de.uniks.stpmon.team_m.Constants.*;
      */
     public static WritableImage showScaledCharacter(String premadeCharacter, int x, int y, int w, int h) {
         try {
-<span class="fc" id="L129">            BufferedImage bufferedImage = ImageIO.read(Objects.requireNonNull(App.class.getResource(&quot;charactermodels/&quot; + premadeCharacter)));</span>
-<span class="fc" id="L130">            BufferedImage bufferedImageFrontView = bufferedImage.getSubimage(x, y, w, h);</span>
-<span class="fc" id="L131">            BufferedImage scaledBufferedImage = ImageProcessor.scaleImage(bufferedImageFrontView, 6);</span>
-<span class="fc" id="L132">            javafx.scene.image.WritableImage writableImage = new javafx.scene.image.WritableImage(scaledBufferedImage.getWidth(), scaledBufferedImage.getHeight());</span>
-<span class="fc" id="L133">            javafx.scene.image.PixelWriter pixelWriter = writableImage.getPixelWriter();</span>
-<span class="fc bfc" id="L134" title="All 2 branches covered.">            for (int y1 = 0; y1 &lt; scaledBufferedImage.getHeight(); y1++) {</span>
-<span class="fc bfc" id="L135" title="All 2 branches covered.">                for (int x1 = 0; x1 &lt; scaledBufferedImage.getWidth(); x1++) {</span>
-<span class="fc" id="L136">                    pixelWriter.setArgb(x1, y1, scaledBufferedImage.getRGB(x1, y1));</span>
+<span class="fc" id="L126">            BufferedImage bufferedImage = ImageIO.read(Objects.requireNonNull(App.class.getResource(&quot;charactermodels/&quot; + premadeCharacter)));</span>
+<span class="fc" id="L127">            BufferedImage bufferedImageFrontView = bufferedImage.getSubimage(x, y, w, h);</span>
+<span class="fc" id="L128">            BufferedImage scaledBufferedImage = ImageProcessor.scaleImage(bufferedImageFrontView, 6);</span>
+<span class="fc" id="L129">            javafx.scene.image.WritableImage writableImage = new javafx.scene.image.WritableImage(scaledBufferedImage.getWidth(), scaledBufferedImage.getHeight());</span>
+<span class="fc" id="L130">            javafx.scene.image.PixelWriter pixelWriter = writableImage.getPixelWriter();</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">            for (int y1 = 0; y1 &lt; scaledBufferedImage.getHeight(); y1++) {</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">                for (int x1 = 0; x1 &lt; scaledBufferedImage.getWidth(); x1++) {</span>
+<span class="fc" id="L133">                    pixelWriter.setArgb(x1, y1, scaledBufferedImage.getRGB(x1, y1));</span>
                 }
             }
-<span class="fc" id="L139">            return writableImage;</span>
-<span class="nc" id="L140">        } catch (IOException e) {</span>
-<span class="nc" id="L141">            throw new RuntimeException(e);</span>
+<span class="fc" id="L136">            return writableImage;</span>
+<span class="nc" id="L137">        } catch (IOException e) {</span>
+<span class="nc" id="L138">            throw new RuntimeException(e);</span>
         }
     }
 
     private static String convertToBase64(BufferedImage image) throws IOException {
-<span class="fc" id="L146">        ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
-<span class="fc" id="L147">        ImageIO.write(image, &quot;png&quot;, baos);</span>
-<span class="fc" id="L148">        baos.flush();</span>
-<span class="fc" id="L149">        byte[] imageBytes = baos.toByteArray();</span>
-<span class="fc" id="L150">        baos.close();</span>
+<span class="fc" id="L143">        ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
+<span class="fc" id="L144">        ImageIO.write(image, &quot;png&quot;, baos);</span>
+<span class="fc" id="L145">        baos.flush();</span>
+<span class="fc" id="L146">        byte[] imageBytes = baos.toByteArray();</span>
+<span class="fc" id="L147">        baos.close();</span>
 
-<span class="fc" id="L152">        return Base64.getEncoder().encodeToString(imageBytes);</span>
+<span class="fc" id="L149">        return Base64.getEncoder().encodeToString(imageBytes);</span>
     }
 
     public static Image resonseBodyToJavaFXImage(ResponseBody responseBody) throws IOException {
-<span class="fc bfc" id="L156" title="All 2 branches covered.">        if (responseBody.source() != null) {</span>
-<span class="fc" id="L157">            try (InputStream inputStream = responseBody.byteStream()) {</span>
-<span class="fc" id="L158">                byte[] imageData = toByteArray(inputStream);</span>
-<span class="fc" id="L159">                return new Image(new ByteArrayInputStream(imageData));</span>
-            }
+<span class="fc" id="L153">        responseBody.source();</span>
+<span class="fc" id="L154">        try (InputStream inputStream = responseBody.byteStream()) {</span>
+<span class="fc" id="L155">            byte[] imageData = toByteArray(inputStream);</span>
+<span class="fc" id="L156">            return new Image(new ByteArrayInputStream(imageData));</span>
         }
-<span class="fc" id="L162">        return null;</span>
     }
 
     private static byte[] toByteArray(InputStream inputStream) throws IOException {
-<span class="fc" id="L166">        byte[] buffer = new byte[4096];</span>
+<span class="fc" id="L161">        byte[] buffer = new byte[4096];</span>
         int bytesRead;
-<span class="fc" id="L168">        ByteArrayOutputStream output = new ByteArrayOutputStream();</span>
-<span class="pc bpc" id="L169" title="1 of 2 branches missed.">        while ((bytesRead = inputStream.read(buffer)) != -1) {</span>
-<span class="nc" id="L170">            output.write(buffer, 0, bytesRead);</span>
+<span class="fc" id="L163">        ByteArrayOutputStream output = new ByteArrayOutputStream();</span>
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">        while ((bytesRead = inputStream.read(buffer)) != -1) {</span>
+<span class="nc" id="L165">            output.write(buffer, 0, bytesRead);</span>
         }
-<span class="fc" id="L172">        return output.toByteArray();</span>
+<span class="fc" id="L167">        return output.toByteArray();</span>
     }
 }
 
