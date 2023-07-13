@@ -189,7 +189,9 @@ public class WelcomeSceneController extends Controller {
                             trainerStorage.setTrainer(result);
                             disposables.add(presetsServiceProvider.get().getCharacter(result.image()).observeOn(FX_SCHEDULER).subscribe(
                                     response -> {
-                                        trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
+                                        if (!GraphicsEnvironment.isHeadless()) {
+                                            trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
+                                        }
                                         app.show(ingameControllerProvider.get());
                                     },
                                     error -> {
