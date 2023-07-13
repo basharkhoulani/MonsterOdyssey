@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
@@ -164,7 +165,7 @@ public class MonsterCell extends ListCell<Monster> {
         if (encounter) {
             this.encounterController.showMonsterDetailsInEncounter();
         } else {
-            this.ingameController.showMonsterDetails(monstersListController, monster, monsterTypeDto, monsterImage, resources, presetsService, type);
+            this.ingameController.showMonsterDetails(monster, monsterTypeDto, monsterImage, resources, presetsService, type);
         }
     }
 
