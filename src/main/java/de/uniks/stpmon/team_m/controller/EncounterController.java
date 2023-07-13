@@ -32,6 +32,7 @@ import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -105,6 +106,7 @@ public class EncounterController extends Controller {
     private List<AbilityDto> abilityDtos = new ArrayList<>();
     private HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
     private HashMap<String, Opponent> opponentsDelete = new HashMap<>();
+    private HashMap<String, Monster> monstersInEncounter = new HashMap<>();
     private int repeatedTimes = 0;
     private boolean inEncounter = true;
 
@@ -149,7 +151,6 @@ public class EncounterController extends Controller {
         return parent;
     }
 
-
     private void showTrainer(){
         setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), mySprite,1);
         if(!encounterOpponentStorage.isWild()){
@@ -170,6 +171,8 @@ public class EncounterController extends Controller {
         // self monster
         disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getSelfOpponent().monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
+                    monstersInEncounter.put(trainerId, monster);
+                    listenToMonster(trainerId, monster._id());
                     initMonsterDetails(monster);
                     //write monster name
                     disposables.add(presetsService.getMonster(monster.type())
@@ -187,6 +190,8 @@ public class EncounterController extends Controller {
         // enemy monster
         disposables.add(monstersService.getMonster(regionId, encounterOpponentStorage.getEnemyOpponent().trainer(), encounterOpponentStorage.getEnemyOpponent().monster())
                 .observeOn(FX_SCHEDULER).subscribe(monster -> {
+                    monstersInEncounter.put(encounterOpponentStorage.getEnemyOpponent().trainer(), monster);
+                    listenToMonster(encounterOpponentStorage.getEnemyOpponent().trainer(), monster._id());
                     encounterOpponentStorage.setCurrentEnemyMonster(monster);
                     opponentLevel.setText(monster.level() + " LVL");
                     opponentHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
@@ -204,6 +209,7 @@ public class EncounterController extends Controller {
                                 opponentMonster.setImage(enemyMonsterImage);
                             }, Throwable::printStackTrace));
                         }, Throwable::printStackTrace));
+
     }
 
     private void initMonsterDetails(Monster monster) {
@@ -282,14 +288,15 @@ public class EncounterController extends Controller {
             } else {
                 // else for change monster move
                 // here for the situation that change Monster Move
+                // have to add another websocket
             }
 
             Opponent oResults = forDescription.get(opponentId + "Results");
+
             for (Result r : oResults.results()) {
                 switch (r.type()){
                     case "ability-success" -> {
                         updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
-                        updateMonsterValues(o.trainer(), o.monster());
                     }
                     // @Tobias: Here you can add the other cases
                     default -> updateDescription("", false);
@@ -297,6 +304,25 @@ public class EncounterController extends Controller {
             }
         }
         inEncounter = false;
+    }
+
+    private void listenToMonster(String trainerId, String monsterId) {
+        disposables.add(eventListener.get().listen("trainers." + trainerId + ".monsters." + monsterId + ".*", Monster.class)
+                .observeOn(FX_SCHEDULER).subscribe(event -> {
+                    final Monster monster = event.data();
+                    System.out.println("Monster updated: " + monster);
+                    if (event.suffix().contains("updated")) {
+                        if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
+                            initMonsterDetails(monster);
+                        } else {
+                            encounterOpponentStorage.setCurrentEnemyMonster(monster);
+                            opponentLevel.setText(monster.level() + " LVL");
+                            opponentHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
+                        }
+                    }
+                }, error -> {
+                    error.printStackTrace();
+                }));
     }
 
     private void showResult() {
@@ -474,28 +500,6 @@ public class EncounterController extends Controller {
         }
     }
 
-    private void updateMonsterValues(String trainerId, String monsterId) {
-        boolean isMe = trainerId.equals(trainerStorageProvider.get().getTrainer()._id());
-        if (monsterId == null){
-            if(isMe){
-                myHealthBar.setProgress(0);
-                myHealth.setText("0 HP");
-            } else {
-                opponentHealthBar.setProgress(0);
-            }
-        } else {
-            disposables.add(monstersService.getMonster(regionId, trainerId, monsterId)
-                    .observeOn(FX_SCHEDULER).subscribe(monster -> {
-                        if (isMe) {
-                            initMonsterDetails(monster);
-                        } else {
-                            encounterOpponentStorage.setCurrentEnemyMonster(monster);
-                            opponentLevel.setText(monster.level() + " LVL");
-                            opponentHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
-                        }
-                    }));
-        }
-    }
 
     public void resetOppoenentUpdate(){
         opponentsUpdate.clear();
