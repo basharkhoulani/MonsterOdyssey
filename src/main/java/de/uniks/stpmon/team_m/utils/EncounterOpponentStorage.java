@@ -141,4 +141,12 @@ public class EncounterOpponentStorage {
         }
 
     }
+
+    public void setEnemyOpponent(Opponent o) {
+        this.enemyOpponents.add(o);
+    }
+
+    public Opponent getEnemyOpponent() {
+        return this.enemyOpponents.get(0);
+    }
 }

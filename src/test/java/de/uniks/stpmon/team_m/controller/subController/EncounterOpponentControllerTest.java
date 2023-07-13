@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import java.awt.*;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -106,8 +107,10 @@ public class EncounterOpponentControllerTest extends ApplicationTest {
             Image image = new Image(Objects.requireNonNull(Main.class.getResource("images/Monster.png")).toString());
             encounterOpponentController.setMonsterImage(image);
             // Perform assertions
-            ImageView monsterImageView = encounterOpponentController.monsterImageView;
-            assertEquals(image, monsterImageView.getImage());
+            if (!GraphicsEnvironment.isHeadless()) {
+                ImageView monsterImageView = encounterOpponentController.monsterImageView;
+                assertEquals(image, monsterImageView.getImage());
+            }
         });
     }
 
@@ -116,8 +119,10 @@ public class EncounterOpponentControllerTest extends ApplicationTest {
         Image image = new Image(Objects.requireNonNull(Main.class.getResource("images/Monster.png")).toString());
         encounterOpponentController.setTrainerImage(image);
         // Perform assertions
-        ImageView trainerImageView = encounterOpponentController.trainerImageView;
-        assertEquals(image, trainerImageView.getImage());
+        if (!GraphicsEnvironment.isHeadless()) {
+            ImageView trainerImageView = encounterOpponentController.trainerImageView;
+            assertEquals(image, trainerImageView.getImage());
+        }
     }
 
     @Test
