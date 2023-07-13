@@ -94,12 +94,12 @@ public class Constants {
     public static final String ARROWRIGHTSYMBOL = "images/arrowRight.png";
 
     // NPC DIALOG
-    public static int dialogVBoxWidth = 700;
-    public static int getDialogVBoxHeight = 150;
-    public static int spacerToBottomOfScreen = 150;
-    public static Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);
-    public static Insets helpLabelInsets = new Insets(0, 40, 20, 0);
-    public static int helpLabelFontSize = 12;
+    public static final int dialogVBoxWidth = 700;
+    public static final int getDialogVBoxHeight = 150;
+    public static final int spacerToBottomOfScreen = 150;
+    public static final Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);
+    public static final Insets helpLabelInsets = new Insets(0, 40, 20, 0);
+    public static final int helpLabelFontSize = 12;
 
     public enum DialogSpecialInteractions {
         nurseYes,
@@ -122,29 +122,29 @@ public class Constants {
     }
 
     // Nurse Popup
-    public static int popupHeight = 170;
-    public static int popupWidth = 300;
-    public static int textFieldHeight = 120;
-    public static int buttonsHBoxHeight = 50;
-    public static int buttonsHBoxSpacing = 30;
-    public static int nurseButtonHeight = 40;
-    public static int nurseButtonWidth = 80;
+    public static final int popupHeight = 170;
+    public static final int popupWidth = 300;
+    public static final int textFieldHeight = 120;
+    public static final int buttonsHBoxHeight = 50;
+    public static final int buttonsHBoxSpacing = 30;
+    public static final int nurseButtonHeight = 40;
+    public static final int nurseButtonWidth = 80;
 
     // Ingame Help
-    public static int spaceBetweenPhoneAndWindowEdge = 25;
-    public static int offsetToNotShowPhoneInScreen = 30;
+    public static final int spaceBetweenPhoneAndWindowEdge = 25;
+    public static final int offsetToNotShowPhoneInScreen = 30;
     public static final String smallHandyImage = "images/SmallHandy.png";
     public static final String notificationBellImage = "images/NotificationBell.png";
 
     // Encounter
-    public static int fleePopupWidth = 300;
-    public static int fleePopupHeight = 200;
-    public static int fleeTextHeight = 150;
-    public static Insets fleeTextInsets = new Insets(20, 10, 0, 10);
-    public static int fleeButtonsHBoxHeight = 50;
-    public static Insets fleeButtonsHBoxInsets = new Insets(0, 10, 10, 10);
-    public static int fleeButtonWidth = 100;
-    public static int fleeButtonHeight = 40;
+    public static final int fleePopupWidth = 300;
+    public static final int fleePopupHeight = 200;
+    public static final int fleeTextHeight = 150;
+    public static final Insets fleeTextInsets = new Insets(20, 10, 0, 10);
+    public static final int fleeButtonsHBoxHeight = 50;
+    public static final Insets fleeButtonsHBoxInsets = new Insets(0, 10, 10, 10);
+    public static final int fleeButtonWidth = 100;
+    public static final int fleeButtonHeight = 40;
 
     // Error messages
     public static final String HTTP_400 = "400";
@@ -181,7 +181,7 @@ public class Constants {
     public static final String FIGHT_SOUND = "Nintendo_Style_Battle_Music_Loop_02.wav";
 
     // Colors
-    public static HashMap<String, String> TYPESCOLORPALETTE = new HashMap<>(Map.ofEntries(
+    public static final HashMap<String, String> TYPESCOLORPALETTE = new HashMap<>(Map.ofEntries(
             entry("normal", "#BBBBAA"),
             entry("fire", "#FF421C"),
             entry("water", "#2C9BE3"),
@@ -203,7 +203,7 @@ public class Constants {
     ));
 
     // Abilities
-    public static HashMap<String, String> ABILITYPALETTE = new HashMap<>(Map.ofEntries(
+    public static final HashMap<String, String> ABILITYPALETTE = new HashMap<>(Map.ofEntries(
             entry("normal", "ability-normal.png"),
             entry("fire", "ability-fire.png"),
             entry("water", "ability-water.png"),
@@ -224,7 +224,7 @@ public class Constants {
             entry("fairy", "ability-fairy")
     ));
 
-    public static List<String> ATTRIBUTE_IMAGES = Arrays.asList(
+    public static final List<String> ATTRIBUTE_IMAGES = Arrays.asList(
             "star.png",
             "attack.png",
             "heart.png",
