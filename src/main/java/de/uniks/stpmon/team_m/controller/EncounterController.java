@@ -1,9 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.Constants;
-import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
-import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
-import de.uniks.stpmon.team_m.controller.subController.MonstersDetailController;
+import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
@@ -96,6 +94,8 @@ public class EncounterController extends Controller {
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
     Provider<MonstersDetailController> monstersDetailControllerProvider;
+    @Inject
+    Provider<ChangeMonsterListController> changeMonsterListControllerProvider;
     IngameController ingameController;
 
     private String regionId;
@@ -233,6 +233,17 @@ public class EncounterController extends Controller {
         monsterDetailVBox.requestFocus();
     }
 
+    public void showChangeMonsterList() {
+        VBox monsterListVBox = new VBox();
+        monsterListVBox.setMinWidth(600);
+        monsterListVBox.setMinHeight(410);
+        monsterListVBox.setAlignment(Pos.CENTER);
+        ChangeMonsterListController changeMonsterListController = changeMonsterListControllerProvider.get();
+        changeMonsterListController.init(this, monsterListVBox, ingameController);
+        monsterListVBox.getChildren().add(changeMonsterListController.render());
+        rootStackPane.getChildren().add(monsterListVBox);
+        monsterListVBox.requestFocus();
+    }
 
     @Override
     public void destroy() {
