@@ -45,9 +45,9 @@ class EncounterResultControllerTest extends ApplicationTest {
     @Test
     void clickOK() {
         final Button okButton = lookup("#okButton").query();
-        EncounterController encounterController = mock(EncounterController.class);
+        final EncounterController encounterController = mock(EncounterController.class);
         when(encounterControllerProvider.get()).thenReturn(encounterController);
-        IngameController ingameController = mock(IngameController.class);
+        final IngameController ingameController = mock(IngameController.class);
         when(ingameControllerProvider.get()).thenReturn(ingameController);
 
         doNothing().when(encounterController).destroy();
