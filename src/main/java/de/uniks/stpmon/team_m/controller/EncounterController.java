@@ -32,7 +32,6 @@ import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -104,9 +103,9 @@ public class EncounterController extends Controller {
     private final List<Controller> subControllers = new ArrayList<>();
     private int currentImageIndex = 0;
     private List<AbilityDto> abilityDtos = new ArrayList<>();
-    private HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
-    private HashMap<String, Opponent> opponentsDelete = new HashMap<>();
-    private HashMap<String, Monster> monstersInEncounter = new HashMap<>();
+    private final HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
+    private final HashMap<String, Opponent> opponentsDelete = new HashMap<>();
+    private final HashMap<String, Monster> monstersInEncounter = new HashMap<>();
     private int repeatedTimes = 0;
     private boolean inEncounter = true;
 
@@ -244,9 +243,7 @@ public class EncounterController extends Controller {
                             showResult();
                         }
                     }
-                }, error -> {
-                    error.printStackTrace();
-                }));
+                }, Throwable::printStackTrace));
     }
 
     private void updateOpponent(Opponent opponent) {
@@ -295,9 +292,7 @@ public class EncounterController extends Controller {
 
             for (Result r : oResults.results()) {
                 switch (r.type()){
-                    case "ability-success" -> {
-                        updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
-                    }
+                    case "ability-success" -> updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
                     // @Tobias: Here you can add the other cases
                     default -> updateDescription("", false);
                 }
