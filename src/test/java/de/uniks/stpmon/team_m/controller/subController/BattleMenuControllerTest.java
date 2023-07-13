@@ -28,9 +28,6 @@ class BattleMenuControllerTest extends ApplicationTest {
 
     @InjectMocks
     BattleMenuController battleMenuController;
-
-    @Mock
-    EncounterOpponentsService encounterOpponentsService;
     @Mock
     EncounterOpponentStorage encounterOpponentStorage;
     @Mock
