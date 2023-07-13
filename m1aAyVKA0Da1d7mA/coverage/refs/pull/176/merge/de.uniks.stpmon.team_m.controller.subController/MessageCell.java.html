@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MessageCell.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">MessageCell.java</span></div><h1>MessageCell.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.dto.Message;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.UserStorage;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+import java.awt.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+import static javafx.geometry.Pos.CENTER_LEFT;
+import static javafx.geometry.Pos.CENTER_RIGHT;
+
+public class MessageCell extends ListCell&lt;Message&gt; {
+
+    @FXML
+    public HBox rootMessageHBox;
+    @FXML
+    public Label messageContent;
+    @FXML
+    public Label senderTimeDate;
+    @FXML
+    public Button editMessage;
+    @FXML
+    public Button deleteMessage;
+    @FXML
+    public VBox messageVBox;
+    @FXML
+    public ImageView avatar;
+    private FXMLLoader loader;
+    private final MessagesBoxController messagesBoxController;
+
+    public UserStorage user;
+
+
+    /**
+     * MessageCell is used to handle the message cells.
+     * Every message cell has a rootMessageHBox which contains the content of the message, the sender and the time and
+     * date of the message. The rootMessageHBox has the id of the message. The message cell has a messageVBox which
+     * contains the rootMessageHBox. The message cell has a editMessage button and a deleteMessage button.
+     *
+     * @param messagesBoxController The {@link MessagesBoxController} is used to handle the messages box.
+     * @param user                  The user is used to identify the user.
+     */
+
+<span class="fc" id="L60">    public MessageCell(MessagesBoxController messagesBoxController, UserStorage user) {</span>
+<span class="fc" id="L61">        this.messagesBoxController = messagesBoxController;</span>
+<span class="fc" id="L62">        this.user = user;</span>
+<span class="fc" id="L63">    }</span>
+
+
+    /**
+     * The updateItem method is used to update the message cell.
+     */
+
+    @Override
+    protected void updateItem(Message message, boolean empty) {
+<span class="fc" id="L72">        super.updateItem(message, empty);</span>
+<span class="fc" id="L73">        setStyle(LIST_VIEW_STYLE_NO_INDEXING);</span>
+<span class="pc bpc" id="L74" title="1 of 4 branches missed.">        if (message == null || empty) {</span>
+<span class="fc" id="L75">            setText(null);</span>
+<span class="fc" id="L76">            setGraphic(null);</span>
+        } else {
+<span class="fc" id="L78">            loadFXML();</span>
+<span class="fc" id="L79">            final String senderName = messagesBoxController.getUsername(message.sender());</span>
+<span class="fc" id="L80">            final String base64avatar = messagesBoxController.getAvatar(message.sender());</span>
+<span class="fc" id="L81">            messageContent.setText(message.body());</span>
+<span class="fc" id="L82">            setDateAndEdited(message, senderName);</span>
+<span class="fc" id="L83">            setMessageOrientationAndStyle(message);</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">            if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L85">                avatar.setImage(ImageProcessor.fromBase64ToFXImage(base64avatar));</span>
+            }
+<span class="fc" id="L87">            setGraphic(rootMessageHBox);</span>
+<span class="fc" id="L88">            setUserData(message);</span>
+<span class="fc" id="L89">            setText(null);</span>
+        }
+<span class="fc" id="L91">    }</span>
+
+    /**
+     * The setMessageOrientationAndStyle method is used to set the message orientation and style.
+     *
+     * @param message The {@link Message} is used to get the sender of the message.
+     */
+
+    private void setMessageOrientationAndStyle(Message message) {
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        if (message.sender().equals(user.get_id())) {</span>
+<span class="fc" id="L101">            messageVBox.setStyle(messageVBox.getStyle() + OWN_MESSAGE_STYLE);</span>
+<span class="fc" id="L102">            setAlignment(CENTER_RIGHT);</span>
+<span class="fc" id="L103">            avatar.toFront();</span>
+        } else {
+<span class="fc" id="L105">            messageVBox.setStyle(messageVBox.getStyle() + NOT_OWN_MESSAGE_STYLE);</span>
+<span class="fc" id="L106">            setAlignment(CENTER_LEFT);</span>
+        }
+<span class="fc" id="L108">        messageVBox.setStyle(messageVBox.getStyle() + ROUNDED_CORNERS_STYLE + BORDER_COLOR_BLACK);</span>
+<span class="fc" id="L109">    }</span>
+
+    /**
+     * The setDateAndEdited method is used to set the date and, if edited, the updated time of the message.
+     *
+     * @param message    The {@link Message} is used to get the date of the message.
+     * @param senderName The senderName is used to get the name of the sender.
+     */
+
+    private void setDateAndEdited(Message message, String senderName) {
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        if (!message.createdAt().equals(message.updatedAt())) {</span>
+<span class="fc" id="L120">            senderTimeDate.setText(senderName + &quot;, &quot; + formatTimeString(getItem().updatedAt()) + &quot; (&quot; + PENCIL + &quot;)&quot;);</span>
+        } else {
+<span class="fc" id="L122">            senderTimeDate.setText(senderName + &quot;, &quot; + formatTimeString(getItem().createdAt()));</span>
+        }
+<span class="fc" id="L124">    }</span>
+
+    /**
+     * The loadFXML method is used to load the FXML file.
+     */
+
+    private void loadFXML() {
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (loader == null) {</span>
+<span class="fc" id="L132">            loader = new FXMLLoader(Main.class.getResource(&quot;views/MessageCell.fxml&quot;));</span>
+<span class="fc" id="L133">            loader.setControllerFactory(c -&gt; this);</span>
+            try {
+<span class="fc" id="L135">                loader.load();</span>
+<span class="nc" id="L136">            } catch (Exception e) {</span>
+<span class="nc" id="L137">                e.printStackTrace();</span>
+<span class="fc" id="L138">            }</span>
+        }
+<span class="fc" id="L140">    }</span>
+
+    /**
+     * The showEditAndDelete method is used to show the edit and delete button if the user is the sender of the message.
+     */
+
+    public void showEditAndDelete() {
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (!getItem().sender().equals(user.get_id())) {</span>
+<span class="fc" id="L148">            hideEditAndDelete();</span>
+        } else {
+<span class="fc" id="L150">            editMessage.setVisible(true);</span>
+<span class="fc" id="L151">            deleteMessage.setVisible(true);</span>
+        }
+<span class="fc" id="L153">    }</span>
+
+    public void hideEditAndDelete() {
+<span class="fc" id="L156">        editMessage.setVisible(false);</span>
+<span class="fc" id="L157">        deleteMessage.setVisible(false);</span>
+<span class="fc" id="L158">    }</span>
+
+    /**
+     * The formatTimeString method is used to format the time string.
+     *
+     * @param dateTime The dateTime is used to get the time.
+     * @return The formatted time string.
+     */
+
+    private String formatTimeString(String dateTime) {
+<span class="fc" id="L168">        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.parse(dateTime), ZoneId.of(ZONE_ID_EUROPE_BERLIN));</span>
+
+<span class="fc" id="L170">        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);</span>
+<span class="fc" id="L171">        return localDateTime.format(outputFormatter);</span>
+    }
+
+    /**
+     * The editMessage method is used to edit the message.
+     * The editMessage method opens a TextInputDialog where the user can edit the message. If the user clicks on the
+     * editMessage method calls the editMessage method of the {@link MessagesBoxController}.
+     */
+
+    public void editMessage() {
+<span class="fc" id="L181">        TextInputDialog dialog = new TextInputDialog();</span>
+<span class="fc" id="L182">        dialog.setTitle(messagesBoxController.getResources().getString(&quot;EDIT.MESSAGE.TITLE&quot;));</span>
+<span class="fc" id="L183">        dialog.setHeaderText(null);</span>
+<span class="fc" id="L184">        dialog.setContentText(messagesBoxController.getResources().getString(&quot;EDIT.MESSAGE.CONTENT&quot;));</span>
+
+<span class="fc" id="L186">        TextArea messageArea = new TextArea();</span>
+<span class="fc" id="L187">        messageArea.setText(getItem().body());</span>
+<span class="fc" id="L188">        messageArea.setId(&quot;messageArea&quot;);</span>
+<span class="fc" id="L189">        dialog.getDialogPane().setContent(messageArea);</span>
+<span class="fc" id="L190">        Button confirmEdit = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);</span>
+<span class="fc" id="L191">        confirmEdit.setOnAction(event -&gt; {</span>
+<span class="fc" id="L192">            messagesBoxController.editMessage(messageArea.getText(), getItem());</span>
+<span class="fc" id="L193">            dialog.close();</span>
+<span class="fc" id="L194">        });</span>
+<span class="fc" id="L195">        dialog.showAndWait();</span>
+<span class="fc" id="L196">    }</span>
+
+    /**
+     * The deleteMessage method is used to delete the message.
+     * The deleteMessage method opens an Alert where the user can confirm the deletion of the message. If the user
+     * confirms the deletion the deleteMessage method calls the deleteMessage method of the {@link MessagesBoxController}.
+     */
+
+    public void deleteMessage() {
+<span class="fc" id="L205">        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);</span>
+<span class="fc" id="L206">        alert.setTitle(messagesBoxController.getResources().getString(&quot;DELETE.MESSAGE.TITLE&quot;));</span>
+<span class="fc" id="L207">        alert.setHeaderText(messagesBoxController.getResources().getString(&quot;DELETE.MESSAGE.TITLE&quot;));</span>
+<span class="fc" id="L208">        alert.setContentText(messagesBoxController.getResources().getString(&quot;DELETE.MESSAGE.CONTENT&quot;));</span>
+
+<span class="fc" id="L210">        Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+<span class="pc bpc" id="L211" title="2 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.OK) {</span>
+<span class="fc" id="L212">            messagesBoxController.deleteMessage(getItem());</span>
+<span class="fc" id="L213">            alert.close();</span>
+        }
+<span class="fc" id="L215">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
