@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="323.0"
-            prefWidth="450.0" styleClass="dialogBackground" stylesheets="@../styles.css"
+            prefWidth="450.0" styleClass="dialogBackground" 
             xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="de.uniks.stpmon.team_m.controller.subController.ChangeAudioController">
    <Label alignment="CENTER" layoutY="54.0" prefHeight="24.0" prefWidth="450.0" text="%CHANGE.VOLUME"/>

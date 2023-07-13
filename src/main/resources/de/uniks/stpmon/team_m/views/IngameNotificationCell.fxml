@@ -3,7 +3,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.TextFlow?>
-<HBox fx:id="rootNotificationHBox" maxWidth="350.0" prefHeight="94.0" prefWidth="178.0" spacing="3" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<HBox fx:id="rootNotificationHBox" maxWidth="350.0" prefHeight="94.0" prefWidth="178.0" spacing="3" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <ImageView fx:id="avatar" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: black; -fx-border-style: solid; -fx-border-width: 2px;">
    </ImageView>
    <TextFlow fx:id="notificationTextFlow" prefHeight="200.0" prefWidth="200.0" styleClass="ingameNotificationTextFlow" />
