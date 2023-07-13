@@ -109,7 +109,6 @@ public class EncounterController extends Controller {
     private List<AbilityDto> abilityDtos = new ArrayList<>();
     private List<Opponent> opponentsUpdate = new ArrayList<>();
     private int repeatedTimes = 0;
-    private boolean resultDefeated = false;
     private boolean resultLevelUP = false;
 
     private ArrayList<Opponent> battleLog = new ArrayList<>();
@@ -240,22 +239,21 @@ public class EncounterController extends Controller {
                         System.out.println(opponent);
                         if (opponent.results().size() > 0) {
                             opponent.results().forEach(result -> {
+                                System.out.println(result);
                                 if (Objects.equals(result.type(), "monster-levelup")) {
                                     if (!resultLevelUP) {
-                                        showLevelUpPopUp();
-                                        System.out.println("levelupPopup------------------------------");
                                         resultLevelUP = true;
                                     }
                                 }
                                 if (Objects.equals(result.type(), "target-defeated")) {
-                                    if (!resultDefeated) {
+                                    if (Objects.equals(opponent._id(), encounterOpponentStorage.getSelfOpponent()._id())) {
                                         monsterDefeated();
-                                        System.out.println("monsterDefeated-----------------------------");
-                                        resultDefeated = true;
+                                    } else {
+                                        System.out.println("you dead-------------------");
                                     }
 
-                                }
 
+                                }
                             });
                         }
                     }
@@ -304,7 +302,6 @@ public class EncounterController extends Controller {
     private void writeBattleDescription(ArrayList<Opponent> forDescription) {
         for (Opponent o : forDescription) {
             if (o.move() != null) {
-                resultLevelUP = false;
                 Move move = o.move();
                 if (move instanceof AbilityMove abilityMove) {
                     if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
@@ -363,19 +360,34 @@ public class EncounterController extends Controller {
     }
 
     public void monsterDefeated() {
-        opponentMonster.setVisible(false);
+        System.out.println("monsterDefeated-----------------");
         battleDescription.setText(resources.getString("TARGET.DEFEATED"));
+        PauseTransition pause = new PauseTransition(Duration.millis(500));
+        pause.setOnFinished(evt -> {
+            opponentMonster.setVisible(false);
+            if (resultLevelUP) {
+                showLevelUpPopUp();
+            } else {
+                continueBattle();
+            }
+        });
+        pause.play();
+    }
 
+    public void continueBattle() {
+        System.out.println("continueBattle-----------------");
         if (encounterOpponentStorage.getEnemyOpponent().monster() == null) {
-
-            SequentialTransition fleeAnimation = buildFleeAnimation();
-            PauseTransition firstPause = new PauseTransition(Duration.millis(2000));
-            firstPause.setOnFinished(evt -> {
-                myMonster.setVisible(false);
-                fleeAnimation.play();
-            });
-            firstPause.play();
-            fleeAnimation.setOnFinished(evt -> showIngameController());
+            if (encounterOpponentStorage.getOpponentTrainer() == null) {
+                System.out.println("ending in 2");
+                SequentialTransition fleeAnimation = buildFleeAnimation();
+                PauseTransition pause = new PauseTransition(Duration.millis(2000));
+                pause.setOnFinished(evt -> {
+                    myMonster.setVisible(false);
+                    fleeAnimation.play();
+                });
+                pause.play();
+                fleeAnimation.setOnFinished(evt -> showIngameController());
+            }
         }
     }
 
@@ -530,6 +542,8 @@ public class EncounterController extends Controller {
     }
 
     public void showLevelUpPopUp() {
+        System.out.println("showLevelUpPopUp-----------------");
+        resultLevelUP = false;
         LevelUpController levelUpController = levelUpControllerProvider.get();
         VBox popUpVBox = new VBox();
         popUpVBox.getStyleClass().add("miniMapContainer");
