@@ -42,7 +42,7 @@ public class BattleMenuController extends Controller {
     public Parent render(){
 <span class="nc" id="L43">        final Parent parent = super.render();</span>
 <span class="nc" id="L44">        fleeButton.setVisible(encounterOpponentStorage.isWild());</span>
-<span class="nc" id="L45">        fleeButton.setOnAction(this.changeToIngame());</span>
+<span class="nc" id="L45">        fleeButton.setOnAction(this::changeToIngame);</span>
 <span class="nc" id="L46">        return parent;</span>
     }
 
@@ -59,16 +59,15 @@ public class BattleMenuController extends Controller {
         // show the MonsterInformation VBox
 <span class="nc" id="L60">    }</span>
 
-    public EventHandler&lt;ActionEvent&gt; changeToIngame() {
+    public void changeToIngame(ActionEvent event) {
 <span class="nc bnc" id="L63" title="All 2 branches missed.">        if (onFleeButtonClick != null) {</span>
 <span class="nc" id="L64">            onFleeButtonClick.run();</span>
         }
-<span class="nc" id="L66">        return null;</span>
-    }
+<span class="nc" id="L66">    }</span>
 
     public void showFleeButton(boolean isWild){
-<span class="nc" id="L70">        fleeButton.setVisible(isWild);</span>
-<span class="nc" id="L71">        fleeButton.setOnAction(this.changeToIngame());</span>
-<span class="nc" id="L72">    }</span>
+<span class="nc" id="L69">        fleeButton.setVisible(isWild);</span>
+<span class="nc" id="L70">        fleeButton.setOnAction(this::changeToIngame);</span>
+<span class="nc" id="L71">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
