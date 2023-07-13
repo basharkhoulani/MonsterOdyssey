@@ -42,7 +42,7 @@ public class BattleMenuController extends Controller {
     public Parent render(){
         final Parent parent = super.render();
         fleeButton.setVisible(encounterOpponentStorage.isWild());
-        fleeButton.setOnAction(this.changeToIngame());
+        fleeButton.setOnAction(this::changeToIngame);
         return parent;
     }
 
@@ -59,15 +59,14 @@ public class BattleMenuController extends Controller {
         // show the MonsterInformation VBox
     }
 
-    public EventHandler<ActionEvent> changeToIngame() {
+    public void changeToIngame(ActionEvent event) {
         if (onFleeButtonClick != null) {
             onFleeButtonClick.run();
         }
-        return null;
     }
 
     public void showFleeButton(boolean isWild){
         fleeButton.setVisible(isWild);
-        fleeButton.setOnAction(this.changeToIngame());
+        fleeButton.setOnAction(this::changeToIngame);
     }
 }
