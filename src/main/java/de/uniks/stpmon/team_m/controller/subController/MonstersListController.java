@@ -82,7 +82,7 @@ public class MonstersListController extends Controller {
     }
 
     private void initMonsterList(List<Monster> monsters) {
-        monsterListViewActive.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController));
+        monsterListViewActive.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false));
         monsterListViewActive.getItems().addAll(monsters);
         monsterListViewActive.setFocusModel(null);
         monsterListViewActive.setSelectionModel(null);
