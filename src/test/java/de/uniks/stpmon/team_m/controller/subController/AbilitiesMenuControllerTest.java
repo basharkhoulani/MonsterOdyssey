@@ -2,16 +2,12 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.EncounterController;
-import de.uniks.stpmon.team_m.dto.AbilityDto;
-import de.uniks.stpmon.team_m.dto.Monster;
-import de.uniks.stpmon.team_m.dto.MonsterAttributes;
+import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,8 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.framework.junit5.ApplicationTest;
 
-
-import javax.inject.Inject;
 import javax.inject.Provider;
 
 import java.util.LinkedHashMap;
@@ -31,9 +25,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AbilitiesMenuControllerTest extends ApplicationTest {
@@ -48,15 +40,12 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
     @Mock
     Provider<EncounterOpponentStorage> encounterOpponentStorageProvider;
     @Mock
-    Provider<PresetsService> presetsServiceProvider;
-    @InjectMocks
     EncounterController encounterController;
 
 
     @Override
     public void start(Stage stage){
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        HBox battelMenu = new HBox();
         abilitiesMenuController.setValues(bundle, null, null, abilitiesMenuController, app);
 
         LinkedHashMap<String, Integer> abilities = new LinkedHashMap<>();
@@ -98,5 +87,75 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
         assertFalse(abilityButton3.isVisible());
         assertFalse(abilityButton4.isVisible());
     }
+
+    @Test
+    void useAbilityTest() {
+        EncounterOpponentStorage encounterOpponentStorage = mock(EncounterOpponentStorage.class);
+        when(encounterOpponentStorageProvider.get()).thenReturn(encounterOpponentStorage);
+        when(encounterOpponentStorage.getEncounterId()).thenReturn("64ad9a7532eb8b56aafb5138");
+        when(encounterOpponentStorage.getRegionId()).thenReturn("645e32c6866ace359554a7ec");
+        Move move = new AbilityMove("ability", 1, "000000000000000000000000");
+
+
+        when(encounterOpponentStorage.getSelfOpponent()).thenReturn(new Opponent(
+                "2023-07-11T18:07:49.590Z",
+                "2023-07-11T18:07:54.361Z",
+                "64ad9a7532eb8b56aafb513a",
+                "64ad9a7532eb8b56aafb5138",
+                "64ad9a4532eb8b56aafb4a7b",
+                false,
+                false,
+                "64ad9a5a6cec1b8f0ff857ed",
+                null,
+                List.of(),
+                0
+        ));
+
+        when(encounterOpponentStorage.getEnemyOpponent()).thenReturn(new Opponent(
+                "2023-07-11T18:07:49.594Z",
+                "2023-07-11T18:07:54.381Z",
+                "64ad9a7532eb8b56aafb513f",
+                "64ad9a7532eb8b56aafb5138",
+                "000000000000000000000000",
+                true,
+                true,
+                "64ad9a7532eb8b56aafb513c",
+                null,
+                List.of(),
+                0
+        ));
+
+        when(encounterOpponentsService.updateOpponent("645e32c6866ace359554a7ec", "64ad9a7532eb8b56aafb5138", "64ad9a7532eb8b56aafb513a", null, move)).thenReturn(Observable.just(new Opponent(
+                "2023-07-11T18:07:49.590Z",
+                "2023-07-11T18:07:54.361Z",
+                "64ad9a7532eb8b56aafb513a",
+                "64ad9a7532eb8b56aafb5138",
+                "64ad9a4532eb8b56aafb4a7b",
+                false,
+                false,
+                "64ad9a5a6cec1b8f0ff857ed",
+                move,
+                List.of(),
+                0
+        )));
+
+        doNothing().when(encounterController).updateDescription("", true);
+        doNothing().when(encounterController).resetRepeatedTimes();
+        doNothing().when(encounterController).resetOppoenentUpdate();
+        doNothing().when(encounterController).goBackToBattleMenu();
+
+        final Button abilityButton1 = lookup("#abilityButton1").query();
+        clickOn(abilityButton1);
+        verify(encounterOpponentsService).updateOpponent("645e32c6866ace359554a7ec", "64ad9a7532eb8b56aafb5138", "64ad9a7532eb8b56aafb513a", null, move);
+    }
+
+    @Test
+    void goBackTest() {
+        doNothing().when(encounterController).goBackToBattleMenu();
+        final Button backButton = lookup("#goBackButton").query();
+        clickOn(backButton);
+        verify(encounterController).goBackToBattleMenu();
+    }
+
 
 }
