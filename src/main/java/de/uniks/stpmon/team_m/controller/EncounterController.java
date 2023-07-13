@@ -288,7 +288,7 @@ public class EncounterController extends Controller {
             } else {
                 // else for change monster move
                 // here for the situation that change Monster Move
-                // have to add another websocket
+                // have to add another websocket listenToMonster(trainerId, monsterId)
             }
 
             Opponent oResults = forDescription.get(opponentId + "Results");
@@ -310,7 +310,6 @@ public class EncounterController extends Controller {
         disposables.add(eventListener.get().listen("trainers." + trainerId + ".monsters." + monsterId + ".*", Monster.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     final Monster monster = event.data();
-                    System.out.println("Monster updated: " + monster);
                     if (event.suffix().contains("updated")) {
                         if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
                             initMonsterDetails(monster);
@@ -320,9 +319,7 @@ public class EncounterController extends Controller {
                             opponentHealthBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());
                         }
                     }
-                }, error -> {
-                    error.printStackTrace();
-                }));
+                }, Throwable::printStackTrace));
     }
 
     private void showResult() {
