@@ -27,7 +27,6 @@ import static de.uniks.stpmon.team_m.Constants.BEST_FRIEND_PREF;
 import static de.uniks.stpmon.team_m.Constants.HTTP_403;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 

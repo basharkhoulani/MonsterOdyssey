@@ -1,7 +1,6 @@
 package de.uniks.stpmon.team_m.utils;
 
 import de.uniks.stpmon.team_m.controller.subController.TrainerController;
-import de.uniks.stpmon.team_m.dto.Trainer;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
