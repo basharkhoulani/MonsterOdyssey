@@ -26,8 +26,6 @@ public class MonstersListController extends Controller {
     @FXML
     public Tab activeTeamTab;
     @FXML
-    public ListView monsterListViewOther;
-    @FXML
     public Button closeButton;
     @Inject
     Provider<TrainersService> trainersServiceProvider;
@@ -51,12 +49,14 @@ public class MonstersListController extends Controller {
     public Provider<PresetsService> presetsServiceProvider;
     @Inject
     IngameController ingameController;
-
     @FXML
     public ListView<Monster> monsterListViewActive;
+    @FXML
+    public ListView<Monster> monsterListViewOther;
     public VBox monsterListVBox;
 
     public List<Monster> activeMonstersList;
+    public List<Monster> otherMonstersList;
 
     @Inject
     public MonstersListController() {
@@ -65,6 +65,7 @@ public class MonstersListController extends Controller {
     public void init(IngameController ingameController, VBox monsterListVBox) {
         super.init();
         activeMonstersList = new ArrayList<>();
+        otherMonstersList = new ArrayList<>();
         this.ingameController = ingameController;
         this.monsterListVBox = monsterListVBox;
     }
@@ -82,9 +83,12 @@ public class MonstersListController extends Controller {
                     activeMonstersList = list.stream()
                             .filter(monster -> trainerStorageProvider.get().getTrainer().team().contains(monster._id()))
                             .collect(Collectors.toList());
+
+                    otherMonstersList.addAll(list);
+                    otherMonstersList.removeAll(activeMonstersList);
+                    initOtherMonsterList(otherMonstersList);
                     initMonsterList(activeMonstersList);
                 }, throwable -> showError(throwable.getMessage())));
-
 
         return parent;
     }
@@ -94,6 +98,13 @@ public class MonstersListController extends Controller {
         monsterListViewActive.getItems().addAll(monsters);
         monsterListViewActive.setFocusModel(null);
         monsterListViewActive.setSelectionModel(null);
+    }
+
+    private void initOtherMonsterList(List<Monster> monsters) {
+        monsterListViewOther.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false));
+        monsterListViewOther.getItems().addAll(monsters);
+        monsterListViewOther.setFocusModel(null);
+        monsterListViewOther.setSelectionModel(null);
     }
 
     public void onCloseMonsterList() {
