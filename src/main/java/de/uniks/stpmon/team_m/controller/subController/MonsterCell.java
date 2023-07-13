@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
@@ -65,9 +66,12 @@ public class MonsterCell extends ListCell<Monster> {
     public UserStorage usersStorage;
     public PresetsService presetsService;
     public IngameController ingameController;
+    public EncounterController encounterController;
+    public boolean encounter;
     @Inject
     Provider<TrainersService> trainersServiceProvider;
     MonstersListController monstersListController;
+    ChangeMonsterListController changeMonsterListController;
     private FXMLLoader loader;
 
     protected final CompositeDisposable disposables = new CompositeDisposable();
@@ -78,11 +82,23 @@ public class MonsterCell extends ListCell<Monster> {
     private String typeImagePath;
     private Image typeImage;
 
-    public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController, IngameController ingameController) {
+    public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController,
+                       IngameController ingameController, boolean encounter) {
         this.ingameController = ingameController;
         this.resources = resources;
         this.presetsService = presetsService;
         this.monstersListController = monstersListController;
+        this.encounter = encounter;
+    }
+
+    public MonsterCell(ResourceBundle resources, PresetsService presetsService, ChangeMonsterListController changeMonsterListController,
+                       EncounterController encounterController, IngameController ingameController, boolean encounter) {
+        this.encounterController = encounterController;
+        this.resources = resources;
+        this.presetsService = presetsService;
+        this.changeMonsterListController = changeMonsterListController;
+        this.ingameController = ingameController;
+        this.encounter = encounter;
     }
 
     @Override
@@ -128,6 +144,12 @@ public class MonsterCell extends ListCell<Monster> {
                         monsterImageView.setImage(this.monsterImage);
                     }, error -> monstersListController.showError(error.getMessage())));
             viewDetailsButton.setOnAction(event -> showDetails(monster, type.toString()));
+
+            if (encounter) {
+                removeFromTeamButton.setStyle("-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7;");
+                removeFromTeamButton.setText(resources.getString("CHANGE.MONSTER"));
+                // TODO: Tobias hier den Aufruf zur Change Monster Methode
+            }
             setGraphic(rootmonsterHBox);
             setText(null);
             setStyle("-fx-background-color: #CFE9DB;  -fx-border-color: #1C701C; -fx-border-width: 2px");
@@ -135,7 +157,11 @@ public class MonsterCell extends ListCell<Monster> {
     }
 
     private void showDetails(Monster monster, String type) {
-        this.ingameController.showMonsterDetails(monstersListController, monster, monsterTypeDto, monsterImage, resources, presetsService, type);
+        if (encounter) {
+            this.encounterController.showMonsterDetailsInEncounter();
+        } else {
+            this.ingameController.showMonsterDetails(monstersListController, monster, monsterTypeDto, monsterImage, resources, presetsService, type);
+        }
     }
 
     private void loadFXML() {
