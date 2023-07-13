@@ -146,6 +146,19 @@ class EncounterControllerTest extends ApplicationTest {
                                 List.of(),
                                 0
                         )));
+        when(encounterOpponentStorage.getSelfOpponent()).thenReturn(new Opponent(
+                "2023-07-09T11:52:17.658Z",
+                "2023-07-09T11:52:35.578Z",
+                "64aa9f7132eb8b56aa9eb20f",
+                "64aa9f7132eb8b56aa9eb208",
+                "64abfde932eb8b56aac8efac",
+                true,
+                true,
+                "64aa9f7132eb8b56aa9eb20c",
+                null,
+                List.of(),
+                0
+        ));
 
         // Mock the team and enemy Monster
         doNothing().when(encounterOpponentStorage).addCurrentMonster(any());
@@ -175,8 +188,10 @@ class EncounterControllerTest extends ApplicationTest {
                 List.of("fire"),
                 "Flamander is a small, agile monster that lives in the hot deserts of the world."
         );
-
+        when(presetsService.getCharacter(anyString())).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
+        when(presetsService.getAbilities()).thenReturn(Observable.just(List.of(new AbilityDto(1, "Attack", "unknown", "fire", 5, 0.99, 100))));
         when(presetsService.getMonsterImage(1)).thenReturn(Observable.just(ResponseBody.create(null,new byte[0])));
+        when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(monsterType));
 
         // Mock the enemy trainer
         when(trainersService.getTrainer(anyString(), anyString())).thenReturn(Observable.just(
@@ -214,6 +229,8 @@ class EncounterControllerTest extends ApplicationTest {
         app.start(stage);
         app.show(encounterController);
         stage.requestFocus();
+
+
     }
 
     @Test

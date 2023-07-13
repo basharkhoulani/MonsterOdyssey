@@ -111,6 +111,7 @@ public class EncounterController extends Controller {
         encounterId = encounterOpponentStorage.getEncounterId();
         trainerId = trainerStorageProvider.get().getTrainer()._id();
         listenToOpponents();
+        battleMenuController.setValues(resources, preferences, resourceBundleProvider, battleMenuController, app);
         battleMenuController.init();
         subControllers.addAll(List.of(battleMenuController));
         encounterOpponentControllerHashMap = new HashMap<>();
