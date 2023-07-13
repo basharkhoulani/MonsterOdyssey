@@ -4,6 +4,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
+import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
@@ -45,10 +46,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -1091,9 +1090,11 @@ public class IngameController extends Controller {
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
                                     encounterOpponentStorage.setEncounterSize(opts.size());
+                                    encounterOpponentStorage.resetEnemyOpponents();
+                                    encounterOpponentStorage.setOpponentsInStorage(opts);
                                     for (Opponent o : opts) {
                                         if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                                            encounterOpponentStorage.setEnemyOpponent(o);
+                                            encounterOpponentStorage.addEnemyOpponent(o);
                                         }
                                     }
                                     if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponent() != null) {

@@ -94,6 +94,10 @@ public class EncounterOpponentStorage {
         return enemyOpponents;
     }
 
+    public void resetEnemyOpponents() {
+        this.enemyOpponents.clear();
+    }
+
     public void addEnemyOpponent(Opponent enemyOpponent) {
         this.enemyOpponents.add(enemyOpponent);
     }
