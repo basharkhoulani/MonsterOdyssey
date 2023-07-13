@@ -31,6 +31,7 @@ class LoginControllerTest extends ApplicationTest {
     @Mock
     UsersService usersService;
     @Spy
+    final
     App app = new App(null);
 
     @InjectMocks

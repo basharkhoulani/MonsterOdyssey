@@ -17,7 +17,6 @@ public class SpriteAnimation extends AnimationTimer {
     private final GraphicsContext graphicsContext;
 
     private final Image spriteChunk;
-    private final Trainer trainer;
     public Image currentImage;
     private Image[] images;
     public boolean isPlaying;
@@ -38,7 +37,6 @@ public class SpriteAnimation extends AnimationTimer {
         super();
         this.trainerController = trainerController;
         this.spriteChunk = spriteChunk;
-        this.trainer = trainer;
         this.duration = duration;
         this.graphicsContext = graphicsContext;
         this.alternativeGraphicsContext = alternativeGraphicsContext;

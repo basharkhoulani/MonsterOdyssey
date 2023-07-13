@@ -30,6 +30,7 @@ public class CharacterSelectionControllerTest extends ApplicationTest {
     @Mock
     Provider<TrainerStorage> trainerStorageProvider;
     @Spy
+    final
     App app = new App(null);
 
     @Override

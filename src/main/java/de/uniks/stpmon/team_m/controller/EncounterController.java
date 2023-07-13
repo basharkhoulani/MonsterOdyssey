@@ -98,10 +98,10 @@ public class EncounterController extends Controller {
     private String trainerId;
     private Image myMonsterImage;
     private Image enemyMonsterImage;
-    private List<Controller> subControllers = new ArrayList<>();
+    private final List<Controller> subControllers = new ArrayList<>();
     private int currentImageIndex = 0;
     private List<AbilityDto> abilityDtos = new ArrayList<>();
-    private List<Opponent> opponentsUpdate = new ArrayList<>();
+    private final List<Opponent> opponentsUpdate = new ArrayList<>();
     private int repeatedTimes = 0;
 
     @Inject

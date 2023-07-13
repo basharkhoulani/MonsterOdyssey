@@ -101,9 +101,7 @@ public class WelcomeSceneController extends Controller {
     public void switchScene() {
 
         switch (sceneNumber) {
-            case 0 -> {
-                app.show(mainMenuControllerProvider.get());
-            }
+            case 0 -> app.show(mainMenuControllerProvider.get());
             case 1 -> {
                 if (messagePane.getChildren().size() > 2) {
                     messagePane.getChildren().remove(2);

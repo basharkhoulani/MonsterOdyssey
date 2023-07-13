@@ -17,6 +17,7 @@ class EncounterControllerTest extends ApplicationTest {
     @InjectMocks
     EncounterController encounterController;
     @Spy
+    final
     App app = new App(null);
 
     public void start(Stage stage) {

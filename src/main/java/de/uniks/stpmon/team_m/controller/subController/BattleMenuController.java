@@ -28,7 +28,6 @@ public class BattleMenuController extends Controller {
     public Button fleeButton;
     public Runnable onFleeButtonClick;
     private EncounterController encounterController;
-    private HBox battleMenuHBox;
     EncounterOpponentStorage encounterOpponentStorage;
 
 
@@ -39,7 +38,6 @@ public class BattleMenuController extends Controller {
     public void init(EncounterController encounterController, HBox battleMenuHBox, EncounterOpponentStorage encounterOpponentStorage, App app) {
         super.init();
         this.encounterController = encounterController;
-        this.battleMenuHBox = battleMenuHBox;
         this.encounterOpponentStorage = encounterOpponentStorage;
         this.app = app;
     }

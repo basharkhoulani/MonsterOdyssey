@@ -45,6 +45,7 @@ class FriendSettingsControllerTest extends ApplicationTest {
     @InjectMocks
     FriendSettingsController friendSettingsController;
     @Spy
+    final
     App app = new App(null);
 
     @Override

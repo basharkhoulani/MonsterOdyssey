@@ -154,9 +154,9 @@ public class IngameController extends Controller {
     Provider<MonstersListController> monstersListControllerProvider;
 
     private final ObservableList<MoveTrainerDto> moveTrainerDtos = FXCollections.observableArrayList();
-    HashMap<String, Image> tileSetImages = new HashMap<>();
+    final HashMap<String, Image> tileSetImages = new HashMap<>();
 
-    HashMap<String, TileSet> tileSetJsons = new HashMap<>();
+    final HashMap<String, TileSet> tileSetJsons = new HashMap<>();
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
     private ObservableList<Trainer> trainers;
 

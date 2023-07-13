@@ -79,6 +79,7 @@ class MainMenuControllerTest extends ApplicationTest {
     @Spy
     GroupStorage groupStorage;
     @Spy
+    final
     App app = new App(null);
     @InjectMocks
     MainMenuController mainMenuController;

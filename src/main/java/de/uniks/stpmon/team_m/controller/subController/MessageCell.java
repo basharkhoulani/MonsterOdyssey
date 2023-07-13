@@ -44,7 +44,7 @@ public class MessageCell extends ListCell<Message> {
     private FXMLLoader loader;
     private final MessagesBoxController messagesBoxController;
 
-    public UserStorage user;
+    public final UserStorage user;
 
 
     /**

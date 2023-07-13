@@ -41,6 +41,7 @@ class AccountSettingControllerTest extends ApplicationTest {
     @Mock
     Provider<UserStorage> userStorageProvider;
     @Spy
+    final
     App app = new App(null);
 
     @Override

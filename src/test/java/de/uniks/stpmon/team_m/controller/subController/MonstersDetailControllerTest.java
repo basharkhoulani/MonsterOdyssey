@@ -32,6 +32,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class MonstersDetailControllerTest extends ApplicationTest {
     @Spy
+    final
     App app = new App(null);
     @InjectMocks
     MonstersDetailController monstersDetailController;

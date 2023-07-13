@@ -85,7 +85,6 @@ public class IngameTrainerSettingsController extends Controller {
 
     protected final CompositeDisposable disposables = new CompositeDisposable();
     private VBox ingameVbox;
-    private IngameDeleteTrainerWarningController ingameDeleteTrainerWarningController;
     public int index = 1;
     final private String[] characters = PREMADE_CHARACTERS;
     public String selectedCharacter = characters[index - 1];
@@ -115,7 +114,7 @@ public class IngameTrainerSettingsController extends Controller {
     }
 
     public void onDeleteTrainerButtonClick() {
-        ingameDeleteTrainerWarningController = ingameDeleteTrainerWarningControllerProvider.get();
+        IngameDeleteTrainerWarningController ingameDeleteTrainerWarningController = ingameDeleteTrainerWarningControllerProvider.get();
         VBox deleteTrainerWarningVbox = new VBox();
         deleteTrainerWarningVbox.setAlignment(Pos.CENTER);
         ingameDeleteTrainerWarningController.init(this, deleteTrainerWarningVbox);

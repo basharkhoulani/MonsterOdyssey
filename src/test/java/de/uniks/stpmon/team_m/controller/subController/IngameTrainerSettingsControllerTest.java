@@ -25,6 +25,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class IngameTrainerSettingsControllerTest extends ApplicationTest {
     @Spy
+    final
     App app = new App(null);
 
     @Mock

@@ -56,6 +56,7 @@ class MessagesBoxControllerTest extends ApplicationTest {
     @InjectMocks
     MessagesBoxController messagesBoxController;
     @Spy
+    final
     App app = new App(null);
 
     @Override

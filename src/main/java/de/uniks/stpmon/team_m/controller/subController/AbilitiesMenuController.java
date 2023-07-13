@@ -37,7 +37,6 @@ public class AbilitiesMenuController extends Controller {
     EncounterOpponentsService encounterOpponentsService;
     PresetsService presetsService;
     private Monster monster;
-    private HBox battleMenuHBox;
     private EncounterController encounterController;
 
 
@@ -49,7 +48,6 @@ public class AbilitiesMenuController extends Controller {
         super.init();
         this.monster = monster;
         this.presetsService = presetsService;
-        this.battleMenuHBox = battleMenuHBox;
         this.encounterController = encounterController;
     }
 

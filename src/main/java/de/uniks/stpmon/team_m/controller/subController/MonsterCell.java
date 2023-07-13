@@ -68,11 +68,11 @@ public class MonsterCell extends ListCell<Monster> {
     public TrainersService trainersService;
     @Inject
     public UserStorage usersStorage;
-    public PresetsService presetsService;
-    public IngameController ingameController;
+    public final PresetsService presetsService;
+    public final IngameController ingameController;
     @Inject
     Provider<TrainersService> trainersServiceProvider;
-    MonstersListController monstersListController;
+    final MonstersListController monstersListController;
     private FXMLLoader loader;
 
     protected final CompositeDisposable disposables = new CompositeDisposable();

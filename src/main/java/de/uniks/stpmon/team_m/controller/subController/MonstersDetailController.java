@@ -66,13 +66,10 @@ public class MonstersDetailController extends Controller {
     private Image monsterImage;
     public IngameController ingameController;
     public VBox monsterDetailVBox;
-    public List<AbilityDto> monsterAbilities = new ArrayList<>();
+    public final List<AbilityDto> monsterAbilities = new ArrayList<>();
     @Inject
     public Provider<PresetsService> presetsServiceProvider;
     private String monsterType;
-    private String typeColor;
-    private String typeImagePath;
-    private Image typeImage;
     @FXML
     public Label monsterName;
     @FXML
@@ -116,13 +113,13 @@ public class MonstersDetailController extends Controller {
         // Sprite
         if (!GraphicsEnvironment.isHeadless()) {
             monsterImageView.setImage(monsterImage);
-            typeColor = TYPESCOLORPALETTE.get(monsterType);
+            String typeColor = TYPESCOLORPALETTE.get(monsterType);
             String style = "-fx-background-color: " + typeColor + ";";
             typeIcon.setStyle(style);
 
-            typeImagePath = ABILITYPALETTE.get(monsterType);
+            String typeImagePath = ABILITYPALETTE.get(monsterType);
             URL resourceType = Main.class.getResource("images/" + typeImagePath);
-            typeImage = new Image(resourceType.toString());
+            Image typeImage = new Image(resourceType.toString());
             typeImageView.setImage(typeImage);
             typeImageView.setFitHeight(45);
             typeImageView.setFitWidth(45);
@@ -185,7 +182,7 @@ public class MonstersDetailController extends Controller {
 
 
     private void initMonsterAbilities(List<AbilityDto> abilities, Monster monster) {
-        abilityListView.setCellFactory(param -> new AbilityCell(monster, resources, presetsServiceProvider.get(), this, this.ingameController));
+        abilityListView.setCellFactory(param -> new AbilityCell(monster, resources, presetsServiceProvider.get(), this));
         abilityListView.getItems().addAll(abilities);
         abilityListView.setFocusModel(null);
         abilityListView.setSelectionModel(null);
