@@ -23,15 +23,14 @@ public class EncounterResultController extends Controller {
     Provider<EncounterController> encounterController;
     @Inject
     Provider<IngameController> ingameControllerProvider;
-    private VBox encounterResultVBox;
+
 
 
     @Inject
     public EncounterResultController() {
     }
 
-    public void init(VBox encounterResultVBox, App app) {
-        this.encounterResultVBox = encounterResultVBox;
+    public void init(App app) {
         this.app = app;
     }
 
