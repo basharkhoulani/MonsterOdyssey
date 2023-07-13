@@ -76,55 +76,52 @@ public class AbilityCell extends ListCell&lt;AbilityDto&gt; {
 <span class="fc" id="L76">            setStyle(&quot;-fx-background-color: #D6E8FE;&quot;);</span>
         } else {
 <span class="fc" id="L78">            loadFXML();</span>
-<span class="fc" id="L79">            disposables.add(presetsService.getAbility(abilityDto.id()).observeOn(FX_SCHEDULER)</span>
-<span class="fc" id="L80">                    .subscribe(ability -&gt; {</span>
-<span class="fc" id="L81">                        typeColor = TYPESCOLORPALETTE.get(ability.type());</span>
-<span class="fc" id="L82">                        String style = &quot;-fx-background-color: &quot; + typeColor + &quot;;&quot;;</span>
-<span class="fc" id="L83">                        typeIcon.setStyle(style);</span>
+<span class="fc" id="L79">            typeColor = TYPESCOLORPALETTE.get(abilityDto.type());</span>
+<span class="fc" id="L80">            String style = &quot;-fx-background-color: &quot; + typeColor + &quot;;&quot;;</span>
+<span class="fc" id="L81">            typeIcon.setStyle(style);</span>
 
-<span class="pc bpc" id="L85" title="1 of 2 branches missed.">                        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L86">                            typeImagePath = ABILITYPALETTE.get(abilityDto.type());</span>
-<span class="nc" id="L87">                            URL resourceType = Main.class.getResource(&quot;images/&quot; + typeImagePath);</span>
-<span class="nc bnc" id="L88" title="All 2 branches missed.">                            assert resourceType != null;</span>
-<span class="nc" id="L89">                            typeImage = new Image(resourceType.toString());</span>
-<span class="nc" id="L90">                            typeImageView.setImage(typeImage);</span>
-<span class="nc" id="L91">                            typeImageView.setFitHeight(45);</span>
-<span class="nc" id="L92">                            typeImageView.setFitWidth(45);</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">            if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L84">                typeImagePath = ABILITYPALETTE.get(abilityDto.type());</span>
+<span class="nc" id="L85">                URL resourceType = Main.class.getResource(&quot;images/&quot; + typeImagePath);</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">                assert resourceType != null;</span>
+<span class="nc" id="L87">                typeImage = new Image(resourceType.toString());</span>
+<span class="nc" id="L88">                typeImageView.setImage(typeImage);</span>
+<span class="nc" id="L89">                typeImageView.setFitHeight(45);</span>
+<span class="nc" id="L90">                typeImageView.setFitWidth(45);</span>
 
-<span class="nc" id="L94">                            URL resourceDamage = Main.class.getResource(&quot;images/ability-electic.png&quot;);</span>
-<span class="nc bnc" id="L95" title="All 2 branches missed.">                            assert resourceDamage != null;</span>
-<span class="nc" id="L96">                            Image damageImage = new Image(resourceDamage.toString());</span>
-<span class="nc" id="L97">                            damageImageView.setImage(damageImage);</span>
+<span class="nc" id="L92">                URL resourceDamage = Main.class.getResource(&quot;images/ability-electic.png&quot;);</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">                assert resourceDamage != null;</span>
+<span class="nc" id="L94">                Image damageImage = new Image(resourceDamage.toString());</span>
+<span class="nc" id="L95">                damageImageView.setImage(damageImage);</span>
 
-<span class="nc" id="L99">                            URL resourceAccuracy = Main.class.getResource(&quot;images/accuracy.png&quot;);</span>
-<span class="nc bnc" id="L100" title="All 2 branches missed.">                            assert resourceAccuracy != null;</span>
-<span class="nc" id="L101">                            Image accuracyImage = new Image(resourceAccuracy.toString());</span>
-<span class="nc" id="L102">                            accuracyImageView.setImage(accuracyImage);</span>
-                        }
-<span class="fc" id="L104">                        abilityName.setText(abilityDto.name());</span>
-<span class="fc" id="L105">                        abilityDescription.setText(abilityDto.description());</span>
+<span class="nc" id="L97">                URL resourceAccuracy = Main.class.getResource(&quot;images/accuracy.png&quot;);</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">                assert resourceAccuracy != null;</span>
+<span class="nc" id="L99">                Image accuracyImage = new Image(resourceAccuracy.toString());</span>
+<span class="nc" id="L100">                accuracyImageView.setImage(accuracyImage);</span>
+            }
+<span class="fc" id="L102">            abilityName.setText(abilityDto.name());</span>
+<span class="fc" id="L103">            abilityDescription.setText(abilityDto.description());</span>
 
-<span class="fc" id="L107">                        damageLabel.setText(abilityDto.power() + &quot; DMG&quot;);</span>
-<span class="fc" id="L108">                        accuracyLabel.setText((abilityDto.accuracy() * 100) + &quot; %&quot;);</span>
-<span class="fc" id="L109">                        Integer uses = monster.abilities().get(String.valueOf(ability.id()));</span>
-<span class="fc" id="L110">                        usesLabel.setText(resources.getString(&quot;USES&quot;) + &quot;: &quot; + uses + &quot;/&quot;+ abilityDto.maxUses());</span>
-<span class="pc" id="L111">                    }, error -&gt; monstersDetailController.showError(error.getMessage())));</span>
-<span class="fc" id="L112">            setGraphic(rootAbilityBox);</span>
-<span class="fc" id="L113">            setText(null);</span>
+<span class="fc" id="L105">            damageLabel.setText(abilityDto.power() + &quot; DMG&quot;);</span>
+<span class="fc" id="L106">            accuracyLabel.setText((abilityDto.accuracy() * 100) + &quot; %&quot;);</span>
+<span class="fc" id="L107">            Integer uses = monster.abilities().get(String.valueOf(abilityDto.id()));</span>
+<span class="fc" id="L108">            usesLabel.setText(resources.getString(&quot;USES&quot;) + &quot;: &quot; + uses + &quot;/&quot;+ abilityDto.maxUses());</span>
+<span class="fc" id="L109">            setGraphic(rootAbilityBox);</span>
+<span class="fc" id="L110">            setText(null);</span>
         }
-<span class="fc" id="L115">    }</span>
+<span class="fc" id="L112">    }</span>
 
     private void loadFXML() {
-<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        if (loader == null) {</span>
-<span class="fc" id="L119">            loader = new FXMLLoader(Main.class.getResource(&quot;views/AbilityCell.fxml&quot;));</span>
-<span class="fc" id="L120">            loader.setResources(resources);</span>
-<span class="fc" id="L121">            loader.setControllerFactory(c -&gt; this);</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        if (loader == null) {</span>
+<span class="fc" id="L116">            loader = new FXMLLoader(Main.class.getResource(&quot;views/AbilityCell.fxml&quot;));</span>
+<span class="fc" id="L117">            loader.setResources(resources);</span>
+<span class="fc" id="L118">            loader.setControllerFactory(c -&gt; this);</span>
             try {
-<span class="fc" id="L123">                loader.load();</span>
-<span class="nc" id="L124">            } catch (Exception e) {</span>
-<span class="nc" id="L125">                e.printStackTrace();</span>
-<span class="fc" id="L126">            }</span>
+<span class="fc" id="L120">                loader.load();</span>
+<span class="nc" id="L121">            } catch (Exception e) {</span>
+<span class="nc" id="L122">                e.printStackTrace();</span>
+<span class="fc" id="L123">            }</span>
         }
-<span class="fc" id="L128">    }</span>
+<span class="fc" id="L125">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
