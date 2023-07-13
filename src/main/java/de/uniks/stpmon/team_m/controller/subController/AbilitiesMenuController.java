@@ -44,7 +44,7 @@ public class AbilitiesMenuController extends Controller {
     public AbilitiesMenuController() {
     }
 
-    public void init(Monster monster, PresetsService presetsService, HBox battleMenuHBox, EncounterController encounterController) {
+    public void init(Monster monster, PresetsService presetsService, EncounterController encounterController) {
         super.init();
         this.monster = monster;
         this.presetsService = presetsService;

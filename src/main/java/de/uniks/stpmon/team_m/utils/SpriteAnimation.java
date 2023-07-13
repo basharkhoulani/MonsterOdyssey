@@ -17,9 +17,7 @@ public class SpriteAnimation extends AnimationTimer {
     private final GraphicsContext graphicsContext;
 
     private final Image spriteChunk;
-    public Image currentImage;
     private Image[] images;
-    public boolean isPlaying;
     private long duration;
     private Long lastPlayedTimeStamp;
     private int currentIndex = 0;
@@ -32,8 +30,7 @@ public class SpriteAnimation extends AnimationTimer {
     private Image[] trainerWalkingDown;
     private Image[] trainerWalkingLeft;
     private Image[] trainerWalkingRight;
-    private boolean isWalking;
-    public SpriteAnimation(TrainerController trainerController, Image spriteChunk, Trainer trainer, long duration, GraphicsContext graphicsContext, GraphicsContext alternativeGraphicsContext) {
+    public SpriteAnimation(TrainerController trainerController, Image spriteChunk, long duration, GraphicsContext graphicsContext, GraphicsContext alternativeGraphicsContext) {
         super();
         this.trainerController = trainerController;
         this.spriteChunk = spriteChunk;
@@ -53,8 +50,6 @@ public class SpriteAnimation extends AnimationTimer {
         trainerStandingDown = ImageProcessor.cropTrainerImages(spriteChunk, 3, false);
         trainerWalkingDown = ImageProcessor.cropTrainerImages(spriteChunk, 3, true);
         images = trainerWalkingDown;
-        currentImage = images[0];
-
     }
 
     @Override
@@ -85,7 +80,6 @@ public class SpriteAnimation extends AnimationTimer {
         }
         lastPlayedTimeStamp = System.currentTimeMillis();
         currentIndex = (currentIndex + 1) % 6;
-        currentImage = images[currentIndex];
     }
 
     private void setImages(Image[] images) {
@@ -98,7 +92,6 @@ public class SpriteAnimation extends AnimationTimer {
 
     public void walk(int direction) {
         setupAnimation(direction, DELAY, trainerWalkingUp, trainerWalkingRight, trainerWalkingDown, trainerWalkingLeft);
-        isWalking = true;
     }
 
     private void setupAnimation(int direction, int delay, Image[] trainerWalkingUp, Image[] trainerWalkingRight, Image[] trainerWalkingDown, Image[] trainerWalkingLeft) {
@@ -115,19 +108,16 @@ public class SpriteAnimation extends AnimationTimer {
     }
 
     public void stay(int direction) {
-        isWalking = false;
         setupAnimation(direction, DELAY_LONG, trainerStandingUp, trainerStandingRight, trainerStandingDown, trainerStandingLeft);
     }
 
     @Override
     public void start() {
         super.start();
-        this.isPlaying = true;
     }
 
     @Override
     public void stop() {
         super.stop();
-        this.isPlaying = false;
     }
 }

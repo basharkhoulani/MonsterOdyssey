@@ -16,7 +16,6 @@ import javafx.util.Duration;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.sql.Time;
 
 import static de.uniks.stpmon.team_m.Constants.spaceBetweenPhoneAndWindowEdge;
 
@@ -55,7 +54,7 @@ public class NotificationListHandyController extends Controller {
 
         ingameNotificationListView.setSelectionModel(null);
         ingameNotificationListView.setFocusModel(null);
-        ingameNotificationListView.setCellFactory(param -> new IngameNotificationCell(this));
+        ingameNotificationListView.setCellFactory(param -> new IngameNotificationCell());
         ingameNotificationListView.setItems(handyMessages);
 
         if (trainer.encounteredMonsterTypes().size() == 0) {

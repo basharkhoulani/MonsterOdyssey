@@ -43,7 +43,6 @@ public class Constants {
     public static final String NOT_OWN_MESSAGE_STYLE = "-fx-background-color: lightgreen;";
     public static final String ROUNDED_CORNERS_STYLE = "-fx-border-radius: 10; -fx-background-radius: 10;";
     public static final String BORDER_COLOR_BLACK = "-fx-border-color: black;";
-    public static final String DATE_TIME_FORMAT = "HH:mm, dd.MM.yy";
     public static final String TIME_FORMAT = "HH:mm";
     public static final int DURATION_OF_LOADING_SCREEN = 3;
 
@@ -83,8 +82,8 @@ public class Constants {
     public static final double ONE = 1;
 
     public static final String SETTINGSYMBOL2 = "images/SettingSymbol2.png";
-    public static final String GOBACKSYMBOL = "images/GoBackSymbol.PNG";
-    public static final String PLAYSYMBOL = "images/PlaySymbol.PNG";
+    public static final String GOBACKSYMBOL = "images/GoBackSymbol.png";
+    public static final String PLAYSYMBOL = "images/PlaySymbol.png";
     public static final String AUDIOSYMBOL = "images/AudioSymbol.png";
     public static final String KEYBINDINGSSYMBOL = "images/KeybindingsSymbol.png";
     public static final String CHECKSYMBOL = "images/checkSymbol.png";
@@ -160,9 +159,6 @@ public class Constants {
 
     // Change Audio Settings
 
-    public static final int DIALOG_WIDTH = 450;
-    public static final int DIALOG_HEIGHT = 300;
-
     // Characters
     public static final String[] PREMADE_CHARACTERS = {
             "Premade_Character_01.png", "Premade_Character_02.png", "Premade_Character_03.png", "Premade_Character_04.png",
@@ -178,7 +174,6 @@ public class Constants {
     public static final String CITY_SOUND = "Nintendo_Style_Upbeat_Music_Loop_03.wav";
     public static final String ROOMS_SOUND = "Nintendo_Style_Funny_Music_Loop_02.wav";
     public static final String ROUTE_SOUND = "Nintendo_Style_Upbeat_Music_Loop_05.wav";
-    public static final String FIGHT_SOUND = "Nintendo_Style_Battle_Music_Loop_02.wav";
 
     // Colors
     public static final HashMap<String, String> TYPESCOLORPALETTE = new HashMap<>(Map.ofEntries(

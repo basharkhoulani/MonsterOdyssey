@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.AVATAR_1;
-import static de.uniks.stpmon.team_m.Constants.smallHandyImage;
 
 public class IngameNotificationCell extends ListCell<String> {
 
@@ -32,7 +31,7 @@ public class IngameNotificationCell extends ListCell<String> {
     private Text notificationText;
     private FXMLLoader loader;
 
-    public IngameNotificationCell(NotificationListHandyController notificationListHandyController) {
+    public IngameNotificationCell() {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/uniks/stpmon/team_m/views/IngameNotificationCell.fxml"));

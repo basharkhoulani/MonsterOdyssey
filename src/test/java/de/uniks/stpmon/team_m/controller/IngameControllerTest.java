@@ -1,8 +1,9 @@
 package de.uniks.stpmon.team_m.controller;
 
-import com.sun.javafx.collections.ObservableListWrapper;
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.controller.subController.*;
+import de.uniks.stpmon.team_m.controller.subController.IngamePauseMenuController;
+import de.uniks.stpmon.team_m.controller.subController.MonstersListController;
+import de.uniks.stpmon.team_m.controller.subController.NotificationListHandyController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
@@ -10,16 +11,11 @@ import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -33,7 +29,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -62,9 +57,6 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<MonstersListController> monstersListControllerProvider;
     @Mock
     Provider<NotificationListHandyController> notificationListHandyControllerProvider;
-    @Mock
-    Provider<EncounterController> encounterControllerProvider;
-
     // Leave this mock!! it ensures that tests run fine
     @Mock
     TrainerStorage trainerStorage;
@@ -78,8 +70,6 @@ public class IngameControllerTest extends ApplicationTest {
     @Mock
     MessageService messageService;
     @Mock
-    RegionsService regionsService;
-    @Mock
     EncounterOpponentsService encounterOpponentsService;
     @InjectMocks
     IngameController ingameController;
@@ -87,8 +77,6 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<EventListener> eventListener;
     @Mock
     PresetsService presetsService;
-    @Mock
-    Parent parent;
     @InjectMocks
     NotificationListHandyController notificationListHandyController;
     @InjectMocks
@@ -501,7 +489,6 @@ public class IngameControllerTest extends ApplicationTest {
         when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
         doNothing().when(app).show(mainMenuController);
         clickOn("#pauseButton");
-        final VBox pauseMenuVbox = lookup("#pauseMenuVbox").query();
         clickOn("#resumeGameButton");
         clickOn("#pauseButton");
         clickOn("#leaveGameButton");

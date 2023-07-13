@@ -18,7 +18,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -75,7 +74,7 @@ public class MonstersDetailControllerTest extends ApplicationTest {
                 35,
                 1.0,
                 2)));
-        monstersDetailController.init(ingameController, monsterDetailVBox, monstersListController, monster, monsterTypeDto, null, bundle, presetsService, "fire");
+        monstersDetailController.init(ingameController, monsterDetailVBox, monster, monsterTypeDto, null, bundle, presetsService, "fire");
                 when(presetsService.getAbilities()).thenReturn(Observable.just(List.of(
                 new AbilityDto(
                         1,

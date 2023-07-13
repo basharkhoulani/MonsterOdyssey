@@ -133,7 +133,7 @@ public class EncounterController extends Controller {
                 }, Throwable::printStackTrace));
 
         // render for subcontroller
-        battleMenuController.init(this, battleMenu, encounterOpponentStorage, app);
+        battleMenuController.init(this, encounterOpponentStorage, app);
         battleMenu.getChildren().add(battleMenuController.render());
         battleMenuController.onFleeButtonClick = this::onFleeButtonClick;
 
@@ -306,16 +306,16 @@ public class EncounterController extends Controller {
         battleMenu.getChildren().clear();
         Monster monster = encounterOpponentStorage.getCurrentTrainerMonster();
         if(encounterOpponentStorage.getSelfOpponent().monster() != null){
-            abilitiesMenuController.init(monster, presetsService, battleMenu, this);
+            abilitiesMenuController.init(monster, presetsService, this);
         } else {
-            abilitiesMenuController.init(null, presetsService, battleMenu, this);
+            abilitiesMenuController.init(null, presetsService, this);
         }
         battleMenu.getChildren().add(abilitiesMenuController.render());
     }
 
     public void goBackToBattleMenu() {
         battleMenu.getChildren().clear();
-        battleMenuController.init(this, battleMenu, encounterOpponentStorage, app);
+        battleMenuController.init(this, encounterOpponentStorage, app);
         battleMenu.getChildren().add(battleMenuController.render());
     }
 

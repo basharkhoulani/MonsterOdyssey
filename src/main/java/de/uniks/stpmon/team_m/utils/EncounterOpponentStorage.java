@@ -6,7 +6,6 @@ import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.dto.Trainer;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.util.List;
 

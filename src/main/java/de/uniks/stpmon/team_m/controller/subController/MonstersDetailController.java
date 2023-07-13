@@ -60,7 +60,6 @@ public class MonstersDetailController extends Controller {
     @Inject
     Provider<IngameController> ingameControllerProvider;
     PresetsService presetsService;
-    MonstersListController monstersListController;
     private Monster monster;
     private MonsterTypeDto monsterTypeDto;
     private Image monsterImage;
@@ -90,14 +89,13 @@ public class MonstersDetailController extends Controller {
         return parent;
     }
 
-    public void init(IngameController ingameController, VBox monsterDetailVBox, MonstersListController monstersListController,
+    public void init(IngameController ingameController, VBox monsterDetailVBox,
                      Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources, PresetsService presetsService,
                      String type) {
         super.init();
         this.monsterType = type;
         this.ingameController = ingameController;
         this.monsterDetailVBox = monsterDetailVBox;
-        this.monstersListController = monstersListController;
         this.monster = monster;
         this.monsterTypeDto = monsterTypeDto;
         this.monsterImage = monsterImage;
@@ -119,6 +117,7 @@ public class MonstersDetailController extends Controller {
 
             String typeImagePath = ABILITYPALETTE.get(monsterType);
             URL resourceType = Main.class.getResource("images/" + typeImagePath);
+            assert resourceType != null;
             Image typeImage = new Image(resourceType.toString());
             typeImageView.setImage(typeImage);
             typeImageView.setFitHeight(45);
@@ -126,6 +125,7 @@ public class MonstersDetailController extends Controller {
 
             for (String imagePath: ATTRIBUTE_IMAGES) {
                 URL resourceImage = Main.class.getResource("images/" + imagePath);
+                assert resourceImage != null;
                 Image attributeImage = new Image(resourceImage.toString());
 
                 switch(imagePath) {

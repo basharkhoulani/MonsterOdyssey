@@ -73,7 +73,6 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
         ingameDeleteTrainerWarningController.setValues(bundle, null, null, ingameDeleteTrainerWarningController, app);
         when(ingameDeleteTrainerWarningControllerProvider.get()).thenReturn(ingameDeleteTrainerWarningController);
 
-        Button deleteTrainerButton = lookup("#deleteTrainerButton").queryButton();
         clickOn("#deleteTrainerButton");
         clickOn("#cancelButton");
         verify(app).show(trainerSettingsController);

@@ -3,18 +3,14 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
-import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 
 import javax.inject.Inject;
-import java.awt.*;
-import java.util.Objects;
 
 public class BattleMenuController extends Controller {
 
@@ -35,7 +31,7 @@ public class BattleMenuController extends Controller {
     public BattleMenuController(
     ) {}
 
-    public void init(EncounterController encounterController, HBox battleMenuHBox, EncounterOpponentStorage encounterOpponentStorage, App app) {
+    public void init(EncounterController encounterController, EncounterOpponentStorage encounterOpponentStorage, App app) {
         super.init();
         this.encounterController = encounterController;
         this.encounterOpponentStorage = encounterOpponentStorage;
@@ -46,7 +42,7 @@ public class BattleMenuController extends Controller {
     public Parent render(){
         final Parent parent = super.render();
         fleeButton.setVisible(encounterOpponentStorage.isWild());
-        fleeButton.setOnAction(this::changeToIngame);
+        fleeButton.setOnAction(this.changeToIngame());
         return parent;
     }
 
@@ -63,14 +59,15 @@ public class BattleMenuController extends Controller {
         // show the MonsterInformation VBox
     }
 
-    public void changeToIngame(ActionEvent event) {
+    public EventHandler<ActionEvent> changeToIngame() {
         if (onFleeButtonClick != null) {
             onFleeButtonClick.run();
         }
+        return null;
     }
 
     public void showFleeButton(boolean isWild){
         fleeButton.setVisible(isWild);
-        fleeButton.setOnAction(this::changeToIngame);
+        fleeButton.setOnAction(this.changeToIngame());
     }
 }

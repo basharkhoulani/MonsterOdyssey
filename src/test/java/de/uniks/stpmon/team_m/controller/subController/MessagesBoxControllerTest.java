@@ -32,7 +32,6 @@ import static io.reactivex.rxjava3.core.Observable.error;
 import static io.reactivex.rxjava3.core.Observable.just;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 

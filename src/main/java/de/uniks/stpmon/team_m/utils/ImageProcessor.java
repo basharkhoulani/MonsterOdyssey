@@ -3,6 +3,8 @@ package de.uniks.stpmon.team_m.utils;
 
 import de.uniks.stpmon.team_m.App;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
 import okhttp3.ResponseBody;
 
 import javax.imageio.ImageIO;
@@ -11,11 +13,6 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Base64;
 import java.util.Objects;
-
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
-
-import java.io.InputStream;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 

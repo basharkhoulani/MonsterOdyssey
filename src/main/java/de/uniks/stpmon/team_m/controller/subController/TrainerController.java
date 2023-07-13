@@ -54,7 +54,7 @@ public class TrainerController extends Controller {
         } else {
             duration = DELAY_LONG;
         }
-        spriteAnimation = new SpriteAnimation(this, trainerChunk, trainer, duration, graphicsContext, alternativeGraphicsContext);
+        spriteAnimation = new SpriteAnimation(this, trainerChunk, duration, graphicsContext, alternativeGraphicsContext);
         spriteAnimation.stay(trainerDirection);
     }
 
