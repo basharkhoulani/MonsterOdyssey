@@ -368,7 +368,7 @@ public class EncounterController extends Controller {
     private void showResultPopUp(String string) {
 <span class="nc" id="L369">        VBox resultBox = new VBox();</span>
 <span class="nc" id="L370">        resultBox.setAlignment(Pos.CENTER);</span>
-<span class="nc" id="L371">        encounterResultController.init(resultBox, app);</span>
+<span class="nc" id="L371">        encounterResultController.init(app);</span>
 <span class="nc" id="L372">        resultBox.getChildren().add(encounterResultController.render());</span>
 <span class="nc" id="L373">        rootStackPane.getChildren().add(resultBox);</span>
 <span class="nc" id="L374">        resultBox.requestFocus();</span>

@@ -23,27 +23,26 @@ public class EncounterResultController extends Controller {
     Provider&lt;EncounterController&gt; encounterController;
     @Inject
     Provider&lt;IngameController&gt; ingameControllerProvider;
-    private VBox encounterResultVBox;
+
 
 
     @Inject
 <span class="nc" id="L30">    public EncounterResultController() {</span>
 <span class="nc" id="L31">    }</span>
 
-    public void init(VBox encounterResultVBox, App app) {
-<span class="nc" id="L34">        this.encounterResultVBox = encounterResultVBox;</span>
-<span class="nc" id="L35">        this.app = app;</span>
-<span class="nc" id="L36">    }</span>
+    public void init(App app) {
+<span class="nc" id="L34">        this.app = app;</span>
+<span class="nc" id="L35">    }</span>
 
     public void clickOK() {
-<span class="nc" id="L39">        encounterController.get().destroy();</span>
-<span class="nc" id="L40">        app.show(ingameControllerProvider.get());</span>
+<span class="nc" id="L38">        encounterController.get().destroy();</span>
+<span class="nc" id="L39">        app.show(ingameControllerProvider.get());</span>
 
-<span class="nc" id="L42">    }</span>
+<span class="nc" id="L41">    }</span>
 
     public void setInformationText(String text) {
-<span class="nc" id="L45">        informationText.setText(text);</span>
-<span class="nc" id="L46">    }</span>
+<span class="nc" id="L44">        informationText.setText(text);</span>
+<span class="nc" id="L45">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
