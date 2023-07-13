@@ -39,9 +39,7 @@ public class NotificationListHandyController extends Controller {
         handyMessages = FXCollections.observableArrayList();
         this.ingameController = ingameController;
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            ingameController.notificationBell.setVisible(true);
-        }));
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> ingameController.notificationBell.setVisible(true)));
 
         timeline.play();
 
@@ -73,16 +71,14 @@ public class NotificationListHandyController extends Controller {
             int iterator = i;
 
             PauseTransition pause = new PauseTransition(Duration.millis(1));
-            pause.setOnFinished(event -> {
-                notificationHandyStackPane.translateXProperty().bind(
-                        ingameController.anchorPane.
-                                widthProperty().
-                                add(notificationHandyStackPane.widthProperty()).
-                                divide(2).
-                                subtract(notificationHandyStackPane.widthProperty()).
-                                add(iterator)
-                );
-            });
+            pause.setOnFinished(event -> notificationHandyStackPane.translateXProperty().bind(
+                    ingameController.anchorPane.
+                            widthProperty().
+                            add(notificationHandyStackPane.widthProperty()).
+                            divide(2).
+                            subtract(notificationHandyStackPane.widthProperty()).
+                            add(iterator)
+            ));
             pause.setDelay(Duration.millis(i));
             pause.play();
         }
@@ -96,10 +92,7 @@ public class NotificationListHandyController extends Controller {
 
         for (int i = 0; i < 4; i++) {
             int iterator = i;
-            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> {
-
-                handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.NEW."+iterator));
-            });
+            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.NEW."+iterator)));
             timeline.getKeyFrames().add(keyFrame);
             duration++;
         }
@@ -114,9 +107,7 @@ public class NotificationListHandyController extends Controller {
 
         for (int i = 0; i < 2; i++) {
             int iter = i;
-            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> {
-                handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.STARTER."+ iter));
-            });
+            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.STARTER."+ iter)));
             timeline.getKeyFrames().add(keyFrame);
             duration++;
         }

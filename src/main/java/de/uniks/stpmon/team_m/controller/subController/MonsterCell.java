@@ -101,7 +101,7 @@ public class MonsterCell extends ListCell<Monster> {
                         monsterTypeDto = monsterType;
                         monsterName.setText(resources.getString("NAME") + " " + monsterTypeDto.name());
                         for (String s : monsterTypeDto.type()) {
-                            type.append("").append(s);
+                            type.append(s);
                         }
                         typeColor = TYPESCOLORPALETTE.get(type.toString());
                         String style = "-fx-background-color: " + typeColor + ";";

@@ -53,17 +53,15 @@ public class ChangeAudioController extends Controller {
     }
 
     public void getSliderValue() {
-        audioSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            public void changed(ObservableValue <?extends Number>observable, Number oldValue, Number newValue){
-                if (newValue.doubleValue() == 0) {
-                    preferences.putBoolean("mute", true);
-                } else {
-                    preferences.putBoolean("mute", false);
-                    AudioService.getInstance().unmuteSound();
-                }
-                AudioService.getInstance().setVolume(newValue.doubleValue() / 100);
-                preferences.putDouble("volume", newValue.doubleValue() / 100);
+        audioSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.doubleValue() == 0) {
+                preferences.putBoolean("mute", true);
+            } else {
+                preferences.putBoolean("mute", false);
+                AudioService.getInstance().unmuteSound();
             }
+            AudioService.getInstance().setVolume(newValue.doubleValue() / 100);
+            preferences.putDouble("volume", newValue.doubleValue() / 100);
         });
     }
 }
