@@ -110,14 +110,4 @@ public class SpriteAnimation extends AnimationTimer {
     public void stay(int direction) {
         setupAnimation(direction, DELAY_LONG, trainerStandingUp, trainerStandingRight, trainerStandingDown, trainerStandingLeft);
     }
-
-    @Override
-    public void start() {
-        super.start();
-    }
-
-    @Override
-    public void stop() {
-        super.stop();
-    }
 }

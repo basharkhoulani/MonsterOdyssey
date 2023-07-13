@@ -271,11 +271,6 @@ class AccountSettingControllerTest extends ApplicationTest {
     }
 
     @Test
-    void saveAvatar() {
-
-    }
-
-    @Test
     void changeLanguage() {
         final Button changeLanguageButton = lookup("#changeLanguageButton").query();
         clickOn(changeLanguageButton);

@@ -21,7 +21,6 @@ public class TrainerController extends Controller {
     private SpriteAnimation spriteAnimation;
     private final GraphicsContext graphicsContext;
     private final GraphicsContext alternativeGraphicsContext;
-    private final Trainer trainer;
     private final Image trainerChunk;
     private int trainerX;
     private int trainerY;
@@ -73,7 +72,6 @@ public class TrainerController extends Controller {
     public TrainerController(IngameController ingameController, Trainer trainer, Image trainerChunk, GraphicsContext graphicsContext, GraphicsContext alternateGraphicsContext) {
         this.ingameController = ingameController;
         this.trainerChunk = trainerChunk;
-        this.trainer = trainer;
         this.graphicsContext = graphicsContext;
         this.alternativeGraphicsContext = alternateGraphicsContext;
         trainerTargetX = trainer.x();

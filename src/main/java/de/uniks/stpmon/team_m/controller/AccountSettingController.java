@@ -100,11 +100,6 @@ public class AccountSettingController extends Controller {
         return resources.getString("ACCOUNT.SETTINGS.TITLE");
     }
 
-    @Override
-    public void init() {
-        super.init();
-    }
-
     /**
      * This method is used to render JavaFX elements of the AccountSettingController.
      * It is also used to bind the username and password to the TextFields.
