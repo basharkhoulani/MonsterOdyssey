@@ -92,6 +92,11 @@ public class Constants {
     public static final String PLAYSYMBOL = "images/PlaySymbol.PNG";
     public static final String AUDIOSYMBOL = "images/AudioSymbol.png";
     public static final String KEYBINDINGSSYMBOL = "images/KeybindingsSymbol.png";
+    public static final String CHECKSYMBOL = "images/checkSymbol.png";
+    public static final String WARNING = "images/Warning.png";
+    public static final String PENCIL2SYMBOL = "images/Pencil2.png";
+    public static final String ARROWLEFTSYMBOL = "images/arrowLeft.png";
+    public static final String ARROWRIGHTSYMBOL = "images/arrowRight.png";
 
     // NPC DIALOG
     public static int dialogVBoxWidth = 700;

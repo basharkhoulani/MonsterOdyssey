@@ -20,7 +20,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -140,9 +139,6 @@ public class IngameController extends Controller {
     Provider<IngameController> ingameControllerProvider;
 
     private IngamePauseMenuController ingamePauseMenuController;
-
-    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
-    public static final KeyCode INTERACT_KEY = KeyCode.E;
     private boolean isChatting = false;
     private boolean inDialog = false;
     private boolean inNpcPopup = false;
@@ -205,8 +201,7 @@ public class IngameController extends Controller {
         trainerPositionHashMap = new HashMap<>();
         // Initialize key event listeners
         keyPressedHandler = event -> {
-
-            if (event.getCode() == INTERACT_KEY) {
+            if (event.getCode().toString().equals(preferences.get("interaction", "E"))) {
                 if (!inNpcPopup && !inEncounterInfoBox) {
                     interactWithTrainer();
                 } else if(inEncounterInfoBox){
@@ -215,7 +210,7 @@ public class IngameController extends Controller {
                     showEncounterScene();
                 }
             }
-            if (event.getCode() == PAUSE_MENU_KEY) {
+            if (event.getCode().toString().equals(preferences.get("pauseMenu","ESCAPE"))) {
                 if (inSettings) {
                     return;
                 }
@@ -241,17 +236,17 @@ public class IngameController extends Controller {
             if (movementDisabled) {
                 return;
             }
-            if ((event.getCode() == KeyCode.W)) {
-                checkMovement(0, -1, TRAINER_DIRECTION_UP);
+            if ((event.getCode().toString().equals(preferences.get("walkUp", "W")))) {
+                checkMovement(0, -1, 1);
             }
-            if ((event.getCode() == KeyCode.S)) {
-                checkMovement(0, 1, TRAINER_DIRECTION_DOWN);
+            if ((event.getCode().toString().equals(preferences.get("walkDown", "S")))) {
+                checkMovement(0, 1, 3);
             }
-            if ((event.getCode() == KeyCode.A)) {
-                checkMovement(-1, 0, TRAINER_DIRECTION_LEFT);
+            if ((event.getCode().toString().equals(preferences.get("walkLeft", "A")))) {
+                checkMovement(-1, 0, 2);
             }
-            if ((event.getCode() == KeyCode.D)) {
-                checkMovement(1, 0, TRAINER_DIRECTION_RIGHT);
+            if ((event.getCode().toString().equals(preferences.get("walkRight", "D")))) {
+                checkMovement(1, 0, 0);
             }
             event.consume();
         };
@@ -389,7 +384,7 @@ public class IngameController extends Controller {
         }
 
         // Add event handlers
-        app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);
+        app.getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
 
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(area -> {
@@ -429,7 +424,7 @@ public class IngameController extends Controller {
 
         //Keybindings
         if(preferences.get("walkUp",null) == null){
-            preferences.put("walkUp",KeyCode.W.getChar());
+            preferences.put("walkUp", KeyCode.W.getChar());
         }
         if(preferences.get("walkDown",null) == null){
             preferences.put("walkDown",KeyCode.S.getChar());
@@ -444,23 +439,10 @@ public class IngameController extends Controller {
             preferences.put("interaction",KeyCode.E.getChar());
         }
         if(preferences.get("pauseMenu",null) == null){
-            preferences.put("pauseMenu","ESC");
+            preferences.put("pauseMenu","ESCAPE");
         }
-        return parent;
-    }
 
-    private void changeRegion() {
-        disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER).subscribe(
-                trainer -> {
-                    trainerStorageProvider.get().setTrainer(trainer);
-                    destroy();
-                    app.show(ingameControllerProvider.get());
-                },
-                error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }
-        ));
+        return parent;
     }
 
     private void initMapShiftTransitions() {
@@ -492,6 +474,20 @@ public class IngameController extends Controller {
                 getMapMovementTransition(overUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE),
                 getMapMovementTransition(roofCanvas, 0, SCALE_FACTOR * TILE_SIZE)
         );
+    }
+
+    private void changeRegion() {
+        disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER).subscribe(
+                trainer -> {
+                    trainerStorageProvider.get().setTrainer(trainer);
+                    destroy();
+                    app.show(ingameControllerProvider.get());
+                },
+                error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }
+        ));
     }
 
     public void listenToMovement(ObservableList<MoveTrainerDto> moveTrainerDtos, String area) {
@@ -1092,21 +1088,15 @@ public class IngameController extends Controller {
                     if (opponentEvent.suffix().equals("created")) {
                         encounterOpponentStorage.setSelfOpponent(opponent);
                         encounterOpponentStorage.setEncounterId(opponent.encounter());
-                        encounterOpponentStorage.setAttacker(opponent.isAttacker());
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
                                     encounterOpponentStorage.setEncounterSize(opts.size());
-                                    encounterOpponentStorage.setOpponentsInStorage(opts);
                                     for (Opponent o : opts) {
-                                        if (!o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                                            if (o.isAttacker() != encounterOpponentStorage.isAttacker()) {
-                                                encounterOpponentStorage.addEnemyOpponent(o);
-                                            } else{
-                                                encounterOpponentStorage.setCoopOpponent(o);
-                                            }
+                                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                                            encounterOpponentStorage.setEnemyOpponent(o);
                                         }
                                     }
-                                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponents().size() != 0) {
+                                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponent() != null) {
                                         showEncounterInfoWindow();
                                     }
                                 }));
@@ -1231,10 +1221,10 @@ public class IngameController extends Controller {
                 if (trainerControllerHashMap.containsKey(this.currentNpc) && trainerControllerHashMap.get(this.currentNpc).getDirection() != currentDirection) {
                     int turnDirection;
                     switch (currentDirection) {
-                        case TRAINER_DIRECTION_RIGHT    -> turnDirection = TRAINER_DIRECTION_LEFT;
-                        case TRAINER_DIRECTION_UP       -> turnDirection = TRAINER_DIRECTION_DOWN;
-                        case TRAINER_DIRECTION_LEFT     -> turnDirection = TRAINER_DIRECTION_RIGHT;
-                        default                         -> turnDirection = TRAINER_DIRECTION_UP;
+                        case 0 -> turnDirection = 2;
+                        case 1 -> turnDirection = 3;
+                        case 2 -> turnDirection = 0;
+                        default -> turnDirection = 1;
                     }
                     trainerControllerHashMap.get(this.currentNpc).turn(turnDirection);
                 }
@@ -1273,19 +1263,19 @@ public class IngameController extends Controller {
         int checkTileYForNurse = currentY;
 
         switch (direction) {
-            case TRAINER_DIRECTION_RIGHT -> {
+            case 0 -> {                         // facing right
                 checkTileX++;
                 checkTileXForNurse += 2;
             }
-            case TRAINER_DIRECTION_UP -> {
+            case 1 -> {                         // facing up
                 checkTileY--;
                 checkTileYForNurse -= 2;
             }
-            case TRAINER_DIRECTION_LEFT -> {
+            case 2 -> {                         // facing left
                 checkTileX--;
                 checkTileXForNurse -= 2;
             }
-            case TRAINER_DIRECTION_DOWN -> {
+            case 3 -> {                         // facing down
                 checkTileY++;
                 checkTileYForNurse += 2;
             }
@@ -1633,7 +1623,7 @@ public class IngameController extends Controller {
     @Override
     public void destroy() {
         super.destroy();
-        app.getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);
+        app.getStage().getScene().removeEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
         for (var trainerController : trainerControllerHashMap.values()) {
             trainerController.destroy();
         }
