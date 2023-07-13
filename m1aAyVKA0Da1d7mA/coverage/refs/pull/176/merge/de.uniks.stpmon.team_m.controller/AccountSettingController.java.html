@@ -78,8 +78,8 @@ public class AccountSettingController extends Controller {
     UsersService usersService;
     @Inject
     Provider&lt;AvatarSelectionController&gt; avatarSelectionControllerProvider;
-    private ChangeLanguageController changeLanguageController;
     private PasswordFieldSkin skin;
+    private ChangeLanguageController changeLanguageController;
 <span class="fc" id="L83">    private final SimpleStringProperty username = new SimpleStringProperty();</span>
 <span class="fc" id="L84">    private final SimpleStringProperty password = new SimpleStringProperty();</span>
     private String selectedFilePath;
@@ -92,6 +92,13 @@ public class AccountSettingController extends Controller {
 <span class="fc" id="L92">    AccountSettingController() {</span>
 <span class="fc" id="L93">    }</span>
 
+    @Override
+    public void init() {
+<span class="fc" id="L97">        super.init();</span>
+<span class="fc" id="L98">        this.changeLanguageController = new ChangeLanguageController();</span>
+<span class="fc" id="L99">        changeLanguageController.init();</span>
+<span class="fc" id="L100">    }</span>
+
     /**
      * This method is used to define the title of the AccountSettingController
      *
@@ -100,15 +107,8 @@ public class AccountSettingController extends Controller {
 
     @Override
     public String getTitle() {
-<span class="fc" id="L103">        return resources.getString(&quot;ACCOUNT.SETTINGS.TITLE&quot;);</span>
+<span class="fc" id="L110">        return resources.getString(&quot;ACCOUNT.SETTINGS.TITLE&quot;);</span>
     }
-
-    @Override
-    public void init() {
-<span class="fc" id="L108">        super.init();</span>
-<span class="fc" id="L109">        changeLanguageController = new ChangeLanguageController();</span>
-<span class="fc" id="L110">        changeLanguageController.init();</span>
-<span class="fc" id="L111">    }</span>
 
     /**
      * This method is used to render JavaFX elements of the AccountSettingController.
@@ -366,7 +366,7 @@ public class AccountSettingController extends Controller {
      * This method is used to open the Change Language Pop up
      */
     public void changeLanguage() {
-<span class="fc" id="L369">        Dialog&lt;?&gt; dialog = new Dialog&lt;&gt;();</span>
+<span class="fc" id="L369">        javafx.scene.control.Dialog&lt;?&gt; dialog = new Dialog&lt;&gt;();</span>
 <span class="fc" id="L370">        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);</span>
 <span class="fc" id="L371">        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);</span>
 <span class="fc" id="L372">        closeButton.managedProperty().bind(closeButton.visibleProperty());</span>

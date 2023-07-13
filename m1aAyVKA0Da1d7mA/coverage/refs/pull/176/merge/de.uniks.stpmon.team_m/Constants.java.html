@@ -43,7 +43,6 @@ import static java.util.Map.entry;
     public static final String NOT_OWN_MESSAGE_STYLE = &quot;-fx-background-color: lightgreen;&quot;;
     public static final String ROUNDED_CORNERS_STYLE = &quot;-fx-border-radius: 10; -fx-background-radius: 10;&quot;;
     public static final String BORDER_COLOR_BLACK = &quot;-fx-border-color: black;&quot;;
-    public static final String DATE_TIME_FORMAT = &quot;HH:mm, dd.MM.yy&quot;;
     public static final String TIME_FORMAT = &quot;HH:mm&quot;;
     public static final int DURATION_OF_LOADING_SCREEN = 3;
 
@@ -83,8 +82,8 @@ import static java.util.Map.entry;
     public static final double ONE = 1;
 
     public static final String SETTINGSYMBOL2 = &quot;images/SettingSymbol2.png&quot;;
-    public static final String GOBACKSYMBOL = &quot;images/GoBackSymbol.PNG&quot;;
-    public static final String PLAYSYMBOL = &quot;images/PlaySymbol.PNG&quot;;
+    public static final String GOBACKSYMBOL = &quot;images/GoBackSymbol.png&quot;;
+    public static final String PLAYSYMBOL = &quot;images/PlaySymbol.png&quot;;
     public static final String AUDIOSYMBOL = &quot;images/AudioSymbol.png&quot;;
     public static final String KEYBINDINGSSYMBOL = &quot;images/KeybindingsSymbol.png&quot;;
     public static final String CHECKSYMBOL = &quot;images/checkSymbol.png&quot;;
@@ -94,57 +93,57 @@ import static java.util.Map.entry;
     public static final String ARROWRIGHTSYMBOL = &quot;images/arrowRight.png&quot;;
 
     // NPC DIALOG
-<span class="fc" id="L97">    public static int dialogVBoxWidth = 700;</span>
-<span class="fc" id="L98">    public static int getDialogVBoxHeight = 150;</span>
-<span class="fc" id="L99">    public static int spacerToBottomOfScreen = 150;</span>
-<span class="fc" id="L100">    public static Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);</span>
-<span class="fc" id="L101">    public static Insets helpLabelInsets = new Insets(0, 40, 20, 0);</span>
-<span class="fc" id="L102">    public static int helpLabelFontSize = 12;</span>
+    public static final int dialogVBoxWidth = 700;
+    public static final int getDialogVBoxHeight = 150;
+    public static final int spacerToBottomOfScreen = 150;
+<span class="fc" id="L99">    public static final Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);</span>
+<span class="fc" id="L100">    public static final Insets helpLabelInsets = new Insets(0, 40, 20, 0);</span>
+    public static final int helpLabelFontSize = 12;
 
-<span class="fc" id="L104">    public enum DialogSpecialInteractions {</span>
-<span class="fc" id="L105">        nurseYes,</span>
-<span class="fc" id="L106">        nurseNo,</span>
-<span class="fc" id="L107">        nurseNoMons,</span>
-<span class="fc" id="L108">        starterSelection0,</span>
-<span class="fc" id="L109">        starterSelection1,</span>
-<span class="fc" id="L110">        starterSelection2</span>
+<span class="fc" id="L103">    public enum DialogSpecialInteractions {</span>
+<span class="fc" id="L104">        nurseYes,</span>
+<span class="fc" id="L105">        nurseNo,</span>
+<span class="fc" id="L106">        nurseNoMons,</span>
+<span class="fc" id="L107">        starterSelection0,</span>
+<span class="fc" id="L108">        starterSelection1,</span>
+<span class="fc" id="L109">        starterSelection2</span>
     }
 
-<span class="fc" id="L113">    public enum ContinueDialogReturnValues {</span>
-<span class="fc" id="L114">        dialogNotFinished,</span>
-<span class="fc" id="L115">        dialogFinishedTalkToTrainer,</span>
-<span class="fc" id="L116">        dialogFinishedNoTalkToTrainer,</span>
-<span class="fc" id="L117">        albertDialogFinished0,</span>
-<span class="fc" id="L118">        albertDialogFinished1,</span>
-<span class="fc" id="L119">        albertDialogFinished2,</span>
-<span class="fc" id="L120">        spokenToNurse,</span>
-<span class="fc" id="L121">        encounterOnTalk</span>
+<span class="fc" id="L112">    public enum ContinueDialogReturnValues {</span>
+<span class="fc" id="L113">        dialogNotFinished,</span>
+<span class="fc" id="L114">        dialogFinishedTalkToTrainer,</span>
+<span class="fc" id="L115">        dialogFinishedNoTalkToTrainer,</span>
+<span class="fc" id="L116">        albertDialogFinished0,</span>
+<span class="fc" id="L117">        albertDialogFinished1,</span>
+<span class="fc" id="L118">        albertDialogFinished2,</span>
+<span class="fc" id="L119">        spokenToNurse,</span>
+<span class="fc" id="L120">        encounterOnTalk</span>
     }
 
     // Nurse Popup
-<span class="fc" id="L125">    public static int popupHeight = 170;</span>
-<span class="fc" id="L126">    public static int popupWidth = 300;</span>
-<span class="fc" id="L127">    public static int textFieldHeight = 120;</span>
-<span class="fc" id="L128">    public static int buttonsHBoxHeight = 50;</span>
-<span class="fc" id="L129">    public static int buttonsHBoxSpacing = 30;</span>
-<span class="fc" id="L130">    public static int nurseButtonHeight = 40;</span>
-<span class="fc" id="L131">    public static int nurseButtonWidth = 80;</span>
+    public static final int popupHeight = 170;
+    public static final int popupWidth = 300;
+    public static final int textFieldHeight = 120;
+    public static final int buttonsHBoxHeight = 50;
+    public static final int buttonsHBoxSpacing = 30;
+    public static final int nurseButtonHeight = 40;
+    public static final int nurseButtonWidth = 80;
 
     // Ingame Help
-<span class="fc" id="L134">    public static int spaceBetweenPhoneAndWindowEdge = 25;</span>
-<span class="fc" id="L135">    public static int offsetToNotShowPhoneInScreen = 30;</span>
+    public static final int spaceBetweenPhoneAndWindowEdge = 25;
+    public static final int offsetToNotShowPhoneInScreen = 30;
     public static final String smallHandyImage = &quot;images/SmallHandy.png&quot;;
     public static final String notificationBellImage = &quot;images/NotificationBell.png&quot;;
 
     // Encounter
-<span class="fc" id="L140">    public static int fleePopupWidth = 300;</span>
-<span class="fc" id="L141">    public static int fleePopupHeight = 200;</span>
-<span class="fc" id="L142">    public static int fleeTextHeight = 150;</span>
-<span class="fc" id="L143">    public static Insets fleeTextInsets = new Insets(20, 10, 0, 10);</span>
-<span class="fc" id="L144">    public static int fleeButtonsHBoxHeight = 50;</span>
-<span class="fc" id="L145">    public static Insets fleeButtonsHBoxInsets = new Insets(0, 10, 10, 10);</span>
-<span class="fc" id="L146">    public static int fleeButtonWidth = 100;</span>
-<span class="fc" id="L147">    public static int fleeButtonHeight = 40;</span>
+    public static final int fleePopupWidth = 300;
+    public static final int fleePopupHeight = 200;
+    public static final int fleeTextHeight = 150;
+<span class="fc" id="L142">    public static final Insets fleeTextInsets = new Insets(20, 10, 0, 10);</span>
+    public static final int fleeButtonsHBoxHeight = 50;
+<span class="fc" id="L144">    public static final Insets fleeButtonsHBoxInsets = new Insets(0, 10, 10, 10);</span>
+    public static final int fleeButtonWidth = 100;
+    public static final int fleeButtonHeight = 40;
 
     // Error messages
     public static final String HTTP_400 = &quot;400&quot;;
@@ -160,11 +159,8 @@ import static java.util.Map.entry;
 
     // Change Audio Settings
 
-    public static final int DIALOG_WIDTH = 450;
-    public static final int DIALOG_HEIGHT = 300;
-
     // Characters
-<span class="fc" id="L167">    public static final String[] PREMADE_CHARACTERS = {</span>
+<span class="fc" id="L163">    public static final String[] PREMADE_CHARACTERS = {</span>
             &quot;Premade_Character_01.png&quot;, &quot;Premade_Character_02.png&quot;, &quot;Premade_Character_03.png&quot;, &quot;Premade_Character_04.png&quot;,
             &quot;Premade_Character_05.png&quot;, &quot;Premade_Character_06.png&quot;, &quot;Premade_Character_07.png&quot;, &quot;Premade_Character_08.png&quot;,
             &quot;Premade_Character_09.png&quot;, &quot;Premade_Character_10.png&quot;, &quot;Premade_Character_11.png&quot;, &quot;Premade_Character_12.png&quot;,
@@ -178,53 +174,52 @@ import static java.util.Map.entry;
     public static final String CITY_SOUND = &quot;Nintendo_Style_Upbeat_Music_Loop_03.wav&quot;;
     public static final String ROOMS_SOUND = &quot;Nintendo_Style_Funny_Music_Loop_02.wav&quot;;
     public static final String ROUTE_SOUND = &quot;Nintendo_Style_Upbeat_Music_Loop_05.wav&quot;;
-    public static final String FIGHT_SOUND = &quot;Nintendo_Style_Battle_Music_Loop_02.wav&quot;;
 
     // Colors
-<span class="fc" id="L184">    public static HashMap&lt;String, String&gt; TYPESCOLORPALETTE = new HashMap&lt;&gt;(Map.ofEntries(</span>
-<span class="fc" id="L185">            entry(&quot;normal&quot;, &quot;#BBBBAA&quot;),</span>
-<span class="fc" id="L186">            entry(&quot;fire&quot;, &quot;#FF421C&quot;),</span>
-<span class="fc" id="L187">            entry(&quot;water&quot;, &quot;#2C9BE3&quot;),</span>
-<span class="fc" id="L188">            entry(&quot;electric&quot;, &quot;#FFDC00&quot;),</span>
-<span class="fc" id="L189">            entry(&quot;grass&quot;, &quot;#62BC5A&quot;),</span>
-<span class="fc" id="L190">            entry(&quot;flying&quot;, &quot;#96CAFF&quot;),</span>
-<span class="fc" id="L191">            entry(&quot;bug&quot;, &quot;#92C12A&quot;),</span>
-<span class="fc" id="L192">            entry(&quot;poison&quot;, &quot;#9553CD&quot;),</span>
-<span class="fc" id="L193">            entry(&quot;rock&quot;, &quot;#BBAA66&quot;),</span>
-<span class="fc" id="L194">            entry(&quot;ground&quot;, &quot;#A67439&quot;),</span>
-<span class="fc" id="L195">            entry(&quot;fighting&quot;, &quot;#BB5544&quot;),</span>
-<span class="fc" id="L196">            entry(&quot;ice&quot;, &quot;#74CFC0&quot;),</span>
-<span class="fc" id="L197">            entry(&quot;psychic&quot;, &quot;#FF6380&quot;),</span>
-<span class="fc" id="L198">            entry(&quot;ghost&quot;, &quot;#6E4370&quot;),</span>
-<span class="fc" id="L199">            entry(&quot;dragon&quot;, &quot;#5670BE&quot;),</span>
-<span class="fc" id="L200">            entry(&quot;dark&quot;, &quot;#353225&quot;),</span>
-<span class="fc" id="L201">            entry(&quot;steel&quot;, &quot;#97A8AA&quot;),</span>
-<span class="fc" id="L202">            entry(&quot;fairy&quot;, &quot;#D15F5F&quot;)</span>
+<span class="fc" id="L179">    public static final HashMap&lt;String, String&gt; TYPESCOLORPALETTE = new HashMap&lt;&gt;(Map.ofEntries(</span>
+<span class="fc" id="L180">            entry(&quot;normal&quot;, &quot;#BBBBAA&quot;),</span>
+<span class="fc" id="L181">            entry(&quot;fire&quot;, &quot;#FF421C&quot;),</span>
+<span class="fc" id="L182">            entry(&quot;water&quot;, &quot;#2C9BE3&quot;),</span>
+<span class="fc" id="L183">            entry(&quot;electric&quot;, &quot;#FFDC00&quot;),</span>
+<span class="fc" id="L184">            entry(&quot;grass&quot;, &quot;#62BC5A&quot;),</span>
+<span class="fc" id="L185">            entry(&quot;flying&quot;, &quot;#96CAFF&quot;),</span>
+<span class="fc" id="L186">            entry(&quot;bug&quot;, &quot;#92C12A&quot;),</span>
+<span class="fc" id="L187">            entry(&quot;poison&quot;, &quot;#9553CD&quot;),</span>
+<span class="fc" id="L188">            entry(&quot;rock&quot;, &quot;#BBAA66&quot;),</span>
+<span class="fc" id="L189">            entry(&quot;ground&quot;, &quot;#A67439&quot;),</span>
+<span class="fc" id="L190">            entry(&quot;fighting&quot;, &quot;#BB5544&quot;),</span>
+<span class="fc" id="L191">            entry(&quot;ice&quot;, &quot;#74CFC0&quot;),</span>
+<span class="fc" id="L192">            entry(&quot;psychic&quot;, &quot;#FF6380&quot;),</span>
+<span class="fc" id="L193">            entry(&quot;ghost&quot;, &quot;#6E4370&quot;),</span>
+<span class="fc" id="L194">            entry(&quot;dragon&quot;, &quot;#5670BE&quot;),</span>
+<span class="fc" id="L195">            entry(&quot;dark&quot;, &quot;#353225&quot;),</span>
+<span class="fc" id="L196">            entry(&quot;steel&quot;, &quot;#97A8AA&quot;),</span>
+<span class="fc" id="L197">            entry(&quot;fairy&quot;, &quot;#D15F5F&quot;)</span>
     ));
 
     // Abilities
-<span class="fc" id="L206">    public static HashMap&lt;String, String&gt; ABILITYPALETTE = new HashMap&lt;&gt;(Map.ofEntries(</span>
-<span class="fc" id="L207">            entry(&quot;normal&quot;, &quot;ability-normal.png&quot;),</span>
-<span class="fc" id="L208">            entry(&quot;fire&quot;, &quot;ability-fire.png&quot;),</span>
-<span class="fc" id="L209">            entry(&quot;water&quot;, &quot;ability-water.png&quot;),</span>
-<span class="fc" id="L210">            entry(&quot;electric&quot;, &quot;ability-electic.png&quot;),</span>
-<span class="fc" id="L211">            entry(&quot;grass&quot;, &quot;ability-grass.png&quot;),</span>
-<span class="fc" id="L212">            entry(&quot;flying&quot;, &quot;ability-flying.png&quot;),</span>
-<span class="fc" id="L213">            entry(&quot;bug&quot;, &quot;ability-bug&quot;),</span>
-<span class="fc" id="L214">            entry(&quot;poison&quot;, &quot;ability-poison&quot;),</span>
-<span class="fc" id="L215">            entry(&quot;rock&quot;, &quot;ability-rock&quot;),</span>
-<span class="fc" id="L216">            entry(&quot;ground&quot;, &quot;ability-ground&quot;),</span>
-<span class="fc" id="L217">            entry(&quot;fighting&quot;, &quot;ability-fighting&quot;),</span>
-<span class="fc" id="L218">            entry(&quot;ice&quot;, &quot;ability-ice&quot;),</span>
-<span class="fc" id="L219">            entry(&quot;psychic&quot;, &quot;ability-psychic&quot;),</span>
-<span class="fc" id="L220">            entry(&quot;ghost&quot;, &quot;ability-ghost&quot;),</span>
-<span class="fc" id="L221">            entry(&quot;dragon&quot;, &quot;ability-dragon&quot;),</span>
-<span class="fc" id="L222">            entry(&quot;dark&quot;, &quot;ability-dragon&quot;),</span>
-<span class="fc" id="L223">            entry(&quot;steel&quot;, &quot;ability-steel&quot;),</span>
-<span class="fc" id="L224">            entry(&quot;fairy&quot;, &quot;ability-fairy&quot;)</span>
+<span class="fc" id="L201">    public static final HashMap&lt;String, String&gt; ABILITYPALETTE = new HashMap&lt;&gt;(Map.ofEntries(</span>
+<span class="fc" id="L202">            entry(&quot;normal&quot;, &quot;ability-normal.png&quot;),</span>
+<span class="fc" id="L203">            entry(&quot;fire&quot;, &quot;ability-fire.png&quot;),</span>
+<span class="fc" id="L204">            entry(&quot;water&quot;, &quot;ability-water.png&quot;),</span>
+<span class="fc" id="L205">            entry(&quot;electric&quot;, &quot;ability-electic.png&quot;),</span>
+<span class="fc" id="L206">            entry(&quot;grass&quot;, &quot;ability-grass.png&quot;),</span>
+<span class="fc" id="L207">            entry(&quot;flying&quot;, &quot;ability-flying.png&quot;),</span>
+<span class="fc" id="L208">            entry(&quot;bug&quot;, &quot;ability-bug&quot;),</span>
+<span class="fc" id="L209">            entry(&quot;poison&quot;, &quot;ability-poison&quot;),</span>
+<span class="fc" id="L210">            entry(&quot;rock&quot;, &quot;ability-rock&quot;),</span>
+<span class="fc" id="L211">            entry(&quot;ground&quot;, &quot;ability-ground&quot;),</span>
+<span class="fc" id="L212">            entry(&quot;fighting&quot;, &quot;ability-fighting&quot;),</span>
+<span class="fc" id="L213">            entry(&quot;ice&quot;, &quot;ability-ice&quot;),</span>
+<span class="fc" id="L214">            entry(&quot;psychic&quot;, &quot;ability-psychic&quot;),</span>
+<span class="fc" id="L215">            entry(&quot;ghost&quot;, &quot;ability-ghost&quot;),</span>
+<span class="fc" id="L216">            entry(&quot;dragon&quot;, &quot;ability-dragon&quot;),</span>
+<span class="fc" id="L217">            entry(&quot;dark&quot;, &quot;ability-dragon&quot;),</span>
+<span class="fc" id="L218">            entry(&quot;steel&quot;, &quot;ability-steel&quot;),</span>
+<span class="fc" id="L219">            entry(&quot;fairy&quot;, &quot;ability-fairy&quot;)</span>
     ));
 
-<span class="fc" id="L227">    public static List&lt;String&gt; ATTRIBUTE_IMAGES = Arrays.asList(</span>
+<span class="fc" id="L222">    public static final List&lt;String&gt; ATTRIBUTE_IMAGES = Arrays.asList(</span>
             &quot;star.png&quot;,
             &quot;attack.png&quot;,
             &quot;heart.png&quot;,

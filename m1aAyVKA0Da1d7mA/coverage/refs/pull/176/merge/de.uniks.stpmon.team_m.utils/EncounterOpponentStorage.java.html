@@ -6,7 +6,6 @@ import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.dto.Trainer;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.util.List;
 
@@ -29,102 +28,102 @@ public class EncounterOpponentStorage {
 
 
     @Inject
-<span class="fc" id="L32">    public EncounterOpponentStorage() { }</span>
+<span class="fc" id="L31">    public EncounterOpponentStorage() { }</span>
 
     public String getEncounterId() {
-<span class="nc" id="L35">        return encounterId;</span>
+<span class="nc" id="L34">        return encounterId;</span>
     }
 
     public void setEncounterId(String encounterId) {
-<span class="nc" id="L39">        this.encounterId = encounterId;</span>
-<span class="nc" id="L40">    }</span>
+<span class="nc" id="L38">        this.encounterId = encounterId;</span>
+<span class="nc" id="L39">    }</span>
 
     public String getRegionId() {
-<span class="nc" id="L43">        return regionId;</span>
+<span class="nc" id="L42">        return regionId;</span>
     }
 
     public void setRegionId(String regionId) {
-<span class="fc" id="L47">        this.regionId = regionId;</span>
-<span class="fc" id="L48">    }</span>
+<span class="fc" id="L46">        this.regionId = regionId;</span>
+<span class="fc" id="L47">    }</span>
 
     public boolean isWild() {
-<span class="nc" id="L51">        return isWild;</span>
+<span class="nc" id="L50">        return isWild;</span>
     }
 
     public void setWild(boolean wild) {
-<span class="nc" id="L55">        isWild = wild;</span>
-<span class="nc" id="L56">    }</span>
+<span class="nc" id="L54">        isWild = wild;</span>
+<span class="nc" id="L55">    }</span>
 
     public int getEncounterSize() {
-<span class="nc" id="L59">        return encounterSize;</span>
+<span class="nc" id="L58">        return encounterSize;</span>
     }
 
     public void setEncounterSize(int encounterSize) {
-<span class="nc" id="L63">        this.encounterSize = encounterSize;</span>
-<span class="nc" id="L64">    }</span>
+<span class="nc" id="L62">        this.encounterSize = encounterSize;</span>
+<span class="nc" id="L63">    }</span>
 
     public List&lt;Opponent&gt; getOpponentsInStorage() {
-<span class="nc" id="L67">        return opponentsInStorage;</span>
+<span class="nc" id="L66">        return opponentsInStorage;</span>
     }
 
     public void setOpponentsInStorage(List&lt;Opponent&gt; opponentsInStorage) {
-<span class="nc" id="L71">        this.opponentsInStorage = opponentsInStorage;</span>
-<span class="nc" id="L72">    }</span>
+<span class="nc" id="L70">        this.opponentsInStorage = opponentsInStorage;</span>
+<span class="nc" id="L71">    }</span>
 
     public Trainer getOpponentTrainer() {
-<span class="nc" id="L75">        return opponentTrainer;</span>
+<span class="nc" id="L74">        return opponentTrainer;</span>
     }
 
     public void setOpponentTrainer(Trainer opponentTrainer) {
-<span class="nc" id="L79">        this.opponentTrainer = opponentTrainer;</span>
-<span class="nc" id="L80">    }</span>
+<span class="nc" id="L78">        this.opponentTrainer = opponentTrainer;</span>
+<span class="nc" id="L79">    }</span>
 
     public Opponent getSelfOpponent() {
-<span class="nc" id="L83">        return selfOpponent;</span>
+<span class="nc" id="L82">        return selfOpponent;</span>
     }
 
     public void setSelfOpponent(Opponent selfOpponent) {
-<span class="nc" id="L87">        this.selfOpponent = selfOpponent;</span>
-<span class="nc" id="L88">    }</span>
+<span class="nc" id="L86">        this.selfOpponent = selfOpponent;</span>
+<span class="nc" id="L87">    }</span>
 
     public Opponent getEnemyOpponent() {
-<span class="nc" id="L91">        return enemyOpponent;</span>
+<span class="nc" id="L90">        return enemyOpponent;</span>
     }
 
     public void setEnemyOpponent(Opponent enemyOpponent) {
-<span class="nc" id="L95">        this.enemyOpponent = enemyOpponent;</span>
-<span class="nc" id="L96">    }</span>
+<span class="nc" id="L94">        this.enemyOpponent = enemyOpponent;</span>
+<span class="nc" id="L95">    }</span>
 
     public Monster getCurrentTrainerMonster() {
-<span class="nc" id="L99">        return currentTrainerMonster;</span>
+<span class="nc" id="L98">        return currentTrainerMonster;</span>
     }
 
     public void setCurrentTrainerMonster(Monster currentTrainerMonster) {
-<span class="nc" id="L103">        this.currentTrainerMonster = currentTrainerMonster;</span>
-<span class="nc" id="L104">    }</span>
+<span class="nc" id="L102">        this.currentTrainerMonster = currentTrainerMonster;</span>
+<span class="nc" id="L103">    }</span>
 
     public Monster getCurrentEnemyMonster() {
-<span class="nc" id="L107">        return currentEnemyMonster;</span>
+<span class="nc" id="L106">        return currentEnemyMonster;</span>
     }
 
     public void setCurrentEnemyMonster(Monster currentEnemyMonster) {
-<span class="nc" id="L111">        this.currentEnemyMonster = currentEnemyMonster;</span>
-<span class="nc" id="L112">    }</span>
+<span class="nc" id="L110">        this.currentEnemyMonster = currentEnemyMonster;</span>
+<span class="nc" id="L111">    }</span>
 
     public MonsterTypeDto getCurrentTrainerMonsterType() {
-<span class="nc" id="L115">        return currentTrainerMonsterType;</span>
+<span class="nc" id="L114">        return currentTrainerMonsterType;</span>
     }
 
     public void setCurrentTrainerMonsterType(MonsterTypeDto currentTrainerMonsterType) {
-<span class="nc" id="L119">        this.currentTrainerMonsterType = currentTrainerMonsterType;</span>
-<span class="nc" id="L120">    }</span>
+<span class="nc" id="L118">        this.currentTrainerMonsterType = currentTrainerMonsterType;</span>
+<span class="nc" id="L119">    }</span>
 
     public MonsterTypeDto getCurrentEnemyMonsterType() {
-<span class="nc" id="L123">        return currentEnemyMonsterType;</span>
+<span class="nc" id="L122">        return currentEnemyMonsterType;</span>
     }
 
     public void setCurrentEnemyMonsterType(MonsterTypeDto currentEnemyMonsterType) {
-<span class="nc" id="L127">        this.currentEnemyMonsterType = currentEnemyMonsterType;</span>
-<span class="nc" id="L128">    }</span>
+<span class="nc" id="L126">        this.currentEnemyMonsterType = currentEnemyMonsterType;</span>
+<span class="nc" id="L127">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
