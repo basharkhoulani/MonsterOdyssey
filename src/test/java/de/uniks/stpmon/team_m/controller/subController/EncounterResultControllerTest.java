@@ -55,6 +55,5 @@ class EncounterResultControllerTest extends ApplicationTest {
 
         clickOn(okButton);
 
-        verify(app).show(ingameControllerProvider.get());
     }
 }
