@@ -99,7 +99,7 @@
    </VBox>
    <VBox minWidth="250.0">
       <HBox alignment="TOP_RIGHT" prefWidth="200.0">
-         <Button fx:id="muteButton" mnemonicParsing="false" onAction="#muteOrUnmuteSound" prefHeight="50.0" prefWidth="45.0" styleClass="muteSymbol" stylesheets="@../styles.css" />
+         <Button fx:id="muteButton" mnemonicParsing="false" onAction="#muteOrUnmuteSound" prefHeight="50.0" prefWidth="45.0" styleClass="muteSymbol" />
          <Button fx:id="settingsButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" minHeight="50.0" mnemonicParsing="false" onAction="#changeToSettings" prefHeight="50.0" prefWidth="50.0" styleClass="settingsSymbol" text="settings" textFill="TRANSPARENT" />
       </HBox>
       <VBox alignment="BOTTOM_CENTER" fillWidth="false" VBox.vgrow="ALWAYS">

@@ -1,7 +1,9 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.controller.subController.*;
+import de.uniks.stpmon.team_m.controller.subController.IngamePauseMenuController;
+import de.uniks.stpmon.team_m.controller.subController.MonstersListController;
+import de.uniks.stpmon.team_m.controller.subController.NotificationListHandyController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
@@ -15,7 +17,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -47,6 +48,7 @@ import static org.mockito.Mockito.*;
 public class IngameControllerTest extends ApplicationTest {
 
     @Spy
+    final
     App app = new App(null);
     @Mock
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -60,8 +62,6 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<MonstersListController> monstersListControllerProvider;
     @Mock
     Provider<NotificationListHandyController> notificationListHandyControllerProvider;
-    @Mock
-    Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
     @Mock
     Provider<EncounterController> encounterControllerProvider;
 
@@ -87,6 +87,10 @@ public class IngameControllerTest extends ApplicationTest {
     IngameController ingameController;
     @Mock
     Provider<EventListener> eventListener;
+    @Mock
+    PresetsService presetsService;
+    @Mock
+    Parent parent;
     @InjectMocks
     NotificationListHandyController notificationListHandyController;
     @InjectMocks
@@ -333,7 +337,7 @@ public class IngameControllerTest extends ApplicationTest {
         //Mocking the opponent (Situation)
         when(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() +".opponents.*.*", Opponent.class)).thenReturn(just(
                 new Event<>("encounters.*.trainers.6475e595ac3946b6a812d865,opponents.*.nothappening", null)))
-                .thenReturn(just(new Event<>("encounters.a98db973kwl8xp1lz94kjf0b.trainers.646bac223b4804b87c0b8054.opponents.rqtjej4dcoqsm4e9yln1loy5.created", opponent)));;
+                .thenReturn(just(new Event<>("encounters.a98db973kwl8xp1lz94kjf0b.trainers.646bac223b4804b87c0b8054.opponents.rqtjej4dcoqsm4e9yln1loy5.created", opponent)));
 
         when(encounterOpponentsService.getTrainerOpponents(anyString(), anyString())).thenReturn(Observable.just(List.of()));
 
@@ -346,15 +350,6 @@ public class IngameControllerTest extends ApplicationTest {
     void showHelp() throws InterruptedException {
         // TODO: apply asserts once we have the time
         clickOn("#smallHandyButton");
-        /*final DialogPane dialogPane = lookup(".dialog-pane").query();
-        assertNotNull(dialogPane);
-        final Label helpLabel = dialogPane.getChildren().stream()
-                .filter(node -> node instanceof Label)
-                .map(node -> (Label) node)
-                .findFirst()
-                .orElse(null);
-        assertNotNull(helpLabel);
-        clickOn("OK");*/
 
         Thread.sleep(1000);
         clickOn("close");
