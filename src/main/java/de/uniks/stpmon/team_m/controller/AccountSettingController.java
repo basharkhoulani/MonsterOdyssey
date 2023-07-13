@@ -2,7 +2,6 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.AvatarSelectionController;
-import de.uniks.stpmon.team_m.controller.subController.ChangeLanguageController;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.PasswordFieldSkin;
@@ -10,7 +9,6 @@ import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
@@ -78,7 +76,6 @@ public class AccountSettingController extends Controller {
     UsersService usersService;
     @Inject
     Provider<AvatarSelectionController> avatarSelectionControllerProvider;
-    private ChangeLanguageController changeLanguageController;
     private PasswordFieldSkin skin;
     private final SimpleStringProperty username = new SimpleStringProperty();
     private final SimpleStringProperty password = new SimpleStringProperty();
@@ -106,8 +103,6 @@ public class AccountSettingController extends Controller {
     @Override
     public void init() {
         super.init();
-        changeLanguageController = new ChangeLanguageController();
-        changeLanguageController.init();
     }
 
     /**
@@ -360,20 +355,5 @@ public class AccountSettingController extends Controller {
         } else {
             return resources.getString("CUSTOM.ERROR");
         }
-    }
-
-    /**
-     * This method is used to open the Change Language Pop up
-     */
-    public void changeLanguage() {
-        Dialog<?> dialog = new Dialog<>();
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
-        closeButton.managedProperty().bind(closeButton.visibleProperty());
-        closeButton.setVisible(false);
-        dialog.setTitle(resources.getString("CHOOSE.LANGUAGE"));
-        changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);
-        dialog.getDialogPane().setContent(changeLanguageController.render());
-        dialog.showAndWait();
     }
 }
