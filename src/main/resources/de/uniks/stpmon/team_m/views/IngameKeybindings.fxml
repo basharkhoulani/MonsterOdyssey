@@ -3,22 +3,18 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="keybindingsStackpane" prefHeight="461.0" prefWidth="693.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.IngameKeybindingsController">
-    <VBox fx:id="keybindingsVbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="462.0" prefWidth="693.0" style="-fx-background-color: #CFE9DB;">
+<StackPane prefHeight="461.0" prefWidth="693.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.IngameKeybindingsController">
+    <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="462.0" prefWidth="693.0" style="-fx-background-color: #CFE9DB;">
    <spacing>10</spacing>
-      <children>
          <VBox prefHeight="315.0" prefWidth="632.0">
-            <children>
                <HBox prefHeight="104.0" prefWidth="632.0">
-                  <children>
-                     <Label fx:id="walkUpLabel" prefHeight="52.0" prefWidth="145.0" text="%WALK.UP">
+                     <Label prefHeight="52.0" prefWidth="145.0" text="%WALK.UP">
                         <font>
                            <Font name="Comic Sans MS" size="17.0" />
                         </font>
@@ -31,11 +27,9 @@
                            <Insets top="20.0" />
                         </HBox.margin>
                      </Button>
-                  </children>
                </HBox>
                <HBox prefHeight="82.0" prefWidth="632.0">
-                  <children>
-                     <Label fx:id="walkDownLabel" prefHeight="52.0" prefWidth="145.0" text="%WALK.DOWN">
+                     <Label prefHeight="52.0" prefWidth="145.0" text="%WALK.DOWN">
                         <font>
                            <Font name="Comic Sans MS" size="17.0" />
                         </font>
@@ -48,7 +42,7 @@
                            <Insets />
                         </HBox.margin>
                      </Button>
-                     <Label fx:id="interactionLabel" layoutX="20.0" layoutY="10.0" prefHeight="52.0" prefWidth="145.0" text="%INTERACTION">
+                     <Label layoutX="20.0" layoutY="10.0" prefHeight="52.0" prefWidth="145.0" text="%INTERACTION">
                         <font>
                            <Font name="Comic Sans MS" size="17.0" />
                         </font>
@@ -57,11 +51,9 @@
                         </HBox.margin>
                      </Label>
                      <Button fx:id="interactionButton" layoutX="165.0" layoutY="10.0" mnemonicParsing="false" onAction="#setInteraction" prefHeight="55.0" prefWidth="129.0" style="-fx-background-color: #FFF2CC; -fx-border-radius: 10; -fx-border-color: grey; -fx-background-radius: 10; -fx-border-width: 1;" />
-                  </children>
                </HBox>
                <HBox prefHeight="80.0" prefWidth="632.0">
-                  <children>
-                     <Label fx:id="walkRightLabel" prefHeight="52.0" prefWidth="145.0" text="%WALK.RIGHT">
+                     <Label prefHeight="52.0" prefWidth="145.0" text="%WALK.RIGHT">
                         <font>
                            <Font name="Comic Sans MS" size="17.0" />
                         </font>
@@ -74,7 +66,7 @@
                            <Insets />
                         </HBox.margin>
                      </Button>
-                     <Label fx:id="pauseMenuLabel" layoutX="20.0" layoutY="10.0" prefHeight="52.0" prefWidth="145.0" text="%PAUSE.MENU">
+                     <Label layoutX="20.0" layoutY="10.0" prefHeight="52.0" prefWidth="145.0" text="%PAUSE.MENU">
                         <font>
                            <Font name="Comic Sans MS" size="17.0" />
                         </font>
@@ -83,11 +75,9 @@
                         </HBox.margin>
                      </Label>
                      <Button fx:id="pauseMenuButton" layoutX="165.0" layoutY="10.0" mnemonicParsing="false" onAction="#setPauseMenu" prefHeight="55.0" prefWidth="129.0" style="-fx-background-color: #FFF2CC; -fx-border-radius: 10; -fx-border-color: grey; -fx-background-radius: 10; -fx-border-width: 1;" />
-                  </children>
                </HBox>
                <HBox prefHeight="83.0" prefWidth="632.0">
-                  <children>
-                     <Label fx:id="walkLeftLabel" prefHeight="52.0" prefWidth="145.0" text="%WALK.LEFT">
+                     <Label prefHeight="52.0" prefWidth="145.0" text="%WALK.LEFT">
                         <font>
                            <Font name="Comic Sans MS" size="17.0" />
                         </font>
@@ -100,12 +90,9 @@
                            <Insets />
                         </HBox.margin>
                      </Button>
-                  </children>
                </HBox>
-            </children>
          </VBox>
          <HBox prefHeight="37.0" prefWidth="693.0">
-            <children>
                <Label fx:id="informationLabel" prefHeight="34.0" prefWidth="555.0" text="%KEYBINDINGS.INFORMATION" textAlignment="CENTER">
                   <font>
                      <Font name="Comic Sans MS" size="17.0" />
@@ -114,19 +101,14 @@
                      <Insets left="120.0" />
                   </HBox.margin>
                </Label>
-            </children>
          </HBox>
          <HBox prefHeight="100.0" prefWidth="200.0">
-            <children>
                <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" prefHeight="58.0" prefWidth="150.0" style="-fx-background-color: #FFF2CC; -fx-border-color: grey; -fx-border-width: 1;">
                   <HBox.margin>
                      <Insets left="60.0" />
                   </HBox.margin>
                   <graphic>
                      <ImageView fx:id="goBackImageView" fitHeight="47.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                           <Image url="@../images/GoBackSymbol.png" />
-                        </image>
                      </ImageView>
                   </graphic>
                </Button>
@@ -144,14 +126,9 @@
                   </HBox.margin>
                   <graphic>
                      <ImageView fx:id="checkImageView" fitHeight="47.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                           <Image url="@../images/checkSymbol.png" />
-                        </image>
                      </ImageView>
                   </graphic>
                </Button>
-            </children>
          </HBox>
-      </children>
 </VBox>
 </StackPane>

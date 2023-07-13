@@ -2,8 +2,7 @@ package de.uniks.stpmon.team_m;
 
 import javafx.geometry.Insets;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Map.entry;
 
@@ -63,6 +62,7 @@ public class Constants {
 
     // MESSAGES
     public static final String PENCIL = "\u270F";
+    public static final String ZONE_ID_EUROPE_BERLIN = "Europe/Berlin";
 
     // AVATAR
     public static final String AVATAR_1 = "images/monster.png";
@@ -87,6 +87,11 @@ public class Constants {
     public static final String PLAYSYMBOL = "images/PlaySymbol.PNG";
     public static final String AUDIOSYMBOL = "images/AudioSymbol.png";
     public static final String KEYBINDINGSSYMBOL = "images/KeybindingsSymbol.png";
+    public static final String CHECKSYMBOL = "images/checkSymbol.png";
+    public static final String WARNING = "images/Warning.png";
+    public static final String PENCIL2SYMBOL = "images/Pencil2.png";
+    public static final String ARROWLEFTSYMBOL = "images/arrowLeft.png";
+    public static final String ARROWRIGHTSYMBOL = "images/arrowRight.png";
 
     // NPC DIALOG
     public static int dialogVBoxWidth = 700;
@@ -218,4 +223,12 @@ public class Constants {
             entry("steel", "ability-steel"),
             entry("fairy", "ability-fairy")
     ));
+
+    public static List<String> ATTRIBUTE_IMAGES = Arrays.asList(
+            "star.png",
+            "attack.png",
+            "heart.png",
+            "speed.png",
+            "defense.png"
+            );
 }

@@ -20,7 +20,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -133,14 +132,13 @@ public class IngameController extends Controller {
     @Inject
     Provider<ChangeAudioController> changeAudioControllerProvider;
     @Inject
+    Provider<MonstersDetailController> monstersDetailControllerProvider;
+    @Inject
     RegionsService regionsService;
     @Inject
     Provider<IngameController> ingameControllerProvider;
 
     private IngamePauseMenuController ingamePauseMenuController;
-
-    public static final KeyCode PAUSE_MENU_KEY = KeyCode.P;
-    public static final KeyCode INTERACT_KEY = KeyCode.E;
     private boolean isChatting = false;
     private boolean inDialog = false;
     private boolean inNpcPopup = false;
@@ -203,8 +201,7 @@ public class IngameController extends Controller {
         trainerPositionHashMap = new HashMap<>();
         // Initialize key event listeners
         keyPressedHandler = event -> {
-
-            if (event.getCode() == INTERACT_KEY) {
+            if (event.getCode().toString().equals(preferences.get("interaction", "E"))) {
                 if (!inNpcPopup && !inEncounterInfoBox) {
                     interactWithTrainer();
                 } else if(inEncounterInfoBox){
@@ -213,7 +210,7 @@ public class IngameController extends Controller {
                     showEncounterScene();
                 }
             }
-            if (event.getCode() == PAUSE_MENU_KEY) {
+            if (event.getCode().toString().equals(preferences.get("pauseMenu","ESCAPE"))) {
                 if (inSettings) {
                     return;
                 }
@@ -239,16 +236,16 @@ public class IngameController extends Controller {
             if (movementDisabled) {
                 return;
             }
-            if ((event.getCode() == KeyCode.W)) {
+            if ((event.getCode().toString().equals(preferences.get("walkUp", "W")))) {
                 checkMovement(0, -1, 1);
             }
-            if ((event.getCode() == KeyCode.S)) {
+            if ((event.getCode().toString().equals(preferences.get("walkDown", "S")))) {
                 checkMovement(0, 1, 3);
             }
-            if ((event.getCode() == KeyCode.A)) {
+            if ((event.getCode().toString().equals(preferences.get("walkLeft", "A")))) {
                 checkMovement(-1, 0, 2);
             }
-            if ((event.getCode() == KeyCode.D)) {
+            if ((event.getCode().toString().equals(preferences.get("walkRight", "D")))) {
                 checkMovement(1, 0, 0);
             }
             event.consume();
@@ -387,7 +384,7 @@ public class IngameController extends Controller {
         }
 
         // Add event handlers
-        app.getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);
+        app.getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
 
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(area -> {
@@ -427,7 +424,7 @@ public class IngameController extends Controller {
 
         //Keybindings
         if(preferences.get("walkUp",null) == null){
-            preferences.put("walkUp",KeyCode.W.getChar());
+            preferences.put("walkUp", KeyCode.W.getChar());
         }
         if(preferences.get("walkDown",null) == null){
             preferences.put("walkDown",KeyCode.S.getChar());
@@ -442,8 +439,9 @@ public class IngameController extends Controller {
             preferences.put("interaction",KeyCode.E.getChar());
         }
         if(preferences.get("pauseMenu",null) == null){
-            preferences.put("pauseMenu","ESC");
+            preferences.put("pauseMenu","ESCAPE");
         }
+
         return parent;
     }
 
@@ -594,7 +592,18 @@ public class IngameController extends Controller {
                         error.printStackTrace();
                     }));
         }
-        focusOnPlayerPosition(map.width(), map.height(), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
+        boolean layerFound = false;
+        for (Layer layer: map.layers()) {
+            if (layer.width() != 0) {
+                focusOnPlayerPosition(layer.width(), layer.height(), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
+                layerFound = true;
+                break;
+            }
+        }
+        if (!layerFound) {
+            focusOnPlayerPosition(map.width(), map.height(), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
+        }
+
     }
 
     private void focusOnPlayerPosition(double mapWidth, double mapHeight, int tilePosX, int tilePosY) {
@@ -726,8 +735,18 @@ public class IngameController extends Controller {
             canvas.setScaleX(SCALE_FACTOR);
             canvas.setScaleY(SCALE_FACTOR);
         }
-        canvas.setWidth(map.width() * TILE_SIZE);
-        canvas.setHeight(map.height() * TILE_SIZE);
+        boolean layerFound = false;
+        for (Layer layer: map.layers()) {
+            if (layer.width() != 0) {
+                canvas.setWidth(layer.width() * TILE_SIZE);
+                canvas.setHeight(layer.height() * TILE_SIZE);
+                layerFound = true;
+            }
+        }
+        if (!layerFound) {
+            canvas.setWidth(map.width() * TILE_SIZE);
+            canvas.setHeight(map.height() * TILE_SIZE);
+        }
     }
 
     /**
@@ -764,7 +783,7 @@ public class IngameController extends Controller {
         WritableImage writableImageTop = new WritableImage(width * TILE_SIZE, height * TILE_SIZE);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                int tileId = data.get(y * width + x);
+                int tileId = data.get(y * width + x) & 0x0FFFFFFF;
                 if (tileId == 0) {
                     continue;
                 }
@@ -1116,7 +1135,7 @@ public class IngameController extends Controller {
                                 }, Throwable::printStackTrace));
                     }
                 }, Throwable::printStackTrace));
-        
+
     }
 
     private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {
@@ -1604,7 +1623,7 @@ public class IngameController extends Controller {
     @Override
     public void destroy() {
         super.destroy();
-        app.getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);
+        app.getStage().getScene().removeEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
         for (var trainerController : trainerControllerHashMap.values()) {
             trainerController.destroy();
         }
@@ -1621,6 +1640,18 @@ public class IngameController extends Controller {
         changeAudioVBox.getChildren().add(changeAudioController.render());
         root.getChildren().add(changeAudioVBox);
         changeAudioVBox.requestFocus();
+        buttonsDisable(true);
+    }
+
+    public void showMonsterDetails(MonstersListController monstersListController, Monster monster, MonsterTypeDto monsterTypeDto,
+                                   Image monsterImage, ResourceBundle resources,  PresetsService presetsService, String type) {
+        VBox monsterDetailVBox = new VBox();
+        monsterDetailVBox.setAlignment(Pos.CENTER);
+        MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();
+        monstersDetailController.init(this, monsterDetailVBox, monstersListController, monster, monsterTypeDto, monsterImage, resources, presetsService, type);
+        monsterDetailVBox.getChildren().add(monstersDetailController.render());
+        root.getChildren().add(monsterDetailVBox);
+        monsterDetailVBox.requestFocus();
         buttonsDisable(true);
     }
 

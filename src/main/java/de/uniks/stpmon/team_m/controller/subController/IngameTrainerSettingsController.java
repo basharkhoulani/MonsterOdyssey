@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.controller.MainMenuController;
@@ -26,8 +27,9 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.awt.*;
+import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.PREMADE_CHARACTERS;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 @Singleton
 public class IngameTrainerSettingsController extends Controller {
@@ -53,6 +55,12 @@ public class IngameTrainerSettingsController extends Controller {
     public Button deleteTrainerButton;
     @FXML
     public StackPane trainerSettingsStackpane;
+    @FXML
+    public ImageView trainerNameEditImageView;
+    @FXML
+    public ImageView arrowRightImageView;
+    @FXML
+    public ImageView arrowLeftImageView;
 
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
@@ -95,6 +103,11 @@ public class IngameTrainerSettingsController extends Controller {
     @Override
     public Parent render() {
         Parent parent = super.render();
+        if(!GraphicsEnvironment.isHeadless()){
+            trainerNameEditImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(PENCIL2SYMBOL)).toString()));
+            arrowLeftImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(ARROWLEFTSYMBOL)).toString()));
+            arrowRightImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(ARROWRIGHTSYMBOL)).toString()));
+        }
         loadAndSetTrainerImage();
         trainerNameTextfield.setPromptText(trainerStorageProvider.get().getTrainerName());
         trainerNameTextfield.setDisable(true);
