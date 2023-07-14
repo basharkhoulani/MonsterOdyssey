@@ -18,10 +18,10 @@ public class NpcTextManager {
     public String[] getNpcTexts(String npcID) {
 <span class="fc" id="L19">        String[] returnTexts = npcTexts.get(npcID);</span>
 
-<span class="pc bpc" id="L21" title="1 of 2 branches missed.">        if (returnTexts == null) {</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">        if (returnTexts == null) {</span>
 <span class="fc" id="L22">            return npcTexts.get(&quot;Default&quot;);</span>
         } else {
-<span class="nc" id="L24">            return returnTexts;</span>
+<span class="fc" id="L24">            return returnTexts;</span>
         }
     }
 

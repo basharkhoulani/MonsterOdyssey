@@ -875,24 +875,24 @@ public class IngameController extends Controller {
      */
 
     public void showHelp() {
-<span class="nc" id="L878">        smallHandyButton.setVisible(false);</span>
-<span class="nc" id="L879">        notificationBell.setVisible(false);</span>
+<span class="fc" id="L878">        smallHandyButton.setVisible(false);</span>
+<span class="fc" id="L879">        notificationBell.setVisible(false);</span>
 
-<span class="nc bnc" id="L881" title="All 2 branches missed.">        for (int i = 0; i &lt; notificationHandyStackPane.getWidth(); i++) {</span>
-<span class="nc" id="L882">            int iterator = i;</span>
+<span class="fc bfc" id="L881" title="All 2 branches covered.">        for (int i = 0; i &lt; notificationHandyStackPane.getWidth(); i++) {</span>
+<span class="fc" id="L882">            int iterator = i;</span>
 
-<span class="nc" id="L884">            PauseTransition pause = new PauseTransition(Duration.millis(1));</span>
-<span class="nc" id="L885">            pause.setOnFinished(event -&gt; notificationHandyStackPane.translateXProperty().bind(</span>
+<span class="fc" id="L884">            PauseTransition pause = new PauseTransition(Duration.millis(1));</span>
+<span class="fc" id="L885">            pause.setOnFinished(event -&gt; notificationHandyStackPane.translateXProperty().bind(</span>
                     anchorPane.
-<span class="nc" id="L887">                            widthProperty().</span>
-<span class="nc" id="L888">                            add(notificationHandyStackPane.widthProperty()).</span>
-<span class="nc" id="L889">                            divide(2).</span>
-<span class="nc" id="L890">                            subtract(iterator)</span>
+<span class="fc" id="L887">                            widthProperty().</span>
+<span class="fc" id="L888">                            add(notificationHandyStackPane.widthProperty()).</span>
+<span class="fc" id="L889">                            divide(2).</span>
+<span class="fc" id="L890">                            subtract(iterator)</span>
             ));
-<span class="nc" id="L892">            pause.setDelay(Duration.millis(i));</span>
-<span class="nc" id="L893">            pause.play();</span>
+<span class="fc" id="L892">            pause.setDelay(Duration.millis(i));</span>
+<span class="fc" id="L893">            pause.play();</span>
         }
-<span class="nc" id="L895">    }</span>
+<span class="fc" id="L895">    }</span>
 
     /**
      * This method is used to pause the game. It shows a dialog with two buttons.
@@ -997,9 +997,9 @@ public class IngameController extends Controller {
 <span class="fc" id="L997">    }</span>
 
     public void paneClicked() {
-<span class="nc" id="L1000">        groundCanvas.requestFocus();</span>
-<span class="nc" id="L1001">        isChatting = false;</span>
-<span class="nc" id="L1002">    }</span>
+<span class="fc" id="L1000">        groundCanvas.requestFocus();</span>
+<span class="fc" id="L1001">        isChatting = false;</span>
+<span class="fc" id="L1002">    }</span>
 
     public void messageFieldClicked() {
 <span class="fc" id="L1005">        messageField.requestFocus();</span>
@@ -1205,7 +1205,7 @@ public class IngameController extends Controller {
 <span class="fc bfc" id="L1205" title="All 2 branches covered.">        if (inDialog) {</span>
             try {
 <span class="pc bpc" id="L1207" title="1 of 2 branches missed.">                if (this.currentNpc.npc() != null) {</span>
-<span class="pc bpc" id="L1208" title="3 of 4 branches missed.">                    if (this.currentNpc.npc().canHeal() &amp;&amp; trainerStorageProvider.get().getTrainer().team().size() == 0) {</span>
+<span class="pc bpc" id="L1208" title="1 of 4 branches missed.">                    if (this.currentNpc.npc().canHeal() &amp;&amp; trainerStorageProvider.get().getTrainer().team().size() == 0) {</span>
 <span class="nc" id="L1209">                        continueTrainerDialog(DialogSpecialInteractions.nurseNoMons);</span>
                     } else {
 <span class="fc" id="L1211">                        continueTrainerDialog(null);</span>
@@ -1302,7 +1302,7 @@ public class IngameController extends Controller {
         } else {
 <span class="fc" id="L1303">            Trainer nurseBehindCounter = searchHashedMapForTrainer(checkTileXForNurse, checkTileYForNurse);</span>
 
-<span class="pc bpc" id="L1305" title="1 of 2 branches missed.">            if (nurseBehindCounter == null) {</span>
+<span class="fc bfc" id="L1305" title="All 2 branches covered.">            if (nurseBehindCounter == null) {</span>
 <span class="fc" id="L1306">                return null;</span>
             }
 
@@ -1310,8 +1310,8 @@ public class IngameController extends Controller {
             // apparently almost all NPC's have the canHeal() boolean, but some only have walkRandomly().
             // If they don't have the canHeal(), it should be covered by this try/catch
             try {
-<span class="nc bnc" id="L1313" title="All 2 branches missed.">                if (nurseBehindCounter.npc().canHeal()) {</span>
-<span class="nc" id="L1314">                    return nurseBehindCounter;</span>
+<span class="pc bpc" id="L1313" title="1 of 2 branches missed.">                if (nurseBehindCounter.npc().canHeal()) {</span>
+<span class="fc" id="L1314">                    return nurseBehindCounter;</span>
                 } else {
 <span class="nc" id="L1316">                    return null;</span>
                 }
@@ -1326,7 +1326,7 @@ public class IngameController extends Controller {
     // This Methode returns all kind of trainer (npcs and normal trainers) that are standing on a specific tile
     public Trainer searchHashedMapForTrainer(int checkX, int checkY) {
 <span class="fc bfc" id="L1328" title="All 2 branches covered.">        for (java.util.Map.Entry&lt;Trainer, Position&gt; set : trainerPositionHashMap.entrySet()) {</span>
-<span class="pc bpc" id="L1329" title="1 of 4 branches missed.">            if (set.getValue().getX() == checkX &amp;&amp; set.getValue().getY() == checkY) {</span>
+<span class="fc bfc" id="L1329" title="All 4 branches covered.">            if (set.getValue().getX() == checkX &amp;&amp; set.getValue().getY() == checkY) {</span>
 <span class="fc" id="L1330">                return set.getKey();</span>
             }
 <span class="fc" id="L1332">        }</span>
@@ -1369,7 +1369,7 @@ public class IngameController extends Controller {
     public void continueTrainerDialog(DialogSpecialInteractions specialInteractions) {
 <span class="fc" id="L1370">        ContinueDialogReturnValues continueDialogReturn = dialogController.continueDialog(specialInteractions);</span>
 
-<span class="pc bpc" id="L1372" title="5 of 8 branches missed.">        switch (continueDialogReturn) {</span>
+<span class="pc bpc" id="L1372" title="3 of 8 branches missed.">        switch (continueDialogReturn) {</span>
 <span class="fc" id="L1373">            case dialogFinishedTalkToTrainer -&gt; endDialog(0, true);</span>
             case albertDialogFinished0 -&gt; {
 <span class="fc" id="L1375">                endDialog(0, true);</span>
@@ -1387,8 +1387,8 @@ public class IngameController extends Controller {
 <span class="nc" id="L1387">                this.notificationListHandyController.displayStarterMessages();</span>
 <span class="nc" id="L1388">                notificationBell.setVisible(true);</span>
 <span class="nc" id="L1389">            }</span>
-<span class="nc" id="L1390">            case dialogFinishedNoTalkToTrainer -&gt; endDialog(0, false);</span>
-<span class="nc" id="L1391">            case spokenToNurse -&gt; createNurseHealPopup();</span>
+<span class="fc" id="L1390">            case dialogFinishedNoTalkToTrainer -&gt; endDialog(0, false);</span>
+<span class="fc" id="L1391">            case spokenToNurse -&gt; createNurseHealPopup();</span>
             case encounterOnTalk -&gt; {
 <span class="nc" id="L1393">                disposables.add(udpEventListenerProvider.get().talk(trainerStorageProvider.get().getTrainer().area(), new TalkTrainerDto(</span>
 <span class="nc" id="L1394">                        trainerStorageProvider.get().getTrainer()._id(),</span>
@@ -1416,73 +1416,73 @@ public class IngameController extends Controller {
         }
 <span class="fc" id="L1417">        stackPane.getChildren().remove(dialogStackPane);</span>
 
-<span class="pc bpc" id="L1419" title="1 of 2 branches missed.">        if (encounterNpc) {</span>
+<span class="fc bfc" id="L1419" title="All 2 branches covered.">        if (encounterNpc) {</span>
 <span class="fc" id="L1420">            encounterNPC(this.currentNpc, selectionValue);</span>
         }
 <span class="fc" id="L1422">    }</span>
 
     public void createNurseHealPopup() {
         // base VBox
-<span class="nc" id="L1426">        VBox nurseVBox = new VBox();</span>
-<span class="nc" id="L1427">        nurseVBox.setId(&quot;nurseVBox&quot;);</span>
-<span class="nc" id="L1428">        nurseVBox.setMaxHeight(popupHeight);</span>
-<span class="nc" id="L1429">        nurseVBox.setMaxWidth(popupWidth);</span>
-<span class="nc" id="L1430">        nurseVBox.getStyleClass().add(&quot;dialogTextFlow&quot;);</span>
-<span class="nc" id="L1431">        this.nursePopupVBox = nurseVBox;</span>
+<span class="fc" id="L1426">        VBox nurseVBox = new VBox();</span>
+<span class="fc" id="L1427">        nurseVBox.setId(&quot;nurseVBox&quot;);</span>
+<span class="fc" id="L1428">        nurseVBox.setMaxHeight(popupHeight);</span>
+<span class="fc" id="L1429">        nurseVBox.setMaxWidth(popupWidth);</span>
+<span class="fc" id="L1430">        nurseVBox.getStyleClass().add(&quot;dialogTextFlow&quot;);</span>
+<span class="fc" id="L1431">        this.nursePopupVBox = nurseVBox;</span>
 
         // text field
-<span class="nc" id="L1434">        TextFlow nurseQuestion = new TextFlow(new Text(resources.getString(&quot;NURSE.HEAL.QUESTION&quot;)));</span>
-<span class="nc" id="L1435">        nurseQuestion.setPrefWidth(popupWidth);</span>
-<span class="nc" id="L1436">        nurseQuestion.setPrefHeight(textFieldHeight);</span>
-<span class="nc" id="L1437">        nurseQuestion.setPadding(dialogTextFlowInsets);</span>
-<span class="nc" id="L1438">        nurseQuestion.setTextAlignment(TextAlignment.CENTER);</span>
+<span class="fc" id="L1434">        TextFlow nurseQuestion = new TextFlow(new Text(resources.getString(&quot;NURSE.HEAL.QUESTION&quot;)));</span>
+<span class="fc" id="L1435">        nurseQuestion.setPrefWidth(popupWidth);</span>
+<span class="fc" id="L1436">        nurseQuestion.setPrefHeight(textFieldHeight);</span>
+<span class="fc" id="L1437">        nurseQuestion.setPadding(dialogTextFlowInsets);</span>
+<span class="fc" id="L1438">        nurseQuestion.setTextAlignment(TextAlignment.CENTER);</span>
 
         // buttonsHBox
-<span class="nc" id="L1441">        HBox buttonsHBox = new HBox();</span>
-<span class="nc" id="L1442">        buttonsHBox.setMaxHeight(buttonsHBoxHeight);</span>
-<span class="nc" id="L1443">        buttonsHBox.setMaxWidth(popupWidth);</span>
-<span class="nc" id="L1444">        buttonsHBox.setAlignment(Pos.TOP_CENTER);</span>
-<span class="nc" id="L1445">        buttonsHBox.setSpacing(buttonsHBoxSpacing);</span>
+<span class="fc" id="L1441">        HBox buttonsHBox = new HBox();</span>
+<span class="fc" id="L1442">        buttonsHBox.setMaxHeight(buttonsHBoxHeight);</span>
+<span class="fc" id="L1443">        buttonsHBox.setMaxWidth(popupWidth);</span>
+<span class="fc" id="L1444">        buttonsHBox.setAlignment(Pos.TOP_CENTER);</span>
+<span class="fc" id="L1445">        buttonsHBox.setSpacing(buttonsHBoxSpacing);</span>
 
         // yes button
-<span class="nc" id="L1448">        Button yesButton = new Button(resources.getString(&quot;NURSE.YES&quot;));</span>
-<span class="nc" id="L1449">        yesButton.setMaxWidth(nurseButtonWidth);</span>
-<span class="nc" id="L1450">        yesButton.setMinWidth(nurseButtonWidth);</span>
-<span class="nc" id="L1451">        yesButton.setMaxHeight(nurseButtonHeight);</span>
-<span class="nc" id="L1452">        yesButton.setMinHeight(nurseButtonHeight);</span>
-<span class="nc" id="L1453">        yesButton.getStyleClass().add(&quot;buttonsYellow&quot;);</span>
-<span class="nc" id="L1454">        yesButton.setOnAction(event -&gt; {</span>
-<span class="nc" id="L1455">            continueTrainerDialog(DialogSpecialInteractions.nurseYes);</span>
-<span class="nc" id="L1456">            inNpcPopup = false;</span>
-<span class="nc" id="L1457">            this.root.getChildren().remove(nursePopupVBox);</span>
-<span class="nc" id="L1458">            buttonsDisable(false);</span>
-<span class="nc" id="L1459">        });</span>
+<span class="fc" id="L1448">        Button yesButton = new Button(resources.getString(&quot;NURSE.YES&quot;));</span>
+<span class="fc" id="L1449">        yesButton.setMaxWidth(nurseButtonWidth);</span>
+<span class="fc" id="L1450">        yesButton.setMinWidth(nurseButtonWidth);</span>
+<span class="fc" id="L1451">        yesButton.setMaxHeight(nurseButtonHeight);</span>
+<span class="fc" id="L1452">        yesButton.setMinHeight(nurseButtonHeight);</span>
+<span class="fc" id="L1453">        yesButton.getStyleClass().add(&quot;buttonsYellow&quot;);</span>
+<span class="fc" id="L1454">        yesButton.setOnAction(event -&gt; {</span>
+<span class="fc" id="L1455">            continueTrainerDialog(DialogSpecialInteractions.nurseYes);</span>
+<span class="fc" id="L1456">            inNpcPopup = false;</span>
+<span class="fc" id="L1457">            this.root.getChildren().remove(nursePopupVBox);</span>
+<span class="fc" id="L1458">            buttonsDisable(false);</span>
+<span class="fc" id="L1459">        });</span>
 
         // no button
-<span class="nc" id="L1462">        Button noButton = new Button(resources.getString(&quot;NURSE.NO&quot;));</span>
-<span class="nc" id="L1463">        noButton.setMaxWidth(nurseButtonWidth);</span>
-<span class="nc" id="L1464">        noButton.setMinWidth(nurseButtonWidth);</span>
-<span class="nc" id="L1465">        noButton.setMaxHeight(nurseButtonHeight);</span>
-<span class="nc" id="L1466">        noButton.setMinHeight(nurseButtonHeight);</span>
-<span class="nc" id="L1467">        noButton.getStyleClass().add(&quot;buttonsWhite&quot;);</span>
-<span class="nc" id="L1468">        noButton.setOnAction(event -&gt; {</span>
-<span class="nc" id="L1469">            continueTrainerDialog(DialogSpecialInteractions.nurseNo);</span>
-<span class="nc" id="L1470">            inNpcPopup = false;</span>
-<span class="nc" id="L1471">            this.root.getChildren().remove(nursePopupVBox);</span>
-<span class="nc" id="L1472">            buttonsDisable(false);</span>
-<span class="nc" id="L1473">        });</span>
+<span class="fc" id="L1462">        Button noButton = new Button(resources.getString(&quot;NURSE.NO&quot;));</span>
+<span class="fc" id="L1463">        noButton.setMaxWidth(nurseButtonWidth);</span>
+<span class="fc" id="L1464">        noButton.setMinWidth(nurseButtonWidth);</span>
+<span class="fc" id="L1465">        noButton.setMaxHeight(nurseButtonHeight);</span>
+<span class="fc" id="L1466">        noButton.setMinHeight(nurseButtonHeight);</span>
+<span class="fc" id="L1467">        noButton.getStyleClass().add(&quot;buttonsWhite&quot;);</span>
+<span class="fc" id="L1468">        noButton.setOnAction(event -&gt; {</span>
+<span class="fc" id="L1469">            continueTrainerDialog(DialogSpecialInteractions.nurseNo);</span>
+<span class="fc" id="L1470">            inNpcPopup = false;</span>
+<span class="fc" id="L1471">            this.root.getChildren().remove(nursePopupVBox);</span>
+<span class="fc" id="L1472">            buttonsDisable(false);</span>
+<span class="fc" id="L1473">        });</span>
 
         // add buttons to buttonHBox
-<span class="nc" id="L1476">        buttonsHBox.getChildren().addAll(yesButton, noButton);</span>
+<span class="fc" id="L1476">        buttonsHBox.getChildren().addAll(yesButton, noButton);</span>
 
         // add text and buttonsHBox to nurseVBox
-<span class="nc" id="L1479">        nurseVBox.getChildren().addAll(nurseQuestion, buttonsHBox);</span>
+<span class="fc" id="L1479">        nurseVBox.getChildren().addAll(nurseQuestion, buttonsHBox);</span>
 
         // add nurseVBox to stackPane
-<span class="nc" id="L1482">        root.getChildren().add(nurseVBox);</span>
-<span class="nc" id="L1483">        buttonsDisable(true);</span>
-<span class="nc" id="L1484">        inNpcPopup = true;</span>
-<span class="nc" id="L1485">    }</span>
+<span class="fc" id="L1482">        root.getChildren().add(nurseVBox);</span>
+<span class="fc" id="L1483">        buttonsDisable(true);</span>
+<span class="fc" id="L1484">        inNpcPopup = true;</span>
+<span class="fc" id="L1485">    }</span>
 
     public TextFlow createDialogVBox(boolean isEncounter) {
 <span class="fc" id="L1488">        StackPane dialogStackPane = new StackPane();</span>
