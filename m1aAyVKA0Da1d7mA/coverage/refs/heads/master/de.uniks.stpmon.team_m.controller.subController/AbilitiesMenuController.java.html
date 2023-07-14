@@ -104,11 +104,11 @@ public class AbilitiesMenuController extends Controller {
 <span class="fc" id="L104">        disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(</span>
                 opponent -&gt; {
 <span class="fc" id="L106">                    updateButton(ability, abilityButton, currentUse-1);</span>
-<span class="fc" id="L107">                    encounterController.updateDescription(EMPTY_STRING, true);</span>
-<span class="fc" id="L108">                    encounterController.resetOppoenentUpdate();</span>
-<span class="fc" id="L109">                    encounterController.resetRepeatedTimes();</span>
-<span class="fc" id="L110">                    encounterController.goBackToBattleMenu();</span>
-<span class="fc" id="L111">                }, Throwable::printStackTrace));</span>
+<span class="nc" id="L107">                    encounterController.updateDescription(resources.getString(&quot;YOU.USED&quot;) + &quot; &quot; + ability.name() + &quot;. \n&quot;, true);</span>
+<span class="nc" id="L108">                    encounterController.resetOppoenentUpdate();</span>
+<span class="nc" id="L109">                    encounterController.resetRepeatedTimes();</span>
+<span class="nc" id="L110">                    encounterController.goBackToBattleMenu();</span>
+<span class="nc" id="L111">                }, Throwable::printStackTrace));</span>
 <span class="fc" id="L112">    }</span>
 
     private void updateButton(AbilityDto ability, Button abilityButton, int currentUse) {
