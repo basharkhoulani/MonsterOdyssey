@@ -113,4 +113,17 @@ public class NotificationListHandyController extends Controller {
         }
         timeline.play();
     }
+
+    public void displayLowHealthMessages() {
+        Timeline timeline = new Timeline();
+        int duration = 1;
+
+        for (int i = 0; i < 2; i++) {
+            int iter = i;
+            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.LOWHEALTH."+ iter)));
+            timeline.getKeyFrames().add(keyFrame);
+            duration++;
+        }
+        timeline.play();
+    }
 }
