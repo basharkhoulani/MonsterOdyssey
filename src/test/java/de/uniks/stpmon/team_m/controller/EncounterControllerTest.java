@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
+import de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
@@ -62,11 +63,13 @@ class EncounterControllerTest extends ApplicationTest {
     BattleMenuController battleMenuController;
     @Mock
     Parent parent;
-
+    @Mock
+    AbilitiesMenuController abilitiesMenuController;
+    @Mock
+    EncounterOpponentController encounterOpponentController;
 
 
     public void start(Stage stage) {
-        /*
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
         encounterController.setValues(bundle, null, null, encounterController, app);
 
@@ -190,27 +193,27 @@ class EncounterControllerTest extends ApplicationTest {
                 List.of("fire"),
                 "Flamander is a small, agile monster that lives in the hot deserts of the world."
         );
-        when(presetsService.getMonsterImage(1)).thenReturn(Observable.just(ResponseBody.create(null,new byte[0])));
+        when(presetsService.getMonsterImage(1)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
 
         // Mock the enemy trainer
         when(trainersService.getTrainer(anyString(), anyString())).thenReturn(Observable.just(
-                        new Trainer(
-                                "2023-05-30T12:02:57.510Z",
-                                "2023-05-30T12:01:57.510Z",
-                                "64abfde932eb8b56aac8efac",
-                                "646bab5cecf584e1be02598a",
-                                "6475e595ac3946b6a812d868",
-                                "Peter",
-                                "Premade_Character_02.png",
-                                0,
-                                List.of("64aa9f7132eb8b56aa9eb20c"),
-                                List.of(1),
-                                "6475e595ac3946b6a812d863",
-                                33,
-                                18,
-                                1,
-                                null
-                        )
+                new Trainer(
+                        "2023-05-30T12:02:57.510Z",
+                        "2023-05-30T12:01:57.510Z",
+                        "64abfde932eb8b56aac8efac",
+                        "646bab5cecf584e1be02598a",
+                        "6475e595ac3946b6a812d868",
+                        "Peter",
+                        "Premade_Character_02.png",
+                        0,
+                        List.of("64aa9f7132eb8b56aa9eb20c"),
+                        List.of(1),
+                        "6475e595ac3946b6a812d863",
+                        33,
+                        18,
+                        1,
+                        null
+                )
         ));
 
         // Mock eventListener
@@ -228,12 +231,49 @@ class EncounterControllerTest extends ApplicationTest {
         app.start(stage);
         app.show(encounterController);
         stage.requestFocus();
-    */
+
     }
 
     @Test
-    void controllerTest(){
+    void controllerTest() {
 
+    }
+
+    @Test
+    void renderFor1vs2Test() {
+        when(encounterOpponentStorage.getEncounterSize()).thenReturn(3);
+        when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
+                List.of(
+                        new Opponent(
+                                "2023-07-09T11:52:17.658Z",
+                                "2023-07-09T11:52:35.578Z",
+                                "64aa9f7132eb8b56aa9eb20f",
+                                "64aa9f7132eb8b56aa9eb208",
+                                "64abfde932eb8b56aac8efac",
+                                true,
+                                true,
+                                "64aa9f7132eb8b56aa9eb20c",
+                                null,
+                                List.of(),
+                                0
+                        ),
+                        new Opponent(
+                                "2023-07-09T11:52:17.658Z",
+                                "2023-07-09T11:52:35.578Z",
+                                "64aa9f7132eb8b56aa9eb20p",
+                                "64aa9f7132eb8b56aa9eb208",
+                                "64abfde932eb8b56aac8efap",
+                                true,
+                                true,
+                                "64aa9f7132eb8b56aa9eb20c",
+                                null,
+                                List.of(),
+                                0
+                        )
+                ));
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        encounterController.setValues(bundle, null, null, encounterController, app);
+        app.show(encounterController);
     }
 
 }
