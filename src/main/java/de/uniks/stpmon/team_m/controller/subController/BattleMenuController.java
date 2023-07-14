@@ -5,17 +5,22 @@ import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.controller.EncounterController;
+import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.Monster;
+import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
-
 
 public class BattleMenuController extends Controller {
 
@@ -29,6 +34,11 @@ public class BattleMenuController extends Controller {
     public Button fleeButton;
     public Runnable onFleeButtonClick;
     private EncounterController encounterController;
+    EncounterOpponentStorage encounterOpponentStorage;
+    IngameController ingameController;
+    MonstersListController monsterListController;
+    BattleMenuController battleMenuController;
+    public Image monsterImage;
     private EncounterOpponentStorage encounterOpponentStorage;
     private VBox battleMenuVBox;
 
@@ -58,12 +68,12 @@ public class BattleMenuController extends Controller {
         encounterController.showAbilities();
     }
 
-    public void changeMonster(ActionEvent actionEvent) {
-        // show the ChangeMonster VBox
+    public void changeMonster() {
+        this.encounterController.showChangeMonsterList();
     }
 
-    public void showMonsterInformation(ActionEvent actionEvent) {
-        // show the MonsterInformation VBox
+    public void showMonsterInformation() {
+        this.encounterController.showMonsterDetailsInEncounter();
     }
 
     public void changeToIngame(ActionEvent event) {
@@ -75,5 +85,12 @@ public class BattleMenuController extends Controller {
     public void showFleeButton(boolean isWild){
         fleeButton.setVisible(isWild);
         fleeButton.setOnAction(this::changeToIngame);
+    }
+
+    public void buttonDisable(boolean isDisable) {
+        abilitiesButton.setDisable(isDisable);
+        changeMonsterButton.setDisable(isDisable);
+        currentInfoButton.setDisable(isDisable);
+        fleeButton.setDisable(isDisable);
     }
 }

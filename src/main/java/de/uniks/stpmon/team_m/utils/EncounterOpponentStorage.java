@@ -66,6 +66,25 @@ public class EncounterOpponentStorage {
         this.encounterSize = encounterSize;
     }
 
+    public List<String> getOpponentsInStorage() {
+        return opponentsInStorage;
+    }
+
+    public void setOpponentsInStorage(List<Opponent> opponentsInStorage) {
+        this.opponentsInStorage.clear();
+        for (Opponent opponent : opponentsInStorage) {
+            this.opponentsInStorage.add(opponent._id());
+        }
+    }
+
+    public Trainer getOpponentTrainer() {
+        return opponentTrainer;
+    }
+
+    public void setOpponentTrainer(Trainer opponentTrainer) {
+        this.opponentTrainer = opponentTrainer;
+    }
+
     public Opponent getSelfOpponent() {
         return selfOpponent;
     }
@@ -152,5 +171,8 @@ public class EncounterOpponentStorage {
 
     public Opponent getEnemyOpponent() {
         return this.enemyOpponents.get(0);
+    }
+    public void setCurrentEnemyMonsterType(MonsterTypeDto currentEnemyMonsterType) {
+        this.currentEnemyMonsterType = currentEnemyMonsterType;
     }
 }
