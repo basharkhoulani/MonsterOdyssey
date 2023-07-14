@@ -6,6 +6,7 @@ import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,6 +19,7 @@ import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Objects;
 
 
@@ -56,6 +58,7 @@ public class LevelUpController extends Controller {
     private Monster monster;
     private MonsterTypeDto monsterTypeDto;
     private Monster oldMonster;
+    private ArrayList<Integer> newAbilities;
 
 
     @Inject
@@ -63,13 +66,14 @@ public class LevelUpController extends Controller {
 
     }
 
-    public void init(VBox container, StackPane root, EncounterController encounterController, Monster currentMonster, MonsterTypeDto currentMonsterTypeDto, Monster oldMonster) {
+    public void init(VBox container, StackPane root, EncounterController encounterController, Monster currentMonster, MonsterTypeDto currentMonsterTypeDto, Monster oldMonster, ArrayList<Integer> newAbilities) {
         this.container = container;
         this.root = root;
         this.encounterController = encounterController;
         this.monster = currentMonster;
         this.monsterTypeDto = currentMonsterTypeDto;
         this.oldMonster = oldMonster;
+        this.newAbilities = newAbilities;
     }
 
     public Parent render() {
@@ -90,6 +94,16 @@ public class LevelUpController extends Controller {
 
         levelUpTextFlow.getChildren().add(new Text(resources.getString("LEVEL.UP!") + "\n"));
         levelUpTextFlow.getChildren().add(new Text(monsterTypeDto.name() + " " + resources.getString("NOW.HAS.THE.FOLLOWING.ATTRIBUTES") + ":"));
+
+        if (!newAbilities.isEmpty()) {
+            Label label = new Label("new Ability\n");
+            label.setAlignment(Pos.CENTER);
+            newAbilities.forEach(integer -> {
+
+
+            });
+            abilityVBox.getChildren().add(label);
+        }
         return parent;
     }
 

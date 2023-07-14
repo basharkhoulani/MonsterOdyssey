@@ -119,6 +119,7 @@ public class EncounterController extends Controller {
     private boolean resultLevelUP = false;
     private ArrayList<Opponent> battleLog = new ArrayList<>();
     private Monster oldMonster;
+    private ArrayList<Integer> newAbilities = new ArrayList<>();
 
     @Inject
     public EncounterController() {
@@ -289,14 +290,15 @@ public class EncounterController extends Controller {
                                         resultLevelUP = true;
                                     }
                                 }
+                                if (Objects.equals(result.type(), "monster-learned")) {
+                                    newAbilities.add(result.ability());
+                                }
                                 if (Objects.equals(result.type(), "target-defeated")) {
                                     if (Objects.equals(opponent._id(), encounterOpponentStorage.getSelfOpponent()._id())) {
                                         monsterDefeated();
                                     } else {
-                                        System.out.println("you dead-------------------");
+                                        showResultPopUp(resources.getString("YOU.FAILED"));
                                     }
-
-
                                 }
                             });
                         }
@@ -356,7 +358,6 @@ public class EncounterController extends Controller {
             for (Result r : oResults.results()) {
                 switch (r.type()){
                     case "ability-success" -> updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
-                    // @Tobias: Here you can add the other cases
                     default -> updateDescription("", false);
                 }
             }
@@ -453,7 +454,8 @@ public class EncounterController extends Controller {
     }
 
     public void continueBattle() {
-        if (encounterOpponentStorage.getOpponentTrainer() == null) {
+        //if (encounterOpponentStorage.getOpponentTrainer() == null) {
+        if (encounterOpponentStorage.isWild()) {
             SequentialTransition fleeAnimation = buildFleeAnimation();
             PauseTransition pause = new PauseTransition(Duration.millis(2000));
             pause.setOnFinished(evt -> {
@@ -461,7 +463,7 @@ public class EncounterController extends Controller {
                 fleeAnimation.play();
             });
             pause.play();
-            fleeAnimation.setOnFinished(evt -> showIngameController());
+            fleeAnimation.setOnFinished(evt -> showResultPopUp(resources.getString("YOU.WON")));
         }
 
     }
@@ -615,13 +617,13 @@ public class EncounterController extends Controller {
                             this,
                             monster,
                             encounterOpponentStorage.getCurrentTrainerMonsterType(),
-                            oldMonster
+                            oldMonster,
+                            newAbilities
                     );
                     popUpVBox.getChildren().add(levelUpController.render());
                     rootStackPane.getChildren().add(popUpVBox);
+                    newAbilities.clear();
                 }, Throwable::printStackTrace));
-
-
     }
 }
     
