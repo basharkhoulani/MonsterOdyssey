@@ -14,7 +14,7 @@
       </StackPane.margin>
    </Rectangle>
    <ListView fx:id="ingameNotificationListView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="429.0" prefWidth="265.0" />
-   <Button mnemonicParsing="false" onAction="#closeNotificationListHandy" prefHeight="38.0" prefWidth="119.0" styleClass="buttonsYellow" text="%INGAME.CLOSE.PHONE" textAlignment="CENTER" StackPane.alignment="BOTTOM_CENTER">
+   <Button mnemonicParsing="false" focusTraversable="false" onAction="#closeNotificationListHandy" prefHeight="38.0" prefWidth="119.0" styleClass="buttonsYellow" text="%INGAME.CLOSE.PHONE" textAlignment="CENTER" StackPane.alignment="BOTTOM_CENTER">
       <StackPane.margin>
          <Insets bottom="4.0" />
       </StackPane.margin>
