@@ -153,6 +153,8 @@ public class MonsterCell extends ListCell<Monster> {
             if (encounter) {
                 removeFromTeamButton.setStyle("-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7;");
                 removeFromTeamButton.setText(resources.getString("CHANGE.MONSTER"));
+                arrowUp.setVisible(false);
+                arrowDown.setVisible(false);
                 // TODO: Tobias hier den Aufruf zur Change Monster Methode
             }
             setGraphic(rootmonsterHBox);

@@ -1130,9 +1130,20 @@ public class IngameController extends Controller {
                 .observeOn(FX_SCHEDULER).subscribe(opt -> {
                     if (opt.size() > 0) {
                         String encounterId = opt.get(0).encounter();
+                        encounterOpponentStorage.setEncounterId(encounterId);
+                        encounterOpponentStorage.setSelfOpponent(opt.get(0));
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, encounterId)
-                                .observeOn(FX_SCHEDULER).subscribe(opts ->{
-                                    //TODO: rebuild the encounter Scene
+                                .observeOn(FX_SCHEDULER).subscribe(opts -> {
+                                    encounterOpponentStorage.setEncounterSize(opts.size());
+                                    encounterOpponentStorage.setOpponentsInStorage(opts);
+                                    for (Opponent o : opts) {
+                                        if (!o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                                            encounterOpponentStorage.setEnemyOpponent(o);
+                                        }
+                                    }
+                                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponent() != null) {
+                                        showEncounterScene();
+                                    }
                                 }, Throwable::printStackTrace));
                     }
                 }, Throwable::printStackTrace));
@@ -1358,7 +1369,7 @@ public class IngameController extends Controller {
         ContinueDialogReturnValues continueDialogReturn = dialogController.continueDialog(specialInteractions);
 
         switch (continueDialogReturn) {
-            case dialogFinishedTalkToTrainer -> endDialog(-1, true);
+            case dialogFinishedTalkToTrainer -> endDialog(0, true);
             case albertDialogFinished0 -> {
                 endDialog(0, true);
                 this.notificationListHandyController.displayStarterMessages();
@@ -1657,6 +1668,11 @@ public class IngameController extends Controller {
         root.getChildren().add(monsterDetailVBox);
         monsterDetailVBox.requestFocus();
         buttonsDisable(true);
+    }
+
+    public void showLowHealthNotification() {
+        notificationBell.setVisible(true);
+        this.notificationListHandyController.displayLowHealthMessages();
     }
 
     public void specificSounds() {

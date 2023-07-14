@@ -50,7 +50,6 @@ public class DialogController extends Controller {
                 }
             } else {
                 // check if player already encountered albert
-                // -- maybe this can be swapped with starters == null, but not all npc's have the starters attribute
                 if (npc.npc().starters() != null && alreadyEncountered) {
                     this.npcTexts = npcTextManager.getNpcTexts(npc._id() + "alreadyEncountered");
                 } else {
@@ -151,7 +150,7 @@ public class DialogController extends Controller {
                 return encounterOnTalk;
             }
 
-            if (npc.npc().starters() != null && !this.alreadyEncountered) {
+            if (Objects.equals(this.npc._id(), "645e32c6866ace359554a802") && !this.alreadyEncountered) {
                 ingameController.showStarterSelection(this.npc.npc().starters());
                 return dialogNotFinished;
             } else {
