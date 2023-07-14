@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.IngamePauseMenuController;
+import de.uniks.stpmon.team_m.controller.subController.IngameStarterMonsterController;
 import de.uniks.stpmon.team_m.controller.subController.MonstersListController;
 import de.uniks.stpmon.team_m.controller.subController.NotificationListHandyController;
 import de.uniks.stpmon.team_m.dto.*;
@@ -12,18 +13,19 @@ import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
 import okio.BufferedSource;
-import org.assertj.core.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -63,6 +65,8 @@ public class IngameControllerTest extends ApplicationTest {
     @Mock
     Provider<NotificationListHandyController> notificationListHandyControllerProvider;
     @Mock
+    Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
+    @Mock
     Provider<EncounterController> encounterControllerProvider;
 
     // Leave this mock!! it ensures that tests run fine
@@ -87,8 +91,6 @@ public class IngameControllerTest extends ApplicationTest {
     IngameController ingameController;
     @Mock
     Provider<EventListener> eventListener;
-    @Mock
-    PresetsService presetsService;
     @Mock
     Parent parent;
     @InjectMocks
