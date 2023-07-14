@@ -114,9 +114,10 @@ public class EncounterController extends Controller {
         listenToOpponents(encounterId);
         battleMenuController.setValues(resources, preferences, resourceBundleProvider, battleMenuController, app);
         battleMenuController.init();
-        subControllers.addAll(List.of(battleMenuController, abilitiesMenuController));
+        subControllers.add(battleMenuController);
+        subControllers.add(abilitiesMenuController);
         encounterOpponentControllerHashMap = new HashMap<>();
-        if (!GraphicsEnvironment.isHeadless() && !AudioService.getInstance().checkMuted()) {
+        if (!GraphicsEnvironment.isHeadless() && !AudioService.getInstance().checkMuted() && preferences != null) {
             AudioService.getInstance().stopSound();
             AudioService.getInstance().playSound(FIGHT_SOUND);
             AudioService.getInstance().setCurrentSound(FIGHT_SOUND);

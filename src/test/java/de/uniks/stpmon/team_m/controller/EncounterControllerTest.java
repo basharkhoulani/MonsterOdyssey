@@ -5,11 +5,14 @@ import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController;
 import de.uniks.stpmon.team_m.dto.*;
+import de.uniks.stpmon.team_m.rest.RegionEncountersApiService;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
+import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 import okhttp3.ResponseBody;
@@ -35,24 +38,22 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class EncounterControllerTest extends ApplicationTest {
 
-    @InjectMocks
-    EncounterController encounterController;
     @Spy
     final
     App app = new App(null);
-    @Mock
-    Preferences preferences;
     //Service
     @Mock
     RegionEncountersService regionEncountersService;
+    @Mock
+    MonstersService monstersService;
+    @Mock
+    RegionEncountersApiService regionEncountersApiService;
     @Mock
     Provider<EventListener> eventListener;
     @Mock
     PresetsService presetsService;
     @Mock
     TrainersService trainersService;
-    @Mock
-    MonstersService monstersService;
     // Storage
     @Spy
     EncounterOpponentStorage encounterOpponentStorage;
@@ -61,17 +62,21 @@ class EncounterControllerTest extends ApplicationTest {
     // Controller
     @Spy
     BattleMenuController battleMenuController;
-    @Mock
-    Parent parent;
-    @Mock
+    @InjectMocks
+    EncounterController encounterController;
+    @InjectMocks
     AbilitiesMenuController abilitiesMenuController;
-    @Mock
+    @InjectMocks
     EncounterOpponentController encounterOpponentController;
 
 
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        encounterController.setValues(bundle, null, null, encounterController, app);
+        Preferences preferences = mock(Preferences.class);
+        encounterController.setValues(bundle, preferences, null, encounterController, app);
+        battleMenuController.setValues(bundle, preferences, null, battleMenuController, app);
+
+        when(preferences.getDouble(anyString(), anyDouble())).thenReturn(0.0);
 
         // Mock the situation for 1 vs 1
         when(encounterOpponentStorage.getEncounterSize()).thenReturn(2);
@@ -195,6 +200,37 @@ class EncounterControllerTest extends ApplicationTest {
         );
         when(presetsService.getMonsterImage(1)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
 
+        lenient().doNothing().when(battleMenuController).setTrainerSpriteImageView(any(), any(), anyInt());
+
+        when(presetsService.getCharacter(any())).thenReturn(new Observable<ResponseBody>() {
+            @Override
+            protected void subscribeActual(@NonNull Observer<? super ResponseBody> observer) {
+
+            }
+        });
+
+        when(presetsService.getAbilities()).thenReturn(Observable.just(List.of(
+                new AbilityDto(
+                        124512,
+                        "tolle Fähigkeit",
+                        "macht ganz dolle aua",
+                        "fire",
+                        5,
+                        100,
+                        69
+                )
+        )));
+
+        when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(
+                new MonsterTypeDto(
+                        696969,
+                        "Kätzchen Zerstörer",
+                        "images/monster1_without",
+                        List.of("fire"),
+                        "Jooooo das vieh ballert"
+                )
+        ));
+
         // Mock the enemy trainer
         when(trainersService.getTrainer(anyString(), anyString())).thenReturn(Observable.just(
                 new Trainer(
@@ -227,15 +263,10 @@ class EncounterControllerTest extends ApplicationTest {
         //when(presetsService.getAbilities()).thenReturn(Observable.just(List.of(new AbilityDto(1, "Attack", "unknown", "fire", 5, 0.99, 100))));
         //when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(monsterType));
         //when(preferences.getDouble("volume", AudioService.getInstance().getVolume())).thenReturn(0.5);
-        doNothing().when(battleMenuController).init();
+//        doNothing().when(battleMenuController).init();
         app.start(stage);
         app.show(encounterController);
         stage.requestFocus();
-
-    }
-
-    @Test
-    void controllerTest() {
 
     }
 
