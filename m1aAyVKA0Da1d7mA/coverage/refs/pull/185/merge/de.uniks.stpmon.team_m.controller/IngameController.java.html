@@ -1368,13 +1368,13 @@ public class IngameController extends Controller {
     public void continueTrainerDialog(DialogSpecialInteractions specialInteractions) {
 <span class="fc" id="L1369">        ContinueDialogReturnValues continueDialogReturn = dialogController.continueDialog(specialInteractions);</span>
 
-<span class="pc bpc" id="L1371" title="4 of 8 branches missed.">        switch (continueDialogReturn) {</span>
+<span class="pc bpc" id="L1371" title="3 of 8 branches missed.">        switch (continueDialogReturn) {</span>
 <span class="fc" id="L1372">            case dialogFinishedTalkToTrainer -&gt; endDialog(0, true);</span>
             case albertDialogFinished0 -&gt; {
-<span class="nc" id="L1374">                endDialog(0, true);</span>
-<span class="nc" id="L1375">                this.notificationListHandyController.displayStarterMessages();</span>
-<span class="nc" id="L1376">                notificationBell.setVisible(true);</span>
-<span class="nc" id="L1377">            }</span>
+<span class="fc" id="L1374">                endDialog(0, true);</span>
+<span class="fc" id="L1375">                this.notificationListHandyController.displayStarterMessages();</span>
+<span class="fc" id="L1376">                notificationBell.setVisible(true);</span>
+<span class="fc" id="L1377">            }</span>
             case albertDialogFinished1 -&gt; {
 <span class="nc" id="L1379">                endDialog(1, true);</span>
 <span class="nc" id="L1380">                this.notificationListHandyController.displayStarterMessages();</span>
@@ -1596,43 +1596,43 @@ public class IngameController extends Controller {
 <span class="nc" id="L1596">    }</span>
 
     public void showStarterSelection(List&lt;String&gt; starters) {
-<span class="nc" id="L1599">        final boolean[] isSelection = {true};</span>
-<span class="nc" id="L1600">        IngameStarterMonsterController ingameStarterMonsterController = ingameStarterMonsterControllerProvider.get();</span>
-<span class="nc" id="L1601">        starterSelectionVBox = new VBox();</span>
-<span class="nc" id="L1602">        starterSelectionVBox.getStyleClass().add(&quot;miniMapContainer&quot;);</span>
-<span class="nc" id="L1603">        starterSelectionVBox.setStyle(&quot;-fx-max-height: 350px; -fx-max-width: 550px&quot;);</span>
-<span class="nc" id="L1604">        starterSelectionVBox.setPadding(new Insets(0, 0, 8, 0));</span>
-<span class="nc" id="L1605">        ingameStarterMonsterController.init(this, app, starters);</span>
-<span class="nc" id="L1606">        starterSelectionVBox.getChildren().add(ingameStarterMonsterController.render());</span>
+<span class="fc" id="L1599">        final boolean[] isSelection = {true};</span>
+<span class="fc" id="L1600">        IngameStarterMonsterController ingameStarterMonsterController = ingameStarterMonsterControllerProvider.get();</span>
+<span class="fc" id="L1601">        starterSelectionVBox = new VBox();</span>
+<span class="fc" id="L1602">        starterSelectionVBox.getStyleClass().add(&quot;miniMapContainer&quot;);</span>
+<span class="fc" id="L1603">        starterSelectionVBox.setStyle(&quot;-fx-max-height: 350px; -fx-max-width: 550px&quot;);</span>
+<span class="fc" id="L1604">        starterSelectionVBox.setPadding(new Insets(0, 0, 8, 0));</span>
+<span class="fc" id="L1605">        ingameStarterMonsterController.init(this, app, starters);</span>
+<span class="fc" id="L1606">        starterSelectionVBox.getChildren().add(ingameStarterMonsterController.render());</span>
 
-<span class="nc" id="L1608">        Button okButton = new Button();</span>
-<span class="nc" id="L1609">        okButton.setId(&quot;okButton&quot;);</span>
-<span class="nc" id="L1610">        okButton.setText(resources.getString(&quot;OK&quot;));</span>
-<span class="nc" id="L1611">        okButton.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
-<span class="nc" id="L1612">        okButton.setStyle(&quot;-fx-background-color: #e0ecfc&quot;);</span>
-<span class="nc" id="L1613">        okButton.setOnAction(event -&gt; {</span>
-<span class="nc bnc" id="L1614" title="All 2 branches missed.">            if (isSelection[0]) {</span>
-<span class="nc" id="L1615">                isSelection[0] = false;</span>
-<span class="nc" id="L1616">                AnchorPane starterAnchorPane = (AnchorPane) starterSelectionVBox.getChildren().get(0);</span>
-<span class="nc" id="L1617">                Label starterLabel = (Label) starterAnchorPane.getChildren().get(0);</span>
-<span class="nc" id="L1618">                starterLabel.setText(resources.getString(&quot;NEW.MONSTER.ADDED&quot;));</span>
-<span class="nc" id="L1619">                starterAnchorPane.getChildren().remove(3);</span>
-<span class="nc" id="L1620">                starterAnchorPane.getChildren().remove(2);</span>
-<span class="nc" id="L1621">            } else {</span>
-<span class="nc" id="L1622">                root.getChildren().remove(starterSelectionVBox);</span>
-<span class="nc" id="L1623">                buttonsDisable(false);</span>
-<span class="nc bnc" id="L1624" title="All 4 branches missed.">                switch (ingameStarterMonsterController.index - 1) {</span>
-<span class="nc" id="L1625">                    case 0 -&gt; continueTrainerDialog(DialogSpecialInteractions.starterSelection0);</span>
+<span class="fc" id="L1608">        Button okButton = new Button();</span>
+<span class="fc" id="L1609">        okButton.setId(&quot;starterSelectionOkButton&quot;);</span>
+<span class="fc" id="L1610">        okButton.setText(resources.getString(&quot;OK&quot;));</span>
+<span class="fc" id="L1611">        okButton.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
+<span class="fc" id="L1612">        okButton.setStyle(&quot;-fx-background-color: #e0ecfc&quot;);</span>
+<span class="fc" id="L1613">        okButton.setOnAction(event -&gt; {</span>
+<span class="fc bfc" id="L1614" title="All 2 branches covered.">            if (isSelection[0]) {</span>
+<span class="fc" id="L1615">                isSelection[0] = false;</span>
+<span class="fc" id="L1616">                AnchorPane starterAnchorPane = (AnchorPane) starterSelectionVBox.getChildren().get(0);</span>
+<span class="fc" id="L1617">                Label starterLabel = (Label) starterAnchorPane.getChildren().get(0);</span>
+<span class="fc" id="L1618">                starterLabel.setText(resources.getString(&quot;NEW.MONSTER.ADDED&quot;));</span>
+<span class="fc" id="L1619">                starterAnchorPane.getChildren().remove(3);</span>
+<span class="fc" id="L1620">                starterAnchorPane.getChildren().remove(2);</span>
+<span class="fc" id="L1621">            } else {</span>
+<span class="fc" id="L1622">                root.getChildren().remove(starterSelectionVBox);</span>
+<span class="fc" id="L1623">                buttonsDisable(false);</span>
+<span class="pc bpc" id="L1624" title="3 of 4 branches missed.">                switch (ingameStarterMonsterController.index - 1) {</span>
+<span class="fc" id="L1625">                    case 0 -&gt; continueTrainerDialog(DialogSpecialInteractions.starterSelection0);</span>
 <span class="nc" id="L1626">                    case 1 -&gt; continueTrainerDialog(DialogSpecialInteractions.starterSelection1);</span>
 <span class="nc" id="L1627">                    case 2 -&gt; continueTrainerDialog(DialogSpecialInteractions.starterSelection2);</span>
                 }
             }
-<span class="nc" id="L1630">        });</span>
-<span class="nc" id="L1631">        starterSelectionVBox.getChildren().add(okButton);</span>
-<span class="nc" id="L1632">        root.getChildren().add(starterSelectionVBox);</span>
-<span class="nc" id="L1633">        starterSelectionVBox.requestFocus();</span>
-<span class="nc" id="L1634">        buttonsDisable(true);</span>
-<span class="nc" id="L1635">    }</span>
+<span class="fc" id="L1630">        });</span>
+<span class="fc" id="L1631">        starterSelectionVBox.getChildren().add(okButton);</span>
+<span class="fc" id="L1632">        root.getChildren().add(starterSelectionVBox);</span>
+<span class="fc" id="L1633">        starterSelectionVBox.requestFocus();</span>
+<span class="fc" id="L1634">        buttonsDisable(true);</span>
+<span class="fc" id="L1635">    }</span>
 
 
     @Override
