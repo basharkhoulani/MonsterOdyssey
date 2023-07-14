@@ -1,16 +1,15 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Monster;
-import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.service.MonstersService;
+import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
-import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
@@ -20,53 +19,32 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class MonstersListController extends Controller {
-    @FXML
-    public Tab othersTab;
-    @FXML
-    public Tab activeTeamTab;
-    @FXML
-    public ListView monsterListViewOther;
-    @FXML
-    public Button closeButton;
+public class ChangeMonsterListController extends Controller {
     @Inject
-    Provider<TrainersService> trainersServiceProvider;
+    EncounterController encounterController;
     @Inject
-    Provider<MonstersDetailController> monstersDetailControllerProvider;
-    @Inject
-    UsersService usersService;
-    @Inject
-    RegionsService regionsService;
-    @Inject
-    TrainersService trainersService;
-    @Inject
-    MonstersService monstersService;
-    @Inject
-    Provider<TrainerStorage> trainerStorageProvider;
-    @Inject
-    Provider<UserStorage> userStorageProvider;
-    @Inject
-    public UserStorage usersStorage;
+    IngameController ingameController;
     @Inject
     public Provider<PresetsService> presetsServiceProvider;
     @Inject
-    IngameController ingameController;
-
+    Provider<TrainerStorage> trainerStorageProvider;
+    @Inject
+    MonstersService monstersService;
     @FXML
-    public ListView<Monster> monsterListViewActive;
+    public ListView<Monster> changeMonsterListView;
     public VBox monsterListVBox;
-
     public List<Monster> activeMonstersList;
 
     @Inject
-    public MonstersListController() {
+    public ChangeMonsterListController() {
     }
 
-    public void init(IngameController ingameController, VBox monsterListVBox) {
+    public void init(EncounterController encounterController, VBox monsterListVBox, IngameController ingameController) {
         super.init();
         activeMonstersList = new ArrayList<>();
-        this.ingameController = ingameController;
+        this.encounterController = encounterController;
         this.monsterListVBox = monsterListVBox;
+        this.ingameController = ingameController;
     }
 
     @Override
@@ -84,20 +62,17 @@ public class MonstersListController extends Controller {
                             .collect(Collectors.toList());
                     initMonsterList(activeMonstersList);
                 }, throwable -> showError(throwable.getMessage())));
-
-
         return parent;
     }
 
     private void initMonsterList(List<Monster> monsters) {
-        monsterListViewActive.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false));
-        monsterListViewActive.getItems().addAll(monsters);
-        monsterListViewActive.setFocusModel(null);
-        monsterListViewActive.setSelectionModel(null);
+        changeMonsterListView.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.encounterController, this.ingameController, true));
+        changeMonsterListView.getItems().addAll(monsters);
+        changeMonsterListView.setFocusModel(null);
+        changeMonsterListView.setSelectionModel(null);
     }
 
     public void onCloseMonsterList() {
-        ingameController.root.getChildren().remove(monsterListVBox);
-        ingameController.buttonsDisable(false);
+        encounterController.rootStackPane.getChildren().remove(monsterListVBox);
     }
 }
