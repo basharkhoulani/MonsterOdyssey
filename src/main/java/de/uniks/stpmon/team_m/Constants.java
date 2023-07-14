@@ -223,18 +223,18 @@ public class Constants {
             entry("electric", "ability-electic.png"),
             entry("grass", "ability-grass.png"),
             entry("flying", "ability-flying.png"),
-            entry("bug", "ability-bug"),
-            entry("poison", "ability-poison"),
-            entry("rock", "ability-rock"),
-            entry("ground", "ability-ground"),
-            entry("fighting", "ability-fighting"),
-            entry("ice", "ability-ice"),
-            entry("psychic", "ability-psychic"),
-            entry("ghost", "ability-ghost"),
-            entry("dragon", "ability-dragon"),
-            entry("dark", "ability-dragon"),
-            entry("steel", "ability-steel"),
-            entry("fairy", "ability-fairy")
+            entry("bug", "ability-bug.png"),
+            entry("poison", "ability-poison.png"),
+            entry("rock", "ability-rock.png"),
+            entry("ground", "ability-ground.png"),
+            entry("fighting", "ability-fighting.png"),
+            entry("ice", "ability-ice.png"),
+            entry("psychic", "ability-psychic.png"),
+            entry("ghost", "ability-ghost.png"),
+            entry("dragon", "ability-dragon.png"),
+            entry("dark", "ability-dragon.png"),
+            entry("steel", "ability-steel.png"),
+            entry("fairy", "ability-fairy.png")
     ));
 
     public static final List<String> ATTRIBUTE_IMAGES = Arrays.asList(
