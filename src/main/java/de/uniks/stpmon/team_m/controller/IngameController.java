@@ -1660,6 +1660,7 @@ public class IngameController extends Controller {
     }
 
     public void showLowHealthNotification() {
+        notificationBell.setVisible(true);
         this.notificationListHandyController.displayLowHealthMessages();
     }
 
