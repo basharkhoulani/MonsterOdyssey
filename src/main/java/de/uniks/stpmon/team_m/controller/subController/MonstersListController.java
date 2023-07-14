@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Monster;
+import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
@@ -83,6 +84,7 @@ public class MonstersListController extends Controller {
                     activeMonstersList = list.stream()
                             .filter(monster -> trainerStorageProvider.get().getTrainer().team().contains(monster._id()))
                             .collect(Collectors.toList());
+                    sortActiveMonstersList();
 
                     otherMonstersList = list.stream()
                             .filter (monster -> !trainerStorageProvider.get().getTrainer().team().contains(monster ._id()))
@@ -94,15 +96,73 @@ public class MonstersListController extends Controller {
         return parent;
     }
 
+    private void sortActiveMonstersList() {
+        List <Monster> sortedList = new ArrayList<>();
+        for (String id : trainerStorageProvider.get().getTrainer().team()) {
+            for (Monster monster : activeMonstersList) {
+                if (monster._id().equals(id)) {
+                    sortedList.add(monster);
+                    break;
+                }
+            }
+        }
+        activeMonstersList = sortedList;
+    }
+
+    public void changeOrderUp (String id) {
+        int index = 0;
+        for (Monster monster : activeMonstersList) {
+            if (monster._id().equals(id)) {
+                break;
+            }
+            index++;
+        }
+        if (index > 0) {
+            Monster monster = activeMonstersList.get(index);
+            activeMonstersList.set(index, activeMonstersList.get(index - 1));
+            activeMonstersList.set(index - 1, monster);
+            updateTeam();
+        }
+    }
+
+    public void changeOrderDown (String id) {
+        int index = 0;
+        for (Monster monster : activeMonstersList) {
+            if (monster._id().equals(id)) {
+                break;
+            }
+            index++;
+        }
+        if (index < activeMonstersList.size() - 1) {
+            Monster monster = activeMonstersList.get(index);
+            activeMonstersList.set(index, activeMonstersList.get(index + 1));
+            activeMonstersList.set(index + 1, monster);
+            updateTeam();
+        }
+    }
+
+    public void updateTeam(){
+        Trainer trainer = trainerStorageProvider.get().getTrainer();
+        monsterListViewActive.getItems().clear();
+        monsterListViewActive.getItems().addAll(activeMonstersList);
+        List<String> team = new ArrayList<>();
+        for (Monster monster1 : activeMonstersList) {
+            team.add(monster1._id());
+        }
+        disposables.add(trainersService.updateTrainer(trainer.region(), trainer._id(), null, null, team)
+                .observeOn(FX_SCHEDULER)
+                .subscribe(t -> trainerStorageProvider.get().setTrainer(t), throwable -> showError(throwable.getMessage())));
+    }
+
     private void initMonsterList(List<Monster> monsters) {
-        monsterListViewActive.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false));
+        monsterListViewActive.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false, false));
         monsterListViewActive.getItems().addAll(monsters);
         monsterListViewActive.setFocusModel(null);
         monsterListViewActive.setSelectionModel(null);
     }
 
     private void initOtherMonsterList(List<Monster> monsters) {
-        monsterListViewOther.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false));
+        monsterListViewOther.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false, true));
         monsterListViewOther.getItems().addAll(monsters);
         monsterListViewOther.setFocusModel(null);
         monsterListViewOther.setSelectionModel(null);
@@ -111,5 +171,29 @@ public class MonstersListController extends Controller {
     public void onCloseMonsterList() {
         ingameController.root.getChildren().remove(monsterListVBox);
         ingameController.buttonsDisable(false);
+    }
+
+    public void removeFromTeam(Monster monster) {
+        List<String> team = trainerStorageProvider.get().getTrainer().team();
+        team.remove(monster._id());
+        updateBothLists(monsterListViewOther, otherMonstersList, monsterListViewActive, activeMonstersList, monster, team);
+    }
+
+    public void addToTeam(Monster monster) {
+        List<String> team = trainerStorageProvider.get().getTrainer().team();
+        team.add(monster._id());
+        updateBothLists(monsterListViewActive, activeMonstersList, monsterListViewOther, otherMonstersList, monster, team);
+    }
+
+    private void updateBothLists(ListView<Monster> listViewAdd,List<Monster> listAdd, ListView<Monster> listViewRemove, List<Monster> listRemove, Monster monster, List<String> team) {
+        disposables.add(trainersService.updateTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), null, null, team)
+                .observeOn(FX_SCHEDULER)
+                .subscribe(t -> trainerStorageProvider.get().setTrainer(t), throwable -> showError(throwable.getMessage())));
+        listRemove.removeIf(remove -> remove._id().equals(monster._id()));
+        listViewRemove.getItems().clear();
+        listViewRemove.getItems().addAll(listRemove);
+        listAdd.add(monster);
+        listViewAdd.getItems().clear();
+        listViewAdd.getItems().addAll(listAdd);
     }
 }
