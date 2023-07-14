@@ -199,13 +199,9 @@ import static de.uniks.stpmon.team_m.Constants.*;
 
     public void setTrainerSpriteImageView(Trainer trainer, ImageView imageView, int direction) {
 <span class="nc bnc" id="L201" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L202">            disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody -&gt; {</span>
-<span class="nc" id="L203">                        javafx.scene.image.Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);</span>
-<span class="nc" id="L204">                        Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, direction, false);</span>
-<span class="nc" id="L205">                        imageView.setImage(character[0]);</span>
-<span class="nc" id="L206">                    }, error -&gt; showError(error.getMessage())</span>
-            ));
+<span class="nc" id="L202">            Image character = ImageProcessor.showScaledCharacter(trainer.image(), direction, false);</span>
+<span class="nc" id="L203">            imageView.setImage(character);</span>
         }
-<span class="nc" id="L209">    }</span>
+<span class="nc" id="L205">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
