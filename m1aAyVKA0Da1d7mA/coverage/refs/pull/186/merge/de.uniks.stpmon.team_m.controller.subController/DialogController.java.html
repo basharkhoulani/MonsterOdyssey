@@ -50,7 +50,7 @@ import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
                 }
             } else {
                 // check if player already encountered albert
-<span class="pc bpc" id="L53" title="3 of 4 branches missed.">                if (npc.npc().starters() != null &amp;&amp; alreadyEncountered) {</span>
+<span class="pc bpc" id="L53" title="1 of 4 branches missed.">                if (npc.npc().starters() != null &amp;&amp; alreadyEncountered) {</span>
 <span class="nc" id="L54">                    this.npcTexts = npcTextManager.getNpcTexts(npc._id() + &quot;alreadyEncountered&quot;);</span>
                 } else {
 <span class="fc" id="L56">                    this.npcTexts = npcTextManager.getNpcTexts(npc._id());</span>
@@ -78,7 +78,7 @@ import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
     public Constants.ContinueDialogReturnValues continueDialog(Constants.DialogSpecialInteractions specialInteraction) {
         // check if a special interaction has been triggered
 <span class="fc bfc" id="L80" title="All 2 branches covered.">        if (specialInteraction != null) {</span>
-<span class="pc bpc" id="L81" title="5 of 7 branches missed.">            switch (specialInteraction) {</span>
+<span class="pc bpc" id="L81" title="4 of 7 branches missed.">            switch (specialInteraction) {</span>
                 case nurseYes -&gt; {
 <span class="fc" id="L83">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.NURSE.YES.DIALOG&quot;));</span>
 <span class="fc" id="L84">                    this.wantsHeal = true;</span>
@@ -100,10 +100,10 @@ import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
                     }
                 }
                 case starterSelection0 -&gt; {
-<span class="nc" id="L103">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
-<span class="nc" id="L104">                    this.starterSelection = 0;</span>
-<span class="nc" id="L105">                    this.starterSelected = true;</span>
-<span class="nc" id="L106">                }</span>
+<span class="fc" id="L103">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
+<span class="fc" id="L104">                    this.starterSelection = 0;</span>
+<span class="fc" id="L105">                    this.starterSelected = true;</span>
+<span class="fc" id="L106">                }</span>
                 case starterSelection1 -&gt; {
 <span class="nc" id="L108">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
 <span class="nc" id="L109">                    this.starterSelection = 1;</span>
@@ -128,10 +128,10 @@ import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
                 }
             }
 
-<span class="pc bpc" id="L131" title="1 of 2 branches missed.">            if (starterSelected) {</span>
-<span class="nc bnc" id="L132" title="All 4 branches missed.">                switch (starterSelection) {</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">            if (starterSelected) {</span>
+<span class="pc bpc" id="L132" title="3 of 4 branches missed.">                switch (starterSelection) {</span>
                     case 0 -&gt; {
-<span class="nc" id="L134">                        return albertDialogFinished0;</span>
+<span class="fc" id="L134">                        return albertDialogFinished0;</span>
                     }
                     case 1 -&gt; {
 <span class="nc" id="L137">                        return albertDialogFinished1;</span>
@@ -150,9 +150,9 @@ import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
 <span class="nc" id="L150">                return encounterOnTalk;</span>
             }
 
-<span class="pc bpc" id="L153" title="1 of 2 branches missed.">            if (this.npc.npc().starters() != null) {</span>
-<span class="nc" id="L154">                ingameController.showStarterSelection(this.npc.npc().starters());</span>
-<span class="nc" id="L155">                return dialogNotFinished;</span>
+<span class="pc bpc" id="L153" title="1 of 4 branches missed.">            if (npc.npc().starters() != null &amp;&amp; !this.alreadyEncountered) {</span>
+<span class="fc" id="L154">                ingameController.showStarterSelection(this.npc.npc().starters());</span>
+<span class="fc" id="L155">                return dialogNotFinished;</span>
             } else {
 <span class="fc" id="L157">                return dialogFinishedTalkToTrainer;</span>
             }
