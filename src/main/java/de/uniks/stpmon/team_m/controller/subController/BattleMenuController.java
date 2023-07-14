@@ -39,7 +39,6 @@ public class BattleMenuController extends Controller {
     MonstersListController monsterListController;
     BattleMenuController battleMenuController;
     public Image monsterImage;
-    private EncounterOpponentStorage encounterOpponentStorage;
     private VBox battleMenuVBox;
 
 
@@ -51,6 +50,13 @@ public class BattleMenuController extends Controller {
         super.init();
         this.encounterController = encounterController;
         this.battleMenuVBox = battleMenuVBox;
+        this.encounterOpponentStorage = encounterOpponentStorage;
+        this.app = app;
+    }
+    public void init(EncounterController encounterController, EncounterOpponentStorage encounterOpponentStorage, App app) {
+        super.init();
+        this.encounterController = encounterController;
+        this.battleMenuVBox = null;
         this.encounterOpponentStorage = encounterOpponentStorage;
         this.app = app;
     }
