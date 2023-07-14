@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
@@ -36,6 +35,7 @@ import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
 public class MonsterCell extends ListCell<Monster> {
 
+    private final boolean other;
     @FXML
     public ImageView arrowUp;
     @FXML
@@ -86,22 +86,24 @@ public class MonsterCell extends ListCell<Monster> {
     private Image typeImage;
 
     public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController,
-                       IngameController ingameController, boolean encounter) {
+                       IngameController ingameController, boolean encounter, boolean other) {
         this.ingameController = ingameController;
         this.resources = resources;
         this.presetsService = presetsService;
         this.monstersListController = monstersListController;
         this.encounter = encounter;
+        this.other = other;
     }
 
     public MonsterCell(ResourceBundle resources, PresetsService presetsService, ChangeMonsterListController changeMonsterListController,
-                       EncounterController encounterController, IngameController ingameController, boolean encounter) {
+                       EncounterController encounterController, IngameController ingameController, boolean encounter, boolean other) {
         this.encounterController = encounterController;
         this.resources = resources;
         this.presetsService = presetsService;
         this.changeMonsterListController = changeMonsterListController;
         this.ingameController = ingameController;
         this.encounter = encounter;
+        this.other = other;
     }
 
     @Override
@@ -150,6 +152,19 @@ public class MonsterCell extends ListCell<Monster> {
                     }, error -> monstersListController.showError(error.getMessage())));
             viewDetailsButton.setOnAction(event -> showDetails(monster, type.toString()));
 
+            if(!encounter) {
+                arrowUp.setOnMouseClicked(event -> monstersListController.changeOrderUp(monster._id()));
+                arrowDown.setOnMouseClicked(event -> monstersListController.changeOrderDown(monster._id()));
+                removeFromTeamButton.setOnAction(event -> monstersListController.removeFromTeam(monster));
+                if (other) {
+                    removeFromTeamButton.setStyle("-fx-background-color: #FFF2CC; -fx-border-width: 1px; -fx-border-color: gray;");
+                    removeFromTeamButton.setText(resources.getString("ADD.MONSTER"));
+                    arrowUp.setVisible(false);
+                    arrowDown.setVisible(false);
+                    removeFromTeamButton.setOnAction(event -> monstersListController.addToTeam(monster));
+                }
+            }
+
             if (encounter) {
                 removeFromTeamButton.setStyle("-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7;");
                 removeFromTeamButton.setText(resources.getString("CHANGE.MONSTER"));
@@ -162,6 +177,7 @@ public class MonsterCell extends ListCell<Monster> {
             setStyle("-fx-background-color: #CFE9DB;  -fx-border-color: #1C701C; -fx-border-width: 2px");
         }
     }
+
 
     private void showDetails(Monster monster, String type) {
         if (encounter) {
