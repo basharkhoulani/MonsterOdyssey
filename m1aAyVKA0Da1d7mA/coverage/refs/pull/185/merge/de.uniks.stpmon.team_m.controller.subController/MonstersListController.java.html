@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MonstersListController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">MonstersListController.java</span></div><h1>MonstersListController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.Monster;
+import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import de.uniks.stpmon.team_m.utils.UserStorage;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.layout.VBox;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+public class MonstersListController extends Controller {
+    @FXML
+    public Tab othersTab;
+    @FXML
+    public Tab activeTeamTab;
+    @FXML
+    public Button closeButton;
+    @Inject
+    Provider&lt;TrainersService&gt; trainersServiceProvider;
+    @Inject
+    Provider&lt;MonstersDetailController&gt; monstersDetailControllerProvider;
+    @Inject
+    UsersService usersService;
+    @Inject
+    RegionsService regionsService;
+    @Inject
+    TrainersService trainersService;
+    @Inject
+    MonstersService monstersService;
+    @Inject
+    Provider&lt;TrainerStorage&gt; trainerStorageProvider;
+    @Inject
+    Provider&lt;UserStorage&gt; userStorageProvider;
+    @Inject
+    public UserStorage usersStorage;
+    @Inject
+    public Provider&lt;PresetsService&gt; presetsServiceProvider;
+    @Inject
+    IngameController ingameController;
+    @FXML
+    public ListView&lt;Monster&gt; monsterListViewActive;
+    @FXML
+    public ListView&lt;Monster&gt; monsterListViewOther;
+    public VBox monsterListVBox;
+
+    public List&lt;Monster&gt; activeMonstersList;
+    public List&lt;Monster&gt; otherMonstersList;
+
+    @Inject
+<span class="fc" id="L63">    public MonstersListController() {</span>
+<span class="fc" id="L64">    }</span>
+
+    public void init(IngameController ingameController, VBox monsterListVBox) {
+<span class="nc" id="L67">        super.init();</span>
+<span class="nc" id="L68">        activeMonstersList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L69">        otherMonstersList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L70">        this.ingameController = ingameController;</span>
+<span class="nc" id="L71">        this.monsterListVBox = monsterListVBox;</span>
+<span class="nc" id="L72">    }</span>
+
+    @Override
+    public String getTitle() {
+<span class="fc" id="L76">        return resources.getString(&quot;MONSTERS&quot;);</span>
+    }
+
+    @Override
+    public Parent render() {
+<span class="fc" id="L81">        final Parent parent = super.render();</span>
+<span class="fc" id="L82">        disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L83">                .subscribe(list -&gt; {</span>
+<span class="fc" id="L84">                    activeMonstersList = list.stream()</span>
+<span class="fc" id="L85">                            .filter(monster -&gt; trainerStorageProvider.get().getTrainer().team().contains(monster._id()))</span>
+<span class="fc" id="L86">                            .collect(Collectors.toList());</span>
+<span class="fc" id="L87">                    sortActiveMonstersList();</span>
+
+<span class="fc" id="L89">                    otherMonstersList = list.stream()</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">                            .filter (monster -&gt; !trainerStorageProvider.get().getTrainer().team().contains(monster ._id()))</span>
+<span class="fc" id="L91">                            .collect (Collectors.toList());</span>
+<span class="fc" id="L92">                    initOtherMonsterList(otherMonstersList);</span>
+<span class="fc" id="L93">                    initMonsterList(activeMonstersList);</span>
+<span class="pc" id="L94">                }, throwable -&gt; showError(throwable.getMessage())));</span>
+
+<span class="fc" id="L96">        return parent;</span>
+    }
+
+    private void sortActiveMonstersList() {
+<span class="fc" id="L100">        List &lt;Monster&gt; sortedList = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        for (String id : trainerStorageProvider.get().getTrainer().team()) {</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">            for (Monster monster : activeMonstersList) {</span>
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">                if (monster._id().equals(id)) {</span>
+<span class="fc" id="L104">                    sortedList.add(monster);</span>
+<span class="fc" id="L105">                    break;</span>
+                }
+<span class="nc" id="L107">            }</span>
+<span class="fc" id="L108">        }</span>
+<span class="fc" id="L109">        activeMonstersList = sortedList;</span>
+<span class="fc" id="L110">    }</span>
+
+    public void changeOrderUp (String id) {
+<span class="nc" id="L113">        int index = 0;</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        for (Monster monster : activeMonstersList) {</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">            if (monster._id().equals(id)) {</span>
+<span class="nc" id="L116">                break;</span>
+            }
+<span class="nc" id="L118">            index++;</span>
+<span class="nc" id="L119">        }</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">        if (index &gt; 0) {</span>
+<span class="nc" id="L121">            Monster monster = activeMonstersList.get(index);</span>
+<span class="nc" id="L122">            activeMonstersList.set(index, activeMonstersList.get(index - 1));</span>
+<span class="nc" id="L123">            activeMonstersList.set(index - 1, monster);</span>
+<span class="nc" id="L124">            updateTeam();</span>
+        }
+<span class="nc" id="L126">    }</span>
+
+    public void changeOrderDown (String id) {
+<span class="nc" id="L129">        int index = 0;</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">        for (Monster monster : activeMonstersList) {</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">            if (monster._id().equals(id)) {</span>
+<span class="nc" id="L132">                break;</span>
+            }
+<span class="nc" id="L134">            index++;</span>
+<span class="nc" id="L135">        }</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        if (index &lt; activeMonstersList.size() - 1) {</span>
+<span class="nc" id="L137">            Monster monster = activeMonstersList.get(index);</span>
+<span class="nc" id="L138">            activeMonstersList.set(index, activeMonstersList.get(index + 1));</span>
+<span class="nc" id="L139">            activeMonstersList.set(index + 1, monster);</span>
+<span class="nc" id="L140">            updateTeam();</span>
+        }
+<span class="nc" id="L142">    }</span>
+
+    public void updateTeam(){
+<span class="nc" id="L145">        Trainer trainer = trainerStorageProvider.get().getTrainer();</span>
+<span class="nc" id="L146">        monsterListViewActive.getItems().clear();</span>
+<span class="nc" id="L147">        monsterListViewActive.getItems().addAll(activeMonstersList);</span>
+<span class="nc" id="L148">        List&lt;String&gt; team = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">        for (Monster monster1 : activeMonstersList) {</span>
+<span class="nc" id="L150">            team.add(monster1._id());</span>
+<span class="nc" id="L151">        }</span>
+<span class="nc" id="L152">        disposables.add(trainersService.updateTrainer(trainer.region(), trainer._id(), null, null, team)</span>
+<span class="nc" id="L153">                .observeOn(FX_SCHEDULER)</span>
+<span class="nc" id="L154">                .subscribe(t -&gt; trainerStorageProvider.get().setTrainer(t), throwable -&gt; showError(throwable.getMessage())));</span>
+<span class="nc" id="L155">    }</span>
+
+    private void initMonsterList(List&lt;Monster&gt; monsters) {
+<span class="fc" id="L158">        monsterListViewActive.setCellFactory(param -&gt; new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false, false));</span>
+<span class="fc" id="L159">        monsterListViewActive.getItems().addAll(monsters);</span>
+<span class="fc" id="L160">        monsterListViewActive.setFocusModel(null);</span>
+<span class="fc" id="L161">        monsterListViewActive.setSelectionModel(null);</span>
+<span class="fc" id="L162">    }</span>
+
+    private void initOtherMonsterList(List&lt;Monster&gt; monsters) {
+<span class="pc" id="L165">        monsterListViewOther.setCellFactory(param -&gt; new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false, true));</span>
+<span class="fc" id="L166">        monsterListViewOther.getItems().addAll(monsters);</span>
+<span class="fc" id="L167">        monsterListViewOther.setFocusModel(null);</span>
+<span class="fc" id="L168">        monsterListViewOther.setSelectionModel(null);</span>
+<span class="fc" id="L169">    }</span>
+
+    public void onCloseMonsterList() {
+<span class="nc" id="L172">        ingameController.root.getChildren().remove(monsterListVBox);</span>
+<span class="nc" id="L173">        ingameController.buttonsDisable(false);</span>
+<span class="nc" id="L174">    }</span>
+
+    public void removeFromTeam(Monster monster) {
+<span class="nc" id="L177">        List&lt;String&gt; team = trainerStorageProvider.get().getTrainer().team();</span>
+<span class="nc" id="L178">        team.remove(monster._id());</span>
+<span class="nc" id="L179">        updateBothLists(monsterListViewOther, otherMonstersList, monsterListViewActive, activeMonstersList, monster, team);</span>
+<span class="nc" id="L180">    }</span>
+
+    public void addToTeam(Monster monster) {
+<span class="nc" id="L183">        List&lt;String&gt; team = trainerStorageProvider.get().getTrainer().team();</span>
+<span class="nc" id="L184">        team.add(monster._id());</span>
+<span class="nc" id="L185">        updateBothLists(monsterListViewActive, activeMonstersList, monsterListViewOther, otherMonstersList, monster, team);</span>
+<span class="nc" id="L186">    }</span>
+
+    private void updateBothLists(ListView&lt;Monster&gt; listViewAdd,List&lt;Monster&gt; listAdd, ListView&lt;Monster&gt; listViewRemove, List&lt;Monster&gt; listRemove, Monster monster, List&lt;String&gt; team) {
+<span class="nc" id="L189">        disposables.add(trainersService.updateTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), null, null, team)</span>
+<span class="nc" id="L190">                .observeOn(FX_SCHEDULER)</span>
+<span class="nc" id="L191">                .subscribe(t -&gt; trainerStorageProvider.get().setTrainer(t), throwable -&gt; showError(throwable.getMessage())));</span>
+<span class="nc" id="L192">        listRemove.removeIf(remove -&gt; remove._id().equals(monster._id()));</span>
+<span class="nc" id="L193">        listViewRemove.getItems().clear();</span>
+<span class="nc" id="L194">        listViewRemove.getItems().addAll(listRemove);</span>
+<span class="nc" id="L195">        listAdd.add(monster);</span>
+<span class="nc" id="L196">        listViewAdd.getItems().clear();</span>
+<span class="nc" id="L197">        listViewAdd.getItems().addAll(listAdd);</span>
+<span class="nc" id="L198">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
