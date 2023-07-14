@@ -117,7 +117,7 @@ public class EncounterController extends Controller {
         subControllers.add(battleMenuController);
         subControllers.add(abilitiesMenuController);
         encounterOpponentControllerHashMap = new HashMap<>();
-        if (!GraphicsEnvironment.isHeadless() && !AudioService.getInstance().checkMuted() && preferences != null) {
+        if (!GraphicsEnvironment.isHeadless() && !AudioService.getInstance().checkMuted()) {
             AudioService.getInstance().stopSound();
             AudioService.getInstance().playSound(FIGHT_SOUND);
             AudioService.getInstance().setCurrentSound(FIGHT_SOUND);
@@ -375,7 +375,11 @@ public class EncounterController extends Controller {
     @Override
     public void destroy() {
         super.destroy();
-        subControllers.forEach(Controller::destroy);
+        for (Controller controller : subControllers) {
+            if (controller != null) {
+                controller.destroy();
+            }
+        }
         //add destroy methode for the elements in encounterOpponentControllerHashMap
         encounterOpponentControllerHashMap.values().forEach(Controller::destroy);
     }
@@ -556,6 +560,7 @@ public class EncounterController extends Controller {
 
         // yes Button
         Button yesButton = new Button(this.resources.getString("ENCOUNTER_FLEE_CONFIRM_BUTTON"));
+        yesButton.setId("fleePopupYesButton");
         yesButton.setMaxWidth(fleeButtonWidth);
         yesButton.setMinHeight(fleeButtonHeight);
         yesButton.setPrefWidth(fleeButtonWidth);
@@ -567,12 +572,13 @@ public class EncounterController extends Controller {
 
         // no Button
         Button noButton = new Button(this.resources.getString("ENCOUNTER_FLEE_CANCEL_BUTTON"));
+        noButton.setId("fleePopupNoButton");
         noButton.setMaxWidth(fleeButtonWidth);
         noButton.setMinHeight(fleeButtonHeight);
         noButton.setPrefWidth(fleeButtonWidth);
         noButton.setPrefHeight(fleeButtonHeight);
         noButton.getStyleClass().add("hBoxYellow");
-        //noButton.setOnAction(event -> rootStackPane.getChildren().remove(fleeVBox));
+        noButton.setOnAction(event -> rootStackPane.getChildren().remove(fleeVBox));
 
         // add buttons to hbox
         buttonHBox.getChildren().addAll(yesButton, noButton);

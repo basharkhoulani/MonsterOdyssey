@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -43,7 +44,11 @@ class EncounterControllerTest extends ApplicationTest {
     App app = new App(null);
     //Service
     @Mock
+    Preferences preferences;
+    @Mock
     RegionEncountersService regionEncountersService;
+    @Mock
+    EncounterOpponentsService encounterOpponentsService;
     @Mock
     MonstersService monstersService;
     @Mock
@@ -62,21 +67,24 @@ class EncounterControllerTest extends ApplicationTest {
     // Controller
     @Spy
     BattleMenuController battleMenuController;
+    @Mock
+    Provider<AbilitiesMenuController> abilitiesMenuControllerProvider;
+    @InjectMocks
+    IngameController ingameController;
+    @Mock
+    Provider<IngameController> ingameControllerProvider;
     @InjectMocks
     EncounterController encounterController;
-    @InjectMocks
-    AbilitiesMenuController abilitiesMenuController;
+
     @InjectMocks
     EncounterOpponentController encounterOpponentController;
 
 
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        Preferences preferences = mock(Preferences.class);
         encounterController.setValues(bundle, preferences, null, encounterController, app);
-        battleMenuController.setValues(bundle, preferences, null, battleMenuController, app);
 
-        when(preferences.getDouble(anyString(), anyDouble())).thenReturn(0.0);
+        lenient().when(preferences.getDouble(anyString(), anyDouble())).thenReturn(0.0);
 
         // Mock the situation for 1 vs 1
         when(encounterOpponentStorage.getEncounterSize()).thenReturn(2);
@@ -189,7 +197,7 @@ class EncounterControllerTest extends ApplicationTest {
                 new MonsterAttributes(14, 8, 8, 5),
                 new MonsterAttributes(14, 8, 8, 5)
         );
-        when(monstersService.getMonster(anyString(), anyString(), anyString())).thenReturn(Observable.just(monster));
+        when(monstersService.getMonster(anyString(), any(), anyString())).thenReturn(Observable.just(monster));
 
         MonsterTypeDto monsterType = new MonsterTypeDto(
                 1,
@@ -202,7 +210,7 @@ class EncounterControllerTest extends ApplicationTest {
 
         lenient().doNothing().when(battleMenuController).setTrainerSpriteImageView(any(), any(), anyInt());
 
-        when(presetsService.getCharacter(any())).thenReturn(new Observable<ResponseBody>() {
+        lenient().when(presetsService.getCharacter(any())).thenReturn(new Observable<ResponseBody>() {
             @Override
             protected void subscribeActual(@NonNull Observer<? super ResponseBody> observer) {
 
@@ -259,6 +267,7 @@ class EncounterControllerTest extends ApplicationTest {
                 new Event<>("encounters.*.trainers.*.opponents.*.nothappening", null)));
 
         when(encounterOpponentStorage.isWild()).thenReturn(false);
+
         //when(presetsService.getCharacter(anyString())).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
         //when(presetsService.getAbilities()).thenReturn(Observable.just(List.of(new AbilityDto(1, "Attack", "unknown", "fire", 5, 0.99, 100))));
         //when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(monsterType));
@@ -267,11 +276,10 @@ class EncounterControllerTest extends ApplicationTest {
         app.start(stage);
         app.show(encounterController);
         stage.requestFocus();
-
     }
 
     @Test
-    void renderFor1vs2Test() {
+    void renderFor1vs2Test() throws InterruptedException {
         when(encounterOpponentStorage.getEncounterSize()).thenReturn(3);
         when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
                 List.of(
@@ -303,8 +311,232 @@ class EncounterControllerTest extends ApplicationTest {
                         )
                 ));
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        encounterController.setValues(bundle, null, null, encounterController, app);
+        encounterController.setValues(bundle, preferences, null, encounterController, app);
         app.show(encounterController);
     }
 
+    @Test
+    void renderFor1vs1() {
+        when(encounterOpponentStorage.getEncounterSize()).thenReturn(2);
+        when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
+                List.of(
+                        new Opponent(
+                                "2023-07-09T11:52:17.658Z",
+                                "2023-07-09T11:52:35.578Z",
+                                "64aa9f7132eb8b56aa9eb20f",
+                                "64aa9f7132eb8b56aa9eb208",
+                                "64abfde932eb8b56aac8efac",
+                                true,
+                                true,
+                                "64aa9f7132eb8b56aa9eb20c",
+                                null,
+                                List.of(),
+                                0
+                        )
+                ));
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        encounterController.setValues(bundle, preferences, null, encounterController, app);
+        app.show(encounterController);
+    }
+
+    @Test
+    void renderFor2vs2() {
+        when(encounterOpponentStorage.getEncounterSize()).thenReturn(4);
+        when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
+                List.of(
+                        new Opponent(
+                                "2023-07-09T11:52:17.658Z",
+                                "2023-07-09T11:52:35.578Z",
+                                "64aa9f7132eb8b56aa9eb20f",
+                                "64aa9f7132eb8b56aa9eb208",
+                                "64abfde932eb8b56aac8efac",
+                                true,
+                                true,
+                                "64aa9f7132eb8b56aa9eb20c",
+                                null,
+                                List.of(),
+                                0
+                        ),
+                        new Opponent(
+                                "2023-07-09T11:52:17.658Z",
+                                "2023-07-09T11:52:35.578Z",
+                                "64aa9f7232eb8b53aa9eb20f",
+                                "64aa9f7132eb8b56aa9eb208",
+                                "64abfde932eb8b56aac8efac",
+                                true,
+                                true,
+                                "64aa9f7132eb8b56aa9eb20c",
+                                null,
+                                List.of(),
+                                0
+                        ),
+                        new Opponent(
+                                "2023-07-09T11:52:17.658Z",
+                                "2023-07-09T11:52:35.578Z",
+                                "64aa9f7132eb8b56aa9eb201",
+                                "64aa9f7132eb8b56aa9eb208",
+                                "64abfde932eb8b56aac8efac",
+                                false,
+                                true,
+                                "64aa9f7132eb8b56aa9eb20c",
+                                null,
+                                List.of(),
+                                0
+                        )
+                ));
+
+        when(encounterOpponentStorage.getCoopOpponent()).thenReturn(
+                new Opponent(
+                        "2023-07-09T11:52:17.658Z",
+                        "2023-07-09T11:52:35.578Z",
+                        "64aa9f7132eb8b56aa9eb201",
+                        "64aa9f7132eb8b56aa9eb208",
+                        "64abfde932eb8b56aac8efac",
+                        false,
+                        true,
+                        "64aa9f7132eb8b56aa9eb20c",
+                        null,
+                        List.of(),
+                        0
+                )
+        );
+
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        encounterController.setValues(bundle, preferences, null, encounterController, app);
+        app.show(encounterController);
+    }
+
+    @Test
+    void testWildEncounter() {
+        when(encounterOpponentStorage.getEncounterSize()).thenReturn(2);
+
+        when(regionEncountersService.getEncounter(anyString(), anyString())).thenReturn(Observable.just(
+                new Encounter(
+                        "2023-05-22T17:51:46.772Z",
+                        "2023-05-22T17:51:46.772Z",
+                        "64aa9f7132eb8b56aa9eb208",
+                        "646bab5cecf584e1be02598a",
+                        true
+                )
+        ));
+
+        when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
+                List.of(
+                        new Opponent(
+                                "2023-07-09T11:52:17.658Z",
+                                "2023-07-09T11:52:35.578Z",
+                                "64aa9f7132eb8b56aa9eb20f",
+                                "64aa9f7132eb8b56aa9eb208",
+                                null,
+                                true,
+                                true,
+                                "64aa9f7132eb8b56aa9eb20c",
+                                null,
+                                List.of(),
+                                0
+                        )
+                ));
+
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        encounterController.setValues(bundle, preferences, null, encounterController, app);
+        app.show(encounterController);
+    }
+
+    @Test
+    void testFleeButton() throws InterruptedException {
+        when(encounterOpponentStorage.getEncounterSize()).thenReturn(2);
+
+        lenient().when(encounterOpponentsService.deleteOpponent(any(), anyString(), anyString())).thenReturn(
+                Observable.just(new Opponent(
+                        "2023-07-09T11:52:17.658Z",
+                        "2023-07-09T11:52:35.578Z",
+                        "64aa9f7132eb8b56aa9eb20f",
+                        "64aa9f7132eb8b56aa9eb208",
+                        null,
+                        true,
+                        true,
+                        "64aa9f7132eb8b56aa9eb20c",
+                        null,
+                        List.of(),
+                        0
+                ))
+        );
+        when(regionEncountersService.getEncounter(anyString(), anyString())).thenReturn(Observable.just(
+                new Encounter(
+                        "2023-05-22T17:51:46.772Z",
+                        "2023-05-22T17:51:46.772Z",
+                        "64aa9f7132eb8b56aa9eb208",
+                        "646bab5cecf584e1be02598a",
+                        true
+                )
+        ));
+
+        when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
+                List.of(
+                        new Opponent(
+                                "2023-07-09T11:52:17.658Z",
+                                "2023-07-09T11:52:35.578Z",
+                                "64aa9f7132eb8b56aa9eb20f",
+                                "64aa9f7132eb8b56aa9eb208",
+                                null,
+                                true,
+                                true,
+                                "64aa9f7132eb8b56aa9eb20c",
+                                null,
+                                List.of(),
+                                0
+                        )
+                ));
+
+        lenient().when(ingameControllerProvider.get()).thenReturn(ingameController);
+        lenient().doNothing().when(app).show(ingameController);
+
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        encounterController.setValues(bundle, preferences, null, encounterController, app);
+        app.show(encounterController);
+
+        Thread.sleep(200);
+
+        clickOn("#fleeButton");
+        clickOn("#fleePopupNoButton");
+
+        clickOn("#fleeButton");
+        clickOn("#fleePopupYesButton");
+    }
+
+   /* @Test
+    void testAbilitesMenu() throws InterruptedException {
+
+            when(encounterOpponentStorage.getEncounterSize()).thenReturn(2);
+            when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
+                    List.of(
+                            new Opponent(
+                                    "2023-07-09T11:52:17.658Z",
+                                    "2023-07-09T11:52:35.578Z",
+                                    "64aa9f7132eb8b56aa9eb20f",
+                                    "64aa9f7132eb8b56aa9eb208",
+                                    "64abfde932eb8b56aac8efac",
+                                    true,
+                                    true,
+                                    "64aa9f7132eb8b56aa9eb20c",
+                                    null,
+                                    List.of(),
+                                    0
+                            )
+                    ));
+            ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+            encounterController.setValues(bundle, preferences, null, encounterController, app);
+        AbilitiesMenuController abilitiesMenuController = Mockito.mock(AbilitiesMenuController.class);
+        abilitiesMenuController.setValues(bundle, preferences, null, abilitiesMenuController, app);
+        when(abilitiesMenuControllerProvider.get()).thenReturn(abilitiesMenuController);
+
+            app.show(encounterController);
+
+            Thread.sleep(200);
+
+            clickOn("#abilitiesButton");
+
+            Thread.sleep(1000000);
+        }
+*/
 }
