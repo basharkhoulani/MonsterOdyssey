@@ -13,12 +13,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.dialogTextFlowInsets;
 
 
 public class MonstersListController extends Controller {
@@ -180,9 +186,34 @@ public class MonstersListController extends Controller {
     }
 
     public void addToTeam(Monster monster) {
+        if (trainerStorageProvider.get().getTrainer().team().size() >= 6) {
+            createLimitPopUp();
+            return;
+        }
         List<String> team = trainerStorageProvider.get().getTrainer().team();
         team.add(monster._id());
         updateBothLists(monsterListViewActive, activeMonstersList, monsterListViewOther, otherMonstersList, monster, team);
+    }
+
+    private void createLimitPopUp() {
+        VBox limitVBox = new VBox();
+        limitVBox.setId("limitVBox");
+        limitVBox.setMaxHeight(popupHeight);
+        limitVBox.setMaxWidth(popupWidth);
+        limitVBox.getStyleClass().add("dialogTextFlow");
+
+        // text field
+        TextFlow message = new TextFlow(new Text(resources.getString("LIMIT.MESSAGE")));
+        message.setPrefWidth(popupWidth);
+        message.setPrefHeight(textFieldHeight);
+        message.setPadding(dialogTextFlowInsets);
+        message.setTextAlignment(TextAlignment.CENTER);
+
+        Button ok = new Button(resources.getString("OK"));
+        ok.getStyleClass().add("buttonsYellow");
+        ok.setOnAction(event -> ingameController.root.getChildren().remove(limitVBox));
+
+        limitVBox.getChildren().addAll(message, ok);
     }
 
     private void updateBothLists(ListView<Monster> listViewAdd,List<Monster> listAdd, ListView<Monster> listViewRemove, List<Monster> listRemove, Monster monster, List<String> team) {
