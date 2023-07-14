@@ -113,5 +113,18 @@ public class NotificationListHandyController extends Controller {
         }
 <span class="nc" id="L114">        timeline.play();</span>
 <span class="nc" id="L115">    }</span>
+
+    public void displayLowHealthMessages() {
+<span class="nc" id="L118">        Timeline timeline = new Timeline();</span>
+<span class="nc" id="L119">        int duration = 1;</span>
+
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L122">            int iter = i;</span>
+<span class="nc" id="L123">            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -&gt; handyMessages.add(this.resources.getString(&quot;INGAME.NOTIFICATIONS.LOWHEALTH.&quot;+ iter)));</span>
+<span class="nc" id="L124">            timeline.getKeyFrames().add(keyFrame);</span>
+<span class="nc" id="L125">            duration++;</span>
+        }
+<span class="nc" id="L127">        timeline.play();</span>
+<span class="nc" id="L128">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

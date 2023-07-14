@@ -1670,35 +1670,40 @@ public class IngameController extends Controller {
 <span class="nc" id="L1670">        buttonsDisable(true);</span>
 <span class="nc" id="L1671">    }</span>
 
+    public void showLowHealthNotification() {
+<span class="nc" id="L1674">        notificationBell.setVisible(true);</span>
+<span class="nc" id="L1675">        this.notificationListHandyController.displayLowHealthMessages();</span>
+<span class="nc" id="L1676">    }</span>
+
     public void specificSounds() {
-<span class="pc bpc" id="L1674" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L1675">            disposables.add(areasService.getArea(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer().area()).</span>
-<span class="nc" id="L1676">                    observeOn(FX_SCHEDULER).subscribe(area -&gt; {</span>
-<span class="nc bnc" id="L1677" title="All 2 branches missed.">                        if (area.name().contains(&quot;Route&quot;)) {</span>
-<span class="nc" id="L1678">                            AudioService.getInstance().stopSound();</span>
-<span class="nc" id="L1679">                            AudioService.getInstance().playSound(ROUTE_SOUND);</span>
-<span class="nc" id="L1680">                            AudioService.getInstance().setCurrentSound(ROUTE_SOUND);</span>
-<span class="nc" id="L1681">                            AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()));</span>
-<span class="nc bnc" id="L1682" title="All 2 branches missed.">                        } else if (area.map().infinite()) {</span>
+<span class="pc bpc" id="L1679" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L1680">            disposables.add(areasService.getArea(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer().area()).</span>
+<span class="nc" id="L1681">                    observeOn(FX_SCHEDULER).subscribe(area -&gt; {</span>
+<span class="nc bnc" id="L1682" title="All 2 branches missed.">                        if (area.name().contains(&quot;Route&quot;)) {</span>
 <span class="nc" id="L1683">                            AudioService.getInstance().stopSound();</span>
-<span class="nc" id="L1684">                            AudioService.getInstance().playSound(CITY_SOUND);</span>
-<span class="nc" id="L1685">                            AudioService.getInstance().setCurrentSound(CITY_SOUND);</span>
+<span class="nc" id="L1684">                            AudioService.getInstance().playSound(ROUTE_SOUND);</span>
+<span class="nc" id="L1685">                            AudioService.getInstance().setCurrentSound(ROUTE_SOUND);</span>
 <span class="nc" id="L1686">                            AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()));</span>
-                        } else {
+<span class="nc bnc" id="L1687" title="All 2 branches missed.">                        } else if (area.map().infinite()) {</span>
 <span class="nc" id="L1688">                            AudioService.getInstance().stopSound();</span>
-<span class="nc" id="L1689">                            AudioService.getInstance().playSound(ROOMS_SOUND);</span>
-<span class="nc" id="L1690">                            AudioService.getInstance().setCurrentSound(ROOMS_SOUND);</span>
+<span class="nc" id="L1689">                            AudioService.getInstance().playSound(CITY_SOUND);</span>
+<span class="nc" id="L1690">                            AudioService.getInstance().setCurrentSound(CITY_SOUND);</span>
 <span class="nc" id="L1691">                            AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()));</span>
+                        } else {
+<span class="nc" id="L1693">                            AudioService.getInstance().stopSound();</span>
+<span class="nc" id="L1694">                            AudioService.getInstance().playSound(ROOMS_SOUND);</span>
+<span class="nc" id="L1695">                            AudioService.getInstance().setCurrentSound(ROOMS_SOUND);</span>
+<span class="nc" id="L1696">                            AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()));</span>
                         }
-<span class="nc bnc" id="L1693" title="All 2 branches missed.">                        if (preferences.getBoolean(&quot;mute&quot;, false)) {</span>
-<span class="nc" id="L1694">                            AudioService.getInstance().setVolume(0);</span>
+<span class="nc bnc" id="L1698" title="All 2 branches missed.">                        if (preferences.getBoolean(&quot;mute&quot;, false)) {</span>
+<span class="nc" id="L1699">                            AudioService.getInstance().setVolume(0);</span>
                         }
-<span class="nc" id="L1696">                    }, error -&gt; this.showError(error.getMessage())));</span>
+<span class="nc" id="L1701">                    }, error -&gt; this.showError(error.getMessage())));</span>
         }
-<span class="fc" id="L1698">    }</span>
+<span class="fc" id="L1703">    }</span>
 
     public int getUserTrainerY() {
-<span class="nc" id="L1701">        return trainerStorageProvider.get().getY();</span>
+<span class="nc" id="L1706">        return trainerStorageProvider.get().getY();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
