@@ -199,12 +199,8 @@ public abstract class Controller {
 
     public void setTrainerSpriteImageView(Trainer trainer, ImageView imageView, int direction) {
         if (!GraphicsEnvironment.isHeadless()) {
-            disposables.add(presetsService.getCharacter(trainer.image()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
-                        javafx.scene.image.Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
-                        Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, direction, false);
-                        imageView.setImage(character[0]);
-                    }, error -> showError(error.getMessage())
-            ));
+            Image character = ImageProcessor.showScaledCharacter(trainer.image(), direction, false);
+            imageView.setImage(character);
         }
     }
 }
