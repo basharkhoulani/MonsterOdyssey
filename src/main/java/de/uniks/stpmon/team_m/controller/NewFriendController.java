@@ -7,7 +7,6 @@ import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
@@ -62,17 +61,6 @@ public class NewFriendController extends Controller {
     @Override
     public String getTitle() {
         return resources.getString("NEW.FRIEND.TITLE");
-    }
-
-    /**
-     * This method renders JavaFX elements of the view.
-     *
-     * @return Parent object
-     */
-
-    @Override
-    public Parent render() {
-        return super.render();
     }
 
     /**

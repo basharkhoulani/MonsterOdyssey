@@ -101,9 +101,7 @@ public class WelcomeSceneController extends Controller {
     public void switchScene() {
 
         switch (sceneNumber) {
-            case 0 -> {
-                app.show(mainMenuControllerProvider.get());
-            }
+            case 0 -> app.show(mainMenuControllerProvider.get());
             case 1 -> {
                 if (messagePane.getChildren().size() > 2) {
                     messagePane.getChildren().remove(2);
@@ -191,7 +189,9 @@ public class WelcomeSceneController extends Controller {
                             trainerStorage.setTrainer(result);
                             disposables.add(presetsServiceProvider.get().getCharacter(result.image()).observeOn(FX_SCHEDULER).subscribe(
                                     response -> {
-                                        trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
+                                        if (!GraphicsEnvironment.isHeadless()) {
+                                            trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
+                                        }
                                         app.show(ingameControllerProvider.get());
                                     },
                                     error -> {

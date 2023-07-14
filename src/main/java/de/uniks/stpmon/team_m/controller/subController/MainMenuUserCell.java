@@ -15,7 +15,7 @@ import static javafx.geometry.Pos.CENTER_RIGHT;
 
 public class MainMenuUserCell extends UserCell {
 
-    Provider<FriendSettingsController> friendSettingsControllerProvider;
+    final Provider<FriendSettingsController> friendSettingsControllerProvider;
 
     /**
      * MainMenuUserCell is used to handle the main menu user cells in the MainMenuController.

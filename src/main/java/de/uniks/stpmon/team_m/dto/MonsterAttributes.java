@@ -1,7 +1,7 @@
 package de.uniks.stpmon.team_m.dto;
 
 public record MonsterAttributes(
-        int health,
+        float health,
         int attack,
         int defense,
         int speed
