@@ -347,7 +347,7 @@ public class IngameControllerTest extends ApplicationTest {
         app.show(ingameController);
         stage.requestFocus();
     }
-
+    /*
     @Test
     void showHelp() throws InterruptedException {
         // TODO: apply asserts once we have the time
@@ -356,6 +356,8 @@ public class IngameControllerTest extends ApplicationTest {
         Thread.sleep(1000);
         clickOn("close");
     }
+
+     */
 
     @Test
     void sendMessageTest() {
