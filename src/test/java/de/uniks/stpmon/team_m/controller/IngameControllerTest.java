@@ -347,7 +347,7 @@ public class IngameControllerTest extends ApplicationTest {
         app.show(ingameController);
         stage.requestFocus();
     }
-    /*
+
     @Test
     void showHelp() throws InterruptedException {
         // TODO: apply asserts once we have the time
@@ -356,8 +356,6 @@ public class IngameControllerTest extends ApplicationTest {
         Thread.sleep(1000);
         clickOn("close");
     }
-
-     */
 
     @Test
     void sendMessageTest() {
@@ -433,7 +431,6 @@ public class IngameControllerTest extends ApplicationTest {
         Thread.sleep(30);
     }
 
-    /*
     @Test
     void testNurseDialog() throws InterruptedException {
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(20);
@@ -504,7 +501,6 @@ public class IngameControllerTest extends ApplicationTest {
         Thread.sleep(30);
     }
 
-     */
 
     @Test
     void testTalkToNPC2TilesAway() throws InterruptedException {
