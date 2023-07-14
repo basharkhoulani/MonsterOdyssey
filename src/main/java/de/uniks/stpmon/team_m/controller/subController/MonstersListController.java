@@ -87,7 +87,6 @@ public class MonstersListController extends Controller {
                     otherMonstersList = list.stream()
                             .filter (monster -> !trainerStorageProvider.get().getTrainer().team().contains(monster ._id()))
                             .collect (Collectors.toList());
-                    otherMonstersList.removeAll(activeMonstersList);
                     initOtherMonsterList(otherMonstersList);
                     initMonsterList(activeMonstersList);
                 }, throwable -> showError(throwable.getMessage())));
