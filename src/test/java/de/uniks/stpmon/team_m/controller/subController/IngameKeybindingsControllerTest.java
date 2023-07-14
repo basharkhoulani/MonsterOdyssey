@@ -22,6 +22,7 @@ import static org.mockito.Mockito.mock;
 @ExtendWith(MockitoExtension.class)
 public class IngameKeybindingsControllerTest extends ApplicationTest {
     @Spy
+    final
     App app = new App(null);
     @InjectMocks
     IngameKeybindingsController ingameKeybindingsController;

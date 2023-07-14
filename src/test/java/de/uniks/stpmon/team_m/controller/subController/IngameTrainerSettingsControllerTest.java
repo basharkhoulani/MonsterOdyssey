@@ -4,7 +4,6 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.dto.NPCInfo;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +24,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class IngameTrainerSettingsControllerTest extends ApplicationTest {
     @Spy
+    final
     App app = new App(null);
 
     @Mock
@@ -72,7 +72,6 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
         ingameDeleteTrainerWarningController.setValues(bundle, null, null, ingameDeleteTrainerWarningController, app);
         when(ingameDeleteTrainerWarningControllerProvider.get()).thenReturn(ingameDeleteTrainerWarningController);
 
-        Button deleteTrainerButton = lookup("#deleteTrainerButton").queryButton();
         clickOn("#deleteTrainerButton");
         clickOn("#cancelButton");
         verify(app).show(trainerSettingsController);

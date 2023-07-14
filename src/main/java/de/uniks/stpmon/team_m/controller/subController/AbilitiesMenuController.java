@@ -2,18 +2,22 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
-import de.uniks.stpmon.team_m.dto.*;
+import de.uniks.stpmon.team_m.dto.AbilityDto;
+import de.uniks.stpmon.team_m.dto.AbilityMove;
+import de.uniks.stpmon.team_m.dto.Monster;
+import de.uniks.stpmon.team_m.dto.Move;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import static de.uniks.stpmon.team_m.Constants.EMPTY_STRING;
@@ -37,7 +41,6 @@ public class AbilitiesMenuController extends Controller {
     EncounterOpponentsService encounterOpponentsService;
     PresetsService presetsService;
     private Monster monster;
-    private HBox battleMenuHBox;
     private EncounterController encounterController;
 
 
@@ -45,11 +48,10 @@ public class AbilitiesMenuController extends Controller {
     public AbilitiesMenuController() {
     }
 
-    public void init(Monster monster, PresetsService presetsService, HBox battleMenuHBox, EncounterController encounterController) {
+    public void init(Monster monster, PresetsService presetsService, EncounterController encounterController) {
         super.init();
         this.monster = monster;
         this.presetsService = presetsService;
-        this.battleMenuHBox = battleMenuHBox;
         this.encounterController = encounterController;
     }
 
@@ -102,7 +104,7 @@ public class AbilitiesMenuController extends Controller {
         disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(
                 opponent -> {
                     updateButton(ability, abilityButton, currentUse-1);
-                    encounterController.updateDescription(EMPTY_STRING, true);
+                    encounterController.updateDescription(resources.getString("YOU.USED") + " " + ability.name() + ". \n", true);
                     encounterController.resetOppoenentUpdate();
                     encounterController.resetRepeatedTimes();
                     encounterController.goBackToBattleMenu();

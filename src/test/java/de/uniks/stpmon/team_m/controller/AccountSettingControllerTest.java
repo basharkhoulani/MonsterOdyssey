@@ -41,6 +41,7 @@ class AccountSettingControllerTest extends ApplicationTest {
     @Mock
     Provider<UserStorage> userStorageProvider;
     @Spy
+    final
     App app = new App(null);
 
     @Override
@@ -267,11 +268,6 @@ class AccountSettingControllerTest extends ApplicationTest {
         clickOn(saveAvatarButton);
         waitForFxEvents();
         assertEquals("Your Avatar has been changed successfully.", infoLabel.getText());
-    }
-
-    @Test
-    void saveAvatar() {
-
     }
 
     @Test

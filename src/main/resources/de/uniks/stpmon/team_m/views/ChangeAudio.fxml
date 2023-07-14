@@ -9,36 +9,29 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="323.0" prefWidth="450.0" styleClass="dialogBackground" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.ChangeAudioController">
-   <children>
-      <Label alignment="CENTER" layoutY="54.0" prefHeight="24.0" prefWidth="450.0" text="%CHANGE.VOLUME" />
-      <Slider fx:id="audioSlider" layoutX="103.0" layoutY="145.0" onDragDetected="#getSliderValue" prefHeight="20.0" prefWidth="252.0" />
-      <HBox layoutX="11.0" layoutY="219.0" prefHeight="67.0" prefWidth="439.0">
-         <children>
-            <Button fx:id="closeButton" mnemonicParsing="false" onAction="#onCloseButtonClick" styleClass="buttonsYellow" text="%CLOSE">
-               <HBox.margin>
-                  <Insets left="175.0" top="16.0" />
-               </HBox.margin>
-            </Button>
-         </children>
-      </HBox>
-      <HBox layoutX="23.0" layoutY="128.0" prefHeight="55.0" prefWidth="58.0">
-         <children>
-            <ImageView fitHeight="58.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/mute-icon.png" />
-               </image>
-            </ImageView>
-         </children>
-      </HBox>
-      <HBox layoutX="368.0" layoutY="128.0" prefHeight="55.0" prefWidth="58.0">
-         <children>
-            <ImageView fitHeight="56.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/high-volume-icon.png" />
-               </image>
-            </ImageView>
-         </children>
-      </HBox>
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="323.0"
+            prefWidth="450.0" styleClass="dialogBackground" 
+            xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="de.uniks.stpmon.team_m.controller.subController.ChangeAudioController">
+   <Label alignment="CENTER" layoutY="54.0" prefHeight="24.0" prefWidth="450.0" text="%CHANGE.VOLUME"/>
+   <Slider fx:id="audioSlider" layoutX="103.0" layoutY="145.0" onDragDetected="#getSliderValue" prefHeight="20.0"
+           prefWidth="252.0"/>
+   <HBox layoutX="11.0" layoutY="219.0" prefHeight="67.0" prefWidth="439.0">
+      <Button fx:id="closeButton" mnemonicParsing="false" onAction="#onCloseButtonClick" styleClass="buttonsYellow"
+              text="%CLOSE">
+         <HBox.margin>
+            <Insets left="175.0" top="16.0"/>
+         </HBox.margin>
+      </Button>
+   </HBox>
+   <HBox layoutX="23.0" layoutY="128.0" prefHeight="55.0" prefWidth="58.0">
+      <ImageView fitHeight="58.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true">
+         <Image url="@../images/mute-icon.png"/>
+      </ImageView>
+   </HBox>
+   <HBox layoutX="368.0" layoutY="128.0" prefHeight="55.0" prefWidth="58.0">
+      <ImageView fitHeight="56.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
+         <Image url="@../images/high-volume-icon.png"/>
+      </ImageView>
+   </HBox>
 </AnchorPane>

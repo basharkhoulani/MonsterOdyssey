@@ -22,5 +22,5 @@
       </font>
    </Label>
    <Button fx:id="goBackButton" layoutX="72.0" layoutY="520.0" mnemonicParsing="false" onAction="#changeToMain"
-           styleClass="welcomeSceneButton" stylesheets="@../styles.css" text="%GO.BACK"/>
+           styleClass="welcomeSceneButton" text="%GO.BACK"/>
 </AnchorPane>

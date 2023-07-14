@@ -8,19 +8,25 @@ import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 
 public class MonstersListController extends Controller {
+    @FXML
+    public Tab othersTab;
+    @FXML
+    public Tab activeTeamTab;
+    @FXML
+    public Button closeButton;
     @Inject
     Provider<TrainersService> trainersServiceProvider;
     @Inject
@@ -43,12 +49,14 @@ public class MonstersListController extends Controller {
     public Provider<PresetsService> presetsServiceProvider;
     @Inject
     IngameController ingameController;
-
     @FXML
     public ListView<Monster> monsterListViewActive;
+    @FXML
+    public ListView<Monster> monsterListViewOther;
     public VBox monsterListVBox;
 
     public List<Monster> activeMonstersList;
+    public List<Monster> otherMonstersList;
 
     @Inject
     public MonstersListController() {
@@ -57,6 +65,7 @@ public class MonstersListController extends Controller {
     public void init(IngameController ingameController, VBox monsterListVBox) {
         super.init();
         activeMonstersList = new ArrayList<>();
+        otherMonstersList = new ArrayList<>();
         this.ingameController = ingameController;
         this.monsterListVBox = monsterListVBox;
     }
@@ -74,18 +83,29 @@ public class MonstersListController extends Controller {
                     activeMonstersList = list.stream()
                             .filter(monster -> trainerStorageProvider.get().getTrainer().team().contains(monster._id()))
                             .collect(Collectors.toList());
+
+                    otherMonstersList = list.stream()
+                            .filter (monster -> !trainerStorageProvider.get().getTrainer().team().contains(monster ._id()))
+                            .collect (Collectors.toList());
+                    initOtherMonsterList(otherMonstersList);
                     initMonsterList(activeMonstersList);
                 }, throwable -> showError(throwable.getMessage())));
-
 
         return parent;
     }
 
     private void initMonsterList(List<Monster> monsters) {
-        monsterListViewActive.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController));
+        monsterListViewActive.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false));
         monsterListViewActive.getItems().addAll(monsters);
         monsterListViewActive.setFocusModel(null);
         monsterListViewActive.setSelectionModel(null);
+    }
+
+    private void initOtherMonsterList(List<Monster> monsters) {
+        monsterListViewOther.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false));
+        monsterListViewOther.getItems().addAll(monsters);
+        monsterListViewOther.setFocusModel(null);
+        monsterListViewOther.setSelectionModel(null);
     }
 
     public void onCloseMonsterList() {

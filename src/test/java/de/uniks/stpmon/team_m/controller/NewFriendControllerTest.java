@@ -48,6 +48,7 @@ class NewFriendControllerTest extends ApplicationTest {
     @Mock
     GroupService groupService;
     @Spy
+    final
     App app = new App(null);
     @InjectMocks
     NewFriendController newFriendController;
