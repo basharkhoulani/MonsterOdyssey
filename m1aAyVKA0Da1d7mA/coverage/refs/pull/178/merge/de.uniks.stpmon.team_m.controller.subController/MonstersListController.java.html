@@ -87,31 +87,30 @@ public class MonstersListController extends Controller {
 <span class="fc" id="L87">                    otherMonstersList = list.stream()</span>
 <span class="pc bpc" id="L88" title="1 of 2 branches missed.">                            .filter (monster -&gt; !trainerStorageProvider.get().getTrainer().team().contains(monster ._id()))</span>
 <span class="fc" id="L89">                            .collect (Collectors.toList());</span>
-<span class="fc" id="L90">                    otherMonstersList.removeAll(activeMonstersList);</span>
-<span class="fc" id="L91">                    initOtherMonsterList(otherMonstersList);</span>
-<span class="fc" id="L92">                    initMonsterList(activeMonstersList);</span>
-<span class="pc" id="L93">                }, throwable -&gt; showError(throwable.getMessage())));</span>
+<span class="fc" id="L90">                    initOtherMonsterList(otherMonstersList);</span>
+<span class="fc" id="L91">                    initMonsterList(activeMonstersList);</span>
+<span class="pc" id="L92">                }, throwable -&gt; showError(throwable.getMessage())));</span>
 
-<span class="fc" id="L95">        return parent;</span>
+<span class="fc" id="L94">        return parent;</span>
     }
 
     private void initMonsterList(List&lt;Monster&gt; monsters) {
-<span class="fc" id="L99">        monsterListViewActive.setCellFactory(param -&gt; new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false));</span>
-<span class="fc" id="L100">        monsterListViewActive.getItems().addAll(monsters);</span>
-<span class="fc" id="L101">        monsterListViewActive.setFocusModel(null);</span>
-<span class="fc" id="L102">        monsterListViewActive.setSelectionModel(null);</span>
-<span class="fc" id="L103">    }</span>
+<span class="fc" id="L98">        monsterListViewActive.setCellFactory(param -&gt; new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false));</span>
+<span class="fc" id="L99">        monsterListViewActive.getItems().addAll(monsters);</span>
+<span class="fc" id="L100">        monsterListViewActive.setFocusModel(null);</span>
+<span class="fc" id="L101">        monsterListViewActive.setSelectionModel(null);</span>
+<span class="fc" id="L102">    }</span>
 
     private void initOtherMonsterList(List&lt;Monster&gt; monsters) {
-<span class="pc" id="L106">        monsterListViewOther.setCellFactory(param -&gt; new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false));</span>
-<span class="fc" id="L107">        monsterListViewOther.getItems().addAll(monsters);</span>
-<span class="fc" id="L108">        monsterListViewOther.setFocusModel(null);</span>
-<span class="fc" id="L109">        monsterListViewOther.setSelectionModel(null);</span>
-<span class="fc" id="L110">    }</span>
+<span class="pc" id="L105">        monsterListViewOther.setCellFactory(param -&gt; new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false));</span>
+<span class="fc" id="L106">        monsterListViewOther.getItems().addAll(monsters);</span>
+<span class="fc" id="L107">        monsterListViewOther.setFocusModel(null);</span>
+<span class="fc" id="L108">        monsterListViewOther.setSelectionModel(null);</span>
+<span class="fc" id="L109">    }</span>
 
     public void onCloseMonsterList() {
-<span class="nc" id="L113">        ingameController.root.getChildren().remove(monsterListVBox);</span>
-<span class="nc" id="L114">        ingameController.buttonsDisable(false);</span>
-<span class="nc" id="L115">    }</span>
+<span class="nc" id="L112">        ingameController.root.getChildren().remove(monsterListVBox);</span>
+<span class="nc" id="L113">        ingameController.buttonsDisable(false);</span>
+<span class="nc" id="L114">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
