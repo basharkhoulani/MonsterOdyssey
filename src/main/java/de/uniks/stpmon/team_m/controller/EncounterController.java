@@ -408,6 +408,12 @@ public class EncounterController extends Controller {
 
     public void showIngameController() {
         destroy();
+        trainerStorageProvider.get().getTrainer().team().stream()
+                .flatMap(teamMonsterId -> trainerStorageProvider.get().getMonsters().stream()
+                        .filter(trainerMonster -> teamMonsterId.equals(trainerMonster._id()))
+                        .filter(trainerMonster -> (double) trainerMonster.currentAttributes().health() / trainerMonster.attributes().health() <= 0.2)
+                )
+                .forEach(trainerMonster -> this.ingameController.showLowHealthNotification());
         app.show(ingameControllerProvider.get());
     }
 

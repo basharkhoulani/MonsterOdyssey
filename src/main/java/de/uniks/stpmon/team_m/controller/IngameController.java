@@ -1670,6 +1670,11 @@ public class IngameController extends Controller {
         buttonsDisable(true);
     }
 
+    public void showLowHealthNotification() {
+        notificationBell.setVisible(true);
+        this.notificationListHandyController.displayLowHealthMessages();
+    }
+
     public void specificSounds() {
         if (!GraphicsEnvironment.isHeadless()) {
             disposables.add(areasService.getArea(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer().area()).
