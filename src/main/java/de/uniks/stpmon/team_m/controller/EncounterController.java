@@ -34,7 +34,6 @@ import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -69,8 +68,6 @@ public class EncounterController extends Controller {
     public HBox battleMenu;
     @FXML
     public Text battleDescription;
-    @FXML
-    public Button goBack;
     @FXML
     public StackPane rootStackPane;
 
@@ -600,7 +597,6 @@ public class EncounterController extends Controller {
     }
 
     public void showLevelUpPopUp() {
-        updateMonsterValues(trainerId, encounterOpponentStorage.getCurrentTrainerMonster()._id());
         resultLevelUP = false;
         LevelUpController levelUpController = levelUpControllerProvider.get();
         VBox popUpVBox = new VBox();
