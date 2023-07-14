@@ -637,10 +637,10 @@ public class EncounterController extends Controller {
     }
 
     public void monsterDefeated() {
-        battleDescription.setText(resources.getString("TARGET.DEFEATED"));
+        battleDialogText.setText(resources.getString("TARGET.DEFEATED"));
         PauseTransition pause = new PauseTransition(Duration.millis(500));
         pause.setOnFinished(evt -> {
-            opponentMonster.setVisible(false);
+            enemy1Controller.monsterImageView.setVisible(false);
             if (resultLevelUP) {
                 showLevelUpPopUp();
             } else {
@@ -656,7 +656,7 @@ public class EncounterController extends Controller {
             SequentialTransition fleeAnimation = buildFleeAnimation();
             PauseTransition pause = new PauseTransition(Duration.millis(2000));
             pause.setOnFinished(evt -> {
-                myMonster.setVisible(false);
+                ownTrainerController.monsterImageView.setVisible(false);
                 fleeAnimation.play();
             });
             pause.play();
