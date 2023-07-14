@@ -74,67 +74,73 @@ public class TrainerController extends Controller {
 <span class="fc" id="L74">        this.trainerChunk = trainerChunk;</span>
 <span class="fc" id="L75">        this.graphicsContext = graphicsContext;</span>
 <span class="fc" id="L76">        this.alternativeGraphicsContext = alternateGraphicsContext;</span>
-<span class="fc" id="L77">        trainerTargetX = trainer.x();</span>
-<span class="fc" id="L78">        trainerTargetY = trainer.y();</span>
-<span class="fc" id="L79">        this.trainerX = trainer.x() * TILE_SIZE;</span>
-<span class="fc" id="L80">        this.trainerY = trainer.y() * TILE_SIZE;</span>
-<span class="fc" id="L81">        this.trainerDirection = trainer.direction();</span>
-<span class="fc" id="L82">    }</span>
+
+        // Init trainer position and direction
+<span class="fc" id="L79">        trainerTargetX = trainer.x();</span>
+<span class="fc" id="L80">        trainerTargetY = trainer.y();</span>
+<span class="fc" id="L81">        this.trainerX = trainer.x() * TILE_SIZE;</span>
+<span class="fc" id="L82">        this.trainerY = trainer.y() * TILE_SIZE;</span>
+<span class="fc" id="L83">        this.trainerDirection = trainer.direction();</span>
+<span class="fc" id="L84">    }</span>
 
     /**
      * @param x x-coordinate of the trainer in tiles
      * @param y y-coordinate of the trainer in tiles
      */
     public void setTrainerTargetPosition(int x, int y) {
-<span class="nc" id="L89">        trainerTargetX = x;</span>
-<span class="nc" id="L90">        trainerTargetY = y;</span>
-<span class="nc" id="L91">    }</span>
+<span class="nc" id="L91">        trainerTargetX = x;</span>
+<span class="nc" id="L92">        trainerTargetY = y;</span>
+<span class="nc" id="L93">    }</span>
 
+    /**
+     * This method is used to turn the trainer in a specific direction
+     * @param direction : 0 = right, 1 = up, 2 = left, 3 = down
+     */
     public void turn(int direction) {
-<span class="nc" id="L94">        trainerDirection = direction;</span>
-<span class="nc" id="L95">        spriteAnimation.stay(trainerDirection);</span>
-<span class="nc" id="L96">    }</span>
+<span class="nc" id="L100">        trainerDirection = direction;</span>
+<span class="nc" id="L101">        spriteAnimation.stay(trainerDirection);</span>
+<span class="nc" id="L102">    }</span>
 
     public void walk() {
-<span class="nc bnc" id="L99" title="All 4 branches missed.">        if (trainerX != trainerTargetX * TILE_SIZE || trainerY != trainerTargetY * TILE_SIZE) {</span>
-<span class="nc" id="L100">            isWalking = true;</span>
-<span class="nc bnc" id="L101" title="All 2 branches missed.">            if (trainerX &lt; trainerTargetX * TILE_SIZE) {</span>
-<span class="nc" id="L102">                trainerX++;</span>
-<span class="nc" id="L103">                trainerDirection = 0;</span>
-<span class="nc bnc" id="L104" title="All 2 branches missed.">            } else if (trainerX &gt; trainerTargetX * TILE_SIZE) {</span>
-<span class="nc" id="L105">                trainerX--;</span>
-<span class="nc" id="L106">                trainerDirection = 2;</span>
-<span class="nc bnc" id="L107" title="All 2 branches missed.">            } else if (trainerY &lt; trainerTargetY * TILE_SIZE) {</span>
-<span class="nc" id="L108">                trainerY++;</span>
-<span class="nc" id="L109">                trainerDirection = 3;</span>
-<span class="nc bnc" id="L110" title="All 2 branches missed.">            } else if (trainerY &gt; trainerTargetY * TILE_SIZE) {</span>
-<span class="nc" id="L111">                trainerY--;</span>
-<span class="nc" id="L112">                trainerDirection = 1;</span>
+<span class="nc bnc" id="L105" title="All 4 branches missed.">        if (trainerX != trainerTargetX * TILE_SIZE || trainerY != trainerTargetY * TILE_SIZE) {</span>
+<span class="nc" id="L106">            isWalking = true;</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            if (trainerX &lt; trainerTargetX * TILE_SIZE) {</span>
+<span class="nc" id="L108">                trainerDirection = TRAINER_DIRECTION_RIGHT;</span>
+<span class="nc" id="L109">                trainerX++;</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">            } else if (trainerX &gt; trainerTargetX * TILE_SIZE) {</span>
+<span class="nc" id="L111">                trainerDirection = TRAINER_DIRECTION_LEFT;</span>
+<span class="nc" id="L112">                trainerX--;</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">            } else if (trainerY &lt; trainerTargetY * TILE_SIZE) {</span>
+<span class="nc" id="L114">                trainerDirection = TRAINER_DIRECTION_DOWN;</span>
+<span class="nc" id="L115">                trainerY++;</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">            } else if (trainerY &gt; trainerTargetY * TILE_SIZE) {</span>
+<span class="nc" id="L117">                trainerDirection = TRAINER_DIRECTION_UP;</span>
+<span class="nc" id="L118">                trainerY--;</span>
             }
-<span class="nc" id="L114">            spriteAnimation.walk(trainerDirection);</span>
+<span class="nc" id="L120">            spriteAnimation.walk(trainerDirection);</span>
         }
         else {
-<span class="nc" id="L117">            isWalking = false;</span>
-<span class="nc" id="L118">            spriteAnimation.stay(trainerDirection);</span>
+<span class="nc" id="L123">            isWalking = false;</span>
+<span class="nc" id="L124">            spriteAnimation.stay(trainerDirection);</span>
         }
-<span class="nc" id="L120">    }</span>
+<span class="nc" id="L126">    }</span>
 
     public void setTrainerDirection(int direction) {
-<span class="nc" id="L123">        trainerDirection = direction;</span>
-<span class="nc" id="L124">    }</span>
+<span class="nc" id="L129">        trainerDirection = direction;</span>
+<span class="nc" id="L130">    }</span>
 
     @Override
     public void destroy() {
-<span class="fc" id="L128">        spriteAnimation.stop();</span>
-<span class="fc" id="L129">        super.destroy();</span>
-<span class="fc" id="L130">    }</span>
+<span class="fc" id="L134">        spriteAnimation.stop();</span>
+<span class="fc" id="L135">        super.destroy();</span>
+<span class="fc" id="L136">    }</span>
 
     public int getUserTrainerY() {
-<span class="nc" id="L133">        return ingameController.getUserTrainerY();</span>
+<span class="nc" id="L139">        return ingameController.getUserTrainerY();</span>
     }
 
     public int getDirection() {
-<span class="fc" id="L137">        return this.trainerDirection;</span>
+<span class="fc" id="L143">        return this.trainerDirection;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

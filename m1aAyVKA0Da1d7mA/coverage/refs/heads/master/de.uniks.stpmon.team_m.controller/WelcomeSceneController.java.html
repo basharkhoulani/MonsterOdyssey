@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WelcomeSceneController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller</a> &gt; <span class="el_source">WelcomeSceneController.java</span></div><h1>WelcomeSceneController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.CharacterSelectionController;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.service.AudioService;
@@ -14,6 +15,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -23,6 +26,7 @@ import javafx.stage.StageStyle;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
@@ -41,8 +45,12 @@ public class WelcomeSceneController extends Controller {
     public Label secondMessage;
     @FXML
     public VBox firstMessageBox;
-<span class="fc" id="L44">    public int sceneNumber = 1;</span>
-<span class="fc" id="L45">    private final SimpleStringProperty trainerName = new SimpleStringProperty();</span>
+<span class="fc" id="L48">    public int sceneNumber = 1;</span>
+<span class="fc" id="L49">    private final SimpleStringProperty trainerName = new SimpleStringProperty();</span>
+    @FXML
+    public ImageView welcomeSceneMonster2ImageView;
+    @FXML
+    public ImageView welcomeSceneMonster1ImageView;
     @Inject
     Provider&lt;IngameController&gt; ingameControllerProvider;
     @Inject
@@ -63,162 +71,168 @@ public class WelcomeSceneController extends Controller {
     AudioService audioService;
 
     @Inject
-<span class="fc" id="L66">    public WelcomeSceneController() {</span>
-<span class="fc" id="L67">    }</span>
+<span class="fc" id="L74">    public WelcomeSceneController() {</span>
+<span class="fc" id="L75">    }</span>
 
     @Override
     public String getTitle() {
-<span class="fc" id="L71">        return resources.getString(&quot;INGAME.TITLE&quot;);</span>
+<span class="fc" id="L79">        return resources.getString(&quot;INGAME.TITLE&quot;);</span>
     }
 
     @Override
     public void init() {
-<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc bnc" id="L77" title="All 2 branches missed.">            if (!AudioService.getInstance().getCurrentSound().equals(WELCOME_SOUND)) {</span>
-<span class="nc" id="L78">                AudioService.getInstance().stopSound();</span>
-<span class="nc" id="L79">                AudioService.getInstance().playSound(WELCOME_SOUND);</span>
-<span class="nc" id="L80">                AudioService.getInstance().setCurrentSound(WELCOME_SOUND);</span>
-<span class="nc bnc" id="L81" title="All 2 branches missed.">                if (preferences.getBoolean(&quot;mute&quot;, false)) {</span>
-<span class="nc" id="L82">                    AudioService.getInstance().setVolume(0);</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">            if (!AudioService.getInstance().getCurrentSound().equals(WELCOME_SOUND)) {</span>
+<span class="nc" id="L86">                AudioService.getInstance().stopSound();</span>
+<span class="nc" id="L87">                AudioService.getInstance().playSound(WELCOME_SOUND);</span>
+<span class="nc" id="L88">                AudioService.getInstance().setCurrentSound(WELCOME_SOUND);</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">                if (preferences.getBoolean(&quot;mute&quot;, false)) {</span>
+<span class="nc" id="L90">                    AudioService.getInstance().setVolume(0);</span>
                 }
             }
         }
-<span class="fc" id="L86">    }</span>
+<span class="fc" id="L94">    }</span>
 
     @Override
     public Parent render() {
-<span class="fc" id="L90">        final Parent parent = super.render();</span>
-<span class="fc" id="L91">        nextButton.setOnAction(event -&gt; changeCount(true));</span>
-<span class="fc" id="L92">        previousButton.setOnAction(event -&gt; changeCount(false));</span>
-<span class="fc" id="L93">        return parent;</span>
+<span class="fc" id="L98">        final Parent parent = super.render();</span>
+
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L101">            welcomeSceneMonster1ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(MONSTER_1_COLOR)).toString()));</span>
+<span class="nc" id="L102">            welcomeSceneMonster2ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(MONSTER_2_COLOR)).toString()));</span>
+        }
+
+<span class="fc" id="L105">        nextButton.setOnAction(event -&gt; changeCount(true));</span>
+<span class="fc" id="L106">        previousButton.setOnAction(event -&gt; changeCount(false));</span>
+<span class="fc" id="L107">        return parent;</span>
     }
 
     private void changeCount(boolean change) {
-<span class="fc" id="L97">        sceneNumber = sceneCounter(sceneNumber, change);</span>
-<span class="fc" id="L98">        switchScene();</span>
-<span class="fc" id="L99">    }</span>
+<span class="fc" id="L111">        sceneNumber = sceneCounter(sceneNumber, change);</span>
+<span class="fc" id="L112">        switchScene();</span>
+<span class="fc" id="L113">    }</span>
 
     public void switchScene() {
 
-<span class="pc bpc" id="L103" title="2 of 10 branches missed.">        switch (sceneNumber) {</span>
-<span class="nc" id="L104">            case 0 -&gt; app.show(mainMenuControllerProvider.get());</span>
+<span class="pc bpc" id="L117" title="2 of 10 branches missed.">        switch (sceneNumber) {</span>
+<span class="nc" id="L118">            case 0 -&gt; app.show(mainMenuControllerProvider.get());</span>
             case 1 -&gt; {
-<span class="pc bpc" id="L106" title="1 of 2 branches missed.">                if (messagePane.getChildren().size() &gt; 2) {</span>
-<span class="fc" id="L107">                    messagePane.getChildren().remove(2);</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">                if (messagePane.getChildren().size() &gt; 2) {</span>
+<span class="fc" id="L121">                    messagePane.getChildren().remove(2);</span>
                 }
-<span class="fc" id="L109">                firstMessage.setText(resources.getString(&quot;FIRST.MESSAGE&quot;));</span>
-<span class="fc" id="L110">                secondMessage.setText(resources.getString(&quot;SECOND.MESSAGE&quot;));</span>
-<span class="fc" id="L111">            }</span>
-            case 2 -&gt; {
-<span class="fc" id="L113">                firstMessage.setText(resources.getString(&quot;THIRD.MESSAGE&quot;));</span>
-<span class="fc" id="L114">                secondMessage.setText(resources.getString(&quot;FOURTH.MESSAGE&quot;));</span>
-<span class="fc" id="L115">                final VBox messageVBox3 = new VBox();</span>
-<span class="fc" id="L116">                messageVBox3.getStyleClass().add(&quot;welcomeMessage&quot;);</span>
-<span class="fc" id="L117">                final Label thirdMessage = new Label();</span>
-<span class="fc" id="L118">                thirdMessage.setId(&quot;thirdMessage&quot;);</span>
-<span class="fc" id="L119">                thirdMessage.setText(resources.getString(&quot;FIFTH.MESSAGE&quot;));</span>
-<span class="fc" id="L120">                thirdMessage.setPrefHeight(MESSAGEBOX_HEIGHT);</span>
-<span class="fc" id="L121">                thirdMessage.setPrefWidth(MESSAGEBOX_WIDTH);</span>
-<span class="fc" id="L122">                messageVBox3.getChildren().add(thirdMessage);</span>
-<span class="fc" id="L123">                messageVBox3.setLayoutY(firstMessageBox.getLayoutY() + 100);</span>
-<span class="fc" id="L124">                messagePane.getChildren().add(messageVBox3);</span>
+<span class="fc" id="L123">                firstMessage.setText(resources.getString(&quot;FIRST.MESSAGE&quot;));</span>
+<span class="fc" id="L124">                secondMessage.setText(resources.getString(&quot;SECOND.MESSAGE&quot;));</span>
 <span class="fc" id="L125">            }</span>
+            case 2 -&gt; {
+<span class="fc" id="L127">                firstMessage.setText(resources.getString(&quot;THIRD.MESSAGE&quot;));</span>
+<span class="fc" id="L128">                secondMessage.setText(resources.getString(&quot;FOURTH.MESSAGE&quot;));</span>
+<span class="fc" id="L129">                final VBox messageVBox3 = new VBox();</span>
+<span class="fc" id="L130">                messageVBox3.getStyleClass().add(&quot;welcomeMessage&quot;);</span>
+<span class="fc" id="L131">                final Label thirdMessage = new Label();</span>
+<span class="fc" id="L132">                thirdMessage.setId(&quot;thirdMessage&quot;);</span>
+<span class="fc" id="L133">                thirdMessage.setText(resources.getString(&quot;FIFTH.MESSAGE&quot;));</span>
+<span class="fc" id="L134">                thirdMessage.setPrefHeight(MESSAGEBOX_HEIGHT);</span>
+<span class="fc" id="L135">                thirdMessage.setPrefWidth(MESSAGEBOX_WIDTH);</span>
+<span class="fc" id="L136">                messageVBox3.getChildren().add(thirdMessage);</span>
+<span class="fc" id="L137">                messageVBox3.setLayoutY(firstMessageBox.getLayoutY() + 100);</span>
+<span class="fc" id="L138">                messagePane.getChildren().add(messageVBox3);</span>
+<span class="fc" id="L139">            }</span>
             case 3 -&gt; {
-<span class="pc bpc" id="L127" title="1 of 2 branches missed.">                if (messagePane.getChildren().size() &gt; 2) {</span>
-<span class="fc" id="L128">                    messagePane.getChildren().remove(2);</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">                if (messagePane.getChildren().size() &gt; 2) {</span>
+<span class="fc" id="L142">                    messagePane.getChildren().remove(2);</span>
                 }
-<span class="fc" id="L130">                firstMessage.setText(resources.getString(&quot;SIXTH.MESSAGE&quot;));</span>
-<span class="fc" id="L131">                firstMessage.setWrapText(true);</span>
-<span class="fc" id="L132">                firstMessage.setPrefWidth(200);</span>
-<span class="fc" id="L133">                secondMessage.setText(resources.getString(&quot;SEVENTH.MESSAGE&quot;));</span>
-<span class="fc" id="L134">            }</span>
+<span class="fc" id="L144">                firstMessage.setText(resources.getString(&quot;SIXTH.MESSAGE&quot;));</span>
+<span class="fc" id="L145">                firstMessage.setWrapText(true);</span>
+<span class="fc" id="L146">                firstMessage.setPrefWidth(200);</span>
+<span class="fc" id="L147">                secondMessage.setText(resources.getString(&quot;SEVENTH.MESSAGE&quot;));</span>
+<span class="fc" id="L148">            }</span>
             case 4 -&gt; {
-<span class="fc" id="L136">                final Alert alert = new Alert(Alert.AlertType.NONE);</span>
-<span class="fc" id="L137">                final DialogPane dialogPane = alert.getDialogPane();</span>
-<span class="fc" id="L138">                final ButtonType cancelButton = new ButtonType(resources.getString(&quot;CANCEL&quot;), ButtonBar.ButtonData.APPLY);</span>
-<span class="fc" id="L139">                final ButtonType okButton = new ButtonType(resources.getString(&quot;OK&quot;));</span>
-<span class="fc" id="L140">                final TextField textFieldName = new TextField();</span>
-<span class="fc" id="L141">                textFieldName.setId(&quot;nameField&quot;);</span>
-<span class="fc" id="L142">                textFieldName.setPromptText(resources.getString(&quot;NAMEASK&quot;));</span>
-<span class="fc" id="L143">                textFieldName.textProperty().bindBidirectional(trainerName);</span>
-<span class="fc" id="L144">                dialogPane.getButtonTypes().addAll(cancelButton, okButton);</span>
+<span class="fc" id="L150">                final Alert alert = new Alert(Alert.AlertType.NONE);</span>
+<span class="fc" id="L151">                final DialogPane dialogPane = alert.getDialogPane();</span>
+<span class="fc" id="L152">                final ButtonType cancelButton = new ButtonType(resources.getString(&quot;CANCEL&quot;), ButtonBar.ButtonData.APPLY);</span>
+<span class="fc" id="L153">                final ButtonType okButton = new ButtonType(resources.getString(&quot;OK&quot;));</span>
+<span class="fc" id="L154">                final TextField textFieldName = new TextField();</span>
+<span class="fc" id="L155">                textFieldName.setId(&quot;nameField&quot;);</span>
+<span class="fc" id="L156">                textFieldName.setPromptText(resources.getString(&quot;NAMEASK&quot;));</span>
+<span class="fc" id="L157">                textFieldName.textProperty().bindBidirectional(trainerName);</span>
+<span class="fc" id="L158">                dialogPane.getButtonTypes().addAll(cancelButton, okButton);</span>
 
-<span class="fc" id="L146">                final Button cancelButton2 = (Button) alert.getDialogPane().lookupButton(cancelButton);</span>
-<span class="fc" id="L147">                final Button okButton2 = (Button) alert.getDialogPane().lookupButton(okButton);</span>
-<span class="fc" id="L148">                cancelButton2.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
-<span class="fc" id="L149">                okButton2.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
+<span class="fc" id="L160">                final Button cancelButton2 = (Button) alert.getDialogPane().lookupButton(cancelButton);</span>
+<span class="fc" id="L161">                final Button okButton2 = (Button) alert.getDialogPane().lookupButton(okButton);</span>
+<span class="fc" id="L162">                cancelButton2.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
+<span class="fc" id="L163">                okButton2.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
 
-<span class="fc" id="L151">                final VBox vbox = new VBox(textFieldName);</span>
+<span class="fc" id="L165">                final VBox vbox = new VBox(textFieldName);</span>
 
-<span class="fc" id="L153">                alert.setTitle(resources.getString(&quot;NAME.ALERT.TITLE&quot;));</span>
-<span class="fc" id="L154">                alert.initStyle(StageStyle.UNDECORATED);</span>
-<span class="fc" id="L155">                dialogPane.getStyleClass().add(&quot;alertDialogName&quot;);</span>
-<span class="fc" id="L156">                dialogPane.setContent(vbox);</span>
+<span class="fc" id="L167">                alert.setTitle(resources.getString(&quot;NAME.ALERT.TITLE&quot;));</span>
+<span class="fc" id="L168">                alert.initStyle(StageStyle.UNDECORATED);</span>
+<span class="fc" id="L169">                dialogPane.getStyleClass().add(&quot;alertDialogName&quot;);</span>
+<span class="fc" id="L170">                dialogPane.setContent(vbox);</span>
 
-<span class="pc" id="L158">                textFieldName.addEventHandler(KeyEvent.KEY_PRESSED, event -&gt; enterButtonTrainerInput(event, alert, textFieldName, okButton));</span>
+<span class="pc" id="L172">                textFieldName.addEventHandler(KeyEvent.KEY_PRESSED, event -&gt; enterButtonTrainerInput(event, alert, textFieldName, okButton));</span>
 
-<span class="fc" id="L160">                Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
-<span class="pc bpc" id="L161" title="2 of 4 branches missed.">                if (result.isPresent() &amp;&amp; result.get() == cancelButton) {</span>
-<span class="nc" id="L162">                    alert.close();</span>
-<span class="nc" id="L163">                    changeCount(false);</span>
-<span class="pc bpc" id="L164" title="2 of 4 branches missed.">                } else if (result.isPresent() &amp;&amp; result.get() == okButton) {</span>
-<span class="fc" id="L165">                    trainerStorage.setTrainerName(trainerName.get());</span>
-<span class="fc" id="L166">                    changeCount(true);</span>
+<span class="fc" id="L174">                Optional&lt;ButtonType&gt; result = alert.showAndWait();</span>
+<span class="pc bpc" id="L175" title="2 of 4 branches missed.">                if (result.isPresent() &amp;&amp; result.get() == cancelButton) {</span>
+<span class="nc" id="L176">                    alert.close();</span>
+<span class="nc" id="L177">                    changeCount(false);</span>
+<span class="pc bpc" id="L178" title="2 of 4 branches missed.">                } else if (result.isPresent() &amp;&amp; result.get() == okButton) {</span>
+<span class="fc" id="L179">                    trainerStorage.setTrainerName(trainerName.get());</span>
+<span class="fc" id="L180">                    changeCount(true);</span>
                 }
-<span class="fc" id="L168">            }</span>
+<span class="fc" id="L182">            }</span>
             case 5 -&gt; {
-<span class="fc" id="L170">                firstMessage.setText(resources.getString(&quot;EIGHTH.MESSAGE&quot;));</span>
-<span class="fc" id="L171">                secondMessage.setText(resources.getString(&quot;NINTH.MESSAGE&quot;));</span>
-<span class="fc" id="L172">                secondMessage.setWrapText(true);</span>
-<span class="fc" id="L173">                secondMessage.setPrefWidth(200);</span>
-<span class="fc" id="L174">            }</span>
-<span class="fc" id="L175">            case 6 -&gt; app.show(characterSelectionControllerProvider.get());</span>
+<span class="fc" id="L184">                firstMessage.setText(resources.getString(&quot;EIGHTH.MESSAGE&quot;));</span>
+<span class="fc" id="L185">                secondMessage.setText(resources.getString(&quot;NINTH.MESSAGE&quot;));</span>
+<span class="fc" id="L186">                secondMessage.setWrapText(true);</span>
+<span class="fc" id="L187">                secondMessage.setPrefWidth(200);</span>
+<span class="fc" id="L188">            }</span>
+<span class="fc" id="L189">            case 6 -&gt; app.show(characterSelectionControllerProvider.get());</span>
             case 7 -&gt; {
-<span class="fc" id="L177">                firstMessage.setText(resources.getString(&quot;TENTH.MESSAGE&quot;));</span>
-<span class="fc" id="L178">                secondMessage.setText(resources.getString(&quot;ELEVENTH.MESSAGE&quot;));</span>
-<span class="fc" id="L179">                secondMessage.setWrapText(true);</span>
-<span class="fc" id="L180">                secondMessage.setPrefWidth(200);</span>
-<span class="fc" id="L181">            }</span>
+<span class="fc" id="L191">                firstMessage.setText(resources.getString(&quot;TENTH.MESSAGE&quot;));</span>
+<span class="fc" id="L192">                secondMessage.setText(resources.getString(&quot;ELEVENTH.MESSAGE&quot;));</span>
+<span class="fc" id="L193">                secondMessage.setWrapText(true);</span>
+<span class="fc" id="L194">                secondMessage.setPrefWidth(200);</span>
+<span class="fc" id="L195">            }</span>
             case 8 -&gt; {
-<span class="fc" id="L183">                Region region = trainerStorage.getRegion();</span>
-<span class="fc" id="L184">                disposables.add(trainersServiceProvider.get().createTrainer(</span>
-<span class="fc" id="L185">                        region._id(),</span>
-<span class="fc" id="L186">                        trainerStorage.getTrainerName(),</span>
-<span class="fc" id="L187">                        trainerStorage.getTrainerSprite()</span>
-<span class="fc" id="L188">                ).observeOn(FX_SCHEDULER).subscribe(result -&gt; {</span>
-<span class="fc" id="L189">                            trainerStorage.setTrainer(result);</span>
-<span class="fc" id="L190">                            disposables.add(presetsServiceProvider.get().getCharacter(result.image()).observeOn(FX_SCHEDULER).subscribe(</span>
+<span class="fc" id="L197">                Region region = trainerStorage.getRegion();</span>
+<span class="fc" id="L198">                disposables.add(trainersServiceProvider.get().createTrainer(</span>
+<span class="fc" id="L199">                        region._id(),</span>
+<span class="fc" id="L200">                        trainerStorage.getTrainerName(),</span>
+<span class="fc" id="L201">                        trainerStorage.getTrainerSprite()</span>
+<span class="fc" id="L202">                ).observeOn(FX_SCHEDULER).subscribe(result -&gt; {</span>
+<span class="fc" id="L203">                            trainerStorage.setTrainer(result);</span>
+<span class="fc" id="L204">                            disposables.add(presetsServiceProvider.get().getCharacter(result.image()).observeOn(FX_SCHEDULER).subscribe(</span>
                                     response -&gt; {
-<span class="pc bpc" id="L192" title="1 of 2 branches missed.">                                        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L193">                                            trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));</span>
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">                                        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L207">                                            trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));</span>
                                         }
-<span class="fc" id="L195">                                        app.show(ingameControllerProvider.get());</span>
-<span class="fc" id="L196">                                    },</span>
+<span class="fc" id="L209">                                        app.show(ingameControllerProvider.get());</span>
+<span class="fc" id="L210">                                    },</span>
                                     error -&gt; {
-<span class="nc" id="L198">                                        showError(error.getMessage());</span>
-<span class="nc" id="L199">                                        error.printStackTrace();</span>
-<span class="nc" id="L200">                                    }</span>
+<span class="nc" id="L212">                                        showError(error.getMessage());</span>
+<span class="nc" id="L213">                                        error.printStackTrace();</span>
+<span class="nc" id="L214">                                    }</span>
                             ));
-<span class="fc" id="L202">                        }, error -&gt; showError(error.getMessage())</span>
+<span class="fc" id="L216">                        }, error -&gt; showError(error.getMessage())</span>
                 ));
             }
         }
 
-<span class="fc" id="L207">    }</span>
+<span class="fc" id="L221">    }</span>
 
     public void enterButtonTrainerInput(KeyEvent event, Alert alert, TextField textFieldName, ButtonType okButton) {
-<span class="nc bnc" id="L210" title="All 2 branches missed.">        if (event.getCode() == KeyCode.ENTER) {</span>
-<span class="nc" id="L211">            event.consume();</span>
-<span class="nc" id="L212">            alert.setResult(okButton);</span>
-<span class="nc" id="L213">            textFieldName.removeEventHandler(KeyEvent.KEY_PRESSED, event1 -&gt; enterButtonTrainerInput(event, alert, textFieldName, okButton));</span>
+<span class="nc bnc" id="L224" title="All 2 branches missed.">        if (event.getCode() == KeyCode.ENTER) {</span>
+<span class="nc" id="L225">            event.consume();</span>
+<span class="nc" id="L226">            alert.setResult(okButton);</span>
+<span class="nc" id="L227">            textFieldName.removeEventHandler(KeyEvent.KEY_PRESSED, event1 -&gt; enterButtonTrainerInput(event, alert, textFieldName, okButton));</span>
         }
-<span class="nc" id="L215">    }</span>
+<span class="nc" id="L229">    }</span>
 
     public int sceneCounter(int sceneNumber, boolean next) {
-<span class="fc bfc" id="L218" title="All 2 branches covered.">        if (next) {</span>
-<span class="fc" id="L219">            return sceneNumber + 1;</span>
+<span class="fc bfc" id="L232" title="All 2 branches covered.">        if (next) {</span>
+<span class="fc" id="L233">            return sceneNumber + 1;</span>
         } else {
-<span class="fc" id="L221">            return sceneNumber - 1;</span>
+<span class="fc" id="L235">            return sceneNumber - 1;</span>
         }
     }
 }

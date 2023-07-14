@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EncounterOpponentController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">EncounterOpponentController.java</span></div><h1>EncounterOpponentController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.dto.Opponent;
+import javafx.application.Platform;
+import javafx.event.EventTarget;
+import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.Effect;
+import javafx.scene.effect.Glow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+import java.awt.*;
+import java.util.Objects;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.AVATAR_4;
+
+public class EncounterOpponentController extends Controller {
+    private final Boolean isEnemy;
+    private final Boolean isWild;
+    private final Boolean invertX;
+    public final Boolean isMultipleEnemyEncounter;
+<span class="fc" id="L31">    public Boolean isTargeted = false;</span>
+
+    @FXML
+    public HBox opponentHBox;
+    @FXML
+    public VBox monsterInfoBox;
+    @FXML
+    public ProgressBar experienceBar;
+    @FXML
+    public Label levelLabel;
+    @FXML
+    public ProgressBar HealthBar;
+    @FXML
+    public HBox healthHBox;
+    @FXML
+    public Label healthLabel;
+    @FXML
+    public HBox monsterNameHBox;
+    @FXML
+    public Label monsterNameLabel;
+    @FXML
+    public VBox trainerMonsterVBox;
+    @FXML
+    public VBox monsterImageViewVBox;
+    @FXML
+    public ImageView monsterImageView;
+    @FXML
+    public ImageView trainerImageView;
+    @FXML
+    public VBox splitterVBox;
+    @FXML
+    public HBox trainerMonsterHBox;
+    @FXML
+    public ImageView starImageView;
+    @FXML
+    public ImageView heartImageView;
+
+    private Opponent currentTarget;
+    public Runnable onTargetChange;
+
+<span class="fc" id="L71">    public EncounterOpponentController(Boolean isEnemy, Boolean isWild, Boolean invertX, Boolean isMultipleEnemyEncounter) {</span>
+<span class="fc" id="L72">        this.isEnemy = isEnemy;</span>
+<span class="fc" id="L73">        this.isWild = isWild;</span>
+<span class="fc" id="L74">        this.invertX = invertX;</span>
+<span class="fc" id="L75">        this.isMultipleEnemyEncounter = isMultipleEnemyEncounter;</span>
+<span class="fc" id="L76">    }</span>
+
+    @Override
+    public Parent render() {
+<span class="fc" id="L80">        Parent parent = super.render();</span>
+
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L83">            starImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(STAR_ICON)).toString()));</span>
+<span class="nc" id="L84">            heartImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(HEART_ICON)).toString()));</span>
+        }
+
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (isEnemy) {</span>
+<span class="fc" id="L88">            experienceBar.setVisible(false);</span>
+<span class="fc" id="L89">            experienceBar.setDisable(true);</span>
+<span class="fc" id="L90">            experienceBar.setMinWidth(0);</span>
+<span class="fc" id="L91">            experienceBar.setMaxWidth(0);</span>
+<span class="fc" id="L92">            healthHBox.setVisible(false);</span>
+<span class="fc" id="L93">            healthLabel.setVisible(false);</span>
+<span class="fc" id="L94">            healthLabel.setDisable(true);</span>
+<span class="fc" id="L95">            monsterNameHBox.getStyleClass().clear();</span>
+<span class="fc" id="L96">            monsterNameHBox.getStyleClass().add(&quot;hBoxRed&quot;);</span>
+<span class="fc" id="L97">            trainerMonsterVBox.getChildren().clear();</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">            if (isWild) {</span>
+<span class="fc" id="L99">                trainerMonsterVBox.setAlignment(Pos.BOTTOM_CENTER);</span>
+<span class="fc" id="L100">                trainerImageView.setDisable(true);</span>
+<span class="fc" id="L101">                trainerImageView.setVisible(false);</span>
+<span class="fc" id="L102">                trainerMonsterVBox.getChildren().add(monsterImageViewVBox);</span>
+            } else {
+<span class="fc" id="L104">                trainerMonsterVBox.setAlignment(Pos.CENTER);</span>
+<span class="fc" id="L105">                trainerMonsterVBox.getChildren().add(0, trainerImageView);</span>
+<span class="fc" id="L106">                trainerMonsterVBox.getChildren().add(1, trainerMonsterHBox);</span>
+            }
+        }
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (invertX) {</span>
+<span class="fc" id="L110">            opponentHBox.getChildren().clear();</span>
+<span class="fc" id="L111">            opponentHBox.getChildren().add(0, trainerMonsterVBox);</span>
+<span class="fc" id="L112">            opponentHBox.getChildren().add(1, splitterVBox);</span>
+<span class="fc" id="L113">            opponentHBox.getChildren().add(2, monsterInfoBox);</span>
+        }
+<span class="fc" id="L115">        monsterImageViewVBox.setOnMouseClicked(event -&gt; {</span>
+<span class="nc bnc" id="L116" title="All 6 branches missed.">            if (isEnemy &amp;&amp; isMultipleEnemyEncounter &amp;&amp; onTargetChange != null) {</span>
+<span class="nc" id="L117">                onTargetChange.run();</span>
+            }
+<span class="nc" id="L119">        });</span>
+<span class="fc" id="L120">        return parent;</span>
+    }
+
+    public EncounterOpponentController setExperienceBarValue(double value) {
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        if (!experienceBar.isDisabled()) {</span>
+<span class="fc" id="L125">            experienceBar.setProgress(value);</span>
+        }
+<span class="fc" id="L127">        return this;</span>
+    }
+
+    public EncounterOpponentController setLevelLabel(String value) {
+<span class="fc" id="L131">        levelLabel.setText(value);</span>
+<span class="fc" id="L132">        return this;</span>
+    }
+
+    public EncounterOpponentController setHealthBarValue(double value) {
+<span class="fc" id="L136">        HealthBar.setProgress(value);</span>
+<span class="fc" id="L137">        return this;</span>
+    }
+
+    public EncounterOpponentController setHealthLabel(String value) {
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        if (!healthLabel.isDisabled()) {</span>
+<span class="fc" id="L142">            healthLabel.setText(value);</span>
+        }
+<span class="fc" id="L144">        return this;</span>
+    }
+
+    public EncounterOpponentController setMonsterNameLabel(String value) {
+<span class="fc" id="L148">        monsterNameLabel.setText(value);</span>
+<span class="fc" id="L149">        return this;</span>
+    }
+
+    public EncounterOpponentController setMonsterImage(Image image) {
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L154">            monsterImageView.setImage(image);</span>
+        }
+<span class="fc" id="L156">        return this;</span>
+    }
+
+    public EncounterOpponentController setTrainerImage(Image image) {
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">            if (!trainerImageView.isDisabled()) {</span>
+<span class="nc" id="L162">                trainerImageView.setImage(image);</span>
+            }
+        }
+<span class="fc" id="L165">        return this;</span>
+    }
+
+    public EncounterOpponentController onTarget() {
+<span class="fc" id="L169">        monsterNameHBox.getStyleClass().clear();</span>
+<span class="fc" id="L170">        monsterNameHBox.getStyleClass().add(&quot;hBoxGreen&quot;);</span>
+<span class="fc" id="L171">        monsterImageViewVBox.setStyle(&quot;-fx-padding: 16px; -fx-border-color: red; -fx-border-radius: 100;&quot;);</span>
+<span class="fc" id="L172">        isTargeted = true;</span>
+<span class="fc" id="L173">        return this;</span>
+    }
+
+    public EncounterOpponentController unTarget() {
+<span class="nc" id="L177">        monsterNameHBox.getStyleClass().clear();</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        if (isEnemy) {</span>
+<span class="nc" id="L179">            monsterNameHBox.getStyleClass().add(&quot;hBoxRed&quot;);</span>
+        } else {
+<span class="nc" id="L181">            monsterNameHBox.getStyleClass().add(&quot;hBoxYellow&quot;);</span>
+        }
+<span class="nc" id="L183">        monsterImageViewVBox.setStyle(&quot;-fx-padding: 0px; -fx-border-color: transparent; -fx-border-radius: 0;&quot;);</span>
+<span class="nc" id="L184">        isTargeted = false;</span>
+<span class="nc" id="L185">        return this;</span>
+    }
+
+    public Opponent getCurrentTarget() {
+<span class="fc" id="L189">        return currentTarget;</span>
+    }
+
+    public void setCurrentTarget(Opponent currentTarget) {
+<span class="fc" id="L193">        this.currentTarget = currentTarget;</span>
+<span class="fc" id="L194">    }</span>
+
+    public ImageView getTrainerImageView() {
+<span class="fc" id="L197">        return trainerImageView;</span>
+    }
+
+    public String getMonsterName() {
+<span class="nc" id="L201">        return monsterNameLabel.getText();</span>
+    }
+
+    public boolean getEnemy() {
+<span class="nc" id="L205">        return isEnemy;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
