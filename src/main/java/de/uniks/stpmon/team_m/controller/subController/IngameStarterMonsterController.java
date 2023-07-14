@@ -20,6 +20,7 @@ import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.List;
 
 import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
@@ -79,19 +80,27 @@ public class IngameStarterMonsterController extends Controller {
             monster3 = monsterType.get(Integer.parseInt(starters.get(2)) - 1);
             // get Images
             disposables.add(presetsService.getMonsterImage(Integer.parseInt(starters.get(0))).observeOn(FX_SCHEDULER).subscribe(monsterImage -> {
-                monster1Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
+                if (!GraphicsEnvironment.isHeadless()) {
+                    monster1Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
+                }
                 showMonster(1);
             }, error -> {
                 showError(error.getMessage());
                 error.printStackTrace();
             }));
-            disposables.add(presetsService.getMonsterImage(Integer.parseInt(starters.get(1))).observeOn(FX_SCHEDULER).subscribe(monsterImage ->
-                    monster2Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage), error -> {
-                showError(error.getMessage());
-                error.printStackTrace();
+            disposables.add(presetsService.getMonsterImage(Integer.parseInt(starters.get(1))).observeOn(FX_SCHEDULER).subscribe(monsterImage -> {
+                    if (!GraphicsEnvironment.isHeadless()) {
+                        monster2Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
+                    }
+                    }, error -> {
+                        showError(error.getMessage());
+                        error.printStackTrace();
             }));
-            disposables.add(presetsService.getMonsterImage(Integer.parseInt(starters.get(2))).observeOn(FX_SCHEDULER).subscribe(monsterImage ->
-                    monster3Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage), error -> {
+            disposables.add(presetsService.getMonsterImage(Integer.parseInt(starters.get(2))).observeOn(FX_SCHEDULER).subscribe(monsterImage -> {
+                    if (!GraphicsEnvironment.isHeadless()) {
+                        monster3Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
+                    }
+                    }, error -> {
                 showError(error.getMessage());
                 error.printStackTrace();
             }));
