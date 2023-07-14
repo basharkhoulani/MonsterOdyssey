@@ -69,7 +69,7 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
                 35,
                 1.0,
                 2))));
-        abilitiesMenuController.init(monster, presetsService, encounterController);
+        abilitiesMenuController.init(monster, presetsService, null, encounterController);
         app.start(stage);
         app.show(abilitiesMenuController);
         stage.requestFocus();

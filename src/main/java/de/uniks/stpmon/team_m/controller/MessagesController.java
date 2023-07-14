@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.GroupCell;
 import de.uniks.stpmon.team_m.controller.subController.MessagesBoxController;
 import de.uniks.stpmon.team_m.controller.subController.UserCell;
@@ -17,6 +18,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -24,14 +31,12 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.EMPTY_STRING;
-import static de.uniks.stpmon.team_m.Constants.MESSAGE_NAMESPACE_GROUPS;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class MessagesController extends Controller {
 
@@ -63,6 +68,8 @@ public class MessagesController extends Controller {
     public ListView<User> userListView;
     @FXML
     public ListView<Group> groupListView;
+    @FXML
+    public ImageView messagesMonsterWithoutImageView;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
@@ -222,6 +229,11 @@ public class MessagesController extends Controller {
     @Override
     public Parent render() {
         Parent parent = super.render();
+
+        if (!GraphicsEnvironment.isHeadless()) {
+            messagesMonsterWithoutImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(MONSTER1_WITHOUT)).toString()));
+        }
+
         initListViews();
         settingsButton.setVisible(false);
         messageTextArea.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);

@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.FriendSettingsController;
 import de.uniks.stpmon.team_m.controller.subController.MainMenuUserCell;
 import de.uniks.stpmon.team_m.controller.subController.RegionCell;
@@ -15,15 +16,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
+import java.util.Objects;
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.MENU_SOUND;
-import static de.uniks.stpmon.team_m.Constants.USER_STATUS_OFFLINE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class MainMenuController extends Controller {
 
@@ -50,6 +53,10 @@ public class MainMenuController extends Controller {
     @FXML
     public Label trainerDeletedSuccessfully;
     public String information;
+    @FXML
+    public ImageView mainMenuMonsterWithoutImageView1;
+    @FXML
+    public ImageView mainMenuMonsterWithoutImageView2;
     @Inject
     Provider<LoginController> loginControllerProvider;
     @Inject
@@ -150,6 +157,8 @@ public class MainMenuController extends Controller {
         showTrainerDeletion();
 
         if (!GraphicsEnvironment.isHeadless()) {
+            mainMenuMonsterWithoutImageView1.setImage(new Image(Objects.requireNonNull(App.class.getResource(MONSTER1_WITHOUT)).toString()));
+            mainMenuMonsterWithoutImageView2.setImage(new Image(Objects.requireNonNull(App.class.getResource(MONSTER1_WITHOUT)).toString()));
             if (preferences.getBoolean("mute", false)) {
                 AudioService.getInstance().unmuteSound();
                 muteOrUnmuteSound();

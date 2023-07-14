@@ -1,105 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane fx:id="rootStackPane" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.EncounterController">
-<AnchorPane minHeight="786.0" minWidth="1024.0" prefHeight="786.0" prefWidth="1024.0" styleClass="encounterBackground" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
-   <AnchorPane minHeight="786.0" minWidth="1024.0" prefHeight="786.0" prefWidth="1024.0" styleClass="ForegroundContainer" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <VBox minHeight="284.0" minWidth="400.0" prefHeight="284.0" prefWidth="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <HBox alignment="CENTER_LEFT" prefHeight="67.0" prefWidth="400.0">
-            <ImageView fitHeight="50.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
-               <Image url="@../images/star.png" />
-            </ImageView>
-            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" styleClass="hBoxRed">
-               <Label fx:id="opponentLevel">
-                  <font>
-                     <Font name="Comic Sans MS Bold" size="14.0" />
-                  </font>
-               </Label>
+<StackPane fx:id="rootStackPane" xmlns="http://javafx.com/javafx/11.0.2" maxHeight="-Infinity" maxWidth="-Infinity"
+           minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="768.0"
+           xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.EncounterController">
+   <BorderPane styleClass="encounterBackground">
+      <center>
+         <VBox fx:id="battleBackgroundVBox" styleClass="ForegroundContainer">
+            <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+               <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                  <HBox fx:id="enemyHBox" alignment="CENTER" VBox.vgrow="ALWAYS">
+                     <padding>
+                        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
+                     </padding>
+                  </HBox>
+               </VBox>
             </HBox>
-         </HBox>
-         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-            <ImageView fitHeight="50.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
-               <Image url="@../images/heart.png" />
-            </ImageView>
-            <ProgressBar fx:id="opponentHealthBar" prefHeight="20.0" prefWidth="253.0" progress="0.64" styleClass="healthprogress-bar" />
-         </HBox>
-         <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="400.0">
-            <SplitPane prefHeight="100.0" prefWidth="52.0" visible="false" />
-            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0" styleClass="hBoxRed">
-               <Label fx:id="opponentMonsterName">
-                  <font>
-                     <Font name="Comic Sans MS Bold" size="14.0" />
-                  </font>
-               </Label>
+            <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+               <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                  <HBox fx:id="teamHBox" alignment="CENTER" VBox.vgrow="ALWAYS">
+                     <padding>
+                        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
+                     </padding>
+                  </HBox>
+               </VBox>
             </HBox>
+         </VBox>
+      </center>
+      <bottom>
+         <HBox prefWidth="200.0" spacing="8.0" styleClass="hBoxDarkGreen" BorderPane.alignment="CENTER">
+            <VBox HBox.hgrow="ALWAYS">
+               <TextFlow fx:id="battleDialogTextFlow" styleClass="hBoxLightGreen" textAlignment="CENTER"
+                         VBox.vgrow="ALWAYS">
+                  <padding>
+                     <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+                  </padding>
+                  <Text fx:id="battleDialogText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                     <font>
+                        <Font name="Comic Sans MS Bold" size="17.0"/>
+                     </font>
+                  </Text>
+               </TextFlow>
+            </VBox>
+            <VBox fx:id="battleMenuVBox" prefHeight="125.0" prefWidth="250.0" HBox.hgrow="NEVER">
+               <HBox.margin>
+                  <Insets/>
+               </HBox.margin>
+            </VBox>
+            <padding>
+               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+            </padding>
          </HBox>
-      </VBox>
-      <VBox alignment="CENTER" layoutX="412.0" layoutY="8.0" minHeight="300.0" minWidth="200.0" prefHeight="300.0" prefWidth="200.0" AnchorPane.leftAnchor="412.0" AnchorPane.rightAnchor="412.0" AnchorPane.topAnchor="0.0">
-         <ImageView fx:id="opponentTrainer" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-         <ImageView fx:id="opponentMonster" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-      </VBox>
-      <VBox layoutX="624.0" layoutY="8.0" minHeight="284.0" minWidth="400.0" prefHeight="284.0" prefWidth="400.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <VBox alignment="CENTER" layoutX="412.0" layoutY="300.0" minHeight="300.0" minWidth="200.0" prefHeight="300.0" prefWidth="200.0" AnchorPane.leftAnchor="412.0" AnchorPane.rightAnchor="412.0" AnchorPane.topAnchor="300.0">
-         <ImageView fx:id="myMonster" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-         <ImageView fx:id="mySprite" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-      </VBox>
-      <VBox layoutX="624.0" layoutY="316.0" minHeight="284.0" minWidth="400.0" prefHeight="284.0" prefWidth="400.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="316.0">
-         <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="400.0">
-            <ImageView fitHeight="50.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
-               <Image url="@../images/star.png" />
-            </ImageView>
-            <ProgressBar fx:id="myLevelBar" prefHeight="20.0" prefWidth="250.0" progress="0.88" styleClass="levelprogress-bar" />
-            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="97.0" styleClass="hBoxRed">
-               <Label fx:id="myLevel">
-                  <font>
-                     <Font name="Comic Sans MS Bold" size="14.0" />
-                  </font>
-               </Label>
-            </HBox>
-         </HBox>
-         <SplitPane minHeight="30.0" minWidth="400.0" prefHeight="30.0" prefWidth="400.0" visible="false" />
-         <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="400.0">
-            <ImageView fitHeight="50.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
-               <Image url="@../images/heart.png" />
-            </ImageView>
-            <ProgressBar fx:id="myHealthBar" prefHeight="20.0" prefWidth="250.0" progress="0.78" styleClass="healthprogress-bar" />
-            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="97.0" styleClass="hBoxRed">
-               <Label fx:id="myHealth">
-                  <font>
-                     <Font name="Comic Sans MS Bold" size="14.0" />
-                  </font>
-               </Label>
-            </HBox>
-         </HBox>
-         <SplitPane layoutX="10.0" layoutY="80.0" minHeight="30.0" minWidth="400.0" prefHeight="30.0" prefWidth="400.0" visible="false" />
-         <HBox prefHeight="70.0" prefWidth="200.0">
-            <SplitPane prefHeight="100.0" prefWidth="50.0" visible="false" />
-            <HBox alignment="CENTER" prefHeight="70.0" prefWidth="200.0" styleClass="hBoxYellow">
-               <Label fx:id="myMonsterName">
-                  <font>
-                     <Font name="Comic Sans MS Bold" size="14.0" />
-                  </font>
-               </Label>
-            </HBox>
-         </HBox>
-      </VBox>
-      <VBox layoutY="308.0" minHeight="284.0" minWidth="400.0" prefHeight="284.0" prefWidth="400.0" AnchorPane.leftAnchor="0.0" />
-      <AnchorPane layoutY="602.0" minHeight="166.0" minWidth="1050.0" prefHeight="166.0" prefWidth="1050.0" styleClass="hBoxDarkGreen" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <HBox alignment="CENTER" prefHeight="160.0" prefWidth="647.0" styleClass="hBoxLightGreen" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="377.0" AnchorPane.topAnchor="3.0">
-            <TextFlow prefHeight="166.0" prefWidth="645.0" textAlignment="CENTER">
-               <Text fx:id="battleDescription" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1.0">
-                  <font>
-                     <Font name="Comic Sans MS Bold" size="24.0" />
-                  </font>
-               </Text>
-            </TextFlow>
-         </HBox>
-         <HBox fx:id="battleMenu" layoutX="674.0" layoutY="3.0" minHeight="160.0" minWidth="350.0" prefHeight="160.0" prefWidth="350.0" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="3.0" />
-      </AnchorPane>
-   </AnchorPane>
-</AnchorPane>
+      </bottom>
+   </BorderPane>
 </StackPane>

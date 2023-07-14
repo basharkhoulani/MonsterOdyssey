@@ -25,13 +25,11 @@
       </Button>
    </HBox>
    <HBox layoutX="23.0" layoutY="128.0" prefHeight="55.0" prefWidth="58.0">
-      <ImageView fitHeight="58.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true">
-         <Image url="@../images/mute-icon.png"/>
+      <ImageView fx:id="muteIconImageView" fitHeight="58.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true">
       </ImageView>
    </HBox>
    <HBox layoutX="368.0" layoutY="128.0" prefHeight="55.0" prefWidth="58.0">
-      <ImageView fitHeight="56.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
-         <Image url="@../images/high-volume-icon.png"/>
+      <ImageView fx:id="highVolumeIconImageView" fitHeight="56.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
       </ImageView>
    </HBox>
 </AnchorPane>

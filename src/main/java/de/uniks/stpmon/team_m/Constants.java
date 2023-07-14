@@ -51,6 +51,8 @@ public class Constants {
     public static final char BULLET = '\u25cf';
     public static final String REFRESH_TOKEN_PREF = "refreshToken";
 
+    // Account Settings
+    public static final String MONSTER1_WITHOUT = "images/Monster1-without.png";
 
     // NEW GROUP
     public static final String CHECK_MARK = "\u2713";
@@ -80,6 +82,11 @@ public class Constants {
     public static final int DELAY_LONG = 500;
     public static final double ZERO = 0;
     public static final double ONE = 1;
+    public static final int TRAINER_DIRECTION_RIGHT = 0;
+    public static final int TRAINER_DIRECTION_UP = 1;
+    public static final int TRAINER_DIRECTION_LEFT = 2;
+    public static final int TRAINER_DIRECTION_DOWN = 3;
+
 
     public static final String SETTINGSYMBOL2 = "images/SettingSymbol2.png";
     public static final String GOBACKSYMBOL = "images/GoBackSymbol.png";
@@ -91,6 +98,8 @@ public class Constants {
     public static final String PENCIL2SYMBOL = "images/Pencil2.png";
     public static final String ARROWLEFTSYMBOL = "images/arrowLeft.png";
     public static final String ARROWRIGHTSYMBOL = "images/arrowRight.png";
+    public static final String MAPSYMBOL = "images/MapSymbol.png";
+    public static final String MONSTER_WITH_COLOR = "images/Monster_mit_Farbe.png";
 
     // NPC DIALOG
     public static final int dialogVBoxWidth = 700;
@@ -145,6 +154,10 @@ public class Constants {
     public static final int fleeButtonWidth = 100;
     public static final int fleeButtonHeight = 40;
 
+    // Encounter - images
+    public static final String STAR_ICON = "images/star.png";
+    public static final String HEART_ICON = "images/heart.png";
+
     // Error messages
     public static final String HTTP_400 = "400";
     public static final String HTTP_401 = "401";
@@ -156,8 +169,12 @@ public class Constants {
     // Welcome Scene
     public static final int MESSAGEBOX_HEIGHT = 45;
     public static final int MESSAGEBOX_WIDTH = 170;
+    public static final String MONSTER_2_COLOR = "images/Monster2-color.png";
+    public static final String MONSTER_1_COLOR = "images/Monster1-color.png";
 
     // Change Audio Settings
+    public static final String MUTE_ICON = "images/mute-icon.png";
+    public static final String HIGH_VOLUME_ICON = "images/high-volume-icon.png";
 
     // Characters
     public static final String[] PREMADE_CHARACTERS = {
@@ -174,6 +191,7 @@ public class Constants {
     public static final String CITY_SOUND = "Nintendo_Style_Upbeat_Music_Loop_03.wav";
     public static final String ROOMS_SOUND = "Nintendo_Style_Funny_Music_Loop_02.wav";
     public static final String ROUTE_SOUND = "Nintendo_Style_Upbeat_Music_Loop_05.wav";
+    public static final String FIGHT_SOUND = "Nintendo_Style_Battle_Music_Loop_02.wav";
 
     // Colors
     public static final HashMap<String, String> TYPESCOLORPALETTE = new HashMap<>(Map.ofEntries(
@@ -205,18 +223,18 @@ public class Constants {
             entry("electric", "ability-electic.png"),
             entry("grass", "ability-grass.png"),
             entry("flying", "ability-flying.png"),
-            entry("bug", "ability-bug"),
-            entry("poison", "ability-poison"),
-            entry("rock", "ability-rock"),
-            entry("ground", "ability-ground"),
-            entry("fighting", "ability-fighting"),
-            entry("ice", "ability-ice"),
-            entry("psychic", "ability-psychic"),
-            entry("ghost", "ability-ghost"),
-            entry("dragon", "ability-dragon"),
-            entry("dark", "ability-dragon"),
-            entry("steel", "ability-steel"),
-            entry("fairy", "ability-fairy")
+            entry("bug", "ability-bug.png"),
+            entry("poison", "ability-poison.png"),
+            entry("rock", "ability-rock.png"),
+            entry("ground", "ability-ground.png"),
+            entry("fighting", "ability-fighting.png"),
+            entry("ice", "ability-ice.png"),
+            entry("psychic", "ability-psychic.png"),
+            entry("ghost", "ability-ghost.png"),
+            entry("dragon", "ability-dragon.png"),
+            entry("dark", "ability-dragon.png"),
+            entry("steel", "ability-steel.png"),
+            entry("fairy", "ability-fairy.png")
     ));
 
     public static final List<String> ATTRIBUTE_IMAGES = Arrays.asList(

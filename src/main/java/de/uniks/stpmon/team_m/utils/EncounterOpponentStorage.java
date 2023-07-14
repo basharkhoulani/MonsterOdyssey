@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.dto.Trainer;
+import javafx.collections.FXCollections;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -16,16 +17,20 @@ public class EncounterOpponentStorage {
     private List<String> opponentsInStorage = new ArrayList<>();
     private Opponent selfOpponent;
     // Die Opponent mit selben trainerId
-    private Opponent enemyOpponent;
-    //Die Opponent mit Id der Gegner
-    private Trainer opponentTrainer;
+    private List<Opponent> enemyOpponents = FXCollections.observableArrayList();
+    // Die Opponent mit Id der Gegner
+    private Opponent coopOpponent;
+    // Die Opponent mit Id des Coop-Partners
     private Monster currentTrainerMonster;
     private MonsterTypeDto currentTrainerMonsterType;
-    private Monster currentEnemyMonster;
-    private MonsterTypeDto currentEnemyMonsterType;
+    private List<Monster> currentMonsters = FXCollections.observableArrayList();
+    private List<MonsterTypeDto> currentMonsterTypes = FXCollections.observableArrayList();
     private String regionId;
     private boolean isWild;
     private int encounterSize;
+    private boolean isAttacker;
+    private Trainer opponentTrainer;
+    private MonsterTypeDto currentEnemyMonsterType;
 
 
     @Inject
@@ -63,17 +68,6 @@ public class EncounterOpponentStorage {
         this.encounterSize = encounterSize;
     }
 
-    public List<String> getOpponentsInStorage() {
-        return opponentsInStorage;
-    }
-
-    public void setOpponentsInStorage(List<Opponent> opponentsInStorage) {
-        this.opponentsInStorage.clear();
-        for (Opponent opponent : opponentsInStorage) {
-            this.opponentsInStorage.add(opponent._id());
-        }
-    }
-
     public Trainer getOpponentTrainer() {
         return opponentTrainer;
     }
@@ -90,28 +84,12 @@ public class EncounterOpponentStorage {
         this.selfOpponent = selfOpponent;
     }
 
-    public Opponent getEnemyOpponent() {
-        return enemyOpponent;
-    }
-
-    public void setEnemyOpponent(Opponent enemyOpponent) {
-        this.enemyOpponent = enemyOpponent;
-    }
-
     public Monster getCurrentTrainerMonster() {
         return currentTrainerMonster;
     }
 
     public void setCurrentTrainerMonster(Monster currentTrainerMonster) {
         this.currentTrainerMonster = currentTrainerMonster;
-    }
-
-    public Monster getCurrentEnemyMonster() {
-        return currentEnemyMonster;
-    }
-
-    public void setCurrentEnemyMonster(Monster currentEnemyMonster) {
-        this.currentEnemyMonster = currentEnemyMonster;
     }
 
     public MonsterTypeDto getCurrentTrainerMonsterType() {
@@ -122,10 +100,69 @@ public class EncounterOpponentStorage {
         this.currentTrainerMonsterType = currentTrainerMonsterType;
     }
 
-    public MonsterTypeDto getCurrentEnemyMonsterType() {
-        return currentEnemyMonsterType;
+    public List<Opponent> getEnemyOpponents() {
+        return enemyOpponents;
     }
 
+    public void resetEnemyOpponents() {
+        this.enemyOpponents.clear();
+    }
+
+    public void addEnemyOpponent(Opponent enemyOpponent) {
+        this.enemyOpponents.add(enemyOpponent);
+    }
+
+    public Opponent getCoopOpponent() {
+        return coopOpponent;
+    }
+
+    public void setCoopOpponent(Opponent coopOpponent) {
+        this.coopOpponent = coopOpponent;
+    }
+
+    public boolean isAttacker() {
+        return isAttacker;
+    }
+
+    public void setAttacker(boolean attack) {
+        isAttacker = attack;
+    }
+
+    public List<Monster> getCurrentMonsters() {
+        return currentMonsters;
+    }
+
+    public void addCurrentMonster(Monster monster) {
+        this.currentMonsters.add(monster);
+    }
+
+    public List<MonsterTypeDto> getCurrentMonsterTypes() {
+        return currentMonsterTypes;
+    }
+
+    public void addCurrentMonsterType(MonsterTypeDto monsterType) {
+        this.currentMonsterTypes.add(monsterType);
+    }
+
+    public List<String> getOpponentsInStorage() {
+        return opponentsInStorage;
+    }
+
+    public void setOpponentsInStorage(List<Opponent> opponents) {
+        this.opponentsInStorage.clear();
+        for (Opponent opponent : opponents) {
+            this.opponentsInStorage.add(opponent._id());
+        }
+
+    }
+
+    public void setEnemyOpponent(Opponent o) {
+        this.enemyOpponents.add(o);
+    }
+
+    public Opponent getEnemyOpponent() {
+        return this.enemyOpponents.get(0);
+    }
     public void setCurrentEnemyMonsterType(MonsterTypeDto currentEnemyMonsterType) {
         this.currentEnemyMonsterType = currentEnemyMonsterType;
     }

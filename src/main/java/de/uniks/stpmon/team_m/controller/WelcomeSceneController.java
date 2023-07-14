@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.CharacterSelectionController;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.service.AudioService;
@@ -14,6 +15,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -23,6 +26,7 @@ import javafx.stage.StageStyle;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
@@ -43,6 +47,10 @@ public class WelcomeSceneController extends Controller {
     public VBox firstMessageBox;
     public int sceneNumber = 1;
     private final SimpleStringProperty trainerName = new SimpleStringProperty();
+    @FXML
+    public ImageView welcomeSceneMonster2ImageView;
+    @FXML
+    public ImageView welcomeSceneMonster1ImageView;
     @Inject
     Provider<IngameController> ingameControllerProvider;
     @Inject
@@ -88,6 +96,12 @@ public class WelcomeSceneController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
+
+        if (!GraphicsEnvironment.isHeadless()) {
+            welcomeSceneMonster1ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(MONSTER_1_COLOR)).toString()));
+            welcomeSceneMonster2ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(MONSTER_2_COLOR)).toString()));
+        }
+
         nextButton.setOnAction(event -> changeCount(true));
         previousButton.setOnAction(event -> changeCount(false));
         return parent;

@@ -9,8 +9,7 @@
 <HBox styleClass="Background" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.GroupController">
    <VBox alignment="TOP_CENTER" fillWidth="false" minWidth="375.0" HBox.hgrow="NEVER">
       <HBox alignment="CENTER" styleClass="ForegroundHeaderContainer" VBox.vgrow="SOMETIMES">
-         <ImageView fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../images/Monster1-without.png" />
+         <ImageView fx:id="groupMonsterWithoutImageView" fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
          </ImageView>
          <Label fx:id="selectGroupMembersLabel" text="%SELECT.GROUPMEMBERS" HBox.hgrow="NEVER">
             <font>

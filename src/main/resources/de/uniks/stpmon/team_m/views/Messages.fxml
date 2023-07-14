@@ -2,10 +2,9 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
 <BorderPane minHeight="480.0" minWidth="640.0" prefHeight="600.0" prefWidth="800.0" styleClass="Background" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.MessagesController">
    <left>
       <HBox alignment="CENTER" fillHeight="false" BorderPane.alignment="TOP_CENTER">
@@ -19,8 +18,7 @@
                      <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
-                     <ImageView fitHeight="36.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../images/Monster1-without.png" />
+                     <ImageView fx:id="messagesMonsterWithoutImageView" fitHeight="36.0" pickOnBounds="true" preserveRatio="true">
                         <HBox.margin>
                            <Insets bottom="8.0" />
                         </HBox.margin>

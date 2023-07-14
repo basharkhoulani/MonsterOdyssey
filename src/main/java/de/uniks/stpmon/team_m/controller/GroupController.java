@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.GroupUserCell;
 import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
@@ -15,19 +16,26 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.EMPTY_STRING;
-import static de.uniks.stpmon.team_m.Constants.MAX_SUGGESTIONS_NEW_GROUP;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class GroupController extends Controller {
-
+    @FXML
+    public ImageView groupMonsterWithoutImageView;
     private String TITLE;
     @FXML
     public Label errorMessage;
@@ -187,6 +195,11 @@ public class GroupController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
+
+        if (!GraphicsEnvironment.isHeadless()) {
+            groupMonsterWithoutImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(MONSTER1_WITHOUT)).toString()));
+        }
+
         final String groupId = groupStorageProvider.get().get_id();
         if (groupId.equals(EMPTY_STRING)) {
             deleteGroupButton.setVisible(false);

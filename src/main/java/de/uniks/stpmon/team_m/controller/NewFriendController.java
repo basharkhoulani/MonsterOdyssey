@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.dto.Group;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.GroupService;
@@ -7,18 +8,22 @@ import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.GroupStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.EMPTY_STRING;
-import static de.uniks.stpmon.team_m.Constants.HTTP_403;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class NewFriendController extends Controller {
 
@@ -30,6 +35,8 @@ public class NewFriendController extends Controller {
     public Button messageButton;
     @FXML
     public TextField searchTextField;
+    @FXML
+    public ImageView newFriendMonsterWithoutImageView;
     List<User> allUsers;
     @Inject
     UsersService usersService;
@@ -50,6 +57,16 @@ public class NewFriendController extends Controller {
 
     @Inject
     public NewFriendController() {
+    }
+
+    @Override
+    public Parent render() {
+        Parent parent = super.render();
+
+        if (!GraphicsEnvironment.isHeadless()) {
+            newFriendMonsterWithoutImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(MONSTER1_WITHOUT)).toString()));
+        }
+        return parent;
     }
 
     /**

@@ -2,14 +2,10 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
-
 <AnchorPane fx:id="starterSelectionAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="350.0" prefWidth="550.0" style="-fx-background-color: #d3ebd3;"
             xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
@@ -33,7 +29,6 @@
                 </HBox.margin>
                 <ImageView fx:id="starterImageView" fitHeight="100.0" fitWidth="100.0" nodeOrientation="INHERIT"
                            pickOnBounds="true" preserveRatio="true">
-                    <Image url="@../images/Monster_mit_Farbe.png"/>
                 </ImageView>
                 <padding>
                     <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
@@ -50,10 +45,8 @@
     </VBox>
     <ImageView fx:id="arrowLeft" fitHeight="32.0" fitWidth="32.0" layoutX="14.0" layoutY="169.0"
                onMouseClicked="#rotateLeft" pickOnBounds="true" preserveRatio="true">
-        <Image url="@../images/arrowLeft.png"/>
     </ImageView>
     <ImageView fx:id="arrowRight" fitHeight="32.0" fitWidth="32.0" layoutX="504.0" layoutY="169.0"
                onMouseClicked="#rotateRight" pickOnBounds="true" preserveRatio="true">
-        <Image url="@../images/arrowRight.png"/>
     </ImageView>
 </AnchorPane>

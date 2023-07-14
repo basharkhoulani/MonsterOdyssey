@@ -37,6 +37,10 @@
     -fx-border-width: 1px;
     -fx-border-color: #D63818;
 }
+.buttonsRounded {
+    -fx-background-radius: 10px !important;
+    -fx-border-radius: 10px !important;
+}
 
 .buttonsBlue {
     -fx-background-color: #DAE8FC;
@@ -473,11 +477,19 @@
 .hBoxRed {
     -fx-background-color: #F8CECC;
     -fx-background-radius: 10;
+    -fx-border-color: #696969;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-border-radius: 10;
 }
 
 .hBoxYellow {
     -fx-background-color: #FFF2CC;
     -fx-background-radius: 10;
+    -fx-border-color: #696969;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-border-radius: 10;
 }
 
 .hBoxDarkGreen {
@@ -491,13 +503,23 @@
 }
 
 .levelprogress-bar {
-    -fx-accent: #2B8B03;
+    -fx-accent: #009900;
     -fx-control-inner-background: #FFFFFF;
+    -fx-border-color: #696969;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-padding: 1px 2px 1px 2px;
+    -fx-border-radius: 10;
 }
 
 .healthprogress-bar {
-    -fx-accent: #430000;
+    -fx-accent: #FF0000;
     -fx-control-inner-background: #FFFFFF;
+    -fx-border-color: #696969;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-padding: 1px 2px 1px 2px;
+    -fx-border-radius: 10;
 }
 
 .encounterBackground {

@@ -12,6 +12,7 @@ import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -41,6 +42,7 @@ public class AbilitiesMenuController extends Controller {
     EncounterOpponentsService encounterOpponentsService;
     PresetsService presetsService;
     private Monster monster;
+    private VBox battleMenuVBox;
     private EncounterController encounterController;
 
 
@@ -48,10 +50,11 @@ public class AbilitiesMenuController extends Controller {
     public AbilitiesMenuController() {
     }
 
-    public void init(Monster monster, PresetsService presetsService, EncounterController encounterController) {
+    public void init(Monster monster, PresetsService presetsService, VBox battleMenuVBox, EncounterController encounterController) {
         super.init();
         this.monster = monster;
         this.presetsService = presetsService;
+        this.battleMenuVBox = battleMenuVBox;
         this.encounterController = encounterController;
     }
 
@@ -104,6 +107,7 @@ public class AbilitiesMenuController extends Controller {
         disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(
                 opponent -> {
                     updateButton(ability, abilityButton, currentUse-1);
+                    encounterController.updateDescription(resources.getString("YOU.USED") + ability.name() + ". ", true);
                     encounterController.updateDescription(resources.getString("YOU.USED") + " " + ability.name() + ". \n", true);
                     encounterController.resetOppoenentUpdate();
                     encounterController.resetRepeatedTimes();

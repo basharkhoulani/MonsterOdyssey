@@ -74,6 +74,8 @@ public class TrainerController extends Controller {
         this.trainerChunk = trainerChunk;
         this.graphicsContext = graphicsContext;
         this.alternativeGraphicsContext = alternateGraphicsContext;
+
+        // Init trainer position and direction
         trainerTargetX = trainer.x();
         trainerTargetY = trainer.y();
         this.trainerX = trainer.x() * TILE_SIZE;
@@ -90,6 +92,10 @@ public class TrainerController extends Controller {
         trainerTargetY = y;
     }
 
+    /**
+     * This method is used to turn the trainer in a specific direction
+     * @param direction : 0 = right, 1 = up, 2 = left, 3 = down
+     */
     public void turn(int direction) {
         trainerDirection = direction;
         spriteAnimation.stay(trainerDirection);
@@ -99,17 +105,17 @@ public class TrainerController extends Controller {
         if (trainerX != trainerTargetX * TILE_SIZE || trainerY != trainerTargetY * TILE_SIZE) {
             isWalking = true;
             if (trainerX < trainerTargetX * TILE_SIZE) {
+                trainerDirection = TRAINER_DIRECTION_RIGHT;
                 trainerX++;
-                trainerDirection = 0;
             } else if (trainerX > trainerTargetX * TILE_SIZE) {
+                trainerDirection = TRAINER_DIRECTION_LEFT;
                 trainerX--;
-                trainerDirection = 2;
             } else if (trainerY < trainerTargetY * TILE_SIZE) {
+                trainerDirection = TRAINER_DIRECTION_DOWN;
                 trainerY++;
-                trainerDirection = 3;
             } else if (trainerY > trainerTargetY * TILE_SIZE) {
+                trainerDirection = TRAINER_DIRECTION_UP;
                 trainerY--;
-                trainerDirection = 1;
             }
             spriteAnimation.walk(trainerDirection);
         }
