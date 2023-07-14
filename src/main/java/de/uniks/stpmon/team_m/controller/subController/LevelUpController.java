@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.dto.Monster;
@@ -8,12 +9,16 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
+import java.awt.*;
+import java.util.Objects;
 
 
 public class LevelUpController extends Controller {
@@ -33,12 +38,25 @@ public class LevelUpController extends Controller {
     public Label defenseLabel;
     @FXML
     public Label speedLabel;
+    @FXML
+    public ImageView expImageView;
+    @FXML
+    public ImageView hpImageView;
+    @FXML
+    public ImageView atkImageView;
+    @FXML
+    public ImageView defImageView;
+    @FXML
+    public ImageView spImageView;
+    @FXML
+    public VBox abilityVBox;
     private VBox container;
     private EncounterController encounterController;
     private StackPane root;
     private Monster monster;
     private MonsterTypeDto monsterTypeDto;
     private Monster oldMonster;
+
 
     @Inject
     public LevelUpController() {
@@ -56,6 +74,13 @@ public class LevelUpController extends Controller {
 
     public Parent render() {
         final Parent parent = super.render();
+        if (!GraphicsEnvironment.isHeadless()) {
+            expImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource("images/star.png")).toString()));
+            hpImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource("images/heart.png")).toString()));
+            atkImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource("images/attack.png")).toString()));
+            defImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource("images/defense.png")).toString()));
+            spImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource("images/speed.png")).toString()));
+        }
 
         levelLabel.setText(oldMonster.level() + " -> " + monster.level());
         healthLabel.setText(oldMonster.attributes().health() + " -> " + monster.attributes().health());
