@@ -20,7 +20,6 @@ import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.REFRESH_TOKEN_PREF;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

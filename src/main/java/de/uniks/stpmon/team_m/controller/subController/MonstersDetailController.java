@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.Monster;
@@ -15,6 +16,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
@@ -57,22 +59,29 @@ public class MonstersDetailController extends Controller {
     public ImageView typeImageView;
     @FXML
     public VBox typeIcon;
+    @FXML
+    public HBox levelBox;
+    @FXML
+    public HBox attackBox;
+    @FXML
+    public HBox hpBox;
+    @FXML
+    public HBox speedBox;
+    @FXML
+    public HBox defenseBox;
     @Inject
     Provider<IngameController> ingameControllerProvider;
     PresetsService presetsService;
-    MonstersListController monstersListController;
     private Monster monster;
     private MonsterTypeDto monsterTypeDto;
     private Image monsterImage;
     public IngameController ingameController;
+    public EncounterController encounterController;
     public VBox monsterDetailVBox;
-    public List<AbilityDto> monsterAbilities = new ArrayList<>();
+    public final List<AbilityDto> monsterAbilities = new ArrayList<>();
     @Inject
     public Provider<PresetsService> presetsServiceProvider;
     private String monsterType;
-    private String typeColor;
-    private String typeImagePath;
-    private Image typeImage;
     @FXML
     public Label monsterName;
     @FXML
@@ -93,20 +102,33 @@ public class MonstersDetailController extends Controller {
         return parent;
     }
 
-    public void init(IngameController ingameController, VBox monsterDetailVBox, MonstersListController monstersListController,
+    public void init(IngameController ingameController, VBox monsterDetailVBox,
                      Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources, PresetsService presetsService,
                      String type) {
         super.init();
         this.monsterType = type;
         this.ingameController = ingameController;
         this.monsterDetailVBox = monsterDetailVBox;
-        this.monstersListController = monstersListController;
         this.monster = monster;
         this.monsterTypeDto = monsterTypeDto;
         this.monsterImage = monsterImage;
         this.resources = resources;
         this.presetsService = presetsService;
     }
+
+    public void initFromBattleMenu(EncounterController encounterController, VBox monsterDetailVBox, Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage,
+                                   ResourceBundle resources, PresetsService presetsService, String type) {
+        super.init();
+        this.monsterType = type;
+        this.encounterController = encounterController;
+        this.monsterDetailVBox = monsterDetailVBox;
+        this.monster = monster;
+        this.monsterTypeDto = monsterTypeDto;
+        this.monsterImage = monsterImage;
+        this.resources = resources;
+        this.presetsService = presetsService;
+    }
+
 
     @Inject
     public MonstersDetailController() {
@@ -116,19 +138,21 @@ public class MonstersDetailController extends Controller {
         // Sprite
         if (!GraphicsEnvironment.isHeadless()) {
             monsterImageView.setImage(monsterImage);
-            typeColor = TYPESCOLORPALETTE.get(monsterType);
+            String typeColor = TYPESCOLORPALETTE.get(monsterType);
             String style = "-fx-background-color: " + typeColor + ";";
             typeIcon.setStyle(style);
 
-            typeImagePath = ABILITYPALETTE.get(monsterType);
+            String typeImagePath = ABILITYPALETTE.get(monsterType);
             URL resourceType = Main.class.getResource("images/" + typeImagePath);
-            typeImage = new Image(resourceType.toString());
+            assert resourceType != null;
+            Image typeImage = new Image(resourceType.toString());
             typeImageView.setImage(typeImage);
             typeImageView.setFitHeight(45);
             typeImageView.setFitWidth(45);
 
             for (String imagePath: ATTRIBUTE_IMAGES) {
                 URL resourceImage = Main.class.getResource("images/" + imagePath);
+                assert resourceImage != null;
                 Image attributeImage = new Image(resourceImage.toString());
 
                 switch(imagePath) {
@@ -142,10 +166,6 @@ public class MonstersDetailController extends Controller {
         }
 
         // Name, Type, Experience, Level
-        StringBuilder type = new StringBuilder(resources.getString("TYPE"));
-        for (String s : monsterTypeDto.type()) {
-            type.append(" ").append(s);
-        }
 
         monsterName.setText(monsterTypeDto.name());
 
@@ -185,14 +205,18 @@ public class MonstersDetailController extends Controller {
 
 
     private void initMonsterAbilities(List<AbilityDto> abilities, Monster monster) {
-        abilityListView.setCellFactory(param -> new AbilityCell(monster, resources, presetsServiceProvider.get(), this, this.ingameController));
+        abilityListView.setCellFactory(param -> new AbilityCell(monster, resources, presetsServiceProvider.get(), this));
         abilityListView.getItems().addAll(abilities);
         abilityListView.setFocusModel(null);
         abilityListView.setSelectionModel(null);
     }
 
     public void goBackToMonsters() {
-        ingameController.root.getChildren().remove(monsterDetailVBox);
+        if (monsterDetailVBox.getParent().getId().equals("root")) {
+            ingameController.root.getChildren().remove(monsterDetailVBox);
+        } else {
+            encounterController.rootStackPane.getChildren().remove(monsterDetailVBox);
+        }
     }
 
     public double getMaxExp(int lvl) {

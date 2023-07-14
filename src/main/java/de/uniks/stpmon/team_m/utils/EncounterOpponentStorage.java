@@ -6,14 +6,14 @@ import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.dto.Trainer;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.inject.Singleton;
+import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
 public class EncounterOpponentStorage {
     private String encounterId;
-    private List<Opponent> opponentsInStorage;
+    private List<String> opponentsInStorage = new ArrayList<>();
     private Opponent selfOpponent;
     // Die Opponent mit selben trainerId
     private Opponent enemyOpponent;
@@ -63,12 +63,15 @@ public class EncounterOpponentStorage {
         this.encounterSize = encounterSize;
     }
 
-    public List<Opponent> getOpponentsInStorage() {
+    public List<String> getOpponentsInStorage() {
         return opponentsInStorage;
     }
 
     public void setOpponentsInStorage(List<Opponent> opponentsInStorage) {
-        this.opponentsInStorage = opponentsInStorage;
+        this.opponentsInStorage.clear();
+        for (Opponent opponent : opponentsInStorage) {
+            this.opponentsInStorage.add(opponent._id());
+        }
     }
 
     public Trainer getOpponentTrainer() {

@@ -35,6 +35,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class AvatarSelectionControllerTest extends ApplicationTest {
     @Spy
+    final
     App app = new App(null);
     @Mock
     Provider<FileChooser> fileChooserProvider;
