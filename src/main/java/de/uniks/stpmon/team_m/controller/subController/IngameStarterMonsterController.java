@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
@@ -20,11 +21,13 @@ import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.net.URL;
 import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.ABILITYPALETTE;
+import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
 public class IngameStarterMonsterController extends Controller {
     @FXML
@@ -74,14 +77,6 @@ public class IngameStarterMonsterController extends Controller {
 
     public Parent render() {
         final Parent parent = super.render();
-
-        if (!GraphicsEnvironment.isHeadless()) {
-            starterImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(MONSTER_WITH_COLOR)).toString()));
-            arrowLeft.setImage(new Image(Objects.requireNonNull(App.class.getResource(ARROWLEFTSYMBOL)).toString()));
-            arrowRight.setImage(new Image(Objects.requireNonNull(App.class.getResource(ARROWRIGHTSYMBOL)).toString()));
-
-        }
-
         // get monsters
         disposables.add(presetsService.getMonsters().observeOn(FX_SCHEDULER).subscribe(monsterType -> {
             monster1 = monsterType.get(Integer.parseInt(starters.get(0)) - 1);
@@ -89,19 +84,27 @@ public class IngameStarterMonsterController extends Controller {
             monster3 = monsterType.get(Integer.parseInt(starters.get(2)) - 1);
             // get Images
             disposables.add(presetsService.getMonsterImage(Integer.parseInt(starters.get(0))).observeOn(FX_SCHEDULER).subscribe(monsterImage -> {
-                monster1Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
+                if (!GraphicsEnvironment.isHeadless()) {
+                    monster1Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
+                }
                 showMonster(1);
             }, error -> {
                 showError(error.getMessage());
                 error.printStackTrace();
             }));
-            disposables.add(presetsService.getMonsterImage(Integer.parseInt(starters.get(1))).observeOn(FX_SCHEDULER).subscribe(monsterImage ->
-                    monster2Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage), error -> {
-                showError(error.getMessage());
-                error.printStackTrace();
+            disposables.add(presetsService.getMonsterImage(Integer.parseInt(starters.get(1))).observeOn(FX_SCHEDULER).subscribe(monsterImage -> {
+                    if (!GraphicsEnvironment.isHeadless()) {
+                        monster2Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
+                    }
+                    }, error -> {
+                        showError(error.getMessage());
+                        error.printStackTrace();
             }));
-            disposables.add(presetsService.getMonsterImage(Integer.parseInt(starters.get(2))).observeOn(FX_SCHEDULER).subscribe(monsterImage ->
-                    monster3Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage), error -> {
+            disposables.add(presetsService.getMonsterImage(Integer.parseInt(starters.get(2))).observeOn(FX_SCHEDULER).subscribe(monsterImage -> {
+                    if (!GraphicsEnvironment.isHeadless()) {
+                        monster3Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
+                    }
+                    }, error -> {
                 showError(error.getMessage());
                 error.printStackTrace();
             }));
@@ -113,15 +116,12 @@ public class IngameStarterMonsterController extends Controller {
         return parent;
     }
 
-    public VBox createTypeVBox(String type, Image image) {
+    public VBox createTypeVBox(String type, String image) {
         VBox typeVBox = new VBox();
         typeVBox.setMaxSize(32, 32);
         if (TYPESCOLORPALETTE.containsKey(type)) {
             String color = TYPESCOLORPALETTE.get(type);
             typeVBox.setStyle("-fx-background-color: " + color + ";-fx-border-color: black");
-        }
-        if (image == null) {
-            image = new Image(String.valueOf(App.class.getResource("images/ingameHelpSymbol.png")));
         }
         ImageView typeImageView = new ImageView(image);
         typeImageView.setFitHeight(32);
@@ -160,7 +160,9 @@ public class IngameStarterMonsterController extends Controller {
 
         // add type
         monster.type().forEach(type -> {
-            VBox typeVBox = createTypeVBox(type, null);
+            String typeImagePath = ABILITYPALETTE.get(type);
+            URL resource = Main.class.getResource("images/" + typeImagePath);
+            VBox typeVBox = createTypeVBox(type, Objects.requireNonNull(resource).toString());
             typesVBox.getChildren().add(typeVBox);
         });
 

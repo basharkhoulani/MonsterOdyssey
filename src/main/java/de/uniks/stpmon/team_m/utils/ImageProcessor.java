@@ -85,21 +85,10 @@ public class ImageProcessor {
      */
     public static Image[] cropTrainerImages(Image trainerChunk, int direction, Boolean isWalking) {
         Image[] array = new Image[6];
-        int x, y;
-        if (isWalking) {
-            y = 69;
-        } else {
-            y = 37;
-        }
-        switch (direction) {
-            case 0 -> x = 0;
-            case 1 -> x = 96;
-            case 2 -> x = 192;
-            default -> x = 288;
-        }
+        int[] params = getParams(direction, isWalking);
         for (int i = 0; i < 6; i++) {
-            array[i] = getSubImage(trainerChunk, x, y, 16, 27);
-            x += 16;
+            array[i] = getSubImage(trainerChunk, params[0], params[1], params[2], params[3]);
+            params[0] += 16;
         }
         return array;
     }
@@ -112,19 +101,38 @@ public class ImageProcessor {
         return null;
     }
 
+    public static int[] getParams(int direction, Boolean isWalking) {
+        int x, y;
+        int w = 16;
+        int h = 27;
+        if (isWalking) {
+            y = 69;
+        } else {
+            y = 37;
+        }
+        switch (direction) {
+            case 0 -> x = 0;
+            case 1 -> x = 96;
+            case 2 -> x = 192;
+            default -> x = 288;
+        }
+        return new int[] {x, y, w, h};
+    }
+
     /**
      * This method is used to crop the
      *
-     * @param premadeCharacter for instance "Premade_Character_01.png", also found in Constants
+     * @param charactermodel   character chunk, for instance "Premade_Character_01.png"
      * @param x                coordinate of upper right corner of image
      * @param y                coordinate of upper right corner of image
      * @param w                width of image
      * @param h                height of image
      */
-    public static WritableImage showScaledCharacter(String premadeCharacter, int x, int y, int w, int h) {
+    public static WritableImage showScaledCharacter(String charactermodel, int direction, Boolean isWalking) {
+        int[] params = getParams(direction, isWalking);
         try {
-            BufferedImage bufferedImage = ImageIO.read(Objects.requireNonNull(App.class.getResource("charactermodels/" + premadeCharacter)));
-            BufferedImage bufferedImageFrontView = bufferedImage.getSubimage(x, y, w, h);
+            BufferedImage bufferedImage = ImageIO.read(Objects.requireNonNull(App.class.getResource("charactermodels/" + charactermodel)));
+            BufferedImage bufferedImageFrontView = bufferedImage.getSubimage(params[0], params[1], params[2], params[3]);
             BufferedImage scaledBufferedImage = ImageProcessor.scaleImage(bufferedImageFrontView, 6);
             javafx.scene.image.WritableImage writableImage = new javafx.scene.image.WritableImage(scaledBufferedImage.getWidth(), scaledBufferedImage.getHeight());
             javafx.scene.image.PixelWriter pixelWriter = writableImage.getPixelWriter();

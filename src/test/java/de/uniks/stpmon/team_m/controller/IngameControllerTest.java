@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.IngamePauseMenuController;
+import de.uniks.stpmon.team_m.controller.subController.IngameStarterMonsterController;
 import de.uniks.stpmon.team_m.controller.subController.MonstersListController;
 import de.uniks.stpmon.team_m.controller.subController.NotificationListHandyController;
 import de.uniks.stpmon.team_m.dto.*;
@@ -12,13 +13,19 @@ import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import okhttp3.MediaType;
+import okhttp3.ResponseBody;
+import okio.BufferedSource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -57,10 +64,17 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<MonstersListController> monstersListControllerProvider;
     @Mock
     Provider<NotificationListHandyController> notificationListHandyControllerProvider;
+    @Mock
+    Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
+    @Mock
+    Provider<EncounterController> encounterControllerProvider;
+
     // Leave this mock!! it ensures that tests run fine
+    // -- WHY?????? add explanation
     @Mock
     TrainerStorage trainerStorage;
     // Please also keep this mock, it is needed for the tests
+    // -- which ones????
     @Spy
     EncounterOpponentStorage encounterOpponentStorage;
     @Mock
@@ -71,14 +85,18 @@ public class IngameControllerTest extends ApplicationTest {
     MessageService messageService;
     @Mock
     EncounterOpponentsService encounterOpponentsService;
+    @Mock
+    PresetsService presetsService;
     @InjectMocks
     IngameController ingameController;
     @Mock
     Provider<EventListener> eventListener;
     @Mock
-    PresetsService presetsService;
+    Parent parent;
     @InjectMocks
     NotificationListHandyController notificationListHandyController;
+    @InjectMocks
+    IngameStarterMonsterController ingameStarterMonsterController;
     @InjectMocks
     IngamePauseMenuController pauseMenuController;
     @InjectMocks
@@ -195,7 +213,23 @@ public class IngameControllerTest extends ApplicationTest {
                         20,
                         18,
                         2,
-                        new NPCInfo(false, false, false, true, null, null))
+                        new NPCInfo(false, false, false, true, null, null)),
+                new Trainer(
+                        "2023-05-30T12:02:57.510Z",
+                        "2023-05-30T12:01:57.510Z",
+                        "6475e595ac3946b6a812d869",
+                        "646bab5cecf584e1be02598a",
+                        "6475e595ac3946b6a812d868",
+                        "Prof. Testikus Maximus",
+                        "Premade_Character_02.png",
+                        0,
+                        List.of(),
+                        List.of(),
+                        "6475e595ac3946b6a812d863",
+                        69,
+                        69,
+                        2,
+                        new NPCInfo(false, false, false, false, null, List.of("1", "3", "5")))
                 )
         ));
         EventListener eventListenerMock = mock(EventListener.class);
@@ -231,8 +265,63 @@ public class IngameControllerTest extends ApplicationTest {
 
         notificationListHandyController.setValues(bundle, null, null, notificationListHandyController, app);
         when(notificationListHandyControllerProvider.get()).thenReturn(notificationListHandyController);
+        ingameStarterMonsterController.setValues(bundle, null, null, ingameStarterMonsterController, app);
+        lenient().when(ingameStarterMonsterControllerProvider.get()).thenReturn(ingameStarterMonsterController);
 
+        lenient().when(presetsService.getMonsters()).thenReturn(Observable.just(List.of(
+                new MonsterTypeDto(
+                        1,
+                        "Monster1",
+                        "Flamander_1.png",
+                        List.of("fire"),
+                        "Monster1lololol"
+                ),
+                new MonsterTypeDto(
+                        2,
+                        "Monster2",
+                        "Flamander_1.png",
+                        List.of("fire"),
+                        "ich bin ein echter gangster"
+                ),
+                new MonsterTypeDto(
+                        3,
+                        "Monster3",
+                        "Flamander_1.png",
+                        List.of("fire"),
+                        "waaas willst du tun"
+                ),
+                new MonsterTypeDto(
+                        4,
+                        "Monster4",
+                        "Flamander_1.png",
+                        List.of("fire"),
+                        "dieser big tasty hat nichts mehr mit einem big tasty zu tun"
+                ),
+                new MonsterTypeDto(
+                        5,
+                        "Monster5",
+                        "Flamander_1.png",
+                        List.of("fire"),
+                        "auch ein blindes schaf findet manchmal ein huhn"
+                )
+        )));
 
+        lenient().when(presetsService.getMonsterImage(anyInt())).thenReturn(Observable.just(
+                new ResponseBody() {
+                    @Override
+                    public MediaType contentType() {
+                        return null;
+                    }
+
+                    @Override
+                    public long contentLength() {
+                        return 0;
+                    }
+
+                    @Override
+                    public BufferedSource source() { return null; }
+                }
+        ));
 
         Opponent opponent = new Opponent(
                 "2023-05-30T12:02:57.510Z",
@@ -484,5 +573,73 @@ public class IngameControllerTest extends ApplicationTest {
         clickOn("#pauseButton");
         clickOn("#leaveGameButton");
         verify(app).show(mainMenuController);
+    }
+
+    @Test
+    void testStarterMonsterNpcDialog() throws InterruptedException {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(69);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(70);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+        when(trainerStorageProvider.get().getTrainer()).thenReturn(new Trainer(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "6475e595ac3946b6a812d865",
+                "646bab5cecf584e1be02598a",
+                "6475e595ac3946b6a812d868",
+                "Peter",
+                "Premade_Character_02.png",
+                0,
+                List.of(),
+                null,
+                "6475e595ac3946b6a812d863",
+                33,
+                18,
+                0,
+                new NPCInfo(false, false,false, false, null,null)));
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        final VBox starterSelectionVBox = lookup("#starterSelectionVBox").query();
+        assertNotNull(starterSelectionVBox);
+
+        final Label starterSelectionLabel0 = lookup("#starterSelectionLabel").query();
+        final String starterSelectionLabelText0 = starterSelectionLabel0.getText();
+
+        clickOn("#arrowRight");
+
+        final Label starterSelectionLabel1 = lookup("#starterSelectionLabel").query();
+        final String starterSelectionLabelText1 = starterSelectionLabel1.getText();
+
+        assertNotEquals(starterSelectionLabelText0, starterSelectionLabelText1);
+
+        clickOn("#arrowLeft");
+
+        final Label starterSelectionLabel2 = lookup("#starterSelectionLabel").query();
+        final String starterSelectionLabelText2 = starterSelectionLabel2.getText();
+
+        assertEquals(starterSelectionLabelText0, starterSelectionLabelText2);
+
+        clickOn("#starterSelectionOkButton");
+        clickOn("#starterSelectionOkButton");
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
     }
 }
