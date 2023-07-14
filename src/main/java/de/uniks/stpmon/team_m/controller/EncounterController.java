@@ -451,8 +451,13 @@ public class EncounterController extends Controller {
     @Override
     public void destroy() {
         super.destroy();
-        subControllers.forEach(Controller::destroy);
+        for (var controller : subControllers) {
+            if (controller != null) {
+                controller.destroy();
+            }
+        }
         encounterOpponentControllerHashMap.values().forEach(Controller::destroy);
+
     }
 
     public void listenToOpponents(String encounterId) {
