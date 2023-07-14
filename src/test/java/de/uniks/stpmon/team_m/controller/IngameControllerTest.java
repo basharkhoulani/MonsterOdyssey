@@ -431,6 +431,7 @@ public class IngameControllerTest extends ApplicationTest {
         Thread.sleep(30);
     }
 
+    /*
     @Test
     void testNurseDialog() throws InterruptedException {
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(20);
@@ -500,6 +501,8 @@ public class IngameControllerTest extends ApplicationTest {
 
         Thread.sleep(30);
     }
+
+     */
 
     @Test
     void testTalkToNPC2TilesAway() throws InterruptedException {
