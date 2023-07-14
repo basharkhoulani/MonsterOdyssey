@@ -9,7 +9,6 @@ import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -62,11 +61,11 @@ public class BattleMenuController extends Controller {
         encounterController.showAbilities();
     }
 
-    public void changeMonster(ActionEvent actionEvent) {
+    public void changeMonster() {
         this.encounterController.showChangeMonsterList();
     }
 
-    public void showMonsterInformation(ActionEvent actionEvent) {
+    public void showMonsterInformation() {
         this.encounterController.showMonsterDetailsInEncounter();
     }
 
@@ -79,5 +78,12 @@ public class BattleMenuController extends Controller {
     public void showFleeButton(boolean isWild){
         fleeButton.setVisible(isWild);
         fleeButton.setOnAction(this::changeToIngame);
+    }
+
+    public void buttonDisable(boolean isDisable) {
+        abilitiesButton.setDisable(isDisable);
+        changeMonsterButton.setDisable(isDisable);
+        currentInfoButton.setDisable(isDisable);
+        fleeButton.setDisable(isDisable);
     }
 }

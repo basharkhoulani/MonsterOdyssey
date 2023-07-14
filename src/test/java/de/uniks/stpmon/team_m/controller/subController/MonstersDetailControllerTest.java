@@ -94,7 +94,7 @@ public class MonstersDetailControllerTest extends ApplicationTest {
     void controllerTest() {
         moveTo("Flamander");
         moveTo("Level: 1");
-        moveTo("Health: 14/14");
+        moveTo("Health: 14.0/14.0");
         moveTo("Attack: 8/8");
         moveTo("Defense: 8/8");
         moveTo("Speed: 5/5");
