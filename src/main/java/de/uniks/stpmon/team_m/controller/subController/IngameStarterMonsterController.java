@@ -20,9 +20,11 @@ import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class IngameStarterMonsterController extends Controller {
     @FXML
@@ -72,6 +74,14 @@ public class IngameStarterMonsterController extends Controller {
 
     public Parent render() {
         final Parent parent = super.render();
+
+        if (!GraphicsEnvironment.isHeadless()) {
+            starterImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(MONSTER_WITH_COLOR)).toString()));
+            arrowLeft.setImage(new Image(Objects.requireNonNull(App.class.getResource(ARROWLEFTSYMBOL)).toString()));
+            arrowRight.setImage(new Image(Objects.requireNonNull(App.class.getResource(ARROWRIGHTSYMBOL)).toString()));
+
+        }
+
         // get monsters
         disposables.add(presetsService.getMonsters().observeOn(FX_SCHEDULER).subscribe(monsterType -> {
             monster1 = monsterType.get(Integer.parseInt(starters.get(0)) - 1);

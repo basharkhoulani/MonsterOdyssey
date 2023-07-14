@@ -51,6 +51,8 @@ public class Constants {
     public static final char BULLET = '\u25cf';
     public static final String REFRESH_TOKEN_PREF = "refreshToken";
 
+    // Account Settings
+    public static final String MONSTER1_WITHOUT = "images/Monster1-without.png";
 
     // NEW GROUP
     public static final String CHECK_MARK = "\u2713";
@@ -96,6 +98,8 @@ public class Constants {
     public static final String PENCIL2SYMBOL = "images/Pencil2.png";
     public static final String ARROWLEFTSYMBOL = "images/arrowLeft.png";
     public static final String ARROWRIGHTSYMBOL = "images/arrowRight.png";
+    public static final String MAPSYMBOL = "images/MapSymbol.png";
+    public static final String MONSTER_WITH_COLOR = "images/Monster_mit_Farbe.png";
 
     // NPC DIALOG
     public static final int dialogVBoxWidth = 700;
@@ -150,6 +154,10 @@ public class Constants {
     public static final int fleeButtonWidth = 100;
     public static final int fleeButtonHeight = 40;
 
+    // Encounter - images
+    public static final String STAR_ICON = "images/star.png";
+    public static final String HEART_ICON = "images/heart.png";
+
     // Error messages
     public static final String HTTP_400 = "400";
     public static final String HTTP_401 = "401";
@@ -161,8 +169,12 @@ public class Constants {
     // Welcome Scene
     public static final int MESSAGEBOX_HEIGHT = 45;
     public static final int MESSAGEBOX_WIDTH = 170;
+    public static final String MONSTER_2_COLOR = "images/Monster2-color.png";
+    public static final String MONSTER_1_COLOR = "images/Monster1-color.png";
 
     // Change Audio Settings
+    public static final String MUTE_ICON = "images/mute-icon.png";
+    public static final String HIGH_VOLUME_ICON = "images/high-volume-icon.png";
 
     // Characters
     public static final String[] PREMADE_CHARACTERS = {

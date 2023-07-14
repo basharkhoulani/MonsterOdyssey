@@ -22,7 +22,6 @@
                         <HBox.margin>
                             <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
                         </HBox.margin>
-                        <Image url="@../images/MapSymbol.png" />
                     </ImageView>
                 </HBox>
                 <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="430.0" HBox.hgrow="SOMETIMES">

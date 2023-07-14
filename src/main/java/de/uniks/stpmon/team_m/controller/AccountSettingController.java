@@ -68,6 +68,8 @@ public class AccountSettingController extends Controller {
     public Label avatarErrorLabel;
     @FXML
     public Button changeLanguageButton;
+    @FXML
+    public ImageView accountSettingsMonsterImageView;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
     @Inject
@@ -121,6 +123,10 @@ public class AccountSettingController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
+
+        if (!GraphicsEnvironment.isHeadless()) {
+            accountSettingsMonsterImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(MONSTER1_WITHOUT)).toString()));
+        }
 
         // Firstly disable the editfield
         usernameField.setDisable(true);

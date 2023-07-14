@@ -380,6 +380,7 @@ public class IngameController extends Controller {
 
         if (!GraphicsEnvironment.isHeadless()) {
             trainerController.startAnimations();
+            mapSymbol.setImage(new Image(Objects.requireNonNull(App.class.getResource(MAPSYMBOL)).toString()));
         }
 
         // Add event handlers

@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.Opponent;
 import javafx.application.Platform;
@@ -17,6 +18,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.awt.*;
+import java.util.Objects;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.AVATAR_4;
 
 public class EncounterOpponentController extends Controller {
     private final Boolean isEnemy;
@@ -55,6 +60,10 @@ public class EncounterOpponentController extends Controller {
     public VBox splitterVBox;
     @FXML
     public HBox trainerMonsterHBox;
+    @FXML
+    public ImageView starImageView;
+    @FXML
+    public ImageView heartImageView;
 
     private Opponent currentTarget;
     public Runnable onTargetChange;
@@ -69,6 +78,12 @@ public class EncounterOpponentController extends Controller {
     @Override
     public Parent render() {
         Parent parent = super.render();
+
+        if (!GraphicsEnvironment.isHeadless()) {
+            starImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(STAR_ICON)).toString()));
+            heartImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(HEART_ICON)).toString()));
+        }
+
         if (isEnemy) {
             experienceBar.setVisible(false);
             experienceBar.setDisable(true);
