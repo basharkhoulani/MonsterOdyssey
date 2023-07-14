@@ -1606,7 +1606,7 @@ public class IngameController extends Controller {
         starterSelectionVBox.getChildren().add(ingameStarterMonsterController.render());
 
         Button okButton = new Button();
-        okButton.setId("okButton");
+        okButton.setId("starterSelectionOkButton");
         okButton.setText(resources.getString("OK"));
         okButton.getStyleClass().add("welcomeSceneButton");
         okButton.setStyle("-fx-background-color: #e0ecfc");
