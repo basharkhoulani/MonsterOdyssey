@@ -613,13 +613,15 @@ public class EncounterController extends Controller {
     }
 
     public void showIngameController() {
+        if (trainerStorageProvider.get().getTrainer().team() != null && trainerStorageProvider.get().getMonsters() != null) {
+            trainerStorageProvider.get().getTrainer().team().stream()
+                    .flatMap(teamMonsterId -> trainerStorageProvider.get().getMonsters().stream()
+                            .filter(trainerMonster -> teamMonsterId.equals(trainerMonster._id()))
+                            .filter(trainerMonster -> (double) trainerMonster.currentAttributes().health() / trainerMonster.attributes().health() <= 0.2)
+                    )
+                    .forEach(trainerMonster -> this.ingameController.showLowHealthNotification());
+        }
         destroy();
-        trainerStorageProvider.get().getTrainer().team().stream()
-                .flatMap(teamMonsterId -> trainerStorageProvider.get().getMonsters().stream()
-                        .filter(trainerMonster -> teamMonsterId.equals(trainerMonster._id()))
-                        .filter(trainerMonster -> (double) trainerMonster.currentAttributes().health() / trainerMonster.attributes().health() <= 0.2)
-                )
-                .forEach(trainerMonster -> this.ingameController.showLowHealthNotification());
         app.show(ingameControllerProvider.get());
     }
 
