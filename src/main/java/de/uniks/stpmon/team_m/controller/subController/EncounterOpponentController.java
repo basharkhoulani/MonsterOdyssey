@@ -17,7 +17,6 @@ import java.awt.*;
 import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
-import static de.uniks.stpmon.team_m.Constants.AVATAR_4;
 
 public class EncounterOpponentController extends Controller {
     private final Boolean isEnemy;
