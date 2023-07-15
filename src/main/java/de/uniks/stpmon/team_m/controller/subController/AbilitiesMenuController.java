@@ -102,7 +102,6 @@ public class AbilitiesMenuController extends Controller {
 
         disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(
                 opponent -> {
-                    updateButton(ability, abilityButton, currentUse-1);
                     encounterController.updateDescription(resources.getString("YOU.USED") + ability.name() + ". ", true);
                     encounterController.updateDescription(resources.getString("YOU.USED") + " " + ability.name() + ". \n", true);
                     encounterController.resetOpponentUpdate();
@@ -110,14 +109,6 @@ public class AbilitiesMenuController extends Controller {
                     encounterController.goBackToBattleMenu();
                 }, Throwable::printStackTrace));
     }
-
-    private void updateButton(AbilityDto ability, Button abilityButton, int currentUse) {
-        abilityButton.setText(ability.name() + " " + currentUse + "/" + ability.maxUses());
-        if(currentUse == 0){
-            abilityButton.setDisable(true);
-        }
-    }
-
 
     public void goBack() {
         encounterController.goBackToBattleMenu();
