@@ -539,12 +539,12 @@ public class EncounterController extends Controller {
         disposables.add(eventListener.get().listen("trainers." + trainerId + ".monsters." + monsterId + ".*", Monster.class).observeOn(FX_SCHEDULER).subscribe(event -> {
             final Monster monster = event.data();
             if (event.suffix().contains("updated")) {
-                encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());
                 float currentHealth = (float) (Math.round(monster.currentAttributes().health() * 10) / 10);
                 float maxHealth = (float) (Math.round(monster.attributes().health() * 10) / 10);
-                encounterOpponentController.setHealthLabel(currentHealth + "/" + maxHealth);
-                encounterOpponentController.setLevelLabel(monster.level() + " LVL");
-                encounterOpponentController.setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
+                encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health())
+                        .setHealthLabel(currentHealth + "/" + maxHealth)
+                        .setLevelLabel(monster.level() + " LVL")
+                        .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
             }
         }, Throwable::printStackTrace));
     }
