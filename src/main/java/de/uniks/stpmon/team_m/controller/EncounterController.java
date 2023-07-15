@@ -309,7 +309,7 @@ public class EncounterController extends Controller {
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
             oldMonster = monster;
             encounterOpponentStorage.addCurrentMonster(monster);
-            encounterOpponentController.setLevelLabel("Lvl " + monster.level()).setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
+            encounterOpponentController.setLevelLabel(monster.level() + " LVL").setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
             monstersInEncounter.put(opponent.trainer(), monster);
 
             listenToMonster(opponent.trainer(), monster._id(), encounterOpponentController);
