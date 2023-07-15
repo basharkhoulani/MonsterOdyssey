@@ -187,13 +187,6 @@ class EncounterControllerTest extends ApplicationTest {
         );
         when(monstersService.getMonster(anyString(), any(), anyString())).thenReturn(Observable.just(monster));
 
-        MonsterTypeDto monsterType = new MonsterTypeDto(
-                1,
-                "Flamander",
-                "Flamander_1.png",
-                List.of("fire"),
-                "Flamander is a small, agile monster that lives in the hot deserts of the world."
-        );
         when(presetsService.getMonsterImage(1)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
 
         lenient().doNothing().when(battleMenuController).setTrainerSpriteImageView(any(), any(), anyInt());

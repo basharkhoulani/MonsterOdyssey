@@ -313,7 +313,6 @@ public class EncounterController extends Controller {
             monstersInEncounter.put(opponent.trainer(), monster);
 
             listenToMonster(opponent.trainer(), monster._id(), encounterOpponentController);
-            initMonsterDetails(monster);
             //write monster name
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -> {
                 encounterOpponentController.setMonsterNameLabel(m.name());
@@ -351,7 +350,10 @@ public class EncounterController extends Controller {
             }
             encounterOpponentStorage.addCurrentMonster(monster);
             listenToMonster(opponent.trainer(), opponent.monster(), encounterOpponentController);
-            encounterOpponentController.setLevelLabel(monster.level() + " LVL").setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1)).setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health()).setHealthLabel(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
+            encounterOpponentController.setLevelLabel(monster.level() + " LVL")
+                    .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1))
+                    .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health())
+                    .setHealthLabel(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
             //write monster name
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -> {
                 encounterOpponentController.setMonsterNameLabel(m.name());
@@ -365,14 +367,6 @@ public class EncounterController extends Controller {
                 encounterOpponentController.setMonsterImage(myMonsterImage);
             }, Throwable::printStackTrace));
         }, Throwable::printStackTrace));
-    }
-
-    private void initMonsterDetails(Monster monster) {
-        encounterOpponentStorage.setCurrentTrainerMonster(monster);
-        ownTrainerController.setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1));
-        ownTrainerController.setLevelLabel(monster.level() + " LVL");
-        ownTrainerController.setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
-        ownTrainerController.setHealthLabel(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
     }
 
     private void showCoopImage(EncounterOpponentController encounterOpponentController, Opponent opponent) {
@@ -477,7 +471,6 @@ public class EncounterController extends Controller {
             if (opponent.trainer().equals(trainerId)) {
                 encounterOpponentStorage.setSelfOpponent(opponent);
             } else {
-                encounterOpponentStorage.setEnemyOpponent(opponent);
                 encounterOpponentStorage.getEnemyOpponents().removeIf(o -> o._id().equals(opponent._id()));
                 encounterOpponentStorage.addEnemyOpponent(opponent);
             }
@@ -545,6 +538,9 @@ public class EncounterController extends Controller {
                         .setHealthLabel(currentHealth + "/" + maxHealth)
                         .setLevelLabel(monster.level() + " LVL")
                         .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
+                if(trainerId.equals(trainerStorageProvider.get().getTrainer()._id())){
+                    encounterOpponentStorage.setCurrentTrainerMonster(monster);
+                }
             }
         }, Throwable::printStackTrace));
     }

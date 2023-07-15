@@ -82,7 +82,7 @@ public class AbilitiesMenuController extends Controller {
                                 abilityButton.setStyle("-fx-background-color: " + TYPESCOLORPALETTE.get(ability.type()) + ";-fx-border-color: black");
                             }
                             // setOnAction
-                            abilityButton.setOnAction(actionEvent -> useAbility(ability, abilityButton, entry.getValue()));
+                            abilityButton.setOnAction(actionEvent -> useAbility(ability));
                             i++;
                         }
                     }
@@ -93,16 +93,15 @@ public class AbilitiesMenuController extends Controller {
                 }, Throwable::printStackTrace));
     }
 
-    private void useAbility(AbilityDto ability, Button abilityButton, int currentUse) {
+    private void useAbility(AbilityDto ability) {
         String regionId = encounterOpponentStorageProvider.get().getRegionId();
         String encounterId = encounterOpponentStorageProvider.get().getEncounterId();
         String opponentId = encounterOpponentStorageProvider.get().getSelfOpponent()._id();
-        String targetId = encounterOpponentStorageProvider.get().getEnemyOpponent().trainer();
+        String targetId = encounterOpponentStorageProvider.get().getEnemyOpponents().get(0).trainer();
         Move move = new AbilityMove("ability", ability.id(), targetId);
 
         disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(
                 opponent -> {
-                    updateButton(ability, abilityButton, currentUse-1);
                     encounterController.updateDescription(resources.getString("YOU.USED") + ability.name() + ". ", true);
                     encounterController.updateDescription(resources.getString("YOU.USED") + " " + ability.name() + ". \n", true);
                     encounterController.resetOpponentUpdate();
@@ -110,14 +109,6 @@ public class AbilitiesMenuController extends Controller {
                     encounterController.goBackToBattleMenu();
                 }, Throwable::printStackTrace));
     }
-
-    private void updateButton(AbilityDto ability, Button abilityButton, int currentUse) {
-        abilityButton.setText(ability.name() + " " + currentUse + "/" + ability.maxUses());
-        if(currentUse == 0){
-            abilityButton.setDisable(true);
-        }
-    }
-
 
     public void goBack() {
         encounterController.goBackToBattleMenu();

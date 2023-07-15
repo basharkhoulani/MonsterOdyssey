@@ -36,6 +36,7 @@ public class EncounterResultController extends Controller {
 
     public void clickOK() {
         encounterController.get().destroy();
+        ingameControllerProvider.get().setIsNewStart(false);
         app.show(ingameControllerProvider.get());
 
     }

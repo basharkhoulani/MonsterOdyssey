@@ -3,7 +3,6 @@ package de.uniks.stpmon.team_m.utils;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.dto.Opponent;
-import de.uniks.stpmon.team_m.dto.Trainer;
 import javafx.collections.FXCollections;
 
 import javax.inject.Inject;
@@ -14,7 +13,7 @@ import java.util.List;
 @Singleton
 public class EncounterOpponentStorage {
     private String encounterId;
-    private List<String> opponentsInStorage = new ArrayList<>();
+    private final List<String> opponentsInStorage = new ArrayList<>();
     private Opponent selfOpponent;
     // Die Opponent mit selben trainerId
     private List<Opponent> enemyOpponents = FXCollections.observableArrayList();
@@ -29,8 +28,6 @@ public class EncounterOpponentStorage {
     private boolean isWild;
     private int encounterSize;
     private boolean isAttacker;
-    private Trainer opponentTrainer;
-    private MonsterTypeDto currentEnemyMonsterType;
 
 
     @Inject
@@ -66,14 +63,6 @@ public class EncounterOpponentStorage {
 
     public void setEncounterSize(int encounterSize) {
         this.encounterSize = encounterSize;
-    }
-
-    public Trainer getOpponentTrainer() {
-        return opponentTrainer;
-    }
-
-    public void setOpponentTrainer(Trainer opponentTrainer) {
-        this.opponentTrainer = opponentTrainer;
     }
 
     public Opponent getSelfOpponent() {
@@ -128,16 +117,8 @@ public class EncounterOpponentStorage {
         isAttacker = attack;
     }
 
-    public List<Monster> getCurrentMonsters() {
-        return currentMonsters;
-    }
-
     public void addCurrentMonster(Monster monster) {
         this.currentMonsters.add(monster);
-    }
-
-    public List<MonsterTypeDto> getCurrentMonsterTypes() {
-        return currentMonsterTypes;
     }
 
     public void addCurrentMonsterType(MonsterTypeDto monsterType) {
@@ -154,16 +135,5 @@ public class EncounterOpponentStorage {
             this.opponentsInStorage.add(opponent._id());
         }
 
-    }
-
-    public void setEnemyOpponent(Opponent o) {
-        this.enemyOpponents.add(o);
-    }
-
-    public Opponent getEnemyOpponent() {
-        return this.enemyOpponents.get(0);
-    }
-    public void setCurrentEnemyMonsterType(MonsterTypeDto currentEnemyMonsterType) {
-        this.currentEnemyMonsterType = currentEnemyMonsterType;
     }
 }
