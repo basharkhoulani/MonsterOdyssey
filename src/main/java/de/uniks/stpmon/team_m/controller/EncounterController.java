@@ -477,7 +477,6 @@ public class EncounterController extends Controller {
             if (opponent.trainer().equals(trainerId)) {
                 encounterOpponentStorage.setSelfOpponent(opponent);
             } else {
-                encounterOpponentStorage.setEnemyOpponent(opponent);
                 encounterOpponentStorage.getEnemyOpponents().removeIf(o -> o._id().equals(opponent._id()));
                 encounterOpponentStorage.addEnemyOpponent(opponent);
             }
@@ -545,6 +544,9 @@ public class EncounterController extends Controller {
                         .setHealthLabel(currentHealth + "/" + maxHealth)
                         .setLevelLabel(monster.level() + " LVL")
                         .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
+                if(trainerId.equals(trainerStorageProvider.get().getTrainer()._id())){
+                    encounterOpponentStorage.setCurrentTrainerMonster(monster);
+                }
             }
         }, Throwable::printStackTrace));
     }

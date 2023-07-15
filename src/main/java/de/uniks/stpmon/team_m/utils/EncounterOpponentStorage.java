@@ -29,8 +29,6 @@ public class EncounterOpponentStorage {
     private boolean isWild;
     private int encounterSize;
     private boolean isAttacker;
-    private Trainer opponentTrainer;
-    private MonsterTypeDto currentEnemyMonsterType;
 
 
     @Inject
@@ -66,14 +64,6 @@ public class EncounterOpponentStorage {
 
     public void setEncounterSize(int encounterSize) {
         this.encounterSize = encounterSize;
-    }
-
-    public Trainer getOpponentTrainer() {
-        return opponentTrainer;
-    }
-
-    public void setOpponentTrainer(Trainer opponentTrainer) {
-        this.opponentTrainer = opponentTrainer;
     }
 
     public Opponent getSelfOpponent() {
@@ -128,16 +118,8 @@ public class EncounterOpponentStorage {
         isAttacker = attack;
     }
 
-    public List<Monster> getCurrentMonsters() {
-        return currentMonsters;
-    }
-
     public void addCurrentMonster(Monster monster) {
         this.currentMonsters.add(monster);
-    }
-
-    public List<MonsterTypeDto> getCurrentMonsterTypes() {
-        return currentMonsterTypes;
     }
 
     public void addCurrentMonsterType(MonsterTypeDto monsterType) {
@@ -154,16 +136,5 @@ public class EncounterOpponentStorage {
             this.opponentsInStorage.add(opponent._id());
         }
 
-    }
-
-    public void setEnemyOpponent(Opponent o) {
-        this.enemyOpponents.add(o);
-    }
-
-    public Opponent getEnemyOpponent() {
-        return this.enemyOpponents.get(0);
-    }
-    public void setCurrentEnemyMonsterType(MonsterTypeDto currentEnemyMonsterType) {
-        this.currentEnemyMonsterType = currentEnemyMonsterType;
     }
 }
