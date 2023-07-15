@@ -206,6 +206,7 @@ public class WelcomeSceneController extends Controller {
                                         if (!GraphicsEnvironment.isHeadless()) {
                                             trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
                                         }
+                                        ingameControllerProvider.get().setIsNewStart(true);
                                         app.show(ingameControllerProvider.get());
                                     },
                                     error -> {
