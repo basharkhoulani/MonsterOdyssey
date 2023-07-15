@@ -3,7 +3,6 @@ package de.uniks.stpmon.team_m.utils;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.dto.Opponent;
-import de.uniks.stpmon.team_m.dto.Trainer;
 import javafx.collections.FXCollections;
 
 import javax.inject.Inject;
@@ -14,7 +13,7 @@ import java.util.List;
 @Singleton
 public class EncounterOpponentStorage {
     private String encounterId;
-    private List<String> opponentsInStorage = new ArrayList<>();
+    private final List<String> opponentsInStorage = new ArrayList<>();
     private Opponent selfOpponent;
     // Die Opponent mit selben trainerId
     private List<Opponent> enemyOpponents = FXCollections.observableArrayList();
