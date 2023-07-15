@@ -391,9 +391,7 @@ public class EncounterController extends Controller {
         for (String s : monsterTypeDto.type()) {
             type.append(s);
         }
-
-        //@Harun: Es gibt jetzt keinen myMonsterImage mehr, für die Darstellung brauchst du die entsprechende OwnTrainercontroller und erstelle einen Neue Methode in der EnocunterOpponentController Klasse um die Image View zu bekommen
-        monstersDetailController.initFromBattleMenu(this, monsterDetailVBox, monster, monsterTypeDto, myMonsterImage, resources, presetsService, type.toString());
+        monstersDetailController.initFromBattleMenu(this, monsterDetailVBox, monster, monsterTypeDto, ownTrainerController.monsterImageView.getImage(), resources, presetsService, type.toString());
         monsterDetailVBox.getChildren().add(monstersDetailController.render());
         rootStackPane.getChildren().add(monsterDetailVBox);
         monsterDetailVBox.requestFocus();
