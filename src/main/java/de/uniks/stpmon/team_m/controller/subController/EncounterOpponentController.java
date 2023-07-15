@@ -3,15 +3,11 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.Opponent;
-import javafx.application.Platform;
-import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.effect.Effect;
-import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -21,7 +17,6 @@ import java.awt.*;
 import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
-import static de.uniks.stpmon.team_m.Constants.AVATAR_4;
 
 public class EncounterOpponentController extends Controller {
     private final Boolean isEnemy;
@@ -197,11 +192,4 @@ public class EncounterOpponentController extends Controller {
         return trainerImageView;
     }
 
-    public String getMonsterName() {
-        return monsterNameLabel.getText();
-    }
-
-    public boolean getEnemy() {
-        return isEnemy;
-    }
 }

@@ -144,6 +144,7 @@ public class IngameController extends Controller {
     private boolean isPaused = false;
     private boolean inSettings = false;
     private boolean inEncounterInfoBox = false;
+    private boolean isNewStart = true;
 
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
@@ -1088,6 +1089,7 @@ public class IngameController extends Controller {
                     if (opponentEvent.suffix().equals("created")) {
                         encounterOpponentStorage.setSelfOpponent(opponent);
                         encounterOpponentStorage.setEncounterId(opponent.encounter());
+                        encounterOpponentStorage.setAttacker(opponent.isAttacker());
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
                                     encounterOpponentStorage.setEncounterSize(opts.size());
@@ -1095,11 +1097,16 @@ public class IngameController extends Controller {
                                     encounterOpponentStorage.setOpponentsInStorage(opts);
                                     for (Opponent o : opts) {
                                         if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                                            encounterOpponentStorage.addEnemyOpponent(o);
+                                            if(o.isAttacker() != encounterOpponentStorage.isAttacker()) {
+                                                encounterOpponentStorage.addEnemyOpponent(o);
+                                            } else {
+                                                encounterOpponentStorage.setCoopOpponent(o);
+                                            }
                                         }
                                     }
-                                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponent() != null) {
+                                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponents().size() != 0) {
                                         showEncounterInfoWindow();
+                                        this.isNewStart = false;
                                     }
                                 }));
                     }
@@ -1130,22 +1137,28 @@ public class IngameController extends Controller {
         disposables.add(encounterOpponentsService.getTrainerOpponents(regionId, trainerId)
                 .observeOn(FX_SCHEDULER).subscribe(opt -> {
                     if (opt.size() > 0) {
-                        String encounterId = opt.get(0).encounter();
-                        encounterOpponentStorage.setEncounterId(encounterId);
-                        encounterOpponentStorage.setSelfOpponent(opt.get(0));
-                        disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, encounterId)
+                        Opponent opponent = opt.get(0);
+                        encounterOpponentStorage.setSelfOpponent(opponent);
+                        encounterOpponentStorage.setEncounterId(opponent.encounter());
+                        encounterOpponentStorage.setAttacker(opponent.isAttacker());
+                        disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
-                                    encounterOpponentStorage.setEncounterSize(opts.size());
                                     encounterOpponentStorage.setOpponentsInStorage(opts);
+                                    encounterOpponentStorage.resetEnemyOpponents();
+                                    encounterOpponentStorage.setEncounterSize(opts.size());
                                     for (Opponent o : opts) {
-                                        if (!o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                                            encounterOpponentStorage.setEnemyOpponent(o);
+                                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                                            if(o.isAttacker() != encounterOpponentStorage.isAttacker()) {
+                                                encounterOpponentStorage.addEnemyOpponent(o);
+                                            } else {
+                                                encounterOpponentStorage.setCoopOpponent(o);
+                                            }
                                         }
                                     }
-                                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponent() != null) {
+                                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponents().size() != 0 && isNewStart) {
                                         showEncounterScene();
                                     }
-                                }, Throwable::printStackTrace));
+                                }));
                     }
                 }, Throwable::printStackTrace));
 
@@ -1306,7 +1319,7 @@ public class IngameController extends Controller {
                 return null;
             }
 
-            // maybe this if will throw an error in the future. I've looked into the server for all NPC's,
+            // maybe this will throw an error in the future. I've looked into the server for all NPC's,
             // apparently almost all NPC's have the canHeal() boolean, but some only have walkRandomly().
             // If they don't have the canHeal(), it should be covered by this try/catch
             try {
@@ -1705,5 +1718,9 @@ public class IngameController extends Controller {
 
     public int getUserTrainerY() {
         return trainerStorageProvider.get().getY();
+    }
+
+    public void setIsNewStart(boolean isNewStart) {
+        this.isNewStart = isNewStart;
     }
 }

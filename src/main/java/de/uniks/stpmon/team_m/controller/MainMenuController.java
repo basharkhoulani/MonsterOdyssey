@@ -272,6 +272,7 @@ public class MainMenuController extends Controller {
                                 response -> {
                                     trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
                                     destroy();
+                                    ingameControllerProvider.get().setIsNewStart(true);
                                     app.show(ingameControllerProvider.get());
                                 },
                                 error -> {
