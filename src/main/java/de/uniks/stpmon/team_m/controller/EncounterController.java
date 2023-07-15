@@ -345,7 +345,6 @@ public class EncounterController extends Controller {
     private void showTeamMonster(EncounterOpponentController encounterOpponentController, Opponent opponent, boolean isSelf) {
         // Monster
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
-            System.out.println("showTeamMonster: " + monster);
             if (isSelf) {
                 encounterOpponentStorage.setCurrentTrainerMonster(monster);
             }
