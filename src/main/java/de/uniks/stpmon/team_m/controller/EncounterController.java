@@ -313,7 +313,6 @@ public class EncounterController extends Controller {
             monstersInEncounter.put(opponent.trainer(), monster);
 
             listenToMonster(opponent.trainer(), monster._id(), encounterOpponentController);
-            initMonsterDetails(monster);
             //write monster name
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -> {
                 encounterOpponentController.setMonsterNameLabel(m.name());
@@ -346,12 +345,16 @@ public class EncounterController extends Controller {
     private void showTeamMonster(EncounterOpponentController encounterOpponentController, Opponent opponent, boolean isSelf) {
         // Monster
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
+            System.out.println("showTeamMonster: " + monster);
             if (isSelf) {
                 encounterOpponentStorage.setCurrentTrainerMonster(monster);
             }
             encounterOpponentStorage.addCurrentMonster(monster);
             listenToMonster(opponent.trainer(), opponent.monster(), encounterOpponentController);
-            encounterOpponentController.setLevelLabel(monster.level() + " LVL").setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1)).setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health()).setHealthLabel(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
+            encounterOpponentController.setLevelLabel(monster.level() + " LVL")
+                    .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1))
+                    .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health())
+                    .setHealthLabel(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
             //write monster name
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -> {
                 encounterOpponentController.setMonsterNameLabel(m.name());
@@ -365,14 +368,6 @@ public class EncounterController extends Controller {
                 encounterOpponentController.setMonsterImage(myMonsterImage);
             }, Throwable::printStackTrace));
         }, Throwable::printStackTrace));
-    }
-
-    private void initMonsterDetails(Monster monster) {
-        encounterOpponentStorage.setCurrentTrainerMonster(monster);
-        ownTrainerController.setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1));
-        ownTrainerController.setLevelLabel(monster.level() + " LVL");
-        ownTrainerController.setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
-        ownTrainerController.setHealthLabel(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
     }
 
     private void showCoopImage(EncounterOpponentController encounterOpponentController, Opponent opponent) {
