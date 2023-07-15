@@ -36,13 +36,14 @@ public class EncounterResultController extends Controller {
 
     public void clickOK() {
 <span class="fc" id="L38">        encounterController.get().destroy();</span>
-<span class="fc" id="L39">        app.show(ingameControllerProvider.get());</span>
+<span class="fc" id="L39">        ingameControllerProvider.get().setIsNewStart(false);</span>
+<span class="fc" id="L40">        app.show(ingameControllerProvider.get());</span>
 
-<span class="fc" id="L41">    }</span>
+<span class="fc" id="L42">    }</span>
 
     public void setInformationText(String text) {
-<span class="nc" id="L44">        informationText.setText(text);</span>
-<span class="nc" id="L45">    }</span>
+<span class="nc" id="L45">        informationText.setText(text);</span>
+<span class="nc" id="L46">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

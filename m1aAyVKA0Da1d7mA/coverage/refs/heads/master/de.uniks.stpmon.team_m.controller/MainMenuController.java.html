@@ -272,28 +272,29 @@ public class MainMenuController extends Controller {
                                 response -&gt; {
 <span class="fc" id="L273">                                    trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));</span>
 <span class="fc" id="L274">                                    destroy();</span>
-<span class="fc" id="L275">                                    app.show(ingameControllerProvider.get());</span>
-<span class="fc" id="L276">                                },</span>
+<span class="fc" id="L275">                                    ingameControllerProvider.get().setIsNewStart(true);</span>
+<span class="fc" id="L276">                                    app.show(ingameControllerProvider.get());</span>
+<span class="fc" id="L277">                                },</span>
                                 error -&gt; {
-<span class="nc" id="L278">                                    showError(error.getMessage());</span>
-<span class="nc" id="L279">                                    error.printStackTrace();</span>
-<span class="nc" id="L280">                                }</span>
+<span class="nc" id="L279">                                    showError(error.getMessage());</span>
+<span class="nc" id="L280">                                    error.printStackTrace();</span>
+<span class="nc" id="L281">                                }</span>
                         ));
                     }
-<span class="pc" id="L283">                }, error -&gt; showError(error.getMessage())</span>
+<span class="pc" id="L284">                }, error -&gt; showError(error.getMessage())</span>
         ));
-<span class="fc" id="L285">    }</span>
+<span class="fc" id="L286">    }</span>
 
     public void showTrainerDeletion() {
-<span class="fc" id="L288">        trainerDeletedSuccessfully.setText(this.information);</span>
-<span class="fc" id="L289">    }</span>
+<span class="fc" id="L289">        trainerDeletedSuccessfully.setText(this.information);</span>
+<span class="fc" id="L290">    }</span>
 
     public void setTrainerDeletion() {
-<span class="nc" id="L292">        this.information = resources.getString(&quot;DELETE.TRAINER.SUCCESS&quot;);</span>
-<span class="nc" id="L293">    }</span>
+<span class="nc" id="L293">        this.information = resources.getString(&quot;DELETE.TRAINER.SUCCESS&quot;);</span>
+<span class="nc" id="L294">    }</span>
 
     public void muteOrUnmuteSound() {
-<span class="nc" id="L296">        AudioService.getInstance().muteOrUnmuteSound(muteButton, preferences);</span>
-<span class="nc" id="L297">    }</span>
+<span class="nc" id="L297">        AudioService.getInstance().muteOrUnmuteSound(muteButton, preferences);</span>
+<span class="nc" id="L298">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
