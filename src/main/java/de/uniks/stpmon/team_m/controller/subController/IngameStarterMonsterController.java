@@ -77,6 +77,14 @@ public class IngameStarterMonsterController extends Controller {
 
     public Parent render() {
         final Parent parent = super.render();
+        // Load and display arrows
+        if (!GraphicsEnvironment.isHeadless()) {
+            Image arrowLeft = new Image(Objects.requireNonNull(Main.class.getResource("images/arrowLeft.png")).toExternalForm());
+            Image arrowRight = new Image(Objects.requireNonNull(Main.class.getResource("images/arrowRight.png")).toExternalForm());
+            this.arrowLeft.setImage(arrowLeft);
+            this.arrowRight.setImage(arrowRight);
+        }
+
         // get monsters
         disposables.add(presetsService.getMonsters().observeOn(FX_SCHEDULER).subscribe(monsterType -> {
             monster1 = monsterType.get(Integer.parseInt(starters.get(0)) - 1);

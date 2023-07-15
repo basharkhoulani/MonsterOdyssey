@@ -309,7 +309,7 @@ public class EncounterController extends Controller {
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
             oldMonster = monster;
             encounterOpponentStorage.addCurrentMonster(monster);
-            encounterOpponentController.setLevelLabel(monster.level() + " LVL").setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
+            encounterOpponentController.setLevelLabel("LVL " + monster.level()).setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
             monstersInEncounter.put(opponent.trainer(), monster);
 
             listenToMonster(opponent.trainer(), monster._id(), encounterOpponentController);
@@ -350,7 +350,7 @@ public class EncounterController extends Controller {
             }
             encounterOpponentStorage.addCurrentMonster(monster);
             listenToMonster(opponent.trainer(), opponent.monster(), encounterOpponentController);
-            encounterOpponentController.setLevelLabel(monster.level() + " LVL")
+            encounterOpponentController.setLevelLabel("LVL " + monster.level())
                     .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1))
                     .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health())
                     .setHealthLabel(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
@@ -391,9 +391,7 @@ public class EncounterController extends Controller {
         for (String s : monsterTypeDto.type()) {
             type.append(s);
         }
-
-        //@Harun: Es gibt jetzt keinen myMonsterImage mehr, für die Darstellung brauchst du die entsprechende OwnTrainercontroller und erstelle einen Neue Methode in der EnocunterOpponentController Klasse um die Image View zu bekommen
-        monstersDetailController.initFromBattleMenu(this, monsterDetailVBox, monster, monsterTypeDto, myMonsterImage, resources, presetsService, type.toString());
+        monstersDetailController.initFromBattleMenu(this, monsterDetailVBox, monster, monsterTypeDto, ownTrainerController.monsterImageView.getImage(), resources, presetsService, type.toString());
         monsterDetailVBox.getChildren().add(monstersDetailController.render());
         rootStackPane.getChildren().add(monsterDetailVBox);
         monsterDetailVBox.requestFocus();
@@ -419,7 +417,9 @@ public class EncounterController extends Controller {
                 controller.destroy();
             }
         }
-        encounterOpponentControllerHashMap.values().forEach(Controller::destroy);
+        if (encounterOpponentControllerHashMap != null) {
+            encounterOpponentControllerHashMap.values().forEach(Controller::destroy);
+        }
 
     }
 
@@ -536,7 +536,7 @@ public class EncounterController extends Controller {
                 float maxHealth = (float) (Math.round(monster.attributes().health() * 10) / 10);
                 encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health())
                         .setHealthLabel(currentHealth + "/" + maxHealth)
-                        .setLevelLabel(monster.level() + " LVL")
+                        .setLevelLabel("LVL " + monster.level())
                         .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
                 if(trainerId.equals(trainerStorageProvider.get().getTrainer()._id())){
                     encounterOpponentStorage.setCurrentTrainerMonster(monster);
@@ -572,7 +572,9 @@ public class EncounterController extends Controller {
 
     public void showIngameController() {
         destroy();
-        trainerStorageProvider.get().getTrainer().team().stream().flatMap(teamMonsterId -> trainerStorageProvider.get().getMonsters().stream().filter(trainerMonster -> teamMonsterId.equals(trainerMonster._id())).filter(trainerMonster -> (double) trainerMonster.currentAttributes().health() / trainerMonster.attributes().health() <= 0.2)).forEach(trainerMonster -> this.ingameController.showLowHealthNotification());
+        if (trainerStorageProvider.get().getMonsters() != null) {
+            trainerStorageProvider.get().getTrainer().team().stream().flatMap(teamMonsterId -> trainerStorageProvider.get().getMonsters().stream().filter(trainerMonster -> teamMonsterId.equals(trainerMonster._id())).filter(trainerMonster -> (double) trainerMonster.currentAttributes().health() / trainerMonster.attributes().health() <= 0.2)).forEach(trainerMonster -> this.ingameController.showLowHealthNotification());
+        }
         app.show(ingameControllerProvider.get());
     }
 

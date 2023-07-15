@@ -54,6 +54,7 @@ public class MonstersDetailController extends Controller {
     public ProgressBar defenseProgressBar;
     @FXML
     public ListView<AbilityDto> abilityListView;
+    @FXML
     public ImageView monsterImageView;
     @FXML
     public ImageView typeImageView;
