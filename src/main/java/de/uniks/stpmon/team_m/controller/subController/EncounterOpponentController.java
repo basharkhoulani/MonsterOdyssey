@@ -197,11 +197,4 @@ public class EncounterOpponentController extends Controller {
         return trainerImageView;
     }
 
-    public String getMonsterName() {
-        return monsterNameLabel.getText();
-    }
-
-    public boolean getEnemy() {
-        return isEnemy;
-    }
 }

@@ -351,7 +351,7 @@ public class EncounterController extends Controller {
             }
             encounterOpponentStorage.addCurrentMonster(monster);
             listenToMonster(opponent.trainer(), opponent.monster(), encounterOpponentController);
-            encounterOpponentController.setLevelLabel("LVL " + monster.level()).setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1)).setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health()).setHealthLabel(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
+            encounterOpponentController.setLevelLabel(monster.level() + " LVL").setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1)).setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health()).setHealthLabel(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
             //write monster name
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -> {
                 encounterOpponentController.setMonsterNameLabel(m.name());
@@ -543,7 +543,7 @@ public class EncounterController extends Controller {
                 float currentHealth = (float) (Math.round(monster.currentAttributes().health() * 10) / 10);
                 float maxHealth = (float) (Math.round(monster.attributes().health() * 10) / 10);
                 encounterOpponentController.setHealthLabel(currentHealth + "/" + maxHealth);
-                encounterOpponentController.setLevelLabel("LVL: " + monster.level());
+                encounterOpponentController.setLevelLabel(monster.level() + " LVL");
                 encounterOpponentController.setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
             }
         }, Throwable::printStackTrace));
