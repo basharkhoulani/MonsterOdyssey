@@ -401,7 +401,7 @@ public class EncounterController extends Controller {
     private void initMonsterDetails(Monster monster) {
         encounterOpponentStorage.setCurrentTrainerMonster(monster);
         ownTrainerController.setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1));
-        ownTrainerController.setLevelLabel(monster.level() + " LVL");
+        ownTrainerController.setLevelLabel("LVL " + monster.level());
         ownTrainerController.setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
         ownTrainerController.setHealthLabel(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
     }
@@ -579,7 +579,7 @@ public class EncounterController extends Controller {
                             initMonsterDetails(monster);
                         } else {
                             EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(encounterOpponentStorage.getEnemyOpponents().get(0)._id());
-                            encounterOpponentController.setLevelLabel(monster.level() + " LVL");
+                            encounterOpponentController.setLevelLabel("LVL " + monster.level());
                             encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());
                             encounterOpponentStorage.addCurrentMonster(monster);
                         }
