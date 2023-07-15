@@ -6,6 +6,7 @@ import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.service.MonstersService;
 import de.uniks.stpmon.team_m.service.PresetsService;
+import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -16,6 +17,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -28,6 +30,8 @@ public class ChangeMonsterListController extends Controller {
     public Provider<PresetsService> presetsServiceProvider;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
+    @Inject
+    Provider<EncounterOpponentStorage> encounterOpponentStorageProvider;
     @Inject
     MonstersService monstersService;
     @FXML
@@ -58,7 +62,8 @@ public class ChangeMonsterListController extends Controller {
         disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
                 .subscribe(list -> {
                     activeMonstersList = list.stream()
-                            .filter(monster -> trainerStorageProvider.get().getTrainer().team().contains(monster._id()))
+                            .filter(monster -> trainerStorageProvider.get().getTrainer().team().contains(monster._id()) && !Objects.equals(monster
+                                    ._id(), encounterOpponentStorageProvider.get().getSelfOpponent().monster()))
                             .collect(Collectors.toList());
                     initMonsterList(activeMonstersList);
                 }, throwable -> showError(throwable.getMessage())));
