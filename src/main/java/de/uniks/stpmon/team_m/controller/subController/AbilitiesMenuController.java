@@ -82,7 +82,7 @@ public class AbilitiesMenuController extends Controller {
                                 abilityButton.setStyle("-fx-background-color: " + TYPESCOLORPALETTE.get(ability.type()) + ";-fx-border-color: black");
                             }
                             // setOnAction
-                            abilityButton.setOnAction(actionEvent -> useAbility(ability, abilityButton, entry.getValue()));
+                            abilityButton.setOnAction(actionEvent -> useAbility(ability));
                             i++;
                         }
                     }
@@ -93,7 +93,7 @@ public class AbilitiesMenuController extends Controller {
                 }, Throwable::printStackTrace));
     }
 
-    private void useAbility(AbilityDto ability, Button abilityButton, int currentUse) {
+    private void useAbility(AbilityDto ability) {
         String regionId = encounterOpponentStorageProvider.get().getRegionId();
         String encounterId = encounterOpponentStorageProvider.get().getEncounterId();
         String opponentId = encounterOpponentStorageProvider.get().getSelfOpponent()._id();
