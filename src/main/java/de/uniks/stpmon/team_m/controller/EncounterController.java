@@ -585,9 +585,9 @@ public class EncounterController extends Controller {
         Monster monster = encounterOpponentStorage.getCurrentTrainerMonster();
         subControllers.add(abilitiesMenuController);
         if (encounterOpponentStorage.getSelfOpponent().monster() != null) {
-            abilitiesMenuController.init(monster, presetsService, battleMenuVBox, this);
+            abilitiesMenuController.init(monster, presetsService, this);
         } else {
-            abilitiesMenuController.init(null, presetsService, battleMenuVBox, this);
+            abilitiesMenuController.init(null, presetsService, this);
         }
         battleMenuVBox.getChildren().add(abilitiesMenuController.render());
     }

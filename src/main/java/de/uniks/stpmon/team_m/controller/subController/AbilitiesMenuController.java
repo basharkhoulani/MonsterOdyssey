@@ -12,7 +12,6 @@ import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
