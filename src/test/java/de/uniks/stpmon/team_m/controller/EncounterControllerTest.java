@@ -1,11 +1,9 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController;
 import de.uniks.stpmon.team_m.dto.*;
-import de.uniks.stpmon.team_m.rest.RegionEncountersApiService;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -13,19 +11,14 @@ import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
-import javafx.scene.Parent;
 import javafx.stage.Stage;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -52,8 +45,6 @@ class EncounterControllerTest extends ApplicationTest {
     @Mock
     MonstersService monstersService;
     @Mock
-    RegionEncountersApiService regionEncountersApiService;
-    @Mock
     Provider<EventListener> eventListener;
     @Mock
     PresetsService presetsService;
@@ -67,15 +58,12 @@ class EncounterControllerTest extends ApplicationTest {
     // Controller
     @Spy
     BattleMenuController battleMenuController;
-    @Mock
-    Provider<AbilitiesMenuController> abilitiesMenuControllerProvider;
     @InjectMocks
     IngameController ingameController;
     @Mock
     Provider<IngameController> ingameControllerProvider;
     @InjectMocks
     EncounterController encounterController;
-
     @InjectMocks
     EncounterOpponentController encounterOpponentController;
 
@@ -263,8 +251,10 @@ class EncounterControllerTest extends ApplicationTest {
         // Mock eventListener
         EventListener eventListenerMock = mock(EventListener.class);
         when(eventListener.get()).thenReturn(eventListenerMock);
-        when(eventListener.get().listen("encounters." + encounterOpponentStorage.getEncounterId() + ".trainers.*.opponents.*.*", Opponent.class)).thenReturn(just(
-                new Event<>("encounters.*.trainers.*.opponents.*.nothappening", null)));
+        when(eventListener.get().listen(any(), any())).thenReturn(just(
+                new Event<>("encounters.*.trainers.*.opponents.*.nothappening", null)
+                )).thenReturn(just(new Event<>("trainers.*.monsters.*.nothappening", null)
+                ));
 
         when(encounterOpponentStorage.isWild()).thenReturn(false);
 
@@ -504,39 +494,4 @@ class EncounterControllerTest extends ApplicationTest {
         clickOn("#fleePopupYesButton");
     }
 
-   /* @Test
-    void testAbilitesMenu() throws InterruptedException {
-
-            when(encounterOpponentStorage.getEncounterSize()).thenReturn(2);
-            when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
-                    List.of(
-                            new Opponent(
-                                    "2023-07-09T11:52:17.658Z",
-                                    "2023-07-09T11:52:35.578Z",
-                                    "64aa9f7132eb8b56aa9eb20f",
-                                    "64aa9f7132eb8b56aa9eb208",
-                                    "64abfde932eb8b56aac8efac",
-                                    true,
-                                    true,
-                                    "64aa9f7132eb8b56aa9eb20c",
-                                    null,
-                                    List.of(),
-                                    0
-                            )
-                    ));
-            ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-            encounterController.setValues(bundle, preferences, null, encounterController, app);
-        AbilitiesMenuController abilitiesMenuController = Mockito.mock(AbilitiesMenuController.class);
-        abilitiesMenuController.setValues(bundle, preferences, null, abilitiesMenuController, app);
-        when(abilitiesMenuControllerProvider.get()).thenReturn(abilitiesMenuController);
-
-            app.show(encounterController);
-
-            Thread.sleep(200);
-
-            clickOn("#abilitiesButton");
-
-            Thread.sleep(1000000);
-        }
-*/
 }

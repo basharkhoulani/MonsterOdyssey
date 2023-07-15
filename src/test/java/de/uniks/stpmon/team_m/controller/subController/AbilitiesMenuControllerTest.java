@@ -69,7 +69,7 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
                 35,
                 1.0,
                 2))));
-        abilitiesMenuController.init(monster, presetsService, null, encounterController);
+        abilitiesMenuController.init(monster, presetsService, encounterController);
         app.start(stage);
         app.show(abilitiesMenuController);
         stage.requestFocus();
@@ -141,7 +141,7 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
 
         doNothing().when(encounterController).updateDescription("", true);
         doNothing().when(encounterController).resetRepeatedTimes();
-        doNothing().when(encounterController).resetOppoenentUpdate();
+        doNothing().when(encounterController).resetOpponentUpdate();
         doNothing().when(encounterController).goBackToBattleMenu();
 
         final Button abilityButton1 = lookup("#abilityButton1").query();
