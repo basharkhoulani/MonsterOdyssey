@@ -456,7 +456,9 @@ public class EncounterController extends Controller {
                 controller.destroy();
             }
         }
-        encounterOpponentControllerHashMap.values().forEach(Controller::destroy);
+        if (encounterOpponentControllerHashMap != null) {
+            encounterOpponentControllerHashMap.values().forEach(Controller::destroy);
+        }
 
     }
 
@@ -578,6 +580,10 @@ public class EncounterController extends Controller {
                         if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
                             initMonsterDetails(monster);
                         } else {
+                            Opponent o = encounterOpponentStorage.getEnemyOpponents().stream().filter(opponent -> opponent.monster().equals(monster._id())).findFirst().orElse(null);
+                            if (o != null) {
+                                updateMonsterValues(trainerId, monster._id(), o);
+                            }
                             EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(encounterOpponentStorage.getEnemyOpponents().get(0)._id());
                             encounterOpponentController.setLevelLabel("LVL " + monster.level());
                             encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());
