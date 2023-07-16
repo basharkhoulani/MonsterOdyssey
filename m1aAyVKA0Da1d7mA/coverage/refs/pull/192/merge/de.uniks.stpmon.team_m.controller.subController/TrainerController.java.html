@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TrainerController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">TrainerController.java</span></div><h1>TrainerController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.service.PresetsService;
+import de.uniks.stpmon.team_m.utils.SpriteAnimation;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import javafx.scene.Parent;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+
+public class TrainerController extends Controller {
+    private final IngameController ingameController;
+
+    private SpriteAnimation spriteAnimation;
+    private final GraphicsContext graphicsContext;
+    private final GraphicsContext alternativeGraphicsContext;
+    private final Image trainerChunk;
+    private int trainerX;
+    private int trainerY;
+    private int trainerDirection;
+    private int trainerTargetX;
+    private int trainerTargetY;
+
+    @Inject
+    PresetsService presetsService;
+
+    @Inject
+    Provider&lt;TrainerStorage&gt; trainerStorageProvider;
+
+<span class="fc" id="L37">    private Boolean isWalking = false;</span>
+
+    public int getTrainerX() {
+<span class="nc" id="L40">        return trainerX;</span>
+    }
+
+    public int getTrainerY() {
+<span class="nc" id="L44">        return trainerY;</span>
+    }
+
+    @Override
+    public void init() {
+<span class="fc" id="L49">        super.init();</span>
+        int duration;
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (isWalking) {</span>
+<span class="nc" id="L52">            duration = DELAY;</span>
+        } else {
+<span class="fc" id="L54">            duration = DELAY_LONG;</span>
+        }
+<span class="fc" id="L56">        spriteAnimation = new SpriteAnimation(this, trainerChunk, duration, graphicsContext, alternativeGraphicsContext);</span>
+<span class="fc" id="L57">        spriteAnimation.stay(trainerDirection);</span>
+<span class="fc" id="L58">    }</span>
+
+    public void startAnimations() {
+<span class="nc" id="L61">        spriteAnimation.start();</span>
+<span class="nc" id="L62">    }</span>
+
+    @Override
+    public Parent render() {
+<span class="nc" id="L66">        return null;</span>
+    }
+
+    /** Note: oldTrainerX, oldTrainerY, targetTrainerX and targetTrainerY are given in tiles, not in pixels!
+     *  BUT trainerTargetX and trainerTargetY are given in pixels!
+     */
+<span class="fc" id="L72">    public TrainerController(IngameController ingameController, Trainer trainer, Image trainerChunk, GraphicsContext graphicsContext, GraphicsContext alternateGraphicsContext) {</span>
+<span class="fc" id="L73">        this.ingameController = ingameController;</span>
+<span class="fc" id="L74">        this.trainerChunk = trainerChunk;</span>
+<span class="fc" id="L75">        this.graphicsContext = graphicsContext;</span>
+<span class="fc" id="L76">        this.alternativeGraphicsContext = alternateGraphicsContext;</span>
+
+        // Init trainer position and direction
+<span class="fc" id="L79">        trainerTargetX = trainer.x();</span>
+<span class="fc" id="L80">        trainerTargetY = trainer.y();</span>
+<span class="fc" id="L81">        this.trainerX = trainer.x() * TILE_SIZE;</span>
+<span class="fc" id="L82">        this.trainerY = trainer.y() * TILE_SIZE;</span>
+<span class="fc" id="L83">        this.trainerDirection = trainer.direction();</span>
+<span class="fc" id="L84">    }</span>
+
+    /**
+     * @param x x-coordinate of the trainer in tiles
+     * @param y y-coordinate of the trainer in tiles
+     */
+    public void setTrainerTargetPosition(int x, int y) {
+<span class="nc" id="L91">        trainerTargetX = x;</span>
+<span class="nc" id="L92">        trainerTargetY = y;</span>
+<span class="nc" id="L93">    }</span>
+
+    /**
+     * This method is used to turn the trainer in a specific direction
+     * @param direction : 0 = right, 1 = up, 2 = left, 3 = down
+     */
+    public void turn(int direction) {
+<span class="nc" id="L100">        trainerDirection = direction;</span>
+<span class="nc" id="L101">        spriteAnimation.stay(trainerDirection);</span>
+<span class="nc" id="L102">    }</span>
+
+    public void walk() {
+<span class="nc bnc" id="L105" title="All 4 branches missed.">        if (trainerX != trainerTargetX * TILE_SIZE || trainerY != trainerTargetY * TILE_SIZE) {</span>
+<span class="nc" id="L106">            isWalking = true;</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            if (trainerX &lt; trainerTargetX * TILE_SIZE) {</span>
+<span class="nc" id="L108">                trainerDirection = TRAINER_DIRECTION_RIGHT;</span>
+<span class="nc" id="L109">                trainerX++;</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">            } else if (trainerX &gt; trainerTargetX * TILE_SIZE) {</span>
+<span class="nc" id="L111">                trainerDirection = TRAINER_DIRECTION_LEFT;</span>
+<span class="nc" id="L112">                trainerX--;</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">            } else if (trainerY &lt; trainerTargetY * TILE_SIZE) {</span>
+<span class="nc" id="L114">                trainerDirection = TRAINER_DIRECTION_DOWN;</span>
+<span class="nc" id="L115">                trainerY++;</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">            } else if (trainerY &gt; trainerTargetY * TILE_SIZE) {</span>
+<span class="nc" id="L117">                trainerDirection = TRAINER_DIRECTION_UP;</span>
+<span class="nc" id="L118">                trainerY--;</span>
+            }
+<span class="nc" id="L120">            spriteAnimation.walk(trainerDirection);</span>
+        }
+        else {
+<span class="nc" id="L123">            isWalking = false;</span>
+<span class="nc" id="L124">            spriteAnimation.stay(trainerDirection);</span>
+        }
+<span class="nc" id="L126">    }</span>
+
+    public void setTrainerDirection(int direction) {
+<span class="nc" id="L129">        trainerDirection = direction;</span>
+<span class="nc" id="L130">    }</span>
+
+    @Override
+    public void destroy() {
+<span class="fc" id="L134">        spriteAnimation.stop();</span>
+<span class="fc" id="L135">        super.destroy();</span>
+<span class="fc" id="L136">    }</span>
+
+    public int getUserTrainerY() {
+<span class="nc" id="L139">        return ingameController.getUserTrainerY();</span>
+    }
+
+    public int getDirection() {
+<span class="fc" id="L143">        return this.trainerDirection;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
