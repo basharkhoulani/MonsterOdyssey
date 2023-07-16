@@ -164,6 +164,10 @@ public class EncounterController extends Controller {
         ImageView sprite = ownTrainerController.getTrainerImageView();
         setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), sprite, 1);
 
+        disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getSelfOpponent().monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
+            oldMonster = monster;
+            encounterOpponentStorage.addCurrentMonster(monster);
+        }));
         disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> abilityDtos.addAll(abilities)));
 
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId).observeOn(FX_SCHEDULER).subscribe(encounter -> {
@@ -307,8 +311,6 @@ public class EncounterController extends Controller {
     // Hier soll allen Serveranfragen kommen
     private void showWildMonster(EncounterOpponentController encounterOpponentController, Opponent opponent, boolean isInit) {
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
-            oldMonster = monster;
-            encounterOpponentStorage.addCurrentMonster(monster);
             encounterOpponentController.setLevelLabel("LVL " + monster.level()).setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
             monstersInEncounter.put(opponent.trainer(), monster);
 
