@@ -113,6 +113,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<EncounterController> encounterControllerProvider;
     @Inject
+    Provider<ItemMenuController> itemMenuControllerProvider;
+    @Inject
     AreasService areasService;
     @Inject
     PresetsService presetsService;
@@ -1722,5 +1724,16 @@ public class IngameController extends Controller {
 
     public void setIsNewStart(boolean isNewStart) {
         this.isNewStart = isNewStart;
+    }
+
+    public void openInventar() {
+        VBox itemMenuBox = new VBox();
+        itemMenuBox.setAlignment(Pos.CENTER);
+        ItemMenuController itemMenuController = itemMenuControllerProvider.get();
+        itemMenuController.init(this);
+        itemMenuBox.getChildren().add(itemMenuController.render());
+        root.getChildren().add(itemMenuBox);
+        itemMenuBox.requestFocus();
+        buttonsDisable(true);
     }
 }
