@@ -31,7 +31,7 @@
                     </ImageView>
                <VBox prefHeight="100.0" prefWidth="160.0">
                   <children>
-                     <HBox prefHeight="53.0" prefWidth="195.0" style="-fx-background-color: #FFFFFF; -fx-opacity: 0.8;">
+                     <HBox onMouseClicked="#openInventar" prefHeight="53.0" prefWidth="195.0" style="-fx-background-color: #FFFFFF; -fx-opacity: 0.8;">
                         <VBox.margin>
                            <Insets top="15.0" />
                         </VBox.margin>
