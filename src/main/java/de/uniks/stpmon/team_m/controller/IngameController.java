@@ -220,8 +220,7 @@ public class IngameController extends Controller {
                     ingamePauseMenuController.resumeGame();
                 }
             }
-            if (event.getCode().toString().equals(preferences.get("inventar","I"))){
-                //TODO: Open inventar here
+            if (event.getCode().toString().equals(preferences.get("inventory","I"))){
             }
             if (isChatting || loadingMap || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < TRANSITION_DURATION + 50)) {
                 return;
@@ -445,8 +444,8 @@ public class IngameController extends Controller {
         if(preferences.get("pauseMenu",null) == null){
             preferences.put("pauseMenu","ESCAPE");
         }
-        if(preferences.get("inventar",null) == null){
-            preferences.put("inventar",KeyCode.I.getChar());
+        if(preferences.get("inventory",null) == null){
+            preferences.put("inventory",KeyCode.I.getChar());
         }
 
         return parent;

@@ -35,7 +35,7 @@ public class IngameKeybindingsController extends Controller {
     @FXML
     public Button pauseMenuButton;
     @FXML
-    public Button inventarButton;
+    public Button inventoryButton;
     @FXML
     public Button goBackButton;
     @FXML
@@ -70,7 +70,7 @@ public class IngameKeybindingsController extends Controller {
         walkLeftButton.setText(preferences.get("walkLeft","A"));
         interactionButton.setText(preferences.get("interaction","E"));
         pauseMenuButton.setText(preferences.get("pauseMenu","ESCAPE"));
-        inventarButton.setText(preferences.get("inventar","I"));
+        inventoryButton.setText(preferences.get("inventar","I"));
         return parent;
     }
 
@@ -97,7 +97,7 @@ public class IngameKeybindingsController extends Controller {
         preferences.put("interaction",KeyCode.E.getChar());
         interactionButton.setText("E");
         preferences.put("inventar",KeyCode.I.getChar());
-        inventarButton.setText("I");
+        inventoryButton.setText("I");
         informationLabel.setText(resources.getString("KEYBINDINGS.DEFAULT"));
     }
 
@@ -108,7 +108,7 @@ public class IngameKeybindingsController extends Controller {
         preferences.put("walkRight",walkRightButton.getText());
         preferences.put("pauseMenu",pauseMenuButton.getText());
         preferences.put("interaction",interactionButton.getText());
-        preferences.put("inventar", inventarButton.getText());
+        preferences.put("inventar", inventoryButton.getText());
         informationLabel.setText(resources.getString("KEYBINDINGS.CHANGED"));
     }
 
@@ -136,13 +136,13 @@ public class IngameKeybindingsController extends Controller {
         setKeyPressedHandler(walkUpButton);
     }
 
-    public void setInventar() {
-        setKeyPressedHandler(inventarButton);
+    public void setInventory() {
+        setKeyPressedHandler(inventoryButton);
     }
 
     private void setKeyPressedHandler(Button button){
         keyPressedHandler = event -> {
-            List<String> list = Arrays.asList(walkDownButton.getText(), walkUpButton.getText(), walkRightButton.getText(), walkLeftButton.getText(), interactionButton.getText(), pauseMenuButton.getText(), inventarButton.getText());
+            List<String> list = Arrays.asList(walkDownButton.getText(), walkUpButton.getText(), walkRightButton.getText(), walkLeftButton.getText(), interactionButton.getText(), pauseMenuButton.getText(), inventoryButton.getText());
             if (list.contains(event.getCode().toString())) {
                 informationLabel.setText(resources.getString("KEYBINDING.USED"));
                 button.setText(currentButtonText);
@@ -202,7 +202,7 @@ public class IngameKeybindingsController extends Controller {
         walkDownButton.setDisable(set);
         pauseMenuButton.setDisable(set);
         interactionButton.setDisable(set);
-        inventarButton.setDisable(set);
+        inventoryButton.setDisable(set);
         if(set){
             currentbutton.setDisable(false);
         }
