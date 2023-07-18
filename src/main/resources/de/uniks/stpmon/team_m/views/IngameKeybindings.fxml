@@ -27,6 +27,19 @@
                            <Insets top="20.0" />
                         </HBox.margin>
                      </Button>
+            <Label layoutX="20.0" layoutY="30.0" prefHeight="52.0" prefWidth="145.0" text="%INVENTAR">
+               <font>
+                  <Font name="Comic Sans MS" size="17.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="40.0" top="20.0" />
+               </HBox.margin>
+            </Label>
+            <Button fx:id="inventarButton" layoutX="165.0" layoutY="30.0" mnemonicParsing="false" onAction="#setInventar" prefHeight="55.0" prefWidth="129.0" style="-fx-background-color: #FFF2CC; -fx-border-radius: 10; -fx-border-color: grey; -fx-background-radius: 10; -fx-border-width: 1;">
+               <HBox.margin>
+                  <Insets top="20.0" />
+               </HBox.margin>
+            </Button>
                </HBox>
                <HBox prefHeight="82.0" prefWidth="632.0">
                      <Label prefHeight="52.0" prefWidth="145.0" text="%WALK.DOWN">
