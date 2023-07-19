@@ -16,8 +16,7 @@ import javafx.scene.layout.VBox;
 import java.awt.*;
 import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.HEART_ICON;
-import static de.uniks.stpmon.team_m.Constants.STAR_ICON;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class EncounterOpponentController extends Controller {
     private final Boolean isEnemy;
@@ -90,6 +89,12 @@ public class EncounterOpponentController extends Controller {
         if (!GraphicsEnvironment.isHeadless()) {
             starImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(STAR_ICON)).toString()));
             heartImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(HEART_ICON)).toString()));
+            paralysedImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("paralysed"))).toString()));
+            asleepImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("asleep"))).toString()));
+            poisonedImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("poisoned"))).toString()));
+            burnedImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("burned"))).toString()));
+            frozenImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("frozen"))).toString()));
+            confusedImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("confused"))).toString()));
         }
 
         if (isEnemy) {
@@ -205,4 +210,14 @@ public class EncounterOpponentController extends Controller {
         return trainerImageView;
     }
 
+    public void showStatus(String status, boolean value) {
+        switch (status) {
+            case "paralysed" -> paralysedImage.setVisible(value);
+            case "asleep" -> asleepImage.setVisible(value);
+            case "poisoned" -> poisonedImage.setVisible(value);
+            case "frozen" -> frozenImage.setVisible(value);
+            case "confused" -> confusedImage.setVisible(value);
+            case "burned" -> burnedImage.setVisible(value);
+        }
+    }
 }
