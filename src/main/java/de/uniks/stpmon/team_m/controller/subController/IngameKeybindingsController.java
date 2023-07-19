@@ -70,7 +70,7 @@ public class IngameKeybindingsController extends Controller {
         walkLeftButton.setText(preferences.get("walkLeft","A"));
         interactionButton.setText(preferences.get("interaction","E"));
         pauseMenuButton.setText(preferences.get("pauseMenu","ESCAPE"));
-        inventoryButton.setText(preferences.get("inventar","I"));
+        inventoryButton.setText(preferences.get("inventory","I"));
         return parent;
     }
 
@@ -96,7 +96,7 @@ public class IngameKeybindingsController extends Controller {
         pauseMenuButton.setText("ESCAPE");
         preferences.put("interaction",KeyCode.E.getChar());
         interactionButton.setText("E");
-        preferences.put("inventar",KeyCode.I.getChar());
+        preferences.put("inventory",KeyCode.I.getChar());
         inventoryButton.setText("I");
         informationLabel.setText(resources.getString("KEYBINDINGS.DEFAULT"));
     }
@@ -108,7 +108,7 @@ public class IngameKeybindingsController extends Controller {
         preferences.put("walkRight",walkRightButton.getText());
         preferences.put("pauseMenu",pauseMenuButton.getText());
         preferences.put("interaction",interactionButton.getText());
-        preferences.put("inventar", inventoryButton.getText());
+        preferences.put("inventory", inventoryButton.getText());
         informationLabel.setText(resources.getString("KEYBINDINGS.CHANGED"));
     }
 
