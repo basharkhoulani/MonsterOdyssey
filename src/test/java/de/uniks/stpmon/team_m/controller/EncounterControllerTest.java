@@ -129,6 +129,7 @@ class EncounterControllerTest extends ApplicationTest {
                         0,
                         List.of("64aa9f636cec1b8f0fac57dc"),
                         List.of(1),
+                        List.of("6475e595ac3946b6a812d863"),
                         "6475e595ac3946b6a812d863",
                         33,
                         18,
@@ -183,7 +184,8 @@ class EncounterControllerTest extends ApplicationTest {
                 0,
                 abilities,
                 new MonsterAttributes(14, 8, 8, 5),
-                new MonsterAttributes(14, 8, 8, 5)
+                new MonsterAttributes(14, 8, 8, 5),
+                List.of()
         );
         when(monstersService.getMonster(anyString(), any(), anyString())).thenReturn(Observable.just(monster));
 
@@ -233,6 +235,7 @@ class EncounterControllerTest extends ApplicationTest {
                         0,
                         List.of("64aa9f7132eb8b56aa9eb20c"),
                         List.of(1),
+                        List.of("6475e595ac3946b6a812d863"),
                         "6475e595ac3946b6a812d863",
                         33,
                         18,

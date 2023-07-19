@@ -4,7 +4,7 @@ public record Result(
         String type,
         Integer ability,
         String effectiveness,
-        int item,
+        Integer item,
         String status
 ) {
 }

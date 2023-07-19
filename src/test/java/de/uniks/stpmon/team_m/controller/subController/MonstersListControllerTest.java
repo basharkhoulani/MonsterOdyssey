@@ -60,7 +60,8 @@ public class MonstersListControllerTest extends ApplicationTest {
                         0,
                         abilities,
                         new MonsterAttributes(14, 8, 8, 5),
-                        new MonsterAttributes(14, 8, 8, 5)));
+                        new MonsterAttributes(14, 8, 8, 5),
+                        List.of()));
         when(monstersService.getMonsters(any(), any())).thenReturn(Observable.just(monsters));
         TrainerStorage trainerStorage = mock(TrainerStorage.class);
         when(trainerStorageProvider.get()).thenReturn(trainerStorage);
@@ -110,6 +111,7 @@ public class MonstersListControllerTest extends ApplicationTest {
                 0,
                 List.of("647e1530866ace3595866db2"),
                 List.of(1,2),
+                List.of("647e1530866ace3595866db2"),
                 "645e32c6866ace359554a7fa",
                 45,
                 23,

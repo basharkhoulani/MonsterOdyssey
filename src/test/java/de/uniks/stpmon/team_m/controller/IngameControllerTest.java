@@ -133,11 +133,12 @@ public class IngameControllerTest extends ApplicationTest {
                 0,
                 List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
                 List.of(1,2),
+                List.of("646bacc568933551792bf3d5"),
                 "646bacc568933551792bf3d5",
                 33,
                 19,
                 0,
-                new NPCInfo(false, false, false, false, null, null)
+                new NPCInfo(false, false, false, false, null, null, null)
         ));
         when(trainerStorageProvider.get().getRegion()).thenReturn(
                 new Region(
@@ -202,11 +203,12 @@ public class IngameControllerTest extends ApplicationTest {
                     0,
                     List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
                     List.of(1,2),
+                    List.of("646bacc568933551792bf3d5"),
                     "6475e595ac3946b6a812d863",
                     33,
                     18,
                     0,
-                    new NPCInfo(false, false, false, false, null, null)),
+                    new NPCInfo(false, false, false, false, null, null, null)),
                 new Trainer(
                         "2023-05-30T12:02:57.510Z",
                         "2023-05-30T12:01:57.510Z",
@@ -218,11 +220,12 @@ public class IngameControllerTest extends ApplicationTest {
                         0,
                         List.of(),
                         List.of(),
+                        List.of("646bacc568933551792bf3d5"),
                         "6475e595ac3946b6a812d863",
                         20,
                         18,
                         2,
-                        new NPCInfo(false, false, false, true, null, null)),
+                        new NPCInfo(false, false, false, true, null, null, null)),
                 new Trainer(
                         "2023-05-30T12:02:57.510Z",
                         "2023-05-30T12:01:57.510Z",
@@ -234,11 +237,12 @@ public class IngameControllerTest extends ApplicationTest {
                         0,
                         List.of(),
                         List.of(),
+                        List.of("646bacc568933551792bf3d5"),
                         "6475e595ac3946b6a812d863",
                         69,
                         69,
                         2,
-                        new NPCInfo(false, false, false, false, null, List.of("1", "3", "5")))
+                        new NPCInfo(false, false, false, false, null,null, List.of("1", "3", "5")))
                 )
         ));
         EventListener eventListenerMock = mock(EventListener.class);
@@ -259,11 +263,12 @@ public class IngameControllerTest extends ApplicationTest {
                 0,
                 List.of("1", "2"),
                 List.of(),
+                List.of("646bacc568933551792bf3d5"),
                 "6475e595ac3946b6a812d863",
                 33,
                 18,
                 1,
-                new NPCInfo(false, false,false, false, null,null));
+                new NPCInfo(false, false,false, false, null,null, null));
 
         when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers.*.*", Trainer.class)).thenReturn(just(
                 new Event<>("regions.646bab5cecf584e1be02598a.trainers.6475e595ac3946b6a812d865.created", trainer)));
@@ -542,11 +547,12 @@ public class IngameControllerTest extends ApplicationTest {
                 0,
                 List.of(),
                 null,
+                List.of("646bacc568933551792bf3d5"),
                 "6475e595ac3946b6a812d863",
                 33,
                 18,
                 0,
-                new NPCInfo(false, false,false, false, null,null)));
+                new NPCInfo(false, false,false, false, null,null, null)));
 
         press(KeyCode.E);
         release(KeyCode.E);
@@ -623,11 +629,12 @@ public class IngameControllerTest extends ApplicationTest {
                 0,
                 List.of(),
                 null,
+                List.of("646bacc568933551792bf3d5"),
                 "6475e595ac3946b6a812d863",
                 33,
                 18,
                 0,
-                new NPCInfo(false, false,false, false, null,null)));
+                new NPCInfo(false, false,false, false, null,null, null)));
 
         press(KeyCode.E);
         release(KeyCode.E);
