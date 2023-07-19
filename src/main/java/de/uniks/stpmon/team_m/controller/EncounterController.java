@@ -90,6 +90,8 @@ public class EncounterController extends Controller {
     IngameController ingameController;
     @Inject
     Provider<LevelUpController> levelUpControllerProvider;
+    @Inject
+    Provider<EncounterController> encounterControllerProvider;
 
     private EncounterOpponentController enemy1Controller;
     private EncounterOpponentController enemy2Controller;
@@ -110,7 +112,7 @@ public class EncounterController extends Controller {
     private int repeatedTimes = 0;
     private boolean inEncounter = true;
     private boolean resultLevelUP = false;
-    private final ArrayList<Opponent> battleLog = new ArrayList<>();
+    private final ArrayList<Opponent> opponentLog = new ArrayList<>();
     private Monster oldMonster;
     private final ArrayList<Integer> newAbilities = new ArrayList<>();
 
@@ -428,10 +430,11 @@ public class EncounterController extends Controller {
     public void listenToOpponents(String encounterId) {
         disposables.add(eventListener.get().listen("encounters." + encounterId + ".trainers.*.opponents.*.*", Opponent.class).observeOn(FX_SCHEDULER).subscribe(event -> {
             final Opponent opponent = event.data();
-            if (battleLog.contains(opponent)) {
+            if (opponentLog.contains(opponent)) {
                 return;
             }
-            battleLog.add(opponent);
+            opponentLog.add(opponent);
+            System.out.println(opponent);
             if (event.suffix().contains("updated")) {
                 inEncounter = true;
                 updateOpponent(opponent);
@@ -502,9 +505,15 @@ public class EncounterController extends Controller {
                     updateDescription(resources.getString("ENEMY.USED") + " " + abilityDtos.get(abilityMove.ability() - 1).name() + ". ", false);
                 }
             }
-                // else for change monster move
-                // here for the situation that change Monster Move
-                // have to add another websocket listenToMonster(trainerId, monsterId)
+            if (move instanceof ChangeMonsterMove changeMonsterMove) {
+                if (!o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                    updateDescription(resources.getString("ENEMY.CHANGED.MONSTER") + ". ", false);
+                    listenToMonster(o.trainer(), o.monster(), encounterOpponentControllerHashMap.get(o._id()));
+                }
+            }
+            // else for change monster move
+            // here for the situation that change Monster Move
+            // have to add another websocket listenToMonster(trainerId, monsterId)
 
             Opponent oResults = forDescription.get(opponentId + "Results");
 
@@ -540,7 +549,7 @@ public class EncounterController extends Controller {
                         .setHealthLabel(currentHealth + "/" + maxHealth)
                         .setLevelLabel("LVL " + monster.level())
                         .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
-                if(trainerId.equals(trainerStorageProvider.get().getTrainer()._id())){
+                if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
                     encounterOpponentStorage.setCurrentTrainerMonster(monster);
                 }
             }
@@ -613,17 +622,16 @@ public class EncounterController extends Controller {
     }
 
     public void continueBattle() {
-        //if (encounterOpponentStorage.getOpponentTrainer() == null) {
-        if (encounterOpponentStorage.isWild()) {
-            SequentialTransition fleeAnimation = buildFleeAnimation();
-            PauseTransition pause = new PauseTransition(Duration.millis(2000));
-            pause.setOnFinished(evt -> {
-                ownTrainerController.monsterImageView.setVisible(false);
-                fleeAnimation.play();
-            });
-            pause.play();
-            fleeAnimation.setOnFinished(evt -> showResultPopUp(resources.getString("YOU.WON")));
-        }
+        //if (encounterOpponentStorage.isWild()) {
+        SequentialTransition fleeAnimation = buildFleeAnimation();
+        PauseTransition pause = new PauseTransition(Duration.millis(1000));
+        pause.setOnFinished(evt -> {
+            ownTrainerController.monsterImageView.setVisible(false);
+            fleeAnimation.play();
+        });
+        pause.play();
+        fleeAnimation.setOnFinished(evt -> showResultPopUp(resources.getString("YOU.WON")));
+        //}
 
     }
 
@@ -638,9 +646,9 @@ public class EncounterController extends Controller {
         });
         fleeAnimation.setOnFinished(evt -> disposables.add(encounterOpponentsService.deleteOpponent(encounterOpponentStorage.getRegionId(), encounterOpponentStorage.getEncounterId(), encounterOpponentStorage.getSelfOpponent()._id()).observeOn(FX_SCHEDULER)
                 .subscribe(result -> showIngameController(), error -> {
-            showError(error.getMessage());
-            error.printStackTrace();
-        })));
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                })));
         firstPause.play();
     }
 
@@ -758,5 +766,28 @@ public class EncounterController extends Controller {
             newAbilities.clear();
         }, Throwable::printStackTrace));
     }
+
+    public void changeMonster(Monster monster, MonsterTypeDto monsterTypeDto) {
+        Move move = new ChangeMonsterMove("change-monster", monster._id());
+        EncounterOpponentController relativeEncounterOpponentController;
+        if (opponentsSize > 3) {
+            relativeEncounterOpponentController = coopTrainerController;
+        } else {
+            relativeEncounterOpponentController = ownTrainerController;
+        }
+        disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, encounterOpponentStorage.getSelfOpponent()._id(), null, move).observeOn(FX_SCHEDULER).subscribe(
+                opponent -> {
+                    updateDescription(resources.getString("YOU.USED") + " change monster. ", true);
+                    updateDescription(resources.getString("YOU.USED") + " change monster. \n", true);
+                    resetOpponentUpdate();
+                    resetRepeatedTimes();
+                    goBackToBattleMenu();
+                    encounterOpponentStorage.setCurrentTrainerMonster(monster);
+                    encounterOpponentStorage.setCurrentTrainerMonsterType(monsterTypeDto);
+                    listenToMonster(trainerId, monster._id(), ownTrainerController);
+                    showTeamMonster(relativeEncounterOpponentController, encounterOpponentStorage.getSelfOpponent(), true);
+                }, Throwable::printStackTrace));
+    }
+
 }
     
