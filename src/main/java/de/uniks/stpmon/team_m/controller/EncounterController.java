@@ -207,7 +207,7 @@ public class EncounterController extends Controller {
         HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy1Parent);
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
-        showWildMonster(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0), true);
+        showEnemyMonster(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0), true);
 
         // Own trainer
         teamHBox.setPadding(new Insets(0, 0, 0, 400));
@@ -311,7 +311,7 @@ public class EncounterController extends Controller {
     }
 
     // Hier soll allen Serveranfragen kommen
-    private void showWildMonster(EncounterOpponentController encounterOpponentController, Opponent opponent, boolean isInit) {
+    private void showEnemyMonster(EncounterOpponentController encounterOpponentController, Opponent opponent, boolean isInit) {
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
             encounterOpponentController.setLevelLabel("LVL " + monster.level()).setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
             monstersInEncounter.put(opponent.trainer(), monster);
@@ -335,7 +335,7 @@ public class EncounterController extends Controller {
     private void showEnemyInfo(EncounterOpponentController encounterOpponentController, Opponent opponent) {
         if (opponent != null) {
             // Monster
-            showWildMonster(encounterOpponentController, opponent, true);
+            showEnemyMonster(encounterOpponentController, opponent, true);
 
             // Trainer Sprite
             disposables.add(trainersService.getTrainer(regionId, opponent.trainer()).observeOn(FX_SCHEDULER).subscribe(trainer -> {
@@ -506,14 +506,14 @@ public class EncounterController extends Controller {
                 }
             }
             if (move instanceof ChangeMonsterMove changeMonsterMove) {
-                if (!o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                    updateDescription(resources.getString("ENEMY.CHANGED.MONSTER") + ". ", false);
+                // TODO: translation
+                if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                    updateDescription("you changed monster" + ". ", false);
+                    showTeamMonster(encounterOpponentControllerHashMap.get(o._id()), o, true);
                     listenToMonster(o.trainer(), o.monster(), encounterOpponentControllerHashMap.get(o._id()));
                 }
+                // here else for enemy change, coop change
             }
-            // else for change monster move
-            // here for the situation that change Monster Move
-            // have to add another websocket listenToMonster(trainerId, monsterId)
 
             Opponent oResults = forDescription.get(opponentId + "Results");
 
@@ -551,6 +551,9 @@ public class EncounterController extends Controller {
                         .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
                 if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
                     encounterOpponentStorage.setCurrentTrainerMonster(monster);
+                    disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto -> {
+                        encounterOpponentStorage.setCurrentTrainerMonsterType(monsterTypeDto);
+                    }));
                 }
             }
         }, Throwable::printStackTrace));
@@ -769,23 +772,14 @@ public class EncounterController extends Controller {
 
     public void changeMonster(Monster monster, MonsterTypeDto monsterTypeDto) {
         Move move = new ChangeMonsterMove("change-monster", monster._id());
-        EncounterOpponentController relativeEncounterOpponentController;
-        if (opponentsSize > 3) {
-            relativeEncounterOpponentController = coopTrainerController;
-        } else {
-            relativeEncounterOpponentController = ownTrainerController;
-        }
+
         disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, encounterOpponentStorage.getSelfOpponent()._id(), null, move).observeOn(FX_SCHEDULER).subscribe(
                 opponent -> {
-                    updateDescription(resources.getString("YOU.USED") + " change monster. ", true);
-                    updateDescription(resources.getString("YOU.USED") + " change monster. \n", true);
-                    resetOpponentUpdate();
                     resetRepeatedTimes();
                     goBackToBattleMenu();
                     encounterOpponentStorage.setCurrentTrainerMonster(monster);
                     encounterOpponentStorage.setCurrentTrainerMonsterType(monsterTypeDto);
-                    listenToMonster(trainerId, monster._id(), ownTrainerController);
-                    showTeamMonster(relativeEncounterOpponentController, encounterOpponentStorage.getSelfOpponent(), true);
+                    encounterOpponentStorage.setSelfOpponent(opponent);
                 }, Throwable::printStackTrace));
     }
 
