@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.service;
 
 import com.google.gson.Gson;
 import de.uniks.stpmon.team_m.dto.AbilityDto;
+import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.dto.TileSet;
 import de.uniks.stpmon.team_m.rest.PresetsApiService;
@@ -62,6 +63,39 @@ public class PresetsService {
 
     public Observable<ResponseBody> getCharacter(String filename) {
         return presetsApiService.getCharacter(filename);
+    }
+
+    /**
+     * getItems returns a list of item types.
+     *
+     * @return The list of item types.
+     */
+
+    public Observable<List<ItemTypeDto>> getItems() {
+        return presetsApiService.getItems();
+    }
+
+    /**
+     * getItem returns a specific item type.
+     *
+     * @param id The id of the item type.
+     * @return The item type.
+     */
+
+    public Observable<ItemTypeDto> getItem(int id) {
+        return presetsApiService.getItem(id);
+    }
+
+    /**
+     * getItemImage returns a specific item type image PNG.
+     * Saved in a ResponseBody to be able to processed as needed.
+     * Example for image to JavaFX image is found in ImageProcessor.java
+     * @param id The id of the item type.
+     * @return The item type image.
+     */
+
+    public Observable<ResponseBody> getItemImage(int id) {
+        return presetsApiService.getItemImage(id);
     }
 
     /**

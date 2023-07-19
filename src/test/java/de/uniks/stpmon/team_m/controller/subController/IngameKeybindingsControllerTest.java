@@ -11,13 +11,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
-
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class IngameKeybindingsControllerTest extends ApplicationTest {
@@ -26,6 +24,7 @@ public class IngameKeybindingsControllerTest extends ApplicationTest {
     App app = new App(null);
     @InjectMocks
     IngameKeybindingsController ingameKeybindingsController;
+
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
@@ -43,6 +42,7 @@ public class IngameKeybindingsControllerTest extends ApplicationTest {
         final Button walkRightButton = lookup("#walkRightButton").queryButton();
         final Button interactionButton = lookup("#interactionButton").queryButton();
         final Button pauseMenuButton = lookup("#pauseMenuButton").queryButton();
+        final Button inventoryButton = lookup("#inventoryButton").queryButton();
         lookup("#checkButton").queryButton();
         lookup("#defaultButton").queryButton();
         lookup("#goBackButton").queryButton();
@@ -55,6 +55,7 @@ public class IngameKeybindingsControllerTest extends ApplicationTest {
         assertTrue(walkRightButton.isDisabled());
         assertTrue(interactionButton.isDisabled());
         assertTrue(pauseMenuButton.isDisabled());
+        assertTrue(inventoryButton.isDisabled());
         assertFalse(walkLeftButton.isDisabled());
         assertEquals("Waiting for input...", informationLabel.getText());
         assertEquals("...", walkLeftButton.getText());
@@ -84,21 +85,60 @@ public class IngameKeybindingsControllerTest extends ApplicationTest {
         press(KeyCode.T);
         release(KeyCode.T);
         assertEquals("T", walkDownButton.getText());
+        assertEquals("Click the Check Button to confirm the change!", informationLabel.getText());
 
         clickOn("#walkUpButton");
         press(KeyCode.M);
         release(KeyCode.M);
         assertEquals("M", walkUpButton.getText());
+        assertEquals("Click the Check Button to confirm the change!", informationLabel.getText());
 
         clickOn("#interactionButton");
         press(KeyCode.DIGIT3);
         release(KeyCode.DIGIT3);
         assertEquals("3", interactionButton.getText());
+        assertEquals("Click the Check Button to confirm the change!", informationLabel.getText());
 
         clickOn("#pauseMenuButton");
         press(KeyCode.UP);
         release(KeyCode.UP);
         assertEquals("UP", pauseMenuButton.getText());
+        assertEquals("Click the Check Button to confirm the change!", informationLabel.getText());
+
+        clickOn("#walkLeftButton");
+        press(KeyCode.SPACE);
+        release(KeyCode.SPACE);
+        assertEquals("Wrong input! Try again!", informationLabel.getText());
+
+        clickOn("#inventoryButton");
+        press(KeyCode.DOWN);
+        release(KeyCode.DOWN);
+        assertEquals("DOWN", inventoryButton.getText());
+        assertEquals("Click the Check Button to confirm the change!", informationLabel.getText());
+
+        clickOn("#inventoryButton");
+        press(KeyCode.ALT);
+        release(KeyCode.ALT);
+        assertEquals("Wrong input! Try again!", informationLabel.getText());
+        assertEquals("DOWN", inventoryButton.getText());
+
+        clickOn("#inventoryButton");
+        press(KeyCode.LEFT);
+        release(KeyCode.LEFT);
+        assertEquals("LEFT", inventoryButton.getText());
+        assertEquals("Click the Check Button to confirm the change!", informationLabel.getText());
+
+        clickOn("#walkRightButton");
+        press(KeyCode.RIGHT);
+        release(KeyCode.RIGHT);
+        assertEquals("RIGHT", walkRightButton.getText());
+        assertEquals("Click the Check Button to confirm the change!", informationLabel.getText());
+
+        clickOn("#pauseMenuButton");
+        press(KeyCode.ESCAPE);
+        release(KeyCode.ESCAPE);
+        assertEquals("ESCAPE", pauseMenuButton.getText());
+        assertEquals("Click the Check Button to confirm the change!", informationLabel.getText());
 
         clickOn("#defaultButton");
         assertEquals("Keybindings successfully changed to default!", informationLabel.getText());
@@ -108,5 +148,8 @@ public class IngameKeybindingsControllerTest extends ApplicationTest {
         assertEquals("W", walkUpButton.getText());
         assertEquals("E", interactionButton.getText());
         assertEquals("ESCAPE", pauseMenuButton.getText());
+        assertEquals("I", inventoryButton.getText());
+
+
     }
 }

@@ -58,6 +58,12 @@ public class IngameController extends Controller {
     @FXML
     public Button pauseButton;
     @FXML
+    public Button coinsButton;
+    @FXML
+    public ImageView coinsImageView;
+    @FXML
+    public Label coinsLabel;
+    @FXML
     public TextField messageField;
     @FXML
     public Button showChatButton;
@@ -221,6 +227,9 @@ public class IngameController extends Controller {
                 } else {
                     ingamePauseMenuController.resumeGame();
                 }
+            }
+            if (event.getCode().toString().equals(preferences.get("inventory","I"))){
+                showItems();
             }
             if (isChatting || loadingMap || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < TRANSITION_DURATION + 50)) {
                 return;
@@ -415,6 +424,7 @@ public class IngameController extends Controller {
             smallHandyImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(smallHandyImage)).toString()));
             monsterForHandyImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString()));
             notificationBell.setImage(new Image(Objects.requireNonNull(App.class.getResource(notificationBellImage)).toString()));
+            coinsImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(COIN)).toString()));
         }
 
         //Setup Encounter
@@ -443,6 +453,9 @@ public class IngameController extends Controller {
         }
         if(preferences.get("pauseMenu",null) == null){
             preferences.put("pauseMenu","ESCAPE");
+        }
+        if(preferences.get("inventory",null) == null){
+            preferences.put("inventory",KeyCode.I.getChar());
         }
 
         return parent;
@@ -1210,6 +1223,10 @@ public class IngameController extends Controller {
         root.getChildren().add(monsterListVBox);
         monsterListVBox.requestFocus();
         buttonsDisable(true);
+    }
+
+    public void showItems(){
+        //TODO: Add ItemsVBox to root
     }
 
     /*

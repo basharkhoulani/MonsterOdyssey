@@ -47,7 +47,9 @@ class EncounterOpponentsServiceTest {
                         List.of(new Result(
                                 "ability-success",
                                 1,
-                                "super-effective"
+                                "super-effective",
+                                null,
+                                null
                         )),
                         0
 
@@ -68,6 +70,8 @@ class EncounterOpponentsServiceTest {
                         ),
                         List.of(new Result(
                                 "monster-levelup",
+                                null,
+                                null,
                                 null,
                                 null
                         )),
@@ -100,7 +104,9 @@ class EncounterOpponentsServiceTest {
                         List.of(new Result(
                                 "ability-success",
                                 1,
-                                "super-effective"
+                                "super-effective",
+                                null,
+                                null
                         )),
                         0
 
@@ -121,6 +127,8 @@ class EncounterOpponentsServiceTest {
                         ),
                         List.of(new Result(
                                 "monster-levelup",
+                                null,
+                                null,
                                 null,
                                 null
                         )),
@@ -153,7 +161,9 @@ class EncounterOpponentsServiceTest {
                         List.of(new Result(
                                 "ability-success",
                                 1,
-                                "super-effective"
+                                "super-effective",
+                                null,
+                                null
                         )),
                         0
 
@@ -188,7 +198,9 @@ class EncounterOpponentsServiceTest {
                 List.of(new Result(
                         "ability-success",
                         1,
-                        "super-effective"
+                        "super-effective",
+                        null,
+                        null
                 )),
                 0
         )));
@@ -223,7 +235,9 @@ class EncounterOpponentsServiceTest {
                 List.of(new Result(
                         "ability-success",
                         1,
-                        "super-effective"
+                        "super-effective",
+                        null,
+                        null
                 )),
                 0
         )));

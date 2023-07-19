@@ -14,7 +14,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.input.KeyEvent;
 import javax.inject.Inject;
 import java.awt.*;
+import java.util.List;
 import java.util.Objects;
+import java.util.Arrays;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -32,6 +34,8 @@ public class IngameKeybindingsController extends Controller {
     public Button interactionButton;
     @FXML
     public Button pauseMenuButton;
+    @FXML
+    public Button inventoryButton;
     @FXML
     public Button goBackButton;
     @FXML
@@ -66,6 +70,7 @@ public class IngameKeybindingsController extends Controller {
         walkLeftButton.setText(preferences.get("walkLeft","A"));
         interactionButton.setText(preferences.get("interaction","E"));
         pauseMenuButton.setText(preferences.get("pauseMenu","ESCAPE"));
+        inventoryButton.setText(preferences.get("inventory","I"));
         return parent;
     }
 
@@ -91,6 +96,8 @@ public class IngameKeybindingsController extends Controller {
         pauseMenuButton.setText("ESCAPE");
         preferences.put("interaction",KeyCode.E.getChar());
         interactionButton.setText("E");
+        preferences.put("inventory",KeyCode.I.getChar());
+        inventoryButton.setText("I");
         informationLabel.setText(resources.getString("KEYBINDINGS.DEFAULT"));
     }
 
@@ -101,6 +108,7 @@ public class IngameKeybindingsController extends Controller {
         preferences.put("walkRight",walkRightButton.getText());
         preferences.put("pauseMenu",pauseMenuButton.getText());
         preferences.put("interaction",interactionButton.getText());
+        preferences.put("inventory", inventoryButton.getText());
         informationLabel.setText(resources.getString("KEYBINDINGS.CHANGED"));
     }
 
@@ -128,17 +136,16 @@ public class IngameKeybindingsController extends Controller {
         setKeyPressedHandler(walkUpButton);
     }
 
+    public void setInventory() {
+        setKeyPressedHandler(inventoryButton);
+    }
+
     private void setKeyPressedHandler(Button button){
         keyPressedHandler = event -> {
-            if(event.getCode().toString().equals(walkDownButton.getText()) ||
-                    event.getCode().toString().equals(walkUpButton.getText()) ||
-                    event.getCode().toString().equals(walkRightButton.getText()) ||
-                    event.getCode().toString().equals(walkLeftButton.getText()) ||
-                    event.getCode().toString().equals(interactionButton.getText()) ||
-                    event.getCode().toString().equals(pauseMenuButton.getText())) {
+            List<String> list = Arrays.asList(walkDownButton.getText(), walkUpButton.getText(), walkRightButton.getText(), walkLeftButton.getText(), interactionButton.getText(), pauseMenuButton.getText(), inventoryButton.getText());
+            if (list.contains(event.getCode().toString())) {
                 informationLabel.setText(resources.getString("KEYBINDING.USED"));
                 button.setText(currentButtonText);
-
             }
             else if(event.getCode() == KeyCode.SPACE){
                 button.setText(currentButtonText);
@@ -176,7 +183,7 @@ public class IngameKeybindingsController extends Controller {
                     button.setText(event.getText().toUpperCase());
                 } else {
                     informationLabel.setText(resources.getString("WRONG.INPUT"));
-                    button.setText("A");
+                    button.setText(currentButtonText);
                 }
             }
             button.removeEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
@@ -195,6 +202,7 @@ public class IngameKeybindingsController extends Controller {
         walkDownButton.setDisable(set);
         pauseMenuButton.setDisable(set);
         interactionButton.setDisable(set);
+        inventoryButton.setDisable(set);
         if(set){
             currentbutton.setDisable(false);
         }
