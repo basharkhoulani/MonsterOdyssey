@@ -1,10 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.controller.subController.IngamePauseMenuController;
-import de.uniks.stpmon.team_m.controller.subController.IngameStarterMonsterController;
-import de.uniks.stpmon.team_m.controller.subController.MonstersListController;
-import de.uniks.stpmon.team_m.controller.subController.NotificationListHandyController;
+import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
@@ -101,6 +98,18 @@ public class IngameControllerTest extends ApplicationTest {
     IngamePauseMenuController pauseMenuController;
     @InjectMocks
     MainMenuController mainMenuController;
+    @Mock
+    Provider<IngameSettingsController> ingameSettingsControllerProvider;
+    @InjectMocks
+    IngameSettingsController ingameSettingsController;
+    @Mock
+    Provider<IngameKeybindingsController> ingameKeybindingsControllerProvider;
+    @InjectMocks
+    IngameKeybindingsController ingameKeybindingsController;
+    @Mock
+    Provider<ChangeAudioController> changeAudioControllerProvider;
+    @InjectMocks
+    ChangeAudioController changeAudioController;
 
     @Override
     public void start(Stage stage) {
@@ -561,17 +570,37 @@ public class IngameControllerTest extends ApplicationTest {
     }
 
     @Test
-    void testPauseMenu(){
+    void testPauseMenuAndSettings(){
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
         pauseMenuController.setValues(bundle, null, null, pauseMenuController, app);
         when(pauseMenuControllerProvider.get()).thenReturn(pauseMenuController);
+
+        ingameSettingsController.setValues(bundle, null, null, ingameSettingsController, app);
+        when(ingameSettingsControllerProvider.get()).thenReturn(ingameSettingsController);
+
+        ingameKeybindingsController.setValues(bundle, preferences, null, ingameKeybindingsController, app);
+        when(ingameKeybindingsControllerProvider.get()).thenReturn(ingameKeybindingsController);
+
+        changeAudioController.setValues(bundle, preferences, null, changeAudioController, app);
+        when(changeAudioControllerProvider.get()).thenReturn(changeAudioController);
 
         mainMenuController.setValues(bundle, null, null, mainMenuController, app);
         when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
         doNothing().when(app).show(mainMenuController);
+
         clickOn("#pauseButton");
         clickOn("#resumeGameButton");
         clickOn("#pauseButton");
+
+        clickOn("#settingsButton");
+        clickOn("#keybindingsButton");
+        clickOn(ingameKeybindingsController.goBackButton);
+
+        clickOn("#audioSettingsButton");
+        clickOn("#closeButton");
+
+        clickOn("#goBackButton");
         clickOn("#leaveGameButton");
         verify(app).show(mainMenuController);
     }

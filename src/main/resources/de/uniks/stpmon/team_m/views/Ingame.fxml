@@ -23,6 +23,27 @@
                             <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
                         </HBox.margin>
                     </ImageView>
+               <Button fx:id="coinsButton" mnemonicParsing="false" onAction="#showItems" prefHeight="46.0" prefWidth="120.0" style="-fx-background-radius: 10; -fx-background-color: rgba(255, 255, 255, .7);">
+                  <HBox.margin>
+                     <Insets left="10.0" top="10.0" />
+                  </HBox.margin>
+                  <font>
+                     <Font name="Comic Sans MS Bold" size="17.0" />
+                  </font>
+                  <graphic>
+                     <HBox prefHeight="41.0" prefWidth="107.0" spacing="20.0">
+                           <ImageView fx:id="coinsImageView" fitHeight="38.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />
+                           <Label fx:id="coinsLabel" prefHeight="24.0" prefWidth="37.0">
+                              <HBox.margin>
+                                 <Insets top="7.0" />
+                              </HBox.margin>
+                              <font>
+                                 <Font name="Comic Sans MS Bold" size="17.0" />
+                              </font>
+                           </Label>
+                     </HBox>
+                  </graphic>
+               </Button>
                 </HBox>
                 <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="430.0" HBox.hgrow="SOMETIMES">
                <ImageView fx:id="notificationBell" fitHeight="57.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true" visible="false">
