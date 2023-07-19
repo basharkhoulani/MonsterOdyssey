@@ -96,11 +96,8 @@ public class AnimationBuilder {
         var ref = new Object() {
             int currentImageIndex = 0;
         };
-
         Image[] images = ImageProcessor.cropTrainerImages(trainerChunk, direction, true);
-
         KeyFrame animationFrame = new KeyFrame(Duration.millis(durationMillis), event -> {
-            //ownTrainerController.setTrainerImage(images[ref.currentImageIndex]);
             target.setImage(images[ref.currentImageIndex]);
             ref.currentImageIndex = (ref.currentImageIndex + 1) % 6;
         });
@@ -112,10 +109,11 @@ public class AnimationBuilder {
 
 
     public static void throwMonBall(StackPane root, ImageView source, ImageView target) {
+
         // Setup image and imageView for monball
         ImageView ballImageView = new ImageView(new Image(Objects.requireNonNull(Main.class.getResource("images/monball.png")).toExternalForm()));
-        ballImageView.setFitWidth(64);
-        ballImageView.setFitHeight(64);
+        ballImageView.setFitWidth(50);
+        ballImageView.setFitHeight(50);
         ballImageView.setVisible(false);
 
         // Init transitions
