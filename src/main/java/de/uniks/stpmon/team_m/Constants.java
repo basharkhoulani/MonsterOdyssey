@@ -250,11 +250,11 @@ public class Constants {
     );
 
     public static final HashMap<String, String> STATUS_EFFECTS_IMAGES = new HashMap<>(Map.ofEntries(
-            entry("paralysed", "paralysed.png"),
-            entry("asleep", "asleep.png"),
-            entry("poisoned", "poisoned.png"),
-            entry("burned", "burned.png"),
-            entry("frozen", "frozen.png"),
-            entry("confused", "confused.png")
+            entry("paralysed", "images/paralysed.png"),
+            entry("asleep", "images/asleep.png"),
+            entry("poisoned", "images/poisoned.png"),
+            entry("burned", "images/burned.png"),
+            entry("frozen", "images/frozen.png"),
+            entry("confused", "images/confused.png")
     ));
 }
