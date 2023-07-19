@@ -320,6 +320,36 @@ public class TestModule {
             }
 
             @Override
+            public Observable<List<ItemTypeDto>> getItems() {
+                return Observable.just(List.of());
+            }
+
+            @Override
+            public Observable<ItemTypeDto> getItem(int id) {
+                return null;
+            }
+
+            @Override
+            public Observable<ResponseBody> getItemImage(int id) {
+                return Observable.just(new ResponseBody() {
+                    @Override
+                    public MediaType contentType() {
+                        return null;
+                    }
+
+                    @Override
+                    public long contentLength() {
+                        return 0;
+                    }
+
+                    @Override
+                    public BufferedSource source() {
+                        return null;
+                    }
+                });
+            }
+
+            @Override
             public Observable<List<MonsterTypeDto>> getMonsters() {
                 return null;
             }
@@ -378,6 +408,7 @@ public class TestModule {
                         0,
                         List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
                         List.of(1,2),
+                        List.of("Testina"),
                         "Testina",
                         0,
                         0,
@@ -427,11 +458,12 @@ public class TestModule {
                         0,
                         null,
                         null,
+                        List.of("646bacc568933551792bf3d5"),
                         "646bacc568933551792bf3d5",
                         0,
                         0,
                         0,
-                        new NPCInfo(false,false,false,false, null, null)));
+                        new NPCInfo(false,false,false,false, null, null, null)));
             }
 
             @Override
@@ -452,6 +484,7 @@ public class TestModule {
                         0,
                         List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
                         List.of(1,2),
+                        List.of("Testina"),
                         "Testina",
                         0,
                         0,
@@ -592,6 +625,27 @@ public class TestModule {
 
             @Override
             public Observable<Encounter> getEncounter(String regionId, String encounterId) {
+                return null;
+            }
+        };
+    }
+
+    @Provides
+    static TrainerItemsApiService trainerItemsApiService() {
+        return new TrainerItemsApiService() {
+
+            @Override
+            public Observable<Item> useOrTradeItem(String regionId, String trainerId, String action, UpdateItemDto dto) {
+                return null;
+            }
+
+            @Override
+            public Observable<List<Item>> getItems(String regionId, String trainerId, String types) {
+                return null;
+            }
+
+            @Override
+            public Observable<Item> getItem(String regionId, String trainerId, String id) {
                 return null;
             }
         };

@@ -87,11 +87,12 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
                 0,
                 null,
                 null,
+                List.of(),
                 "646bacc568933551792bf3d5",
                 0,
                 0,
                 0,
-                new NPCInfo(false, false, false, false, null, null))));
+                new NPCInfo(false, false, false, false, null, null, null))));
 
 
         app.start(stage);
