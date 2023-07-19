@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.service;
 
 import de.uniks.stpmon.team_m.dto.Item;
+import de.uniks.stpmon.team_m.dto.UpdateItemDto;
 import de.uniks.stpmon.team_m.dto.UpdateTrainerDto;
 import de.uniks.stpmon.team_m.rest.TrainerItemsApiService;
 import io.reactivex.rxjava3.core.Observable;
@@ -30,7 +31,7 @@ public class TrainerItemsService {
      * @return The item.
      */
 
-    public Observable<Item> useOrTradeItem(String regionId, String trainerId, String action, UpdateTrainerDto dto) {
+    public Observable<Item> useOrTradeItem(String regionId, String trainerId, String action, UpdateItemDto dto) {
         return trainerItemsApiService.useOrTradeItem(regionId, trainerId, action, dto);
     }
 
