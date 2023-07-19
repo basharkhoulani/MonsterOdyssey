@@ -18,7 +18,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.CacheHint;
+
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
@@ -179,9 +179,10 @@ public class IngameController extends Controller {
 
     private ParallelTransition shiftMapRightTransition;
     private ParallelTransition shiftMapLeftTransition;
-    private ParallelTransition shiftMapUpTransition;
+    private SequentialTransition shiftMapUpTransition = new SequentialTransition();
+    //private ParallelTransition shiftMapUpTransition;
     private ParallelTransition shiftMapDownTransition;
-    private boolean loadingMap;
+    private boolean loading;
     private VBox loadingScreen;
     private Timeline loadingScreenAnimation;
 
@@ -219,7 +220,7 @@ public class IngameController extends Controller {
                     ingamePauseMenuController.resumeGame();
                 }
             }
-            if (isChatting || loadingMap || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < TRANSITION_DURATION + 25)) {
+            if (isChatting || loading || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < TRANSITION_DURATION + 25)) {
                 return;
             }
             if (event.getCode() == KeyCode.ENTER) {
@@ -276,13 +277,6 @@ public class IngameController extends Controller {
         ).subscribe());
     }
 
-    private void setCacheHint(CacheHint cacheHint) {
-        groundCanvas.setCacheHint(cacheHint);
-        overUserTrainerCanvas.setCacheHint(cacheHint);
-        userTrainerCanvas.setCacheHint(cacheHint);
-        behindUserTrainerCanvas.setCacheHint(cacheHint);
-        roofCanvas.setCacheHint(cacheHint);
-    }
 
     /**
      * This method sets the title of the {@link IngameController}.
@@ -357,14 +351,6 @@ public class IngameController extends Controller {
         chatListView.setPlaceholder(new Label(resources.getString("NO.MESSAGES.YET")));
         chatListView.setFocusModel(null);
         chatListView.setSelectionModel(null);
-
-        // Init cache hints
-        groundCanvas.setCache(true);
-        overUserTrainerCanvas.setCache(true);
-        userTrainerCanvas.setCache(true);
-        behindUserTrainerCanvas.setCache(true);
-        roofCanvas.setCache(true);
-        setCacheHint(CacheHint.QUALITY);
 
         initMapShiftTransitions();
 
@@ -446,7 +432,7 @@ public class IngameController extends Controller {
     }
 
     private void initMapShiftTransitions() {
-        /*
+        ///*
 
         for (int i=0; i < TILE_SIZE; i++) {
             shiftMapUpTransition.getChildren().add(new ParallelTransition(
@@ -458,14 +444,16 @@ public class IngameController extends Controller {
             ));
         }
 
-         */
-        shiftMapUpTransition = new ParallelTransition(
+         //*/
+        /*shiftMapUpTransition = new ParallelTransition(
                 getMapMovementTransition(groundCanvas,              0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
                 getMapMovementTransition(behindUserTrainerCanvas,   0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
                 getMapMovementTransition(userTrainerCanvas,         0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
                 getMapMovementTransition(overUserTrainerCanvas,     0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
                 getMapMovementTransition(roofCanvas,                0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
         );
+
+         */
         shiftMapLeftTransition = new ParallelTransition(
                 getMapMovementTransition(groundCanvas,              -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
                 getMapMovementTransition(behindUserTrainerCanvas,   -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
@@ -518,7 +506,6 @@ public class IngameController extends Controller {
                         if (oldXValue != moveTrainerDto.x() || oldYValue != moveTrainerDto.y()) {
                             trainerController.setTrainerTargetPosition(moveTrainerDto.x(), moveTrainerDto.y());
                             trainerController.setTrainerDirection(moveTrainerDto.direction());
-                            setCacheHint(CacheHint.SPEED);
                             if (oldXValue < moveTrainerDto.x()) {
                                 shiftMapLeftTransition.play();
                             } else if (oldXValue > moveTrainerDto.x()) {
@@ -528,7 +515,6 @@ public class IngameController extends Controller {
                             } else {
                                 shiftMapDownTransition.play();
                             }
-                            setCacheHint(CacheHint.QUALITY);
                         } else {
                             trainerController.turn(moveTrainerDto.direction());
                         }
@@ -616,7 +602,7 @@ public class IngameController extends Controller {
         // Init and display loading screen
         buildAndDisplayLoadingScreen(map);
 
-        loadingMap = true;
+        loading = true;
         tileSetImages.clear();
         for (TileSet tileSet : map.tilesets()) {
             final String mapName = getFileName(tileSet.source());
@@ -762,9 +748,7 @@ public class IngameController extends Controller {
                 }
                 loadPlayers();
                 loadMiniMap();
-                loadingMap = false;
-                root.getChildren().remove(loadingScreen);
-                loadingScreenAnimation.stop();
+
             }
         }
     }
@@ -811,6 +795,7 @@ public class IngameController extends Controller {
                 renderChunk(map, image, tileSet, tileSetJson, multipleTileSets, chunk, forMiniMap);
             }
         }
+
     }
 
     private void renderData(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, Layer layer, boolean forMiniMap) {
@@ -1623,6 +1608,9 @@ public class IngameController extends Controller {
                                         renderMap(miniMap, tileSetImages.get(getFileName(tileSet1.source())), tileSetJsons.get(getFileName(tileSet1.source())),
                                                 tileSet1, miniMap.tilesets().size() > 1, true);
                                     }
+                                    loading = false;
+                                    root.getChildren().remove(loadingScreen);
+                                    loadingScreenAnimation.stop();
                                 }, error -> {
                                     showError(error.getMessage());
                                     error.printStackTrace();

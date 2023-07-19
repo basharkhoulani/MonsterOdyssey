@@ -102,9 +102,7 @@ public class EncounterController extends Controller {
     private String regionId;
     private String encounterId;
     private String trainerId;
-    private Image myMonsterImage;
     private final List<Controller> subControllers = new ArrayList<>();
-    private int currentImageIndex = 0;
     private final List<AbilityDto> abilityDtos = new ArrayList<>();
     private final HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
     private final HashMap<String, Opponent> opponentsDelete = new HashMap<>();
@@ -630,7 +628,6 @@ public class EncounterController extends Controller {
     }
 
     public void continueBattle() {
-        //if (encounterOpponentStorage.getOpponentTrainer() == null) {
         if (encounterOpponentStorage.isWild()) {
             SequentialTransition fleeAnimation = AnimationBuilder.buildFleeAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), ownTrainerController);
             PauseTransition pause = new PauseTransition(Duration.millis(2000));
