@@ -70,7 +70,7 @@ public class IngameKeybindingsController extends Controller {
 <span class="fc" id="L70">        walkLeftButton.setText(preferences.get(&quot;walkLeft&quot;,&quot;A&quot;));</span>
 <span class="fc" id="L71">        interactionButton.setText(preferences.get(&quot;interaction&quot;,&quot;E&quot;));</span>
 <span class="fc" id="L72">        pauseMenuButton.setText(preferences.get(&quot;pauseMenu&quot;,&quot;ESCAPE&quot;));</span>
-<span class="fc" id="L73">        inventoryButton.setText(preferences.get(&quot;inventar&quot;,&quot;I&quot;));</span>
+<span class="fc" id="L73">        inventoryButton.setText(preferences.get(&quot;inventory&quot;,&quot;I&quot;));</span>
 <span class="fc" id="L74">        return parent;</span>
     }
 
@@ -96,7 +96,7 @@ public class IngameKeybindingsController extends Controller {
 <span class="fc" id="L96">        pauseMenuButton.setText(&quot;ESCAPE&quot;);</span>
 <span class="fc" id="L97">        preferences.put(&quot;interaction&quot;,KeyCode.E.getChar());</span>
 <span class="fc" id="L98">        interactionButton.setText(&quot;E&quot;);</span>
-<span class="fc" id="L99">        preferences.put(&quot;inventar&quot;,KeyCode.I.getChar());</span>
+<span class="fc" id="L99">        preferences.put(&quot;inventory&quot;,KeyCode.I.getChar());</span>
 <span class="fc" id="L100">        inventoryButton.setText(&quot;I&quot;);</span>
 <span class="fc" id="L101">        informationLabel.setText(resources.getString(&quot;KEYBINDINGS.DEFAULT&quot;));</span>
 <span class="fc" id="L102">    }</span>
@@ -108,7 +108,7 @@ public class IngameKeybindingsController extends Controller {
 <span class="fc" id="L108">        preferences.put(&quot;walkRight&quot;,walkRightButton.getText());</span>
 <span class="fc" id="L109">        preferences.put(&quot;pauseMenu&quot;,pauseMenuButton.getText());</span>
 <span class="fc" id="L110">        preferences.put(&quot;interaction&quot;,interactionButton.getText());</span>
-<span class="fc" id="L111">        preferences.put(&quot;inventar&quot;, inventoryButton.getText());</span>
+<span class="fc" id="L111">        preferences.put(&quot;inventory&quot;, inventoryButton.getText());</span>
 <span class="fc" id="L112">        informationLabel.setText(resources.getString(&quot;KEYBINDINGS.CHANGED&quot;));</span>
 <span class="fc" id="L113">    }</span>
 
