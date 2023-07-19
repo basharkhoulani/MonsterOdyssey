@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -109,7 +108,6 @@ public class EncounterController extends Controller {
     private int repeatedTimes = 0;
     private boolean inEncounter = true;
     private boolean resultLevelUP = false;
-    private final ArrayList<Opponent> battleLog = new ArrayList<>();
     private Monster oldMonster;
     private final ArrayList<Integer> newAbilities = new ArrayList<>();
 
@@ -147,7 +145,7 @@ public class EncounterController extends Controller {
     public Parent render() {
         Parent parent = super.render();
         // init battle menu
-        battleMenuController.init(this, battleMenuVBox, encounterOpponentStorage, app);
+        battleMenuController.init(this, encounterOpponentStorage, app);
         battleMenuVBox.getChildren().add(battleMenuController.render());
         battleMenuController.onFleeButtonClick = this::onFleeButtonClick;
 
@@ -500,19 +498,21 @@ public class EncounterController extends Controller {
             Opponent oResults = forDescription.get(opponentId + "Results");
 
             for (Result r : oResults.results()) {
-                if (r.type().equals("ability-success")) {
-                    updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
-                } else if (r.type().equals("monster-levelup")) {
-                    if (!resultLevelUP) {
-                        resultLevelUP = true;
+                switch (r.type()) {
+                    case "ability-success" ->
+                            updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
+                    case "monster-levelup" -> {
+                        if (!resultLevelUP) {
+                            resultLevelUP = true;
+                        }
                     }
-                } else if (r.type().equals("monster-learned")) {
-                    newAbilities.add(r.ability());
-                } else if (r.type().equals("target-defeated")) {
-                    if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id()) || oResults.isAttacker() == encounterOpponentStorage.isAttacker()) {
-                        monsterDefeated(resources.getString("ENEMY.DEFEATED"));
-                    } else {
-                        monsterDefeated(resources.getString("TEAM.DEFEATED"));
+                    case "monster-learned" -> newAbilities.add(r.ability());
+                    case "target-defeated" -> {
+                        if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id()) || oResults.isAttacker() == encounterOpponentStorage.isAttacker()) {
+                            monsterDefeated(resources.getString("ENEMY.DEFEATED"));
+                        } else {
+                            monsterDefeated(resources.getString("TEAM.DEFEATED"));
+                        }
                     }
                 }
             }
@@ -595,7 +595,7 @@ public class EncounterController extends Controller {
 
     public void goBackToBattleMenu() {
         battleMenuVBox.getChildren().clear();
-        battleMenuController.init(this, battleMenuVBox, encounterOpponentStorage, app);
+        battleMenuController.init(this, encounterOpponentStorage, app);
         battleMenuVBox.getChildren().add(battleMenuController.render());
     }
 

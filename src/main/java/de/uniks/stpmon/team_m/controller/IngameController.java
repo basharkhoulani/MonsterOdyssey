@@ -1151,11 +1151,7 @@ public class IngameController extends Controller {
                 encounterOpponentStorage.addEnemyOpponent(o);
             } else {
                 encounterOpponentStorage.setCoopOpponent(o);
-                if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                    encounterOpponentStorage.setTwoMonster(true);
-                } else {
-                    encounterOpponentStorage.setTwoMonster(false);
-                }
+                encounterOpponentStorage.setTwoMonster(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id()));
             }
         }
     }
