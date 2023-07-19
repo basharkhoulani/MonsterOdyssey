@@ -2,7 +2,10 @@ package de.uniks.stpmon.team_m;
 
 import javafx.geometry.Insets;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Map.entry;
 
@@ -244,5 +247,14 @@ public class Constants {
             "heart.png",
             "speed.png",
             "defense.png"
-            );
+    );
+
+    public static final HashMap<String, String> STATUSEFFECTS = new HashMap<>(Map.ofEntries(
+            entry("paralysed", "paralysed.png"),
+            entry("asleep", "asleep.png"),
+            entry("poisoned", "poisoned.png"),
+            entry("burned", "burned.png"),
+            entry("frozen", "frozen.png"),
+            entry("confused", "confused.png")
+    ));
 }
