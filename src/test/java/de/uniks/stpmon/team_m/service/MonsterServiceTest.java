@@ -43,7 +43,8 @@ public class MonsterServiceTest {
                                 56,
                                 abilities,
                                 new MonsterAttributes(40, 23, 45, 67),
-                                new MonsterAttributes(20, 23, 45, 67)
+                                new MonsterAttributes(20, 23, 45, 67),
+                                List.of()
                         ),
                         new Monster(
                                 "2023-05-22T17:51:46.772Z",
@@ -55,7 +56,8 @@ public class MonsterServiceTest {
                                 23,
                                 abilities,
                                 new MonsterAttributes(40, 23, 45, 67),
-                                new MonsterAttributes(20, 23, 45, 67)
+                                new MonsterAttributes(20, 23, 45, 67),
+                                List.of()
                         )
                 )));
 
@@ -84,7 +86,8 @@ public class MonsterServiceTest {
                                 56,
                                 abilities,
                                 new MonsterAttributes(40, 23, 45, 67),
-                                new MonsterAttributes(20, 23, 45, 67)
+                                new MonsterAttributes(20, 23, 45, 67),
+                                List.of()
                         )
                 ));
 
