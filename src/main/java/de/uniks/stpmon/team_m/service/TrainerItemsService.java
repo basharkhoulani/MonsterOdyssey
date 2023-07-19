@@ -2,7 +2,6 @@ package de.uniks.stpmon.team_m.service;
 
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.UpdateItemDto;
-import de.uniks.stpmon.team_m.dto.UpdateTrainerDto;
 import de.uniks.stpmon.team_m.rest.TrainerItemsApiService;
 import io.reactivex.rxjava3.core.Observable;
 

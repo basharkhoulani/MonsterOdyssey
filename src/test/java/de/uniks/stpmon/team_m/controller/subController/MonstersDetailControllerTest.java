@@ -58,7 +58,6 @@ public class MonstersDetailControllerTest extends ApplicationTest {
                 new MonsterAttributes(14, 8, 8, 5),
                 new MonsterAttributes(14, 8, 8, 5),
                 List.of());
-        MonstersListController monstersListController = mock(MonstersListController.class);
         MonsterTypeDto monsterTypeDto = new MonsterTypeDto(
                 1,
                 "Flamander",

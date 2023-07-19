@@ -64,8 +64,7 @@ class EncounterControllerTest extends ApplicationTest {
     Provider<IngameController> ingameControllerProvider;
     @InjectMocks
     EncounterController encounterController;
-    @InjectMocks
-    EncounterOpponentController encounterOpponentController;
+
 
 
     public void start(Stage stage) {
@@ -193,7 +192,7 @@ class EncounterControllerTest extends ApplicationTest {
 
         lenient().doNothing().when(battleMenuController).setTrainerSpriteImageView(any(), any(), anyInt());
 
-        lenient().when(presetsService.getCharacter(any())).thenReturn(new Observable<ResponseBody>() {
+        lenient().when(presetsService.getCharacter(any())).thenReturn(new Observable<>() {
             @Override
             protected void subscribeActual(@NonNull Observer<? super ResponseBody> observer) {
 
@@ -265,7 +264,7 @@ class EncounterControllerTest extends ApplicationTest {
     }
 
     @Test
-    void renderFor1vs2Test() throws InterruptedException {
+    void renderFor1vs2Test() {
         when(encounterOpponentStorage.getEncounterSize()).thenReturn(3);
         when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
                 List.of(
