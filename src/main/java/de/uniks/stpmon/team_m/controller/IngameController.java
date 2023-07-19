@@ -1729,6 +1729,7 @@ public class IngameController extends Controller {
     public void openInventar() {
         VBox itemMenuBox = new VBox();
         itemMenuBox.setAlignment(Pos.CENTER);
+        itemMenuBox.setStyle("-fx-background-radius: 15 15 15 15");
         ItemMenuController itemMenuController = itemMenuControllerProvider.get();
         itemMenuController.init(this);
         itemMenuBox.getChildren().add(itemMenuController.render());
