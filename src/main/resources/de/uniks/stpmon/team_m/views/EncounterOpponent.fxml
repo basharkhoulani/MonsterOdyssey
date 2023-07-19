@@ -13,15 +13,33 @@
          <padding>
             <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
          </padding>
+         <HBox prefWidth="320.0">
+            <VBox.margin>
+               <Insets top="8.0"/>
+            </VBox.margin>
+            <ImageView fx:id="paralysedImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"
+                       visible="false"/>
+            <ImageView fx:id="asleepImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"
+                       visible="false"/>
+            <ImageView fx:id="poisonedImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"
+                       visible="false"/>
+            <ImageView fx:id="burnedImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"
+                       visible="false"/>
+            <ImageView fx:id="frozenImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"
+                       visible="false"/>
+            <ImageView fx:id="confusedImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"
+                       visible="false"/>
+         </HBox>
          <HBox alignment="CENTER_LEFT">
             <ImageView fx:id="starImageView" fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
                   <Insets/>
                </HBox.margin>
             </ImageView>
-            <ProgressBar fx:id="experienceBar" maxWidth="300.0" minWidth="175.0" prefHeight="20.0" progress="0.88" styleClass="levelprogress-bar" HBox.hgrow="ALWAYS">
+            <ProgressBar fx:id="experienceBar" maxWidth="300.0" minWidth="175.0" prefHeight="20.0" progress="0.88"
+                         styleClass="levelprogress-bar" HBox.hgrow="ALWAYS">
                <HBox.margin>
-                  <Insets left="8.0" right="8.0" />
+                  <Insets left="8.0" right="8.0"/>
                </HBox.margin>
             </ProgressBar>
             <HBox alignment="CENTER" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="97.0" styleClass="hBoxRed">
@@ -74,18 +92,6 @@
             <VBox.margin>
                <Insets top="8.0"/>
             </VBox.margin>
-         </HBox>
-         <HBox prefWidth="320.0">
-            <VBox.margin>
-               <Insets top="8.0"/>
-            </VBox.margin>
-            <ImageView fx:id="paralysedImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true"
-                       preserveRatio="true"/>
-            <ImageView fx:id="asleepImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"/>
-            <ImageView fx:id="poisonedImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"/>
-            <ImageView fx:id="burnedImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"/>
-            <ImageView fx:id="frozenImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"/>
-            <ImageView fx:id="confusedImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"/>
          </HBox>
       </VBox>
       <VBox fx:id="splitterVBox" maxWidth="50.0" minWidth="1.0" HBox.hgrow="ALWAYS" />
