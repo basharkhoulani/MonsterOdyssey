@@ -2,10 +2,12 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.dto.Opponent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
@@ -13,17 +15,20 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import javax.inject.Inject;
 import java.awt.*;
 import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
 public class EncounterOpponentController extends Controller {
-    private final Boolean isEnemy;
-    private final Boolean isWild;
-    private final Boolean invertX;
-    public final Boolean isMultipleEnemyEncounter;
+    private Boolean isEnemy;
+    private Boolean isWild;
+    private Boolean invertX;
+    public Boolean isMultipleEnemyEncounter;
     public Boolean isTargeted = false;
+    private Boolean isSelf;
+    private Opponent currentOpponent;
 
     @FXML
     public HBox opponentHBox;
@@ -59,15 +64,26 @@ public class EncounterOpponentController extends Controller {
     public ImageView starImageView;
     @FXML
     public ImageView heartImageView;
+    @FXML
+    public Button currentMonsterButton;
 
     private Opponent currentTarget;
     public Runnable onTargetChange;
+    EncounterController encounterController;
 
-    public EncounterOpponentController(Boolean isEnemy, Boolean isWild, Boolean invertX, Boolean isMultipleEnemyEncounter) {
+    @Inject
+    public EncounterOpponentController(){
+    }
+
+    public void init(Opponent currentOpponent, Boolean isEnemy, Boolean isWild, Boolean invertX, Boolean isMultipleEnemyEncounter, Boolean isSelf, EncounterController encounterController) {
+        super.init();
         this.isEnemy = isEnemy;
         this.isWild = isWild;
         this.invertX = invertX;
         this.isMultipleEnemyEncounter = isMultipleEnemyEncounter;
+        this.isSelf = isSelf;
+        this.currentOpponent = currentOpponent;
+        this.encounterController = encounterController;
     }
 
     @Override
@@ -112,7 +128,20 @@ public class EncounterOpponentController extends Controller {
                 onTargetChange.run();
             }
         });
+
+        if(!isSelf){
+            currentMonsterButton.setVisible(false);
+            currentMonsterButton.setDisable(true);
+        } else {
+            currentMonsterButton.setOnAction(event -> {
+                showMonsterInformation(currentOpponent.monster());
+            });
+        }
         return parent;
+    }
+
+    private void showMonsterInformation(String monsterId) {
+        this.encounterController.showMonsterDetailsInEncounter();
     }
 
     public EncounterOpponentController setExperienceBarValue(double value) {

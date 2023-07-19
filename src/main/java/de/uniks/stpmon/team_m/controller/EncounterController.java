@@ -100,7 +100,6 @@ public class EncounterController extends Controller {
     private String regionId;
     private String encounterId;
     private String trainerId;
-    private Image myMonsterImage;
     private final List<Controller> subControllers = new ArrayList<>();
     private int currentImageIndex = 0;
     private final List<AbilityDto> abilityDtos = new ArrayList<>();
@@ -153,11 +152,13 @@ public class EncounterController extends Controller {
         battleMenuController.onFleeButtonClick = this::onFleeButtonClick;
 
         // Init opponent controller for own trainer
-        ownTrainerController = new EncounterOpponentController(false, false, true, false);
-        ownTrainerController.init();
-        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getSelfOpponent()._id(), ownTrainerController);
+        ownTrainerController = new EncounterOpponentController();
+        Opponent selfOpponent = encounterOpponentStorage.getSelfOpponent();
+        ownTrainerController.init(selfOpponent, false, false, true, false, true, this);
+        encounterOpponentControllerHashMap.put(selfOpponent._id(), ownTrainerController);
         Parent ownTrainerParent = ownTrainerController.render();
         HBox.setHgrow(ownTrainerParent, javafx.scene.layout.Priority.ALWAYS);
+
         //showMyMonster
         showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent(), true);
         // showMySprite
@@ -168,7 +169,8 @@ public class EncounterController extends Controller {
             oldMonster = monster;
             encounterOpponentStorage.addCurrentMonster(monster);
         }));
-        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> abilityDtos.addAll(abilities)));
+
+        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilityDtos::addAll));
 
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId).observeOn(FX_SCHEDULER).subscribe(encounter -> {
             encounterOpponentStorage.setWild(encounter.isWild());
@@ -197,9 +199,10 @@ public class EncounterController extends Controller {
         // Wild situation
 
         // Wild monster (init opponent controller for enemy)
-        enemy1Controller = new EncounterOpponentController(true, true, false, false);
-        enemy1Controller.init();
-        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0)._id(), enemy1Controller);
+        Opponent enemyOpponent = encounterOpponentStorage.getEnemyOpponents().get(0);
+        enemy1Controller = new EncounterOpponentController();
+        enemy1Controller.init(enemyOpponent, true, true, false, false, false, this);
+        encounterOpponentControllerHashMap.put(enemyOpponent._id(), enemy1Controller);
         enemyHBox.setPadding(new Insets(0, 400, 0, 0));
         Parent enemy1Parent = enemy1Controller.render();
         HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
@@ -216,9 +219,10 @@ public class EncounterController extends Controller {
         // 1 vs 1 situation
 
         // Enemy as a trainer (init opponent controller for the enemy)
-        enemy1Controller = new EncounterOpponentController(true, false, false, false);
-        enemy1Controller.init();
-        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0)._id(), enemy1Controller);
+        Opponent enemyOpponent = encounterOpponentStorage.getEnemyOpponents().get(0);
+        enemy1Controller = new EncounterOpponentController();
+        enemy1Controller.init(enemyOpponent, true, false, false, false, false, this);
+        encounterOpponentControllerHashMap.put(enemyOpponent._id(), enemy1Controller);
         Parent enemy1Parent = enemy1Controller.render();
         HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy1Parent);
@@ -234,9 +238,10 @@ public class EncounterController extends Controller {
         // 1 vs 2 situation
 
         // 1st enemy as a trainer
-        enemy1Controller = new EncounterOpponentController(true, false, false, true);
-        enemy1Controller.init();
-        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0)._id(), enemy1Controller);
+        Opponent enemy1Opponent = encounterOpponentStorage.getEnemyOpponents().get(0);
+        enemy1Controller = new EncounterOpponentController();
+        enemy1Controller.init(enemy1Opponent, true, false, false, false, false, this);
+        encounterOpponentControllerHashMap.put(enemy1Opponent._id(), enemy1Controller);
         VBox enemy1Parent = (VBox) enemy1Controller.render();
         HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy1Parent);
@@ -244,9 +249,10 @@ public class EncounterController extends Controller {
         showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
 
         // 2nd enemy as a trainer
-        enemy2Controller = new EncounterOpponentController(true, false, true, true);
-        enemy2Controller.init();
-        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(1)._id(), enemy2Controller);
+        Opponent enemy2Opponent = encounterOpponentStorage.getEnemyOpponents().get(1);
+        enemy2Controller = new EncounterOpponentController();
+        enemy2Controller.init(enemy2Opponent, true, false, false, false, false, this);
+        encounterOpponentControllerHashMap.put(enemy2Opponent._id(), enemy2Controller);
         VBox enemy2Parent = (VBox) enemy2Controller.render();
         HBox.setHgrow(enemy2Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy2Parent);
@@ -261,9 +267,10 @@ public class EncounterController extends Controller {
         // 2 vs 2 situation
 
         // 1st enemy as a trainer
-        enemy1Controller = new EncounterOpponentController(true, false, false, true);
-        enemy1Controller.init();
-        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0)._id(), enemy1Controller);
+        Opponent enemy1Opponent = encounterOpponentStorage.getEnemyOpponents().get(0);
+        enemy1Controller = new EncounterOpponentController();
+        enemy1Controller.init(enemy1Opponent, true, false, false, false, false, this);
+        encounterOpponentControllerHashMap.put(enemy1Opponent._id(), enemy1Controller);
         VBox enemy1Parent = (VBox) enemy1Controller.render();
         HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy1Parent);
@@ -271,21 +278,26 @@ public class EncounterController extends Controller {
         showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
 
         // 2nd enemy as a trainer
-        enemy2Controller = new EncounterOpponentController(true, false, true, true);
-        enemy2Controller.init();
-        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(1)._id(), enemy2Controller);
+        Opponent enemy2Opponent = encounterOpponentStorage.getEnemyOpponents().get(1);
+        enemy2Controller = new EncounterOpponentController();
+        enemy2Controller.init(enemy2Opponent, true, false, false, false, false, this);
+        encounterOpponentControllerHashMap.put(enemy2Opponent._id(), enemy2Controller);
         VBox enemy2Parent = (VBox) enemy2Controller.render();
         HBox.setHgrow(enemy2Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy2Parent);
         showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(1));
 
         // Coop Trainer
-        coopTrainerController = new EncounterOpponentController(false, false, false, false);
-        coopTrainerController.init();
-        encounterOpponentControllerHashMap.put(encounterOpponentStorage.getCoopOpponent()._id(), coopTrainerController);
+        Opponent coopOpponent = encounterOpponentStorage.getCoopOpponent();
+        coopTrainerController = new EncounterOpponentController();
+        coopTrainerController.init(coopOpponent, false, false, false, false, encounterOpponentStorage.isTwoMonster(), this);
+        encounterOpponentControllerHashMap.put(coopOpponent._id(), coopTrainerController);
         Parent coopTrainerParent = coopTrainerController.render();
         HBox.setHgrow(coopTrainerParent, javafx.scene.layout.Priority.ALWAYS);
         teamHBox.getChildren().add(coopTrainerParent);
+        if (encounterOpponentStorage.isTwoMonster()){
+            showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent(), true);
+        }
         showCoopImage(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
         showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent(), false);
 
@@ -319,6 +331,7 @@ public class EncounterController extends Controller {
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -> {
                 encounterOpponentController.setMonsterNameLabel(m.name());
                 encounterOpponentStorage.addCurrentMonsterType(m);
+                // only show the description if it is at start
                 if (encounterOpponentStorage.isWild() && isInit) {
                     battleDialogText.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + m.name());
                 }
@@ -428,32 +441,10 @@ public class EncounterController extends Controller {
     public void listenToOpponents(String encounterId) {
         disposables.add(eventListener.get().listen("encounters." + encounterId + ".trainers.*.opponents.*.*", Opponent.class).observeOn(FX_SCHEDULER).subscribe(event -> {
             final Opponent opponent = event.data();
-            if (battleLog.contains(opponent)) {
-                return;
-            }
-            battleLog.add(opponent);
+            System.out.println("Opponent: " + event.suffix() + opponent);
             if (event.suffix().contains("updated")) {
                 inEncounter = true;
                 updateOpponent(opponent);
-                if (opponent.results().size() > 0) {
-                    opponent.results().forEach(result -> {
-                        if (Objects.equals(result.type(), "monster-levelup")) {
-                            if (!resultLevelUP) {
-                                resultLevelUP = true;
-                            }
-                        }
-                        if (Objects.equals(result.type(), "monster-learned")) {
-                            newAbilities.add(result.ability());
-                        }
-                        if (Objects.equals(result.type(), "target-defeated")) {
-                            if (Objects.equals(opponent._id(), encounterOpponentStorage.getSelfOpponent()._id())) {
-                                monsterDefeated();
-                            } else {
-                                showResultPopUp(resources.getString("YOU.FAILED"));
-                            }
-                        }
-                    });
-                }
             } else if (event.suffix().contains("deleted")) {
                 opponentsDelete.put(opponent._id(), opponent);
                 if (opponentsDelete.size() >= encounterOpponentStorage.getEncounterSize() && !inEncounter) {
@@ -511,8 +502,18 @@ public class EncounterController extends Controller {
             for (Result r : oResults.results()) {
                 if (r.type().equals("ability-success")) {
                     updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
-                } else {
-                    updateDescription("", false);
+                } else if (r.type().equals("monster-levelup")) {
+                    if (!resultLevelUP) {
+                        resultLevelUP = true;
+                    }
+                } else if (r.type().equals("monster-learned")) {
+                    newAbilities.add(r.ability());
+                } else if (r.type().equals("target-defeated")) {
+                    if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id()) || oResults.isAttacker() == encounterOpponentStorage.isAttacker()) {
+                        monsterDefeated(resources.getString("ENEMY.DEFEATED"));
+                    } else {
+                        monsterDefeated(resources.getString("TEAM.DEFEATED"));
+                    }
                 }
             }
         }
@@ -598,16 +599,19 @@ public class EncounterController extends Controller {
         battleMenuVBox.getChildren().add(battleMenuController.render());
     }
 
-    public void monsterDefeated() {
-        battleDialogText.setText(resources.getString("TARGET.DEFEATED"));
+    public void monsterDefeated(String information) {
+        battleDialogText.setText(information);
         PauseTransition pause = new PauseTransition(Duration.millis(500));
         pause.setOnFinished(evt -> {
             enemy1Controller.monsterImageView.setVisible(false);
             if (resultLevelUP) {
                 showLevelUpPopUp();
-            } else {
+            }
+            /*
+            else {
                 continueBattle();
             }
+            */
         });
         pause.play();
     }
@@ -622,7 +626,7 @@ public class EncounterController extends Controller {
                 fleeAnimation.play();
             });
             pause.play();
-            fleeAnimation.setOnFinished(evt -> showResultPopUp(resources.getString("YOU.WON")));
+            // fleeAnimation.setOnFinished(evt -> showResultPopUp(resources.getString("YOU.WON")));
         }
 
     }
@@ -742,10 +746,14 @@ public class EncounterController extends Controller {
         this.repeatedTimes = 0;
     }
 
+    /*
+        * Disable the buttons in the encounter when a Popup is shown
+     */
     public void buttonsDisableEncounter(boolean isDisable) {
         battleMenuController.buttonDisable(isDisable);
     }
 
+    // TODO: an zwei Monster anpassen
     public void showLevelUpPopUp() {
         resultLevelUP = false;
         LevelUpController levelUpController = levelUpControllerProvider.get();

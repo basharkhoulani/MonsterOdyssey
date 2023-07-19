@@ -29,10 +29,11 @@ public class BattleMenuController extends Controller {
     @FXML
     public Button changeMonsterButton;
     @FXML
-    public Button currentInfoButton;
-    @FXML
     public Button fleeButton;
+    @FXML
+    public Button itemButton;
     public Runnable onFleeButtonClick;
+
     private EncounterController encounterController;
     EncounterOpponentStorage encounterOpponentStorage;
     IngameController ingameController;
@@ -78,9 +79,7 @@ public class BattleMenuController extends Controller {
         this.encounterController.showChangeMonsterList();
     }
 
-    public void showMonsterInformation() {
-        this.encounterController.showMonsterDetailsInEncounter();
-    }
+
 
     public void changeToIngame(ActionEvent event) {
         if (onFleeButtonClick != null) {
@@ -96,7 +95,10 @@ public class BattleMenuController extends Controller {
     public void buttonDisable(boolean isDisable) {
         abilitiesButton.setDisable(isDisable);
         changeMonsterButton.setDisable(isDisable);
-        currentInfoButton.setDisable(isDisable);
+        itemButton.setDisable(isDisable);
         fleeButton.setDisable(isDisable);
+    }
+
+    public void showItem() {
     }
 }

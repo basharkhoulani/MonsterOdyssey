@@ -1092,18 +1092,8 @@ public class IngameController extends Controller {
                         encounterOpponentStorage.setAttacker(opponent.isAttacker());
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
-                                    encounterOpponentStorage.setEncounterSize(opts.size());
-                                    encounterOpponentStorage.resetEnemyOpponents();
-                                    encounterOpponentStorage.setOpponentsInStorage(opts);
-                                    for (Opponent o : opts) {
-                                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                                            if(o.isAttacker() != encounterOpponentStorage.isAttacker()) {
-                                                encounterOpponentStorage.addEnemyOpponent(o);
-                                            } else {
-                                                encounterOpponentStorage.setCoopOpponent(o);
-                                            }
-                                        }
-                                    }
+                                    System.out.println("Opponents: " + opts);
+                                    initEncounterOpponentStorage(opts);
                                     if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponents().size() != 0) {
                                         showEncounterInfoWindow();
                                         this.isNewStart = false;
@@ -1143,18 +1133,7 @@ public class IngameController extends Controller {
                         encounterOpponentStorage.setAttacker(opponent.isAttacker());
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
-                                    encounterOpponentStorage.setOpponentsInStorage(opts);
-                                    encounterOpponentStorage.resetEnemyOpponents();
-                                    encounterOpponentStorage.setEncounterSize(opts.size());
-                                    for (Opponent o : opts) {
-                                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                                            if(o.isAttacker() != encounterOpponentStorage.isAttacker()) {
-                                                encounterOpponentStorage.addEnemyOpponent(o);
-                                            } else {
-                                                encounterOpponentStorage.setCoopOpponent(o);
-                                            }
-                                        }
-                                    }
+                                    initEncounterOpponentStorage(opts);
                                     if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponents().size() != 0 && isNewStart) {
                                         showEncounterScene();
                                     }
@@ -1162,6 +1141,23 @@ public class IngameController extends Controller {
                     }
                 }, Throwable::printStackTrace));
 
+    }
+    private void initEncounterOpponentStorage(List<Opponent> opponents) {
+        encounterOpponentStorage.setOpponentsInStorage(opponents);
+        encounterOpponentStorage.resetEnemyOpponents();
+        encounterOpponentStorage.setEncounterSize(opponents.size());
+        for (Opponent o : opponents) {
+            if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && o.isAttacker() != encounterOpponentStorage.isAttacker()) {
+                encounterOpponentStorage.addEnemyOpponent(o);
+            } else {
+                encounterOpponentStorage.setCoopOpponent(o);
+                if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                    encounterOpponentStorage.setTwoMonster(true);
+                } else {
+                    encounterOpponentStorage.setTwoMonster(false);
+                }
+            }
+        }
     }
 
     private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {

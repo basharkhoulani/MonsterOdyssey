@@ -28,6 +28,7 @@ public class EncounterOpponentStorage {
     private boolean isWild;
     private int encounterSize;
     private boolean isAttacker;
+    private boolean isTwoMonster;
 
 
     @Inject
@@ -135,5 +136,13 @@ public class EncounterOpponentStorage {
             this.opponentsInStorage.add(opponent._id());
         }
 
+    }
+
+    public boolean isTwoMonster() {
+        return isTwoMonster;
+    }
+
+    public void setTwoMonster(boolean twoMonster) {
+        isTwoMonster = twoMonster;
     }
 }
