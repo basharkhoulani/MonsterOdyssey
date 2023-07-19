@@ -9,10 +9,7 @@ import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
-import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
-import de.uniks.stpmon.team_m.utils.Position;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import de.uniks.stpmon.team_m.utils.*;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.*;
 import javafx.collections.FXCollections;
@@ -185,6 +182,8 @@ public class IngameController extends Controller {
     private ParallelTransition shiftMapUpTransition;
     private ParallelTransition shiftMapDownTransition;
     private boolean loadingMap;
+    private VBox loadingScreen;
+    private Timeline loadingScreenAnimation;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -569,7 +568,6 @@ public class IngameController extends Controller {
         );
     }
 
-
     /**
      * loadMap is used to load the map of the current area, given a Tiled Map. It loads every image of every tileset, then
      * calls afterAllTileSetsLoaded to render the map. It also sets the size of the stage to the size of the map.
@@ -579,6 +577,25 @@ public class IngameController extends Controller {
     private void loadMap(Map map) {
         if (GraphicsEnvironment.isHeadless()) {
             return;
+        }
+        // Init and display loading screen
+        loadingScreen = new VBox();
+        loadingScreen.setAlignment(Pos.CENTER);
+        loadingScreen.setPrefWidth(map.width() * TILE_SIZE * SCALE_FACTOR);
+        loadingScreen.setPrefHeight(map.height() * TILE_SIZE * SCALE_FACTOR);
+        loadingScreen.setSpacing(10);
+        loadingScreen.setStyle("-fx-background-color: black");
+        Label loadingLabel = new Label("Loading...");
+        loadingLabel.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-font-family: 'Comic Sans MS'");
+        ImageView trainerImageView = new ImageView();
+        trainerImageView.setFitWidth(40);
+        trainerImageView.setFitHeight(40);
+        loadingScreen.getChildren().add(loadingLabel);
+        loadingScreen.getChildren().add(trainerImageView);
+        loadingScreenAnimation = AnimationBuilder.buildTrainerWalkAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), trainerImageView, 150, Animation.INDEFINITE, TRAINER_DIRECTION_RIGHT);
+        root.getChildren().add(loadingScreen);
+        if (!GraphicsEnvironment.isHeadless()) {
+            loadingScreenAnimation.play();
         }
         loadingMap = true;
         tileSetImages.clear();
@@ -727,6 +744,8 @@ public class IngameController extends Controller {
                 loadPlayers();
                 loadMiniMap();
                 loadingMap = false;
+                root.getChildren().remove(loadingScreen);
+                loadingScreenAnimation.stop();
             }
         }
     }
@@ -1051,8 +1070,10 @@ public class IngameController extends Controller {
                         }
                         case "deleted" -> {
                             trainers.removeIf(t -> t._id().equals(trainer._id()));
-                            trainerControllerHashMap.get(trainer).destroy();
-                            trainerControllerHashMap.remove(trainer);
+                            if (trainerControllerHashMap.containsKey(trainer)) {
+                                trainerControllerHashMap.get(trainer).destroy();
+                                trainerControllerHashMap.remove(trainer);
+                            }
                             trainerPositionHashMap.remove(trainer);
                         }
                     }

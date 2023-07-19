@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController;
@@ -11,6 +12,7 @@ import de.uniks.stpmon.team_m.controller.subController.LevelUpController;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.utils.AnimationBuilder;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -168,7 +170,7 @@ public class EncounterController extends Controller {
             oldMonster = monster;
             encounterOpponentStorage.addCurrentMonster(monster);
         }));
-        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> abilityDtos.addAll(abilities)));
+        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilityDtos::addAll));
 
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId).observeOn(FX_SCHEDULER).subscribe(encounter -> {
             encounterOpponentStorage.setWild(encounter.isWild());
@@ -536,7 +538,10 @@ public class EncounterController extends Controller {
             if (event.suffix().contains("updated")) {
                 float currentHealth = (float) (Math.round(monster.currentAttributes().health() * 10) / 10);
                 float maxHealth = (float) (Math.round(monster.attributes().health() * 10) / 10);
-                encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health())
+                AnimationBuilder.buildShakeAnimation(enemy1Controller.monsterImageView, 50, 3, 1).play();
+                AnimationBuilder.buildProgressBarAnimation(encounterOpponentController.HealthBar, 1000, monster.currentAttributes().health() / monster.attributes().health()).play();
+                encounterOpponentController
+                        //.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health())
                         .setHealthLabel(currentHealth + "/" + maxHealth)
                         .setLevelLabel("LVL " + monster.level())
                         .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
@@ -624,27 +629,33 @@ public class EncounterController extends Controller {
             pause.play();
             fleeAnimation.setOnFinished(evt -> showResultPopUp(resources.getString("YOU.WON")));
         }
-
     }
 
+
+
     public void fleeFromBattle() {
-        SequentialTransition fleeAnimation = buildFleeAnimation();
+        SequentialTransition fleeAnimation = AnimationBuilder.buildFleeAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), ownTrainerController);
         PauseTransition firstPause = new PauseTransition(Duration.millis(500));
         battleDialogText.setText(resources.getString("ENCOUNTER_DESCRIPTION_FLEE"));
-
         firstPause.setOnFinished(evt -> {
             ownTrainerController.monsterImageView.setVisible(false);
             fleeAnimation.play();
         });
+
         fleeAnimation.setOnFinished(evt -> disposables.add(encounterOpponentsService.deleteOpponent(encounterOpponentStorage.getRegionId(), encounterOpponentStorage.getEncounterId(), encounterOpponentStorage.getSelfOpponent()._id()).observeOn(FX_SCHEDULER)
                 .subscribe(result -> showIngameController(), error -> {
             showError(error.getMessage());
             error.printStackTrace();
         })));
+
         firstPause.play();
+
+
     }
 
     private SequentialTransition buildFleeAnimation() {
+
+        /*
         SequentialTransition transition = new SequentialTransition();
 
         Image[] images = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), TRAINER_DIRECTION_DOWN, true);
@@ -668,6 +679,9 @@ public class EncounterController extends Controller {
             transition.getChildren().add(parallelTransition);
         }
         return transition;
+
+         */
+        return AnimationBuilder.buildFleeAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), ownTrainerController);
     }
 
     private VBox buildFleePopup() {
