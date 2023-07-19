@@ -82,8 +82,6 @@ public class IngameControllerTest extends ApplicationTest {
     IngameController ingameController;
     @Mock
     Provider<EventListener> eventListener;
-    @Mock
-    Parent parent;
     @InjectMocks
     NotificationListHandyController notificationListHandyController;
     @InjectMocks
@@ -511,7 +509,7 @@ public class IngameControllerTest extends ApplicationTest {
 
 
     @Test
-    void testTalkToNPC2TilesAway() throws InterruptedException {
+    void testTalkToNPC2TilesAway() {
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(20);
         when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
