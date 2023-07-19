@@ -166,7 +166,7 @@ class EncounterControllerTest extends ApplicationTest {
         ));
 
         // Mock the team and enemy Monster
-        doNothing().when(encounterOpponentStorage).addCurrentMonster(any());
+        doNothing().when(encounterOpponentStorage).addCurrentMonsters(anyString(), any());
         LinkedHashMap<String, Integer> abilities = new LinkedHashMap<>();
         abilities.put("1", 35);
         abilities.put("3", 20);
