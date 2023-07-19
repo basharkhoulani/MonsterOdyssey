@@ -63,13 +63,7 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<NotificationListHandyController> notificationListHandyControllerProvider;
     @Mock
     Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
-    @Mock
-    Provider<EncounterController> encounterControllerProvider;
 
-    // Leave this mock!! it ensures that tests run fine
-    // -- WHY?????? add explanation
-    @Mock
-    TrainerStorage trainerStorage;
     // Please also keep this mock, it is needed for the tests
     // -- which ones????
     @Spy
