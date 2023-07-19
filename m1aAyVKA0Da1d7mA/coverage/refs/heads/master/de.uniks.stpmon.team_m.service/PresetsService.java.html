@@ -2,6 +2,7 @@
 
 import com.google.gson.Gson;
 import de.uniks.stpmon.team_m.dto.AbilityDto;
+import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.dto.TileSet;
 import de.uniks.stpmon.team_m.rest.PresetsApiService;
@@ -21,9 +22,9 @@ public class PresetsService {
      */
 
     @Inject
-<span class="fc" id="L24">    public PresetsService(PresetsApiService presetsApiService) {</span>
-<span class="fc" id="L25">        this.presetsApiService = presetsApiService;</span>
-<span class="fc" id="L26">    }</span>
+<span class="fc" id="L25">    public PresetsService(PresetsApiService presetsApiService) {</span>
+<span class="fc" id="L26">        this.presetsApiService = presetsApiService;</span>
+<span class="fc" id="L27">    }</span>
 
     /**
      * getTileset(-Image) returns a tileset in JSON format, or a tile image PNG.
@@ -35,11 +36,11 @@ public class PresetsService {
      */
 
     public Observable&lt;Image&gt; getTilesetImage(String filename) {
-<span class="nc" id="L38">        return presetsApiService.getTileset(filename).map(ImageProcessor::resonseBodyToJavaFXImage);</span>
+<span class="nc" id="L39">        return presetsApiService.getTileset(filename).map(ImageProcessor::resonseBodyToJavaFXImage);</span>
     }
 
     public Observable&lt;TileSet&gt; getTileset(String filename) {
-<span class="nc" id="L42">        return presetsApiService.getTileset(filename + &quot;.json&quot;).map(responseBody -&gt; new Gson().fromJson(responseBody.string(), TileSet.class));</span>
+<span class="nc" id="L43">        return presetsApiService.getTileset(filename + &quot;.json&quot;).map(responseBody -&gt; new Gson().fromJson(responseBody.string(), TileSet.class));</span>
     }
 
     /**
@@ -49,7 +50,7 @@ public class PresetsService {
      */
 
     public Observable&lt;List&lt;String&gt;&gt; getCharacters() {
-<span class="fc" id="L52">        return presetsApiService.getCharacters();</span>
+<span class="fc" id="L53">        return presetsApiService.getCharacters();</span>
     }
 
     /**
@@ -61,7 +62,40 @@ public class PresetsService {
      */
 
     public Observable&lt;ResponseBody&gt; getCharacter(String filename) {
-<span class="fc" id="L64">        return presetsApiService.getCharacter(filename);</span>
+<span class="fc" id="L65">        return presetsApiService.getCharacter(filename);</span>
+    }
+
+    /**
+     * getItems returns a list of item types.
+     *
+     * @return The list of item types.
+     */
+
+    public Observable&lt;List&lt;ItemTypeDto&gt;&gt; getItems() {
+<span class="nc" id="L75">        return presetsApiService.getItems();</span>
+    }
+
+    /**
+     * getItem returns a specific item type.
+     *
+     * @param id The id of the item type.
+     * @return The item type.
+     */
+
+    public Observable&lt;ItemTypeDto&gt; getItem(int id) {
+<span class="nc" id="L86">        return presetsApiService.getItem(id);</span>
+    }
+
+    /**
+     * getItemImage returns a specific item type image PNG.
+     * Saved in a ResponseBody to be able to processed as needed.
+     * Example for image to JavaFX image is found in ImageProcessor.java
+     * @param id The id of the item type.
+     * @return The item type image.
+     */
+
+    public Observable&lt;ResponseBody&gt; getItemImage(int id) {
+<span class="nc" id="L98">        return presetsApiService.getItemImage(id);</span>
     }
 
     /**
@@ -71,7 +105,7 @@ public class PresetsService {
      */
 
     public Observable&lt;List&lt;MonsterTypeDto&gt;&gt; getMonsters() {
-<span class="fc" id="L74">        return presetsApiService.getMonsters();</span>
+<span class="fc" id="L108">        return presetsApiService.getMonsters();</span>
     }
 
     /**
@@ -82,7 +116,7 @@ public class PresetsService {
      */
 
     public Observable&lt;MonsterTypeDto&gt; getMonster(int id) {
-<span class="fc" id="L85">        return presetsApiService.getMonster(id);</span>
+<span class="fc" id="L119">        return presetsApiService.getMonster(id);</span>
     }
 
     /**
@@ -94,7 +128,7 @@ public class PresetsService {
      */
 
     public Observable&lt;ResponseBody&gt; getMonsterImage(int id) {
-<span class="fc" id="L97">        return presetsApiService.getMonsterImage(id);</span>
+<span class="fc" id="L131">        return presetsApiService.getMonsterImage(id);</span>
     }
 
     /**
@@ -104,7 +138,7 @@ public class PresetsService {
      */
 
     public Observable&lt;List&lt;AbilityDto&gt;&gt; getAbilities() {
-<span class="fc" id="L107">        return presetsApiService.getAbilities();</span>
+<span class="fc" id="L141">        return presetsApiService.getAbilities();</span>
     }
 
     /**
@@ -115,7 +149,7 @@ public class PresetsService {
      */
 
     public Observable&lt;AbilityDto&gt; getAbility(int id) {
-<span class="fc" id="L118">        return presetsApiService.getAbility(id);</span>
+<span class="fc" id="L152">        return presetsApiService.getAbility(id);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

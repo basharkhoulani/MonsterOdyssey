@@ -1261,7 +1261,7 @@ public class IngameController extends Controller {
 <span class="fc bfc" id="L1261" title="All 2 branches covered.">            if (this.currentNpc != null) {</span>
 <span class="fc" id="L1262">                inDialog = true;</span>
 
-<span class="pc bpc" id="L1264" title="1 of 4 branches missed.">                if (trainerControllerHashMap.containsKey(this.currentNpc) &amp;&amp; trainerControllerHashMap.get(this.currentNpc).getDirection() != currentDirection) {</span>
+<span class="pc bpc" id="L1264" title="3 of 4 branches missed.">                if (trainerControllerHashMap.containsKey(this.currentNpc) &amp;&amp; trainerControllerHashMap.get(this.currentNpc).getDirection() != currentDirection) {</span>
                     int turnDirection;
 <span class="nc bnc" id="L1266" title="All 4 branches missed.">                    switch (currentDirection) {</span>
 <span class="nc" id="L1267">                        case 0 -&gt; turnDirection = 2;</span>
@@ -1439,8 +1439,8 @@ public class IngameController extends Controller {
 <span class="fc" id="L1439">        inDialog = false;</span>
 
         // Turn NPC back to original direction after finishing dialog
-<span class="fc bfc" id="L1442" title="All 2 branches covered.">        if (trainerControllerHashMap.containsKey(this.currentNpc)</span>
-<span class="pc bpc" id="L1443" title="1 of 2 branches missed.">                &amp;&amp; trainerControllerHashMap.get(this.currentNpc).getDirection() != this.currentNpc.direction()</span>
+<span class="pc bpc" id="L1442" title="1 of 2 branches missed.">        if (trainerControllerHashMap.containsKey(this.currentNpc)</span>
+<span class="nc bnc" id="L1443" title="All 2 branches missed.">                &amp;&amp; trainerControllerHashMap.get(this.currentNpc).getDirection() != this.currentNpc.direction()</span>
         ) {
 <span class="nc" id="L1445">            trainerControllerHashMap.get(this.currentNpc).turn(this.currentNpc.direction());</span>
         }
