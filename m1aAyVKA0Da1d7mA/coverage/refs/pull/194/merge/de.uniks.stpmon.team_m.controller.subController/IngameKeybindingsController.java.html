@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IngameKeybindingsController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">IngameKeybindingsController.java</span></div><h1>IngameKeybindingsController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
+import javafx.scene.input.KeyEvent;
+import javax.inject.Inject;
+import java.awt.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Arrays;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+
+public class IngameKeybindingsController extends Controller {
+
+    @FXML
+    public Button walkUpButton;
+    @FXML
+    public Button walkDownButton;
+    @FXML
+    public Button walkRightButton;
+    @FXML
+    public Button walkLeftButton;
+    @FXML
+    public Button interactionButton;
+    @FXML
+    public Button pauseMenuButton;
+    @FXML
+    public Button inventoryButton;
+    @FXML
+    public Button goBackButton;
+    @FXML
+    public Button defaultButton;
+    @FXML
+    public Button checkButton;
+    @FXML
+    public Label informationLabel;
+    @FXML
+    public ImageView checkImageView;
+    @FXML
+    public ImageView goBackImageView;
+    @Inject
+    IngameController ingameController;
+    private VBox ingameVbox;
+    private EventHandler&lt;KeyEvent&gt; keyPressedHandler;
+    public String currentButtonText;
+
+    @Inject
+<span class="fc" id="L58">    public IngameKeybindingsController() {</span>
+<span class="fc" id="L59">    }</span>
+
+    public Parent render() {
+<span class="fc" id="L62">        Parent parent = super.render();</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if(!GraphicsEnvironment.isHeadless()){</span>
+<span class="nc" id="L64">            checkImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(CHECKSYMBOL)).toString()));</span>
+<span class="nc" id="L65">            goBackImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(GOBACKSYMBOL)).toString()));</span>
+        }
+<span class="fc" id="L67">        walkUpButton.setText(preferences.get(&quot;walkUp&quot;,&quot;W&quot;));</span>
+<span class="fc" id="L68">        walkDownButton.setText(preferences.get(&quot;walkDown&quot;,&quot;S&quot;));</span>
+<span class="fc" id="L69">        walkRightButton.setText(preferences.get(&quot;walkRight&quot;,&quot;D&quot;));</span>
+<span class="fc" id="L70">        walkLeftButton.setText(preferences.get(&quot;walkLeft&quot;,&quot;A&quot;));</span>
+<span class="fc" id="L71">        interactionButton.setText(preferences.get(&quot;interaction&quot;,&quot;E&quot;));</span>
+<span class="fc" id="L72">        pauseMenuButton.setText(preferences.get(&quot;pauseMenu&quot;,&quot;ESCAPE&quot;));</span>
+<span class="fc" id="L73">        inventoryButton.setText(preferences.get(&quot;inventar&quot;,&quot;I&quot;));</span>
+<span class="fc" id="L74">        return parent;</span>
+    }
+
+    public void init(IngameController ingameController, VBox ingameVbox) {
+<span class="fc" id="L78">        this.ingameController = ingameController;</span>
+<span class="fc" id="L79">        this.ingameVbox = ingameVbox;</span>
+<span class="fc" id="L80">    }</span>
+
+    public void goBack() {
+<span class="fc" id="L83">        ingameController.root.getChildren().remove(ingameVbox);</span>
+<span class="fc" id="L84">    }</span>
+
+    public void setDefault() {
+<span class="fc" id="L87">        preferences.put(&quot;walkUp&quot;,KeyCode.W.getChar());</span>
+<span class="fc" id="L88">        walkUpButton.setText(&quot;W&quot;);</span>
+<span class="fc" id="L89">        preferences.put(&quot;walkDown&quot;,KeyCode.S.getChar() );</span>
+<span class="fc" id="L90">        walkDownButton.setText(&quot;S&quot;);</span>
+<span class="fc" id="L91">        preferences.put(&quot;walkLeft&quot;,KeyCode.A.getChar());</span>
+<span class="fc" id="L92">        walkLeftButton.setText(&quot;A&quot;);</span>
+<span class="fc" id="L93">        preferences.put(&quot;walkRight&quot;,KeyCode.D.getChar());</span>
+<span class="fc" id="L94">        walkRightButton.setText(&quot;D&quot;);</span>
+<span class="fc" id="L95">        preferences.put(&quot;pauseMenu&quot;,&quot;ESCAPE&quot;);</span>
+<span class="fc" id="L96">        pauseMenuButton.setText(&quot;ESCAPE&quot;);</span>
+<span class="fc" id="L97">        preferences.put(&quot;interaction&quot;,KeyCode.E.getChar());</span>
+<span class="fc" id="L98">        interactionButton.setText(&quot;E&quot;);</span>
+<span class="fc" id="L99">        preferences.put(&quot;inventar&quot;,KeyCode.I.getChar());</span>
+<span class="fc" id="L100">        inventoryButton.setText(&quot;I&quot;);</span>
+<span class="fc" id="L101">        informationLabel.setText(resources.getString(&quot;KEYBINDINGS.DEFAULT&quot;));</span>
+<span class="fc" id="L102">    }</span>
+
+    public void check() {
+<span class="fc" id="L105">        preferences.put(&quot;walkUp&quot;,walkUpButton.getText());</span>
+<span class="fc" id="L106">        preferences.put(&quot;walkDown&quot;,walkDownButton.getText());</span>
+<span class="fc" id="L107">        preferences.put(&quot;walkLeft&quot;,walkLeftButton.getText());</span>
+<span class="fc" id="L108">        preferences.put(&quot;walkRight&quot;,walkRightButton.getText());</span>
+<span class="fc" id="L109">        preferences.put(&quot;pauseMenu&quot;,pauseMenuButton.getText());</span>
+<span class="fc" id="L110">        preferences.put(&quot;interaction&quot;,interactionButton.getText());</span>
+<span class="fc" id="L111">        preferences.put(&quot;inventar&quot;, inventoryButton.getText());</span>
+<span class="fc" id="L112">        informationLabel.setText(resources.getString(&quot;KEYBINDINGS.CHANGED&quot;));</span>
+<span class="fc" id="L113">    }</span>
+
+    public void setWalkLeft() {
+<span class="fc" id="L116">        setKeyPressedHandler(walkLeftButton);</span>
+<span class="fc" id="L117">    }</span>
+
+    public void setPauseMenu() {
+<span class="fc" id="L120">        setKeyPressedHandler(pauseMenuButton);</span>
+<span class="fc" id="L121">    }</span>
+
+    public void setWalkRight() {
+<span class="fc" id="L124">        setKeyPressedHandler(walkRightButton);</span>
+<span class="fc" id="L125">    }</span>
+
+    public void setInteraction() {
+<span class="fc" id="L128">        setKeyPressedHandler(interactionButton);</span>
+<span class="fc" id="L129">    }</span>
+
+    public void setWalkDown() {
+<span class="fc" id="L132">        setKeyPressedHandler(walkDownButton);</span>
+<span class="fc" id="L133">    }</span>
+
+    public void setWalkUp() {
+<span class="fc" id="L136">        setKeyPressedHandler(walkUpButton);</span>
+<span class="fc" id="L137">    }</span>
+
+    public void setInventory() {
+<span class="fc" id="L140">        setKeyPressedHandler(inventoryButton);</span>
+<span class="fc" id="L141">    }</span>
+
+    private void setKeyPressedHandler(Button button){
+<span class="fc" id="L144">        keyPressedHandler = event -&gt; {</span>
+<span class="fc" id="L145">            List&lt;String&gt; list = Arrays.asList(walkDownButton.getText(), walkUpButton.getText(), walkRightButton.getText(), walkLeftButton.getText(), interactionButton.getText(), pauseMenuButton.getText(), inventoryButton.getText());</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">            if (list.contains(event.getCode().toString())) {</span>
+<span class="fc" id="L147">                informationLabel.setText(resources.getString(&quot;KEYBINDING.USED&quot;));</span>
+<span class="fc" id="L148">                button.setText(currentButtonText);</span>
+            }
+<span class="fc bfc" id="L150" title="All 2 branches covered.">            else if(event.getCode() == KeyCode.SPACE){</span>
+<span class="fc" id="L151">                button.setText(currentButtonText);</span>
+<span class="fc" id="L152">                informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
+<span class="fc" id="L153">                event.consume();</span>
+            }
+<span class="fc bfc" id="L155" title="All 2 branches covered.">            else if(event.getCode() == KeyCode.UP) {</span>
+<span class="fc" id="L156">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="fc" id="L157">                button.setText(&quot;&quot;);</span>
+<span class="fc" id="L158">                button.setText(&quot;UP&quot;);</span>
+            }
+<span class="fc bfc" id="L160" title="All 2 branches covered.">            else if(event.getCode() == KeyCode.DOWN){</span>
+<span class="fc" id="L161">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="fc" id="L162">                button.setText(&quot;&quot;);</span>
+<span class="fc" id="L163">                button.setText(&quot;DOWN&quot;);</span>
+            }
+<span class="fc bfc" id="L165" title="All 2 branches covered.">            else if(event.getCode() == KeyCode.RIGHT){</span>
+<span class="fc" id="L166">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="fc" id="L167">                button.setText(&quot;&quot;);</span>
+<span class="fc" id="L168">                button.setText(&quot;RIGHT&quot;);</span>
+            }
+<span class="fc bfc" id="L170" title="All 2 branches covered.">            else if(event.getCode() == KeyCode.LEFT){</span>
+<span class="fc" id="L171">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="fc" id="L172">                button.setText(&quot;&quot;);</span>
+<span class="fc" id="L173">                button.setText(&quot;LEFT&quot;);</span>
+            }
+<span class="fc bfc" id="L175" title="All 2 branches covered.">            else if (event.getCode() == KeyCode.ESCAPE) {</span>
+<span class="fc" id="L176">                informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="fc" id="L177">                button.setText(&quot;&quot;);</span>
+<span class="fc" id="L178">                button.setText(&quot;ESCAPE&quot;);</span>
+            } else {
+<span class="pc bpc" id="L180" title="1 of 4 branches missed.">                if (event.getText().length() != 0 &amp;&amp; Character.isLetterOrDigit(event.getText().charAt(0))) {</span>
+<span class="fc" id="L181">                    informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
+<span class="fc" id="L182">                    button.setText(&quot;&quot;);</span>
+<span class="fc" id="L183">                    button.setText(event.getText().toUpperCase());</span>
+                } else {
+<span class="fc" id="L185">                    informationLabel.setText(resources.getString(&quot;WRONG.INPUT&quot;));</span>
+<span class="fc" id="L186">                    button.setText(currentButtonText);</span>
+                }
+            }
+<span class="fc" id="L189">            button.removeEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);</span>
+<span class="fc" id="L190">            buttonsDisable(false, button);</span>
+<span class="fc" id="L191">        };</span>
+<span class="fc" id="L192">        buttonsDisable(true, button);</span>
+<span class="fc" id="L193">        currentButtonText = button.getText();</span>
+<span class="fc" id="L194">        button.setText(&quot;...&quot;);</span>
+<span class="fc" id="L195">        informationLabel.setText(resources.getString(&quot;WAITING.INPUT&quot;));</span>
+<span class="fc" id="L196">        button.addEventFilter(KeyEvent.KEY_PRESSED,keyPressedHandler);</span>
+<span class="fc" id="L197">    }</span>
+    public void buttonsDisable(boolean set, Button currentbutton){
+<span class="fc" id="L199">        walkUpButton.setDisable(set);</span>
+<span class="fc" id="L200">        walkRightButton.setDisable(set);</span>
+<span class="fc" id="L201">        walkLeftButton.setDisable(set);</span>
+<span class="fc" id="L202">        walkDownButton.setDisable(set);</span>
+<span class="fc" id="L203">        pauseMenuButton.setDisable(set);</span>
+<span class="fc" id="L204">        interactionButton.setDisable(set);</span>
+<span class="fc" id="L205">        inventoryButton.setDisable(set);</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">        if(set){</span>
+<span class="fc" id="L207">            currentbutton.setDisable(false);</span>
+        }
+<span class="fc" id="L209">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
