@@ -25,8 +25,8 @@ public class ChangeAudioController extends Controller {
     public ImageView highVolumeIconImageView;
 
     @Inject
-<span class="nc" id="L28">    public ChangeAudioController() {</span>
-<span class="nc" id="L29">    }</span>
+<span class="fc" id="L28">    public ChangeAudioController() {</span>
+<span class="fc" id="L29">    }</span>
 
     @FXML
     private Button closeButton;
@@ -41,31 +41,31 @@ public class ChangeAudioController extends Controller {
 
     @Override
     public Parent render() {
-<span class="nc" id="L44">        final Parent parent = super.render();</span>
+<span class="fc" id="L44">        final Parent parent = super.render();</span>
 
-<span class="nc bnc" id="L46" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
 <span class="nc" id="L47">            muteIconImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(MUTE_ICON)).toString()));</span>
 <span class="nc" id="L48">            highVolumeIconImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(HIGH_VOLUME_ICON)).toString()));</span>
         }
 
-<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (preferences.getBoolean(&quot;mute&quot;, false)) {</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (preferences.getBoolean(&quot;mute&quot;, false)) {</span>
 <span class="nc" id="L52">            audioSlider.setValue(0);</span>
         } else {
-<span class="nc" id="L54">            audioSlider.setValue(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()) * 100);</span>
+<span class="fc" id="L54">            audioSlider.setValue(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()) * 100);</span>
         }
-<span class="nc" id="L56">        return parent;</span>
+<span class="fc" id="L56">        return parent;</span>
     }
 
 
     public void init(IngameController ingameController, VBox changeAudioVBox) {
-<span class="nc" id="L61">        this.ingameController = ingameController;</span>
-<span class="nc" id="L62">        this.changeAudioVBox = changeAudioVBox;</span>
-<span class="nc" id="L63">    }</span>
+<span class="fc" id="L61">        this.ingameController = ingameController;</span>
+<span class="fc" id="L62">        this.changeAudioVBox = changeAudioVBox;</span>
+<span class="fc" id="L63">    }</span>
 
     public void onCloseButtonClick() {
-<span class="nc" id="L66">        ingameController.root.getChildren().remove(changeAudioVBox);</span>
-<span class="nc" id="L67">        ingameController.showSettings();</span>
-<span class="nc" id="L68">    }</span>
+<span class="fc" id="L66">        ingameController.root.getChildren().remove(changeAudioVBox);</span>
+<span class="fc" id="L67">        ingameController.showSettings();</span>
+<span class="fc" id="L68">    }</span>
 
     public void getSliderValue() {
 <span class="nc" id="L71">        audioSlider.valueProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
