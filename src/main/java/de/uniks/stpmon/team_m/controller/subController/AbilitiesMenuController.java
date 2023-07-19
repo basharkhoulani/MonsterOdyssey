@@ -102,9 +102,7 @@ public class AbilitiesMenuController extends Controller {
 
         disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(
                 opponent -> {
-                    encounterController.updateDescription(resources.getString("YOU.USED") + ability.name() + ". ", true);
                     encounterController.updateDescription(resources.getString("YOU.USED") + " " + ability.name() + ". \n", true);
-                    encounterController.resetOpponentUpdate();
                     encounterController.resetRepeatedTimes();
                     encounterController.goBackToBattleMenu();
                 }, Throwable::printStackTrace));

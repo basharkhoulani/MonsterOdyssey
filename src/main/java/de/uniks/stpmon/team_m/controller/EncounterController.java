@@ -738,10 +738,6 @@ public class EncounterController extends Controller {
         return fleeVBox;
     }
 
-    public void resetOpponentUpdate() {
-        opponentsUpdate.clear();
-    }
-
     public void resetRepeatedTimes() {
         this.repeatedTimes = 0;
     }

@@ -141,7 +141,6 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
 
         doNothing().when(encounterController).updateDescription("", true);
         doNothing().when(encounterController).resetRepeatedTimes();
-        doNothing().when(encounterController).resetOpponentUpdate();
         doNothing().when(encounterController).goBackToBattleMenu();
 
         final Button abilityButton1 = lookup("#abilityButton1").query();

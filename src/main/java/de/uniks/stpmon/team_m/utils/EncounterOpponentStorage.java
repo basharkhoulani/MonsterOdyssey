@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Singleton
@@ -22,7 +23,7 @@ public class EncounterOpponentStorage {
     // Die Opponent mit Id des Coop-Partners
     private Monster currentTrainerMonster;
     private MonsterTypeDto currentTrainerMonsterType;
-    private List<Monster> currentMonsters = FXCollections.observableArrayList();
+    private HashMap<String, Monster> currentMonsters = new HashMap<>();
     private List<MonsterTypeDto> currentMonsterTypes = FXCollections.observableArrayList();
     private String regionId;
     private boolean isWild;
@@ -119,7 +120,7 @@ public class EncounterOpponentStorage {
     }
 
     public void addCurrentMonster(Monster monster) {
-        this.currentMonsters.add(monster);
+        this.currentMonsters.put(monster._id(), monster);
     }
 
     public void addCurrentMonsterType(MonsterTypeDto monsterType) {
