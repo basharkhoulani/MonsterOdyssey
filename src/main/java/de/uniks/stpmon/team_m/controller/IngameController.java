@@ -219,7 +219,7 @@ public class IngameController extends Controller {
                     ingamePauseMenuController.resumeGame();
                 }
             }
-            if (isChatting || loadingMap || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < TRANSITION_DURATION + 50)) {
+            if (isChatting || loadingMap || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < TRANSITION_DURATION + 25)) {
                 return;
             }
             if (event.getCode() == KeyCode.ENTER) {
@@ -446,33 +446,47 @@ public class IngameController extends Controller {
     }
 
     private void initMapShiftTransitions() {
+        /*
+
+        for (int i=0; i < TILE_SIZE; i++) {
+            shiftMapUpTransition.getChildren().add(new ParallelTransition(
+                    getMapMovementTransition(groundCanvas,              0, -SCALE_FACTOR * 2, TRANSITION_DURATION / TILE_SIZE),
+                    getMapMovementTransition(behindUserTrainerCanvas,   0, -SCALE_FACTOR * 2, TRANSITION_DURATION / TILE_SIZE),
+                    getMapMovementTransition(userTrainerCanvas,         0, -SCALE_FACTOR * 2, TRANSITION_DURATION / TILE_SIZE),
+                    getMapMovementTransition(overUserTrainerCanvas,     0, -SCALE_FACTOR * 2, TRANSITION_DURATION / TILE_SIZE),
+                    getMapMovementTransition(roofCanvas,                0, -SCALE_FACTOR * 2, TRANSITION_DURATION / TILE_SIZE)
+            ));
+        }
+
+         */
+        shiftMapUpTransition = new ParallelTransition(
+                getMapMovementTransition(groundCanvas,              0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas,   0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas,         0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas,     0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas,                0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
+        );
         shiftMapLeftTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas, -SCALE_FACTOR * TILE_SIZE, 0),
-                getMapMovementTransition(behindUserTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0),
-                getMapMovementTransition(userTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0),
-                getMapMovementTransition(overUserTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0),
-                getMapMovementTransition(roofCanvas, -SCALE_FACTOR * TILE_SIZE, 0)
+                getMapMovementTransition(groundCanvas,              -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas,   -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas,         -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas,     -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas,                -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
         );
         shiftMapRightTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas, SCALE_FACTOR * TILE_SIZE, 0),
-                getMapMovementTransition(behindUserTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0),
-                getMapMovementTransition(userTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0),
-                getMapMovementTransition(overUserTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0),
-                getMapMovementTransition(roofCanvas, SCALE_FACTOR * TILE_SIZE, 0)
+                getMapMovementTransition(groundCanvas,              SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas,   SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas,         SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas,     SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas,                SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
         );
-        shiftMapUpTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas, 0, -SCALE_FACTOR * TILE_SIZE),
-                getMapMovementTransition(behindUserTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE),
-                getMapMovementTransition(userTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE),
-                getMapMovementTransition(overUserTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE),
-                getMapMovementTransition(roofCanvas, 0, -SCALE_FACTOR * TILE_SIZE)
-        );
+
         shiftMapDownTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE),
-                getMapMovementTransition(behindUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE),
-                getMapMovementTransition(userTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE),
-                getMapMovementTransition(overUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE),
-                getMapMovementTransition(roofCanvas, 0, SCALE_FACTOR * TILE_SIZE)
+                getMapMovementTransition(groundCanvas,              0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas,   0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas,         0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas,     0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas,                0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
         );
     }
 
@@ -555,17 +569,38 @@ public class IngameController extends Controller {
      * @param y   : y value of the movement (in pixels)
      * @return : new Timeline of the transition with the specified values.
      */
-    private Timeline getMapMovementTransition(Canvas map, int x, int y) {
+    private Timeline getMapMovementTransition(Canvas map, int x, int y, int durationMillis) {
         return new Timeline(
-                new KeyFrame(Duration.millis(TRANSITION_DURATION), e -> {
+                new KeyFrame(Duration.millis(durationMillis), e -> {
                     TranslateTransition translateTransition = new TranslateTransition();
-                    translateTransition.setDuration(Duration.millis(TRANSITION_DURATION));
+                    translateTransition.setDuration(Duration.millis(durationMillis));
                     translateTransition.setNode(map);
                     translateTransition.setByX(x);
                     translateTransition.setByY(y);
                     translateTransition.play();
                 })
         );
+    }
+
+    private void buildAndDisplayLoadingScreen(Map map) {
+        loadingScreen = new VBox();
+        loadingScreen.setAlignment(Pos.CENTER);
+        loadingScreen.setPrefWidth(map.width() * TILE_SIZE * SCALE_FACTOR);
+        loadingScreen.setPrefHeight(map.height() * TILE_SIZE * SCALE_FACTOR);
+        loadingScreen.setSpacing(10);
+        loadingScreen.setStyle("-fx-background-color: black");
+        Label loadingLabel = new Label(resources.getString("LOADING.LABEL"));
+        loadingLabel.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-font-family: 'Comic Sans MS'");
+        ImageView trainerImageView = new ImageView();
+        trainerImageView.setFitWidth(40);
+        trainerImageView.setFitHeight(40);
+        loadingScreen.getChildren().add(loadingLabel);
+        loadingScreen.getChildren().add(trainerImageView);
+        root.getChildren().add(loadingScreen);
+        if (!GraphicsEnvironment.isHeadless()) {
+            loadingScreenAnimation = AnimationBuilder.buildTrainerWalkAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), trainerImageView, 150, Animation.INDEFINITE, TRAINER_DIRECTION_RIGHT);
+            loadingScreenAnimation.play();
+        }
     }
 
     /**
@@ -579,24 +614,8 @@ public class IngameController extends Controller {
             return;
         }
         // Init and display loading screen
-        loadingScreen = new VBox();
-        loadingScreen.setAlignment(Pos.CENTER);
-        loadingScreen.setPrefWidth(map.width() * TILE_SIZE * SCALE_FACTOR);
-        loadingScreen.setPrefHeight(map.height() * TILE_SIZE * SCALE_FACTOR);
-        loadingScreen.setSpacing(10);
-        loadingScreen.setStyle("-fx-background-color: black");
-        Label loadingLabel = new Label("Loading...");
-        loadingLabel.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-font-family: 'Comic Sans MS'");
-        ImageView trainerImageView = new ImageView();
-        trainerImageView.setFitWidth(40);
-        trainerImageView.setFitHeight(40);
-        loadingScreen.getChildren().add(loadingLabel);
-        loadingScreen.getChildren().add(trainerImageView);
-        loadingScreenAnimation = AnimationBuilder.buildTrainerWalkAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), trainerImageView, 150, Animation.INDEFINITE, TRAINER_DIRECTION_RIGHT);
-        root.getChildren().add(loadingScreen);
-        if (!GraphicsEnvironment.isHeadless()) {
-            loadingScreenAnimation.play();
-        }
+        buildAndDisplayLoadingScreen(map);
+
         loadingMap = true;
         tileSetImages.clear();
         for (TileSet tileSet : map.tilesets()) {
@@ -628,11 +647,11 @@ public class IngameController extends Controller {
         int shiftX = (int) calculateInitialCameraXOffset(mapWidth, tilePosX);
         int shiftY = (int) calculateInitialCameraYOffset(mapHeight, tilePosY);
         int additionalShiftY = TILE_SIZE * SCALE_FACTOR;
-        getMapMovementTransition(groundCanvas, shiftX, shiftY + additionalShiftY).play();
-        getMapMovementTransition(behindUserTrainerCanvas, shiftX, shiftY).play();
-        getMapMovementTransition(userTrainerCanvas, shiftX, shiftY).play();
-        getMapMovementTransition(overUserTrainerCanvas, shiftX, shiftY).play();
-        getMapMovementTransition(roofCanvas, shiftX, shiftY + additionalShiftY + 1).play();
+        getMapMovementTransition(groundCanvas, shiftX, shiftY + additionalShiftY, TRANSITION_DURATION).play();
+        getMapMovementTransition(behindUserTrainerCanvas, shiftX, shiftY, TRANSITION_DURATION).play();
+        getMapMovementTransition(userTrainerCanvas, shiftX, shiftY, TRANSITION_DURATION).play();
+        getMapMovementTransition(overUserTrainerCanvas, shiftX, shiftY, TRANSITION_DURATION).play();
+        getMapMovementTransition(roofCanvas, shiftX, shiftY + additionalShiftY + 1, TRANSITION_DURATION).play();
     }
 
     /**
