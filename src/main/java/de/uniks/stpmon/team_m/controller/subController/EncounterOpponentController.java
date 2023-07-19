@@ -16,7 +16,8 @@ import javafx.scene.layout.VBox;
 import java.awt.*;
 import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.HEART_ICON;
+import static de.uniks.stpmon.team_m.Constants.STAR_ICON;
 
 public class EncounterOpponentController extends Controller {
     private final Boolean isEnemy;
@@ -59,6 +60,18 @@ public class EncounterOpponentController extends Controller {
     public ImageView starImageView;
     @FXML
     public ImageView heartImageView;
+    @FXML
+    public ImageView paralysedImage;
+    @FXML
+    public ImageView asleepImage;
+    @FXML
+    public ImageView poisonedImage;
+    @FXML
+    public ImageView frozenImage;
+    @FXML
+    public ImageView confusedImage;
+    @FXML
+    public ImageView burnedImage;
 
     private Opponent currentTarget;
     public Runnable onTargetChange;

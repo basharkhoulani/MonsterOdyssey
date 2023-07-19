@@ -4,18 +4,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="650.0" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController">
+<?import javafx.scene.text.Font?>
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="650.0" minHeight="-Infinity" minWidth="-Infinity"
+      xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController">
    <HBox fx:id="opponentHBox" alignment="CENTER" VBox.vgrow="ALWAYS">
       <VBox fx:id="monsterInfoBox" alignment="CENTER" HBox.hgrow="ALWAYS">
          <padding>
-            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
          </padding>
          <HBox alignment="CENTER_LEFT">
             <ImageView fx:id="starImageView" fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
-                  <Insets />
+                  <Insets/>
                </HBox.margin>
             </ImageView>
             <ProgressBar fx:id="experienceBar" maxWidth="300.0" minWidth="175.0" prefHeight="20.0" progress="0.88" styleClass="levelprogress-bar" HBox.hgrow="ALWAYS">
@@ -62,17 +63,29 @@
          <HBox>
             <HBox fx:id="monsterNameHBox" alignment="CENTER" maxHeight="40.0" minHeight="40.0" minWidth="200.0" prefHeight="40.0" styleClass="hBoxYellow">
                <HBox.margin>
-                  <Insets left="60.0" />
+                  <Insets left="60.0"/>
                </HBox.margin>
                <Label fx:id="monsterNameLabel">
                   <font>
-                     <Font name="Comic Sans MS Bold" size="14.0" />
+                     <Font name="Comic Sans MS Bold" size="14.0"/>
                   </font>
                </Label>
             </HBox>
             <VBox.margin>
-               <Insets top="8.0" />
+               <Insets top="8.0"/>
             </VBox.margin>
+         </HBox>
+         <HBox prefWidth="320.0">
+            <VBox.margin>
+               <Insets top="8.0"/>
+            </VBox.margin>
+            <ImageView fx:id="paralysedImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true"
+                       preserveRatio="true"/>
+            <ImageView fx:id="asleepImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"/>
+            <ImageView fx:id="poisonedImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"/>
+            <ImageView fx:id="burnedImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"/>
+            <ImageView fx:id="frozenImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"/>
+            <ImageView fx:id="confusedImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"/>
          </HBox>
       </VBox>
       <VBox fx:id="splitterVBox" maxWidth="50.0" minWidth="1.0" HBox.hgrow="ALWAYS" />

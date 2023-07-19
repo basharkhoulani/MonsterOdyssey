@@ -249,7 +249,7 @@ public class Constants {
             "defense.png"
     );
 
-    public static final HashMap<String, String> STATUSEFFECTS = new HashMap<>(Map.ofEntries(
+    public static final HashMap<String, String> STATUS_EFFECTS_IMAGES = new HashMap<>(Map.ofEntries(
             entry("paralysed", "paralysed.png"),
             entry("asleep", "asleep.png"),
             entry("poisoned", "poisoned.png"),
