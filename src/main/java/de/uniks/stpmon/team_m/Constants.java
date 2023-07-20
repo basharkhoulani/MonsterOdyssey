@@ -100,6 +100,7 @@ public class Constants {
     public static final String ARROWRIGHTSYMBOL = "images/arrowRight.png";
     public static final String MAPSYMBOL = "images/MapSymbol.png";
     public static final String MONSTER_WITH_COLOR = "images/Monster_mit_Farbe.png";
+    public static final String COIN = "images/coin.png";
 
     // NPC DIALOG
     public static final int dialogVBoxWidth = 700;
