@@ -424,7 +424,6 @@ public class EncounterController extends Controller {
                 return;
             }
             battleLog.add(opponent);
-            System.out.println("Opponent: " + opponent);
             if (event.suffix().contains("updated")) {
                 inEncounter = true;
                 updateOpponent(opponent);
