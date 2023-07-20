@@ -136,6 +136,10 @@ public class EncounterOpponentController extends Controller {
             currentMonsterButton.setOnAction(event -> {
                 showMonsterInformation(currentOpponent, this);
             });
+            if (!invertX){
+                trainerImageView.setDisable(true);
+                trainerImageView.setVisible(false);
+            }
         }
         return parent;
     }

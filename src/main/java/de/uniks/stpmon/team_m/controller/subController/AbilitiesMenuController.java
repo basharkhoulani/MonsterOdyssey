@@ -97,6 +97,7 @@ public class AbilitiesMenuController extends Controller {
         String regionId = encounterOpponentStorageProvider.get().getRegionId();
         String encounterId = encounterOpponentStorageProvider.get().getEncounterId();
         String opponentId = encounterOpponentStorageProvider.get().getSelfOpponent()._id();
+        // here to put the selected target
         String targetId = encounterOpponentStorageProvider.get().getEnemyOpponents().get(0).trainer();
         Move move = new AbilityMove("ability", ability.id(), targetId);
 
@@ -104,6 +105,7 @@ public class AbilitiesMenuController extends Controller {
                 opponent -> {
                     encounterController.updateDescription(resources.getString("YOU.USED") + " " + ability.name() + ". \n", true);
                     encounterController.resetRepeatedTimes();
+                    encounterController.increaseCurrentMonsterIndex();
                     encounterController.goBackToBattleMenu();
                 }, Throwable::printStackTrace));
     }
