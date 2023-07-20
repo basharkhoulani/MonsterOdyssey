@@ -105,10 +105,10 @@ public class EncounterController extends Controller {
     private final HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
     private final HashMap<String, Opponent> opponentsDelete = new HashMap<>();
     private int repeatedTimes = 0;
-    private boolean inEncounter = true;
-    private boolean resultLevelUP = false;
-    private Monster oldMonster; // here use HashMap
-    private final ArrayList<Integer> newAbilities = new ArrayList<>(); // here use HashMap
+    //private Monster oldMonster; // here use HashMap
+    private HashMap<String, Boolean> resultLevelUpHashMap = new HashMap<>();
+    private HashMap<String, Monster> oldMonsterHashMap = new HashMap<>();
+    private HashMap<String, ArrayList<Integer>> newAbilitiesHashMap = new HashMap<>();
     private HashMap<String, EncounterOpponentController> encounterOpponentControllerHashMap = new HashMap<>();
     private int currentMonsterIndex = 0;
 
@@ -165,9 +165,20 @@ public class EncounterController extends Controller {
         setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), sprite, TRAINER_DIRECTION_UP);
 
         disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getSelfOpponent().monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
-            oldMonster = monster;
+            oldMonsterHashMap.put(encounterOpponentStorage.getSelfOpponent()._id(), monster);
             encounterOpponentStorage.addCurrentMonsters(encounterOpponentStorage.getSelfOpponent()._id(), monster);
         }));
+        newAbilitiesHashMap.put(encounterOpponentStorage.getSelfOpponent()._id(), new ArrayList<>());
+        resultLevelUpHashMap.put(encounterOpponentStorage.getSelfOpponent()._id(), false);
+
+        if(encounterOpponentStorage.isTwoMonster()){
+            disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getCoopOpponent().monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
+                oldMonsterHashMap.put(encounterOpponentStorage.getCoopOpponent()._id(), monster);
+                encounterOpponentStorage.addCurrentMonsters(encounterOpponentStorage.getCoopOpponent()._id(), monster);
+            }));
+            newAbilitiesHashMap.put(encounterOpponentStorage.getCoopOpponent()._id(), new ArrayList<>());
+            resultLevelUpHashMap.put(encounterOpponentStorage.getCoopOpponent()._id(), false);
+        }
 
         disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilityDtos::addAll));
 
@@ -453,11 +464,10 @@ public class EncounterController extends Controller {
             final Opponent opponent = event.data();
             System.out.println("Opponent: " + event.suffix() + opponent);
             if (event.suffix().contains("updated")) {
-                inEncounter = true;
                 updateOpponent(opponent);
             } else if (event.suffix().contains("deleted")) {
                 opponentsDelete.put(opponent._id(), opponent);
-                if (opponentsDelete.size() >= encounterOpponentStorage.getEncounterSize() && !inEncounter) {
+                if (opponentsDelete.size() >= encounterOpponentStorage.getEncounterSize()) {
                     showResult();
                 }
             }
@@ -486,7 +496,6 @@ public class EncounterController extends Controller {
                 writeBattleDescription(opponentsUpdate);
             }
             repeatedTimes++;
-            inEncounter = false;
         }
     }
 
@@ -518,12 +527,18 @@ public class EncounterController extends Controller {
                                 updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
                         case "monster-levelup" -> {
                             if(oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
-                                if (!resultLevelUP) {
-                                    resultLevelUP = true;
+                                resultLevelUpHashMap.put(oResults._id(), true);
+                            }
+                        }
+                        case "monster-learned" -> {
+                            if(oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
+                                if(newAbilitiesHashMap.get(oResults._id()) == null){
+                                    newAbilitiesHashMap.put(oResults._id(), new ArrayList<>(List.of(r.ability())));
+                                } else {
+                                    newAbilitiesHashMap.get(oResults._id()).add(r.ability());
                                 }
                             }
                         }
-                        case "monster-learned" -> newAbilities.add(r.ability());
                         case "target-defeated" -> {
                             if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id()) || oResults.isAttacker() == encounterOpponentStorage.isAttacker()) {
                                 monsterDefeated(resources.getString("ENEMY.DEFEATED"));
@@ -536,7 +551,6 @@ public class EncounterController extends Controller {
             }
 
         }
-        inEncounter = false;
         opponentsUpdate.clear();
     }
 
@@ -638,10 +652,14 @@ public class EncounterController extends Controller {
         updateDescription(information + "\n", false);
         PauseTransition pause = new PauseTransition(Duration.millis(500));
         pause.setOnFinished(evt -> {
-            if (resultLevelUP) {
-                showLevelUpPopUp();
+            if (resultLevelUpHashMap.get(encounterOpponentStorage.getSelfOpponent()._id())) {
+                showLevelUpPopUp(encounterOpponentStorage.getSelfOpponent()._id());
             }
-
+            if (encounterOpponentStorage.isTwoMonster()){
+                if(resultLevelUpHashMap.get(encounterOpponentStorage.getCoopOpponent()._id())) {
+                    showLevelUpPopUp(encounterOpponentStorage.getCoopOpponent()._id());
+                }
+            }
         });
         pause.play();
     }
@@ -769,18 +787,21 @@ public class EncounterController extends Controller {
         battleMenuController.buttonDisable(isDisable);
     }
 
-    // TODO: an zwei Monster anpassen
-    public void showLevelUpPopUp() {
-        resultLevelUP = false;
+    // TODO: an zwei Monster anpassen here only one Monster
+    public void showLevelUpPopUp(String opponentId) {
+        resultLevelUpHashMap.put(opponentId, false);
         LevelUpController levelUpController = levelUpControllerProvider.get();
         VBox popUpVBox = new VBox();
         popUpVBox.getStyleClass().add("miniMapContainer");
-        String selfOpponentId = encounterOpponentStorage.getSelfOpponent()._id();
-        disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getCurrentMonsters(selfOpponentId)._id()).observeOn(FX_SCHEDULER).subscribe(monster -> {
-            levelUpController.init(popUpVBox, rootStackPane, this, monster, encounterOpponentStorage.getCurrentMonsterType(selfOpponentId), oldMonster, newAbilities);
+
+        Monster oldMonster = oldMonsterHashMap.get(opponentId);
+        ArrayList<Integer> newAbilities = newAbilitiesHashMap.get(opponentId);
+
+        disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getCurrentMonsters(opponentId)._id()).observeOn(FX_SCHEDULER).subscribe(monster -> {
+            levelUpController.init(popUpVBox, rootStackPane, this, monster, encounterOpponentStorage.getCurrentMonsterType(opponentId), oldMonster, newAbilities);
             popUpVBox.getChildren().add(levelUpController.render());
             rootStackPane.getChildren().add(popUpVBox);
-            newAbilities.clear();
+            newAbilitiesHashMap.put(opponentId, new ArrayList<>());
         }, Throwable::printStackTrace));
     }
 }
