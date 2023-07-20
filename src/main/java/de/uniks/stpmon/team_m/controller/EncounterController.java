@@ -158,7 +158,7 @@ public class EncounterController extends Controller {
         HBox.setHgrow(ownTrainerParent, javafx.scene.layout.Priority.ALWAYS);
 
         //showMyMonster
-        showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent(), true);
+        showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent());
         // showMySprite
         ImageView sprite = ownTrainerController.getTrainerImageView();
         setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), sprite, 1);
@@ -293,11 +293,10 @@ public class EncounterController extends Controller {
         Parent coopTrainerParent = coopTrainerController.render();
         HBox.setHgrow(coopTrainerParent, javafx.scene.layout.Priority.ALWAYS);
         teamHBox.getChildren().add(coopTrainerParent);
-        if (encounterOpponentStorage.isTwoMonster()){
-            showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent(), true);
+        if (!encounterOpponentStorage.isTwoMonster()){
+            showCoopImage(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
         }
-        showCoopImage(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
-        showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent(), false);
+        showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
 
         // Own trainer
         teamHBox.getChildren().add(ownTrainerParent);
@@ -355,7 +354,7 @@ public class EncounterController extends Controller {
         }
     }
 
-    private void showTeamMonster(EncounterOpponentController encounterOpponentController, Opponent opponent, boolean isSelf) {
+    private void showTeamMonster(EncounterOpponentController encounterOpponentController, Opponent opponent) {
         // Monster
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
             encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);

@@ -109,6 +109,5 @@ public class LevelUpController extends Controller {
 
     public void okButtonPressed() {
         root.getChildren().remove(container);
-        encounterController.continueBattle();
     }
 }
