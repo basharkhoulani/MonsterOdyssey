@@ -52,7 +52,7 @@ public class IngameNotificationCell extends ListCell<String> {
             loadFXML();
             notificationText.setText(notificationString);
 
-            if(!GraphicsEnvironment.isHeadless()){
+            if (!GraphicsEnvironment.isHeadless()) {
                 avatar.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString()));
             }
 

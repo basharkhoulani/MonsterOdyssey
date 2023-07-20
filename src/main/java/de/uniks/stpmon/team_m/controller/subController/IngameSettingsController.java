@@ -52,7 +52,7 @@ public class IngameSettingsController extends Controller {
 
     public Parent render() {
         final Parent parent = super.render();
-        if(!GraphicsEnvironment.isHeadless()){
+        if (!GraphicsEnvironment.isHeadless()) {
             audioSettingsImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(AUDIOSYMBOL)).toString()));
             keybindingsImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(KEYBINDINGSSYMBOL)).toString()));
             goBackImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(GOBACKSYMBOL)).toString()));
@@ -75,7 +75,7 @@ public class IngameSettingsController extends Controller {
         ingameController.showKeybindings();
     }
 
-    public void openTrainerSettings(){
+    public void openTrainerSettings() {
         ingameController.showTrainerSettings();
     }
 

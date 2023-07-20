@@ -16,17 +16,14 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.HIGH_VOLUME_ICON;
+import static de.uniks.stpmon.team_m.Constants.MUTE_ICON;
 
 public class ChangeAudioController extends Controller {
     @FXML
     public ImageView muteIconImageView;
     @FXML
     public ImageView highVolumeIconImageView;
-
-    @Inject
-    public ChangeAudioController() {
-    }
 
     @FXML
     private Button closeButton;
@@ -38,6 +35,10 @@ public class ChangeAudioController extends Controller {
 
     @Inject
     IngameController ingameController;
+
+    @Inject
+    public ChangeAudioController() {
+    }
 
     @Override
     public Parent render() {

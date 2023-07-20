@@ -4,7 +4,6 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
-import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
@@ -46,8 +45,10 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -210,13 +211,13 @@ public class IngameController extends Controller {
             if (event.getCode().toString().equals(preferences.get("interaction", "E"))) {
                 if (!inNpcPopup && !inEncounterInfoBox) {
                     interactWithTrainer();
-                } else if(inEncounterInfoBox){
+                } else if (inEncounterInfoBox) {
                     stackPane.getChildren().remove(dialogStackPane);
                     this.inEncounterInfoBox = false;
                     showEncounterScene();
                 }
             }
-            if (event.getCode().toString().equals(preferences.get("pauseMenu","ESCAPE"))) {
+            if (event.getCode().toString().equals(preferences.get("pauseMenu", "ESCAPE"))) {
                 if (inSettings) {
                     return;
                 }
@@ -226,7 +227,7 @@ public class IngameController extends Controller {
                     ingamePauseMenuController.resumeGame();
                 }
             }
-            if (event.getCode().toString().equals(preferences.get("inventory","I"))){
+            if (event.getCode().toString().equals(preferences.get("inventory", "I"))) {
                 showItems();
             }
             if (isChatting || loadingMap || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < TRANSITION_DURATION + 50)) {
@@ -434,26 +435,26 @@ public class IngameController extends Controller {
         specificSounds();
 
         //Keybindings
-        if(preferences.get("walkUp",null) == null){
+        if (preferences.get("walkUp", null) == null) {
             preferences.put("walkUp", KeyCode.W.getChar());
         }
-        if(preferences.get("walkDown",null) == null){
-            preferences.put("walkDown",KeyCode.S.getChar());
+        if (preferences.get("walkDown", null) == null) {
+            preferences.put("walkDown", KeyCode.S.getChar());
         }
-        if(preferences.get("walkLeft",null) == null){
-            preferences.put("walkLeft",KeyCode.A.getChar());
+        if (preferences.get("walkLeft", null) == null) {
+            preferences.put("walkLeft", KeyCode.A.getChar());
         }
-        if(preferences.get("walkRight",null) == null){
-            preferences.put("walkRight",KeyCode.D.getChar());
+        if (preferences.get("walkRight", null) == null) {
+            preferences.put("walkRight", KeyCode.D.getChar());
         }
-        if(preferences.get("interaction",null) == null){
-            preferences.put("interaction",KeyCode.E.getChar());
+        if (preferences.get("interaction", null) == null) {
+            preferences.put("interaction", KeyCode.E.getChar());
         }
-        if(preferences.get("pauseMenu",null) == null){
-            preferences.put("pauseMenu","ESCAPE");
+        if (preferences.get("pauseMenu", null) == null) {
+            preferences.put("pauseMenu", "ESCAPE");
         }
-        if(preferences.get("inventory",null) == null){
-            preferences.put("inventory",KeyCode.I.getChar());
+        if (preferences.get("inventory", null) == null) {
+            preferences.put("inventory", KeyCode.I.getChar());
         }
 
         return parent;
@@ -607,7 +608,7 @@ public class IngameController extends Controller {
                     }));
         }
         boolean layerFound = false;
-        for (Layer layer: map.layers()) {
+        for (Layer layer : map.layers()) {
             if (layer.width() != 0) {
                 focusOnPlayerPosition(layer.width(), layer.height(), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
                 layerFound = true;
@@ -750,7 +751,7 @@ public class IngameController extends Controller {
             canvas.setScaleY(SCALE_FACTOR);
         }
         boolean layerFound = false;
-        for (Layer layer: map.layers()) {
+        for (Layer layer : map.layers()) {
             if (layer.width() != 0) {
                 canvas.setWidth(layer.width() * TILE_SIZE);
                 canvas.setHeight(layer.height() * TILE_SIZE);
@@ -1096,7 +1097,7 @@ public class IngameController extends Controller {
     public void listenToOpponents() {
         String regionId = trainerStorageProvider.get().getRegion()._id();
         encounterOpponentStorage.setRegionId(trainerStorageProvider.get().getRegion()._id());
-        disposables.add(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() +".opponents.*.*", Opponent.class)
+        disposables.add(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() + ".opponents.*.*", Opponent.class)
                 .observeOn(FX_SCHEDULER).subscribe(opponentEvent -> {
                     final Opponent opponent = opponentEvent.data();
                     if (opponentEvent.suffix().equals("created")) {
@@ -1110,7 +1111,7 @@ public class IngameController extends Controller {
                                     encounterOpponentStorage.setOpponentsInStorage(opts);
                                     for (Opponent o : opts) {
                                         if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                                            if(o.isAttacker() != encounterOpponentStorage.isAttacker()) {
+                                            if (o.isAttacker() != encounterOpponentStorage.isAttacker()) {
                                                 encounterOpponentStorage.addEnemyOpponent(o);
                                             } else {
                                                 encounterOpponentStorage.setCoopOpponent(o);
@@ -1161,7 +1162,7 @@ public class IngameController extends Controller {
                                     encounterOpponentStorage.setEncounterSize(opts.size());
                                     for (Opponent o : opts) {
                                         if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                                            if(o.isAttacker() != encounterOpponentStorage.isAttacker()) {
+                                            if (o.isAttacker() != encounterOpponentStorage.isAttacker()) {
                                                 encounterOpponentStorage.addEnemyOpponent(o);
                                             } else {
                                                 encounterOpponentStorage.setCoopOpponent(o);
@@ -1223,7 +1224,7 @@ public class IngameController extends Controller {
         buttonsDisable(true);
     }
 
-    public void showItems(){
+    public void showItems() {
         //TODO: Add ItemsVBox to root
     }
 
@@ -1246,7 +1247,7 @@ public class IngameController extends Controller {
                             this.currentNpc._id(),
                             0
                     )).observeOn(FX_SCHEDULER).subscribe());
-                    endDialog(0,false);
+                    endDialog(0, false);
                 }
             } catch (Error e) {
                 continueTrainerDialog(null);
@@ -1433,7 +1434,7 @@ public class IngameController extends Controller {
     }
 
     public void endDialog(int selectionValue, boolean encounterNpc) {
-        if(this.dialogController !=null){
+        if (this.dialogController != null) {
             this.dialogController.destroy();
         }
         inDialog = false;
@@ -1521,7 +1522,7 @@ public class IngameController extends Controller {
         dialogStackPane.setMaxWidth(700);
 
         Label nameLabel = new Label();
-        if(isEncounter){
+        if (isEncounter) {
             nameLabel.setText(resources.getString("ANNOUNCEMENT"));
         } else {
             nameLabel.setText(this.currentNpc.name());
@@ -1690,7 +1691,7 @@ public class IngameController extends Controller {
     }
 
     public void showMonsterDetails(Monster monster, MonsterTypeDto monsterTypeDto,
-                                   Image monsterImage, ResourceBundle resources,  PresetsService presetsService, String type) {
+                                   Image monsterImage, ResourceBundle resources, PresetsService presetsService, String type) {
         VBox monsterDetailVBox = new VBox();
         monsterDetailVBox.setAlignment(Pos.CENTER);
         MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();
