@@ -99,6 +99,17 @@ public class MonsterCell extends ListCell<Monster> {
         this.itemId = null;
     }
 
+    public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController,
+                       IngameController ingameController, boolean encounter, boolean other, String itemId) {
+        this.ingameController = ingameController;
+        this.resources = resources;
+        this.presetsService = presetsService;
+        this.monstersListController = monstersListController;
+        this.encounter = encounter;
+        this.other = other;
+        this.itemId = itemId;
+    }
+
     public MonsterCell(ResourceBundle resources, PresetsService presetsService, ChangeMonsterListController changeMonsterListController,
                        EncounterController encounterController, IngameController ingameController, boolean encounter, boolean other) {
         this.encounterController = encounterController;
@@ -195,7 +206,7 @@ public class MonsterCell extends ListCell<Monster> {
                 arrowDown.setVisible(false);
                 viewDetailsButton.setDisable(true);
                 viewDetailsButton.setVisible(false);
-                removeFromTeamButton.setStyle("-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7;");
+                removeFromTeamButton.setStyle("-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7; -fx-min-width: 150px; -fx-min-height: 50px;");
                 removeFromTeamButton.setText(resources.getString("SELECT"));
                 removeFromTeamButton.setOnAction(event -> ingameController.useItem(itemId, monster));
             }
