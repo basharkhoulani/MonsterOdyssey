@@ -257,4 +257,11 @@ public class Constants {
             entry("frozen", "images/frozen.png"),
             entry("confused", "images/confused.png")
     ));
+
+    public static final String PARALYSED = "paralysed";
+    public static final String ASLEEP = "asleep";
+    public static final String POISONED = "poisoned";
+    public static final String BURNED = "burned";
+    public static final String FROZEN = "frozen";
+    public static final String CONFUSED = "confused";
 }

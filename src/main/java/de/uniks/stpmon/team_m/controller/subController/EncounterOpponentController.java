@@ -212,12 +212,12 @@ public class EncounterOpponentController extends Controller {
 
     public void showStatus(String status, boolean value) {
         switch (status) {
-            case "paralysed" -> paralysedImage.setVisible(value);
-            case "asleep" -> asleepImage.setVisible(value);
-            case "poisoned" -> poisonedImage.setVisible(value);
-            case "frozen" -> frozenImage.setVisible(value);
-            case "confused" -> confusedImage.setVisible(value);
-            case "burned" -> burnedImage.setVisible(value);
+            case PARALYSED -> paralysedImage.setVisible(value);
+            case ASLEEP -> asleepImage.setVisible(value);
+            case POISONED -> poisonedImage.setVisible(value);
+            case FROZEN -> frozenImage.setVisible(value);
+            case CONFUSED -> confusedImage.setVisible(value);
+            case BURNED -> burnedImage.setVisible(value);
         }
     }
 }
