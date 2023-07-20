@@ -544,46 +544,50 @@ public class EncounterController extends Controller {
         List<String> opponentsInStorage = encounterOpponentStorage.getOpponentsInStorage();
         for (String opponentId : opponentsInStorage) {
             Opponent o = forDescription.get(opponentId + "Move");
-            Move move = o.move();
-            if (move instanceof AbilityMove abilityMove) {
-                if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                    updateDescription(resources.getString("YOU.USED") + " " + abilityDtos.get(abilityMove.ability() - 1).name() + ". ", false);
-                } else if (o.isAttacker() == encounterOpponentStorage.isAttacker()) {
-                    updateDescription(resources.getString("COOP.USED") + " " + abilityDtos.get(abilityMove.ability() - 1).name() + ". ", false);
+            if(o != null){
+                Move move = o.move();
+                if (move instanceof AbilityMove abilityMove) {
+                    if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                        updateDescription(resources.getString("YOU.USED") + " " + abilityDtos.get(abilityMove.ability() - 1).name() + ". ", false);
+                    } else if (o.isAttacker() == encounterOpponentStorage.isAttacker()) {
+                        updateDescription(resources.getString("COOP.USED") + " " + abilityDtos.get(abilityMove.ability() - 1).name() + ". ", false);
 
-                }else {
-                    updateDescription(resources.getString("ENEMY.USED") + " " + abilityDtos.get(abilityMove.ability() - 1).name() + ". ", false);
+                    }else {
+                        updateDescription(resources.getString("ENEMY.USED") + " " + abilityDtos.get(abilityMove.ability() - 1).name() + ". ", false);
+                    }
                 }
             }
+
                 // else for change monster move
                 // here for the situation that change Monster Move
                 // have to add another websocket listenToMonster(trainerId, monsterId)
 
             Opponent oResults = forDescription.get(opponentId + "Results");
-            if(oResults.results() != null){
-                for (Result r : oResults.results()) {
-                    switch (r.type()) {
-                        case "ability-success" ->
-                                updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
-                        case "monster-levelup" -> {
-                            if(oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
-                                resultLevelUpHashMap.put(oResults._id(), true);
-                            }
-                        }
-                        case "monster-learned" -> {
-                            if(oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())){
-                                if(newAbilitiesHashMap.get(oResults._id()) == null){
-                                    newAbilitiesHashMap.put(oResults._id(), new ArrayList<>(List.of(r.ability())));
-                                } else {
-                                    newAbilitiesHashMap.get(oResults._id()).add(r.ability());
+            if(oResults != null){
+                if(oResults.results() != null) {
+                    for (Result r : oResults.results()) {
+                        switch (r.type()) {
+                            case "ability-success" -> updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
+                            case "monster-levelup" -> {
+                                if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                                    resultLevelUpHashMap.put(oResults._id(), true);
                                 }
                             }
-                        }
-                        case "target-defeated" -> {
-                            if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id()) || oResults.isAttacker() == encounterOpponentStorage.isAttacker()) {
-                                monsterDefeated(resources.getString("ENEMY.DEFEATED"));
-                            } else {
-                                monsterDefeated(resources.getString("TEAM.DEFEATED"));
+                            case "monster-learned" -> {
+                                if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                                    if (newAbilitiesHashMap.get(oResults._id()) == null) {
+                                        newAbilitiesHashMap.put(oResults._id(), new ArrayList<>(List.of(r.ability())));
+                                    } else {
+                                        newAbilitiesHashMap.get(oResults._id()).add(r.ability());
+                                    }
+                                }
+                            }
+                            case "target-defeated" -> {
+                                if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id()) || oResults.isAttacker() == encounterOpponentStorage.isAttacker()) {
+                                    monsterDefeated(resources.getString("ENEMY.DEFEATED"));
+                                } else {
+                                    monsterDefeated(resources.getString("TEAM.DEFEATED"));
+                                }
                             }
                         }
                     }
