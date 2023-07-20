@@ -108,7 +108,7 @@ public class EncounterController extends Controller {
     private final List<AbilityDto> abilityDtos = new ArrayList<>();
     private final HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
     private final HashMap<String, Opponent> opponentsDelete = new HashMap<>();
-    private final HashMap<String, Monster> monstersInEncounter = new HashMap<>();
+    private final HashMap<Monster, MonsterTypeDto> monstersInEncounter = new HashMap<Monster, MonsterTypeDto>();
     private int repeatedTimes = 0;
     private boolean inEncounter = true;
     private boolean resultLevelUP = false;
@@ -135,6 +135,11 @@ public class EncounterController extends Controller {
         subControllers.add(battleMenuController);
         subControllers.add(abilitiesMenuController);
         encounterOpponentControllerHashMap = new HashMap<>();
+        disposables.add(monstersService.getMonsters(regionId, trainerId).observeOn(FX_SCHEDULER).subscribe(monsters -> {
+            monsters.forEach(monster -> disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto ->
+                            monstersInEncounter.put(monster, monsterTypeDto),
+                    Throwable::printStackTrace)));
+        }, Throwable::printStackTrace));
         if (!GraphicsEnvironment.isHeadless() && !AudioService.getInstance().checkMuted()) {
             AudioService.getInstance().stopSound();
             AudioService.getInstance().playSound(FIGHT_SOUND);
@@ -169,8 +174,8 @@ public class EncounterController extends Controller {
         disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getSelfOpponent().monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
             oldMonster = monster;
             encounterOpponentStorage.addCurrentMonster(monster);
-        }));
-        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> abilityDtos.addAll(abilities)));
+        }, Throwable::printStackTrace));
+        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> abilityDtos.addAll(abilities), Throwable::printStackTrace));
 
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId).observeOn(FX_SCHEDULER).subscribe(encounter -> {
             encounterOpponentStorage.setWild(encounter.isWild());
@@ -187,7 +192,7 @@ public class EncounterController extends Controller {
                 }
                 battleMenuController.showFleeButton(false);
             }
-        }));
+        }, Throwable::printStackTrace));
         return parent;
     }
 
@@ -314,7 +319,6 @@ public class EncounterController extends Controller {
     private void showEnemyMonster(EncounterOpponentController encounterOpponentController, Opponent opponent, boolean isInit) {
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
             encounterOpponentController.setLevelLabel("LVL " + monster.level()).setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
-            monstersInEncounter.put(opponent.trainer(), monster);
 
             listenToMonster(opponent.trainer(), monster._id(), encounterOpponentController);
             //write monster name
@@ -430,11 +434,6 @@ public class EncounterController extends Controller {
     public void listenToOpponents(String encounterId) {
         disposables.add(eventListener.get().listen("encounters." + encounterId + ".trainers.*.opponents.*.*", Opponent.class).observeOn(FX_SCHEDULER).subscribe(event -> {
             final Opponent opponent = event.data();
-            if (opponentLog.contains(opponent)) {
-                return;
-            }
-            opponentLog.add(opponent);
-            System.out.println(opponent);
             if (event.suffix().contains("updated")) {
                 inEncounter = true;
                 updateOpponent(opponent);
@@ -444,15 +443,13 @@ public class EncounterController extends Controller {
                             if (!resultLevelUP) {
                                 resultLevelUP = true;
                             }
-                        }
-                        if (Objects.equals(result.type(), "monster-learned")) {
+                        } else if (Objects.equals(result.type(), "monster-learned")) {
                             newAbilities.add(result.ability());
-                        }
-                        if (Objects.equals(result.type(), "target-defeated")) {
+                        } else if (Objects.equals(result.type(), "target-defeated")) {
                             if (Objects.equals(opponent._id(), encounterOpponentStorage.getSelfOpponent()._id())) {
-                                monsterDefeated();
+                                enemyMonsterDefeated();
                             } else {
-                                showResultPopUp(resources.getString("YOU.FAILED"));
+                                yourMonsterDefeated();
                             }
                         }
                     });
@@ -505,14 +502,21 @@ public class EncounterController extends Controller {
                     updateDescription(resources.getString("ENEMY.USED") + " " + abilityDtos.get(abilityMove.ability() - 1).name() + ". ", false);
                 }
             }
-            if (move instanceof ChangeMonsterMove changeMonsterMove) {
-                // TODO: translation
+            if (move instanceof ChangeMonsterMove) {
                 if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                    updateDescription("you changed monster" + ". ", false);
+                    updateDescription(resources.getString("YOU.CHANGED.MONSTER") + ". ", false);
                     showTeamMonster(encounterOpponentControllerHashMap.get(o._id()), o, true);
                     listenToMonster(o.trainer(), o.monster(), encounterOpponentControllerHashMap.get(o._id()));
+                } else if (encounterOpponentStorage.getEnemyOpponents().contains(o)) {
+                    updateDescription(resources.getString("ENEMY.CHANGED.MONSTER") + ". ", false);
+                    showEnemyMonster(encounterOpponentControllerHashMap.get(o._id()), o, false);
+                    listenToMonster(o.trainer(), o.monster(), encounterOpponentControllerHashMap.get(o._id()));
+                } else {
+                    updateDescription(resources.getString("ALLY.CHANGED.MONSTER") + ". ", false);
+                    showTeamMonster(encounterOpponentControllerHashMap.get(o._id()), o, false);
+                    listenToMonster(o.trainer(), o.monster(), encounterOpponentControllerHashMap.get(o._id()));
                 }
-                // here else for enemy change, coop change
+
             }
 
             Opponent oResults = forDescription.get(opponentId + "Results");
@@ -553,7 +557,7 @@ public class EncounterController extends Controller {
                     encounterOpponentStorage.setCurrentTrainerMonster(monster);
                     disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto -> {
                         encounterOpponentStorage.setCurrentTrainerMonsterType(monsterTypeDto);
-                    }));
+                    }, Throwable::printStackTrace));
                 }
             }
         }, Throwable::printStackTrace));
@@ -610,9 +614,9 @@ public class EncounterController extends Controller {
         battleMenuVBox.getChildren().add(battleMenuController.render());
     }
 
-    public void monsterDefeated() {
+    public void enemyMonsterDefeated() {
         battleDialogText.setText(resources.getString("TARGET.DEFEATED"));
-        PauseTransition pause = new PauseTransition(Duration.millis(500));
+        PauseTransition pause = new PauseTransition(Duration.millis(1000));
         pause.setOnFinished(evt -> {
             enemy1Controller.monsterImageView.setVisible(false);
             if (resultLevelUP) {
@@ -625,17 +629,44 @@ public class EncounterController extends Controller {
     }
 
     public void continueBattle() {
-        //if (encounterOpponentStorage.isWild()) {
-        SequentialTransition fleeAnimation = buildFleeAnimation();
-        PauseTransition pause = new PauseTransition(Duration.millis(1000));
-        pause.setOnFinished(evt -> {
-            ownTrainerController.monsterImageView.setVisible(false);
-            fleeAnimation.play();
+        final boolean[] enemyHasAnotherMonster = {false};
+        encounterOpponentStorage.getEnemyOpponents().forEach(opponent -> {
+            if (opponent.monster() != null) {
+                enemyHasAnotherMonster[0] = true;
+            }
         });
-        pause.play();
-        fleeAnimation.setOnFinished(evt -> showResultPopUp(resources.getString("YOU.WON")));
-        //}
+        if (!enemyHasAnotherMonster[0] || encounterOpponentStorage.isWild()) {
+            SequentialTransition fleeAnimation = buildFleeAnimation();
+            PauseTransition pause = new PauseTransition(Duration.millis(1000));
+            pause.setOnFinished(evt -> {
+                ownTrainerController.monsterImageView.setVisible(false);
+                fleeAnimation.play();
+            });
+            pause.play();
+            fleeAnimation.setOnFinished(evt -> showResultPopUp(resources.getString("YOU.WON")));
+        }
+    }
 
+    public void yourMonsterDefeated() {
+        final boolean[] hasAnotherMonster = {false};
+        monstersInEncounter.forEach((monster, monsterTypeDto) -> {
+            if (monster.currentAttributes().health() > 0) {
+                hasAnotherMonster[0] = true;
+                disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, encounterOpponentStorage.getSelfOpponent()._id(), monster._id(), null).observeOn(FX_SCHEDULER).subscribe(
+                        opponent -> {
+                            resetRepeatedTimes();
+                            goBackToBattleMenu();
+                            encounterOpponentStorage.setCurrentTrainerMonster(monster);
+                            encounterOpponentStorage.setCurrentTrainerMonsterType(monsterTypeDto);
+                            encounterOpponentStorage.setSelfOpponent(opponent);
+                            showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent(), true);
+                        }, Throwable::printStackTrace));
+
+            }
+        });
+        if (!hasAnotherMonster[0]) {
+            showResultPopUp(resources.getString("YOU.FAILED"));
+        }
     }
 
     public void fleeFromBattle() {
@@ -772,7 +803,6 @@ public class EncounterController extends Controller {
 
     public void changeMonster(Monster monster, MonsterTypeDto monsterTypeDto) {
         Move move = new ChangeMonsterMove("change-monster", monster._id());
-
         disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, encounterOpponentStorage.getSelfOpponent()._id(), null, move).observeOn(FX_SCHEDULER).subscribe(
                 opponent -> {
                     resetRepeatedTimes();
