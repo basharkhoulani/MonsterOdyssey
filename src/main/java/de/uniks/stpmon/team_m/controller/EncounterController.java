@@ -108,11 +108,10 @@ public class EncounterController extends Controller {
     private final List<AbilityDto> abilityDtos = new ArrayList<>();
     private final HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
     private final HashMap<String, Opponent> opponentsDelete = new HashMap<>();
-    private final HashMap<Monster, MonsterTypeDto> monstersInEncounter = new HashMap<Monster, MonsterTypeDto>();
+    private final HashMap<Monster, MonsterTypeDto> monstersInEncounter = new HashMap<>();
     private int repeatedTimes = 0;
     private boolean inEncounter = true;
     private boolean resultLevelUP = false;
-    private final ArrayList<Opponent> opponentLog = new ArrayList<>();
     private Monster oldMonster;
     private final ArrayList<Integer> newAbilities = new ArrayList<>();
 
@@ -135,11 +134,10 @@ public class EncounterController extends Controller {
         subControllers.add(battleMenuController);
         subControllers.add(abilitiesMenuController);
         encounterOpponentControllerHashMap = new HashMap<>();
-        disposables.add(monstersService.getMonsters(regionId, trainerId).observeOn(FX_SCHEDULER).subscribe(monsters -> {
-            monsters.forEach(monster -> disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto ->
-                            monstersInEncounter.put(monster, monsterTypeDto),
-                    Throwable::printStackTrace)));
-        }, Throwable::printStackTrace));
+        disposables.add(monstersService.getMonsters(regionId, trainerId).observeOn(FX_SCHEDULER).subscribe(monsters ->
+                monsters.forEach(monster -> disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto ->
+                        monstersInEncounter.put(monster, monsterTypeDto),
+                Throwable::printStackTrace))), Throwable::printStackTrace));
         if (!GraphicsEnvironment.isHeadless() && !AudioService.getInstance().checkMuted()) {
             AudioService.getInstance().stopSound();
             AudioService.getInstance().playSound(FIGHT_SOUND);
@@ -175,7 +173,7 @@ public class EncounterController extends Controller {
             oldMonster = monster;
             encounterOpponentStorage.addCurrentMonster(monster);
         }, Throwable::printStackTrace));
-        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> abilityDtos.addAll(abilities), Throwable::printStackTrace));
+        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilityDtos::addAll, Throwable::printStackTrace));
 
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId).observeOn(FX_SCHEDULER).subscribe(encounter -> {
             encounterOpponentStorage.setWild(encounter.isWild());
@@ -555,9 +553,8 @@ public class EncounterController extends Controller {
                         .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
                 if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
                     encounterOpponentStorage.setCurrentTrainerMonster(monster);
-                    disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto -> {
-                        encounterOpponentStorage.setCurrentTrainerMonsterType(monsterTypeDto);
-                    }, Throwable::printStackTrace));
+                    disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto ->
+                            encounterOpponentStorage.setCurrentTrainerMonsterType(monsterTypeDto), Throwable::printStackTrace));
                 }
             }
         }, Throwable::printStackTrace));
