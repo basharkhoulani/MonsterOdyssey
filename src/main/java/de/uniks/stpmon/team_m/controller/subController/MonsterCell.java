@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
@@ -21,6 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -30,8 +32,7 @@ import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static de.uniks.stpmon.team_m.Constants.ABILITYPALETTE;
-import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class MonsterCell extends ListCell<Monster> {
 
@@ -47,9 +48,11 @@ public class MonsterCell extends ListCell<Monster> {
     @FXML
     public VBox monsterVBox;
     @FXML
-    Label monsterName;
+    Label monsterNameLevel;
     @FXML
-    Label monsterLevel;
+    public FlowPane statusEffectsFlowPane;
+    @FXML
+    Label monsterHealth;
     @FXML
     ImageView monsterImageView;
     @FXML
@@ -120,7 +123,7 @@ public class MonsterCell extends ListCell<Monster> {
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER)
                     .subscribe(monsterType -> {
                         monsterTypeDto = monsterType;
-                        monsterName.setText(resources.getString("NAME") + " " + monsterTypeDto.name());
+                        monsterNameLevel.setText(monsterTypeDto.name() + " (LVL " + monster.level() + ")");
                         for (String s : monsterTypeDto.type()) {
                             type.append(s);
                         }
@@ -144,7 +147,7 @@ public class MonsterCell extends ListCell<Monster> {
                             arrowDown.setImage(arrowUpImage);
                         }
                     }, error -> monstersListController.showError(error.getMessage())));
-            monsterLevel.setText(resources.getString("LEVEL") + " " + monster.level());
+            monsterHealth.setText(monster.currentAttributes().health() + " / " + monster.attributes().health() + " HP");
             disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
                     .subscribe(monsterImage -> {
                         this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
@@ -172,6 +175,14 @@ public class MonsterCell extends ListCell<Monster> {
                 arrowDown.setVisible(false);
                 // TODO: Tobias hier den Aufruf zur Change Monster Methode
             }
+
+            monster.status().forEach(statusEffect -> {
+                ImageView statusEffectImageView = new ImageView(String.valueOf(Main.class.getResource(STATUS_EFFECTS_IMAGES.get(statusEffect))));
+                statusEffectImageView.setFitHeight(24);
+                statusEffectImageView.setFitWidth(24);
+                statusEffectsFlowPane.getChildren().add(statusEffectImageView);
+            });
+
             setGraphic(rootmonsterHBox);
             setText(null);
             setStyle("-fx-background-color: #CFE9DB;  -fx-border-color: #1C701C; -fx-border-width: 2px");
