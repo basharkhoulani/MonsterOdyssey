@@ -111,6 +111,7 @@ public class EncounterController extends Controller {
     private HashMap<String, ArrayList<Integer>> newAbilitiesHashMap = new HashMap<>();
     private HashMap<String, EncounterOpponentController> encounterOpponentControllerHashMap = new HashMap<>();
     private int currentMonsterIndex = 0;
+    private int deleteOpponents = 0;
 
 
     @Inject
@@ -191,7 +192,12 @@ public class EncounterController extends Controller {
                 if (opponentsSize == 2) {
                     renderFor1vs1(ownTrainerParent);
                 } else if (opponentsSize == 3) {
-                    renderFor1vs2(ownTrainerParent);
+                    if(encounterOpponentStorage.getEnemyOpponents().size() == 2){
+                        renderFor1vs2(ownTrainerParent);
+                    } else {
+                        renderFor2vs1(ownTrainerParent);
+                    }
+
                 } else {
                     renderFor2vs2(ownTrainerParent);
                 }
@@ -274,6 +280,39 @@ public class EncounterController extends Controller {
 
         // Own trainer
         teamHBox.setPadding(new Insets(0, 0, 0, 450));
+        teamHBox.getChildren().add(ownTrainerParent);
+    }
+
+    private void renderFor2vs1(Parent ownTrainerParent) {
+        // 2 vs 1 Situation
+
+        // 1st enemy as a trainer
+        Opponent enemy1Opponent = encounterOpponentStorage.getEnemyOpponents().get(0);
+        checkMoveAlreadyUsed(enemy1Opponent); // für Encounter wiederherstellen
+        enemy1Controller = new EncounterOpponentController();
+        enemy1Controller.init(enemy1Opponent, true, false, false, false, false, this);
+        encounterOpponentControllerHashMap.put(enemy1Opponent._id(), enemy1Controller);
+        VBox enemy1Parent = (VBox) enemy1Controller.render();
+        HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
+        enemyHBox.getChildren().add(enemy1Parent);
+        targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
+        showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
+
+        // Coop Trainer
+        Opponent coopOpponent = encounterOpponentStorage.getCoopOpponent();
+        checkMoveAlreadyUsed(coopOpponent); // für Encounter wiederherstellen
+        coopTrainerController = new EncounterOpponentController();
+        coopTrainerController.init(coopOpponent, false, false, false, false, encounterOpponentStorage.isTwoMonster(), this);
+        encounterOpponentControllerHashMap.put(coopOpponent._id(), coopTrainerController);
+        Parent coopTrainerParent = coopTrainerController.render();
+        HBox.setHgrow(coopTrainerParent, javafx.scene.layout.Priority.ALWAYS);
+        teamHBox.getChildren().add(coopTrainerParent);
+        if (!encounterOpponentStorage.isTwoMonster()){
+            showCoopImage(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
+        }
+        showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
+
+        // Own trainer
         teamHBox.getChildren().add(ownTrainerParent);
     }
 
@@ -467,6 +506,7 @@ public class EncounterController extends Controller {
                 updateOpponent(opponent);
             } else if (event.suffix().contains("deleted")) {
                 opponentsDelete.put(opponent._id(), opponent);
+                deleteOpponents++;
                 if (opponentsDelete.size() >= encounterOpponentStorage.getEncounterSize()) {
                     showResult();
                 }
@@ -491,7 +531,7 @@ public class EncounterController extends Controller {
         }
 
         // this magic number is two time the size of oppenents in this encounter
-        if (opponentsUpdate.size() >= encounterOpponentStorage.getEncounterSize() * 2) {
+        if (opponentsUpdate.size() >= (encounterOpponentStorage.getEncounterSize() - deleteOpponents) * 2) {
             if (repeatedTimes == 0) {
                 writeBattleDescription(opponentsUpdate);
             }
@@ -629,6 +669,10 @@ public class EncounterController extends Controller {
             if (currentMonsterIndex % 2 == 0 && encounterOpponentStorage.getCoopOpponent().monster() != null) {
                 monster = encounterOpponentStorage.getCurrentMonsters(encounterOpponentStorage.getCoopOpponent()._id());
             } else if (currentMonsterIndex % 2 == 1 && encounterOpponentStorage.getSelfOpponent().monster() != null) {
+                monster = encounterOpponentStorage.getCurrentMonsters(encounterOpponentStorage.getSelfOpponent()._id());
+            } else if (encounterOpponentStorage.getSelfOpponent().monster() == null){
+                monster = encounterOpponentStorage.getCurrentMonsters(encounterOpponentStorage.getCoopOpponent()._id());
+            } else if (encounterOpponentStorage.getCoopOpponent().monster() == null){
                 monster = encounterOpponentStorage.getCurrentMonsters(encounterOpponentStorage.getSelfOpponent()._id());
             }
         } else {
@@ -787,7 +831,6 @@ public class EncounterController extends Controller {
         battleMenuController.buttonDisable(isDisable);
     }
 
-    // TODO: an zwei Monster anpassen here only one Monster
     public void showLevelUpPopUp(String opponentId) {
         resultLevelUpHashMap.put(opponentId, false);
         LevelUpController levelUpController = levelUpControllerProvider.get();
