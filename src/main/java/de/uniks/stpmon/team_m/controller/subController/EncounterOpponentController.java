@@ -134,14 +134,14 @@ public class EncounterOpponentController extends Controller {
             currentMonsterButton.setDisable(true);
         } else {
             currentMonsterButton.setOnAction(event -> {
-                showMonsterInformation(currentOpponent.monster());
+                showMonsterInformation(currentOpponent, this);
             });
         }
         return parent;
     }
 
-    private void showMonsterInformation(String monsterId) {
-        this.encounterController.showMonsterDetailsInEncounter();
+    private void showMonsterInformation(Opponent currentOpponent, EncounterOpponentController encounterOpponentController) {
+        this.encounterController.showMonsterDetailsInEncounter(currentOpponent, encounterOpponentController);
     }
 
     public EncounterOpponentController setExperienceBarValue(double value) {
@@ -178,6 +178,10 @@ public class EncounterOpponentController extends Controller {
             monsterImageView.setImage(image);
         }
         return this;
+    }
+
+    public Image getMonsterImage() {
+        return monsterImageView.getImage();
     }
 
     public EncounterOpponentController setTrainerImage(Image image) {

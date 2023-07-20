@@ -1162,7 +1162,7 @@ public class IngameController extends Controller {
         for (Opponent o : opponents) {
             if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && o.isAttacker() != encounterOpponentStorage.isAttacker()) {
                 encounterOpponentStorage.addEnemyOpponent(o);
-            } else {
+            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) && o.isAttacker() == encounterOpponentStorage.isAttacker()){
                 encounterOpponentStorage.setCoopOpponent(o);
                 encounterOpponentStorage.setTwoMonster(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id()));
             }

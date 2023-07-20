@@ -37,6 +37,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -386,18 +387,29 @@ public class EncounterController extends Controller {
         return (int) (Math.pow(currentLevel, 3) - Math.pow(currentLevel - 1, 3));
     }
 
-    public void showMonsterDetailsInEncounter() {
+    public void showMonsterDetailsInEncounter(Opponent currentOpponent, EncounterOpponentController encounterOpponentController) {
         VBox monsterDetailVBox = new VBox();
         monsterDetailVBox.setAlignment(Pos.CENTER);
         MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();
-        Monster monster = encounterOpponentStorage.getCurrentMonsters(encounterOpponentStorage.getSelfOpponent()._id());
-        MonsterTypeDto monsterTypeDto = encounterOpponentStorage.getCurrentMonsterType(encounterOpponentStorage.getSelfOpponent()._id());
+        Monster monster = encounterOpponentStorage.getCurrentMonsters(currentOpponent._id());
+        MonsterTypeDto monsterTypeDto = encounterOpponentStorage.getCurrentMonsterType(currentOpponent._id());
 
         StringBuilder type = new StringBuilder();
         for (String s : monsterTypeDto.type()) {
             type.append(s);
         }
-        monstersDetailController.initFromBattleMenu(this, monsterDetailVBox, monster, monsterTypeDto, ownTrainerController.monsterImageView.getImage(), resources, presetsService, type.toString());
+        monstersDetailController.initFromBattleMenu(this, monsterDetailVBox, monster, monsterTypeDto, encounterOpponentController.getMonsterImage(), resources, presetsService, type.toString());
+        monsterDetailVBox.getChildren().add(monstersDetailController.render());
+        rootStackPane.getChildren().add(monsterDetailVBox);
+        monsterDetailVBox.requestFocus();
+    }
+
+    public void showMonsterDetails(Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, String type) {
+        VBox monsterDetailVBox = new VBox();
+        monsterDetailVBox.setAlignment(Pos.CENTER);
+        MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();
+
+        monstersDetailController.initFromBattleMenu(this, monsterDetailVBox, monster, monsterTypeDto, monsterImage, resources, presetsService, type);
         monsterDetailVBox.getChildren().add(monstersDetailController.render());
         rootStackPane.getChildren().add(monsterDetailVBox);
         monsterDetailVBox.requestFocus();
@@ -576,6 +588,8 @@ public class EncounterController extends Controller {
         battleMenuVBox.getChildren().clear();
         Monster monster = encounterOpponentStorage.getCurrentMonsters(encounterOpponentStorage.getSelfOpponent()._id());
         subControllers.add(abilitiesMenuController);
+
+        // TODO: monster soll generisch sein
         if (encounterOpponentStorage.getSelfOpponent().monster() != null) {
             abilitiesMenuController.init(monster, presetsService, this);
         } else {
@@ -598,23 +612,11 @@ public class EncounterController extends Controller {
             if (resultLevelUP) {
                 showLevelUpPopUp();
             }
-            else {
-                continueBattle();
-            }
 
         });
         pause.play();
     }
 
-    public void continueBattle() {
-        SequentialTransition fleeAnimation = buildFleeAnimation();
-        PauseTransition pause = new PauseTransition(Duration.millis(2000));
-        pause.setOnFinished(evt -> {
-            ownTrainerController.monsterImageView.setVisible(false);
-            fleeAnimation.play();
-        });
-        pause.play();
-    }
 
     public void fleeFromBattle() {
         SequentialTransition fleeAnimation = buildFleeAnimation();

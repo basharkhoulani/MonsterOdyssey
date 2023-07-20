@@ -170,7 +170,7 @@ public class MonsterCell extends ListCell<Monster> {
                 removeFromTeamButton.setText(resources.getString("CHANGE.MONSTER"));
                 arrowUp.setVisible(false);
                 arrowDown.setVisible(false);
-                // TODO: Tobias hier den Aufruf zur Change Monster Methode
+
             }
             setGraphic(rootmonsterHBox);
             setText(null);
@@ -181,7 +181,7 @@ public class MonsterCell extends ListCell<Monster> {
 
     private void showDetails(Monster monster, String type) {
         if (encounter) {
-            this.encounterController.showMonsterDetailsInEncounter();
+            this.encounterController.showMonsterDetails(monster, monsterTypeDto, monsterImage, type);
         } else {
             this.ingameController.showMonsterDetails(monster, monsterTypeDto, monsterImage, resources, presetsService, type);
         }
