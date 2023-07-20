@@ -37,7 +37,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ResourceBundle;
 
 
 import static de.uniks.stpmon.team_m.Constants.*;
