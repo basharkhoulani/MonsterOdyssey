@@ -1,15 +1,8 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.Constants;
-import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
-import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
-import de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController;
 import de.uniks.stpmon.team_m.controller.subController.*;
-import de.uniks.stpmon.team_m.controller.subController.EncounterResultController;
 import de.uniks.stpmon.team_m.dto.*;
-import de.uniks.stpmon.team_m.controller.subController.LevelUpController;
-import de.uniks.stpmon.team_m.dto.Monster;
-import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
@@ -17,8 +10,8 @@ import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.*;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -27,9 +20,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
-import javafx.scene.text.TextAlignment;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -37,7 +30,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -452,6 +444,14 @@ public class EncounterController extends Controller {
                                 showResultPopUp(resources.getString("YOU.FAILED"));
                             }
                         }
+                        if (Objects.equals(result.type(), "status-added")) {
+                            EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(opponent._id());
+                            encounterOpponentController.showStatus(result.status(), true);
+                        }
+                        if (Objects.equals(result.type(), "status-removed")) {
+                            EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(opponent._id());
+                            encounterOpponentController.showStatus(result.status(), false);
+                        }
                     });
                 }
             } else if (event.suffix().contains("deleted")) {
@@ -502,9 +502,9 @@ public class EncounterController extends Controller {
                     updateDescription(resources.getString("ENEMY.USED") + " " + abilityDtos.get(abilityMove.ability() - 1).name() + ". ", false);
                 }
             }
-                // else for change monster move
-                // here for the situation that change Monster Move
-                // have to add another websocket listenToMonster(trainerId, monsterId)
+            // else for change monster move
+            // here for the situation that change Monster Move
+            // have to add another websocket listenToMonster(trainerId, monsterId)
 
             Opponent oResults = forDescription.get(opponentId + "Results");
 
@@ -540,7 +540,7 @@ public class EncounterController extends Controller {
                         .setHealthLabel(currentHealth + "/" + maxHealth)
                         .setLevelLabel("LVL " + monster.level())
                         .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
-                if(trainerId.equals(trainerStorageProvider.get().getTrainer()._id())){
+                if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
                     encounterOpponentStorage.setCurrentTrainerMonster(monster);
                 }
             }
@@ -613,18 +613,14 @@ public class EncounterController extends Controller {
     }
 
     public void continueBattle() {
-        //if (encounterOpponentStorage.getOpponentTrainer() == null) {
-        if (encounterOpponentStorage.isWild()) {
-            SequentialTransition fleeAnimation = buildFleeAnimation();
-            PauseTransition pause = new PauseTransition(Duration.millis(2000));
-            pause.setOnFinished(evt -> {
-                ownTrainerController.monsterImageView.setVisible(false);
-                fleeAnimation.play();
-            });
-            pause.play();
-            fleeAnimation.setOnFinished(evt -> showResultPopUp(resources.getString("YOU.WON")));
-        }
-
+        SequentialTransition fleeAnimation = buildFleeAnimation();
+        PauseTransition pause = new PauseTransition(Duration.millis(1000));
+        pause.setOnFinished(evt -> {
+            ownTrainerController.monsterImageView.setVisible(false);
+            fleeAnimation.play();
+        });
+        pause.play();
+        fleeAnimation.setOnFinished(evt -> showResultPopUp(resources.getString("YOU.WON")));
     }
 
     public void fleeFromBattle() {
@@ -638,9 +634,9 @@ public class EncounterController extends Controller {
         });
         fleeAnimation.setOnFinished(evt -> disposables.add(encounterOpponentsService.deleteOpponent(encounterOpponentStorage.getRegionId(), encounterOpponentStorage.getEncounterId(), encounterOpponentStorage.getSelfOpponent()._id()).observeOn(FX_SCHEDULER)
                 .subscribe(result -> showIngameController(), error -> {
-            showError(error.getMessage());
-            error.printStackTrace();
-        })));
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                })));
         firstPause.play();
     }
 

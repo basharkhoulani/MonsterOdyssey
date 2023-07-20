@@ -23,8 +23,10 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -151,12 +153,12 @@ public class MonstersDetailController extends Controller {
             typeImageView.setFitHeight(45);
             typeImageView.setFitWidth(45);
 
-            for (String imagePath: ATTRIBUTE_IMAGES) {
+            for (String imagePath : ATTRIBUTE_IMAGES) {
                 URL resourceImage = Main.class.getResource("images/" + imagePath);
                 assert resourceImage != null;
                 Image attributeImage = new Image(resourceImage.toString());
 
-                switch(imagePath) {
+                switch (imagePath) {
                     case "star.png" -> starImageView.setImage(attributeImage);
                     case "attack.png" -> attackImageView.setImage(attributeImage);
                     case "heart.png" -> heartImageView.setImage(attributeImage);
@@ -201,7 +203,7 @@ public class MonstersDetailController extends Controller {
             }
             initMonsterAbilities(monsterAbilities, monster);
         }, error ->
-            showError(error.getMessage())));
+                showError(error.getMessage())));
     }
 
 
