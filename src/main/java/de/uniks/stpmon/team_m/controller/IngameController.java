@@ -931,6 +931,10 @@ public class IngameController extends Controller {
         inSettings = false;
     }
 
+    public void useItem(String itemId, Monster monster) {
+        // TODO: Send server call to use item on monster
+    }
+
     public void buttonsDisable(Boolean set) {
         if (set) {
             stackPane.setEffect(new BoxBlur(10, 10, 3));

@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
@@ -37,6 +36,7 @@ import static de.uniks.stpmon.team_m.Constants.*;
 public class MonsterCell extends ListCell<Monster> {
 
     private final boolean other;
+    private final String itemId;
     @FXML
     public ImageView arrowUp;
     @FXML
@@ -96,6 +96,7 @@ public class MonsterCell extends ListCell<Monster> {
         this.monstersListController = monstersListController;
         this.encounter = encounter;
         this.other = other;
+        this.itemId = null;
     }
 
     public MonsterCell(ResourceBundle resources, PresetsService presetsService, ChangeMonsterListController changeMonsterListController,
@@ -107,6 +108,19 @@ public class MonsterCell extends ListCell<Monster> {
         this.ingameController = ingameController;
         this.encounter = encounter;
         this.other = other;
+        this.itemId = null;
+    }
+
+    public MonsterCell(ResourceBundle resources, PresetsService presetsService, ChangeMonsterListController changeMonsterListController,
+                       EncounterController encounterController, IngameController ingameController, boolean encounter, boolean other, String itemId) {
+        this.encounterController = encounterController;
+        this.resources = resources;
+        this.presetsService = presetsService;
+        this.changeMonsterListController = changeMonsterListController;
+        this.ingameController = ingameController;
+        this.encounter = encounter;
+        this.other = other;
+        this.itemId = itemId;
     }
 
     @Override
@@ -120,6 +134,7 @@ public class MonsterCell extends ListCell<Monster> {
         } else {
             loadFXML();
             viewDetailsButton.prefWidthProperty().bind(removeFromTeamButton.widthProperty());
+            monsterHealth.setText(monster.currentAttributes().health() + " / " + monster.attributes().health() + " HP");
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER)
                     .subscribe(monsterType -> {
                         monsterTypeDto = monsterType;
@@ -147,7 +162,6 @@ public class MonsterCell extends ListCell<Monster> {
                             arrowDown.setImage(arrowUpImage);
                         }
                     }, error -> monstersListController.showError(error.getMessage())));
-            monsterHealth.setText(monster.currentAttributes().health() + " / " + monster.attributes().health() + " HP");
             disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
                     .subscribe(monsterImage -> {
                         this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
@@ -174,6 +188,16 @@ public class MonsterCell extends ListCell<Monster> {
                 arrowUp.setVisible(false);
                 arrowDown.setVisible(false);
                 // TODO: Tobias hier den Aufruf zur Change Monster Methode
+            }
+
+            if (itemId != null) {
+                arrowUp.setVisible(false);
+                arrowDown.setVisible(false);
+                viewDetailsButton.setDisable(true);
+                viewDetailsButton.setVisible(false);
+                removeFromTeamButton.setStyle("-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7;");
+                removeFromTeamButton.setText(resources.getString("SELECT"));
+                removeFromTeamButton.setOnAction(event -> ingameController.useItem(itemId, monster));
             }
 
             monster.status().forEach(statusEffect -> {
