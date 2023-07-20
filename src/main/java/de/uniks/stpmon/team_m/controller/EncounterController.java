@@ -107,11 +107,11 @@ public class EncounterController extends Controller {
     private int repeatedTimes = 0;
     private boolean inEncounter = true;
     private boolean resultLevelUP = false;
-    private Monster oldMonster;
-    private final ArrayList<Integer> newAbilities = new ArrayList<>();
+    private Monster oldMonster; // here use HashMap
+    private final ArrayList<Integer> newAbilities = new ArrayList<>(); // here use HashMap
     private HashMap<String, EncounterOpponentController> encounterOpponentControllerHashMap = new HashMap<>();
     private int currentMonsterIndex = 0;
-    private int aktionInARound = 0;
+
 
     @Inject
     public EncounterController() {
@@ -453,7 +453,6 @@ public class EncounterController extends Controller {
             final Opponent opponent = event.data();
             System.out.println("Opponent: " + event.suffix() + opponent);
             if (event.suffix().contains("updated")) {
-                aktionInARound++;
                 inEncounter = true;
                 updateOpponent(opponent);
             } else if (event.suffix().contains("deleted")) {
@@ -482,7 +481,7 @@ public class EncounterController extends Controller {
         }
 
         // this magic number is two time the size of oppenents in this encounter
-        if (aktionInARound >= encounterOpponentStorage.getEncounterSize() * 2) {
+        if (opponentsUpdate.size() >= encounterOpponentStorage.getEncounterSize() * 2) {
             if (repeatedTimes == 0) {
                 writeBattleDescription(opponentsUpdate);
             }
@@ -538,13 +537,12 @@ public class EncounterController extends Controller {
 
         }
         inEncounter = false;
-        aktionInARound = 0;
+        opponentsUpdate.clear();
     }
 
     private void checkMoveAlreadyUsed(Opponent opponent) {
         if (opponent.move() != null){
             updateOpponent(opponent);
-            aktionInARound++;
         }
     }
 
@@ -640,7 +638,6 @@ public class EncounterController extends Controller {
         updateDescription(information + "\n", false);
         PauseTransition pause = new PauseTransition(Duration.millis(500));
         pause.setOnFinished(evt -> {
-            enemy1Controller.monsterImageView.setVisible(false);
             if (resultLevelUP) {
                 showLevelUpPopUp();
             }
