@@ -607,18 +607,27 @@ public class IngameController extends Controller {
                         error.printStackTrace();
                     }));
         }
-        boolean layerFound = false;
+        focusOnPlayerPosition(getMaxWidth(map), getMaxHeight(map), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
+    }
+
+    private int getMaxHeight(Map map) {
+        int maxHeight = map.height();
         for (Layer layer : map.layers()) {
-            if (layer.width() != 0) {
-                focusOnPlayerPosition(layer.width(), layer.height(), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
-                layerFound = true;
-                break;
+            if (layer.height() != 0) {
+                maxHeight = Math.max(maxHeight, layer.height());
             }
         }
-        if (!layerFound) {
-            focusOnPlayerPosition(map.width(), map.height(), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
-        }
+        return maxHeight;
+    }
 
+    private int getMaxWidth(Map map) {
+        int maxWidth = map.width();
+        for (Layer layer : map.layers()) {
+            if (layer.width() != 0) {
+                maxWidth = Math.max(maxWidth, layer.width());
+            }
+        }
+        return maxWidth;
     }
 
     private void focusOnPlayerPosition(double mapWidth, double mapHeight, int tilePosX, int tilePosY) {
@@ -750,18 +759,8 @@ public class IngameController extends Controller {
             canvas.setScaleX(SCALE_FACTOR);
             canvas.setScaleY(SCALE_FACTOR);
         }
-        boolean layerFound = false;
-        for (Layer layer : map.layers()) {
-            if (layer.width() != 0) {
-                canvas.setWidth(layer.width() * TILE_SIZE);
-                canvas.setHeight(layer.height() * TILE_SIZE);
-                layerFound = true;
-            }
-        }
-        if (!layerFound) {
-            canvas.setWidth(map.width() * TILE_SIZE);
-            canvas.setHeight(map.height() * TILE_SIZE);
-        }
+        canvas.setWidth(getMaxWidth(map) * TILE_SIZE);
+        canvas.setHeight(getMaxHeight(map) * TILE_SIZE);
     }
 
     /**
@@ -793,12 +792,12 @@ public class IngameController extends Controller {
         renderTiles(map, image, tileSet, tileSetJson, multipleTileSets, layer.width(), layer.height(), layer.data(), layer.x(), layer.y(), forMiniMap);
     }
 
-    private void renderTiles(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, int width, int height, List<Integer> data, int x2, int y2, boolean forMiniMap) {
+    private void renderTiles(Map map, Image image, TileSet tileSet, TileSet tileSetJson, boolean multipleTileSets, int width, int height, List<Long> data, int x2, int y2, boolean forMiniMap) {
         WritableImage writableImageGround = new WritableImage(width * TILE_SIZE, height * TILE_SIZE);
         WritableImage writableImageTop = new WritableImage(width * TILE_SIZE, height * TILE_SIZE);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                int tileId = data.get(y * width + x) & 0x0FFFFFFF;
+                int tileId = (int) (data.get(y * width + x) & 0x0FFFFFFF);
                 if (tileId == 0) {
                     continue;
                 }
@@ -807,12 +806,15 @@ public class IngameController extends Controller {
                 int tilesPerRow = (int) (image.getWidth() / TILE_SIZE);
                 int tileX = ((tileId - tileSet.firstgid()) % tilesPerRow) * TILE_SIZE;
                 int tileY = ((tileId - tileSet.firstgid()) / tilesPerRow) * TILE_SIZE;
-                if (isRoof(tileSet, tileSetJson, tileId)) {
-                    writableImageTop.getPixelWriter().setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
-                            image.getPixelReader(), tileX, tileY);
-                } else {
-                    writableImageGround.getPixelWriter().setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
-                            image.getPixelReader(), tileX, tileY);
+                try {
+                    if (isRoof(tileSet, tileSetJson, tileId)) {
+                        writableImageTop.getPixelWriter().setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
+                                image.getPixelReader(), tileX, tileY);
+                    } else {
+                        writableImageGround.getPixelWriter().setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
+                                image.getPixelReader(), tileX, tileY);
+                    }
+                } catch (Exception ignored) {
                 }
             }
         }
