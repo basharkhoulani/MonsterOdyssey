@@ -99,8 +99,8 @@ public class LoginController extends Controller {
 <span class="fc" id="L99">        super.init();</span>
 <span class="fc" id="L100">        this.changeLanguageController = new ChangeLanguageController();</span>
 <span class="fc" id="L101">        changeLanguageController.init();</span>
-<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()){</span>
-<span class="nc bnc" id="L103" title="All 4 branches missed.">            if(AudioService.getInstance() != null &amp;&amp; (AudioService.getInstance().getCurrentSound() == null)) {</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc bnc" id="L103" title="All 4 branches missed.">            if (AudioService.getInstance() != null &amp;&amp; (AudioService.getInstance().getCurrentSound() == null)) {</span>
 <span class="nc" id="L104">                AudioService.getInstance().playSound(MENU_SOUND);</span>
 <span class="nc" id="L105">                AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()));</span>
             }

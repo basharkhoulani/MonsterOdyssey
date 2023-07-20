@@ -25,25 +25,24 @@ public class EncounterResultController extends Controller {
     Provider&lt;IngameController&gt; ingameControllerProvider;
 
 
-
     @Inject
-<span class="fc" id="L30">    public EncounterResultController() {</span>
-<span class="fc" id="L31">    }</span>
+<span class="fc" id="L29">    public EncounterResultController() {</span>
+<span class="fc" id="L30">    }</span>
 
     public void init(App app) {
-<span class="fc" id="L34">        this.app = app;</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L33">        this.app = app;</span>
+<span class="fc" id="L34">    }</span>
 
     public void clickOK() {
-<span class="fc" id="L38">        encounterController.get().destroy();</span>
-<span class="fc" id="L39">        ingameControllerProvider.get().setIsNewStart(false);</span>
-<span class="fc" id="L40">        app.show(ingameControllerProvider.get());</span>
+<span class="fc" id="L37">        encounterController.get().destroy();</span>
+<span class="fc" id="L38">        ingameControllerProvider.get().setIsNewStart(false);</span>
+<span class="fc" id="L39">        app.show(ingameControllerProvider.get());</span>
 
-<span class="fc" id="L42">    }</span>
+<span class="fc" id="L41">    }</span>
 
     public void setInformationText(String text) {
-<span class="nc" id="L45">        informationText.setText(text);</span>
-<span class="nc" id="L46">    }</span>
+<span class="nc" id="L44">        informationText.setText(text);</span>
+<span class="nc" id="L45">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

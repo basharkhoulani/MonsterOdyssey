@@ -68,13 +68,13 @@ public class AbilitiesMenuController extends Controller {
 <span class="fc" id="L68">        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(</span>
                 abilities -&gt; {
 <span class="fc" id="L70">                    int i = 0;</span>
-<span class="pc bpc" id="L71" title="1 of 2 branches missed.">                    if(monster != null){</span>
-<span class="fc bfc" id="L72" title="All 2 branches covered.">                        for (Map.Entry&lt;String, Integer&gt; entry: monster.abilities().entrySet()) {</span>
-<span class="fc" id="L73">                            AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey())-1);</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">                    if (monster != null) {</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">                        for (Map.Entry&lt;String, Integer&gt; entry : monster.abilities().entrySet()) {</span>
+<span class="fc" id="L73">                            AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey()) - 1);</span>
 <span class="fc" id="L74">                            Button abilityButton = abilityButtons.get(i);</span>
 <span class="fc" id="L75">                            abilityButton.setText(ability.name() + &quot; &quot; + entry.getValue() + &quot;/&quot; + ability.maxUses());</span>
                             // Disable Button if no uses left
-<span class="pc bpc" id="L77" title="1 of 2 branches missed.">                            if(entry.getValue() == 0){</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">                            if (entry.getValue() == 0) {</span>
 <span class="nc" id="L78">                                abilityButton.setDisable(true);</span>
                             }
                             // Change Color
@@ -86,7 +86,7 @@ public class AbilitiesMenuController extends Controller {
 <span class="fc" id="L86">                            i++;</span>
 <span class="fc" id="L87">                        }</span>
                     }
-<span class="fc bfc" id="L89" title="All 2 branches covered.">                    while(i&lt;4){</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">                    while (i &lt; 4) {</span>
 <span class="fc" id="L90">                        abilityButtons.get(i).setVisible(false);</span>
 <span class="fc" id="L91">                        i++;</span>
                     }

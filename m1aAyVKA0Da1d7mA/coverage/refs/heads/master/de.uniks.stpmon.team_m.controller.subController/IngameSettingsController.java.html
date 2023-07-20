@@ -52,7 +52,7 @@ public class IngameSettingsController extends Controller {
 
     public Parent render() {
 <span class="fc" id="L54">        final Parent parent = super.render();</span>
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if(!GraphicsEnvironment.isHeadless()){</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
 <span class="nc" id="L56">            audioSettingsImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(AUDIOSYMBOL)).toString()));</span>
 <span class="nc" id="L57">            keybindingsImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(KEYBINDINGSSYMBOL)).toString()));</span>
 <span class="nc" id="L58">            goBackImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(GOBACKSYMBOL)).toString()));</span>
@@ -75,7 +75,7 @@ public class IngameSettingsController extends Controller {
 <span class="fc" id="L75">        ingameController.showKeybindings();</span>
 <span class="fc" id="L76">    }</span>
 
-    public void openTrainerSettings(){
+    public void openTrainerSettings() {
 <span class="nc" id="L79">        ingameController.showTrainerSettings();</span>
 <span class="nc" id="L80">    }</span>
 

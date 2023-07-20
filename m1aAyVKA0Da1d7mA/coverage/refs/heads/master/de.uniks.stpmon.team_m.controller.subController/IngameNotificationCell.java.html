@@ -52,7 +52,7 @@ public class IngameNotificationCell extends ListCell&lt;String&gt; {
 <span class="fc" id="L52">            loadFXML();</span>
 <span class="fc" id="L53">            notificationText.setText(notificationString);</span>
 
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">            if(!GraphicsEnvironment.isHeadless()){</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">            if (!GraphicsEnvironment.isHeadless()) {</span>
 <span class="nc" id="L56">                avatar.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString()));</span>
             }
 

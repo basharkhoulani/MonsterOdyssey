@@ -15,10 +15,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -235,7 +235,7 @@ public class GroupController extends Controller {
 <span class="pc bpc" id="L235" title="1 of 4 branches missed.">        if (result.isPresent() &amp;&amp; result.get() == ButtonType.YES) {</span>
 <span class="pc bpc" id="L236" title="1 of 2 branches missed.">            if (groupStorageProvider.get().getMembers().size() &gt; 1) {</span>
 <span class="nc" id="L237">                groupStorageProvider.get().getMembers().remove(userStorage.get().get_id());</span>
-<span class="nc" id="L238">                disposables.add(groupService.update(groupStorageProvider.get().get_id(),groupStorageProvider.get().getName(), groupStorageProvider.get().getMembers())</span>
+<span class="nc" id="L238">                disposables.add(groupService.update(groupStorageProvider.get().get_id(), groupStorageProvider.get().getName(), groupStorageProvider.get().getMembers())</span>
 <span class="nc" id="L239">                        .observeOn(FX_SCHEDULER)</span>
 <span class="nc" id="L240">                        .subscribe(group -&gt; app.show(messagesControllerProvider.get())</span>
 <span class="nc" id="L241">                                , error -&gt; showError(error.getMessage())));</span>

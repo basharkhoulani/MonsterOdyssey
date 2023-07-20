@@ -21,8 +21,8 @@ import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.net.URL;
 import java.awt.*;
+import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 
@@ -101,18 +101,18 @@ public class IngameStarterMonsterController extends Controller {
 <span class="nc" id="L101">                error.printStackTrace();</span>
 <span class="nc" id="L102">            }));</span>
 <span class="fc" id="L103">            disposables.add(presetsService.getMonsterImage(Integer.parseInt(starters.get(1))).observeOn(FX_SCHEDULER).subscribe(monsterImage -&gt; {</span>
-<span class="pc bpc" id="L104" title="1 of 2 branches missed.">                    if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L105">                        monster2Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);</span>
-                    }
-<span class="fc" id="L107">                    }, error -&gt; {</span>
-<span class="nc" id="L108">                        showError(error.getMessage());</span>
-<span class="nc" id="L109">                        error.printStackTrace();</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">                if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L105">                    monster2Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);</span>
+                }
+<span class="fc" id="L107">            }, error -&gt; {</span>
+<span class="nc" id="L108">                showError(error.getMessage());</span>
+<span class="nc" id="L109">                error.printStackTrace();</span>
 <span class="nc" id="L110">            }));</span>
 <span class="fc" id="L111">            disposables.add(presetsService.getMonsterImage(Integer.parseInt(starters.get(2))).observeOn(FX_SCHEDULER).subscribe(monsterImage -&gt; {</span>
-<span class="pc bpc" id="L112" title="1 of 2 branches missed.">                    if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L113">                        monster3Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);</span>
-                    }
-<span class="fc" id="L115">                    }, error -&gt; {</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">                if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L113">                    monster3Image = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);</span>
+                }
+<span class="fc" id="L115">            }, error -&gt; {</span>
 <span class="nc" id="L116">                showError(error.getMessage());</span>
 <span class="nc" id="L117">                error.printStackTrace();</span>
 <span class="nc" id="L118">            }));</span>

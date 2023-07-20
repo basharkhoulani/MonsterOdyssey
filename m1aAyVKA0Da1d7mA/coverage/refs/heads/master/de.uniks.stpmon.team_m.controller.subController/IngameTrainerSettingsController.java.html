@@ -99,7 +99,7 @@ public class IngameTrainerSettingsController extends Controller {
     @Override
     public Parent render() {
 <span class="fc" id="L101">        Parent parent = super.render();</span>
-<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if(!GraphicsEnvironment.isHeadless()){</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
 <span class="nc" id="L103">            trainerNameEditImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(PENCIL2SYMBOL)).toString()));</span>
 <span class="nc" id="L104">            arrowLeftImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(ARROWLEFTSYMBOL)).toString()));</span>
 <span class="nc" id="L105">            arrowRightImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(ARROWRIGHTSYMBOL)).toString()));</span>

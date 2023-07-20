@@ -23,13 +23,15 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
 
-<span class="fc" id="L32">public class MonstersDetailController extends Controller {</span>
+<span class="fc" id="L34">public class MonstersDetailController extends Controller {</span>
     @FXML
     public Button goBackMonstersButton;
     @FXML
@@ -79,7 +81,7 @@ import static de.uniks.stpmon.team_m.Constants.*;
     public IngameController ingameController;
     public EncounterController encounterController;
     public VBox monsterDetailVBox;
-<span class="fc" id="L82">    public final List&lt;AbilityDto&gt; monsterAbilities = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L84">    public final List&lt;AbilityDto&gt; monsterAbilities = new ArrayList&lt;&gt;();</span>
     @Inject
     public Provider&lt;PresetsService&gt; presetsServiceProvider;
     private String monsterType;
@@ -98,130 +100,130 @@ import static de.uniks.stpmon.team_m.Constants.*;
 
     @Override
     public Parent render() {
-<span class="fc" id="L101">        final Parent parent = super.render();</span>
-<span class="fc" id="L102">        initMonsterDetails();</span>
-<span class="fc" id="L103">        return parent;</span>
+<span class="fc" id="L103">        final Parent parent = super.render();</span>
+<span class="fc" id="L104">        initMonsterDetails();</span>
+<span class="fc" id="L105">        return parent;</span>
     }
 
     public void init(IngameController ingameController, VBox monsterDetailVBox,
                      Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources, PresetsService presetsService,
                      String type) {
-<span class="fc" id="L109">        super.init();</span>
-<span class="fc" id="L110">        this.monsterType = type;</span>
-<span class="fc" id="L111">        this.ingameController = ingameController;</span>
-<span class="fc" id="L112">        this.monsterDetailVBox = monsterDetailVBox;</span>
-<span class="fc" id="L113">        this.monster = monster;</span>
-<span class="fc" id="L114">        this.monsterTypeDto = monsterTypeDto;</span>
-<span class="fc" id="L115">        this.monsterImage = monsterImage;</span>
-<span class="fc" id="L116">        this.resources = resources;</span>
-<span class="fc" id="L117">        this.presetsService = presetsService;</span>
-<span class="fc" id="L118">    }</span>
+<span class="fc" id="L111">        super.init();</span>
+<span class="fc" id="L112">        this.monsterType = type;</span>
+<span class="fc" id="L113">        this.ingameController = ingameController;</span>
+<span class="fc" id="L114">        this.monsterDetailVBox = monsterDetailVBox;</span>
+<span class="fc" id="L115">        this.monster = monster;</span>
+<span class="fc" id="L116">        this.monsterTypeDto = monsterTypeDto;</span>
+<span class="fc" id="L117">        this.monsterImage = monsterImage;</span>
+<span class="fc" id="L118">        this.resources = resources;</span>
+<span class="fc" id="L119">        this.presetsService = presetsService;</span>
+<span class="fc" id="L120">    }</span>
 
     public void initFromBattleMenu(EncounterController encounterController, VBox monsterDetailVBox, Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage,
                                    ResourceBundle resources, PresetsService presetsService, String type) {
-<span class="nc" id="L122">        super.init();</span>
-<span class="nc" id="L123">        this.monsterType = type;</span>
-<span class="nc" id="L124">        this.encounterController = encounterController;</span>
-<span class="nc" id="L125">        this.monsterDetailVBox = monsterDetailVBox;</span>
-<span class="nc" id="L126">        this.monster = monster;</span>
-<span class="nc" id="L127">        this.monsterTypeDto = monsterTypeDto;</span>
-<span class="nc" id="L128">        this.monsterImage = monsterImage;</span>
-<span class="nc" id="L129">        this.resources = resources;</span>
-<span class="nc" id="L130">        this.presetsService = presetsService;</span>
-<span class="nc" id="L131">    }</span>
+<span class="nc" id="L124">        super.init();</span>
+<span class="nc" id="L125">        this.monsterType = type;</span>
+<span class="nc" id="L126">        this.encounterController = encounterController;</span>
+<span class="nc" id="L127">        this.monsterDetailVBox = monsterDetailVBox;</span>
+<span class="nc" id="L128">        this.monster = monster;</span>
+<span class="nc" id="L129">        this.monsterTypeDto = monsterTypeDto;</span>
+<span class="nc" id="L130">        this.monsterImage = monsterImage;</span>
+<span class="nc" id="L131">        this.resources = resources;</span>
+<span class="nc" id="L132">        this.presetsService = presetsService;</span>
+<span class="nc" id="L133">    }</span>
 
 
     @Inject
-<span class="fc" id="L135">    public MonstersDetailController() {</span>
-<span class="fc" id="L136">    }</span>
+<span class="fc" id="L137">    public MonstersDetailController() {</span>
+<span class="fc" id="L138">    }</span>
 
     private void initMonsterDetails() {
         // Sprite
-<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L141">            monsterImageView.setImage(monsterImage);</span>
-<span class="nc" id="L142">            String typeColor = TYPESCOLORPALETTE.get(monsterType);</span>
-<span class="nc" id="L143">            String style = &quot;-fx-background-color: &quot; + typeColor + &quot;;&quot;;</span>
-<span class="nc" id="L144">            typeIcon.setStyle(style);</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L143">            monsterImageView.setImage(monsterImage);</span>
+<span class="nc" id="L144">            String typeColor = TYPESCOLORPALETTE.get(monsterType);</span>
+<span class="nc" id="L145">            String style = &quot;-fx-background-color: &quot; + typeColor + &quot;;&quot;;</span>
+<span class="nc" id="L146">            typeIcon.setStyle(style);</span>
 
-<span class="nc" id="L146">            String typeImagePath = ABILITYPALETTE.get(monsterType);</span>
-<span class="nc" id="L147">            URL resourceType = Main.class.getResource(&quot;images/&quot; + typeImagePath);</span>
-<span class="nc bnc" id="L148" title="All 2 branches missed.">            assert resourceType != null;</span>
-<span class="nc" id="L149">            Image typeImage = new Image(resourceType.toString());</span>
-<span class="nc" id="L150">            typeImageView.setImage(typeImage);</span>
-<span class="nc" id="L151">            typeImageView.setFitHeight(45);</span>
-<span class="nc" id="L152">            typeImageView.setFitWidth(45);</span>
+<span class="nc" id="L148">            String typeImagePath = ABILITYPALETTE.get(monsterType);</span>
+<span class="nc" id="L149">            URL resourceType = Main.class.getResource(&quot;images/&quot; + typeImagePath);</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">            assert resourceType != null;</span>
+<span class="nc" id="L151">            Image typeImage = new Image(resourceType.toString());</span>
+<span class="nc" id="L152">            typeImageView.setImage(typeImage);</span>
+<span class="nc" id="L153">            typeImageView.setFitHeight(45);</span>
+<span class="nc" id="L154">            typeImageView.setFitWidth(45);</span>
 
-<span class="nc bnc" id="L154" title="All 2 branches missed.">            for (String imagePath: ATTRIBUTE_IMAGES) {</span>
-<span class="nc" id="L155">                URL resourceImage = Main.class.getResource(&quot;images/&quot; + imagePath);</span>
-<span class="nc bnc" id="L156" title="All 2 branches missed.">                assert resourceImage != null;</span>
-<span class="nc" id="L157">                Image attributeImage = new Image(resourceImage.toString());</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">            for (String imagePath : ATTRIBUTE_IMAGES) {</span>
+<span class="nc" id="L157">                URL resourceImage = Main.class.getResource(&quot;images/&quot; + imagePath);</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">                assert resourceImage != null;</span>
+<span class="nc" id="L159">                Image attributeImage = new Image(resourceImage.toString());</span>
 
-<span class="nc bnc" id="L159" title="All 6 branches missed.">                switch(imagePath) {</span>
-<span class="nc" id="L160">                    case &quot;star.png&quot; -&gt; starImageView.setImage(attributeImage);</span>
-<span class="nc" id="L161">                    case &quot;attack.png&quot; -&gt; attackImageView.setImage(attributeImage);</span>
-<span class="nc" id="L162">                    case &quot;heart.png&quot; -&gt; heartImageView.setImage(attributeImage);</span>
-<span class="nc" id="L163">                    case &quot;speed.png&quot; -&gt; speedImageView.setImage(attributeImage);</span>
-<span class="nc" id="L164">                    case &quot;defense.png&quot; -&gt; defenseImageView.setImage(attributeImage);</span>
+<span class="nc bnc" id="L161" title="All 6 branches missed.">                switch (imagePath) {</span>
+<span class="nc" id="L162">                    case &quot;star.png&quot; -&gt; starImageView.setImage(attributeImage);</span>
+<span class="nc" id="L163">                    case &quot;attack.png&quot; -&gt; attackImageView.setImage(attributeImage);</span>
+<span class="nc" id="L164">                    case &quot;heart.png&quot; -&gt; heartImageView.setImage(attributeImage);</span>
+<span class="nc" id="L165">                    case &quot;speed.png&quot; -&gt; speedImageView.setImage(attributeImage);</span>
+<span class="nc" id="L166">                    case &quot;defense.png&quot; -&gt; defenseImageView.setImage(attributeImage);</span>
                 }
-<span class="nc" id="L166">            }</span>
+<span class="nc" id="L168">            }</span>
         }
 
         // Name, Type, Experience, Level
 
-<span class="fc" id="L171">        monsterName.setText(monsterTypeDto.name());</span>
+<span class="fc" id="L173">        monsterName.setText(monsterTypeDto.name());</span>
 
         // Attribute bars
-<span class="fc" id="L174">        lvlProgressBar.setProgress(monster.experience() / getMaxExp(monster.level()));</span>
-<span class="fc" id="L175">        lvlProgressBar.setStyle(&quot;-fx-background-color: #FFFFFF; -fx-accent: #2B8B03;&quot;);</span>
+<span class="fc" id="L176">        lvlProgressBar.setProgress(monster.experience() / getMaxExp(monster.level()));</span>
+<span class="fc" id="L177">        lvlProgressBar.setStyle(&quot;-fx-background-color: #FFFFFF; -fx-accent: #2B8B03;&quot;);</span>
 
-<span class="fc" id="L177">        attackProgressBar.setProgress((double) monster.currentAttributes().attack() / monster.attributes().attack());</span>
-<span class="fc" id="L178">        attackProgressBar.setStyle(&quot;-fx-background-color: #FFFFFF; -fx-accent: #999900;&quot;);</span>
+<span class="fc" id="L179">        attackProgressBar.setProgress((double) monster.currentAttributes().attack() / monster.attributes().attack());</span>
+<span class="fc" id="L180">        attackProgressBar.setStyle(&quot;-fx-background-color: #FFFFFF; -fx-accent: #999900;&quot;);</span>
 
-<span class="fc" id="L180">        healthProgressBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());</span>
-<span class="fc" id="L181">        healthProgressBar.setStyle(&quot;-fx-background-color: #FFFFFF; -fx-accent: #430000;&quot;);</span>
+<span class="fc" id="L182">        healthProgressBar.setProgress((double) monster.currentAttributes().health() / monster.attributes().health());</span>
+<span class="fc" id="L183">        healthProgressBar.setStyle(&quot;-fx-background-color: #FFFFFF; -fx-accent: #430000;&quot;);</span>
 
-<span class="fc" id="L183">        speedProgressBar.setProgress((double) monster.currentAttributes().speed() / monster.attributes().speed());</span>
-<span class="fc" id="L184">        speedProgressBar.setStyle(&quot;-fx-background-color: #FFFFFF; -fx-accent: #FFC88F;&quot;);</span>
+<span class="fc" id="L185">        speedProgressBar.setProgress((double) monster.currentAttributes().speed() / monster.attributes().speed());</span>
+<span class="fc" id="L186">        speedProgressBar.setStyle(&quot;-fx-background-color: #FFFFFF; -fx-accent: #FFC88F;&quot;);</span>
 
-<span class="fc" id="L186">        defenseProgressBar.setProgress((double) monster.currentAttributes().defense() / monster.attributes().defense());</span>
-<span class="fc" id="L187">        defenseProgressBar.setStyle(&quot;-fx-background-color: #FFFFFF; -fx-accent: #848480;&quot;);</span>
+<span class="fc" id="L188">        defenseProgressBar.setProgress((double) monster.currentAttributes().defense() / monster.attributes().defense());</span>
+<span class="fc" id="L189">        defenseProgressBar.setStyle(&quot;-fx-background-color: #FFFFFF; -fx-accent: #848480;&quot;);</span>
 
-<span class="fc" id="L189">        monsterLevel.setText(resources.getString(&quot;LEVEL&quot;) + &quot; &quot; + monster.level());</span>
+<span class="fc" id="L191">        monsterLevel.setText(resources.getString(&quot;LEVEL&quot;) + &quot; &quot; + monster.level());</span>
 
         // Attribute values
-<span class="fc" id="L192">        monsterHealth.setText(resources.getString(&quot;HEALTH&quot;) + &quot; &quot; + monster.currentAttributes().health() + &quot;/&quot; + monster.attributes().health());</span>
-<span class="fc" id="L193">        monsterAttack.setText(resources.getString(&quot;ATTACK&quot;) + &quot; &quot; + monster.currentAttributes().attack() + &quot;/&quot; + monster.attributes().attack());</span>
-<span class="fc" id="L194">        monsterDefense.setText(resources.getString(&quot;DEFENSE&quot;) + &quot; &quot; + monster.currentAttributes().defense() + &quot;/&quot; + monster.attributes().defense());</span>
-<span class="fc" id="L195">        monsterSpeed.setText(resources.getString(&quot;SPEED&quot;) + &quot; &quot; + monster.currentAttributes().speed() + &quot;/&quot; + monster.attributes().speed());</span>
+<span class="fc" id="L194">        monsterHealth.setText(resources.getString(&quot;HEALTH&quot;) + &quot; &quot; + monster.currentAttributes().health() + &quot;/&quot; + monster.attributes().health());</span>
+<span class="fc" id="L195">        monsterAttack.setText(resources.getString(&quot;ATTACK&quot;) + &quot; &quot; + monster.currentAttributes().attack() + &quot;/&quot; + monster.attributes().attack());</span>
+<span class="fc" id="L196">        monsterDefense.setText(resources.getString(&quot;DEFENSE&quot;) + &quot; &quot; + monster.currentAttributes().defense() + &quot;/&quot; + monster.attributes().defense());</span>
+<span class="fc" id="L197">        monsterSpeed.setText(resources.getString(&quot;SPEED&quot;) + &quot; &quot; + monster.currentAttributes().speed() + &quot;/&quot; + monster.attributes().speed());</span>
 
-<span class="fc" id="L197">        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -&gt; {</span>
-<span class="fc bfc" id="L198" title="All 2 branches covered.">            for (Map.Entry&lt;String, Integer&gt; entry : monster.abilities().entrySet()) {</span>
-<span class="fc" id="L199">                AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey()) - 1);</span>
-<span class="fc" id="L200">                monsterAbilities.add(ability);</span>
-<span class="fc" id="L201">            }</span>
-<span class="fc" id="L202">            initMonsterAbilities(monsterAbilities, monster);</span>
-<span class="fc" id="L203">        }, error -&gt;</span>
-<span class="nc" id="L204">            showError(error.getMessage())));</span>
-<span class="fc" id="L205">    }</span>
+<span class="fc" id="L199">        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -&gt; {</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">            for (Map.Entry&lt;String, Integer&gt; entry : monster.abilities().entrySet()) {</span>
+<span class="fc" id="L201">                AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey()) - 1);</span>
+<span class="fc" id="L202">                monsterAbilities.add(ability);</span>
+<span class="fc" id="L203">            }</span>
+<span class="fc" id="L204">            initMonsterAbilities(monsterAbilities, monster);</span>
+<span class="fc" id="L205">        }, error -&gt;</span>
+<span class="nc" id="L206">                showError(error.getMessage())));</span>
+<span class="fc" id="L207">    }</span>
 
 
     private void initMonsterAbilities(List&lt;AbilityDto&gt; abilities, Monster monster) {
-<span class="fc" id="L209">        abilityListView.setCellFactory(param -&gt; new AbilityCell(monster, resources, presetsServiceProvider.get(), this));</span>
-<span class="fc" id="L210">        abilityListView.getItems().addAll(abilities);</span>
-<span class="fc" id="L211">        abilityListView.setFocusModel(null);</span>
-<span class="fc" id="L212">        abilityListView.setSelectionModel(null);</span>
-<span class="fc" id="L213">    }</span>
+<span class="fc" id="L211">        abilityListView.setCellFactory(param -&gt; new AbilityCell(monster, resources, presetsServiceProvider.get(), this));</span>
+<span class="fc" id="L212">        abilityListView.getItems().addAll(abilities);</span>
+<span class="fc" id="L213">        abilityListView.setFocusModel(null);</span>
+<span class="fc" id="L214">        abilityListView.setSelectionModel(null);</span>
+<span class="fc" id="L215">    }</span>
 
     public void goBackToMonsters() {
-<span class="nc bnc" id="L216" title="All 2 branches missed.">        if (monsterDetailVBox.getParent().getId().equals(&quot;root&quot;)) {</span>
-<span class="nc" id="L217">            ingameController.root.getChildren().remove(monsterDetailVBox);</span>
+<span class="nc bnc" id="L218" title="All 2 branches missed.">        if (monsterDetailVBox.getParent().getId().equals(&quot;root&quot;)) {</span>
+<span class="nc" id="L219">            ingameController.root.getChildren().remove(monsterDetailVBox);</span>
         } else {
-<span class="nc" id="L219">            encounterController.rootStackPane.getChildren().remove(monsterDetailVBox);</span>
+<span class="nc" id="L221">            encounterController.rootStackPane.getChildren().remove(monsterDetailVBox);</span>
         }
-<span class="nc" id="L221">    }</span>
+<span class="nc" id="L223">    }</span>
 
     public double getMaxExp(int lvl) {
-<span class="fc" id="L224">        return Math.pow(lvl, 3) - Math.pow((lvl - 1), 3);</span>
+<span class="fc" id="L226">        return Math.pow(lvl, 3) - Math.pow((lvl - 1), 3);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

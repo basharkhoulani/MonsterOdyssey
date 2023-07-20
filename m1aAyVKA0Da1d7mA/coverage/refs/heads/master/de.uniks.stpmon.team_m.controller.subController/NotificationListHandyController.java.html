@@ -92,7 +92,7 @@ public class NotificationListHandyController extends Controller {
 
 <span class="fc bfc" id="L93" title="All 2 branches covered.">        for (int i = 0; i &lt; 4; i++) {</span>
 <span class="fc" id="L94">            int iterator = i;</span>
-<span class="fc" id="L95">            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -&gt; handyMessages.add(this.resources.getString(&quot;INGAME.NOTIFICATIONS.NEW.&quot;+iterator)));</span>
+<span class="fc" id="L95">            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -&gt; handyMessages.add(this.resources.getString(&quot;INGAME.NOTIFICATIONS.NEW.&quot; + iterator)));</span>
 <span class="fc" id="L96">            timeline.getKeyFrames().add(keyFrame);</span>
 <span class="fc" id="L97">            duration++;</span>
         }
@@ -107,7 +107,7 @@ public class NotificationListHandyController extends Controller {
 
 <span class="fc bfc" id="L108" title="All 2 branches covered.">        for (int i = 0; i &lt; 2; i++) {</span>
 <span class="fc" id="L109">            int iter = i;</span>
-<span class="fc" id="L110">            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -&gt; handyMessages.add(this.resources.getString(&quot;INGAME.NOTIFICATIONS.STARTER.&quot;+ iter)));</span>
+<span class="fc" id="L110">            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -&gt; handyMessages.add(this.resources.getString(&quot;INGAME.NOTIFICATIONS.STARTER.&quot; + iter)));</span>
 <span class="fc" id="L111">            timeline.getKeyFrames().add(keyFrame);</span>
 <span class="fc" id="L112">            duration++;</span>
         }
@@ -120,7 +120,7 @@ public class NotificationListHandyController extends Controller {
 
 <span class="nc bnc" id="L121" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
 <span class="nc" id="L122">            int iter = i;</span>
-<span class="nc" id="L123">            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -&gt; handyMessages.add(this.resources.getString(&quot;INGAME.NOTIFICATIONS.LOWHEALTH.&quot;+ iter)));</span>
+<span class="nc" id="L123">            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -&gt; handyMessages.add(this.resources.getString(&quot;INGAME.NOTIFICATIONS.LOWHEALTH.&quot; + iter)));</span>
 <span class="nc" id="L124">            timeline.getKeyFrames().add(keyFrame);</span>
 <span class="nc" id="L125">            duration++;</span>
         }
