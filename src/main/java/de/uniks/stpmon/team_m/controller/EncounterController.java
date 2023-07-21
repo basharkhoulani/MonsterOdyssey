@@ -502,6 +502,12 @@ public class EncounterController extends Controller {
                 if (opponentsDelete.size() >= encounterOpponentStorage.getEncounterSize()) {
                     showResult();
                 }
+            } else if (event.suffix().equals("created")) {
+                disposables.add(encounterOpponentsService.getEncounterOpponents(trainerStorageProvider.get().getRegion()._id() ,encounterId)
+                        .observeOn(FX_SCHEDULER).subscribe(opponents -> {
+                            initEncounterOpponentStorage(opponents);
+                            render();
+                        }, Throwable::printStackTrace));
             }
         }, Throwable::printStackTrace));
     }
@@ -581,17 +587,15 @@ public class EncounterController extends Controller {
                                     monsterDefeated(resources.getString("TEAM.DEFEATED"));
                                 }
                             }
-                            /*
-                            if (Objects.equals(result.type(), "status-added")) {
-                            EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(opponent._id());
-                            encounterOpponentController.showStatus(result.status(), true);
-                        }
-                        if (Objects.equals(result.type(), "status-removed")) {
-                            EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(opponent._id());
-                            encounterOpponentController.showStatus(result.status(), false);
-                        }
+                            case "status-added" -> {
+                                EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(oResults._id());
+                                encounterOpponentController.showStatus(r.status(), true);
 
-                            * */
+                            }
+                            case "status-removed" -> {
+                                EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(oResults._id());
+                                encounterOpponentController.showStatus(r.status(), false);
+                            }
                         }
                     }
                 }
@@ -854,6 +858,20 @@ public class EncounterController extends Controller {
             rootStackPane.getChildren().add(popUpVBox);
             newAbilitiesHashMap.put(opponentId, new ArrayList<>());
         }, Throwable::printStackTrace));
+    }
+
+    private void initEncounterOpponentStorage(List<Opponent> opponents) {
+        encounterOpponentStorage.setOpponentsInStorage(opponents);
+        encounterOpponentStorage.resetEnemyOpponents();
+        encounterOpponentStorage.setEncounterSize(opponents.size());
+        for (Opponent o : opponents) {
+            if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && o.isAttacker() != encounterOpponentStorage.isAttacker()) {
+                encounterOpponentStorage.addEnemyOpponent(o);
+            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) && o.isAttacker() == encounterOpponentStorage.isAttacker()){
+                encounterOpponentStorage.setCoopOpponent(o);
+                encounterOpponentStorage.setTwoMonster(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id()));
+            }
+        }
     }
 }
     
