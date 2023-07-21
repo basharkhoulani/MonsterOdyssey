@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -613,7 +614,7 @@ public class IngameController extends Controller {
                     .flatMap(tileset -> presetsService.getTilesetImage(tileset.image()))
                     .doOnNext(image -> tileSetImages.put(mapName, image))
                     .observeOn(FX_SCHEDULER).subscribe(image -> afterAllTileSetsLoaded(map), error -> {
-                        Thread.sleep(5000);
+                        TimeUnit.SECONDS.sleep(10);
                         destroy();
                         app.show(ingameControllerProvider.get());
                     }));
@@ -1619,8 +1620,7 @@ public class IngameController extends Controller {
                                     root.getChildren().remove(loadingScreen);
                                     loadingScreenAnimation.stop();
                                 }, error -> {
-                                    error.printStackTrace();
-                                    Thread.sleep(5000);
+                                    TimeUnit.SECONDS.sleep(10);
                                     destroy();
                                     app.show(ingameControllerProvider.get());
                                 }));
