@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" styleClass="inventarMenu" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.ItemMenuController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" style="-fx-background-radius: 15;" styleClass="inventarMenu" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.ItemMenuController">
    <children>
       <VBox prefHeight="450.0" prefWidth="216.0">
          <children>
@@ -18,14 +18,19 @@
                   <Label alignment="CENTER" prefHeight="47.0" prefWidth="216.0" style="-fx-background-color: #FFFFFF;" text="%INVENTAR" />
                </children>
             </HBox>
-            <ListView fx:id="itemListView" prefHeight="406.0" prefWidth="216.0" />
+            <ListView fx:id="itemListView" prefHeight="406.0" prefWidth="213.0" />
          </children>
       </VBox>
       <VBox prefHeight="450.0" prefWidth="384.0" style="-fx-background-color: #FFFFFF; -fx-opacity: 0.75;">
          <children>
             <HBox prefHeight="39.0" prefWidth="384.0">
                <children>
-                  <Label alignment="CENTER" prefHeight="39.0" prefWidth="400.0" text="%DETAILS" />
+                  <Label alignment="CENTER" prefHeight="39.0" prefWidth="383.0" text="%DETAILS" />
+                  <Button fx:id="closeButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeItemMenu" prefHeight="39.0" prefWidth="39.0" style="-fx-background-color: #FFFFFF;">
+                     <graphic>
+                        <ImageView fx:id="closeImageView" fitHeight="39.0" fitWidth="39.0" onMouseClicked="#closeItemMenu" pickOnBounds="true" preserveRatio="true" />
+                     </graphic>
+                  </Button>
                </children>
             </HBox>
             <HBox prefHeight="158.0" prefWidth="384.0">
