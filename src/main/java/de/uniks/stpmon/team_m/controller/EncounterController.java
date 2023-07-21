@@ -110,7 +110,6 @@ public class EncounterController extends Controller {
     private Monster oldMonster;
     private final ArrayList<Integer> newAbilities = new ArrayList<>();
 
-    // Hier finde ich mit dem Key (Opponent id) besser
     private HashMap<String, EncounterOpponentController> encounterOpponentControllerHashMap = new HashMap<>();
 
     @Inject
@@ -157,7 +156,6 @@ public class EncounterController extends Controller {
         ownTrainerController.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getSelfOpponent()._id(), ownTrainerController);
         Parent ownTrainerParent = ownTrainerController.render();
-        //HBox.setHgrow(ownTrainerParent, javafx.scene.layout.Priority.ALWAYS);
         //showMyMonster
         showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent(), true);
         // showMySprite
@@ -202,7 +200,6 @@ public class EncounterController extends Controller {
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0)._id(), enemy1Controller);
         enemyHBox.setPadding(new Insets(0, 360, 0, 0));
         Parent enemy1Parent = enemy1Controller.render();
-        //HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy1Parent);
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
         showEnemyMonster(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0), true);
@@ -220,7 +217,6 @@ public class EncounterController extends Controller {
         enemy1Controller.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0)._id(), enemy1Controller);
         Parent enemy1Parent = enemy1Controller.render();
-        //HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.setPadding(new Insets(0, 360, 0, 0));
         enemyHBox.getChildren().add(enemy1Parent);
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
@@ -240,7 +236,6 @@ public class EncounterController extends Controller {
         enemy1Controller.onTargetChange = this::onTargetChange;
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0)._id(), enemy1Controller);
         VBox enemy1Parent = (VBox) enemy1Controller.render();
-        //HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy1Parent);
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
         showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
@@ -251,7 +246,6 @@ public class EncounterController extends Controller {
         enemy2Controller.onTargetChange = this::onTargetChange;
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(1)._id(), enemy2Controller);
         VBox enemy2Parent = (VBox) enemy2Controller.render();
-        //HBox.setHgrow(enemy2Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy2Parent);
         showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(1));
 
@@ -269,7 +263,6 @@ public class EncounterController extends Controller {
         enemy1Controller.onTargetChange = this::onTargetChange;
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0)._id(), enemy1Controller);
         VBox enemy1Parent = (VBox) enemy1Controller.render();
-        //HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy1Parent);
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
         showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
@@ -280,7 +273,6 @@ public class EncounterController extends Controller {
         enemy2Controller.onTargetChange = this::onTargetChange;
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(1)._id(), enemy2Controller);
         VBox enemy2Parent = (VBox) enemy2Controller.render();
-        //HBox.setHgrow(enemy2Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy2Parent);
         showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(1));
 
@@ -289,7 +281,6 @@ public class EncounterController extends Controller {
         coopTrainerController.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getCoopOpponent()._id(), coopTrainerController);
         Parent coopTrainerParent = coopTrainerController.render();
-        //HBox.setHgrow(coopTrainerParent, javafx.scene.layout.Priority.ALWAYS);
         teamHBox.getChildren().add(coopTrainerParent);
         showCoopImage(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
         showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent(), false);
