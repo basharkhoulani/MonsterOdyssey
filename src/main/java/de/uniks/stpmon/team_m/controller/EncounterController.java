@@ -599,6 +599,7 @@ public class EncounterController extends Controller {
 
         }
         opponentsUpdate.clear();
+        currentMonsterIndex = 0;
     }
 
     private void checkMoveAlreadyUsed(Opponent opponent) {
@@ -618,7 +619,7 @@ public class EncounterController extends Controller {
         }
     }
 
-    private void listenToMonster(String trainerId, String monsterId, EncounterOpponentController encounterOpponentController) {
+    private void listenToMonster(String trainerId, String monsterId, EncounterOpponentController encounterOpponentController, Opponent opponent) {
         disposables.add(eventListener.get().listen("trainers." + trainerId + ".monsters." + monsterId + ".*", Monster.class).observeOn(FX_SCHEDULER).subscribe(event -> {
             final Monster monster = event.data();
             if (event.suffix().contains("updated")) {
