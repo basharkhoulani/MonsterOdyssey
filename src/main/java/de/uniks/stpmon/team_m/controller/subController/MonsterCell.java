@@ -52,6 +52,8 @@ public class MonsterCell extends ListCell<Monster> {
     @FXML
     public FlowPane statusEffectsFlowPane;
     @FXML
+    public VBox buttonsVBox;
+    @FXML
     Label monsterHealth;
     @FXML
     ImageView monsterImageView;
@@ -204,8 +206,7 @@ public class MonsterCell extends ListCell<Monster> {
             if (itemId != null) {
                 arrowUp.setVisible(false);
                 arrowDown.setVisible(false);
-                viewDetailsButton.setDisable(true);
-                viewDetailsButton.setVisible(false);
+                buttonsVBox.getChildren().remove(viewDetailsButton);
                 removeFromTeamButton.setStyle("-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7; -fx-min-width: 150px; -fx-min-height: 50px;");
                 removeFromTeamButton.setText(resources.getString("SELECT"));
                 removeFromTeamButton.setOnAction(event -> ingameController.useItem(itemId, monster));

@@ -62,7 +62,7 @@
            </VBox.margin>
         </ImageView>
     </VBox>
-    <VBox alignment="CENTER" opacity="0.46" prefHeight="120.0" HBox.hgrow="ALWAYS">
+    <VBox fx:id="buttonsVBox" alignment="CENTER" prefHeight="120.0" HBox.hgrow="ALWAYS">
         <Button fx:id="removeFromTeamButton" alignment="CENTER" mnemonicParsing="false" styleClass="buttonsRed" text="%REMOVE.FROM.TEAM">
            <VBox.margin>
                <Insets />
