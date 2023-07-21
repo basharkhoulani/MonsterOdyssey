@@ -170,7 +170,10 @@ public class MonsterCell extends ListCell<Monster> {
                 removeFromTeamButton.setText(resources.getString("CHANGE.MONSTER"));
                 arrowUp.setVisible(false);
                 arrowDown.setVisible(false);
-                // TODO: Tobias hier den Aufruf zur Change Monster Methode
+                removeFromTeamButton.setOnAction(event -> {
+                    encounterController.changeMonster(monster, monsterTypeDto);
+                    changeMonsterListController.onCloseMonsterList();
+                });
             }
             setGraphic(rootmonsterHBox);
             setText(null);
