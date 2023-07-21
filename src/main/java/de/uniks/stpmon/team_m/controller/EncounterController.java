@@ -473,6 +473,7 @@ public class EncounterController extends Controller {
             } else {
                 encounterOpponentStorage.getEnemyOpponents().removeIf(o -> o._id().equals(opponent._id()));
                 encounterOpponentStorage.addEnemyOpponent(opponent);
+                showEnemyMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent, false);
             }
             opponentsUpdate.put(opponent._id() + "Results", opponent);
         }
