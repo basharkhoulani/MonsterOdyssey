@@ -16,14 +16,14 @@ public class EncounterOpponentStorage {
     private final List<String> opponentsInStorage = new ArrayList<>();
     private Opponent selfOpponent;
     // Die Opponent mit selben trainerId
-    private List<Opponent> enemyOpponents = FXCollections.observableArrayList();
+    private final List<Opponent> enemyOpponents = FXCollections.observableArrayList();
     // Die Opponent mit Id der Gegner
     private Opponent coopOpponent;
     // Die Opponent mit Id des Coop-Partners
     private Monster currentTrainerMonster;
     private MonsterTypeDto currentTrainerMonsterType;
-    private List<Monster> currentMonsters = FXCollections.observableArrayList();
-    private List<MonsterTypeDto> currentMonsterTypes = FXCollections.observableArrayList();
+    private final List<Monster> currentMonsters = FXCollections.observableArrayList();
+    private final List<MonsterTypeDto> currentMonsterTypes = FXCollections.observableArrayList();
     private String regionId;
     private boolean isWild;
     private int encounterSize;

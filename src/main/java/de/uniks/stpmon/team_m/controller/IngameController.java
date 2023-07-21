@@ -17,7 +17,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
@@ -184,13 +183,13 @@ public class IngameController extends Controller {
     private Map miniMap;
     private TrainerController trainerController;
 
-    private SequentialTransition shiftMapRightTransition = new SequentialTransition();
+    private final SequentialTransition shiftMapRightTransition = new SequentialTransition();
     //private ParallelTransition shiftMapRightTransition;
-    private SequentialTransition shiftMapLeftTransition = new SequentialTransition();
+    private final SequentialTransition shiftMapLeftTransition = new SequentialTransition();
     //private ParallelTransition shiftMapLeftTransition;
-    private SequentialTransition shiftMapUpTransition = new SequentialTransition();
+    private final SequentialTransition shiftMapUpTransition = new SequentialTransition();
     //private ParallelTransition shiftMapUpTransition;
-    private SequentialTransition shiftMapDownTransition = new SequentialTransition();
+    private final SequentialTransition shiftMapDownTransition = new SequentialTransition();
     //private ParallelTransition shiftMapDownTransition;
     private boolean loading;
     private VBox loadingScreen;
