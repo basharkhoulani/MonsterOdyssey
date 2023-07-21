@@ -552,7 +552,7 @@ public class EncounterController extends Controller {
 <span class="nc" id="L552">                float currentHealth = (float) (Math.round(monster.currentAttributes().health() * 10) / 10);</span>
 <span class="nc" id="L553">                float maxHealth = (float) (Math.round(monster.attributes().health() * 10) / 10);</span>
 <span class="nc bnc" id="L554" title="All 2 branches missed.">                if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L555">                    AnimationBuilder.buildShakeAnimation(enemy1Controller.monsterImageView, 50, 3, 1).play();</span>
+<span class="nc" id="L555">                    AnimationBuilder.buildShakeAnimation(encounterOpponentController.monsterImageView, 50, 3, 1).play();</span>
 <span class="nc" id="L556">                    AnimationBuilder.buildProgressBarAnimation(encounterOpponentController.HealthBar, 1500, monster.currentAttributes().health() / monster.attributes().health()).play();</span>
                 } else {
 <span class="nc" id="L558">                    encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());</span>
