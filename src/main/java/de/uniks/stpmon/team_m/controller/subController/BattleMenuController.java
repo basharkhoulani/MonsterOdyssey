@@ -3,21 +3,13 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
-import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
-import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
-import de.uniks.stpmon.team_m.dto.Monster;
-import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
@@ -43,8 +35,8 @@ public class BattleMenuController extends Controller {
 
 
     @Inject
-    public BattleMenuController(
-    ) {}
+    public BattleMenuController() {
+    }
 
     public void init(EncounterController encounterController, VBox battleMenuVBox, EncounterOpponentStorage encounterOpponentStorage, App app) {
         super.init();
@@ -53,6 +45,7 @@ public class BattleMenuController extends Controller {
         this.encounterOpponentStorage = encounterOpponentStorage;
         this.app = app;
     }
+
     public void init(EncounterController encounterController, EncounterOpponentStorage encounterOpponentStorage, App app) {
         super.init();
         this.encounterController = encounterController;
@@ -62,7 +55,7 @@ public class BattleMenuController extends Controller {
     }
 
     @Override
-    public Parent render(){
+    public Parent render() {
         final Parent parent = super.render();
         fleeButton.setVisible(encounterOpponentStorage.isWild());
         fleeButton.setOnAction(this::changeToIngame);
@@ -88,7 +81,7 @@ public class BattleMenuController extends Controller {
         }
     }
 
-    public void showFleeButton(boolean isWild){
+    public void showFleeButton(boolean isWild) {
         fleeButton.setVisible(isWild);
         fleeButton.setOnAction(this::changeToIngame);
     }

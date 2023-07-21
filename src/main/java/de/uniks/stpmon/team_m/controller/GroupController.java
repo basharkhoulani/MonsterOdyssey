@@ -15,10 +15,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -235,7 +235,7 @@ public class GroupController extends Controller {
         if (result.isPresent() && result.get() == ButtonType.YES) {
             if (groupStorageProvider.get().getMembers().size() > 1) {
                 groupStorageProvider.get().getMembers().remove(userStorage.get().get_id());
-                disposables.add(groupService.update(groupStorageProvider.get().get_id(),groupStorageProvider.get().getName(), groupStorageProvider.get().getMembers())
+                disposables.add(groupService.update(groupStorageProvider.get().get_id(), groupStorageProvider.get().getName(), groupStorageProvider.get().getMembers())
                         .observeOn(FX_SCHEDULER)
                         .subscribe(group -> app.show(messagesControllerProvider.get())
                                 , error -> showError(error.getMessage())));

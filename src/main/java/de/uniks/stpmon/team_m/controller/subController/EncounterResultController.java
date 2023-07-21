@@ -25,7 +25,6 @@ public class EncounterResultController extends Controller {
     Provider<IngameController> ingameControllerProvider;
 
 
-
     @Inject
     public EncounterResultController() {
     }

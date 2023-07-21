@@ -4,7 +4,7 @@ import java.util.List;
 
 public record Layer(
         List<Chunk> chunks,
-        List<Integer> data,
+        List<Long> data,
         int height,
         int id,
         String name,
