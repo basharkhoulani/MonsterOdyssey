@@ -66,6 +66,18 @@ public class EncounterOpponentController extends Controller {
     public ImageView heartImageView;
     @FXML
     public Button currentMonsterButton;
+    @FXML
+    public ImageView paralysedImage;
+    @FXML
+    public ImageView asleepImage;
+    @FXML
+    public ImageView poisonedImage;
+    @FXML
+    public ImageView frozenImage;
+    @FXML
+    public ImageView confusedImage;
+    @FXML
+    public ImageView burnedImage;
 
     private Opponent currentTarget;
     public Runnable onTargetChange;
@@ -93,6 +105,12 @@ public class EncounterOpponentController extends Controller {
         if (!GraphicsEnvironment.isHeadless()) {
             starImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(STAR_ICON)).toString()));
             heartImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(HEART_ICON)).toString()));
+            paralysedImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("paralysed"))).toString()));
+            asleepImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("asleep"))).toString()));
+            poisonedImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("poisoned"))).toString()));
+            burnedImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("burned"))).toString()));
+            frozenImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("frozen"))).toString()));
+            confusedImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("confused"))).toString()));
         }
 
         if (isEnemy) {
@@ -229,4 +247,14 @@ public class EncounterOpponentController extends Controller {
         return trainerImageView;
     }
 
+    public void showStatus(String status, boolean value) {
+        switch (status) {
+            case PARALYSED -> paralysedImage.setVisible(value);
+            case ASLEEP -> asleepImage.setVisible(value);
+            case POISONED -> poisonedImage.setVisible(value);
+            case FROZEN -> frozenImage.setVisible(value);
+            case CONFUSED -> confusedImage.setVisible(value);
+            case BURNED -> burnedImage.setVisible(value);
+        }
+    }
 }

@@ -28,8 +28,8 @@ public class BattleMenuController extends Controller {
 
 
     @Inject
-    public BattleMenuController(
-    ) {}
+    public BattleMenuController() {
+    }
 
     public void init(EncounterController encounterController, EncounterOpponentStorage encounterOpponentStorage, App app) {
         super.init();
@@ -39,7 +39,7 @@ public class BattleMenuController extends Controller {
     }
 
     @Override
-    public Parent render(){
+    public Parent render() {
         final Parent parent = super.render();
         fleeButton.setVisible(encounterOpponentStorage.isWild());
         fleeButton.setOnAction(this::changeToIngame);
@@ -63,7 +63,7 @@ public class BattleMenuController extends Controller {
         }
     }
 
-    public void showFleeButton(boolean isWild){
+    public void showFleeButton(boolean isWild) {
         fleeButton.setVisible(isWild);
         fleeButton.setOnAction(this::changeToIngame);
     }

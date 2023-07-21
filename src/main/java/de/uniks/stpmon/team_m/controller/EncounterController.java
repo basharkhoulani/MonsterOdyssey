@@ -1,15 +1,8 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.Constants;
-import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
-import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
-import de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController;
 import de.uniks.stpmon.team_m.controller.subController.*;
-import de.uniks.stpmon.team_m.controller.subController.EncounterResultController;
 import de.uniks.stpmon.team_m.dto.*;
-import de.uniks.stpmon.team_m.controller.subController.LevelUpController;
-import de.uniks.stpmon.team_m.dto.Monster;
-import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
@@ -17,8 +10,8 @@ import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import javafx.animation.*;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -27,9 +20,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
-import javafx.scene.text.TextAlignment;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -37,7 +30,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -589,6 +581,17 @@ public class EncounterController extends Controller {
                                     monsterDefeated(resources.getString("TEAM.DEFEATED"));
                                 }
                             }
+                            /*
+                            if (Objects.equals(result.type(), "status-added")) {
+                            EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(opponent._id());
+                            encounterOpponentController.showStatus(result.status(), true);
+                        }
+                        if (Objects.equals(result.type(), "status-removed")) {
+                            EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(opponent._id());
+                            encounterOpponentController.showStatus(result.status(), false);
+                        }
+
+                            * */
                         }
                     }
                 }
@@ -615,7 +618,7 @@ public class EncounterController extends Controller {
         }
     }
 
-    private void listenToMonster(String trainerId, String monsterId, EncounterOpponentController encounterOpponentController, Opponent opponent) {
+    private void listenToMonster(String trainerId, String monsterId, EncounterOpponentController encounterOpponentController) {
         disposables.add(eventListener.get().listen("trainers." + trainerId + ".monsters." + monsterId + ".*", Monster.class).observeOn(FX_SCHEDULER).subscribe(event -> {
             final Monster monster = event.data();
             if (event.suffix().contains("updated")) {
@@ -724,9 +727,9 @@ public class EncounterController extends Controller {
         });
         fleeAnimation.setOnFinished(evt -> disposables.add(encounterOpponentsService.deleteOpponent(encounterOpponentStorage.getRegionId(), encounterOpponentStorage.getEncounterId(), encounterOpponentStorage.getSelfOpponent()._id()).observeOn(FX_SCHEDULER)
                 .subscribe(result -> showIngameController(), error -> {
-            showError(error.getMessage());
-            error.printStackTrace();
-        })));
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                })));
         firstPause.play();
     }
 
