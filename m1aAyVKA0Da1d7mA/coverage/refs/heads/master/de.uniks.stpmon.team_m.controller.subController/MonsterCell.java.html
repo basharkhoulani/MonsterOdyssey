@@ -170,35 +170,38 @@ public class MonsterCell extends ListCell&lt;Monster&gt; {
 <span class="nc" id="L170">                removeFromTeamButton.setText(resources.getString(&quot;CHANGE.MONSTER&quot;));</span>
 <span class="nc" id="L171">                arrowUp.setVisible(false);</span>
 <span class="nc" id="L172">                arrowDown.setVisible(false);</span>
-                // TODO: Tobias hier den Aufruf zur Change Monster Methode
+<span class="nc" id="L173">                removeFromTeamButton.setOnAction(event -&gt; {</span>
+<span class="nc" id="L174">                    encounterController.changeMonster(monster, monsterTypeDto);</span>
+<span class="nc" id="L175">                    changeMonsterListController.onCloseMonsterList();</span>
+<span class="nc" id="L176">                });</span>
             }
-<span class="fc" id="L175">            setGraphic(rootmonsterHBox);</span>
-<span class="fc" id="L176">            setText(null);</span>
-<span class="fc" id="L177">            setStyle(&quot;-fx-background-color: #CFE9DB;  -fx-border-color: #1C701C; -fx-border-width: 2px&quot;);</span>
+<span class="fc" id="L178">            setGraphic(rootmonsterHBox);</span>
+<span class="fc" id="L179">            setText(null);</span>
+<span class="fc" id="L180">            setStyle(&quot;-fx-background-color: #CFE9DB;  -fx-border-color: #1C701C; -fx-border-width: 2px&quot;);</span>
         }
-<span class="fc" id="L179">    }</span>
+<span class="fc" id="L182">    }</span>
 
 
     private void showDetails(Monster monster, String type) {
-<span class="nc bnc" id="L183" title="All 2 branches missed.">        if (encounter) {</span>
-<span class="nc" id="L184">            this.encounterController.showMonsterDetailsInEncounter();</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">        if (encounter) {</span>
+<span class="nc" id="L187">            this.encounterController.showMonsterDetailsInEncounter();</span>
         } else {
-<span class="nc" id="L186">            this.ingameController.showMonsterDetails(monster, monsterTypeDto, monsterImage, resources, presetsService, type);</span>
+<span class="nc" id="L189">            this.ingameController.showMonsterDetails(monster, monsterTypeDto, monsterImage, resources, presetsService, type);</span>
         }
-<span class="nc" id="L188">    }</span>
+<span class="nc" id="L191">    }</span>
 
     private void loadFXML() {
-<span class="pc bpc" id="L191" title="1 of 2 branches missed.">        if (loader == null) {</span>
-<span class="fc" id="L192">            loader = new FXMLLoader(Main.class.getResource(&quot;views/MonsterCell.fxml&quot;));</span>
-<span class="fc" id="L193">            loader.setResources(resources);</span>
-<span class="fc" id="L194">            loader.setControllerFactory(c -&gt; this);</span>
+<span class="pc bpc" id="L194" title="1 of 2 branches missed.">        if (loader == null) {</span>
+<span class="fc" id="L195">            loader = new FXMLLoader(Main.class.getResource(&quot;views/MonsterCell.fxml&quot;));</span>
+<span class="fc" id="L196">            loader.setResources(resources);</span>
+<span class="fc" id="L197">            loader.setControllerFactory(c -&gt; this);</span>
             try {
-<span class="fc" id="L196">                loader.load();</span>
-<span class="nc" id="L197">            } catch (Exception e) {</span>
-<span class="nc" id="L198">                e.printStackTrace();</span>
-<span class="fc" id="L199">            }</span>
+<span class="fc" id="L199">                loader.load();</span>
+<span class="nc" id="L200">            } catch (Exception e) {</span>
+<span class="nc" id="L201">                e.printStackTrace();</span>
+<span class="fc" id="L202">            }</span>
         }
-<span class="fc" id="L201">    }</span>
+<span class="fc" id="L204">    }</span>
 }
 
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
