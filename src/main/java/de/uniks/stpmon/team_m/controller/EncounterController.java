@@ -136,8 +136,8 @@ public class EncounterController extends Controller {
         encounterOpponentControllerHashMap = new HashMap<>();
         disposables.add(monstersService.getMonsters(regionId, trainerId).observeOn(FX_SCHEDULER).subscribe(monsters ->
                 monsters.forEach(monster -> disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto ->
-                        monstersInEncounter.put(monster, monsterTypeDto),
-                Throwable::printStackTrace))), Throwable::printStackTrace));
+                                monstersInEncounter.put(monster, monsterTypeDto),
+                        Throwable::printStackTrace))), Throwable::printStackTrace));
         if (!GraphicsEnvironment.isHeadless() && !AudioService.getInstance().checkMuted()) {
             AudioService.getInstance().stopSound();
             AudioService.getInstance().playSound(FIGHT_SOUND);
@@ -553,8 +553,11 @@ public class EncounterController extends Controller {
                         .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
                 if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
                     encounterOpponentStorage.setCurrentTrainerMonster(monster);
-                    disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto ->
-                            encounterOpponentStorage.setCurrentTrainerMonsterType(monsterTypeDto), Throwable::printStackTrace));
+                    disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto -> {
+                        encounterOpponentStorage.setCurrentTrainerMonsterType(monsterTypeDto);
+                        monstersInEncounter.remove(monster);
+                        monstersInEncounter.put(monster, monsterTypeDto);
+                    }, Throwable::printStackTrace));
                 }
             }
         }, Throwable::printStackTrace));
@@ -646,21 +649,26 @@ public class EncounterController extends Controller {
 
     public void yourMonsterDefeated() {
         final boolean[] hasAnotherMonster = {false};
-        monstersInEncounter.forEach((monster, monsterTypeDto) -> {
-            if (monster.currentAttributes().health() > 0) {
-                hasAnotherMonster[0] = true;
-                disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, encounterOpponentStorage.getSelfOpponent()._id(), monster._id(), null).observeOn(FX_SCHEDULER).subscribe(
-                        opponent -> {
-                            resetRepeatedTimes();
-                            goBackToBattleMenu();
-                            encounterOpponentStorage.setCurrentTrainerMonster(monster);
-                            encounterOpponentStorage.setCurrentTrainerMonsterType(monsterTypeDto);
-                            encounterOpponentStorage.setSelfOpponent(opponent);
-                            showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent(), true);
-                        }, Throwable::printStackTrace));
-
-            }
+        PauseTransition pause = new PauseTransition(Duration.millis(1000));
+        pause.setOnFinished(evt -> {
+            ownTrainerController.monsterImageView.setVisible(false);
+            System.out.println(monstersInEncounter);
+            monstersInEncounter.forEach((monster, monsterTypeDto) -> {
+                if (monster.currentAttributes().health() > 0) {
+                    hasAnotherMonster[0] = true;
+                    disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, encounterOpponentStorage.getSelfOpponent()._id(), monster._id(), null).observeOn(FX_SCHEDULER).subscribe(
+                            opponent -> {
+                                resetRepeatedTimes();
+                                goBackToBattleMenu();
+                                encounterOpponentStorage.setCurrentTrainerMonster(monster);
+                                encounterOpponentStorage.setCurrentTrainerMonsterType(monsterTypeDto);
+                                encounterOpponentStorage.setSelfOpponent(opponent);
+                                showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent(), true);
+                            }, Throwable::printStackTrace));
+                }
+            });
         });
+        pause.play();
         if (!hasAnotherMonster[0]) {
             showResultPopUp(resources.getString("YOU.FAILED"));
         }
