@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.HBox?>
 
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.ItemCell">
    <children>
-      <ImageView fx:id="itemImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="itemImageView" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" />
       <Label fx:id="itemLabel" prefHeight="55.0" prefWidth="118.0">
          <padding>
             <Insets left="5.0" />
