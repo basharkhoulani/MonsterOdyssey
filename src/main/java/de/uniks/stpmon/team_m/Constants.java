@@ -8,10 +8,10 @@ import static java.util.Map.entry;
 
 public class Constants {
     // SERVER
-    public static final String API_URL = "https://stpmon.uniks.de/api/v3";
-    public static final String WS_URL = "wss://stpmon.uniks.de/ws/v3";
+    public static final String API_URL = "https://stpmon.uniks.de/api/v4";
+    public static final String WS_URL = "wss://stpmon.uniks.de/ws/v4";
     public static final String UDP_URL = "stpmon.uniks.de";
-    public static final int SERVER_PORT = 30013;
+    public static final int SERVER_PORT = 30014;
     public static final String MESSAGE_NAMESPACE_GROUPS = "groups";
     public static final String MESSAGE_NAMESPACE_REGIONS = "regions";
     public static final String MESSAGE_NAMESPACE_GLOBAL = "global";
