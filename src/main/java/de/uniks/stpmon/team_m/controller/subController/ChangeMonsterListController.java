@@ -64,7 +64,8 @@ public class ChangeMonsterListController extends Controller {
                     // TODO: change Monster filtern
                     activeMonstersList = list.stream()
                             .filter(monster -> trainerStorageProvider.get().getTrainer().team().contains(monster._id()) && !Objects.equals(monster
-                                    ._id(), encounterOpponentStorageProvider.get().getSelfOpponent().monster()))
+                                    ._id(), encounterOpponentStorageProvider.get().getSelfOpponent().monster())
+                                    && !(encounterOpponentStorageProvider.get().isTwoMonster() && Objects.equals(monster._id(), encounterOpponentStorageProvider.get().getCoopOpponent().monster())))
                             .collect(Collectors.toList());
                     initMonsterList(activeMonstersList);
                 }, throwable -> showError(throwable.getMessage())));
