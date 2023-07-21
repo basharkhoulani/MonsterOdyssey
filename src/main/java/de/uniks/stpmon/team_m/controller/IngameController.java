@@ -183,14 +183,13 @@ public class IngameController extends Controller {
     private Map miniMap;
     private TrainerController trainerController;
 
-    private final SequentialTransition shiftMapRightTransition = new SequentialTransition();
-    //private ParallelTransition shiftMapRightTransition;
-    private final SequentialTransition shiftMapLeftTransition = new SequentialTransition();
-    //private ParallelTransition shiftMapLeftTransition;
-    private final SequentialTransition shiftMapUpTransition = new SequentialTransition();
-    //private ParallelTransition shiftMapUpTransition;
-    private final SequentialTransition shiftMapDownTransition = new SequentialTransition();
-    //private ParallelTransition shiftMapDownTransition;
+
+    private ParallelTransition shiftMapRightTransition;
+    private ParallelTransition shiftMapLeftTransition;
+
+    private ParallelTransition shiftMapUpTransition;
+
+    private ParallelTransition shiftMapDownTransition;
     private boolean loading;
     private VBox loadingScreen;
     private Timeline loadingScreenAnimation;
@@ -445,45 +444,7 @@ public class IngameController extends Controller {
     }
 
     private void initMapShiftTransitions() {
-        for (int i=0; i < TILE_SIZE; i++) {
-            shiftMapUpTransition.getChildren().add(new ParallelTransition(
-                    getMapMovementTransition(groundCanvas,              0, -SCALE_FACTOR * 2, TRANSITION_DURATION / TILE_SIZE),
-                    getMapMovementTransition(behindUserTrainerCanvas,   0, -SCALE_FACTOR * 2, TRANSITION_DURATION / TILE_SIZE),
-                    getMapMovementTransition(userTrainerCanvas,         0, -SCALE_FACTOR * 2, TRANSITION_DURATION / TILE_SIZE),
-                    getMapMovementTransition(overUserTrainerCanvas,     0, -SCALE_FACTOR * 2, TRANSITION_DURATION / TILE_SIZE),
-                    getMapMovementTransition(roofCanvas,                0, -SCALE_FACTOR * 2, TRANSITION_DURATION / TILE_SIZE)
-            ));
-        }
-        for (int i=0; i < TILE_SIZE; i++) {
-            shiftMapDownTransition.getChildren().add(new ParallelTransition(
-                    getMapMovementTransition(groundCanvas,              0, SCALE_FACTOR * 2, TRANSITION_DURATION / TILE_SIZE),
-                    getMapMovementTransition(behindUserTrainerCanvas,   0, SCALE_FACTOR * 2, TRANSITION_DURATION / TILE_SIZE),
-                    getMapMovementTransition(userTrainerCanvas,         0, SCALE_FACTOR * 2, TRANSITION_DURATION / TILE_SIZE),
-                    getMapMovementTransition(overUserTrainerCanvas,     0, SCALE_FACTOR * 2, TRANSITION_DURATION / TILE_SIZE),
-                    getMapMovementTransition(roofCanvas,                0, SCALE_FACTOR * 2, TRANSITION_DURATION / TILE_SIZE)
-            ));
-        }
-        for (int i=0; i < TILE_SIZE; i++) {
-            shiftMapRightTransition.getChildren().add(new ParallelTransition(
-                    getMapMovementTransition(groundCanvas,               SCALE_FACTOR * 2,0, TRANSITION_DURATION / TILE_SIZE),
-                    getMapMovementTransition(behindUserTrainerCanvas,   SCALE_FACTOR * 2, 0,  TRANSITION_DURATION / TILE_SIZE),
-                    getMapMovementTransition(userTrainerCanvas,         SCALE_FACTOR * 2, 0, TRANSITION_DURATION / TILE_SIZE),
-                    getMapMovementTransition(overUserTrainerCanvas,     SCALE_FACTOR * 2, 0, TRANSITION_DURATION / TILE_SIZE),
-                    getMapMovementTransition(roofCanvas,                 SCALE_FACTOR * 2, 0, TRANSITION_DURATION / TILE_SIZE)
-            ));
-        }
-        for (int i=0; i < TILE_SIZE; i++) {
-            shiftMapLeftTransition.getChildren().add(new ParallelTransition(
-                    getMapMovementTransition(groundCanvas,              -SCALE_FACTOR * 2, 0, TRANSITION_DURATION / TILE_SIZE),
-                    getMapMovementTransition(behindUserTrainerCanvas,   -SCALE_FACTOR * 2, 0, TRANSITION_DURATION / TILE_SIZE),
-                    getMapMovementTransition(userTrainerCanvas,         -SCALE_FACTOR * 2, 0, TRANSITION_DURATION / TILE_SIZE),
-                    getMapMovementTransition(overUserTrainerCanvas,     -SCALE_FACTOR * 2, 0, TRANSITION_DURATION / TILE_SIZE),
-                    getMapMovementTransition(roofCanvas,                -SCALE_FACTOR * 2, 0,TRANSITION_DURATION / TILE_SIZE)
-            ));
-        }
-
-         //*/
-        /*shiftMapUpTransition = new ParallelTransition(
+        shiftMapUpTransition = new ParallelTransition(
                 getMapMovementTransition(groundCanvas,              0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
                 getMapMovementTransition(behindUserTrainerCanvas,   0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
                 getMapMovementTransition(userTrainerCanvas,         0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
@@ -508,13 +469,12 @@ public class IngameController extends Controller {
         );
 
         shiftMapDownTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE),
-                getMapMovementTransition(behindUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE),
-                getMapMovementTransition(userTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE),
-                getMapMovementTransition(overUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE),
-                getMapMovementTransition(roofCanvas, 0, SCALE_FACTOR * TILE_SIZE)
+                getMapMovementTransition(groundCanvas,              0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas,   0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas,         0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas,     0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas,                0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
         );
-         */
     }
 
     private void changeRegion() {
