@@ -52,6 +52,8 @@ public class MonsterCell extends ListCell<Monster> {
     @FXML
     public FlowPane statusEffectsFlowPane;
     @FXML
+    public HBox monsterTypesHBox;
+    @FXML
     public VBox buttonsVBox;
     @FXML
     Label monsterHealth;
@@ -59,10 +61,7 @@ public class MonsterCell extends ListCell<Monster> {
     ImageView monsterImageView;
     @FXML
     HBox rootmonsterHBox;
-    @FXML
-    VBox typeIcon;
-    @FXML
-    ImageView typeImageView;
+
     private final ResourceBundle resources;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
@@ -86,9 +85,6 @@ public class MonsterCell extends ListCell<Monster> {
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
     private MonsterTypeDto monsterTypeDto;
     private Image monsterImage;
-    private String typeColor;
-    private String typeImagePath;
-    private Image typeImage;
 
     public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController,
                        IngameController ingameController, boolean encounter, boolean other) {
@@ -155,31 +151,42 @@ public class MonsterCell extends ListCell<Monster> {
                         for (String s : monsterTypeDto.type()) {
                             type.append(s);
                         }
-                        typeColor = TYPESCOLORPALETTE.get(type.toString());
-                        String style = "-fx-background-color: " + typeColor + ";";
-                        typeIcon.setStyle(style);
-
-                        if(!GraphicsEnvironment.isHeadless()) {
-                            typeImagePath = ABILITYPALETTE.get(type.toString());
-                            URL resourceType = Main.class.getResource("images/" + typeImagePath);
-                            assert resourceType != null;
-                            typeImage = new Image(resourceType.toString());
-                            typeImageView.setImage(typeImage);
-                            typeImageView.setFitHeight(45);
-                            typeImageView.setFitWidth(45);
-
+                        if (!GraphicsEnvironment.isHeadless()) {
+                            monsterType.type().forEach(t -> {
+                                String typeColor = TYPESCOLORPALETTE.get(type.toString());
+                                String style = "-fx-background-color: " + typeColor + ";";
+                                VBox typeIcon = new VBox();
+                                typeIcon.setStyle(style);
+                                String typeImagePath = ABILITYPALETTE.get(type.toString());
+                                URL resourceType = Main.class.getResource("images/" + typeImagePath);
+                                assert resourceType != null;
+                                Image typeImage = new Image(resourceType.toString());
+                                ImageView typeImageView = new ImageView();
+                                typeImageView.setImage(typeImage);
+                                typeImageView.setFitHeight(45);
+                                typeImageView.setFitWidth(45);
+                                typeIcon.getChildren().add(typeImageView);
+                                monsterTypesHBox.getChildren().add(typeIcon);
+                            });
                             URL resourseArrowUp = Main.class.getResource("images/monster-arrange-up.png");
                             assert resourseArrowUp != null;
                             Image arrowUpImage = new Image(resourseArrowUp.toString());
                             arrowUp.setImage(arrowUpImage);
                             arrowDown.setImage(arrowUpImage);
                         }
-                    }, error -> monstersListController.showError(error.getMessage())));
+                    }, error -> {
+                        monstersListController.showError(error.getMessage());
+                        error.printStackTrace();
+                    }));
+
             disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
                     .subscribe(monsterImage -> {
                         this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
                         monsterImageView.setImage(this.monsterImage);
-                    }, error -> monstersListController.showError(error.getMessage())));
+                    }, error -> {
+                        monstersListController.showError(error.getMessage());
+                        error.printStackTrace();
+                    }));
             viewDetailsButton.setOnAction(event -> showDetails(monster, type.toString()));
 
             if(!encounter) {

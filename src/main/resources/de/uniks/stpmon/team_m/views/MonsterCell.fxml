@@ -29,13 +29,8 @@
                         <Insets />
                     </VBox.margin>
                 </Label>
-                <VBox fx:id="typeIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="48.0" styleClass="typeIcon">
-                    <ImageView fx:id="typeImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
-                        <VBox.margin>
-                            <Insets />
-                        </VBox.margin>
-                    </ImageView>
-                </VBox>
+                <HBox fx:id="monsterTypesHBox">
+                </HBox>
             </VBox>
             <HBox prefWidth="63.0">
                 <VBox HBox.hgrow="ALWAYS" />
