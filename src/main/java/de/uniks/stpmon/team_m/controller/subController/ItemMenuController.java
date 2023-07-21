@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import de.uniks.stpmon.team_m.service.TrainerItemsService;
@@ -18,7 +19,9 @@ import javafx.scene.layout.VBox;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ItemMenuController extends Controller {
 
@@ -30,7 +33,7 @@ public class ItemMenuController extends Controller {
     @FXML
     public ImageView closeImageView;
     @FXML
-    public ListView<Item> itemListView;
+    public ListView<ItemTypeDto> itemListView;
     public VBox itemMenuBox;
     @Inject
     public ItemMenuController(){}
@@ -54,24 +57,24 @@ public class ItemMenuController extends Controller {
         assert resourceClose != null;
         Image closeImage = new Image(resourceClose.toString());
         closeImageView.setImage(closeImage);
-        disposables.add(trainerItemsService.get().getItems(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), String.valueOf(1)).observeOn(FX_SCHEDULER)
-                .subscribe(itemList -> {
-                    System.out.println(itemList.size());
-                }, throwable -> {
-                    System.out.println(throwable.getMessage());
-                    //showError(throwable.getMessage())
-                }));
+        disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER)
+                        .subscribe(itemTypeDtos -> {
+                            System.out.println(itemTypeDtos.size());
+                            initItems(itemTypeDtos);
+                        }, throwable -> showError(throwable.getMessage())));
+        /*disposables.add(trainerItemsService.get().getItems(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), String.valueOf(1)).observeOn(FX_SCHEDULER)
+                .subscribe(this::initItems, throwable -> showError(throwable.getMessage())));
+         */
 
         return parent;
     }
 
-    public void initItems(List<Item> itemList) {
+    public void initItems(List<ItemTypeDto> itemList) {
         itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources));
         itemListView.getItems().addAll(itemList);
         itemListView.setFocusModel(null);
         itemListView.setSelectionModel(null);
     }
-
     public void closeItemMenu() {
         ingameController.root.getChildren().remove(itemMenuBox);
         ingameController.buttonsDisable(false);
