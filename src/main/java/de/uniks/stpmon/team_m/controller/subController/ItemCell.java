@@ -17,9 +17,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 
-
+import javax.inject.Inject;
+import javax.inject.Provider;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -41,13 +44,18 @@ public class ItemCell extends ListCell<ItemTypeDto> {
     public Label itemLabel;
     @FXML
     public Label itemNumber;
-
+    @FXML
+    public HBox itemHBox;
     private Image itemImage;
+    VBox itemDescriptionBox;
+    @Inject
+    Provider<ItemDescriptionController> itemDescriptionControllerProvider;
 
 
     public ItemCell(PresetsService presetsService, ItemMenuController itemMenuController,
-                    ResourceBundle resources) {
+                    ResourceBundle resources, VBox itemDescriptionBox) {
         this.presetsService = presetsService;
+        this.itemDescriptionBox = itemDescriptionBox;
         this.itemMenuController = itemMenuController;
         this.resources = resources;
     }
@@ -67,10 +75,13 @@ public class ItemCell extends ListCell<ItemTypeDto> {
                         this.itemImage = ImageProcessor.resonseBodyToJavaFXImage(itemImage);
                         itemImageView.setImage(this.itemImage);
                     }, error -> {
-                        itemMenuController.showError(error.getMessage());
+                         itemMenuController.showError(error.getMessage());
                     }));
             itemLabel.setText(itemTypeDto.name());
             itemNumber.setText(itemTypeDto.use());
+
+            itemHBox.setOnMouseClicked(event -> openItemDescription(itemTypeDto,this.itemImage));
+
         }
     }
 
@@ -85,5 +96,11 @@ public class ItemCell extends ListCell<ItemTypeDto> {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void openItemDescription(ItemTypeDto itemTypeDto, Image itemImage) {
+        ItemDescriptionController itemDescriptionController = itemDescriptionControllerProvider.get();
+        itemDescriptionController.init(itemTypeDto, itemImage);
+        itemDescriptionBox.getChildren().add(itemDescriptionController.render());
     }
 }

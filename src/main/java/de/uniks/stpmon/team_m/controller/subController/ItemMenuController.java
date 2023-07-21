@@ -31,10 +31,11 @@ public class ItemMenuController extends Controller {
     Provider<TrainerStorage> trainerStorageProvider;
     TrainersService trainersService;
     @FXML
-    public ImageView closeImageView;
-    @FXML
     public ListView<ItemTypeDto> itemListView;
+    @FXML
+    public VBox itemDescriptionBox;
     public VBox itemMenuBox;
+
     @Inject
     public ItemMenuController(){}
 
@@ -47,16 +48,10 @@ public class ItemMenuController extends Controller {
         this.itemMenuBox = itemMenuBox;
     }
 
-    public void initItemList() {
 
-    }
     @Override
     public Parent render() {
         final Parent parent = super.render();
-        URL resourceClose = Main.class.getResource("images/close-x.png");
-        assert resourceClose != null;
-        Image closeImage = new Image(resourceClose.toString());
-        closeImageView.setImage(closeImage);
         disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER)
                         .subscribe(itemTypeDtos -> {
                             System.out.println(itemTypeDtos.size());
@@ -70,7 +65,7 @@ public class ItemMenuController extends Controller {
     }
 
     public void initItems(List<ItemTypeDto> itemList) {
-        itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources));
+        itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox));
         itemListView.getItems().addAll(itemList);
         itemListView.setFocusModel(null);
         itemListView.setSelectionModel(null);

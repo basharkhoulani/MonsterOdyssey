@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="450.0" prefWidth="384.0" style="-fx-background-color: #FFFFFF; -fx-opacity: 0.75;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.ItemDescriptionController.java">
+   <children>
+      <HBox prefHeight="39.0" prefWidth="384.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="39.0" prefWidth="383.0" text="%DETAILS" />
+            <Button fx:id="closeButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeItemMenu" prefHeight="39.0" prefWidth="39.0" style="-fx-background-color: #FFFFFF;">
+               <graphic>
+                  <ImageView fx:id="closeImageView" fitHeight="39.0" fitWidth="39.0" onMouseClicked="#closeItemMenu" pickOnBounds="true" preserveRatio="true" />
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+      <HBox prefHeight="158.0" prefWidth="384.0">
+         <children>
+            <VBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-width: 2.5;">
+               <HBox.margin>
+                  <Insets left="8.0" top="15.0" />
+               </HBox.margin>
+               <children>
+                  <ImageView fx:id="itemImageView" fitHeight="130.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </VBox>
+            <VBox maxHeight="-Infinity" prefHeight="130.0" prefWidth="232.0">
+               <HBox.margin>
+                  <Insets top="15.0" />
+               </HBox.margin>
+               <children>
+                  <HBox prefHeight="32.0" prefWidth="232.0">
+                     <VBox.margin>
+                        <Insets top="13.0" />
+                     </VBox.margin>
+                     <children>
+                        <Label prefHeight="32.0" prefWidth="96.0" text="%ITEM.NUMBER">
+                           <HBox.margin>
+                              <Insets left="6.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="itemAmountLabel" prefHeight="32.0" prefWidth="74.0" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="32.0" prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets top="3.0" />
+                     </VBox.margin>
+                     <children>
+                        <Label prefHeight="32.0" prefWidth="96.0" text="%PRICE">
+                           <HBox.margin>
+                              <Insets left="6.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="itemPriceLabel" prefHeight="32.0" prefWidth="74.0" />
+                        <ImageView fx:id="coinImage" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </HBox>
+                  <Button fx:id="useButton" mnemonicParsing="false" prefHeight="32.0" prefWidth="107.0" styleClass="buttonsBlue" text="%USE">
+                     <VBox.margin>
+                        <Insets left="6.0" top="11.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox prefHeight="26.0" prefWidth="384.0">
+         <VBox.margin>
+            <Insets top="13.0" />
+         </VBox.margin>
+         <children>
+            <Label prefHeight="31.0" prefWidth="210.0" text="%DESCRIPTION">
+               <HBox.margin>
+                  <Insets left="6.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox prefHeight="213.0" prefWidth="384.0">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets top="14.0" />
+         </padding>
+         <children>
+            <Label fx:id="itemDescription" prefHeight="21.0" prefWidth="384.0" />
+         </children>
+      </HBox>
+   </children>
+</VBox>
