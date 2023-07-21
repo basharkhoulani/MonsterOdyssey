@@ -168,8 +168,6 @@ public class EncounterController extends Controller {
             oldMonster = monster;
             encounterOpponentStorage.addCurrentMonster(monster);
         }));
-        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilityDtos::addAll));
-        }, Throwable::printStackTrace));
         disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilityDtos::addAll, Throwable::printStackTrace));
 
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId).observeOn(FX_SCHEDULER).subscribe(encounter -> {
@@ -657,7 +655,7 @@ public class EncounterController extends Controller {
             }
         });
         if (!enemyHasAnotherMonster[0] || encounterOpponentStorage.isWild()) {
-            SequentialTransition fleeAnimation = buildFleeAnimation();
+            SequentialTransition fleeAnimation = AnimationBuilder.buildFleeAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), ownTrainerController);
             PauseTransition pause = new PauseTransition(Duration.millis(1000));
             pause.setOnFinished(evt -> {
                 ownTrainerController.monsterImageView.setVisible(false);
