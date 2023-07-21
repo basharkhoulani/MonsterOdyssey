@@ -389,7 +389,10 @@ public class IngameController extends Controller {
 
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(
-                area -> loadMap(area.map()), error -> showError(error.getMessage())
+                area -> loadMap(area.map()), error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }
         ));
         monstersListControllerProvider.get().init();
 
@@ -610,8 +613,9 @@ public class IngameController extends Controller {
                     .flatMap(tileset -> presetsService.getTilesetImage(tileset.image()))
                     .doOnNext(image -> tileSetImages.put(mapName, image))
                     .observeOn(FX_SCHEDULER).subscribe(image -> afterAllTileSetsLoaded(map), error -> {
-                        showError(error.getMessage());
-                        error.printStackTrace();
+                        Thread.sleep(5000);
+                        destroy();
+                        app.show(ingameControllerProvider.get());
                     }));
         }
         focusOnPlayerPosition(getMaxWidth(map), getMaxHeight(map), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
@@ -1615,8 +1619,10 @@ public class IngameController extends Controller {
                                     root.getChildren().remove(loadingScreen);
                                     loadingScreenAnimation.stop();
                                 }, error -> {
-                                    showError(error.getMessage());
                                     error.printStackTrace();
+                                    Thread.sleep(5000);
+                                    destroy();
+                                    app.show(ingameControllerProvider.get());
                                 }));
                     }
                 },
