@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static de.uniks.stpmon.team_m.Constants.*;
-import static de.uniks.stpmon.team_m.Constants.dialogTextFlowInsets;
 
 
 public class MonstersListController extends Controller {
@@ -93,8 +92,8 @@ public class MonstersListController extends Controller {
                     sortActiveMonstersList();
 
                     otherMonstersList = list.stream()
-                            .filter (monster -> !trainerStorageProvider.get().getTrainer().team().contains(monster ._id()))
-                            .collect (Collectors.toList());
+                            .filter(monster -> !trainerStorageProvider.get().getTrainer().team().contains(monster._id()))
+                            .collect(Collectors.toList());
                     initOtherMonsterList(otherMonstersList);
                     initMonsterList(activeMonstersList);
                 }, throwable -> showError(throwable.getMessage())));
@@ -103,7 +102,7 @@ public class MonstersListController extends Controller {
     }
 
     private void sortActiveMonstersList() {
-        List <Monster> sortedList = new ArrayList<>();
+        List<Monster> sortedList = new ArrayList<>();
         for (String id : trainerStorageProvider.get().getTrainer().team()) {
             for (Monster monster : activeMonstersList) {
                 if (monster._id().equals(id)) {
@@ -115,7 +114,7 @@ public class MonstersListController extends Controller {
         activeMonstersList = sortedList;
     }
 
-    public void changeOrderUp (String id) {
+    public void changeOrderUp(String id) {
         int index = 0;
         for (Monster monster : activeMonstersList) {
             if (monster._id().equals(id)) {
@@ -131,7 +130,7 @@ public class MonstersListController extends Controller {
         }
     }
 
-    public void changeOrderDown (String id) {
+    public void changeOrderDown(String id) {
         int index = 0;
         for (Monster monster : activeMonstersList) {
             if (monster._id().equals(id)) {
@@ -147,7 +146,7 @@ public class MonstersListController extends Controller {
         }
     }
 
-    public void updateTeam(){
+    public void updateTeam() {
         Trainer trainer = trainerStorageProvider.get().getTrainer();
         monsterListViewActive.getItems().clear();
         monsterListViewActive.getItems().addAll(activeMonstersList);
@@ -216,7 +215,7 @@ public class MonstersListController extends Controller {
         limitVBox.getChildren().addAll(message, ok);
     }
 
-    private void updateBothLists(ListView<Monster> listViewAdd,List<Monster> listAdd, ListView<Monster> listViewRemove, List<Monster> listRemove, Monster monster, List<String> team) {
+    private void updateBothLists(ListView<Monster> listViewAdd, List<Monster> listAdd, ListView<Monster> listViewRemove, List<Monster> listRemove, Monster monster, List<String> team) {
         disposables.add(trainersService.updateTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), null, null, team)
                 .observeOn(FX_SCHEDULER)
                 .subscribe(t -> trainerStorageProvider.get().setTrainer(t), throwable -> showError(throwable.getMessage())));

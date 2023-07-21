@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.rest;
 
 import de.uniks.stpmon.team_m.dto.AbilityDto;
+import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import io.reactivex.rxjava3.core.Observable;
 import okhttp3.ResponseBody;
@@ -16,6 +17,12 @@ public interface PresetsApiService {
     Observable<List<String>> getCharacters();
     @GET("presets/characters/{filename}")
     Observable<ResponseBody> getCharacter(@Path("filename") String filename);
+    @GET("presets/items")
+    Observable<List<ItemTypeDto>> getItems();
+    @GET("presets/items/{id}")
+    Observable<ItemTypeDto> getItem(@Path("id") int id);
+    @GET("presets/items/{id}/image")
+    Observable<ResponseBody> getItemImage(@Path("id") int id);
     @GET("presets/monsters")
     Observable<List<MonsterTypeDto>> getMonsters();
     @GET("presets/monsters/{id}")

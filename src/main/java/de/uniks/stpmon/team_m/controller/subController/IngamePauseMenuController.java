@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
 import java.awt.*;
 import java.util.Objects;
 
@@ -42,13 +41,14 @@ public class IngamePauseMenuController extends Controller {
     Provider<IngameController> ingameControllerProvider;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
+
     @Inject
     public IngamePauseMenuController() {
     }
 
     public Parent render() {
         final Parent parent = super.render();
-        if(!GraphicsEnvironment.isHeadless()){
+        if (!GraphicsEnvironment.isHeadless()) {
             resumeGameImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(PLAYSYMBOL)).toString()));
             settingsImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(SETTINGSYMBOL2)).toString()));
             leaveGameImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(GOBACKSYMBOL)).toString()));
@@ -78,7 +78,7 @@ public class IngamePauseMenuController extends Controller {
     public void leaveGame() {
         ingameController.root.getChildren().remove(ingameVbox);
         double volume = AudioService.getInstance().getVolume();
-        if(!GraphicsEnvironment.isHeadless()){
+        if (!GraphicsEnvironment.isHeadless()) {
             AudioService.getInstance().setVolume(volume);
         }
         ingameController.destroy();

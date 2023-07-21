@@ -99,7 +99,7 @@ public class IngameTrainerSettingsController extends Controller {
     @Override
     public Parent render() {
         Parent parent = super.render();
-        if(!GraphicsEnvironment.isHeadless()){
+        if (!GraphicsEnvironment.isHeadless()) {
             trainerNameEditImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(PENCIL2SYMBOL)).toString()));
             arrowLeftImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(ARROWLEFTSYMBOL)).toString()));
             arrowRightImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(ARROWRIGHTSYMBOL)).toString()));

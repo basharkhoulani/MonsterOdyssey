@@ -2,7 +2,6 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
-import de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
@@ -64,8 +63,7 @@ class EncounterControllerTest extends ApplicationTest {
     Provider<IngameController> ingameControllerProvider;
     @InjectMocks
     EncounterController encounterController;
-    @InjectMocks
-    EncounterOpponentController encounterOpponentController;
+
 
 
     public void start(Stage stage) {
@@ -129,6 +127,7 @@ class EncounterControllerTest extends ApplicationTest {
                         0,
                         List.of("64aa9f636cec1b8f0fac57dc"),
                         List.of(1),
+                        List.of("6475e595ac3946b6a812d863"),
                         "6475e595ac3946b6a812d863",
                         33,
                         18,
@@ -183,7 +182,8 @@ class EncounterControllerTest extends ApplicationTest {
                 0,
                 abilities,
                 new MonsterAttributes(14, 8, 8, 5),
-                new MonsterAttributes(14, 8, 8, 5)
+                new MonsterAttributes(14, 8, 8, 5),
+                List.of()
         );
         when(monstersService.getMonster(anyString(), any(), anyString())).thenReturn(Observable.just(monster));
 
@@ -191,7 +191,7 @@ class EncounterControllerTest extends ApplicationTest {
 
         lenient().doNothing().when(battleMenuController).setTrainerSpriteImageView(any(), any(), anyInt());
 
-        lenient().when(presetsService.getCharacter(any())).thenReturn(new Observable<ResponseBody>() {
+        lenient().when(presetsService.getCharacter(any())).thenReturn(new Observable<>() {
             @Override
             protected void subscribeActual(@NonNull Observer<? super ResponseBody> observer) {
 
@@ -220,6 +220,20 @@ class EncounterControllerTest extends ApplicationTest {
                 )
         ));
 
+        List<Monster> monsters = List.of(
+                new Monster("2023-06-05T17:02:40.357Z",
+                        "023-06-05T17:02:40.357Z",
+                        "647e1530866ace3595866db2",
+                        "647e15308c1bb6a91fb57321",
+                        1,
+                        1,
+                        0,
+                        abilities,
+                        new MonsterAttributes(14, 8, 8, 5),
+                        new MonsterAttributes(14, 8, 8, 5),
+                        List.of()));
+        when(monstersService.getMonsters(any(), any())).thenReturn(Observable.just(monsters));
+
         // Mock the enemy trainer
         when(trainersService.getTrainer(anyString(), anyString())).thenReturn(Observable.just(
                 new Trainer(
@@ -233,6 +247,7 @@ class EncounterControllerTest extends ApplicationTest {
                         0,
                         List.of("64aa9f7132eb8b56aa9eb20c"),
                         List.of(1),
+                        List.of("6475e595ac3946b6a812d863"),
                         "6475e595ac3946b6a812d863",
                         33,
                         18,
@@ -262,7 +277,7 @@ class EncounterControllerTest extends ApplicationTest {
     }
 
     @Test
-    void renderFor1vs2Test() throws InterruptedException {
+    void renderFor1vs2Test() {
         when(encounterOpponentStorage.getEncounterSize()).thenReturn(3);
         when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
                 List.of(

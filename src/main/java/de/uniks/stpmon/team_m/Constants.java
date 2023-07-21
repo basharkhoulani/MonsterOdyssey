@@ -2,16 +2,19 @@ package de.uniks.stpmon.team_m;
 
 import javafx.geometry.Insets;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Map.entry;
 
 public class Constants {
     // SERVER
-    public static final String API_URL = "https://stpmon.uniks.de/api/v3";
-    public static final String WS_URL = "wss://stpmon.uniks.de/ws/v3";
+    public static final String API_URL = "https://stpmon.uniks.de/api/v4";
+    public static final String WS_URL = "wss://stpmon.uniks.de/ws/v4";
     public static final String UDP_URL = "stpmon.uniks.de";
-    public static final int SERVER_PORT = 30013;
+    public static final int SERVER_PORT = 30014;
     public static final String MESSAGE_NAMESPACE_GROUPS = "groups";
     public static final String MESSAGE_NAMESPACE_REGIONS = "regions";
     public static final String MESSAGE_NAMESPACE_GLOBAL = "global";
@@ -100,6 +103,7 @@ public class Constants {
     public static final String ARROWRIGHTSYMBOL = "images/arrowRight.png";
     public static final String MAPSYMBOL = "images/MapSymbol.png";
     public static final String MONSTER_WITH_COLOR = "images/Monster_mit_Farbe.png";
+    public static final String COIN = "images/coin.png";
 
     // NPC DIALOG
     public static final int dialogVBoxWidth = 700;
@@ -243,5 +247,21 @@ public class Constants {
             "heart.png",
             "speed.png",
             "defense.png"
-            );
+    );
+
+    public static final HashMap<String, String> STATUS_EFFECTS_IMAGES = new HashMap<>(Map.ofEntries(
+            entry("paralysed", "images/paralysed.png"),
+            entry("asleep", "images/asleep.png"),
+            entry("poisoned", "images/poisoned.png"),
+            entry("burned", "images/burned.png"),
+            entry("frozen", "images/frozen.png"),
+            entry("confused", "images/confused.png")
+    ));
+
+    public static final String PARALYSED = "paralysed";
+    public static final String ASLEEP = "asleep";
+    public static final String POISONED = "poisoned";
+    public static final String BURNED = "burned";
+    public static final String FROZEN = "frozen";
+    public static final String CONFUSED = "confused";
 }

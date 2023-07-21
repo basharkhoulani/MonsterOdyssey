@@ -10,7 +10,7 @@ import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.Objects;
+
 import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
 
 public class DialogController extends Controller {
@@ -72,6 +72,7 @@ public class DialogController extends Controller {
 
     /**
      * Method to continue the dialog.
+     *
      * @param specialInteraction Whether the player had a popup with a special interaction with a npc
      * @return A continueDialogReturnValue, which determines what happens after the dialog
      */

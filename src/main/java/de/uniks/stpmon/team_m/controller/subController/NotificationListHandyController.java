@@ -95,7 +95,7 @@ public class NotificationListHandyController extends Controller {
 
         for (int i = 0; i < 4; i++) {
             int iterator = i;
-            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.NEW."+iterator)));
+            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.NEW." + iterator)));
             timeline.getKeyFrames().add(keyFrame);
             duration++;
         }
@@ -110,7 +110,7 @@ public class NotificationListHandyController extends Controller {
 
         for (int i = 0; i < 2; i++) {
             int iter = i;
-            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.STARTER."+ iter)));
+            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.STARTER." + iter)));
             timeline.getKeyFrames().add(keyFrame);
             duration++;
         }
@@ -124,7 +124,7 @@ public class NotificationListHandyController extends Controller {
 
         for (int i = 0; i < 2; i++) {
             int iter = i;
-            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.LOWHEALTH."+ iter)));
+            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.LOWHEALTH." + iter)));
             timeline.getKeyFrames().add(keyFrame);
             duration++;
         }

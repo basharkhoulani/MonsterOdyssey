@@ -107,4 +107,8 @@ public class HttpModule {
     @Singleton
     EncounterOpponentsApiService opponents(Retrofit retrofit) { return retrofit.create(EncounterOpponentsApiService.class); }
 
+    @Provides
+    @Singleton
+    TrainerItemsApiService items(Retrofit retrofit) { return retrofit.create(TrainerItemsApiService.class); }
+
 }

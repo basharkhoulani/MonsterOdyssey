@@ -2,9 +2,10 @@ package de.uniks.stpmon.team_m.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-@JsonTypeName("change-monster")
-public record ChangeMonsterMove(
+@JsonTypeName("item")
+public record UseItemMove(
         String type,
-        String monster
-) implements Move{
+        int item,
+        String target
+) {
 }

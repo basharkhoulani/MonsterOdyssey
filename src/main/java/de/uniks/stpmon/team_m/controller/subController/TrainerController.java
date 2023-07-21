@@ -66,8 +66,9 @@ public class TrainerController extends Controller {
         return null;
     }
 
-    /** Note: oldTrainerX, oldTrainerY, targetTrainerX and targetTrainerY are given in tiles, not in pixels!
-     *  BUT trainerTargetX and trainerTargetY are given in pixels!
+    /**
+     * Note: oldTrainerX, oldTrainerY, targetTrainerX and targetTrainerY are given in tiles, not in pixels!
+     * BUT trainerTargetX and trainerTargetY are given in pixels!
      */
     public TrainerController(IngameController ingameController, Trainer trainer, Image trainerChunk, GraphicsContext graphicsContext, GraphicsContext alternateGraphicsContext) {
         this.ingameController = ingameController;
@@ -94,6 +95,7 @@ public class TrainerController extends Controller {
 
     /**
      * This method is used to turn the trainer in a specific direction
+     *
      * @param direction : 0 = right, 1 = up, 2 = left, 3 = down
      */
     public void turn(int direction) {
@@ -118,8 +120,7 @@ public class TrainerController extends Controller {
                 trainerY--;
             }
             spriteAnimation.walk(trainerDirection);
-        }
-        else {
+        } else {
             isWalking = false;
             spriteAnimation.stay(trainerDirection);
         }

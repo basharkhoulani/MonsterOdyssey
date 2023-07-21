@@ -13,6 +13,7 @@ public record Trainer(
         int coins,
         List<String> team,
         List<Integer> encounteredMonsterTypes,
+        List<String> visitedAreas,
         String area,
         int x,
         int y,
