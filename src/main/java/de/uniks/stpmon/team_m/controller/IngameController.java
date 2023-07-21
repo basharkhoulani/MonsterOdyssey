@@ -457,7 +457,7 @@ public class IngameController extends Controller {
         if(preferences.get("inventory",null) == null){
             preferences.put("inventory",KeyCode.I.getChar());
         }
-
+        showCoins();
         return parent;
     }
 
@@ -1226,7 +1226,28 @@ public class IngameController extends Controller {
     }
 
     public void showItems(){
-        //TODO: Add ItemsVBox to root
+        VBox itemMenuBox = new VBox();
+        itemMenuBox.setAlignment(Pos.CENTER);
+        itemMenuBox.setStyle("-fx-background-radius: 15 15 15 15");
+        ItemMenuController itemMenuController = itemMenuControllerProvider.get();
+        itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox);
+        itemMenuBox.getChildren().add(itemMenuController.render());
+        root.getChildren().add(itemMenuBox);
+        itemMenuBox.requestFocus();
+        buttonsDisable(true);
+    }
+
+    public void showCoins() {
+        disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER).subscribe(
+                trainer -> {
+                    int coins = trainer.coins();
+                    coinsLabel.setText(String.valueOf(coins));
+                },
+                error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }
+        ));
     }
 
     /*
@@ -1741,17 +1762,5 @@ public class IngameController extends Controller {
 
     public void setIsNewStart(boolean isNewStart) {
         this.isNewStart = isNewStart;
-    }
-
-    public void openInventar() {
-        VBox itemMenuBox = new VBox();
-        itemMenuBox.setAlignment(Pos.CENTER);
-        itemMenuBox.setStyle("-fx-background-radius: 15 15 15 15");
-        ItemMenuController itemMenuController = itemMenuControllerProvider.get();
-        itemMenuController.init(this);
-        itemMenuBox.getChildren().add(itemMenuController.render());
-        root.getChildren().add(itemMenuBox);
-        itemMenuBox.requestFocus();
-        buttonsDisable(true);
     }
 }
