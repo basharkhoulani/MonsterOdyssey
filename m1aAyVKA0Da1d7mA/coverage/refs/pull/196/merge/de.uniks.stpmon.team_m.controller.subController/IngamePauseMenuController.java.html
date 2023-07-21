@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
 import java.awt.*;
 import java.util.Objects;
 
@@ -42,13 +41,14 @@ public class IngamePauseMenuController extends Controller {
     Provider&lt;IngameController&gt; ingameControllerProvider;
     @Inject
     Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
+
     @Inject
 <span class="fc" id="L46">    public IngamePauseMenuController() {</span>
 <span class="fc" id="L47">    }</span>
 
     public Parent render() {
 <span class="fc" id="L50">        final Parent parent = super.render();</span>
-<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if(!GraphicsEnvironment.isHeadless()){</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
 <span class="nc" id="L52">            resumeGameImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(PLAYSYMBOL)).toString()));</span>
 <span class="nc" id="L53">            settingsImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(SETTINGSYMBOL2)).toString()));</span>
 <span class="nc" id="L54">            leaveGameImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(GOBACKSYMBOL)).toString()));</span>
@@ -78,7 +78,7 @@ public class IngamePauseMenuController extends Controller {
     public void leaveGame() {
 <span class="fc" id="L79">        ingameController.root.getChildren().remove(ingameVbox);</span>
 <span class="fc" id="L80">        double volume = AudioService.getInstance().getVolume();</span>
-<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        if(!GraphicsEnvironment.isHeadless()){</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
 <span class="nc" id="L82">            AudioService.getInstance().setVolume(volume);</span>
         }
 <span class="fc" id="L84">        ingameController.destroy();</span>

@@ -16,17 +16,14 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.HIGH_VOLUME_ICON;
+import static de.uniks.stpmon.team_m.Constants.MUTE_ICON;
 
 public class ChangeAudioController extends Controller {
     @FXML
     public ImageView muteIconImageView;
     @FXML
     public ImageView highVolumeIconImageView;
-
-    @Inject
-<span class="fc" id="L28">    public ChangeAudioController() {</span>
-<span class="fc" id="L29">    }</span>
 
     @FXML
     private Button closeButton;
@@ -39,45 +36,49 @@ public class ChangeAudioController extends Controller {
     @Inject
     IngameController ingameController;
 
+    @Inject
+<span class="fc" id="L40">    public ChangeAudioController() {</span>
+<span class="fc" id="L41">    }</span>
+
     @Override
     public Parent render() {
-<span class="fc" id="L44">        final Parent parent = super.render();</span>
+<span class="fc" id="L45">        final Parent parent = super.render();</span>
 
-<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L47">            muteIconImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(MUTE_ICON)).toString()));</span>
-<span class="nc" id="L48">            highVolumeIconImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(HIGH_VOLUME_ICON)).toString()));</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L48">            muteIconImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(MUTE_ICON)).toString()));</span>
+<span class="nc" id="L49">            highVolumeIconImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(HIGH_VOLUME_ICON)).toString()));</span>
         }
 
-<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (preferences.getBoolean(&quot;mute&quot;, false)) {</span>
-<span class="nc" id="L52">            audioSlider.setValue(0);</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (preferences.getBoolean(&quot;mute&quot;, false)) {</span>
+<span class="nc" id="L53">            audioSlider.setValue(0);</span>
         } else {
-<span class="fc" id="L54">            audioSlider.setValue(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()) * 100);</span>
+<span class="fc" id="L55">            audioSlider.setValue(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()) * 100);</span>
         }
-<span class="fc" id="L56">        return parent;</span>
+<span class="fc" id="L57">        return parent;</span>
     }
 
 
     public void init(IngameController ingameController, VBox changeAudioVBox) {
-<span class="fc" id="L61">        this.ingameController = ingameController;</span>
-<span class="fc" id="L62">        this.changeAudioVBox = changeAudioVBox;</span>
-<span class="fc" id="L63">    }</span>
+<span class="fc" id="L62">        this.ingameController = ingameController;</span>
+<span class="fc" id="L63">        this.changeAudioVBox = changeAudioVBox;</span>
+<span class="fc" id="L64">    }</span>
 
     public void onCloseButtonClick() {
-<span class="fc" id="L66">        ingameController.root.getChildren().remove(changeAudioVBox);</span>
-<span class="fc" id="L67">        ingameController.showSettings();</span>
-<span class="fc" id="L68">    }</span>
+<span class="fc" id="L67">        ingameController.root.getChildren().remove(changeAudioVBox);</span>
+<span class="fc" id="L68">        ingameController.showSettings();</span>
+<span class="fc" id="L69">    }</span>
 
     public void getSliderValue() {
-<span class="nc" id="L71">        audioSlider.valueProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
-<span class="nc bnc" id="L72" title="All 2 branches missed.">            if (newValue.doubleValue() == 0) {</span>
-<span class="nc" id="L73">                preferences.putBoolean(&quot;mute&quot;, true);</span>
+<span class="nc" id="L72">        audioSlider.valueProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">            if (newValue.doubleValue() == 0) {</span>
+<span class="nc" id="L74">                preferences.putBoolean(&quot;mute&quot;, true);</span>
             } else {
-<span class="nc" id="L75">                preferences.putBoolean(&quot;mute&quot;, false);</span>
-<span class="nc" id="L76">                AudioService.getInstance().unmuteSound();</span>
+<span class="nc" id="L76">                preferences.putBoolean(&quot;mute&quot;, false);</span>
+<span class="nc" id="L77">                AudioService.getInstance().unmuteSound();</span>
             }
-<span class="nc" id="L78">            AudioService.getInstance().setVolume(newValue.doubleValue() / 100);</span>
-<span class="nc" id="L79">            preferences.putDouble(&quot;volume&quot;, newValue.doubleValue() / 100);</span>
-<span class="nc" id="L80">        });</span>
-<span class="nc" id="L81">    }</span>
+<span class="nc" id="L79">            AudioService.getInstance().setVolume(newValue.doubleValue() / 100);</span>
+<span class="nc" id="L80">            preferences.putDouble(&quot;volume&quot;, newValue.doubleValue() / 100);</span>
+<span class="nc" id="L81">        });</span>
+<span class="nc" id="L82">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

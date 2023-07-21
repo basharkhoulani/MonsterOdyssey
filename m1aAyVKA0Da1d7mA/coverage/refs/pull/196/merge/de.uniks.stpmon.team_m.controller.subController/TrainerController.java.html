@@ -66,81 +66,82 @@ public class TrainerController extends Controller {
 <span class="nc" id="L66">        return null;</span>
     }
 
-    /** Note: oldTrainerX, oldTrainerY, targetTrainerX and targetTrainerY are given in tiles, not in pixels!
-     *  BUT trainerTargetX and trainerTargetY are given in pixels!
+    /**
+     * Note: oldTrainerX, oldTrainerY, targetTrainerX and targetTrainerY are given in tiles, not in pixels!
+     * BUT trainerTargetX and trainerTargetY are given in pixels!
      */
-<span class="fc" id="L72">    public TrainerController(IngameController ingameController, Trainer trainer, Image trainerChunk, GraphicsContext graphicsContext, GraphicsContext alternateGraphicsContext) {</span>
-<span class="fc" id="L73">        this.ingameController = ingameController;</span>
-<span class="fc" id="L74">        this.trainerChunk = trainerChunk;</span>
-<span class="fc" id="L75">        this.graphicsContext = graphicsContext;</span>
-<span class="fc" id="L76">        this.alternativeGraphicsContext = alternateGraphicsContext;</span>
+<span class="fc" id="L73">    public TrainerController(IngameController ingameController, Trainer trainer, Image trainerChunk, GraphicsContext graphicsContext, GraphicsContext alternateGraphicsContext) {</span>
+<span class="fc" id="L74">        this.ingameController = ingameController;</span>
+<span class="fc" id="L75">        this.trainerChunk = trainerChunk;</span>
+<span class="fc" id="L76">        this.graphicsContext = graphicsContext;</span>
+<span class="fc" id="L77">        this.alternativeGraphicsContext = alternateGraphicsContext;</span>
 
         // Init trainer position and direction
-<span class="fc" id="L79">        trainerTargetX = trainer.x();</span>
-<span class="fc" id="L80">        trainerTargetY = trainer.y();</span>
-<span class="fc" id="L81">        this.trainerX = trainer.x() * TILE_SIZE;</span>
-<span class="fc" id="L82">        this.trainerY = trainer.y() * TILE_SIZE;</span>
-<span class="fc" id="L83">        this.trainerDirection = trainer.direction();</span>
-<span class="fc" id="L84">    }</span>
+<span class="fc" id="L80">        trainerTargetX = trainer.x();</span>
+<span class="fc" id="L81">        trainerTargetY = trainer.y();</span>
+<span class="fc" id="L82">        this.trainerX = trainer.x() * TILE_SIZE;</span>
+<span class="fc" id="L83">        this.trainerY = trainer.y() * TILE_SIZE;</span>
+<span class="fc" id="L84">        this.trainerDirection = trainer.direction();</span>
+<span class="fc" id="L85">    }</span>
 
     /**
      * @param x x-coordinate of the trainer in tiles
      * @param y y-coordinate of the trainer in tiles
      */
     public void setTrainerTargetPosition(int x, int y) {
-<span class="nc" id="L91">        trainerTargetX = x;</span>
-<span class="nc" id="L92">        trainerTargetY = y;</span>
-<span class="nc" id="L93">    }</span>
+<span class="nc" id="L92">        trainerTargetX = x;</span>
+<span class="nc" id="L93">        trainerTargetY = y;</span>
+<span class="nc" id="L94">    }</span>
 
     /**
      * This method is used to turn the trainer in a specific direction
+     *
      * @param direction : 0 = right, 1 = up, 2 = left, 3 = down
      */
     public void turn(int direction) {
-<span class="nc" id="L100">        trainerDirection = direction;</span>
-<span class="nc" id="L101">        spriteAnimation.stay(trainerDirection);</span>
-<span class="nc" id="L102">    }</span>
+<span class="nc" id="L102">        trainerDirection = direction;</span>
+<span class="nc" id="L103">        spriteAnimation.stay(trainerDirection);</span>
+<span class="nc" id="L104">    }</span>
 
     public void walk() {
-<span class="nc bnc" id="L105" title="All 4 branches missed.">        if (trainerX != trainerTargetX * TILE_SIZE || trainerY != trainerTargetY * TILE_SIZE) {</span>
-<span class="nc" id="L106">            isWalking = true;</span>
-<span class="nc bnc" id="L107" title="All 2 branches missed.">            if (trainerX &lt; trainerTargetX * TILE_SIZE) {</span>
-<span class="nc" id="L108">                trainerDirection = TRAINER_DIRECTION_RIGHT;</span>
-<span class="nc" id="L109">                trainerX++;</span>
-<span class="nc bnc" id="L110" title="All 2 branches missed.">            } else if (trainerX &gt; trainerTargetX * TILE_SIZE) {</span>
-<span class="nc" id="L111">                trainerDirection = TRAINER_DIRECTION_LEFT;</span>
-<span class="nc" id="L112">                trainerX--;</span>
-<span class="nc bnc" id="L113" title="All 2 branches missed.">            } else if (trainerY &lt; trainerTargetY * TILE_SIZE) {</span>
-<span class="nc" id="L114">                trainerDirection = TRAINER_DIRECTION_DOWN;</span>
-<span class="nc" id="L115">                trainerY++;</span>
-<span class="nc bnc" id="L116" title="All 2 branches missed.">            } else if (trainerY &gt; trainerTargetY * TILE_SIZE) {</span>
-<span class="nc" id="L117">                trainerDirection = TRAINER_DIRECTION_UP;</span>
-<span class="nc" id="L118">                trainerY--;</span>
+<span class="nc bnc" id="L107" title="All 4 branches missed.">        if (trainerX != trainerTargetX * TILE_SIZE || trainerY != trainerTargetY * TILE_SIZE) {</span>
+<span class="nc" id="L108">            isWalking = true;</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">            if (trainerX &lt; trainerTargetX * TILE_SIZE) {</span>
+<span class="nc" id="L110">                trainerDirection = TRAINER_DIRECTION_RIGHT;</span>
+<span class="nc" id="L111">                trainerX++;</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">            } else if (trainerX &gt; trainerTargetX * TILE_SIZE) {</span>
+<span class="nc" id="L113">                trainerDirection = TRAINER_DIRECTION_LEFT;</span>
+<span class="nc" id="L114">                trainerX--;</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">            } else if (trainerY &lt; trainerTargetY * TILE_SIZE) {</span>
+<span class="nc" id="L116">                trainerDirection = TRAINER_DIRECTION_DOWN;</span>
+<span class="nc" id="L117">                trainerY++;</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            } else if (trainerY &gt; trainerTargetY * TILE_SIZE) {</span>
+<span class="nc" id="L119">                trainerDirection = TRAINER_DIRECTION_UP;</span>
+<span class="nc" id="L120">                trainerY--;</span>
             }
-<span class="nc" id="L120">            spriteAnimation.walk(trainerDirection);</span>
+<span class="nc" id="L122">            spriteAnimation.walk(trainerDirection);</span>
+        } else {
+<span class="nc" id="L124">            isWalking = false;</span>
+<span class="nc" id="L125">            spriteAnimation.stay(trainerDirection);</span>
         }
-        else {
-<span class="nc" id="L123">            isWalking = false;</span>
-<span class="nc" id="L124">            spriteAnimation.stay(trainerDirection);</span>
-        }
-<span class="nc" id="L126">    }</span>
+<span class="nc" id="L127">    }</span>
 
     public void setTrainerDirection(int direction) {
-<span class="nc" id="L129">        trainerDirection = direction;</span>
-<span class="nc" id="L130">    }</span>
+<span class="nc" id="L130">        trainerDirection = direction;</span>
+<span class="nc" id="L131">    }</span>
 
     @Override
     public void destroy() {
-<span class="fc" id="L134">        spriteAnimation.stop();</span>
-<span class="fc" id="L135">        super.destroy();</span>
-<span class="fc" id="L136">    }</span>
+<span class="fc" id="L135">        spriteAnimation.stop();</span>
+<span class="fc" id="L136">        super.destroy();</span>
+<span class="fc" id="L137">    }</span>
 
     public int getUserTrainerY() {
-<span class="nc" id="L139">        return ingameController.getUserTrainerY();</span>
+<span class="nc" id="L140">        return ingameController.getUserTrainerY();</span>
     }
 
     public int getDirection() {
-<span class="nc" id="L143">        return this.trainerDirection;</span>
+<span class="nc" id="L144">        return this.trainerDirection;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.util.Objects;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.WARNING;
 
 public class IngameDeleteTrainerWarningController extends Controller {
     @FXML
@@ -34,29 +34,32 @@ public class IngameDeleteTrainerWarningController extends Controller {
     @Inject
     IngameTrainerSettingsController ingameTrainerSettingsController;
     private VBox ingameVbox;
+
     @Inject
-<span class="fc" id="L38">    public IngameDeleteTrainerWarningController() {</span>
-<span class="fc" id="L39">    }</span>
+<span class="fc" id="L39">    public IngameDeleteTrainerWarningController() {</span>
+<span class="fc" id="L40">    }</span>
 
     public Parent render() {
-<span class="fc" id="L42">        final Parent parent = super.render();</span>
-<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if(!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L44">            warningImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(WARNING)).toString()));</span>
+<span class="fc" id="L43">        final Parent parent = super.render();</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L45">            warningImageView.setImage(new javafx.scene.image.Image(Objects.requireNonNull(App.class.getResource(WARNING)).toString()));</span>
         }
-<span class="fc" id="L46">        return parent;</span>
+<span class="fc" id="L47">        return parent;</span>
     }
-    public void init(IngameTrainerSettingsController ingameTrainerSettingsController, VBox ingameVbox) {
-<span class="fc" id="L49">        this.ingameTrainerSettingsController = ingameTrainerSettingsController;</span>
-<span class="fc" id="L50">        this.ingameVbox = ingameVbox;</span>
-<span class="fc" id="L51">    }</span>
 
-    public void clickCancel(){
-<span class="fc" id="L54">        ingameTrainerSettingsController.trainerSettingsStackpane.getChildren().remove(ingameVbox);</span>
-<span class="fc" id="L55">        ingameTrainerSettingsController.buttonsDisableTrainer(false);</span>
-<span class="fc" id="L56">    }</span>
-    public void clickOK(){
-<span class="nc" id="L58">        clickCancel();</span>
-<span class="nc" id="L59">        ingameTrainerSettingsController.deleteTrainer();</span>
-<span class="nc" id="L60">    }</span>
+    public void init(IngameTrainerSettingsController ingameTrainerSettingsController, VBox ingameVbox) {
+<span class="fc" id="L51">        this.ingameTrainerSettingsController = ingameTrainerSettingsController;</span>
+<span class="fc" id="L52">        this.ingameVbox = ingameVbox;</span>
+<span class="fc" id="L53">    }</span>
+
+    public void clickCancel() {
+<span class="fc" id="L56">        ingameTrainerSettingsController.trainerSettingsStackpane.getChildren().remove(ingameVbox);</span>
+<span class="fc" id="L57">        ingameTrainerSettingsController.buttonsDisableTrainer(false);</span>
+<span class="fc" id="L58">    }</span>
+
+    public void clickOK() {
+<span class="nc" id="L61">        clickCancel();</span>
+<span class="nc" id="L62">        ingameTrainerSettingsController.deleteTrainer();</span>
+<span class="nc" id="L63">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

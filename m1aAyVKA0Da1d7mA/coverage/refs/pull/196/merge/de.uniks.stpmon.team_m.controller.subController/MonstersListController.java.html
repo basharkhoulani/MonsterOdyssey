@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static de.uniks.stpmon.team_m.Constants.*;
-import static de.uniks.stpmon.team_m.Constants.dialogTextFlowInsets;
 
 
 public class MonstersListController extends Controller {
@@ -66,166 +65,166 @@ public class MonstersListController extends Controller {
     public List&lt;Monster&gt; otherMonstersList;
 
     @Inject
-<span class="fc" id="L69">    public MonstersListController() {</span>
-<span class="fc" id="L70">    }</span>
+<span class="fc" id="L68">    public MonstersListController() {</span>
+<span class="fc" id="L69">    }</span>
 
     public void init(IngameController ingameController, VBox monsterListVBox) {
-<span class="nc" id="L73">        super.init();</span>
-<span class="nc" id="L74">        activeMonstersList = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L75">        otherMonstersList = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L76">        this.ingameController = ingameController;</span>
-<span class="nc" id="L77">        this.monsterListVBox = monsterListVBox;</span>
-<span class="nc" id="L78">    }</span>
+<span class="nc" id="L72">        super.init();</span>
+<span class="nc" id="L73">        activeMonstersList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L74">        otherMonstersList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L75">        this.ingameController = ingameController;</span>
+<span class="nc" id="L76">        this.monsterListVBox = monsterListVBox;</span>
+<span class="nc" id="L77">    }</span>
 
     @Override
     public String getTitle() {
-<span class="fc" id="L82">        return resources.getString(&quot;MONSTERS&quot;);</span>
+<span class="fc" id="L81">        return resources.getString(&quot;MONSTERS&quot;);</span>
     }
 
     @Override
     public Parent render() {
-<span class="fc" id="L87">        final Parent parent = super.render();</span>
-<span class="fc" id="L88">        disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)</span>
-<span class="fc" id="L89">                .subscribe(list -&gt; {</span>
-<span class="fc" id="L90">                    activeMonstersList = list.stream()</span>
-<span class="fc" id="L91">                            .filter(monster -&gt; trainerStorageProvider.get().getTrainer().team().contains(monster._id()))</span>
-<span class="fc" id="L92">                            .collect(Collectors.toList());</span>
-<span class="fc" id="L93">                    sortActiveMonstersList();</span>
+<span class="fc" id="L86">        final Parent parent = super.render();</span>
+<span class="fc" id="L87">        disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L88">                .subscribe(list -&gt; {</span>
+<span class="fc" id="L89">                    activeMonstersList = list.stream()</span>
+<span class="fc" id="L90">                            .filter(monster -&gt; trainerStorageProvider.get().getTrainer().team().contains(monster._id()))</span>
+<span class="fc" id="L91">                            .collect(Collectors.toList());</span>
+<span class="fc" id="L92">                    sortActiveMonstersList();</span>
 
-<span class="fc" id="L95">                    otherMonstersList = list.stream()</span>
-<span class="pc bpc" id="L96" title="1 of 2 branches missed.">                            .filter (monster -&gt; !trainerStorageProvider.get().getTrainer().team().contains(monster ._id()))</span>
-<span class="fc" id="L97">                            .collect (Collectors.toList());</span>
-<span class="fc" id="L98">                    initOtherMonsterList(otherMonstersList);</span>
-<span class="fc" id="L99">                    initMonsterList(activeMonstersList);</span>
-<span class="pc" id="L100">                }, throwable -&gt; showError(throwable.getMessage())));</span>
+<span class="fc" id="L94">                    otherMonstersList = list.stream()</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">                            .filter(monster -&gt; !trainerStorageProvider.get().getTrainer().team().contains(monster._id()))</span>
+<span class="fc" id="L96">                            .collect(Collectors.toList());</span>
+<span class="fc" id="L97">                    initOtherMonsterList(otherMonstersList);</span>
+<span class="fc" id="L98">                    initMonsterList(activeMonstersList);</span>
+<span class="pc" id="L99">                }, throwable -&gt; showError(throwable.getMessage())));</span>
 
-<span class="fc" id="L102">        return parent;</span>
+<span class="fc" id="L101">        return parent;</span>
     }
 
     private void sortActiveMonstersList() {
-<span class="fc" id="L106">        List &lt;Monster&gt; sortedList = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L107" title="All 2 branches covered.">        for (String id : trainerStorageProvider.get().getTrainer().team()) {</span>
-<span class="pc bpc" id="L108" title="1 of 2 branches missed.">            for (Monster monster : activeMonstersList) {</span>
-<span class="pc bpc" id="L109" title="1 of 2 branches missed.">                if (monster._id().equals(id)) {</span>
-<span class="fc" id="L110">                    sortedList.add(monster);</span>
-<span class="fc" id="L111">                    break;</span>
+<span class="fc" id="L105">        List&lt;Monster&gt; sortedList = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        for (String id : trainerStorageProvider.get().getTrainer().team()) {</span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">            for (Monster monster : activeMonstersList) {</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">                if (monster._id().equals(id)) {</span>
+<span class="fc" id="L109">                    sortedList.add(monster);</span>
+<span class="fc" id="L110">                    break;</span>
                 }
-<span class="nc" id="L113">            }</span>
-<span class="fc" id="L114">        }</span>
-<span class="fc" id="L115">        activeMonstersList = sortedList;</span>
-<span class="fc" id="L116">    }</span>
+<span class="nc" id="L112">            }</span>
+<span class="fc" id="L113">        }</span>
+<span class="fc" id="L114">        activeMonstersList = sortedList;</span>
+<span class="fc" id="L115">    }</span>
 
-    public void changeOrderUp (String id) {
-<span class="nc" id="L119">        int index = 0;</span>
-<span class="nc bnc" id="L120" title="All 2 branches missed.">        for (Monster monster : activeMonstersList) {</span>
-<span class="nc bnc" id="L121" title="All 2 branches missed.">            if (monster._id().equals(id)) {</span>
-<span class="nc" id="L122">                break;</span>
+    public void changeOrderUp(String id) {
+<span class="nc" id="L118">        int index = 0;</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        for (Monster monster : activeMonstersList) {</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">            if (monster._id().equals(id)) {</span>
+<span class="nc" id="L121">                break;</span>
             }
-<span class="nc" id="L124">            index++;</span>
-<span class="nc" id="L125">        }</span>
-<span class="nc bnc" id="L126" title="All 2 branches missed.">        if (index &gt; 0) {</span>
-<span class="nc" id="L127">            Monster monster = activeMonstersList.get(index);</span>
-<span class="nc" id="L128">            activeMonstersList.set(index, activeMonstersList.get(index - 1));</span>
-<span class="nc" id="L129">            activeMonstersList.set(index - 1, monster);</span>
-<span class="nc" id="L130">            updateTeam();</span>
+<span class="nc" id="L123">            index++;</span>
+<span class="nc" id="L124">        }</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        if (index &gt; 0) {</span>
+<span class="nc" id="L126">            Monster monster = activeMonstersList.get(index);</span>
+<span class="nc" id="L127">            activeMonstersList.set(index, activeMonstersList.get(index - 1));</span>
+<span class="nc" id="L128">            activeMonstersList.set(index - 1, monster);</span>
+<span class="nc" id="L129">            updateTeam();</span>
         }
-<span class="nc" id="L132">    }</span>
+<span class="nc" id="L131">    }</span>
 
-    public void changeOrderDown (String id) {
-<span class="nc" id="L135">        int index = 0;</span>
-<span class="nc bnc" id="L136" title="All 2 branches missed.">        for (Monster monster : activeMonstersList) {</span>
-<span class="nc bnc" id="L137" title="All 2 branches missed.">            if (monster._id().equals(id)) {</span>
-<span class="nc" id="L138">                break;</span>
+    public void changeOrderDown(String id) {
+<span class="nc" id="L134">        int index = 0;</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        for (Monster monster : activeMonstersList) {</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">            if (monster._id().equals(id)) {</span>
+<span class="nc" id="L137">                break;</span>
             }
-<span class="nc" id="L140">            index++;</span>
-<span class="nc" id="L141">        }</span>
-<span class="nc bnc" id="L142" title="All 2 branches missed.">        if (index &lt; activeMonstersList.size() - 1) {</span>
-<span class="nc" id="L143">            Monster monster = activeMonstersList.get(index);</span>
-<span class="nc" id="L144">            activeMonstersList.set(index, activeMonstersList.get(index + 1));</span>
-<span class="nc" id="L145">            activeMonstersList.set(index + 1, monster);</span>
-<span class="nc" id="L146">            updateTeam();</span>
+<span class="nc" id="L139">            index++;</span>
+<span class="nc" id="L140">        }</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">        if (index &lt; activeMonstersList.size() - 1) {</span>
+<span class="nc" id="L142">            Monster monster = activeMonstersList.get(index);</span>
+<span class="nc" id="L143">            activeMonstersList.set(index, activeMonstersList.get(index + 1));</span>
+<span class="nc" id="L144">            activeMonstersList.set(index + 1, monster);</span>
+<span class="nc" id="L145">            updateTeam();</span>
         }
-<span class="nc" id="L148">    }</span>
+<span class="nc" id="L147">    }</span>
 
-    public void updateTeam(){
-<span class="nc" id="L151">        Trainer trainer = trainerStorageProvider.get().getTrainer();</span>
-<span class="nc" id="L152">        monsterListViewActive.getItems().clear();</span>
-<span class="nc" id="L153">        monsterListViewActive.getItems().addAll(activeMonstersList);</span>
-<span class="nc" id="L154">        List&lt;String&gt; team = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L155" title="All 2 branches missed.">        for (Monster monster1 : activeMonstersList) {</span>
-<span class="nc" id="L156">            team.add(monster1._id());</span>
-<span class="nc" id="L157">        }</span>
-<span class="nc" id="L158">        disposables.add(trainersService.updateTrainer(trainer.region(), trainer._id(), null, null, team)</span>
-<span class="nc" id="L159">                .observeOn(FX_SCHEDULER)</span>
-<span class="nc" id="L160">                .subscribe(t -&gt; trainerStorageProvider.get().setTrainer(t), throwable -&gt; showError(throwable.getMessage())));</span>
-<span class="nc" id="L161">    }</span>
+    public void updateTeam() {
+<span class="nc" id="L150">        Trainer trainer = trainerStorageProvider.get().getTrainer();</span>
+<span class="nc" id="L151">        monsterListViewActive.getItems().clear();</span>
+<span class="nc" id="L152">        monsterListViewActive.getItems().addAll(activeMonstersList);</span>
+<span class="nc" id="L153">        List&lt;String&gt; team = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        for (Monster monster1 : activeMonstersList) {</span>
+<span class="nc" id="L155">            team.add(monster1._id());</span>
+<span class="nc" id="L156">        }</span>
+<span class="nc" id="L157">        disposables.add(trainersService.updateTrainer(trainer.region(), trainer._id(), null, null, team)</span>
+<span class="nc" id="L158">                .observeOn(FX_SCHEDULER)</span>
+<span class="nc" id="L159">                .subscribe(t -&gt; trainerStorageProvider.get().setTrainer(t), throwable -&gt; showError(throwable.getMessage())));</span>
+<span class="nc" id="L160">    }</span>
 
     private void initMonsterList(List&lt;Monster&gt; monsters) {
-<span class="fc" id="L164">        monsterListViewActive.setCellFactory(param -&gt; new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false, false));</span>
-<span class="fc" id="L165">        monsterListViewActive.getItems().addAll(monsters);</span>
-<span class="fc" id="L166">        monsterListViewActive.setFocusModel(null);</span>
-<span class="fc" id="L167">        monsterListViewActive.setSelectionModel(null);</span>
-<span class="fc" id="L168">    }</span>
+<span class="fc" id="L163">        monsterListViewActive.setCellFactory(param -&gt; new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false, false));</span>
+<span class="fc" id="L164">        monsterListViewActive.getItems().addAll(monsters);</span>
+<span class="fc" id="L165">        monsterListViewActive.setFocusModel(null);</span>
+<span class="fc" id="L166">        monsterListViewActive.setSelectionModel(null);</span>
+<span class="fc" id="L167">    }</span>
 
     private void initOtherMonsterList(List&lt;Monster&gt; monsters) {
-<span class="pc" id="L171">        monsterListViewOther.setCellFactory(param -&gt; new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false, true));</span>
-<span class="fc" id="L172">        monsterListViewOther.getItems().addAll(monsters);</span>
-<span class="fc" id="L173">        monsterListViewOther.setFocusModel(null);</span>
-<span class="fc" id="L174">        monsterListViewOther.setSelectionModel(null);</span>
-<span class="fc" id="L175">    }</span>
+<span class="pc" id="L170">        monsterListViewOther.setCellFactory(param -&gt; new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false, true));</span>
+<span class="fc" id="L171">        monsterListViewOther.getItems().addAll(monsters);</span>
+<span class="fc" id="L172">        monsterListViewOther.setFocusModel(null);</span>
+<span class="fc" id="L173">        monsterListViewOther.setSelectionModel(null);</span>
+<span class="fc" id="L174">    }</span>
 
     public void onCloseMonsterList() {
-<span class="nc" id="L178">        ingameController.root.getChildren().remove(monsterListVBox);</span>
-<span class="nc" id="L179">        ingameController.buttonsDisable(false);</span>
-<span class="nc" id="L180">    }</span>
+<span class="nc" id="L177">        ingameController.root.getChildren().remove(monsterListVBox);</span>
+<span class="nc" id="L178">        ingameController.buttonsDisable(false);</span>
+<span class="nc" id="L179">    }</span>
 
     public void removeFromTeam(Monster monster) {
-<span class="nc" id="L183">        List&lt;String&gt; team = trainerStorageProvider.get().getTrainer().team();</span>
-<span class="nc" id="L184">        team.remove(monster._id());</span>
-<span class="nc" id="L185">        updateBothLists(monsterListViewOther, otherMonstersList, monsterListViewActive, activeMonstersList, monster, team);</span>
-<span class="nc" id="L186">    }</span>
+<span class="nc" id="L182">        List&lt;String&gt; team = trainerStorageProvider.get().getTrainer().team();</span>
+<span class="nc" id="L183">        team.remove(monster._id());</span>
+<span class="nc" id="L184">        updateBothLists(monsterListViewOther, otherMonstersList, monsterListViewActive, activeMonstersList, monster, team);</span>
+<span class="nc" id="L185">    }</span>
 
     public void addToTeam(Monster monster) {
-<span class="nc bnc" id="L189" title="All 2 branches missed.">        if (trainerStorageProvider.get().getTrainer().team().size() &gt;= 6) {</span>
-<span class="nc" id="L190">            createLimitPopUp();</span>
-<span class="nc" id="L191">            return;</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">        if (trainerStorageProvider.get().getTrainer().team().size() &gt;= 6) {</span>
+<span class="nc" id="L189">            createLimitPopUp();</span>
+<span class="nc" id="L190">            return;</span>
         }
-<span class="nc" id="L193">        List&lt;String&gt; team = trainerStorageProvider.get().getTrainer().team();</span>
-<span class="nc" id="L194">        team.add(monster._id());</span>
-<span class="nc" id="L195">        updateBothLists(monsterListViewActive, activeMonstersList, monsterListViewOther, otherMonstersList, monster, team);</span>
-<span class="nc" id="L196">    }</span>
+<span class="nc" id="L192">        List&lt;String&gt; team = trainerStorageProvider.get().getTrainer().team();</span>
+<span class="nc" id="L193">        team.add(monster._id());</span>
+<span class="nc" id="L194">        updateBothLists(monsterListViewActive, activeMonstersList, monsterListViewOther, otherMonstersList, monster, team);</span>
+<span class="nc" id="L195">    }</span>
 
     private void createLimitPopUp() {
-<span class="nc" id="L199">        VBox limitVBox = new VBox();</span>
-<span class="nc" id="L200">        limitVBox.setId(&quot;limitVBox&quot;);</span>
-<span class="nc" id="L201">        limitVBox.setMaxHeight(popupHeight);</span>
-<span class="nc" id="L202">        limitVBox.setMaxWidth(popupWidth);</span>
-<span class="nc" id="L203">        limitVBox.getStyleClass().add(&quot;dialogTextFlow&quot;);</span>
+<span class="nc" id="L198">        VBox limitVBox = new VBox();</span>
+<span class="nc" id="L199">        limitVBox.setId(&quot;limitVBox&quot;);</span>
+<span class="nc" id="L200">        limitVBox.setMaxHeight(popupHeight);</span>
+<span class="nc" id="L201">        limitVBox.setMaxWidth(popupWidth);</span>
+<span class="nc" id="L202">        limitVBox.getStyleClass().add(&quot;dialogTextFlow&quot;);</span>
 
         // text field
-<span class="nc" id="L206">        TextFlow message = new TextFlow(new Text(resources.getString(&quot;LIMIT.MESSAGE&quot;)));</span>
-<span class="nc" id="L207">        message.setPrefWidth(popupWidth);</span>
-<span class="nc" id="L208">        message.setPrefHeight(textFieldHeight);</span>
-<span class="nc" id="L209">        message.setPadding(dialogTextFlowInsets);</span>
-<span class="nc" id="L210">        message.setTextAlignment(TextAlignment.CENTER);</span>
+<span class="nc" id="L205">        TextFlow message = new TextFlow(new Text(resources.getString(&quot;LIMIT.MESSAGE&quot;)));</span>
+<span class="nc" id="L206">        message.setPrefWidth(popupWidth);</span>
+<span class="nc" id="L207">        message.setPrefHeight(textFieldHeight);</span>
+<span class="nc" id="L208">        message.setPadding(dialogTextFlowInsets);</span>
+<span class="nc" id="L209">        message.setTextAlignment(TextAlignment.CENTER);</span>
 
-<span class="nc" id="L212">        Button ok = new Button(resources.getString(&quot;OK&quot;));</span>
-<span class="nc" id="L213">        ok.getStyleClass().add(&quot;buttonsYellow&quot;);</span>
-<span class="nc" id="L214">        ok.setOnAction(event -&gt; ingameController.root.getChildren().remove(limitVBox));</span>
+<span class="nc" id="L211">        Button ok = new Button(resources.getString(&quot;OK&quot;));</span>
+<span class="nc" id="L212">        ok.getStyleClass().add(&quot;buttonsYellow&quot;);</span>
+<span class="nc" id="L213">        ok.setOnAction(event -&gt; ingameController.root.getChildren().remove(limitVBox));</span>
 
-<span class="nc" id="L216">        limitVBox.getChildren().addAll(message, ok);</span>
-<span class="nc" id="L217">    }</span>
+<span class="nc" id="L215">        limitVBox.getChildren().addAll(message, ok);</span>
+<span class="nc" id="L216">    }</span>
 
-    private void updateBothLists(ListView&lt;Monster&gt; listViewAdd,List&lt;Monster&gt; listAdd, ListView&lt;Monster&gt; listViewRemove, List&lt;Monster&gt; listRemove, Monster monster, List&lt;String&gt; team) {
-<span class="nc" id="L220">        disposables.add(trainersService.updateTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), null, null, team)</span>
-<span class="nc" id="L221">                .observeOn(FX_SCHEDULER)</span>
-<span class="nc" id="L222">                .subscribe(t -&gt; trainerStorageProvider.get().setTrainer(t), throwable -&gt; showError(throwable.getMessage())));</span>
-<span class="nc" id="L223">        listRemove.removeIf(remove -&gt; remove._id().equals(monster._id()));</span>
-<span class="nc" id="L224">        listViewRemove.getItems().clear();</span>
-<span class="nc" id="L225">        listViewRemove.getItems().addAll(listRemove);</span>
-<span class="nc" id="L226">        listAdd.add(monster);</span>
-<span class="nc" id="L227">        listViewAdd.getItems().clear();</span>
-<span class="nc" id="L228">        listViewAdd.getItems().addAll(listAdd);</span>
-<span class="nc" id="L229">    }</span>
+    private void updateBothLists(ListView&lt;Monster&gt; listViewAdd, List&lt;Monster&gt; listAdd, ListView&lt;Monster&gt; listViewRemove, List&lt;Monster&gt; listRemove, Monster monster, List&lt;String&gt; team) {
+<span class="nc" id="L219">        disposables.add(trainersService.updateTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), null, null, team)</span>
+<span class="nc" id="L220">                .observeOn(FX_SCHEDULER)</span>
+<span class="nc" id="L221">                .subscribe(t -&gt; trainerStorageProvider.get().setTrainer(t), throwable -&gt; showError(throwable.getMessage())));</span>
+<span class="nc" id="L222">        listRemove.removeIf(remove -&gt; remove._id().equals(monster._id()));</span>
+<span class="nc" id="L223">        listViewRemove.getItems().clear();</span>
+<span class="nc" id="L224">        listViewRemove.getItems().addAll(listRemove);</span>
+<span class="nc" id="L225">        listAdd.add(monster);</span>
+<span class="nc" id="L226">        listViewAdd.getItems().clear();</span>
+<span class="nc" id="L227">        listViewAdd.getItems().addAll(listAdd);</span>
+<span class="nc" id="L228">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

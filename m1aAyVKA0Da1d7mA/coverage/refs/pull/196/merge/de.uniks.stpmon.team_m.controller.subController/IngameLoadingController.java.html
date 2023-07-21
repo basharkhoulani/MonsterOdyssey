@@ -21,39 +21,42 @@ public class IngameLoadingController extends Controller {
     public Button goBackButton;
     @Inject
     Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
+
     @Inject
-<span class="nc" id="L25">    public IngameLoadingController() {</span>
-<span class="nc" id="L26">    }</span>
+<span class="nc" id="L26">    public IngameLoadingController() {</span>
+<span class="nc" id="L27">    }</span>
 
     @Override
-<span class="nc" id="L29">    public String getTitle() {return resources.getString(&quot;INGAME.TITLE&quot;);}</span>
+    public String getTitle() {
+<span class="nc" id="L31">        return resources.getString(&quot;INGAME.TITLE&quot;);</span>
+    }
 
 
     @Override
     public Parent render() {
-<span class="nc" id="L34">        final Parent parent = super.render();</span>
-<span class="nc" id="L35">        startLoading();</span>
-<span class="nc" id="L36">        return parent;</span>
+<span class="nc" id="L37">        final Parent parent = super.render();</span>
+<span class="nc" id="L38">        startLoading();</span>
+<span class="nc" id="L39">        return parent;</span>
     }
 
     public void updateLoadingLabel() {
-<span class="nc" id="L40">        String currentLoadingText = loadingLabel.getText();</span>
-<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (currentLoadingText.endsWith(&quot;...&quot;)) {</span>
-<span class="nc" id="L42">            currentLoadingText = resources.getString(&quot;LOADING.LABEL&quot;);</span>
+<span class="nc" id="L43">        String currentLoadingText = loadingLabel.getText();</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (currentLoadingText.endsWith(&quot;...&quot;)) {</span>
+<span class="nc" id="L45">            currentLoadingText = resources.getString(&quot;LOADING.LABEL&quot;);</span>
         } else {
-<span class="nc" id="L44">            currentLoadingText = currentLoadingText + &quot;.&quot;;</span>
+<span class="nc" id="L47">            currentLoadingText = currentLoadingText + &quot;.&quot;;</span>
         }
-<span class="nc" id="L46">        loadingLabel.setText(currentLoadingText);</span>
-<span class="nc" id="L47">    }</span>
+<span class="nc" id="L49">        loadingLabel.setText(currentLoadingText);</span>
+<span class="nc" id="L50">    }</span>
 
     public void startLoading() {
-<span class="nc" id="L50">        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), event -&gt; updateLoadingLabel()));</span>
-<span class="nc" id="L51">        timeline.setCycleCount(Timeline.INDEFINITE);</span>
-<span class="nc" id="L52">        timeline.play();</span>
-<span class="nc" id="L53">    }</span>
+<span class="nc" id="L53">        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), event -&gt; updateLoadingLabel()));</span>
+<span class="nc" id="L54">        timeline.setCycleCount(Timeline.INDEFINITE);</span>
+<span class="nc" id="L55">        timeline.play();</span>
+<span class="nc" id="L56">    }</span>
 
     public void changeToMain() {
-<span class="nc" id="L56">        app.show(mainMenuControllerProvider.get());</span>
-<span class="nc" id="L57">    }</span>
+<span class="nc" id="L59">        app.show(mainMenuControllerProvider.get());</span>
+<span class="nc" id="L60">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
