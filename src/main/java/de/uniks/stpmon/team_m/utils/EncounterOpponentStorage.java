@@ -16,18 +16,20 @@ public class EncounterOpponentStorage {
     private final List<String> opponentsInStorage = new ArrayList<>();
     private Opponent selfOpponent;
     // Die Opponent mit selben trainerId
-    private List<Opponent> enemyOpponents = FXCollections.observableArrayList();
+    private final List<Opponent> enemyOpponents = FXCollections.observableArrayList();
     // Die Opponent mit Id der Gegner
     private Opponent coopOpponent;
     // Die Opponent mit Id des Coop-Partners
     private Monster currentTrainerMonster;
     private MonsterTypeDto currentTrainerMonsterType;
-    private List<Monster> currentMonsters = FXCollections.observableArrayList();
-    private List<MonsterTypeDto> currentMonsterTypes = FXCollections.observableArrayList();
+    private final List<Monster> currentMonsters = FXCollections.observableArrayList();
+    private final List<MonsterTypeDto> currentMonsterTypes = FXCollections.observableArrayList();
     private String regionId;
     private boolean isWild;
     private int encounterSize;
     private boolean isAttacker;
+    private Opponent targetOpponent;
+    private Opponent leastTargetOpponent;
 
 
     @Inject
@@ -135,5 +137,18 @@ public class EncounterOpponentStorage {
             this.opponentsInStorage.add(opponent._id());
         }
 
+    }
+
+    public void setTargetOpponent(Opponent opponent) {
+        this.leastTargetOpponent = targetOpponent;
+        this.targetOpponent = opponent;
+    }
+
+    public Opponent getTargetOpponent() {
+        return this.targetOpponent;
+    }
+
+    public Opponent getLeastTargetOpponent() {
+        return this.leastTargetOpponent;
     }
 }

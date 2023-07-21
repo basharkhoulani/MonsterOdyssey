@@ -1,9 +1,14 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
+import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
+import de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.utils.AnimationBuilder;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -94,9 +99,7 @@ public class EncounterController extends Controller {
     private String regionId;
     private String encounterId;
     private String trainerId;
-    private Image myMonsterImage;
     private final List<Controller> subControllers = new ArrayList<>();
-    private int currentImageIndex = 0;
     private final List<AbilityDto> abilityDtos = new ArrayList<>();
     private final HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
     private final HashMap<String, Opponent> opponentsDelete = new HashMap<>();
@@ -107,7 +110,6 @@ public class EncounterController extends Controller {
     private Monster oldMonster;
     private final ArrayList<Integer> newAbilities = new ArrayList<>();
 
-    // Hier finde ich mit dem Key (Opponent id) besser
     private HashMap<String, EncounterOpponentController> encounterOpponentControllerHashMap = new HashMap<>();
 
     @Inject
@@ -150,11 +152,10 @@ public class EncounterController extends Controller {
         battleMenuController.onFleeButtonClick = this::onFleeButtonClick;
 
         // Init opponent controller for own trainer
-        ownTrainerController = new EncounterOpponentController(false, false, true, false);
+        ownTrainerController = new EncounterOpponentController(false, false, true, false, encounterOpponentStorage, encounterOpponentStorage.getSelfOpponent());
         ownTrainerController.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getSelfOpponent()._id(), ownTrainerController);
         Parent ownTrainerParent = ownTrainerController.render();
-        HBox.setHgrow(ownTrainerParent, javafx.scene.layout.Priority.ALWAYS);
         //showMyMonster
         showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent(), true);
         // showMySprite
@@ -164,7 +165,7 @@ public class EncounterController extends Controller {
         disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getSelfOpponent().monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
             oldMonster = monster;
             encounterOpponentStorage.addCurrentMonster(monster);
-        }, Throwable::printStackTrace));
+        }));
         disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilityDtos::addAll, Throwable::printStackTrace));
 
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId).observeOn(FX_SCHEDULER).subscribe(encounter -> {
@@ -194,18 +195,17 @@ public class EncounterController extends Controller {
         // Wild situation
 
         // Wild monster (init opponent controller for enemy)
-        enemy1Controller = new EncounterOpponentController(true, true, false, false);
+        enemy1Controller = new EncounterOpponentController(true, true, false, false, encounterOpponentStorage, encounterOpponentStorage.getEnemyOpponents().get(0));
         enemy1Controller.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0)._id(), enemy1Controller);
-        enemyHBox.setPadding(new Insets(0, 400, 0, 0));
+        enemyHBox.setPadding(new Insets(0, 360, 0, 0));
         Parent enemy1Parent = enemy1Controller.render();
-        HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy1Parent);
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
         showEnemyMonster(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0), true);
 
         // Own trainer
-        teamHBox.setPadding(new Insets(0, 0, 0, 400));
+        teamHBox.setPadding(new Insets(0, 0, 0, 360));
         teamHBox.getChildren().add(ownTrainerParent);
     }
 
@@ -213,17 +213,17 @@ public class EncounterController extends Controller {
         // 1 vs 1 situation
 
         // Enemy as a trainer (init opponent controller for the enemy)
-        enemy1Controller = new EncounterOpponentController(true, false, false, false);
+        enemy1Controller = new EncounterOpponentController(true, false, false, false, encounterOpponentStorage, encounterOpponentStorage.getEnemyOpponents().get(0));
         enemy1Controller.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0)._id(), enemy1Controller);
         Parent enemy1Parent = enemy1Controller.render();
-        HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
+        enemyHBox.setPadding(new Insets(0, 360, 0, 0));
         enemyHBox.getChildren().add(enemy1Parent);
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
         showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
 
         // Own trainer
-        teamHBox.setPadding(new Insets(0, 0, 0, 400));
+        teamHBox.setPadding(new Insets(0, 0, 0, 360));
         teamHBox.getChildren().add(ownTrainerParent);
     }
 
@@ -231,26 +231,26 @@ public class EncounterController extends Controller {
         // 1 vs 2 situation
 
         // 1st enemy as a trainer
-        enemy1Controller = new EncounterOpponentController(true, false, false, true);
+        enemy1Controller = new EncounterOpponentController(true, false, false, true, encounterOpponentStorage, encounterOpponentStorage.getEnemyOpponents().get(0));
         enemy1Controller.init();
+        enemy1Controller.onTargetChange = this::onTargetChange;
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0)._id(), enemy1Controller);
         VBox enemy1Parent = (VBox) enemy1Controller.render();
-        HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy1Parent);
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
         showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
 
         // 2nd enemy as a trainer
-        enemy2Controller = new EncounterOpponentController(true, false, true, true);
+        enemy2Controller = new EncounterOpponentController(true, false, true, true, encounterOpponentStorage, encounterOpponentStorage.getEnemyOpponents().get(1));
         enemy2Controller.init();
+        enemy2Controller.onTargetChange = this::onTargetChange;
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(1)._id(), enemy2Controller);
         VBox enemy2Parent = (VBox) enemy2Controller.render();
-        HBox.setHgrow(enemy2Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy2Parent);
         showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(1));
 
         // Own trainer
-        teamHBox.setPadding(new Insets(0, 0, 0, 450));
+        teamHBox.setPadding(new Insets(0, 0, 0, 360));
         teamHBox.getChildren().add(ownTrainerParent);
     }
 
@@ -258,30 +258,29 @@ public class EncounterController extends Controller {
         // 2 vs 2 situation
 
         // 1st enemy as a trainer
-        enemy1Controller = new EncounterOpponentController(true, false, false, true);
+        enemy1Controller = new EncounterOpponentController(true, false, false, true, encounterOpponentStorage, encounterOpponentStorage.getEnemyOpponents().get(0));
         enemy1Controller.init();
+        enemy1Controller.onTargetChange = this::onTargetChange;
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(0)._id(), enemy1Controller);
         VBox enemy1Parent = (VBox) enemy1Controller.render();
-        HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy1Parent);
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
         showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
 
         // 2nd enemy as a trainer
-        enemy2Controller = new EncounterOpponentController(true, false, true, true);
+        enemy2Controller = new EncounterOpponentController(true, false, true, true, encounterOpponentStorage, encounterOpponentStorage.getEnemyOpponents().get(1));
         enemy2Controller.init();
+        enemy2Controller.onTargetChange = this::onTargetChange;
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getEnemyOpponents().get(1)._id(), enemy2Controller);
         VBox enemy2Parent = (VBox) enemy2Controller.render();
-        HBox.setHgrow(enemy2Parent, javafx.scene.layout.Priority.ALWAYS);
         enemyHBox.getChildren().add(enemy2Parent);
         showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(1));
 
         // Coop Trainer
-        coopTrainerController = new EncounterOpponentController(false, false, false, false);
+        coopTrainerController = new EncounterOpponentController(false, false, false, false, encounterOpponentStorage, encounterOpponentStorage.getCoopOpponent());
         coopTrainerController.init();
         encounterOpponentControllerHashMap.put(encounterOpponentStorage.getCoopOpponent()._id(), coopTrainerController);
         Parent coopTrainerParent = coopTrainerController.render();
-        HBox.setHgrow(coopTrainerParent, javafx.scene.layout.Priority.ALWAYS);
         teamHBox.getChildren().add(coopTrainerParent);
         showCoopImage(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
         showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent(), false);
@@ -290,18 +289,22 @@ public class EncounterController extends Controller {
         teamHBox.getChildren().add(ownTrainerParent);
     }
 
-    private void targetOpponent(Opponent opponent) {
-        if (encounterOpponentControllerHashMap.containsKey(opponent._id())) {
-            if (ownTrainerController.getCurrentTarget() != null && encounterOpponentControllerHashMap.containsKey(ownTrainerController.getCurrentTarget()._id())) {
-                encounterOpponentControllerHashMap.get(ownTrainerController.getCurrentTarget()._id()).unTarget();
-            }
-            if (ownTrainerController.getCurrentTarget() != opponent) {
-                ownTrainerController.setCurrentTarget(opponent);
-            }
-            if (encounterOpponentControllerHashMap.get(opponent._id()).isMultipleEnemyEncounter) {
-                encounterOpponentControllerHashMap.get(opponent._id()).onTarget();
-            }
+    private void onTargetChange() {
+        if (encounterOpponentStorage.getLeastTargetOpponent() != null && encounterOpponentControllerHashMap.containsKey(encounterOpponentStorage.getLeastTargetOpponent()._id())) {
+            encounterOpponentControllerHashMap.get(encounterOpponentStorage.getLeastTargetOpponent()._id()).unTarget();
+        }
+        if (encounterOpponentControllerHashMap.containsKey(encounterOpponentStorage.getTargetOpponent()._id())) {
+            encounterOpponentControllerHashMap.get(encounterOpponentStorage.getTargetOpponent()._id()).onTarget();
+        }
+    }
 
+    private void targetOpponent(Opponent opponent) {
+        encounterOpponentStorage.setTargetOpponent(opponent);
+        if (encounterOpponentStorage.getTargetOpponent() != opponent
+                && encounterOpponentControllerHashMap.containsKey(opponent._id())
+                && encounterOpponentControllerHashMap.get(opponent._id()).isMultipleEnemyEncounter
+        ) {
+            onTargetChange();
         }
     }
 
@@ -548,7 +551,13 @@ public class EncounterController extends Controller {
             if (event.suffix().contains("updated")) {
                 float currentHealth = (float) (Math.round(monster.currentAttributes().health() * 10) / 10);
                 float maxHealth = (float) (Math.round(monster.attributes().health() * 10) / 10);
-                encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health())
+                if (!GraphicsEnvironment.isHeadless()) {
+                    AnimationBuilder.buildShakeAnimation(encounterOpponentController.monsterImageView, 50, 3, 1).play();
+                    AnimationBuilder.buildProgressBarAnimation(encounterOpponentController.HealthBar, 1500, monster.currentAttributes().health() / monster.attributes().health()).play();
+                } else {
+                    encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());
+                }
+                encounterOpponentController
                         .setHealthLabel(currentHealth + "/" + maxHealth)
                         .setLevelLabel("LVL " + monster.level())
                         .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
@@ -637,7 +646,7 @@ public class EncounterController extends Controller {
             }
         });
         if (!enemyHasAnotherMonster[0] || encounterOpponentStorage.isWild()) {
-            SequentialTransition fleeAnimation = buildFleeAnimation();
+            SequentialTransition fleeAnimation = AnimationBuilder.buildFleeAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), ownTrainerController);
             PauseTransition pause = new PauseTransition(Duration.millis(1000));
             pause.setOnFinished(evt -> {
                 ownTrainerController.monsterImageView.setVisible(false);
@@ -676,10 +685,9 @@ public class EncounterController extends Controller {
     }
 
     public void fleeFromBattle() {
-        SequentialTransition fleeAnimation = buildFleeAnimation();
+        SequentialTransition fleeAnimation = AnimationBuilder.buildFleeAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), ownTrainerController);
         PauseTransition firstPause = new PauseTransition(Duration.millis(500));
         battleDialogText.setText(resources.getString("ENCOUNTER_DESCRIPTION_FLEE"));
-
         firstPause.setOnFinished(evt -> {
             ownTrainerController.monsterImageView.setVisible(false);
             fleeAnimation.play();
@@ -690,32 +698,6 @@ public class EncounterController extends Controller {
                     error.printStackTrace();
                 })));
         firstPause.play();
-    }
-
-    private SequentialTransition buildFleeAnimation() {
-        SequentialTransition transition = new SequentialTransition();
-
-        Image[] images = ImageProcessor.cropTrainerImages(trainerStorageProvider.get().getTrainerSpriteChunk(), TRAINER_DIRECTION_DOWN, true);
-
-        KeyFrame animationFrame = new KeyFrame(Duration.millis(Constants.DELAY), event -> {
-            ownTrainerController.setTrainerImage(images[currentImageIndex]);
-            currentImageIndex = (currentImageIndex + 1) % 6;
-        });
-        KeyFrame movementFrame = new KeyFrame(Duration.millis(Constants.DELAY), evt -> {
-            TranslateTransition translateTransition = new TranslateTransition();
-            translateTransition.setNode(ownTrainerController.trainerMonsterVBox);
-            translateTransition.setByY(16);
-            translateTransition.setDuration(Duration.millis(Constants.DELAY));
-            translateTransition.setCycleCount(1);
-            translateTransition.play();
-        });
-        for (int i = 0; i < 12; i++) {
-            Timeline fleeAnimation = new Timeline(animationFrame);
-            Timeline trainerMovement = new Timeline(movementFrame);
-            ParallelTransition parallelTransition = new ParallelTransition(fleeAnimation, trainerMovement);
-            transition.getChildren().add(parallelTransition);
-        }
-        return transition;
     }
 
     private VBox buildFleePopup() {
