@@ -552,7 +552,7 @@ public class EncounterController extends Controller {
                 float currentHealth = (float) (Math.round(monster.currentAttributes().health() * 10) / 10);
                 float maxHealth = (float) (Math.round(monster.attributes().health() * 10) / 10);
                 if (!GraphicsEnvironment.isHeadless()) {
-                    AnimationBuilder.buildShakeAnimation(enemy1Controller.monsterImageView, 50, 3, 1).play();
+                    AnimationBuilder.buildShakeAnimation(encounterOpponentController.monsterImageView, 50, 3, 1).play();
                     AnimationBuilder.buildProgressBarAnimation(encounterOpponentController.HealthBar, 1500, monster.currentAttributes().health() / monster.attributes().health()).play();
                 } else {
                     encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());
