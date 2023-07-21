@@ -380,6 +380,10 @@ public class IngameController extends Controller {
         if (!GraphicsEnvironment.isHeadless()) {
             trainerController.startAnimations();
             mapSymbol.setImage(new Image(Objects.requireNonNull(App.class.getResource(MAPSYMBOL)).toString()));
+            smallHandyImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(smallHandyImage)).toString()));
+            monsterForHandyImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString()));
+            notificationBell.setImage(new Image(Objects.requireNonNull(App.class.getResource(notificationBellImage)).toString()));
+            coinsImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(COIN)).toString()));
         }
 
         // Add event handlers
@@ -406,13 +410,6 @@ public class IngameController extends Controller {
                         divide(2).
                         add(offsetToNotShowPhoneInScreen)
         );
-
-        if (!GraphicsEnvironment.isHeadless()) {
-            smallHandyImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(smallHandyImage)).toString()));
-            monsterForHandyImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(AVATAR_1)).toString()));
-            notificationBell.setImage(new Image(Objects.requireNonNull(App.class.getResource(notificationBellImage)).toString()));
-            coinsImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(COIN)).toString()));
-        }
 
         //Setup Encounter
         checkIfEncounterAlreadyExist();
@@ -1655,6 +1652,9 @@ public class IngameController extends Controller {
                                         renderMap(miniMap, tileSetImages.get(getFileName(tileSet1.source())), tileSetJsons.get(getFileName(tileSet1.source())),
                                                 tileSet1, miniMap.tilesets().size() > 1, true);
                                     }
+                                    loading = false;
+                                    root.getChildren().remove(loadingScreen);
+                                    loadingScreenAnimation.stop();
                                 }, error -> {
                                     showError(error.getMessage());
                                     error.printStackTrace();
