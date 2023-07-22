@@ -531,8 +531,8 @@
 }
 
 .inventarMenu {
-    -fx-background-radius: 20 20 20 20;
+    -fx-background-radius: 10;
     -fx-border-color: #000000;
     -fx-border-width: 2px;
-    -fx-border-radius: 20px;
+    -fx-border-radius: 10px;
 }

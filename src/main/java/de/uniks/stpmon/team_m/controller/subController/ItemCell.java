@@ -102,6 +102,7 @@ public class ItemCell extends ListCell<Item> {
                                 itemImageView.setImage(image);
                                 itemHBox.setOnMouseClicked(event -> openItemDescription(itemTypeDto, image));
                                 //itemHBox.setOnMouseClicked(event -> openItemDescription(itemTypeDto, this.itemImage));
+
                                 setGraphic(itemHBox);
                             },
                             error -> {
