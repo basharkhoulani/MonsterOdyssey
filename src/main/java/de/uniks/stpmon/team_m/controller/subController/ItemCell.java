@@ -96,9 +96,11 @@ public class ItemCell extends ListCell<Item> {
                                 loadFXML();
                                 itemLabel.setText(itemTypeDto.name());
                                 itemNumber.setText(String.valueOf(item.amount()));
+
+                                // TODO: replace with real image
                                 Image image = new Image(Objects.requireNonNull(Main.class.getResource("images/star.png")).toExternalForm());
-                                itemHBox.setOnMouseClicked(event -> openItemDescription(itemTypeDto, image));
                                 itemImageView.setImage(image);
+                                itemHBox.setOnMouseClicked(event -> openItemDescription(itemTypeDto, image));
                                 //itemHBox.setOnMouseClicked(event -> openItemDescription(itemTypeDto, this.itemImage));
                                 setGraphic(itemHBox);
                             },
@@ -157,8 +159,8 @@ public class ItemCell extends ListCell<Item> {
     }
 
     public void openItemDescription(ItemTypeDto itemTypeDto, Image itemImage) {
-        ItemDescriptionController itemDescriptionController = itemDescriptionControllerProvider.get();
-        //ItemDescriptionController itemDescriptionController = new ItemDescriptionController();
+        //ItemDescriptionController itemDescriptionController = itemDescriptionControllerProvider.get();
+        ItemDescriptionController itemDescriptionController = new ItemDescriptionController();
         itemDescriptionController.setValues(resources, preferences, resourceBundleProvider, itemDescriptionController, app);
         itemDescriptionController.init(itemTypeDto, itemImage);
         itemDescriptionBox.getChildren().add(itemDescriptionController.render());

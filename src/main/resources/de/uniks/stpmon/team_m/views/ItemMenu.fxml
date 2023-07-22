@@ -1,18 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0"
-      prefWidth="600.0" style="-fx-background-radius: 15;" styleClass="inventarMenu"
-      xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="de.uniks.stpmon.team_m.controller.subController.ItemMenuController">
-   <VBox maxWidth="350.0" minWidth="250.0" prefHeight="450.0" prefWidth="250.0">
-      <VBox alignment="CENTER">
-         <Label alignment="CENTER" prefHeight="47.0" prefWidth="250.0" style="-fx-background-color: #FFFFFF;"
-                text="%INVENTAR"/>
-      </VBox>
-      <ListView fx:id="itemListView" prefHeight="406.0" prefWidth="250.0"/>
+<VBox fx:id="inventoryRoot" alignment="CENTER" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.ItemMenuController">
+   <VBox fillWidth="false" maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" style="-fx-background-radius: 10px;">
+      <children>
+         <HBox maxHeight="50.0">
+            <VBox alignment="CENTER">
+               <Label alignment="CENTER" prefHeight="47.0" prefWidth="250.0" style="-fx-background-color: #FFFFFF;" text="%INVENTAR" />
+            </VBox>
+            <VBox alignment="CENTER" minWidth="0.0" prefWidth="300.0">
+               <Label fx:id="itemNameLabel">
+                  <font>
+                     <Font name="Comic Sans MS Bold" size="24.0" />
+                  </font>
+               </Label>
+            </VBox>
+            <VBox alignment="CENTER" prefWidth="50.0">
+               <ImageView fx:id="closeInventoryIcon" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" />
+            </VBox>
+         </HBox>
+         <HBox maxWidth="-Infinity">
+            <VBox>
+               <ListView fx:id="itemListView" prefHeight="350.0" prefWidth="250.0" />
+            </VBox>
+            <VBox fx:id="itemDescriptionBox" maxHeight="350.0" prefHeight="350.0" prefWidth="350.0" HBox.hgrow="ALWAYS" />
+         </HBox>
+      </children>
+      <styleClass>
+         <String fx:value="inventarMenu" />
+         <String fx:value="ForegroundContainer" />
+      </styleClass>
    </VBox>
-   <VBox fx:id="itemDescriptionBox" prefHeight="450.0" prefWidth="385.0"/>
-</HBox>
+</VBox>

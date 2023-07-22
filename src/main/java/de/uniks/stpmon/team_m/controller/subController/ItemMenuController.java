@@ -11,6 +11,7 @@ import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,24 +19,35 @@ import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class ItemMenuController extends Controller {
-
-    IngameController ingameController;
-    @Inject
-    Provider<TrainerItemsService> trainerItemsService;
-    Provider<TrainerStorage> trainerStorageProvider;
-    TrainersService trainersService;
+    @FXML
+    public VBox inventoryRoot;
+    @FXML
+    public Label itemNameLabel;
+    @FXML
+    public ImageView closeInventoryIcon;
     @FXML
     public ListView<Item> itemListView;
     @FXML
     public VBox itemDescriptionBox;
+
+    @Inject
+    Provider<TrainerItemsService> trainerItemsService;
+    @Inject
+    Provider<TrainerStorage> trainerStorageProvider;
+    @Inject
+    TrainersService trainersService;
+
     public VBox itemMenuBox;
+    IngameController ingameController;
 
     @Inject
     public ItemMenuController() {
@@ -54,29 +66,18 @@ public class ItemMenuController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
+        // Items are now saved in trainerStorage
         initItems(trainerStorageProvider.get().getItems());
 
-        /*
-        disposables.add(trainerItemsService.get().getItems(
-                        trainerStorageProvider.get().getRegion()._id(),
-                        trainerStorageProvider.get().getTrainer()._id(),
-                        null
-                ).observeOn(FX_SCHEDULER)
-                .subscribe(this::initItems, throwable -> {
-                    showError(throwable.getMessage());
-                    throwable.printStackTrace();
-                }));
-        */
-        /*disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER)
-                        .subscribe(itemTypeDtos -> {
-                            System.out.println(itemTypeDtos.size());
-                            initItems(itemTypeDtos);
-                        }, throwable -> showError(throwable.getMessage())));
-        /*disposables.add(trainerItemsService.get().getItems(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), String.valueOf(1)).observeOn(FX_SCHEDULER)
-                .subscribe(this::initItems, throwable -> showError(throwable.getMessage())));
-         */
-
+        if (!GraphicsEnvironment.isHeadless()) {
+            closeInventoryIcon.setImage(new Image(Objects.requireNonNull(Main.class.getResource("images/close-x.png")).toExternalForm()));
+        }
+        closeInventoryIcon.setOnMouseClicked(evt -> closeItemMenu());
         return parent;
+    }
+
+    public void setItemNameLabel(String itemName) {
+        itemNameLabel.setText(itemName);
     }
 
     public void initItems(List<Item> itemList) {
