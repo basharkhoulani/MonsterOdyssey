@@ -52,6 +52,8 @@ public class ItemMenuController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
+        /** @Harun: Versuch mal den TrainerItemsService hier statt dem presetService zu verwenden um
+         *  die Items (mit referenz auf den trainer) zu bekommen und für diese dann den presetService zu benutzen */
         disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER)
                         .subscribe(itemTypeDtos -> {
                             System.out.println(itemTypeDtos.size());
