@@ -112,7 +112,7 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
                 0
         ));
 
-        when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(List.of(new Opponent(
+        when(encounterOpponentStorage.getTargetOpponent()).thenReturn(new Opponent(
                 "2023-07-11T18:07:49.594Z",
                 "2023-07-11T18:07:54.381Z",
                 "64ad9a7532eb8b56aafb513f",
@@ -124,7 +124,7 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
                 null,
                 List.of(),
                 0
-        )));
+        ));
 
         when(encounterOpponentsService.updateOpponent("645e32c6866ace359554a7ec", "64ad9a7532eb8b56aafb5138", "64ad9a7532eb8b56aafb513a", null, move)).thenReturn(Observable.just(new Opponent(
                 "2023-07-11T18:07:49.590Z",
