@@ -310,9 +310,9 @@ public class EncounterController extends Controller {
         teamHBox.getChildren().add(coopTrainerParent);
         if (!encounterOpponentStorage.isTwoMonster()){
             showCoopImage(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
-            monsterInEncounterHashMap.put(coopOpponent._id(), false);
         }
         showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
+        monsterInEncounterHashMap.put(coopOpponent._id(), false);
 
 
         // Own trainer
@@ -355,9 +355,9 @@ public class EncounterController extends Controller {
         teamHBox.getChildren().add(coopTrainerParent);
         if (!encounterOpponentStorage.isTwoMonster()){
             showCoopImage(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
-            monsterInEncounterHashMap.put(coopOpponent._id(), false);
         }
         showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
+        monsterInEncounterHashMap.put(coopOpponent._id(), false);
 
         // Own trainer
         teamHBox.getChildren().add(ownTrainerParent);
@@ -547,21 +547,23 @@ public class EncounterController extends Controller {
                 if(opponent.trainer().equals(trainerId)){
                     yourMonsterDefeated(opponent._id());
                 }
-            }else if(monsterInEncounterHashMap.get(opponent._id())){
-                if(opponent.monster() != null) {
-                    if (opponent.isAttacker() != encounterOpponentStorage.isAttacker()) {
-                        showEnemyMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent, false);
-                        updateDescription(resources.getString("ENEMY.CHANGED.MONSTER") + "\n", false);
-                    } else {
-                        showTeamMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent);
-                        if(opponent.trainer().equals(trainerId)){
-                            updateDescription(resources.getString("YOU.CHANGED.MONSTER") + "\n", false);
+            }else if( monsterInEncounterHashMap.get(opponent._id()) != null){
+                if (monsterInEncounterHashMap.get(opponent._id())) {
+                    if (opponent.monster() != null) {
+                        if (opponent.isAttacker() != encounterOpponentStorage.isAttacker()) {
+                            showEnemyMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent, false);
+                            updateDescription(resources.getString("ENEMY.CHANGED.MONSTER") + "\n", false);
                         } else {
-                            updateDescription(resources.getString("ALLY.CHANGED.MONSTER") + "\n", false);
+                            showTeamMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent);
+                            if (opponent.trainer().equals(trainerId)) {
+                                updateDescription(resources.getString("YOU.CHANGED.MONSTER") + "\n", false);
+                            } else {
+                                updateDescription(resources.getString("ALLY.CHANGED.MONSTER") + "\n", false);
+                            }
                         }
+                        monsterInEncounterHashMap.put(opponent._id(), false);
+                        opponentsUpdate.remove(opponent._id() + "Results");
                     }
-                    monsterInEncounterHashMap.put(opponent._id(), false);
-                    opponentsUpdate.remove(opponent._id() + "Results");
                 }
             }
         }
