@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
@@ -97,15 +96,14 @@ public class EncounterController extends Controller {
     private final List<AbilityDto> abilityDtos = new ArrayList<>();
     private final HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
     private final HashMap<String, Opponent> opponentsDelete = new HashMap<>();
-    private final HashMap<Monster, MonsterTypeDto> monstersInEncounter = new HashMap<>();
-    private HashMap <String, Boolean> monsterInEncounterHashMap = new HashMap<>();
+    private final HashMap <String, Boolean> monsterInEncounterHashMap = new HashMap<>();
     private int repeatedTimes = 0;
     //private Monster oldMonster; // here use HashMap
-    private HashMap<String, Boolean> resultLevelUpHashMap = new HashMap<>();
-    private HashMap<String, Monster> oldMonsterHashMap = new HashMap<>();
-    private HashMap<String, ArrayList<Integer>> newAbilitiesHashMap = new HashMap<>();
-    private HashMap<String, EncounterOpponentController> encounterOpponentControllerHashMap = new HashMap<>();
-    private HashMap<String, Boolean> monsterInTeamHashMap = new HashMap<>();
+    private final HashMap<String, Boolean> resultLevelUpHashMap = new HashMap<>();
+    private final HashMap<String, Monster> oldMonsterHashMap = new HashMap<>();
+    private final HashMap<String, ArrayList<Integer>> newAbilitiesHashMap = new HashMap<>();
+    private final HashMap<String, EncounterOpponentController> encounterOpponentControllerHashMap = new HashMap<>();
+    private final HashMap<String, Boolean> monsterInTeamHashMap = new HashMap<>();
     private int currentMonsterIndex = 0;
     private int deleteOpponents = 0;
 
