@@ -220,19 +220,6 @@ class EncounterControllerTest extends ApplicationTest {
                 )
         ));
 
-        List<Monster> monsters = List.of(
-                new Monster("2023-06-05T17:02:40.357Z",
-                        "023-06-05T17:02:40.357Z",
-                        "647e1530866ace3595866db2",
-                        "647e15308c1bb6a91fb57321",
-                        1,
-                        1,
-                        0,
-                        abilities,
-                        new MonsterAttributes(14, 8, 8, 5),
-                        new MonsterAttributes(14, 8, 8, 5),
-                        List.of()));
-        when(monstersService.getMonsters(any(), any())).thenReturn(Observable.just(monsters));
 
         // Mock the enemy trainer
         when(trainersService.getTrainer(anyString(), anyString())).thenReturn(Observable.just(
@@ -528,19 +515,6 @@ class EncounterControllerTest extends ApplicationTest {
                                 "64aa9f7132eb8b56aa9eb208",
                                 "64abfde932eb8b56aac8efac",
                                 true,
-                                true,
-                                "64aa9f7132eb8b56aa9eb20c",
-                                null,
-                                List.of(),
-                                0
-                        ),
-                        new Opponent(
-                                "2023-07-09T11:52:17.658Z",
-                                "2023-07-09T11:52:35.578Z",
-                                "64aa9f7132eb8b56aa9eb201",
-                                "64aa9f7132eb8b56aa9eb208",
-                                "64abfde932eb8b56aac8efac",
-                                false,
                                 true,
                                 "64aa9f7132eb8b56aa9eb20c",
                                 null,
