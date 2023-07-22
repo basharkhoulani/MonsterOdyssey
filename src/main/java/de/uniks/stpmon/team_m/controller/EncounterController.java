@@ -432,7 +432,6 @@ public class EncounterController extends Controller {
     private void showTeamMonster(EncounterOpponentController encounterOpponentController, Opponent opponent) {
         // Monster
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
-            System.out.println("showTeamMonster: " + monster);
             encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);
             listenToMonster(opponent.trainer(), opponent.monster(), encounterOpponentController, opponent);
             encounterOpponentController.setLevelLabel("LVL " + monster.level())
@@ -553,8 +552,6 @@ public class EncounterController extends Controller {
                 encounterOpponentStorage.setCoopOpponent(opponent);
             }
             opponentsUpdate.put(opponent._id() + "Results", opponent);
-            // TODO：记录一下对手或者队友哪个Monster死了 HashMap<String, Boolean> opponentId：true/false
-            // 如果这个opponent之前的monster死了，又来了一个没有move的opponent，说明这个opponent换了一个monster，这个时候要重新渲染一下
             if(opponent.monster() == null){
                 monsterInEncounterHashMap.put(opponent._id(), true);
                 if(opponent.trainer().equals(trainerId)){
@@ -635,6 +632,7 @@ public class EncounterController extends Controller {
                                     } else {
                                         newAbilitiesHashMap.get(oResults._id()).add(r.ability());
                                     }
+                                    updateDescription("Your monster learned " + abilityDtos.get(r.ability() - 1).name() + ".\n", false);
                                 }
                             }
                             case "target-defeated" -> {
@@ -642,9 +640,10 @@ public class EncounterController extends Controller {
                                     // You defeat the monster of enemy
                                     // monsterDefeated(resources.getString("ENEMY.DEFEATED"));
                                     enemyMonsterDefeated();
-                                    // hier könnten einen Flag einsetzen um zu sagen dass die
+                                    updateDescription(resources.getString("ENEMY.DEFEATED") + "\n", false);
                                 } else if(oResults.isAttacker() == encounterOpponentStorage.isAttacker()) {
                                     // Coop defeat the monster of enemy
+                                    updateDescription(resources.getString("ENEMY.DEFEATED") + "\n", false);
                                 }else {
                                     // Your monster or the monster of your coop is defeated
                                     // monsterDefeated(resources.getString("TEAM.DEFEATED"));
@@ -806,8 +805,6 @@ public class EncounterController extends Controller {
                             updateDescription("You changed Monster", false);
                             }, Throwable::printStackTrace));
             }});
-
-
     }
 
 
@@ -937,9 +934,27 @@ public class EncounterController extends Controller {
         }
     }
 
-    public void changeMonster(Monster monster, MonsterTypeDto monsterTypeDto) {
+    public void changeMonster(Monster monster) {
         Move move = new ChangeMonsterMove("change-monster", monster._id());
-        disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, encounterOpponentStorage.getSelfOpponent()._id(), null, move).observeOn(FX_SCHEDULER).subscribe(
+        String opponentId = encounterOpponentStorage.getSelfOpponent()._id();
+
+        if (encounterOpponentStorage.isTwoMonster()){
+            if (currentMonsterIndex % 2 == 0 && encounterOpponentStorage.getCoopOpponent().monster() != null) {
+                opponentId = encounterOpponentStorage.getCoopOpponent()._id();
+            } else if (currentMonsterIndex % 2 == 1 && encounterOpponentStorage.getSelfOpponent().monster() != null) {
+                opponentId = encounterOpponentStorage.getSelfOpponent()._id();
+            } else if (encounterOpponentStorage.getSelfOpponent().monster() == null){
+                opponentId = encounterOpponentStorage.getCoopOpponent()._id();
+            } else if (encounterOpponentStorage.getCoopOpponent().monster() == null){
+                opponentId = encounterOpponentStorage.getSelfOpponent()._id();
+            }
+        } else {
+            if (encounterOpponentStorage.getSelfOpponent().monster() != null) {
+                opponentId = encounterOpponentStorage.getSelfOpponent()._id();
+            }
+        }
+
+        disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(
                 opponent -> {
                     resetRepeatedTimes();
                     if(encounterOpponentStorage.isTwoMonster()){
@@ -952,7 +967,8 @@ public class EncounterController extends Controller {
                         encounterOpponentStorage.setSelfOpponent(opponent);
                     }
                     updateDescription("You Changed your Monster", true);
-                }, Throwable::printStackTrace));
+                    increaseCurrentMonsterIndex();
+                }));
     }
 
 }

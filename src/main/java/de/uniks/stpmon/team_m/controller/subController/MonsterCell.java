@@ -171,7 +171,7 @@ public class MonsterCell extends ListCell<Monster> {
                 arrowUp.setVisible(false);
                 arrowDown.setVisible(false);
                 removeFromTeamButton.setOnAction(event -> {
-                    encounterController.changeMonster(monster, monsterTypeDto);
+                    encounterController.changeMonster(monster);
                     changeMonsterListController.onCloseMonsterList();
                 });
             }
