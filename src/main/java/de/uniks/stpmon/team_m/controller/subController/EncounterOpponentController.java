@@ -27,7 +27,8 @@ public class EncounterOpponentController extends Controller {
     private Boolean isWild;
     private Boolean invertX;
     public Boolean isMultipleEnemyEncounter;
-    private EncounterOpponentStorage encounterOpponentStorage;
+    @Inject
+    EncounterOpponentStorage encounterOpponentStorage;
     public Boolean isTargeted = false;
     private Boolean isSelf;
     private Opponent currentOpponent;
@@ -80,7 +81,6 @@ public class EncounterOpponentController extends Controller {
     public ImageView confusedImage;
     @FXML
     public ImageView burnedImage;
-
     public Runnable onTargetChange;
     EncounterController encounterController;
 
@@ -88,7 +88,7 @@ public class EncounterOpponentController extends Controller {
     public EncounterOpponentController(){
     }
 
-    public void init(Opponent currentOpponent, Boolean isEnemy, Boolean isWild, Boolean invertX, Boolean isMultipleEnemyEncounter, Boolean isSelf, EncounterController encounterController, EncounterOpponentStorage encounterOpponentStorage) {
+    public void init(Opponent currentOpponent, Boolean isEnemy, Boolean isWild, Boolean invertX, Boolean isMultipleEnemyEncounter, Boolean isSelf, EncounterController encounterController) {
         super.init();
         this.isEnemy = isEnemy;
         this.isWild = isWild;
@@ -97,7 +97,6 @@ public class EncounterOpponentController extends Controller {
         this.isSelf = isSelf;
         this.currentOpponent = currentOpponent;
         this.encounterController = encounterController;
-        this.encounterOpponentStorage = encounterOpponentStorage;
     }
 
     @Override

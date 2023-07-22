@@ -31,6 +31,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -82,8 +83,6 @@ public class EncounterController extends Controller {
     IngameController ingameController;
     @Inject
     Provider<LevelUpController> levelUpControllerProvider;
-    @Inject
-    Provider<EncounterController> encounterControllerProvider;
 
     private EncounterOpponentController enemy1Controller;
     private EncounterOpponentController enemy2Controller;
@@ -94,19 +93,19 @@ public class EncounterController extends Controller {
     private String regionId;
     private String encounterId;
     private String trainerId;
-    private Image myMonsterImage;
     private final List<Controller> subControllers = new ArrayList<>();
-    private int currentImageIndex = 0;
     private final List<AbilityDto> abilityDtos = new ArrayList<>();
     private final HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
     private final HashMap<String, Opponent> opponentsDelete = new HashMap<>();
     private final HashMap<Monster, MonsterTypeDto> monstersInEncounter = new HashMap<>();
+    private HashMap <String, Boolean> monsterInEncounterHashMap = new HashMap<>();
     private int repeatedTimes = 0;
     //private Monster oldMonster; // here use HashMap
     private HashMap<String, Boolean> resultLevelUpHashMap = new HashMap<>();
     private HashMap<String, Monster> oldMonsterHashMap = new HashMap<>();
     private HashMap<String, ArrayList<Integer>> newAbilitiesHashMap = new HashMap<>();
     private HashMap<String, EncounterOpponentController> encounterOpponentControllerHashMap = new HashMap<>();
+    private HashMap<String, Boolean> monsterInTeamHashMap = new HashMap<>();
     private int currentMonsterIndex = 0;
     private int deleteOpponents = 0;
 
@@ -127,10 +126,18 @@ public class EncounterController extends Controller {
         subControllers.add(battleMenuController);
 
         // TODO: here is only the monster from team is available, not all the monsters from trainer
+        List<String> monsterInTeam = trainerStorageProvider.get().getTrainer().team();
+        for(String monsterId: monsterInTeam){
+            monsterInTeamHashMap.put(monsterId, false);
+        }
+
+        /*
         disposables.add(monstersService.getMonsters(regionId, trainerId).observeOn(FX_SCHEDULER).subscribe(monsters ->
                 monsters.forEach(monster -> disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto ->
                                 monstersInEncounter.put(monster, monsterTypeDto),
                         Throwable::printStackTrace))), Throwable::printStackTrace));
+         */
+
         if (!GraphicsEnvironment.isHeadless() && !AudioService.getInstance().checkMuted()) {
             AudioService.getInstance().stopSound();
             AudioService.getInstance().playSound(FIGHT_SOUND);
@@ -161,6 +168,7 @@ public class EncounterController extends Controller {
 
         //showMyMonster
         showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent());
+        monsterInEncounterHashMap.put(selfOpponent._id(), false);
         // showMySprite
         ImageView sprite = ownTrainerController.getTrainerImageView();
         setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), sprite, TRAINER_DIRECTION_UP);
@@ -220,11 +228,12 @@ public class EncounterController extends Controller {
         enemy1Controller = new EncounterOpponentController();
         enemy1Controller.init(enemyOpponent, true, true, false, false, false, this);
         encounterOpponentControllerHashMap.put(enemyOpponent._id(), enemy1Controller);
-        enemyHBox.setPadding(new Insets(0, 400, 0, 0));
+        enemyHBox.setPadding(new Insets(0, 360, 0, 0));
         Parent enemy1Parent = enemy1Controller.render();
         enemyHBox.getChildren().add(enemy1Parent);
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
         showEnemyMonster(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0), true);
+        monsterInEncounterHashMap.put(enemyOpponent._id(), false);
 
         // Own trainer
         teamHBox.setPadding(new Insets(0, 0, 0, 360));
@@ -245,6 +254,7 @@ public class EncounterController extends Controller {
         enemyHBox.getChildren().add(enemy1Parent);
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
         showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
+        monsterInEncounterHashMap.put(enemyOpponent._id(), false);
 
         // Own trainer
         teamHBox.setPadding(new Insets(0, 0, 0, 360));
@@ -265,6 +275,7 @@ public class EncounterController extends Controller {
         enemyHBox.getChildren().add(enemy1Parent);
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
         showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
+        monsterInEncounterHashMap.put(enemy1Opponent._id(), false);
 
         // 2nd enemy as a trainer
         Opponent enemy2Opponent = encounterOpponentStorage.getEnemyOpponents().get(1);
@@ -275,6 +286,7 @@ public class EncounterController extends Controller {
         VBox enemy2Parent = (VBox) enemy2Controller.render();
         enemyHBox.getChildren().add(enemy2Parent);
         showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(1));
+        monsterInEncounterHashMap.put(enemy2Opponent._id(), false);
 
         // Own trainer
         teamHBox.setPadding(new Insets(0, 0, 0, 360));
@@ -295,6 +307,7 @@ public class EncounterController extends Controller {
         enemyHBox.getChildren().add(enemy1Parent);
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
         showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
+        monsterInEncounterHashMap.put(enemy1Opponent._id(), false);
 
         // Coop Trainer
         Opponent coopOpponent = encounterOpponentStorage.getCoopOpponent();
@@ -307,8 +320,10 @@ public class EncounterController extends Controller {
         teamHBox.getChildren().add(coopTrainerParent);
         if (!encounterOpponentStorage.isTwoMonster()){
             showCoopImage(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
+            monsterInEncounterHashMap.put(coopOpponent._id(), false);
         }
         showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
+
 
         // Own trainer
         teamHBox.getChildren().add(ownTrainerParent);
@@ -327,6 +342,7 @@ public class EncounterController extends Controller {
         enemyHBox.getChildren().add(enemy1Parent);
         targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));
         showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));
+        monsterInEncounterHashMap.put(enemy1Opponent._id(), false);
 
         // 2nd enemy as a trainer
         Opponent enemy2Opponent = encounterOpponentStorage.getEnemyOpponents().get(1);
@@ -337,6 +353,7 @@ public class EncounterController extends Controller {
         VBox enemy2Parent = (VBox) enemy2Controller.render();
         enemyHBox.getChildren().add(enemy2Parent);
         showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(1));
+        monsterInEncounterHashMap.put(enemy2Opponent._id(), false);
 
         // Coop Trainer
         Opponent coopOpponent = encounterOpponentStorage.getCoopOpponent();
@@ -348,6 +365,7 @@ public class EncounterController extends Controller {
         teamHBox.getChildren().add(coopTrainerParent);
         if (!encounterOpponentStorage.isTwoMonster()){
             showCoopImage(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
+            monsterInEncounterHashMap.put(coopOpponent._id(), false);
         }
         showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent());
 
@@ -414,6 +432,7 @@ public class EncounterController extends Controller {
     private void showTeamMonster(EncounterOpponentController encounterOpponentController, Opponent opponent) {
         // Monster
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
+            System.out.println("showTeamMonster: " + monster);
             encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);
             listenToMonster(opponent.trainer(), opponent.monster(), encounterOpponentController, opponent);
             encounterOpponentController.setLevelLabel("LVL " + monster.level())
@@ -529,14 +548,30 @@ public class EncounterController extends Controller {
             } else if (opponent.isAttacker() != encounterOpponentStorage.isAttacker()){
                 encounterOpponentStorage.getEnemyOpponents().removeIf(o -> o._id().equals(opponent._id()));
                 encounterOpponentStorage.addEnemyOpponent(opponent);
-                // TODO: don't call the showEnemyMonster everytime when the opponent is updated
-                showEnemyMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent, false);
+
             } else {
                 encounterOpponentStorage.setCoopOpponent(opponent);
             }
             opponentsUpdate.put(opponent._id() + "Results", opponent);
             // TODO：记录一下对手或者队友哪个Monster死了 HashMap<String, Boolean> opponentId：true/false
             // 如果这个opponent之前的monster死了，又来了一个没有move的opponent，说明这个opponent换了一个monster，这个时候要重新渲染一下
+            if(opponent.monster() == null){
+                monsterInEncounterHashMap.put(opponent._id(), true);
+                if(opponent.trainer().equals(trainerId)){
+                    yourMonsterDefeated(opponent._id());
+                }
+            }else if(monsterInEncounterHashMap.get(opponent._id())){
+                if(opponent.monster() != null) {
+                    if (opponent.isAttacker() != encounterOpponentStorage.isAttacker()) {
+                        showEnemyMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent, false);
+                    } else {
+                        showTeamMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent);
+                    }
+                    monsterInEncounterHashMap.put(opponent._id(), false);
+                    updateDescription("Opponent " + opponent.trainer() + " has changed monster", false);
+                    opponentsUpdate.remove(opponent._id() + "Results");
+                }
+            }
         }
 
         // this magic number is two time the size of oppenents in this encounter
@@ -613,7 +648,7 @@ public class EncounterController extends Controller {
                                 }else {
                                     // Your monster or the monster of your coop is defeated
                                     // monsterDefeated(resources.getString("TEAM.DEFEATED"));
-                                    yourMonsterDefeated();
+                                    updateDescription(resources.getString("TEAM.DEFEATED") + "\n", false);
                                 }
                             }
                             case "status-added" -> {
@@ -662,7 +697,9 @@ public class EncounterController extends Controller {
                 float maxHealth = (float) (Math.round(monster.attributes().health() * 10) / 10);
                 if (!GraphicsEnvironment.isHeadless()) {
                     AnimationBuilder.buildShakeAnimation(encounterOpponentController.monsterImageView, 50, 3, 1).play();
-                    AnimationBuilder.buildProgressBarAnimation(encounterOpponentController.HealthBar, 1500, monster.currentAttributes().health() / monster.attributes().health()).play();
+                    if(currentHealth > 0){
+                        AnimationBuilder.buildProgressBarAnimation(encounterOpponentController.HealthBar, 1500, monster.currentAttributes().health() / monster.attributes().health()).play();
+                    }
                 } else {
                     encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());
                 }
@@ -674,10 +711,9 @@ public class EncounterController extends Controller {
                     encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);
                     // if health is 0, then add to the team the information that the monster is died.
                     // if the type of the monster changed, then make a server call and update in the opponent storage
-                    disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto -> {
-                        monstersInEncounter.remove(monster);
-                        monstersInEncounter.put(monster, monsterTypeDto);
-                    }, Throwable::printStackTrace));
+                    if(currentHealth == 0){
+                        monsterInTeamHashMap.put(monster._id(), true);
+                    }
                 }
             }
         }, Throwable::printStackTrace));
@@ -750,77 +786,28 @@ public class EncounterController extends Controller {
     }
 
     public void enemyMonsterDefeated() {
-        updateDescription(resources.getString("TARGET.DEFEATED") + "\n", false);
-        PauseTransition pause = new PauseTransition(Duration.millis(500));
-        pause.setOnFinished(evt -> {
-            if (resultLevelUpHashMap.get(encounterOpponentStorage.getSelfOpponent()._id())) {
-                showLevelUpPopUp(encounterOpponentStorage.getSelfOpponent()._id());
+        if (resultLevelUpHashMap.get(encounterOpponentStorage.getSelfOpponent()._id())) {
+            showLevelUpPopUp(encounterOpponentStorage.getSelfOpponent()._id());
+        }
+        if (encounterOpponentStorage.isTwoMonster()){
+            if(resultLevelUpHashMap.get(encounterOpponentStorage.getCoopOpponent()._id())) {
+                showLevelUpPopUp(encounterOpponentStorage.getCoopOpponent()._id());
             }
-            if (encounterOpponentStorage.isTwoMonster()){
-                if(resultLevelUpHashMap.get(encounterOpponentStorage.getCoopOpponent()._id())) {
-                    showLevelUpPopUp(encounterOpponentStorage.getCoopOpponent()._id());
-                }
-            }
-        });
-        pause.play();
-    }
-
-    public void continueBattle() {
-        final boolean[] enemyHasAnotherMonster = {false};
-        encounterOpponentStorage.getEnemyOpponents().forEach(opponent -> {
-            if (opponent.monster() != null) {
-                enemyHasAnotherMonster[0] = true;
-            }
-        });
-        if (!enemyHasAnotherMonster[0] || encounterOpponentStorage.isWild()) {
-            SequentialTransition fleeAnimation = AnimationBuilder.buildFleeAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), ownTrainerController);
-            PauseTransition pause = new PauseTransition(Duration.millis(1000));
-            pause.setOnFinished(evt -> {
-                ownTrainerController.monsterImageView.setVisible(false);
-                fleeAnimation.play();
-            });
-            pause.play();
-            fleeAnimation.setOnFinished(evt -> showResultPopUp(resources.getString("YOU.WON")));
         }
     }
 
     //TODO: rewrite this with monster = null
-    public void yourMonsterDefeated() {
-        final boolean[] hasAnotherMonster = {false};
-        PauseTransition pause = new PauseTransition(Duration.millis(1000));
-        pause.setOnFinished(evt -> {
-            ownTrainerController.monsterImageView.setVisible(false);
-            System.out.println(monstersInEncounter);
-            monstersInEncounter.forEach((monster, monsterTypeDto) -> {
-                if (monster.currentAttributes().health() > 0) {
-                    hasAnotherMonster[0] = true;
-                    disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, encounterOpponentStorage.getSelfOpponent()._id(), monster._id(), null).observeOn(FX_SCHEDULER).subscribe(
-                            opponent -> {
-                                resetRepeatedTimes();
-                                goBackToBattleMenu();
-                                encounterOpponentStorage.setCurrentTrainerMonster(monster);
-                                encounterOpponentStorage.setCurrentTrainerMonsterType(monsterTypeDto);
-                                encounterOpponentStorage.setSelfOpponent(opponent);
-                                showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent(), true);
+    public void yourMonsterDefeated(String opponentId) {
+        monsterInTeamHashMap.forEach((monsterId, isDied) -> {
+            if(!isDied){
+                disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, monsterId, null).observeOn(FX_SCHEDULER).subscribe(
+                        opponent -> {
+                            resetRepeatedTimes();
+                            updateDescription("You changed Monster", false);
                             }, Throwable::printStackTrace));
-                }
-            });
-        });
-        pause.play();
-        /*
-        if (!hasAnotherMonster[0]) {
-            showResultPopUp(resources.getString("YOU.FAILED"));
-        }*/
-    }
+            }});
 
-    public void ownMonsterDefeated(Opponent opponent) {
-        PauseTransition pause = new PauseTransition(Duration.millis(1000));
-        pause.setOnFinished(evt -> {
-            // TODO: check if there are healthy monsters left
-            // if there are any left, change it to the healthy monster
-            // if there are not any left. The server will delete the opponent. Just show that all your monster are defeated
-        });
-        pause.play();
+
     }
 
 
@@ -955,9 +942,16 @@ public class EncounterController extends Controller {
         disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, encounterOpponentStorage.getSelfOpponent()._id(), null, move).observeOn(FX_SCHEDULER).subscribe(
                 opponent -> {
                     resetRepeatedTimes();
-                    encounterOpponentStorage.setCurrentTrainerMonster(monster);
-                    encounterOpponentStorage.setCurrentTrainerMonsterType(monsterTypeDto);
-                    encounterOpponentStorage.setSelfOpponent(opponent);
+                    if(encounterOpponentStorage.isTwoMonster()){
+                        if(Objects.equals(encounterOpponentStorage.getSelfOpponent()._id(), opponent._id())){
+                            encounterOpponentStorage.setSelfOpponent(opponent);
+                        } else if (Objects.equals(encounterOpponentStorage.getCoopOpponent()._id(), opponent._id())){
+                            encounterOpponentStorage.setCoopOpponent(opponent);
+                        }
+                    } else {
+                        encounterOpponentStorage.setSelfOpponent(opponent);
+                    }
+                    updateDescription("You Changed your Monster", true);
                 }, Throwable::printStackTrace));
     }
 
