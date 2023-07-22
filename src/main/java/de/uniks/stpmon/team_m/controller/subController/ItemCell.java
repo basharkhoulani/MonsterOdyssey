@@ -30,7 +30,7 @@ import static de.uniks.stpmon.team_m.Constants.ABILITYPALETTE;
 import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
 
-public class ItemCell extends ListCell<ItemTypeDto> {
+public class ItemCell extends ListCell<Item> {
     public final PresetsService presetsService;
     public final ItemMenuController itemMenuController;
     private final ResourceBundle resources;
@@ -48,6 +48,9 @@ public class ItemCell extends ListCell<ItemTypeDto> {
     public HBox itemHBox;
     private Image itemImage;
     VBox itemDescriptionBox;
+
+    ItemTypeDto itemTypeDto;
+
     @Inject
     Provider<ItemDescriptionController> itemDescriptionControllerProvider;
 
@@ -61,14 +64,21 @@ public class ItemCell extends ListCell<ItemTypeDto> {
     }
 
 
-    protected void updateItem(ItemTypeDto itemTypeDto, boolean empty) {
-        super.updateItem(itemTypeDto, empty);
-        if (itemTypeDto == null || empty) {
+    protected void updateItem(Item item, boolean empty) {
+        super.updateItem(item, empty);
+        if (item == null || empty) {
             setText(null);
             setGraphic(null);
             setStyle("-fx-background-color: #FFFFFF;");
         } else {
             loadFXML();
+
+            disposables.add(presetsService.getItemImage(Integer.parseInt(item._id())).observeOn(FX_SCHEDULER)
+                    .subscribe(itemTypeDto -> {
+                                this.itemTypeDto = itemTypeDto;
+                            }, error -> {
+                                itemMenuController.showError(error.getMessage());
+                            }));
 
             disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)
                     .subscribe(itemImage -> {

@@ -56,7 +56,6 @@ public class ItemDescriptionController extends Controller {
         itemImageView.setImage(itemImage);
         itemPriceLabel.setText(String.valueOf(itemTypeDto.price()));
         itemDescription.setText(itemTypeDto.description());
-        //itemAmountLabel.setText(itemTypeDto.);
 
         return parent;
     }

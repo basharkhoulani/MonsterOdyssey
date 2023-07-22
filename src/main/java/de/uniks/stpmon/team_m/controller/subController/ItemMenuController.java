@@ -52,9 +52,12 @@ public class ItemMenuController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
-        /** @Harun: Versuch mal den TrainerItemsService hier statt dem presetService zu verwenden um
-         *  die Items (mit referenz auf den trainer) zu bekommen und für diese dann den presetService zu benutzen */
-        disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER)
+
+        disposables.add(trainerItemsService.get().getItems(trainerStorageProvider.get().getRegion()._id()
+                        , trainerStorageProvider.get().getTrainer()._id(), null).observeOn(FX_SCHEDULER)
+                .subscribe(this::initItems, throwable -> showError(throwable.getMessage())));
+
+        /*disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER)
                         .subscribe(itemTypeDtos -> {
                             System.out.println(itemTypeDtos.size());
                             initItems(itemTypeDtos);
@@ -66,7 +69,7 @@ public class ItemMenuController extends Controller {
         return parent;
     }
 
-    public void initItems(List<ItemTypeDto> itemList) {
+    public void initItems(List<Item> itemList) {
         itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox));
         itemListView.getItems().addAll(itemList);
         itemListView.setFocusModel(null);
