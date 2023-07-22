@@ -160,14 +160,14 @@ public class MonstersListController extends Controller {
     }
 
     private void initMonsterList(List<Monster> monsters) {
-        monsterListViewActive.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false, false, "asasa"));
+        monsterListViewActive.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false, false));
         monsterListViewActive.getItems().addAll(monsters);
         monsterListViewActive.setFocusModel(null);
         monsterListViewActive.setSelectionModel(null);
     }
 
     private void initOtherMonsterList(List<Monster> monsters) {
-        monsterListViewOther.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false, true, "tddtddd"));
+        monsterListViewOther.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false, true));
         monsterListViewOther.getItems().addAll(monsters);
         monsterListViewOther.setFocusModel(null);
         monsterListViewOther.setSelectionModel(null);

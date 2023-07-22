@@ -14,8 +14,10 @@ import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -149,27 +151,11 @@ public class MonsterCell extends ListCell<Monster> {
                         monsterTypeDto = monsterType;
                         monsterNameLevel.setText(monsterTypeDto.name() + " (LVL " + monster.level() + ")");
                         for (String s : monsterTypeDto.type()) {
-                            System.out.println(s);
                             type.append(s);
                         }
 
                         if (!GraphicsEnvironment.isHeadless()) {
-                            monsterTypeDto.type().forEach(t -> {
-                                String typeColor = TYPESCOLORPALETTE.get(t);
-                                String style = "-fx-background-color: " + typeColor + "; -fx-border-color: black; -fx-border-width: 1px;";
-                                VBox typeIcon = new VBox();
-                                typeIcon.setStyle(style);
-                                String typeImagePath = ABILITYPALETTE.get(t);
-                                URL resourceType = Main.class.getResource("images/" + typeImagePath);
-                                assert resourceType != null;
-                                Image typeImage = new Image(resourceType.toString());
-                                ImageView typeImageView = new ImageView();
-                                typeImageView.setImage(typeImage);
-                                typeImageView.setFitHeight(45);
-                                typeImageView.setFitWidth(45);
-                                typeIcon.getChildren().add(typeImageView);
-                                monsterTypesHBox.getChildren().add(typeIcon);
-                            });
+                            renderMonsterTypes(monsterTypeDto, monsterTypesHBox.getChildren());
                             URL resourseArrowUp = Main.class.getResource("images/monster-arrange-up.png");
                             assert resourseArrowUp != null;
                             Image arrowUpImage = new Image(resourseArrowUp.toString());
@@ -232,6 +218,25 @@ public class MonsterCell extends ListCell<Monster> {
             setText(null);
             setStyle("-fx-background-color: #CFE9DB;  -fx-border-color: #1C701C; -fx-border-width: 2px");
         }
+    }
+
+    static void renderMonsterTypes(MonsterTypeDto monsterTypeDto, ObservableList<Node> children) {
+        monsterTypeDto.type().forEach(t -> {
+            String typeColor = TYPESCOLORPALETTE.get(t);
+            String style = "-fx-background-color: " + typeColor + "; -fx-border-color: black; -fx-border-width: 1px;";
+            VBox typeIcon = new VBox();
+            typeIcon.setStyle(style);
+            String typeImagePath = ABILITYPALETTE.get(t);
+            URL resourceType = Main.class.getResource("images/" + typeImagePath);
+            assert resourceType != null;
+            Image typeImage = new Image(resourceType.toString());
+            ImageView typeImageView = new ImageView();
+            typeImageView.setImage(typeImage);
+            typeImageView.setFitHeight(45);
+            typeImageView.setFitWidth(45);
+            typeIcon.getChildren().add(typeImageView);
+            children.add(typeIcon);
+        });
     }
 
 

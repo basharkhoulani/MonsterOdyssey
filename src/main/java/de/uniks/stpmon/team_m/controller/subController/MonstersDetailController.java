@@ -43,6 +43,8 @@ public class MonstersDetailController extends Controller {
     @FXML
     public Label monsterDefense;
     @FXML
+    public VBox typeIconVBox;
+    @FXML
     public Label monsterSpeed;
     @FXML
     public ProgressBar lvlProgressBar;
@@ -141,17 +143,7 @@ public class MonstersDetailController extends Controller {
         // Sprite
         if (!GraphicsEnvironment.isHeadless()) {
             monsterImageView.setImage(monsterImage);
-            String typeColor = TYPESCOLORPALETTE.get(monsterType);
-            String style = "-fx-background-color: " + typeColor + ";";
-            typeIcon.setStyle(style);
-
-            String typeImagePath = ABILITYPALETTE.get(monsterType);
-            URL resourceType = Main.class.getResource("images/" + typeImagePath);
-            assert resourceType != null;
-            Image typeImage = new Image(resourceType.toString());
-            typeImageView.setImage(typeImage);
-            typeImageView.setFitHeight(45);
-            typeImageView.setFitWidth(45);
+            MonsterCell.renderMonsterTypes(monsterTypeDto, typeIconVBox.getChildren());
 
             for (String imagePath : ATTRIBUTE_IMAGES) {
                 URL resourceImage = Main.class.getResource("images/" + imagePath);
