@@ -28,6 +28,8 @@ public class EncounterOpponentStorage {
     private int encounterSize;
     private boolean isAttacker;
     private boolean isTwoMonster;
+    private Opponent targetOpponent;
+    private Opponent leastTargetOpponent;
 
 
     @Inject
@@ -127,6 +129,19 @@ public class EncounterOpponentStorage {
             this.opponentsInStorage.add(opponent._id());
         }
 
+    }
+
+    public void setTargetOpponent(Opponent opponent) {
+        this.leastTargetOpponent = targetOpponent;
+        this.targetOpponent = opponent;
+    }
+
+    public Opponent getTargetOpponent() {
+        return this.targetOpponent;
+    }
+
+    public Opponent getLeastTargetOpponent() {
+        return this.leastTargetOpponent;
     }
 
     public boolean isTwoMonster() {

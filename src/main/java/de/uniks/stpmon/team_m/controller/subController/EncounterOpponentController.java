@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.dto.Opponent;
+import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -26,6 +27,7 @@ public class EncounterOpponentController extends Controller {
     private Boolean isWild;
     private Boolean invertX;
     public Boolean isMultipleEnemyEncounter;
+    private EncounterOpponentStorage encounterOpponentStorage;
     public Boolean isTargeted = false;
     private Boolean isSelf;
     private Opponent currentOpponent;
@@ -79,7 +81,6 @@ public class EncounterOpponentController extends Controller {
     @FXML
     public ImageView burnedImage;
 
-    private Opponent currentTarget;
     public Runnable onTargetChange;
     EncounterController encounterController;
 
@@ -87,7 +88,7 @@ public class EncounterOpponentController extends Controller {
     public EncounterOpponentController(){
     }
 
-    public void init(Opponent currentOpponent, Boolean isEnemy, Boolean isWild, Boolean invertX, Boolean isMultipleEnemyEncounter, Boolean isSelf, EncounterController encounterController) {
+    public void init(Opponent currentOpponent, Boolean isEnemy, Boolean isWild, Boolean invertX, Boolean isMultipleEnemyEncounter, Boolean isSelf, EncounterController encounterController, EncounterOpponentStorage encounterOpponentStorage) {
         super.init();
         this.isEnemy = isEnemy;
         this.isWild = isWild;
@@ -96,6 +97,7 @@ public class EncounterOpponentController extends Controller {
         this.isSelf = isSelf;
         this.currentOpponent = currentOpponent;
         this.encounterController = encounterController;
+        this.encounterOpponentStorage = encounterOpponentStorage;
     }
 
     @Override
@@ -143,6 +145,9 @@ public class EncounterOpponentController extends Controller {
         }
         monsterImageViewVBox.setOnMouseClicked(event -> {
             if (isEnemy && isMultipleEnemyEncounter && onTargetChange != null) {
+                if (currentOpponent != encounterOpponentStorage.getTargetOpponent()) {
+                       encounterOpponentStorage.setTargetOpponent(currentOpponent);
+                }
                 onTargetChange.run();
             }
         });
@@ -219,7 +224,11 @@ public class EncounterOpponentController extends Controller {
         monsterNameHBox.getStyleClass().clear();
         monsterNameHBox.getStyleClass().add("hBoxGreen");
         monsterImageViewVBox.setStyle("-fx-padding: 16px; -fx-border-color: red; -fx-border-radius: 100;");
+        encounterOpponentStorage.setTargetOpponent(this.currentOpponent);
         isTargeted = true;
+        if (onTargetChange != null) {
+            onTargetChange.run();
+        }
         return this;
     }
 
@@ -233,14 +242,6 @@ public class EncounterOpponentController extends Controller {
         monsterImageViewVBox.setStyle("-fx-padding: 0px; -fx-border-color: transparent; -fx-border-radius: 0;");
         isTargeted = false;
         return this;
-    }
-
-    public Opponent getCurrentTarget() {
-        return currentTarget;
-    }
-
-    public void setCurrentTarget(Opponent currentTarget) {
-        this.currentTarget = currentTarget;
     }
 
     public ImageView getTrainerImageView() {
