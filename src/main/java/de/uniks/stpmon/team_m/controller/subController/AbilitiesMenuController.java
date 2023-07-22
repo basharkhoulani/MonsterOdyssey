@@ -98,7 +98,7 @@ public class AbilitiesMenuController extends Controller {
         String encounterId = encounterOpponentStorageProvider.get().getEncounterId();
         String opponentId = encounterOpponentStorageProvider.get().getSelfOpponent()._id();
         // here to put the selected target
-        String targetId = encounterOpponentStorageProvider.get().getEnemyOpponents().get(0).trainer();
+        String targetId = encounterOpponentStorageProvider.get().getTargetOpponent().trainer();
         Move move = new AbilityMove("ability", ability.id(), targetId);
 
         disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(
