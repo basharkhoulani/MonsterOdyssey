@@ -551,7 +551,7 @@ public class EncounterController extends Controller {
                 if(opponent.monster() != null) {
                     if (opponent.isAttacker() != encounterOpponentStorage.isAttacker()) {
                         showEnemyMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent, false);
-                        updateDescription(resources.getString("ENEMY.MONSTER.CHANGED") + "\n", false);
+                        updateDescription(resources.getString("ENEMY.CHANGED.MONSTER") + "\n", false);
                     } else {
                         showTeamMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent);
                         if(opponent.trainer().equals(trainerId)){
@@ -587,7 +587,6 @@ public class EncounterController extends Controller {
                         updateDescription(resources.getString("YOU.USED") + " " + abilityDtos.get(abilityMove.ability() - 1).name() + ". ", false);
                     } else if (o.isAttacker() == encounterOpponentStorage.isAttacker()) {
                         updateDescription(resources.getString("COOP.USED") + " " + abilityDtos.get(abilityMove.ability() - 1).name() + ". ", false);
-
                     }else {
                         updateDescription(resources.getString("ENEMY.USED") + " " + abilityDtos.get(abilityMove.ability() - 1).name() + ". ", false);
                     }
@@ -691,6 +690,8 @@ public class EncounterController extends Controller {
                     AnimationBuilder.buildShakeAnimation(encounterOpponentController.monsterImageView, 50, 3, 1).play();
                     if(currentHealth > 0){
                         AnimationBuilder.buildProgressBarAnimation(encounterOpponentController.HealthBar, 1500, monster.currentAttributes().health() / monster.attributes().health()).play();
+                    } else {
+                        encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());
                     }
                 } else {
                     encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());
@@ -793,10 +794,7 @@ public class EncounterController extends Controller {
         monsterInTeamHashMap.forEach((monsterId, isDied) -> {
             if(!isDied){
                 disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, monsterId, null).observeOn(FX_SCHEDULER).subscribe(
-                        opponent -> {
-                            resetRepeatedTimes();
-                            updateDescription("You changed Monster", false);
-                            }, Throwable::printStackTrace));
+                        opponent -> resetRepeatedTimes(), Throwable::printStackTrace));
             }});
     }
 
@@ -906,7 +904,7 @@ public class EncounterController extends Controller {
         ArrayList<Integer> newAbilities = newAbilitiesHashMap.get(opponentId);
 
         disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getCurrentMonsters(opponentId)._id()).observeOn(FX_SCHEDULER).subscribe(monster -> {
-            levelUpController.init(popUpVBox, rootStackPane, this, monster, encounterOpponentStorage.getCurrentMonsterType(opponentId), oldMonster, newAbilities);
+            levelUpController.init(popUpVBox, rootStackPane, this, monster, encounterOpponentStorage.getCurrentMonsterType(opponentId), oldMonster, newAbilities, abilityDtos);
             popUpVBox.getChildren().add(levelUpController.render());
             rootStackPane.getChildren().add(popUpVBox);
             newAbilitiesHashMap.put(opponentId, new ArrayList<>());
@@ -959,7 +957,7 @@ public class EncounterController extends Controller {
                     } else {
                         encounterOpponentStorage.setSelfOpponent(opponent);
                     }
-                    updateDescription("You Changed your Monster", true);
+                    updateDescription(resources.getString("YOU.CHANGED.MONSTER") + ". ", true);
                     increaseCurrentMonsterIndex();
                 }));
     }
