@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 import static de.uniks.stpmon.team_m.Constants.ABILITYPALETTE;
 import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
@@ -71,29 +72,53 @@ public class ItemCell extends ListCell<Item> {
             setGraphic(null);
             setStyle("-fx-background-color: #FFFFFF;");
         } else {
-            loadFXML();
-
-            disposables.add(presetsService.getItemImage(Integer.parseInt(item._id())).observeOn(FX_SCHEDULER)
+            /** Try to load all trainers items from presetsService
+            *   take rateLimit into account, if loading fails we need to retry loading later
+             *
+             *   try to load images AFTER items loading finished with the same strategy
+            */
+            disposables.add(presetsService.getItem(item.type()).observeOn(FX_SCHEDULER)
                     .subscribe(itemTypeDto -> {
                                 this.itemTypeDto = itemTypeDto;
-                            }, error -> {
-                                itemMenuController.showError(error.getMessage());
+                                setGraphic(new Label(itemTypeDto.name()));
+                            },
+                            error -> {
+                                setGraphic(new Label("Loading..."));
+                                TimeUnit.SECONDS.sleep(1);
+                                updateItem(item, empty);
                             }));
+        }
 
-            disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)
-                    .subscribe(itemImage -> {
-                        this.itemImage = ImageProcessor.resonseBodyToJavaFXImage(itemImage);
-                        itemImageView.setImage(this.itemImage);
+            //loadFXML();
+            /*
+            disposables.add(presetsService.getItem(item.type()).observeOn(FX_SCHEDULER)
+                    .subscribe(itemTypeDto -> {
+                        this.itemTypeDto = itemTypeDto;
+
+                        disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)
+                                .subscribe(itemImage -> {
+                                    this.itemImage = ImageProcessor.resonseBodyToJavaFXImage(itemImage);
+                                    itemImageView.setImage(this.itemImage);
+                                }, error -> {
+                                    itemMenuController.showError(error.getMessage());
+                                    error.printStackTrace();
+                                }));
+
+
+                        itemLabel.setText(itemTypeDto.name());
+                        itemNumber.setText(itemTypeDto.use());
+
+                        itemHBox.setOnMouseClicked(event -> openItemDescription(itemTypeDto, this.itemImage));
                     }, error -> {
-                         itemMenuController.showError(error.getMessage());
+                        itemMenuController.showError(error.getMessage());
+                        error.printStackTrace();
                     }));
-            itemLabel.setText(itemTypeDto.name());
-            itemNumber.setText(itemTypeDto.use());
 
-            itemHBox.setOnMouseClicked(event -> openItemDescription(itemTypeDto,this.itemImage));
+
+             */
 
         }
-    }
+
 
     private void loadFXML() {
         if (loader == null) {

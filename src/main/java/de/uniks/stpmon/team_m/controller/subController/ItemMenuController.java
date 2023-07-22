@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class ItemMenuController extends Controller {
 
@@ -31,13 +32,14 @@ public class ItemMenuController extends Controller {
     Provider<TrainerStorage> trainerStorageProvider;
     TrainersService trainersService;
     @FXML
-    public ListView<ItemTypeDto> itemListView;
+    public ListView<Item> itemListView;
     @FXML
     public VBox itemDescriptionBox;
     public VBox itemMenuBox;
 
     @Inject
-    public ItemMenuController(){}
+    public ItemMenuController() {
+    }
 
     public void init(IngameController ingameController, TrainersService trainersService, Provider<TrainerStorage> trainerStorageProvider,
                      VBox itemMenuBox) {
@@ -52,11 +54,19 @@ public class ItemMenuController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
+        initItems(trainerStorageProvider.get().getItems());
 
-        disposables.add(trainerItemsService.get().getItems(trainerStorageProvider.get().getRegion()._id()
-                        , trainerStorageProvider.get().getTrainer()._id(), null).observeOn(FX_SCHEDULER)
-                .subscribe(this::initItems, throwable -> showError(throwable.getMessage())));
-
+        /*
+        disposables.add(trainerItemsService.get().getItems(
+                        trainerStorageProvider.get().getRegion()._id(),
+                        trainerStorageProvider.get().getTrainer()._id(),
+                        null
+                ).observeOn(FX_SCHEDULER)
+                .subscribe(this::initItems, throwable -> {
+                    showError(throwable.getMessage());
+                    throwable.printStackTrace();
+                }));
+        */
         /*disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER)
                         .subscribe(itemTypeDtos -> {
                             System.out.println(itemTypeDtos.size());
@@ -70,11 +80,26 @@ public class ItemMenuController extends Controller {
     }
 
     public void initItems(List<Item> itemList) {
+        System.out.println("Initing items: " + itemList.size());
+        for (Item item : itemList) {
+            initItem(item);
+        }
+        /*
         itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox));
         itemListView.getItems().addAll(itemList);
         itemListView.setFocusModel(null);
         itemListView.setSelectionModel(null);
+
+         */
     }
+
+    public void initItem(Item item) {
+        itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox));
+        itemListView.getItems().add(item);
+        itemListView.setFocusModel(null);
+        itemListView.setSelectionModel(null);
+    }
+
     public void closeItemMenu() {
         ingameController.root.getChildren().remove(itemMenuBox);
         ingameController.buttonsDisable(false);
