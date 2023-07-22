@@ -123,18 +123,10 @@ public class EncounterController extends Controller {
         battleMenuController.init();
         subControllers.add(battleMenuController);
 
-        // TODO: here is only the monster from team is available, not all the monsters from trainer
         List<String> monsterInTeam = trainerStorageProvider.get().getTrainer().team();
         for(String monsterId: monsterInTeam){
             monsterInTeamHashMap.put(monsterId, false);
         }
-
-        /*
-        disposables.add(monstersService.getMonsters(regionId, trainerId).observeOn(FX_SCHEDULER).subscribe(monsters ->
-                monsters.forEach(monster -> disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto ->
-                                monstersInEncounter.put(monster, monsterTypeDto),
-                        Throwable::printStackTrace))), Throwable::printStackTrace));
-         */
 
         if (!GraphicsEnvironment.isHeadless() && !AudioService.getInstance().checkMuted()) {
             AudioService.getInstance().stopSound();
@@ -559,11 +551,16 @@ public class EncounterController extends Controller {
                 if(opponent.monster() != null) {
                     if (opponent.isAttacker() != encounterOpponentStorage.isAttacker()) {
                         showEnemyMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent, false);
+                        updateDescription(resources.getString("ENEMY.MONSTER.CHANGED") + "\n", false);
                     } else {
                         showTeamMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent);
+                        if(opponent.trainer().equals(trainerId)){
+                            updateDescription(resources.getString("YOU.CHANGED.MONSTER") + "\n", false);
+                        } else {
+                            updateDescription(resources.getString("ALLY.CHANGED.MONSTER") + "\n", false);
+                        }
                     }
                     monsterInEncounterHashMap.put(opponent._id(), false);
-                    updateDescription("Opponent " + opponent.trainer() + " has changed monster", false);
                     opponentsUpdate.remove(opponent._id() + "Results");
                 }
             }
@@ -598,13 +595,13 @@ public class EncounterController extends Controller {
 
                 if (move instanceof ChangeMonsterMove) {
                     if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                        updateDescription(resources.getString("YOU.CHANGED.MONSTER") + ". ", false);
+                        updateDescription(resources.getString("YOU.CHANGED.MONSTER") + "\n", false);
                         showTeamMonster(encounterOpponentControllerHashMap.get(o._id()), o);
                     } else if (o.isAttacker() != encounterOpponentStorage.isAttacker()) {
-                        updateDescription(resources.getString("ENEMY.CHANGED.MONSTER") + ". ", false);
+                        updateDescription(resources.getString("ENEMY.CHANGED.MONSTER") + "\n", false);
                         showEnemyMonster(encounterOpponentControllerHashMap.get(o._id()), o, false);
                     } else {
-                        updateDescription(resources.getString("ALLY.CHANGED.MONSTER") + ". ", false);
+                        updateDescription(resources.getString("ALLY.CHANGED.MONSTER") + "\n", false);
                         showTeamMonster(encounterOpponentControllerHashMap.get(o._id()), o);
                     }
                     listenToMonster(o.trainer(), o.monster(), encounterOpponentControllerHashMap.get(o._id()), o);
@@ -630,7 +627,7 @@ public class EncounterController extends Controller {
                                     } else {
                                         newAbilitiesHashMap.get(oResults._id()).add(r.ability());
                                     }
-                                    updateDescription("Your monster learned " + abilityDtos.get(r.ability() - 1).name() + ".\n", false);
+                                    updateDescription(resources.getString("YOUR.MONSTER.LEARNED") + " " + abilityDtos.get(r.ability() - 1).name() + ".\n", false);
                                 }
                             }
                             case "target-defeated" -> {
@@ -661,8 +658,6 @@ public class EncounterController extends Controller {
                     }
                 }
             }
-
-            // TODO: here for automatically change monster
 
         }
         opponentsUpdate.clear();
