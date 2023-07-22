@@ -6,14 +6,14 @@
 <?import javafx.scene.layout.HBox?>
 
 
-<HBox fx:id="itemHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.ItemCell">
-   <children>
-      <ImageView fx:id="itemImageView" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="itemLabel" prefHeight="55.0" prefWidth="118.0">
-         <padding>
-            <Insets left="5.0" />
-         </padding>
-      </Label>
-      <Label fx:id="itemNumber" alignment="CENTER" prefHeight="55.0" prefWidth="42.0" />
-   </children>
+<HBox fx:id="itemHBox" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" prefHeight="55.0" prefWidth="200" xmlns="http://javafx.com/javafx/19"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.ItemCell">
+   <ImageView fx:id="itemImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true"/>
+   <Label fx:id="itemLabel" prefHeight="55.0" prefWidth="118.0">
+      <padding>
+         <Insets left="5.0"/>
+      </padding>
+   </Label>
+   <Label fx:id="itemNumber" alignment="CENTER" prefHeight="55.0" prefWidth="42.0"/>
 </HBox>

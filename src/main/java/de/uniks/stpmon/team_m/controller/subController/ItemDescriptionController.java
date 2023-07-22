@@ -49,11 +49,12 @@ public class ItemDescriptionController extends Controller {
         final Parent parent = super.render();
 
         URL resourceClose = Main.class.getResource("images/close-x.png");
+        System.out.println(resourceClose != null);
         assert resourceClose != null;
         Image closeImage = new Image(resourceClose.toString());
         closeImageView.setImage(closeImage);
 
-        itemImageView.setImage(itemImage);
+        //itemImageView.setImage(itemImage);
         itemPriceLabel.setText(String.valueOf(itemTypeDto.price()));
         itemDescription.setText(itemTypeDto.description());
 

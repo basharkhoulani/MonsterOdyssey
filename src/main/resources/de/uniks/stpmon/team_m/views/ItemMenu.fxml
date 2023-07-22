@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" style="-fx-background-radius: 15;" styleClass="inventarMenu" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.ItemMenuController">
-   <children>
-      <VBox prefHeight="450.0" prefWidth="216.0">
-         <children>
-            <HBox prefHeight="39.0" prefWidth="216.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="47.0" prefWidth="216.0" style="-fx-background-color: #FFFFFF;" text="%INVENTAR" />
-               </children>
-            </HBox>
-            <ListView fx:id="itemListView" prefHeight="406.0" prefWidth="213.0" />
-         </children>
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0"
+      prefWidth="600.0" style="-fx-background-radius: 15;" styleClass="inventarMenu"
+      xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="de.uniks.stpmon.team_m.controller.subController.ItemMenuController">
+   <VBox maxWidth="350.0" minWidth="250.0" prefHeight="450.0" prefWidth="250.0">
+      <VBox alignment="CENTER">
+         <Label alignment="CENTER" prefHeight="47.0" prefWidth="250.0" style="-fx-background-color: #FFFFFF;"
+                text="%INVENTAR"/>
       </VBox>
-      <VBox fx:id="itemDescriptionBox" prefHeight="450.0" prefWidth="385.0" />
-   </children>
+      <ListView fx:id="itemListView" prefHeight="406.0" prefWidth="250.0"/>
+   </VBox>
+   <VBox fx:id="itemDescriptionBox" prefHeight="450.0" prefWidth="385.0"/>
 </HBox>
