@@ -149,15 +149,17 @@ public class MonsterCell extends ListCell<Monster> {
                         monsterTypeDto = monsterType;
                         monsterNameLevel.setText(monsterTypeDto.name() + " (LVL " + monster.level() + ")");
                         for (String s : monsterTypeDto.type()) {
+                            System.out.println(s);
                             type.append(s);
                         }
+
                         if (!GraphicsEnvironment.isHeadless()) {
-                            monsterType.type().forEach(t -> {
-                                String typeColor = TYPESCOLORPALETTE.get(type.toString());
-                                String style = "-fx-background-color: " + typeColor + ";";
+                            monsterTypeDto.type().forEach(t -> {
+                                String typeColor = TYPESCOLORPALETTE.get(t);
+                                String style = "-fx-background-color: " + typeColor + "; -fx-border-color: black; -fx-border-width: 1px;";
                                 VBox typeIcon = new VBox();
                                 typeIcon.setStyle(style);
-                                String typeImagePath = ABILITYPALETTE.get(type.toString());
+                                String typeImagePath = ABILITYPALETTE.get(t);
                                 URL resourceType = Main.class.getResource("images/" + typeImagePath);
                                 assert resourceType != null;
                                 Image typeImage = new Image(resourceType.toString());
