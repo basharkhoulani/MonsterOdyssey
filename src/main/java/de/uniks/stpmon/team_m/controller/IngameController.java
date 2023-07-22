@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.Region;
@@ -156,6 +157,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
 
+    @Inject
+    TrainerItemsService trainerItemsService;
 
     @Inject
     Provider<MonstersListController> monstersListControllerProvider;
@@ -931,8 +934,16 @@ public class IngameController extends Controller {
         inSettings = false;
     }
 
-    public void useItem(String itemId, Monster monster) {
-        // TODO: Send server call to use item on monster
+    public void useItem(Item item, Monster monster) {
+        disposables.add(trainerItemsService.useOrTradeItem(
+                trainerStorageProvider.get().getRegion()._id(),
+                trainerStorageProvider.get().getTrainer()._id(),
+                ITEM_ACTION_USE_ITEM,
+                // Not sure if amount of 1 is correct or if we should use item.amount()-1
+                new UpdateItemDto(1, item.type(), monster._id())
+        ).observeOn(FX_SCHEDULER).subscribe(result -> {
+            trainerStorageProvider.get().updateItem(result);
+        }));
     }
 
     public void buttonsDisable(Boolean set) {
