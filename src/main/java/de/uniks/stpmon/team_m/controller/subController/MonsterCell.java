@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.service.PresetsService;
@@ -38,7 +39,7 @@ import static de.uniks.stpmon.team_m.Constants.*;
 public class MonsterCell extends ListCell<Monster> {
 
     private final boolean other;
-    private final String itemId;
+    private final Item item;
     @FXML
     public ImageView arrowUp;
     @FXML
@@ -96,18 +97,18 @@ public class MonsterCell extends ListCell<Monster> {
         this.monstersListController = monstersListController;
         this.encounter = encounter;
         this.other = other;
-        this.itemId = null;
+        this.item = null;
     }
 
     public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController,
-                       IngameController ingameController, boolean encounter, boolean other, String itemId) {
+                       IngameController ingameController, boolean encounter, boolean other, Item item) {
         this.ingameController = ingameController;
         this.resources = resources;
         this.presetsService = presetsService;
         this.monstersListController = monstersListController;
         this.encounter = encounter;
         this.other = other;
-        this.itemId = itemId;
+        this.item = item;
     }
 
     public MonsterCell(ResourceBundle resources, PresetsService presetsService, ChangeMonsterListController changeMonsterListController,
@@ -119,11 +120,11 @@ public class MonsterCell extends ListCell<Monster> {
         this.ingameController = ingameController;
         this.encounter = encounter;
         this.other = other;
-        this.itemId = null;
+        this.item = null;
     }
 
     public MonsterCell(ResourceBundle resources, PresetsService presetsService, ChangeMonsterListController changeMonsterListController,
-                       EncounterController encounterController, IngameController ingameController, boolean encounter, boolean other, String itemId) {
+                       EncounterController encounterController, IngameController ingameController, boolean encounter, boolean other, Item item) {
         this.encounterController = encounterController;
         this.resources = resources;
         this.presetsService = presetsService;
@@ -131,7 +132,7 @@ public class MonsterCell extends ListCell<Monster> {
         this.ingameController = ingameController;
         this.encounter = encounter;
         this.other = other;
-        this.itemId = itemId;
+        this.item = item;
     }
 
     @Override
@@ -198,13 +199,13 @@ public class MonsterCell extends ListCell<Monster> {
                 // TODO: Tobias hier den Aufruf zur Change Monster Methode
             }
 
-            if (itemId != null) {
+            if (item != null) {
                 arrowUp.setVisible(false);
                 arrowDown.setVisible(false);
                 buttonsVBox.getChildren().remove(viewDetailsButton);
                 removeFromTeamButton.setStyle("-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7; -fx-min-width: 150px; -fx-min-height: 50px;");
                 removeFromTeamButton.setText(resources.getString("SELECT"));
-                removeFromTeamButton.setOnAction(event -> ingameController.useItem(itemId, monster));
+                removeFromTeamButton.setOnAction(event -> ingameController.useItem(item, monster));
             }
 
             monster.status().forEach(statusEffect -> {
