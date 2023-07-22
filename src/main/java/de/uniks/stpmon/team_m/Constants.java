@@ -119,7 +119,9 @@ public class Constants {
         nurseNoMons,
         starterSelection0,
         starterSelection1,
-        starterSelection2
+        starterSelection2,
+        clerkOpenShop,
+        clerkCancelShop
     }
 
     public enum ContinueDialogReturnValues {
@@ -130,7 +132,9 @@ public class Constants {
         albertDialogFinished1,
         albertDialogFinished2,
         spokenToNurse,
-        encounterOnTalk
+        encounterOnTalk,
+        spokenToClerk
+
     }
 
     // Nurse Popup

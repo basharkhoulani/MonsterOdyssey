@@ -1320,23 +1320,29 @@ public class IngameController extends Controller {
         int checkTileY = currentY;
         int checkTileXForNurse = currentX;
         int checkTileYForNurse = currentY;
+        int checkTileXForSpecialNpc = currentX;
+        int checkTileYForSpecialNpc = currentY;
 
         switch (direction) {
             case 0 -> {                         // facing right
                 checkTileX++;
                 checkTileXForNurse += 2;
+                checkTileXForSpecialNpc += 2;
             }
             case 1 -> {                         // facing up
                 checkTileY--;
                 checkTileYForNurse -= 2;
+                checkTileYForSpecialNpc -= 2;
             }
             case 2 -> {                         // facing left
                 checkTileX--;
                 checkTileXForNurse -= 2;
+                checkTileXForSpecialNpc -= 2;
             }
             case 3 -> {                         // facing down
                 checkTileY++;
                 checkTileYForNurse += 2;
+                checkTileYForSpecialNpc += 2;
             }
             default -> System.err.println("Unknown direction for Trainer: " + direction);
         }
@@ -1346,26 +1352,46 @@ public class IngameController extends Controller {
         if (tileInFront != null) {
             return tileInFront;
         } else {
+            Trainer specialNpcBehindCounter = searchHashedMapForTrainer(checkTileXForSpecialNpc, checkTileYForSpecialNpc);
             Trainer nurseBehindCounter = searchHashedMapForTrainer(checkTileXForNurse, checkTileYForNurse);
 
             if (nurseBehindCounter == null) {
                 return null;
             }
 
+            if (specialNpcBehindCounter == null) {
+                return null;
+            }
+
             // maybe this will throw an error in the future. I've looked into the server for all NPC's,
             // apparently almost all NPC's have the canHeal() boolean, but some only have walkRandomly().
             // If they don't have the canHeal(), it should be covered by this try/catch
+
+            // needs to be done this way with the ugly double try/catch blocks, because most of the npc's on
+            // the server don't even have the sells attribute, so it will throw errors if we try to access it.
+            // The only (super stupid and ugly) solution, just because they can't write a simple db modify script,
+            // is to do it this way.
             try {
-                if (nurseBehindCounter.npc().canHeal()) {
-                    return nurseBehindCounter;
-                } else {
-                    return null;
+                if (specialNpcBehindCounter.npc().canHeal()) {
+                    return specialNpcBehindCounter;
                 }
             } catch (Error e) {
                 System.err.println("NPC does not have the canHeal() attribute");
                 e.printStackTrace();
-                return null;
             }
+
+            try {
+                if (specialNpcBehindCounter.npc().sells() != null) {
+                    if (!specialNpcBehindCounter.npc().sells().isEmpty()) {
+                        return specialNpcBehindCounter;
+                    }
+                }
+            } catch (Error e) {
+                System.err.println("NPC does not have the canHeal() attribute");
+                e.printStackTrace();
+            }
+
+            return null;
         }
     }
 
@@ -1443,6 +1469,7 @@ public class IngameController extends Controller {
                 )).observeOn(FX_SCHEDULER).subscribe());
                 endDialog(0, true);
             }
+            case spokenToClerk -> createShopPopup();
             default -> {
             }
         }
@@ -1528,6 +1555,10 @@ public class IngameController extends Controller {
         root.getChildren().add(nurseVBox);
         buttonsDisable(true);
         inNpcPopup = true;
+    }
+
+    public void createShopPopup() {
+        System.out.println("shop popup");
     }
 
     public TextFlow createDialogVBox(boolean isEncounter) {
