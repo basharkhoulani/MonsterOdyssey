@@ -691,10 +691,31 @@ public class IngameControllerTest extends ApplicationTest {
 
     @Test
     void testClerkDialog() throws InterruptedException {
+        // test will be expanded after implementing the rest of the features
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(100);
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(102);
         Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
 
-        Thread.sleep(10000000);
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        clickOn("Leave");
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
     }
 }
