@@ -11,6 +11,7 @@ import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -521,15 +522,79 @@ public class IngameControllerTest extends ApplicationTest {
         clickOn("#showChatButton");
         assertEquals(chat.getOpacity(), 0);
 
+        // test sizing
+        app.getStage().setWidth(100);
+        app.getStage().setWidth(1000);
+        app.getStage().setHeight(100);
+        app.getStage().setHeight(800);
+
+        // test minimap
+        IngameMiniMapController ingameMini = mock(IngameMiniMapController.class);
+        when(ingameMiniMapControllerProvider.get()).thenReturn(ingameMini);
+        doNothing().when(ingameMini).init(any(), any(), any(), any(), any());
+        Button close = new Button("Close");
+        close.setOnAction(event -> {
+            StackPane stackPane = lookup("#stackPane").query();
+            VBox miniMapVBox = lookup("#miniMapVBox").query();
+            stackPane.getChildren().remove(stackPane.getChildren().size()-1);
+            miniMapVBox.setVisible(false);
+            miniMapVBox.toBack();
+            ingameController.buttonsDisable(false);
+        });
+        when(ingameMini.render()).thenReturn(close);
+
+        clickOn("#mapSymbol");
+        clickOn(close);
+
+        // test pause and settings
+
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
+        pauseMenuController.setValues(bundle, null, null, pauseMenuController, app);
+        when(pauseMenuControllerProvider.get()).thenReturn(pauseMenuController);
+
+        ingameSettingsController.setValues(bundle, null, null, ingameSettingsController, app);
+        when(ingameSettingsControllerProvider.get()).thenReturn(ingameSettingsController);
+
+        ingameKeybindingsController.setValues(bundle, preferences, null, ingameKeybindingsController, app);
+        when(ingameKeybindingsControllerProvider.get()).thenReturn(ingameKeybindingsController);
+
+        changeAudioController.setValues(bundle, preferences, null, changeAudioController, app);
+        when(changeAudioControllerProvider.get()).thenReturn(changeAudioController);
+
+        mainMenuController.setValues(bundle, null, null, mainMenuController, app);
+        when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
+        doNothing().when(app).show(mainMenuController);
+
+        clickOn("#pauseButton");
+        clickOn("#resumeGameButton");
+
+        type(KeyCode.ESCAPE);
+        clickOn("#settingsButton");
+        type(KeyCode.ESCAPE);
+        clickOn("#keybindingsButton");
+        clickOn(ingameKeybindingsController.goBackButton);
+
+
+        clickOn("#audioSettingsButton");
+        clickOn("#closeButton");
+
+
+        clickOn("#goBackButton");
+        type(KeyCode.ESCAPE);
+        type(KeyCode.ESCAPE);
+
+        clickOn("#leaveGameButton");
+        verify(app).show(mainMenuController);
+
         // test dialog
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(19);
         Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
         when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
 
-        press(KeyCode.E);
-        release(KeyCode.E);
-
+        type(KeyCode.E);
+        sleep(10000);
         final TextFlow dialogTextFlow = lookup("#dialogTextFlow").query();
         final Text dialogText = (Text) dialogTextFlow.getChildren().get(0);
         final String firstDefaultText = dialogText.getText();
@@ -688,44 +753,7 @@ public class IngameControllerTest extends ApplicationTest {
 
     @Test
     void testPauseMenuAndSettings() {
-        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
-        pauseMenuController.setValues(bundle, null, null, pauseMenuController, app);
-        when(pauseMenuControllerProvider.get()).thenReturn(pauseMenuController);
 
-        ingameSettingsController.setValues(bundle, null, null, ingameSettingsController, app);
-        when(ingameSettingsControllerProvider.get()).thenReturn(ingameSettingsController);
-
-        ingameKeybindingsController.setValues(bundle, preferences, null, ingameKeybindingsController, app);
-        when(ingameKeybindingsControllerProvider.get()).thenReturn(ingameKeybindingsController);
-
-        changeAudioController.setValues(bundle, preferences, null, changeAudioController, app);
-        when(changeAudioControllerProvider.get()).thenReturn(changeAudioController);
-
-        mainMenuController.setValues(bundle, null, null, mainMenuController, app);
-        when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
-        doNothing().when(app).show(mainMenuController);
-
-        clickOn("#pauseButton");
-        clickOn("#resumeGameButton");
-
-        type(KeyCode.ESCAPE);
-        clickOn("#settingsButton");
-        type(KeyCode.ESCAPE);
-        clickOn("#keybindingsButton");
-        clickOn(ingameKeybindingsController.goBackButton);
-
-
-        clickOn("#audioSettingsButton");
-        clickOn("#closeButton");
-
-
-        clickOn("#goBackButton");
-        type(KeyCode.ESCAPE);
-        type(KeyCode.ESCAPE);
-
-        clickOn("#leaveGameButton");
-        verify(app).show(mainMenuController);
     }
 
     @Test
@@ -828,17 +856,6 @@ public class IngameControllerTest extends ApplicationTest {
     }
 
     @Test
-    void miniMapTest() {
-        IngameMiniMapController ingameMini = mock(IngameMiniMapController.class);
-        when(ingameMiniMapControllerProvider.get()).thenReturn(ingameMini);
-        doNothing().when(ingameMini).init(any(), any(), any(), any(), any());
-        when(ingameMini.render()).thenReturn(new Parent() {
-        });
-        clickOn("#mapSymbol");
-        clickOn("#mapSymbol");
-    }
-
-    @Test
     void testMovement() {
         when(udpEventListenerProvider.get().move(any())).thenReturn(empty());
         when(trainerStorageProvider.get().getDirection()).thenReturn(1);
@@ -851,11 +868,4 @@ public class IngameControllerTest extends ApplicationTest {
         type(KeyCode.D);
     }
 
-    @Test
-    void changeWindowSize() {
-        app.getStage().setWidth(100);
-        app.getStage().setWidth(1000);
-        app.getStage().setHeight(100);
-        app.getStage().setHeight(1000);
-    }
 }
