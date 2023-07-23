@@ -107,6 +107,7 @@ public class EncounterController extends Controller {
     private int repeatedTimes = 0;
     private boolean inEncounter = true;
     private boolean resultLevelUP = false;
+    private boolean resultEvolved = false;
     private Monster oldMonster;
     private final ArrayList<Integer> newAbilities = new ArrayList<>();
 
@@ -437,7 +438,12 @@ public class EncounterController extends Controller {
                                 resultLevelUP = true;
                             }
                         } else if (Objects.equals(result.type(), "monster-learned")) {
+                            System.out.println(result);
                             newAbilities.add(result.ability());
+                        } else if (Objects.equals(result.type(), "monster-evolved")) {
+                            if (!resultEvolved) {
+                                resultEvolved = true;
+                            }
                         } else if (Objects.equals(result.type(), "target-defeated")) {
                             if (Objects.equals(opponent._id(), encounterOpponentStorage.getSelfOpponent()._id())) {
                                 enemyMonsterDefeated();
@@ -659,7 +665,7 @@ public class EncounterController extends Controller {
 
     public void yourMonsterDefeated() {
         final boolean[] hasAnotherMonster = {false};
-        PauseTransition pause = new PauseTransition(Duration.millis(1000));
+        PauseTransition pause = new PauseTransition(Duration.millis(2000));
         pause.setOnFinished(evt -> {
             ownTrainerController.monsterImageView.setVisible(false);
             System.out.println(monstersInEncounter);
@@ -679,9 +685,13 @@ public class EncounterController extends Controller {
             });
         });
         pause.play();
-        if (!hasAnotherMonster[0]) {
-            showResultPopUp(resources.getString("YOU.FAILED"));
-        }
+        PauseTransition pause2 = new PauseTransition(Duration.millis(2000));
+        pause2.setOnFinished(evt -> {
+            if (!hasAnotherMonster[0]) {
+                showResultPopUp(resources.getString("YOU.FAILED"));
+            }
+        });
+        pause2.play();
     }
 
     public void fleeFromBattle() {
@@ -782,7 +792,7 @@ public class EncounterController extends Controller {
         VBox popUpVBox = new VBox();
         popUpVBox.getStyleClass().add("miniMapContainer");
         disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getCurrentTrainerMonster()._id()).observeOn(FX_SCHEDULER).subscribe(monster -> {
-            levelUpController.init(popUpVBox, rootStackPane, this, monster, encounterOpponentStorage.getCurrentTrainerMonsterType(), oldMonster, newAbilities);
+            levelUpController.init(popUpVBox, rootStackPane, this, monster, encounterOpponentStorage.getCurrentTrainerMonsterType(), oldMonster, newAbilities, abilityDtos);
             popUpVBox.getChildren().add(levelUpController.render());
             rootStackPane.getChildren().add(popUpVBox);
             newAbilities.clear();

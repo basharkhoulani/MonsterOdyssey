@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
+import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -20,6 +22,7 @@ import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -59,6 +62,7 @@ public class LevelUpController extends Controller {
     private MonsterTypeDto monsterTypeDto;
     private Monster oldMonster;
     private ArrayList<Integer> newAbilities;
+    private List<AbilityDto> abilityDtos;
 
 
     @Inject
@@ -66,7 +70,7 @@ public class LevelUpController extends Controller {
 
     }
 
-    public void init(VBox container, StackPane root, EncounterController encounterController, Monster currentMonster, MonsterTypeDto currentMonsterTypeDto, Monster oldMonster, ArrayList<Integer> newAbilities) {
+    public void init(VBox container, StackPane root, EncounterController encounterController, Monster currentMonster, MonsterTypeDto currentMonsterTypeDto, Monster oldMonster, ArrayList<Integer> newAbilities, List<AbilityDto> abilityDtos) {
         this.container = container;
         this.root = root;
         this.encounterController = encounterController;
@@ -74,6 +78,7 @@ public class LevelUpController extends Controller {
         this.monsterTypeDto = currentMonsterTypeDto;
         this.oldMonster = oldMonster;
         this.newAbilities = newAbilities;
+        this.abilityDtos = abilityDtos;
     }
 
     public Parent render() {
@@ -96,15 +101,22 @@ public class LevelUpController extends Controller {
         levelUpTextFlow.getChildren().add(new Text(monsterTypeDto.name() + " " + resources.getString("NOW.HAS.THE.FOLLOWING.ATTRIBUTES") + ":"));
 
         if (!newAbilities.isEmpty()) {
-            Label label = new Label("new Ability\n");
+            Label label = new Label(resources.getString("NEW.ABILITY"));
             label.setAlignment(Pos.CENTER);
-            newAbilities.forEach(integer -> {
-
-
-            });
             abilityVBox.getChildren().add(label);
+            newAbilities.forEach(integer -> abilityVBox.getChildren().add(getAbilityVBox(integer)));
         }
         return parent;
+    }
+
+    public HBox getAbilityVBox(Integer integer) {
+        AbilityDto ability = abilityDtos.get(integer-1);
+        System.out.println("ability: " + ability);
+        HBox box = new HBox();
+        box.setAlignment(Pos.CENTER);
+        Label name = new Label(ability.name());
+        box.getChildren().add(name);
+        return box;
     }
 
     public void okButtonPressed() {
