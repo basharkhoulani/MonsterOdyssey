@@ -63,6 +63,8 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<NotificationListHandyController> notificationListHandyControllerProvider;
     @Mock
     Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
+    @Mock
+    Provider<IngameMiniMapController> ingameMiniMapControllerProvider;
 
     // Please also keep this mock, it is needed for the tests
     // -- which ones????
@@ -388,7 +390,11 @@ public class IngameControllerTest extends ApplicationTest {
         write("Hello World");
         clickOn("#sendMessageButton");
         assertEquals("", messageField.getText());
-        //verify(messageService, times(2)).newMessage(any(), any(), any());
+
+        type(KeyCode.ENTER);
+        assertTrue(messageField.isFocused());
+        type(KeyCode.ENTER);
+        assertFalse(messageField.isFocused());
     }
 
     @Test
@@ -589,16 +595,22 @@ public class IngameControllerTest extends ApplicationTest {
 
         clickOn("#pauseButton");
         clickOn("#resumeGameButton");
-        clickOn("#pauseButton");
 
+        type(KeyCode.ESCAPE);
         clickOn("#settingsButton");
+        type(KeyCode.ESCAPE);
         clickOn("#keybindingsButton");
         clickOn(ingameKeybindingsController.goBackButton);
+
 
         clickOn("#audioSettingsButton");
         clickOn("#closeButton");
 
+
         clickOn("#goBackButton");
+        type(KeyCode.ESCAPE);
+        type(KeyCode.ESCAPE);
+
         clickOn("#leaveGameButton");
         verify(app).show(mainMenuController);
     }
@@ -670,5 +682,16 @@ public class IngameControllerTest extends ApplicationTest {
         press(KeyCode.E);
         release(KeyCode.E);
         Thread.sleep(30);
+    }
+
+    @Test
+    void miniMapTest() {
+        IngameMiniMapController ingameMini = mock(IngameMiniMapController.class);
+        when(ingameMiniMapControllerProvider.get()).thenReturn(ingameMini);
+        doNothing().when(ingameMini).init(any(), any(), any(), any(), any());
+        when(ingameMini.render()).thenReturn(new Parent() {
+        });
+        clickOn("#mapSymbol");
+        clickOn("#mapSymbol");
     }
 }
