@@ -694,4 +694,17 @@ public class IngameControllerTest extends ApplicationTest {
         clickOn("#mapSymbol");
         clickOn("#mapSymbol");
     }
+
+    @Test
+    void testMovement() {
+        when(udpEventListenerProvider.get().move(any())).thenReturn(empty());
+        when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+        type(KeyCode.W);
+        sleep(200);
+        type(KeyCode.A);
+        sleep(200);
+        type(KeyCode.S);
+        sleep(200);
+        type(KeyCode.D);
+    }
 }
