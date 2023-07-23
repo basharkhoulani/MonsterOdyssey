@@ -85,13 +85,6 @@ public class ItemMenuController extends Controller {
         for (Item item : itemList) {
             initItem(item);
         }
-        /*
-        itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox));
-        itemListView.getItems().addAll(itemList);
-        itemListView.setFocusModel(null);
-        itemListView.setSelectionModel(null);
-
-         */
     }
 
     public void initItem(Item item) {
@@ -105,4 +98,6 @@ public class ItemMenuController extends Controller {
         ingameController.root.getChildren().remove(itemMenuBox);
         ingameController.buttonsDisable(false);
     }
+
+
 }
