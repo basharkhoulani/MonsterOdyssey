@@ -72,11 +72,10 @@ public class DialogController extends Controller {
             System.err.println("NPC does not have sells() attribute..");
         }
 
-        if (this.npcTexts == null) {
+        if (this.npcTexts == null || this.npcTexts.length == 0) {
             this.npcTexts = npcTextManager.getNpcTexts(npc._id());
         }
         this.currentTextIndex = 0;
-        assert this.npcTexts != null;
         this.currentText = new Text(this.npcTexts[currentTextIndex]);
         this.amountOfTexts = npcTexts.length;
 
