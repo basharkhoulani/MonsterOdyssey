@@ -750,26 +750,31 @@ public class EncounterController extends Controller {
     public void showAbilities() {
         battleMenuVBox.getChildren().clear();
         Monster monster = null;
+        Opponent opponent = encounterOpponentStorage.getSelfOpponent();
         subControllers.add(abilitiesMenuController);
 
-        // TODO: monster soll generisch sein
         if (encounterOpponentStorage.isTwoMonster()){
             if (currentMonsterIndex % 2 == 0 && encounterOpponentStorage.getCoopOpponent().monster() != null) {
                 monster = encounterOpponentStorage.getCurrentMonsters(encounterOpponentStorage.getCoopOpponent()._id());
+                opponent = encounterOpponentStorage.getCoopOpponent();
             } else if (currentMonsterIndex % 2 == 1 && encounterOpponentStorage.getSelfOpponent().monster() != null) {
                 monster = encounterOpponentStorage.getCurrentMonsters(encounterOpponentStorage.getSelfOpponent()._id());
+                opponent = encounterOpponentStorage.getSelfOpponent();
             } else if (encounterOpponentStorage.getSelfOpponent().monster() == null){
                 monster = encounterOpponentStorage.getCurrentMonsters(encounterOpponentStorage.getCoopOpponent()._id());
+                opponent = encounterOpponentStorage.getCoopOpponent();
             } else if (encounterOpponentStorage.getCoopOpponent().monster() == null){
                 monster = encounterOpponentStorage.getCurrentMonsters(encounterOpponentStorage.getSelfOpponent()._id());
+                opponent = encounterOpponentStorage.getSelfOpponent();
             }
         } else {
             if (encounterOpponentStorage.getSelfOpponent().monster() != null) {
                 monster = encounterOpponentStorage.getCurrentMonsters(encounterOpponentStorage.getSelfOpponent()._id());
+                opponent = encounterOpponentStorage.getSelfOpponent();
             }
         }
 
-        abilitiesMenuController.init(monster, presetsService, this);
+        abilitiesMenuController.init(monster, presetsService, this, opponent);
 
         battleMenuVBox.getChildren().add(abilitiesMenuController.render());
     }
@@ -790,8 +795,7 @@ public class EncounterController extends Controller {
             }
         }
     }
-
-    //TODO: rewrite this with monster = null
+    
     public void yourMonsterDefeated(String opponentId) {
         monsterInTeamHashMap.forEach((monsterId, isDied) -> {
             if(!isDied){
