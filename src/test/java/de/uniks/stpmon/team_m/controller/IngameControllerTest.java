@@ -514,7 +514,7 @@ public class IngameControllerTest extends ApplicationTest {
         release(KeyCode.E);
 
         final TextFlow dialogTextFlow = lookup("#dialogTextFlow").query();
-        Text dialogText = (Text) dialogTextFlow.getChildren().get(0);
+        final Text dialogText = (Text) dialogTextFlow.getChildren().get(0);
         final String firstDefaultText = dialogText.getText();
         assertNotEquals("", firstDefaultText);
 
@@ -538,19 +538,19 @@ public class IngameControllerTest extends ApplicationTest {
         Thread.sleep(30);
 
         // test nurse dialog
-
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(20);
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(20);    // two tiles apart from Nurse
         Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
         when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
         type(KeyCode.E);
 
-
+        final TextFlow nurseDialogTextFlow = lookup("#dialogTextFlow").query();
+        final Text nurseDialogText = (Text) nurseDialogTextFlow.getChildren().get(0);
         final String firstNurseText = dialogText.getText();
 
         assertNotEquals("", firstNurseText);
 
-        Thread.sleep(30);
+        Thread.sleep(30000);
 
         press(KeyCode.E);
         release(KeyCode.E);
