@@ -1364,7 +1364,7 @@ public class IngameController extends Controller {
 <span class="pc bpc" id="L1364" title="1 of 2 branches missed.">            if (specialNpcBehindCounter == null) {</span>
 <span class="nc" id="L1365">                return null;</span>
             }
-            
+
             try {
 <span class="fc bfc" id="L1369" title="All 2 branches covered.">                if (specialNpcBehindCounter.npc().canHeal()) {</span>
 <span class="fc" id="L1370">                    return specialNpcBehindCounter;</span>
@@ -1381,7 +1381,7 @@ public class IngameController extends Controller {
                     }
                 }
 <span class="nc" id="L1383">            } catch (Error e) {</span>
-<span class="nc" id="L1384">                System.err.println(&quot;NPC does not have the canHeal() attribute&quot;);</span>
+<span class="nc" id="L1384">                System.err.println(&quot;NPC does not have the sells() attribute&quot;);</span>
 <span class="nc" id="L1385">                e.printStackTrace();</span>
 <span class="nc" id="L1386">            }</span>
 
