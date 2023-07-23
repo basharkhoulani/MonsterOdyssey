@@ -150,6 +150,9 @@ public class IngameController extends Controller {
     private boolean inEncounterInfoBox = false;
     private boolean isNewStart = true;
 
+    private Boolean coinsEarned;
+    private Integer coinsAmount;
+
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
 
@@ -761,7 +764,9 @@ public class IngameController extends Controller {
                 }
                 loadPlayers();
                 loadMiniMap();
-
+                if (getCoinsEarned() != null && getCoinsEarned()) {
+                    showCoinsEarnedWindow();
+                }
             }
         }
     }
@@ -1151,6 +1156,16 @@ public class IngameController extends Controller {
         TextFlow dialogTextFlow = createDialogVBox(true);
         dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.INFO")));
         this.inEncounterInfoBox = true;
+        movementDisabled = true;
+    }
+
+    private void showCoinsEarnedWindow() {
+        TextFlow dialogTextFlow = createDialogVBox(true);
+        dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.WON") + "\n" +
+                resources.getString("COINS.EARNED") + " " + getCoinsAmount() + " " +
+                resources.getString("COINS.EARNED2")));
+        inDialog = false;
+        inEncounterInfoBox = false;
         movementDisabled = true;
     }
 
@@ -1759,5 +1774,21 @@ public class IngameController extends Controller {
 
     public void setIsNewStart(boolean isNewStart) {
         this.isNewStart = isNewStart;
+    }
+
+    public Boolean getCoinsEarned() {
+        return coinsEarned;
+    }
+
+    public void setCoinsEarned(Boolean coinsEarned) {
+        this.coinsEarned = coinsEarned;
+    }
+
+    public Integer getCoinsAmount() {
+        return coinsAmount;
+    }
+
+    public void setCoinsAmount(Integer coinsAmount) {
+        this.coinsAmount = coinsAmount;
     }
 }
