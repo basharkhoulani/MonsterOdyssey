@@ -7,16 +7,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="450.0" prefWidth="384.0" style="-fx-background-color: #FFFFFF; -fx-opacity: 0.75;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.ItemDescriptionController.java">
+<VBox prefHeight="450.0" prefWidth="384.0" style="-fx-background-color: #FFFFFF; -fx-opacity: 0.75;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.ItemDescriptionController">
    <children>
       <HBox prefHeight="39.0" prefWidth="384.0">
          <children>
             <Label alignment="CENTER" prefHeight="39.0" prefWidth="383.0" text="%DETAILS" />
-            <Button fx:id="closeButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeItemMenu" prefHeight="39.0" prefWidth="39.0" style="-fx-background-color: #FFFFFF;">
-               <graphic>
-                  <ImageView fx:id="closeImageView" fitHeight="39.0" fitWidth="39.0" onMouseClicked="#closeItemMenu" pickOnBounds="true" preserveRatio="true" />
-               </graphic>
-            </Button>
          </children>
       </HBox>
       <HBox prefHeight="158.0" prefWidth="384.0">
