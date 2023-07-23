@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EncounterOpponentStorage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.utils</a> &gt; <span class="el_source">EncounterOpponentStorage.java</span></div><h1>EncounterOpponentStorage.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.utils;
+
+import de.uniks.stpmon.team_m.dto.Monster;
+import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import de.uniks.stpmon.team_m.dto.Opponent;
+import javafx.collections.FXCollections;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.ArrayList;
+import java.util.List;
+
+@Singleton
+public class EncounterOpponentStorage {
+    private String encounterId;
+<span class="fc" id="L16">    private final List&lt;String&gt; opponentsInStorage = new ArrayList&lt;&gt;();</span>
+    private Opponent selfOpponent;
+    // Die Opponent mit selben trainerId
+<span class="fc" id="L19">    private final List&lt;Opponent&gt; enemyOpponents = FXCollections.observableArrayList();</span>
+    // Die Opponent mit Id der Gegner
+    private Opponent coopOpponent;
+    // Die Opponent mit Id des Coop-Partners
+    private Monster currentTrainerMonster;
+    private MonsterTypeDto currentTrainerMonsterType;
+<span class="fc" id="L25">    private final List&lt;Monster&gt; currentMonsters = FXCollections.observableArrayList();</span>
+<span class="fc" id="L26">    private final List&lt;MonsterTypeDto&gt; currentMonsterTypes = FXCollections.observableArrayList();</span>
+    private String regionId;
+    private boolean isWild;
+    private int encounterSize;
+    private boolean isAttacker;
+    private Opponent targetOpponent;
+    private Opponent leastTargetOpponent;
+
+
+    @Inject
+<span class="fc" id="L36">    public EncounterOpponentStorage() { }</span>
+
+    public String getEncounterId() {
+<span class="fc" id="L39">        return encounterId;</span>
+    }
+
+    public void setEncounterId(String encounterId) {
+<span class="nc" id="L43">        this.encounterId = encounterId;</span>
+<span class="nc" id="L44">    }</span>
+
+    public String getRegionId() {
+<span class="fc" id="L47">        return regionId;</span>
+    }
+
+    public void setRegionId(String regionId) {
+<span class="fc" id="L51">        this.regionId = regionId;</span>
+<span class="fc" id="L52">    }</span>
+
+    public boolean isWild() {
+<span class="fc" id="L55">        return isWild;</span>
+    }
+
+    public void setWild(boolean wild) {
+<span class="fc" id="L59">        isWild = wild;</span>
+<span class="fc" id="L60">    }</span>
+
+    public int getEncounterSize() {
+<span class="fc" id="L63">        return encounterSize;</span>
+    }
+
+    public void setEncounterSize(int encounterSize) {
+<span class="nc" id="L67">        this.encounterSize = encounterSize;</span>
+<span class="nc" id="L68">    }</span>
+
+    public Opponent getSelfOpponent() {
+<span class="fc" id="L71">        return selfOpponent;</span>
+    }
+
+    public void setSelfOpponent(Opponent selfOpponent) {
+<span class="nc" id="L75">        this.selfOpponent = selfOpponent;</span>
+<span class="nc" id="L76">    }</span>
+
+    public Monster getCurrentTrainerMonster() {
+<span class="nc" id="L79">        return currentTrainerMonster;</span>
+    }
+
+    public void setCurrentTrainerMonster(Monster currentTrainerMonster) {
+<span class="fc" id="L83">        this.currentTrainerMonster = currentTrainerMonster;</span>
+<span class="fc" id="L84">    }</span>
+
+    public MonsterTypeDto getCurrentTrainerMonsterType() {
+<span class="nc" id="L87">        return currentTrainerMonsterType;</span>
+    }
+
+    public void setCurrentTrainerMonsterType(MonsterTypeDto currentTrainerMonsterType) {
+<span class="fc" id="L91">        this.currentTrainerMonsterType = currentTrainerMonsterType;</span>
+<span class="fc" id="L92">    }</span>
+
+    public List&lt;Opponent&gt; getEnemyOpponents() {
+<span class="fc" id="L95">        return enemyOpponents;</span>
+    }
+
+    public void resetEnemyOpponents() {
+<span class="nc" id="L99">        this.enemyOpponents.clear();</span>
+<span class="nc" id="L100">    }</span>
+
+    public void addEnemyOpponent(Opponent enemyOpponent) {
+<span class="nc" id="L103">        this.enemyOpponents.add(enemyOpponent);</span>
+<span class="nc" id="L104">    }</span>
+
+    public Opponent getCoopOpponent() {
+<span class="fc" id="L107">        return coopOpponent;</span>
+    }
+
+    public void setCoopOpponent(Opponent coopOpponent) {
+<span class="nc" id="L111">        this.coopOpponent = coopOpponent;</span>
+<span class="nc" id="L112">    }</span>
+
+    public boolean isAttacker() {
+<span class="nc" id="L115">        return isAttacker;</span>
+    }
+
+    public void setAttacker(boolean attack) {
+<span class="nc" id="L119">        isAttacker = attack;</span>
+<span class="nc" id="L120">    }</span>
+
+    public void addCurrentMonster(Monster monster) {
+<span class="nc" id="L123">        this.currentMonsters.add(monster);</span>
+<span class="nc" id="L124">    }</span>
+
+    public void addCurrentMonsterType(MonsterTypeDto monsterType) {
+<span class="fc" id="L127">        this.currentMonsterTypes.add(monsterType);</span>
+<span class="fc" id="L128">    }</span>
+
+    public List&lt;String&gt; getOpponentsInStorage() {
+<span class="nc" id="L131">        return opponentsInStorage;</span>
+    }
+
+    public void setOpponentsInStorage(List&lt;Opponent&gt; opponents) {
+<span class="nc" id="L135">        this.opponentsInStorage.clear();</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        for (Opponent opponent : opponents) {</span>
+<span class="nc" id="L137">            this.opponentsInStorage.add(opponent._id());</span>
+<span class="nc" id="L138">        }</span>
+
+<span class="nc" id="L140">    }</span>
+
+    public void setTargetOpponent(Opponent opponent) {
+<span class="fc" id="L143">        this.leastTargetOpponent = targetOpponent;</span>
+<span class="fc" id="L144">        this.targetOpponent = opponent;</span>
+<span class="fc" id="L145">    }</span>
+
+    public Opponent getTargetOpponent() {
+<span class="fc" id="L148">        return this.targetOpponent;</span>
+    }
+
+    public Opponent getLeastTargetOpponent() {
+<span class="nc" id="L152">        return this.leastTargetOpponent;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
