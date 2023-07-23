@@ -78,6 +78,8 @@ public class IngameControllerTest extends ApplicationTest {
     @Mock
     Provider<IngamePauseMenuController> pauseMenuControllerProvider;
     @Mock
+    Provider<MonstersDetailController> monstersDetailControllerProvider;
+    @Mock
     TrainersService trainersService;
     @Mock
     MessageService messageService;
@@ -99,6 +101,8 @@ public class IngameControllerTest extends ApplicationTest {
     IngamePauseMenuController pauseMenuController;
     @InjectMocks
     MonstersListController monstersListController;
+    @InjectMocks
+    MonstersDetailController monstersDetailController;
     @InjectMocks
     MainMenuController mainMenuController;
     @Mock
@@ -308,6 +312,7 @@ public class IngameControllerTest extends ApplicationTest {
                         "auch ein blindes schaf findet manchmal ein huhn"
                 )
         )));
+
 
         lenient().when(presetsService.getMonsterImage(anyInt())).thenReturn(Observable.just(
                 new ResponseBody() {
@@ -642,6 +647,7 @@ public class IngameControllerTest extends ApplicationTest {
         Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
         monstersListController.setValues(bundle, null, null, monstersListController, app);
         when(monstersListControllerProvider.get()).thenReturn(monstersListController);
+        when(monstersDetailControllerProvider.get()).thenReturn(monstersDetailController);
         when(presetsServiceProvider.get()).thenReturn(presetsService);
         when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(
                 new MonsterTypeDto(
@@ -671,8 +677,22 @@ public class IngameControllerTest extends ApplicationTest {
                         List.of()
                 )
         )));
+        when(presetsService.getAbilities()).thenReturn(Observable.just(List.of(
+                new AbilityDto(
+                        1,
+                        "Tackle",
+                        "A physical attack in which the user charges and slams into the target with its whole body.",
+                        "normal",
+                        35,
+                        1.0,
+                        2
+                ))));
         // test monster list
         clickOn("#monstersButton");
+        clickOn("Other");
+        moveTo("Name: Salamander");
+        clickOn("#viewDetailsButton");
+        moveTo("Salamander");
     }
 
     @Test
