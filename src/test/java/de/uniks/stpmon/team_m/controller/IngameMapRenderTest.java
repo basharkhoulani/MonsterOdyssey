@@ -9,6 +9,7 @@ import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import okhttp3.MediaType;
@@ -445,6 +446,6 @@ public class IngameMapRenderTest extends ApplicationTest {
 
     @Test
     void testRender() {
-        moveTo("#mapSymbol");
+        clickOn("#sendMessageButton");
     }
 }

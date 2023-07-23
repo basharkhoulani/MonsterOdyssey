@@ -35,6 +35,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -67,6 +68,8 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
     @Mock
     Provider<IngameMiniMapController> ingameMiniMapControllerProvider;
+    @Mock
+    Provider<PresetsService> presetsServiceProvider;
 
     // Please also keep this mock, it is needed for the tests
     // -- which ones????
@@ -78,6 +81,8 @@ public class IngameControllerTest extends ApplicationTest {
     TrainersService trainersService;
     @Mock
     MessageService messageService;
+    @Mock
+    MonstersService monstersService;
     @Mock
     EncounterOpponentsService encounterOpponentsService;
     @Mock
@@ -92,6 +97,8 @@ public class IngameControllerTest extends ApplicationTest {
     IngameStarterMonsterController ingameStarterMonsterController;
     @InjectMocks
     IngamePauseMenuController pauseMenuController;
+    @InjectMocks
+    MonstersListController monstersListController;
     @InjectMocks
     MainMenuController mainMenuController;
     @Mock
@@ -627,6 +634,45 @@ public class IngameControllerTest extends ApplicationTest {
 
         clickOn("#leaveGameButton");
         verify(app).show(mainMenuController);
+    }
+
+    @Test
+    void showMonsterTest(){
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
+        monstersListController.setValues(bundle, null, null, monstersListController, app);
+        when(monstersListControllerProvider.get()).thenReturn(monstersListController);
+        when(presetsServiceProvider.get()).thenReturn(presetsService);
+        when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(
+                new MonsterTypeDto(
+                        1,
+                        "Salamander",
+                        "salamander.png",
+                        List.of("fire"),
+                        "A fire lizard. It's hot."
+                )
+        ));
+        LinkedHashMap<String, Integer> abilities = new LinkedHashMap<>();
+        abilities.put("1", 1);
+        abilities.put("23", 2);
+        abilities.put("4", 3);
+        when(monstersService.getMonsters(any(), any())).thenReturn(Observable.just(List.of(
+                new Monster(
+                        "2023-05-22T17:51:46.772Z",
+                        "2023-05-22T17:51:46.772Z",
+                        "646bac223b4804b87c0b8054",
+                        "646bac8c1a74032c70fffe24",
+                        1,
+                        3,
+                        56,
+                        abilities,
+                        new MonsterAttributes(40, 23, 45, 67),
+                        new MonsterAttributes(20, 23, 45, 67),
+                        List.of()
+                )
+        )));
+        // test monster list
+        clickOn("#monstersButton");
     }
 
     @Test
