@@ -38,6 +38,8 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
+import static de.uniks.stpmon.team_m.Constants.MINIMUM_WIDTH;
+import static de.uniks.stpmon.team_m.Constants.OFFSET_WIDTH_HEIGHT;
 import static io.reactivex.rxjava3.core.Observable.empty;
 import static io.reactivex.rxjava3.core.Observable.just;
 import static org.junit.jupiter.api.Assertions.*;
@@ -706,5 +708,13 @@ public class IngameControllerTest extends ApplicationTest {
         type(KeyCode.S);
         sleep(200);
         type(KeyCode.D);
+    }
+
+    @Test
+    void changeWindowSize() {
+        app.getStage().setWidth(100);
+        app.getStage().setWidth(1000);
+        app.getStage().setHeight(100);
+        app.getStage().setHeight(1000);
     }
 }
