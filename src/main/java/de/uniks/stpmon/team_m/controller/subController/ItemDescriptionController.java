@@ -23,6 +23,7 @@ public class ItemDescriptionController extends Controller {
 
     ItemTypeDto itemTypeDto;
     Image itemImage;
+    Item item;
     @FXML
     public ImageView itemImageView;
     @FXML
@@ -32,29 +33,22 @@ public class ItemDescriptionController extends Controller {
     @FXML
     public Label itemDescription;
 
-    @FXML
-    public ImageView closeImageView;
 
     @Inject
     public ItemDescriptionController(){}
 
-    public void init(ItemTypeDto itemTypeDto, Image itemImage) {
+    public void init(ItemTypeDto itemTypeDto, Image itemImage, Item item) {
         super.init();
         this.itemImage = itemImage;
         this.itemTypeDto = itemTypeDto;
+        this.item = item;
     }
 
     @Override
     public Parent render() {
         final Parent parent = super.render();
-
-        URL resourceClose = Main.class.getResource("images/close-x.png");
-        System.out.println(resourceClose != null);
-        assert resourceClose != null;
-        Image closeImage = new Image(resourceClose.toString());
-        closeImageView.setImage(closeImage);
-
-        //itemImageView.setImage(itemImage);
+        itemImageView.setImage(itemImage);
+        itemAmountLabel.setText(String.valueOf(item.amount()));
         itemPriceLabel.setText(String.valueOf(itemTypeDto.price()));
         itemDescription.setText(itemTypeDto.description());
 
