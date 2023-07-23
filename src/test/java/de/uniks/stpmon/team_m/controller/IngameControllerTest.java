@@ -139,6 +139,106 @@ public class IngameControllerTest extends ApplicationTest {
                 0,
                 new NPCInfo(false, false, false, false, null, null, null)
         ));
+        Layer minimaplayer = new Layer(
+                List.of(new Chunk(
+                        List.of(1L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L),
+                        1,
+                        1,
+                        1,
+                        1
+                )),
+                List.of(1L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L),
+                1,
+                1,
+                "Tile Layer 1",
+                1,
+                0,
+                0,
+                "tilelayer",
+                true,
+                1,
+                1,
+                1,
+                "right-down",
+                List.of());
+        Map minimap = new Map(
+                -1,
+                true,
+                1,
+                1,
+                "orthogonal",
+                "right-down",
+                "1.6.1",
+                "minimap",
+                "1.6",
+                1,
+                1,
+                List.of(minimaplayer),
+                1,
+                1,
+                List.of(new TileSet(
+                        1,
+                        "Flamander_1.png",
+                        1,
+                        1,
+                        0,
+                        "Flamander_1",
+                        0,
+                        1,
+                        1,
+                        1,
+                        List.of(),
+                        1,
+                        "Flamander_1.tsx"
+                )),
+                List.of());
+        Layer maplayer = new Layer(
+                null,
+                List.of(1L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L),
+                1,
+                1,
+                "Tile Layer 1",
+                1,
+                0,
+                0,
+                "tilelayer",
+                true,
+                1,
+                1,
+                1,
+                "right-down",
+                List.of());
+        Map map = new Map(
+                -1,
+                true,
+                1,
+                1,
+                "orthogonal",
+                "right-down",
+                "1.6.1",
+                "map",
+                "1.6",
+                1,
+                1,
+                List.of(maplayer),
+                1,
+                1,
+                List.of(new TileSet(
+                        1,
+                        "Flamander_1.png",
+                        1,
+                        1,
+                        0,
+                        "Flamander_1",
+                        0,
+                        1,
+                        1,
+                        1,
+                        List.of(),
+                        1,
+                        "Flamander_1.tsx"
+                )),
+                List.of());
         when(trainerStorageProvider.get().getRegion()).thenReturn(
                 new Region(
                         "2023-05-22T17:51:46.772Z",
@@ -146,22 +246,7 @@ public class IngameControllerTest extends ApplicationTest {
                         "646bab5cecf584e1be02598a",
                         "Albertina",
                         new Spawn("646bc3c0a9ac1b375fb41d93", 1, 1),
-                        new Map(-1,
-                                true,
-                                1,
-                                1,
-                                "orthogonal",
-                                "right-down",
-                                "1.6.1",
-                                "map",
-                                "1.6",
-                                32,
-                                32,
-                                List.of(),
-                                16,
-                                16,
-                                List.of(),
-                                List.of())));
+                        minimap));
         when(areasService.getArea(any(), any())).thenReturn(Observable.just(
                 new Area(
                         "2023-05-22T17:51:46.772Z",
@@ -169,39 +254,9 @@ public class IngameControllerTest extends ApplicationTest {
                         "646bc3c0a9ac1b375fb41d93",
                         "646bc436cfee07c0e408466f",
                         "Albertina",
-                        new Map(
-                                -1,
-                                true,
-                                1,
-                                1,
-                                "orthogonal",
-                                "right-down",
-                                "1.6.1",
-                                "map",
-                                "1.6",
-                                32,
-                                32,
-                                List.of(),
-                                16,
-                                16,
-                                List.of(new TileSet(
-                                        1,
-                                        "Flamander_1.png",
-                                        16,
-                                        16,
-                                        0,
-                                        "Flamander_1",
-                                        0,
-                                        1,
-                                        16,
-                                        16,
-                                        List.of(),
-                                        1,
-                                        "Flamander_1.tsx"
-                                )),
-                                List.of()))
+                        map
 
-        ));
+        )));
         doNothing().when(trainerStorage).setMonsters(any());
         lenient().when(presetsService.getCharacter(any())).thenReturn(Observable.empty());
         when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(
@@ -387,6 +442,8 @@ public class IngameControllerTest extends ApplicationTest {
                 "Flamander_1.tsx"
         )));
         Image mockedImage = mock(Image.class);
+        when(mockedImage.getHeight()).thenReturn(16.0);
+        when(mockedImage.getWidth()).thenReturn(16.0);
         when(presetsService.getTilesetImage(any())).thenReturn(Observable.just(mockedImage));
         when(regionsService.getRegion(any())).thenReturn(Observable.just(new Region(
                         "2023-05-22T17:51:46.772Z",
@@ -394,53 +451,22 @@ public class IngameControllerTest extends ApplicationTest {
                         "646bab5cecf584e1be02598a",
                         "Albertina",
                         new Spawn("646bc3c0a9ac1b375fb41d93", 1, 1),
-                new Map(
-                        -1,
-                        true,
-                        1,
-                        1,
-                        "orthogonal",
-                        "right-down",
-                        "1.6.1",
-                        "map",
-                        "1.6",
-                        32,
-                        32,
-                        List.of(),
-                        16,
-                        16,
-                        List.of(new TileSet(
-                                1,
-                                "Flamander_1.png",
-                                16,
-                                16,
-                                0,
-                                "Flamander_1",
-                                0,
-                                1,
-                                16,
-                                16,
-                                List.of(),
-                                1,
-                                "Flamander_1.tsx"
-                        )), List.of()))));
+                        minimap
+        )));
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
     }
 
     @Test
-    void showHelp() throws InterruptedException {
-
-        // TODO: apply asserts once we have the time
+    void testIngame() throws InterruptedException {
         clickOn("#smallHandyButton");
 
         Thread.sleep(1000);
         clickOn("close");
-    }
 
-    @Test
-    void sendMessageTest() {
+
+        // ingame chat
         final TextField messageField = lookup("#messageField").query();
         when(messageService.newMessage(any(), any(), any()))
                 .thenReturn(Observable.just(new Message(
@@ -469,10 +495,7 @@ public class IngameControllerTest extends ApplicationTest {
         assertTrue(messageField.isFocused());
         type(KeyCode.ENTER);
         assertFalse(messageField.isFocused());
-    }
 
-    @Test
-    void getMessages() {
         ListView<Message> chat = lookup("#chatListView").query();
         assertEquals(chat.getOpacity(), 0);
         clickOn("#showChatButton");
@@ -480,10 +503,8 @@ public class IngameControllerTest extends ApplicationTest {
         moveTo("Test1");
         clickOn("#showChatButton");
         assertEquals(chat.getOpacity(), 0);
-    }
 
-    @Test
-    void testDialog() throws InterruptedException {
+        // test dialog
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(19);
         Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
@@ -493,7 +514,7 @@ public class IngameControllerTest extends ApplicationTest {
         release(KeyCode.E);
 
         final TextFlow dialogTextFlow = lookup("#dialogTextFlow").query();
-        final Text dialogText = (Text) dialogTextFlow.getChildren().get(0);
+        Text dialogText = (Text) dialogTextFlow.getChildren().get(0);
         final String firstDefaultText = dialogText.getText();
         assertNotEquals("", firstDefaultText);
 
@@ -515,19 +536,16 @@ public class IngameControllerTest extends ApplicationTest {
         release(KeyCode.E);
 
         Thread.sleep(30);
-    }
 
-    @Test
-    void testNurseDialog() throws InterruptedException {
+        // test nurse dialog
+
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(20);
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(20);    // two tiles apart from Nurse
         Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
         when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
         type(KeyCode.E);
 
-        final TextFlow dialogTextFlow = lookup("#dialogTextFlow").query();
 
-        final Text dialogText = (Text) dialogTextFlow.getChildren().get(0);
         final String firstNurseText = dialogText.getText();
 
         assertNotEquals("", firstNurseText);
@@ -583,6 +601,12 @@ public class IngameControllerTest extends ApplicationTest {
         release(KeyCode.E);
 
         Thread.sleep(30);
+    }
+
+
+    @Test
+    void testNurseDialog() throws InterruptedException {
+
     }
 
 
