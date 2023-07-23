@@ -69,12 +69,12 @@ public class MonstersListController extends Controller {
 <span class="fc" id="L69">    }</span>
 
     public void init(IngameController ingameController, VBox monsterListVBox) {
-<span class="nc" id="L72">        super.init();</span>
-<span class="nc" id="L73">        activeMonstersList = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L74">        otherMonstersList = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L75">        this.ingameController = ingameController;</span>
-<span class="nc" id="L76">        this.monsterListVBox = monsterListVBox;</span>
-<span class="nc" id="L77">    }</span>
+<span class="fc" id="L72">        super.init();</span>
+<span class="fc" id="L73">        activeMonstersList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L74">        otherMonstersList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L75">        this.ingameController = ingameController;</span>
+<span class="fc" id="L76">        this.monsterListVBox = monsterListVBox;</span>
+<span class="fc" id="L77">    }</span>
 
     @Override
     public String getTitle() {
@@ -92,7 +92,7 @@ public class MonstersListController extends Controller {
 <span class="fc" id="L92">                    sortActiveMonstersList();</span>
 
 <span class="fc" id="L94">                    otherMonstersList = list.stream()</span>
-<span class="pc bpc" id="L95" title="1 of 2 branches missed.">                            .filter(monster -&gt; !trainerStorageProvider.get().getTrainer().team().contains(monster._id()))</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">                            .filter(monster -&gt; !trainerStorageProvider.get().getTrainer().team().contains(monster._id()))</span>
 <span class="fc" id="L96">                            .collect(Collectors.toList());</span>
 <span class="fc" id="L97">                    initOtherMonsterList(otherMonstersList);</span>
 <span class="fc" id="L98">                    initMonsterList(activeMonstersList);</span>
@@ -104,7 +104,7 @@ public class MonstersListController extends Controller {
     private void sortActiveMonstersList() {
 <span class="fc" id="L105">        List&lt;Monster&gt; sortedList = new ArrayList&lt;&gt;();</span>
 <span class="fc bfc" id="L106" title="All 2 branches covered.">        for (String id : trainerStorageProvider.get().getTrainer().team()) {</span>
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">            for (Monster monster : activeMonstersList) {</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">            for (Monster monster : activeMonstersList) {</span>
 <span class="pc bpc" id="L108" title="1 of 2 branches missed.">                if (monster._id().equals(id)) {</span>
 <span class="fc" id="L109">                    sortedList.add(monster);</span>
 <span class="fc" id="L110">                    break;</span>
@@ -167,7 +167,7 @@ public class MonstersListController extends Controller {
 <span class="fc" id="L167">    }</span>
 
     private void initOtherMonsterList(List&lt;Monster&gt; monsters) {
-<span class="pc" id="L170">        monsterListViewOther.setCellFactory(param -&gt; new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false, true));</span>
+<span class="fc" id="L170">        monsterListViewOther.setCellFactory(param -&gt; new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false, true));</span>
 <span class="fc" id="L171">        monsterListViewOther.getItems().addAll(monsters);</span>
 <span class="fc" id="L172">        monsterListViewOther.setFocusModel(null);</span>
 <span class="fc" id="L173">        monsterListViewOther.setSelectionModel(null);</span>

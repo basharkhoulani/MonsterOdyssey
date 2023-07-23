@@ -1230,17 +1230,17 @@ public class IngameController extends Controller {
 <span class="fc" id="L1230">    }</span>
 
     public void showMonsters() {
-<span class="nc" id="L1233">        VBox monsterListVBox = new VBox();</span>
-<span class="nc" id="L1234">        monsterListVBox.setMinWidth(600);</span>
-<span class="nc" id="L1235">        monsterListVBox.setMinHeight(410);</span>
-<span class="nc" id="L1236">        monsterListVBox.setAlignment(Pos.CENTER);</span>
-<span class="nc" id="L1237">        MonstersListController monstersListController = monstersListControllerProvider.get();</span>
-<span class="nc" id="L1238">        monstersListController.init(this, monsterListVBox);</span>
-<span class="nc" id="L1239">        monsterListVBox.getChildren().add(monstersListController.render());</span>
-<span class="nc" id="L1240">        root.getChildren().add(monsterListVBox);</span>
-<span class="nc" id="L1241">        monsterListVBox.requestFocus();</span>
-<span class="nc" id="L1242">        buttonsDisable(true);</span>
-<span class="nc" id="L1243">    }</span>
+<span class="fc" id="L1233">        VBox monsterListVBox = new VBox();</span>
+<span class="fc" id="L1234">        monsterListVBox.setMinWidth(600);</span>
+<span class="fc" id="L1235">        monsterListVBox.setMinHeight(410);</span>
+<span class="fc" id="L1236">        monsterListVBox.setAlignment(Pos.CENTER);</span>
+<span class="fc" id="L1237">        MonstersListController monstersListController = monstersListControllerProvider.get();</span>
+<span class="fc" id="L1238">        monstersListController.init(this, monsterListVBox);</span>
+<span class="fc" id="L1239">        monsterListVBox.getChildren().add(monstersListController.render());</span>
+<span class="fc" id="L1240">        root.getChildren().add(monsterListVBox);</span>
+<span class="fc" id="L1241">        monsterListVBox.requestFocus();</span>
+<span class="fc" id="L1242">        buttonsDisable(true);</span>
+<span class="fc" id="L1243">    }</span>
 
     public void showItems() {
         //TODO: Add ItemsVBox to root
@@ -1809,15 +1809,15 @@ public class IngameController extends Controller {
 
     public void showMonsterDetails(Monster monster, MonsterTypeDto monsterTypeDto,
                                    Image monsterImage, ResourceBundle resources, PresetsService presetsService, String type) {
-<span class="nc" id="L1812">        VBox monsterDetailVBox = new VBox();</span>
-<span class="nc" id="L1813">        monsterDetailVBox.setAlignment(Pos.CENTER);</span>
-<span class="nc" id="L1814">        MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();</span>
-<span class="nc" id="L1815">        monstersDetailController.init(this, monsterDetailVBox, monster, monsterTypeDto, monsterImage, resources, presetsService, type);</span>
-<span class="nc" id="L1816">        monsterDetailVBox.getChildren().add(monstersDetailController.render());</span>
-<span class="nc" id="L1817">        root.getChildren().add(monsterDetailVBox);</span>
-<span class="nc" id="L1818">        monsterDetailVBox.requestFocus();</span>
-<span class="nc" id="L1819">        buttonsDisable(true);</span>
-<span class="nc" id="L1820">    }</span>
+<span class="fc" id="L1812">        VBox monsterDetailVBox = new VBox();</span>
+<span class="fc" id="L1813">        monsterDetailVBox.setAlignment(Pos.CENTER);</span>
+<span class="fc" id="L1814">        MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();</span>
+<span class="fc" id="L1815">        monstersDetailController.init(this, monsterDetailVBox, monster, monsterTypeDto, monsterImage, resources, presetsService, type);</span>
+<span class="fc" id="L1816">        monsterDetailVBox.getChildren().add(monstersDetailController.render());</span>
+<span class="fc" id="L1817">        root.getChildren().add(monsterDetailVBox);</span>
+<span class="fc" id="L1818">        monsterDetailVBox.requestFocus();</span>
+<span class="fc" id="L1819">        buttonsDisable(true);</span>
+<span class="fc" id="L1820">    }</span>
 
     public void showLowHealthNotification() {
 <span class="nc" id="L1823">        notificationBell.setVisible(true);</span>
