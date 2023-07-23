@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -38,8 +39,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
-import static de.uniks.stpmon.team_m.Constants.MINIMUM_WIDTH;
-import static de.uniks.stpmon.team_m.Constants.OFFSET_WIDTH_HEIGHT;
 import static io.reactivex.rxjava3.core.Observable.empty;
 import static io.reactivex.rxjava3.core.Observable.just;
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,6 +57,8 @@ public class IngameControllerTest extends ApplicationTest {
     @Mock
     AreasService areasService;
     @Mock
+    RegionsService regionsService;
+    @Mock
     Provider<UDPEventListener> udpEventListenerProvider;
     @Mock
     Provider<MonstersListController> monstersListControllerProvider;
@@ -67,6 +68,8 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
     @Mock
     Provider<IngameMiniMapController> ingameMiniMapControllerProvider;
+    @Mock
+    Provider<IngameController> ingameControllerProvider;
 
     // Please also keep this mock, it is needed for the tests
     // -- which ones????
@@ -111,7 +114,7 @@ public class IngameControllerTest extends ApplicationTest {
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
         Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
-        ingameController. setValues (bundle, preferences, null, ingameController, app);
+        ingameController.setValues(bundle, preferences, null, ingameController, app);
 
         UDPEventListener udpEventListener = mock(UDPEventListener.class);
         Mockito.when(udpEventListenerProvider.get()).thenReturn(udpEventListener);
@@ -128,7 +131,7 @@ public class IngameControllerTest extends ApplicationTest {
                 "Premade_Character_01.png",
                 0,
                 List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
-                List.of(1,2),
+                List.of(1, 2),
                 List.of("646bacc568933551792bf3d5"),
                 "646bacc568933551792bf3d5",
                 33,
@@ -181,64 +184,78 @@ public class IngameControllerTest extends ApplicationTest {
                                 List.of(),
                                 16,
                                 16,
-                                List.of(),
+                                List.of(new TileSet(
+                                        1,
+                                        "Flamander_1.png",
+                                        16,
+                                        16,
+                                        0,
+                                        "Flamander_1",
+                                        0,
+                                        1,
+                                        16,
+                                        16,
+                                        List.of(),
+                                        1,
+                                        "Flamander_1.tsx"
+                                )),
                                 List.of()))
 
         ));
         doNothing().when(trainerStorage).setMonsters(any());
         lenient().when(presetsService.getCharacter(any())).thenReturn(Observable.empty());
         when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(
-                new Trainer(
-                    "2023-05-30T12:02:57.510Z",
-                    "2023-05-30T12:01:57.510Z",
-                    "6475e595ac3946b6a812d863",
-                    "646bab5cecf584e1be02598a",
-                    "6475e595ac3946b6a812d868",
-                    "Hans",
-                    "Premade_Character_01.png",
-                    0,
-                    List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
-                    List.of(1,2),
-                    List.of("646bacc568933551792bf3d5"),
-                    "6475e595ac3946b6a812d863",
-                    33,
-                    18,
-                    0,
-                    new NPCInfo(false, false, false, false, null, null, null)),
-                new Trainer(
-                        "2023-05-30T12:02:57.510Z",
-                        "2023-05-30T12:01:57.510Z",
-                        "6475e595ac3946b6a812d863",
-                        "646bab5cecf584e1be02598a",
-                        "6475e595ac3946b6a812d868",
-                        "Krankenschwester Erna",
-                        "Nurse_2_16x16.png",
-                        0,
-                        List.of(),
-                        List.of(),
-                        List.of("646bacc568933551792bf3d5"),
-                        "6475e595ac3946b6a812d863",
-                        20,
-                        18,
-                        2,
-                        new NPCInfo(false, false, false, true, null, null, null)),
-                new Trainer(
-                        "2023-05-30T12:02:57.510Z",
-                        "2023-05-30T12:01:57.510Z",
-                        "6475e595ac3946b6a812d869",
-                        "646bab5cecf584e1be02598a",
-                        "6475e595ac3946b6a812d868",
-                        "Prof. Testikus Maximus",
-                        "Premade_Character_02.png",
-                        0,
-                        List.of(),
-                        List.of(),
-                        List.of("646bacc568933551792bf3d5"),
-                        "6475e595ac3946b6a812d863",
-                        69,
-                        69,
-                        2,
-                        new NPCInfo(false, false, false, false, null,null, List.of("1", "3", "5")))
+                        new Trainer(
+                                "2023-05-30T12:02:57.510Z",
+                                "2023-05-30T12:01:57.510Z",
+                                "6475e595ac3946b6a812d863",
+                                "646bab5cecf584e1be02598a",
+                                "6475e595ac3946b6a812d868",
+                                "Hans",
+                                "Premade_Character_01.png",
+                                0,
+                                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                                List.of(1, 2),
+                                List.of("646bacc568933551792bf3d5"),
+                                "6475e595ac3946b6a812d863",
+                                33,
+                                18,
+                                0,
+                                new NPCInfo(false, false, false, false, null, null, null)),
+                        new Trainer(
+                                "2023-05-30T12:02:57.510Z",
+                                "2023-05-30T12:01:57.510Z",
+                                "6475e595ac3946b6a812d863",
+                                "646bab5cecf584e1be02598a",
+                                "6475e595ac3946b6a812d868",
+                                "Krankenschwester Erna",
+                                "Nurse_2_16x16.png",
+                                0,
+                                List.of(),
+                                List.of(),
+                                List.of("646bacc568933551792bf3d5"),
+                                "6475e595ac3946b6a812d863",
+                                20,
+                                18,
+                                2,
+                                new NPCInfo(false, false, false, true, null, null, null)),
+                        new Trainer(
+                                "2023-05-30T12:02:57.510Z",
+                                "2023-05-30T12:01:57.510Z",
+                                "6475e595ac3946b6a812d869",
+                                "646bab5cecf584e1be02598a",
+                                "6475e595ac3946b6a812d868",
+                                "Prof. Testikus Maximus",
+                                "Premade_Character_02.png",
+                                0,
+                                List.of(),
+                                List.of(),
+                                List.of("646bacc568933551792bf3d5"),
+                                "6475e595ac3946b6a812d863",
+                                69,
+                                69,
+                                2,
+                                new NPCInfo(false, false, false, false, null, null, List.of("1", "3", "5")))
                 )
         ));
         EventListener eventListenerMock = mock(EventListener.class);
@@ -264,7 +281,7 @@ public class IngameControllerTest extends ApplicationTest {
                 33,
                 18,
                 1,
-                new NPCInfo(false, false,false, false, null,null, null));
+                new NPCInfo(false, false, false, false, null, null, null));
 
         when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers.*.*", Trainer.class)).thenReturn(just(
                 new Event<>("regions.646bab5cecf584e1be02598a.trainers.6475e595ac3946b6a812d865.created", trainer)));
@@ -329,7 +346,9 @@ public class IngameControllerTest extends ApplicationTest {
                     }
 
                     @Override
-                    public BufferedSource source() { return null; }
+                    public BufferedSource source() {
+                        return null;
+                    }
                 }
         ));
 
@@ -347,12 +366,64 @@ public class IngameControllerTest extends ApplicationTest {
                 0);
 
         //Mocking the opponent (Situation)
-        when(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() +".opponents.*.*", Opponent.class)).thenReturn(just(
-                new Event<>("encounters.*.trainers.6475e595ac3946b6a812d865,opponents.*.nothappening", null)))
+        when(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() + ".opponents.*.*", Opponent.class)).thenReturn(just(
+                        new Event<>("encounters.*.trainers.6475e595ac3946b6a812d865,opponents.*.nothappening", null)))
                 .thenReturn(just(new Event<>("encounters.a98db973kwl8xp1lz94kjf0b.trainers.646bac223b4804b87c0b8054.opponents.rqtjej4dcoqsm4e9yln1loy5.created", opponent)));
 
         when(encounterOpponentsService.getTrainerOpponents(anyString(), anyString())).thenReturn(Observable.just(List.of()));
-
+        when(presetsService.getTileset(any())).thenReturn(Observable.just(new TileSet(
+                1,
+                "Flamander_1.png",
+                16,
+                16,
+                0,
+                "Flamander_1",
+                0,
+                1,
+                16,
+                16,
+                List.of(),
+                1,
+                "Flamander_1.tsx"
+        )));
+        Image mockedImage = mock(Image.class);
+        when(presetsService.getTilesetImage(any())).thenReturn(Observable.just(mockedImage));
+        when(regionsService.getRegion(any())).thenReturn(Observable.just(new Region(
+                        "2023-05-22T17:51:46.772Z",
+                        "2023-05-22T17:51:46.772Z",
+                        "646bab5cecf584e1be02598a",
+                        "Albertina",
+                        new Spawn("646bc3c0a9ac1b375fb41d93", 1, 1),
+                new Map(
+                        -1,
+                        true,
+                        1,
+                        1,
+                        "orthogonal",
+                        "right-down",
+                        "1.6.1",
+                        "map",
+                        "1.6",
+                        32,
+                        32,
+                        List.of(),
+                        16,
+                        16,
+                        List.of(new TileSet(
+                                1,
+                                "Flamander_1.png",
+                                16,
+                                16,
+                                0,
+                                "Flamander_1",
+                                0,
+                                1,
+                                16,
+                                16,
+                                List.of(),
+                                1,
+                                "Flamander_1.tsx"
+                        )), List.of()))));
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
@@ -360,6 +431,7 @@ public class IngameControllerTest extends ApplicationTest {
 
     @Test
     void showHelp() throws InterruptedException {
+
         // TODO: apply asserts once we have the time
         clickOn("#smallHandyButton");
 
@@ -407,7 +479,7 @@ public class IngameControllerTest extends ApplicationTest {
         assertEquals(chat.getOpacity(), 1);
         moveTo("Test1");
         clickOn("#showChatButton");
-        assertEquals(chat.getOpacity(),  0);
+        assertEquals(chat.getOpacity(), 0);
     }
 
     @Test
@@ -451,9 +523,7 @@ public class IngameControllerTest extends ApplicationTest {
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(20);    // two tiles apart from Nurse
         Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
         when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
-
-        press(KeyCode.E);
-        release(KeyCode.E);
+        type(KeyCode.E);
 
         final TextFlow dialogTextFlow = lookup("#dialogTextFlow").query();
 
@@ -552,7 +622,7 @@ public class IngameControllerTest extends ApplicationTest {
                 33,
                 18,
                 0,
-                new NPCInfo(false, false,false, false, null,null, null)));
+                new NPCInfo(false, false, false, false, null, null, null)));
 
         press(KeyCode.E);
         release(KeyCode.E);
@@ -576,7 +646,7 @@ public class IngameControllerTest extends ApplicationTest {
     }
 
     @Test
-    void testPauseMenuAndSettings(){
+    void testPauseMenuAndSettings() {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
         Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
         pauseMenuController.setValues(bundle, null, null, pauseMenuController, app);
@@ -640,7 +710,7 @@ public class IngameControllerTest extends ApplicationTest {
                 33,
                 18,
                 0,
-                new NPCInfo(false, false,false, false, null,null, null)));
+                new NPCInfo(false, false, false, false, null, null, null)));
 
         press(KeyCode.E);
         release(KeyCode.E);

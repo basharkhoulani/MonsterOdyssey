@@ -599,9 +599,9 @@ public class IngameController extends Controller {
      * @param map Tiled Map of the current area.
      */
     private void loadMap(Map map) {
-        if (GraphicsEnvironment.isHeadless()) {
-            return;
-        }
+//        if (GraphicsEnvironment.isHeadless()) {
+//            return;
+//        }
         // Init and display loading screen
         buildAndDisplayLoadingScreen(map);
 
@@ -614,6 +614,7 @@ public class IngameController extends Controller {
                     .flatMap(tileset -> presetsService.getTilesetImage(tileset.image()))
                     .doOnNext(image -> tileSetImages.put(mapName, image))
                     .observeOn(FX_SCHEDULER).subscribe(image -> afterAllTileSetsLoaded(map), error -> {
+                        System.out.println("Error while loading tileset: " + error.getMessage());
                         TimeUnit.SECONDS.sleep(10);
                         destroy();
                         app.show(ingameControllerProvider.get());
@@ -1618,7 +1619,9 @@ public class IngameController extends Controller {
                                     }
                                     loading = false;
                                     root.getChildren().remove(loadingScreen);
-                                    loadingScreenAnimation.stop();
+                                    if (!GraphicsEnvironment.isHeadless()) {
+                                        loadingScreenAnimation.stop();
+                                    }
                                 }, error -> {
                                     TimeUnit.SECONDS.sleep(10);
                                     destroy();
