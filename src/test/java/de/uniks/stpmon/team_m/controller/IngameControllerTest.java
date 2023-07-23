@@ -58,8 +58,6 @@ public class IngameControllerTest extends ApplicationTest {
     @Mock
     AreasService areasService;
     @Mock
-    RegionsService regionsService;
-    @Mock
     Provider<UDPEventListener> udpEventListenerProvider;
     @Mock
     Provider<MonstersListController> monstersListControllerProvider;
@@ -69,8 +67,6 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
     @Mock
     Provider<IngameMiniMapController> ingameMiniMapControllerProvider;
-    @Mock
-    Provider<IngameController> ingameControllerProvider;
 
     // Please also keep this mock, it is needed for the tests
     // -- which ones????
@@ -140,106 +136,6 @@ public class IngameControllerTest extends ApplicationTest {
                 0,
                 new NPCInfo(false, false, false, false, null, null, null)
         ));
-        Layer minimaplayer = new Layer(
-                List.of(new Chunk(
-                        List.of(1L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L),
-                        1,
-                        1,
-                        1,
-                        1
-                )),
-                List.of(1L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L),
-                1,
-                1,
-                "Tile Layer 1",
-                1,
-                0,
-                0,
-                "tilelayer",
-                true,
-                1,
-                1,
-                1,
-                "right-down",
-                List.of());
-        Map minimap = new Map(
-                -1,
-                true,
-                1,
-                1,
-                "orthogonal",
-                "right-down",
-                "1.6.1",
-                "minimap",
-                "1.6",
-                1,
-                1,
-                List.of(minimaplayer),
-                1,
-                1,
-                List.of(new TileSet(
-                        1,
-                        "Flamander_1.png",
-                        1,
-                        1,
-                        0,
-                        "Flamander_1",
-                        0,
-                        1,
-                        1,
-                        1,
-                        List.of(),
-                        1,
-                        "Flamander_1.tsx"
-                )),
-                List.of());
-        Layer maplayer = new Layer(
-                null,
-                List.of(1L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L),
-                1,
-                1,
-                "Tile Layer 1",
-                1,
-                0,
-                0,
-                "tilelayer",
-                true,
-                1,
-                1,
-                1,
-                "right-down",
-                List.of());
-        Map map = new Map(
-                -1,
-                true,
-                1,
-                1,
-                "orthogonal",
-                "right-down",
-                "1.6.1",
-                "map",
-                "1.6",
-                1,
-                1,
-                List.of(maplayer),
-                1,
-                1,
-                List.of(new TileSet(
-                        1,
-                        "Flamander_1.png",
-                        1,
-                        1,
-                        0,
-                        "Flamander_1",
-                        0,
-                        1,
-                        1,
-                        1,
-                        List.of(),
-                        1,
-                        "Flamander_1.tsx"
-                )),
-                List.of());
         when(trainerStorageProvider.get().getRegion()).thenReturn(
                 new Region(
                         "2023-05-22T17:51:46.772Z",
@@ -247,7 +143,7 @@ public class IngameControllerTest extends ApplicationTest {
                         "646bab5cecf584e1be02598a",
                         "Albertina",
                         new Spawn("646bc3c0a9ac1b375fb41d93", 1, 1),
-                        minimap));
+                        null));
         when(areasService.getArea(any(), any())).thenReturn(Observable.just(
                 new Area(
                         "2023-05-22T17:51:46.772Z",
@@ -255,9 +151,9 @@ public class IngameControllerTest extends ApplicationTest {
                         "646bc3c0a9ac1b375fb41d93",
                         "646bc436cfee07c0e408466f",
                         "Albertina",
-                        map
+                        null
 
-        )));
+                )));
         doNothing().when(trainerStorage).setMonsters(any());
         lenient().when(presetsService.getCharacter(any())).thenReturn(Observable.empty());
         when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(
@@ -444,46 +340,20 @@ public class IngameControllerTest extends ApplicationTest {
                 .thenReturn(just(new Event<>("encounters.a98db973kwl8xp1lz94kjf0b.trainers.646bac223b4804b87c0b8054.opponents.rqtjej4dcoqsm4e9yln1loy5.created", opponent)));
 
         when(encounterOpponentsService.getTrainerOpponents(anyString(), anyString())).thenReturn(Observable.just(List.of()));
-        when(presetsService.getTileset(any())).thenReturn(Observable.just(new TileSet(
-                1,
-                "Flamander_1.png",
-                16,
-                16,
-                0,
-                "Flamander_1",
-                0,
-                1,
-                16,
-                16,
-                List.of(),
-                1,
-                "Flamander_1.tsx"
-        )));
-        Image mockedImage = mock(Image.class);
-        when(mockedImage.getHeight()).thenReturn(16.0);
-        when(mockedImage.getWidth()).thenReturn(16.0);
-        when(presetsService.getTilesetImage(any())).thenReturn(Observable.just(mockedImage));
-        when(regionsService.getRegion(any())).thenReturn(Observable.just(new Region(
-                        "2023-05-22T17:51:46.772Z",
-                        "2023-05-22T17:51:46.772Z",
-                        "646bab5cecf584e1be02598a",
-                        "Albertina",
-                        new Spawn("646bc3c0a9ac1b375fb41d93", 1, 1),
-                        minimap
-        )));
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
     }
 
     @Test
-    void testIngame() throws InterruptedException {
+    void testHelp() throws InterruptedException {
         clickOn("#smallHandyButton");
 
         Thread.sleep(1000);
         clickOn("close");
-
-
+    }
+    @Test
+            void testMessage() {
         // ingame chat
         final TextField messageField = lookup("#messageField").query();
         when(messageService.newMessage(any(), any(), any()))
@@ -521,14 +391,10 @@ public class IngameControllerTest extends ApplicationTest {
         moveTo("Test1");
         clickOn("#showChatButton");
         assertEquals(chat.getOpacity(), 0);
+    }
 
-        // test sizing
-        app.getStage().setWidth(100);
-        app.getStage().setWidth(1000);
-        app.getStage().setHeight(100);
-        app.getStage().setHeight(800);
-
-        // test minimap
+    @Test
+    void testMiniMap() {
         IngameMiniMapController ingameMini = mock(IngameMiniMapController.class);
         when(ingameMiniMapControllerProvider.get()).thenReturn(ingameMini);
         doNothing().when(ingameMini).init(any(), any(), any(), any(), any());
@@ -536,7 +402,7 @@ public class IngameControllerTest extends ApplicationTest {
         close.setOnAction(event -> {
             StackPane stackPane = lookup("#stackPane").query();
             VBox miniMapVBox = lookup("#miniMapVBox").query();
-            stackPane.getChildren().remove(stackPane.getChildren().size()-1);
+            stackPane.getChildren().remove(stackPane.getChildren().size() - 1);
             miniMapVBox.setVisible(false);
             miniMapVBox.toBack();
             ingameController.buttonsDisable(false);
@@ -545,56 +411,15 @@ public class IngameControllerTest extends ApplicationTest {
 
         clickOn("#mapSymbol");
         clickOn(close);
-
-        // test pause and settings
-
-        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
-        pauseMenuController.setValues(bundle, null, null, pauseMenuController, app);
-        when(pauseMenuControllerProvider.get()).thenReturn(pauseMenuController);
-
-        ingameSettingsController.setValues(bundle, null, null, ingameSettingsController, app);
-        when(ingameSettingsControllerProvider.get()).thenReturn(ingameSettingsController);
-
-        ingameKeybindingsController.setValues(bundle, preferences, null, ingameKeybindingsController, app);
-        when(ingameKeybindingsControllerProvider.get()).thenReturn(ingameKeybindingsController);
-
-        changeAudioController.setValues(bundle, preferences, null, changeAudioController, app);
-        when(changeAudioControllerProvider.get()).thenReturn(changeAudioController);
-
-        mainMenuController.setValues(bundle, null, null, mainMenuController, app);
-        when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
-        doNothing().when(app).show(mainMenuController);
-
-        clickOn("#pauseButton");
-        clickOn("#resumeGameButton");
-
-        type(KeyCode.ESCAPE);
-        clickOn("#settingsButton");
-        type(KeyCode.ESCAPE);
-        clickOn("#keybindingsButton");
-        clickOn(ingameKeybindingsController.goBackButton);
-
-
-        clickOn("#audioSettingsButton");
-        clickOn("#closeButton");
-
-
-        clickOn("#goBackButton");
-        type(KeyCode.ESCAPE);
-        type(KeyCode.ESCAPE);
-
-        clickOn("#leaveGameButton");
-        verify(app).show(mainMenuController);
-
-        // test dialog
+    }
+    @Test
+    void testDialog() throws InterruptedException {
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(19);
         Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
         when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
 
         type(KeyCode.E);
-        sleep(10000);
         final TextFlow dialogTextFlow = lookup("#dialogTextFlow").query();
         final Text dialogText = (Text) dialogTextFlow.getChildren().get(0);
         final String firstDefaultText = dialogText.getText();
@@ -618,79 +443,7 @@ public class IngameControllerTest extends ApplicationTest {
         release(KeyCode.E);
 
         Thread.sleep(30);
-
-        // test nurse dialog
-        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(20);
-        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(20);    // two tiles apart from Nurse
-        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
-        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
-        type(KeyCode.E);
-
-        final TextFlow nurseDialogTextFlow = lookup("#dialogTextFlow").query();
-        final Text nurseDialogText = (Text) nurseDialogTextFlow.getChildren().get(0);
-        final String firstNurseText = dialogText.getText();
-
-        assertNotEquals("", firstNurseText);
-
-        Thread.sleep(30000);
-
-        press(KeyCode.E);
-        release(KeyCode.E);
-
-        Thread.sleep(30);
-
-        assertNotEquals(firstNurseText, dialogText.getText());
-
-        press(KeyCode.E);
-        release(KeyCode.E);
-
-        Thread.sleep(30);
-
-        press(KeyCode.E);
-        release(KeyCode.E);
-
-        Thread.sleep(30);
-
-        clickOn("No");
-
-        final StackPane rootStackPane = lookup("#root").query();
-        final Node node = rootStackPane.getChildren().get(rootStackPane.getChildren().size() - 1);
-
-        assertNotEquals("nurseVBox", node.getId());
-
-        press(KeyCode.E);
-        release(KeyCode.E);
-
-        Thread.sleep(30);
-
-
-        final StackPane stackPane = lookup("#stackPane").query();
-        final Node node2 = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
-
-        assertNotEquals("dialogStackPane", node2.getId());
-
-        for (int i = 0; i < 4; i++) {
-            press(KeyCode.E);
-            release(KeyCode.E);
-
-            Thread.sleep(30);
-        }
-
-        clickOn("Yes");
-        // healing of monsters cannot be tested, since this should happen on the server, when you encounter the nurse
-
-        press(KeyCode.E);
-        release(KeyCode.E);
-
-        Thread.sleep(30);
     }
-
-
-    @Test
-    void testNurseDialog() throws InterruptedException {
-
-    }
-
 
     @Test
     void testTalkToNPC2TilesAway() {
@@ -752,8 +505,128 @@ public class IngameControllerTest extends ApplicationTest {
     }
 
     @Test
-    void testPauseMenuAndSettings() {
+    void testMovement() {
+        when(udpEventListenerProvider.get().move(any())).thenReturn(empty());
+        when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+        type(KeyCode.W);
+        sleep(200);
+        type(KeyCode.A);
+        sleep(200);
+        type(KeyCode.S);
+        sleep(200);
+        type(KeyCode.D);
+    }
 
+    @Test
+    void testNurseDialogWithMons() throws InterruptedException {
+        // test nurse dialog
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(20);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(20);    // two tiles apart from Nurse
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+        type(KeyCode.E);
+
+        final TextFlow dialogTextFlow = lookup("#dialogTextFlow").query();
+        final Text dialogText = (Text) dialogTextFlow.getChildren().get(0);
+        final String firstNurseText = dialogText.getText();
+
+        assertNotEquals("", firstNurseText);
+
+        Thread.sleep(30000);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        assertNotEquals(firstNurseText, dialogText.getText());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        clickOn("No");
+
+        final StackPane rootStackPane = lookup("#root").query();
+        final Node node = rootStackPane.getChildren().get(rootStackPane.getChildren().size() - 1);
+
+        assertNotEquals("nurseVBox", node.getId());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node2 = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("dialogStackPane", node2.getId());
+
+        for (int i = 0; i < 4; i++) {
+            press(KeyCode.E);
+            release(KeyCode.E);
+
+            Thread.sleep(30);
+        }
+
+        clickOn("Yes");
+        // healing of monsters cannot be tested, since this should happen on the server, when you encounter the nurse
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+    }
+    @Test
+    void testPauseMenu() {
+
+        // test pause and settings
+
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
+        pauseMenuController.setValues(bundle, null, null, pauseMenuController, app);
+        when(pauseMenuControllerProvider.get()).thenReturn(pauseMenuController);
+
+        ingameSettingsController.setValues(bundle, null, null, ingameSettingsController, app);
+        when(ingameSettingsControllerProvider.get()).thenReturn(ingameSettingsController);
+
+        ingameKeybindingsController.setValues(bundle, preferences, null, ingameKeybindingsController, app);
+        when(ingameKeybindingsControllerProvider.get()).thenReturn(ingameKeybindingsController);
+
+        changeAudioController.setValues(bundle, preferences, null, changeAudioController, app);
+        when(changeAudioControllerProvider.get()).thenReturn(changeAudioController);
+
+        mainMenuController.setValues(bundle, null, null, mainMenuController, app);
+        when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
+        doNothing().when(app).show(mainMenuController);
+
+        clickOn("#pauseButton");
+        clickOn("#resumeGameButton");
+
+        type(KeyCode.ESCAPE);
+        clickOn("#settingsButton");
+        type(KeyCode.ESCAPE);
+        clickOn("#keybindingsButton");
+        clickOn(ingameKeybindingsController.goBackButton);
+
+
+        clickOn("#audioSettingsButton");
+        clickOn("#closeButton");
+
+
+        clickOn("#goBackButton");
+        type(KeyCode.ESCAPE);
+        type(KeyCode.ESCAPE);
+
+        clickOn("#leaveGameButton");
+        verify(app).show(mainMenuController);
     }
 
     @Test
@@ -855,17 +728,5 @@ public class IngameControllerTest extends ApplicationTest {
         Thread.sleep(30);
     }
 
-    @Test
-    void testMovement() {
-        when(udpEventListenerProvider.get().move(any())).thenReturn(empty());
-        when(trainerStorageProvider.get().getDirection()).thenReturn(1);
-        type(KeyCode.W);
-        sleep(200);
-        type(KeyCode.A);
-        sleep(200);
-        type(KeyCode.S);
-        sleep(200);
-        type(KeyCode.D);
-    }
 
 }

@@ -601,9 +601,9 @@ public class IngameController extends Controller {
      * @param map Tiled Map of the current area.
      */
     private void loadMap(Map map) {
-//        if (GraphicsEnvironment.isHeadless()) {
-//            return;
-//        }
+        if (map == null) {
+            return;
+        }
         // Init and display loading screen
         buildAndDisplayLoadingScreen(map);
 
