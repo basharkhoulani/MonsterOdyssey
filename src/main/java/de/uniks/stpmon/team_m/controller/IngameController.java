@@ -1364,7 +1364,7 @@ public class IngameController extends Controller {
             if (specialNpcBehindCounter == null) {
                 return null;
             }
-            
+
             try {
                 if (specialNpcBehindCounter.npc().canHeal()) {
                     return specialNpcBehindCounter;
@@ -1381,7 +1381,7 @@ public class IngameController extends Controller {
                     }
                 }
             } catch (Error e) {
-                System.err.println("NPC does not have the canHeal() attribute");
+                System.err.println("NPC does not have the sells() attribute");
                 e.printStackTrace();
             }
 
