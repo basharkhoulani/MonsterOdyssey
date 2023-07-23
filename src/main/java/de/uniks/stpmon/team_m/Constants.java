@@ -2,7 +2,10 @@ package de.uniks.stpmon.team_m;
 
 import javafx.geometry.Insets;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Map.entry;
 
@@ -76,7 +79,7 @@ public class Constants {
 
     // INGAME
     public static final int TILE_SIZE = 16;
-    public static final int TRANSITION_DURATION = 300;
+    public static final int TRANSITION_DURATION = 196;
     public static final int SCALE_FACTOR = 2;
     public static final int DELAY = 100;
     public static final int DELAY_LONG = 500;
@@ -116,7 +119,9 @@ public class Constants {
         nurseNoMons,
         starterSelection0,
         starterSelection1,
-        starterSelection2
+        starterSelection2,
+        clerkOpenShop,
+        clerkCancelShop
     }
 
     public enum ContinueDialogReturnValues {
@@ -127,7 +132,9 @@ public class Constants {
         albertDialogFinished1,
         albertDialogFinished2,
         spokenToNurse,
-        encounterOnTalk
+        encounterOnTalk,
+        spokenToClerk
+
     }
 
     // Nurse Popup
@@ -138,6 +145,15 @@ public class Constants {
     public static final int buttonsHBoxSpacing = 30;
     public static final int nurseButtonHeight = 40;
     public static final int nurseButtonWidth = 80;
+
+    // Clerk Popup
+    public static final int clerkPopupHeight = 250;
+    public static final int clerkQuestionHeight = 75;
+    public static final int clerkButtonsVBoxHeight = 225;
+    public static final int clerkButtonVBoxSpacing = 10;
+    public static final int clerkButtonWidth = 250;
+    public static final int clerkButtonHeight = 40;
+
 
     // Ingame Help
     public static final int spaceBetweenPhoneAndWindowEdge = 25;
@@ -244,5 +260,21 @@ public class Constants {
             "heart.png",
             "speed.png",
             "defense.png"
-            );
+    );
+
+    public static final HashMap<String, String> STATUS_EFFECTS_IMAGES = new HashMap<>(Map.ofEntries(
+            entry("paralysed", "images/paralysed.png"),
+            entry("asleep", "images/asleep.png"),
+            entry("poisoned", "images/poisoned.png"),
+            entry("burned", "images/burned.png"),
+            entry("frozen", "images/frozen.png"),
+            entry("confused", "images/confused.png")
+    ));
+
+    public static final String PARALYSED = "paralysed";
+    public static final String ASLEEP = "asleep";
+    public static final String POISONED = "poisoned";
+    public static final String BURNED = "burned";
+    public static final String FROZEN = "frozen";
+    public static final String CONFUSED = "confused";
 }

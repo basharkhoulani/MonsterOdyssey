@@ -502,6 +502,7 @@ public class NpcTextManager {
 
         npcTexts.put("Nurse", Nurse);
         npcTexts.put("NurseNoMons", NurseNoMons);
+        npcTexts.put("Clerk", Clerk);
 
         npcTexts.put("645e32c6866ace359554a7f8", Clerk);
 

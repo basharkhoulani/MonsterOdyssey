@@ -21,12 +21,15 @@ public class IngameLoadingController extends Controller {
     public Button goBackButton;
     @Inject
     Provider<MainMenuController> mainMenuControllerProvider;
+
     @Inject
     public IngameLoadingController() {
     }
 
     @Override
-    public String getTitle() {return resources.getString("INGAME.TITLE");}
+    public String getTitle() {
+        return resources.getString("INGAME.TITLE");
+    }
 
 
     @Override

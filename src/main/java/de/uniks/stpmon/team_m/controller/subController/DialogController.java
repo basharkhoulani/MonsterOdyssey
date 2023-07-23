@@ -10,7 +10,7 @@ import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.Objects;
+
 import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
 
 public class DialogController extends Controller {
@@ -28,7 +28,9 @@ public class DialogController extends Controller {
     private final int amountOfTexts;
     private int starterSelection;
     private boolean alreadySeenNurseDialog = false;
+    private boolean alreadySeenClerkDialog = false;
     private boolean wantsHeal;
+    private boolean wantsToShop;
     private boolean noMons;
     private boolean starterSelected = false;
 
@@ -52,18 +54,28 @@ public class DialogController extends Controller {
                 // check if player already encountered albert
                 if (npc.npc().starters() != null && alreadyEncountered) {
                     this.npcTexts = npcTextManager.getNpcTexts(npc._id() + "alreadyEncountered");
-                } else {
-                    this.npcTexts = npcTextManager.getNpcTexts(npc._id());
                 }
             }
 
         } catch (Error e) {
             System.err.println("NPC does not have canHeal() attribute..");
-            this.npcTexts = npcTextManager.getNpcTexts(npc._id());
         }
 
+        // same problem here like in the IngameController
+        try {
+            if (npc.npc().sells() != null) {
+                if (!npc.npc().sells().isEmpty()) {
+                    this.npcTexts = npcTextManager.getNpcTexts("Clerk");
+                }
+            }
+         } catch (Error e) {
+            System.err.println("NPC does not have sells() attribute..");
+        }
+
+        if (this.npcTexts == null || this.npcTexts.length == 0) {
+            this.npcTexts = npcTextManager.getNpcTexts(npc._id());
+        }
         this.currentTextIndex = 0;
-        assert this.npcTexts != null;
         this.currentText = new Text(this.npcTexts[currentTextIndex]);
         this.amountOfTexts = npcTexts.length;
 
@@ -72,6 +84,7 @@ public class DialogController extends Controller {
 
     /**
      * Method to continue the dialog.
+     *
      * @param specialInteraction Whether the player had a popup with a special interaction with a npc
      * @return A continueDialogReturnValue, which determines what happens after the dialog
      */
@@ -114,6 +127,16 @@ public class DialogController extends Controller {
                     this.starterSelection = 2;
                     this.starterSelected = true;
                 }
+                case clerkOpenShop -> {
+                    this.currentText.setText(npcTextManager.getSingleNpcText("TODO"));
+                    this.alreadySeenClerkDialog = true;
+                    this.wantsToShop = true;
+                }
+                case clerkCancelShop -> {
+                    this.currentText.setText(npcTextManager.getSingleNpcText("CLERK.ABANDON.SHOP"));
+                    this.alreadySeenClerkDialog = true;
+                    this.wantsToShop = false;
+                }
             }
             return dialogNotFinished;
         }
@@ -122,6 +145,14 @@ public class DialogController extends Controller {
         if (++currentTextIndex >= amountOfTexts) {
             if (alreadySeenNurseDialog) {
                 if (wantsHeal) {
+                    return dialogFinishedTalkToTrainer;
+                } else {
+                    return dialogFinishedNoTalkToTrainer;
+                }
+            }
+
+            if (alreadySeenClerkDialog) {
+                if (wantsToShop) {
                     return dialogFinishedTalkToTrainer;
                 } else {
                     return dialogFinishedNoTalkToTrainer;
@@ -149,6 +180,14 @@ public class DialogController extends Controller {
             if (npc.npc().encounterOnTalk()) {
                 return encounterOnTalk;
             }
+
+            try {
+                if (npc.npc().sells() != null) {
+                    if (!npc.npc().sells().isEmpty()) {
+                        return spokenToClerk;
+                    }
+                }
+            } catch (Error ignored) {}
 
             if (npc.npc().starters() != null && !this.alreadyEncountered) {
                 ingameController.showStarterSelection(this.npc.npc().starters());

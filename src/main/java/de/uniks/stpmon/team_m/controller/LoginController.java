@@ -99,8 +99,8 @@ public class LoginController extends Controller {
         super.init();
         this.changeLanguageController = new ChangeLanguageController();
         changeLanguageController.init();
-        if (!GraphicsEnvironment.isHeadless()){
-            if(AudioService.getInstance() != null && (AudioService.getInstance().getCurrentSound() == null)) {
+        if (!GraphicsEnvironment.isHeadless()) {
+            if (AudioService.getInstance() != null && (AudioService.getInstance().getCurrentSound() == null)) {
                 AudioService.getInstance().playSound(MENU_SOUND);
                 AudioService.getInstance().setVolume(preferences.getDouble("volume", AudioService.getInstance().getVolume()));
             }

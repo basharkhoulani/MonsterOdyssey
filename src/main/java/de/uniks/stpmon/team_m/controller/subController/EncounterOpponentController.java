@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.Opponent;
+import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -23,6 +24,8 @@ public class EncounterOpponentController extends Controller {
     private final Boolean isWild;
     private final Boolean invertX;
     public final Boolean isMultipleEnemyEncounter;
+    private final EncounterOpponentStorage encounterOpponentStorage;
+    private final Opponent opponent;
     public Boolean isTargeted = false;
 
     @FXML
@@ -59,15 +62,34 @@ public class EncounterOpponentController extends Controller {
     public ImageView starImageView;
     @FXML
     public ImageView heartImageView;
+    @FXML
+    public ImageView paralysedImage;
+    @FXML
+    public ImageView asleepImage;
+    @FXML
+    public ImageView poisonedImage;
+    @FXML
+    public ImageView frozenImage;
+    @FXML
+    public ImageView confusedImage;
+    @FXML
+    public ImageView burnedImage;
 
-    private Opponent currentTarget;
     public Runnable onTargetChange;
 
-    public EncounterOpponentController(Boolean isEnemy, Boolean isWild, Boolean invertX, Boolean isMultipleEnemyEncounter) {
+    public EncounterOpponentController(
+            Boolean isEnemy,
+            Boolean isWild,
+            Boolean invertX,
+            Boolean isMultipleEnemyEncounter,
+            EncounterOpponentStorage encounterOpponentStorage,
+            Opponent opponent) {
         this.isEnemy = isEnemy;
         this.isWild = isWild;
         this.invertX = invertX;
         this.isMultipleEnemyEncounter = isMultipleEnemyEncounter;
+        this.encounterOpponentStorage = encounterOpponentStorage;
+        this.opponent = opponent;
     }
 
     @Override
@@ -77,6 +99,12 @@ public class EncounterOpponentController extends Controller {
         if (!GraphicsEnvironment.isHeadless()) {
             starImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(STAR_ICON)).toString()));
             heartImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(HEART_ICON)).toString()));
+            paralysedImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("paralysed"))).toString()));
+            asleepImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("asleep"))).toString()));
+            poisonedImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("poisoned"))).toString()));
+            burnedImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("burned"))).toString()));
+            frozenImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("frozen"))).toString()));
+            confusedImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("confused"))).toString()));
         }
 
         if (isEnemy) {
@@ -109,6 +137,9 @@ public class EncounterOpponentController extends Controller {
         }
         monsterImageViewVBox.setOnMouseClicked(event -> {
             if (isEnemy && isMultipleEnemyEncounter && onTargetChange != null) {
+                if (opponent != encounterOpponentStorage.getTargetOpponent()) {
+                       encounterOpponentStorage.setTargetOpponent(opponent);
+                }
                 onTargetChange.run();
             }
         });
@@ -164,7 +195,11 @@ public class EncounterOpponentController extends Controller {
         monsterNameHBox.getStyleClass().clear();
         monsterNameHBox.getStyleClass().add("hBoxGreen");
         monsterImageViewVBox.setStyle("-fx-padding: 16px; -fx-border-color: red; -fx-border-radius: 100;");
+        encounterOpponentStorage.setTargetOpponent(this.opponent);
         isTargeted = true;
+        if (onTargetChange != null) {
+            onTargetChange.run();
+        }
         return this;
     }
 
@@ -180,16 +215,18 @@ public class EncounterOpponentController extends Controller {
         return this;
     }
 
-    public Opponent getCurrentTarget() {
-        return currentTarget;
-    }
-
-    public void setCurrentTarget(Opponent currentTarget) {
-        this.currentTarget = currentTarget;
-    }
-
     public ImageView getTrainerImageView() {
         return trainerImageView;
     }
 
+    public void showStatus(String status, boolean value) {
+        switch (status) {
+            case PARALYSED -> paralysedImage.setVisible(value);
+            case ASLEEP -> asleepImage.setVisible(value);
+            case POISONED -> poisonedImage.setVisible(value);
+            case FROZEN -> frozenImage.setVisible(value);
+            case CONFUSED -> confusedImage.setVisible(value);
+            case BURNED -> burnedImage.setVisible(value);
+        }
+    }
 }
