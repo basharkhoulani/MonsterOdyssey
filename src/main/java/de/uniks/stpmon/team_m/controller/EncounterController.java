@@ -1,10 +1,5 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.Constants;
-import de.uniks.stpmon.team_m.Main;
-import de.uniks.stpmon.team_m.controller.subController.AbilitiesMenuController;
-import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
-import de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
@@ -13,7 +8,8 @@ import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
-import javafx.animation.*;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -588,6 +584,11 @@ public class EncounterController extends Controller {
     }
 
     private void showResultPopUp(String string) {
+        Opponent selfOpponent = encounterOpponentStorage.getSelfOpponent();
+        if (selfOpponent.coins() != 0) {
+            encounterResultController.setCoinsAmount(selfOpponent.coins());
+            encounterResultController.setCoinsEarned(true);
+        }
         VBox resultBox = new VBox();
         resultBox.setAlignment(Pos.CENTER);
         encounterResultController.init(app);
