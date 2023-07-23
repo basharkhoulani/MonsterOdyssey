@@ -288,6 +288,8 @@ public class IngameMapRenderTest extends ApplicationTest {
                 .thenReturn(just(new Event<>("encounters.a98db973kwl8xp1lz94kjf0b.trainers.646bac223b4804b87c0b8054.opponents.rqtjej4dcoqsm4e9yln1loy5.created", opponent)));
 
         when(encounterOpponentsService.getTrainerOpponents(anyString(), anyString())).thenReturn(Observable.just(List.of()));
+
+        // mocking the map
         Layer minimaplayer = new Layer(
                 List.of(new Chunk(
                         List.of(1L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L),
