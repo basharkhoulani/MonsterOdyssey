@@ -213,9 +213,9 @@ public class IngameController extends Controller {
         // Initialize key event listeners
 <span class="fc" id="L214">        keyPressedHandler = event -&gt; {</span>
 <span class="fc bfc" id="L215" title="All 2 branches covered.">            if (event.getCode().toString().equals(preferences.get(&quot;interaction&quot;, &quot;E&quot;))) {</span>
-<span class="pc bpc" id="L216" title="2 of 4 branches missed.">                if (!inNpcPopup &amp;&amp; !inEncounterInfoBox) {</span>
+<span class="pc bpc" id="L216" title="1 of 4 branches missed.">                if (!inNpcPopup &amp;&amp; !inEncounterInfoBox) {</span>
 <span class="fc" id="L217">                    interactWithTrainer();</span>
-<span class="nc bnc" id="L218" title="All 2 branches missed.">                } else if (inEncounterInfoBox) {</span>
+<span class="pc bpc" id="L218" title="1 of 2 branches missed.">                } else if (inEncounterInfoBox) {</span>
 <span class="nc" id="L219">                    stackPane.getChildren().remove(dialogStackPane);</span>
 <span class="nc" id="L220">                    this.inEncounterInfoBox = false;</span>
 <span class="nc" id="L221">                    showEncounterScene();</span>
