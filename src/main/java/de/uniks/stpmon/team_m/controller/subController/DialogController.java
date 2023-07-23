@@ -62,7 +62,6 @@ public class DialogController extends Controller {
         }
 
         // same problem here like in the IngameController
-        System.out.println(npc);
         try {
             if (npc.npc().sells() != null) {
                 if (!npc.npc().sells().isEmpty()) {
@@ -135,7 +134,7 @@ public class DialogController extends Controller {
                     this.wantsToShop = true;
                 }
                 case clerkCancelShop -> {
-                    this.currentText.setText(npcTextManager.getSingleNpcText("TODO"));
+                    this.currentText.setText(npcTextManager.getSingleNpcText("CLERK.ABANDON.SHOP"));
                     this.alreadySeenClerkDialog = true;
                     this.wantsToShop = false;
                 }
@@ -184,8 +183,10 @@ public class DialogController extends Controller {
             }
 
             try {
-                if (!npc.npc().sells().isEmpty()) {
-                    return spokenToClerk;
+                if (npc.npc().sells() != null) {
+                    if (!npc.npc().sells().isEmpty()) {
+                        return spokenToClerk;
+                    }
                 }
             } catch (Error ignored) {}
 
