@@ -1364,15 +1364,7 @@ public class IngameController extends Controller {
             if (specialNpcBehindCounter == null) {
                 return null;
             }
-
-            // maybe this will throw an error in the future. I've looked into the server for all NPC's,
-            // apparently almost all NPC's have the canHeal() boolean, but some only have walkRandomly().
-            // If they don't have the canHeal(), it should be covered by this try/catch
-
-            // needs to be done this way with the ugly double try/catch blocks, because most of the npc's on
-            // the server don't even have the sells attribute, so it will throw errors if we try to access it.
-            // The only (super stupid and ugly) solution, just because they can't write a simple db modify script,
-            // is to do it this way.
+            
             try {
                 if (specialNpcBehindCounter.npc().canHeal()) {
                     return specialNpcBehindCounter;
