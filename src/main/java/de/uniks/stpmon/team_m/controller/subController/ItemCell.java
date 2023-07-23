@@ -85,11 +85,6 @@ public class ItemCell extends ListCell<Item> {
             setGraphic(null);
             setStyle("-fx-background-color: #FFFFFF;");
         } else {
-            /** Try to load all trainers items from presetsService
-            *   take rateLimit into account, if loading fails we need to retry loading later
-             *
-             *   try to load images AFTER items loading finished with the same strategy
-            */
             disposables.add(presetsService.getItem(item.type()).observeOn(FX_SCHEDULER)
                     .subscribe(itemTypeDto -> {
                                 this.itemTypeDto = itemTypeDto;
@@ -97,12 +92,18 @@ public class ItemCell extends ListCell<Item> {
                                 itemLabel.setText(itemTypeDto.name());
                                 itemNumber.setText(String.valueOf(item.amount()));
 
-                                // TODO: replace with real image
-                                Image image = new Image(Objects.requireNonNull(Main.class.getResource("images/star.png")).toExternalForm());
-                                itemImageView.setImage(image);
-                                itemHBox.setOnMouseClicked(event -> openItemDescription(itemTypeDto, image));
-                                //itemHBox.setOnMouseClicked(event -> openItemDescription(itemTypeDto, this.itemImage));
-
+                                disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)
+                                        .subscribe(itemImage -> {
+                                            this.itemImage = ImageProcessor.resonseBodyToJavaFXImage(itemImage);
+                                            itemImageView.setImage(this.itemImage);
+                                        }, error -> {
+                                            itemMenuController.showError(error.getMessage());
+                                            error.printStackTrace();
+                                        }));
+                                itemHBox.setOnMouseClicked(event -> {
+                                    openItemDescription(itemTypeDto, this.itemImage, item);
+                                    itemMenuController.setItemNameLabel(itemTypeDto.name());
+                                });
                                 setGraphic(itemHBox);
                             },
                             error -> {
@@ -113,36 +114,7 @@ public class ItemCell extends ListCell<Item> {
                                 delay.setOnFinished(event -> updateItem(item, empty));
                                 delay.play();
                             }));
-        }
-
-            //loadFXML();
-            /*
-            disposables.add(presetsService.getItem(item.type()).observeOn(FX_SCHEDULER)
-                    .subscribe(itemTypeDto -> {
-                        this.itemTypeDto = itemTypeDto;
-
-                        disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)
-                                .subscribe(itemImage -> {
-                                    this.itemImage = ImageProcessor.resonseBodyToJavaFXImage(itemImage);
-                                    itemImageView.setImage(this.itemImage);
-                                }, error -> {
-                                    itemMenuController.showError(error.getMessage());
-                                    error.printStackTrace();
-                                }));
-
-
-                        itemLabel.setText(itemTypeDto.name());
-                        itemNumber.setText(itemTypeDto.use());
-
-                        itemHBox.setOnMouseClicked(event -> openItemDescription(itemTypeDto, this.itemImage));
-                    }, error -> {
-                        itemMenuController.showError(error.getMessage());
-                        error.printStackTrace();
-                    }));
-
-
-             */
-
+            }
         }
 
 
@@ -159,11 +131,13 @@ public class ItemCell extends ListCell<Item> {
         }
     }
 
-    public void openItemDescription(ItemTypeDto itemTypeDto, Image itemImage) {
-        //ItemDescriptionController itemDescriptionController = itemDescriptionControllerProvider.get();
+    public void openItemDescription(ItemTypeDto itemTypeDto, Image itemImage, Item item) {
         ItemDescriptionController itemDescriptionController = new ItemDescriptionController();
         itemDescriptionController.setValues(resources, preferences, resourceBundleProvider, itemDescriptionController, app);
-        itemDescriptionController.init(itemTypeDto, itemImage);
+        itemDescriptionController.init(itemTypeDto, itemImage, item);
+        if (itemDescriptionBox.getChildren().size() != 0) {
+           itemDescriptionBox.getChildren().clear();
+        }
         itemDescriptionBox.getChildren().add(itemDescriptionController.render());
     }
 }
