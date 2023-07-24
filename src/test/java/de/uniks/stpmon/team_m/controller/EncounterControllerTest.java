@@ -354,19 +354,6 @@ class EncounterControllerTest extends ApplicationTest {
                                 null,
                                 List.of(),
                                 0
-                        ),
-                        new Opponent(
-                                "2023-07-09T11:52:17.658Z",
-                                "2023-07-09T11:52:35.578Z",
-                                "64aa9f7132eb8b56aa9eb201",
-                                "64aa9f7132eb8b56aa9eb208",
-                                "64abfde932eb8b56aac8efaf",
-                                false,
-                                true,
-                                "64aa9f7132eb8b56aa9eb20c",
-                                null,
-                                List.of(),
-                                0
                         )
                 ));
 
@@ -533,6 +520,47 @@ class EncounterControllerTest extends ApplicationTest {
                         false,
                         true,
                         "64aa9f7132eb8b56aa9eb20f",
+                        null,
+                        List.of(),
+                        0
+                )
+        );
+
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        encounterController.setValues(bundle, preferences, null, encounterController, app);
+        app.show(encounterController);
+    }
+
+    @Test
+    void testRenderFor2vs1(){
+        when(encounterOpponentStorage.getEncounterSize()).thenReturn(3);
+        when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
+                List.of(
+                        new Opponent(
+                                "2023-07-09T11:52:17.658Z",
+                                "2023-07-09T11:52:35.578Z",
+                                "64aa9f7132eb8b56aa9eb20f",
+                                "64aa9f7132eb8b56aa9eb208",
+                                "64abfde932eb8b56aac8efac",
+                                true,
+                                true,
+                                "64aa9f7132eb8b56aa9eb20c",
+                                null,
+                                List.of(),
+                                0
+                        )
+                ));
+
+        when(encounterOpponentStorage.getCoopOpponent()).thenReturn(
+                new Opponent(
+                        "2023-07-09T11:52:17.658Z",
+                        "2023-07-09T11:52:35.578Z",
+                        "64aa9f7132eb8b56aa9eb201",
+                        "64aa9f7132eb8b56aa9eb208",
+                        "64abfde932eb8b56aac8efac",
+                        false,
+                        true,
+                        "64aa9f7132eb8b56aa9eb20c",
                         null,
                         List.of(),
                         0
