@@ -6,6 +6,7 @@ import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,6 +31,8 @@ public class ItemDescriptionController extends Controller {
     public TextFlow itemDescription;
     @FXML
     public ImageView coinImageView;
+    @FXML
+    public Button useButton;
 
     @Inject
     public ItemDescriptionController(){}
@@ -50,6 +53,11 @@ public class ItemDescriptionController extends Controller {
 
         Text description = new Text(itemTypeDto.description());
         itemDescription.getChildren().add(description);
+
+        if(itemTypeDto.use() == null) {
+            useButton.setVisible(false);
+            useButton.setDisable(true);
+        }
 
         URL resourceImage = Main.class.getResource("images/coin.png");
         assert resourceImage != null;
