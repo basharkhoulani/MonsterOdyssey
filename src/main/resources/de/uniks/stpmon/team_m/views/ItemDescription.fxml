@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.TextFlow?>
 
-<VBox prefHeight="450.0" prefWidth="384.0" style="-fx-background-color: #FFFFFF; -fx-opacity: 0.75;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.ItemDescriptionController">
+<VBox prefHeight="450.0" prefWidth="384.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.ItemDescriptionController">
    <children>
-      <HBox prefHeight="39.0" prefWidth="384.0">
-         <children>
-            <Label alignment="CENTER" prefHeight="39.0" prefWidth="383.0" text="%DETAILS" />
-         </children>
-      </HBox>
       <HBox prefHeight="158.0" prefWidth="384.0">
          <children>
             <VBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-width: 2.5;">
@@ -53,13 +50,20 @@
                            </HBox.margin>
                         </Label>
                         <Label fx:id="itemPriceLabel" prefHeight="32.0" prefWidth="74.0" />
-                        <ImageView fx:id="coinImage" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="coinImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="-40.0" />
+                           </HBox.margin></ImageView>
                      </children>
                   </HBox>
-                  <Button fx:id="useButton" mnemonicParsing="false" prefHeight="32.0" prefWidth="107.0" styleClass="buttonsBlue" text="%USE">
+                  <Button fx:id="useButton" mnemonicParsing="false" prefHeight="32.0" prefWidth="107.0" text="%USE">
                      <VBox.margin>
                         <Insets left="6.0" top="11.0" />
                      </VBox.margin>
+                     <styleClass>
+                        <String fx:value="buttonsBlue" />
+                        <String fx:value="boldFont" />
+                     </styleClass>
                   </Button>
                </children>
             </VBox>
@@ -70,14 +74,14 @@
             <Insets top="13.0" />
          </VBox.margin>
          <children>
-            <Label prefHeight="31.0" prefWidth="210.0" text="%DESCRIPTION">
+            <Label prefHeight="31.0" prefWidth="210.0" styleClass="boldFont" text="%DESCRIPTION">
                <HBox.margin>
                   <Insets left="6.0" />
                </HBox.margin>
             </Label>
          </children>
       </HBox>
-      <HBox prefHeight="213.0" prefWidth="384.0">
+      <HBox prefHeight="252.0" prefWidth="384.0">
          <VBox.margin>
             <Insets />
          </VBox.margin>
@@ -85,7 +89,11 @@
             <Insets top="14.0" />
          </padding>
          <children>
-            <Label fx:id="itemDescription" prefHeight="21.0" prefWidth="384.0" />
+            <TextFlow fx:id="itemDescription" prefHeight="210.0" prefWidth="370.0">
+               <HBox.margin>
+                  <Insets left="7.0" right="7.0" />
+               </HBox.margin>
+            </TextFlow>
          </children>
       </HBox>
    </children>
