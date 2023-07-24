@@ -234,7 +234,24 @@ public class IngameControllerTest extends ApplicationTest {
                         69,
                         69,
                         2,
-                        new NPCInfo(false, false, false, false, null,null, List.of("1", "3", "5")))
+                        new NPCInfo(false, false, false, false, null,null, List.of("1", "3", "5"))),
+                new Trainer(
+                        "2023-05-30T12:02:57.510Z",
+                        "2023-05-30T12:01:57.510Z",
+                        "6475e595ac3946b6a812d811",
+                        "646bab5cecf584e1be02598a",
+                        "6475e595ac3946b6a812d868",
+                        "Test Clerk",
+                        "Premade_Character_02.png",
+                        0,
+                        List.of(),
+                        List.of(),
+                        List.of("646bacc568933551792bf3d5"),
+                        "6475e595ac3946b6a812d863",
+                        100,
+                        100,
+                        2,
+                        new NPCInfo(false, false, false, false, List.of(1, 2, 3),null, null))
                 )
         ));
         EventListener eventListenerMock = mock(EventListener.class);
@@ -666,6 +683,36 @@ public class IngameControllerTest extends ApplicationTest {
 
         clickOn("#starterSelectionOkButton");
         clickOn("#starterSelectionOkButton");
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+    }
+
+    @Test
+    void testClerkDialog() throws InterruptedException {
+        // test will be expanded after implementing the rest of the features
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(100);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(102);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        clickOn("Leave");
 
         press(KeyCode.E);
         release(KeyCode.E);
