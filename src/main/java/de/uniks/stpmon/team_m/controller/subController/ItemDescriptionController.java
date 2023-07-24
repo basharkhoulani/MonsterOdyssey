@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
@@ -31,8 +32,9 @@ public class ItemDescriptionController extends Controller {
     @FXML
     public Label itemPriceLabel;
     @FXML
-    public Label itemDescription;
-
+    public TextFlow itemDescription;
+    @FXML
+    public ImageView coinImageView;
 
     @Inject
     public ItemDescriptionController(){}
@@ -50,7 +52,14 @@ public class ItemDescriptionController extends Controller {
         itemImageView.setImage(itemImage);
         itemAmountLabel.setText(String.valueOf(item.amount()));
         itemPriceLabel.setText(String.valueOf(itemTypeDto.price()));
-        itemDescription.setText(itemTypeDto.description());
+
+        Text description = new Text(itemTypeDto.description());
+        itemDescription.getChildren().add(description);
+
+        URL resourceImage = Main.class.getResource("images/coin.png");
+        assert resourceImage != null;
+        Image coinImage = new Image(resourceImage.toString());
+        coinImageView.setImage(coinImage);
 
         return parent;
     }
