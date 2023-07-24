@@ -43,12 +43,12 @@ public class EncounterController extends Controller {
     private final HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
     private final HashMap<String, Opponent> opponentsDelete = new HashMap<>();
     private final HashMap<String, Boolean> monsterInEncounterHashMap = new HashMap<>();
-    //private Monster oldMonster; // here use HashMap
     private final HashMap<String, Boolean> resultLevelUpHashMap = new HashMap<>();
     private final HashMap<String, Monster> oldMonsterHashMap = new HashMap<>();
     private final HashMap<String, ArrayList<Integer>> newAbilitiesHashMap = new HashMap<>();
     private final HashMap<String, EncounterOpponentController> encounterOpponentControllerHashMap = new HashMap<>();
     private final HashMap<String, Boolean> monsterInTeamHashMap = new HashMap<>();
+    private final DecimalFormat formatter = new DecimalFormat("#,###.0");
     @FXML
     public StackPane rootStackPane;
     @FXML
@@ -105,7 +105,6 @@ public class EncounterController extends Controller {
     private int repeatedTimes = 0;
     private int currentMonsterIndex = 0;
     private int deleteOpponents = 0;
-    private DecimalFormat formatter = new DecimalFormat("#,###.0");
 
 
     @Inject
@@ -374,10 +373,7 @@ public class EncounterController extends Controller {
 
     private void targetOpponent(Opponent opponent) {
         encounterOpponentStorage.setTargetOpponent(opponent);
-        if (encounterOpponentStorage.getTargetOpponent() != opponent
-                && encounterOpponentControllerHashMap.containsKey(opponent._id())
-                && encounterOpponentControllerHashMap.get(opponent._id()).isMultipleEnemyEncounter
-        ) {
+        if (encounterOpponentStorage.getTargetOpponent() != opponent && encounterOpponentControllerHashMap.containsKey(opponent._id()) && encounterOpponentControllerHashMap.get(opponent._id()).isMultipleEnemyEncounter) {
             onTargetChange();
         }
     }
@@ -426,10 +422,7 @@ public class EncounterController extends Controller {
             listenToMonster(opponent.trainer(), opponent.monster(), encounterOpponentController, opponent);
             double currentHealth = monster.currentAttributes().health();
             double maxHealth = monster.attributes().health();
-            encounterOpponentController.setLevelLabel("LVL " + monster.level())
-                    .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1))
-                    .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health())
-                    .setHealthLabel(formatter.format(currentHealth) + "/" + formatter.format(maxHealth) + " HP");
+            encounterOpponentController.setLevelLabel("LVL " + monster.level()).setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1)).setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health()).setHealthLabel(formatter.format(currentHealth) + "/" + formatter.format(maxHealth) + " HP");
             //write monster name
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -> {
                 encounterOpponentController.setMonsterNameLabel(m.name());
@@ -699,10 +692,7 @@ public class EncounterController extends Controller {
                 } else {
                     encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());
                 }
-                encounterOpponentController
-                        .setHealthLabel(formatter.format(currentHealth) + "/" + formatter.format(maxHealth) + " HP")
-                        .setLevelLabel("LVL " + monster.level())
-                        .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
+                encounterOpponentController.setHealthLabel(formatter.format(currentHealth) + "/" + formatter.format(maxHealth) + " HP").setLevelLabel("LVL " + monster.level()).setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
                 if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
                     encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);
                     // if health is 0, then add to the team the information that the monster is died.
