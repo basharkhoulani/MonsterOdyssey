@@ -114,6 +114,7 @@ public class ItemCell extends ListCell<Item> {
                                 delay.setOnFinished(event -> updateItem(item, empty));
                                 delay.play();
                             }));
+            setStyle("-fx-border-width: 1px; -fx-border-color: #000000");
             }
         }
 
