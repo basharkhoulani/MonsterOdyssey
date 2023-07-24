@@ -197,6 +197,7 @@ public class IngameController extends Controller {
     private boolean loading;
     private VBox loadingScreen;
     private Timeline loadingScreenAnimation;
+    private boolean inCoinsEarnedInfoBox = false;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -214,12 +215,15 @@ public class IngameController extends Controller {
         // Initialize key event listeners
         keyPressedHandler = event -> {
             if (event.getCode().toString().equals(preferences.get("interaction", "E"))) {
-                if (!inNpcPopup && !inEncounterInfoBox) {
+                if (!inNpcPopup && !inEncounterInfoBox && !inCoinsEarnedInfoBox) {
                     interactWithTrainer();
                 } else if (inEncounterInfoBox) {
                     stackPane.getChildren().remove(dialogStackPane);
                     this.inEncounterInfoBox = false;
                     showEncounterScene();
+                } else if (inCoinsEarnedInfoBox) {
+                    inCoinsEarnedInfoBox = false;
+                    stackPane.getChildren().remove(dialogStackPane);
                 }
             }
             if (event.getCode().toString().equals(preferences.get("pauseMenu", "ESCAPE"))) {
@@ -1166,7 +1170,8 @@ public class IngameController extends Controller {
                 resources.getString("COINS.EARNED2")));
         inDialog = false;
         inEncounterInfoBox = false;
-        movementDisabled = true;
+        inCoinsEarnedInfoBox = true;
+        movementDisabled = false;
     }
 
     private void showEncounterScene() {
