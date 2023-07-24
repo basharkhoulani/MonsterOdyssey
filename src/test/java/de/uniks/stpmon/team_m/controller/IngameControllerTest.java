@@ -314,24 +314,9 @@ public class IngameControllerTest extends ApplicationTest {
         )));
 
 
-        lenient().when(presetsService.getMonsterImage(anyInt())).thenReturn(Observable.just(
-                new ResponseBody() {
-                    @Override
-                    public MediaType contentType() {
-                        return null;
-                    }
+        ResponseBody responseBody = mock(ResponseBody.class);
 
-                    @Override
-                    public long contentLength() {
-                        return 0;
-                    }
-
-                    @Override
-                    public BufferedSource source() {
-                        return null;
-                    }
-                }
-        ));
+        lenient().when(presetsService.getMonsterImage(anyInt())).thenReturn(Observable.just(responseBody));
 
         Opponent opponent = new Opponent(
                 "2023-05-30T12:02:57.510Z",
@@ -410,6 +395,7 @@ public class IngameControllerTest extends ApplicationTest {
         IngameMiniMapController ingameMini = mock(IngameMiniMapController.class);
         when(ingameMiniMapControllerProvider.get()).thenReturn(ingameMini);
         doNothing().when(ingameMini).init(any(), any(), any(), any(), any());
+
         Button close = new Button("Close");
         close.setOnAction(event -> {
             StackPane stackPane = lookup("#stackPane").query();
@@ -544,8 +530,6 @@ public class IngameControllerTest extends ApplicationTest {
 
         assertNotEquals("", firstNurseText);
 
-        Thread.sleep(30000);
-
         press(KeyCode.E);
         release(KeyCode.E);
 
@@ -644,7 +628,6 @@ public class IngameControllerTest extends ApplicationTest {
     @Test
     void showMonsterTest(){
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
         monstersListController.setValues(bundle, null, null, monstersListController, app);
         when(monstersListControllerProvider.get()).thenReturn(monstersListController);
         when(monstersDetailControllerProvider.get()).thenReturn(monstersDetailController);

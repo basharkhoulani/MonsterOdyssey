@@ -78,7 +78,7 @@ public class IngameMapRenderTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
+        Preferences preferences = mock(Preferences.class);
         ingameController.setValues(bundle, preferences, null, ingameController, app);
 
         UDPEventListener udpEventListener = mock(UDPEventListener.class);
@@ -250,25 +250,8 @@ public class IngameMapRenderTest extends ApplicationTest {
                         "auch ein blindes schaf findet manchmal ein huhn"
                 )
         )));
-
-        lenient().when(presetsService.getMonsterImage(anyInt())).thenReturn(Observable.just(
-                new ResponseBody() {
-                    @Override
-                    public MediaType contentType() {
-                        return null;
-                    }
-
-                    @Override
-                    public long contentLength() {
-                        return 0;
-                    }
-
-                    @Override
-                    public BufferedSource source() {
-                        return null;
-                    }
-                }
-        ));
+        ResponseBody responseBody = mock(ResponseBody.class);
+        lenient().when(presetsService.getMonsterImage(anyInt())).thenReturn(Observable.just(responseBody));
 
         Opponent opponent = new Opponent(
                 "2023-05-30T12:02:57.510Z",
