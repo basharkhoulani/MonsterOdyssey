@@ -1,7 +1,9 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.controller.subController.*;
+import de.uniks.stpmon.team_m.controller.subController.IngameStarterMonsterController;
+import de.uniks.stpmon.team_m.controller.subController.MonstersListController;
+import de.uniks.stpmon.team_m.controller.subController.NotificationListHandyController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
@@ -9,12 +11,9 @@ import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import okhttp3.MediaType;
 import okhttp3.ResponseBody;
-import okio.BufferedSource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,11 +30,8 @@ import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 import static io.reactivex.rxjava3.core.Observable.just;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class IngameMapRenderTest extends ApplicationTest {
