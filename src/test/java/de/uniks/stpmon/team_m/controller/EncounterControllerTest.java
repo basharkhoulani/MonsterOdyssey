@@ -253,11 +253,6 @@ class EncounterControllerTest extends ApplicationTest {
 
         when(encounterOpponentStorage.isWild()).thenReturn(false);
 
-        //when(presetsService.getCharacter(anyString())).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
-        //when(presetsService.getAbilities()).thenReturn(Observable.just(List.of(new AbilityDto(1, "Attack", "unknown", "fire", 5, 0.99, 100))));
-        //when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(monsterType));
-        //when(preferences.getDouble("volume", AudioService.getInstance().getVolume())).thenReturn(0.5);
-//        doNothing().when(battleMenuController).init();
         app.start(stage);
         app.show(encounterController);
         stage.requestFocus();
