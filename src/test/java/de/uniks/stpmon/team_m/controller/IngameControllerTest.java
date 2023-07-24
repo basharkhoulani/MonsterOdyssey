@@ -91,6 +91,8 @@ public class IngameControllerTest extends ApplicationTest {
     @InjectMocks
     MainMenuController mainMenuController;
     @Mock
+    TrainerItemsService trainerItemsService;
+    @Mock
     Provider<IngameSettingsController> ingameSettingsControllerProvider;
     @InjectMocks
     IngameSettingsController ingameSettingsController;
@@ -132,6 +134,26 @@ public class IngameControllerTest extends ApplicationTest {
                 0,
                 new NPCInfo(false, false, false, false, null, null, null)
         ));
+        when(trainerItemsService.getItems(any(), any(), any())).thenReturn(
+                Observable.just(List.of(new Item("98759283759023874653", "Travis", 2, 2)))
+        );
+        when(trainersService.getTrainer(any(), any())).thenReturn(Observable.just(
+            new Trainer("2023-05-30T12:02:57.510Z",
+                    "2023-05-30T12:01:57.510Z",
+                    "6475e595ac3946b6a812d863",
+                    "646bab5cecf584e1be02598a",
+                    "6475e595ac3946b6a812d868",
+                    "Hans",
+                    "Premade_Character_01.png",
+                    0,
+                    List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                    List.of(1,2),
+                    List.of("646bacc568933551792bf3d5"),
+                    "6475e595ac3946b6a812d863",
+                    33,
+                    18,
+                    0,
+                    new NPCInfo(false, false, false, false, null, null, null))));
         when(trainerStorageProvider.get().getRegion()).thenReturn(
                 new Region(
                         "2023-05-22T17:51:46.772Z",
