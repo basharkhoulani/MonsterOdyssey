@@ -277,9 +277,7 @@ public class IngameController extends Controller {
                         trainerStorageProvider.get().getRegion()._id(),
                         trainerStorageProvider.get().getTrainer()._id(),
                         null
-                ).observeOn(FX_SCHEDULER).subscribe(items -> {
-                    trainerStorageProvider.get().setItems(items.stream().filter(item -> item.trainer().equals(trainerStorageProvider.get().getTrainer()._id())).collect(Collectors.toList()));
-                }));
+                ).observeOn(FX_SCHEDULER).subscribe(trainerStorageProvider.get()::setItems));
 
     }
 
@@ -1268,16 +1266,7 @@ public class IngameController extends Controller {
     }
 
     public void showCoins() {
-        disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER).subscribe(
-                trainer -> {
-                    int coins = trainer.coins();
-                    coinsLabel.setText(String.valueOf(coins));
-                },
-                error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }
-        ));
+        coinsLabel.setText(String.valueOf(trainerStorageProvider.get().getTrainer().coins()));
     }
 
     /*
