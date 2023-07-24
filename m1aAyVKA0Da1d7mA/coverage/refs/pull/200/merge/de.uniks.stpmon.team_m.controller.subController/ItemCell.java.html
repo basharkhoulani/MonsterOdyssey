@@ -80,7 +80,7 @@ public class ItemCell extends ListCell&lt;Item&gt; {
 <span class="nc" id="L80">                                this.itemTypeDto = itemTypeDto;</span>
 <span class="nc" id="L81">                                loadFXML();</span>
 <span class="nc" id="L82">                                itemLabel.setText(itemTypeDto.name());</span>
-<span class="nc" id="L83">                                itemNumber.setText(String.valueOf(item.amount()));</span>
+<span class="nc" id="L83">                                itemNumber.setText(&quot;(&quot; + item.amount() + &quot;)&quot;);</span>
 
 <span class="nc" id="L85">                                disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)</span>
 <span class="nc" id="L86">                                        .subscribe(itemImage -&gt; {</span>
