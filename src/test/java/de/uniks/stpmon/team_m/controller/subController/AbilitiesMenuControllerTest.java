@@ -70,7 +70,20 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
                 35,
                 1.0,
                 2))));
-        abilitiesMenuController.init(monster, presetsService, encounterController);
+        Opponent currentOpponent = new Opponent(
+                "2023-07-11T18:07:49.590Z",
+                "2023-07-11T18:07:54.361Z",
+                "64ad9a7532eb8b56aafb513a",
+                "64ad9a7532eb8b56aafb5138",
+                "64ad9a4532eb8b56aafb4a7b",
+                false,
+                false,
+                "64ad9a5a6cec1b8f0ff857ed",
+                null,
+                List.of(),
+                0
+        );
+        abilitiesMenuController.init(monster, presetsService, encounterController, currentOpponent);
         app.start(stage);
         app.show(abilitiesMenuController);
         stage.requestFocus();
@@ -96,21 +109,6 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
         when(encounterOpponentStorage.getEncounterId()).thenReturn("64ad9a7532eb8b56aafb5138");
         when(encounterOpponentStorage.getRegionId()).thenReturn("645e32c6866ace359554a7ec");
         Move move = new AbilityMove("ability", 1, "000000000000000000000000");
-
-
-        when(encounterOpponentStorage.getSelfOpponent()).thenReturn(new Opponent(
-                "2023-07-11T18:07:49.590Z",
-                "2023-07-11T18:07:54.361Z",
-                "64ad9a7532eb8b56aafb513a",
-                "64ad9a7532eb8b56aafb5138",
-                "64ad9a4532eb8b56aafb4a7b",
-                false,
-                false,
-                "64ad9a5a6cec1b8f0ff857ed",
-                null,
-                List.of(),
-                0
-        ));
 
         when(encounterOpponentStorage.getTargetOpponent()).thenReturn(new Opponent(
                 "2023-07-11T18:07:49.594Z",
