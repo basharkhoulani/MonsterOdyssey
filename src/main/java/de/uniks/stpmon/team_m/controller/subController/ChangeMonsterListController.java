@@ -65,7 +65,8 @@ public class ChangeMonsterListController extends Controller {
                     activeMonstersList = list.stream()
                             .filter(monster -> trainerStorageProvider.get().getTrainer().team().contains(monster._id()) && !Objects.equals(monster
                                     ._id(), encounterOpponentStorageProvider.get().getSelfOpponent().monster())
-                                    && !(encounterOpponentStorageProvider.get().isTwoMonster() && Objects.equals(monster._id(), encounterOpponentStorageProvider.get().getCoopOpponent().monster())))
+                                    && !(encounterOpponentStorageProvider.get().isTwoMonster() && Objects.equals(monster._id(), encounterOpponentStorageProvider.get().getCoopOpponent().monster()))
+                                    && monster.currentAttributes().health() > 0)
                             .collect(Collectors.toList());
                     initMonsterList(activeMonstersList);
                 }, throwable -> showError(throwable.getMessage())));
