@@ -28,6 +28,7 @@ import javafx.util.Duration;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -104,6 +105,7 @@ public class EncounterController extends Controller {
     private int repeatedTimes = 0;
     private int currentMonsterIndex = 0;
     private int deleteOpponents = 0;
+    private DecimalFormat formatter = new DecimalFormat("#,###.0");
 
 
     @Inject
@@ -422,10 +424,12 @@ public class EncounterController extends Controller {
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
             encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);
             listenToMonster(opponent.trainer(), opponent.monster(), encounterOpponentController, opponent);
+            double currentHealth = monster.currentAttributes().health();
+            double maxHealth = monster.attributes().health();
             encounterOpponentController.setLevelLabel("LVL " + monster.level())
                     .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1))
                     .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health())
-                    .setHealthLabel(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
+                    .setHealthLabel(formatter.format(currentHealth) + "/" + formatter.format(maxHealth) + " HP");
             //write monster name
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -> {
                 encounterOpponentController.setMonsterNameLabel(m.name());
@@ -506,7 +510,6 @@ public class EncounterController extends Controller {
     public void listenToOpponents(String encounterId) {
         disposables.add(eventListener.get().listen("encounters." + encounterId + ".trainers.*.opponents.*.*", Opponent.class).observeOn(FX_SCHEDULER).subscribe(event -> {
             final Opponent opponent = event.data();
-            System.out.println("Opponent: " + event.suffix() + opponent);
             if (event.suffix().contains("updated")) {
                 updateOpponent(opponent);
             } else if (event.suffix().contains("deleted")) {
@@ -685,8 +688,8 @@ public class EncounterController extends Controller {
         disposables.add(eventListener.get().listen("trainers." + trainerId + ".monsters." + monsterId + ".*", Monster.class).observeOn(FX_SCHEDULER).subscribe(event -> {
             final Monster monster = event.data();
             if (event.suffix().contains("updated")) {
-                float currentHealth = (float) (Math.round(monster.currentAttributes().health() * 10) / 10);
-                float maxHealth = (float) (Math.round(monster.attributes().health() * 10) / 10);
+                double currentHealth = (double) monster.currentAttributes().health();
+                double maxHealth = (double) monster.attributes().health();
                 if (!GraphicsEnvironment.isHeadless()) {
                     AnimationBuilder.buildShakeAnimation(encounterOpponentController.monsterImageView, 50, 3, 1).play();
                     if (currentHealth > 0) {
@@ -698,7 +701,7 @@ public class EncounterController extends Controller {
                     encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());
                 }
                 encounterOpponentController
-                        .setHealthLabel(currentHealth + "/" + maxHealth)
+                        .setHealthLabel(formatter.format(currentHealth) + "/" + formatter.format(maxHealth) + " HP")
                         .setLevelLabel("LVL " + monster.level())
                         .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
                 if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
