@@ -575,17 +575,17 @@ public class EncounterController extends Controller {
             Opponent o = opponentsDelete.get(id);
             if (o.monster() == null) {
                 if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                    showResultPopUp(resources.getString("YOU.FAILED"));
+                    showResultPopUp(resources.getString("YOU.FAILED"), false);
                 } else {
-                    showResultPopUp(resources.getString("YOU.WON"));
+                    showResultPopUp(resources.getString("YOU.WON"), true);
                 }
             }
         }
     }
 
-    private void showResultPopUp(String string) {
+    private void showResultPopUp(String string, boolean isWin) {
         Opponent selfOpponent = encounterOpponentStorage.getSelfOpponent();
-        if (selfOpponent.coins() != 0) {
+        if (selfOpponent.coins() != 0 && isWin) {
             encounterResultController.setCoinsAmount(selfOpponent.coins());
             encounterResultController.setCoinsEarned(true);
         }
@@ -654,7 +654,7 @@ public class EncounterController extends Controller {
                 fleeAnimation.play();
             });
             pause.play();
-            fleeAnimation.setOnFinished(evt -> showResultPopUp(resources.getString("YOU.WON")));
+            fleeAnimation.setOnFinished(evt -> showResultPopUp(resources.getString("YOU.WON"), true));
         }
     }
 
@@ -681,7 +681,7 @@ public class EncounterController extends Controller {
         });
         pause.play();
         if (!hasAnotherMonster[0]) {
-            showResultPopUp(resources.getString("YOU.FAILED"));
+            showResultPopUp(resources.getString("YOU.FAILED"), false);
         }
     }
 
