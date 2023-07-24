@@ -437,26 +437,26 @@ public class IngameController extends Controller {
         specificSounds();
 
         //Keybindings
-        if (preferences.get("walkUp", null) == null) {
+        if(preferences.get("walkUp",null) == null){
             preferences.put("walkUp", KeyCode.W.getChar());
         }
-        if (preferences.get("walkDown", null) == null) {
-            preferences.put("walkDown", KeyCode.S.getChar());
+        if(preferences.get("walkDown",null) == null){
+            preferences.put("walkDown",KeyCode.S.getChar());
         }
-        if (preferences.get("walkLeft", null) == null) {
-            preferences.put("walkLeft", KeyCode.A.getChar());
+        if(preferences.get("walkLeft",null) == null){
+            preferences.put("walkLeft",KeyCode.A.getChar());
         }
-        if (preferences.get("walkRight", null) == null) {
-            preferences.put("walkRight", KeyCode.D.getChar());
+        if(preferences.get("walkRight",null) == null){
+            preferences.put("walkRight",KeyCode.D.getChar());
         }
-        if (preferences.get("interaction", null) == null) {
-            preferences.put("interaction", KeyCode.E.getChar());
+        if(preferences.get("interaction",null) == null){
+            preferences.put("interaction",KeyCode.E.getChar());
         }
-        if (preferences.get("pauseMenu", null) == null) {
-            preferences.put("pauseMenu", "ESCAPE");
+        if(preferences.get("pauseMenu",null) == null){
+            preferences.put("pauseMenu","ESCAPE");
         }
-        if (preferences.get("inventory", null) == null) {
-            preferences.put("inventory", KeyCode.I.getChar());
+        if(preferences.get("inventory",null) == null){
+            preferences.put("inventory",KeyCode.I.getChar());
         }
         showCoins();
         return parent;
@@ -1136,18 +1136,7 @@ public class IngameController extends Controller {
                         encounterOpponentStorage.setAttacker(opponent.isAttacker());
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
-                                    encounterOpponentStorage.setEncounterSize(opts.size());
-                                    encounterOpponentStorage.resetEnemyOpponents();
-                                    encounterOpponentStorage.setOpponentsInStorage(opts);
-                                    for (Opponent o : opts) {
-                                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                                            if (o.isAttacker() != encounterOpponentStorage.isAttacker()) {
-                                                encounterOpponentStorage.addEnemyOpponent(o);
-                                            } else {
-                                                encounterOpponentStorage.setCoopOpponent(o);
-                                            }
-                                        }
-                                    }
+                                    initEncounterOpponentStorage(opts);
                                     if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponents().size() != 0) {
                                         showEncounterInfoWindow();
                                         this.isNewStart = false;
@@ -1187,18 +1176,7 @@ public class IngameController extends Controller {
                         encounterOpponentStorage.setAttacker(opponent.isAttacker());
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
-                                    encounterOpponentStorage.setOpponentsInStorage(opts);
-                                    encounterOpponentStorage.resetEnemyOpponents();
-                                    encounterOpponentStorage.setEncounterSize(opts.size());
-                                    for (Opponent o : opts) {
-                                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                                            if (o.isAttacker() != encounterOpponentStorage.isAttacker()) {
-                                                encounterOpponentStorage.addEnemyOpponent(o);
-                                            } else {
-                                                encounterOpponentStorage.setCoopOpponent(o);
-                                            }
-                                        }
-                                    }
+                                    initEncounterOpponentStorage(opts);
                                     if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponents().size() != 0 && isNewStart) {
                                         showEncounterScene();
                                     }
@@ -1206,6 +1184,19 @@ public class IngameController extends Controller {
                     }
                 }, Throwable::printStackTrace));
 
+    }
+    private void initEncounterOpponentStorage(List<Opponent> opponents) {
+        encounterOpponentStorage.setOpponentsInStorage(opponents);
+        encounterOpponentStorage.resetEnemyOpponents();
+        encounterOpponentStorage.setEncounterSize(opponents.size());
+        for (Opponent o : opponents) {
+            if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && o.isAttacker() != encounterOpponentStorage.isAttacker()) {
+                encounterOpponentStorage.addEnemyOpponent(o);
+            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) && o.isAttacker() == encounterOpponentStorage.isAttacker()){
+                encounterOpponentStorage.setCoopOpponent(o);
+                encounterOpponentStorage.setTwoMonster(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id()));
+            }
+        }
     }
 
     private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {
