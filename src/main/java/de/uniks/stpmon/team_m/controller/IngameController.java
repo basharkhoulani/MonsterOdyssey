@@ -171,6 +171,8 @@ public class IngameController extends Controller {
     private HashMap<Trainer, Position> trainerPositionHashMap;
     Stage popupStage;
     private VBox nursePopupVBox;
+    private VBox clerkPopupVBox;
+
     private DialogController dialogController;
     private Trainer currentNpc;
     private NpcTextManager npcTextManager;
@@ -1311,23 +1313,29 @@ public class IngameController extends Controller {
         int checkTileY = currentY;
         int checkTileXForNurse = currentX;
         int checkTileYForNurse = currentY;
+        int checkTileXForSpecialNpc = currentX;
+        int checkTileYForSpecialNpc = currentY;
 
         switch (direction) {
             case 0 -> {                         // facing right
                 checkTileX++;
                 checkTileXForNurse += 2;
+                checkTileXForSpecialNpc += 2;
             }
             case 1 -> {                         // facing up
                 checkTileY--;
                 checkTileYForNurse -= 2;
+                checkTileYForSpecialNpc -= 2;
             }
             case 2 -> {                         // facing left
                 checkTileX--;
                 checkTileXForNurse -= 2;
+                checkTileXForSpecialNpc -= 2;
             }
             case 3 -> {                         // facing down
                 checkTileY++;
                 checkTileYForNurse += 2;
+                checkTileYForSpecialNpc += 2;
             }
             default -> System.err.println("Unknown direction for Trainer: " + direction);
         }
@@ -1337,26 +1345,38 @@ public class IngameController extends Controller {
         if (tileInFront != null) {
             return tileInFront;
         } else {
+            Trainer specialNpcBehindCounter = searchHashedMapForTrainer(checkTileXForSpecialNpc, checkTileYForSpecialNpc);
             Trainer nurseBehindCounter = searchHashedMapForTrainer(checkTileXForNurse, checkTileYForNurse);
 
             if (nurseBehindCounter == null) {
                 return null;
             }
 
-            // maybe this will throw an error in the future. I've looked into the server for all NPC's,
-            // apparently almost all NPC's have the canHeal() boolean, but some only have walkRandomly().
-            // If they don't have the canHeal(), it should be covered by this try/catch
+            if (specialNpcBehindCounter == null) {
+                return null;
+            }
+
             try {
-                if (nurseBehindCounter.npc().canHeal()) {
-                    return nurseBehindCounter;
-                } else {
-                    return null;
+                if (specialNpcBehindCounter.npc().canHeal()) {
+                    return specialNpcBehindCounter;
                 }
             } catch (Error e) {
                 System.err.println("NPC does not have the canHeal() attribute");
                 e.printStackTrace();
-                return null;
             }
+
+            try {
+                if (specialNpcBehindCounter.npc().sells() != null) {
+                    if (!specialNpcBehindCounter.npc().sells().isEmpty()) {
+                        return specialNpcBehindCounter;
+                    }
+                }
+            } catch (Error e) {
+                System.err.println("NPC does not have the sells() attribute");
+                e.printStackTrace();
+            }
+
+            return null;
         }
     }
 
@@ -1434,6 +1454,7 @@ public class IngameController extends Controller {
                 )).observeOn(FX_SCHEDULER).subscribe());
                 endDialog(0, true);
             }
+            case spokenToClerk -> createClerkPopup();
             default -> {
             }
         }
@@ -1517,6 +1538,79 @@ public class IngameController extends Controller {
 
         // add nurseVBox to stackPane
         root.getChildren().add(nurseVBox);
+        buttonsDisable(true);
+        inNpcPopup = true;
+    }
+
+    public void createClerkPopup() {
+        // base VBox
+        VBox clerkPopup = new VBox();
+        clerkPopup.setId("clerkPopup");
+        clerkPopup.setMaxHeight(clerkPopupHeight);
+        clerkPopup.setMaxWidth(popupWidth);
+        clerkPopup.getStyleClass().add("dialogTextFlow");
+        this.clerkPopupVBox = clerkPopup;
+
+        // text field
+        Text clerkText = new Text(resources.getString("CLERK.ENTER.SHOP.QUESTION"));
+        clerkText.getStyleClass().add("clerkText");
+        TextFlow clerkQuestion = new TextFlow(clerkText);
+        clerkQuestion.setPrefWidth(popupWidth);
+        clerkQuestion.setPrefHeight(clerkQuestionHeight);
+        clerkQuestion.setPadding(dialogTextFlowInsets);
+        clerkQuestion.setTextAlignment(TextAlignment.CENTER);
+
+        // buttonsVBox
+        VBox buttonsVBox = new VBox();
+        buttonsVBox.setMaxHeight(clerkButtonsVBoxHeight);
+        buttonsVBox.setMaxWidth(popupWidth);
+        buttonsVBox.setAlignment(Pos.TOP_CENTER);
+        buttonsVBox.setSpacing(clerkButtonVBoxSpacing);
+
+        // buyButton
+        Button buyButton = new Button(resources.getString("CLERK.BUY"));
+        buyButton.setMaxWidth(clerkButtonWidth);
+        buyButton.setMinWidth(clerkButtonWidth);
+        buyButton.setMaxHeight(clerkButtonHeight);
+        buyButton.setMinHeight(clerkButtonHeight);
+        buyButton.getStyleClass().add("clerkDialogWhiteButton");
+        buyButton.setOnAction(event -> {
+            // TODO
+        });
+
+        // sellButton
+        Button sellButton = new Button(resources.getString("CLERK.SELL"));
+        sellButton.setMaxWidth(clerkButtonWidth);
+        sellButton.setMinWidth(clerkButtonWidth);
+        sellButton.setMaxHeight(clerkButtonHeight);
+        sellButton.setMinHeight(clerkButtonHeight);
+        sellButton.getStyleClass().add("clerkDialogWhiteButton");
+        sellButton.setOnAction(event -> {
+            // TODO
+        });
+
+        // leaveButton
+        Button leaveButton = new Button(resources.getString("CLERK.LEAVE"));
+        leaveButton.setMaxWidth(clerkButtonWidth);
+        leaveButton.setMinWidth(clerkButtonWidth);
+        leaveButton.setMaxHeight(clerkButtonHeight);
+        leaveButton.setMinHeight(clerkButtonHeight);
+        leaveButton.getStyleClass().add("clerkDialogYellowButton");
+        leaveButton.setOnAction(event -> {
+            continueTrainerDialog(DialogSpecialInteractions.clerkCancelShop);
+            inNpcPopup = false;
+            this.root.getChildren().remove(clerkPopupVBox);
+            buttonsDisable(false);
+        });
+
+        // add buttons to VBox
+        buttonsVBox.getChildren().addAll(buyButton, sellButton, leaveButton);
+
+        // add text and buttonsVBox to nurseVBox
+        clerkPopup.getChildren().addAll(clerkQuestion, buttonsVBox);
+
+        // add nurseVBox to stackPane
+        root.getChildren().add(clerkPopup);
         buttonsDisable(true);
         inNpcPopup = true;
     }
