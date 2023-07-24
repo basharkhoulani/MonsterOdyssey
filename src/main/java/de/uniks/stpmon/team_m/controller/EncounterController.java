@@ -438,7 +438,6 @@ public class EncounterController extends Controller {
                                 resultLevelUP = true;
                             }
                         } else if (Objects.equals(result.type(), "monster-learned")) {
-                            System.out.println(result);
                             newAbilities.add(result.ability());
                         } else if (Objects.equals(result.type(), "monster-evolved")) {
                             if (!resultEvolved) {
@@ -668,7 +667,6 @@ public class EncounterController extends Controller {
         PauseTransition pause = new PauseTransition(Duration.millis(2000));
         pause.setOnFinished(evt -> {
             ownTrainerController.monsterImageView.setVisible(false);
-            System.out.println(monstersInEncounter);
             monstersInEncounter.forEach((monster, monsterTypeDto) -> {
                 if (monster.currentAttributes().health() > 0) {
                     hasAnotherMonster[0] = true;
@@ -792,7 +790,7 @@ public class EncounterController extends Controller {
         VBox popUpVBox = new VBox();
         popUpVBox.getStyleClass().add("miniMapContainer");
         disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getCurrentTrainerMonster()._id()).observeOn(FX_SCHEDULER).subscribe(monster -> {
-            levelUpController.init(popUpVBox, rootStackPane, this, monster, encounterOpponentStorage.getCurrentTrainerMonsterType(), oldMonster, newAbilities, abilityDtos);
+            levelUpController.init(popUpVBox, rootStackPane, this, monster, encounterOpponentStorage.getCurrentTrainerMonsterType(), oldMonster, newAbilities);
             popUpVBox.getChildren().add(levelUpController.render());
             rootStackPane.getChildren().add(popUpVBox);
             newAbilities.clear();
