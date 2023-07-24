@@ -2,12 +2,10 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
-import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -22,18 +20,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.net.URL;
-import java.util.Objects;
-import java.util.Random;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 import java.util.prefs.Preferences;
-
-import static de.uniks.stpmon.team_m.Constants.ABILITYPALETTE;
-import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
 
 public class ItemCell extends ListCell<Item> {
