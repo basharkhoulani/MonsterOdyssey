@@ -81,12 +81,10 @@ public class ItemMenuController extends Controller {
     }
 
     public void initItems(List<Item> itemList) {
-        System.out.println("Initing items: " + itemList.size());
         for (Item item : itemList) {
             initItem(item);
         }
     }
-
     public void initItem(Item item) {
         itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app));
         itemListView.getItems().add(item);
