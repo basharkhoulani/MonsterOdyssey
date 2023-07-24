@@ -27,7 +27,7 @@ public class EncounterOpponentStorage {
     private boolean isWild;
     private int encounterSize;
     private boolean isAttacker;
-    private boolean isTwoMonster;
+    private boolean isTwoMonster = false;
     private Opponent targetOpponent;
     private Opponent leastTargetOpponent;
 

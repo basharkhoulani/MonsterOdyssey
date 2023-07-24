@@ -794,8 +794,8 @@ public class EncounterController extends Controller {
 
     public void yourMonsterDefeated(String opponentId) {
         monsterInTeamHashMap.forEach((monsterId, isDied) -> {
-            if (!isDied) {
-                if (!Objects.equals(monsterId, encounterOpponentStorage.getSelfOpponent().monster()) && !Objects.equals(monsterId, encounterOpponentStorage.getCoopOpponent().monster())) {
+            if (!isDied && !Objects.equals(monsterId, encounterOpponentStorage.getSelfOpponent().monster())) {
+                if (!encounterOpponentStorage.isTwoMonster() || !Objects.equals(monsterId, encounterOpponentStorage.getCoopOpponent().monster())) {
                     disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, monsterId, null).observeOn(FX_SCHEDULER).subscribe(
                             opponent -> resetRepeatedTimes(), Throwable::printStackTrace));
                 }
