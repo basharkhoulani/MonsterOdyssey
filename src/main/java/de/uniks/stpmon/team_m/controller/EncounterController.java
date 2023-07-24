@@ -519,11 +519,10 @@ public class EncounterController extends Controller {
                     showResult();
                 }
             } else if (event.suffix().equals("created")) {
-                disposables.add(encounterOpponentsService.getEncounterOpponents(trainerStorageProvider.get().getRegion()._id(), encounterId)
-                        .observeOn(FX_SCHEDULER).subscribe(opponents -> {
-                            initEncounterOpponentStorage(opponents);
-                            render();
-                        }, Throwable::printStackTrace));
+                disposables.add(encounterOpponentsService.getEncounterOpponents(trainerStorageProvider.get().getRegion()._id(), encounterId).observeOn(FX_SCHEDULER).subscribe(opponents -> {
+                    initEncounterOpponentStorage(opponents);
+                    render();
+                }, Throwable::printStackTrace));
             }
         }, Throwable::printStackTrace));
     }
@@ -799,8 +798,7 @@ public class EncounterController extends Controller {
         monsterInTeamHashMap.forEach((monsterId, isDied) -> {
             if (!isDied && !Objects.equals(monsterId, encounterOpponentStorage.getSelfOpponent().monster())) {
                 if (!encounterOpponentStorage.isTwoMonster() || !Objects.equals(monsterId, encounterOpponentStorage.getCoopOpponent().monster())) {
-                    disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, monsterId, null).observeOn(FX_SCHEDULER).subscribe(
-                            opponent -> resetRepeatedTimes(), Throwable::printStackTrace));
+                    disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, monsterId, null).observeOn(FX_SCHEDULER).subscribe(opponent -> resetRepeatedTimes(), Throwable::printStackTrace));
                 }
             }
         });
@@ -815,11 +813,10 @@ public class EncounterController extends Controller {
             ownTrainerController.monsterImageView.setVisible(false);
             fleeAnimation.play();
         });
-        fleeAnimation.setOnFinished(evt -> disposables.add(encounterOpponentsService.deleteOpponent(encounterOpponentStorage.getRegionId(), encounterOpponentStorage.getEncounterId(), encounterOpponentStorage.getSelfOpponent()._id()).observeOn(FX_SCHEDULER)
-                .subscribe(result -> showIngameController(), error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                })));
+        fleeAnimation.setOnFinished(evt -> disposables.add(encounterOpponentsService.deleteOpponent(encounterOpponentStorage.getRegionId(), encounterOpponentStorage.getEncounterId(), encounterOpponentStorage.getSelfOpponent()._id()).observeOn(FX_SCHEDULER).subscribe(result -> showIngameController(), error -> {
+            showError(error.getMessage());
+            error.printStackTrace();
+        })));
         firstPause.play();
     }
 
@@ -953,21 +950,20 @@ public class EncounterController extends Controller {
             }
         }
 
-        disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(
-                opponent -> {
-                    resetRepeatedTimes();
-                    if (encounterOpponentStorage.isTwoMonster()) {
-                        if (Objects.equals(encounterOpponentStorage.getSelfOpponent()._id(), opponent._id())) {
-                            encounterOpponentStorage.setSelfOpponent(opponent);
-                        } else if (Objects.equals(encounterOpponentStorage.getCoopOpponent()._id(), opponent._id())) {
-                            encounterOpponentStorage.setCoopOpponent(opponent);
-                        }
-                    } else {
-                        encounterOpponentStorage.setSelfOpponent(opponent);
-                    }
-                    updateDescription(resources.getString("YOU.CHANGED.MONSTER") + ". ", true);
-                    increaseCurrentMonsterIndex();
-                }));
+        disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(opponent -> {
+            resetRepeatedTimes();
+            if (encounterOpponentStorage.isTwoMonster()) {
+                if (Objects.equals(encounterOpponentStorage.getSelfOpponent()._id(), opponent._id())) {
+                    encounterOpponentStorage.setSelfOpponent(opponent);
+                } else if (Objects.equals(encounterOpponentStorage.getCoopOpponent()._id(), opponent._id())) {
+                    encounterOpponentStorage.setCoopOpponent(opponent);
+                }
+            } else {
+                encounterOpponentStorage.setSelfOpponent(opponent);
+            }
+            updateDescription(resources.getString("YOU.CHANGED.MONSTER") + ". ", true);
+            increaseCurrentMonsterIndex();
+        }));
     }
 
 }
