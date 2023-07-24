@@ -79,13 +79,18 @@ public class IngameMapRenderTest extends ApplicationTest {
 
         UDPEventListener udpEventListener = mock(UDPEventListener.class);
         Mockito.when(udpEventListenerProvider.get()).thenReturn(udpEventListener);
-        when(udpEventListener.listen(any(), any())).thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("646bac223b4804b87c0b8054", "64610ec8420b3d786212aea3", 0, 0, 2))));
+        when(udpEventListener.listen(any(), any()))
+                .thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("6475e595ac3946b6a812d865", "6475e595ac3946b6a812d863", 1, 0, 0))))
+                .thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("6475e595ac3946b6a812d865", "6475e595ac3946b6a812d863", 1, 1, 0))))
+                .thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("6475e595ac3946b6a812d865", "6475e595ac3946b6a812d863", 0, 1, 0))))
+                .thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("6475e595ac3946b6a812d865", "6475e595ac3946b6a812d863", 0, 0, 0))))
+                .thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("6475e595ac3946b6a812d865", "64610ec8420b3d786212aea3", 0, 0, 0))));
         final TrainerStorage trainerStorage = mock(TrainerStorage.class);
         Mockito.when(trainerStorageProvider.get()).thenReturn(trainerStorage);
         Mockito.when(trainerStorage.getTrainer()).thenReturn(new Trainer(
                 "2023-05-22T17:51:46.772Z",
                 "2023-05-22T17:51:46.772Z",
-                "646bac223b4804b87c0b8054",
+                "6475e595ac3946b6a812d865",
                 "646bab5cecf584e1be02598a",
                 "646bac8c1a74032c70fffe24",
                 "Hans",
@@ -94,12 +99,30 @@ public class IngameMapRenderTest extends ApplicationTest {
                 List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
                 List.of(1, 2),
                 List.of("646bacc568933551792bf3d5"),
-                "646bacc568933551792bf3d5",
+                "6475e595ac3946b6a812d863",
                 33,
                 19,
                 0,
                 new NPCInfo(false, false, false, false, null, null, null)
         ));
+
+        lenient().when(trainersService.getTrainer(any(), any())).thenReturn(Observable.just(new Trainer(
+                        "2023-05-22T17:51:46.772Z",
+                        "2023-05-22T17:51:46.772Z",
+                        "6475e595ac3946b6a812d865",
+                        "646bab5cecf584e1be02598a",
+                        "646bac8c1a74032c70fffe24",
+                        "Hans",
+                        "Premade_Character_01.png",
+                        0,
+                        List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                        List.of(1, 2),
+                        List.of("646bacc568933551792bf3d5"),
+                        "6475e595ac3946b6a812d863",
+                        33,
+                        19,
+                        0,
+                        new NPCInfo(false, false, false, false, null, null, null))));
 
         doNothing().when(trainerStorage).setMonsters(any());
         lenient().when(presetsService.getCharacter(any())).thenReturn(Observable.empty());
@@ -203,7 +226,6 @@ public class IngameMapRenderTest extends ApplicationTest {
         MonstersListController monstersListController = mock(MonstersListController.class);
         when(trainerStorageProvider.get().getTrainer()).thenReturn(trainer);
         when(monstersListControllerProvider.get()).thenReturn(monstersListController);
-
         notificationListHandyController.setValues(bundle, null, null, notificationListHandyController, app);
         when(notificationListHandyControllerProvider.get()).thenReturn(notificationListHandyController);
         ingameStarterMonsterController.setValues(bundle, null, null, ingameStarterMonsterController, app);
