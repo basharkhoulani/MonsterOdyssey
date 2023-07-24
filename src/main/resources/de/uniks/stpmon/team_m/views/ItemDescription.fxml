@@ -18,7 +18,7 @@
                   <Insets left="8.0" top="15.0" />
                </HBox.margin>
                <children>
-                  <ImageView fx:id="itemImageView" fitHeight="130.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="itemImageView" fitHeight="120.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </VBox>
             <VBox maxHeight="-Infinity" prefHeight="130.0" prefWidth="232.0">
