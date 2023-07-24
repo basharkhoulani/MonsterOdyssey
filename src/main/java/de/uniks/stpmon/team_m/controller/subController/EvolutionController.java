@@ -31,7 +31,7 @@ public class EvolutionController extends Controller {
     @FXML
     public ImageView newMonsterImageView;
     @FXML
-    public Label newMonster;
+    public Label newMonsterLabel;
     @FXML
     public Button okButton;
     @FXML
@@ -42,18 +42,22 @@ public class EvolutionController extends Controller {
     private Monster monster;
     private MonsterTypeDto monsterTypeDto;
     private Monster oldMonster;
+    private Image oldMonsterImage;
+    private Image newMonsterImage;
 
     @Inject
     public EvolutionController() {
     }
 
-    public void init(VBox container, StackPane root, EncounterController encounterController, Monster currentMonster, MonsterTypeDto currentMonsterTypeDto, Monster oldMonster) {
+    public void init(VBox container, StackPane root, EncounterController encounterController, Monster currentMonster, MonsterTypeDto currentMonsterTypeDto, Monster oldMonster, Image oldMonsterImage, Image newMonsterImage) {
         this.container = container;
         this.root = root;
         this.encounterController = encounterController;
         this.monster = currentMonster;
         this.monsterTypeDto = currentMonsterTypeDto;
         this.oldMonster = oldMonster;
+        this.oldMonsterImage = oldMonsterImage;
+        this.newMonsterImage = newMonsterImage;
     }
 
     public Parent render() {
@@ -66,5 +70,6 @@ public class EvolutionController extends Controller {
 
     public void okButtonPressed() {
         root.getChildren().remove(container);
+        encounterController.continueBattle();
     }
 }

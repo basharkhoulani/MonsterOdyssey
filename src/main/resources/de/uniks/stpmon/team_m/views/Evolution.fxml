@@ -24,7 +24,7 @@
         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="250.0">
             <ImageView fx:id="newMonsterImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true"
                        preserveRatio="true"/>
-            <Label fx:id="newMonster" prefHeight="50.0" prefWidth="200.0"/>
+            <Label fx:id="newMonsterLabel" prefHeight="50.0" prefWidth="200.0"/>
         </VBox>
     </HBox>
     <Button fx:id="okButton" mnemonicParsing="false" onAction="#okButtonPressed" prefHeight="32.0" prefWidth="95.0"
