@@ -265,12 +265,5 @@ public class Constants {
     public static final String FROZEN = "frozen";
     public static final String CONFUSED = "confused";
 
-    public enum ITEM_ACTION {
-        USE_ITEM() {
-            @Override
-            public String toString() {
-                return "use-item";
-            }
-        }
-    }
+    public static final String ITEM_ACTION_USE_ITEM = "use-item";
 }

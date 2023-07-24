@@ -937,7 +937,7 @@ public class IngameController extends Controller {
         disposables.add(trainerItemsService.useOrTradeItem(
                 trainerStorageProvider.get().getRegion()._id(),
                 trainerStorageProvider.get().getTrainer()._id(),
-                ITEM_ACTION.USE_ITEM.toString(),
+                ITEM_ACTION_USE_ITEM,
                 // Not sure if amount of 1 is correct or if we should use item.amount()-1
                 new UpdateItemDto(1, item.type(), monster._id())
         ).observeOn(FX_SCHEDULER).subscribe(result -> trainerStorageProvider.get().updateItem(result)));
