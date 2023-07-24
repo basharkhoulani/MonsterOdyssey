@@ -22,7 +22,6 @@ import org.testfx.framework.junit5.ApplicationTest;
 import javax.inject.Provider;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
@@ -34,9 +33,6 @@ public class LevelUpControllerTest extends ApplicationTest {
     App app = new App(null);
     @InjectMocks
     LevelUpController levelUpController;
-    @Mock
-    Provider<EncounterController> encounterControllerProvider;
-
 
     @Override
     public void start(Stage stage) {
