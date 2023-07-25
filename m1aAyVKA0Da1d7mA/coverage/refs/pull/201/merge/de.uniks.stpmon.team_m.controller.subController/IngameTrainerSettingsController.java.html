@@ -122,121 +122,125 @@ public class IngameTrainerSettingsController extends Controller {
 <span class="fc" id="L122">    }</span>
 
     public void deleteTrainer() {
-<span class="nc" id="L125">        disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).</span>
-<span class="nc" id="L126">                observeOn(FX_SCHEDULER).subscribe(end -&gt; {</span>
-<span class="nc" id="L127">                    trainerStorageProvider.get().setTrainer(null);</span>
-<span class="nc" id="L128">                    trainerStorageProvider.get().setTrainerSprite(null);</span>
-<span class="nc" id="L129">                    trainerStorageProvider.get().setTrainerName(null);</span>
-<span class="nc" id="L130">                    trainerStorageProvider.get().setRegion(null);</span>
-<span class="nc" id="L131">                }, error -&gt; this.showError(error.getMessage())));</span>
-<span class="nc" id="L132">        MainMenuController mainMenuController = mainMenuControllerProvider.get();</span>
-<span class="nc" id="L133">        mainMenuController.setTrainerDeletion();</span>
-<span class="nc" id="L134">        ingameController.destroy();</span>
-<span class="nc" id="L135">        app.show(mainMenuController);</span>
-<span class="nc" id="L136">    }</span>
+<span class="fc" id="L125">        disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).</span>
+<span class="fc" id="L126">                observeOn(FX_SCHEDULER).subscribe(end -&gt; {</span>
+<span class="fc" id="L127">                    trainerStorageProvider.get().setTrainer(null);</span>
+<span class="fc" id="L128">                    trainerStorageProvider.get().setTrainerSprite(null);</span>
+<span class="fc" id="L129">                    trainerStorageProvider.get().setTrainerName(null);</span>
+<span class="fc" id="L130">                    trainerStorageProvider.get().setRegion(null);</span>
+<span class="pc" id="L131">                }, error -&gt; this.showError(error.getMessage())));</span>
+<span class="fc" id="L132">        MainMenuController mainMenuController = mainMenuControllerProvider.get();</span>
+<span class="fc" id="L133">        mainMenuController.setTrainerDeletion();</span>
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if (ingameController != null) {</span>
+<span class="nc" id="L135">            ingameController.destroy();</span>
+        }
+<span class="fc" id="L137">        app.show(mainMenuController);</span>
+<span class="fc" id="L138">    }</span>
 
     public void buttonsDisableTrainer(boolean set) {
-<span class="fc" id="L139">        deleteTrainerButton.setDisable(set);</span>
-<span class="fc" id="L140">        updateTrainerButton.setDisable(set);</span>
-<span class="fc" id="L141">        trainerNameEditButton.setDisable(set);</span>
-<span class="fc" id="L142">        arrowLeftButton.setDisable(set);</span>
-<span class="fc" id="L143">        arrowRightButton.setDisable(set);</span>
-<span class="fc" id="L144">        goBackButton.setDisable(set);</span>
-<span class="fc" id="L145">    }</span>
+<span class="fc" id="L141">        deleteTrainerButton.setDisable(set);</span>
+<span class="fc" id="L142">        updateTrainerButton.setDisable(set);</span>
+<span class="fc" id="L143">        trainerNameEditButton.setDisable(set);</span>
+<span class="fc" id="L144">        arrowLeftButton.setDisable(set);</span>
+<span class="fc" id="L145">        arrowRightButton.setDisable(set);</span>
+<span class="fc" id="L146">        goBackButton.setDisable(set);</span>
+<span class="fc" id="L147">    }</span>
 
     private void loadAndSetTrainerImage() {
-<span class="fc" id="L148">        String sprite = trainerStorageProvider.get().getTrainerSprite();</span>
-<span class="fc" id="L149">        String subString = sprite.substring(sprite.length() - 6, sprite.length() - 4);</span>
-<span class="fc" id="L150">        index = Integer.parseInt(subString);</span>
-<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L152">            trainerAvatarImageView.setImage(ImageProcessor.showScaledCharacter(sprite, 3, false));</span>
+<span class="fc" id="L150">        String sprite = trainerStorageProvider.get().getTrainerSprite();</span>
+<span class="fc" id="L151">        String subString = sprite.substring(sprite.length() - 6, sprite.length() - 4);</span>
+<span class="fc" id="L152">        index = Integer.parseInt(subString);</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L154">            trainerAvatarImageView.setImage(ImageProcessor.showScaledCharacter(sprite, 3, false));</span>
         }
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L156">    }</span>
 
     public void initIngame(IngameController ingameController, VBox ingameVbox) {
-<span class="fc" id="L157">        this.ingameController = ingameController;</span>
-<span class="fc" id="L158">        this.ingameVbox = ingameVbox;</span>
-<span class="fc" id="L159">    }</span>
+<span class="fc" id="L159">        this.ingameController = ingameController;</span>
+<span class="fc" id="L160">        this.ingameVbox = ingameVbox;</span>
+<span class="fc" id="L161">    }</span>
 
     public void goBackToSettings() {
-<span class="fc" id="L162">        ingameController.root.getChildren().remove(ingameVbox);</span>
-<span class="fc" id="L163">    }</span>
+<span class="fc" id="L164">        ingameController.root.getChildren().remove(ingameVbox);</span>
+<span class="fc" id="L165">    }</span>
 
     public void editTrainerName() {
-<span class="nc" id="L166">        trainerNameTextfield.setDisable(false);</span>
-<span class="nc" id="L167">    }</span>
+<span class="fc" id="L168">        trainerNameTextfield.setDisable(false);</span>
+<span class="fc" id="L169">    }</span>
 
     public void showCharacter() {
-<span class="nc" id="L170">        trainerAvatarImageView.setImage(ImageProcessor.showScaledCharacter(characters[index - 1], 3, false));</span>
-<span class="nc" id="L171">        selectedCharacter = characters[index - 1];</span>
-<span class="nc" id="L172">    }</span>
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L173">            trainerAvatarImageView.setImage(ImageProcessor.showScaledCharacter(characters[index - 1], 3, false));</span>
+        }
+<span class="fc" id="L175">        selectedCharacter = characters[index - 1];</span>
+<span class="fc" id="L176">    }</span>
 
     public void arrowLeftClick() {
-<span class="nc" id="L175">        index--;</span>
-<span class="nc bnc" id="L176" title="All 2 branches missed.">        if (index &lt; 1) {</span>
-<span class="nc" id="L177">            index = index + characters.length;</span>
+<span class="fc" id="L179">        index--;</span>
+<span class="pc bpc" id="L180" title="1 of 2 branches missed.">        if (index &lt; 1) {</span>
+<span class="fc" id="L181">            index = index + characters.length;</span>
         }
-<span class="nc" id="L179">        showCharacter();</span>
-<span class="nc" id="L180">    }</span>
+<span class="fc" id="L183">        showCharacter();</span>
+<span class="fc" id="L184">    }</span>
 
     public void arrowRightClick() {
-<span class="nc" id="L183">        index++;</span>
-<span class="nc bnc" id="L184" title="All 2 branches missed.">        if (index &gt; characters.length) {</span>
-<span class="nc" id="L185">            index = index - characters.length;</span>
+<span class="fc" id="L187">        index++;</span>
+<span class="pc bpc" id="L188" title="1 of 2 branches missed.">        if (index &gt; characters.length) {</span>
+<span class="fc" id="L189">            index = index - characters.length;</span>
         }
-<span class="nc" id="L187">        showCharacter();</span>
-<span class="nc" id="L188">    }</span>
+<span class="fc" id="L191">        showCharacter();</span>
+<span class="fc" id="L192">    }</span>
 
     public void updateTrainer() {
-<span class="nc" id="L191">        TrainerStorage trainerStorage = trainerStorageProvider.get();</span>
-<span class="nc" id="L192">        String trainerName = trainerStorage.getTrainerName();</span>
-<span class="nc bnc" id="L193" title="All 4 branches missed.">        if (!trainerNameTextfield.getText().equals(trainerStorage.getTrainerName()) &amp;&amp; !trainerNameTextfield.getText().equals(&quot;&quot;)) {</span>
-<span class="nc" id="L194">            trainerName = trainerNameTextfield.getText();</span>
+<span class="fc" id="L195">        TrainerStorage trainerStorage = trainerStorageProvider.get();</span>
+<span class="fc" id="L196">        String trainerName = trainerStorage.getTrainerName();</span>
+<span class="pc bpc" id="L197" title="2 of 4 branches missed.">        if (!trainerNameTextfield.getText().equals(trainerStorage.getTrainerName()) &amp;&amp; !trainerNameTextfield.getText().equals(&quot;&quot;)) {</span>
+<span class="fc" id="L198">            trainerName = trainerNameTextfield.getText();</span>
         }
 
-<span class="nc bnc" id="L197" title="All 4 branches missed.">        if (!trainerNameTextfield.getText().equals(trainerStorage.getTrainerName()) || !trainerStorage.getTrainerSprite().equals(selectedCharacter)) {</span>
-<span class="nc" id="L198">            disposables.add(trainersService.updateTrainer(</span>
-<span class="nc" id="L199">                    trainerStorage.getRegion()._id(),</span>
-<span class="nc" id="L200">                    trainerStorage.getTrainer()._id(),</span>
+<span class="pc bpc" id="L201" title="3 of 4 branches missed.">        if (!trainerNameTextfield.getText().equals(trainerStorage.getTrainerName()) || !trainerStorage.getTrainerSprite().equals(selectedCharacter)) {</span>
+<span class="fc" id="L202">            disposables.add(trainersService.updateTrainer(</span>
+<span class="fc" id="L203">                    trainerStorage.getRegion()._id(),</span>
+<span class="fc" id="L204">                    trainerStorage.getTrainer()._id(),</span>
                     trainerName,
                     selectedCharacter,
                     null
-<span class="nc" id="L204">            ).observeOn(FX_SCHEDULER).subscribe(trainer -&gt; {</span>
-<span class="nc" id="L205">                trainerStorage.setTrainer(trainer);</span>
-<span class="nc" id="L206">                trainerStorage.setTrainerName(trainer.name());</span>
-<span class="nc" id="L207">                trainerStorage.setTrainerSprite(trainer.image());</span>
-<span class="nc" id="L208">                updatePopup();</span>
-<span class="nc" id="L209">            }, Throwable::printStackTrace));</span>
+<span class="fc" id="L208">            ).observeOn(FX_SCHEDULER).subscribe(trainer -&gt; {</span>
+<span class="fc" id="L209">                trainerStorage.setTrainer(trainer);</span>
+<span class="fc" id="L210">                trainerStorage.setTrainerName(trainer.name());</span>
+<span class="fc" id="L211">                trainerStorage.setTrainerSprite(trainer.image());</span>
+<span class="fc" id="L212">                updatePopup();</span>
+<span class="fc" id="L213">            }, Throwable::printStackTrace));</span>
         }
-<span class="nc" id="L211">    }</span>
+<span class="fc" id="L215">    }</span>
 
     private void updatePopup() {
-<span class="nc" id="L214">        buttonsDisableTrainer(true);</span>
-<span class="nc" id="L215">        VBox updatePopupVBox = new VBox();</span>
-<span class="nc" id="L216">        updatePopupVBox.getStyleClass().add(&quot;miniMapContainer&quot;);</span>
-<span class="nc" id="L217">        updatePopupVBox.setStyle(&quot;-fx-max-height: 150px; -fx-max-width: 550px&quot;);</span>
-<span class="nc" id="L218">        updatePopupVBox.setPadding(new Insets(10, 10, 10, 10));</span>
-<span class="nc" id="L219">        updatePopupVBox.setSpacing(12);</span>
+<span class="fc" id="L218">        buttonsDisableTrainer(true);</span>
+<span class="fc" id="L219">        VBox updatePopupVBox = new VBox();</span>
+<span class="fc" id="L220">        updatePopupVBox.getStyleClass().add(&quot;miniMapContainer&quot;);</span>
+<span class="fc" id="L221">        updatePopupVBox.setStyle(&quot;-fx-max-height: 150px; -fx-max-width: 550px&quot;);</span>
+<span class="fc" id="L222">        updatePopupVBox.setPadding(new Insets(10, 10, 10, 10));</span>
+<span class="fc" id="L223">        updatePopupVBox.setSpacing(12);</span>
 
-<span class="nc" id="L221">        Label notification = new Label(resources.getString(&quot;UPDATE.NOTIFICATION&quot;));</span>
-<span class="nc" id="L222">        notification.setWrapText(true);</span>
-<span class="nc" id="L223">        notification.setStyle(&quot;-fx-font-family: \&quot;Comic Sans MS\&quot;; -fx-font-weight: bold&quot;);</span>
+<span class="fc" id="L225">        Label notification = new Label(resources.getString(&quot;UPDATE.NOTIFICATION&quot;));</span>
+<span class="fc" id="L226">        notification.setWrapText(true);</span>
+<span class="fc" id="L227">        notification.setStyle(&quot;-fx-font-family: \&quot;Comic Sans MS\&quot;; -fx-font-weight: bold&quot;);</span>
 
-<span class="nc" id="L225">        Button okButton = new Button();</span>
-<span class="nc" id="L226">        okButton.setText(resources.getString(&quot;OK&quot;));</span>
-<span class="nc" id="L227">        okButton.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
-<span class="nc" id="L228">        okButton.setOnAction(event -&gt; restartGame());</span>
+<span class="fc" id="L229">        Button okButton = new Button();</span>
+<span class="fc" id="L230">        okButton.setText(resources.getString(&quot;OK&quot;));</span>
+<span class="fc" id="L231">        okButton.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
+<span class="fc" id="L232">        okButton.setOnAction(event -&gt; restartGame());</span>
 
-<span class="nc" id="L230">        updatePopupVBox.getChildren().add(notification);</span>
-<span class="nc" id="L231">        updatePopupVBox.getChildren().add(okButton);</span>
-<span class="nc" id="L232">        ingameController.root.getChildren().add(updatePopupVBox);</span>
-<span class="nc" id="L233">    }</span>
+<span class="fc" id="L234">        updatePopupVBox.getChildren().add(notification);</span>
+<span class="fc" id="L235">        updatePopupVBox.getChildren().add(okButton);</span>
+<span class="fc" id="L236">        ingameController.root.getChildren().add(updatePopupVBox);</span>
+<span class="fc" id="L237">    }</span>
 
     private void restartGame() {
-<span class="nc" id="L236">        MainMenuController mainMenuController = mainMenuControllerProvider.get();</span>
-<span class="nc" id="L237">        ingameController.destroy();</span>
-<span class="nc" id="L238">        app.show(mainMenuController);</span>
-<span class="nc" id="L239">    }</span>
+<span class="fc" id="L240">        MainMenuController mainMenuController = mainMenuControllerProvider.get();</span>
+<span class="fc" id="L241">        ingameController.destroy();</span>
+<span class="fc" id="L242">        app.show(mainMenuController);</span>
+<span class="fc" id="L243">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
