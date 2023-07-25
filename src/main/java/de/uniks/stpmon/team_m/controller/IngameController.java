@@ -117,6 +117,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<EncounterController> encounterControllerProvider;
     @Inject
+    Provider<ItemMenuController> itemMenuControllerProvider;
+    @Inject
     AreasService areasService;
     @Inject
     PresetsService presetsService;
@@ -150,9 +152,14 @@ public class IngameController extends Controller {
     private boolean inEncounterInfoBox = false;
     private boolean isNewStart = true;
 
+    private Boolean coinsEarned;
+    private Integer coinsAmount;
+
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
 
+    @Inject
+    TrainerItemsService trainerItemsService;
 
     @Inject
     Provider<MonstersListController> monstersListControllerProvider;
@@ -196,6 +203,8 @@ public class IngameController extends Controller {
     private boolean loading;
     private VBox loadingScreen;
     private Timeline loadingScreenAnimation;
+    private VBox itemMenuBox;
+    private boolean inCoinsEarnedInfoBox = false;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -213,12 +222,15 @@ public class IngameController extends Controller {
         // Initialize key event listeners
         keyPressedHandler = event -> {
             if (event.getCode().toString().equals(preferences.get("interaction", "E"))) {
-                if (!inNpcPopup && !inEncounterInfoBox) {
+                if (!inNpcPopup && !inEncounterInfoBox && !inCoinsEarnedInfoBox) {
                     interactWithTrainer();
                 } else if (inEncounterInfoBox) {
                     stackPane.getChildren().remove(dialogStackPane);
                     this.inEncounterInfoBox = false;
                     showEncounterScene();
+                } else if (inCoinsEarnedInfoBox) {
+                    inCoinsEarnedInfoBox = false;
+                    stackPane.getChildren().remove(dialogStackPane);
                 }
             }
             if (event.getCode().toString().equals(preferences.get("pauseMenu", "ESCAPE"))) {
@@ -232,7 +244,9 @@ public class IngameController extends Controller {
                 }
             }
             if (event.getCode().toString().equals(preferences.get("inventory", "I"))) {
-                showItems();
+                if (!this.root.getChildren().contains(itemMenuBox)) {
+                    showItems();
+                }
             }
             if (isChatting || loading || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < TRANSITION_DURATION + 25)) {
                 return;
@@ -265,6 +279,14 @@ public class IngameController extends Controller {
             event.consume();
         };
         this.npcTextManager = new NpcTextManager(resources);
+
+        // Load trainer items and save them to trainerStorage
+        disposables.add(
+                trainerItemsService.getItems(
+                        trainerStorageProvider.get().getRegion()._id(),
+                        trainerStorageProvider.get().getTrainer()._id(),
+                        null
+                ).observeOn(FX_SCHEDULER).subscribe(trainerStorageProvider.get()::setItems));
 
     }
 
@@ -445,7 +467,7 @@ public class IngameController extends Controller {
         if (preferences.get("inventory", null) == null) {
             preferences.put("inventory", KeyCode.I.getChar());
         }
-
+        showCoins();
         return parent;
     }
 
@@ -766,7 +788,9 @@ public class IngameController extends Controller {
                 }
                 loadPlayers();
                 loadMiniMap();
-
+                if (getCoinsEarned() != null && getCoinsEarned()) {
+                    showCoinsEarnedWindow();
+                }
             }
         }
     }
@@ -1126,18 +1150,7 @@ public class IngameController extends Controller {
                         encounterOpponentStorage.setAttacker(opponent.isAttacker());
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
-                                    encounterOpponentStorage.setEncounterSize(opts.size());
-                                    encounterOpponentStorage.resetEnemyOpponents();
-                                    encounterOpponentStorage.setOpponentsInStorage(opts);
-                                    for (Opponent o : opts) {
-                                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                                            if (o.isAttacker() != encounterOpponentStorage.isAttacker()) {
-                                                encounterOpponentStorage.addEnemyOpponent(o);
-                                            } else {
-                                                encounterOpponentStorage.setCoopOpponent(o);
-                                            }
-                                        }
-                                    }
+                                    initEncounterOpponentStorage(opts);
                                     if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponents().size() != 0) {
                                         showEncounterInfoWindow();
                                         this.isNewStart = false;
@@ -1159,6 +1172,19 @@ public class IngameController extends Controller {
         movementDisabled = true;
     }
 
+    private void showCoinsEarnedWindow() {
+        TextFlow dialogTextFlow = createDialogVBox(true);
+        dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.WON") + "\n" +
+                resources.getString("COINS.EARNED") + " " + getCoinsAmount() + " " +
+                resources.getString("COINS.EARNED2")));
+        inDialog = false;
+        inEncounterInfoBox = false;
+        inCoinsEarnedInfoBox = true;
+        movementDisabled = false;
+        disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id())
+                .observeOn(FX_SCHEDULER).subscribe(trainer -> coinsLabel.setText(String.valueOf(trainer.coins())), error -> showError(error.getMessage())));
+    }
+
     private void showEncounterScene() {
         destroy();
         app.show(encounterControllerProvider.get());
@@ -1177,18 +1203,7 @@ public class IngameController extends Controller {
                         encounterOpponentStorage.setAttacker(opponent.isAttacker());
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
-                                    encounterOpponentStorage.setOpponentsInStorage(opts);
-                                    encounterOpponentStorage.resetEnemyOpponents();
-                                    encounterOpponentStorage.setEncounterSize(opts.size());
-                                    for (Opponent o : opts) {
-                                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                                            if (o.isAttacker() != encounterOpponentStorage.isAttacker()) {
-                                                encounterOpponentStorage.addEnemyOpponent(o);
-                                            } else {
-                                                encounterOpponentStorage.setCoopOpponent(o);
-                                            }
-                                        }
-                                    }
+                                    initEncounterOpponentStorage(opts);
                                     if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponents().size() != 0 && isNewStart) {
                                         showEncounterScene();
                                     }
@@ -1196,6 +1211,19 @@ public class IngameController extends Controller {
                     }
                 }, Throwable::printStackTrace));
 
+    }
+    private void initEncounterOpponentStorage(List<Opponent> opponents) {
+        encounterOpponentStorage.setOpponentsInStorage(opponents);
+        encounterOpponentStorage.resetEnemyOpponents();
+        encounterOpponentStorage.setEncounterSize(opponents.size());
+        for (Opponent o : opponents) {
+            if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && o.isAttacker() != encounterOpponentStorage.isAttacker()) {
+                encounterOpponentStorage.addEnemyOpponent(o);
+            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) && o.isAttacker() == encounterOpponentStorage.isAttacker()){
+                encounterOpponentStorage.setCoopOpponent(o);
+                encounterOpponentStorage.setTwoMonster(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id()));
+            }
+        }
     }
 
     private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {
@@ -1245,7 +1273,18 @@ public class IngameController extends Controller {
     }
 
     public void showItems() {
-        //TODO: Add ItemsVBox to root
+        itemMenuBox = new VBox();
+        itemMenuBox.setAlignment(Pos.CENTER);
+        ItemMenuController itemMenuController = itemMenuControllerProvider.get();
+        itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox);
+        itemMenuBox.getChildren().add(itemMenuController.render());
+        root.getChildren().add(itemMenuBox);
+        itemMenuBox.requestFocus();
+        buttonsDisable(true);
+    }
+
+    public void showCoins() {
+        coinsLabel.setText(String.valueOf(trainerStorageProvider.get().getTrainer().coins()));
     }
 
     /*
@@ -1859,5 +1898,21 @@ public class IngameController extends Controller {
 
     public void setIsNewStart(boolean isNewStart) {
         this.isNewStart = isNewStart;
+    }
+
+    public Boolean getCoinsEarned() {
+        return coinsEarned;
+    }
+
+    public void setCoinsEarned(Boolean coinsEarned) {
+        this.coinsEarned = coinsEarned;
+    }
+
+    public Integer getCoinsAmount() {
+        return coinsAmount;
+    }
+
+    public void setCoinsAmount(Integer coinsAmount) {
+        this.coinsAmount = coinsAmount;
     }
 }

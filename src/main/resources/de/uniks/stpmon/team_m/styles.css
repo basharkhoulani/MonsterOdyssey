@@ -551,3 +551,12 @@
     -fx-border-radius: 10px;
     -fx-border-color: black;
 }
+.inventarMenu {
+    -fx-background-radius: 10;
+    -fx-border-color: #000000;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+}
+.boldFont {
+    -fx-font-weight: bold;
+}

@@ -2,10 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
-import de.uniks.stpmon.team_m.dto.AbilityDto;
-import de.uniks.stpmon.team_m.dto.AbilityMove;
-import de.uniks.stpmon.team_m.dto.Monster;
-import de.uniks.stpmon.team_m.dto.Move;
+import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
@@ -41,17 +38,19 @@ public class AbilitiesMenuController extends Controller {
     PresetsService presetsService;
     private Monster monster;
     private EncounterController encounterController;
+    private Opponent currentOpponent;
 
 
     @Inject
     public AbilitiesMenuController() {
     }
 
-    public void init(Monster monster, PresetsService presetsService, EncounterController encounterController) {
+    public void init(Monster monster, PresetsService presetsService, EncounterController encounterController, Opponent currentOpponent) {
         super.init();
         this.monster = monster;
         this.presetsService = presetsService;
         this.encounterController = encounterController;
+        this.currentOpponent = currentOpponent;
     }
 
     @Override
@@ -96,16 +95,16 @@ public class AbilitiesMenuController extends Controller {
     private void useAbility(AbilityDto ability) {
         String regionId = encounterOpponentStorageProvider.get().getRegionId();
         String encounterId = encounterOpponentStorageProvider.get().getEncounterId();
-        String opponentId = encounterOpponentStorageProvider.get().getSelfOpponent()._id();
-        String targetId = encounterOpponentStorageProvider.get().getEnemyOpponents().get(0).trainer();
+        String opponentId = currentOpponent._id();
+        // here to put the selected target
+        String targetId = encounterOpponentStorageProvider.get().getTargetOpponent().trainer();
         Move move = new AbilityMove("ability", ability.id(), targetId);
 
         disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(
                 opponent -> {
-                    encounterController.updateDescription(resources.getString("YOU.USED") + ability.name() + ". ", true);
                     encounterController.updateDescription(resources.getString("YOU.USED") + " " + ability.name() + ". \n", true);
-                    encounterController.resetOpponentUpdate();
                     encounterController.resetRepeatedTimes();
+                    encounterController.increaseCurrentMonsterIndex();
                     encounterController.goBackToBattleMenu();
                 }, Throwable::printStackTrace));
     }
