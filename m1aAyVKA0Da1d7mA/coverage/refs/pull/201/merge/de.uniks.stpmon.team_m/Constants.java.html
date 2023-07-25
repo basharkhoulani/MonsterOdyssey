@@ -262,20 +262,30 @@ import static java.util.Map.entry;
             &quot;defense.png&quot;
     );
 
-<span class="fc" id="L265">    public static final HashMap&lt;String, String&gt; STATUS_EFFECTS_IMAGES = new HashMap&lt;&gt;(Map.ofEntries(</span>
-<span class="fc" id="L266">            entry(&quot;paralysed&quot;, &quot;images/paralysed.png&quot;),</span>
-<span class="fc" id="L267">            entry(&quot;asleep&quot;, &quot;images/asleep.png&quot;),</span>
-<span class="fc" id="L268">            entry(&quot;poisoned&quot;, &quot;images/poisoned.png&quot;),</span>
-<span class="fc" id="L269">            entry(&quot;burned&quot;, &quot;images/burned.png&quot;),</span>
-<span class="fc" id="L270">            entry(&quot;frozen&quot;, &quot;images/frozen.png&quot;),</span>
-<span class="fc" id="L271">            entry(&quot;confused&quot;, &quot;images/confused.png&quot;)</span>
-    ));
-
     public static final String PARALYSED = &quot;paralysed&quot;;
     public static final String ASLEEP = &quot;asleep&quot;;
     public static final String POISONED = &quot;poisoned&quot;;
     public static final String BURNED = &quot;burned&quot;;
     public static final String FROZEN = &quot;frozen&quot;;
     public static final String CONFUSED = &quot;confused&quot;;
+
+<span class="fc" id="L272">    public static final List&lt;String&gt; STATUS_EFFECTS = Arrays.asList(PARALYSED, ASLEEP, POISONED, BURNED, FROZEN, CONFUSED);</span>
+
+<span class="fc" id="L274">    public static final HashMap&lt;String, String&gt; STATUS_EFFECTS_IMAGES = new HashMap&lt;&gt;(Map.ofEntries(</span>
+<span class="fc" id="L275">            entry(PARALYSED, &quot;images/paralysed.png&quot;),</span>
+<span class="fc" id="L276">            entry(ASLEEP, &quot;images/asleep.png&quot;),</span>
+<span class="fc" id="L277">            entry(POISONED, &quot;images/poisoned.png&quot;),</span>
+<span class="fc" id="L278">            entry(BURNED, &quot;images/burned.png&quot;),</span>
+<span class="fc" id="L279">            entry(FROZEN, &quot;images/frozen.png&quot;),</span>
+<span class="fc" id="L280">            entry(CONFUSED, &quot;images/confused.png&quot;)</span>
+    ));
+
+
+<span class="nc" id="L284">    public enum itemType {</span>
+<span class="nc" id="L285">        ball,</span>
+<span class="nc" id="L286">        effect,</span>
+<span class="nc" id="L287">        monsterBox,</span>
+<span class="nc" id="L288">        itemBox</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

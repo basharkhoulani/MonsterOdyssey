@@ -3,6 +3,7 @@
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
+import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import javafx.fxml.FXML;
@@ -20,6 +21,7 @@ import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -59,57 +61,58 @@ public class LevelUpController extends Controller {
     private MonsterTypeDto monsterTypeDto;
     private Monster oldMonster;
     private ArrayList&lt;Integer&gt; newAbilities;
+    private List&lt;AbilityDto&gt; abilities;
 
 
     @Inject
-<span class="nc" id="L65">    public LevelUpController() {</span>
+<span class="nc" id="L68">    public LevelUpController() {</span>
 
-<span class="nc" id="L67">    }</span>
+<span class="nc" id="L70">    }</span>
 
-    public void init(VBox container, StackPane root, EncounterController encounterController, Monster currentMonster, MonsterTypeDto currentMonsterTypeDto, Monster oldMonster, ArrayList&lt;Integer&gt; newAbilities) {
-<span class="nc" id="L70">        this.container = container;</span>
-<span class="nc" id="L71">        this.root = root;</span>
-<span class="nc" id="L72">        this.encounterController = encounterController;</span>
-<span class="nc" id="L73">        this.monster = currentMonster;</span>
-<span class="nc" id="L74">        this.monsterTypeDto = currentMonsterTypeDto;</span>
-<span class="nc" id="L75">        this.oldMonster = oldMonster;</span>
-<span class="nc" id="L76">        this.newAbilities = newAbilities;</span>
-<span class="nc" id="L77">    }</span>
+    public void init(VBox container, StackPane root, EncounterController encounterController, Monster currentMonster,
+                     MonsterTypeDto currentMonsterTypeDto, Monster oldMonster, ArrayList&lt;Integer&gt; newAbilities, List&lt;AbilityDto&gt; abilities) {
+<span class="nc" id="L74">        this.container = container;</span>
+<span class="nc" id="L75">        this.root = root;</span>
+<span class="nc" id="L76">        this.encounterController = encounterController;</span>
+<span class="nc" id="L77">        this.monster = currentMonster;</span>
+<span class="nc" id="L78">        this.monsterTypeDto = currentMonsterTypeDto;</span>
+<span class="nc" id="L79">        this.oldMonster = oldMonster;</span>
+<span class="nc" id="L80">        this.newAbilities = newAbilities;</span>
+<span class="nc" id="L81">        this.abilities = abilities;</span>
+<span class="nc" id="L82">    }</span>
 
     public Parent render() {
-<span class="nc" id="L80">        final Parent parent = super.render();</span>
-<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L82">            expImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(&quot;images/star.png&quot;)).toString()));</span>
-<span class="nc" id="L83">            hpImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(&quot;images/heart.png&quot;)).toString()));</span>
-<span class="nc" id="L84">            atkImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(&quot;images/attack.png&quot;)).toString()));</span>
-<span class="nc" id="L85">            defImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(&quot;images/defense.png&quot;)).toString()));</span>
-<span class="nc" id="L86">            spImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(&quot;images/speed.png&quot;)).toString()));</span>
+<span class="nc" id="L85">        final Parent parent = super.render();</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L87">            expImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(&quot;images/star.png&quot;)).toString()));</span>
+<span class="nc" id="L88">            hpImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(&quot;images/heart.png&quot;)).toString()));</span>
+<span class="nc" id="L89">            atkImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(&quot;images/attack.png&quot;)).toString()));</span>
+<span class="nc" id="L90">            defImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(&quot;images/defense.png&quot;)).toString()));</span>
+<span class="nc" id="L91">            spImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(&quot;images/speed.png&quot;)).toString()));</span>
         }
 
-<span class="nc" id="L89">        levelLabel.setText(oldMonster.level() + &quot; -&gt; &quot; + monster.level());</span>
-<span class="nc" id="L90">        healthLabel.setText(oldMonster.attributes().health() + &quot; -&gt; &quot; + monster.attributes().health());</span>
-<span class="nc" id="L91">        attackLabel.setText(oldMonster.attributes().attack() + &quot; -&gt; &quot; + monster.attributes().attack());</span>
-<span class="nc" id="L92">        defenseLabel.setText(oldMonster.attributes().defense() + &quot; -&gt; &quot; + monster.attributes().defense());</span>
-<span class="nc" id="L93">        speedLabel.setText(oldMonster.attributes().speed() + &quot; -&gt; &quot; + monster.attributes().speed());</span>
+<span class="nc" id="L94">        levelLabel.setText(oldMonster.level() + &quot; -&gt; &quot; + monster.level());</span>
+<span class="nc" id="L95">        healthLabel.setText(oldMonster.attributes().health() + &quot; -&gt; &quot; + monster.attributes().health());</span>
+<span class="nc" id="L96">        attackLabel.setText(oldMonster.attributes().attack() + &quot; -&gt; &quot; + monster.attributes().attack());</span>
+<span class="nc" id="L97">        defenseLabel.setText(oldMonster.attributes().defense() + &quot; -&gt; &quot; + monster.attributes().defense());</span>
+<span class="nc" id="L98">        speedLabel.setText(oldMonster.attributes().speed() + &quot; -&gt; &quot; + monster.attributes().speed());</span>
 
-<span class="nc" id="L95">        levelUpTextFlow.getChildren().add(new Text(resources.getString(&quot;LEVEL.UP!&quot;) + &quot;\n&quot;));</span>
-<span class="nc" id="L96">        levelUpTextFlow.getChildren().add(new Text(monsterTypeDto.name() + &quot; &quot; + resources.getString(&quot;NOW.HAS.THE.FOLLOWING.ATTRIBUTES&quot;) + &quot;:&quot;));</span>
+<span class="nc" id="L100">        levelUpTextFlow.getChildren().add(new Text(resources.getString(&quot;LEVEL.UP!&quot;) + &quot;\n&quot;));</span>
+<span class="nc" id="L101">        levelUpTextFlow.getChildren().add(new Text(monsterTypeDto.name() + &quot; &quot; + resources.getString(&quot;NOW.HAS.THE.FOLLOWING.ATTRIBUTES&quot;) + &quot;:&quot;));</span>
 
-<span class="nc bnc" id="L98" title="All 2 branches missed.">        if (!newAbilities.isEmpty()) {</span>
-<span class="nc" id="L99">            Label label = new Label(&quot;new Ability\n&quot;);</span>
-<span class="nc" id="L100">            label.setAlignment(Pos.CENTER);</span>
-<span class="nc" id="L101">            newAbilities.forEach(integer -&gt; {</span>
-
-
-<span class="nc" id="L104">            });</span>
-<span class="nc" id="L105">            abilityVBox.getChildren().add(label);</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (!newAbilities.isEmpty()) {</span>
+<span class="nc" id="L104">            Label label = new Label(resources.getString(&quot;NEW.ABILITIES&quot;) + &quot;: &quot;);</span>
+<span class="nc" id="L105">            label.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L106">            newAbilities.forEach(integer -&gt; {</span>
+<span class="nc" id="L107">                label.setText(label.getText() + abilities.get(integer-1).name() + &quot; &quot;);</span>
+<span class="nc" id="L108">            });</span>
+<span class="nc" id="L109">            abilityVBox.getChildren().add(label);</span>
         }
-<span class="nc" id="L107">        return parent;</span>
+<span class="nc" id="L111">        return parent;</span>
     }
 
     public void okButtonPressed() {
-<span class="nc" id="L111">        root.getChildren().remove(container);</span>
-<span class="nc" id="L112">        encounterController.continueBattle();</span>
-<span class="nc" id="L113">    }</span>
+<span class="nc" id="L115">        root.getChildren().remove(container);</span>
+<span class="nc" id="L116">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

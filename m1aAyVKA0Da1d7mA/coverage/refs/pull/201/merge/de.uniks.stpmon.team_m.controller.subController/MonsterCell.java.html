@@ -173,7 +173,7 @@ public class MonsterCell extends ListCell&lt;Monster&gt; {
 <span class="nc" id="L173">                arrowUp.setVisible(false);</span>
 <span class="nc" id="L174">                arrowDown.setVisible(false);</span>
 <span class="nc" id="L175">                removeFromTeamButton.setOnAction(event -&gt; {</span>
-<span class="nc" id="L176">                    encounterController.changeMonster(monster, monsterTypeDto);</span>
+<span class="nc" id="L176">                    encounterController.changeMonster(monster);</span>
 <span class="nc" id="L177">                    changeMonsterListController.onCloseMonsterList();</span>
 <span class="nc" id="L178">                });</span>
             }
@@ -186,7 +186,7 @@ public class MonsterCell extends ListCell&lt;Monster&gt; {
 
     private void showDetails(Monster monster, String type) {
 <span class="pc bpc" id="L188" title="1 of 2 branches missed.">        if (encounter) {</span>
-<span class="nc" id="L189">            this.encounterController.showMonsterDetailsInEncounter();</span>
+<span class="nc" id="L189">            this.encounterController.showMonsterDetails(monster, monsterTypeDto, monsterImage, type);</span>
         } else {
 <span class="fc" id="L191">            this.ingameController.showMonsterDetails(monster, monsterTypeDto, monsterImage, resources, presetsService, type);</span>
         }
