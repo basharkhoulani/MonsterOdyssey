@@ -131,7 +131,7 @@ public class IngameTrainerSettingsController extends Controller {
                 }, error -> this.showError(error.getMessage())));
         MainMenuController mainMenuController = mainMenuControllerProvider.get();
         mainMenuController.setTrainerDeletion();
-        if(ingameController != null) {
+        if (ingameController != null) {
             ingameController.destroy();
         }
         app.show(mainMenuController);
