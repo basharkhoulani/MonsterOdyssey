@@ -373,7 +373,10 @@ public class EncounterController extends Controller {
 
     private void targetOpponent(Opponent opponent) {
         encounterOpponentStorage.setTargetOpponent(opponent);
-        if (encounterOpponentStorage.getTargetOpponent() != opponent && encounterOpponentControllerHashMap.containsKey(opponent._id()) && encounterOpponentControllerHashMap.get(opponent._id()).isMultipleEnemyEncounter) {
+        if (encounterOpponentStorage.getTargetOpponent() != opponent
+                && encounterOpponentControllerHashMap.containsKey(opponent._id())
+                && encounterOpponentControllerHashMap.get(opponent._id()).isMultipleEnemyEncounter
+        ) {
             onTargetChange();
         }
     }
@@ -385,6 +388,12 @@ public class EncounterController extends Controller {
             encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);
 
             listenToMonster(opponent.trainer(), monster._id(), encounterOpponentController, opponent);
+            for (String effect : STATUS_EFFECTS) {
+                encounterOpponentController.showStatus(effect, false);
+            }
+            for (String effect : monster.status()) {
+                encounterOpponentController.showStatus(effect, true);
+            }
             //write monster name
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -> {
                 encounterOpponentController.setMonsterNameLabel(m.name());
@@ -422,7 +431,16 @@ public class EncounterController extends Controller {
             listenToMonster(opponent.trainer(), opponent.monster(), encounterOpponentController, opponent);
             double currentHealth = monster.currentAttributes().health();
             double maxHealth = monster.attributes().health();
-            encounterOpponentController.setLevelLabel("LVL " + monster.level()).setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1)).setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health()).setHealthLabel(formatter.format(currentHealth) + "/" + formatter.format(maxHealth) + " HP");
+            encounterOpponentController.setLevelLabel("LVL " + monster.level())
+                    .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1))
+                    .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health())
+                    .setHealthLabel(formatter.format(currentHealth) + "/" + formatter.format(maxHealth) + " HP");
+            for (String effect : STATUS_EFFECTS) {
+                encounterOpponentController.showStatus(effect, false);
+            }
+            for (String effect : monster.status()) {
+                encounterOpponentController.showStatus(effect, true);
+            }
             //write monster name
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -> {
                 encounterOpponentController.setMonsterNameLabel(m.name());
@@ -693,7 +711,10 @@ public class EncounterController extends Controller {
                 } else {
                     encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());
                 }
-                encounterOpponentController.setHealthLabel(formatter.format(currentHealth) + "/" + formatter.format(maxHealth) + " HP").setLevelLabel("LVL " + monster.level()).setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
+                encounterOpponentController
+                        .setHealthLabel(formatter.format(currentHealth) + "/" + formatter.format(maxHealth) + " HP")
+                        .setLevelLabel("LVL " + monster.level())
+                        .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
                 if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
                     encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);
                     // if health is 0, then add to the team the information that the monster is died.
@@ -712,15 +733,20 @@ public class EncounterController extends Controller {
             Opponent o = opponentsDelete.get(id);
             if (o.monster() == null) {
                 if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                    showResultPopUp(resources.getString("YOU.FAILED"));
+                    showResultPopUp(resources.getString("YOU.FAILED"), false);
                 } else {
-                    showResultPopUp(resources.getString("YOU.WON"));
+                    showResultPopUp(resources.getString("YOU.WON"), true);
                 }
             }
         }
     }
 
-    public void showResultPopUp(String string) {
+    private void showResultPopUp(String string, boolean isWin) {
+        Opponent selfOpponent = encounterOpponentStorage.getSelfOpponent();
+        if (selfOpponent.coins() != 0 && isWin) {
+            encounterResultController.setCoinsAmount(selfOpponent.coins());
+            encounterResultController.setCoinsEarned(true);
+        }
         VBox resultBox = new VBox();
         resultBox.setAlignment(Pos.CENTER);
         encounterResultController.init(app);
@@ -789,7 +815,8 @@ public class EncounterController extends Controller {
         monsterInTeamHashMap.forEach((monsterId, isDied) -> {
             if (!isDied && !Objects.equals(monsterId, encounterOpponentStorage.getSelfOpponent().monster())) {
                 if (!encounterOpponentStorage.isTwoMonster() || !Objects.equals(monsterId, encounterOpponentStorage.getCoopOpponent().monster())) {
-                    disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, monsterId, null).observeOn(FX_SCHEDULER).subscribe(opponent -> resetRepeatedTimes(), Throwable::printStackTrace));
+                    disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, monsterId, null).observeOn(FX_SCHEDULER).subscribe(
+                            opponent -> resetRepeatedTimes(), Throwable::printStackTrace));
                 }
             }
         });
