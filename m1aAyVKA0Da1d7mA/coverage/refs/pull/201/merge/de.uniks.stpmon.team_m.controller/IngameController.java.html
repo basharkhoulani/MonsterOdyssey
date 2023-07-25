@@ -1001,19 +1001,19 @@ public class IngameController extends Controller {
 <span class="fc" id="L1001">    }</span>
 
     public void showTrainerSettings() {
-<span class="nc" id="L1004">        IngameTrainerSettingsController ingameTrainerSettingsController = ingameTrainerSettingsControllerProvider.get();</span>
-<span class="nc" id="L1005">        VBox trainersettingsVBox = new VBox();</span>
-<span class="nc" id="L1006">        trainersettingsVBox.setAlignment(Pos.CENTER);</span>
-<span class="nc" id="L1007">        ingameTrainerSettingsController.initIngame(this, trainersettingsVBox);</span>
-<span class="nc" id="L1008">        trainersettingsVBox.getChildren().add(ingameTrainerSettingsController.render());</span>
-<span class="nc" id="L1009">        root.getChildren().add(trainersettingsVBox);</span>
-<span class="nc" id="L1010">        trainersettingsVBox.requestFocus();</span>
-<span class="nc" id="L1011">        buttonsDisable(true);</span>
+<span class="fc" id="L1004">        IngameTrainerSettingsController ingameTrainerSettingsController = ingameTrainerSettingsControllerProvider.get();</span>
+<span class="fc" id="L1005">        VBox trainersettingsVBox = new VBox();</span>
+<span class="fc" id="L1006">        trainersettingsVBox.setAlignment(Pos.CENTER);</span>
+<span class="fc" id="L1007">        ingameTrainerSettingsController.initIngame(this, trainersettingsVBox);</span>
+<span class="fc" id="L1008">        trainersettingsVBox.getChildren().add(ingameTrainerSettingsController.render());</span>
+<span class="fc" id="L1009">        root.getChildren().add(trainersettingsVBox);</span>
+<span class="fc" id="L1010">        trainersettingsVBox.requestFocus();</span>
+<span class="fc" id="L1011">        buttonsDisable(true);</span>
 
 
-<span class="nc" id="L1014">        ingameTrainerSettingsControllerProvider.get().setApp(this.app);</span>
-<span class="nc" id="L1015">        ingameTrainerSettingsControllerProvider.get().setValues(resources, preferences, resourceBundleProvider, ingameTrainerSettingsControllerProvider.get(), app);</span>
-<span class="nc" id="L1016">    }</span>
+<span class="fc" id="L1014">        ingameTrainerSettingsControllerProvider.get().setApp(this.app);</span>
+<span class="fc" id="L1015">        ingameTrainerSettingsControllerProvider.get().setValues(resources, preferences, resourceBundleProvider, ingameTrainerSettingsControllerProvider.get(), app);</span>
+<span class="fc" id="L1016">    }</span>
 
     public void showKeybindings() {
 <span class="fc" id="L1019">        IngameKeybindingsController ingameKeybindingsController = ingameKeybindingsControllerProvider.get();</span>
