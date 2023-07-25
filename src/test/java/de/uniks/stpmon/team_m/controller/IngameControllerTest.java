@@ -709,7 +709,6 @@ public class IngameControllerTest extends ApplicationTest {
     @Test
     void testTrainerSettingsUpdate() {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
         pauseMenuController.setValues(bundle, null, null, pauseMenuController, app);
         when(pauseMenuControllerProvider.get()).thenReturn(pauseMenuController);
 

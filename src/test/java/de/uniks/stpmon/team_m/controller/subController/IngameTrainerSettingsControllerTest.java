@@ -40,9 +40,12 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
     Provider<TrainerStorage> trainerStorageProvider;
     @Mock
     Provider<IngameDeleteTrainerWarningController> ingameDeleteTrainerWarningControllerProvider;
+    @Mock
+    Provider<MainMenuController> mainMenuControllerProvider;
+    @Mock
+    TrainersService trainersService;
     @InjectMocks
     IngameDeleteTrainerWarningController ingameDeleteTrainerWarningController;
-
     @InjectMocks
     IngameTrainerSettingsController trainerSettingsController;
 
@@ -82,10 +85,42 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
         ingameDeleteTrainerWarningController.setValues(bundle, null, null, ingameDeleteTrainerWarningController, app);
         when(ingameDeleteTrainerWarningControllerProvider.get()).thenReturn(ingameDeleteTrainerWarningController);
 
+        MainMenuController mainMenuController = mock(MainMenuController.class);
+        when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
+
+        when(trainerStorageProvider.get().getRegion()).thenReturn(
+                new Region(
+                        "2023-05-22T17:51:46.772Z",
+                        "2023-05-22T17:51:46.772Z",
+                        "646bab5cecf584e1be02598a",
+                        "Albertina",
+                        new Spawn("646bc3c0a9ac1b375fb41d93", 1, 1),
+                        null));
+
+        when(trainersService.deleteTrainer(any(), any())).thenReturn(Observable.just(new Trainer("2023-05-22T17:51:46.772Z",
+                "2023-05-22T17:51:46.772Z",
+                "646bac223b4804b87c0b8054",
+                "646bab5cecf584e1be02598a",
+                "646bac8c1a74032c70fffe24",
+                "Hans",
+                "Premade_Character_01.png",
+                0,
+                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                List.of(1,2),
+                List.of(),
+                "646bacc568933551792bf3d5",
+                0,
+                0,
+                0,
+                new NPCInfo(false, false,false, false,null, null, null))));
+
+        doNothing().when(app).show(mainMenuController);
         clickOn("#deleteTrainerButton");
         clickOn("#cancelButton");
         verify(app).show(trainerSettingsController);
         clickOn("#deleteTrainerButton");
+        clickOn("OK");
+        verify(app).show(mainMenuController);
     }
 
     @Test
