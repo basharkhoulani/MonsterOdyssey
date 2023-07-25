@@ -1504,6 +1504,50 @@ public class IngameController extends Controller {
             encounterNPC(this.currentNpc, selectionValue);
         }
     }
+    public void createJoinEncounterPopup() {
+        VBox joinEncounterVBox = new VBox();
+        joinEncounterVBox.setId("joinEncountervBox");
+        joinEncounterVBox.setMaxHeight(popupHeight);
+        joinEncounterVBox.setMaxWidth(popupWidth);
+        joinEncounterVBox.getStyleClass().add("dialogTextFlow");
+
+        TextFlow actions = new TextFlow(new Text("Wähle eine Aktion aus"));
+        actions.setPrefWidth(popupWidth);
+        actions.setPrefHeight(textFieldHeight);
+        Insets dialogTextFlowInsets = new Insets(20, 10, 0, 10);
+        actions.setPadding(dialogTextFlowInsets);
+        actions.setTextAlignment(TextAlignment.CENTER);
+
+        VBox buttonsVBox = new VBox();
+        buttonsVBox.setMaxHeight(buttonsHBoxHeight);
+        buttonsVBox.setMaxWidth(popupWidth);
+        buttonsVBox.setAlignment(Pos.CENTER);
+        buttonsVBox.setSpacing(15);
+        Insets vBoxInsets = new Insets(5, 0, 20, 0);
+        buttonsVBox.setPadding(vBoxInsets);
+
+        Button joinEncounterButton = new Button("Kampf beitreten");
+        joinEncounterButton.getStyleClass().add("buttonsWhite");
+        joinEncounterButton.setPrefWidth(250);
+        joinEncounterButton.setPrefHeight(200);
+
+        Button leaveEncounterButton = new Button("Verlassen");
+        leaveEncounterButton.getStyleClass().add("buttonsYellow");
+        leaveEncounterButton.setPrefWidth(250);
+        leaveEncounterButton.setPrefHeight(200);
+        leaveEncounterButton.setOnAction(event -> {
+            this.root.getChildren().remove(joinEncounterVBox);
+            buttonsDisable(false);
+        });
+
+        buttonsVBox.getChildren().addAll(joinEncounterButton, leaveEncounterButton);
+
+
+        joinEncounterVBox.getChildren().addAll(actions, buttonsVBox);
+
+        root.getChildren().add(joinEncounterVBox);
+        buttonsDisable(true);
+    }
 
     public void createNurseHealPopup() {
         // base VBox
@@ -1650,7 +1694,7 @@ public class IngameController extends Controller {
         Label nameLabel = new Label();
         if (isEncounter) {
             nameLabel.setText(resources.getString("ANNOUNCEMENT"));
-        } else {
+        }else {
             nameLabel.setText(this.currentNpc.name());
         }
         nameLabel.setPadding(new Insets(5, 10, 5, 10));
