@@ -73,6 +73,7 @@ public class IngameMapRenderTest extends ApplicationTest {
     NotificationListHandyController notificationListHandyController;
     @InjectMocks
     IngameStarterMonsterController ingameStarterMonsterController;
+
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
@@ -86,22 +87,22 @@ public class IngameMapRenderTest extends ApplicationTest {
         final TrainerStorage trainerStorage = mock(TrainerStorage.class);
         Mockito.when(trainerStorageProvider.get()).thenReturn(trainerStorage);
         lenient().when(trainersService.getTrainer(any(), any())).thenReturn(Observable.just(new Trainer(
-                        "2023-05-22T17:51:46.772Z",
-                        "2023-05-22T17:51:46.772Z",
-                        "6475e595ac3946b6a812d865",
-                        "646bab5cecf584e1be02598a",
-                        "646bac8c1a74032c70fffe24",
-                        "Hans",
-                        "Premade_Character_01.png",
-                        0,
-                        List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
-                        List.of(1, 2),
-                        List.of("646bacc568933551792bf3d5"),
-                        "6475e595ac3946b6a812d863",
-                        33,
-                        19,
-                        0,
-                        new NPCInfo(false, false, false, false, null, null, null))));
+                "2023-05-22T17:51:46.772Z",
+                "2023-05-22T17:51:46.772Z",
+                "6475e595ac3946b6a812d865",
+                "646bab5cecf584e1be02598a",
+                "646bac8c1a74032c70fffe24",
+                "Hans",
+                "Premade_Character_01.png",
+                0,
+                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                List.of(1, 2),
+                List.of("646bacc568933551792bf3d5"),
+                "6475e595ac3946b6a812d863",
+                33,
+                19,
+                0,
+                new NPCInfo(false, false, false, false, null, null, null))));
         when(trainerStorageProvider.get().getY()).thenReturn(5);
         when(trainerStorageProvider.get().getX()).thenReturn(5);
         doNothing().when(trainerStorage).setMonsters(any());
@@ -117,7 +118,7 @@ public class IngameMapRenderTest extends ApplicationTest {
                                 "Premade_Character_01.png",
                                 0,
                                 List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
-                                List.of(1,2),
+                                List.of(1, 2),
                                 List.of("646bacc568933551792bf3d5"),
                                 "6475e595ac3946b6a812d863",
                                 33,
@@ -157,7 +158,7 @@ public class IngameMapRenderTest extends ApplicationTest {
                                 69,
                                 69,
                                 2,
-                                new NPCInfo(false, false, false, false, null,null, List.of("1", "3", "5"))),
+                                new NPCInfo(false, false, false, false, null, null, List.of("1", "3", "5"))),
                         new Trainer(
                                 "2023-05-30T12:02:57.510Z",
                                 "2023-05-30T12:01:57.510Z",
@@ -174,7 +175,7 @@ public class IngameMapRenderTest extends ApplicationTest {
                                 100,
                                 100,
                                 2,
-                                new NPCInfo(false, false, false, false, List.of(1, 2, 3),null, null))
+                                new NPCInfo(false, false, false, false, List.of(1, 2, 3), null, null))
                 )
         ));
         EventListener eventListenerMock = mock(EventListener.class);
@@ -276,13 +277,13 @@ public class IngameMapRenderTest extends ApplicationTest {
         // mocking the map
         Layer minimaplayer = new Layer(
                 List.of(new Chunk(
-                        List.of(1L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L),
+                        List.of(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L),
                         1,
                         1,
                         1,
                         1
                 )),
-                List.of(1L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L),
+                List.of(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L),
                 1,
                 1,
                 "Tile Layer 1",
@@ -329,7 +330,7 @@ public class IngameMapRenderTest extends ApplicationTest {
                 List.of());
         Layer maplayer = new Layer(
                 null,
-                List.of(1L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L),
+                List.of(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L),
                 1,
                 1,
                 "Tile Layer 1",
