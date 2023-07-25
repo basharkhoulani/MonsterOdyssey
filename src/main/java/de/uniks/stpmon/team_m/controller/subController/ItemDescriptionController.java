@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.Item;
@@ -22,6 +23,8 @@ public class ItemDescriptionController extends Controller {
     Image itemImage;
     Item item;
     @FXML
+    public Label itemAmountTitleLabel;
+    @FXML
     public ImageView itemImageView;
     @FXML
     public Label itemAmountLabel;
@@ -33,15 +36,18 @@ public class ItemDescriptionController extends Controller {
     public ImageView coinImageView;
     @FXML
     public Button useButton;
+    private Constants.inventoryType inventoryType;
 
     @Inject
-    public ItemDescriptionController(){}
+    public ItemDescriptionController() {
+    }
 
-    public void init(ItemTypeDto itemTypeDto, Image itemImage, Item item) {
+    public void init(ItemTypeDto itemTypeDto, Image itemImage, Item item, Constants.inventoryType inventoryType) {
         super.init();
         this.itemImage = itemImage;
         this.itemTypeDto = itemTypeDto;
         this.item = item;
+        this.inventoryType = inventoryType;
     }
 
     @Override
@@ -54,9 +60,25 @@ public class ItemDescriptionController extends Controller {
         Text description = new Text(itemTypeDto.description());
         itemDescription.getChildren().add(description);
 
-        if(itemTypeDto.use() == null) {
+        if (itemTypeDto.use() == null) {
             useButton.setVisible(false);
             useButton.setDisable(true);
+        }
+
+        switch (this.inventoryType) {
+            case showItems -> {
+                break;
+            }
+            case buyItems -> {
+                itemAmountTitleLabel.setVisible(false);
+                itemAmountLabel.setVisible(false);
+                useButton.setText("Kaufen"); // TODO lang-files
+                useButton.setOnAction(event -> buyItem());
+            }
+            case sellItems -> {
+                useButton.setText("Verkaufen"); // TODO lang-files
+                useButton.setOnAction(event -> sellItem());
+            }
         }
 
         URL resourceImage = Main.class.getResource("images/coin.png");
@@ -65,5 +87,13 @@ public class ItemDescriptionController extends Controller {
         coinImageView.setImage(coinImage);
 
         return parent;
+    }
+
+    public void buyItem() {
+
+    }
+
+    public void sellItem() {
+
     }
 }

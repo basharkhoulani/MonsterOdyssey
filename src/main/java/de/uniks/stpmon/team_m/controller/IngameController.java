@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.Region;
@@ -46,7 +47,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -202,6 +202,7 @@ public class IngameController extends Controller {
     private VBox loadingScreen;
     private Timeline loadingScreenAnimation;
     private VBox itemMenuBox;
+
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
      */
@@ -439,26 +440,26 @@ public class IngameController extends Controller {
         specificSounds();
 
         //Keybindings
-        if(preferences.get("walkUp",null) == null){
+        if (preferences.get("walkUp", null) == null) {
             preferences.put("walkUp", KeyCode.W.getChar());
         }
-        if(preferences.get("walkDown",null) == null){
-            preferences.put("walkDown",KeyCode.S.getChar());
+        if (preferences.get("walkDown", null) == null) {
+            preferences.put("walkDown", KeyCode.S.getChar());
         }
-        if(preferences.get("walkLeft",null) == null){
-            preferences.put("walkLeft",KeyCode.A.getChar());
+        if (preferences.get("walkLeft", null) == null) {
+            preferences.put("walkLeft", KeyCode.A.getChar());
         }
-        if(preferences.get("walkRight",null) == null){
-            preferences.put("walkRight",KeyCode.D.getChar());
+        if (preferences.get("walkRight", null) == null) {
+            preferences.put("walkRight", KeyCode.D.getChar());
         }
-        if(preferences.get("interaction",null) == null){
-            preferences.put("interaction",KeyCode.E.getChar());
+        if (preferences.get("interaction", null) == null) {
+            preferences.put("interaction", KeyCode.E.getChar());
         }
-        if(preferences.get("pauseMenu",null) == null){
-            preferences.put("pauseMenu","ESCAPE");
+        if (preferences.get("pauseMenu", null) == null) {
+            preferences.put("pauseMenu", "ESCAPE");
         }
-        if(preferences.get("inventory",null) == null){
-            preferences.put("inventory",KeyCode.I.getChar());
+        if (preferences.get("inventory", null) == null) {
+            preferences.put("inventory", KeyCode.I.getChar());
         }
         showCoins();
         return parent;
@@ -466,35 +467,35 @@ public class IngameController extends Controller {
 
     private void initMapShiftTransitions() {
         shiftMapUpTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas,              0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas,   0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas,         0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas,     0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas,                0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
         );
 
 
         shiftMapLeftTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas,              -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas,   -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas,         -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas,     -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas,                -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
         );
         shiftMapRightTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas,              SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas,   SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas,         SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas,     SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas,                SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
         );
 
         shiftMapDownTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas,              0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas,   0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas,         0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas,     0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas,                0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
         );
     }
 
@@ -1187,6 +1188,7 @@ public class IngameController extends Controller {
                 }, Throwable::printStackTrace));
 
     }
+
     private void initEncounterOpponentStorage(List<Opponent> opponents) {
         encounterOpponentStorage.setOpponentsInStorage(opponents);
         encounterOpponentStorage.resetEnemyOpponents();
@@ -1194,7 +1196,7 @@ public class IngameController extends Controller {
         for (Opponent o : opponents) {
             if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && o.isAttacker() != encounterOpponentStorage.isAttacker()) {
                 encounterOpponentStorage.addEnemyOpponent(o);
-            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) && o.isAttacker() == encounterOpponentStorage.isAttacker()){
+            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) && o.isAttacker() == encounterOpponentStorage.isAttacker()) {
                 encounterOpponentStorage.setCoopOpponent(o);
                 encounterOpponentStorage.setTwoMonster(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id()));
             }
@@ -1248,10 +1250,14 @@ public class IngameController extends Controller {
     }
 
     public void showItems() {
+        openInventory(inventoryType.showItems, List.of());
+    }
+
+    public void openInventory(Constants.inventoryType inventoryType, List<Integer> npcItemTypeIDs) {
         itemMenuBox = new VBox();
         itemMenuBox.setAlignment(Pos.CENTER);
         ItemMenuController itemMenuController = itemMenuControllerProvider.get();
-        itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox);
+        itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox, inventoryType, npcItemTypeIDs);
         itemMenuBox.getChildren().add(itemMenuController.render());
         root.getChildren().add(itemMenuBox);
         itemMenuBox.requestFocus();
@@ -1601,7 +1607,11 @@ public class IngameController extends Controller {
         buyButton.setMinHeight(clerkButtonHeight);
         buyButton.getStyleClass().add("clerkDialogWhiteButton");
         buyButton.setOnAction(event -> {
-            // TODO
+            continueTrainerDialog(DialogSpecialInteractions.clerkCancelShop);
+            inNpcPopup = false;
+            this.root.getChildren().remove(clerkPopupVBox);
+            buttonsDisable(false);
+            openInventory(inventoryType.buyItems, currentNpc.npc().sells());
         });
 
         // sellButton
@@ -1612,7 +1622,11 @@ public class IngameController extends Controller {
         sellButton.setMinHeight(clerkButtonHeight);
         sellButton.getStyleClass().add("clerkDialogWhiteButton");
         sellButton.setOnAction(event -> {
-            // TODO
+            continueTrainerDialog(DialogSpecialInteractions.clerkCancelShop);
+            inNpcPopup = false;
+            this.root.getChildren().remove(clerkPopupVBox);
+            buttonsDisable(false);
+            openInventory(inventoryType.sellItems, List.of());
         });
 
         // leaveButton
