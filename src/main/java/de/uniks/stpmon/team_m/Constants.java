@@ -256,6 +256,8 @@ public class Constants {
     public static final String FROZEN = "frozen";
     public static final String CONFUSED = "confused";
 
+    public static final List<String> STATUS_EFFECTS = Arrays.asList(PARALYSED, ASLEEP, POISONED, BURNED, FROZEN, CONFUSED);
+
     public static final HashMap<String, String> STATUS_EFFECTS_IMAGES = new HashMap<>(Map.ofEntries(
             entry(PARALYSED, "images/paralysed.png"),
             entry(ASLEEP, "images/asleep.png"),
