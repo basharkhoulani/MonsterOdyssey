@@ -284,4 +284,11 @@ public class Constants {
         monsterBox,
         itemBox
     }
+
+    // enum to decide if the player wants to open his inv, sell or buy items
+    public enum inventoryType {
+        showItems,
+        buyItems,
+        sellItems
+    }
 }
