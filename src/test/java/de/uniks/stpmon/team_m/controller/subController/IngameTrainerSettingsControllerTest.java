@@ -1,9 +1,17 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.controller.MainMenuController;
 import de.uniks.stpmon.team_m.dto.NPCInfo;
+import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.dto.Spawn;
 import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +22,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.List;
 import java.util.Locale;
@@ -77,5 +86,11 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
         clickOn("#cancelButton");
         verify(app).show(trainerSettingsController);
         clickOn("#deleteTrainerButton");
+    }
+
+    @Test
+    public void changeSprite() {
+        clickOn("#arrowLeftButton");
+        clickOn("#arrowRightButton");
     }
 }
