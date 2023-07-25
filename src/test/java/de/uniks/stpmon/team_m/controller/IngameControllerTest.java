@@ -306,19 +306,6 @@ public class IngameControllerTest extends ApplicationTest {
 
         lenient().when(presetsService.getMonsterImage(anyInt())).thenReturn(Observable.just(responseBody));
 
-        Opponent opponent = new Opponent(
-                "2023-05-30T12:02:57.510Z",
-                "2023-05-30T12:01:57.510Z",
-                "rqtjej4dcoqsm4e9yln1loy5",
-                "a98db973kwl8xp1lz94kjf0b",
-                "646bac223b4804b87c0b8054",
-                false,
-                false,
-                "pn2iz308akz07eau5iwa6ykq",
-                null,
-                List.of(),
-                0);
-
         //Mocking the opponent (Situation)
         when(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() + ".opponents.*.*", Opponent.class)).thenReturn(just(
                         new Event<>("encounters.*.trainers.6475e595ac3946b6a812d865,opponents.*.nothappening", null)));

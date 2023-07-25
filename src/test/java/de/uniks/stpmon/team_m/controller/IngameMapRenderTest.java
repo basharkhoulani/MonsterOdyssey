@@ -422,6 +422,18 @@ public class IngameMapRenderTest extends ApplicationTest {
         when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers.*.*", Trainer.class)).thenReturn(just(
                 new Event<>("regions.646bab5cecf584e1be02598a.trainers.6475e595ac3946b6a812d865.created", trainer)));
 
+        when(encounterOpponentsService.getEncounterOpponents(any(), any())).thenReturn(Observable.just(List.of(new Opponent(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "rqtjej4dcoqsm4e9yln1loy5",
+                "a98db973kwl8xp1lz94kjf0b",
+                "646bac223b4804b87c0b8054",
+                false,
+                false,
+                "pn2iz308akz07eau5iwa6ykq",
+                null,
+                List.of(),
+                0))));
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
