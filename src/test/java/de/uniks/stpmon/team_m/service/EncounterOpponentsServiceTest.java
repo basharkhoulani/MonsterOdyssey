@@ -46,6 +46,7 @@ class EncounterOpponentsServiceTest {
                         ),
                         List.of(new Result(
                                 "ability-success",
+                                null,
                                 1,
                                 "super-effective",
                                 null,
@@ -70,6 +71,7 @@ class EncounterOpponentsServiceTest {
                         ),
                         List.of(new Result(
                                 "monster-levelup",
+                                null,
                                 null,
                                 null,
                                 null,
@@ -103,6 +105,7 @@ class EncounterOpponentsServiceTest {
                         ),
                         List.of(new Result(
                                 "ability-success",
+                                null,
                                 1,
                                 "super-effective",
                                 null,
@@ -127,6 +130,7 @@ class EncounterOpponentsServiceTest {
                         ),
                         List.of(new Result(
                                 "monster-levelup",
+                                null,
                                 null,
                                 null,
                                 null,
@@ -160,6 +164,7 @@ class EncounterOpponentsServiceTest {
                         ),
                         List.of(new Result(
                                 "ability-success",
+                                null,
                                 1,
                                 "super-effective",
                                 null,
@@ -197,6 +202,7 @@ class EncounterOpponentsServiceTest {
                 ),
                 List.of(new Result(
                         "ability-success",
+                        null,
                         1,
                         "super-effective",
                         null,
@@ -234,6 +240,7 @@ class EncounterOpponentsServiceTest {
                 ),
                 List.of(new Result(
                         "ability-success",
+                        null,
                         1,
                         "super-effective",
                         null,
