@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -117,6 +118,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<EncounterController> encounterControllerProvider;
     @Inject
+    Provider<ItemMenuController> itemMenuControllerProvider;
+    @Inject
     AreasService areasService;
     @Inject
     PresetsService presetsService;
@@ -153,6 +156,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
 
+    @Inject
+    TrainerItemsService trainerItemsService;
 
     @Inject
     Provider<MonstersListController> monstersListControllerProvider;
@@ -196,7 +201,7 @@ public class IngameController extends Controller {
     private boolean loading;
     private VBox loadingScreen;
     private Timeline loadingScreenAnimation;
-
+    private VBox itemMenuBox;
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
      */
@@ -232,7 +237,9 @@ public class IngameController extends Controller {
                 }
             }
             if (event.getCode().toString().equals(preferences.get("inventory", "I"))) {
-                showItems();
+                if (!this.root.getChildren().contains(itemMenuBox)) {
+                    showItems();
+                }
             }
             if (isChatting || loading || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < TRANSITION_DURATION + 25)) {
                 return;
@@ -265,6 +272,14 @@ public class IngameController extends Controller {
             event.consume();
         };
         this.npcTextManager = new NpcTextManager(resources);
+
+        // Load trainer items and save them to trainerStorage
+        disposables.add(
+                trainerItemsService.getItems(
+                        trainerStorageProvider.get().getRegion()._id(),
+                        trainerStorageProvider.get().getTrainer()._id(),
+                        null
+                ).observeOn(FX_SCHEDULER).subscribe(trainerStorageProvider.get()::setItems));
 
     }
 
@@ -445,7 +460,7 @@ public class IngameController extends Controller {
         if(preferences.get("inventory",null) == null){
             preferences.put("inventory",KeyCode.I.getChar());
         }
-
+        showCoins();
         return parent;
     }
 
@@ -1233,7 +1248,18 @@ public class IngameController extends Controller {
     }
 
     public void showItems() {
-        //TODO: Add ItemsVBox to root
+        itemMenuBox = new VBox();
+        itemMenuBox.setAlignment(Pos.CENTER);
+        ItemMenuController itemMenuController = itemMenuControllerProvider.get();
+        itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox);
+        itemMenuBox.getChildren().add(itemMenuController.render());
+        root.getChildren().add(itemMenuBox);
+        itemMenuBox.requestFocus();
+        buttonsDisable(true);
+    }
+
+    public void showCoins() {
+        coinsLabel.setText(String.valueOf(trainerStorageProvider.get().getTrainer().coins()));
     }
 
     /*

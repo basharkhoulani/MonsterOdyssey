@@ -277,4 +277,11 @@ public class Constants {
     public static final String BURNED = "burned";
     public static final String FROZEN = "frozen";
     public static final String CONFUSED = "confused";
+
+    public enum itemType {
+        ball,
+        effect,
+        monsterBox,
+        itemBox
+    }
 }
