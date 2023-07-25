@@ -46,7 +46,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -1179,6 +1178,8 @@ public class IngameController extends Controller {
         inEncounterInfoBox = false;
         inCoinsEarnedInfoBox = true;
         movementDisabled = false;
+        disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id())
+                .observeOn(FX_SCHEDULER).subscribe(trainer -> coinsLabel.setText(String.valueOf(trainer.coins())), error -> showError(error.getMessage())));
     }
 
     private void showEncounterScene() {
