@@ -1272,6 +1272,7 @@ public class IngameController extends Controller {
 
     public void showItems() {
         itemMenuBox = new VBox();
+        itemMenuBox.setId("itemMenuBox");
         itemMenuBox.setAlignment(Pos.CENTER);
         ItemMenuController itemMenuController = itemMenuControllerProvider.get();
         itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox);

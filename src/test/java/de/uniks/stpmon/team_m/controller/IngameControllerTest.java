@@ -65,6 +65,8 @@ public class IngameControllerTest extends ApplicationTest {
     @Mock
     Provider<IngameMiniMapController> ingameMiniMapControllerProvider;
     @Mock
+    Provider<ItemMenuController> itemMenuControllerProvider;
+    @Mock
     Provider<PresetsService> presetsServiceProvider;
 
     // Please also keep this mock, it is needed for the tests
@@ -393,6 +395,27 @@ public class IngameControllerTest extends ApplicationTest {
         when(ingameMini.render()).thenReturn(close);
 
         clickOn("#mapSymbol");
+        clickOn(close);
+    }
+
+    @Test
+    void testInventory() {
+        ItemMenuController itemMenuController = mock(ItemMenuController.class);
+        when(itemMenuControllerProvider.get()).thenReturn(itemMenuController);
+        doNothing().when(itemMenuController).init(any(), any(), any(), any());
+
+        Button close = new Button("Close");
+        close.setOnAction(event -> {
+            StackPane stackPane = lookup("#stackPane").query();
+            VBox itemMenuBox = lookup("#itemMenuBox").query();
+            stackPane.getChildren().remove(stackPane.getChildren().size() - 1);
+            itemMenuBox.setVisible(false);
+            itemMenuBox.toBack();
+            ingameController.buttonsDisable(false);
+        });
+        when(itemMenuController.render()).thenReturn(close);
+
+        clickOn("#coinsButton");
         clickOn(close);
     }
     @Test
@@ -736,7 +759,62 @@ public class IngameControllerTest extends ApplicationTest {
     }
 
     @Test
-    void testStarterMonsterNpcDialog() throws InterruptedException {
+    void testStarter1MonsterNpcDialog() throws InterruptedException {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(69);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(70);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+        when(trainerStorageProvider.get().getTrainer()).thenReturn(new Trainer(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "6475e595ac3946b6a812d865",
+                "646bab5cecf584e1be02598a",
+                "6475e595ac3946b6a812d868",
+                "Peter",
+                "Premade_Character_02.png",
+                0,
+                List.of(),
+                null,
+                List.of("646bacc568933551792bf3d5"),
+                "6475e595ac3946b6a812d863",
+                33,
+                18,
+                0,
+                new NPCInfo(false, false, false, false, null, null, null)));
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        final VBox starterSelectionVBox = lookup("#starterSelectionVBox").query();
+        assertNotNull(starterSelectionVBox);
+
+        final Label starterSelectionLabel0 = lookup("#starterSelectionLabel").query();
+        final String starterSelectionLabelText0 = starterSelectionLabel0.getText();
+
+        clickOn("#starterSelectionOkButton");
+        clickOn("#starterSelectionOkButton");
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+    }
+
+    @Test
+    void testStarter2MonsterNpcDialog() throws InterruptedException {
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(69);
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(70);
         Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
@@ -789,12 +867,68 @@ public class IngameControllerTest extends ApplicationTest {
 
         assertNotEquals(starterSelectionLabelText0, starterSelectionLabelText1);
 
+
+        clickOn("#starterSelectionOkButton");
+        clickOn("#starterSelectionOkButton");
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+    }
+
+    @Test
+    void testStarter3MonsterNpcDialog() throws InterruptedException {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(69);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(70);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+        when(trainerStorageProvider.get().getTrainer()).thenReturn(new Trainer(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "6475e595ac3946b6a812d865",
+                "646bab5cecf584e1be02598a",
+                "6475e595ac3946b6a812d868",
+                "Peter",
+                "Premade_Character_02.png",
+                0,
+                List.of(),
+                null,
+                List.of("646bacc568933551792bf3d5"),
+                "6475e595ac3946b6a812d863",
+                33,
+                18,
+                0,
+                new NPCInfo(false, false, false, false, null, null, null)));
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        final VBox starterSelectionVBox = lookup("#starterSelectionVBox").query();
+        assertNotNull(starterSelectionVBox);
+
+        final Label starterSelectionLabel0 = lookup("#starterSelectionLabel").query();
+        final String starterSelectionLabelText0 = starterSelectionLabel0.getText();
+
         clickOn("#arrowLeft");
 
         final Label starterSelectionLabel2 = lookup("#starterSelectionLabel").query();
         final String starterSelectionLabelText2 = starterSelectionLabel2.getText();
 
-        assertEquals(starterSelectionLabelText0, starterSelectionLabelText2);
+        assertNotEquals(starterSelectionLabelText0, starterSelectionLabelText2);
 
         clickOn("#starterSelectionOkButton");
         clickOn("#starterSelectionOkButton");
