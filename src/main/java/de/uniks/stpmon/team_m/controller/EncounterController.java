@@ -503,6 +503,7 @@ public class EncounterController extends Controller {
     public void listenToOpponents(String encounterId) {
         disposables.add(eventListener.get().listen("encounters." + encounterId + ".trainers.*.opponents.*.*", Opponent.class).observeOn(FX_SCHEDULER).subscribe(event -> {
             final Opponent opponent = event.data();
+            System.out.println("Opponent "+ event.suffix() + " : " + opponent);
             if (event.suffix().contains("updated")) {
                 updateOpponent(opponent);
             } else if (event.suffix().contains("deleted")) {
@@ -511,7 +512,7 @@ public class EncounterController extends Controller {
                 if (opponentsDelete.size() >= encounterOpponentStorage.getEncounterSize()) {
                     showResult();
                 }
-            } else if (event.suffix().equals("created")) {
+            } else if (event.suffix().contains("created")) {
                 disposables.add(encounterOpponentsService.getEncounterOpponents(trainerStorageProvider.get().getRegion()._id(), encounterId).observeOn(FX_SCHEDULER).subscribe(opponents -> {
                     initEncounterOpponentStorage(opponents);
                     render();
@@ -570,7 +571,7 @@ public class EncounterController extends Controller {
         }
     }
 
-    private void writeBattleDescription(HashMap<String, Opponent> forDescription) {
+    public void writeBattleDescription(HashMap<String, Opponent> forDescription) {
         updateDescription(EMPTY_STRING, true);
         List<String> opponentsInStorage = encounterOpponentStorage.getOpponentsInStorage();
         for (String opponentId : opponentsInStorage) {
@@ -719,7 +720,7 @@ public class EncounterController extends Controller {
         }
     }
 
-    private void showResultPopUp(String string) {
+    public void showResultPopUp(String string) {
         VBox resultBox = new VBox();
         resultBox.setAlignment(Pos.CENTER);
         encounterResultController.init(app);
