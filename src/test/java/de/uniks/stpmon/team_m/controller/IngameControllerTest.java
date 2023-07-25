@@ -117,6 +117,10 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<ChangeAudioController> changeAudioControllerProvider;
     @InjectMocks
     ChangeAudioController changeAudioController;
+    @Mock
+    Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
+    @InjectMocks
+    IngameTrainerSettingsController ingameTrainerSettingsController;
 
     @Override
     public void start(Stage stage) {
@@ -666,6 +670,10 @@ public class IngameControllerTest extends ApplicationTest {
         changeAudioController.setValues(bundle, preferences, null, changeAudioController, app);
         when(changeAudioControllerProvider.get()).thenReturn(changeAudioController);
 
+        ingameTrainerSettingsController.setValues(bundle, null, null, ingameTrainerSettingsController, app);
+        when(ingameTrainerSettingsControllerProvider.get()).thenReturn(ingameTrainerSettingsController);
+        when(trainerStorageProvider.get().getTrainerSprite()).thenReturn("Premade_Character_01.png");
+
         mainMenuController.setValues(bundle, null, null, mainMenuController, app);
         when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
         doNothing().when(app).show(mainMenuController);
@@ -682,6 +690,9 @@ public class IngameControllerTest extends ApplicationTest {
 
         clickOn("#audioSettingsButton");
         clickOn("#closeButton");
+
+        clickOn("#trainerSettingsButton");
+        clickOn("<");
 
 
         clickOn("#goBackButton");
