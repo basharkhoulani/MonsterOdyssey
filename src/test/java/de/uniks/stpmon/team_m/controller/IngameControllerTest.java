@@ -91,6 +91,8 @@ public class IngameControllerTest extends ApplicationTest {
     @InjectMocks
     MainMenuController mainMenuController;
     @Mock
+    TrainerItemsService trainerItemsService;
+    @Mock
     Provider<IngameSettingsController> ingameSettingsControllerProvider;
     @InjectMocks
     IngameSettingsController ingameSettingsController;
@@ -114,24 +116,9 @@ public class IngameControllerTest extends ApplicationTest {
         when(udpEventListener.listen(any(), any())).thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("646bac223b4804b87c0b8054", "64610ec8420b3d786212aea3", 0, 0, 2))));
         final TrainerStorage trainerStorage = mock(TrainerStorage.class);
         Mockito.when(trainerStorageProvider.get()).thenReturn(trainerStorage);
-        Mockito.when(trainerStorage.getTrainer()).thenReturn(new Trainer(
-                "2023-05-22T17:51:46.772Z",
-                "2023-05-22T17:51:46.772Z",
-                "646bac223b4804b87c0b8054",
-                "646bab5cecf584e1be02598a",
-                "646bac8c1a74032c70fffe24",
-                "Hans",
-                "Premade_Character_01.png",
-                0,
-                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
-                List.of(1,2),
-                List.of("646bacc568933551792bf3d5"),
-                "646bacc568933551792bf3d5",
-                33,
-                19,
-                0,
-                new NPCInfo(false, false, false, false, null, null, null)
-        ));
+        when(trainerItemsService.getItems(any(), any(), any())).thenReturn(
+                Observable.just(List.of(new Item("98759283759023874653", "Travis", 2, 2)))
+        );
         when(trainerStorageProvider.get().getRegion()).thenReturn(
                 new Region(
                         "2023-05-22T17:51:46.772Z",
