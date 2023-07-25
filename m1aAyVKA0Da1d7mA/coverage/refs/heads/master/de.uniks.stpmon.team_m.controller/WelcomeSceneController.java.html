@@ -207,12 +207,12 @@ public class WelcomeSceneController extends Controller {
 <span class="nc" id="L207">                                            trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));</span>
                                         }
 <span class="fc" id="L209">                                        ingameControllerProvider.get().setIsNewStart(true);</span>
-<span class="fc" id="L210">                                        app.show(ingameControllerProvider.get());</span>
-<span class="fc" id="L211">                                    },</span>
+<span class="nc" id="L210">                                        app.show(ingameControllerProvider.get());</span>
+<span class="nc" id="L211">                                    },</span>
                                     error -&gt; {
-<span class="nc" id="L213">                                        showError(error.getMessage());</span>
-<span class="nc" id="L214">                                        error.printStackTrace();</span>
-<span class="nc" id="L215">                                    }</span>
+<span class="fc" id="L213">                                        showError(error.getMessage());</span>
+<span class="fc" id="L214">                                        error.printStackTrace();</span>
+<span class="fc" id="L215">                                    }</span>
                             ));
 <span class="fc" id="L217">                        }, error -&gt; showError(error.getMessage())</span>
                 ));

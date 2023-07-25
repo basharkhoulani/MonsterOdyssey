@@ -16,22 +16,22 @@ import java.util.function.Consumer;
 public class UDPClient {
     private final InetAddress serverAddress;
     private final int serverPort;
-<span class="fc" id="L19">    private final List&lt;Consumer&lt;String&gt;&gt; messageHandlers = Collections.synchronizedList(new ArrayList&lt;&gt;());</span>
+<span class="nc" id="L19">    private final List&lt;Consumer&lt;String&gt;&gt; messageHandlers = Collections.synchronizedList(new ArrayList&lt;&gt;());</span>
     private DatagramSocket socket;
     private Thread receivingThread;
 
-<span class="fc" id="L23">    public UDPClient(InetAddress serverAddress, int serverPort) {</span>
-<span class="fc" id="L24">        this.serverAddress = serverAddress;</span>
-<span class="fc" id="L25">        this.serverPort = serverPort;</span>
-<span class="fc" id="L26">    }</span>
+<span class="nc" id="L23">    public UDPClient(InetAddress serverAddress, int serverPort) {</span>
+<span class="nc" id="L24">        this.serverAddress = serverAddress;</span>
+<span class="nc" id="L25">        this.serverPort = serverPort;</span>
+<span class="nc" id="L26">    }</span>
 
     public boolean isOpen() {
 <span class="nc bnc" id="L29" title="All 4 branches missed.">        return this.socket != null &amp;&amp; !this.socket.isClosed();</span>
     }
 
     public void open() throws IOException {
-<span class="fc" id="L33">        onOpen(new DatagramSocket());</span>
-<span class="fc" id="L34">    }</span>
+<span class="nc" id="L33">        onOpen(new DatagramSocket());</span>
+<span class="nc" id="L34">    }</span>
 
     public void close() {
 <span class="nc bnc" id="L37" title="All 4 branches missed.">        if (socket != null &amp;&amp; !socket.isClosed()) {</span>
@@ -42,8 +42,8 @@ public class UDPClient {
 
     @OnOpen
     public void onOpen(DatagramSocket socket) {
-<span class="fc" id="L45">        this.socket = socket;</span>
-<span class="fc" id="L46">    }</span>
+<span class="nc" id="L45">        this.socket = socket;</span>
+<span class="nc" id="L46">    }</span>
 
     @OnClose
     public void onClose() {
@@ -63,25 +63,25 @@ public class UDPClient {
 <span class="nc" id="L63">    }</span>
 
     public void addMessageHandler(Consumer&lt;String&gt; msgHandler) {
-<span class="fc" id="L66">        this.messageHandlers.add(msgHandler);</span>
-<span class="fc" id="L67">    }</span>
+<span class="nc" id="L66">        this.messageHandlers.add(msgHandler);</span>
+<span class="nc" id="L67">    }</span>
 
     public void removeMessageHandler(Consumer&lt;String&gt; msgHandler) {
 <span class="nc" id="L70">        this.messageHandlers.remove(msgHandler);</span>
 <span class="nc" id="L71">    }</span>
 
     public void sendMessage(String message) throws IOException {
-<span class="fc" id="L74">        byte[] sendData = message.getBytes();</span>
-<span class="fc" id="L75">        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, serverAddress, serverPort);</span>
-<span class="fc" id="L76">        socket.send(sendPacket);</span>
-<span class="fc" id="L77">    }</span>
+<span class="nc" id="L74">        byte[] sendData = message.getBytes();</span>
+<span class="nc" id="L75">        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, serverAddress, serverPort);</span>
+<span class="nc" id="L76">        socket.send(sendPacket);</span>
+<span class="nc" id="L77">    }</span>
 
     protected void startReceiving() {
-<span class="fc" id="L80">        receivingThread = new Thread(() -&gt; {</span>
-<span class="pc bpc" id="L81" title="1 of 2 branches missed.">            while (!receivingThread.isInterrupted()) {</span>
+<span class="nc" id="L80">        receivingThread = new Thread(() -&gt; {</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">            while (!receivingThread.isInterrupted()) {</span>
                 try {
-<span class="fc" id="L83">                    byte[] receiveData = new byte[508];</span>
-<span class="fc" id="L84">                    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);</span>
+<span class="nc" id="L83">                    byte[] receiveData = new byte[508];</span>
+<span class="nc" id="L84">                    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);</span>
 <span class="nc" id="L85">                    socket.receive(receivePacket);</span>
 <span class="nc" id="L86">                    String message = new String(receivePacket.getData(), 0, receivePacket.getLength());</span>
 <span class="nc" id="L87">                    onMessage(message);</span>
@@ -90,8 +90,8 @@ public class UDPClient {
 <span class="nc" id="L90">                }</span>
             }
 <span class="nc" id="L92">        });</span>
-<span class="fc" id="L93">        receivingThread.start();</span>
-<span class="fc" id="L94">    }</span>
+<span class="nc" id="L93">        receivingThread.start();</span>
+<span class="nc" id="L94">    }</span>
 
     public boolean hasMessageHandler() {
 <span class="nc bnc" id="L97" title="All 2 branches missed.">        return !this.messageHandlers.isEmpty();</span>
