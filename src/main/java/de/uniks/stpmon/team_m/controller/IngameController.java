@@ -201,7 +201,7 @@ public class IngameController extends Controller {
     private boolean loading;
     private VBox loadingScreen;
     private Timeline loadingScreenAnimation;
-
+    private VBox itemMenuBox;
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
      */
@@ -237,7 +237,9 @@ public class IngameController extends Controller {
                 }
             }
             if (event.getCode().toString().equals(preferences.get("inventory", "I"))) {
-                showItems();
+                if (!this.root.getChildren().contains(itemMenuBox)) {
+                    showItems();
+                }
             }
             if (isChatting || loading || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < TRANSITION_DURATION + 25)) {
                 return;
@@ -1246,7 +1248,7 @@ public class IngameController extends Controller {
     }
 
     public void showItems() {
-        VBox itemMenuBox = new VBox();
+        itemMenuBox = new VBox();
         itemMenuBox.setAlignment(Pos.CENTER);
         ItemMenuController itemMenuController = itemMenuControllerProvider.get();
         itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox);
