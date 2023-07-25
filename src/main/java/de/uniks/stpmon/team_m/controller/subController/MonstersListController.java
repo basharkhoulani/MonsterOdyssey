@@ -174,7 +174,7 @@ public class MonstersListController extends Controller {
     }
 
     public void onCloseMonsterList() {
-        ingameController.root.getChildren().remove(monsterListVBox);
+        ingameController.getRoot().getChildren().remove(monsterListVBox);
         ingameController.buttonsDisable(false);
     }
 
