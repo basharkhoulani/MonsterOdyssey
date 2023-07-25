@@ -46,7 +46,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -153,6 +152,9 @@ public class IngameController extends Controller {
     private boolean inEncounterInfoBox = false;
     private boolean isNewStart = true;
 
+    private Boolean coinsEarned;
+    private Integer coinsAmount;
+
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
 
@@ -202,6 +204,8 @@ public class IngameController extends Controller {
     private VBox loadingScreen;
     private Timeline loadingScreenAnimation;
     private VBox itemMenuBox;
+    private boolean inCoinsEarnedInfoBox = false;
+
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
      */
@@ -218,12 +222,15 @@ public class IngameController extends Controller {
         // Initialize key event listeners
         keyPressedHandler = event -> {
             if (event.getCode().toString().equals(preferences.get("interaction", "E"))) {
-                if (!inNpcPopup && !inEncounterInfoBox) {
+                if (!inNpcPopup && !inEncounterInfoBox && !inCoinsEarnedInfoBox) {
                     interactWithTrainer();
                 } else if (inEncounterInfoBox) {
                     stackPane.getChildren().remove(dialogStackPane);
                     this.inEncounterInfoBox = false;
                     showEncounterScene();
+                } else if (inCoinsEarnedInfoBox) {
+                    inCoinsEarnedInfoBox = false;
+                    stackPane.getChildren().remove(dialogStackPane);
                 }
             }
             if (event.getCode().toString().equals(preferences.get("pauseMenu", "ESCAPE"))) {
@@ -439,26 +446,26 @@ public class IngameController extends Controller {
         specificSounds();
 
         //Keybindings
-        if(preferences.get("walkUp",null) == null){
+        if (preferences.get("walkUp", null) == null) {
             preferences.put("walkUp", KeyCode.W.getChar());
         }
-        if(preferences.get("walkDown",null) == null){
-            preferences.put("walkDown",KeyCode.S.getChar());
+        if (preferences.get("walkDown", null) == null) {
+            preferences.put("walkDown", KeyCode.S.getChar());
         }
-        if(preferences.get("walkLeft",null) == null){
-            preferences.put("walkLeft",KeyCode.A.getChar());
+        if (preferences.get("walkLeft", null) == null) {
+            preferences.put("walkLeft", KeyCode.A.getChar());
         }
-        if(preferences.get("walkRight",null) == null){
-            preferences.put("walkRight",KeyCode.D.getChar());
+        if (preferences.get("walkRight", null) == null) {
+            preferences.put("walkRight", KeyCode.D.getChar());
         }
-        if(preferences.get("interaction",null) == null){
-            preferences.put("interaction",KeyCode.E.getChar());
+        if (preferences.get("interaction", null) == null) {
+            preferences.put("interaction", KeyCode.E.getChar());
         }
-        if(preferences.get("pauseMenu",null) == null){
-            preferences.put("pauseMenu","ESCAPE");
+        if (preferences.get("pauseMenu", null) == null) {
+            preferences.put("pauseMenu", "ESCAPE");
         }
-        if(preferences.get("inventory",null) == null){
-            preferences.put("inventory",KeyCode.I.getChar());
+        if (preferences.get("inventory", null) == null) {
+            preferences.put("inventory", KeyCode.I.getChar());
         }
         showCoins();
         return parent;
@@ -778,7 +785,9 @@ public class IngameController extends Controller {
                 }
                 loadPlayers();
                 loadMiniMap();
-
+                if (getCoinsEarned() != null && getCoinsEarned()) {
+                    showCoinsEarnedWindow();
+                }
             }
         }
     }
@@ -1158,6 +1167,19 @@ public class IngameController extends Controller {
         dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.INFO")));
         this.inEncounterInfoBox = true;
         movementDisabled = true;
+    }
+
+    private void showCoinsEarnedWindow() {
+        TextFlow dialogTextFlow = createDialogVBox(true);
+        dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.WON") + "\n" +
+                resources.getString("COINS.EARNED") + " " + getCoinsAmount() + " " +
+                resources.getString("COINS.EARNED2")));
+        inDialog = false;
+        inEncounterInfoBox = false;
+        inCoinsEarnedInfoBox = true;
+        movementDisabled = false;
+        disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id())
+                .observeOn(FX_SCHEDULER).subscribe(trainer -> coinsLabel.setText(String.valueOf(trainer.coins())), error -> showError(error.getMessage())));
     }
 
     private void showEncounterScene() {
@@ -1870,5 +1892,21 @@ public class IngameController extends Controller {
 
     public void setIsNewStart(boolean isNewStart) {
         this.isNewStart = isNewStart;
+    }
+
+    public Boolean getCoinsEarned() {
+        return coinsEarned;
+    }
+
+    public void setCoinsEarned(Boolean coinsEarned) {
+        this.coinsEarned = coinsEarned;
+    }
+
+    public Integer getCoinsAmount() {
+        return coinsAmount;
+    }
+
+    public void setCoinsAmount(Integer coinsAmount) {
+        this.coinsAmount = coinsAmount;
     }
 }
