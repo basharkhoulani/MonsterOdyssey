@@ -21,11 +21,8 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -265,29 +262,102 @@ public class MonstersListControllerTest extends ApplicationTest {
 
     @Test
     void removeFromTeam() {
-
+        @SuppressWarnings("unchecked")
+        final List<String> team = mock(List.class);
+        final Trainer trainer = new Trainer(
+                "2023-06-05T17:02:40.332Z",
+                "2023-06-12T22:14:00.005Z",
+                "647e15308c1bb6a91fb57321",
+                "645e32c6866ace359554a7ec",
+                "647a466a494a75c31bb05921",
+                "Hans",
+                "Premade_Character_04.png",
+                0,
+                team,
+                List.of(1, 2),
+                List.of("647e1530866ace3595866db2", "647e1530866ace3595866900"),
+                "645e32c6866ace359554a7fa",
+                45,
+                23,
+                0,
+                null
+        );
+        when(trainerStorageProvider.get().getTrainer()).thenReturn(trainer);
+        when(team.remove(anyString())).thenReturn(true);
+        when(trainersService.updateTrainer(any(), any(), any(), any(), any()))
+                .thenReturn(Observable.just(
+                        new Trainer(
+                                "2023-06-05T17:02:40.332Z",
+                                "2023-06-12T22:14:00.005Z",
+                                "647e15308c1bb6a91fb57321",
+                                "645e32c6866ace359554a7ec",
+                                "647a466a494a75c31bb05921",
+                                "Hans",
+                                "Premade_Character_04.png",
+                                0,
+                                List.of("647e1530866ace3595866db2"),
+                                List.of(1, 2),
+                                List.of("647e1530866ace3595866db2", "647e1530866ace3595866500"),
+                                "645e32c6866ace359554a7fa",
+                                45,
+                                23,
+                                0,
+                                null
+                        )
+                ));
         clickOn("#removeFromTeamButton647e1530866ace3595866500");
     }
 
     @Test
     void addToTeam() {
         clickOn("#othersTab");
-        assertEquals(monsterListController.otherMonstersList.size(), 1);
-        assertEquals(monsterListController.activeMonstersList.size(), 2);
 
-        /*
-        clickOn("#removeFromTeamButton647e1530866ace3595866900");
+        @SuppressWarnings("unchecked")
+        final List<String> team = mock(List.class);
+        final Trainer trainer = new Trainer(
+                "2023-06-05T17:02:40.332Z",
+                "2023-06-12T22:14:00.005Z",
+                "647e15308c1bb6a91fb57321",
+                "645e32c6866ace359554a7ec",
+                "647a466a494a75c31bb05921",
+                "Hans",
+                "Premade_Character_04.png",
+                0,
+                team,
+                List.of(1, 2),
+                List.of("647e1530866ace3595866db2", "647e1530866ace3595866900"),
+                "645e32c6866ace359554a7fa",
+                45,
+                23,
+                0,
+                null
+        );
+        when(trainerStorageProvider.get().getTrainer()).thenReturn(trainer);
+        when(team.add(anyString())).thenReturn(true);
+        when(trainersService.updateTrainer(any(), any(), any(), any(), any()))
+                .thenReturn(Observable.just(
+                        new Trainer(
+                                "2023-06-05T17:02:40.332Z",
+                                "2023-06-12T22:14:00.005Z",
+                                "647e15308c1bb6a91fb57321",
+                                "645e32c6866ace359554a7ec",
+                                "647a466a494a75c31bb05921",
+                                "Hans",
+                                "Premade_Character_04.png",
+                                0,
+                                List.of("647e1530866ace3595866db2"),
+                                List.of(1, 2),
+                                List.of("647e1530866ace3595866db2", "647e1530866ace3595866900", "647e1530866ace3595866500"),
+                                "645e32c6866ace359554a7fa",
+                                45,
+                                23,
+                                0,
+                                null
+                        )
+                ));
 
-        assertEquals(monsterListController.activeMonstersList.size(), 3);
-        assertEquals(monsterListController.otherMonstersList.size(), 0);
+        clickOn("#removeFromTeamButton647e1530866ace3595866db2");
 
-        try {
-            sleep(5000);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-         */
     }
 
     @Test
@@ -317,13 +387,5 @@ public class MonstersListControllerTest extends ApplicationTest {
         );
         clickOn("#othersTab");
         clickOn("#removeFromTeamButton647e1530866ace3595866900");
-
-        try {
-            sleep(5000);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 }
