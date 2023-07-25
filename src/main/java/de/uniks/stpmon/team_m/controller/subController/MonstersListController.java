@@ -210,9 +210,10 @@ public class MonstersListController extends Controller {
 
         Button ok = new Button(resources.getString("OK"));
         ok.getStyleClass().add("buttonsYellow");
-        ok.setOnAction(event -> ingameController.root.getChildren().remove(limitVBox));
+        ok.setOnAction(event -> ingameController.getRoot().getChildren().remove(limitVBox));
 
         limitVBox.getChildren().addAll(message, ok);
+        ingameController.getRoot().getChildren().add(limitVBox);
     }
 
     private void updateBothLists(ListView<Monster> listViewAdd, List<Monster> listAdd, ListView<Monster> listViewRemove, List<Monster> listRemove, Monster monster, List<String> team) {

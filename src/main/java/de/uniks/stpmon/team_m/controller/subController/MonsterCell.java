@@ -150,7 +150,7 @@ public class MonsterCell extends ListCell<Monster> {
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER)
                     .subscribe(monsterType -> {
                         monsterTypeDto = monsterType;
-                        monsterNameLevel.setText(monsterTypeDto.name() + " (LVL " + monster.level() + ")");
+                        monsterNameLevel.setText(monsterTypeDto.name() + " (" + resources.getString("LEVEL").substring(0, resources.getString("LEVEL").length()-1) + " " + monster.level() + ")");
                         for (String s : monsterTypeDto.type()) {
                             type.append(s);
                         }
@@ -195,13 +195,18 @@ public class MonsterCell extends ListCell<Monster> {
                 removeFromTeamButton.setStyle("-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7;");
                 removeFromTeamButton.setText(resources.getString("CHANGE.MONSTER"));
                 arrowUp.setVisible(false);
+                arrowUp.setDisable(true);
                 arrowDown.setVisible(false);
+                arrowDown.setDisable(true);
+
                 // TODO: Tobias hier den Aufruf zur Change Monster Methode
             }
 
             if (item != null) {
                 arrowUp.setVisible(false);
+                arrowUp.setDisable(true);
                 arrowDown.setVisible(false);
+                arrowDown.setDisable(true);
                 buttonsVBox.getChildren().remove(viewDetailsButton);
                 removeFromTeamButton.setStyle("-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7; -fx-min-width: 150px; -fx-min-height: 50px;");
                 removeFromTeamButton.setText(resources.getString("SELECT"));
@@ -214,7 +219,10 @@ public class MonsterCell extends ListCell<Monster> {
                 statusEffectImageView.setFitWidth(24);
                 statusEffectsFlowPane.getChildren().add(statusEffectImageView);
             });
-
+            arrowDown.setId("arrowDown" + monster._id());
+            arrowUp.setId("arrowUp" + monster._id());
+            removeFromTeamButton.setId("removeFromTeamButton" + monster._id());
+            viewDetailsButton.setId("viewDetailsButton" + monster._id());
             setGraphic(rootmonsterHBox);
             setText(null);
             setStyle("-fx-background-color: #CFE9DB;  -fx-border-color: #1C701C; -fx-border-width: 2px");
