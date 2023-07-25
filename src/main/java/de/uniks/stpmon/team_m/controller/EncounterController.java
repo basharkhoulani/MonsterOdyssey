@@ -308,7 +308,12 @@ public class EncounterController extends Controller {
     private void showEnemyMonster(EncounterOpponentController encounterOpponentController, Opponent opponent, boolean isInit) {
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
             encounterOpponentController.setLevelLabel("LVL " + monster.level()).setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
-
+            for (String effect : STATUS_EFFECTS) {
+                encounterOpponentController.showStatus(effect, false);
+            }
+            for (String effect : monster.status()) {
+                encounterOpponentController.showStatus(effect, true);
+            }
             listenToMonster(opponent.trainer(), monster._id(), encounterOpponentController);
             //write monster name
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -> {
@@ -351,6 +356,12 @@ public class EncounterController extends Controller {
                     .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1))
                     .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health())
                     .setHealthLabel(monster.currentAttributes().health() + "/" + monster.attributes().health() + " HP");
+            for (String effect : STATUS_EFFECTS) {
+                encounterOpponentController.showStatus(effect, false);
+            }
+            for (String effect : monster.status()) {
+                encounterOpponentController.showStatus(effect, true);
+            }
             //write monster name
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -> {
                 encounterOpponentController.setMonsterNameLabel(m.name());
