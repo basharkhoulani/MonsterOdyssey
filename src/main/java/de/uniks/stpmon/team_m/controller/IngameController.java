@@ -530,8 +530,6 @@ public class IngameController extends Controller {
                         }
                         int oldXValue = trainerStorageProvider.get().getX();
                         int oldYValue = trainerStorageProvider.get().getY();
-                        System.out.println(trainerStorageProvider.get().getX());
-                        System.out.println(moveTrainerDto);
                         if (oldXValue != moveTrainerDto.x() || oldYValue != moveTrainerDto.y()) {
                             trainerController.setTrainerTargetPosition(moveTrainerDto.x(), moveTrainerDto.y());
                             trainerController.setTrainerDirection(moveTrainerDto.direction());

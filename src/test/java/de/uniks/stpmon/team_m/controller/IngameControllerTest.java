@@ -124,7 +124,7 @@ public class IngameControllerTest extends ApplicationTest {
 
         UDPEventListener udpEventListener = mock(UDPEventListener.class);
         Mockito.when(udpEventListenerProvider.get()).thenReturn(udpEventListener);
-        when(udpEventListener.listen(any(), any())).thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("646bac223b4804b87c0b8054", "64610ec8420b3d786212aea3", 0, 0, 2))));
+        when(udpEventListener.listen(any(), any())).thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("6475e595ac3946b6a812d865", "6475e595ac3946b6a812d863", 5, 4, 0))));
         final TrainerStorage trainerStorage = mock(TrainerStorage.class);
         Mockito.when(trainerStorageProvider.get()).thenReturn(trainerStorage);
         when(trainerItemsService.getItems(any(), any(), any())).thenReturn(
@@ -246,6 +246,9 @@ public class IngameControllerTest extends ApplicationTest {
                 1,
                 new NPCInfo(false, false, false, false, null, null, null));
 
+        when(trainerStorageProvider.get().getY()).thenReturn(5);
+        when(trainerStorageProvider.get().getX()).thenReturn(5);
+
         when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers.*.*", Trainer.class)).thenReturn(just(
                 new Event<>("regions.646bab5cecf584e1be02598a.trainers.6475e595ac3946b6a812d865.created", trainer)));
 
@@ -316,8 +319,7 @@ public class IngameControllerTest extends ApplicationTest {
 
         //Mocking the opponent (Situation)
         when(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() + ".opponents.*.*", Opponent.class)).thenReturn(just(
-                        new Event<>("encounters.*.trainers.6475e595ac3946b6a812d865,opponents.*.nothappening", null)))
-                .thenReturn(just(new Event<>("encounters.a98db973kwl8xp1lz94kjf0b.trainers.646bac223b4804b87c0b8054.opponents.rqtjej4dcoqsm4e9yln1loy5.created", opponent)));
+                        new Event<>("encounters.*.trainers.6475e595ac3946b6a812d865,opponents.*.nothappening", null)));
 
         when(encounterOpponentsService.getTrainerOpponents(anyString(), anyString())).thenReturn(Observable.just(List.of()));
         app.start(stage);
@@ -560,6 +562,7 @@ public class IngameControllerTest extends ApplicationTest {
     void testMovement() {
         when(udpEventListenerProvider.get().move(any())).thenReturn(empty());
         when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+        when(udpEventListenerProvider.get().listen(any(), any())).thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("6475e595ac3946b6a812d865", "6475e595ac3946b6a812d863", 6, 5, 0))));
         type(KeyCode.W);
         sleep(200);
         type(KeyCode.A);
