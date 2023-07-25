@@ -55,7 +55,7 @@ public class IngameMapRenderTest extends ApplicationTest {
 
     // Please also keep this mock, it is needed for the tests
     // -- which ones????
-    @Spy
+    @Mock
     EncounterOpponentStorage encounterOpponentStorage;
     @Mock
     TrainersService trainersService;
@@ -434,6 +434,32 @@ public class IngameMapRenderTest extends ApplicationTest {
                 null,
                 List.of(),
                 0))));
+
+        when(encounterOpponentStorage.getSelfOpponent()).thenReturn(new Opponent(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "rqtjej4dcoqsm4e9yln1loy5",
+                "a98db973kwl8xp1lz94kjf0b",
+                "646bac223b4804b87c0b8054",
+                false,
+                false,
+                "pn2iz308akz07eau5iwa6ykq",
+                null,
+                List.of(),
+                0));
+
+        when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(List.of(new Opponent(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "rqtjej4dcoqsm4e9yln1loy5",
+                "a98db973kwl8xp1lz94kjf0b",
+                "646bac223b4804b87c0b8054",
+                false,
+                false,
+                "pn2iz308akz07eau5iwa6ykq",
+                null,
+                List.of(),
+                0)));
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
