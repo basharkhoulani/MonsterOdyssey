@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -117,6 +118,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<EncounterController> encounterControllerProvider;
     @Inject
+    Provider<ItemMenuController> itemMenuControllerProvider;
+    @Inject
     AreasService areasService;
     @Inject
     PresetsService presetsService;
@@ -156,6 +159,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
 
+    @Inject
+    TrainerItemsService trainerItemsService;
 
     @Inject
     Provider<MonstersListController> monstersListControllerProvider;
@@ -174,6 +179,8 @@ public class IngameController extends Controller {
     private HashMap<Trainer, Position> trainerPositionHashMap;
     Stage popupStage;
     private VBox nursePopupVBox;
+    private VBox clerkPopupVBox;
+
     private DialogController dialogController;
     private Trainer currentNpc;
     private NpcTextManager npcTextManager;
@@ -197,6 +204,7 @@ public class IngameController extends Controller {
     private boolean loading;
     private VBox loadingScreen;
     private Timeline loadingScreenAnimation;
+    private VBox itemMenuBox;
     private boolean inCoinsEarnedInfoBox = false;
 
     /**
@@ -237,7 +245,9 @@ public class IngameController extends Controller {
                 }
             }
             if (event.getCode().toString().equals(preferences.get("inventory", "I"))) {
-                showItems();
+                if (!this.root.getChildren().contains(itemMenuBox)) {
+                    showItems();
+                }
             }
             if (isChatting || loading || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < TRANSITION_DURATION + 25)) {
                 return;
@@ -270,6 +280,14 @@ public class IngameController extends Controller {
             event.consume();
         };
         this.npcTextManager = new NpcTextManager(resources);
+
+        // Load trainer items and save them to trainerStorage
+        disposables.add(
+                trainerItemsService.getItems(
+                        trainerStorageProvider.get().getRegion()._id(),
+                        trainerStorageProvider.get().getTrainer()._id(),
+                        null
+                ).observeOn(FX_SCHEDULER).subscribe(trainerStorageProvider.get()::setItems));
 
     }
 
@@ -450,7 +468,7 @@ public class IngameController extends Controller {
         if (preferences.get("inventory", null) == null) {
             preferences.put("inventory", KeyCode.I.getChar());
         }
-
+        showCoins();
         return parent;
     }
 
@@ -1130,18 +1148,7 @@ public class IngameController extends Controller {
                         encounterOpponentStorage.setAttacker(opponent.isAttacker());
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
-                                    encounterOpponentStorage.setEncounterSize(opts.size());
-                                    encounterOpponentStorage.resetEnemyOpponents();
-                                    encounterOpponentStorage.setOpponentsInStorage(opts);
-                                    for (Opponent o : opts) {
-                                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                                            if (o.isAttacker() != encounterOpponentStorage.isAttacker()) {
-                                                encounterOpponentStorage.addEnemyOpponent(o);
-                                            } else {
-                                                encounterOpponentStorage.setCoopOpponent(o);
-                                            }
-                                        }
-                                    }
+                                    initEncounterOpponentStorage(opts);
                                     if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponents().size() != 0) {
                                         showEncounterInfoWindow();
                                         this.isNewStart = false;
@@ -1192,18 +1199,7 @@ public class IngameController extends Controller {
                         encounterOpponentStorage.setAttacker(opponent.isAttacker());
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
-                                    encounterOpponentStorage.setOpponentsInStorage(opts);
-                                    encounterOpponentStorage.resetEnemyOpponents();
-                                    encounterOpponentStorage.setEncounterSize(opts.size());
-                                    for (Opponent o : opts) {
-                                        if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && !o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                                            if (o.isAttacker() != encounterOpponentStorage.isAttacker()) {
-                                                encounterOpponentStorage.addEnemyOpponent(o);
-                                            } else {
-                                                encounterOpponentStorage.setCoopOpponent(o);
-                                            }
-                                        }
-                                    }
+                                    initEncounterOpponentStorage(opts);
                                     if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponents().size() != 0 && isNewStart) {
                                         showEncounterScene();
                                     }
@@ -1211,6 +1207,19 @@ public class IngameController extends Controller {
                     }
                 }, Throwable::printStackTrace));
 
+    }
+    private void initEncounterOpponentStorage(List<Opponent> opponents) {
+        encounterOpponentStorage.setOpponentsInStorage(opponents);
+        encounterOpponentStorage.resetEnemyOpponents();
+        encounterOpponentStorage.setEncounterSize(opponents.size());
+        for (Opponent o : opponents) {
+            if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && o.isAttacker() != encounterOpponentStorage.isAttacker()) {
+                encounterOpponentStorage.addEnemyOpponent(o);
+            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) && o.isAttacker() == encounterOpponentStorage.isAttacker()){
+                encounterOpponentStorage.setCoopOpponent(o);
+                encounterOpponentStorage.setTwoMonster(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id()));
+            }
+        }
     }
 
     private void updateTrainer(ObservableList<Trainer> trainers, Trainer trainer) {
@@ -1260,7 +1269,18 @@ public class IngameController extends Controller {
     }
 
     public void showItems() {
-        //TODO: Add ItemsVBox to root
+        itemMenuBox = new VBox();
+        itemMenuBox.setAlignment(Pos.CENTER);
+        ItemMenuController itemMenuController = itemMenuControllerProvider.get();
+        itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox);
+        itemMenuBox.getChildren().add(itemMenuController.render());
+        root.getChildren().add(itemMenuBox);
+        itemMenuBox.requestFocus();
+        buttonsDisable(true);
+    }
+
+    public void showCoins() {
+        coinsLabel.setText(String.valueOf(trainerStorageProvider.get().getTrainer().coins()));
     }
 
     /*
@@ -1340,23 +1360,29 @@ public class IngameController extends Controller {
         int checkTileY = currentY;
         int checkTileXForNurse = currentX;
         int checkTileYForNurse = currentY;
+        int checkTileXForSpecialNpc = currentX;
+        int checkTileYForSpecialNpc = currentY;
 
         switch (direction) {
             case 0 -> {                         // facing right
                 checkTileX++;
                 checkTileXForNurse += 2;
+                checkTileXForSpecialNpc += 2;
             }
             case 1 -> {                         // facing up
                 checkTileY--;
                 checkTileYForNurse -= 2;
+                checkTileYForSpecialNpc -= 2;
             }
             case 2 -> {                         // facing left
                 checkTileX--;
                 checkTileXForNurse -= 2;
+                checkTileXForSpecialNpc -= 2;
             }
             case 3 -> {                         // facing down
                 checkTileY++;
                 checkTileYForNurse += 2;
+                checkTileYForSpecialNpc += 2;
             }
             default -> System.err.println("Unknown direction for Trainer: " + direction);
         }
@@ -1366,26 +1392,38 @@ public class IngameController extends Controller {
         if (tileInFront != null) {
             return tileInFront;
         } else {
+            Trainer specialNpcBehindCounter = searchHashedMapForTrainer(checkTileXForSpecialNpc, checkTileYForSpecialNpc);
             Trainer nurseBehindCounter = searchHashedMapForTrainer(checkTileXForNurse, checkTileYForNurse);
 
             if (nurseBehindCounter == null) {
                 return null;
             }
 
-            // maybe this will throw an error in the future. I've looked into the server for all NPC's,
-            // apparently almost all NPC's have the canHeal() boolean, but some only have walkRandomly().
-            // If they don't have the canHeal(), it should be covered by this try/catch
+            if (specialNpcBehindCounter == null) {
+                return null;
+            }
+
             try {
-                if (nurseBehindCounter.npc().canHeal()) {
-                    return nurseBehindCounter;
-                } else {
-                    return null;
+                if (specialNpcBehindCounter.npc().canHeal()) {
+                    return specialNpcBehindCounter;
                 }
             } catch (Error e) {
                 System.err.println("NPC does not have the canHeal() attribute");
                 e.printStackTrace();
-                return null;
             }
+
+            try {
+                if (specialNpcBehindCounter.npc().sells() != null) {
+                    if (!specialNpcBehindCounter.npc().sells().isEmpty()) {
+                        return specialNpcBehindCounter;
+                    }
+                }
+            } catch (Error e) {
+                System.err.println("NPC does not have the sells() attribute");
+                e.printStackTrace();
+            }
+
+            return null;
         }
     }
 
@@ -1463,6 +1501,7 @@ public class IngameController extends Controller {
                 )).observeOn(FX_SCHEDULER).subscribe());
                 endDialog(0, true);
             }
+            case spokenToClerk -> createClerkPopup();
             default -> {
             }
         }
@@ -1546,6 +1585,79 @@ public class IngameController extends Controller {
 
         // add nurseVBox to stackPane
         root.getChildren().add(nurseVBox);
+        buttonsDisable(true);
+        inNpcPopup = true;
+    }
+
+    public void createClerkPopup() {
+        // base VBox
+        VBox clerkPopup = new VBox();
+        clerkPopup.setId("clerkPopup");
+        clerkPopup.setMaxHeight(clerkPopupHeight);
+        clerkPopup.setMaxWidth(popupWidth);
+        clerkPopup.getStyleClass().add("dialogTextFlow");
+        this.clerkPopupVBox = clerkPopup;
+
+        // text field
+        Text clerkText = new Text(resources.getString("CLERK.ENTER.SHOP.QUESTION"));
+        clerkText.getStyleClass().add("clerkText");
+        TextFlow clerkQuestion = new TextFlow(clerkText);
+        clerkQuestion.setPrefWidth(popupWidth);
+        clerkQuestion.setPrefHeight(clerkQuestionHeight);
+        clerkQuestion.setPadding(dialogTextFlowInsets);
+        clerkQuestion.setTextAlignment(TextAlignment.CENTER);
+
+        // buttonsVBox
+        VBox buttonsVBox = new VBox();
+        buttonsVBox.setMaxHeight(clerkButtonsVBoxHeight);
+        buttonsVBox.setMaxWidth(popupWidth);
+        buttonsVBox.setAlignment(Pos.TOP_CENTER);
+        buttonsVBox.setSpacing(clerkButtonVBoxSpacing);
+
+        // buyButton
+        Button buyButton = new Button(resources.getString("CLERK.BUY"));
+        buyButton.setMaxWidth(clerkButtonWidth);
+        buyButton.setMinWidth(clerkButtonWidth);
+        buyButton.setMaxHeight(clerkButtonHeight);
+        buyButton.setMinHeight(clerkButtonHeight);
+        buyButton.getStyleClass().add("clerkDialogWhiteButton");
+        buyButton.setOnAction(event -> {
+            // TODO
+        });
+
+        // sellButton
+        Button sellButton = new Button(resources.getString("CLERK.SELL"));
+        sellButton.setMaxWidth(clerkButtonWidth);
+        sellButton.setMinWidth(clerkButtonWidth);
+        sellButton.setMaxHeight(clerkButtonHeight);
+        sellButton.setMinHeight(clerkButtonHeight);
+        sellButton.getStyleClass().add("clerkDialogWhiteButton");
+        sellButton.setOnAction(event -> {
+            // TODO
+        });
+
+        // leaveButton
+        Button leaveButton = new Button(resources.getString("CLERK.LEAVE"));
+        leaveButton.setMaxWidth(clerkButtonWidth);
+        leaveButton.setMinWidth(clerkButtonWidth);
+        leaveButton.setMaxHeight(clerkButtonHeight);
+        leaveButton.setMinHeight(clerkButtonHeight);
+        leaveButton.getStyleClass().add("clerkDialogYellowButton");
+        leaveButton.setOnAction(event -> {
+            continueTrainerDialog(DialogSpecialInteractions.clerkCancelShop);
+            inNpcPopup = false;
+            this.root.getChildren().remove(clerkPopupVBox);
+            buttonsDisable(false);
+        });
+
+        // add buttons to VBox
+        buttonsVBox.getChildren().addAll(buyButton, sellButton, leaveButton);
+
+        // add text and buttonsVBox to nurseVBox
+        clerkPopup.getChildren().addAll(clerkQuestion, buttonsVBox);
+
+        // add nurseVBox to stackPane
+        root.getChildren().add(clerkPopup);
         buttonsDisable(true);
         inNpcPopup = true;
     }

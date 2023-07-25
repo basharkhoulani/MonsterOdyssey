@@ -119,7 +119,9 @@ public class Constants {
         nurseNoMons,
         starterSelection0,
         starterSelection1,
-        starterSelection2
+        starterSelection2,
+        clerkOpenShop,
+        clerkCancelShop
     }
 
     public enum ContinueDialogReturnValues {
@@ -130,7 +132,9 @@ public class Constants {
         albertDialogFinished1,
         albertDialogFinished2,
         spokenToNurse,
-        encounterOnTalk
+        encounterOnTalk,
+        spokenToClerk
+
     }
 
     // Nurse Popup
@@ -141,6 +145,15 @@ public class Constants {
     public static final int buttonsHBoxSpacing = 30;
     public static final int nurseButtonHeight = 40;
     public static final int nurseButtonWidth = 80;
+
+    // Clerk Popup
+    public static final int clerkPopupHeight = 250;
+    public static final int clerkQuestionHeight = 75;
+    public static final int clerkButtonsVBoxHeight = 225;
+    public static final int clerkButtonVBoxSpacing = 10;
+    public static final int clerkButtonWidth = 250;
+    public static final int clerkButtonHeight = 40;
+
 
     // Ingame Help
     public static final int spaceBetweenPhoneAndWindowEdge = 25;
@@ -267,4 +280,11 @@ public class Constants {
             entry(CONFUSED, "images/confused.png")
     ));
 
+
+    public enum itemType {
+        ball,
+        effect,
+        monsterBox,
+        itemBox
+    }
 }

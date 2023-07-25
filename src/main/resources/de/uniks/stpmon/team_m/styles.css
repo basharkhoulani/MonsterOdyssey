@@ -529,3 +529,34 @@
     -fx-background-size: cover;
     -fx-background-position: center;
 }
+
+/*********************************************************************************/
+/*************************** Ingame - Dialogs ****************************/
+
+.clerkText {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+.clerkDialogWhiteButton {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 10px;
+    -fx-border-width: 2px;
+    -fx-border-radius: 7px;
+    -fx-border-color: black;
+}
+.clerkDialogYellowButton {
+    -fx-background-color: #FFF2CC;
+    -fx-background-radius: 10px;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-border-color: black;
+}
+.inventarMenu {
+    -fx-background-radius: 10;
+    -fx-border-color: #000000;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+}
+.boldFont {
+    -fx-font-weight: bold;
+}

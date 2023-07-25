@@ -171,7 +171,7 @@ public class MonsterCell extends ListCell<Monster> {
                 arrowUp.setVisible(false);
                 arrowDown.setVisible(false);
                 removeFromTeamButton.setOnAction(event -> {
-                    encounterController.changeMonster(monster, monsterTypeDto);
+                    encounterController.changeMonster(monster);
                     changeMonsterListController.onCloseMonsterList();
                 });
             }
@@ -184,7 +184,7 @@ public class MonsterCell extends ListCell<Monster> {
 
     private void showDetails(Monster monster, String type) {
         if (encounter) {
-            this.encounterController.showMonsterDetailsInEncounter();
+            this.encounterController.showMonsterDetails(monster, monsterTypeDto, monsterImage, type);
         } else {
             this.ingameController.showMonsterDetails(monster, monsterTypeDto, monsterImage, resources, presetsService, type);
         }
