@@ -1150,8 +1150,8 @@ public class IngameController extends Controller {
 <span class="fc" id="L1150">                                .observeOn(FX_SCHEDULER).subscribe(opts -&gt; {</span>
 <span class="fc" id="L1151">                                    initEncounterOpponentStorage(opts);</span>
 <span class="pc bpc" id="L1152" title="2 of 4 branches missed.">                                    if (encounterOpponentStorage.getSelfOpponent() != null &amp;&amp; encounterOpponentStorage.getEnemyOpponents().size() != 0) {</span>
-<span class="nc" id="L1153">                                        showEncounterInfoWindow();</span>
-<span class="nc" id="L1154">                                        this.isNewStart = false;</span>
+<span class="fc" id="L1153">                                        showEncounterInfoWindow();</span>
+<span class="fc" id="L1154">                                        this.isNewStart = false;</span>
                                     }
 <span class="fc" id="L1156">                                }));</span>
                     }
@@ -1163,12 +1163,12 @@ public class IngameController extends Controller {
 <span class="fc" id="L1163">    }</span>
 
     private void showEncounterInfoWindow() {
-<span class="nc" id="L1166">        inDialog = false;</span>
-<span class="nc" id="L1167">        TextFlow dialogTextFlow = createDialogVBox(true);</span>
-<span class="nc" id="L1168">        dialogTextFlow.getChildren().add(new Text(resources.getString(&quot;ENCOUNTER.INFO&quot;)));</span>
-<span class="nc" id="L1169">        this.inEncounterInfoBox = true;</span>
-<span class="nc" id="L1170">        movementDisabled = true;</span>
-<span class="nc" id="L1171">    }</span>
+<span class="fc" id="L1166">        inDialog = false;</span>
+<span class="fc" id="L1167">        TextFlow dialogTextFlow = createDialogVBox(true);</span>
+<span class="fc" id="L1168">        dialogTextFlow.getChildren().add(new Text(resources.getString(&quot;ENCOUNTER.INFO&quot;)));</span>
+<span class="fc" id="L1169">        this.inEncounterInfoBox = true;</span>
+<span class="fc" id="L1170">        movementDisabled = true;</span>
+<span class="fc" id="L1171">    }</span>
 
     private void showCoinsEarnedWindow() {
 <span class="nc" id="L1174">        TextFlow dialogTextFlow = createDialogVBox(true);</span>
@@ -1215,7 +1215,7 @@ public class IngameController extends Controller {
 <span class="fc" id="L1215">        encounterOpponentStorage.resetEnemyOpponents();</span>
 <span class="fc" id="L1216">        encounterOpponentStorage.setEncounterSize(opponents.size());</span>
 <span class="fc bfc" id="L1217" title="All 2 branches covered.">        for (Opponent o : opponents) {</span>
-<span class="pc bpc" id="L1218" title="2 of 4 branches missed.">            if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) &amp;&amp; o.isAttacker() != encounterOpponentStorage.isAttacker()) {</span>
+<span class="pc bpc" id="L1218" title="3 of 4 branches missed.">            if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) &amp;&amp; o.isAttacker() != encounterOpponentStorage.isAttacker()) {</span>
 <span class="nc" id="L1219">                encounterOpponentStorage.addEnemyOpponent(o);</span>
 <span class="pc bpc" id="L1220" title="3 of 4 branches missed.">            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) &amp;&amp; o.isAttacker() == encounterOpponentStorage.isAttacker()){</span>
 <span class="nc" id="L1221">                encounterOpponentStorage.setCoopOpponent(o);</span>
@@ -1672,8 +1672,8 @@ public class IngameController extends Controller {
 <span class="fc" id="L1672">        dialogStackPane.setMaxWidth(700);</span>
 
 <span class="fc" id="L1674">        Label nameLabel = new Label();</span>
-<span class="pc bpc" id="L1675" title="1 of 2 branches missed.">        if (isEncounter) {</span>
-<span class="nc" id="L1676">            nameLabel.setText(resources.getString(&quot;ANNOUNCEMENT&quot;));</span>
+<span class="fc bfc" id="L1675" title="All 2 branches covered.">        if (isEncounter) {</span>
+<span class="fc" id="L1676">            nameLabel.setText(resources.getString(&quot;ANNOUNCEMENT&quot;));</span>
         } else {
 <span class="fc" id="L1678">            nameLabel.setText(this.currentNpc.name());</span>
         }

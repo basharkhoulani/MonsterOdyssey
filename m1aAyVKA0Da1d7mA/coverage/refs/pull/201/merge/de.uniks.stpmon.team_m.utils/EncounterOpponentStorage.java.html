@@ -40,8 +40,8 @@ public class EncounterOpponentStorage {
     }
 
     public void setEncounterId(String encounterId) {
-<span class="fc" id="L43">        this.encounterId = encounterId;</span>
-<span class="fc" id="L44">    }</span>
+<span class="nc" id="L43">        this.encounterId = encounterId;</span>
+<span class="nc" id="L44">    }</span>
 
     public String getRegionId() {
 <span class="fc" id="L47">        return regionId;</span>
@@ -64,24 +64,24 @@ public class EncounterOpponentStorage {
     }
 
     public void setEncounterSize(int encounterSize) {
-<span class="fc" id="L67">        this.encounterSize = encounterSize;</span>
-<span class="fc" id="L68">    }</span>
+<span class="nc" id="L67">        this.encounterSize = encounterSize;</span>
+<span class="nc" id="L68">    }</span>
 
     public Opponent getSelfOpponent() {
 <span class="fc" id="L71">        return selfOpponent;</span>
     }
 
     public void setSelfOpponent(Opponent selfOpponent) {
-<span class="fc" id="L75">        this.selfOpponent = selfOpponent;</span>
-<span class="fc" id="L76">    }</span>
+<span class="nc" id="L75">        this.selfOpponent = selfOpponent;</span>
+<span class="nc" id="L76">    }</span>
 
     public List&lt;Opponent&gt; getEnemyOpponents() {
 <span class="fc" id="L79">        return enemyOpponents;</span>
     }
 
     public void resetEnemyOpponents() {
-<span class="fc" id="L83">        this.enemyOpponents.clear();</span>
-<span class="fc" id="L84">    }</span>
+<span class="nc" id="L83">        this.enemyOpponents.clear();</span>
+<span class="nc" id="L84">    }</span>
 
     public void addEnemyOpponent(Opponent enemyOpponent) {
 <span class="nc" id="L87">        this.enemyOpponents.add(enemyOpponent);</span>
@@ -96,12 +96,12 @@ public class EncounterOpponentStorage {
 <span class="nc" id="L96">    }</span>
 
     public boolean isAttacker() {
-<span class="fc" id="L99">        return isAttacker;</span>
+<span class="nc" id="L99">        return isAttacker;</span>
     }
 
     public void setAttacker(boolean attack) {
-<span class="fc" id="L103">        isAttacker = attack;</span>
-<span class="fc" id="L104">    }</span>
+<span class="nc" id="L103">        isAttacker = attack;</span>
+<span class="nc" id="L104">    }</span>
 
     public void addCurrentMonsters(String opponentId, Monster monster) {
 <span class="nc" id="L107">        this.currentMonsters.put(opponentId, monster);</span>
@@ -124,12 +124,12 @@ public class EncounterOpponentStorage {
     }
 
     public void setOpponentsInStorage(List&lt;Opponent&gt; opponents) {
-<span class="fc" id="L127">        this.opponentsInStorage.clear();</span>
-<span class="fc bfc" id="L128" title="All 2 branches covered.">        for (Opponent opponent : opponents) {</span>
-<span class="fc" id="L129">            this.opponentsInStorage.add(opponent._id());</span>
-<span class="fc" id="L130">        }</span>
+<span class="nc" id="L127">        this.opponentsInStorage.clear();</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        for (Opponent opponent : opponents) {</span>
+<span class="nc" id="L129">            this.opponentsInStorage.add(opponent._id());</span>
+<span class="nc" id="L130">        }</span>
 
-<span class="fc" id="L132">    }</span>
+<span class="nc" id="L132">    }</span>
 
     public void setTargetOpponent(Opponent opponent) {
 <span class="fc" id="L135">        this.leastTargetOpponent = targetOpponent;</span>
