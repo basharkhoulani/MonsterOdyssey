@@ -24,9 +24,9 @@ import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
@@ -1754,5 +1754,9 @@ public class IngameController extends Controller {
 
     public void setIsNewStart(boolean isNewStart) {
         this.isNewStart = isNewStart;
+    }
+
+    public StackPane getRoot() {
+        return root;
     }
 }
