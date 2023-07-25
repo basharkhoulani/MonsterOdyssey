@@ -707,6 +707,53 @@ public class IngameControllerTest extends ApplicationTest {
     }
 
     @Test
+    void testTrainerSettingsUpdate() {
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
+        pauseMenuController.setValues(bundle, null, null, pauseMenuController, app);
+        when(pauseMenuControllerProvider.get()).thenReturn(pauseMenuController);
+
+        ingameSettingsController.setValues(bundle, null, null, ingameSettingsController, app);
+        when(ingameSettingsControllerProvider.get()).thenReturn(ingameSettingsController);
+
+        ingameTrainerSettingsController.setValues(bundle, null, null, ingameTrainerSettingsController, app);
+        when(ingameTrainerSettingsControllerProvider.get()).thenReturn(ingameTrainerSettingsController);
+        when(trainerStorageProvider.get().getTrainerSprite()).thenReturn("Premade_Character_01.png");
+
+        mainMenuController.setValues(bundle, null, null, mainMenuController, app);
+        when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
+
+        when(trainersService.updateTrainer(any(), any(), any(), any(), any())).thenReturn(Observable.just(new Trainer(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "6475e595ac3946b6a812d863",
+                "646bab5cecf584e1be02598a",
+                "6475e595ac3946b6a812d868",
+                "Test",
+                "Premade_Character_01.png",
+                0,
+                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                List.of(1, 2),
+                List.of("646bacc568933551792bf3d5"),
+                "6475e595ac3946b6a812d863",
+                33,
+                18,
+                0,
+                new NPCInfo(false, false, false, false, null, null, null))));
+        doNothing().when(app).show(mainMenuController);
+
+        type(KeyCode.ESCAPE);
+        clickOn("#settingsButton");
+        clickOn("#trainerSettingsButton");
+        clickOn("#trainerNameEditButton");
+        clickOn("#trainerNameTextfield");
+        write("Test");
+        clickOn("#updateTrainerButton");
+        clickOn("OK");
+        verify(app).show(mainMenuController);
+    }
+
+    @Test
     void showMonsterTest() {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
         monstersListController.setValues(bundle, null, null, monstersListController, app);
