@@ -1146,19 +1146,19 @@ public class IngameController extends Controller {
 <span class="fc" id="L1146">                        encounterOpponentStorage.setSelfOpponent(opponent);</span>
 <span class="fc" id="L1147">                        encounterOpponentStorage.setEncounterId(opponent.encounter());</span>
 <span class="fc" id="L1148">                        encounterOpponentStorage.setAttacker(opponent.isAttacker());</span>
-<span class="pc" id="L1149">                        disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())</span>
-<span class="nc" id="L1150">                                .observeOn(FX_SCHEDULER).subscribe(opts -&gt; {</span>
-<span class="nc" id="L1151">                                    initEncounterOpponentStorage(opts);</span>
-<span class="nc bnc" id="L1152" title="All 4 branches missed.">                                    if (encounterOpponentStorage.getSelfOpponent() != null &amp;&amp; encounterOpponentStorage.getEnemyOpponents().size() != 0) {</span>
+<span class="fc" id="L1149">                        disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())</span>
+<span class="fc" id="L1150">                                .observeOn(FX_SCHEDULER).subscribe(opts -&gt; {</span>
+<span class="fc" id="L1151">                                    initEncounterOpponentStorage(opts);</span>
+<span class="pc bpc" id="L1152" title="2 of 4 branches missed.">                                    if (encounterOpponentStorage.getSelfOpponent() != null &amp;&amp; encounterOpponentStorage.getEnemyOpponents().size() != 0) {</span>
 <span class="nc" id="L1153">                                        showEncounterInfoWindow();</span>
 <span class="nc" id="L1154">                                        this.isNewStart = false;</span>
                                     }
-<span class="nc" id="L1156">                                }));</span>
+<span class="fc" id="L1156">                                }));</span>
                     }
 <span class="fc" id="L1158">                }, error -&gt; {</span>
-<span class="fc" id="L1159">                    showError(error.getMessage());</span>
-<span class="fc" id="L1160">                    error.printStackTrace();</span>
-<span class="fc" id="L1161">                })</span>
+<span class="nc" id="L1159">                    showError(error.getMessage());</span>
+<span class="nc" id="L1160">                    error.printStackTrace();</span>
+<span class="nc" id="L1161">                })</span>
         );
 <span class="fc" id="L1163">    }</span>
 
@@ -1211,18 +1211,18 @@ public class IngameController extends Controller {
 
 <span class="fc" id="L1212">    }</span>
     private void initEncounterOpponentStorage(List&lt;Opponent&gt; opponents) {
-<span class="nc" id="L1214">        encounterOpponentStorage.setOpponentsInStorage(opponents);</span>
-<span class="nc" id="L1215">        encounterOpponentStorage.resetEnemyOpponents();</span>
-<span class="nc" id="L1216">        encounterOpponentStorage.setEncounterSize(opponents.size());</span>
-<span class="nc bnc" id="L1217" title="All 2 branches missed.">        for (Opponent o : opponents) {</span>
-<span class="nc bnc" id="L1218" title="All 4 branches missed.">            if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) &amp;&amp; o.isAttacker() != encounterOpponentStorage.isAttacker()) {</span>
+<span class="fc" id="L1214">        encounterOpponentStorage.setOpponentsInStorage(opponents);</span>
+<span class="fc" id="L1215">        encounterOpponentStorage.resetEnemyOpponents();</span>
+<span class="fc" id="L1216">        encounterOpponentStorage.setEncounterSize(opponents.size());</span>
+<span class="fc bfc" id="L1217" title="All 2 branches covered.">        for (Opponent o : opponents) {</span>
+<span class="pc bpc" id="L1218" title="2 of 4 branches missed.">            if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) &amp;&amp; o.isAttacker() != encounterOpponentStorage.isAttacker()) {</span>
 <span class="nc" id="L1219">                encounterOpponentStorage.addEnemyOpponent(o);</span>
-<span class="nc bnc" id="L1220" title="All 4 branches missed.">            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) &amp;&amp; o.isAttacker() == encounterOpponentStorage.isAttacker()){</span>
+<span class="pc bpc" id="L1220" title="3 of 4 branches missed.">            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) &amp;&amp; o.isAttacker() == encounterOpponentStorage.isAttacker()){</span>
 <span class="nc" id="L1221">                encounterOpponentStorage.setCoopOpponent(o);</span>
 <span class="nc" id="L1222">                encounterOpponentStorage.setTwoMonster(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id()));</span>
             }
-<span class="nc" id="L1224">        }</span>
-<span class="nc" id="L1225">    }</span>
+<span class="fc" id="L1224">        }</span>
+<span class="fc" id="L1225">    }</span>
 
     private void updateTrainer(ObservableList&lt;Trainer&gt; trainers, Trainer trainer) {
 <span class="nc" id="L1228">        String trainerId = trainer._id();</span>
