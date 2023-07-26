@@ -378,7 +378,7 @@ public class IngameController extends Controller {
                     for (Trainer trainer : trainers) {
                         trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y()));
                     }
-                }, error -> showError(error.getMessage())));
+                }, error -> /*showError(error.getMessage()*/{}));
 
         // Setup chat
         messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
@@ -416,7 +416,7 @@ public class IngameController extends Controller {
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(
                 area -> loadMap(area.map()), error -> {
-                    showError(error.getMessage());
+                    //showError(error.getMessage());
                     error.printStackTrace();
                 }
         ));
@@ -514,7 +514,7 @@ public class IngameController extends Controller {
                     app.show(ingameControllerProvider.get());
                 },
                 error -> {
-                    showError(error.getMessage());
+                    //showError(error.getMessage());
                     error.printStackTrace();
                 }
         ));
@@ -569,7 +569,7 @@ public class IngameController extends Controller {
                         }
                     }
                 }, error -> {
-                    showError(error.getMessage());
+                    //showError(error.getMessage());
                     error.printStackTrace();
                 }));
     }
@@ -756,7 +756,7 @@ public class IngameController extends Controller {
                         trainerController.init();
                     },
                     error -> {
-                        showError(error.getMessage());
+                        //showError(error.getMessage());
                         error.printStackTrace();
                     }
             ));
@@ -982,7 +982,7 @@ public class IngameController extends Controller {
         ).observeOn(FX_SCHEDULER).subscribe(
                 result -> trainerStorageProvider.get().updateItem(result),
                 error -> {
-                    showError(error.getMessage());
+                    //showError(error.getMessage());
                     error.printStackTrace();
                 }));
     }
@@ -1060,7 +1060,7 @@ public class IngameController extends Controller {
                 messageField.setText(EMPTY_STRING);
                 isChatting = false;
                 groundCanvas.requestFocus();
-            }, error -> showError(error.getMessage())));
+            }, error -> {})); //showError(error.getMessage())));
         }
     }
 
@@ -1130,7 +1130,7 @@ public class IngameController extends Controller {
                             trainerPositionHashMap.remove(trainer);
                         }
                     }
-                }, error -> showError(error.getMessage()))
+                }, error -> {})//showError(error.getMessage()))
         );
     }
 
@@ -1149,7 +1149,7 @@ public class IngameController extends Controller {
                         case "deleted" -> messages.removeIf(m -> m._id().equals(message._id()));
                     }
                 }, error -> {
-                    showError(error.getMessage());
+                    //showError(error.getMessage());
                     error.printStackTrace();
                 }));
     }
@@ -1174,7 +1174,7 @@ public class IngameController extends Controller {
                                 }));
                     }
                 }, error -> {
-                    showError(error.getMessage());
+                    //showError(error.getMessage());
                     error.printStackTrace();
                 })
         );
@@ -1783,7 +1783,7 @@ public class IngameController extends Controller {
                     }
                 },
                 error -> {
-                    showError(error.getMessage());
+                    //showError(error.getMessage());
                     error.printStackTrace();
                 }
         ));
