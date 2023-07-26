@@ -191,66 +191,71 @@ public class MonsterCell extends ListCell&lt;Monster&gt; {
 <span class="fc" id="L191">                removeFromTeamButton.setText(resources.getString(&quot;SELECT&quot;));</span>
 <span class="fc" id="L192">                removeFromTeamButton.setOnAction(event -&gt; {</span>
 <span class="nc" id="L193">                    ingameController.useItem(item, monster);</span>
-<span class="nc" id="L194">                    changeMonsterListController.onCloseMonsterList();</span>
-<span class="nc" id="L195">                });</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">                    if (changeMonsterListController != null) {</span>
+<span class="nc" id="L195">                        changeMonsterListController.onCloseMonsterList();</span>
+                    }
+<span class="nc bnc" id="L197" title="All 2 branches missed.">                    if (monstersListController != null) {</span>
+<span class="nc" id="L198">                        monstersListController.onCloseMonsterList();</span>
+                    }
+<span class="nc" id="L200">                });</span>
             }
 
-<span class="fc" id="L198">            monster.status().forEach(statusEffect -&gt; {</span>
-<span class="fc" id="L199">                ImageView statusEffectImageView = new ImageView(String.valueOf(Main.class.getResource(STATUS_EFFECTS_IMAGES.get(statusEffect))));</span>
-<span class="fc" id="L200">                statusEffectImageView.setFitHeight(24);</span>
-<span class="fc" id="L201">                statusEffectImageView.setFitWidth(24);</span>
-<span class="fc" id="L202">                statusEffectsFlowPane.getChildren().add(statusEffectImageView);</span>
-<span class="fc" id="L203">            });</span>
-<span class="fc" id="L204">            arrowDown.setId(&quot;arrowDown&quot; + monster._id());</span>
-<span class="fc" id="L205">            arrowUp.setId(&quot;arrowUp&quot; + monster._id());</span>
-<span class="fc" id="L206">            removeFromTeamButton.setId(&quot;removeFromTeamButton&quot; + monster._id());</span>
-<span class="fc" id="L207">            viewDetailsButton.setId(&quot;viewDetailsButton&quot; + monster._id());</span>
-<span class="fc" id="L208">            setGraphic(rootmonsterHBox);</span>
-<span class="fc" id="L209">            setText(null);</span>
-<span class="fc" id="L210">            setStyle(&quot;-fx-background-color: #CFE9DB;  -fx-border-color: #1C701C; -fx-border-width: 2px&quot;);</span>
+<span class="fc" id="L203">            monster.status().forEach(statusEffect -&gt; {</span>
+<span class="fc" id="L204">                ImageView statusEffectImageView = new ImageView(String.valueOf(Main.class.getResource(STATUS_EFFECTS_IMAGES.get(statusEffect))));</span>
+<span class="fc" id="L205">                statusEffectImageView.setFitHeight(24);</span>
+<span class="fc" id="L206">                statusEffectImageView.setFitWidth(24);</span>
+<span class="fc" id="L207">                statusEffectsFlowPane.getChildren().add(statusEffectImageView);</span>
+<span class="fc" id="L208">            });</span>
+<span class="fc" id="L209">            arrowDown.setId(&quot;arrowDown&quot; + monster._id());</span>
+<span class="fc" id="L210">            arrowUp.setId(&quot;arrowUp&quot; + monster._id());</span>
+<span class="fc" id="L211">            removeFromTeamButton.setId(&quot;removeFromTeamButton&quot; + monster._id());</span>
+<span class="fc" id="L212">            viewDetailsButton.setId(&quot;viewDetailsButton&quot; + monster._id());</span>
+<span class="fc" id="L213">            setGraphic(rootmonsterHBox);</span>
+<span class="fc" id="L214">            setText(null);</span>
+<span class="fc" id="L215">            setStyle(&quot;-fx-background-color: #CFE9DB;  -fx-border-color: #1C701C; -fx-border-width: 2px&quot;);</span>
         }
-<span class="fc" id="L212">    }</span>
+<span class="fc" id="L217">    }</span>
 
     static void renderMonsterTypes(MonsterTypeDto monsterTypeDto, ObservableList&lt;Node&gt; children) {
-<span class="nc" id="L215">        monsterTypeDto.type().forEach(t -&gt; {</span>
-<span class="nc" id="L216">            String typeColor = TYPESCOLORPALETTE.get(t);</span>
-<span class="nc" id="L217">            String style = &quot;-fx-background-color: &quot; + typeColor + &quot;; -fx-border-color: black; -fx-border-width: 1px;&quot;;</span>
-<span class="nc" id="L218">            VBox typeIcon = new VBox();</span>
-<span class="nc" id="L219">            typeIcon.setStyle(style);</span>
-<span class="nc" id="L220">            String typeImagePath = ABILITYPALETTE.get(t);</span>
-<span class="nc" id="L221">            URL resourceType = Main.class.getResource(&quot;images/&quot; + typeImagePath);</span>
-<span class="nc bnc" id="L222" title="All 2 branches missed.">            assert resourceType != null;</span>
-<span class="nc" id="L223">            Image typeImage = new Image(resourceType.toString());</span>
-<span class="nc" id="L224">            ImageView typeImageView = new ImageView();</span>
-<span class="nc" id="L225">            typeImageView.setImage(typeImage);</span>
-<span class="nc" id="L226">            typeImageView.setFitHeight(45);</span>
-<span class="nc" id="L227">            typeImageView.setFitWidth(45);</span>
-<span class="nc" id="L228">            typeIcon.getChildren().add(typeImageView);</span>
-<span class="nc" id="L229">            children.add(typeIcon);</span>
-<span class="nc" id="L230">        });</span>
-<span class="nc" id="L231">    }</span>
+<span class="nc" id="L220">        monsterTypeDto.type().forEach(t -&gt; {</span>
+<span class="nc" id="L221">            String typeColor = TYPESCOLORPALETTE.get(t);</span>
+<span class="nc" id="L222">            String style = &quot;-fx-background-color: &quot; + typeColor + &quot;; -fx-border-color: black; -fx-border-width: 1px;&quot;;</span>
+<span class="nc" id="L223">            VBox typeIcon = new VBox();</span>
+<span class="nc" id="L224">            typeIcon.setStyle(style);</span>
+<span class="nc" id="L225">            String typeImagePath = ABILITYPALETTE.get(t);</span>
+<span class="nc" id="L226">            URL resourceType = Main.class.getResource(&quot;images/&quot; + typeImagePath);</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">            assert resourceType != null;</span>
+<span class="nc" id="L228">            Image typeImage = new Image(resourceType.toString());</span>
+<span class="nc" id="L229">            ImageView typeImageView = new ImageView();</span>
+<span class="nc" id="L230">            typeImageView.setImage(typeImage);</span>
+<span class="nc" id="L231">            typeImageView.setFitHeight(45);</span>
+<span class="nc" id="L232">            typeImageView.setFitWidth(45);</span>
+<span class="nc" id="L233">            typeIcon.getChildren().add(typeImageView);</span>
+<span class="nc" id="L234">            children.add(typeIcon);</span>
+<span class="nc" id="L235">        });</span>
+<span class="nc" id="L236">    }</span>
 
 
     private void showDetails(Monster monster, String type) {
-<span class="pc bpc" id="L235" title="1 of 2 branches missed.">        if (encounterController != null) {</span>
-<span class="nc" id="L236">            this.encounterController.showMonsterDetails(monster, monsterTypeDto, monsterImage, type);</span>
+<span class="pc bpc" id="L240" title="1 of 2 branches missed.">        if (encounterController != null) {</span>
+<span class="nc" id="L241">            this.encounterController.showMonsterDetails(monster, monsterTypeDto, monsterImage, type);</span>
         } else {
-<span class="fc" id="L238">            this.ingameController.showMonsterDetails(monster, monsterTypeDto, monsterImage, resources, presetsService, type);</span>
+<span class="fc" id="L243">            this.ingameController.showMonsterDetails(monster, monsterTypeDto, monsterImage, resources, presetsService, type);</span>
         }
-<span class="fc" id="L240">    }</span>
+<span class="fc" id="L245">    }</span>
 
     private void loadFXML() {
-<span class="fc bfc" id="L243" title="All 2 branches covered.">        if (loader == null) {</span>
-<span class="fc" id="L244">            loader = new FXMLLoader(Main.class.getResource(&quot;views/MonsterCell.fxml&quot;));</span>
-<span class="fc" id="L245">            loader.setResources(resources);</span>
-<span class="fc" id="L246">            loader.setControllerFactory(c -&gt; this);</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">        if (loader == null) {</span>
+<span class="fc" id="L249">            loader = new FXMLLoader(Main.class.getResource(&quot;views/MonsterCell.fxml&quot;));</span>
+<span class="fc" id="L250">            loader.setResources(resources);</span>
+<span class="fc" id="L251">            loader.setControllerFactory(c -&gt; this);</span>
             try {
-<span class="fc" id="L248">                loader.load();</span>
-<span class="nc" id="L249">            } catch (Exception e) {</span>
-<span class="nc" id="L250">                e.printStackTrace();</span>
-<span class="fc" id="L251">            }</span>
+<span class="fc" id="L253">                loader.load();</span>
+<span class="nc" id="L254">            } catch (Exception e) {</span>
+<span class="nc" id="L255">                e.printStackTrace();</span>
+<span class="fc" id="L256">            }</span>
         }
-<span class="fc" id="L253">    }</span>
+<span class="fc" id="L258">    }</span>
 }
 
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
