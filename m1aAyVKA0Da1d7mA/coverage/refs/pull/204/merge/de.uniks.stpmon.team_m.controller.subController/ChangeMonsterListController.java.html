@@ -74,14 +74,24 @@ public class ChangeMonsterListController extends Controller {
     }
 
     private void initMonsterList(List&lt;Monster&gt; monsters) {
-<span class="nc" id="L77">        changeMonsterListView.setCellFactory(param -&gt; new MonsterCell(resources, presetsServiceProvider.get(), this, this.encounterController, this.ingameController, true, false));</span>
-<span class="nc" id="L78">        changeMonsterListView.getItems().addAll(monsters);</span>
-<span class="nc" id="L79">        changeMonsterListView.setFocusModel(null);</span>
-<span class="nc" id="L80">        changeMonsterListView.setSelectionModel(null);</span>
-<span class="nc" id="L81">    }</span>
+<span class="nc" id="L77">        changeMonsterListView.setCellFactory(param -&gt;</span>
+<span class="nc" id="L78">                new MonsterCell(</span>
+                        resources,
+<span class="nc" id="L80">                        presetsServiceProvider.get(),</span>
+                        null,
+                        this,
+                        this.encounterController,
+                        this.ingameController,
+                        false,
+                        null
+                ));
+<span class="nc" id="L88">        changeMonsterListView.getItems().addAll(monsters);</span>
+<span class="nc" id="L89">        changeMonsterListView.setFocusModel(null);</span>
+<span class="nc" id="L90">        changeMonsterListView.setSelectionModel(null);</span>
+<span class="nc" id="L91">    }</span>
 
     public void onCloseMonsterList() {
-<span class="nc" id="L84">        encounterController.rootStackPane.getChildren().remove(monsterListVBox);</span>
-<span class="nc" id="L85">    }</span>
+<span class="nc" id="L94">        encounterController.rootStackPane.getChildren().remove(monsterListVBox);</span>
+<span class="nc" id="L95">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
