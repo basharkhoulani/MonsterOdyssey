@@ -3,8 +3,8 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
-import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.dto.Map;
+import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.MonstersService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
@@ -16,14 +16,17 @@ import javafx.stage.Stage;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
