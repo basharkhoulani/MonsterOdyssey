@@ -38,17 +38,19 @@ public class ItemDescriptionController extends Controller {
     @FXML
     public Button useButton;
     private Constants.inventoryType inventoryType;
+    private int ownAmountOfItem;
 
     @Inject
     public ItemDescriptionController() {
     }
 
-    public void init(ItemTypeDto itemTypeDto, Image itemImage, Item item, Constants.inventoryType inventoryType) {
+    public void init(ItemTypeDto itemTypeDto, Image itemImage, Item item, Constants.inventoryType inventoryType, int ownAmountOfITem) {
         super.init();
         this.itemImage = itemImage;
         this.itemTypeDto = itemTypeDto;
         this.item = item;
         this.inventoryType = inventoryType;
+        this.ownAmountOfItem = ownAmountOfITem;
     }
 
     @Override
@@ -69,6 +71,8 @@ public class ItemDescriptionController extends Controller {
         switch (this.inventoryType) {
             case buyItems -> {
                 itemAmountTitleLabel.setText(resources.getString("CLERK.IN.BAG"));
+                this.itemAmountLabel.setText(String.valueOf(ownAmountOfItem));
+
                 useButton.setText(resources.getString("CLERK.BUY"));
                 useButton.setOnAction(event -> buyItem());
             }

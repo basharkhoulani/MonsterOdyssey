@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
@@ -127,9 +128,18 @@ public class ItemCell extends ListCell<Item> {
     }
 
     public void openItemDescription(ItemTypeDto itemTypeDto, Image itemImage, Item item) {
+        int ownAmountOfItem = 0;
+        List<Item> trainerItems = itemMenuController.trainerStorageProvider.get().getItems();
+        for (Item trainerItem : trainerItems) {
+            if (trainerItem.type() == item.type()) {
+                ownAmountOfItem = trainerItem.amount();
+                break;
+            }
+        }
+
         ItemDescriptionController itemDescriptionController = new ItemDescriptionController();
         itemDescriptionController.setValues(resources, preferences, resourceBundleProvider, itemDescriptionController, app);
-        itemDescriptionController.init(itemTypeDto, itemImage, item, itemMenuController.getInventoryType());
+        itemDescriptionController.init(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem);
         if (itemDescriptionBox.getChildren().size() != 0) {
             itemDescriptionBox.getChildren().clear();
         }
