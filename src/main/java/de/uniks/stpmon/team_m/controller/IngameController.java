@@ -46,7 +46,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -153,6 +152,9 @@ public class IngameController extends Controller {
     private boolean inEncounterInfoBox = false;
     private boolean isNewStart = true;
 
+    private Boolean coinsEarned;
+    private Integer coinsAmount;
+
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
 
@@ -202,6 +204,8 @@ public class IngameController extends Controller {
     private VBox loadingScreen;
     private Timeline loadingScreenAnimation;
     private VBox itemMenuBox;
+    private boolean inCoinsEarnedInfoBox = false;
+
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
      */
@@ -218,12 +222,15 @@ public class IngameController extends Controller {
         // Initialize key event listeners
         keyPressedHandler = event -> {
             if (event.getCode().toString().equals(preferences.get("interaction", "E"))) {
-                if (!inNpcPopup && !inEncounterInfoBox) {
+                if (!inNpcPopup && !inEncounterInfoBox && !inCoinsEarnedInfoBox) {
                     interactWithTrainer();
                 } else if (inEncounterInfoBox) {
                     stackPane.getChildren().remove(dialogStackPane);
                     this.inEncounterInfoBox = false;
                     showEncounterScene();
+                } else if (inCoinsEarnedInfoBox) {
+                    inCoinsEarnedInfoBox = false;
+                    stackPane.getChildren().remove(dialogStackPane);
                 }
             }
             if (event.getCode().toString().equals(preferences.get("pauseMenu", "ESCAPE"))) {
@@ -370,7 +377,10 @@ public class IngameController extends Controller {
                     for (Trainer trainer : trainers) {
                         trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y()));
                     }
-                }, error -> showError(error.getMessage())));
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
 
         // Setup chat
         messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
@@ -439,26 +449,26 @@ public class IngameController extends Controller {
         specificSounds();
 
         //Keybindings
-        if(preferences.get("walkUp",null) == null){
+        if (preferences.get("walkUp", null) == null) {
             preferences.put("walkUp", KeyCode.W.getChar());
         }
-        if(preferences.get("walkDown",null) == null){
-            preferences.put("walkDown",KeyCode.S.getChar());
+        if (preferences.get("walkDown", null) == null) {
+            preferences.put("walkDown", KeyCode.S.getChar());
         }
-        if(preferences.get("walkLeft",null) == null){
-            preferences.put("walkLeft",KeyCode.A.getChar());
+        if (preferences.get("walkLeft", null) == null) {
+            preferences.put("walkLeft", KeyCode.A.getChar());
         }
-        if(preferences.get("walkRight",null) == null){
-            preferences.put("walkRight",KeyCode.D.getChar());
+        if (preferences.get("walkRight", null) == null) {
+            preferences.put("walkRight", KeyCode.D.getChar());
         }
-        if(preferences.get("interaction",null) == null){
-            preferences.put("interaction",KeyCode.E.getChar());
+        if (preferences.get("interaction", null) == null) {
+            preferences.put("interaction", KeyCode.E.getChar());
         }
-        if(preferences.get("pauseMenu",null) == null){
-            preferences.put("pauseMenu","ESCAPE");
+        if (preferences.get("pauseMenu", null) == null) {
+            preferences.put("pauseMenu", "ESCAPE");
         }
-        if(preferences.get("inventory",null) == null){
-            preferences.put("inventory",KeyCode.I.getChar());
+        if (preferences.get("inventory", null) == null) {
+            preferences.put("inventory", KeyCode.I.getChar());
         }
         showCoins();
         return parent;
@@ -466,35 +476,35 @@ public class IngameController extends Controller {
 
     private void initMapShiftTransitions() {
         shiftMapUpTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas,              0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas,   0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas,         0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas,     0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas,                0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
         );
 
 
         shiftMapLeftTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas,              -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas,   -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas,         -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas,     -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas,                -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
         );
         shiftMapRightTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas,              SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas,   SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas,         SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas,     SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas,                SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
         );
 
         shiftMapDownTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas,              0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas,   0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas,         0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas,     0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas,                0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
         );
     }
 
@@ -559,7 +569,6 @@ public class IngameController extends Controller {
                                 trainerPositionHashMap.put(trainer, new Position(moveTrainerDto.x(), moveTrainerDto.y()));
                             }
                         }
-
                     }
                 }, error -> {
                     showError(error.getMessage());
@@ -616,7 +625,7 @@ public class IngameController extends Controller {
      * @param map Tiled Map of the current area.
      */
     private void loadMap(Map map) {
-        if (GraphicsEnvironment.isHeadless()) {
+        if (map == null) {
             return;
         }
         // Init and display loading screen
@@ -631,12 +640,13 @@ public class IngameController extends Controller {
                     .flatMap(tileset -> presetsService.getTilesetImage(tileset.image()))
                     .doOnNext(image -> tileSetImages.put(mapName, image))
                     .observeOn(FX_SCHEDULER).subscribe(image -> afterAllTileSetsLoaded(map), error -> {
+                        System.out.println("Error while loading tileset: " + error.getMessage());
                         TimeUnit.SECONDS.sleep(10);
                         destroy();
                         app.show(ingameControllerProvider.get());
                     }));
         }
-        focusOnPlayerPosition(getMaxWidth(map), getMaxHeight(map), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
+
     }
 
     private int getMaxHeight(Map map) {
@@ -778,7 +788,10 @@ public class IngameController extends Controller {
                 }
                 loadPlayers();
                 loadMiniMap();
-
+                if (getCoinsEarned() != null && getCoinsEarned()) {
+                    showCoinsEarnedWindow();
+                }
+                focusOnPlayerPosition(getMaxWidth(map), getMaxHeight(map), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
             }
         }
     }
@@ -961,21 +974,37 @@ public class IngameController extends Controller {
         inSettings = false;
     }
 
+    public void useItem(Item item, Monster monster) {
+        disposables.add(trainerItemsService.useOrTradeItem(
+                trainerStorageProvider.get().getRegion()._id(),
+                trainerStorageProvider.get().getTrainer()._id(),
+                ITEM_ACTION_USE_ITEM,
+                new UpdateItemDto(1, item.type(), monster._id())
+        ).observeOn(FX_SCHEDULER).subscribe(
+                result -> trainerStorageProvider.get().updateItem(result),
+                error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
+    }
+
     public void buttonsDisable(Boolean set) {
-        if (set) {
-            stackPane.setEffect(new BoxBlur(10, 10, 3));
-        } else {
-            stackPane.setEffect(null);
+        if (stackPane != null) {
+            if (set) {
+                stackPane.setEffect(new BoxBlur(10, 10, 3));
+            } else {
+                stackPane.setEffect(null);
+            }
+            isPaused = set;
+            movementDisabled = set;
+            inNpcPopup = set;
+            monstersButton.setDisable(set);
+            pauseButton.setDisable(set);
+            showChatButton.setDisable(set);
+            mapSymbol.setDisable(set);
+            messageField.setDisable(set);
+            sendMessageButton.setDisable(set);
         }
-        isPaused = set;
-        movementDisabled = set;
-        inNpcPopup = set;
-        monstersButton.setDisable(set);
-        pauseButton.setDisable(set);
-        showChatButton.setDisable(set);
-        mapSymbol.setDisable(set);
-        messageField.setDisable(set);
-        sendMessageButton.setDisable(set);
     }
 
     public void showSettings() {
@@ -1032,7 +1061,10 @@ public class IngameController extends Controller {
                 messageField.setText(EMPTY_STRING);
                 isChatting = false;
                 groundCanvas.requestFocus();
-            }, error -> showError(error.getMessage())));
+            }, error -> {
+                showError(error.getMessage());
+                error.printStackTrace();
+            }));
         }
     }
 
@@ -1102,7 +1134,10 @@ public class IngameController extends Controller {
                             trainerPositionHashMap.remove(trainer);
                         }
                     }
-                }, error -> showError(error.getMessage()))
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                })
         );
     }
 
@@ -1160,6 +1195,22 @@ public class IngameController extends Controller {
         movementDisabled = true;
     }
 
+    private void showCoinsEarnedWindow() {
+        TextFlow dialogTextFlow = createDialogVBox(true);
+        dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.WON") + "\n" +
+                resources.getString("COINS.EARNED") + " " + getCoinsAmount() + " " +
+                resources.getString("COINS.EARNED2")));
+        inDialog = false;
+        inEncounterInfoBox = false;
+        inCoinsEarnedInfoBox = true;
+        movementDisabled = false;
+        disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id())
+                .observeOn(FX_SCHEDULER).subscribe(trainer -> coinsLabel.setText(String.valueOf(trainer.coins())), error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
+    }
+
     private void showEncounterScene() {
         destroy();
         app.show(encounterControllerProvider.get());
@@ -1187,6 +1238,7 @@ public class IngameController extends Controller {
                 }, Throwable::printStackTrace));
 
     }
+
     private void initEncounterOpponentStorage(List<Opponent> opponents) {
         encounterOpponentStorage.setOpponentsInStorage(opponents);
         encounterOpponentStorage.resetEnemyOpponents();
@@ -1194,7 +1246,7 @@ public class IngameController extends Controller {
         for (Opponent o : opponents) {
             if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && o.isAttacker() != encounterOpponentStorage.isAttacker()) {
                 encounterOpponentStorage.addEnemyOpponent(o);
-            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) && o.isAttacker() == encounterOpponentStorage.isAttacker()){
+            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) && o.isAttacker() == encounterOpponentStorage.isAttacker()) {
                 encounterOpponentStorage.setCoopOpponent(o);
                 encounterOpponentStorage.setTwoMonster(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id()));
             }
@@ -1229,7 +1281,10 @@ public class IngameController extends Controller {
                         Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
                         Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, direction, false);
                         imageView.setImage(character[0]);
-                    }, error -> showError(error.getMessage())
+                    }, error -> {
+                        showError(error.getMessage());
+                        error.printStackTrace();
+                    }
             ));
         }
     }
@@ -1240,7 +1295,7 @@ public class IngameController extends Controller {
         monsterListVBox.setMinHeight(410);
         monsterListVBox.setAlignment(Pos.CENTER);
         MonstersListController monstersListController = monstersListControllerProvider.get();
-        monstersListController.init(this, monsterListVBox);
+        monstersListController.init(this, monsterListVBox, root, null);
         monsterListVBox.getChildren().add(monstersListController.render());
         root.getChildren().add(monsterListVBox);
         monsterListVBox.requestFocus();
@@ -1249,9 +1304,10 @@ public class IngameController extends Controller {
 
     public void showItems() {
         itemMenuBox = new VBox();
+        itemMenuBox.setId("itemMenuBox");
         itemMenuBox.setAlignment(Pos.CENTER);
         ItemMenuController itemMenuController = itemMenuControllerProvider.get();
-        itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox);
+        itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox, root);
         itemMenuBox.getChildren().add(itemMenuController.render());
         root.getChildren().add(itemMenuBox);
         itemMenuBox.requestFocus();
@@ -1773,7 +1829,9 @@ public class IngameController extends Controller {
                                     }
                                     loading = false;
                                     root.getChildren().remove(loadingScreen);
-                                    loadingScreenAnimation.stop();
+                                    if (!GraphicsEnvironment.isHeadless()) {
+                                        loadingScreenAnimation.stop();
+                                    }
                                 }, error -> {
                                     TimeUnit.SECONDS.sleep(10);
                                     destroy();
@@ -1792,6 +1850,7 @@ public class IngameController extends Controller {
         IngameMiniMapController ingameMiniMapController = ingameMiniMapControllerProvider.get();
         if (miniMapVBox == null) {
             miniMapVBox = new VBox();
+            miniMapVBox.setId("miniMapVBox");
             miniMapVBox.getStyleClass().add("miniMapContainer");
             ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox, miniMap);
             miniMapVBox.getChildren().add(ingameMiniMapController.render());
@@ -1904,7 +1963,10 @@ public class IngameController extends Controller {
                         if (preferences.getBoolean("mute", false)) {
                             AudioService.getInstance().setVolume(0);
                         }
-                    }, error -> this.showError(error.getMessage())));
+                    }, error -> {
+                        this.showError(error.getMessage());
+                        error.printStackTrace();
+                    }));
         }
     }
 
@@ -1914,5 +1976,25 @@ public class IngameController extends Controller {
 
     public void setIsNewStart(boolean isNewStart) {
         this.isNewStart = isNewStart;
+    }
+
+    public Boolean getCoinsEarned() {
+        return coinsEarned;
+    }
+
+    public void setCoinsEarned(Boolean coinsEarned) {
+        this.coinsEarned = coinsEarned;
+    }
+
+    public Integer getCoinsAmount() {
+        return coinsAmount;
+    }
+
+    public void setCoinsAmount(Integer coinsAmount) {
+        this.coinsAmount = coinsAmount;
+    }
+
+    public StackPane getRoot() {
+        return root;
     }
 }

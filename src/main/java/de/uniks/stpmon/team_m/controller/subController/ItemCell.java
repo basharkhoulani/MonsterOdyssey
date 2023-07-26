@@ -18,9 +18,9 @@ import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
@@ -33,6 +33,9 @@ public class ItemCell extends ListCell<Item> {
     private final Preferences preferences;
     private final Provider<ResourceBundle> resourceBundleProvider;
     private final App app;
+    private final Runnable closeItemMenu;
+    private final Provider<ItemDescriptionController> itemDescriptionControllerProvider;
+    private final StackPane rootStackPane;
     private FXMLLoader loader;
     protected final CompositeDisposable disposables = new CompositeDisposable();
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
@@ -50,21 +53,18 @@ public class ItemCell extends ListCell<Item> {
 
     ItemTypeDto itemTypeDto;
 
-    @Inject
-    Provider<ItemDescriptionController> itemDescriptionControllerProvider;
 
-
-    public ItemCell(PresetsService presetsService, ItemMenuController itemMenuController,
-                    ResourceBundle resources, VBox itemDescriptionBox, Preferences preferences, Provider<ResourceBundle> resourceBundleProvider, App app) {
+    public ItemCell(PresetsService presetsService, ItemMenuController itemMenuController, Provider<ItemDescriptionController> itemDescriptionControllerProvider, ResourceBundle resources, VBox itemDescriptionBox, Preferences preferences, Provider<ResourceBundle> resourceBundleProvider, App app, Runnable closeItemMenu, StackPane rootStackPane) {
         this.presetsService = presetsService;
         this.itemDescriptionBox = itemDescriptionBox;
         this.itemMenuController = itemMenuController;
+        this.itemDescriptionControllerProvider = itemDescriptionControllerProvider;
         this.resources = resources;
         this.preferences = preferences;
         this.resourceBundleProvider = resourceBundleProvider;
         this.app = app;
-
-
+        this.closeItemMenu = closeItemMenu;
+        this.rootStackPane = rootStackPane;
     }
 
 
@@ -91,7 +91,7 @@ public class ItemCell extends ListCell<Item> {
                                             error.printStackTrace();
                                         }));
                                 itemHBox.setOnMouseClicked(event -> {
-                                    openItemDescription(itemTypeDto, this.itemImage, item);
+                                    openItemDescription(itemTypeDto, this.itemImage, item, closeItemMenu);
                                     itemMenuController.setItemNameLabel(itemTypeDto.name());
                                 });
                                 setGraphic(itemHBox);
@@ -122,10 +122,10 @@ public class ItemCell extends ListCell<Item> {
         }
     }
 
-    public void openItemDescription(ItemTypeDto itemTypeDto, Image itemImage, Item item) {
-        ItemDescriptionController itemDescriptionController = new ItemDescriptionController();
+    public void openItemDescription(ItemTypeDto itemTypeDto, Image itemImage, Item item, Runnable closeItemMenu) {
+        ItemDescriptionController itemDescriptionController = itemDescriptionControllerProvider.get();
         itemDescriptionController.setValues(resources, preferences, resourceBundleProvider, itemDescriptionController, app);
-        itemDescriptionController.init(itemTypeDto, itemImage, item);
+        itemDescriptionController.init(itemTypeDto, itemImage, item, closeItemMenu, rootStackPane);
         if (itemDescriptionBox.getChildren().size() != 0) {
            itemDescriptionBox.getChildren().clear();
         }

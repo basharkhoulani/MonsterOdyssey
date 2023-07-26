@@ -131,7 +131,9 @@ public class IngameTrainerSettingsController extends Controller {
                 }, error -> this.showError(error.getMessage())));
         MainMenuController mainMenuController = mainMenuControllerProvider.get();
         mainMenuController.setTrainerDeletion();
-        ingameController.destroy();
+        if (ingameController != null) {
+            ingameController.destroy();
+        }
         app.show(mainMenuController);
     }
 
@@ -167,7 +169,9 @@ public class IngameTrainerSettingsController extends Controller {
     }
 
     public void showCharacter() {
-        trainerAvatarImageView.setImage(ImageProcessor.showScaledCharacter(characters[index - 1], 3, false));
+        if (!GraphicsEnvironment.isHeadless()) {
+            trainerAvatarImageView.setImage(ImageProcessor.showScaledCharacter(characters[index - 1], 3, false));
+        }
         selectedCharacter = characters[index - 1];
     }
 

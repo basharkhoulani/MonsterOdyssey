@@ -138,7 +138,7 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
                 0
         )));
 
-        doNothing().when(encounterController).updateDescription("", true);
+        doNothing().when(encounterController).updateDescription(any(), anyBoolean());
         doNothing().when(encounterController).resetRepeatedTimes();
         doNothing().when(encounterController).goBackToBattleMenu();
 
