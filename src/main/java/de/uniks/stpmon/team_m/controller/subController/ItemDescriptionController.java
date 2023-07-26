@@ -57,13 +57,15 @@ public class ItemDescriptionController extends Controller {
     public ItemDescriptionController() {
     }
 
-    public void init(ItemTypeDto itemTypeDto, Image itemImage, Item item, Constants.inventoryType inventoryType, int ownAmountOfITem) {
+    public void init(ItemTypeDto itemTypeDto, Image itemImage, Item item, Constants.inventoryType inventoryType, int ownAmountOfITem, Runnable closeItemMenu, StackPane rootStackPane) {
         super.init();
         this.itemImage = itemImage;
         this.itemTypeDto = itemTypeDto;
         this.item = item;
         this.inventoryType = inventoryType;
         this.ownAmountOfItem = ownAmountOfITem;
+        this.closeItemMenu = closeItemMenu;
+        this.rootStackPane = rootStackPane;
     }
 
     @Override

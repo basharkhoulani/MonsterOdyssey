@@ -146,7 +146,7 @@ public class ItemCell extends ListCell<Item> {
 
         ItemDescriptionController itemDescriptionController = new ItemDescriptionController();
         itemDescriptionController.setValues(resources, preferences, resourceBundleProvider, itemDescriptionController, app);
-        itemDescriptionController.init(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem);
+        itemDescriptionController.init(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane);
         if (itemDescriptionBox.getChildren().size() != 0) {
             itemDescriptionBox.getChildren().clear();
         }
