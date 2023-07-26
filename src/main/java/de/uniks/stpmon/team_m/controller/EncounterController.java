@@ -389,6 +389,12 @@ public class EncounterController extends Controller {
             encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);
 
             listenToMonster(opponent.trainer(), monster._id(), encounterOpponentController, opponent);
+            for (String effect : STATUS_EFFECTS) {
+                encounterOpponentController.showStatus(effect, false);
+            }
+            for (String effect : monster.status()) {
+                encounterOpponentController.showStatus(effect, true);
+            }
             //write monster name
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -> {
                 encounterOpponentController.setMonsterNameLabel(m.name());
@@ -430,6 +436,12 @@ public class EncounterController extends Controller {
                     .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1))
                     .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health())
                     .setHealthLabel(formatter.format(currentHealth) + "/" + formatter.format(maxHealth) + " HP");
+            for (String effect : STATUS_EFFECTS) {
+                encounterOpponentController.showStatus(effect, false);
+            }
+            for (String effect : monster.status()) {
+                encounterOpponentController.showStatus(effect, true);
+            }
             //write monster name
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -> {
                 encounterOpponentController.setMonsterNameLabel(m.name());
@@ -722,15 +734,20 @@ public class EncounterController extends Controller {
             Opponent o = opponentsDelete.get(id);
             if (o.monster() == null) {
                 if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                    showResultPopUp(resources.getString("YOU.FAILED"));
+                    showResultPopUp(resources.getString("YOU.FAILED"), false);
                 } else {
-                    showResultPopUp(resources.getString("YOU.WON"));
+                    showResultPopUp(resources.getString("YOU.WON"), true);
                 }
             }
         }
     }
 
-    private void showResultPopUp(String string) {
+    private void showResultPopUp(String string, boolean isWin) {
+        Opponent selfOpponent = encounterOpponentStorage.getSelfOpponent();
+        if (selfOpponent.coins() != 0 && isWin) {
+            encounterResultController.setCoinsAmount(selfOpponent.coins());
+            encounterResultController.setCoinsEarned(true);
+        }
         VBox resultBox = new VBox();
         resultBox.setAlignment(Pos.CENTER);
         encounterResultController.init(app);

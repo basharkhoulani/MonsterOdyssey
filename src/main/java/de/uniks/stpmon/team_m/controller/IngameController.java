@@ -153,6 +153,9 @@ public class IngameController extends Controller {
     private boolean inEncounterInfoBox = false;
     private boolean isNewStart = true;
 
+    private Boolean coinsEarned;
+    private Integer coinsAmount;
+
     @Inject
     Provider<UDPEventListener> udpEventListenerProvider;
 
@@ -202,6 +205,7 @@ public class IngameController extends Controller {
     private VBox loadingScreen;
     private Timeline loadingScreenAnimation;
     private VBox itemMenuBox;
+    private boolean inCoinsEarnedInfoBox = false;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -219,12 +223,15 @@ public class IngameController extends Controller {
         // Initialize key event listeners
         keyPressedHandler = event -> {
             if (event.getCode().toString().equals(preferences.get("interaction", "E"))) {
-                if (!inNpcPopup && !inEncounterInfoBox) {
+                if (!inNpcPopup && !inEncounterInfoBox && !inCoinsEarnedInfoBox) {
                     interactWithTrainer();
                 } else if (inEncounterInfoBox) {
                     stackPane.getChildren().remove(dialogStackPane);
                     this.inEncounterInfoBox = false;
                     showEncounterScene();
+                } else if (inCoinsEarnedInfoBox) {
+                    inCoinsEarnedInfoBox = false;
+                    stackPane.getChildren().remove(dialogStackPane);
                 }
             }
             if (event.getCode().toString().equals(preferences.get("pauseMenu", "ESCAPE"))) {
@@ -617,7 +624,7 @@ public class IngameController extends Controller {
      * @param map Tiled Map of the current area.
      */
     private void loadMap(Map map) {
-        if (GraphicsEnvironment.isHeadless()) {
+        if (map == null) {
             return;
         }
         // Init and display loading screen
@@ -632,6 +639,7 @@ public class IngameController extends Controller {
                     .flatMap(tileset -> presetsService.getTilesetImage(tileset.image()))
                     .doOnNext(image -> tileSetImages.put(mapName, image))
                     .observeOn(FX_SCHEDULER).subscribe(image -> afterAllTileSetsLoaded(map), error -> {
+                        System.out.println("Error while loading tileset: " + error.getMessage());
                         TimeUnit.SECONDS.sleep(10);
                         destroy();
                         app.show(ingameControllerProvider.get());
@@ -779,7 +787,9 @@ public class IngameController extends Controller {
                 }
                 loadPlayers();
                 loadMiniMap();
-
+                if (getCoinsEarned() != null && getCoinsEarned()) {
+                    showCoinsEarnedWindow();
+                }
             }
         }
     }
@@ -1161,6 +1171,19 @@ public class IngameController extends Controller {
         movementDisabled = true;
     }
 
+    private void showCoinsEarnedWindow() {
+        TextFlow dialogTextFlow = createDialogVBox(true);
+        dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.WON") + "\n" +
+                resources.getString("COINS.EARNED") + " " + getCoinsAmount() + " " +
+                resources.getString("COINS.EARNED2")));
+        inDialog = false;
+        inEncounterInfoBox = false;
+        inCoinsEarnedInfoBox = true;
+        movementDisabled = false;
+        disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id())
+                .observeOn(FX_SCHEDULER).subscribe(trainer -> coinsLabel.setText(String.valueOf(trainer.coins())), error -> showError(error.getMessage())));
+    }
+
     private void showEncounterScene() {
         destroy();
         app.show(encounterControllerProvider.get());
@@ -1255,6 +1278,7 @@ public class IngameController extends Controller {
 
     public void openInventory(Constants.inventoryType inventoryType, List<Integer> npcItemTypeIDs) {
         itemMenuBox = new VBox();
+        itemMenuBox.setId("itemMenuBox");
         itemMenuBox.setAlignment(Pos.CENTER);
         ItemMenuController itemMenuController = itemMenuControllerProvider.get();
         itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox, inventoryType, npcItemTypeIDs);
@@ -1743,7 +1767,9 @@ public class IngameController extends Controller {
                                     }
                                     loading = false;
                                     root.getChildren().remove(loadingScreen);
-                                    loadingScreenAnimation.stop();
+                                    if (!GraphicsEnvironment.isHeadless()) {
+                                        loadingScreenAnimation.stop();
+                                    }
                                 }, error -> {
                                     TimeUnit.SECONDS.sleep(10);
                                     destroy();
@@ -1762,6 +1788,7 @@ public class IngameController extends Controller {
         IngameMiniMapController ingameMiniMapController = ingameMiniMapControllerProvider.get();
         if (miniMapVBox == null) {
             miniMapVBox = new VBox();
+            miniMapVBox.setId("miniMapVBox");
             miniMapVBox.getStyleClass().add("miniMapContainer");
             ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox, miniMap);
             miniMapVBox.getChildren().add(ingameMiniMapController.render());
@@ -1884,5 +1911,21 @@ public class IngameController extends Controller {
 
     public void setIsNewStart(boolean isNewStart) {
         this.isNewStart = isNewStart;
+    }
+
+    public Boolean getCoinsEarned() {
+        return coinsEarned;
+    }
+
+    public void setCoinsEarned(Boolean coinsEarned) {
+        this.coinsEarned = coinsEarned;
+    }
+
+    public Integer getCoinsAmount() {
+        return coinsAmount;
+    }
+
+    public void setCoinsAmount(Integer coinsAmount) {
+        this.coinsAmount = coinsAmount;
     }
 }

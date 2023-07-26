@@ -23,7 +23,8 @@ public class EncounterResultController extends Controller {
     Provider<EncounterController> encounterController;
     @Inject
     Provider<IngameController> ingameControllerProvider;
-
+    private Boolean coinsEarned;
+    private Integer coinsAmount;
 
     @Inject
     public EncounterResultController() {
@@ -35,13 +36,30 @@ public class EncounterResultController extends Controller {
 
     public void clickOK() {
         encounterController.get().destroy();
-        ingameControllerProvider.get().setIsNewStart(false);
-        app.show(ingameControllerProvider.get());
-
+        IngameController ingameController = ingameControllerProvider.get();
+        ingameController.setCoinsAmount(getCoinsAmount());
+        ingameController.setCoinsEarned(getCoinsEarned());
+        ingameController.setIsNewStart(false);
+        app.show(ingameController);
     }
 
     public void setInformationText(String text) {
         informationText.setText(text);
     }
 
+    public Boolean getCoinsEarned() {
+        return coinsEarned;
+    }
+
+    public void setCoinsEarned(Boolean coinsEarned) {
+        this.coinsEarned = coinsEarned;
+    }
+
+    public Integer getCoinsAmount() {
+        return coinsAmount;
+    }
+
+    public void setCoinsAmount(Integer coinsAmount) {
+        this.coinsAmount = coinsAmount;
+    }
 }

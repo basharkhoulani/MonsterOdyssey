@@ -262,21 +262,24 @@ public class Constants {
             "defense.png"
     );
 
-    public static final HashMap<String, String> STATUS_EFFECTS_IMAGES = new HashMap<>(Map.ofEntries(
-            entry("paralysed", "images/paralysed.png"),
-            entry("asleep", "images/asleep.png"),
-            entry("poisoned", "images/poisoned.png"),
-            entry("burned", "images/burned.png"),
-            entry("frozen", "images/frozen.png"),
-            entry("confused", "images/confused.png")
-    ));
-
     public static final String PARALYSED = "paralysed";
     public static final String ASLEEP = "asleep";
     public static final String POISONED = "poisoned";
     public static final String BURNED = "burned";
     public static final String FROZEN = "frozen";
     public static final String CONFUSED = "confused";
+
+    public static final List<String> STATUS_EFFECTS = Arrays.asList(PARALYSED, ASLEEP, POISONED, BURNED, FROZEN, CONFUSED);
+
+    public static final HashMap<String, String> STATUS_EFFECTS_IMAGES = new HashMap<>(Map.ofEntries(
+            entry(PARALYSED, "images/paralysed.png"),
+            entry(ASLEEP, "images/asleep.png"),
+            entry(POISONED, "images/poisoned.png"),
+            entry(BURNED, "images/burned.png"),
+            entry(FROZEN, "images/frozen.png"),
+            entry(CONFUSED, "images/confused.png")
+    ));
+
 
     public enum itemType {
         ball,
