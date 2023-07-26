@@ -289,7 +289,17 @@ import static java.util.Map.entry;
 <span class="nc" id="L289">        itemBox</span>
     }
 
+    // enum to decide if the player wants to open his inv, sell or buy items
+<span class="fc" id="L293">    public enum inventoryType {</span>
+<span class="fc" id="L294">        showItems,</span>
+<span class="fc" id="L295">        buyItems,</span>
+<span class="fc" id="L296">        sellItems</span>
+    }
+
     public static final String ITEM_ACTION_USE_ITEM = &quot;use&quot;;
     public static final String ITEM_USAGE_EFFECT = &quot;effect&quot;;
+    public static final int useItemMonsterListVBoxWidth = 600;
+    public static final int useItemMonsterListVBoxHeight = 410;
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
