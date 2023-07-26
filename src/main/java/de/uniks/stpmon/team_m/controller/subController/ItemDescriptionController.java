@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
+import java.awt.*;
 import java.net.URL;
 
 public class ItemDescriptionController extends Controller {
@@ -81,10 +82,12 @@ public class ItemDescriptionController extends Controller {
             }
         }
 
-        URL resourceImage = Main.class.getResource("images/coin.png");
-        assert resourceImage != null;
-        Image coinImage = new Image(resourceImage.toString());
-        coinImageView.setImage(coinImage);
+        if (!GraphicsEnvironment.isHeadless()) {
+            URL resourceImage = Main.class.getResource("images/coin.png");
+            assert resourceImage != null;
+            Image coinImage = new Image(resourceImage.toString());
+            coinImageView.setImage(coinImage);
+        }
 
         return parent;
     }
