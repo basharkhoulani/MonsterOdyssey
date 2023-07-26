@@ -35,7 +35,6 @@ public class ItemCell extends ListCell<Item> {
     private final Provider<ResourceBundle> resourceBundleProvider;
     private final App app;
     private final Runnable closeItemMenu;
-    private final Provider<ItemDescriptionController> itemDescriptionControllerProvider;
     private final StackPane rootStackPane;
     private FXMLLoader loader;
     protected final CompositeDisposable disposables = new CompositeDisposable();
@@ -58,7 +57,6 @@ public class ItemCell extends ListCell<Item> {
 
     public ItemCell(PresetsService presetsService,
                     ItemMenuController itemMenuController,
-                    Provider<ItemDescriptionController> itemDescriptionControllerProvider,
                     ResourceBundle resources,
                     VBox itemDescriptionBox,
                     Preferences preferences,
@@ -69,7 +67,6 @@ public class ItemCell extends ListCell<Item> {
         this.presetsService = presetsService;
         this.itemDescriptionBox = itemDescriptionBox;
         this.itemMenuController = itemMenuController;
-        this.itemDescriptionControllerProvider = itemDescriptionControllerProvider;
         this.resources = resources;
         this.preferences = preferences;
         this.resourceBundleProvider = resourceBundleProvider;

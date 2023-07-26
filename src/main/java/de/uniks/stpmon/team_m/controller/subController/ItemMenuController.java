@@ -109,7 +109,7 @@ public class ItemMenuController extends Controller {
     }
 
     public void initItem(Item item) {
-        itemListView.setCellFactory(param -> new ItemCell(presetsService, this, itemDescriptionControllerProvider, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane));
+        itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane));
         itemListView.getItems().add(item);
         itemListView.setFocusModel(null);
         itemListView.setSelectionModel(null);
