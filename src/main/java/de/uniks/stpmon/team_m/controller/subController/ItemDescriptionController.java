@@ -19,7 +19,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
 
@@ -45,19 +44,22 @@ public class ItemDescriptionController extends Controller {
     private Constants.inventoryType inventoryType;
     private int ownAmountOfItem;
 
-    @Inject
-    Provider<IngameController> ingameControllerProvider;
-    @Inject
-    Provider<MonstersListController> monstersListControllerProvider;
-
     private Runnable closeItemMenu;
     private StackPane rootStackPane;
+    private IngameController ingameController;
 
     @Inject
     public ItemDescriptionController() {
     }
 
-    public void init(ItemTypeDto itemTypeDto, Image itemImage, Item item, Constants.inventoryType inventoryType, int ownAmountOfITem, Runnable closeItemMenu, StackPane rootStackPane) {
+    public void init(ItemTypeDto itemTypeDto,
+                     Image itemImage,
+                     Item item,
+                     Constants.inventoryType inventoryType,
+                     int ownAmountOfITem,
+                     Runnable closeItemMenu,
+                     StackPane rootStackPane,
+                     IngameController ingameController) {
         super.init();
         this.itemImage = itemImage;
         this.itemTypeDto = itemTypeDto;
@@ -66,6 +68,7 @@ public class ItemDescriptionController extends Controller {
         this.ownAmountOfItem = ownAmountOfITem;
         this.closeItemMenu = closeItemMenu;
         this.rootStackPane = rootStackPane;
+        this.ingameController = ingameController;
     }
 
     @Override
@@ -84,7 +87,7 @@ public class ItemDescriptionController extends Controller {
         }
         useButton.setOnAction(evt -> {
             if (itemTypeDto.use().equals(Constants.ITEM_USAGE_EFFECT)) {
-                showMonsterList(item, itemTypeDto);
+                showMonsterList(item);
                 closeItemMenu.run();
             }
         });
@@ -123,13 +126,12 @@ public class ItemDescriptionController extends Controller {
 
     }
 
-    private void showMonsterList(Item item, ItemTypeDto itemTypeDto) {
+    private void showMonsterList(Item item) {
         VBox monsterListVBox = new VBox();
         monsterListVBox.setMinWidth(600);
         monsterListVBox.setMinHeight(410);
         monsterListVBox.setAlignment(Pos.CENTER);
-        MonstersListController monstersListController = monstersListControllerProvider.get();
-        IngameController ingameController = ingameControllerProvider.get();
+        MonstersListController monstersListController = ingameController.getMonstersListController();
         monstersListController.setValues(resources, preferences, resourceBundleProvider, this, app);
         monstersListController.init(ingameController, monsterListVBox, rootStackPane, item);
         monsterListVBox.getChildren().add(monstersListController.render());

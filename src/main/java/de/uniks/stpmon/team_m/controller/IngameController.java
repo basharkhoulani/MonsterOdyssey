@@ -1966,4 +1966,8 @@ public class IngameController extends Controller {
     public StackPane getRoot() {
         return root;
     }
+
+    public MonstersListController getMonstersListController() {
+        return monstersListControllerProvider.get();
+    }
 }
