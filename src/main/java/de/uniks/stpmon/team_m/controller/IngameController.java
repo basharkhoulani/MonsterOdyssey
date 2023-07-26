@@ -377,7 +377,10 @@ public class IngameController extends Controller {
                     for (Trainer trainer : trainers) {
                         trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y()));
                     }
-                }, error -> /*showError(error.getMessage()*/{}));
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
 
         // Setup chat
         messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
@@ -1058,7 +1061,10 @@ public class IngameController extends Controller {
                 messageField.setText(EMPTY_STRING);
                 isChatting = false;
                 groundCanvas.requestFocus();
-            }, error -> {})); //showError(error.getMessage())));
+            }, error -> {
+                showError(error.getMessage());
+                error.printStackTrace();
+            }));
         }
     }
 
@@ -1128,7 +1134,10 @@ public class IngameController extends Controller {
                             trainerPositionHashMap.remove(trainer);
                         }
                     }
-                }, error -> {})//showError(error.getMessage()))
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                })
         );
     }
 
@@ -1196,7 +1205,10 @@ public class IngameController extends Controller {
         inCoinsEarnedInfoBox = true;
         movementDisabled = false;
         disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id())
-                .observeOn(FX_SCHEDULER).subscribe(trainer -> coinsLabel.setText(String.valueOf(trainer.coins())), error -> showError(error.getMessage())));
+                .observeOn(FX_SCHEDULER).subscribe(trainer -> coinsLabel.setText(String.valueOf(trainer.coins())), error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
     }
 
     private void showEncounterScene() {
@@ -1269,7 +1281,10 @@ public class IngameController extends Controller {
                         Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
                         Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, direction, false);
                         imageView.setImage(character[0]);
-                    }, error -> showError(error.getMessage())
+                    }, error -> {
+                        showError(error.getMessage());
+                        error.printStackTrace();
+                    }
             ));
         }
     }
@@ -1904,7 +1919,10 @@ public class IngameController extends Controller {
                         if (preferences.getBoolean("mute", false)) {
                             AudioService.getInstance().setVolume(0);
                         }
-                    }, error -> this.showError(error.getMessage())));
+                    }, error -> {
+                        this.showError(error.getMessage());
+                        error.printStackTrace();
+                    }));
         }
     }
 
