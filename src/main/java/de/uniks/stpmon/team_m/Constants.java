@@ -288,5 +288,5 @@ public class Constants {
         itemBox
     }
 
-    public static final String ITEM_ACTION_USE_ITEM = "use-item";
+    public static final String ITEM_ACTION_USE_ITEM = "use";
 }
