@@ -143,7 +143,7 @@ public class IngameStarterMonsterController extends Controller {
 <span class="fc" id="L143">        starterDescription.getChildren().clear();</span>
         MonsterTypeDto monster;
         Image monsterImage;
-<span class="pc bpc" id="L146" title="1 of 3 branches missed.">        switch (index) {</span>
+<span class="fc bfc" id="L146" title="All 3 branches covered.">        switch (index) {</span>
             default -&gt; {
 <span class="fc" id="L148">                monster = monster1;</span>
 <span class="fc" id="L149">                monsterImage = monster1Image;</span>
@@ -155,9 +155,9 @@ public class IngameStarterMonsterController extends Controller {
 <span class="fc" id="L155">                starterSelectionLabel.setText(resources.getString(&quot;SECOND.SELECTION&quot;));</span>
 <span class="fc" id="L156">            }</span>
             case 3 -&gt; {
-<span class="nc" id="L158">                monster = monster3;</span>
-<span class="nc" id="L159">                monsterImage = monster3Image;</span>
-<span class="nc" id="L160">                starterSelectionLabel.setText(resources.getString(&quot;THIRD.SELECTION&quot;));</span>
+<span class="fc" id="L158">                monster = monster3;</span>
+<span class="fc" id="L159">                monsterImage = monster3Image;</span>
+<span class="fc" id="L160">                starterSelectionLabel.setText(resources.getString(&quot;THIRD.SELECTION&quot;));</span>
             }
         }
 
@@ -184,7 +184,7 @@ public class IngameStarterMonsterController extends Controller {
     public void rotateLeft() {
 <span class="fc" id="L185">        index--;</span>
 <span class="pc bpc" id="L186" title="1 of 2 branches missed.">        if (index &lt; 1) {</span>
-<span class="nc" id="L187">            index = 3;</span>
+<span class="fc" id="L187">            index = 3;</span>
         }
 <span class="fc" id="L189">        showMonster(index);</span>
 <span class="fc" id="L190">    }</span>

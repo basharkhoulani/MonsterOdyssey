@@ -91,7 +91,7 @@ public class DialogController extends Controller {
     public Constants.ContinueDialogReturnValues continueDialog(Constants.DialogSpecialInteractions specialInteraction) {
         // check if a special interaction has been triggered
 <span class="fc bfc" id="L93" title="All 2 branches covered.">        if (specialInteraction != null) {</span>
-<span class="pc bpc" id="L94" title="5 of 9 branches missed.">            switch (specialInteraction) {</span>
+<span class="pc bpc" id="L94" title="3 of 9 branches missed.">            switch (specialInteraction) {</span>
                 case nurseYes -&gt; {
 <span class="fc" id="L96">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.NURSE.YES.DIALOG&quot;));</span>
 <span class="fc" id="L97">                    this.wantsHeal = true;</span>
@@ -118,15 +118,15 @@ public class DialogController extends Controller {
 <span class="fc" id="L118">                    this.starterSelected = true;</span>
 <span class="fc" id="L119">                }</span>
                 case starterSelection1 -&gt; {
-<span class="nc" id="L121">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
-<span class="nc" id="L122">                    this.starterSelection = 1;</span>
-<span class="nc" id="L123">                    this.starterSelected = true;</span>
-<span class="nc" id="L124">                }</span>
+<span class="fc" id="L121">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
+<span class="fc" id="L122">                    this.starterSelection = 1;</span>
+<span class="fc" id="L123">                    this.starterSelected = true;</span>
+<span class="fc" id="L124">                }</span>
                 case starterSelection2 -&gt; {
-<span class="nc" id="L126">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
-<span class="nc" id="L127">                    this.starterSelection = 2;</span>
-<span class="nc" id="L128">                    this.starterSelected = true;</span>
-<span class="nc" id="L129">                }</span>
+<span class="fc" id="L126">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
+<span class="fc" id="L127">                    this.starterSelection = 2;</span>
+<span class="fc" id="L128">                    this.starterSelected = true;</span>
+<span class="fc" id="L129">                }</span>
                 case clerkOpenShop -&gt; {
 <span class="nc" id="L131">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;TODO&quot;));</span>
 <span class="nc" id="L132">                    this.alreadySeenClerkDialog = true;</span>
@@ -160,15 +160,15 @@ public class DialogController extends Controller {
             }
 
 <span class="fc bfc" id="L162" title="All 2 branches covered.">            if (starterSelected) {</span>
-<span class="pc bpc" id="L163" title="3 of 4 branches missed.">                switch (starterSelection) {</span>
+<span class="pc bpc" id="L163" title="1 of 4 branches missed.">                switch (starterSelection) {</span>
                     case 0 -&gt; {
 <span class="fc" id="L165">                        return albertDialogFinished0;</span>
                     }
                     case 1 -&gt; {
-<span class="nc" id="L168">                        return albertDialogFinished1;</span>
+<span class="fc" id="L168">                        return albertDialogFinished1;</span>
                     }
                     case 2 -&gt; {
-<span class="nc" id="L171">                        return albertDialogFinished2;</span>
+<span class="fc" id="L171">                        return albertDialogFinished2;</span>
                     }
                 }
             }
