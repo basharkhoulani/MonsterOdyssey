@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
@@ -42,6 +43,8 @@ public class ItemMenuController extends Controller {
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
     TrainersService trainersService;
+    @Inject
+    Provider<ItemDescriptionController> itemDescriptionControllerProvider;
 
     public VBox itemMenuBox;
     IngameController ingameController;
@@ -49,6 +52,7 @@ public class ItemMenuController extends Controller {
     private List<Integer> npcItemList;
     public HashMap<Integer, ItemTypeDto> itemTypeHashMap = new HashMap<>();
     public HashMap<Integer, Image> itemImageHashMap = new HashMap<>();
+    private StackPane rootStackPane;
 
     @Inject
     public ItemMenuController() {
@@ -103,7 +107,7 @@ public class ItemMenuController extends Controller {
     }
 
     public void initItem(Item item) {
-        itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app));
+        itemListView.setCellFactory(param -> new ItemCell(presetsService, this, itemDescriptionControllerProvider, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane));
         itemListView.getItems().add(item);
         itemListView.setFocusModel(null);
         itemListView.setSelectionModel(null);

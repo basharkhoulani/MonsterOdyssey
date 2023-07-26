@@ -378,7 +378,10 @@ public class IngameController extends Controller {
                     for (Trainer trainer : trainers) {
                         trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y()));
                     }
-                }, error -> showError(error.getMessage())));
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
 
         // Setup chat
         messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
@@ -567,7 +570,6 @@ public class IngameController extends Controller {
                                 trainerPositionHashMap.put(trainer, new Position(moveTrainerDto.x(), moveTrainerDto.y()));
                             }
                         }
-
                     }
                 }, error -> {
                     showError(error.getMessage());
@@ -645,7 +647,7 @@ public class IngameController extends Controller {
                         app.show(ingameControllerProvider.get());
                     }));
         }
-        focusOnPlayerPosition(getMaxWidth(map), getMaxHeight(map), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
+
     }
 
     private int getMaxHeight(Map map) {
@@ -790,6 +792,7 @@ public class IngameController extends Controller {
                 if (getCoinsEarned() != null && getCoinsEarned()) {
                     showCoinsEarnedWindow();
                 }
+                focusOnPlayerPosition(getMaxWidth(map), getMaxHeight(map), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
             }
         }
     }
@@ -972,21 +975,37 @@ public class IngameController extends Controller {
         inSettings = false;
     }
 
+    public void useItem(Item item, Monster monster) {
+        disposables.add(trainerItemsService.useOrTradeItem(
+                trainerStorageProvider.get().getRegion()._id(),
+                trainerStorageProvider.get().getTrainer()._id(),
+                ITEM_ACTION_USE_ITEM,
+                new UpdateItemDto(1, item.type(), monster._id())
+        ).observeOn(FX_SCHEDULER).subscribe(
+                result -> trainerStorageProvider.get().updateItem(result),
+                error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
+    }
+
     public void buttonsDisable(Boolean set) {
-        if (set) {
-            stackPane.setEffect(new BoxBlur(10, 10, 3));
-        } else {
-            stackPane.setEffect(null);
+        if (stackPane != null) {
+            if (set) {
+                stackPane.setEffect(new BoxBlur(10, 10, 3));
+            } else {
+                stackPane.setEffect(null);
+            }
+            isPaused = set;
+            movementDisabled = set;
+            inNpcPopup = set;
+            monstersButton.setDisable(set);
+            pauseButton.setDisable(set);
+            showChatButton.setDisable(set);
+            mapSymbol.setDisable(set);
+            messageField.setDisable(set);
+            sendMessageButton.setDisable(set);
         }
-        isPaused = set;
-        movementDisabled = set;
-        inNpcPopup = set;
-        monstersButton.setDisable(set);
-        pauseButton.setDisable(set);
-        showChatButton.setDisable(set);
-        mapSymbol.setDisable(set);
-        messageField.setDisable(set);
-        sendMessageButton.setDisable(set);
     }
 
     public void showSettings() {
@@ -1043,7 +1062,10 @@ public class IngameController extends Controller {
                 messageField.setText(EMPTY_STRING);
                 isChatting = false;
                 groundCanvas.requestFocus();
-            }, error -> showError(error.getMessage())));
+            }, error -> {
+                showError(error.getMessage());
+                error.printStackTrace();
+            }));
         }
     }
 
@@ -1113,7 +1135,10 @@ public class IngameController extends Controller {
                             trainerPositionHashMap.remove(trainer);
                         }
                     }
-                }, error -> showError(error.getMessage()))
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                })
         );
     }
 
@@ -1181,7 +1206,10 @@ public class IngameController extends Controller {
         inCoinsEarnedInfoBox = true;
         movementDisabled = false;
         disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id())
-                .observeOn(FX_SCHEDULER).subscribe(trainer -> coinsLabel.setText(String.valueOf(trainer.coins())), error -> showError(error.getMessage())));
+                .observeOn(FX_SCHEDULER).subscribe(trainer -> coinsLabel.setText(String.valueOf(trainer.coins())), error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
     }
 
     private void showEncounterScene() {
@@ -1254,7 +1282,10 @@ public class IngameController extends Controller {
                         Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
                         Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, direction, false);
                         imageView.setImage(character[0]);
-                    }, error -> showError(error.getMessage())
+                    }, error -> {
+                        showError(error.getMessage());
+                        error.printStackTrace();
+                    }
             ));
         }
     }
@@ -1265,7 +1296,7 @@ public class IngameController extends Controller {
         monsterListVBox.setMinHeight(410);
         monsterListVBox.setAlignment(Pos.CENTER);
         MonstersListController monstersListController = monstersListControllerProvider.get();
-        monstersListController.init(this, monsterListVBox);
+        monstersListController.init(this, monsterListVBox, root, null);
         monsterListVBox.getChildren().add(monstersListController.render());
         root.getChildren().add(monsterListVBox);
         monsterListVBox.requestFocus();
@@ -1901,7 +1932,10 @@ public class IngameController extends Controller {
                         if (preferences.getBoolean("mute", false)) {
                             AudioService.getInstance().setVolume(0);
                         }
-                    }, error -> this.showError(error.getMessage())));
+                    }, error -> {
+                        this.showError(error.getMessage());
+                        error.printStackTrace();
+                    }));
         }
     }
 
@@ -1927,5 +1961,9 @@ public class IngameController extends Controller {
 
     public void setCoinsAmount(Integer coinsAmount) {
         this.coinsAmount = coinsAmount;
+    }
+
+    public StackPane getRoot() {
+        return root;
     }
 }

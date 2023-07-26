@@ -3,18 +3,23 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
 
@@ -41,8 +46,15 @@ public class ItemDescriptionController extends Controller {
     private int ownAmountOfItem;
 
     @Inject
-    public ItemDescriptionController() {
-    }
+    Provider<IngameController> ingameControllerProvider;
+    @Inject
+    Provider<MonstersListController> monstersListControllerProvider;
+
+    private Runnable closeItemMenu;
+    private StackPane rootStackPane;
+
+    @Inject
+    public ItemDescriptionController(){}
 
     public void init(ItemTypeDto itemTypeDto, Image itemImage, Item item, Constants.inventoryType inventoryType, int ownAmountOfITem) {
         super.init();
@@ -67,6 +79,11 @@ public class ItemDescriptionController extends Controller {
             useButton.setVisible(false);
             useButton.setDisable(true);
         }
+        useButton.setOnAction(evt -> {
+            if (itemTypeDto.use().equals(Constants.ITEM_USAGE_EFFECT)) {
+                showMonsterList(item, itemTypeDto);
+                closeItemMenu.run();
+            }
 
         switch (this.inventoryType) {
             case buyItems -> {
@@ -99,5 +116,21 @@ public class ItemDescriptionController extends Controller {
 
     public void sellItem() {
 
+    }
+
+    private void showMonsterList(Item item, ItemTypeDto itemTypeDto) {
+        VBox monsterListVBox = new VBox();
+        monsterListVBox.setMinWidth(600);
+        monsterListVBox.setMinHeight(410);
+        monsterListVBox.setAlignment(Pos.CENTER);
+        MonstersListController monstersListController = monstersListControllerProvider.get();
+        IngameController ingameController = ingameControllerProvider.get();
+        monstersListController.setValues(resources, preferences, resourceBundleProvider, this, app);
+        monstersListController.init(ingameController, monsterListVBox, rootStackPane, item);
+        monsterListVBox.getChildren().add(monstersListController.render());
+        rootStackPane.getChildren().add(monsterListVBox);
+        monsterListVBox.requestFocus();
+        monstersListController.monsterListViewOther.refresh();
+        monstersListController.monsterListViewActive.refresh();
     }
 }

@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.ATTRIBUTE_IMAGES;
 
 
 public class MonstersDetailController extends Controller {
@@ -42,6 +42,8 @@ public class MonstersDetailController extends Controller {
     public Label monsterAttack;
     @FXML
     public Label monsterDefense;
+    @FXML
+    public VBox typeIconVBox;
     @FXML
     public Label monsterSpeed;
     @FXML
@@ -141,17 +143,7 @@ public class MonstersDetailController extends Controller {
         // Sprite
         if (!GraphicsEnvironment.isHeadless()) {
             monsterImageView.setImage(monsterImage);
-            String typeColor = TYPESCOLORPALETTE.get(monsterType);
-            String style = "-fx-background-color: " + typeColor + ";";
-            typeIcon.setStyle(style);
-
-            String typeImagePath = ABILITYPALETTE.get(monsterType);
-            URL resourceType = Main.class.getResource("images/" + typeImagePath);
-            assert resourceType != null;
-            Image typeImage = new Image(resourceType.toString());
-            typeImageView.setImage(typeImage);
-            typeImageView.setFitHeight(45);
-            typeImageView.setFitWidth(45);
+            MonsterCell.renderMonsterTypes(monsterTypeDto, typeIconVBox.getChildren());
 
             for (String imagePath : ATTRIBUTE_IMAGES) {
                 URL resourceImage = Main.class.getResource("images/" + imagePath);

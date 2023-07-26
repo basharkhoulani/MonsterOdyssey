@@ -18,9 +18,9 @@ import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -34,6 +34,9 @@ public class ItemCell extends ListCell<Item> {
     private final Preferences preferences;
     private final Provider<ResourceBundle> resourceBundleProvider;
     private final App app;
+    private final Runnable closeItemMenu;
+    private final Provider<ItemDescriptionController> itemDescriptionControllerProvider;
+    private final StackPane rootStackPane;
     private FXMLLoader loader;
     protected final CompositeDisposable disposables = new CompositeDisposable();
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
@@ -51,8 +54,6 @@ public class ItemCell extends ListCell<Item> {
 
     ItemTypeDto itemTypeDto;
 
-    @Inject
-    Provider<ItemDescriptionController> itemDescriptionControllerProvider;
 
 
     public ItemCell(PresetsService presetsService,
@@ -65,10 +66,13 @@ public class ItemCell extends ListCell<Item> {
         this.presetsService = presetsService;
         this.itemDescriptionBox = itemDescriptionBox;
         this.itemMenuController = itemMenuController;
+        this.itemDescriptionControllerProvider = itemDescriptionControllerProvider;
         this.resources = resources;
         this.preferences = preferences;
         this.resourceBundleProvider = resourceBundleProvider;
         this.app = app;
+        this.closeItemMenu = closeItemMenu;
+        this.rootStackPane = rootStackPane;
     }
 
     public void updateItem(Item item, boolean empty) {

@@ -8,7 +8,7 @@ import retrofit2.http.*;
 import java.util.List;
 
 public interface TrainerItemsApiService {
-    @POST("regions/{regionId}/trainers/{trainerId]/items")
+    @POST("regions/{regionId}/trainers/{trainerId}/items")
     Observable<Item> useOrTradeItem(@Path("regionId") String regionId, @Path("trainerId") String trainerId, @Query("action") String action, @Body UpdateItemDto dto);
 
     @GET("regions/{regionId}/trainers/{trainerId}/items")
