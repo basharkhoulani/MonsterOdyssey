@@ -300,5 +300,10 @@ public class Constants {
     public static final String ITEM_USAGE_EFFECT = "effect";
     public static final int useItemMonsterListVBoxWidth = 600;
     public static final int useItemMonsterListVBoxHeight = 410;
-
+    public static final long FLIPPING_HORIZONTAL = 0x80000000L;
+    public static final long FLIPPING_VERTICAL = 0x40000000L;
+    public static final long FLIPPING_DIAGONAL = 0x20000000L;
+    public static final long CLEAR_FLIPPING = 0x0FFFFFFFL;
+    public static final int ROTATE_90 = 90;
+    public static final int FLIP_HORIZONTAL_OR_VERTICAL = -1;
 }
