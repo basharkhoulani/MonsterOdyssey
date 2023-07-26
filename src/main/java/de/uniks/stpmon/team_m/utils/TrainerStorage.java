@@ -1,9 +1,6 @@
 package de.uniks.stpmon.team_m.utils;
 
-import de.uniks.stpmon.team_m.dto.Monster;
-import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
-import de.uniks.stpmon.team_m.dto.Region;
-import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.dto.*;
 import javafx.scene.image.Image;
 
 import javax.inject.Inject;
@@ -24,6 +21,7 @@ public class TrainerStorage {
     private Image trainerSpriteChunk;
     private List<Monster> monsters;
     private List<MonsterTypeDto> monsterTypes;
+    private List<Item> items;
 
     @Inject
     public TrainerStorage() {
@@ -99,5 +97,13 @@ public class TrainerStorage {
 
     public void setMonsters(List<Monster> monsters) {
         this.monsters = monsters;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    public List<Item> getItems() {
+        return items;
     }
 }

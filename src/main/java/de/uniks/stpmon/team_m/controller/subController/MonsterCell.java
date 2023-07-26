@@ -147,8 +147,10 @@ public class MonsterCell extends ListCell<Monster> {
             monsterLevel.setText(resources.getString("LEVEL") + " " + monster.level());
             disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
                     .subscribe(monsterImage -> {
-                        this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
-                        monsterImageView.setImage(this.monsterImage);
+                        if (!GraphicsEnvironment.isHeadless()) {
+                            this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
+                            monsterImageView.setImage(this.monsterImage);
+                        }
                     }, error -> monstersListController.showError(error.getMessage())));
             viewDetailsButton.setOnAction(event -> showDetails(monster, type.toString()));
 
@@ -171,7 +173,7 @@ public class MonsterCell extends ListCell<Monster> {
                 arrowUp.setVisible(false);
                 arrowDown.setVisible(false);
                 removeFromTeamButton.setOnAction(event -> {
-                    encounterController.changeMonster(monster, monsterTypeDto);
+                    encounterController.changeMonster(monster);
                     changeMonsterListController.onCloseMonsterList();
                 });
             }
@@ -184,7 +186,7 @@ public class MonsterCell extends ListCell<Monster> {
 
     private void showDetails(Monster monster, String type) {
         if (encounter) {
-            this.encounterController.showMonsterDetailsInEncounter();
+            this.encounterController.showMonsterDetails(monster, monsterTypeDto, monsterImage, type);
         } else {
             this.ingameController.showMonsterDetails(monster, monsterTypeDto, monsterImage, resources, presetsService, type);
         }
