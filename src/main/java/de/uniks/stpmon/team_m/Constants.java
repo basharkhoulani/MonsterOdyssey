@@ -113,6 +113,7 @@ public class Constants {
     public static final Insets helpLabelInsets = new Insets(0, 40, 20, 0);
     public static final int helpLabelFontSize = 12;
 
+
     public enum DialogSpecialInteractions {
         nurseYes,
         nurseNo,
@@ -289,4 +290,5 @@ public class Constants {
     }
 
     public static final String ITEM_ACTION_USE_ITEM = "use";
+    public static final String ITEM_USAGE_EFFECT = "effect";
 }

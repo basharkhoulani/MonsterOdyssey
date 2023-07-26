@@ -76,7 +76,7 @@ public class ItemDescriptionController extends Controller {
             useButton.setDisable(true);
         }
         useButton.setOnAction(evt -> {
-            if (itemTypeDto.use().equals("effect")) {
+            if (itemTypeDto.use().equals(Constants.ITEM_USAGE_EFFECT)) {
                 showMonsterList(item, itemTypeDto);
                 closeItemMenu.run();
             }
