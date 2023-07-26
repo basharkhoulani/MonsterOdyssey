@@ -394,7 +394,7 @@ public class IngameControllerTest extends ApplicationTest {
     void testInventory() {
         ItemMenuController itemMenuController = mock(ItemMenuController.class);
         when(itemMenuControllerProvider.get()).thenReturn(itemMenuController);
-        doNothing().when(itemMenuController).init(any(), any(), any(), any(), any(), any());
+        doNothing().when(itemMenuController).init(any(), any(), any(), any(), any(), any(), any());
 
         Button close = new Button("Close");
         close.setOnAction(event -> {
