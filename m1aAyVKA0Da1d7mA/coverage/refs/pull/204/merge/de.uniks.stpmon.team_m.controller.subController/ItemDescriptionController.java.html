@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ItemDescriptionController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">ItemDescriptionController.java</span></div><h1>ItemDescriptionController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.dto.Item;
+import de.uniks.stpmon.team_m.dto.ItemTypeDto;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+
+import javax.inject.Inject;
+import java.awt.*;
+import java.net.URL;
+
+<span class="nc" id="L21">public class ItemDescriptionController extends Controller {</span>
+
+    ItemTypeDto itemTypeDto;
+    Image itemImage;
+    Item item;
+    @FXML
+    public Label itemAmountTitleLabel;
+    @FXML
+    public ImageView itemImageView;
+    @FXML
+    public Label itemAmountLabel;
+    @FXML
+    public Label itemPriceLabel;
+    @FXML
+    public TextFlow itemDescription;
+    @FXML
+    public ImageView coinImageView;
+    @FXML
+    public Button useButton;
+    private Constants.inventoryType inventoryType;
+
+    @Inject
+<span class="nc" id="L43">    public ItemDescriptionController() {</span>
+<span class="nc" id="L44">    }</span>
+
+    public void init(ItemTypeDto itemTypeDto, Image itemImage, Item item, Constants.inventoryType inventoryType) {
+<span class="nc" id="L47">        super.init();</span>
+<span class="nc" id="L48">        this.itemImage = itemImage;</span>
+<span class="nc" id="L49">        this.itemTypeDto = itemTypeDto;</span>
+<span class="nc" id="L50">        this.item = item;</span>
+<span class="nc" id="L51">        this.inventoryType = inventoryType;</span>
+<span class="nc" id="L52">    }</span>
+
+    @Override
+    public Parent render() {
+<span class="nc" id="L56">        final Parent parent = super.render();</span>
+<span class="nc" id="L57">        itemImageView.setImage(itemImage);</span>
+<span class="nc" id="L58">        itemAmountLabel.setText(String.valueOf(item.amount()));</span>
+<span class="nc" id="L59">        itemPriceLabel.setText(String.valueOf(itemTypeDto.price()));</span>
+
+<span class="nc" id="L61">        Text description = new Text(itemTypeDto.description());</span>
+<span class="nc" id="L62">        itemDescription.getChildren().add(description);</span>
+
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (itemTypeDto.use() == null) {</span>
+<span class="nc" id="L65">            useButton.setVisible(false);</span>
+<span class="nc" id="L66">            useButton.setDisable(true);</span>
+        }
+
+<span class="nc bnc" id="L69" title="All 3 branches missed.">        switch (this.inventoryType) {</span>
+            case buyItems -&gt; {
+<span class="nc" id="L71">                itemAmountTitleLabel.setVisible(false);</span>
+<span class="nc" id="L72">                itemAmountLabel.setVisible(false);</span>
+<span class="nc" id="L73">                useButton.setText(resources.getString(&quot;CLERK.BUY&quot;));</span>
+<span class="nc" id="L74">                useButton.setOnAction(event -&gt; buyItem());</span>
+<span class="nc" id="L75">            }</span>
+            case sellItems -&gt; {
+<span class="nc" id="L77">                useButton.setText(resources.getString(&quot;CLERK.SELL&quot;));</span>
+<span class="nc" id="L78">                useButton.setOnAction(event -&gt; sellItem());</span>
+<span class="nc" id="L79">            }</span>
+            default -&gt; {}
+        }
+
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L84">            URL resourceImage = Main.class.getResource(&quot;images/coin.png&quot;);</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">            assert resourceImage != null;</span>
+<span class="nc" id="L86">            Image coinImage = new Image(resourceImage.toString());</span>
+<span class="nc" id="L87">            coinImageView.setImage(coinImage);</span>
+        }
+
+<span class="nc" id="L90">        return parent;</span>
+    }
+
+    public void buyItem() {
+
+<span class="nc" id="L95">    }</span>
+
+    public void sellItem() {
+
+<span class="nc" id="L99">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
