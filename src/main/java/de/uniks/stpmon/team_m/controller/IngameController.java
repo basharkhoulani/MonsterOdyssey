@@ -474,35 +474,35 @@ public class IngameController extends Controller {
 
     private void initMapShiftTransitions() {
         shiftMapUpTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas,              0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas,   0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas,         0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas,     0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas,                0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
         );
 
 
         shiftMapLeftTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas,              -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas,   -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas,         -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas,     -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas,                -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
         );
         shiftMapRightTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas,              SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas,   SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas,         SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas,     SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas,                SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
         );
 
         shiftMapDownTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas,              0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas,   0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas,         0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas,     0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas,                0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
         );
     }
 
@@ -978,24 +978,31 @@ public class IngameController extends Controller {
                 ITEM_ACTION_USE_ITEM,
                 // Not sure if amount of 1 is correct or if we should use item.amount()-1
                 new UpdateItemDto(1, item.type(), monster._id())
-        ).observeOn(FX_SCHEDULER).subscribe(result -> trainerStorageProvider.get().updateItem(result)));
+        ).observeOn(FX_SCHEDULER).subscribe(
+                result -> trainerStorageProvider.get().updateItem(result),
+                error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
     }
 
     public void buttonsDisable(Boolean set) {
-        if (set) {
-            stackPane.setEffect(new BoxBlur(10, 10, 3));
-        } else {
-            stackPane.setEffect(null);
+        if (stackPane != null) {
+            if (set) {
+                stackPane.setEffect(new BoxBlur(10, 10, 3));
+            } else {
+                stackPane.setEffect(null);
+            }
+            isPaused = set;
+            movementDisabled = set;
+            inNpcPopup = set;
+            monstersButton.setDisable(set);
+            pauseButton.setDisable(set);
+            showChatButton.setDisable(set);
+            mapSymbol.setDisable(set);
+            messageField.setDisable(set);
+            sendMessageButton.setDisable(set);
         }
-        isPaused = set;
-        movementDisabled = set;
-        inNpcPopup = set;
-        monstersButton.setDisable(set);
-        pauseButton.setDisable(set);
-        showChatButton.setDisable(set);
-        mapSymbol.setDisable(set);
-        messageField.setDisable(set);
-        sendMessageButton.setDisable(set);
     }
 
     public void showSettings() {
@@ -1220,6 +1227,7 @@ public class IngameController extends Controller {
                 }, Throwable::printStackTrace));
 
     }
+
     private void initEncounterOpponentStorage(List<Opponent> opponents) {
         encounterOpponentStorage.setOpponentsInStorage(opponents);
         encounterOpponentStorage.resetEnemyOpponents();
@@ -1227,7 +1235,7 @@ public class IngameController extends Controller {
         for (Opponent o : opponents) {
             if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && o.isAttacker() != encounterOpponentStorage.isAttacker()) {
                 encounterOpponentStorage.addEnemyOpponent(o);
-            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) && o.isAttacker() == encounterOpponentStorage.isAttacker()){
+            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) && o.isAttacker() == encounterOpponentStorage.isAttacker()) {
                 encounterOpponentStorage.setCoopOpponent(o);
                 encounterOpponentStorage.setTwoMonster(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id()));
             }
@@ -1273,7 +1281,7 @@ public class IngameController extends Controller {
         monsterListVBox.setMinHeight(410);
         monsterListVBox.setAlignment(Pos.CENTER);
         MonstersListController monstersListController = monstersListControllerProvider.get();
-        monstersListController.init(this, monsterListVBox);
+        monstersListController.init(this, monsterListVBox, root, null);
         monsterListVBox.getChildren().add(monstersListController.render());
         root.getChildren().add(monsterListVBox);
         monsterListVBox.requestFocus();
@@ -1284,7 +1292,7 @@ public class IngameController extends Controller {
         itemMenuBox = new VBox();
         itemMenuBox.setAlignment(Pos.CENTER);
         ItemMenuController itemMenuController = itemMenuControllerProvider.get();
-        itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox);
+        itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox, root);
         itemMenuBox.getChildren().add(itemMenuController.render());
         root.getChildren().add(itemMenuBox);
         itemMenuBox.requestFocus();

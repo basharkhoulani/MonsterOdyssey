@@ -77,7 +77,7 @@ public class MonsterCell extends ListCell<Monster> {
     public PresetsService presetsService;
     public IngameController ingameController;
     public EncounterController encounterController;
-    public boolean encounter;
+
     @Inject
     Provider<TrainersService> trainersServiceProvider;
     MonstersListController monstersListController;
@@ -89,48 +89,22 @@ public class MonsterCell extends ListCell<Monster> {
     private MonsterTypeDto monsterTypeDto;
     private Image monsterImage;
 
-    public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController,
-                       IngameController ingameController, boolean encounter, boolean other) {
-        this.ingameController = ingameController;
+    public MonsterCell(
+            ResourceBundle resources,
+            PresetsService presetsService,
+            MonstersListController monstersListController,
+            ChangeMonsterListController changeMonsterListController,
+            EncounterController encounterController,
+            IngameController ingameController,
+            boolean other,
+            Item item
+    ) {
         this.resources = resources;
         this.presetsService = presetsService;
         this.monstersListController = monstersListController;
-        this.encounter = encounter;
-        this.other = other;
-        this.item = null;
-    }
-
-    public MonsterCell(ResourceBundle resources, PresetsService presetsService, MonstersListController monstersListController,
-                       IngameController ingameController, boolean encounter, boolean other, Item item) {
-        this.ingameController = ingameController;
-        this.resources = resources;
-        this.presetsService = presetsService;
-        this.monstersListController = monstersListController;
-        this.encounter = encounter;
-        this.other = other;
-        this.item = item;
-    }
-
-    public MonsterCell(ResourceBundle resources, PresetsService presetsService, ChangeMonsterListController changeMonsterListController,
-                       EncounterController encounterController, IngameController ingameController, boolean encounter, boolean other) {
-        this.encounterController = encounterController;
-        this.resources = resources;
-        this.presetsService = presetsService;
         this.changeMonsterListController = changeMonsterListController;
-        this.ingameController = ingameController;
-        this.encounter = encounter;
-        this.other = other;
-        this.item = null;
-    }
-
-    public MonsterCell(ResourceBundle resources, PresetsService presetsService, ChangeMonsterListController changeMonsterListController,
-                       EncounterController encounterController, IngameController ingameController, boolean encounter, boolean other, Item item) {
         this.encounterController = encounterController;
-        this.resources = resources;
-        this.presetsService = presetsService;
-        this.changeMonsterListController = changeMonsterListController;
         this.ingameController = ingameController;
-        this.encounter = encounter;
         this.other = other;
         this.item = item;
     }
@@ -178,7 +152,7 @@ public class MonsterCell extends ListCell<Monster> {
                     }));
             viewDetailsButton.setOnAction(event -> showDetails(monster, type.toString()));
 
-            if(!encounter) {
+            if(encounterController == null) {
                 arrowUp.setOnMouseClicked(event -> monstersListController.changeOrderUp(monster._id()));
                 arrowDown.setOnMouseClicked(event -> monstersListController.changeOrderDown(monster._id()));
                 removeFromTeamButton.setOnAction(event -> monstersListController.removeFromTeam(monster));
@@ -191,7 +165,7 @@ public class MonsterCell extends ListCell<Monster> {
                 }
             }
 
-            if (encounter) {
+            if (encounterController != null) {
                 removeFromTeamButton.setStyle("-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7;");
                 removeFromTeamButton.setText(resources.getString("CHANGE.MONSTER"));
                 arrowUp.setVisible(false);
@@ -254,7 +228,7 @@ public class MonsterCell extends ListCell<Monster> {
 
 
     private void showDetails(Monster monster, String type) {
-        if (encounter) {
+        if (encounterController != null) {
             this.encounterController.showMonsterDetails(monster, monsterTypeDto, monsterImage, type);
         } else {
             this.ingameController.showMonsterDetails(monster, monsterTypeDto, monsterImage, resources, presetsService, type);
