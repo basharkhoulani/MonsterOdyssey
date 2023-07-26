@@ -191,7 +191,12 @@ public class MonsterCell extends ListCell<Monster> {
                 removeFromTeamButton.setText(resources.getString("SELECT"));
                 removeFromTeamButton.setOnAction(event -> {
                     ingameController.useItem(item, monster);
-                    changeMonsterListController.onCloseMonsterList();
+                    if (changeMonsterListController != null) {
+                        changeMonsterListController.onCloseMonsterList();
+                    }
+                    if (monstersListController != null) {
+                        monstersListController.onCloseMonsterList();
+                    }
                 });
             }
 
