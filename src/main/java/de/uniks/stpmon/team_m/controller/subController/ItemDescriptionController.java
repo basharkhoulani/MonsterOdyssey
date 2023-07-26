@@ -67,9 +67,6 @@ public class ItemDescriptionController extends Controller {
         }
 
         switch (this.inventoryType) {
-            case showItems -> {
-                break;
-            }
             case buyItems -> {
                 itemAmountTitleLabel.setVisible(false);
                 itemAmountLabel.setVisible(false);
@@ -80,6 +77,7 @@ public class ItemDescriptionController extends Controller {
                 useButton.setText(resources.getString("CLERK.SELL"));
                 useButton.setOnAction(event -> sellItem());
             }
+            default -> {}
         }
 
         if (!GraphicsEnvironment.isHeadless()) {
