@@ -175,7 +175,6 @@ public class MonsterCell extends ListCell<Monster> {
                 arrowDown.setVisible(false);
                 arrowDown.setDisable(true);
 
-                // TODO: Tobias hier den Aufruf zur Change Monster Methode
                 removeFromTeamButton.setOnAction(event -> {
                     encounterController.changeMonster(monster);
                     changeMonsterListController.onCloseMonsterList();
