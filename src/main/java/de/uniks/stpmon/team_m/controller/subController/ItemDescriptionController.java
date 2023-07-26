@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
@@ -75,8 +76,11 @@ public class ItemDescriptionController extends Controller {
             useButton.setDisable(true);
         }
         useButton.setOnAction(evt -> {
-            closeItemMenu.run();
-            showMonsterList(item, itemTypeDto);
+            if (itemTypeDto.use().equals("effect")) {
+                showMonsterList(item, itemTypeDto);
+                closeItemMenu.run();
+            }
+
         });
         if (!GraphicsEnvironment.isHeadless()) {
             URL resourceImage = Main.class.getResource("images/coin.png");
