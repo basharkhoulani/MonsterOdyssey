@@ -22,6 +22,9 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.net.URL;
 
+import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxHeight;
+import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxWidth;
+
 public class ItemDescriptionController extends Controller {
 
     ItemTypeDto itemTypeDto;
@@ -128,8 +131,8 @@ public class ItemDescriptionController extends Controller {
 
     private void showMonsterList(Item item) {
         VBox monsterListVBox = new VBox();
-        monsterListVBox.setMinWidth(600);
-        monsterListVBox.setMinHeight(410);
+        monsterListVBox.setMinWidth(useItemMonsterListVBoxWidth);
+        monsterListVBox.setMinHeight(useItemMonsterListVBoxHeight);
         monsterListVBox.setAlignment(Pos.CENTER);
         MonstersListController monstersListController = ingameController.getMonstersListController();
         monstersListController.setValues(resources, preferences, resourceBundleProvider, this, app);
