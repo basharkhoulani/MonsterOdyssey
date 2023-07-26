@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.dto.Map;
@@ -22,7 +23,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 import javax.inject.Provider;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,11 +45,12 @@ public class MonstersListControllerTest extends ApplicationTest {
     IngameController ingameController;
 
     private List<Monster> monsters;
+    private ResourceBundle resources;
 
     @Override
     public void start(Stage stage) {
-        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        monsterListController.setValues(bundle, null, null, monsterListController, app);
+        resources = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        monsterListController.setValues(resources, null, null, monsterListController, app);
         stage.requestFocus();
         PresetsService presetsService = mock(PresetsService.class);
         when(presetsServiceProvider.get()).thenReturn(presetsService);
@@ -68,7 +70,7 @@ public class MonstersListControllerTest extends ApplicationTest {
                         abilities,
                         new MonsterAttributes(14, 8, 8, 5),
                         new MonsterAttributes(14, 8, 8, 5),
-                        List.of()),
+                        List.of("poisoned")),
                 new Monster("2023-06-05T17:02:40.357Z",
                         "023-06-05T17:02:40.357Z",
                         "647e1530866ace3595866500",
@@ -178,7 +180,7 @@ public class MonstersListControllerTest extends ApplicationTest {
     void onCloseMonsterList() {
         final StackPane root = mock(StackPane.class);
         when(ingameController.getRoot()).thenReturn(root);
-        when(root.getChildren()).thenReturn(FXCollections. observableArrayList());
+        when(root.getChildren()).thenReturn(FXCollections.observableArrayList());
         clickOn("#closeButton");
     }
 
@@ -262,8 +264,7 @@ public class MonstersListControllerTest extends ApplicationTest {
 
     @Test
     void removeFromTeam() {
-        @SuppressWarnings("unchecked")
-        final List<String> team = mock(List.class);
+        @SuppressWarnings("unchecked") final List<String> team = spy(List.class);
         final Trainer trainer = new Trainer(
                 "2023-06-05T17:02:40.332Z",
                 "2023-06-12T22:14:00.005Z",
@@ -282,6 +283,7 @@ public class MonstersListControllerTest extends ApplicationTest {
                 0,
                 null
         );
+
         when(trainerStorageProvider.get().getTrainer()).thenReturn(trainer);
         when(team.remove(anyString())).thenReturn(true);
         when(trainersService.updateTrainer(any(), any(), any(), any(), any()))
@@ -305,15 +307,17 @@ public class MonstersListControllerTest extends ApplicationTest {
                                 null
                         )
                 ));
+
         clickOn("#removeFromTeamButton647e1530866ace3595866500");
+        verify(team).remove(monsters.get(1)._id());
+        assertFalse(team.contains(monsters.get(1)._id()));
     }
 
     @Test
     void addToTeam() {
         clickOn("#othersTab");
 
-        @SuppressWarnings("unchecked")
-        final List<String> team = mock(List.class);
+        @SuppressWarnings("unchecked") final List<String> team = spy(List.class);
         final Trainer trainer = new Trainer(
                 "2023-06-05T17:02:40.332Z",
                 "2023-06-12T22:14:00.005Z",
@@ -356,15 +360,22 @@ public class MonstersListControllerTest extends ApplicationTest {
                         )
                 ));
 
+        assertEquals(monsterListController.otherMonstersList.size(), 1);
+        assertEquals(monsterListController.activeMonstersList.size(), 2);
+
         clickOn("#removeFromTeamButton647e1530866ace3595866db2");
 
+        clickOn("#activeTeamTab");
+
+        assertEquals(monsterListController.otherMonstersList.size(), 0);
+        assertEquals(monsterListController.activeMonstersList.size(), 3);
     }
 
     @Test
     void createLimitPopUp() {
         final StackPane root = mock(StackPane.class);
         when(ingameController.getRoot()).thenReturn(root);
-        when(root.getChildren()).thenReturn(FXCollections. observableArrayList());
+        when(root.getChildren()).thenReturn(FXCollections.observableArrayList());
         when(trainerStorageProvider.get().getTrainer()).thenReturn(
                 new Trainer(
                         "2023-06-05T17:02:40.332Z",
@@ -387,5 +398,70 @@ public class MonstersListControllerTest extends ApplicationTest {
         );
         clickOn("#othersTab");
         clickOn("#removeFromTeamButton647e1530866ace3595866900");
+    }
+
+    @Test
+    void showMonsterDetails() {
+        doNothing().when(ingameController).showMonsterDetails(any(), any(), any(), any(), any(), any());
+        clickOn("#viewDetailsButton647e1530866ace3595866500");
+    }
+
+    @Test
+    void testEncounterMonsterCell() {
+        final EncounterController encounterController = mock(EncounterController.class);
+        final ChangeMonsterListController changeMonsterListController = mock(ChangeMonsterListController.class);
+        monsterListController.monsterListViewActive.setCellFactory(c ->
+                new MonsterCell(
+                        resources,
+                        presetsServiceProvider.get(),
+                        changeMonsterListController,
+                        encounterController,
+                        ingameController,
+                        true,
+                        false
+                ));
+        monsterListController.monsterListViewActive.refresh();
+
+        // Get a list cell and check values
+    }
+
+    @Test
+    void testItemMonsterCell() {
+        final Item item = mock(Item.class);
+        monsterListController.monsterListViewActive.setCellFactory(c ->
+                new MonsterCell(
+                        resources,
+                        presetsServiceProvider.get(),
+                        monsterListController,
+                        ingameController,
+                        false,
+                        false,
+                        item
+                ));
+        monsterListController.monsterListViewActive.refresh();
+
+        // Get a list cell and check values
+    }
+
+
+    @Test
+    void testEncounterItemMonsterCell() {
+        final EncounterController encounterController = mock(EncounterController.class);
+        final ChangeMonsterListController changeMonsterListController = mock(ChangeMonsterListController.class);
+        final Item item = mock(Item.class);
+        monsterListController.monsterListViewActive.setCellFactory(c ->
+                new MonsterCell(
+                        resources,
+                        presetsServiceProvider.get(),
+                        changeMonsterListController,
+                        encounterController,
+                        ingameController,
+                        true,
+                        false,
+                        item
+                ));
+        monsterListController.monsterListViewActive.refresh();
+
+        // Get a list cell and check values
     }
 }
