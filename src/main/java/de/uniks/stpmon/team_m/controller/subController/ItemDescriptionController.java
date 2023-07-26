@@ -68,8 +68,7 @@ public class ItemDescriptionController extends Controller {
 
         switch (this.inventoryType) {
             case buyItems -> {
-                itemAmountTitleLabel.setVisible(false);
-                itemAmountLabel.setVisible(false);
+                itemAmountTitleLabel.setText(resources.getString("CLERK.IN.BAG"));
                 useButton.setText(resources.getString("CLERK.BUY"));
                 useButton.setOnAction(event -> buyItem());
             }
