@@ -76,7 +76,7 @@ import java.net.URL;
 <span class="nc" id="L76">            useButton.setDisable(true);</span>
         }
 <span class="nc" id="L78">        useButton.setOnAction(evt -&gt; {</span>
-<span class="nc bnc" id="L79" title="All 2 branches missed.">            if (itemTypeDto.use().equals(&quot;effect&quot;)) {</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            if (itemTypeDto.use().equals(Constants.ITEM_USAGE_EFFECT)) {</span>
 <span class="nc" id="L80">                showMonsterList(item, itemTypeDto);</span>
 <span class="nc" id="L81">                closeItemMenu.run();</span>
             }
