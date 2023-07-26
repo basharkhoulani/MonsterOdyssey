@@ -58,11 +58,14 @@ public class ItemCell extends ListCell<Item> {
 
     public ItemCell(PresetsService presetsService,
                     ItemMenuController itemMenuController,
+                    Provider<ItemDescriptionController> itemDescriptionControllerProvider,
                     ResourceBundle resources,
                     VBox itemDescriptionBox,
                     Preferences preferences,
                     Provider<ResourceBundle> resourceBundleProvider,
-                    App app) {
+                    App app,
+                    Runnable closeItemMenu,
+                    StackPane rootStackPane) {
         this.presetsService = presetsService;
         this.itemDescriptionBox = itemDescriptionBox;
         this.itemMenuController = itemMenuController;

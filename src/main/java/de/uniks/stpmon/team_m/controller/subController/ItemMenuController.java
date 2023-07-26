@@ -63,7 +63,8 @@ public class ItemMenuController extends Controller {
                      Provider<TrainerStorage> trainerStorageProvider,
                      VBox itemMenuBox,
                      Constants.inventoryType inventoryType,
-                     List<Integer> npcItemList) {
+                     List<Integer> npcItemList,
+                     StackPane rootStackPane) {
         super.init();
         this.ingameController = ingameController;
         this.trainersService = trainersService;
@@ -71,6 +72,7 @@ public class ItemMenuController extends Controller {
         this.itemMenuBox = itemMenuBox;
         this.inventoryType = inventoryType;
         this.npcItemList = npcItemList;
+        this.rootStackPane = rootStackPane;
     }
 
     @Override

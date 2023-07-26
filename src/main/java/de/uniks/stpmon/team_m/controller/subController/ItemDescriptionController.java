@@ -54,7 +54,8 @@ public class ItemDescriptionController extends Controller {
     private StackPane rootStackPane;
 
     @Inject
-    public ItemDescriptionController(){}
+    public ItemDescriptionController() {
+    }
 
     public void init(ItemTypeDto itemTypeDto, Image itemImage, Item item, Constants.inventoryType inventoryType, int ownAmountOfITem) {
         super.init();
@@ -84,6 +85,7 @@ public class ItemDescriptionController extends Controller {
                 showMonsterList(item, itemTypeDto);
                 closeItemMenu.run();
             }
+        });
 
         switch (this.inventoryType) {
             case buyItems -> {
@@ -97,7 +99,8 @@ public class ItemDescriptionController extends Controller {
                 useButton.setText(resources.getString("CLERK.SELL"));
                 useButton.setOnAction(event -> sellItem());
             }
-            default -> {}
+            default -> {
+            }
         }
 
         if (!GraphicsEnvironment.isHeadless()) {

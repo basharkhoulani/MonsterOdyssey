@@ -1312,7 +1312,7 @@ public class IngameController extends Controller {
         itemMenuBox.setId("itemMenuBox");
         itemMenuBox.setAlignment(Pos.CENTER);
         ItemMenuController itemMenuController = itemMenuControllerProvider.get();
-        itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox, inventoryType, npcItemTypeIDs);
+        itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox, inventoryType, npcItemTypeIDs, root);
         itemMenuBox.getChildren().add(itemMenuController.render());
         root.getChildren().add(itemMenuBox);
         itemMenuBox.requestFocus();
