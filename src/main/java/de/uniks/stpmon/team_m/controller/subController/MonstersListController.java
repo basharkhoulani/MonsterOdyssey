@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.*;
@@ -12,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -63,17 +65,21 @@ public class MonstersListController extends Controller {
 
     public List<Monster> activeMonstersList;
     public List<Monster> otherMonstersList;
+    private StackPane rootStackPane;
+    private Item item;
 
     @Inject
     public MonstersListController() {
     }
 
-    public void init(IngameController ingameController, VBox monsterListVBox) {
+    public void init(IngameController ingameController, VBox monsterListVBox, StackPane rootStackPane, Item item) {
         super.init();
         activeMonstersList = new ArrayList<>();
         otherMonstersList = new ArrayList<>();
         this.ingameController = ingameController;
         this.monsterListVBox = monsterListVBox;
+        this.rootStackPane = rootStackPane;
+        this.item = item;
     }
 
     @Override
@@ -160,21 +166,41 @@ public class MonstersListController extends Controller {
     }
 
     private void initMonsterList(List<Monster> monsters) {
-        monsterListViewActive.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false, false));
+        monsterListViewActive.setCellFactory(param -> new MonsterCell(
+                resources,
+                presetsServiceProvider.get(),
+                this,
+                null,
+                null,
+                this.ingameController,
+                false,
+                item
+        ));
         monsterListViewActive.getItems().addAll(monsters);
         monsterListViewActive.setFocusModel(null);
         monsterListViewActive.setSelectionModel(null);
     }
 
     private void initOtherMonsterList(List<Monster> monsters) {
-        monsterListViewOther.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.ingameController, false, true));
+        monsterListViewOther.setCellFactory(param -> new MonsterCell(
+                resources,
+                presetsServiceProvider.get(),
+                this,
+                null,
+                null,
+                this.ingameController,
+                true,
+                item
+        ));
         monsterListViewOther.getItems().addAll(monsters);
         monsterListViewOther.setFocusModel(null);
         monsterListViewOther.setSelectionModel(null);
     }
 
     public void onCloseMonsterList() {
-        ingameController.root.getChildren().remove(monsterListVBox);
+        if (rootStackPane != null) {
+            rootStackPane.getChildren().remove(monsterListVBox);
+        }
         ingameController.buttonsDisable(false);
     }
 
@@ -210,9 +236,10 @@ public class MonstersListController extends Controller {
 
         Button ok = new Button(resources.getString("OK"));
         ok.getStyleClass().add("buttonsYellow");
-        ok.setOnAction(event -> ingameController.root.getChildren().remove(limitVBox));
+        ok.setOnAction(event -> ingameController.getRoot().getChildren().remove(limitVBox));
 
         limitVBox.getChildren().addAll(message, ok);
+        ingameController.getRoot().getChildren().add(limitVBox);
     }
 
     private void updateBothLists(ListView<Monster> listViewAdd, List<Monster> listAdd, ListView<Monster> listViewRemove, List<Monster> listRemove, Monster monster, List<String> team) {

@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="517.0" prefWidth="800.0" style="-fx-background-color: #CFE9DB;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.MonstersDetailController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="517.0" prefWidth="800.0" style="-fx-background-color: #CFE9DB;" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.MonstersDetailController">
     <HBox prefHeight="270.0" prefWidth="800.0" styleClass="bottomLine">
         <HBox prefWidth="266.66" styleClass="rightLine">
             <Button fx:id="goBackMonstersButton" mnemonicParsing="false" onAction="#goBackToMonsters" prefHeight="40.0" prefWidth="40.0" styleClass="buttonsYellow" text="&lt;">
@@ -19,9 +15,8 @@
                 </HBox.margin>
             </Button>
             <VBox prefHeight="250.0" prefWidth="147.0">
-                <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF;"
-                      styleClass="trainerAvatarImageView">
-                    <ImageView fx:id="monsterImageView" fitHeight="120.0" pickOnBounds="true" preserveRatio="true"/>
+                <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF;" styleClass="trainerAvatarImageView">
+                    <ImageView fx:id="monsterImageView" fitHeight="120.0" pickOnBounds="true" preserveRatio="true" />
                 </HBox>
             <Label fx:id="monsterName" alignment="CENTER" prefHeight="17.0" prefWidth="153.0">
                <VBox.margin>
@@ -38,94 +33,88 @@
         </HBox>
         <VBox prefHeight="220.0" prefWidth="308.0" styleClass="rightLine">
             <padding>
-                <Insets left="10.0"/>
+                <Insets left="10.0" />
             </padding>
             <HBox fx:id="levelBox" prefHeight="35.0" prefWidth="267.0">
                 <VBox.margin>
-                    <Insets top="8.0"/>
+                    <Insets top="8.0" />
                 </VBox.margin>
-                <ImageView fx:id="starImageView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true"
-                           preserveRatio="true"/>
+                <ImageView fx:id="starImageView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                 <ProgressBar fx:id="lvlProgressBar" prefWidth="200.0" progress="0.0" styleClass="levelprogress-bar">
                     <opaqueInsets>
-                        <Insets/>
+                        <Insets />
                     </opaqueInsets>
                     <HBox.margin>
-                        <Insets left="14.0" top="9.0"/>
+                        <Insets left="14.0" top="9.0" />
                     </HBox.margin>
                 </ProgressBar>
             </HBox>
             <HBox fx:id="attackBox" prefHeight="35.0" prefWidth="267.0">
                 <VBox.margin>
-                    <Insets top="5.0"/>
+                    <Insets top="5.0" />
                 </VBox.margin>
-                <ImageView fx:id="attackImageView" fitHeight="41.0" fitWidth="44.0" pickOnBounds="true"
-                           preserveRatio="true">
+                <ImageView fx:id="attackImageView" fitHeight="41.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                     <HBox.margin>
-                        <Insets left="-4.0" top="2.0"/>
+                        <Insets left="-4.0" top="2.0" />
                     </HBox.margin>
                 </ImageView>
-                <ProgressBar fx:id="attackProgressBar" prefWidth="200.0" progress="0.0"
-                             styleClass="healthprogress-bar">
+                <ProgressBar fx:id="attackProgressBar" prefWidth="200.0" progress="0.0" styleClass="healthprogress-bar">
                     <opaqueInsets>
-                        <Insets/>
+                        <Insets />
                     </opaqueInsets>
                     <HBox.margin>
-                        <Insets left="10.0" top="12.0"/>
+                        <Insets left="10.0" top="12.0" />
                     </HBox.margin>
                 </ProgressBar>
             </HBox>
             <HBox fx:id="hpBox" prefHeight="35.0" prefWidth="267.0">
                 <padding>
-                    <Insets top="8.0"/>
+                    <Insets top="8.0" />
                 </padding>
                 <VBox.margin>
-                    <Insets top="-3.0"/>
+                    <Insets top="-3.0" />
                 </VBox.margin>
-                <ImageView fx:id="heartImageView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true"
-                           preserveRatio="true"/>
+                <ImageView fx:id="heartImageView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                 <ProgressBar fx:id="healthProgressBar" prefWidth="200.0" progress="0.0">
                     <opaqueInsets>
-                        <Insets/>
+                        <Insets />
                     </opaqueInsets>
                     <HBox.margin>
-                        <Insets left="14.0" top="7.0"/>
+                        <Insets left="14.0" top="7.0" />
                     </HBox.margin>
                 </ProgressBar>
             </HBox>
             <HBox fx:id="speedBox" prefHeight="35.0" prefWidth="200.0">
                 <VBox.margin>
-                    <Insets top="5.0"/>
+                    <Insets top="5.0" />
                 </VBox.margin>
-                <ImageView fx:id="speedImageView" fitHeight="36.0" fitWidth="35.0" pickOnBounds="true"
-                           preserveRatio="true"/>
+                <ImageView fx:id="speedImageView" fitHeight="36.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                 <ProgressBar fx:id="speedProgressBar" prefWidth="200.0" progress="0.0">
                     <opaqueInsets>
-                        <Insets/>
+                        <Insets />
                     </opaqueInsets>
                     <HBox.margin>
-                        <Insets left="14.0" top="9.0"/>
+                        <Insets left="14.0" top="9.0" />
                     </HBox.margin>
                 </ProgressBar>
             </HBox>
             <HBox fx:id="defenseBox" prefHeight="35.0" prefWidth="200.0">
                 <VBox.margin>
-                    <Insets top="5.0"/>
+                    <Insets top="5.0" />
                 </VBox.margin>
-                <ImageView fx:id="defenseImageView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true"
-                           preserveRatio="true"/>
+                <ImageView fx:id="defenseImageView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                 <ProgressBar fx:id="defenseProgressBar" prefWidth="200.0" progress="0.0">
                     <opaqueInsets>
-                        <Insets/>
+                        <Insets />
                     </opaqueInsets>
                     <HBox.margin>
-                        <Insets left="14.0" top="9.0"/>
+                        <Insets left="14.0" top="9.0" />
                     </HBox.margin>
                 </ProgressBar>
             </HBox>
             <Label alignment="CENTER" prefHeight="17.0" prefWidth="346.0" text="%ABILITIES">
                 <VBox.margin>
-                    <Insets top="5.0"/>
+                    <Insets top="5.0" />
                 </VBox.margin>
             </Label>
         </VBox>
@@ -133,53 +122,46 @@
             <VBox prefHeight="262.0" prefWidth="201.0">
                 <Label fx:id="monsterLevel" prefHeight="24.0" prefWidth="266.66">
                     <font>
-                        <Font name="Comic Sans MS" size="17.0"/>
+                        <Font name="Comic Sans MS" size="17.0" />
                     </font>
                     <VBox.margin>
-                        <Insets left="10.0" top="13.0"/>
+                        <Insets left="10.0" top="13.0" />
                     </VBox.margin>
                 </Label>
                 <Label fx:id="monsterAttack" layoutX="10.0" layoutY="10.0" prefHeight="24.0" prefWidth="266.66">
                     <font>
-                        <Font name="Comic Sans MS" size="17.0"/>
+                        <Font name="Comic Sans MS" size="17.0" />
                     </font>
                     <VBox.margin>
-                        <Insets left="10.0" top="21.0"/>
+                        <Insets left="10.0" top="21.0" />
                     </VBox.margin>
                 </Label>
                 <Label fx:id="monsterHealth" layoutX="10.0" layoutY="34.0" prefHeight="24.0" prefWidth="266.66">
                     <font>
-                        <Font name="Comic Sans MS" size="17.0"/>
+                        <Font name="Comic Sans MS" size="17.0" />
                     </font>
                     <VBox.margin>
-                        <Insets left="10.0" top="18.0"/>
+                        <Insets left="10.0" top="18.0" />
                     </VBox.margin>
                 </Label>
                 <Label fx:id="monsterSpeed" layoutX="10.0" layoutY="58.0" prefHeight="24.0" prefWidth="266.66">
                     <font>
-                        <Font name="Comic Sans MS" size="17.0"/>
+                        <Font name="Comic Sans MS" size="17.0" />
                     </font>
                     <VBox.margin>
-                        <Insets left="10.0" top="20.0"/>
+                        <Insets left="10.0" top="20.0" />
                     </VBox.margin>
                 </Label>
                 <Label fx:id="monsterDefense" prefHeight="24.0" prefWidth="253.0">
                     <VBox.margin>
-                        <Insets left="10.0" top="17.0"/>
+                        <Insets left="10.0" top="17.0" />
                     </VBox.margin>
                 </Label>
             </VBox>
-            <VBox fx:id="typeIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                  prefHeight="48.0" prefWidth="48.0" styleClass="typeIcon">
+            <VBox fx:id="typeIconVBox">
                 <HBox.margin>
                     <Insets top="2.0"/>
                 </HBox.margin>
-                <ImageView fx:id="typeImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true"
-                           preserveRatio="true">
-                    <VBox.margin>
-                        <Insets/>
-                    </VBox.margin>
-                </ImageView>
             </VBox>
         </HBox>
     </HBox>
@@ -187,7 +169,7 @@
     <HBox prefHeight="257.0" prefWidth="800.0" styleClass="bottomLine">
         <ListView fx:id="abilityListView" prefHeight="64.0" prefWidth="773.0" style="-fx-background-color: #CFE9DB;">
            <HBox.margin>
-               <Insets left="14.0"/>
+               <Insets left="14.0" />
            </HBox.margin>
         </ListView>
     </HBox>
