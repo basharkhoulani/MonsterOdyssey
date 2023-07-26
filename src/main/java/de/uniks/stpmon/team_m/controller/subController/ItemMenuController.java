@@ -87,6 +87,10 @@ public class ItemMenuController extends Controller {
 
     public void initItems(List<Item> itemList) {
         for (Item item : itemList) {
+            // if inventoryType == sell  AND  the item cannot be used, then skip rendering item
+            if (this.inventoryType == Constants.inventoryType.sellItems && itemTypeHashMap.get(item.type()).use() == null) {
+                continue;
+            }
             initItem(item);
         }
     }
