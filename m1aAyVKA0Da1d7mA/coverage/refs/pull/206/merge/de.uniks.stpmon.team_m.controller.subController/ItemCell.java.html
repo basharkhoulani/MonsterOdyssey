@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ItemCell.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">ItemCell.java</span></div><h1>ItemCell.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.dto.Item;
+import de.uniks.stpmon.team_m.dto.ItemTypeDto;
+import de.uniks.stpmon.team_m.service.PresetsService;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+
+import javax.inject.Provider;
+import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
+
+
+public class ItemCell extends ListCell&lt;Item&gt; {
+    public final PresetsService presetsService;
+    public final ItemMenuController itemMenuController;
+    private final ResourceBundle resources;
+    private final Preferences preferences;
+    private final Provider&lt;ResourceBundle&gt; resourceBundleProvider;
+    private final App app;
+    private final Runnable closeItemMenu;
+    private final Provider&lt;ItemDescriptionController&gt; itemDescriptionControllerProvider;
+    private final StackPane rootStackPane;
+    private FXMLLoader loader;
+<span class="nc" id="L40">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
+<span class="nc" id="L41">    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);</span>
+
+    @FXML
+    public ImageView itemImageView;
+    @FXML
+    public Label itemLabel;
+    @FXML
+    public Label itemNumber;
+    @FXML
+    public HBox itemHBox;
+    private Image itemImage;
+    VBox itemDescriptionBox;
+
+    ItemTypeDto itemTypeDto;
+
+
+<span class="nc" id="L57">    public ItemCell(PresetsService presetsService, ItemMenuController itemMenuController, Provider&lt;ItemDescriptionController&gt; itemDescriptionControllerProvider, ResourceBundle resources, VBox itemDescriptionBox, Preferences preferences, Provider&lt;ResourceBundle&gt; resourceBundleProvider, App app, Runnable closeItemMenu, StackPane rootStackPane) {</span>
+<span class="nc" id="L58">        this.presetsService = presetsService;</span>
+<span class="nc" id="L59">        this.itemDescriptionBox = itemDescriptionBox;</span>
+<span class="nc" id="L60">        this.itemMenuController = itemMenuController;</span>
+<span class="nc" id="L61">        this.itemDescriptionControllerProvider = itemDescriptionControllerProvider;</span>
+<span class="nc" id="L62">        this.resources = resources;</span>
+<span class="nc" id="L63">        this.preferences = preferences;</span>
+<span class="nc" id="L64">        this.resourceBundleProvider = resourceBundleProvider;</span>
+<span class="nc" id="L65">        this.app = app;</span>
+<span class="nc" id="L66">        this.closeItemMenu = closeItemMenu;</span>
+<span class="nc" id="L67">        this.rootStackPane = rootStackPane;</span>
+<span class="nc" id="L68">    }</span>
+
+
+    protected void updateItem(Item item, boolean empty) {
+<span class="nc" id="L72">        super.updateItem(item, empty);</span>
+<span class="nc bnc" id="L73" title="All 4 branches missed.">        if (item == null || empty) {</span>
+<span class="nc" id="L74">            setText(null);</span>
+<span class="nc" id="L75">            setGraphic(null);</span>
+<span class="nc" id="L76">            setStyle(&quot;-fx-background-color: #FFFFFF;&quot;);</span>
+        } else {
+<span class="nc" id="L78">            disposables.add(presetsService.getItem(item.type()).observeOn(FX_SCHEDULER)</span>
+<span class="nc" id="L79">                    .subscribe(itemTypeDto -&gt; {</span>
+<span class="nc" id="L80">                                this.itemTypeDto = itemTypeDto;</span>
+<span class="nc" id="L81">                                loadFXML();</span>
+<span class="nc" id="L82">                                itemLabel.setText(itemTypeDto.name());</span>
+<span class="nc" id="L83">                                itemNumber.setText(&quot;(&quot; + item.amount() + &quot;)&quot;);</span>
+
+<span class="nc" id="L85">                                disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)</span>
+<span class="nc" id="L86">                                        .subscribe(itemImage -&gt; {</span>
+<span class="nc" id="L87">                                            this.itemImage = ImageProcessor.resonseBodyToJavaFXImage(itemImage);</span>
+<span class="nc" id="L88">                                            itemImageView.setImage(this.itemImage);</span>
+<span class="nc" id="L89">                                        }, error -&gt; {</span>
+<span class="nc" id="L90">                                            itemMenuController.showError(error.getMessage());</span>
+<span class="nc" id="L91">                                            error.printStackTrace();</span>
+<span class="nc" id="L92">                                        }));</span>
+<span class="nc" id="L93">                                itemHBox.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L94">                                    openItemDescription(itemTypeDto, this.itemImage, item, closeItemMenu);</span>
+<span class="nc" id="L95">                                    itemMenuController.setItemNameLabel(itemTypeDto.name());</span>
+<span class="nc" id="L96">                                });</span>
+<span class="nc" id="L97">                                setGraphic(itemHBox);</span>
+<span class="nc" id="L98">                            },</span>
+                            error -&gt; {
+<span class="nc" id="L100">                                Label label = new Label(&quot;Loading...&quot;);</span>
+<span class="nc" id="L101">                                label.setStyle(&quot;-fx-padding-left: 5px;&quot;);</span>
+<span class="nc" id="L102">                                setGraphic(label);</span>
+<span class="nc" id="L103">                                PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));</span>
+<span class="nc" id="L104">                                delay.setOnFinished(event -&gt; updateItem(item, empty));</span>
+<span class="nc" id="L105">                                delay.play();</span>
+<span class="nc" id="L106">                            }));</span>
+<span class="nc" id="L107">            setStyle(&quot;-fx-border-width: 1px; -fx-border-color: #000000&quot;);</span>
+            }
+<span class="nc" id="L109">        }</span>
+
+
+    private void loadFXML() {
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        if (loader == null) {</span>
+<span class="nc" id="L114">            loader = new FXMLLoader(Main.class.getResource(&quot;views/ItemCell.fxml&quot;));</span>
+<span class="nc" id="L115">            loader.setResources(resources);</span>
+<span class="nc" id="L116">            loader.setControllerFactory(c -&gt; this);</span>
+            try {
+<span class="nc" id="L118">                loader.load();</span>
+<span class="nc" id="L119">            } catch (Exception e) {</span>
+<span class="nc" id="L120">                e.printStackTrace();</span>
+<span class="nc" id="L121">            }</span>
+        }
+<span class="nc" id="L123">    }</span>
+
+    public void openItemDescription(ItemTypeDto itemTypeDto, Image itemImage, Item item, Runnable closeItemMenu) {
+<span class="nc" id="L126">        ItemDescriptionController itemDescriptionController = itemDescriptionControllerProvider.get();</span>
+<span class="nc" id="L127">        itemDescriptionController.setValues(resources, preferences, resourceBundleProvider, itemDescriptionController, app);</span>
+<span class="nc" id="L128">        itemDescriptionController.init(itemTypeDto, itemImage, item, closeItemMenu, rootStackPane);</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">        if (itemDescriptionBox.getChildren().size() != 0) {</span>
+<span class="nc" id="L130">           itemDescriptionBox.getChildren().clear();</span>
+        }
+<span class="nc" id="L132">        itemDescriptionBox.getChildren().add(itemDescriptionController.render());</span>
+<span class="nc" id="L133">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
