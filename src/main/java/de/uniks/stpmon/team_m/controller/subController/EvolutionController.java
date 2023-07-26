@@ -13,7 +13,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
@@ -57,23 +59,32 @@ public class EvolutionController extends Controller {
         this.currentMonsterTypeDto = currentMonsterTypeDto;
         this.oldMonster = oldMonster;
         this.oldMonsterTypeDto = oldMonsterTypeDto;
-        disposables.add(presetsService.getMonsterImage(oldMonster.type()).observeOn(FX_SCHEDULER).subscribe(responseBody ->
-                oldMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody),Throwable::printStackTrace));
-        disposables.add(presetsService.getMonsterImage(oldMonster.type()).observeOn(FX_SCHEDULER).subscribe(responseBody ->
-                currentMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody),Throwable::printStackTrace));
     }
 
     public Parent render() {
         final Parent parent = super.render();
         if (!GraphicsEnvironment.isHeadless()) {
             arrowImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource("images/arrowRight.png")).toString()));
-            oldMonsterImageView.setImage(oldMonsterImage);
-            newMonsterImageView.setImage(currentMonsterImage);
+            disposables.add(presetsService.getMonsterImage(oldMonster.type()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
+                oldMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
+                oldMonsterImageView.setImage(oldMonsterImage);
+            }, Throwable::printStackTrace));
+            disposables.add(presetsService.getMonsterImage(oldMonster.type()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
+                currentMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
+                newMonsterImageView.setImage(currentMonsterImage);
+            }, Throwable::printStackTrace));
         }
-        // TODO: translation
-        evolutionTextFlow.getChildren().add(new Text("Unglaublich! " + oldMonsterTypeDto.name() + " entwickelt sich zu " + currentMonsterTypeDto.name()));
-        oldMonsterTypeDto.type().forEach(s -> oldMonsterLabel.setText(s));
-        currentMonsterTypeDto.type().forEach(s -> newMonsterLabel.setText(s));
+        Text header = new Text(resources.getString("EVOLUTION") + "!\n");
+        header.setStyle("-fx-font-size: 20");
+        Text text = new Text(resources.getString("INCREDIBLE") + "! " + oldMonsterTypeDto.name() + " " + resources.getString("EVOLVES.TO") + " " + currentMonsterTypeDto.name());
+        evolutionTextFlow.setTextAlignment(TextAlignment.CENTER);
+        evolutionTextFlow.getChildren().addAll(header, text);
+        final String[] oldMonsterString = {resources.getString("TYPE") + " "};
+        final String[] currentMonsterString = {resources.getString("TYPE") + " "};
+        oldMonsterTypeDto.type().forEach(s -> oldMonsterString[0] = oldMonsterString[0] + s + " ");
+        oldMonsterLabel.setText(oldMonsterString[0]);
+        currentMonsterTypeDto.type().forEach(s -> currentMonsterString[0] = currentMonsterString[0] + s + " ");
+        newMonsterLabel.setText(currentMonsterString[0]);
         return parent;
     }
 

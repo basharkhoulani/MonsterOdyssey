@@ -72,8 +72,8 @@ public class LevelUpController extends Controller {
 
     }
 
-    public void init(VBox container, StackPane root, Monster currentMonster,
-                     MonsterTypeDto currentMonsterTypeDto, Monster oldMonster, ArrayList<Integer> newAbilities, List<AbilityDto> abilities, boolean hasEvolved) {
+    public void init(VBox container, StackPane root, Monster currentMonster, MonsterTypeDto currentMonsterTypeDto,
+                     Monster oldMonster, ArrayList<Integer> newAbilities, List<AbilityDto> abilities, boolean hasEvolved) {
         this.container = container;
         this.root = root;
         this.currentMonster = currentMonster;
@@ -82,7 +82,8 @@ public class LevelUpController extends Controller {
         this.newAbilities = newAbilities;
         this.abilities = abilities;
         this.hasEvolved = hasEvolved;
-        disposables.add(presetsService.getMonster(oldMonster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto -> oldMonsterTypeDto = monsterTypeDto, Throwable::printStackTrace));
+        disposables.add(presetsService.getMonster(oldMonster.type()).observeOn(FX_SCHEDULER).subscribe(
+                monsterTypeDto -> oldMonsterTypeDto = monsterTypeDto, Throwable::printStackTrace));
     }
 
     public Parent render() {
@@ -107,7 +108,7 @@ public class LevelUpController extends Controller {
         if (!newAbilities.isEmpty()) {
             Label label = new Label(resources.getString("NEW.ABILITIES") + ": ");
             label.setAlignment(Pos.CENTER);
-            newAbilities.forEach(integer -> label.setText(label.getText() + abilities.get(integer-1).name() + " "));
+            newAbilities.forEach(integer -> label.setText(label.getText() + abilities.get(integer - 1).name() + " "));
             abilityVBox.getChildren().add(label);
         }
         return parent;
@@ -115,8 +116,10 @@ public class LevelUpController extends Controller {
 
     public void okButtonPressed() {
         if (hasEvolved) {
-            evolutionControllerProvider.get().init(container, root, currentMonster, currentMonsterTypeDto, oldMonster, oldMonsterTypeDto);
-            container.getChildren().add(evolutionControllerProvider.get().render());
+            EvolutionController evolutionController = evolutionControllerProvider.get();
+            evolutionController.init(container, root, currentMonster, currentMonsterTypeDto, oldMonster, oldMonsterTypeDto);
+            container.getChildren().clear();
+            container.getChildren().add(evolutionController.render());
         } else {
             root.getChildren().remove(container);
         }
