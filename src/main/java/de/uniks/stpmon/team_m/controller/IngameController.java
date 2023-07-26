@@ -643,7 +643,7 @@ public class IngameController extends Controller {
                         app.show(ingameControllerProvider.get());
                     }));
         }
-        focusOnPlayerPosition(getMaxWidth(map), getMaxHeight(map), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
+
     }
 
     private int getMaxHeight(Map map) {
@@ -788,6 +788,7 @@ public class IngameController extends Controller {
                 if (getCoinsEarned() != null && getCoinsEarned()) {
                     showCoinsEarnedWindow();
                 }
+                focusOnPlayerPosition(getMaxWidth(map), getMaxHeight(map), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
             }
         }
     }
