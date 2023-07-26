@@ -53,7 +53,7 @@
                </HBox.margin>
             </ImageView>
          </HBox>
-         <Button fx:id="useButton" mnemonicParsing="false" prefHeight="32.0" prefWidth="107.0" text="%USE">
+         <Button fx:id="useButton" mnemonicParsing="false" prefHeight="32.0" prefWidth="120.0" text="%USE">
             <VBox.margin>
                <Insets left="6.0" top="11.0"/>
             </VBox.margin>

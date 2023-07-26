@@ -72,11 +72,11 @@ public class ItemDescriptionController extends Controller {
             case buyItems -> {
                 itemAmountTitleLabel.setVisible(false);
                 itemAmountLabel.setVisible(false);
-                useButton.setText("Kaufen"); // TODO lang-files
+                useButton.setText(resources.getString("CLERK.BUY"));
                 useButton.setOnAction(event -> buyItem());
             }
             case sellItems -> {
-                useButton.setText("Verkaufen"); // TODO lang-files
+                useButton.setText(resources.getString("CLERK.SELL"));
                 useButton.setOnAction(event -> sellItem());
             }
         }
