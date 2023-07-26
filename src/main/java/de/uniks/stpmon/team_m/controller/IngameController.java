@@ -416,7 +416,7 @@ public class IngameController extends Controller {
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(
                 area -> loadMap(area.map()), error -> {
-                    //showError(error.getMessage());
+                    showError(error.getMessage());
                     error.printStackTrace();
                 }
         ));
@@ -514,7 +514,7 @@ public class IngameController extends Controller {
                     app.show(ingameControllerProvider.get());
                 },
                 error -> {
-                    //showError(error.getMessage());
+                    showError(error.getMessage());
                     error.printStackTrace();
                 }
         ));
@@ -569,7 +569,7 @@ public class IngameController extends Controller {
                         }
                     }
                 }, error -> {
-                    //showError(error.getMessage());
+                    showError(error.getMessage());
                     error.printStackTrace();
                 }));
     }
@@ -756,7 +756,7 @@ public class IngameController extends Controller {
                         trainerController.init();
                     },
                     error -> {
-                        //showError(error.getMessage());
+                        showError(error.getMessage());
                         error.printStackTrace();
                     }
             ));
@@ -977,12 +977,11 @@ public class IngameController extends Controller {
                 trainerStorageProvider.get().getRegion()._id(),
                 trainerStorageProvider.get().getTrainer()._id(),
                 ITEM_ACTION_USE_ITEM,
-                // Not sure if amount of 1 is correct or if we should use item.amount()-1
                 new UpdateItemDto(1, item.type(), monster._id())
         ).observeOn(FX_SCHEDULER).subscribe(
                 result -> trainerStorageProvider.get().updateItem(result),
                 error -> {
-                    //showError(error.getMessage());
+                    showError(error.getMessage());
                     error.printStackTrace();
                 }));
     }
@@ -1149,7 +1148,7 @@ public class IngameController extends Controller {
                         case "deleted" -> messages.removeIf(m -> m._id().equals(message._id()));
                     }
                 }, error -> {
-                    //showError(error.getMessage());
+                    showError(error.getMessage());
                     error.printStackTrace();
                 }));
     }
@@ -1174,7 +1173,7 @@ public class IngameController extends Controller {
                                 }));
                     }
                 }, error -> {
-                    //showError(error.getMessage());
+                    showError(error.getMessage());
                     error.printStackTrace();
                 })
         );
@@ -1783,7 +1782,7 @@ public class IngameController extends Controller {
                     }
                 },
                 error -> {
-                    //showError(error.getMessage());
+                    showError(error.getMessage());
                     error.printStackTrace();
                 }
         ));
