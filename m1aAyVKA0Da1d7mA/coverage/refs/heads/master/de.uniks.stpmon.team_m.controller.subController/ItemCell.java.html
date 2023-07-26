@@ -18,9 +18,9 @@ import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
@@ -33,9 +33,12 @@ public class ItemCell extends ListCell&lt;Item&gt; {
     private final Preferences preferences;
     private final Provider&lt;ResourceBundle&gt; resourceBundleProvider;
     private final App app;
+    private final Runnable closeItemMenu;
+    private final Provider&lt;ItemDescriptionController&gt; itemDescriptionControllerProvider;
+    private final StackPane rootStackPane;
     private FXMLLoader loader;
-<span class="nc" id="L37">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
-<span class="nc" id="L38">    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);</span>
+<span class="nc" id="L40">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
+<span class="nc" id="L41">    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);</span>
 
     @FXML
     public ImageView itemImageView;
@@ -50,21 +53,18 @@ public class ItemCell extends ListCell&lt;Item&gt; {
 
     ItemTypeDto itemTypeDto;
 
-    @Inject
-    Provider&lt;ItemDescriptionController&gt; itemDescriptionControllerProvider;
 
-
-    public ItemCell(PresetsService presetsService, ItemMenuController itemMenuController,
-<span class="nc" id="L58">                    ResourceBundle resources, VBox itemDescriptionBox, Preferences preferences, Provider&lt;ResourceBundle&gt; resourceBundleProvider, App app) {</span>
-<span class="nc" id="L59">        this.presetsService = presetsService;</span>
-<span class="nc" id="L60">        this.itemDescriptionBox = itemDescriptionBox;</span>
-<span class="nc" id="L61">        this.itemMenuController = itemMenuController;</span>
+<span class="nc" id="L57">    public ItemCell(PresetsService presetsService, ItemMenuController itemMenuController, Provider&lt;ItemDescriptionController&gt; itemDescriptionControllerProvider, ResourceBundle resources, VBox itemDescriptionBox, Preferences preferences, Provider&lt;ResourceBundle&gt; resourceBundleProvider, App app, Runnable closeItemMenu, StackPane rootStackPane) {</span>
+<span class="nc" id="L58">        this.presetsService = presetsService;</span>
+<span class="nc" id="L59">        this.itemDescriptionBox = itemDescriptionBox;</span>
+<span class="nc" id="L60">        this.itemMenuController = itemMenuController;</span>
+<span class="nc" id="L61">        this.itemDescriptionControllerProvider = itemDescriptionControllerProvider;</span>
 <span class="nc" id="L62">        this.resources = resources;</span>
 <span class="nc" id="L63">        this.preferences = preferences;</span>
 <span class="nc" id="L64">        this.resourceBundleProvider = resourceBundleProvider;</span>
 <span class="nc" id="L65">        this.app = app;</span>
-
-
+<span class="nc" id="L66">        this.closeItemMenu = closeItemMenu;</span>
+<span class="nc" id="L67">        this.rootStackPane = rootStackPane;</span>
 <span class="nc" id="L68">    }</span>
 
 
@@ -91,7 +91,7 @@ public class ItemCell extends ListCell&lt;Item&gt; {
 <span class="nc" id="L91">                                            error.printStackTrace();</span>
 <span class="nc" id="L92">                                        }));</span>
 <span class="nc" id="L93">                                itemHBox.setOnMouseClicked(event -&gt; {</span>
-<span class="nc" id="L94">                                    openItemDescription(itemTypeDto, this.itemImage, item);</span>
+<span class="nc" id="L94">                                    openItemDescription(itemTypeDto, this.itemImage, item, closeItemMenu);</span>
 <span class="nc" id="L95">                                    itemMenuController.setItemNameLabel(itemTypeDto.name());</span>
 <span class="nc" id="L96">                                });</span>
 <span class="nc" id="L97">                                setGraphic(itemHBox);</span>
@@ -122,10 +122,10 @@ public class ItemCell extends ListCell&lt;Item&gt; {
         }
 <span class="nc" id="L123">    }</span>
 
-    public void openItemDescription(ItemTypeDto itemTypeDto, Image itemImage, Item item) {
-<span class="nc" id="L126">        ItemDescriptionController itemDescriptionController = new ItemDescriptionController();</span>
+    public void openItemDescription(ItemTypeDto itemTypeDto, Image itemImage, Item item, Runnable closeItemMenu) {
+<span class="nc" id="L126">        ItemDescriptionController itemDescriptionController = itemDescriptionControllerProvider.get();</span>
 <span class="nc" id="L127">        itemDescriptionController.setValues(resources, preferences, resourceBundleProvider, itemDescriptionController, app);</span>
-<span class="nc" id="L128">        itemDescriptionController.init(itemTypeDto, itemImage, item);</span>
+<span class="nc" id="L128">        itemDescriptionController.init(itemTypeDto, itemImage, item, closeItemMenu, rootStackPane);</span>
 <span class="nc bnc" id="L129" title="All 2 branches missed.">        if (itemDescriptionBox.getChildren().size() != 0) {</span>
 <span class="nc" id="L130">           itemDescriptionBox.getChildren().clear();</span>
         }
