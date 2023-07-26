@@ -74,7 +74,17 @@ public class ChangeMonsterListController extends Controller {
     }
 
     private void initMonsterList(List<Monster> monsters) {
-        changeMonsterListView.setCellFactory(param -> new MonsterCell(resources, presetsServiceProvider.get(), this, this.encounterController, this.ingameController, true, false));
+        changeMonsterListView.setCellFactory(param ->
+                new MonsterCell(
+                        resources,
+                        presetsServiceProvider.get(),
+                        null,
+                        this,
+                        this.encounterController,
+                        this.ingameController,
+                        false,
+                        null
+                ));
         changeMonsterListView.getItems().addAll(monsters);
         changeMonsterListView.setFocusModel(null);
         changeMonsterListView.setSelectionModel(null);
