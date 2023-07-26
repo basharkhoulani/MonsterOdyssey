@@ -1,7 +1,9 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import de.uniks.stpmon.team_m.service.PresetsService;
@@ -9,7 +11,6 @@ import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +23,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Provider;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
@@ -34,8 +36,8 @@ public class ItemCell extends ListCell<Item> {
     private final Provider<ResourceBundle> resourceBundleProvider;
     private final App app;
     private final Runnable closeItemMenu;
-    private final Provider<ItemDescriptionController> itemDescriptionControllerProvider;
     private final StackPane rootStackPane;
+    private final IngameController ingameController;
     private FXMLLoader loader;
     protected final CompositeDisposable disposables = new CompositeDisposable();
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
@@ -54,60 +56,71 @@ public class ItemCell extends ListCell<Item> {
     ItemTypeDto itemTypeDto;
 
 
-    public ItemCell(PresetsService presetsService, ItemMenuController itemMenuController, Provider<ItemDescriptionController> itemDescriptionControllerProvider, ResourceBundle resources, VBox itemDescriptionBox, Preferences preferences, Provider<ResourceBundle> resourceBundleProvider, App app, Runnable closeItemMenu, StackPane rootStackPane) {
+
+    public ItemCell(PresetsService presetsService,
+                    ItemMenuController itemMenuController,
+                    ResourceBundle resources,
+                    VBox itemDescriptionBox,
+                    Preferences preferences,
+                    Provider<ResourceBundle> resourceBundleProvider,
+                    App app,
+                    Runnable closeItemMenu,
+                    StackPane rootStackPane,
+                    IngameController ingameController) {
         this.presetsService = presetsService;
         this.itemDescriptionBox = itemDescriptionBox;
         this.itemMenuController = itemMenuController;
-        this.itemDescriptionControllerProvider = itemDescriptionControllerProvider;
         this.resources = resources;
         this.preferences = preferences;
         this.resourceBundleProvider = resourceBundleProvider;
         this.app = app;
         this.closeItemMenu = closeItemMenu;
         this.rootStackPane = rootStackPane;
+        this.ingameController = ingameController;
     }
 
-
-    protected void updateItem(Item item, boolean empty) {
+    public void updateItem(Item item, boolean empty) {
         super.updateItem(item, empty);
         if (item == null || empty) {
             setText(null);
             setGraphic(null);
             setStyle("-fx-background-color: #FFFFFF;");
         } else {
-            disposables.add(presetsService.getItem(item.type()).observeOn(FX_SCHEDULER)
-                    .subscribe(itemTypeDto -> {
-                                this.itemTypeDto = itemTypeDto;
-                                loadFXML();
-                                itemLabel.setText(itemTypeDto.name());
-                                itemNumber.setText("(" + item.amount() + ")");
+            this.itemTypeDto = itemMenuController.itemTypeHashMap.get(item.type());
+            loadFXML();
+            itemLabel.setText(itemTypeDto.name());
+            itemNumber.setText("(" + item.amount() + ")");
 
-                                disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)
-                                        .subscribe(itemImage -> {
-                                            this.itemImage = ImageProcessor.resonseBodyToJavaFXImage(itemImage);
-                                            itemImageView.setImage(this.itemImage);
-                                        }, error -> {
-                                            itemMenuController.showError(error.getMessage());
-                                            error.printStackTrace();
-                                        }));
-                                itemHBox.setOnMouseClicked(event -> {
-                                    openItemDescription(itemTypeDto, this.itemImage, item, closeItemMenu);
-                                    itemMenuController.setItemNameLabel(itemTypeDto.name());
-                                });
-                                setGraphic(itemHBox);
-                            },
-                            error -> {
-                                Label label = new Label("Loading...");
-                                label.setStyle("-fx-padding-left: 5px;");
-                                setGraphic(label);
-                                PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
-                                delay.setOnFinished(event -> updateItem(item, empty));
-                                delay.play();
-                            }));
-            setStyle("-fx-border-width: 1px; -fx-border-color: #000000");
+            if (itemMenuController.itemImageHashMap.containsKey(item.type())) {
+                this.itemImage = itemMenuController.itemImageHashMap.get(item.type());
+                itemImageView.setImage(this.itemImage);
+            } else {
+                disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)
+                        .subscribe(itemImageResBody -> {
+                            Image itemImage = ImageProcessor.resonseBodyToJavaFXImage(itemImageResBody);
+                            itemMenuController.itemImageHashMap.put(item.type(), itemImage);
+                            this.itemImage = itemImage;
+                            itemImageView.setImage(this.itemImage);
+                        }, error -> {
+                            itemMenuController.showError(error.getMessage());
+                            error.printStackTrace();
+                        }));
             }
-        }
 
+            itemHBox.setOnMouseClicked(event -> {
+                openItemDescription(itemTypeDto, this.itemImage, item);
+                itemMenuController.setItemNameLabel(itemTypeDto.name());
+            });
+            setGraphic(itemHBox);
+
+            // hide item count when buying items from clerk
+            if (itemMenuController.getInventoryType() == Constants.inventoryType.buyItems) {
+                itemNumber.setVisible(false);
+            }
+
+            setStyle("-fx-border-width: 1px; -fx-border-color: #000000");
+        }
+    }
 
     private void loadFXML() {
         if (loader == null) {
@@ -122,12 +135,21 @@ public class ItemCell extends ListCell<Item> {
         }
     }
 
-    public void openItemDescription(ItemTypeDto itemTypeDto, Image itemImage, Item item, Runnable closeItemMenu) {
-        ItemDescriptionController itemDescriptionController = itemDescriptionControllerProvider.get();
+    public void openItemDescription(ItemTypeDto itemTypeDto, Image itemImage, Item item) {
+        int ownAmountOfItem = 0;
+        List<Item> trainerItems = itemMenuController.trainerStorageProvider.get().getItems();
+        for (Item trainerItem : trainerItems) {
+            if (trainerItem.type() == item.type()) {
+                ownAmountOfItem = trainerItem.amount();
+                break;
+            }
+        }
+
+        ItemDescriptionController itemDescriptionController = new ItemDescriptionController();
         itemDescriptionController.setValues(resources, preferences, resourceBundleProvider, itemDescriptionController, app);
-        itemDescriptionController.init(itemTypeDto, itemImage, item, closeItemMenu, rootStackPane);
+        itemDescriptionController.init(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, ingameController);
         if (itemDescriptionBox.getChildren().size() != 0) {
-           itemDescriptionBox.getChildren().clear();
+            itemDescriptionBox.getChildren().clear();
         }
         itemDescriptionBox.getChildren().add(itemDescriptionController.render());
     }
