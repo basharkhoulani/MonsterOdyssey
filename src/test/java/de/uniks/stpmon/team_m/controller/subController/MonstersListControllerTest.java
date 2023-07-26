@@ -46,6 +46,7 @@ public class MonstersListControllerTest extends ApplicationTest {
 
     private List<Monster> monsters;
     private ResourceBundle resources;
+    private StackPane rootStackPane;
 
     @Override
     public void start(Stage stage) {
@@ -173,14 +174,11 @@ public class MonstersListControllerTest extends ApplicationTest {
 
         app.start(stage);
         app.show(monsterListController);
-        monsterListController.init(ingameController, monsterListController.monsterListVBox);
+        monsterListController.init(ingameController, monsterListController.monsterListVBox, rootStackPane, null);
     }
 
     @Test
     void onCloseMonsterList() {
-        final StackPane root = mock(StackPane.class);
-        when(ingameController.getRoot()).thenReturn(root);
-        when(root.getChildren()).thenReturn(FXCollections.observableArrayList());
         clickOn("#closeButton");
     }
 
@@ -414,11 +412,12 @@ public class MonstersListControllerTest extends ApplicationTest {
                 new MonsterCell(
                         resources,
                         presetsServiceProvider.get(),
+                        null,
                         changeMonsterListController,
                         encounterController,
                         ingameController,
                         true,
-                        false
+                        null
                 ));
         monsterListController.monsterListViewActive.refresh();
 
@@ -433,8 +432,9 @@ public class MonstersListControllerTest extends ApplicationTest {
                         resources,
                         presetsServiceProvider.get(),
                         monsterListController,
+                        null,
+                        null,
                         ingameController,
-                        false,
                         false,
                         item
                 ));
@@ -453,11 +453,11 @@ public class MonstersListControllerTest extends ApplicationTest {
                 new MonsterCell(
                         resources,
                         presetsServiceProvider.get(),
+                        null,
                         changeMonsterListController,
                         encounterController,
                         ingameController,
                         true,
-                        false,
                         item
                 ));
         monsterListController.monsterListViewActive.refresh();
