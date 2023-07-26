@@ -623,7 +623,7 @@ public class IngameController extends Controller {
      * @param map Tiled Map of the current area.
      */
     private void loadMap(Map map) {
-        if (GraphicsEnvironment.isHeadless()) {
+        if (map == null) {
             return;
         }
         // Init and display loading screen
@@ -638,6 +638,7 @@ public class IngameController extends Controller {
                     .flatMap(tileset -> presetsService.getTilesetImage(tileset.image()))
                     .doOnNext(image -> tileSetImages.put(mapName, image))
                     .observeOn(FX_SCHEDULER).subscribe(image -> afterAllTileSetsLoaded(map), error -> {
+                        System.out.println("Error while loading tileset: " + error.getMessage());
                         TimeUnit.SECONDS.sleep(10);
                         destroy();
                         app.show(ingameControllerProvider.get());
@@ -1290,6 +1291,7 @@ public class IngameController extends Controller {
 
     public void showItems() {
         itemMenuBox = new VBox();
+        itemMenuBox.setId("itemMenuBox");
         itemMenuBox.setAlignment(Pos.CENTER);
         ItemMenuController itemMenuController = itemMenuControllerProvider.get();
         itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox, root);
@@ -1770,7 +1772,9 @@ public class IngameController extends Controller {
                                     }
                                     loading = false;
                                     root.getChildren().remove(loadingScreen);
-                                    loadingScreenAnimation.stop();
+                                    if (!GraphicsEnvironment.isHeadless()) {
+                                        loadingScreenAnimation.stop();
+                                    }
                                 }, error -> {
                                     TimeUnit.SECONDS.sleep(10);
                                     destroy();
@@ -1789,6 +1793,7 @@ public class IngameController extends Controller {
         IngameMiniMapController ingameMiniMapController = ingameMiniMapControllerProvider.get();
         if (miniMapVBox == null) {
             miniMapVBox = new VBox();
+            miniMapVBox.setId("miniMapVBox");
             miniMapVBox.getStyleClass().add("miniMapContainer");
             ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox, miniMap);
             miniMapVBox.getChildren().add(ingameMiniMapController.render());

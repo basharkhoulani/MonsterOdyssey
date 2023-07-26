@@ -144,8 +144,10 @@ public class MonsterCell extends ListCell<Monster> {
 
             disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
                     .subscribe(monsterImage -> {
-                        this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
-                        monsterImageView.setImage(this.monsterImage);
+                        if (!GraphicsEnvironment.isHeadless()) {
+                            this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
+                            monsterImageView.setImage(this.monsterImage);
+                        }
                     }, error -> {
                         monstersListController.showError(error.getMessage());
                         error.printStackTrace();
