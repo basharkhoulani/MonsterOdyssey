@@ -166,7 +166,7 @@ class EncounterControllerTest extends ApplicationTest {
         ));
 
         // Mock the team and enemy Monster
-        doNothing().when(encounterOpponentStorage).addCurrentMonster(any());
+        doNothing().when(encounterOpponentStorage).addCurrentMonsters(anyString(), any());
         LinkedHashMap<String, Integer> abilities = new LinkedHashMap<>();
         abilities.put("1", 35);
         abilities.put("3", 20);
@@ -219,6 +219,7 @@ class EncounterControllerTest extends ApplicationTest {
                         "Jooooo das vieh ballert"
                 )
         ));
+
 
         // Mock the enemy trainer
         when(trainersService.getTrainer(anyString(), anyString())).thenReturn(Observable.just(
@@ -359,7 +360,7 @@ class EncounterControllerTest extends ApplicationTest {
                                 "2023-07-09T11:52:35.578Z",
                                 "64aa9f7132eb8b56aa9eb201",
                                 "64aa9f7132eb8b56aa9eb208",
-                                "64abfde932eb8b56aac8efac",
+                                "64abfde932eb8b56aac8efaf",
                                 false,
                                 true,
                                 "64aa9f7132eb8b56aa9eb20c",
@@ -486,6 +487,61 @@ class EncounterControllerTest extends ApplicationTest {
 
         clickOn("#fleeButton");
         clickOn("#fleePopupYesButton");
+    }
+
+    @Test
+    void render1vs2WithMonster(){
+        when(encounterOpponentStorage.getEncounterSize()).thenReturn(4);
+        when(encounterOpponentStorage.isTwoMonster()).thenReturn(true);
+        when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
+                List.of(
+                        new Opponent(
+                                "2023-07-09T11:52:17.658Z",
+                                "2023-07-09T11:52:35.578Z",
+                                "64aa9f7132eb8b56aa9eb20f",
+                                "64aa9f7132eb8b56aa9eb208",
+                                "64abfde932eb8b56aac8efac",
+                                true,
+                                true,
+                                "64aa9f7132eb8b56aa9eb20c",
+                                null,
+                                List.of(),
+                                0
+                        ),
+                        new Opponent(
+                                "2023-07-09T11:52:17.658Z",
+                                "2023-07-09T11:52:35.578Z",
+                                "64aa9f7232eb8b53aa9eb20f",
+                                "64aa9f7132eb8b56aa9eb208",
+                                "64abfde932eb8b56aac8efac",
+                                true,
+                                true,
+                                "64aa9f7132eb8b56aa9eb20c",
+                                null,
+                                List.of(),
+                                0
+                        )
+                ));
+
+        when(encounterOpponentStorage.getCoopOpponent()).thenReturn(
+                new Opponent(
+                        "2023-07-09T11:52:17.658Z",
+                        "2023-07-09T11:52:35.578Z",
+                        "64aa9f7132eb8b56aa9eb201",
+                        "64aa9f7132eb8b56aa9eb208",
+                        "64abfde932eb8b56aac8efac",
+                        false,
+                        true,
+                        "64aa9f7132eb8b56aa9eb20f",
+                        null,
+                        List.of(),
+                        0
+                )
+        );
+
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        encounterController.setValues(bundle, preferences, null, encounterController, app);
+        app.show(encounterController);
     }
 
 }

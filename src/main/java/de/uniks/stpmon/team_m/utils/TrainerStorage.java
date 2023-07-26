@@ -114,4 +114,12 @@ public class TrainerStorage {
     public void setMonsters(List<Monster> monsters) {
         this.monsters = monsters;
     }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
 }

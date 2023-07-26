@@ -61,9 +61,12 @@ public class ChangeMonsterListController extends Controller {
         final Parent parent = super.render();
         disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
                 .subscribe(list -> {
+                    // TODO: change Monster filtern
                     activeMonstersList = list.stream()
                             .filter(monster -> trainerStorageProvider.get().getTrainer().team().contains(monster._id()) && !Objects.equals(monster
-                                    ._id(), encounterOpponentStorageProvider.get().getSelfOpponent().monster()))
+                                    ._id(), encounterOpponentStorageProvider.get().getSelfOpponent().monster())
+                                    && !(encounterOpponentStorageProvider.get().isTwoMonster() && Objects.equals(monster._id(), encounterOpponentStorageProvider.get().getCoopOpponent().monster()))
+                                    && monster.currentAttributes().health() > 0)
                             .collect(Collectors.toList());
                     initMonsterList(activeMonstersList);
                 }, throwable -> showError(throwable.getMessage())));

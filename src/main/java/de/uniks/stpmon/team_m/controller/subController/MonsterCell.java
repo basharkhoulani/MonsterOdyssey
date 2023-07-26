@@ -200,6 +200,10 @@ public class MonsterCell extends ListCell<Monster> {
                 arrowDown.setDisable(true);
 
                 // TODO: Tobias hier den Aufruf zur Change Monster Methode
+                removeFromTeamButton.setOnAction(event -> {
+                    encounterController.changeMonster(monster);
+                    changeMonsterListController.onCloseMonsterList();
+                });
             }
 
             if (item != null) {
@@ -251,7 +255,7 @@ public class MonsterCell extends ListCell<Monster> {
 
     private void showDetails(Monster monster, String type) {
         if (encounter) {
-            this.encounterController.showMonsterDetailsInEncounter();
+            this.encounterController.showMonsterDetails(monster, monsterTypeDto, monsterImage, type);
         } else {
             this.ingameController.showMonsterDetails(monster, monsterTypeDto, monsterImage, resources, presetsService, type);
         }

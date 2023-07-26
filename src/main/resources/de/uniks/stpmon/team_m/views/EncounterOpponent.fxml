@@ -78,10 +78,11 @@
                </Label>
             </HBox>
          </HBox>
-         <HBox>
+         <HBox alignment="CENTER_LEFT">
+            <Button fx:id="currentMonsterButton" maxHeight="45.0" maxWidth="45.0" minHeight="45.0" minWidth="45.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="45.0" styleClass="helpSymbol" text="Button" />
             <HBox fx:id="monsterNameHBox" alignment="CENTER" maxHeight="40.0" minHeight="40.0" minWidth="200.0" prefHeight="40.0" styleClass="hBoxYellow">
                <HBox.margin>
-                  <Insets left="60.0"/>
+                  <Insets left="15.0" />
                </HBox.margin>
                <Label fx:id="monsterNameLabel">
                   <font>

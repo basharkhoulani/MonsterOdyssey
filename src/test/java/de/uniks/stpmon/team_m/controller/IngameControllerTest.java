@@ -91,6 +91,8 @@ public class IngameControllerTest extends ApplicationTest {
     @InjectMocks
     MainMenuController mainMenuController;
     @Mock
+    TrainerItemsService trainerItemsService;
+    @Mock
     Provider<IngameSettingsController> ingameSettingsControllerProvider;
     @InjectMocks
     IngameSettingsController ingameSettingsController;
@@ -114,24 +116,9 @@ public class IngameControllerTest extends ApplicationTest {
         when(udpEventListener.listen(any(), any())).thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("646bac223b4804b87c0b8054", "64610ec8420b3d786212aea3", 0, 0, 2))));
         final TrainerStorage trainerStorage = mock(TrainerStorage.class);
         Mockito.when(trainerStorageProvider.get()).thenReturn(trainerStorage);
-        Mockito.when(trainerStorage.getTrainer()).thenReturn(new Trainer(
-                "2023-05-22T17:51:46.772Z",
-                "2023-05-22T17:51:46.772Z",
-                "646bac223b4804b87c0b8054",
-                "646bab5cecf584e1be02598a",
-                "646bac8c1a74032c70fffe24",
-                "Hans",
-                "Premade_Character_01.png",
-                0,
-                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
-                List.of(1,2),
-                List.of("646bacc568933551792bf3d5"),
-                "646bacc568933551792bf3d5",
-                33,
-                19,
-                0,
-                new NPCInfo(false, false, false, false, null, null, null)
-        ));
+        when(trainerItemsService.getItems(any(), any(), any())).thenReturn(
+                Observable.just(List.of(new Item("98759283759023874653", "Travis", 2, 2)))
+        );
         when(trainerStorageProvider.get().getRegion()).thenReturn(
                 new Region(
                         "2023-05-22T17:51:46.772Z",
@@ -234,7 +221,24 @@ public class IngameControllerTest extends ApplicationTest {
                         69,
                         69,
                         2,
-                        new NPCInfo(false, false, false, false, null,null, List.of("1", "3", "5")))
+                        new NPCInfo(false, false, false, false, null,null, List.of("1", "3", "5"))),
+                new Trainer(
+                        "2023-05-30T12:02:57.510Z",
+                        "2023-05-30T12:01:57.510Z",
+                        "6475e595ac3946b6a812d811",
+                        "646bab5cecf584e1be02598a",
+                        "6475e595ac3946b6a812d868",
+                        "Test Clerk",
+                        "Premade_Character_02.png",
+                        0,
+                        List.of(),
+                        List.of(),
+                        List.of("646bacc568933551792bf3d5"),
+                        "6475e595ac3946b6a812d863",
+                        100,
+                        100,
+                        2,
+                        new NPCInfo(false, false, false, false, List.of(1, 2, 3),null, null))
                 )
         ));
         EventListener eventListenerMock = mock(EventListener.class);
@@ -666,6 +670,36 @@ public class IngameControllerTest extends ApplicationTest {
 
         clickOn("#starterSelectionOkButton");
         clickOn("#starterSelectionOkButton");
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+    }
+
+    @Test
+    void testClerkDialog() throws InterruptedException {
+        // test will be expanded after implementing the rest of the features
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(100);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(102);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        clickOn("Leave");
 
         press(KeyCode.E);
         release(KeyCode.E);
