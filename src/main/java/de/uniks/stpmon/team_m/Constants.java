@@ -289,6 +289,16 @@ public class Constants {
         itemBox
     }
 
+    // enum to decide if the player wants to open his inv, sell or buy items
+    public enum inventoryType {
+        showItems,
+        buyItems,
+        sellItems
+    }
+
     public static final String ITEM_ACTION_USE_ITEM = "use";
     public static final String ITEM_USAGE_EFFECT = "effect";
+    public static final int useItemMonsterListVBoxWidth = 600;
+    public static final int useItemMonsterListVBoxHeight = 410;
+
 }

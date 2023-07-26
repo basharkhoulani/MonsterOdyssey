@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.Region;
@@ -1303,11 +1304,15 @@ public class IngameController extends Controller {
     }
 
     public void showItems() {
+        openInventory(inventoryType.showItems, List.of());
+    }
+
+    public void openInventory(Constants.inventoryType inventoryType, List<Integer> npcItemTypeIDs) {
         itemMenuBox = new VBox();
         itemMenuBox.setId("itemMenuBox");
         itemMenuBox.setAlignment(Pos.CENTER);
         ItemMenuController itemMenuController = itemMenuControllerProvider.get();
-        itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox, root);
+        itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox, inventoryType, npcItemTypeIDs, root);
         itemMenuBox.getChildren().add(itemMenuController.render());
         root.getChildren().add(itemMenuBox);
         itemMenuBox.requestFocus();
@@ -1701,7 +1706,11 @@ public class IngameController extends Controller {
         buyButton.setMinHeight(clerkButtonHeight);
         buyButton.getStyleClass().add("clerkDialogWhiteButton");
         buyButton.setOnAction(event -> {
-            // TODO
+            continueTrainerDialog(DialogSpecialInteractions.clerkCancelShop);
+            inNpcPopup = false;
+            this.root.getChildren().remove(clerkPopupVBox);
+            buttonsDisable(false);
+            openInventory(inventoryType.buyItems, currentNpc.npc().sells());
         });
 
         // sellButton
@@ -1712,7 +1721,11 @@ public class IngameController extends Controller {
         sellButton.setMinHeight(clerkButtonHeight);
         sellButton.getStyleClass().add("clerkDialogWhiteButton");
         sellButton.setOnAction(event -> {
-            // TODO
+            continueTrainerDialog(DialogSpecialInteractions.clerkCancelShop);
+            inNpcPopup = false;
+            this.root.getChildren().remove(clerkPopupVBox);
+            buttonsDisable(false);
+            openInventory(inventoryType.sellItems, List.of());
         });
 
         // leaveButton
@@ -1996,5 +2009,9 @@ public class IngameController extends Controller {
 
     public StackPane getRoot() {
         return root;
+    }
+
+    public MonstersListController getMonstersListController() {
+        return monstersListControllerProvider.get();
     }
 }
