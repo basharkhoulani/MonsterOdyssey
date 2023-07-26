@@ -45,6 +45,7 @@ public class EncounterController extends Controller {
     private final HashMap<String, Boolean> monsterInEncounterHashMap = new HashMap<>();
     //private Monster oldMonster; // here use HashMap
     private final HashMap<String, Boolean> resultLevelUpHashMap = new HashMap<>();
+    private final HashMap<String, Boolean> resultEvolvedHashMap = new HashMap<>();
     private final HashMap<String, Monster> oldMonsterHashMap = new HashMap<>();
     private final HashMap<String, ArrayList<Integer>> newAbilitiesHashMap = new HashMap<>();
     private final HashMap<String, EncounterOpponentController> encounterOpponentControllerHashMap = new HashMap<>();
@@ -169,6 +170,7 @@ public class EncounterController extends Controller {
         }));
         newAbilitiesHashMap.put(encounterOpponentStorage.getSelfOpponent()._id(), new ArrayList<>());
         resultLevelUpHashMap.put(encounterOpponentStorage.getSelfOpponent()._id(), false);
+        resultEvolvedHashMap.put(encounterOpponentStorage.getSelfOpponent()._id(), false);
 
         if (encounterOpponentStorage.isTwoMonster()) {
             disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getCoopOpponent().monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
@@ -177,6 +179,7 @@ public class EncounterController extends Controller {
             }));
             newAbilitiesHashMap.put(encounterOpponentStorage.getCoopOpponent()._id(), new ArrayList<>());
             resultLevelUpHashMap.put(encounterOpponentStorage.getCoopOpponent()._id(), false);
+            resultEvolvedHashMap.put(encounterOpponentStorage.getCoopOpponent()._id(), false);
         }
 
         disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilityDtos::addAll));
@@ -645,6 +648,11 @@ public class EncounterController extends Controller {
                                     updateDescription(resources.getString("YOUR.MONSTER.LEARNED") + " " + abilityDtos.get(r.ability() - 1).name() + ".\n", false);
                                 }
                             }
+                            case "monster-evolved" -> {
+                                if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                                    resultEvolvedHashMap.put(oResults._id(), true);
+                                }
+                            }
                             case "target-defeated" -> {
                                 if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                                     // You defeat the monster of enemy
@@ -802,14 +810,19 @@ public class EncounterController extends Controller {
     }
 
     public void enemyMonsterDefeated() {
-        if (resultLevelUpHashMap.get(encounterOpponentStorage.getSelfOpponent()._id())) {
-            showLevelUpPopUp(encounterOpponentStorage.getSelfOpponent()._id());
-        }
-        if (encounterOpponentStorage.isTwoMonster()) {
-            if (resultLevelUpHashMap.get(encounterOpponentStorage.getCoopOpponent()._id())) {
-                showLevelUpPopUp(encounterOpponentStorage.getCoopOpponent()._id());
+        // pause to wait for possible level up result which comes after defeat result, else if is always false
+        PauseTransition pause = new PauseTransition(Duration.millis(1000));
+        pause.setOnFinished(evt -> {
+            if (resultLevelUpHashMap.get(encounterOpponentStorage.getSelfOpponent()._id())) {
+                showLevelUpPopUp(encounterOpponentStorage.getSelfOpponent()._id());
             }
-        }
+            if (encounterOpponentStorage.isTwoMonster()) {
+                if (resultLevelUpHashMap.get(encounterOpponentStorage.getCoopOpponent()._id())) {
+                    showLevelUpPopUp(encounterOpponentStorage.getCoopOpponent()._id());
+                }
+            }
+        });
+        pause.play();
     }
 
     public void yourMonsterDefeated(String opponentId) {
@@ -928,12 +941,10 @@ public class EncounterController extends Controller {
         Monster oldMonster = oldMonsterHashMap.get(opponentId);
         ArrayList<Integer> newAbilities = newAbilitiesHashMap.get(opponentId);
 
-        disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getCurrentMonsters(opponentId)._id()).observeOn(FX_SCHEDULER).subscribe(monster -> {
-            levelUpController.init(popUpVBox, rootStackPane, this, monster, encounterOpponentStorage.getCurrentMonsterType(opponentId), oldMonster, newAbilities, abilityDtos);
-            popUpVBox.getChildren().add(levelUpController.render());
-            rootStackPane.getChildren().add(popUpVBox);
-            newAbilitiesHashMap.put(opponentId, new ArrayList<>());
-        }, Throwable::printStackTrace));
+        levelUpController.init(popUpVBox, rootStackPane, this, encounterOpponentStorage.getCurrentMonsters(opponentId), encounterOpponentStorage.getCurrentMonsterType(opponentId), oldMonster, newAbilities, abilityDtos);
+        popUpVBox.getChildren().add(levelUpController.render());
+        rootStackPane.getChildren().add(popUpVBox);
+        newAbilitiesHashMap.put(opponentId, new ArrayList<>());
     }
 
     private void initEncounterOpponentStorage(List<Opponent> opponents) {
