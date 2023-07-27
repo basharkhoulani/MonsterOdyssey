@@ -39,6 +39,22 @@ public class TrainerStorage {
         this.trainerImageUrl = url;
     }
 
+    public void addItem(Item item) {
+        this.items.add(item);
+    }
+
+    public void updateItem(Item item) {
+        this.items.stream().filter(i -> i._id().equals(item._id())).findFirst().ifPresent(i -> this.items.set(this.items.indexOf(i), item));
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
     public Trainer getTrainer() {
         return trainer;
     }
@@ -99,11 +115,4 @@ public class TrainerStorage {
         this.monsters = monsters;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
 }

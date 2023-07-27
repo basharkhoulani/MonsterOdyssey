@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.Region;
@@ -18,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -30,6 +32,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -377,7 +380,10 @@ public class IngameController extends Controller {
                     for (Trainer trainer : trainers) {
                         trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y()));
                     }
-                }, error -> showError(error.getMessage())));
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
 
         // Setup chat
         messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
@@ -473,35 +479,35 @@ public class IngameController extends Controller {
 
     private void initMapShiftTransitions() {
         shiftMapUpTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas,              0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas,   0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas,         0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas,     0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas,                0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
         );
 
 
         shiftMapLeftTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas,              -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas,   -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas,         -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas,     -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas,                -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
         );
         shiftMapRightTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas,              SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas,   SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas,         SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas,     SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas,                SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
         );
 
         shiftMapDownTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas,              0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas,   0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas,         0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas,     0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas,                0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(behindUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(userTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(overUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
+                getMapMovementTransition(roofCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
         );
     }
 
@@ -566,7 +572,6 @@ public class IngameController extends Controller {
                                 trainerPositionHashMap.put(trainer, new Position(moveTrainerDto.x(), moveTrainerDto.y()));
                             }
                         }
-
                     }
                 }, error -> {
                     showError(error.getMessage());
@@ -623,7 +628,7 @@ public class IngameController extends Controller {
      * @param map Tiled Map of the current area.
      */
     private void loadMap(Map map) {
-        if (GraphicsEnvironment.isHeadless()) {
+        if (map == null) {
             return;
         }
         // Init and display loading screen
@@ -638,12 +643,13 @@ public class IngameController extends Controller {
                     .flatMap(tileset -> presetsService.getTilesetImage(tileset.image()))
                     .doOnNext(image -> tileSetImages.put(mapName, image))
                     .observeOn(FX_SCHEDULER).subscribe(image -> afterAllTileSetsLoaded(map), error -> {
+                        System.out.println("Error while loading tileset: " + error.getMessage());
                         TimeUnit.SECONDS.sleep(10);
                         destroy();
                         app.show(ingameControllerProvider.get());
                     }));
         }
-        focusOnPlayerPosition(getMaxWidth(map), getMaxHeight(map), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
+
     }
 
     private int getMaxHeight(Map map) {
@@ -788,6 +794,7 @@ public class IngameController extends Controller {
                 if (getCoinsEarned() != null && getCoinsEarned()) {
                     showCoinsEarnedWindow();
                 }
+                focusOnPlayerPosition(getMaxWidth(map), getMaxHeight(map), trainerStorageProvider.get().getX(), trainerStorageProvider.get().getY());
             }
         }
     }
@@ -836,7 +843,11 @@ public class IngameController extends Controller {
         WritableImage writableImageTop = new WritableImage(width * TILE_SIZE, height * TILE_SIZE);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                int tileId = (int) (data.get(y * width + x) & 0x0FFFFFFF);
+                long globalTileId = data.get(y * width + x);
+                int horizontalFlip = (int) (globalTileId & FLIPPING_HORIZONTAL);
+                int verticalFlip = (int) (globalTileId & FLIPPING_VERTICAL);
+                int diagonalFlip = (int) (globalTileId & FLIPPING_DIAGONAL);
+                int tileId = (int) (globalTileId & CLEAR_FLIPPING);
                 if (tileId == 0) {
                     continue;
                 }
@@ -846,6 +857,32 @@ public class IngameController extends Controller {
                 int tileX = ((tileId - tileSet.firstgid()) % tilesPerRow) * TILE_SIZE;
                 int tileY = ((tileId - tileSet.firstgid()) / tilesPerRow) * TILE_SIZE;
                 try {
+                    if (diagonalFlip != 0 || horizontalFlip != 0 || verticalFlip != 0) {
+                        WritableImage writableImage = new WritableImage(TILE_SIZE, TILE_SIZE);
+                        writableImage.getPixelWriter().setPixels(0, 0, TILE_SIZE, TILE_SIZE,
+                                image.getPixelReader(), tileX, tileY);
+                        ImageView imageView = new ImageView(writableImage);
+                        if (diagonalFlip != 0) {
+                            imageView.setRotate(ROTATE_90);
+                            imageView.setScaleX(FLIP_HORIZONTAL_OR_VERTICAL);
+                        }
+                        if (horizontalFlip != 0) {
+                            imageView.setScaleX(FLIP_HORIZONTAL_OR_VERTICAL);
+                        }
+                        if (verticalFlip != 0) {
+                            imageView.setScaleY(FLIP_HORIZONTAL_OR_VERTICAL);
+                        }
+                        SnapshotParameters params = new SnapshotParameters();
+                        params.setFill(Color.TRANSPARENT);
+                        Image rotatedImage = imageView.snapshot(params, null);
+                        if (isRoof(tileSet, tileSetJson, tileId))
+                            writableImageTop.getPixelWriter().setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
+                                    rotatedImage.getPixelReader(), 0, 0);
+                        else
+                            writableImageGround.getPixelWriter().setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
+                                    rotatedImage.getPixelReader(), 0, 0);
+                        continue;
+                    }
                     if (isRoof(tileSet, tileSetJson, tileId)) {
                         writableImageTop.getPixelWriter().setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
                                 image.getPixelReader(), tileX, tileY);
@@ -970,21 +1007,37 @@ public class IngameController extends Controller {
         inSettings = false;
     }
 
+    public void useItem(Item item, Monster monster) {
+        disposables.add(trainerItemsService.useOrTradeItem(
+                trainerStorageProvider.get().getRegion()._id(),
+                trainerStorageProvider.get().getTrainer()._id(),
+                ITEM_ACTION_USE_ITEM,
+                new UpdateItemDto(1, item.type(), monster._id())
+        ).observeOn(FX_SCHEDULER).subscribe(
+                result -> trainerStorageProvider.get().updateItem(result),
+                error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
+    }
+
     public void buttonsDisable(Boolean set) {
-        if (set) {
-            stackPane.setEffect(new BoxBlur(10, 10, 3));
-        } else {
-            stackPane.setEffect(null);
+        if (stackPane != null) {
+            if (set) {
+                stackPane.setEffect(new BoxBlur(10, 10, 3));
+            } else {
+                stackPane.setEffect(null);
+            }
+            isPaused = set;
+            movementDisabled = set;
+            inNpcPopup = set;
+            monstersButton.setDisable(set);
+            pauseButton.setDisable(set);
+            showChatButton.setDisable(set);
+            mapSymbol.setDisable(set);
+            messageField.setDisable(set);
+            sendMessageButton.setDisable(set);
         }
-        isPaused = set;
-        movementDisabled = set;
-        inNpcPopup = set;
-        monstersButton.setDisable(set);
-        pauseButton.setDisable(set);
-        showChatButton.setDisable(set);
-        mapSymbol.setDisable(set);
-        messageField.setDisable(set);
-        sendMessageButton.setDisable(set);
     }
 
     public void showSettings() {
@@ -1041,7 +1094,10 @@ public class IngameController extends Controller {
                 messageField.setText(EMPTY_STRING);
                 isChatting = false;
                 groundCanvas.requestFocus();
-            }, error -> showError(error.getMessage())));
+            }, error -> {
+                showError(error.getMessage());
+                error.printStackTrace();
+            }));
         }
     }
 
@@ -1111,7 +1167,10 @@ public class IngameController extends Controller {
                             trainerPositionHashMap.remove(trainer);
                         }
                     }
-                }, error -> showError(error.getMessage()))
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                })
         );
     }
 
@@ -1179,7 +1238,10 @@ public class IngameController extends Controller {
         inCoinsEarnedInfoBox = true;
         movementDisabled = false;
         disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id())
-                .observeOn(FX_SCHEDULER).subscribe(trainer -> coinsLabel.setText(String.valueOf(trainer.coins())), error -> showError(error.getMessage())));
+                .observeOn(FX_SCHEDULER).subscribe(trainer -> coinsLabel.setText(String.valueOf(trainer.coins())), error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
     }
 
     private void showEncounterScene() {
@@ -1209,6 +1271,7 @@ public class IngameController extends Controller {
                 }, Throwable::printStackTrace));
 
     }
+
     private void initEncounterOpponentStorage(List<Opponent> opponents) {
         encounterOpponentStorage.setOpponentsInStorage(opponents);
         encounterOpponentStorage.resetEnemyOpponents();
@@ -1216,7 +1279,7 @@ public class IngameController extends Controller {
         for (Opponent o : opponents) {
             if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && o.isAttacker() != encounterOpponentStorage.isAttacker()) {
                 encounterOpponentStorage.addEnemyOpponent(o);
-            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) && o.isAttacker() == encounterOpponentStorage.isAttacker()){
+            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) && o.isAttacker() == encounterOpponentStorage.isAttacker()) {
                 encounterOpponentStorage.setCoopOpponent(o);
                 encounterOpponentStorage.setTwoMonster(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id()));
             }
@@ -1251,7 +1314,10 @@ public class IngameController extends Controller {
                         Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
                         Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, direction, false);
                         imageView.setImage(character[0]);
-                    }, error -> showError(error.getMessage())
+                    }, error -> {
+                        showError(error.getMessage());
+                        error.printStackTrace();
+                    }
             ));
         }
     }
@@ -1262,7 +1328,7 @@ public class IngameController extends Controller {
         monsterListVBox.setMinHeight(410);
         monsterListVBox.setAlignment(Pos.CENTER);
         MonstersListController monstersListController = monstersListControllerProvider.get();
-        monstersListController.init(this, monsterListVBox);
+        monstersListController.init(this, monsterListVBox, root, null);
         monsterListVBox.getChildren().add(monstersListController.render());
         root.getChildren().add(monsterListVBox);
         monsterListVBox.requestFocus();
@@ -1270,10 +1336,15 @@ public class IngameController extends Controller {
     }
 
     public void showItems() {
+        openInventory(inventoryType.showItems, List.of());
+    }
+
+    public void openInventory(Constants.inventoryType inventoryType, List<Integer> npcItemTypeIDs) {
         itemMenuBox = new VBox();
+        itemMenuBox.setId("itemMenuBox");
         itemMenuBox.setAlignment(Pos.CENTER);
         ItemMenuController itemMenuController = itemMenuControllerProvider.get();
-        itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox);
+        itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox, inventoryType, npcItemTypeIDs, root);
         itemMenuBox.getChildren().add(itemMenuController.render());
         root.getChildren().add(itemMenuBox);
         itemMenuBox.requestFocus();
@@ -1623,7 +1694,11 @@ public class IngameController extends Controller {
         buyButton.setMinHeight(clerkButtonHeight);
         buyButton.getStyleClass().add("clerkDialogWhiteButton");
         buyButton.setOnAction(event -> {
-            // TODO
+            continueTrainerDialog(DialogSpecialInteractions.clerkCancelShop);
+            inNpcPopup = false;
+            this.root.getChildren().remove(clerkPopupVBox);
+            buttonsDisable(false);
+            openInventory(inventoryType.buyItems, currentNpc.npc().sells());
         });
 
         // sellButton
@@ -1634,7 +1709,11 @@ public class IngameController extends Controller {
         sellButton.setMinHeight(clerkButtonHeight);
         sellButton.getStyleClass().add("clerkDialogWhiteButton");
         sellButton.setOnAction(event -> {
-            // TODO
+            continueTrainerDialog(DialogSpecialInteractions.clerkCancelShop);
+            inNpcPopup = false;
+            this.root.getChildren().remove(clerkPopupVBox);
+            buttonsDisable(false);
+            openInventory(inventoryType.sellItems, List.of());
         });
 
         // leaveButton
@@ -1751,7 +1830,9 @@ public class IngameController extends Controller {
                                     }
                                     loading = false;
                                     root.getChildren().remove(loadingScreen);
-                                    loadingScreenAnimation.stop();
+                                    if (!GraphicsEnvironment.isHeadless()) {
+                                        loadingScreenAnimation.stop();
+                                    }
                                 }, error -> {
                                     TimeUnit.SECONDS.sleep(10);
                                     destroy();
@@ -1770,6 +1851,7 @@ public class IngameController extends Controller {
         IngameMiniMapController ingameMiniMapController = ingameMiniMapControllerProvider.get();
         if (miniMapVBox == null) {
             miniMapVBox = new VBox();
+            miniMapVBox.setId("miniMapVBox");
             miniMapVBox.getStyleClass().add("miniMapContainer");
             ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox, miniMap);
             miniMapVBox.getChildren().add(ingameMiniMapController.render());
@@ -1882,7 +1964,10 @@ public class IngameController extends Controller {
                         if (preferences.getBoolean("mute", false)) {
                             AudioService.getInstance().setVolume(0);
                         }
-                    }, error -> this.showError(error.getMessage())));
+                    }, error -> {
+                        this.showError(error.getMessage());
+                        error.printStackTrace();
+                    }));
         }
     }
 
@@ -1908,5 +1993,13 @@ public class IngameController extends Controller {
 
     public void setCoinsAmount(Integer coinsAmount) {
         this.coinsAmount = coinsAmount;
+    }
+
+    public StackPane getRoot() {
+        return root;
+    }
+
+    public MonstersListController getMonstersListController() {
+        return monstersListControllerProvider.get();
     }
 }

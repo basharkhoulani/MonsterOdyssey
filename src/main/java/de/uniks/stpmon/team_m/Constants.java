@@ -113,6 +113,7 @@ public class Constants {
     public static final Insets helpLabelInsets = new Insets(0, 40, 20, 0);
     public static final int helpLabelFontSize = 12;
 
+
     public enum DialogSpecialInteractions {
         nurseYes,
         nurseNo,
@@ -287,4 +288,22 @@ public class Constants {
         monsterBox,
         itemBox
     }
+
+    // enum to decide if the player wants to open his inv, sell or buy items
+    public enum inventoryType {
+        showItems,
+        buyItems,
+        sellItems
+    }
+
+    public static final String ITEM_ACTION_USE_ITEM = "use";
+    public static final String ITEM_USAGE_EFFECT = "effect";
+    public static final int useItemMonsterListVBoxWidth = 600;
+    public static final int useItemMonsterListVBoxHeight = 410;
+    public static final long FLIPPING_HORIZONTAL = 0x80000000L;
+    public static final long FLIPPING_VERTICAL = 0x40000000L;
+    public static final long FLIPPING_DIAGONAL = 0x20000000L;
+    public static final long CLEAR_FLIPPING = 0x0FFFFFFFL;
+    public static final int ROTATE_90 = 90;
+    public static final int FLIP_HORIZONTAL_OR_VERTICAL = -1;
 }

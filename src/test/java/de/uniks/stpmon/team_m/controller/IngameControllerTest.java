@@ -10,7 +10,7 @@ import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -20,9 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import okhttp3.MediaType;
 import okhttp3.ResponseBody;
-import okio.BufferedSource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,6 +31,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -63,6 +62,12 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<NotificationListHandyController> notificationListHandyControllerProvider;
     @Mock
     Provider<IngameStarterMonsterController> ingameStarterMonsterControllerProvider;
+    @Mock
+    Provider<IngameMiniMapController> ingameMiniMapControllerProvider;
+    @Mock
+    Provider<ItemMenuController> itemMenuControllerProvider;
+    @Mock
+    Provider<PresetsService> presetsServiceProvider;
 
     // Please also keep this mock, it is needed for the tests
     // -- which ones????
@@ -71,9 +76,13 @@ public class IngameControllerTest extends ApplicationTest {
     @Mock
     Provider<IngamePauseMenuController> pauseMenuControllerProvider;
     @Mock
+    Provider<MonstersDetailController> monstersDetailControllerProvider;
+    @Mock
     TrainersService trainersService;
     @Mock
     MessageService messageService;
+    @Mock
+    MonstersService monstersService;
     @Mock
     EncounterOpponentsService encounterOpponentsService;
     @Mock
@@ -88,6 +97,10 @@ public class IngameControllerTest extends ApplicationTest {
     IngameStarterMonsterController ingameStarterMonsterController;
     @InjectMocks
     IngamePauseMenuController pauseMenuController;
+    @InjectMocks
+    MonstersListController monstersListController;
+    @InjectMocks
+    MonstersDetailController monstersDetailController;
     @InjectMocks
     MainMenuController mainMenuController;
     @Mock
@@ -104,16 +117,20 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<ChangeAudioController> changeAudioControllerProvider;
     @InjectMocks
     ChangeAudioController changeAudioController;
+    @Mock
+    Provider<IngameTrainerSettingsController> ingameTrainerSettingsControllerProvider;
+    @InjectMocks
+    IngameTrainerSettingsController ingameTrainerSettingsController;
 
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
         Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
-        ingameController. setValues (bundle, preferences, null, ingameController, app);
+        ingameController.setValues(bundle, preferences, null, ingameController, app);
 
         UDPEventListener udpEventListener = mock(UDPEventListener.class);
         Mockito.when(udpEventListenerProvider.get()).thenReturn(udpEventListener);
-        when(udpEventListener.listen(any(), any())).thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("646bac223b4804b87c0b8054", "64610ec8420b3d786212aea3", 0, 0, 2))));
+        when(udpEventListener.listen(any(), any())).thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("6475e595ac3946b6a812d865", "6475e595ac3946b6a812d863", 5, 4, 0))));
         final TrainerStorage trainerStorage = mock(TrainerStorage.class);
         Mockito.when(trainerStorageProvider.get()).thenReturn(trainerStorage);
         when(trainerItemsService.getItems(any(), any(), any())).thenReturn(
@@ -126,22 +143,7 @@ public class IngameControllerTest extends ApplicationTest {
                         "646bab5cecf584e1be02598a",
                         "Albertina",
                         new Spawn("646bc3c0a9ac1b375fb41d93", 1, 1),
-                        new Map(-1,
-                                true,
-                                1,
-                                1,
-                                "orthogonal",
-                                "right-down",
-                                "1.6.1",
-                                "map",
-                                "1.6",
-                                32,
-                                32,
-                                List.of(),
-                                16,
-                                16,
-                                List.of(),
-                                List.of())));
+                        null));
         when(areasService.getArea(any(), any())).thenReturn(Observable.just(
                 new Area(
                         "2023-05-22T17:51:46.772Z",
@@ -149,96 +151,80 @@ public class IngameControllerTest extends ApplicationTest {
                         "646bc3c0a9ac1b375fb41d93",
                         "646bc436cfee07c0e408466f",
                         "Albertina",
-                        new Map(
-                                -1,
-                                true,
-                                1,
-                                1,
-                                "orthogonal",
-                                "right-down",
-                                "1.6.1",
-                                "map",
-                                "1.6",
-                                32,
-                                32,
-                                List.of(),
-                                16,
-                                16,
-                                List.of(),
-                                List.of()))
+                        null
 
-        ));
+                )));
         doNothing().when(trainerStorage).setMonsters(any());
         lenient().when(presetsService.getCharacter(any())).thenReturn(Observable.empty());
         when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(
-                new Trainer(
-                    "2023-05-30T12:02:57.510Z",
-                    "2023-05-30T12:01:57.510Z",
-                    "6475e595ac3946b6a812d863",
-                    "646bab5cecf584e1be02598a",
-                    "6475e595ac3946b6a812d868",
-                    "Hans",
-                    "Premade_Character_01.png",
-                    0,
-                    List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
-                    List.of(1,2),
-                    List.of("646bacc568933551792bf3d5"),
-                    "6475e595ac3946b6a812d863",
-                    33,
-                    18,
-                    0,
-                    new NPCInfo(false, false, false, false, null, null, null)),
-                new Trainer(
-                        "2023-05-30T12:02:57.510Z",
-                        "2023-05-30T12:01:57.510Z",
-                        "6475e595ac3946b6a812d863",
-                        "646bab5cecf584e1be02598a",
-                        "6475e595ac3946b6a812d868",
-                        "Krankenschwester Erna",
-                        "Nurse_2_16x16.png",
-                        0,
-                        List.of(),
-                        List.of(),
-                        List.of("646bacc568933551792bf3d5"),
-                        "6475e595ac3946b6a812d863",
-                        20,
-                        18,
-                        2,
-                        new NPCInfo(false, false, false, true, null, null, null)),
-                new Trainer(
-                        "2023-05-30T12:02:57.510Z",
-                        "2023-05-30T12:01:57.510Z",
-                        "6475e595ac3946b6a812d869",
-                        "646bab5cecf584e1be02598a",
-                        "6475e595ac3946b6a812d868",
-                        "Prof. Testikus Maximus",
-                        "Premade_Character_02.png",
-                        0,
-                        List.of(),
-                        List.of(),
-                        List.of("646bacc568933551792bf3d5"),
-                        "6475e595ac3946b6a812d863",
-                        69,
-                        69,
-                        2,
-                        new NPCInfo(false, false, false, false, null,null, List.of("1", "3", "5"))),
-                new Trainer(
-                        "2023-05-30T12:02:57.510Z",
-                        "2023-05-30T12:01:57.510Z",
-                        "6475e595ac3946b6a812d811",
-                        "646bab5cecf584e1be02598a",
-                        "6475e595ac3946b6a812d868",
-                        "Test Clerk",
-                        "Premade_Character_02.png",
-                        0,
-                        List.of(),
-                        List.of(),
-                        List.of("646bacc568933551792bf3d5"),
-                        "6475e595ac3946b6a812d863",
-                        100,
-                        100,
-                        2,
-                        new NPCInfo(false, false, false, false, List.of(1, 2, 3),null, null))
+                        new Trainer(
+                                "2023-05-30T12:02:57.510Z",
+                                "2023-05-30T12:01:57.510Z",
+                                "6475e595ac3946b6a812d863",
+                                "646bab5cecf584e1be02598a",
+                                "6475e595ac3946b6a812d868",
+                                "Hans",
+                                "Premade_Character_01.png",
+                                0,
+                                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                                List.of(1, 2),
+                                List.of("646bacc568933551792bf3d5"),
+                                "6475e595ac3946b6a812d863",
+                                33,
+                                18,
+                                0,
+                                new NPCInfo(false, false, false, false, null, null, null)),
+                        new Trainer(
+                                "2023-05-30T12:02:57.510Z",
+                                "2023-05-30T12:01:57.510Z",
+                                "6475e595ac3946b6a812d863",
+                                "646bab5cecf584e1be02598a",
+                                "6475e595ac3946b6a812d868",
+                                "Krankenschwester Erna",
+                                "Nurse_2_16x16.png",
+                                0,
+                                List.of(),
+                                List.of(),
+                                List.of("646bacc568933551792bf3d5"),
+                                "6475e595ac3946b6a812d863",
+                                20,
+                                18,
+                                2,
+                                new NPCInfo(false, false, false, true, null, null, null)),
+                        new Trainer(
+                                "2023-05-30T12:02:57.510Z",
+                                "2023-05-30T12:01:57.510Z",
+                                "6475e595ac3946b6a812d869",
+                                "646bab5cecf584e1be02598a",
+                                "6475e595ac3946b6a812d868",
+                                "Prof. Testikus Maximus",
+                                "Premade_Character_02.png",
+                                0,
+                                List.of(),
+                                List.of(),
+                                List.of("646bacc568933551792bf3d5"),
+                                "6475e595ac3946b6a812d863",
+                                69,
+                                69,
+                                2,
+                                new NPCInfo(false, false, false, false, null, null, List.of("1", "3", "5"))),
+                        new Trainer(
+                                "2023-05-30T12:02:57.510Z",
+                                "2023-05-30T12:01:57.510Z",
+                                "6475e595ac3946b6a812d811",
+                                "646bab5cecf584e1be02598a",
+                                "6475e595ac3946b6a812d868",
+                                "Test Clerk",
+                                "Premade_Character_02.png",
+                                0,
+                                List.of(),
+                                List.of(),
+                                List.of("646bacc568933551792bf3d5"),
+                                "6475e595ac3946b6a812d863",
+                                100,
+                                100,
+                                2,
+                                new NPCInfo(false, false, false, false, List.of(1, 2, 3), null, null))
                 )
         ));
         EventListener eventListenerMock = mock(EventListener.class);
@@ -264,7 +250,10 @@ public class IngameControllerTest extends ApplicationTest {
                 33,
                 18,
                 1,
-                new NPCInfo(false, false,false, false, null,null, null));
+                new NPCInfo(false, false, false, false, null, null, null));
+
+        when(trainerStorageProvider.get().getY()).thenReturn(5);
+        when(trainerStorageProvider.get().getX()).thenReturn(5);
 
         when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers.*.*", Trainer.class)).thenReturn(just(
                 new Event<>("regions.646bab5cecf584e1be02598a.trainers.6475e595ac3946b6a812d865.created", trainer)));
@@ -316,51 +305,23 @@ public class IngameControllerTest extends ApplicationTest {
                 )
         )));
 
-        lenient().when(presetsService.getMonsterImage(anyInt())).thenReturn(Observable.just(
-                new ResponseBody() {
-                    @Override
-                    public MediaType contentType() {
-                        return null;
-                    }
 
-                    @Override
-                    public long contentLength() {
-                        return 0;
-                    }
+        ResponseBody responseBody = mock(ResponseBody.class);
 
-                    @Override
-                    public BufferedSource source() { return null; }
-                }
-        ));
-
-        Opponent opponent = new Opponent(
-                "2023-05-30T12:02:57.510Z",
-                "2023-05-30T12:01:57.510Z",
-                "rqtjej4dcoqsm4e9yln1loy5",
-                "a98db973kwl8xp1lz94kjf0b",
-                "646bac223b4804b87c0b8054",
-                false,
-                false,
-                "pn2iz308akz07eau5iwa6ykq",
-                null,
-                List.of(),
-                0);
+        lenient().when(presetsService.getMonsterImage(anyInt())).thenReturn(Observable.just(responseBody));
 
         //Mocking the opponent (Situation)
-        when(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() +".opponents.*.*", Opponent.class)).thenReturn(just(
-                new Event<>("encounters.*.trainers.6475e595ac3946b6a812d865,opponents.*.nothappening", null)))
-                .thenReturn(just(new Event<>("encounters.a98db973kwl8xp1lz94kjf0b.trainers.646bac223b4804b87c0b8054.opponents.rqtjej4dcoqsm4e9yln1loy5.created", opponent)));
+        when(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() + ".opponents.*.*", Opponent.class)).thenReturn(just(
+                new Event<>("encounters.*.trainers.6475e595ac3946b6a812d865,opponents.*.nothappening", null)));
 
         when(encounterOpponentsService.getTrainerOpponents(anyString(), anyString())).thenReturn(Observable.just(List.of()));
-
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
     }
 
     @Test
-    void showHelp() throws InterruptedException {
-        // TODO: apply asserts once we have the time
+    void testHelp() throws InterruptedException {
         clickOn("#smallHandyButton");
 
         Thread.sleep(1000);
@@ -368,7 +329,8 @@ public class IngameControllerTest extends ApplicationTest {
     }
 
     @Test
-    void sendMessageTest() {
+    void testMessage() {
+        // ingame chat
         final TextField messageField = lookup("#messageField").query();
         when(messageService.newMessage(any(), any(), any()))
                 .thenReturn(Observable.just(new Message(
@@ -392,18 +354,61 @@ public class IngameControllerTest extends ApplicationTest {
         write("Hello World");
         clickOn("#sendMessageButton");
         assertEquals("", messageField.getText());
-        //verify(messageService, times(2)).newMessage(any(), any(), any());
-    }
 
-    @Test
-    void getMessages() {
+        type(KeyCode.ENTER);
+        assertTrue(messageField.isFocused());
+        type(KeyCode.ENTER);
+        assertFalse(messageField.isFocused());
+
         ListView<Message> chat = lookup("#chatListView").query();
         assertEquals(chat.getOpacity(), 0);
         clickOn("#showChatButton");
         assertEquals(chat.getOpacity(), 1);
         moveTo("Test1");
         clickOn("#showChatButton");
-        assertEquals(chat.getOpacity(),  0);
+        assertEquals(chat.getOpacity(), 0);
+    }
+
+    @Test
+    void testMiniMap() {
+        IngameMiniMapController ingameMini = mock(IngameMiniMapController.class);
+        when(ingameMiniMapControllerProvider.get()).thenReturn(ingameMini);
+        doNothing().when(ingameMini).init(any(), any(), any(), any(), any());
+
+        Button close = new Button("Close");
+        close.setOnAction(event -> {
+            StackPane stackPane = lookup("#stackPane").query();
+            VBox miniMapVBox = lookup("#miniMapVBox").query();
+            stackPane.getChildren().remove(stackPane.getChildren().size() - 1);
+            miniMapVBox.setVisible(false);
+            miniMapVBox.toBack();
+            ingameController.buttonsDisable(false);
+        });
+        when(ingameMini.render()).thenReturn(close);
+
+        clickOn("#mapSymbol");
+        clickOn(close);
+    }
+
+    @Test
+    void testInventory() {
+        ItemMenuController itemMenuController = mock(ItemMenuController.class);
+        when(itemMenuControllerProvider.get()).thenReturn(itemMenuController);
+        doNothing().when(itemMenuController).init(any(), any(), any(), any(), any(), any(), any());
+
+        Button close = new Button("Close");
+        close.setOnAction(event -> {
+            StackPane stackPane = lookup("#stackPane").query();
+            VBox itemMenuBox = lookup("#itemMenuBox").query();
+            stackPane.getChildren().remove(stackPane.getChildren().size() - 1);
+            itemMenuBox.setVisible(false);
+            itemMenuBox.toBack();
+            ingameController.buttonsDisable(false);
+        });
+        when(itemMenuController.render()).thenReturn(close);
+
+        clickOn("#coinsButton");
+        clickOn(close);
     }
 
     @Test
@@ -413,9 +418,7 @@ public class IngameControllerTest extends ApplicationTest {
         Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
         when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
 
-        press(KeyCode.E);
-        release(KeyCode.E);
-
+        type(KeyCode.E);
         final TextFlow dialogTextFlow = lookup("#dialogTextFlow").query();
         final Text dialogText = (Text) dialogTextFlow.getChildren().get(0);
         final String firstDefaultText = dialogText.getText();
@@ -548,7 +551,7 @@ public class IngameControllerTest extends ApplicationTest {
                 33,
                 18,
                 0,
-                new NPCInfo(false, false,false, false, null,null, null)));
+                new NPCInfo(false, false, false, false, null, null, null)));
 
         press(KeyCode.E);
         release(KeyCode.E);
@@ -572,7 +575,90 @@ public class IngameControllerTest extends ApplicationTest {
     }
 
     @Test
-    void testPauseMenuAndSettings(){
+    void testMovement() {
+        when(udpEventListenerProvider.get().move(any())).thenReturn(empty());
+        when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+        when(udpEventListenerProvider.get().listen(any(), any())).thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("6475e595ac3946b6a812d865", "6475e595ac3946b6a812d863", 6, 5, 0))));
+        type(KeyCode.W);
+        sleep(200);
+        type(KeyCode.A);
+        sleep(200);
+        type(KeyCode.S);
+        sleep(200);
+        type(KeyCode.D);
+    }
+
+    @Test
+    void testNurseDialogWithMons() throws InterruptedException {
+        // test nurse dialog
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(20);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(20);    // two tiles apart from Nurse
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+        type(KeyCode.E);
+
+        final TextFlow dialogTextFlow = lookup("#dialogTextFlow").query();
+        final Text dialogText = (Text) dialogTextFlow.getChildren().get(0);
+        final String firstNurseText = dialogText.getText();
+
+        assertNotEquals("", firstNurseText);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        assertNotEquals(firstNurseText, dialogText.getText());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+        clickOn("No");
+
+        final StackPane rootStackPane = lookup("#root").query();
+        final Node node = rootStackPane.getChildren().get(rootStackPane.getChildren().size() - 1);
+
+        assertNotEquals("nurseVBox", node.getId());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+
+
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node2 = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("dialogStackPane", node2.getId());
+
+        for (int i = 0; i < 4; i++) {
+            press(KeyCode.E);
+            release(KeyCode.E);
+
+            Thread.sleep(30);
+        }
+
+        clickOn("Yes");
+        // healing of monsters cannot be tested, since this should happen on the server, when you encounter the nurse
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        Thread.sleep(30);
+    }
+
+    @Test
+    void testPauseMenu() {
+
+        // test pause and settings
+
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
         Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
         pauseMenuController.setValues(bundle, null, null, pauseMenuController, app);
@@ -587,28 +673,129 @@ public class IngameControllerTest extends ApplicationTest {
         changeAudioController.setValues(bundle, preferences, null, changeAudioController, app);
         when(changeAudioControllerProvider.get()).thenReturn(changeAudioController);
 
+        ingameTrainerSettingsController.setValues(bundle, null, null, ingameTrainerSettingsController, app);
+        when(ingameTrainerSettingsControllerProvider.get()).thenReturn(ingameTrainerSettingsController);
+        when(trainerStorageProvider.get().getTrainerSprite()).thenReturn("Premade_Character_01.png");
+
         mainMenuController.setValues(bundle, null, null, mainMenuController, app);
         when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
         doNothing().when(app).show(mainMenuController);
 
         clickOn("#pauseButton");
         clickOn("#resumeGameButton");
-        clickOn("#pauseButton");
 
+        type(KeyCode.ESCAPE);
         clickOn("#settingsButton");
+        type(KeyCode.ESCAPE);
         clickOn("#keybindingsButton");
         clickOn(ingameKeybindingsController.goBackButton);
+
 
         clickOn("#audioSettingsButton");
         clickOn("#closeButton");
 
+        clickOn("#trainerSettingsButton");
+        clickOn("<");
+
+
         clickOn("#goBackButton");
+        type(KeyCode.ESCAPE);
+        type(KeyCode.ESCAPE);
+
         clickOn("#leaveGameButton");
         verify(app).show(mainMenuController);
     }
 
     @Test
-    void testStarterMonsterNpcDialog() throws InterruptedException {
+    void testTrainerSettingsUpdate() {
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        pauseMenuController.setValues(bundle, null, null, pauseMenuController, app);
+        when(pauseMenuControllerProvider.get()).thenReturn(pauseMenuController);
+
+        ingameSettingsController.setValues(bundle, null, null, ingameSettingsController, app);
+        when(ingameSettingsControllerProvider.get()).thenReturn(ingameSettingsController);
+
+        ingameTrainerSettingsController.setValues(bundle, null, null, ingameTrainerSettingsController, app);
+        when(ingameTrainerSettingsControllerProvider.get()).thenReturn(ingameTrainerSettingsController);
+        when(trainerStorageProvider.get().getTrainerSprite()).thenReturn("Premade_Character_01.png");
+
+        mainMenuController.setValues(bundle, null, null, mainMenuController, app);
+        when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
+
+        when(trainersService.updateTrainer(any(), any(), any(), any(), any())).thenReturn(Observable.just(new Trainer(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "6475e595ac3946b6a812d863",
+                "646bab5cecf584e1be02598a",
+                "6475e595ac3946b6a812d868",
+                "Test",
+                "Premade_Character_01.png",
+                0,
+                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
+                List.of(1, 2),
+                List.of("646bacc568933551792bf3d5"),
+                "6475e595ac3946b6a812d863",
+                33,
+                18,
+                0,
+                new NPCInfo(false, false, false, false, null, null, null))));
+        doNothing().when(app).show(mainMenuController);
+
+        type(KeyCode.ESCAPE);
+        clickOn("#settingsButton");
+        clickOn("#trainerSettingsButton");
+        clickOn("#trainerNameEditButton");
+        clickOn("#trainerNameTextfield");
+        write("Test");
+        clickOn("#updateTrainerButton");
+        clickOn("OK");
+        verify(app).show(mainMenuController);
+    }
+
+    @Test
+    void showMonsterTest() {
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        monstersListController.setValues(bundle, null, null, monstersListController, app);
+        when(monstersListControllerProvider.get()).thenReturn(monstersListController);
+        when(presetsServiceProvider.get()).thenReturn(presetsService);
+        when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(
+                new MonsterTypeDto(
+                        1,
+                        "Salamander",
+                        "salamander.png",
+                        List.of("fire"),
+                        "A fire lizard. It's hot."
+                )
+        ));
+        LinkedHashMap<String, Integer> abilities = new LinkedHashMap<>();
+        abilities.put("1", 1);
+        abilities.put("23", 2);
+        abilities.put("4", 3);
+        when(monstersService.getMonsters(any(), any())).thenReturn(Observable.just(List.of(
+                new Monster(
+                        "2023-05-22T17:51:46.772Z",
+                        "2023-05-22T17:51:46.772Z",
+                        "646bac223b4804b87c0b8054",
+                        "646bac8c1a74032c70fffe24",
+                        1,
+                        3,
+                        56,
+                        abilities,
+                        new MonsterAttributes(40, 23, 45, 67),
+                        new MonsterAttributes(20, 23, 45, 67),
+                        List.of()
+                )
+        )));
+        // test monster list
+        clickOn("#monstersButton");
+
+        clickOn("Other");
+        moveTo("Salamander (Level 3)");
+        sleep(5000);
+    }
+
+    @Test
+    void testStarter1MonsterNpcDialog() throws InterruptedException {
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(69);
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(70);
         Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
@@ -630,7 +817,62 @@ public class IngameControllerTest extends ApplicationTest {
                 33,
                 18,
                 0,
-                new NPCInfo(false, false,false, false, null,null, null)));
+                new NPCInfo(false, false, false, false, null, null, null)));
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        final VBox starterSelectionVBox = lookup("#starterSelectionVBox").query();
+        assertNotNull(starterSelectionVBox);
+
+        final Label starterSelectionLabel0 = lookup("#starterSelectionLabel").query();
+        final String starterSelectionLabelText0 = starterSelectionLabel0.getText();
+
+        clickOn("#starterSelectionOkButton");
+        clickOn("#starterSelectionOkButton");
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+    }
+
+    @Test
+    void testStarter2MonsterNpcDialog() throws InterruptedException {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(69);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(70);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+        when(trainerStorageProvider.get().getTrainer()).thenReturn(new Trainer(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "6475e595ac3946b6a812d865",
+                "646bab5cecf584e1be02598a",
+                "6475e595ac3946b6a812d868",
+                "Peter",
+                "Premade_Character_02.png",
+                0,
+                List.of(),
+                null,
+                List.of("646bacc568933551792bf3d5"),
+                "6475e595ac3946b6a812d863",
+                33,
+                18,
+                0,
+                new NPCInfo(false, false, false, false, null, null, null)));
 
         press(KeyCode.E);
         release(KeyCode.E);
@@ -661,12 +903,68 @@ public class IngameControllerTest extends ApplicationTest {
 
         assertNotEquals(starterSelectionLabelText0, starterSelectionLabelText1);
 
+
+        clickOn("#starterSelectionOkButton");
+        clickOn("#starterSelectionOkButton");
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+    }
+
+    @Test
+    void testStarter3MonsterNpcDialog() throws InterruptedException {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(69);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(70);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+        when(trainerStorageProvider.get().getTrainer()).thenReturn(new Trainer(
+                "2023-05-30T12:02:57.510Z",
+                "2023-05-30T12:01:57.510Z",
+                "6475e595ac3946b6a812d865",
+                "646bab5cecf584e1be02598a",
+                "6475e595ac3946b6a812d868",
+                "Peter",
+                "Premade_Character_02.png",
+                0,
+                List.of(),
+                null,
+                List.of("646bacc568933551792bf3d5"),
+                "6475e595ac3946b6a812d863",
+                33,
+                18,
+                0,
+                new NPCInfo(false, false, false, false, null, null, null)));
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        final VBox starterSelectionVBox = lookup("#starterSelectionVBox").query();
+        assertNotNull(starterSelectionVBox);
+
+        final Label starterSelectionLabel0 = lookup("#starterSelectionLabel").query();
+        final String starterSelectionLabelText0 = starterSelectionLabel0.getText();
+
         clickOn("#arrowLeft");
 
         final Label starterSelectionLabel2 = lookup("#starterSelectionLabel").query();
         final String starterSelectionLabelText2 = starterSelectionLabel2.getText();
 
-        assertEquals(starterSelectionLabelText0, starterSelectionLabelText2);
+        assertNotEquals(starterSelectionLabelText0, starterSelectionLabelText2);
 
         clickOn("#starterSelectionOkButton");
         clickOn("#starterSelectionOkButton");
@@ -705,4 +1003,6 @@ public class IngameControllerTest extends ApplicationTest {
         release(KeyCode.E);
         Thread.sleep(30);
     }
+
+
 }
