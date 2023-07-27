@@ -249,6 +249,9 @@ public class IngameController extends Controller {
             if (event.getCode().toString().equals(preferences.get("inventory", "I"))) {
                 if (!this.root.getChildren().contains(itemMenuBox)) {
                     showItems();
+                } else {
+                    root.getChildren().remove(itemMenuBox);
+                    buttonsDisable(false);
                 }
             }
             if (isChatting || loading || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < TRANSITION_DURATION + 25)) {
@@ -1037,6 +1040,7 @@ public class IngameController extends Controller {
             mapSymbol.setDisable(set);
             messageField.setDisable(set);
             sendMessageButton.setDisable(set);
+            coinsButton.setDisable(set);
         }
     }
 
