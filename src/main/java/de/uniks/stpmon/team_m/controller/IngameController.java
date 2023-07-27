@@ -208,6 +208,7 @@ public class IngameController extends Controller {
     private Timeline loadingScreenAnimation;
     private VBox itemMenuBox;
     private boolean inCoinsEarnedInfoBox = false;
+    private boolean inJoinEncounterInfoBox = false;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -225,7 +226,7 @@ public class IngameController extends Controller {
         // Initialize key event listeners
         keyPressedHandler = event -> {
             if (event.getCode().toString().equals(preferences.get("interaction", "E"))) {
-                if (!inNpcPopup && !inEncounterInfoBox && !inCoinsEarnedInfoBox) {
+                if (!inNpcPopup && !inEncounterInfoBox && !inCoinsEarnedInfoBox && !inJoinEncounterInfoBox) {
                     interactWithTrainer();
                 } else if (inEncounterInfoBox) {
                     stackPane.getChildren().remove(dialogStackPane);
@@ -234,6 +235,9 @@ public class IngameController extends Controller {
                 } else if (inCoinsEarnedInfoBox) {
                     inCoinsEarnedInfoBox = false;
                     stackPane.getChildren().remove(dialogStackPane);
+                } else if (inJoinEncounterInfoBox){
+                    inJoinEncounterInfoBox = false;
+                    createJoinEncounterPopup();
                 }
             }
             if (event.getCode().toString().equals(preferences.get("pauseMenu", "ESCAPE"))) {
@@ -1232,6 +1236,15 @@ public class IngameController extends Controller {
         movementDisabled = true;
     }
 
+    private void showOtherTrainerInEncounterInfo() {
+        TextFlow dialogTextFlow = createDialogVBox(true);
+        dialogTextFlow.getChildren().add(new Text(resources.getString("TRAINER.IN.ENCOUNTER")));
+        movementDisabled = true;
+        inDialog = false;
+        inEncounterInfoBox = false;
+        inJoinEncounterInfoBox = true;
+    }
+
     private void showCoinsEarnedWindow() {
         TextFlow dialogTextFlow = createDialogVBox(true);
         dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.WON") + "\n" +
@@ -1635,6 +1648,7 @@ public class IngameController extends Controller {
         leaveEncounterButton.setOnAction(event -> {
             this.root.getChildren().remove(joinEncounterVBox);
             buttonsDisable(false);
+            stackPane.getChildren().remove(dialogStackPane);
         });
 
         //Add Buttons to Vbox
