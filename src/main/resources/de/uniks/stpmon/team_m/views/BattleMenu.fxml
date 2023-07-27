@@ -34,7 +34,7 @@
       </padding>
    </HBox>
    <HBox alignment="CENTER" prefHeight="83.0" prefWidth="350.0">
-      <Button fx:id="itemButton" mnemonicParsing="false" onAction="#showItem" prefHeight="55.0" prefWidth="158.0" text="%Item" wrapText="true">
+      <Button fx:id="itemButton" mnemonicParsing="false" onAction="#showItem" prefHeight="55.0" prefWidth="158.0" text="%ITEM" wrapText="true">
          <font>
             <Font name="Comic Sans MS" size="14.0" />
          </font>

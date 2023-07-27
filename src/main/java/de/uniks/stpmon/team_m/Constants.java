@@ -171,6 +171,15 @@ public class Constants {
     public static final Insets fleeButtonsHBoxInsets = new Insets(0, 10, 10, 10);
     public static final int fleeButtonWidth = 100;
     public static final int fleeButtonHeight = 40;
+    public static final int pauseDuration = 1000;
+    public static final String ABILITY_SUCCESS = "ability-success";
+    public static final String MONSTER_LEVELUP = "monster-levelup";
+    public static final String MONSTER_LEARNED = "monster-learned";
+    public static final String MONSTER_EVOLVED = "monster-evolved";
+    public static final String TARGET_DEFEATED = "target-defeated";
+    public static final String STATUS_ADDED = "status-added";
+    public static final String STATUS_REMOVED = "status-removed";
+    public static final String CHANGE_MONSTER = "change-monster";
 
     // Encounter - images
     public static final String STAR_ICON = "images/star.png";
