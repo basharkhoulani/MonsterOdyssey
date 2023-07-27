@@ -1604,40 +1604,42 @@ public class IngameController extends Controller {
         joinEncounterVBox.setMaxWidth(popupWidth);
         joinEncounterVBox.getStyleClass().add("dialogTextFlow");
 
-        TextFlow actions = new TextFlow(new Text("Wähle eine Aktion aus"));
+        TextFlow actions = new TextFlow(new Text(resources.getString("SELECT.ACTION")));
         actions.setPrefWidth(popupWidth);
         actions.setPrefHeight(textFieldHeight);
-        Insets dialogTextFlowInsets = new Insets(20, 10, 0, 10);
-        actions.setPadding(dialogTextFlowInsets);
+        actions.setPadding(joinEncounterTextInsets);
         actions.setTextAlignment(TextAlignment.CENTER);
 
         VBox buttonsVBox = new VBox();
         buttonsVBox.setMaxHeight(buttonsHBoxHeight);
         buttonsVBox.setMaxWidth(popupWidth);
         buttonsVBox.setAlignment(Pos.CENTER);
-        buttonsVBox.setSpacing(15);
-        Insets vBoxInsets = new Insets(5, 0, 20, 0);
-        buttonsVBox.setPadding(vBoxInsets);
+        buttonsVBox.setSpacing(joinEncounterSpacing);
+        buttonsVBox.setPadding(joinEncountervBoxInsets);
 
-        Button joinEncounterButton = new Button("Kampf beitreten");
+        //Join Encounter Button
+        Button joinEncounterButton = new Button(resources.getString("JOIN.ENCOUNTER"));
         joinEncounterButton.getStyleClass().add("buttonsWhite");
-        joinEncounterButton.setPrefWidth(250);
-        joinEncounterButton.setPrefHeight(200);
+        joinEncounterButton.setPrefWidth(joinEncounterButtonWidth);
+        joinEncounterButton.setPrefHeight(joinEncounterButtonHeight);
 
-        Button leaveEncounterButton = new Button("Verlassen");
+        //Leave Button
+        Button leaveEncounterButton = new Button(resources.getString("LEAVE"));
         leaveEncounterButton.getStyleClass().add("buttonsYellow");
-        leaveEncounterButton.setPrefWidth(250);
-        leaveEncounterButton.setPrefHeight(200);
+        leaveEncounterButton.setPrefWidth(joinEncounterButtonWidth);
+        leaveEncounterButton.setPrefHeight(joinEncounterButtonHeight);
         leaveEncounterButton.setOnAction(event -> {
             this.root.getChildren().remove(joinEncounterVBox);
             buttonsDisable(false);
         });
 
+        //Add Buttons to Vbox
         buttonsVBox.getChildren().addAll(joinEncounterButton, leaveEncounterButton);
 
-
+        //Add Text and Vbox with Buttons to JoinEncounterVbox
         joinEncounterVBox.getChildren().addAll(actions, buttonsVBox);
 
+        //Add Pop up to Ingame
         root.getChildren().add(joinEncounterVBox);
         buttonsDisable(true);
     }
