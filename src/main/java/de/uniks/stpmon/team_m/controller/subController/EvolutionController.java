@@ -4,7 +4,9 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import de.uniks.stpmon.team_m.service.MonstersService;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -13,7 +15,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
@@ -41,7 +42,7 @@ public class EvolutionController extends Controller {
     public ImageView arrowImageView;
     private VBox container;
     private StackPane root;
-    private Monster monster;
+    private Monster currentMonster;
     private MonsterTypeDto currentMonsterTypeDto;
     private MonsterTypeDto oldMonsterTypeDto;
     private Monster oldMonster;
@@ -55,7 +56,7 @@ public class EvolutionController extends Controller {
     public void init(VBox container, StackPane root, Monster currentMonster, MonsterTypeDto currentMonsterTypeDto, Monster oldMonster, MonsterTypeDto oldMonsterTypeDto) {
         this.container = container;
         this.root = root;
-        this.monster = currentMonster;
+        this.currentMonster = currentMonster;
         this.currentMonsterTypeDto = currentMonsterTypeDto;
         this.oldMonster = oldMonster;
         this.oldMonsterTypeDto = oldMonsterTypeDto;
@@ -69,7 +70,7 @@ public class EvolutionController extends Controller {
                 oldMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
                 oldMonsterImageView.setImage(oldMonsterImage);
             }, Throwable::printStackTrace));
-            disposables.add(presetsService.getMonsterImage(oldMonster.type()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
+            disposables.add(presetsService.getMonsterImage(currentMonster.type()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
                 currentMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
                 newMonsterImageView.setImage(currentMonsterImage);
             }, Throwable::printStackTrace));

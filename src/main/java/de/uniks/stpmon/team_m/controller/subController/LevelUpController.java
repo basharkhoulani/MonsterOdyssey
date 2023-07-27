@@ -5,6 +5,8 @@ import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import de.uniks.stpmon.team_m.service.MonstersService;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -65,6 +67,10 @@ public class LevelUpController extends Controller {
     private boolean hasEvolved;
     @Inject
     Provider<EvolutionController> evolutionControllerProvider;
+    @Inject
+    MonstersService monstersService;
+    @Inject
+    TrainerStorage trainerStorage;
 
 
     @Inject
@@ -116,10 +122,16 @@ public class LevelUpController extends Controller {
 
     public void okButtonPressed() {
         if (hasEvolved) {
-            EvolutionController evolutionController = evolutionControllerProvider.get();
-            evolutionController.init(container, root, currentMonster, currentMonsterTypeDto, oldMonster, oldMonsterTypeDto);
-            container.getChildren().clear();
-            container.getChildren().add(evolutionController.render());
+            disposables.add(monstersService.getMonster(trainerStorage.getRegion()._id(), trainerStorage.getTrainer()._id(), currentMonster._id()).observeOn(FX_SCHEDULER).subscribe(monster -> {
+                currentMonster = monster;
+                disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto -> {
+                    currentMonsterTypeDto = monsterTypeDto;
+                    EvolutionController evolutionController = evolutionControllerProvider.get();
+                    evolutionController.init(container, root, currentMonster, currentMonsterTypeDto, oldMonster, oldMonsterTypeDto);
+                    container.getChildren().clear();
+                    container.getChildren().add(evolutionController.render());
+                }, Throwable::printStackTrace));
+            }, Throwable::printStackTrace));
         } else {
             root.getChildren().remove(container);
         }

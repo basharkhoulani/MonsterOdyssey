@@ -107,7 +107,6 @@ public class IngameMiniMapController extends Controller {
 
     public void closeMiniMap() {
         ingameController.root.getChildren().remove(miniMapVBox);
-        System.out.println("Close MiniMap");
         ingameController.buttonsDisable(false);
     }
 
