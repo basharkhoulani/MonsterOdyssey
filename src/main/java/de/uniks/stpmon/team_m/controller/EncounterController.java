@@ -631,14 +631,14 @@ public class EncounterController extends Controller {
                 if (oResults.results() != null) {
                     for (Result r : oResults.results()) {
                         switch (r.type()) {
-                            case "ability-success" ->
+                            case ABILITY_SUCCESS ->
                                     updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
-                            case "monster-levelup" -> {
+                            case MONSTER_LEVELUP -> {
                                 if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                                     resultLevelUpHashMap.put(oResults._id(), true);
                                 }
                             }
-                            case "monster-learned" -> {
+                            case MONSTER_LEARNED -> {
                                 if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                                     if (newAbilitiesHashMap.get(oResults._id()) == null) {
                                         newAbilitiesHashMap.put(oResults._id(), new ArrayList<>(List.of(r.ability())));
@@ -648,12 +648,12 @@ public class EncounterController extends Controller {
                                     updateDescription(resources.getString("YOUR.MONSTER.LEARNED") + " " + abilityDtos.get(r.ability() - 1).name() + ".\n", false);
                                 }
                             }
-                            case "monster-evolved" -> {
+                            case MONSTER_EVOLVED -> {
                                 if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                                     resultEvolvedHashMap.put(oResults._id(), true);
                                 }
                             }
-                            case "target-defeated" -> {
+                            case TARGET_DEFEATED -> {
                                 if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                                     // You defeat the monster of enemy
                                     // monsterDefeated(resources.getString("ENEMY.DEFEATED"));
@@ -668,12 +668,12 @@ public class EncounterController extends Controller {
                                     updateDescription(resources.getString("TEAM.DEFEATED") + "\n", false);
                                 }
                             }
-                            case "status-added" -> {
+                            case STATUS_ADDED -> {
                                 EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(oResults._id());
                                 encounterOpponentController.showStatus(r.status(), true);
 
                             }
-                            case "status-removed" -> {
+                            case STATUS_REMOVED -> {
                                 EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(oResults._id());
                                 encounterOpponentController.showStatus(r.status(), false);
                             }
@@ -811,7 +811,7 @@ public class EncounterController extends Controller {
 
     public void enemyMonsterDefeated() {
         // pause to wait for possible level up result which comes after defeat result, else if is always false
-        PauseTransition pause = new PauseTransition(Duration.millis(1000));
+        PauseTransition pause = new PauseTransition(Duration.millis(pauseDuration));
         pause.setOnFinished(evt -> {
             if (resultLevelUpHashMap.get(encounterOpponentStorage.getSelfOpponent()._id())) {
                 showLevelUpPopUp(encounterOpponentStorage.getSelfOpponent()._id());
@@ -963,7 +963,7 @@ public class EncounterController extends Controller {
     }
 
     public void changeMonster(Monster monster) {
-        Move move = new ChangeMonsterMove("change-monster", monster._id());
+        Move move = new ChangeMonsterMove(CHANGE_MONSTER, monster._id());
         String opponentId = encounterOpponentStorage.getSelfOpponent()._id();
 
         if (encounterOpponentStorage.isTwoMonster()) {

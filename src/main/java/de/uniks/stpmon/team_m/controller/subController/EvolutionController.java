@@ -1,12 +1,11 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
-import de.uniks.stpmon.team_m.service.MonstersService;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -65,7 +64,7 @@ public class EvolutionController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
         if (!GraphicsEnvironment.isHeadless()) {
-            arrowImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource("images/arrowRight.png")).toString()));
+            arrowImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(Constants.ARROWRIGHTSYMBOL)).toString()));
             disposables.add(presetsService.getMonsterImage(oldMonster.type()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
                 oldMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
                 oldMonsterImageView.setImage(oldMonsterImage);
@@ -76,7 +75,7 @@ public class EvolutionController extends Controller {
             }, Throwable::printStackTrace));
         }
         Text header = new Text(resources.getString("EVOLUTION") + "!\n");
-        header.setStyle("-fx-font-size: 20");
+        header.getStyleClass().add("evolutionHeader");
         Text text = new Text(resources.getString("INCREDIBLE") + "! " + oldMonsterTypeDto.name() + " " + resources.getString("EVOLVES.TO") + " " + currentMonsterTypeDto.name());
         evolutionTextFlow.setTextAlignment(TextAlignment.CENTER);
         evolutionTextFlow.getChildren().addAll(header, text);
