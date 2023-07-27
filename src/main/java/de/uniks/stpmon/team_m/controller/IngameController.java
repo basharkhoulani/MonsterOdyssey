@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,6 +32,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -841,7 +843,11 @@ public class IngameController extends Controller {
         WritableImage writableImageTop = new WritableImage(width * TILE_SIZE, height * TILE_SIZE);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                int tileId = (int) (data.get(y * width + x) & 0x0FFFFFFF);
+                long globalTileId = data.get(y * width + x);
+                int horizontalFlip = (int) (globalTileId & FLIPPING_HORIZONTAL);
+                int verticalFlip = (int) (globalTileId & FLIPPING_VERTICAL);
+                int diagonalFlip = (int) (globalTileId & FLIPPING_DIAGONAL);
+                int tileId = (int) (globalTileId & CLEAR_FLIPPING);
                 if (tileId == 0) {
                     continue;
                 }
@@ -851,6 +857,32 @@ public class IngameController extends Controller {
                 int tileX = ((tileId - tileSet.firstgid()) % tilesPerRow) * TILE_SIZE;
                 int tileY = ((tileId - tileSet.firstgid()) / tilesPerRow) * TILE_SIZE;
                 try {
+                    if (diagonalFlip != 0 || horizontalFlip != 0 || verticalFlip != 0) {
+                        WritableImage writableImage = new WritableImage(TILE_SIZE, TILE_SIZE);
+                        writableImage.getPixelWriter().setPixels(0, 0, TILE_SIZE, TILE_SIZE,
+                                image.getPixelReader(), tileX, tileY);
+                        ImageView imageView = new ImageView(writableImage);
+                        if (diagonalFlip != 0) {
+                            imageView.setRotate(ROTATE_90);
+                            imageView.setScaleX(FLIP_HORIZONTAL_OR_VERTICAL);
+                        }
+                        if (horizontalFlip != 0) {
+                            imageView.setScaleX(FLIP_HORIZONTAL_OR_VERTICAL);
+                        }
+                        if (verticalFlip != 0) {
+                            imageView.setScaleY(FLIP_HORIZONTAL_OR_VERTICAL);
+                        }
+                        SnapshotParameters params = new SnapshotParameters();
+                        params.setFill(Color.TRANSPARENT);
+                        Image rotatedImage = imageView.snapshot(params, null);
+                        if (isRoof(tileSet, tileSetJson, tileId))
+                            writableImageTop.getPixelWriter().setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
+                                    rotatedImage.getPixelReader(), 0, 0);
+                        else
+                            writableImageGround.getPixelWriter().setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
+                                    rotatedImage.getPixelReader(), 0, 0);
+                        continue;
+                    }
                     if (isRoof(tileSet, tileSetJson, tileId)) {
                         writableImageTop.getPixelWriter().setPixels(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
                                 image.getPixelReader(), tileX, tileY);
