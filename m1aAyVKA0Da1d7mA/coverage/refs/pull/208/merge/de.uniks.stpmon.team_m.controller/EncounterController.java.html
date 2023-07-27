@@ -631,14 +631,14 @@ public class EncounterController extends Controller {
 <span class="nc bnc" id="L631" title="All 2 branches missed.">                if (oResults.results() != null) {</span>
 <span class="nc bnc" id="L632" title="All 2 branches missed.">                    for (Result r : oResults.results()) {</span>
 <span class="nc bnc" id="L633" title="All 8 branches missed.">                        switch (r.type()) {</span>
-                            case &quot;ability-success&quot; -&gt;
+                            case ABILITY_SUCCESS -&gt;
 <span class="nc" id="L635">                                    updateDescription(abilityDtos.get(r.ability() - 1).name() + &quot; &quot; + resources.getString(&quot;IS&quot;) + &quot; &quot; + r.effectiveness() + &quot;.\n&quot;, false);</span>
-                            case &quot;monster-levelup&quot; -&gt; {
+                            case MONSTER_LEVELUP -&gt; {
 <span class="nc bnc" id="L637" title="All 2 branches missed.">                                if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {</span>
 <span class="nc" id="L638">                                    resultLevelUpHashMap.put(oResults._id(), true);</span>
                                 }
                             }
-                            case &quot;monster-learned&quot; -&gt; {
+                            case MONSTER_LEARNED -&gt; {
 <span class="nc bnc" id="L642" title="All 2 branches missed.">                                if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {</span>
 <span class="nc bnc" id="L643" title="All 2 branches missed.">                                    if (newAbilitiesHashMap.get(oResults._id()) == null) {</span>
 <span class="nc" id="L644">                                        newAbilitiesHashMap.put(oResults._id(), new ArrayList&lt;&gt;(List.of(r.ability())));</span>
@@ -648,12 +648,12 @@ public class EncounterController extends Controller {
 <span class="nc" id="L648">                                    updateDescription(resources.getString(&quot;YOUR.MONSTER.LEARNED&quot;) + &quot; &quot; + abilityDtos.get(r.ability() - 1).name() + &quot;.\n&quot;, false);</span>
                                 }
                             }
-                            case &quot;monster-evolved&quot; -&gt; {
+                            case MONSTER_EVOLVED -&gt; {
 <span class="nc bnc" id="L652" title="All 2 branches missed.">                                if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {</span>
 <span class="nc" id="L653">                                    resultEvolvedHashMap.put(oResults._id(), true);</span>
                                 }
                             }
-                            case &quot;target-defeated&quot; -&gt; {
+                            case TARGET_DEFEATED -&gt; {
 <span class="nc bnc" id="L657" title="All 2 branches missed.">                                if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {</span>
                                     // You defeat the monster of enemy
                                     // monsterDefeated(resources.getString(&quot;ENEMY.DEFEATED&quot;));
@@ -668,12 +668,12 @@ public class EncounterController extends Controller {
 <span class="nc" id="L668">                                    updateDescription(resources.getString(&quot;TEAM.DEFEATED&quot;) + &quot;\n&quot;, false);</span>
                                 }
 <span class="nc" id="L670">                            }</span>
-                            case &quot;status-added&quot; -&gt; {
+                            case STATUS_ADDED -&gt; {
 <span class="nc" id="L672">                                EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(oResults._id());</span>
 <span class="nc" id="L673">                                encounterOpponentController.showStatus(r.status(), true);</span>
 
 <span class="nc" id="L675">                            }</span>
-                            case &quot;status-removed&quot; -&gt; {
+                            case STATUS_REMOVED -&gt; {
 <span class="nc" id="L677">                                EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(oResults._id());</span>
 <span class="nc" id="L678">                                encounterOpponentController.showStatus(r.status(), false);</span>
                             }
@@ -811,7 +811,7 @@ public class EncounterController extends Controller {
 
     public void enemyMonsterDefeated() {
         // pause to wait for possible level up result which comes after defeat result, else if is always false
-<span class="nc" id="L814">        PauseTransition pause = new PauseTransition(Duration.millis(1000));</span>
+<span class="nc" id="L814">        PauseTransition pause = new PauseTransition(Duration.millis(pauseDuration));</span>
 <span class="nc" id="L815">        pause.setOnFinished(evt -&gt; {</span>
 <span class="nc bnc" id="L816" title="All 2 branches missed.">            if (resultLevelUpHashMap.get(encounterOpponentStorage.getSelfOpponent()._id())) {</span>
 <span class="nc" id="L817">                showLevelUpPopUp(encounterOpponentStorage.getSelfOpponent()._id());</span>
@@ -963,7 +963,7 @@ public class EncounterController extends Controller {
 <span class="nc" id="L963">    }</span>
 
     public void changeMonster(Monster monster) {
-<span class="nc" id="L966">        Move move = new ChangeMonsterMove(&quot;change-monster&quot;, monster._id());</span>
+<span class="nc" id="L966">        Move move = new ChangeMonsterMove(CHANGE_MONSTER, monster._id());</span>
 <span class="nc" id="L967">        String opponentId = encounterOpponentStorage.getSelfOpponent()._id();</span>
 
 <span class="nc bnc" id="L969" title="All 2 branches missed.">        if (encounterOpponentStorage.isTwoMonster()) {</span>
