@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox fx:id="evolutionVBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0"
+      xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="de.uniks.stpmon.team_m.controller.subController.EvolutionController">
+    <padding>
+        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+    </padding>
+    <TextFlow fx:id="evolutionTextFlow" lineSpacing="4.0" prefHeight="120.0" prefWidth="560.0"/>
+    <HBox alignment="CENTER" prefHeight="180.0" prefWidth="560.0" spacing="10.0">
+        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="250.0">
+            <ImageView fx:id="oldMonsterImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true"
+                       preserveRatio="true"/>
+            <Label fx:id="oldMonsterLabel" alignment="CENTER" prefHeight="50.0" prefWidth="200.0"/>
+        </VBox>
+        <ImageView fx:id="arrowImageView" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true"/>
+        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="250.0">
+            <ImageView fx:id="newMonsterImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true"
+                       preserveRatio="true"/>
+            <Label fx:id="newMonsterLabel" alignment="CENTER" prefHeight="50.0" prefWidth="200.0"/>
+        </VBox>
+    </HBox>
+    <Button fx:id="okButton" mnemonicParsing="false" onAction="#okButtonPressed" prefHeight="32.0" prefWidth="95.0"
+            styleClass="welcomeSceneButton" text="OK">
+        <font>
+            <Font size="16.0"/>
+        </font>
+    </Button>
+</VBox>
