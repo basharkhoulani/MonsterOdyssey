@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.dto.*;
+import de.uniks.stpmon.team_m.dto.Event;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -10,6 +11,7 @@ import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -26,6 +29,7 @@ import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 import static io.reactivex.rxjava3.core.Observable.just;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -412,6 +416,7 @@ class EncounterControllerTest extends ApplicationTest {
     @Test
     void testFleeButton() throws InterruptedException {
         when(encounterOpponentStorage.getEncounterSize()).thenReturn(2);
+        lenient().when(encounterOpponentStorage.isWild()).thenReturn(true);
 
         lenient().when(encounterOpponentsService.deleteOpponent(any(), anyString(), anyString())).thenReturn(
                 Observable.just(new Opponent(
@@ -462,12 +467,15 @@ class EncounterControllerTest extends ApplicationTest {
         encounterController.setValues(bundle, preferences, null, encounterController, app);
         app.show(encounterController);
 
-        Thread.sleep(2000);
+        Thread.sleep(1000);
 
-        clickOn("#fleeButton");
+        Button fleeButton = lookup("#fleeButton").query();
+        assertNotNull(fleeButton);
+
+        clickOn(fleeButton);
         clickOn("#fleePopupNoButton");
 
-        clickOn("#fleeButton");
+        clickOn(fleeButton);
         clickOn("#fleePopupYesButton");
     }
 
