@@ -304,7 +304,9 @@ class EncounterBattleTest extends ApplicationTest {
                 List.of(new Result("ability-success", null,6, "super-effective", null, null),
                         new Result("target-defeated", null,null, null, null, null),
                         new Result("monster-leanred", null,6, null, null, null),
-                        new Result("monster-levelup", null,null, null, null, null)),
+                        new Result("monster-levelup", null,null, null, null, null),
+                        new Result("monster-evolution", null,null, null, null, null),
+                        new Result("status-added", null,null, null, null, "burned")),
                 0
         );
 

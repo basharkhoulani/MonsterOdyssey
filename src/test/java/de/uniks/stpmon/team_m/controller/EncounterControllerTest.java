@@ -27,6 +27,7 @@ import java.util.prefs.Preferences;
 
 import static io.reactivex.rxjava3.core.Observable.just;
 import static org.mockito.Mockito.*;
+import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 class EncounterControllerTest extends ApplicationTest {
@@ -462,7 +463,7 @@ class EncounterControllerTest extends ApplicationTest {
         encounterController.setValues(bundle, preferences, null, encounterController, app);
         app.show(encounterController);
 
-        Thread.sleep(200);
+        waitForFxEvents();
 
         clickOn("#fleeButton");
         clickOn("#fleePopupNoButton");
