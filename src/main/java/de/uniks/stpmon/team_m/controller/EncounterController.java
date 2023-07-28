@@ -535,7 +535,7 @@ public class EncounterController extends Controller {
                 }
             } else if (event.suffix().contains("created")) {
                 disposables.add(encounterOpponentsService.getEncounterOpponents(trainerStorageProvider.get().getRegion()._id(), encounterId).observeOn(FX_SCHEDULER).subscribe(opponents -> {
-                    initEncounterOpponentStorage(opponents);
+                    ingameControllerProvider.get().initEncounterOpponentStorage(opponents);
                     render();
                 }, Throwable::printStackTrace));
             }
@@ -944,20 +944,6 @@ public class EncounterController extends Controller {
         rootStackPane.getChildren().add(popUpVBox);
         newAbilitiesHashMap.put(opponentId, new ArrayList<>());
         resultEvolvedHashMap.put(opponentId, false);
-    }
-
-    private void initEncounterOpponentStorage(List<Opponent> opponents) {
-        encounterOpponentStorage.setOpponentsInStorage(opponents);
-        encounterOpponentStorage.resetEnemyOpponents();
-        encounterOpponentStorage.setEncounterSize(opponents.size());
-        for (Opponent o : opponents) {
-            if (o.encounter().equals(encounterOpponentStorage.getEncounterId()) && o.isAttacker() != encounterOpponentStorage.isAttacker()) {
-                encounterOpponentStorage.addEnemyOpponent(o);
-            } else if (!o._id().equals(encounterOpponentStorage.getSelfOpponent()._id()) && o.isAttacker() == encounterOpponentStorage.isAttacker()) {
-                encounterOpponentStorage.setCoopOpponent(o);
-                encounterOpponentStorage.setTwoMonster(o.trainer().equals(trainerStorageProvider.get().getTrainer()._id()));
-            }
-        }
     }
 
     public void changeMonster(Monster monster) {

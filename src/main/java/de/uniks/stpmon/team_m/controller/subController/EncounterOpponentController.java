@@ -155,9 +155,7 @@ public class EncounterOpponentController extends Controller {
             currentMonsterButton.setVisible(false);
             currentMonsterButton.setDisable(true);
         } else {
-            currentMonsterButton.setOnAction(event -> {
-                showMonsterInformation(currentOpponent, this);
-            });
+            currentMonsterButton.setOnAction(event -> showMonsterInformation(currentOpponent, this));
             if (!invertX){
                 trainerImageView.setDisable(true);
                 trainerImageView.setVisible(false);

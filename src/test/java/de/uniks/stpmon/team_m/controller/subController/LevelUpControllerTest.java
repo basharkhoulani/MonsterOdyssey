@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 
@@ -88,8 +87,8 @@ public class LevelUpControllerTest extends ApplicationTest {
                 monster,
                 monsterTypeDto,
                 monster,
-                new ArrayList<Integer>(),
-                new ArrayList<AbilityDto>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
                 true);
         app.start(stage);
         app.show(levelUpController);

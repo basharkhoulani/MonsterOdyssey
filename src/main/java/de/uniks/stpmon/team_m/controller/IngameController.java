@@ -1289,7 +1289,7 @@ public class IngameController extends Controller {
 
     }
 
-    private void initEncounterOpponentStorage(List<Opponent> opponents) {
+    public void initEncounterOpponentStorage(List<Opponent> opponents) {
         encounterOpponentStorage.setOpponentsInStorage(opponents);
         encounterOpponentStorage.resetEnemyOpponents();
         encounterOpponentStorage.setEncounterSize(opponents.size());
