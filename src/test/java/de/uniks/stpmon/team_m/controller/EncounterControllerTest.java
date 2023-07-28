@@ -469,7 +469,6 @@ class EncounterControllerTest extends ApplicationTest {
 
         Thread.sleep(200);
 
-        /*
         Button fleeButton = lookup("#fleeButton").query();
         assertNotNull(fleeButton);
 
@@ -478,7 +477,7 @@ class EncounterControllerTest extends ApplicationTest {
 
         clickOn(fleeButton);
         clickOn("#fleePopupYesButton");
-         */
+
     }
 
     @Test
