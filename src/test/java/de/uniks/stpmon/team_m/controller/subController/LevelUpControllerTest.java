@@ -2,7 +2,6 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterAttributes;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;

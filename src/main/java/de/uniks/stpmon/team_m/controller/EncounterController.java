@@ -92,7 +92,6 @@ public class EncounterController extends Controller {
     Provider<MonstersDetailController> monstersDetailControllerProvider;
     @Inject
     Provider<ChangeMonsterListController> changeMonsterListControllerProvider;
-    IngameController ingameController;
     @Inject
     Provider<LevelUpController> levelUpControllerProvider;
     private EncounterOpponentController enemy1Controller;
@@ -501,7 +500,7 @@ public class EncounterController extends Controller {
         monsterListVBox.setMinHeight(410);
         monsterListVBox.setAlignment(Pos.CENTER);
         ChangeMonsterListController changeMonsterListController = changeMonsterListControllerProvider.get();
-        changeMonsterListController.init(this, monsterListVBox, ingameController);
+        changeMonsterListController.init(this, monsterListVBox, ingameControllerProvider.get());
         monsterListVBox.getChildren().add(changeMonsterListController.render());
         rootStackPane.getChildren().add(monsterListVBox);
         monsterListVBox.requestFocus();
@@ -768,7 +767,7 @@ public class EncounterController extends Controller {
     public void showIngameController() {
         destroy();
         if (trainerStorageProvider.get().getMonsters() != null) {
-            trainerStorageProvider.get().getTrainer().team().stream().flatMap(teamMonsterId -> trainerStorageProvider.get().getMonsters().stream().filter(trainerMonster -> teamMonsterId.equals(trainerMonster._id())).filter(trainerMonster -> (double) trainerMonster.currentAttributes().health() / trainerMonster.attributes().health() <= 0.2)).forEach(trainerMonster -> this.ingameController.showLowHealthNotification());
+            trainerStorageProvider.get().getTrainer().team().stream().flatMap(teamMonsterId -> trainerStorageProvider.get().getMonsters().stream().filter(trainerMonster -> teamMonsterId.equals(trainerMonster._id())).filter(trainerMonster -> (double) trainerMonster.currentAttributes().health() / trainerMonster.attributes().health() <= 0.2)).forEach(trainerMonster -> this.ingameControllerProvider.get().showLowHealthNotification());
         }
         app.show(ingameControllerProvider.get());
     }
