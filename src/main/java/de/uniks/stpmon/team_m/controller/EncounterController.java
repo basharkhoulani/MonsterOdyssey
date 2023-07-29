@@ -527,15 +527,38 @@ public class EncounterController extends Controller {
             if (event.suffix().contains("updated")) {
                 updateOpponent(opponent);
             } else if (event.suffix().contains("deleted")) {
-                opponentsDelete.put(opponent._id(), opponent);
+                if(deleteOpponents >= 0){
+                    opponentsDelete.put(opponent._id(), opponent);
+                }
                 deleteOpponents++;
                 if (opponentsDelete.size() >= encounterOpponentStorage.getEncounterSize()) {
                     showResult();
                 }
             } else if (event.suffix().contains("created")) {
+                deleteOpponents--;
                 disposables.add(encounterOpponentsService.getEncounterOpponents(trainerStorageProvider.get().getRegion()._id(), encounterId).observeOn(FX_SCHEDULER).subscribe(opponents -> {
+                    teamHBox.getChildren().clear();
                     ingameControllerProvider.get().initEncounterOpponentStorage(opponents);
-                    render();
+                    for(Opponent o: opponents){
+                        if(o.isAttacker() == encounterOpponentStorage.isAttacker()){
+                            if(o.trainer().equals(trainerId)){
+                                encounterOpponentStorage.setSelfOpponent(o);
+                                ownTrainerController = new EncounterOpponentController();
+                                ownTrainerController.init(o, false, false, true, false, encounterOpponentStorage.isTwoMonster(), this);
+                                encounterOpponentControllerHashMap.put(o._id(), ownTrainerController);
+                            } else {
+                                encounterOpponentStorage.setCoopOpponent(o);
+                                coopTrainerController = new EncounterOpponentController();
+                                coopTrainerController.init(o, false, false, false, false, encounterOpponentStorage.isTwoMonster(), this);
+                                encounterOpponentControllerHashMap.put(o._id(), coopTrainerController);
+                            }
+                            showTeamMonster(encounterOpponentControllerHashMap.get(o._id()), o);
+                            showCoopImage(encounterOpponentControllerHashMap.get(o._id()), o);
+                            monsterInEncounterHashMap.put(o._id(), false);
+                        }
+                    }
+                    teamHBox.getChildren().add(coopTrainerController.render());
+                    teamHBox.getChildren().add(ownTrainerController.render());
                 }, Throwable::printStackTrace));
             }
         }, Throwable::printStackTrace));
