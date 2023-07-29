@@ -1653,6 +1653,21 @@ public class IngameController extends Controller {
         joinEncounterButton.getStyleClass().add("buttonsWhite");
         joinEncounterButton.setPrefWidth(joinEncounterButtonWidth);
         joinEncounterButton.setPrefHeight(joinEncounterButtonHeight);
+        joinEncounterButton.setOnAction(event -> {
+            this.root.getChildren().remove(joinEncounterVBox);
+            buttonsDisable(false);
+            stackPane.getChildren().remove(dialogStackPane);
+
+            String trainerID = trainerStorageProvider.get().getTrainer()._id();
+            disposables.add(udpEventListenerProvider.get().talk(
+                    this.currentNpc.area(),
+                    new TalkTrainerDto(
+                            trainerID,
+                            this.currentNpc._id(),
+                            0
+                    )
+            ).observeOn(FX_SCHEDULER).subscribe());
+        });
 
         //Leave Button
         Button leaveEncounterButton = new Button(resources.getString("LEAVE"));
