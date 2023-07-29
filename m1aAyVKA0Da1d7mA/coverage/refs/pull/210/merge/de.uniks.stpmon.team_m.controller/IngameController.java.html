@@ -1430,7 +1430,7 @@ public class IngameController extends Controller {
                 } else {
 <span class="nc" id="L1431">                    disposables.add(encounterOpponentsService.getTrainerOpponents(currentNpc.region(),currentNpc._id())</span>
 <span class="nc" id="L1432">                            .observeOn(FX_SCHEDULER).subscribe(opponents -&gt; {</span>
-<span class="nc bnc" id="L1433" title="All 2 branches missed.">                                if (opponents.size() &gt; 0) {</span>
+<span class="nc bnc" id="L1433" title="All 2 branches missed.">                                if (opponents.size() == 2) {</span>
 <span class="nc" id="L1434">                                    Opponent opponent = opponents.get(0);</span>
 <span class="nc bnc" id="L1435" title="All 4 branches missed.">                                    if (opponent.move() == null &amp;&amp; opponent.results().size() == 0){</span>
 <span class="nc" id="L1436">                                        showOtherTrainerInEncounterInfo();</span>
