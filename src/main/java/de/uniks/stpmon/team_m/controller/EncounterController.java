@@ -259,7 +259,7 @@ public class EncounterController extends Controller {
         Opponent enemy1Opponent = encounterOpponentStorage.getEnemyOpponents().get(0);
         checkMoveAlreadyUsed(enemy1Opponent); // für Encounter wiederherstellen
         enemy1Controller = new EncounterOpponentController();
-        enemy1Controller.init(enemy1Opponent, true, false, false, false, false, this);
+        enemy1Controller.init(enemy1Opponent, true, false, false, true, false, this);
         encounterOpponentControllerHashMap.put(enemy1Opponent._id(), enemy1Controller);
         VBox enemy1Parent = (VBox) enemy1Controller.render();
         HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);
@@ -272,7 +272,7 @@ public class EncounterController extends Controller {
         Opponent enemy2Opponent = encounterOpponentStorage.getEnemyOpponents().get(1);
         checkMoveAlreadyUsed(enemy2Opponent); // für Encounter wiederherstellen
         enemy2Controller = new EncounterOpponentController();
-        enemy2Controller.init(enemy2Opponent, true, false, true, false, false, this);
+        enemy2Controller.init(enemy2Opponent, true, false, true, true, false, this);
         encounterOpponentControllerHashMap.put(enemy2Opponent._id(), enemy2Controller);
         VBox enemy2Parent = (VBox) enemy2Controller.render();
         enemyHBox.getChildren().add(enemy2Parent);
@@ -327,7 +327,7 @@ public class EncounterController extends Controller {
         Opponent enemy1Opponent = encounterOpponentStorage.getEnemyOpponents().get(0);
         checkMoveAlreadyUsed(enemy1Opponent); // für Encounter wiederherstellen
         enemy1Controller = new EncounterOpponentController();
-        enemy1Controller.init(enemy1Opponent, true, false, false, false, false, this);
+        enemy1Controller.init(enemy1Opponent, true, false, false, true, false, this);
         encounterOpponentControllerHashMap.put(enemy1Opponent._id(), enemy1Controller);
         VBox enemy1Parent = (VBox) enemy1Controller.render();
         enemyHBox.getChildren().add(enemy1Parent);
@@ -339,7 +339,7 @@ public class EncounterController extends Controller {
         Opponent enemy2Opponent = encounterOpponentStorage.getEnemyOpponents().get(1);
         checkMoveAlreadyUsed(enemy2Opponent); // für Encounter wiederherstellen
         enemy2Controller = new EncounterOpponentController();
-        enemy2Controller.init(enemy2Opponent, true, false, true, false, false, this);
+        enemy2Controller.init(enemy2Opponent, true, false, true, true, false, this);
         encounterOpponentControllerHashMap.put(enemy2Opponent._id(), enemy2Controller);
         VBox enemy2Parent = (VBox) enemy2Controller.render();
         enemyHBox.getChildren().add(enemy2Parent);
