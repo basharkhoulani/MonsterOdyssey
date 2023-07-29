@@ -31,6 +31,7 @@ import java.util.prefs.Preferences;
 import static io.reactivex.rxjava3.core.Observable.just;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
+import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 class EncounterControllerTest extends ApplicationTest {
@@ -473,9 +474,11 @@ class EncounterControllerTest extends ApplicationTest {
         assertNotNull(fleeButton);
 
         clickOn(fleeButton);
+        Thread.sleep(200);
         clickOn("#fleePopupNoButton");
 
         clickOn(fleeButton);
+        Thread.sleep(200);
         clickOn("#fleePopupYesButton");
 
     }

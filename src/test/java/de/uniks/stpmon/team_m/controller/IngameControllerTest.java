@@ -41,6 +41,7 @@ import static io.reactivex.rxjava3.core.Observable.empty;
 import static io.reactivex.rxjava3.core.Observable.just;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class IngameControllerTest extends ApplicationTest {
@@ -505,6 +506,7 @@ public class IngameControllerTest extends ApplicationTest {
             Thread.sleep(30);
         }
 
+        waitForFxEvents();
         clickOn("Yes");
         // healing of monsters cannot be tested, since this should happen on the server, when you encounter the nurse
 
