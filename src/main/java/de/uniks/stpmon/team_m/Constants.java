@@ -307,6 +307,9 @@ public class Constants {
 
     public static final String ITEM_ACTION_USE_ITEM = "use";
     public static final String ITEM_USAGE_EFFECT = "effect";
+    public static final String ITEM_USAGE_ITEM_BOX = "itemBox";
+    public static final String ITEM_USAGE_MONSTER_BOX = "monsterBox";
+    public static final String ITEM_USAGE_BALL = "ball";
     public static final int useItemMonsterListVBoxWidth = 600;
     public static final int useItemMonsterListVBoxHeight = 410;
     public static final long FLIPPING_HORIZONTAL = 0x80000000L;
