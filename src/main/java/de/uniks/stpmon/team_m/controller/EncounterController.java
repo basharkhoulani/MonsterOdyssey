@@ -94,8 +94,6 @@ public class EncounterController extends Controller {
     Provider<ChangeMonsterListController> changeMonsterListControllerProvider;
     @Inject
     Provider<LevelUpController> levelUpControllerProvider;
-    @Inject
-    Provider<EncounterOpponentController> encounterOpponentControllerProvider;
     private EncounterOpponentController enemy1Controller;
     private EncounterOpponentController enemy2Controller;
     private EncounterOpponentController ownTrainerController;
@@ -375,14 +373,22 @@ public class EncounterController extends Controller {
         }
     }
 
-    private void targetOpponent(Opponent opponent) {
+    public void targetOpponent(Opponent opponent) {
+        System.out.println("targetOpponent in EncounterController");
         encounterOpponentStorage.setTargetOpponent(opponent);
-        if (encounterOpponentStorage.getTargetOpponent() != opponent
-                && encounterOpponentControllerHashMap.containsKey(opponent._id())
-                && encounterOpponentControllerHashMap.get(opponent._id()).isMultipleEnemyEncounter
-        ) {
-            onTargetChange();
+        if (encounterOpponentStorage.getLeastTargetOpponent() == null){
+            if (encounterOpponentControllerHashMap.containsKey(opponent._id())) {
+                encounterOpponentControllerHashMap.get(opponent._id()).onTarget();
+            }
+        } else {
+            if (encounterOpponentStorage.getLeastTargetOpponent() != opponent
+                    && encounterOpponentControllerHashMap.containsKey(opponent._id())
+                    && encounterOpponentControllerHashMap.get(opponent._id()).isMultipleEnemyEncounter
+            ) {
+                onTargetChange();
+            }
         }
+
     }
 
     // Hier soll allen Serveranfragen kommen
@@ -545,12 +551,12 @@ public class EncounterController extends Controller {
                         if(o.isAttacker() == encounterOpponentStorage.isAttacker()){
                             if(o.trainer().equals(trainerId)){
                                 encounterOpponentStorage.setSelfOpponent(o);
-                                ownTrainerController = encounterOpponentControllerProvider.get();
+                                ownTrainerController = new EncounterOpponentController();
                                 ownTrainerController.init(o, false, false, true, false, encounterOpponentStorage.isTwoMonster(), this);
                                 encounterOpponentControllerHashMap.put(o._id(), ownTrainerController);
                             } else {
                                 encounterOpponentStorage.setCoopOpponent(o);
-                                coopTrainerController = encounterOpponentControllerProvider.get();
+                                coopTrainerController = new EncounterOpponentController();
                                 coopTrainerController.init(o, false, false, false, false, encounterOpponentStorage.isTwoMonster(), this);
                                 encounterOpponentControllerHashMap.put(o._id(), coopTrainerController);
                             }

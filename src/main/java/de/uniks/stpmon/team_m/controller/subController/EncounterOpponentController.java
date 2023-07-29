@@ -27,8 +27,6 @@ public class EncounterOpponentController extends Controller {
     private Boolean isWild;
     private Boolean invertX;
     public Boolean isMultipleEnemyEncounter;
-    @Inject
-    EncounterOpponentStorage encounterOpponentStorage;
     public Boolean isTargeted = false;
     private Boolean isSelf;
     private Opponent currentOpponent;
@@ -84,7 +82,6 @@ public class EncounterOpponentController extends Controller {
     public Runnable onTargetChange;
     EncounterController encounterController;
 
-    @Inject
     public EncounterOpponentController(){
     }
 
@@ -143,11 +140,10 @@ public class EncounterOpponentController extends Controller {
             opponentHBox.getChildren().add(2, monsterInfoBox);
         }
         monsterImageViewVBox.setOnMouseClicked(event -> {
-            if (isEnemy && isMultipleEnemyEncounter && onTargetChange != null) {
-                if (currentOpponent != encounterOpponentStorage.getTargetOpponent()) {
-                       encounterOpponentStorage.setTargetOpponent(currentOpponent);
-                }
-                onTargetChange.run();
+            System.out.println("Clicked on " + currentOpponent._id());
+            if (isEnemy && isMultipleEnemyEncounter) {
+                System.out.println("target Opponent in EncounterOpponentController");
+                encounterController.targetOpponent(currentOpponent);
             }
         });
 
@@ -219,9 +215,8 @@ public class EncounterOpponentController extends Controller {
 
     public EncounterOpponentController onTarget() {
         monsterNameHBox.getStyleClass().clear();
-        monsterNameHBox.getStyleClass().add("hBoxGreen");
+        monsterNameHBox.getStyleClass().add("hBoxRed");
         monsterImageViewVBox.setStyle("-fx-padding: 16px; -fx-border-color: red; -fx-border-radius: 100;");
-        encounterOpponentStorage.setTargetOpponent(this.currentOpponent);
         isTargeted = true;
         if (onTargetChange != null) {
             onTargetChange.run();
