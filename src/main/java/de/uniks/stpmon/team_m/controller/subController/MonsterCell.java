@@ -190,7 +190,7 @@ public class MonsterCell extends ListCell<Monster> {
                 removeFromTeamButton.setStyle("-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7; -fx-min-width: 150px; -fx-min-height: 50px;");
                 removeFromTeamButton.setText(resources.getString("SELECT"));
                 removeFromTeamButton.setOnAction(event -> {
-                    ingameController.useItem(item, monster);
+                    ingameController.useItem(item, monster._id());
                     if (changeMonsterListController != null) {
                         changeMonsterListController.onCloseMonsterList();
                     }

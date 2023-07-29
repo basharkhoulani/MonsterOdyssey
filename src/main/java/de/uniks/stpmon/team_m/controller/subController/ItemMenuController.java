@@ -8,6 +8,7 @@ import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import de.uniks.stpmon.team_m.service.TrainerItemsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.utils.ItemStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -24,6 +25,8 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ItemMenuController extends Controller {
     @FXML
@@ -45,6 +48,8 @@ public class ItemMenuController extends Controller {
     TrainersService trainersService;
     @Inject
     Provider<ItemDescriptionController> itemDescriptionControllerProvider;
+    @Inject
+    Provider<ItemStorage> itemStorageProvider;
 
     public VBox itemMenuBox;
     IngameController ingameController;
@@ -109,7 +114,7 @@ public class ItemMenuController extends Controller {
     }
 
     public void initItem(Item item) {
-        itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController));
+        itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider.get()));
         itemListView.getItems().add(item);
         itemListView.setFocusModel(null);
         itemListView.setSelectionModel(null);
@@ -129,6 +134,7 @@ public class ItemMenuController extends Controller {
                 .subscribe(itemTypes -> {
                     for (ItemTypeDto itemType : itemTypes) {
                         itemTypeHashMap.put(itemType.id(), itemType);
+                        trainerStorageProvider.get().getItems().stream().filter(item -> item.type() == itemType.id()).findFirst().ifPresent(relatedItem -> itemStorageProvider.get().addItemData(relatedItem, itemType, null));
                     }
 
                     if (this.inventoryType == Constants.inventoryType.buyItems) {

@@ -8,6 +8,7 @@ import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.ItemStorage;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -38,6 +39,7 @@ public class ItemCell extends ListCell<Item> {
     private final Runnable closeItemMenu;
     private final StackPane rootStackPane;
     private final IngameController ingameController;
+    private final ItemStorage itemStorage;
     private FXMLLoader loader;
     protected final CompositeDisposable disposables = new CompositeDisposable();
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
@@ -66,7 +68,9 @@ public class ItemCell extends ListCell<Item> {
                     App app,
                     Runnable closeItemMenu,
                     StackPane rootStackPane,
-                    IngameController ingameController) {
+                    IngameController ingameController,
+                    ItemStorage itemStorage
+    ) {
         this.presetsService = presetsService;
         this.itemDescriptionBox = itemDescriptionBox;
         this.itemMenuController = itemMenuController;
@@ -77,6 +81,7 @@ public class ItemCell extends ListCell<Item> {
         this.closeItemMenu = closeItemMenu;
         this.rootStackPane = rootStackPane;
         this.ingameController = ingameController;
+        this.itemStorage = itemStorage;
     }
 
     public void updateItem(Item item, boolean empty) {
@@ -95,16 +100,23 @@ public class ItemCell extends ListCell<Item> {
                 this.itemImage = itemMenuController.itemImageHashMap.get(item.type());
                 itemImageView.setImage(this.itemImage);
             } else {
-                disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)
-                        .subscribe(itemImageResBody -> {
-                            Image itemImage = ImageProcessor.resonseBodyToJavaFXImage(itemImageResBody);
-                            itemMenuController.itemImageHashMap.put(item.type(), itemImage);
-                            this.itemImage = itemImage;
-                            itemImageView.setImage(this.itemImage);
-                        }, error -> {
-                            itemMenuController.showError(error.getMessage());
-                            error.printStackTrace();
-                        }));
+                if (itemStorage.getItemData(item._id()) != null && itemStorage.getItemData(item._id()).getItemImage() != null) {
+                    itemImageView.setImage(itemStorage.getItemData(item._id()).getItemImage());
+                    this.itemImage = itemStorage.getItemData(item._id()).getItemImage();
+                }
+                else {
+                    disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)
+                            .subscribe(itemImageResBody -> {
+                                Image itemImage = ImageProcessor.resonseBodyToJavaFXImage(itemImageResBody);
+                                itemMenuController.itemImageHashMap.put(item.type(), itemImage);
+                                this.itemImage = itemImage;
+                                itemImageView.setImage(itemImage);
+                                itemStorage.updateItemData(item, null, itemImage);
+                            }, error -> {
+                                itemMenuController.showError(error.getMessage());
+                                error.printStackTrace();
+                            }));
+                }
             }
 
             itemHBox.setOnMouseClicked(event -> {

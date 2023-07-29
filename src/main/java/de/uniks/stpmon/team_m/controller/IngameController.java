@@ -122,6 +122,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<ItemMenuController> itemMenuControllerProvider;
     @Inject
+    Provider<ItemStorage> itemStorageProvider;
+    @Inject
     AreasService areasService;
     @Inject
     PresetsService presetsService;
@@ -208,6 +210,9 @@ public class IngameController extends Controller {
     private Timeline loadingScreenAnimation;
     private VBox itemMenuBox;
     private boolean inCoinsEarnedInfoBox = false;
+    private ReceiveObjectController receiveObjectController;
+    private ObservableList<Item> items = FXCollections.observableArrayList();
+    private ObservableList<Monster> monsters = FXCollections.observableArrayList();
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -290,7 +295,6 @@ public class IngameController extends Controller {
                         trainerStorageProvider.get().getTrainer()._id(),
                         null
                 ).observeOn(FX_SCHEDULER).subscribe(trainerStorageProvider.get()::setItems));
-
     }
 
     private void checkMovement(int x, int y, int direction) {
@@ -342,6 +346,8 @@ public class IngameController extends Controller {
         trainerStorageProvider.get().setY(trainerStorageProvider.get().getTrainer().y());
         trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());
         listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
+        listenToMonsters(monsters, trainerStorageProvider.get().getTrainer()._id());
+        listenToItems(items, trainerStorageProvider.get().getTrainer()._id());
         app.getStage().widthProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.doubleValue() < MINIMUM_WIDTH) {
                 anchorPane.setMinWidth(MINIMUM_WIDTH - OFFSET_WIDTH_HEIGHT);
@@ -523,6 +529,85 @@ public class IngameController extends Controller {
                     error.printStackTrace();
                 }
         ));
+    }
+
+    private void createItemReceivedPopUp(Item item) {
+        if (itemStorageProvider.get().getItemData(item._id()) != null) {
+            final ItemData itemData = itemStorageProvider.get().getItemData(item._id());
+            receiveObjectController = new ReceiveObjectController(itemData.getItem(), itemData.getItemTypeDto(), itemData.getItemImage(), resources, this::removeItemReceivedPopUp);
+            getRoot().getChildren().add(receiveObjectController.render());
+        }
+        else {
+            disposables.add(presetsService.getItem(item.type()).observeOn(FX_SCHEDULER).subscribe(
+                    itemTypeDto -> {
+                        disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
+                                image -> {
+                                    itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image));
+                                    receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image), resources, this::removeItemReceivedPopUp);
+                                    root.getChildren().add(receiveObjectController.render());
+                                },
+                                error -> {
+                                    showError(error.getMessage());
+                                    error.printStackTrace();
+                                }));
+                    },
+                    error -> {
+                        showError(error.getMessage());
+                        error.printStackTrace();
+                    }));
+        }
+
+    }
+
+    private void removeItemReceivedPopUp() {
+        getRoot().getChildren().remove(receiveObjectController.receiveObjectRootVBox);
+    }
+
+    public void listenToMonsters(ObservableList<Monster> monsters, String trainerId) {
+        disposables.add(eventListenerProvider.get().listen("trainers." + trainerId + ".monsters.*.*", Monster.class)
+                .observeOn(FX_SCHEDULER).subscribe(event -> {
+                    Monster monster = event.data();
+                    switch (event.suffix()) {
+                        case "created" -> {
+                            System.out.println("Monster received: " + monster);
+                            monsters.add(monster);
+                        }
+                        case "updated" -> {
+                            System.out.println("Monster updated: " + monster);
+                        }
+                        case "deleted" -> {
+                            System.out.println("Monster deleted: " + monster);
+                        }
+                    }
+
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
+    }
+
+    public void listenToItems(ObservableList<Item> items, String trainerId) {
+        disposables.add(eventListenerProvider.get().listen("trainers." + trainerId + ".items.*.*", Item.class)
+                .observeOn(FX_SCHEDULER).subscribe(event -> {
+                    Item item = event.data();
+                    switch (event.suffix()) {
+                        case "created" -> {
+                            System.out.println("Item received: " + item);
+                            items.add(item);
+                            createItemReceivedPopUp(item);
+                        }
+                        case "updated" -> {
+                            System.out.println("Item updated: " + item);
+                        }
+                        case "deleted" -> {
+                            System.out.println("Item deleted: " + item);
+                        }
+                    }
+
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
     }
 
     public void listenToMovement(ObservableList<MoveTrainerDto> moveTrainerDtos, String area) {
@@ -1007,18 +1092,22 @@ public class IngameController extends Controller {
         inSettings = false;
     }
 
-    public void useItem(Item item, Monster monster) {
+    public void useItem(Item item, String monsterId) {
         disposables.add(trainerItemsService.useOrTradeItem(
                 trainerStorageProvider.get().getRegion()._id(),
                 trainerStorageProvider.get().getTrainer()._id(),
                 ITEM_ACTION_USE_ITEM,
-                new UpdateItemDto(1, item.type(), monster._id())
+                new UpdateItemDto(1, item.type(), monsterId)
         ).observeOn(FX_SCHEDULER).subscribe(
                 result -> trainerStorageProvider.get().updateItem(result),
                 error -> {
                     showError(error.getMessage());
                     error.printStackTrace();
                 }));
+    }
+
+    public Trainer getTrainer() {
+        return trainerStorageProvider.get().getTrainer();
     }
 
     public void buttonsDisable(Boolean set) {
@@ -1152,6 +1241,7 @@ public class IngameController extends Controller {
                         case "updated" -> {
                             updateTrainer(trainers, trainer);
                             if (trainerStorageProvider.get().getTrainer()._id().equals(trainer._id())) {
+                                System.out.println("Updated trainer: " + trainer);
                                 trainerStorageProvider.get().setTrainer(trainer);
                             }
                             // albert

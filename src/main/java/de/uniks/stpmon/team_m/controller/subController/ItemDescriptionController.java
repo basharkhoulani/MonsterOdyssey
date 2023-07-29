@@ -6,6 +6,7 @@ import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -19,11 +20,11 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
 
-import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxHeight;
-import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxWidth;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class ItemDescriptionController extends Controller {
 
@@ -84,15 +85,19 @@ public class ItemDescriptionController extends Controller {
         Text description = new Text(itemTypeDto.description());
         itemDescription.getChildren().add(description);
 
-        if (itemTypeDto.use() == null) {
+        if (itemTypeDto.use() == null || itemTypeDto.use().equals(Constants.ITEM_USAGE_BALL)) {
             useButton.setVisible(false);
             useButton.setDisable(true);
         }
+        else if (item.amount() == 0) {
+            useButton.setDisable(true);
+        }
         useButton.setOnAction(evt -> {
-            if (itemTypeDto.use().equals(Constants.ITEM_USAGE_EFFECT)) {
-                showMonsterList(item);
-                closeItemMenu.run();
+            switch (itemTypeDto.use()) {
+                case ITEM_USAGE_EFFECT -> showMonsterList(item);
+                case ITEM_USAGE_ITEM_BOX, ITEM_USAGE_MONSTER_BOX -> ingameController.useItem(item, null);
             }
+            closeItemMenu.run();
         });
 
         switch (this.inventoryType) {
