@@ -1428,10 +1428,24 @@ public class IngameController extends Controller {
                             this
                     );
                 } else {
-                    TextFlow textFlow = createDialogVBox(false);
-                    textFlow.getChildren().add(new Text(resources.getString("WANT.TO.FIGHT")));
+                    disposables.add(encounterOpponentsService.getTrainerOpponents(currentNpc.region(),currentNpc._id())
+                            .observeOn(FX_SCHEDULER).subscribe(opponents -> {
+                                if (opponents.size() == 2) {
+                                    for (Opponent opponent : opponents){
+                                        if (opponent.move() != null || opponent.results().size() != 0){
+                                            TextFlow textFlow = createDialogVBox(false);
+                                            textFlow.getChildren().add(new Text(resources.getString("WANT.TO.FIGHT")));
+                                            return;
+                                        }
+                                    }
+                                    showOtherTrainerInEncounterInfo();
+                                }
+                                else {
+                                    TextFlow textFlow = createDialogVBox(false);
+                                    textFlow.getChildren().add(new Text(resources.getString("WANT.TO.FIGHT")));
+                                }
+                            }));
                 }
-
             }
         }
     }
