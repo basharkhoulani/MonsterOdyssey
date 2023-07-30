@@ -416,7 +416,6 @@ public class IngameController extends Controller {
             coinsImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(COIN)).toString()));
         }
 
-        checkForFirstMessages();
 
         // Add event handlers
         app.getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
@@ -478,30 +477,6 @@ public class IngameController extends Controller {
         }
         showCoins();
         return parent;
-    }
-
-    private void checkForFirstMessages() {
-        disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER).subscribe(
-                trainer -> {
-                    Instant now = Instant.now();
-                    Instant createdTime = Instant.parse(trainer.createdAt());
-                    long elapsedTime = java.time.Duration.between(createdTime, now).getSeconds();
-                    if (elapsedTime < 20) {
-                        preferences.putBoolean("firstEntry", true);
-                        preferences.putBoolean("starterMessages", false);
-                    }
-
-                    if (preferences.getBoolean("firstEntry", true)) {
-                        this.notificationListHandyController.displayFirstTimeNotifications(true);
-                        notificationBell.setVisible(true);
-                        preferences.putBoolean("firstEntry", false);
-                    }
-                },
-                error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }
-        ));
     }
 
     private void initMapShiftTransitions() {
@@ -995,9 +970,22 @@ public class IngameController extends Controller {
      */
 
     public void showHelp() {
-        if (!preferences.getBoolean("starterMessages", false)) {
+        boolean firstEntry = preferences.getBoolean("firstEntry", true);
+        boolean starterMessages = preferences.getBoolean("starterMessages", false);
+        boolean lowHealth = preferences.getBoolean("lowHealth", false);
+
+        if (firstEntry && !starterMessages) {
             this.notificationListHandyController.handyMessages.clear();
             this.notificationListHandyController.displayFirstTimeNotifications(false);
+        } else if (starterMessages) {
+            preferences.putBoolean("firstEntry", false);
+            this.notificationListHandyController.handyMessages.clear();
+            this.notificationListHandyController.displayStarterMessages();
+        } else if (lowHealth) {
+            preferences.putBoolean("starterMessages", false);
+            preferences.putBoolean("firstEntry", false);
+            this.notificationListHandyController.handyMessages.clear();
+            this.notificationListHandyController.displayLowHealthMessages();
         }
         smallHandyButton.setVisible(false);
         notificationBell.setVisible(false);
@@ -1970,8 +1958,8 @@ public class IngameController extends Controller {
     }
 
     public void showLowHealthNotification() {
+        preferences.putBoolean("lowHealth", true);
         notificationBell.setVisible(true);
-        this.notificationListHandyController.displayLowHealthMessages();
     }
 
     public void specificSounds() {
