@@ -183,7 +183,7 @@ public class IngameMapRenderTest extends ApplicationTest {
         Message message = new Message("2023-05-30T12:01:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863",
                 "6475e595ac3946b6a812d868", "Test1");
         when(eventListener.get().listen("regions.646bab5cecf584e1be02598a.messages.*.*", Message.class)).thenReturn(just(
-                new Event<>("regions.646bab5cecf584e1be02598a.messages.6475e595ac3946b6a812d863.created", message)
+                new Event<>("regions.646bab5cecf584e1be02598a.messages.6475e595ac3946b6a812d863.updated", message)
         ));
         when(trainerItemsService.getItems(any(), any(), any())).thenReturn(
                 Observable.just(List.of(new Item("98759283759023874653", "Travis", 2, 2)))
@@ -421,7 +421,7 @@ public class IngameMapRenderTest extends ApplicationTest {
                 minimap
         )));
         when(eventListener.get().listen("regions." + trainerStorageProvider.get().getRegion()._id() + ".trainers.*.*", Trainer.class)).thenReturn(just(
-                new Event<>("regions.646bab5cecf584e1be02598a.trainers.6475e595ac3946b6a812d865.created", trainer)));
+                new Event<>("regions.646bab5cecf584e1be02598a.trainers.6475e595ac3946b6a812d865.updated", trainer)));
 
         when(encounterOpponentsService.getEncounterOpponents(any(), any())).thenReturn(Observable.just(List.of(new Opponent(
                 "2023-05-30T12:02:57.510Z",
