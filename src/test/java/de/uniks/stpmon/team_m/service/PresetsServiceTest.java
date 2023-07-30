@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.service;
 
 import de.uniks.stpmon.team_m.dto.AbilityDto;
+import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.dto.TileSet;
 import de.uniks.stpmon.team_m.rest.PresetsApiService;
@@ -178,5 +179,61 @@ public class PresetsServiceTest {
         TileSet tileSet = presetsService.getTileset("tileset").blockingFirst();
         assertNotNull(tileSet);
         verify(presetsApiService).getTileset("tileset.json");
+    }
+
+    @Test
+    void getItemsTest() {
+        when(presetsApiService.getItems()).thenReturn(Observable.just(List.of(
+                new ItemTypeDto(
+                        1,
+                        "Potion.png",
+                        "Potion",
+                        10,
+                        "A potion. It's red.",
+                        "effect"
+
+                ), new ItemTypeDto(
+                        2,
+                        "Elixir.png",
+                        "Elixir",
+                        20,
+                        "An elixir. It's blue.",
+                        "effect"
+                ))));
+        final List<ItemTypeDto> items = presetsService.getItems().blockingFirst();
+        assertNotNull(items);
+        assertEquals(2, items.size());
+        verify(presetsApiService).getItems();
+    }
+
+    @Test
+    void getItemTest() {
+        when(presetsApiService.getItem(1)).thenReturn(Observable.just(
+                new ItemTypeDto(
+                        1,
+                        "Potion.png",
+                        "Potion",
+                        10,
+                        "A potion. It's red.",
+                        "effect"
+                )
+        ));
+        final ItemTypeDto item = presetsService.getItem(1).blockingFirst();
+        assertNotNull(item);
+        assertEquals(1, item.id());
+        assertEquals("Potion.png", item.image());
+        assertEquals("Potion", item.name());
+        assertEquals(10, item.price());
+        assertEquals("A potion. It's red.", item.description());
+        assertEquals("effect", item.use());
+        verify(presetsApiService).getItem(1);
+    }
+
+    @Test
+    void getItemImageTest() {
+        when(presetsApiService.getItemImage(2)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
+        final ResponseBody responseBody = presetsService.getItemImage(2).blockingFirst();
+        assertNotNull(responseBody);
+        verify(presetsApiService).getItemImage(2);
     }
 }
