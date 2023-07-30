@@ -572,6 +572,38 @@ public class IngameControllerTest extends ApplicationTest {
     }
 
     @Test
+    void testTalkDirection2() {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(19);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(2);
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("dialogStackPane", node.getId());
+    }
+
+    @Test
+    void testTalkDirection3() {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(19);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(3);
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("dialogStackPane", node.getId());
+    }
+
+    @Test
     void testNurseDialogWithNoMons() throws InterruptedException {
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(20);
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(20);    // two tiles apart from Nurse
@@ -896,9 +928,6 @@ public class IngameControllerTest extends ApplicationTest {
 
         final VBox starterSelectionVBox = lookup("#starterSelectionVBox").query();
         assertNotNull(starterSelectionVBox);
-
-        final Label starterSelectionLabel0 = lookup("#starterSelectionLabel").query();
-        final String starterSelectionLabelText0 = starterSelectionLabel0.getText();
 
         clickOn("#starterSelectionOkButton");
         clickOn("#starterSelectionOkButton");
