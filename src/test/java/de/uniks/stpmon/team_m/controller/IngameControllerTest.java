@@ -41,7 +41,6 @@ import static io.reactivex.rxjava3.core.Observable.empty;
 import static io.reactivex.rxjava3.core.Observable.just;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class IngameControllerTest extends ApplicationTest {
