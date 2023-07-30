@@ -982,6 +982,21 @@ public class IngameControllerTest extends ApplicationTest {
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(102);
         Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
 
+        ItemMenuController itemMenuController = mock(ItemMenuController.class);
+        when(itemMenuControllerProvider.get()).thenReturn(itemMenuController);
+        doNothing().when(itemMenuController).init(any(), any(), any(), any(), any(), any(), any());
+
+        Button close = new Button("Close");
+        close.setOnAction(event -> {
+            StackPane stackPane = lookup("#stackPane").query();
+            VBox itemMenuBox = lookup("#itemMenuBox").query();
+            stackPane.getChildren().remove(stackPane.getChildren().size() - 1);
+            itemMenuBox.setVisible(false);
+            itemMenuBox.toBack();
+            ingameController.buttonsDisable(false);
+        });
+        when(itemMenuController.render()).thenReturn(close);
+
         press(KeyCode.E);
         release(KeyCode.E);
         Thread.sleep(30);
@@ -1003,6 +1018,37 @@ public class IngameControllerTest extends ApplicationTest {
         press(KeyCode.E);
         release(KeyCode.E);
         Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        clickOn("Buy");
+        clickOn(close);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        clickOn("Sell");
+        clickOn(close);
+
     }
 
 
