@@ -491,7 +491,7 @@ public class IngameController extends Controller {
                         preferences.putBoolean("starterMessages", false);
                     }
 
-                    if (preferences.getBoolean("firstEntry", true)) {
+                    if (preferences.getBoolean("firstEntry", false)) {
                         this.notificationListHandyController.displayFirstTimeNotifications(true);
                         notificationBell.setVisible(true);
                         preferences.putBoolean("firstEntry", false);
