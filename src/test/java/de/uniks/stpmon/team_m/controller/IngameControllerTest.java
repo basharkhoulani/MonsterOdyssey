@@ -1164,5 +1164,27 @@ public class IngameControllerTest extends ApplicationTest {
 
     }
 
+    @Test
+    void testgetUserTrainerY() {
+        when(ingameController.getUserTrainerY()).thenReturn(13);
+
+        int y = ingameController.getUserTrainerY();
+        assertEquals(13, y);
+
+    }
+
+    @Test
+    void testCoinsEarned() {
+        ingameController.setCoinsEarned(true);
+        assertTrue(ingameController.getCoinsEarned());
+
+    }
+
+    @Test
+    void CoinsAmount() {
+        ingameController.setCoinsAmount(100);
+        assertEquals(100, ingameController.getCoinsAmount());
+    }
+
 
 }
