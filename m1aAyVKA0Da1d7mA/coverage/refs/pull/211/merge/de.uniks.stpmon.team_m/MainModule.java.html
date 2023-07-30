@@ -13,21 +13,21 @@ import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 @Module
-<span class="nc" id="L16">public class MainModule {</span>
+<span class="fc" id="L16">public class MainModule {</span>
 
     @Provides
     ResourceBundle bundle(Preferences preferences){
-<span class="nc" id="L20">        final String locale = preferences.get(&quot;locale&quot;, Locale.ENGLISH.toLanguageTag());</span>
-<span class="nc" id="L21">        return ResourceBundle.getBundle(&quot;de/uniks/stpmon/team_m/lang/lang&quot;, Locale.forLanguageTag(locale));</span>
+<span class="fc" id="L20">        final String locale = preferences.get(&quot;locale&quot;, Locale.ENGLISH.toLanguageTag());</span>
+<span class="fc" id="L21">        return ResourceBundle.getBundle(&quot;de/uniks/stpmon/team_m/lang/lang&quot;, Locale.forLanguageTag(locale));</span>
     }
 
     @Provides
     @Singleton
     ObjectMapper mapper() {
-<span class="nc" id="L27">        return new ObjectMapper()</span>
-<span class="nc" id="L28">                .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)</span>
-<span class="nc" id="L29">                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)</span>
-<span class="nc" id="L30">                .setSerializationInclusion(JsonInclude.Include.NON_ABSENT);</span>
+<span class="fc" id="L27">        return new ObjectMapper()</span>
+<span class="fc" id="L28">                .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)</span>
+<span class="fc" id="L29">                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)</span>
+<span class="fc" id="L30">                .setSerializationInclusion(JsonInclude.Include.NON_ABSENT);</span>
     }
 
     @Provides

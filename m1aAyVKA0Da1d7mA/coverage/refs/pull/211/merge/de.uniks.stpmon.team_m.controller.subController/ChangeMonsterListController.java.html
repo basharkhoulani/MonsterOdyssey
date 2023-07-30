@@ -61,23 +61,22 @@ public class ChangeMonsterListController extends Controller {
 <span class="nc" id="L61">        final Parent parent = super.render();</span>
 <span class="nc" id="L62">        disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)</span>
 <span class="nc" id="L63">                .subscribe(list -&gt; {</span>
-                    // TODO: change Monster filtern
-<span class="nc" id="L65">                    activeMonstersList = list.stream()</span>
-<span class="nc bnc" id="L66" title="All 4 branches missed.">                            .filter(monster -&gt; trainerStorageProvider.get().getTrainer().team().contains(monster._id()) &amp;&amp; !Objects.equals(monster</span>
-<span class="nc" id="L67">                                    ._id(), encounterOpponentStorageProvider.get().getSelfOpponent().monster())</span>
-<span class="nc bnc" id="L68" title="All 4 branches missed.">                                    &amp;&amp; !(encounterOpponentStorageProvider.get().isTwoMonster() &amp;&amp; Objects.equals(monster._id(), encounterOpponentStorageProvider.get().getCoopOpponent().monster()))</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">                                    &amp;&amp; monster.currentAttributes().health() &gt; 0)</span>
-<span class="nc" id="L70">                            .collect(Collectors.toList());</span>
-<span class="nc" id="L71">                    initMonsterList(activeMonstersList);</span>
-<span class="nc" id="L72">                }, throwable -&gt; showError(throwable.getMessage())));</span>
-<span class="nc" id="L73">        return parent;</span>
+<span class="nc" id="L64">                    activeMonstersList = list.stream()</span>
+<span class="nc bnc" id="L65" title="All 4 branches missed.">                            .filter(monster -&gt; trainerStorageProvider.get().getTrainer().team().contains(monster._id()) &amp;&amp; !Objects.equals(monster</span>
+<span class="nc" id="L66">                                    ._id(), encounterOpponentStorageProvider.get().getSelfOpponent().monster())</span>
+<span class="nc bnc" id="L67" title="All 4 branches missed.">                                    &amp;&amp; !(encounterOpponentStorageProvider.get().isTwoMonster() &amp;&amp; Objects.equals(monster._id(), encounterOpponentStorageProvider.get().getCoopOpponent().monster()))</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">                                    &amp;&amp; monster.currentAttributes().health() &gt; 0)</span>
+<span class="nc" id="L69">                            .collect(Collectors.toList());</span>
+<span class="nc" id="L70">                    initMonsterList(activeMonstersList);</span>
+<span class="nc" id="L71">                }, throwable -&gt; showError(throwable.getMessage())));</span>
+<span class="nc" id="L72">        return parent;</span>
     }
 
     private void initMonsterList(List&lt;Monster&gt; monsters) {
-<span class="nc" id="L77">        changeMonsterListView.setCellFactory(param -&gt;</span>
-<span class="nc" id="L78">                new MonsterCell(</span>
+<span class="nc" id="L76">        changeMonsterListView.setCellFactory(param -&gt;</span>
+<span class="nc" id="L77">                new MonsterCell(</span>
                         resources,
-<span class="nc" id="L80">                        presetsServiceProvider.get(),</span>
+<span class="nc" id="L79">                        presetsServiceProvider.get(),</span>
                         null,
                         this,
                         this.encounterController,
@@ -85,13 +84,13 @@ public class ChangeMonsterListController extends Controller {
                         false,
                         null
                 ));
-<span class="nc" id="L88">        changeMonsterListView.getItems().addAll(monsters);</span>
-<span class="nc" id="L89">        changeMonsterListView.setFocusModel(null);</span>
-<span class="nc" id="L90">        changeMonsterListView.setSelectionModel(null);</span>
-<span class="nc" id="L91">    }</span>
+<span class="nc" id="L87">        changeMonsterListView.getItems().addAll(monsters);</span>
+<span class="nc" id="L88">        changeMonsterListView.setFocusModel(null);</span>
+<span class="nc" id="L89">        changeMonsterListView.setSelectionModel(null);</span>
+<span class="nc" id="L90">    }</span>
 
     public void onCloseMonsterList() {
-<span class="nc" id="L94">        encounterController.rootStackPane.getChildren().remove(monsterListVBox);</span>
-<span class="nc" id="L95">    }</span>
+<span class="nc" id="L93">        encounterController.rootStackPane.getChildren().remove(monsterListVBox);</span>
+<span class="nc" id="L94">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

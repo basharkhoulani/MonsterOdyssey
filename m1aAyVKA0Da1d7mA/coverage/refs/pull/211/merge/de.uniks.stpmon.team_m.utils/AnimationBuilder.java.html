@@ -24,33 +24,33 @@ import static de.uniks.stpmon.team_m.Constants.TRAINER_DIRECTION_DOWN;
      * @return : The sequential transition
      */
     public static SequentialTransition buildFleeAnimation(Image trainerChunk, EncounterOpponentController ownTrainerController) {
-<span class="fc" id="L27">        SequentialTransition transition = new SequentialTransition();</span>
-<span class="fc" id="L28">        var ref = new Object() {</span>
-<span class="fc" id="L29">            int currentImageIndex = 0;</span>
+<span class="nc" id="L27">        SequentialTransition transition = new SequentialTransition();</span>
+<span class="nc" id="L28">        var ref = new Object() {</span>
+<span class="nc" id="L29">            int currentImageIndex = 0;</span>
         };
 
-<span class="fc" id="L32">        Image[] images = ImageProcessor.cropTrainerImages(trainerChunk, TRAINER_DIRECTION_DOWN, true);</span>
+<span class="nc" id="L32">        Image[] images = ImageProcessor.cropTrainerImages(trainerChunk, TRAINER_DIRECTION_DOWN, true);</span>
 
-<span class="fc" id="L34">        KeyFrame animationFrame = new KeyFrame(Duration.millis(Constants.DELAY), event -&gt; {</span>
-<span class="fc" id="L35">            ownTrainerController.setTrainerImage(images[ref.currentImageIndex]);</span>
-<span class="fc" id="L36">            ref.currentImageIndex = (ref.currentImageIndex + 1) % 6;</span>
-<span class="fc" id="L37">        });</span>
+<span class="nc" id="L34">        KeyFrame animationFrame = new KeyFrame(Duration.millis(Constants.DELAY), event -&gt; {</span>
+<span class="nc" id="L35">            ownTrainerController.setTrainerImage(images[ref.currentImageIndex]);</span>
+<span class="nc" id="L36">            ref.currentImageIndex = (ref.currentImageIndex + 1) % 6;</span>
+<span class="nc" id="L37">        });</span>
 
-<span class="fc" id="L39">        KeyFrame movementFrame = new KeyFrame(Duration.millis(Constants.DELAY), evt -&gt; {</span>
-<span class="fc" id="L40">            TranslateTransition translateTransition = new TranslateTransition();</span>
-<span class="fc" id="L41">            translateTransition.setNode(ownTrainerController.trainerMonsterVBox);</span>
-<span class="fc" id="L42">            translateTransition.setByY(16);</span>
-<span class="fc" id="L43">            translateTransition.setDuration(Duration.millis(Constants.DELAY));</span>
-<span class="fc" id="L44">            translateTransition.setCycleCount(1);</span>
-<span class="fc" id="L45">            translateTransition.play();</span>
-<span class="fc" id="L46">        });</span>
-<span class="fc bfc" id="L47" title="All 2 branches covered.">        for (int i = 0; i &lt; 12; i++) {</span>
-<span class="fc" id="L48">            Timeline fleeAnimation = new Timeline(animationFrame);</span>
-<span class="fc" id="L49">            Timeline trainerMovement = new Timeline(movementFrame);</span>
-<span class="fc" id="L50">            ParallelTransition parallelTransition = new ParallelTransition(fleeAnimation, trainerMovement);</span>
-<span class="fc" id="L51">            transition.getChildren().add(parallelTransition);</span>
+<span class="nc" id="L39">        KeyFrame movementFrame = new KeyFrame(Duration.millis(Constants.DELAY), evt -&gt; {</span>
+<span class="nc" id="L40">            TranslateTransition translateTransition = new TranslateTransition();</span>
+<span class="nc" id="L41">            translateTransition.setNode(ownTrainerController.trainerMonsterVBox);</span>
+<span class="nc" id="L42">            translateTransition.setByY(16);</span>
+<span class="nc" id="L43">            translateTransition.setDuration(Duration.millis(Constants.DELAY));</span>
+<span class="nc" id="L44">            translateTransition.setCycleCount(1);</span>
+<span class="nc" id="L45">            translateTransition.play();</span>
+<span class="nc" id="L46">        });</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        for (int i = 0; i &lt; 12; i++) {</span>
+<span class="nc" id="L48">            Timeline fleeAnimation = new Timeline(animationFrame);</span>
+<span class="nc" id="L49">            Timeline trainerMovement = new Timeline(movementFrame);</span>
+<span class="nc" id="L50">            ParallelTransition parallelTransition = new ParallelTransition(fleeAnimation, trainerMovement);</span>
+<span class="nc" id="L51">            transition.getChildren().add(parallelTransition);</span>
         }
-<span class="fc" id="L53">        return transition;</span>
+<span class="nc" id="L53">        return transition;</span>
     }
 
     /**
