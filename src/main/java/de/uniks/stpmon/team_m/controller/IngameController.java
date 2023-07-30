@@ -488,27 +488,21 @@ public class IngameController extends Controller {
     }
 
     private void checkForFirstMessages() {
-        disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER).subscribe(
-                trainer -> {
-                    Instant now = Instant.now();
-                    Instant createdTime = Instant.parse(trainer.createdAt());
-                    long elapsedTime = java.time.Duration.between(createdTime, now).getSeconds();
-                    if (elapsedTime < 20) {
-                        preferences.putBoolean("firstEntry", true);
-                        preferences.putBoolean("starterMessages", false);
-                    }
+        Trainer trainer = trainerStorageProvider.get().getTrainer();
+        Instant now = Instant.now();
+        Instant createdTime = Instant.parse(trainer.createdAt());
+        long elapsedTime = java.time.Duration.between(createdTime, now).getSeconds();
+        if (elapsedTime < 20) {
+            preferences.putBoolean("firstEntry", true);
+            preferences.putBoolean("starterMessages", false);
+        }
 
-                    if (preferences.getBoolean("firstEntry", false)) {
-                        this.notificationListHandyController.displayFirstTimeNotifications(true);
-                        notificationBell.setVisible(true);
-                        preferences.putBoolean("firstEntry", false);
-                    }
-                },
-                error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }
-        ));
+        if (preferences.getBoolean("firstEntry", false)) {
+            this.notificationListHandyController.displayFirstTimeNotifications(true);
+            notificationBell.setVisible(true);
+            preferences.putBoolean("firstEntry", false);
+        }
+
     }
 
     private void initMapShiftTransitions() {
