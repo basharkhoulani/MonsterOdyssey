@@ -4,7 +4,6 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.dto.Opponent;
-import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -16,7 +15,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import javax.inject.Inject;
 import java.awt.*;
 import java.util.Objects;
 
@@ -27,8 +25,6 @@ public class EncounterOpponentController extends Controller {
     private Boolean isWild;
     private Boolean invertX;
     public Boolean isMultipleEnemyEncounter;
-    @Inject
-    EncounterOpponentStorage encounterOpponentStorage;
     public Boolean isTargeted = false;
     private Boolean isSelf;
     private Opponent currentOpponent;
@@ -84,7 +80,6 @@ public class EncounterOpponentController extends Controller {
     public Runnable onTargetChange;
     EncounterController encounterController;
 
-    @Inject
     public EncounterOpponentController(){
     }
 
@@ -143,11 +138,8 @@ public class EncounterOpponentController extends Controller {
             opponentHBox.getChildren().add(2, monsterInfoBox);
         }
         monsterImageViewVBox.setOnMouseClicked(event -> {
-            if (isEnemy && isMultipleEnemyEncounter && onTargetChange != null) {
-                if (currentOpponent != encounterOpponentStorage.getTargetOpponent()) {
-                       encounterOpponentStorage.setTargetOpponent(currentOpponent);
-                }
-                onTargetChange.run();
+            if (isEnemy && isMultipleEnemyEncounter) {
+                encounterController.targetOpponent(currentOpponent);
             }
         });
 
@@ -155,9 +147,7 @@ public class EncounterOpponentController extends Controller {
             currentMonsterButton.setVisible(false);
             currentMonsterButton.setDisable(true);
         } else {
-            currentMonsterButton.setOnAction(event -> {
-                showMonsterInformation(currentOpponent, this);
-            });
+            currentMonsterButton.setOnAction(event -> showMonsterInformation(currentOpponent, this));
             if (!invertX){
                 trainerImageView.setDisable(true);
                 trainerImageView.setVisible(false);
@@ -221,9 +211,8 @@ public class EncounterOpponentController extends Controller {
 
     public EncounterOpponentController onTarget() {
         monsterNameHBox.getStyleClass().clear();
-        monsterNameHBox.getStyleClass().add("hBoxGreen");
+        monsterNameHBox.getStyleClass().add("hBoxRed");
         monsterImageViewVBox.setStyle("-fx-padding: 16px; -fx-border-color: red; -fx-border-radius: 100;");
-        encounterOpponentStorage.setTargetOpponent(this.currentOpponent);
         isTargeted = true;
         if (onTargetChange != null) {
             onTargetChange.run();

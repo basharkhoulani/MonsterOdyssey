@@ -209,6 +209,7 @@ public class IngameController extends Controller {
     private Timeline loadingScreenAnimation;
     private VBox itemMenuBox;
     private boolean inCoinsEarnedInfoBox = false;
+    private boolean inJoinEncounterInfoBox = false;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -226,7 +227,7 @@ public class IngameController extends Controller {
         // Initialize key event listeners
         keyPressedHandler = event -> {
             if (event.getCode().toString().equals(preferences.get("interaction", "E"))) {
-                if (!inNpcPopup && !inEncounterInfoBox && !inCoinsEarnedInfoBox) {
+                if (!inNpcPopup && !inEncounterInfoBox && !inCoinsEarnedInfoBox && !inJoinEncounterInfoBox) {
                     interactWithTrainer();
                 } else if (inEncounterInfoBox) {
                     stackPane.getChildren().remove(dialogStackPane);
@@ -235,6 +236,9 @@ public class IngameController extends Controller {
                 } else if (inCoinsEarnedInfoBox) {
                     inCoinsEarnedInfoBox = false;
                     stackPane.getChildren().remove(dialogStackPane);
+                } else if (inJoinEncounterInfoBox){
+                    inJoinEncounterInfoBox = false;
+                    createJoinEncounterPopup();
                 }
             }
             if (event.getCode().toString().equals(preferences.get("pauseMenu", "ESCAPE"))) {
@@ -250,6 +254,9 @@ public class IngameController extends Controller {
             if (event.getCode().toString().equals(preferences.get("inventory", "I"))) {
                 if (!this.root.getChildren().contains(itemMenuBox)) {
                     showItems();
+                } else {
+                    root.getChildren().remove(itemMenuBox);
+                    buttonsDisable(false);
                 }
             }
             if (isChatting || loading || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < TRANSITION_DURATION + 25)) {
@@ -1068,6 +1075,7 @@ public class IngameController extends Controller {
             mapSymbol.setDisable(set);
             messageField.setDisable(set);
             sendMessageButton.setDisable(set);
+            coinsButton.setDisable(set);
         }
     }
 
@@ -1259,6 +1267,15 @@ public class IngameController extends Controller {
         movementDisabled = true;
     }
 
+    private void showOtherTrainerInEncounterInfo() {
+        TextFlow dialogTextFlow = createDialogVBox(true);
+        dialogTextFlow.getChildren().add(new Text(resources.getString("TRAINER.IN.ENCOUNTER")));
+        movementDisabled = true;
+        inDialog = false;
+        inEncounterInfoBox = false;
+        inJoinEncounterInfoBox = true;
+    }
+
     private void showCoinsEarnedWindow() {
         TextFlow dialogTextFlow = createDialogVBox(true);
         dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.WON") + "\n" +
@@ -1303,7 +1320,7 @@ public class IngameController extends Controller {
 
     }
 
-    private void initEncounterOpponentStorage(List<Opponent> opponents) {
+    public void initEncounterOpponentStorage(List<Opponent> opponents) {
         encounterOpponentStorage.setOpponentsInStorage(opponents);
         encounterOpponentStorage.resetEnemyOpponents();
         encounterOpponentStorage.setEncounterSize(opponents.size());
@@ -1442,10 +1459,24 @@ public class IngameController extends Controller {
                             this
                     );
                 } else {
-                    TextFlow textFlow = createDialogVBox(false);
-                    textFlow.getChildren().add(new Text(resources.getString("WANT.TO.FIGHT")));
+                    disposables.add(encounterOpponentsService.getTrainerOpponents(currentNpc.region(),currentNpc._id())
+                            .observeOn(FX_SCHEDULER).subscribe(opponents -> {
+                                if (opponents.size() == 2) {
+                                    for (Opponent opponent : opponents){
+                                        if (opponent.move() != null || opponent.results().size() != 0){
+                                            TextFlow textFlow = createDialogVBox(false);
+                                            textFlow.getChildren().add(new Text(resources.getString("WANT.TO.FIGHT")));
+                                            return;
+                                        }
+                                    }
+                                    showOtherTrainerInEncounterInfo();
+                                }
+                                else {
+                                    TextFlow textFlow = createDialogVBox(false);
+                                    textFlow.getChildren().add(new Text(resources.getString("WANT.TO.FIGHT")));
+                                }
+                            }));
                 }
-
             }
         }
     }
@@ -1630,6 +1661,68 @@ public class IngameController extends Controller {
             encounterNPC(this.currentNpc, selectionValue);
         }
     }
+    public void createJoinEncounterPopup() {
+        VBox joinEncounterVBox = new VBox();
+        joinEncounterVBox.setId("joinEncountervBox");
+        joinEncounterVBox.setMaxHeight(popupHeight);
+        joinEncounterVBox.setMaxWidth(popupWidth);
+        joinEncounterVBox.getStyleClass().add("dialogTextFlow");
+
+        TextFlow actions = new TextFlow(new Text(resources.getString("SELECT.ACTION")));
+        actions.setPrefWidth(popupWidth);
+        actions.setPrefHeight(textFieldHeight);
+        actions.setPadding(joinEncounterTextInsets);
+        actions.setTextAlignment(TextAlignment.CENTER);
+
+        VBox buttonsVBox = new VBox();
+        buttonsVBox.setMaxHeight(buttonsHBoxHeight);
+        buttonsVBox.setMaxWidth(popupWidth);
+        buttonsVBox.setAlignment(Pos.CENTER);
+        buttonsVBox.setSpacing(joinEncounterSpacing);
+        buttonsVBox.setPadding(joinEncountervBoxInsets);
+
+        //Join Encounter Button
+        Button joinEncounterButton = new Button(resources.getString("JOIN.ENCOUNTER"));
+        joinEncounterButton.getStyleClass().add("buttonsWhite");
+        joinEncounterButton.setPrefWidth(joinEncounterButtonWidth);
+        joinEncounterButton.setPrefHeight(joinEncounterButtonHeight);
+        joinEncounterButton.setOnAction(event -> {
+            this.root.getChildren().remove(joinEncounterVBox);
+            buttonsDisable(false);
+            stackPane.getChildren().remove(dialogStackPane);
+
+            String trainerID = trainerStorageProvider.get().getTrainer()._id();
+            disposables.add(udpEventListenerProvider.get().talk(
+                    this.currentNpc.area(),
+                    new TalkTrainerDto(
+                            trainerID,
+                            this.currentNpc._id(),
+                            0
+                    )
+            ).observeOn(FX_SCHEDULER).subscribe());
+        });
+
+        //Leave Button
+        Button leaveEncounterButton = new Button(resources.getString("LEAVE"));
+        leaveEncounterButton.getStyleClass().add("buttonsYellow");
+        leaveEncounterButton.setPrefWidth(joinEncounterButtonWidth);
+        leaveEncounterButton.setPrefHeight(joinEncounterButtonHeight);
+        leaveEncounterButton.setOnAction(event -> {
+            this.root.getChildren().remove(joinEncounterVBox);
+            buttonsDisable(false);
+            stackPane.getChildren().remove(dialogStackPane);
+        });
+
+        //Add Buttons to Vbox
+        buttonsVBox.getChildren().addAll(joinEncounterButton, leaveEncounterButton);
+
+        //Add Text and Vbox with Buttons to JoinEncounterVbox
+        joinEncounterVBox.getChildren().addAll(actions, buttonsVBox);
+
+        //Add Pop up to Ingame
+        root.getChildren().add(joinEncounterVBox);
+        buttonsDisable(true);
+    }
 
     public void createNurseHealPopup() {
         // base VBox
@@ -1784,7 +1877,7 @@ public class IngameController extends Controller {
         Label nameLabel = new Label();
         if (isEncounter) {
             nameLabel.setText(resources.getString("ANNOUNCEMENT"));
-        } else {
+        }else {
             nameLabel.setText(this.currentNpc.name());
         }
         nameLabel.setPadding(new Insets(5, 10, 5, 10));

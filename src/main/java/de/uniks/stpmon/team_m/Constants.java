@@ -155,6 +155,12 @@ public class Constants {
     public static final int clerkButtonWidth = 250;
     public static final int clerkButtonHeight = 40;
 
+    // Join Encounter Popup
+    public static final Insets joinEncounterTextInsets = new Insets(20, 10, 0, 10);
+    public static final Insets joinEncountervBoxInsets = new Insets(5, 0, 20, 0);
+    public static final int joinEncounterSpacing = 15;
+    public static final int joinEncounterButtonHeight = 200;
+    public static final int joinEncounterButtonWidth = 250;
 
     // Ingame Help
     public static final int spaceBetweenPhoneAndWindowEdge = 25;
