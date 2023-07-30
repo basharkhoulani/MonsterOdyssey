@@ -47,14 +47,12 @@ class BattleMenuControllerTest extends ApplicationTest {
     void controllerTest(){
         final Button abilitiesButton = lookup("#abilitiesButton").query();
         final Button changeMonsterButton = lookup("#changeMonsterButton").query();
-        // TODO: change it to ItemButton
-        //final Button currentInfoButton = lookup("#currentInfoButton").query();
+        final Button itemButton = lookup("#itemButton").query();
         final Button fleeButton = lookup("#fleeButton").query();
 
         assertTrue(abilitiesButton.isVisible());
         assertTrue(changeMonsterButton.isVisible());
-        // TODO: change it to ItemButton
-        //assertTrue(currentInfoButton.isVisible());
+        assertTrue(itemButton.isVisible());
         assertFalse(fleeButton.isVisible());
     }
 
@@ -65,6 +63,15 @@ class BattleMenuControllerTest extends ApplicationTest {
         clickOn(abilitiesButton);
         verify(encounterController).showAbilities();
     }
+
+    @Test
+    void changeMonsterTest(){
+        final Button changeMonsterButton = lookup("#changeMonsterButton").query();
+        doNothing().when(encounterController).showChangeMonsterList();
+        clickOn(changeMonsterButton);
+        verify(encounterController).showChangeMonsterList();
+    }
+
 
 
 }

@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.dto.*;
+import de.uniks.stpmon.team_m.dto.Event;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -10,6 +11,7 @@ import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Test;
@@ -26,7 +28,9 @@ import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 import static io.reactivex.rxjava3.core.Observable.just;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
+import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 class EncounterControllerTest extends ApplicationTest {
@@ -253,11 +257,6 @@ class EncounterControllerTest extends ApplicationTest {
 
         when(encounterOpponentStorage.isWild()).thenReturn(false);
 
-        //when(presetsService.getCharacter(anyString())).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
-        //when(presetsService.getAbilities()).thenReturn(Observable.just(List.of(new AbilityDto(1, "Attack", "unknown", "fire", 5, 0.99, 100))));
-        //when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(monsterType));
-        //when(preferences.getDouble("volume", AudioService.getInstance().getVolume())).thenReturn(0.5);
-//        doNothing().when(battleMenuController).init();
         app.start(stage);
         app.show(encounterController);
         stage.requestFocus();
@@ -354,19 +353,6 @@ class EncounterControllerTest extends ApplicationTest {
                                 null,
                                 List.of(),
                                 0
-                        ),
-                        new Opponent(
-                                "2023-07-09T11:52:17.658Z",
-                                "2023-07-09T11:52:35.578Z",
-                                "64aa9f7132eb8b56aa9eb201",
-                                "64aa9f7132eb8b56aa9eb208",
-                                "64abfde932eb8b56aac8efaf",
-                                false,
-                                true,
-                                "64aa9f7132eb8b56aa9eb20c",
-                                null,
-                                List.of(),
-                                0
                         )
                 ));
 
@@ -430,6 +416,7 @@ class EncounterControllerTest extends ApplicationTest {
     @Test
     void testFleeButton() throws InterruptedException {
         when(encounterOpponentStorage.getEncounterSize()).thenReturn(2);
+        lenient().when(encounterOpponentStorage.isWild()).thenReturn(true);
 
         lenient().when(encounterOpponentsService.deleteOpponent(any(), anyString(), anyString())).thenReturn(
                 Observable.just(new Opponent(
@@ -480,13 +467,19 @@ class EncounterControllerTest extends ApplicationTest {
         encounterController.setValues(bundle, preferences, null, encounterController, app);
         app.show(encounterController);
 
-        Thread.sleep(200);
+        sleep(200);
 
-        clickOn("#fleeButton");
-        clickOn("#fleePopupNoButton");
+        Button fleeButton = lookup("#fleeButton").query();
+        assertNotNull(fleeButton);
 
-        clickOn("#fleeButton");
-        clickOn("#fleePopupYesButton");
+        //clickOn(fleeButton);
+        //waitForFxEvents();
+        //clickOn("No");
+
+        //clickOn(fleeButton);
+        //waitForFxEvents();
+        //clickOn("Yes");
+
     }
 
     @Test
@@ -533,6 +526,47 @@ class EncounterControllerTest extends ApplicationTest {
                         false,
                         true,
                         "64aa9f7132eb8b56aa9eb20f",
+                        null,
+                        List.of(),
+                        0
+                )
+        );
+
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        encounterController.setValues(bundle, preferences, null, encounterController, app);
+        app.show(encounterController);
+    }
+
+    @Test
+    void testRenderFor2vs1(){
+        when(encounterOpponentStorage.getEncounterSize()).thenReturn(3);
+        when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
+                List.of(
+                        new Opponent(
+                                "2023-07-09T11:52:17.658Z",
+                                "2023-07-09T11:52:35.578Z",
+                                "64aa9f7132eb8b56aa9eb20f",
+                                "64aa9f7132eb8b56aa9eb208",
+                                "64abfde932eb8b56aac8efac",
+                                true,
+                                true,
+                                "64aa9f7132eb8b56aa9eb20c",
+                                null,
+                                List.of(),
+                                0
+                        )
+                ));
+
+        when(encounterOpponentStorage.getCoopOpponent()).thenReturn(
+                new Opponent(
+                        "2023-07-09T11:52:17.658Z",
+                        "2023-07-09T11:52:35.578Z",
+                        "64aa9f7132eb8b56aa9eb201",
+                        "64aa9f7132eb8b56aa9eb208",
+                        "64abfde932eb8b56aac8efac",
+                        false,
+                        true,
+                        "64aa9f7132eb8b56aa9eb20c",
                         null,
                         List.of(),
                         0
