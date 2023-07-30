@@ -138,115 +138,113 @@ public class EncounterOpponentController extends Controller {
 <span class="fc" id="L138">            opponentHBox.getChildren().add(2, monsterInfoBox);</span>
         }
 <span class="fc" id="L140">        monsterImageViewVBox.setOnMouseClicked(event -&gt; {</span>
-<span class="nc" id="L141">            System.out.println(&quot;Clicked on &quot; + currentOpponent._id());</span>
-<span class="nc bnc" id="L142" title="All 4 branches missed.">            if (isEnemy &amp;&amp; isMultipleEnemyEncounter) {</span>
-<span class="nc" id="L143">                System.out.println(&quot;target Opponent in EncounterOpponentController&quot;);</span>
-<span class="nc" id="L144">                encounterController.targetOpponent(currentOpponent);</span>
+<span class="nc bnc" id="L141" title="All 4 branches missed.">            if (isEnemy &amp;&amp; isMultipleEnemyEncounter) {</span>
+<span class="nc" id="L142">                encounterController.targetOpponent(currentOpponent);</span>
             }
-<span class="nc" id="L146">        });</span>
+<span class="nc" id="L144">        });</span>
 
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        if(!isSelf){</span>
-<span class="fc" id="L149">            currentMonsterButton.setVisible(false);</span>
-<span class="fc" id="L150">            currentMonsterButton.setDisable(true);</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if(!isSelf){</span>
+<span class="fc" id="L147">            currentMonsterButton.setVisible(false);</span>
+<span class="fc" id="L148">            currentMonsterButton.setDisable(true);</span>
         } else {
-<span class="pc" id="L152">            currentMonsterButton.setOnAction(event -&gt; showMonsterInformation(currentOpponent, this));</span>
-<span class="fc bfc" id="L153" title="All 2 branches covered.">            if (!invertX){</span>
-<span class="fc" id="L154">                trainerImageView.setDisable(true);</span>
-<span class="fc" id="L155">                trainerImageView.setVisible(false);</span>
+<span class="pc" id="L150">            currentMonsterButton.setOnAction(event -&gt; showMonsterInformation(currentOpponent, this));</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">            if (!invertX){</span>
+<span class="fc" id="L152">                trainerImageView.setDisable(true);</span>
+<span class="fc" id="L153">                trainerImageView.setVisible(false);</span>
             }
         }
-<span class="fc" id="L158">        return parent;</span>
+<span class="fc" id="L156">        return parent;</span>
     }
 
     private void showMonsterInformation(Opponent currentOpponent, EncounterOpponentController encounterOpponentController) {
-<span class="nc" id="L162">        this.encounterController.showMonsterDetailsInEncounter(currentOpponent, encounterOpponentController);</span>
-<span class="nc" id="L163">    }</span>
+<span class="nc" id="L160">        this.encounterController.showMonsterDetailsInEncounter(currentOpponent, encounterOpponentController);</span>
+<span class="nc" id="L161">    }</span>
 
     public EncounterOpponentController setExperienceBarValue(double value) {
-<span class="fc bfc" id="L166" title="All 2 branches covered.">        if (!experienceBar.isDisabled()) {</span>
-<span class="fc" id="L167">            experienceBar.setProgress(value);</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (!experienceBar.isDisabled()) {</span>
+<span class="fc" id="L165">            experienceBar.setProgress(value);</span>
         }
-<span class="fc" id="L169">        return this;</span>
+<span class="fc" id="L167">        return this;</span>
     }
 
     public EncounterOpponentController setLevelLabel(String value) {
-<span class="fc" id="L173">        levelLabel.setText(value);</span>
-<span class="fc" id="L174">        return this;</span>
+<span class="fc" id="L171">        levelLabel.setText(value);</span>
+<span class="fc" id="L172">        return this;</span>
     }
 
     public EncounterOpponentController setHealthBarValue(double value) {
-<span class="fc" id="L178">        HealthBar.setProgress(value);</span>
-<span class="fc" id="L179">        return this;</span>
+<span class="fc" id="L176">        HealthBar.setProgress(value);</span>
+<span class="fc" id="L177">        return this;</span>
     }
 
     public EncounterOpponentController setHealthLabel(String value) {
-<span class="fc bfc" id="L183" title="All 2 branches covered.">        if (!healthLabel.isDisabled()) {</span>
-<span class="fc" id="L184">            healthLabel.setText(value);</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">        if (!healthLabel.isDisabled()) {</span>
+<span class="fc" id="L182">            healthLabel.setText(value);</span>
         }
-<span class="fc" id="L186">        return this;</span>
+<span class="fc" id="L184">        return this;</span>
     }
 
     public EncounterOpponentController setMonsterNameLabel(String value) {
-<span class="fc" id="L190">        monsterNameLabel.setText(value);</span>
-<span class="fc" id="L191">        return this;</span>
+<span class="fc" id="L188">        monsterNameLabel.setText(value);</span>
+<span class="fc" id="L189">        return this;</span>
     }
 
     public EncounterOpponentController setMonsterImage(Image image) {
-<span class="pc bpc" id="L195" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L196">            monsterImageView.setImage(image);</span>
+<span class="pc bpc" id="L193" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L194">            monsterImageView.setImage(image);</span>
         }
-<span class="fc" id="L198">        return this;</span>
+<span class="fc" id="L196">        return this;</span>
     }
 
     public Image getMonsterImage() {
-<span class="nc" id="L202">        return monsterImageView.getImage();</span>
+<span class="nc" id="L200">        return monsterImageView.getImage();</span>
     }
 
     public EncounterOpponentController setTrainerImage(Image image) {
-<span class="nc bnc" id="L206" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc bnc" id="L207" title="All 2 branches missed.">            if (!trainerImageView.isDisabled()) {</span>
-<span class="nc" id="L208">                trainerImageView.setImage(image);</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">            if (!trainerImageView.isDisabled()) {</span>
+<span class="nc" id="L206">                trainerImageView.setImage(image);</span>
             }
         }
-<span class="nc" id="L211">        return this;</span>
+<span class="nc" id="L209">        return this;</span>
     }
 
     public EncounterOpponentController onTarget() {
-<span class="fc" id="L215">        monsterNameHBox.getStyleClass().clear();</span>
-<span class="fc" id="L216">        monsterNameHBox.getStyleClass().add(&quot;hBoxRed&quot;);</span>
-<span class="fc" id="L217">        monsterImageViewVBox.setStyle(&quot;-fx-padding: 16px; -fx-border-color: red; -fx-border-radius: 100;&quot;);</span>
-<span class="fc" id="L218">        isTargeted = true;</span>
-<span class="pc bpc" id="L219" title="1 of 2 branches missed.">        if (onTargetChange != null) {</span>
-<span class="nc" id="L220">            onTargetChange.run();</span>
+<span class="fc" id="L213">        monsterNameHBox.getStyleClass().clear();</span>
+<span class="fc" id="L214">        monsterNameHBox.getStyleClass().add(&quot;hBoxRed&quot;);</span>
+<span class="fc" id="L215">        monsterImageViewVBox.setStyle(&quot;-fx-padding: 16px; -fx-border-color: red; -fx-border-radius: 100;&quot;);</span>
+<span class="fc" id="L216">        isTargeted = true;</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        if (onTargetChange != null) {</span>
+<span class="nc" id="L218">            onTargetChange.run();</span>
         }
-<span class="fc" id="L222">        return this;</span>
+<span class="fc" id="L220">        return this;</span>
     }
 
     public EncounterOpponentController unTarget() {
-<span class="fc" id="L226">        monsterNameHBox.getStyleClass().clear();</span>
-<span class="pc bpc" id="L227" title="1 of 2 branches missed.">        if (isEnemy) {</span>
-<span class="fc" id="L228">            monsterNameHBox.getStyleClass().add(&quot;hBoxRed&quot;);</span>
+<span class="fc" id="L224">        monsterNameHBox.getStyleClass().clear();</span>
+<span class="pc bpc" id="L225" title="1 of 2 branches missed.">        if (isEnemy) {</span>
+<span class="fc" id="L226">            monsterNameHBox.getStyleClass().add(&quot;hBoxRed&quot;);</span>
         } else {
-<span class="nc" id="L230">            monsterNameHBox.getStyleClass().add(&quot;hBoxYellow&quot;);</span>
+<span class="nc" id="L228">            monsterNameHBox.getStyleClass().add(&quot;hBoxYellow&quot;);</span>
         }
-<span class="fc" id="L232">        monsterImageViewVBox.setStyle(&quot;-fx-padding: 0px; -fx-border-color: transparent; -fx-border-radius: 0;&quot;);</span>
-<span class="fc" id="L233">        isTargeted = false;</span>
-<span class="fc" id="L234">        return this;</span>
+<span class="fc" id="L230">        monsterImageViewVBox.setStyle(&quot;-fx-padding: 0px; -fx-border-color: transparent; -fx-border-radius: 0;&quot;);</span>
+<span class="fc" id="L231">        isTargeted = false;</span>
+<span class="fc" id="L232">        return this;</span>
     }
 
     public ImageView getTrainerImageView() {
-<span class="fc" id="L238">        return trainerImageView;</span>
+<span class="fc" id="L236">        return trainerImageView;</span>
     }
 
     public void showStatus(String status, boolean value) {
-<span class="pc bpc" id="L242" title="1 of 7 branches missed.">        switch (status) {</span>
-<span class="fc" id="L243">            case PARALYSED -&gt; paralysedImage.setVisible(value);</span>
-<span class="fc" id="L244">            case ASLEEP -&gt; asleepImage.setVisible(value);</span>
-<span class="fc" id="L245">            case POISONED -&gt; poisonedImage.setVisible(value);</span>
-<span class="fc" id="L246">            case FROZEN -&gt; frozenImage.setVisible(value);</span>
-<span class="fc" id="L247">            case CONFUSED -&gt; confusedImage.setVisible(value);</span>
-<span class="fc" id="L248">            case BURNED -&gt; burnedImage.setVisible(value);</span>
+<span class="pc bpc" id="L240" title="1 of 7 branches missed.">        switch (status) {</span>
+<span class="fc" id="L241">            case PARALYSED -&gt; paralysedImage.setVisible(value);</span>
+<span class="fc" id="L242">            case ASLEEP -&gt; asleepImage.setVisible(value);</span>
+<span class="fc" id="L243">            case POISONED -&gt; poisonedImage.setVisible(value);</span>
+<span class="fc" id="L244">            case FROZEN -&gt; frozenImage.setVisible(value);</span>
+<span class="fc" id="L245">            case CONFUSED -&gt; confusedImage.setVisible(value);</span>
+<span class="fc" id="L246">            case BURNED -&gt; burnedImage.setVisible(value);</span>
         }
-<span class="fc" id="L250">    }</span>
+<span class="fc" id="L248">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
