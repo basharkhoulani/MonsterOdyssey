@@ -56,7 +56,7 @@ public class NotificationListHandyController extends Controller {
 
 <span class="fc" id="L57">        ingameNotificationListView.setSelectionModel(null);</span>
 <span class="fc" id="L58">        ingameNotificationListView.setFocusModel(null);</span>
-<span class="pc" id="L59">        ingameNotificationListView.setCellFactory(param -&gt; new IngameNotificationCell());</span>
+<span class="fc" id="L59">        ingameNotificationListView.setCellFactory(param -&gt; new IngameNotificationCell());</span>
 <span class="fc" id="L60">        ingameNotificationListView.setItems(handyMessages);</span>
 <span class="fc" id="L61">        ingameNotificationListView.setMouseTransparent(true);</span>
 
@@ -103,33 +103,40 @@ public class NotificationListHandyController extends Controller {
 <span class="nc" id="L103">        timeline.play();</span>
 <span class="nc" id="L104">    }</span>
 
-    public void displayStarterMessages() {
+    public void displayStarterMessages(boolean first) {
 <span class="fc" id="L107">        handyMessages.clear();</span>
 <span class="fc" id="L108">        Timeline timeline = new Timeline();</span>
 <span class="fc" id="L109">        int duration = 1;</span>
 
-<span class="fc bfc" id="L111" title="All 2 branches covered.">        for (int i = 0; i &lt; 2; i++) {</span>
-<span class="fc" id="L112">            int iter = i;</span>
-<span class="fc" id="L113">            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -&gt; handyMessages.add(this.resources.getString(&quot;INGAME.NOTIFICATIONS.STARTER.&quot; + iter)));</span>
-<span class="fc" id="L114">            timeline.getKeyFrames().add(keyFrame);</span>
-<span class="fc" id="L115">            duration++;</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (first) {</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">            for (int i = 0; i &lt; 2; i++) {</span>
+<span class="fc" id="L113">                int iter = i;</span>
+<span class="fc" id="L114">                KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -&gt; handyMessages.add(this.resources.getString(&quot;INGAME.NOTIFICATIONS.STARTER.&quot; + iter)));</span>
+<span class="fc" id="L115">                timeline.getKeyFrames().add(keyFrame);</span>
+<span class="fc" id="L116">                duration++;</span>
+            }
+        } else {
+<span class="fc bfc" id="L119" title="All 2 branches covered.">            for (int i = 0; i &lt; 2; i++) {</span>
+<span class="fc" id="L120">                handyMessages.add(this.resources.getString(&quot;INGAME.NOTIFICATIONS.STARTER.&quot; + i));</span>
+            }
         }
-<span class="fc" id="L117">        timeline.play();</span>
+
+<span class="fc" id="L124">        timeline.play();</span>
         //shakeAnimation.play();
-<span class="fc" id="L119">    }</span>
+<span class="fc" id="L126">    }</span>
 
     public void displayLowHealthMessages() {
-<span class="nc" id="L122">        Timeline timeline = new Timeline();</span>
-<span class="nc" id="L123">        int duration = 1;</span>
+<span class="nc" id="L129">        Timeline timeline = new Timeline();</span>
+<span class="nc" id="L130">        int duration = 1;</span>
 
-<span class="nc bnc" id="L125" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
-<span class="nc" id="L126">            int iter = i;</span>
-<span class="nc" id="L127">            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -&gt; handyMessages.add(this.resources.getString(&quot;INGAME.NOTIFICATIONS.LOWHEALTH.&quot; + iter)));</span>
-<span class="nc" id="L128">            timeline.getKeyFrames().add(keyFrame);</span>
-<span class="nc" id="L129">            duration++;</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L133">            int iter = i;</span>
+<span class="nc" id="L134">            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -&gt; handyMessages.add(this.resources.getString(&quot;INGAME.NOTIFICATIONS.LOWHEALTH.&quot; + iter)));</span>
+<span class="nc" id="L135">            timeline.getKeyFrames().add(keyFrame);</span>
+<span class="nc" id="L136">            duration++;</span>
         }
-<span class="nc" id="L131">        timeline.play();</span>
+<span class="nc" id="L138">        timeline.play();</span>
         //shakeAnimation.play();
-<span class="nc" id="L133">    }</span>
+<span class="nc" id="L140">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
