@@ -473,11 +473,11 @@ class EncounterControllerTest extends ApplicationTest {
 
         clickOn(fleeButton);
         sleep(300);
-        clickOn("#fleePopupNoButton");
+        clickOn("No");
 
         clickOn(fleeButton);
         sleep(200);
-        clickOn("#fleePopupYesButton");
+        clickOn("Yes");
 
     }
 
