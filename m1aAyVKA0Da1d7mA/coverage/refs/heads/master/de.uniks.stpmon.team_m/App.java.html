@@ -24,11 +24,11 @@ public class App extends Application {
     private Stage stage;
     private Controller controller;
     private final MainComponent component;
-<span class="pc" id="L27">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
+<span class="fc" id="L27">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
 
-<span class="nc" id="L29">    public App() {</span>
-<span class="nc" id="L30">        component = DaggerMainComponent.builder().mainApp(this).build();</span>
-<span class="nc" id="L31">    }</span>
+<span class="fc" id="L29">    public App() {</span>
+<span class="fc" id="L30">        component = DaggerMainComponent.builder().mainApp(this).build();</span>
+<span class="fc" id="L31">    }</span>
 
 <span class="fc" id="L33">    public App(MainComponent component) {</span>
 <span class="fc" id="L34">        this.component = component;</span>
@@ -57,20 +57,20 @@ public class App extends Application {
 
 <span class="fc" id="L58">        PauseTransition pause = new PauseTransition(Duration.seconds(DURATION_OF_LOADING_SCREEN));</span>
 <span class="fc" id="L59">        pause.setOnFinished(event -&gt; {</span>
-<span class="pc bpc" id="L60" title="1 of 2 branches missed.">            if (component == null) {</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">            if (component == null) {</span>
 <span class="fc" id="L61">                return;</span>
             }
-<span class="nc" id="L63">            final AuthenticationService authenticationService = component.authenticationService();</span>
-<span class="nc bnc" id="L64" title="All 2 branches missed.">            if (authenticationService.isRememberMe()) {</span>
+<span class="fc" id="L63">            final AuthenticationService authenticationService = component.authenticationService();</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">            if (authenticationService.isRememberMe()) {</span>
 <span class="nc" id="L65">                disposables.add(authenticationService.refresh().observeOn(Schedulers.from(Platform::runLater)).subscribe(</span>
                         lr -&gt; {
 <span class="nc" id="L67">                            component.loginController().userStatusUpdate(USER_STATUS_ONLINE);</span>
 <span class="nc" id="L68">                            show(component.mainMenuController());</span>
 <span class="nc" id="L69">                        }, err -&gt; show(component.loginController())));</span>
             } else {
-<span class="nc" id="L71">                show(component.loginController());</span>
+<span class="fc" id="L71">                show(component.loginController());</span>
             }
-<span class="nc" id="L73">        });</span>
+<span class="fc" id="L73">        });</span>
 <span class="fc" id="L74">        pause.play();</span>
 <span class="fc" id="L75">        stage.show();</span>
 <span class="fc" id="L76">    }</span>
