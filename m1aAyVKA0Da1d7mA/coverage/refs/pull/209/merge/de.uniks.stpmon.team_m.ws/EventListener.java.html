@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventListener.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.ws</a> &gt; <span class="el_source">EventListener.java</span></div><h1>EventListener.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.ws;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.uniks.stpmon.team_m.dto.Event;
+import de.uniks.stpmon.team_m.utils.TokenStorage;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.function.Consumer;
+import java.util.regex.Pattern;
+
+import static de.uniks.stpmon.team_m.Constants.WS_URL;
+
+@Singleton
+public class EventListener {
+    private final TokenStorage tokenStorage;
+    private final ObjectMapper mapper;
+    private ClientEndpoint endpoint;
+
+    @Inject
+<span class="fc" id="L27">    public EventListener(TokenStorage tokenStorage, ObjectMapper mapper) {</span>
+<span class="fc" id="L28">        this.tokenStorage = tokenStorage;</span>
+<span class="fc" id="L29">        this.mapper = mapper;</span>
+<span class="fc" id="L30">    }</span>
+
+    private void ensureOpen() {
+<span class="nc bnc" id="L33" title="All 4 branches missed.">        if (endpoint != null &amp;&amp; endpoint.isOpen()) {</span>
+<span class="nc" id="L34">            return;</span>
+        }
+
+        final URI endpointURI;
+        try {
+<span class="nc" id="L39">            endpointURI = new URI(WS_URL + &quot;/events?authToken=&quot; + tokenStorage.getToken());</span>
+<span class="nc" id="L40">        } catch (URISyntaxException e) {</span>
+<span class="nc" id="L41">            throw new RuntimeException(e);</span>
+<span class="nc" id="L42">        }</span>
+
+<span class="nc" id="L44">        endpoint = new ClientEndpoint(endpointURI);</span>
+<span class="nc" id="L45">        endpoint.open();</span>
+<span class="nc" id="L46">    }</span>
+
+    public &lt;T&gt; Observable&lt;Event&lt;T&gt;&gt; listen(String pattern, Class&lt;T&gt; type) {
+<span class="nc" id="L49">        return Observable.create(emitter -&gt; {</span>
+<span class="nc" id="L50">            this.ensureOpen();</span>
+<span class="nc" id="L51">            send(new Event&lt;&gt;(&quot;subscribe&quot;, pattern));</span>
+<span class="nc" id="L52">            final Consumer&lt;String&gt; handler = createPatternHandler(mapper, pattern, type, emitter);</span>
+<span class="nc" id="L53">            endpoint.addMessageHandler(handler);</span>
+<span class="nc" id="L54">            emitter.setCancellable(() -&gt; removeEventHandler(pattern, handler));</span>
+<span class="nc" id="L55">        });</span>
+    }
+
+    public static &lt;T&gt; Consumer&lt;String&gt; createPatternHandler(ObjectMapper mapper, String pattern, Class&lt;T&gt; type, ObservableEmitter&lt;Event&lt;T&gt;&gt; emitter) {
+<span class="nc" id="L59">        final Pattern regex = Pattern.compile(pattern.replace(&quot;.&quot;, &quot;\\.&quot;).replace(&quot;*&quot;, &quot;[^.]*&quot;));</span>
+<span class="nc" id="L60">        return eventStr -&gt; {</span>
+            try {
+<span class="nc" id="L62">                final JsonNode node = mapper.readTree(eventStr);</span>
+<span class="nc" id="L63">                final String event = node.get(&quot;event&quot;).asText();</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">                if (!regex.matcher(event).matches()) {</span>
+<span class="nc" id="L65">                    return;</span>
+                }
+
+<span class="nc" id="L68">                final T data = mapper.treeToValue(node.get(&quot;data&quot;), type);</span>
+<span class="nc" id="L69">                emitter.onNext(new Event&lt;&gt;(event, data));</span>
+<span class="nc" id="L70">            } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L71">                e.printStackTrace();</span>
+<span class="nc" id="L72">            }</span>
+<span class="nc" id="L73">        };</span>
+    }
+
+    private void removeEventHandler(String pattern, Consumer&lt;String&gt; handler) {
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (endpoint == null) {</span>
+<span class="nc" id="L78">            return;</span>
+        }
+
+<span class="nc" id="L81">        send(new Event&lt;&gt;(&quot;unsubscribe&quot;, pattern));</span>
+<span class="nc" id="L82">        endpoint.removeMessageHandler(handler);</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (!endpoint.hasMessageHandler()) {</span>
+<span class="nc" id="L84">            close();</span>
+        }
+<span class="nc" id="L86">    }</span>
+
+    public void send(Object data) {
+<span class="nc" id="L89">        this.ensureOpen();</span>
+        try {
+<span class="nc" id="L91">            final String msg = mapper.writeValueAsString(data);</span>
+<span class="nc" id="L92">            endpoint.sendMessage(msg);</span>
+<span class="nc" id="L93">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L94">            e.printStackTrace();</span>
+<span class="nc" id="L95">        }</span>
+<span class="nc" id="L96">    }</span>
+
+    private void close() {
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        if (endpoint != null) {</span>
+<span class="nc" id="L100">            endpoint.close();</span>
+<span class="nc" id="L101">            endpoint = null;</span>
+        }
+<span class="nc" id="L103">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
