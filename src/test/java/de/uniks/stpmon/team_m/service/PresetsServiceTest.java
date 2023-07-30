@@ -2,8 +2,10 @@ package de.uniks.stpmon.team_m.service;
 
 import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import de.uniks.stpmon.team_m.dto.TileSet;
 import de.uniks.stpmon.team_m.rest.PresetsApiService;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.image.Image;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,12 +13,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PresetsServiceTest {
@@ -155,5 +157,26 @@ public class PresetsServiceTest {
         assertEquals(1, ability.accuracy());
         assertEquals(10, ability.power());
         verify(presetsApiService).getAbility(1);
+    }
+
+    @Test
+    void getTileSetImageTest() {
+        when(presetsApiService.getTileset("tileset.png")).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
+
+        Image image = presetsService.getTilesetImage("tileset.png").blockingFirst();
+        assertNotNull(image);
+        verify(presetsApiService).getTileset("tileset.png");
+    }
+
+    @Test
+    void getTileSetTest() throws IOException {
+        ResponseBody mockResponseBody = mock(ResponseBody.class);
+        when(mockResponseBody.string()).thenReturn("{\"name\": \"TileSet A\", \"size\": 64}");
+
+        when(presetsApiService.getTileset("tileset.json")).thenReturn(Observable.just(mockResponseBody));
+
+        TileSet tileSet = presetsService.getTileset("tileset").blockingFirst();
+        assertNotNull(tileSet);
+        verify(presetsApiService).getTileset("tileset.json");
     }
 }
