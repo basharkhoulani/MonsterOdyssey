@@ -464,20 +464,20 @@ class EncounterControllerTest extends ApplicationTest {
 
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
         encounterController.setValues(bundle, preferences, null, encounterController, app);
-        app.show(encounterController);
+        //app.show(encounterController);
 
         sleep(200);
 
         Button fleeButton = lookup("#fleeButton").query();
         assertNotNull(fleeButton);
 
-        //clickOn(fleeButton);
-        //sleep(300);
-        //clickOn("No");
+        clickOn(fleeButton);
+        sleep(300);
+        clickOn("#fleePopupNoButton");
 
-        //clickOn(fleeButton);
-        //sleep(200);
-        //clickOn("Yes");
+        clickOn(fleeButton);
+        sleep(200);
+        clickOn("#fleePopupYesButton");
 
     }
 
