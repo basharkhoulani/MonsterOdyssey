@@ -36,11 +36,11 @@ public class PresetsService {
      */
 
     public Observable&lt;Image&gt; getTilesetImage(String filename) {
-<span class="nc" id="L39">        return presetsApiService.getTileset(filename).map(ImageProcessor::resonseBodyToJavaFXImage);</span>
+<span class="fc" id="L39">        return presetsApiService.getTileset(filename).map(ImageProcessor::resonseBodyToJavaFXImage);</span>
     }
 
     public Observable&lt;TileSet&gt; getTileset(String filename) {
-<span class="nc" id="L43">        return presetsApiService.getTileset(filename + &quot;.json&quot;).map(responseBody -&gt; new Gson().fromJson(responseBody.string(), TileSet.class));</span>
+<span class="fc" id="L43">        return presetsApiService.getTileset(filename + &quot;.json&quot;).map(responseBody -&gt; new Gson().fromJson(responseBody.string(), TileSet.class));</span>
     }
 
     /**
@@ -72,7 +72,7 @@ public class PresetsService {
      */
 
     public Observable&lt;List&lt;ItemTypeDto&gt;&gt; getItems() {
-<span class="nc" id="L75">        return presetsApiService.getItems();</span>
+<span class="fc" id="L75">        return presetsApiService.getItems();</span>
     }
 
     /**
@@ -83,7 +83,7 @@ public class PresetsService {
      */
 
     public Observable&lt;ItemTypeDto&gt; getItem(int id) {
-<span class="nc" id="L86">        return presetsApiService.getItem(id);</span>
+<span class="fc" id="L86">        return presetsApiService.getItem(id);</span>
     }
 
     /**
@@ -95,7 +95,7 @@ public class PresetsService {
      */
 
     public Observable&lt;ResponseBody&gt; getItemImage(int id) {
-<span class="nc" id="L98">        return presetsApiService.getItemImage(id);</span>
+<span class="fc" id="L98">        return presetsApiService.getItemImage(id);</span>
     }
 
     /**
