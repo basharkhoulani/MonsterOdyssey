@@ -44,6 +44,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -422,6 +423,7 @@ public class IngameController extends Controller {
             coinsImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(COIN)).toString()));
         }
 
+
         // Add event handlers
         app.getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
 
@@ -449,6 +451,8 @@ public class IngameController extends Controller {
                         divide(2).
                         add(offsetToNotShowPhoneInScreen)
         );
+
+        checkForFirstMessages();
 
         //Setup Encounter
         checkIfEncounterAlreadyExist();
@@ -482,6 +486,25 @@ public class IngameController extends Controller {
         }
         showCoins();
         return parent;
+    }
+
+    private void checkForFirstMessages() {
+        Trainer trainer = trainerStorageProvider.get().getTrainer();
+
+        Instant now = Instant.now();
+        Instant createdTime = Instant.parse(trainer.createdAt());
+
+        long elapsedTime = java.time.Duration.between(createdTime, now).getSeconds();
+        if (elapsedTime < 20) {
+            preferences.putBoolean("firstEntry", true);
+            preferences.putBoolean("starterMessages", false);
+        }
+
+        if (preferences.getBoolean("firstEntry", true)) {
+            this.notificationListHandyController.displayFirstTimeNotifications(true);
+            notificationBell.setVisible(true);
+            preferences.putBoolean("firstEntry", false);
+        }
     }
 
     private void initMapShiftTransitions() {
@@ -975,6 +998,13 @@ public class IngameController extends Controller {
      */
 
     public void showHelp() {
+        if (!preferences.getBoolean("starterMessages", false)) {
+            this.notificationListHandyController.handyMessages.clear();
+            this.notificationListHandyController.displayFirstTimeNotifications(false);
+        } else if (preferences.getBoolean("starterMessages", true) && !preferences.getBoolean("lowHealth", false)) {
+            this.notificationListHandyController.handyMessages.clear();
+            this.notificationListHandyController.displayStarterMessages(false);
+        }
         smallHandyButton.setVisible(false);
         notificationBell.setVisible(false);
 
@@ -1580,19 +1610,21 @@ public class IngameController extends Controller {
             case dialogFinishedTalkToTrainer -> endDialog(0, true);
             case albertDialogFinished0 -> {
                 endDialog(0, true);
-                this.notificationListHandyController.displayStarterMessages();
+                this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
+                preferences.putBoolean("starterMessages", true);
             }
             case albertDialogFinished1 -> {
                 endDialog(1, true);
-                this.notificationListHandyController.displayStarterMessages();
+                this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
-
+                preferences.putBoolean("starterMessages", true);
             }
             case albertDialogFinished2 -> {
                 endDialog(2, true);
-                this.notificationListHandyController.displayStarterMessages();
+                this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
+                preferences.putBoolean("starterMessages", true);
             }
             case dialogFinishedNoTalkToTrainer -> endDialog(0, false);
             case spokenToNurse -> createNurseHealPopup();
