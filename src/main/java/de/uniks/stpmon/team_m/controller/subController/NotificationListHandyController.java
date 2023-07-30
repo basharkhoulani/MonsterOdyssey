@@ -103,17 +103,24 @@ public class NotificationListHandyController extends Controller {
         timeline.play();
     }
 
-    public void displayStarterMessages() {
+    public void displayStarterMessages(boolean first) {
         handyMessages.clear();
         Timeline timeline = new Timeline();
         int duration = 1;
 
-        for (int i = 0; i < 2; i++) {
-            int iter = i;
-            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.STARTER." + iter)));
-            timeline.getKeyFrames().add(keyFrame);
-            duration++;
+        if (first) {
+            for (int i = 0; i < 2; i++) {
+                int iter = i;
+                KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.STARTER." + iter)));
+                timeline.getKeyFrames().add(keyFrame);
+                duration++;
+            }
+        } else {
+            for (int i = 0; i < 2; i++) {
+                handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.STARTER." + i));
+            }
         }
+
         timeline.play();
         //shakeAnimation.play();
     }

@@ -423,7 +423,6 @@ public class IngameController extends Controller {
             coinsImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(COIN)).toString()));
         }
 
-        checkForFirstMessages();
 
         // Add event handlers
         app.getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
@@ -452,6 +451,8 @@ public class IngameController extends Controller {
                         divide(2).
                         add(offsetToNotShowPhoneInScreen)
         );
+
+        checkForFirstMessages();
 
         //Setup Encounter
         checkIfEncounterAlreadyExist();
@@ -1000,6 +1001,9 @@ public class IngameController extends Controller {
         if (!preferences.getBoolean("starterMessages", false)) {
             this.notificationListHandyController.handyMessages.clear();
             this.notificationListHandyController.displayFirstTimeNotifications(false);
+        } else if (preferences.getBoolean("starterMessages", true) && !preferences.getBoolean("lowHealth", false)) {
+            this.notificationListHandyController.handyMessages.clear();
+            this.notificationListHandyController.displayStarterMessages(false);
         }
         smallHandyButton.setVisible(false);
         notificationBell.setVisible(false);
@@ -1606,19 +1610,19 @@ public class IngameController extends Controller {
             case dialogFinishedTalkToTrainer -> endDialog(0, true);
             case albertDialogFinished0 -> {
                 endDialog(0, true);
-                this.notificationListHandyController.displayStarterMessages();
+                this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
                 preferences.putBoolean("starterMessages", true);
             }
             case albertDialogFinished1 -> {
                 endDialog(1, true);
-                this.notificationListHandyController.displayStarterMessages();
+                this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
                 preferences.putBoolean("starterMessages", true);
             }
             case albertDialogFinished2 -> {
                 endDialog(2, true);
-                this.notificationListHandyController.displayStarterMessages();
+                this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
                 preferences.putBoolean("starterMessages", true);
             }
