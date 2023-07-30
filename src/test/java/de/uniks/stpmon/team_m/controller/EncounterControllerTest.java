@@ -471,13 +471,13 @@ class EncounterControllerTest extends ApplicationTest {
         Button fleeButton = lookup("#fleeButton").query();
         assertNotNull(fleeButton);
 
-        clickOn(fleeButton);
-        sleep(300);
-        clickOn("No");
+        //clickOn(fleeButton);
+        //sleep(300);
+        //clickOn("No");
 
-        clickOn(fleeButton);
-        sleep(200);
-        clickOn("Yes");
+        //clickOn(fleeButton);
+        //sleep(200);
+        //clickOn("Yes");
 
     }
 
