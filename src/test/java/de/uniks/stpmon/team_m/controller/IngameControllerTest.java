@@ -100,8 +100,6 @@ public class IngameControllerTest extends ApplicationTest {
     @InjectMocks
     MonstersListController monstersListController;
     @InjectMocks
-    MonstersDetailController monstersDetailController;
-    @InjectMocks
     MainMenuController mainMenuController;
     @Mock
     TrainerItemsService trainerItemsService;
@@ -224,7 +222,24 @@ public class IngameControllerTest extends ApplicationTest {
                                 100,
                                 100,
                                 2,
-                                new NPCInfo(false, false, false, false, List.of(1, 2, 3), null, null))
+                                new NPCInfo(false, false, false, false, List.of(1, 2, 3), null, null)),
+                        new Trainer(
+                                "2023-05-30T12:02:57.510Z",
+                                "2023-05-30T12:01:57.510Z",
+                                "6475e595ac3946b6a812d867",
+                                "646bab5cecf584e1be02598a",
+                                "6475e595ac3946b6a812d868",
+                                "OtherEncounter",
+                                "Premade_Character_02.png",
+                                0,
+                                List.of(),
+                                List.of(),
+                                List.of("646bacc568933551792bf3d5"),
+                                "6475e595ac3946b6a812d863",
+                                200,
+                                200,
+                                2,
+                                null)
                 )
         ));
         EventListener eventListenerMock = mock(EventListener.class);
@@ -313,8 +328,33 @@ public class IngameControllerTest extends ApplicationTest {
         //Mocking the opponent (Situation)
         when(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() + ".opponents.*.*", Opponent.class)).thenReturn(just(
                 new Event<>("encounters.*.trainers.6475e595ac3946b6a812d865,opponents.*.nothappening", null)));
-
         when(encounterOpponentsService.getTrainerOpponents(anyString(), anyString())).thenReturn(Observable.just(List.of()));
+        lenient().when(encounterOpponentsService.getTrainerOpponents("646bab5cecf584e1be02598a", "6475e595ac3946b6a812d867")).thenReturn(Observable.just(List.of(
+                new Opponent(
+                        "2023-07-09T11:52:17.658Z",
+                        "2023-07-09T11:52:35.578Z",
+                        "64aa9f7132eb8b56aa9eb20f",
+                        "64aa9f7132eb8b56aa9eb208",
+                        "64abfde932eb8b56aac8efac",
+                        true,
+                        true,
+                        "64aa9f7132eb8b56aa9eb20c",
+                        null,
+                        List.of(),
+                        0),
+                new Opponent(
+                        "2023-07-09T11:52:17.658Z",
+                        "2023-07-09T11:52:35.578Z",
+                        "64aa9f7132eb8b56aa9eb20d",
+                        "64aa9f7132eb8b56aa9eb208",
+                        "64abfde932eb8b56aac8efad",
+                        true,
+                        true,
+                        "64aa9f7132eb8b56aa9eb20d",
+                        null,
+                        List.of(),
+                        0
+                ))));
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
@@ -520,6 +560,38 @@ public class IngameControllerTest extends ApplicationTest {
     void testTalkToNPC2TilesAway() {
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(20);
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("dialogStackPane", node.getId());
+    }
+
+    @Test
+    void testTalkDirection2() {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(19);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(2);
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("dialogStackPane", node.getId());
+    }
+
+    @Test
+    void testTalkDirection3() {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(19);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(3);
         when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
 
         press(KeyCode.E);
@@ -768,6 +840,22 @@ public class IngameControllerTest extends ApplicationTest {
                         "A fire lizard. It's hot."
                 )
         ));
+
+        MonstersDetailController monstersDetailController = mock(MonstersDetailController.class);
+        when(monstersDetailControllerProvider.get()).thenReturn(monstersDetailController);
+        doNothing().when(monstersDetailController).init(any(), any(), any(), any(), any(), any(), any(), any());
+
+        Button close = new Button("Close");
+        close.setOnAction(event -> {
+            StackPane stackPane = lookup("#stackPane").query();
+            VBox itemMenuBox = lookup("#monsterDetailVBox").query();
+            stackPane.getChildren().remove(stackPane.getChildren().size() - 1);
+            itemMenuBox.setVisible(false);
+            itemMenuBox.toBack();
+            ingameController.buttonsDisable(false);
+        });
+        when(monstersDetailController.render()).thenReturn(close);
+
         LinkedHashMap<String, Integer> abilities = new LinkedHashMap<>();
         abilities.put("1", 1);
         abilities.put("23", 2);
@@ -792,7 +880,9 @@ public class IngameControllerTest extends ApplicationTest {
 
         clickOn("Other");
         moveTo("Salamander (Level 3)");
-        sleep(5000);
+
+        clickOn("#viewDetailsButton646bac223b4804b87c0b8054");
+        clickOn(close);
     }
 
     @Test
@@ -838,9 +928,6 @@ public class IngameControllerTest extends ApplicationTest {
 
         final VBox starterSelectionVBox = lookup("#starterSelectionVBox").query();
         assertNotNull(starterSelectionVBox);
-
-        final Label starterSelectionLabel0 = lookup("#starterSelectionLabel").query();
-        final String starterSelectionLabelText0 = starterSelectionLabel0.getText();
 
         clickOn("#starterSelectionOkButton");
         clickOn("#starterSelectionOkButton");
@@ -982,6 +1069,21 @@ public class IngameControllerTest extends ApplicationTest {
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(102);
         Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
 
+        ItemMenuController itemMenuController = mock(ItemMenuController.class);
+        when(itemMenuControllerProvider.get()).thenReturn(itemMenuController);
+        doNothing().when(itemMenuController).init(any(), any(), any(), any(), any(), any(), any());
+
+        Button close = new Button("Close");
+        close.setOnAction(event -> {
+            StackPane stackPane = lookup("#stackPane").query();
+            VBox itemMenuBox = lookup("#itemMenuBox").query();
+            stackPane.getChildren().remove(stackPane.getChildren().size() - 1);
+            itemMenuBox.setVisible(false);
+            itemMenuBox.toBack();
+            ingameController.buttonsDisable(false);
+        });
+        when(itemMenuController.render()).thenReturn(close);
+
         press(KeyCode.E);
         release(KeyCode.E);
         Thread.sleep(30);
@@ -1003,6 +1105,85 @@ public class IngameControllerTest extends ApplicationTest {
         press(KeyCode.E);
         release(KeyCode.E);
         Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        clickOn("Buy");
+        clickOn(close);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        clickOn("Sell");
+        clickOn(close);
+
+    }
+
+    @Test
+    void testOtherTrainerInEncounter() {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(200);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(201);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+
+        type(KeyCode.E);
+        sleep(30);
+
+        type(KeyCode.E);
+        sleep(30);
+
+        clickOn("Leave");
+
+        type(KeyCode.E);
+        sleep(30);
+
+        type(KeyCode.E);
+        sleep(30);
+
+        clickOn("Join encounter");
+
+    }
+
+    @Test
+    void testgetUserTrainerY() {
+        when(ingameController.getUserTrainerY()).thenReturn(13);
+
+        int y = ingameController.getUserTrainerY();
+        assertEquals(13, y);
+
+    }
+
+    @Test
+    void testCoinsEarned() {
+        ingameController.setCoinsEarned(true);
+        assertTrue(ingameController.getCoinsEarned());
+
+    }
+
+    @Test
+    void CoinsAmount() {
+        ingameController.setCoinsAmount(100);
+        assertEquals(100, ingameController.getCoinsAmount());
     }
 
 

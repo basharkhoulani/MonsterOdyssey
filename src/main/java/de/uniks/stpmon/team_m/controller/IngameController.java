@@ -1460,6 +1460,8 @@ public class IngameController extends Controller {
                 } else {
                     disposables.add(encounterOpponentsService.getTrainerOpponents(currentNpc.region(),currentNpc._id())
                             .observeOn(FX_SCHEDULER).subscribe(opponents -> {
+                                System.out.println(currentNpc.region());
+                                System.out.println(opponents.size());
                                 if (opponents.size() == 2) {
                                     for (Opponent opponent : opponents){
                                         if (opponent.move() != null || opponent.results().size() != 0){
@@ -2052,6 +2054,7 @@ public class IngameController extends Controller {
     public void showMonsterDetails(Monster monster, MonsterTypeDto monsterTypeDto,
                                    Image monsterImage, ResourceBundle resources, PresetsService presetsService, String type) {
         VBox monsterDetailVBox = new VBox();
+        monsterDetailVBox.setId("monsterDetailVBox");
         monsterDetailVBox.setAlignment(Pos.CENTER);
         MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();
         monstersDetailController.init(this, monsterDetailVBox, monster, monsterTypeDto, monsterImage, resources, presetsService, type);
