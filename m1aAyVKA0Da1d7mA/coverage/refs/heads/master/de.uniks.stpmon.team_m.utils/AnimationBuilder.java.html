@@ -80,16 +80,16 @@ import static de.uniks.stpmon.team_m.Constants.TRAINER_DIRECTION_DOWN;
      * @return : The timeline of the animation
      */
     public static Timeline buildShakeAnimation(ImageView imageView, int durationMillis, int shakeAngle, int cycleCount) {
-<span class="fc" id="L83">        Timeline timeline = new Timeline();</span>
-<span class="fc" id="L84">        KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, new KeyValue(imageView.rotateProperty(), 0));</span>
-<span class="fc" id="L85">        KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), new KeyValue(imageView.rotateProperty(), shakeAngle));</span>
-<span class="fc" id="L86">        KeyFrame keyFrame3 = new KeyFrame(Duration.millis(durationMillis).multiply(2), new KeyValue(imageView.rotateProperty(), -shakeAngle));</span>
-<span class="fc" id="L87">        KeyFrame keyFrame4 = new KeyFrame(Duration.millis(durationMillis).multiply(3), new KeyValue(imageView.rotateProperty(), shakeAngle));</span>
-<span class="fc" id="L88">        KeyFrame keyFrame5 = new KeyFrame(Duration.millis(durationMillis).multiply(4), new KeyValue(imageView.rotateProperty(), 0));</span>
+<span class="nc" id="L83">        Timeline timeline = new Timeline();</span>
+<span class="nc" id="L84">        KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, new KeyValue(imageView.rotateProperty(), 0));</span>
+<span class="nc" id="L85">        KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), new KeyValue(imageView.rotateProperty(), shakeAngle));</span>
+<span class="nc" id="L86">        KeyFrame keyFrame3 = new KeyFrame(Duration.millis(durationMillis).multiply(2), new KeyValue(imageView.rotateProperty(), -shakeAngle));</span>
+<span class="nc" id="L87">        KeyFrame keyFrame4 = new KeyFrame(Duration.millis(durationMillis).multiply(3), new KeyValue(imageView.rotateProperty(), shakeAngle));</span>
+<span class="nc" id="L88">        KeyFrame keyFrame5 = new KeyFrame(Duration.millis(durationMillis).multiply(4), new KeyValue(imageView.rotateProperty(), 0));</span>
 
-<span class="fc" id="L90">        timeline.getKeyFrames().addAll(keyFrame1, keyFrame2, keyFrame3, keyFrame4, keyFrame5);</span>
-<span class="fc" id="L91">        timeline.setCycleCount(cycleCount);</span>
-<span class="fc" id="L92">        return timeline;</span>
+<span class="nc" id="L90">        timeline.getKeyFrames().addAll(keyFrame1, keyFrame2, keyFrame3, keyFrame4, keyFrame5);</span>
+<span class="nc" id="L91">        timeline.setCycleCount(cycleCount);</span>
+<span class="nc" id="L92">        return timeline;</span>
     }
 
     public static Timeline buildTrainerWalkAnimation(Image trainerChunk, ImageView target, int durationMillis, int cycleCount, int direction) {
