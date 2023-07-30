@@ -2020,6 +2020,7 @@ public class IngameController extends Controller {
     public void showMonsterDetails(Monster monster, MonsterTypeDto monsterTypeDto,
                                    Image monsterImage, ResourceBundle resources, PresetsService presetsService, String type) {
         VBox monsterDetailVBox = new VBox();
+        monsterDetailVBox.setId("monsterDetailVBox");
         monsterDetailVBox.setAlignment(Pos.CENTER);
         MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();
         monstersDetailController.init(this, monsterDetailVBox, monster, monsterTypeDto, monsterImage, resources, presetsService, type);

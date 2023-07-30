@@ -100,8 +100,6 @@ public class IngameControllerTest extends ApplicationTest {
     @InjectMocks
     MonstersListController monstersListController;
     @InjectMocks
-    MonstersDetailController monstersDetailController;
-    @InjectMocks
     MainMenuController mainMenuController;
     @Mock
     TrainerItemsService trainerItemsService;
@@ -768,6 +766,22 @@ public class IngameControllerTest extends ApplicationTest {
                         "A fire lizard. It's hot."
                 )
         ));
+
+        MonstersDetailController monstersDetailController = mock(MonstersDetailController.class);
+        when(monstersDetailControllerProvider.get()).thenReturn(monstersDetailController);
+        doNothing().when(monstersDetailController).init(any(), any(), any(), any(), any(), any(), any(), any());
+
+        Button close = new Button("Close");
+        close.setOnAction(event -> {
+            StackPane stackPane = lookup("#stackPane").query();
+            VBox itemMenuBox = lookup("#monsterDetailVBox").query();
+            stackPane.getChildren().remove(stackPane.getChildren().size() - 1);
+            itemMenuBox.setVisible(false);
+            itemMenuBox.toBack();
+            ingameController.buttonsDisable(false);
+        });
+        when(monstersDetailController.render()).thenReturn(close);
+
         LinkedHashMap<String, Integer> abilities = new LinkedHashMap<>();
         abilities.put("1", 1);
         abilities.put("23", 2);
@@ -792,7 +806,9 @@ public class IngameControllerTest extends ApplicationTest {
 
         clickOn("Other");
         moveTo("Salamander (Level 3)");
-        sleep(5000);
+
+        clickOn("#viewDetailsButton646bac223b4804b87c0b8054");
+        clickOn(close);
     }
 
     @Test
