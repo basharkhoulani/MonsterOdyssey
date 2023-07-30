@@ -1430,6 +1430,8 @@ public class IngameController extends Controller {
                 } else {
                     disposables.add(encounterOpponentsService.getTrainerOpponents(currentNpc.region(),currentNpc._id())
                             .observeOn(FX_SCHEDULER).subscribe(opponents -> {
+                                System.out.println(currentNpc.region());
+                                System.out.println(opponents.size());
                                 if (opponents.size() == 2) {
                                     for (Opponent opponent : opponents){
                                         if (opponent.move() != null || opponent.results().size() != 0){

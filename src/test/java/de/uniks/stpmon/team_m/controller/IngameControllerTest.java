@@ -222,7 +222,24 @@ public class IngameControllerTest extends ApplicationTest {
                                 100,
                                 100,
                                 2,
-                                new NPCInfo(false, false, false, false, List.of(1, 2, 3), null, null))
+                                new NPCInfo(false, false, false, false, List.of(1, 2, 3), null, null)),
+                        new Trainer(
+                                "2023-05-30T12:02:57.510Z",
+                                "2023-05-30T12:01:57.510Z",
+                                "6475e595ac3946b6a812d867",
+                                "646bab5cecf584e1be02598a",
+                                "6475e595ac3946b6a812d868",
+                                "OtherEncounter",
+                                "Premade_Character_02.png",
+                                0,
+                                List.of(),
+                                List.of(),
+                                List.of("646bacc568933551792bf3d5"),
+                                "6475e595ac3946b6a812d863",
+                                200,
+                                200,
+                                2,
+                                null)
                 )
         ));
         EventListener eventListenerMock = mock(EventListener.class);
@@ -311,8 +328,33 @@ public class IngameControllerTest extends ApplicationTest {
         //Mocking the opponent (Situation)
         when(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() + ".opponents.*.*", Opponent.class)).thenReturn(just(
                 new Event<>("encounters.*.trainers.6475e595ac3946b6a812d865,opponents.*.nothappening", null)));
-
         when(encounterOpponentsService.getTrainerOpponents(anyString(), anyString())).thenReturn(Observable.just(List.of()));
+        lenient().when(encounterOpponentsService.getTrainerOpponents("646bab5cecf584e1be02598a", "6475e595ac3946b6a812d867")).thenReturn(Observable.just(List.of(
+                new Opponent(
+                        "2023-07-09T11:52:17.658Z",
+                        "2023-07-09T11:52:35.578Z",
+                        "64aa9f7132eb8b56aa9eb20f",
+                        "64aa9f7132eb8b56aa9eb208",
+                        "64abfde932eb8b56aac8efac",
+                        true,
+                        true,
+                        "64aa9f7132eb8b56aa9eb20c",
+                        null,
+                        List.of(),
+                        0),
+                new Opponent(
+                        "2023-07-09T11:52:17.658Z",
+                        "2023-07-09T11:52:35.578Z",
+                        "64aa9f7132eb8b56aa9eb20d",
+                        "64aa9f7132eb8b56aa9eb208",
+                        "64abfde932eb8b56aac8efad",
+                        true,
+                        true,
+                        "64aa9f7132eb8b56aa9eb20d",
+                        null,
+                        List.of(),
+                        0
+                ))));
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
@@ -1064,6 +1106,32 @@ public class IngameControllerTest extends ApplicationTest {
 
         clickOn("Sell");
         clickOn(close);
+
+    }
+
+    @Test
+    void testOtherTrainerInEncounter() {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(200);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(201);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+
+        type(KeyCode.E);
+        sleep(30);
+
+        type(KeyCode.E);
+        sleep(30);
+
+        clickOn("Leave");
+
+        type(KeyCode.E);
+        sleep(30);
+
+        type(KeyCode.E);
+        sleep(30);
+
+        clickOn("Join encounter");
 
     }
 
