@@ -138,9 +138,7 @@ public class EncounterOpponentController extends Controller {
             opponentHBox.getChildren().add(2, monsterInfoBox);
         }
         monsterImageViewVBox.setOnMouseClicked(event -> {
-            System.out.println("Clicked on " + currentOpponent._id());
             if (isEnemy && isMultipleEnemyEncounter) {
-                System.out.println("target Opponent in EncounterOpponentController");
                 encounterController.targetOpponent(currentOpponent);
             }
         });

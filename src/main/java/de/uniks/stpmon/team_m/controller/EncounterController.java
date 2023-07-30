@@ -374,7 +374,6 @@ public class EncounterController extends Controller {
     }
 
     public void targetOpponent(Opponent opponent) {
-        System.out.println("targetOpponent in EncounterController");
         encounterOpponentStorage.setTargetOpponent(opponent);
         if (encounterOpponentStorage.getLeastTargetOpponent() == null){
             if (encounterOpponentControllerHashMap.containsKey(opponent._id())) {
@@ -531,7 +530,6 @@ public class EncounterController extends Controller {
     public void listenToOpponents(String encounterId) {
         disposables.add(eventListener.get().listen("encounters." + encounterId + ".trainers.*.opponents.*.*", Opponent.class).observeOn(FX_SCHEDULER).subscribe(event -> {
             final Opponent opponent = event.data();
-            System.out.println("Opponent "+ event.suffix() + " : " + opponent);
             if (event.suffix().contains("updated")) {
                 updateOpponent(opponent);
             } else if (event.suffix().contains("deleted")) {
