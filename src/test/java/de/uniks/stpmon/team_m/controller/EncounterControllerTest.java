@@ -466,18 +466,18 @@ class EncounterControllerTest extends ApplicationTest {
         encounterController.setValues(bundle, preferences, null, encounterController, app);
         app.show(encounterController);
 
-        Thread.sleep(200);
+        sleep(200);
 
         Button fleeButton = lookup("#fleeButton").query();
         assertNotNull(fleeButton);
 
         clickOn(fleeButton);
-        Thread.sleep(200);
-        clickOn("#fleePopupNoButton");
+        sleep(300);
+        clickOn("No");
 
         clickOn(fleeButton);
-        Thread.sleep(200);
-        clickOn("#fleePopupYesButton");
+        sleep(200);
+        clickOn("Yes");
 
     }
 

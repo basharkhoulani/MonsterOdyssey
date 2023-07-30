@@ -506,7 +506,7 @@ public class IngameControllerTest extends ApplicationTest {
             Thread.sleep(30);
         }
 
-        waitForFxEvents();
+        sleep(200);
         clickOn("Yes");
         // healing of monsters cannot be tested, since this should happen on the server, when you encounter the nurse
 
