@@ -58,14 +58,6 @@ public class NotificationListHandyController extends Controller {
         ingameNotificationListView.setFocusModel(null);
         ingameNotificationListView.setCellFactory(param -> new IngameNotificationCell());
         ingameNotificationListView.setItems(handyMessages);
-
-        /*
-        if (trainer.encounteredMonsterTypes().size() == 0) {
-            this.displayFirstTimeNotifications();
-        }
-        /*if (trainer.encounteredMonsterTypes().size() == 1) {
-            this.displayStarterMessages();
-        }*/
         ingameNotificationListView.setMouseTransparent(true);
 
         return parent;
