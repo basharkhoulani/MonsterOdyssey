@@ -6,6 +6,9 @@ import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
+import de.uniks.stpmon.team_m.dto.UpdateItemDto;
+import de.uniks.stpmon.team_m.service.TrainerItemsService;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -19,11 +22,11 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
 
-import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxHeight;
-import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxWidth;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class ItemDescriptionController extends Controller {
 
@@ -51,6 +54,10 @@ public class ItemDescriptionController extends Controller {
     private StackPane rootStackPane;
     private IngameController ingameController;
 
+    private TrainerItemsService trainerItemsService;
+    private TrainerStorage trainerStorage;
+    private ItemMenuController itemMenuController;
+
     @Inject
     public ItemDescriptionController() {
     }
@@ -62,7 +69,8 @@ public class ItemDescriptionController extends Controller {
                      int ownAmountOfITem,
                      Runnable closeItemMenu,
                      StackPane rootStackPane,
-                     IngameController ingameController) {
+                     IngameController ingameController,
+                     ItemMenuController itemMenuController) {
         super.init();
         this.itemImage = itemImage;
         this.itemTypeDto = itemTypeDto;
@@ -72,6 +80,10 @@ public class ItemDescriptionController extends Controller {
         this.closeItemMenu = closeItemMenu;
         this.rootStackPane = rootStackPane;
         this.ingameController = ingameController;
+        this.itemMenuController = itemMenuController;
+
+        this.trainerItemsService = ingameController.getTrainerItemsService();
+        this.trainerStorage = ingameController.getTrainerStorage();
     }
 
     @Override
@@ -122,11 +134,51 @@ public class ItemDescriptionController extends Controller {
     }
 
     public void buyItem() {
+        disposables.add(trainerItemsService.useOrTradeItem(
+                trainerStorage.getRegion()._id(),
+                trainerStorage.getTrainer()._id(),
+                ITEM_ACTION_TRADE_ITEM,
+                new UpdateItemDto(1, item.type(), null)
+        ).observeOn(FX_SCHEDULER).subscribe(
+                result -> {
+                    System.out.println(result);
+                    trainerStorage.updateItem(result);
+                    ownAmountOfItem++;
+                    this.itemAmountLabel.setText(String.valueOf(ownAmountOfItem));
 
+                    ingameController.setCoinsAmount((ingameController.getCoinsAmount() - itemTypeDto.price()));
+                },
+                error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
     }
 
     public void sellItem() {
+        disposables.add(trainerItemsService.useOrTradeItem(
+                trainerStorage.getRegion()._id(),
+                trainerStorage.getTrainer()._id(),
+                ITEM_ACTION_TRADE_ITEM,
+                new UpdateItemDto(-1, item.type(), null)
+        ).observeOn(FX_SCHEDULER).subscribe(
+                result -> {
+                    System.out.println(result);
+                    trainerStorage.updateItem(result);
+                    this.itemMenuController.updateListView();
+                    ownAmountOfItem--;
+                    this.itemAmountLabel.setText(String.valueOf(ownAmountOfItem));
 
+                    ingameController.setCoinsAmount((ingameController.getCoinsAmount() + itemTypeDto.price() / 2));
+                    System.out.println(trainerStorage.getItems());
+                },
+                error -> {
+                    System.out.println(trainerStorage.getRegion()._id());
+                    System.out.println(trainerStorage.getTrainer()._id());
+                    System.out.println(ITEM_ACTION_TRADE_ITEM);
+                    System.out.println(item.type());
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
     }
 
     private void showMonsterList(Item item) {

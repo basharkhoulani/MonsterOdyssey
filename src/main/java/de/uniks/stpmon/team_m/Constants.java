@@ -312,6 +312,7 @@ public class Constants {
     }
 
     public static final String ITEM_ACTION_USE_ITEM = "use";
+    public static final String ITEM_ACTION_TRADE_ITEM = "trade";
     public static final String ITEM_USAGE_EFFECT = "effect";
     public static final int useItemMonsterListVBoxWidth = 600;
     public static final int useItemMonsterListVBoxHeight = 410;

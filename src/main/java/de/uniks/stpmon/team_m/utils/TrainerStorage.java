@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Singleton
@@ -45,14 +46,15 @@ public class TrainerStorage {
 
     public void updateItem(Item item) {
         this.items.stream().filter(i -> i._id().equals(item._id())).findFirst().ifPresent(i -> this.items.set(this.items.indexOf(i), item));
-    }
 
+        this.items = this.items.stream().filter(i -> i.amount() > 0).collect(Collectors.toList());
+    }
     public void setItems(List<Item> items) {
         this.items = items;
     }
 
     public List<Item> getItems() {
-        return items;
+        return items.stream().filter(i -> i.amount() > 0).collect(Collectors.toList());
     }
 
     public Trainer getTrainer() {

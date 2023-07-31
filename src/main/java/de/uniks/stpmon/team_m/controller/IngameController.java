@@ -2128,4 +2128,15 @@ public class IngameController extends Controller {
     public MonstersListController getMonstersListController() {
         return monstersListControllerProvider.get();
     }
+
+    public String getCurrentNpcID() {
+        return this.currentNpc._id();
+    }
+
+    public TrainerStorage getTrainerStorage() {
+        return trainerStorageProvider.get();
+    }
+    public TrainerItemsService getTrainerItemsService() {
+        return this.trainerItemsService;
+    }
 }
