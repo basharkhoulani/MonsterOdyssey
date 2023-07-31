@@ -539,18 +539,16 @@ public class IngameController extends Controller {
         }
         else {
             disposables.add(presetsService.getItem(item.type()).observeOn(FX_SCHEDULER).subscribe(
-                    itemTypeDto -> {
-                        disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
-                                image -> {
-                                    itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image));
-                                    receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image), resources, this::removeItemReceivedPopUp);
-                                    root.getChildren().add(receiveObjectController.render());
-                                },
-                                error -> {
-                                    showError(error.getMessage());
-                                    error.printStackTrace();
-                                }));
-                    },
+                    itemTypeDto -> disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
+                            image -> {
+                                itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image));
+                                receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image), resources, this::removeItemReceivedPopUp);
+                                getRoot().getChildren().add(receiveObjectController.render());
+                            },
+                            error -> {
+                                showError(error.getMessage());
+                                error.printStackTrace();
+                            })),
                     error -> {
                         showError(error.getMessage());
                         error.printStackTrace();
@@ -572,14 +570,9 @@ public class IngameController extends Controller {
                             System.out.println("Monster received: " + monster);
                             monsters.add(monster);
                         }
-                        case "updated" -> {
-                            System.out.println("Monster updated: " + monster);
-                        }
-                        case "deleted" -> {
-                            System.out.println("Monster deleted: " + monster);
-                        }
+                        case "updated" -> System.out.println("Monster updated: " + monster);
+                        case "deleted" -> System.out.println("Monster deleted: " + monster);
                     }
-
                 }, error -> {
                     showError(error.getMessage());
                     error.printStackTrace();
@@ -596,12 +589,8 @@ public class IngameController extends Controller {
                             items.add(item);
                             createItemReceivedPopUp(item);
                         }
-                        case "updated" -> {
-                            System.out.println("Item updated: " + item);
-                        }
-                        case "deleted" -> {
-                            System.out.println("Item deleted: " + item);
-                        }
+                        case "updated" -> System.out.println("Item updated: " + item);
+                        case "deleted" -> System.out.println("Item deleted: " + item);
                     }
 
                 }, error -> {
@@ -1099,7 +1088,19 @@ public class IngameController extends Controller {
                 ITEM_ACTION_USE_ITEM,
                 new UpdateItemDto(1, item.type(), monsterId)
         ).observeOn(FX_SCHEDULER).subscribe(
-                result -> trainerStorageProvider.get().updateItem(result),
+                result -> {
+                    System.out.println("Item used. Result: " + result);
+                    disposables.add(trainerItemsService.getItems(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), null)
+                            .observeOn(FX_SCHEDULER).subscribe(
+                            items -> {
+                                trainerStorageProvider.get().setItems(items);
+                                items.forEach(it -> itemStorageProvider.get().updateItemData(it, null, null));
+                            },
+                            error -> {
+                                showError(error.getMessage());
+                                error.printStackTrace();
+                            }));
+                },
                 error -> {
                     showError(error.getMessage());
                     error.printStackTrace();
