@@ -98,14 +98,6 @@ public abstract class Controller {
      */
 
     public Parent render() {
-        Timer timer = new Timer();
-        TimerTask ping = new TimerTask() {
-            @Override
-            public void run() {
-                disposables.add(authenticationService.refresh().observeOn(FX_SCHEDULER).subscribe(System.out::println));
-            }
-        };
-        timer.schedule(ping, 0, STUNDE_IN_MILLIS);
         return load(getClass().getSimpleName().replace("Controller", ""));
     }
 
