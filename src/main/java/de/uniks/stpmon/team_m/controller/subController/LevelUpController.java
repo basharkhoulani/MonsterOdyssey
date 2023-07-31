@@ -22,6 +22,7 @@ import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -65,6 +66,7 @@ public class LevelUpController extends Controller {
     private ArrayList<Integer> newAbilities;
     private List<AbilityDto> abilities;
     private boolean hasEvolved;
+    private final DecimalFormat formatter = new DecimalFormat("#,###.0");
     @Inject
     Provider<EvolutionController> evolutionControllerProvider;
     @Inject
@@ -103,7 +105,7 @@ public class LevelUpController extends Controller {
         }
 
         levelLabel.setText(oldMonster.level() + " -> " + currentMonster.level());
-        healthLabel.setText(oldMonster.attributes().health() + " -> " + currentMonster.attributes().health());
+        healthLabel.setText(formatter.format(oldMonster.attributes().health()) + " -> " + formatter.format(currentMonster.attributes().health()));
         attackLabel.setText(oldMonster.attributes().attack() + " -> " + currentMonster.attributes().attack());
         defenseLabel.setText(oldMonster.attributes().defense() + " -> " + currentMonster.attributes().defense());
         speedLabel.setText(oldMonster.attributes().speed() + " -> " + currentMonster.attributes().speed());
