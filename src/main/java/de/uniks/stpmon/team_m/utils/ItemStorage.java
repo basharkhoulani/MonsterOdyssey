@@ -25,7 +25,7 @@ public class ItemStorage {
         return itemDataList;
     }
 
-    public void addItemData(Item item, ItemTypeDto itemTypeDto, Image itemImage) {
+    public void addItemData(@NonNull Item item, ItemTypeDto itemTypeDto, Image itemImage) {
         if (itemDataList.stream().anyMatch(m -> m.getItem()._id().equals(item._id()))) {
             return;
         }
