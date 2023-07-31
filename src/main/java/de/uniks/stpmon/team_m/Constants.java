@@ -284,8 +284,9 @@ public class Constants {
     public static final String BURNED = "burned";
     public static final String FROZEN = "frozen";
     public static final String CONFUSED = "confused";
+    public static final String STUNNED = "stunned";
 
-    public static final List<String> STATUS_EFFECTS = Arrays.asList(PARALYSED, ASLEEP, POISONED, BURNED, FROZEN, CONFUSED);
+    public static final List<String> STATUS_EFFECTS = Arrays.asList(PARALYSED, ASLEEP, POISONED, BURNED, FROZEN, CONFUSED, STUNNED);
 
     public static final HashMap<String, String> STATUS_EFFECTS_IMAGES = new HashMap<>(Map.ofEntries(
             entry(PARALYSED, "images/paralysed.png"),
@@ -293,7 +294,8 @@ public class Constants {
             entry(POISONED, "images/poisoned.png"),
             entry(BURNED, "images/burned.png"),
             entry(FROZEN, "images/frozen.png"),
-            entry(CONFUSED, "images/confused.png")
+            entry(CONFUSED, "images/confused.png"),
+            entry(STUNNED, "images/stunned.png")
     ));
 
 

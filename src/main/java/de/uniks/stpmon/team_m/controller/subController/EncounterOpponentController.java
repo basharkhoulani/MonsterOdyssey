@@ -77,6 +77,8 @@ public class EncounterOpponentController extends Controller {
     public ImageView confusedImage;
     @FXML
     public ImageView burnedImage;
+    @FXML
+    public ImageView stunnedImage;
     public Runnable onTargetChange;
     EncounterController encounterController;
 
@@ -107,6 +109,7 @@ public class EncounterOpponentController extends Controller {
             burnedImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("burned"))).toString()));
             frozenImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("frozen"))).toString()));
             confusedImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("confused"))).toString()));
+            stunnedImage.setImage(new Image(Objects.requireNonNull(App.class.getResource(STATUS_EFFECTS_IMAGES.get("stunned"))).toString()));
         }
 
         if (isEnemy) {
@@ -244,6 +247,7 @@ public class EncounterOpponentController extends Controller {
             case FROZEN -> frozenImage.setVisible(value);
             case CONFUSED -> confusedImage.setVisible(value);
             case BURNED -> burnedImage.setVisible(value);
+            case STUNNED -> stunnedImage.setVisible(value);
         }
     }
 }
