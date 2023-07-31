@@ -5,6 +5,7 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
+import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
@@ -45,10 +46,8 @@ import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
 import java.time.Instant;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -485,6 +484,9 @@ public class IngameController extends Controller {
             preferences.put("inventory", KeyCode.I.getChar());
         }
         showCoins();
+
+        setupUdpPing();
+
         return parent;
     }
 
@@ -2095,6 +2097,18 @@ public class IngameController extends Controller {
                         error.printStackTrace();
                     }));
         }
+    }
+
+    private void setupUdpPing() {
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                disposables.add(udpEventListenerProvider.get().ping().observeOn(FX_SCHEDULER).subscribe());
+                System.out.println("Ping sent");
+            }
+        };
+        timer.schedule(task, 60*1000);
     }
 
     public int getUserTrainerY() {
