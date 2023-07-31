@@ -2108,7 +2108,7 @@ public class IngameController extends Controller {
                 System.out.println("Ping sent");
             }
         };
-        timer.schedule(task, 60*1000);
+        timer.schedule(task, 0, MINUTE_IN_MILLIS);
     }
 
     public int getUserTrainerY() {

@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.FriendListUtils;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
@@ -25,6 +26,8 @@ import javax.inject.Provider;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
@@ -39,6 +42,8 @@ public abstract class Controller {
     protected Provider<ResourceBundle> resourceBundleProvider;
     @Inject
     protected PresetsService presetsService;
+    @Inject
+    protected AuthenticationService authenticationService;
     protected Controller toReload;
     protected App app;
     @Inject
@@ -93,6 +98,15 @@ public abstract class Controller {
      */
 
     public Parent render() {
+        Timer timer = new Timer();
+        TimerTask ping = new TimerTask() {
+            @Override
+            public void run() {
+                disposables.add(authenticationService.refresh().observeOn(FX_SCHEDULER).subscribe(System.out::println));
+                System.out.println("Ping");
+            }
+        };
+        timer.schedule(ping, 0, STUNDEN_IN_MILLIS);
         return load(getClass().getSimpleName().replace("Controller", ""));
     }
 
