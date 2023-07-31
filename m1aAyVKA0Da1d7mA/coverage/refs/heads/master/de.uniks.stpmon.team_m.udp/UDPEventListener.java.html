@@ -112,5 +112,12 @@ public class UDPEventListener {
 <span class="nc" id="L112">            send(new Event&lt;&gt;(&quot;areas.&quot; + areaId + &quot;.trainers.&quot; + talkTrainerDto._id() + &quot;.talked&quot;, talkTrainerDto));</span>
 <span class="nc" id="L113">        });</span>
     }
+
+    public &lt;T&gt; Observable&lt;Event&lt;T&gt;&gt; ping() {
+<span class="nc" id="L117">        return Observable.create(emitter -&gt; {</span>
+<span class="nc" id="L118">            this.ensureOpen();</span>
+<span class="nc" id="L119">            send(new Event&lt;&gt;(&quot;ping&quot;, null));</span>
+<span class="nc" id="L120">        });</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
