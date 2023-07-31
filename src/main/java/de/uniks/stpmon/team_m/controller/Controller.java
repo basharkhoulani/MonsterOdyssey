@@ -42,8 +42,6 @@ public abstract class Controller {
     protected Provider<ResourceBundle> resourceBundleProvider;
     @Inject
     protected PresetsService presetsService;
-    @Inject
-    protected AuthenticationService authenticationService;
     protected Controller toReload;
     protected App app;
     @Inject

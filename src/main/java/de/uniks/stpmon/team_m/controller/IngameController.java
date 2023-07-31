@@ -144,6 +144,8 @@ public class IngameController extends Controller {
     @Inject
     RegionsService regionsService;
     @Inject
+    AuthenticationService authenticationService;
+    @Inject
     Provider<IngameController> ingameControllerProvider;
 
     private IngamePauseMenuController ingamePauseMenuController;
