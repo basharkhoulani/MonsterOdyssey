@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterAttributes;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
@@ -59,7 +60,7 @@ public class LevelUpControllerTest extends ApplicationTest {
         abilities.put("3", 20);
         abilities.put("6", 25);
         abilities.put("7", 15);
-        Monster monster = new Monster("2023-06-05T17:02:40.357Z",
+        Monster oldMonster = new Monster("2023-06-05T17:02:40.357Z",
                 "023-06-05T17:02:40.357Z",
                 "647e1530866ace3595866db2",
                 "647e15308c1bb6a91fb57321",
@@ -68,6 +69,17 @@ public class LevelUpControllerTest extends ApplicationTest {
                 0,
                 abilities,
                 new MonsterAttributes(14, 8, 8, 5),
+                new MonsterAttributes(14, 8, 8, 5),
+                List.of());
+        Monster newMonster = new Monster("2023-06-05T17:02:40.357Z",
+                "023-06-05T17:02:40.357Z",
+                "647e1530866ace3595866db2",
+                "647e15308c1bb6a91fb57321",
+                1,
+                2,
+                0,
+                abilities,
+                new MonsterAttributes(16, 9, 9, 7),
                 new MonsterAttributes(14, 8, 8, 5),
                 List.of());
         MonsterTypeDto monsterTypeDto = new MonsterTypeDto(
@@ -80,15 +92,28 @@ public class LevelUpControllerTest extends ApplicationTest {
         vBox.getChildren().addAll(new VBox(), new HBox());
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(vBox);
+
+        ArrayList<Integer> newAbilities = new ArrayList<>();
+        newAbilities.add(1);
+        ArrayList<AbilityDto> abilityDtos = new ArrayList<>();
+        abilityDtos.add(new AbilityDto(
+                1,
+                "Tackle",
+                "A physical attack in which the user charges and slams into the target with its whole body.",
+                "normal",
+                35,
+                1.0,
+                2
+        ));
         levelUpController.init(
                 vBox,
                 stackPane,
-                monster,
+                newMonster,
                 monsterTypeDto,
-                monster,
-                new ArrayList<>(),
-                new ArrayList<>(),
-                true);
+                oldMonster,
+                newAbilities,
+                abilityDtos,
+                false);
         app.start(stage);
         app.show(levelUpController);
         stage.requestFocus();
@@ -98,14 +123,14 @@ public class LevelUpControllerTest extends ApplicationTest {
     @Test
     public void levelUpPopUpTest() {
         final Label level = lookup("#levelLabel").query();
-        assertEquals(level.getText(), "1 -> 1");
+        assertEquals(level.getText(), "1 -> 2");
         final Label health = lookup("#healthLabel").query();
-        assertEquals(health.getText(), "14.0 -> 14.0");
+        assertEquals(health.getText(), "14,0 -> 16,0");
         final Label attack = lookup("#attackLabel").query();
-        assertEquals(attack.getText(), "8 -> 8");
+        assertEquals(attack.getText(), "8 -> 9");
         final Label defense = lookup("#defenseLabel").query();
-        assertEquals(defense.getText(), "8 -> 8");
+        assertEquals(defense.getText(), "8 -> 9");
         final Label speed = lookup("#speedLabel").query();
-        assertEquals(speed.getText(), "5 -> 5");
+        assertEquals(speed.getText(), "5 -> 7");
     }
 }
