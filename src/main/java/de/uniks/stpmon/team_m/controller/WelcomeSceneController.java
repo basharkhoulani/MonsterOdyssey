@@ -188,12 +188,16 @@ public class WelcomeSceneController extends Controller {
             }
             case 6 -> app.show(characterSelectionControllerProvider.get());
             case 7 -> {
+                firstMessage.setText(resources.getString("HARDCORE.MESSAGE.1"));
+                secondMessage.setText(resources.getString("HARDCORE.MESSAGE.2"));
+            }
+            case 8 -> {
                 firstMessage.setText(resources.getString("TENTH.MESSAGE"));
                 secondMessage.setText(resources.getString("ELEVENTH.MESSAGE"));
                 secondMessage.setWrapText(true);
                 secondMessage.setPrefWidth(200);
             }
-            case 8 -> {
+            case 9 -> {
                 Region region = trainerStorage.getRegion();
                 disposables.add(trainersServiceProvider.get().createTrainer(
                         region._id(),
