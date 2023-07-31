@@ -541,7 +541,9 @@ public class EncounterController extends Controller {
                     showResult();
                 }
             } else if (event.suffix().contains("created")) {
-                deleteOpponents--;
+                if(encounterOpponentStorage.getEncounterSize() == 4) {
+                    deleteOpponents--;
+                }
                 disposables.add(encounterOpponentsService.getEncounterOpponents(trainerStorageProvider.get().getRegion()._id(), encounterId).observeOn(FX_SCHEDULER).subscribe(opponents -> {
                     teamHBox.getChildren().clear();
                     ingameControllerProvider.get().initEncounterOpponentStorage(opponents);
