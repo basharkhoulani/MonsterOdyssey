@@ -103,10 +103,9 @@ public abstract class Controller {
             @Override
             public void run() {
                 disposables.add(authenticationService.refresh().observeOn(FX_SCHEDULER).subscribe(System.out::println));
-                System.out.println("Ping");
             }
         };
-        timer.schedule(ping, 0, STUNDEN_IN_MILLIS);
+        timer.schedule(ping, 0, STUNDE_IN_MILLIS);
         return load(getClass().getSimpleName().replace("Controller", ""));
     }
 

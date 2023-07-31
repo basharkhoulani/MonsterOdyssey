@@ -2105,7 +2105,6 @@ public class IngameController extends Controller {
             @Override
             public void run() {
                 disposables.add(udpEventListenerProvider.get().ping().observeOn(FX_SCHEDULER).subscribe());
-                System.out.println("Ping sent");
             }
         };
         timer.schedule(task, 0, MINUTE_IN_MILLIS);
