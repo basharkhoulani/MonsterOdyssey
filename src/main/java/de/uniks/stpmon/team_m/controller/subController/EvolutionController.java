@@ -76,7 +76,8 @@ public class EvolutionController extends Controller {
         }
         Text header = new Text(resources.getString("EVOLUTION") + "!\n");
         header.getStyleClass().add("evolutionHeader");
-        Text text = new Text(resources.getString("INCREDIBLE") + "! " + oldMonsterTypeDto.name() + " " + resources.getString("EVOLVES.TO") + " " + currentMonsterTypeDto.name());
+        Text text = new Text(resources.getString("INCREDIBLE") + "! " +
+                oldMonsterTypeDto.name() + " " + resources.getString("EVOLVES.TO") + " " + currentMonsterTypeDto.name() + "!");
         evolutionTextFlow.setTextAlignment(TextAlignment.CENTER);
         evolutionTextFlow.getChildren().addAll(header, text);
         final String[] oldMonsterString = {resources.getString("TYPE") + " "};

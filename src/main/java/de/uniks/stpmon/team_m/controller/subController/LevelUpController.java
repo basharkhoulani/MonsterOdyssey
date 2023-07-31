@@ -77,7 +77,6 @@ public class LevelUpController extends Controller {
 
     @Inject
     public LevelUpController() {
-
     }
 
     public void init(VBox container, StackPane root, Monster currentMonster, MonsterTypeDto currentMonsterTypeDto,
