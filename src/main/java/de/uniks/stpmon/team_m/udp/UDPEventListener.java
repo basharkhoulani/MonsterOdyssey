@@ -112,4 +112,11 @@ public class UDPEventListener {
             send(new Event<>("areas." + areaId + ".trainers." + talkTrainerDto._id() + ".talked", talkTrainerDto));
         });
     }
+
+    public <T> Observable<Event<T>> ping() {
+        return Observable.create(emitter -> {
+            this.ensureOpen();
+            send(new Event<>("ping", null));
+        });
+    }
 }
