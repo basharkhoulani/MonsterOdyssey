@@ -17,7 +17,7 @@
    </padding>
    <Label fx:id="receivedObjectCongratulationLabel" text="\%CONGRATULATION">
       <font>
-         <Font name="Comic Sans MS Bold" size="17.0"/>
+         <Font name="Comic Sans MS Bold" size="24.0"/>
       </font>
       <VBox.margin>
          <Insets bottom="8.0"/>
@@ -61,7 +61,7 @@
       </VBox>
    </HBox>
    <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
-      <Button fx:id="receiveObjectOkButton" minWidth="150.0" mnemonicParsing="false" text="OK">
+      <Button fx:id="receiveObjectOkButton" minWidth="150.0" mnemonicParsing="false" text="OK" styleClass="buttonsYellow">
          <font>
             <Font name="Comic Sans MS Bold" size="17.0"/>
          </font>

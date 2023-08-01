@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
@@ -108,7 +109,8 @@ public class EncounterController extends Controller {
     private int currentMonsterIndex = 0;
     private int deleteOpponents = 0;
     private DecimalFormat formatter = new DecimalFormat("#,###.0");
-    private Parent receivedMonsterPopUp;
+    private VBox receivedMonsterPopUp;
+    private ImageView ballImageView;
 
 
     @Inject
@@ -1015,7 +1017,14 @@ public class EncounterController extends Controller {
                 case 15 -> bt = WATER;
                 default -> bt = HEAL;
             }
-            ImageView ballImageView = AnimationBuilder.throwMonBall(bt, rootStackPane, ownTrainerController.trainerImageView, enemy1Controller.monsterImageView);
+            ballImageView = AnimationBuilder.throwMonBall(bt,
+                    rootStackPane,
+                    ownTrainerController.trainerImageView,
+                    enemy1Controller.monsterImageView,
+                    () -> onMonsterBreakout(ballImageView)
+                    //this::showMonsterReceivedPopUp
+                    );
+            /*
             disposables.add(encounterOpponentsService.updateOpponent(
                     regionId,
                     encounterId,
@@ -1025,27 +1034,43 @@ public class EncounterController extends Controller {
             ).observeOn(FX_SCHEDULER).subscribe(opponent -> {
                         System.out.println("Result: " + opponent);
                         // TODO: check if monster catching was successful
+
+
                         if (true) {
                             showMonsterReceivedPopUp();
                         } else {
                             ballImageView.setVisible(false);
                             enemy1Controller.monsterImageView.setVisible(true);
                         }
+
                     },
                     error -> {
                         showError(error.getMessage());
                         error.printStackTrace();
                     }
             ));
+
+                         */
         }
     }
 
+    private void onMonsterBreakout(ImageView ballImageView) {
+        ballImageView.setVisible(false);
+        enemy1Controller.monsterImageView.setVisible(true);
+    }
+
     public void showMonsterReceivedPopUp() {
+        receivedMonsterPopUp = new VBox();
+        receivedMonsterPopUp.setMaxWidth(popupWidth);
+        receivedMonsterPopUp.setMaxHeight(popupHeight);
+        receivedMonsterPopUp.setAlignment(Pos.CENTER);
+        receivedMonsterPopUp.setStyle("-fx-border-color: black; -fx-border-width: 1px; -fx-border-style: solid; -fx-border-radius: 10px;");
+        receivedMonsterPopUp.getStyleClass().add("hBoxLightGreen");
         String opponentId = encounterOpponentStorage.getTargetOpponent()._id();
         ReceiveObjectController receivedMonsterController = new ReceiveObjectController(encounterOpponentStorage.getCurrentMonsters(opponentId), encounterOpponentStorage.getCurrentMonsterType(opponentId), enemy1Controller.monsterImageView.getImage(), this::closeMonsterReceivedPopUp);
         receivedMonsterController.setValues(resources, preferences, resourceBundleProvider, this, app);
         receivedMonsterController.init();
-        receivedMonsterPopUp = receivedMonsterController.render();
+        receivedMonsterPopUp.getChildren().add(receivedMonsterController.render());
         rootStackPane.getChildren().add(receivedMonsterPopUp);
     }
 
