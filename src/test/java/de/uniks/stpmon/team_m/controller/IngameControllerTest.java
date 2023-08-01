@@ -812,7 +812,7 @@ public class IngameControllerTest extends ApplicationTest {
         mainMenuController.setValues(bundle, null, null, mainMenuController, app);
         when(mainMenuControllerProvider.get()).thenReturn(mainMenuController);
 
-        when(trainersService.updateTrainer(any(), any(), any(), any(), any())).thenReturn(Observable.just(new Trainer(
+        when(trainersService.updateTrainer(any(), any(), any(), any(), any(), any(), any())).thenReturn(Observable.just(new Trainer(
                 "2023-05-30T12:02:57.510Z",
                 "2023-05-30T12:01:57.510Z",
                 "6475e595ac3946b6a812d863",

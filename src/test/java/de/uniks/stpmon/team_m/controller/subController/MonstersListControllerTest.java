@@ -188,7 +188,7 @@ public class MonstersListControllerTest extends ApplicationTest {
 
     @Test
     void changeOrderDown() {
-        when(trainersService.updateTrainer(any(), any(), any(), any(), any()))
+        when(trainersService.updateTrainer(any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(Observable.just(
                         new Trainer(
                                 "2023-06-05T17:02:40.332Z",
@@ -229,7 +229,7 @@ public class MonstersListControllerTest extends ApplicationTest {
 
     @Test
     void changeOrderUp() {
-        when(trainersService.updateTrainer(any(), any(), any(), any(), any()))
+        when(trainersService.updateTrainer(any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(Observable.just(
                         new Trainer(
                                 "2023-06-05T17:02:40.332Z",
@@ -291,7 +291,7 @@ public class MonstersListControllerTest extends ApplicationTest {
 
         when(trainerStorageProvider.get().getTrainer()).thenReturn(trainer);
         when(team.remove(anyString())).thenReturn(true);
-        when(trainersService.updateTrainer(any(), any(), any(), any(), any()))
+        when(trainersService.updateTrainer(any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(Observable.just(
                         new Trainer(
                                 "2023-06-05T17:02:40.332Z",
@@ -345,7 +345,7 @@ public class MonstersListControllerTest extends ApplicationTest {
         );
         when(trainerStorageProvider.get().getTrainer()).thenReturn(trainer);
         when(team.add(anyString())).thenReturn(true);
-        when(trainersService.updateTrainer(any(), any(), any(), any(), any()))
+        when(trainersService.updateTrainer(any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(Observable.just(
                         new Trainer(
                                 "2023-06-05T17:02:40.332Z",

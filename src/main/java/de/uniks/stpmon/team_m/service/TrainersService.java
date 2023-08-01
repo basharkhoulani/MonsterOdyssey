@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.service;
 
 import de.uniks.stpmon.team_m.dto.CreateTrainerDto;
+import de.uniks.stpmon.team_m.dto.Settings;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.dto.UpdateTrainerDto;
 import de.uniks.stpmon.team_m.rest.TrainersApiService;
@@ -69,8 +70,8 @@ public class TrainersService {
      * @return The trainer.
      */
 
-    public Observable<Trainer> updateTrainer(String regionId, String _id, String name, String image, List<String> team) {
-        UpdateTrainerDto updateTrainerDto = new UpdateTrainerDto(name, image, team);
+    public Observable<Trainer> updateTrainer(String regionId, String _id, String name, String image, List<String> team, String area, Settings settings) {
+        UpdateTrainerDto updateTrainerDto = new UpdateTrainerDto(name, image, team, area, settings);
         return trainersApiService.updateTrainer(regionId, _id, updateTrainerDto);
     }
 

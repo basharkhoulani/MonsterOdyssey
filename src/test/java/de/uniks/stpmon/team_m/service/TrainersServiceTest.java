@@ -203,13 +203,13 @@ public class TrainersServiceTest {
                 null)
         ));
 
-        final Trainer trainer = trainersService.updateTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5", "Hallo", "Premade_Character_03.png", List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a")).blockingFirst();
+        final Trainer trainer = trainersService.updateTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5", "Hallo", "Premade_Character_03.png", List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"), null, null).blockingFirst();
 
         assertNotNull(trainer);
         assertEquals("Hallo", trainer.name());
 
         verify(trainersApiService).updateTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5",
-                new UpdateTrainerDto("Hallo", "Premade_Character_03.png", List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a")));
+                new UpdateTrainerDto("Hallo", "Premade_Character_03.png", List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"), null, null));
 
     }
 
