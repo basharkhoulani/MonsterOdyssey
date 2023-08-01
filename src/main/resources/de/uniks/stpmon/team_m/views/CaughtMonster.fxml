@@ -8,12 +8,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox fx:id="caughtMonsterVbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="249.0" prefWidth="348.0" style="-fx-background-radius: 10; -fx-border-color: black; -fx-border-width: 2;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.CaughtMonsterController">
-      <VBox prefHeight="248.0" prefWidth="368.0">
+<VBox fx:id="caughtMonsterVbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="270.0" prefWidth="320.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 20; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 20;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.CaughtMonsterController">
+      <VBox prefHeight="260.0" prefWidth="344.0">
             <Label fx:id="congratulationLabel" prefHeight="43.0" prefWidth="181.0" textAlignment="CENTER">
                <VBox.margin>
-                  <Insets left="80.0" top="5.0" />
+                  <Insets left="90.0" top="5.0" />
                </VBox.margin>
                <font>
                   <Font name="Comic Sans MS Bold" size="17.0" />
@@ -21,7 +20,7 @@
             </Label>
             <Label fx:id="caughtMonsterLabel" prefHeight="33.0" prefWidth="220.0">
                <VBox.margin>
-                  <Insets left="60.0" top="5.0" />
+                  <Insets left="70.0" top="5.0" />
                </VBox.margin>
                <font>
                   <Font name="Comic Sans MS Bold" size="14.0" />
@@ -36,12 +35,12 @@
                   <VBox prefHeight="97.0" prefWidth="120.0" spacing="10.0">
                         <Label fx:id="newMonsterLabel" prefHeight="44.0" prefWidth="122.0" textFill="#e8a109">
                            <font>
-                              <Font name="Comic Sans MS Bold" size="17.0" />
+                              <Font name="Comic Sans MS Bold" size="24.0" />
                            </font>
                         </Label>
                         <Label fx:id="newMonsterLevelLabel" prefHeight="39.0" prefWidth="118.0">
                            <font>
-                              <Font name="Comic Sans MS" size="14.0" />
+                              <Font name="Comic Sans MS" size="17.0" />
                            </font>
                         </Label>
                   </VBox>
@@ -49,12 +48,12 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </HBox>
-            <Button fx:id="okButton" mnemonicParsing="false" onAction="#okButtonPressed" prefHeight="43.0" prefWidth="124.0" style="-fx-background-color: #FFF2CC; -fx-border-color: black;" text="OK">
+            <Button fx:id="okButton" mnemonicParsing="false" onAction="#okButtonPressed" prefHeight="43.0" prefWidth="124.0" style="-fx-background-color: #FFF2CC; -fx-border-color: black; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-width: 2;" text="OK">
                <font>
-                  <Font name="Comic Sans MS" size="14.0" />
+                  <Font name="Comic Sans MS Bold" size="14.0" />
                </font>
                <VBox.margin>
-                  <Insets left="110.0" />
+                  <Insets left="100.0" top="15.0" />
                </VBox.margin>
             </Button>
       </VBox>
