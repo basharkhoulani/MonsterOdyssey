@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.ballType.*;
 
 
 public class EncounterController extends Controller {
@@ -107,6 +108,7 @@ public class EncounterController extends Controller {
     private int currentMonsterIndex = 0;
     private int deleteOpponents = 0;
     private DecimalFormat formatter = new DecimalFormat("#,###.0");
+    private Parent receivedMonsterPopUp;
 
 
     @Inject
@@ -155,7 +157,7 @@ public class EncounterController extends Controller {
         ownTrainerController.init(selfOpponent, false, false, true, false, true, this);
         encounterOpponentControllerHashMap.put(selfOpponent._id(), ownTrainerController);
         Parent ownTrainerParent = ownTrainerController.render();
-        HBox.setHgrow(ownTrainerParent, javafx.scene.layout.Priority.ALWAYS);
+        //HBox.setHgrow(ownTrainerParent, javafx.scene.layout.Priority.ALWAYS);
 
         //showMyMonster
         showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent());
@@ -209,7 +211,10 @@ public class EncounterController extends Controller {
     }
 
     public void onFleeButtonClick() {
-        rootStackPane.getChildren().add(this.buildFleePopup());
+        // TODO: remove later on
+        //rootStackPane.getChildren().add(this.buildFleePopup());
+        //AnimationBuilder.throwMonBall(ballType.MASTER, rootStackPane, ownTrainerController.getTrainerImageView(), enemy1Controller.monsterImageView);
+        useMonBall(new Item("10", trainerStorageProvider.get().getTrainer()._id(), 10, 1));
     }
 
     private void renderForWild(Parent ownTrainerParent) {
@@ -631,8 +636,7 @@ public class EncounterController extends Controller {
                 if (oResults.results() != null) {
                     for (Result r : oResults.results()) {
                         switch (r.type()) {
-                            case ABILITY_SUCCESS ->
-                                    updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
+                            case ABILITY_SUCCESS -> updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
                             case MONSTER_LEVELUP -> {
                                 if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                                     resultLevelUpHashMap.put(oResults._id(), true);
@@ -997,6 +1001,56 @@ public class EncounterController extends Controller {
                     updateDescription(resources.getString("YOU.CHANGED.MONSTER") + ". ", true);
                     increaseCurrentMonsterIndex();
                 }));
+    }
+
+    public void useMonBall(Item item) {
+        if (encounterOpponentStorage.isWild()) {
+            ballType bt;
+            switch (item.type()) {
+                case 10 -> bt = NORMAL;
+                case 11 -> bt = SUPER;
+                case 12 -> bt = HYPER;
+                case 13 -> bt = MASTER;
+                case 14 -> bt = NET;
+                case 15 -> bt = WATER;
+                default -> bt = HEAL;
+            }
+            ImageView ballImageView = AnimationBuilder.throwMonBall(bt, rootStackPane, ownTrainerController.trainerImageView, enemy1Controller.monsterImageView);
+            disposables.add(encounterOpponentsService.updateOpponent(
+                    regionId,
+                    encounterId,
+                    encounterOpponentStorage.getEnemyOpponents().get(0)._id(),
+                    encounterOpponentStorage.getSelfOpponent().monster(),
+                    new UseItemMove(ITEM_ACTION_USE_ITEM_MOVE, item.type(), encounterOpponentStorage.getTargetOpponent().monster())
+            ).observeOn(FX_SCHEDULER).subscribe(opponent -> {
+                        System.out.println("Result: " + opponent);
+                        // TODO: check if monster catching was successful
+                        if (true) {
+                            showMonsterReceivedPopUp();
+                        } else {
+                            ballImageView.setVisible(false);
+                            enemy1Controller.monsterImageView.setVisible(true);
+                        }
+                    },
+                    error -> {
+                        showError(error.getMessage());
+                        error.printStackTrace();
+                    }
+            ));
+        }
+    }
+
+    public void showMonsterReceivedPopUp() {
+        String opponentId = encounterOpponentStorage.getTargetOpponent()._id();
+        ReceiveObjectController receivedMonsterController = new ReceiveObjectController(encounterOpponentStorage.getCurrentMonsters(opponentId), encounterOpponentStorage.getCurrentMonsterType(opponentId), enemy1Controller.monsterImageView.getImage(), this::closeMonsterReceivedPopUp);
+        receivedMonsterController.setValues(resources, preferences, resourceBundleProvider, this, app);
+        receivedMonsterController.init();
+        receivedMonsterPopUp = receivedMonsterController.render();
+        rootStackPane.getChildren().add(receivedMonsterPopUp);
+    }
+
+    public void closeMonsterReceivedPopUp() {
+        rootStackPane.getChildren().remove(receivedMonsterPopUp);
     }
 
 }
