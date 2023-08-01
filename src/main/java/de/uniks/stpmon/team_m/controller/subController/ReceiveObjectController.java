@@ -13,8 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
-import java.util.ResourceBundle;
-
 public class ReceiveObjectController extends Controller {
     private final Monster monster;
     private final MonsterTypeDto monsterTypeDto;
@@ -39,21 +37,19 @@ public class ReceiveObjectController extends Controller {
     @FXML
     public Button receiveObjectOkButton;
 
-    public ReceiveObjectController(Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources, Runnable onOkButtonClick) {
+    public ReceiveObjectController(Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, Runnable onOkButtonClick) {
         this.monster = monster;
         this.monsterTypeDto = monsterTypeDto;
         this.objectImage = monsterImage;
-        this.resources = resources;
         this.item = null;
         this.itemTypeDto = null;
         this.onOkButtonClick = onOkButtonClick;
     }
 
-    public ReceiveObjectController(Item item, ItemTypeDto itemTypeDto, Image itemImage, ResourceBundle resources , Runnable onOkButtonClick) {
+    public ReceiveObjectController(Item item, ItemTypeDto itemTypeDto, Image itemImage, Runnable onOkButtonClick) {
         this.item = item;
         this.itemTypeDto = itemTypeDto;
         this.objectImage = itemImage;
-        this.resources = resources;
         this.monster = null;
         this.monsterTypeDto = null;
         this.onOkButtonClick = onOkButtonClick;
@@ -73,11 +69,13 @@ public class ReceiveObjectController extends Controller {
         }
         else {
             // TODO: check if item is NOT new
-            if (true) {
-                receivedObjectLabelVBox.getChildren().remove(receivedObjectNewLabel);
+            if (itemTypeDto != null && item != null) {
+                if (true) {
+                    receivedObjectLabelVBox.getChildren().remove(receivedObjectNewLabel);
+                }
+                receiveObjectTextLabel.setText(itemTypeDto.name() + " " + this.resources.getString("RECEIVE_OBJECT_TEXT"));
+                receivedObjectLevelLabel.setText(" " + this.item.amount());
             }
-            receiveObjectTextLabel.setText(itemTypeDto.name() + " " + this.resources.getString("RECEIVE_OBJECT_TEXT"));
-            receivedObjectLevelLabel.setText(" " + this.item.amount());
         }
         receivedObjectImageView.setImage(this.objectImage);
         this.receiveObjectOkButton.setOnAction(event -> onOkButtonClick.run());
