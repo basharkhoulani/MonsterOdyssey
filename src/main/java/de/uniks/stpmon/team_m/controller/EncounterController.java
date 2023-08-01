@@ -753,7 +753,7 @@ public class EncounterController extends Controller {
                     // if health is 0, then add to the team the information that the monster is died.
                     // if the type of the monster changed, then make a server call and update in the opponent storage
                     if (currentHealth == 0) {
-                        if (trainer.settings() != null && trainer.settings().monsterPermaDeath()) {
+                        if (trainer.settings() != null && trainer.settings().monsterPermaDeath() != null && trainer.settings().monsterPermaDeath()) {
                             disposables.add(monstersService.deleteMonster(regionId, trainer._id(), monster._id()).observeOn(FX_SCHEDULER).subscribe());
                         } else {
                             monsterInTeamHashMap.put(monster._id(), true);
