@@ -103,19 +103,27 @@ public class ItemCell extends ListCell<Item> {
                 if (itemStorage.getItemData(item._id()) != null && itemStorage.getItemData(item._id()).getItemImage() != null) {
                     itemImageView.setImage(itemStorage.getItemData(item._id()).getItemImage());
                     this.itemImage = itemStorage.getItemData(item._id()).getItemImage();
-                }
-                else {
-                    disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)
-                            .subscribe(itemImageResBody -> {
-                                Image itemImage = ImageProcessor.resonseBodyToJavaFXImage(itemImageResBody);
-                                itemMenuController.itemImageHashMap.put(item.type(), itemImage);
-                                this.itemImage = itemImage;
-                                itemImageView.setImage(itemImage);
-                                itemStorage.updateItemData(item, null, itemImage);
-                            }, error -> {
-                                itemMenuController.showError(error.getMessage());
-                                error.printStackTrace();
-                            }));
+                } else {
+                    System.out.println(itemTypeDto.image());
+                    Image scaledImage = ImageProcessor.showScaledItemImage(itemTypeDto.image());
+                    if (scaledImage == null) {
+                        disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)
+                                .subscribe(itemImageResBody -> {
+                                    Image itemImage = ImageProcessor.resonseBodyToJavaFXImage(itemImageResBody);
+                                    itemMenuController.itemImageHashMap.put(item.type(), itemImage);
+                                    this.itemImage = itemImage;
+                                    itemImageView.setImage(itemImage);
+                                    itemStorage.updateItemData(item, null, itemImage);
+                                }, error -> {
+                                    itemMenuController.showError(error.getMessage());
+                                    error.printStackTrace();
+                                }));
+                    }
+                    else {
+                        itemStorage.updateItemData(item, null, scaledImage);
+                        itemImageView.setImage(scaledImage);
+                        this.itemImage = scaledImage;
+                    }
                 }
             }
 
