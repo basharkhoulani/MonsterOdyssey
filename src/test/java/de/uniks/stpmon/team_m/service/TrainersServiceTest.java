@@ -48,7 +48,8 @@ public class TrainersServiceTest {
                         0,
                         0,
                         0,
-                        new NPCInfo(false, false, false, false, null, null, null)
+                        new NPCInfo(false, false, false, false, null, null, null),
+                        null
                 )));
 
         final Trainer trainer = trainersService.createTrainer("646bab5cecf584e1be02598a", "Hans", "Premade_Character_01.png").blockingFirst();
@@ -83,13 +84,14 @@ public class TrainersServiceTest {
                         "Premade_Character_01.png",
                         0,
                         List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
-                        List.of(1,2),
+                        List.of(1, 2),
                         List.of("646bacc568933551792bf3d5"),
                         "646bacc568933551792bf3d5",
                         0,
                         0,
                         0,
-                        new NPCInfo(false, false, false, false, null, null, null)),
+                        new NPCInfo(false, false, false, false, null, null, null),
+                        null),
                 new Trainer(
                         "2023-05-21T13:43:12.742Z",
                         "2023-05-21T13:43:12.742Z",
@@ -106,7 +108,8 @@ public class TrainersServiceTest {
                         0,
                         0,
                         0,
-                        new NPCInfo(true, false, false, true, null, null, null))
+                        new NPCInfo(true, false, false, true, null, null, null),
+                        null)
         )));
 
         final List<Trainer> trainers = trainersService.getTrainers("646bab5cecf584e1be02598a", null, null).blockingFirst();
@@ -129,13 +132,14 @@ public class TrainersServiceTest {
                         "Premade_Character_03.png",
                         0,
                         List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
-                        List.of(1,2),
+                        List.of(1, 2),
                         List.of("646baf8096dc75bef5ab7cae"),
                         "646baf8096dc75bef5ab7cae",
                         0,
                         0,
                         0,
-                        new NPCInfo(true, false, false, true, null, null, null))
+                        new NPCInfo(true, false, false, true, null, null, null),
+                        null)
         ));
 
         final Trainer trainer = trainersService.getTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5").blockingFirst();
@@ -159,13 +163,14 @@ public class TrainersServiceTest {
                         "Premade_Character_03.png",
                         0,
                         List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
-                        List.of(1,2),
+                        List.of(1, 2),
                         List.of("646baf8096dc75bef5ab7cae"),
                         "646baf8096dc75bef5ab7cae",
                         0,
                         0,
                         0,
-                        new NPCInfo(false, false, false, false, null, null, null))
+                        new NPCInfo(false, false, false, false, null, null, null),
+                        null)
         ));
 
         final Trainer trainer = trainersService.deleteTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5").blockingFirst();
@@ -188,13 +193,14 @@ public class TrainersServiceTest {
                 "Premade_Character_03.png",
                 0,
                 List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
-                List.of(1,2),
+                List.of(1, 2),
                 List.of("646baf8096dc75bef5ab7cae"),
                 "646baf8096dc75bef5ab7cae",
                 0,
                 0,
                 0,
-                new NPCInfo(false, false, false, false, null, null, null))
+                new NPCInfo(false, false, false, false, null, null, null),
+                null)
         ));
 
         final Trainer trainer = trainersService.updateTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5", "Hallo", "Premade_Character_03.png", List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a")).blockingFirst();

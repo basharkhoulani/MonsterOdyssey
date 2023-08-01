@@ -407,12 +407,13 @@ public class TestModule {
                         getTrainerSprite(),
                         0,
                         List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
-                        List.of(1,2),
+                        List.of(1, 2),
                         List.of("Testina"),
                         "Testina",
                         0,
                         0,
                         0,
+                        null,
                         null);
             }
 
@@ -463,7 +464,8 @@ public class TestModule {
                         0,
                         0,
                         0,
-                        new NPCInfo(false,false,false,false, null, null, null)));
+                        new NPCInfo(false, false, false, false, null, null, null),
+                        null));
             }
 
             @Override
@@ -483,12 +485,13 @@ public class TestModule {
                         Objects.requireNonNull(Main.class.getResource("charactermodels/Premade_Character_01.png")).toString(),
                         0,
                         List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"),
-                        List.of(1,2),
+                        List.of(1, 2),
                         List.of("Testina"),
                         "Testina",
                         0,
                         0,
                         0,
+                        null,
                         null));
             }
 
@@ -580,6 +583,11 @@ public class TestModule {
 
             @Override
             public Observable<Monster> getMonster(String regionId, String trainerId, String monsterId) {
+                return Observable.empty();
+            }
+
+            @Override
+            public Observable<Monster> deleteMonster(String regionId, String trainerId, String monsterId) {
                 return Observable.empty();
             }
         };

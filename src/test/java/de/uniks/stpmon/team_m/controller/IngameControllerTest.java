@@ -171,75 +171,80 @@ public class IngameControllerTest extends ApplicationTest {
                                 33,
                                 18,
                                 0,
-                                new NPCInfo(false, false, false, false, null, null, null)),
-                        new Trainer(
-                                "2023-05-30T12:02:57.510Z",
-                                "2023-05-30T12:01:57.510Z",
-                                "6475e595ac3946b6a812d863",
-                                "646bab5cecf584e1be02598a",
-                                "6475e595ac3946b6a812d868",
-                                "Krankenschwester Erna",
-                                "Nurse_2_16x16.png",
-                                0,
-                                List.of(),
-                                List.of(),
-                                List.of("646bacc568933551792bf3d5"),
-                                "6475e595ac3946b6a812d863",
-                                20,
-                                18,
-                                2,
-                                new NPCInfo(false, false, false, true, null, null, null)),
-                        new Trainer(
-                                "2023-05-30T12:02:57.510Z",
-                                "2023-05-30T12:01:57.510Z",
-                                "6475e595ac3946b6a812d869",
-                                "646bab5cecf584e1be02598a",
-                                "6475e595ac3946b6a812d868",
-                                "Prof. Testikus Maximus",
-                                "Premade_Character_02.png",
-                                0,
-                                List.of(),
-                                List.of(),
-                                List.of("646bacc568933551792bf3d5"),
-                                "6475e595ac3946b6a812d863",
-                                69,
-                                69,
-                                2,
-                                new NPCInfo(false, false, false, false, null, null, List.of("1", "3", "5"))),
-                        new Trainer(
-                                "2023-05-30T12:02:57.510Z",
-                                "2023-05-30T12:01:57.510Z",
-                                "6475e595ac3946b6a812d811",
-                                "646bab5cecf584e1be02598a",
-                                "6475e595ac3946b6a812d868",
-                                "Test Clerk",
-                                "Premade_Character_02.png",
-                                0,
-                                List.of(),
-                                List.of(),
-                                List.of("646bacc568933551792bf3d5"),
-                                "6475e595ac3946b6a812d863",
-                                100,
-                                100,
-                                2,
-                                new NPCInfo(false, false, false, false, List.of(1, 2, 3), null, null)),
-                        new Trainer(
-                                "2023-05-30T12:02:57.510Z",
-                                "2023-05-30T12:01:57.510Z",
-                                "6475e595ac3946b6a812d867",
-                                "646bab5cecf584e1be02598a",
-                                "6475e595ac3946b6a812d868",
-                                "OtherEncounter",
-                                "Premade_Character_02.png",
-                                0,
-                                List.of(),
-                                List.of(),
-                                List.of("646bacc568933551792bf3d5"),
-                                "6475e595ac3946b6a812d863",
-                                200,
-                                200,
-                                2,
-                                null)
+                                new NPCInfo(false, false, false, false, null, null, null),
+                                null),
+                new Trainer(
+                        "2023-05-30T12:02:57.510Z",
+                        "2023-05-30T12:01:57.510Z",
+                        "6475e595ac3946b6a812d863",
+                        "646bab5cecf584e1be02598a",
+                        "6475e595ac3946b6a812d868",
+                        "Krankenschwester Erna",
+                        "Nurse_2_16x16.png",
+                        0,
+                        List.of(),
+                        List.of(),
+                        List.of("646bacc568933551792bf3d5"),
+                        "6475e595ac3946b6a812d863",
+                        20,
+                        18,
+                        2,
+                        new NPCInfo(false, false, false, true, null, null, null),
+                        null),
+                new Trainer(
+                        "2023-05-30T12:02:57.510Z",
+                        "2023-05-30T12:01:57.510Z",
+                        "6475e595ac3946b6a812d869",
+                        "646bab5cecf584e1be02598a",
+                        "6475e595ac3946b6a812d868",
+                        "Prof. Testikus Maximus",
+                        "Premade_Character_02.png",
+                        0,
+                        List.of(),
+                        List.of(),
+                        List.of("646bacc568933551792bf3d5"),
+                        "6475e595ac3946b6a812d863",
+                        69,
+                        69,
+                        2,
+                        new NPCInfo(false, false, false, false, null, null, List.of("1", "3", "5")),
+                        null),
+                new Trainer(
+                        "2023-05-30T12:02:57.510Z",
+                        "2023-05-30T12:01:57.510Z",
+                        "6475e595ac3946b6a812d811",
+                        "646bab5cecf584e1be02598a",
+                        "6475e595ac3946b6a812d868",
+                        "Test Clerk",
+                        "Premade_Character_02.png",
+                        0,
+                        List.of(),
+                        List.of(),
+                        List.of("646bacc568933551792bf3d5"),
+                        "6475e595ac3946b6a812d863",
+                        100,
+                        100,
+                        2,
+                        new NPCInfo(false, false, false, false, List.of(1, 2, 3), null, null),
+                        null),
+                new Trainer(
+                        "2023-05-30T12:02:57.510Z",
+                        "2023-05-30T12:01:57.510Z",
+                        "6475e595ac3946b6a812d867",
+                        "646bab5cecf584e1be02598a",
+                        "6475e595ac3946b6a812d868",
+                        "OtherEncounter",
+                        "Premade_Character_02.png",
+                        0,
+                        List.of(),
+                        List.of(),
+                        List.of("646bacc568933551792bf3d5"),
+                        "6475e595ac3946b6a812d863",
+                        200,
+                        200,
+                        2,
+                        null,
+                        null)
                 )
         ));
         EventListener eventListenerMock = mock(EventListener.class);
@@ -265,7 +270,8 @@ public class IngameControllerTest extends ApplicationTest {
                 33,
                 18,
                 1,
-                new NPCInfo(false, false, false, false, null, null, null));
+                new NPCInfo(false, false, false, false, null, null, null),
+                null);
 
         when(trainerStorageProvider.get().getY()).thenReturn(5);
         when(trainerStorageProvider.get().getX()).thenReturn(5);
@@ -623,7 +629,8 @@ public class IngameControllerTest extends ApplicationTest {
                 33,
                 18,
                 0,
-                new NPCInfo(false, false, false, false, null, null, null)));
+                new NPCInfo(false, false, false, false, null, null, null),
+                null));
 
         press(KeyCode.E);
         release(KeyCode.E);
@@ -810,7 +817,8 @@ public class IngameControllerTest extends ApplicationTest {
                 33,
                 18,
                 0,
-                new NPCInfo(false, false, false, false, null, null, null))));
+                new NPCInfo(false, false, false, false, null, null, null),
+                null)));
         doNothing().when(app).show(mainMenuController);
 
         type(KeyCode.ESCAPE);
@@ -907,7 +915,8 @@ public class IngameControllerTest extends ApplicationTest {
                 33,
                 18,
                 0,
-                new NPCInfo(false, false, false, false, null, null, null)));
+                new NPCInfo(false, false, false, false, null, null, null),
+                null));
 
         press(KeyCode.E);
         release(KeyCode.E);
@@ -959,7 +968,8 @@ public class IngameControllerTest extends ApplicationTest {
                 33,
                 18,
                 0,
-                new NPCInfo(false, false, false, false, null, null, null)));
+                new NPCInfo(false, false, false, false, null, null, null),
+                null));
 
         press(KeyCode.E);
         release(KeyCode.E);
@@ -1022,7 +1032,8 @@ public class IngameControllerTest extends ApplicationTest {
                 33,
                 18,
                 0,
-                new NPCInfo(false, false, false, false, null, null, null)));
+                new NPCInfo(false, false, false, false, null, null, null),
+                null));
 
         press(KeyCode.E);
         release(KeyCode.E);

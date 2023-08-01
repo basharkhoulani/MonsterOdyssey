@@ -3,7 +3,10 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.dto.*;
-import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.service.MonstersService;
+import de.uniks.stpmon.team_m.service.PresetsService;
+import de.uniks.stpmon.team_m.service.RegionEncountersService;
+import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
@@ -29,7 +32,7 @@ import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 import static io.reactivex.rxjava3.core.Observable.just;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
@@ -127,6 +130,7 @@ class EncounterBattleTest extends ApplicationTest {
                         33,
                         18,
                         1,
+                        null,
                         null
                 )
         );
@@ -251,6 +255,7 @@ class EncounterBattleTest extends ApplicationTest {
                         33,
                         18,
                         1,
+                        null,
                         null
                 )
         ));

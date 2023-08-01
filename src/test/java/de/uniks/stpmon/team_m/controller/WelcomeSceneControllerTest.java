@@ -92,7 +92,8 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
                 0,
                 0,
                 0,
-                new NPCInfo(false, false, false, false, null, null, null))));
+                new NPCInfo(false, false, false, false, null, null, null),
+                null)));
 
 
         app.start(stage);

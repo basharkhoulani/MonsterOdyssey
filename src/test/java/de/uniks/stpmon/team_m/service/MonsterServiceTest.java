@@ -110,4 +110,34 @@ public class MonsterServiceTest {
 
         verify(monstersApiService).getMonster("646bab5cecf584e1be02598a", "646bac8c1a74032c70fffe24", "646bac223b4804b87c0b8054");
     }
+
+    @Test
+    void deleteMonstersTest() {
+        LinkedHashMap<String, Integer> abilities = new LinkedHashMap<>();
+        abilities.put("1", 1);
+        abilities.put("23", 2);
+        abilities.put("4", 3);
+        when(monstersApiService.deleteMonster("646bab5cecf584e1be02598a", "646bac8c1a74032c70fffe24", "646bac223b4804b87c0b8054"))
+                .thenReturn(Observable.just(
+                        new Monster(
+                                "2023-05-22T17:51:46.772Z",
+                                "2023-05-22T17:51:46.772Z",
+                                "646bac223b4804b87c0b8054",
+                                "646bac8c1a74032c70fffe24",
+                                1,
+                                3,
+                                56,
+                                abilities,
+                                new MonsterAttributes(40, 23, 45, 67),
+                                new MonsterAttributes(20, 23, 45, 67),
+                                List.of()
+                        )
+                ));
+
+        final Monster monster = monstersService.deleteMonster("646bab5cecf584e1be02598a", "646bac8c1a74032c70fffe24", "646bac223b4804b87c0b8054").blockingFirst();
+
+        assertNotNull(monster);
+
+        verify(monstersApiService).deleteMonster("646bab5cecf584e1be02598a", "646bac8c1a74032c70fffe24", "646bac223b4804b87c0b8054");
+    }
 }

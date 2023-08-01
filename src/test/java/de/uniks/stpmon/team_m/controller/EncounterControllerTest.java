@@ -3,7 +3,6 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.dto.*;
-import de.uniks.stpmon.team_m.dto.Event;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -16,7 +15,9 @@ import javafx.stage.Stage;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
@@ -30,7 +31,6 @@ import java.util.prefs.Preferences;
 import static io.reactivex.rxjava3.core.Observable.just;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
-import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 class EncounterControllerTest extends ApplicationTest {
@@ -136,6 +136,7 @@ class EncounterControllerTest extends ApplicationTest {
                         33,
                         18,
                         1,
+                        null,
                         null
                 )
         );
@@ -243,6 +244,7 @@ class EncounterControllerTest extends ApplicationTest {
                         33,
                         18,
                         1,
+                        null,
                         null
                 )
         ));
