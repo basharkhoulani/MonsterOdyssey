@@ -1,7 +1,7 @@
 package de.uniks.stpmon.team_m.utils;
 
 import de.uniks.stpmon.team_m.Constants;
-import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.Constants.ballType;
 import de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController;
 import javafx.animation.*;
 import javafx.scene.control.ProgressBar;
@@ -11,9 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
-import java.util.Objects;
-
 import static de.uniks.stpmon.team_m.Constants.TRAINER_DIRECTION_DOWN;
+import static de.uniks.stpmon.team_m.Constants.ballType.*;
 
 public class AnimationBuilder {
     /**
@@ -107,11 +106,20 @@ public class AnimationBuilder {
         return trainerWalkAnimation;
     }
 
-
-    public static void throwMonBall(StackPane root, ImageView source, ImageView target) {
+    public static ImageView throwMonBall(ballType type, StackPane root, ImageView source, ImageView target) {
+        String imageUrl = "monball_";
+        if (type == NORMAL)        { imageUrl += "normal"; }
+        else if (type == SUPER)    { imageUrl += "super";  }
+        else if (type == HYPER)    { imageUrl += "hyper";  }
+        else if (type == MASTER)   { imageUrl += "master"; }
+        else if (type == WATER)    { imageUrl += "water";  }
+        else if (type == NET)      { imageUrl += "net";    }
+        else                       { imageUrl += "heal";   }
+        imageUrl += ".png";
 
         // Setup image and imageView for monball
-        ImageView ballImageView = new ImageView(new Image(Objects.requireNonNull(Main.class.getResource("images/monball.png")).toExternalForm()));
+        Image image = ImageProcessor.showScaledItemImage(imageUrl);
+        ImageView ballImageView = new ImageView(image); //new Image(Objects.requireNonNull(Main.class.getResource("item_images/" + imageUrl)).toExternalForm()));
         ballImageView.setFitWidth(50);
         ballImageView.setFitHeight(50);
         ballImageView.setVisible(false);
@@ -126,14 +134,19 @@ public class AnimationBuilder {
         ParallelTransition parallelTransition = new ParallelTransition(sequentialScaleTransition, rotateTransition);
         PauseTransition pauseTransition = new PauseTransition(Duration.millis(50));
         TranslateTransition monballFallTransition = new TranslateTransition(Duration.millis(100), ballImageView);
+        PauseTransition secondPause = new PauseTransition(Duration.millis(1000));
+        PauseTransition thirdPause = new PauseTransition(Duration.millis(1000));
+        Timeline ballShakeTransition = buildShakeAnimation(ballImageView, 100, 5, 1);
 
         // Move monball imageView to own trainer, then start throw ball animation
         initialTransition.setToY(source.layoutYProperty().intValue());
+        initialTransition.setToX(source.layoutXProperty().intValue() - 50);
         root.getChildren().add(ballImageView);
 
         // Setup other animations
         ballImageView.setVisible(true);
         ballImageView.setEffect(new Glow(0.8));
+        throwTransition.setToX(target.layoutXProperty().get() + target.layoutXProperty().intValue() - source.layoutXProperty().intValue() + 50);
         throwTransition.setToY(target.layoutYProperty().get() + target.layoutYProperty().intValue() - source.layoutYProperty().intValue() - 50);
 
         growthTransition.setByX(1.5);
@@ -146,15 +159,22 @@ public class AnimationBuilder {
 
         monballFallTransition.setByY(25);
 
+
         // Set callbacks on finished
-        initialTransition.setOnFinished(evt  -> throwTransition.play());
-        throwTransition.setOnFinished(evt    -> parallelTransition.play());
-        growthTransition.setOnFinished(evt   -> target.setVisible(false));
-        shrinkTransition.setOnFinished(evt   -> ballImageView.setEffect(null));
-        parallelTransition.setOnFinished(evt -> pauseTransition.play());
-        pauseTransition.setOnFinished(evt    -> monballFallTransition.play());
+        initialTransition.setOnFinished(evt     -> throwTransition.play());
+        throwTransition.setOnFinished(evt       -> parallelTransition.play());
+        growthTransition.setOnFinished(evt      -> target.setVisible(false));
+        shrinkTransition.setOnFinished(evt      -> ballImageView.setEffect(null));
+        parallelTransition.setOnFinished(evt    -> pauseTransition.play());
+        pauseTransition.setOnFinished(evt       -> monballFallTransition.play());
+        monballFallTransition.setOnFinished(evt -> secondPause.play());
+        secondPause.setOnFinished(evt           -> ballShakeTransition.play());
+        ballShakeTransition.setOnFinished(evt   -> thirdPause.play());
+        thirdPause.setOnFinished(evt            -> ballShakeTransition.play());
 
         // Start callback chain
         initialTransition.play();
+
+        return ballImageView;
     }
 }
