@@ -534,7 +534,7 @@ public class IngameController extends Controller {
     private void createItemReceivedPopUp(Item item) {
         if (itemStorageProvider.get().getItemData(item._id()) != null) {
             final ItemData itemData = itemStorageProvider.get().getItemData(item._id());
-            receiveObjectController = new ReceiveObjectController(itemData.getItem(), itemData.getItemTypeDto(), itemData.getItemImage(), resources, this::removeItemReceivedPopUp);
+            receiveObjectController = new ReceiveObjectController(itemData.getItem(), itemData.getItemTypeDto(), itemData.getItemImage(), this::removeItemReceivedPopUp);
             getRoot().getChildren().add(receiveObjectController.render());
         }
         else {
@@ -542,7 +542,7 @@ public class IngameController extends Controller {
                     itemTypeDto -> disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
                             image -> {
                                 itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image));
-                                receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image), resources, this::removeItemReceivedPopUp);
+                                receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image), this::removeItemReceivedPopUp);
                                 getRoot().getChildren().add(receiveObjectController.render());
                             },
                             error -> {
