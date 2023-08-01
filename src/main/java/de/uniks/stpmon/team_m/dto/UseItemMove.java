@@ -7,5 +7,5 @@ public record UseItemMove(
         String type,
         int item,
         String target
-) {
+) implements Move{
 }
