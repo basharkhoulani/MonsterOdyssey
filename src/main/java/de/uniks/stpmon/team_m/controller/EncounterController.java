@@ -521,9 +521,7 @@ public class EncounterController extends Controller {
                 controller.destroy();
             }
         }
-        if (encounterOpponentControllerHashMap != null) {
-            encounterOpponentControllerHashMap.values().forEach(Controller::destroy);
-        }
+        encounterOpponentControllerHashMap.values().forEach(Controller::destroy);
 
     }
 
@@ -592,21 +590,19 @@ public class EncounterController extends Controller {
                 }
             } else if (monsterInEncounterHashMap.get(opponent._id()) != null) {
                 if (monsterInEncounterHashMap.get(opponent._id())) {
-                    if (opponent.monster() != null) {
-                        if (opponent.isAttacker() != encounterOpponentStorage.isAttacker()) {
-                            showEnemyMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent, false);
-                            updateDescription(resources.getString("ENEMY.CHANGED.MONSTER") + "\n", false);
+                    if (opponent.isAttacker() != encounterOpponentStorage.isAttacker()) {
+                        showEnemyMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent, false);
+                        updateDescription(resources.getString("ENEMY.CHANGED.MONSTER") + "\n", false);
+                    } else {
+                        showTeamMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent);
+                        if (opponent.trainer().equals(trainerId)) {
+                            updateDescription(resources.getString("YOU.CHANGED.MONSTER") + "\n", false);
                         } else {
-                            showTeamMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent);
-                            if (opponent.trainer().equals(trainerId)) {
-                                updateDescription(resources.getString("YOU.CHANGED.MONSTER") + "\n", false);
-                            } else {
-                                updateDescription(resources.getString("ALLY.CHANGED.MONSTER") + "\n", false);
-                            }
+                            updateDescription(resources.getString("ALLY.CHANGED.MONSTER") + "\n", false);
                         }
-                        monsterInEncounterHashMap.put(opponent._id(), false);
-                        opponentsUpdate.remove(opponent._id() + "Results");
                     }
+                    monsterInEncounterHashMap.put(opponent._id(), false);
+                    opponentsUpdate.remove(opponent._id() + "Results");
                 }
             }
         }
@@ -735,8 +731,8 @@ public class EncounterController extends Controller {
         disposables.add(eventListener.get().listen("trainers." + trainerId + ".monsters." + monsterId + ".*", Monster.class).observeOn(FX_SCHEDULER).subscribe(event -> {
             final Monster monster = event.data();
             if (event.suffix().contains("updated")) {
-                double currentHealth = (double) monster.currentAttributes().health();
-                double maxHealth = (double) monster.attributes().health();
+                double currentHealth = monster.currentAttributes().health();
+                double maxHealth = monster.attributes().health();
                 if (!GraphicsEnvironment.isHeadless()) {
                     AnimationBuilder.buildShakeAnimation(encounterOpponentController.monsterImageView, 50, 3, 1).play();
                     if (currentHealth > 0) {
