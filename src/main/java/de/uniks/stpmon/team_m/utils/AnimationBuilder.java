@@ -11,6 +11,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static de.uniks.stpmon.team_m.Constants.TRAINER_DIRECTION_DOWN;
 import static de.uniks.stpmon.team_m.Constants.ballType.*;
 
@@ -106,8 +109,8 @@ public class AnimationBuilder {
         return trainerWalkAnimation;
     }
 
-    public static ImageView throwMonBall(ballType type, StackPane root, ImageView source, ImageView target) {
-        String imageUrl = "monball_";
+    public static ImageView throwMonBall(ballType type, StackPane root, ImageView source, ImageView target, int ticks, Runnable onFinished) {
+        String imageUrl = "ball_";
         if (type == NORMAL)        { imageUrl += "normal"; }
         else if (type == SUPER)    { imageUrl += "super";  }
         else if (type == HYPER)    { imageUrl += "hyper";  }
@@ -134,10 +137,25 @@ public class AnimationBuilder {
         ParallelTransition parallelTransition = new ParallelTransition(sequentialScaleTransition, rotateTransition);
         PauseTransition pauseTransition = new PauseTransition(Duration.millis(50));
         TranslateTransition monballFallTransition = new TranslateTransition(Duration.millis(100), ballImageView);
-        PauseTransition secondPause = new PauseTransition(Duration.millis(1000));
-        PauseTransition thirdPause = new PauseTransition(Duration.millis(1000));
-        Timeline ballShakeTransition = buildShakeAnimation(ballImageView, 100, 5, 1);
 
+        List<PauseTransition> pauseTransitions = new ArrayList<>();
+        List<Timeline> shakeTransitions = new ArrayList<>();
+        for (int i = 0; i < ticks; i++) {
+            PauseTransition pause = new PauseTransition(Duration.millis(1000));
+            Timeline shakeTransition = buildShakeAnimation(ballImageView, 100, 5, 1);
+            pause.setOnFinished(evt -> shakeTransition.play());
+            pauseTransitions.add(pause);
+            shakeTransitions.add(shakeTransition);
+        }
+        for (int i = 0; i < ticks; i++) {
+            int finalI = i;
+            if (finalI + 1 == ticks) {
+                shakeTransitions.get(i).setOnFinished(evt -> onFinished.run());
+            }
+            else {
+                shakeTransitions.get(i).setOnFinished(evt -> pauseTransitions.get(finalI +1).play());
+            }
+        }
         // Move monball imageView to own trainer, then start throw ball animation
         initialTransition.setToY(source.layoutYProperty().intValue());
         initialTransition.setToX(source.layoutXProperty().intValue() - 50);
@@ -157,7 +175,7 @@ public class AnimationBuilder {
 
         rotateTransition.setByAngle(360);
 
-        monballFallTransition.setByY(25);
+        monballFallTransition.setByY(50);
 
 
         // Set callbacks on finished
@@ -167,10 +185,7 @@ public class AnimationBuilder {
         shrinkTransition.setOnFinished(evt      -> ballImageView.setEffect(null));
         parallelTransition.setOnFinished(evt    -> pauseTransition.play());
         pauseTransition.setOnFinished(evt       -> monballFallTransition.play());
-        monballFallTransition.setOnFinished(evt -> secondPause.play());
-        secondPause.setOnFinished(evt           -> ballShakeTransition.play());
-        ballShakeTransition.setOnFinished(evt   -> thirdPause.play());
-        thirdPause.setOnFinished(evt            -> ballShakeTransition.play());
+        monballFallTransition.setOnFinished(evt -> pauseTransitions.get(0).play());
 
         // Start callback chain
         initialTransition.play();
