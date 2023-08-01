@@ -747,12 +747,17 @@ public class EncounterController extends Controller {
                         .setHealthLabel(formatter.format(currentHealth) + "/" + formatter.format(maxHealth) + " HP")
                         .setLevelLabel("LVL " + monster.level())
                         .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
-                if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
+                Trainer trainer = trainerStorageProvider.get().getTrainer();
+                if (trainerId.equals(trainer._id())) {
                     encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);
                     // if health is 0, then add to the team the information that the monster is died.
                     // if the type of the monster changed, then make a server call and update in the opponent storage
                     if (currentHealth == 0) {
-                        monsterInTeamHashMap.put(monster._id(), true);
+                        if (trainer.settings() != null && trainer.settings().monsterPermaDeath()) {
+                            disposables.add(monstersService.deleteMonster(regionId, trainer._id(), monster._id()).observeOn(FX_SCHEDULER).subscribe());
+                        } else {
+                            monsterInTeamHashMap.put(monster._id(), true);
+                        }
                     }
                 }
             }
