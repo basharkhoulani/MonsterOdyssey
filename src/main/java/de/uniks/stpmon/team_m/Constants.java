@@ -28,6 +28,8 @@ public class Constants {
     public static final String APP_ICON = "images/Monster-durchsichtig.png";
     public static final String TASKBAR_ICON = "images/Monster-durchsichtig.png";
     public static final String EMPTY_STRING = "";
+    public static final int STUNDE_IN_MILLIS = 3600000;
+    public static final int MINUTE_IN_MILLIS = 60000;
     public static final String FX_STYLE_BORDER_COLOR_BLACK = "-fx-border-color: black";
     public static final String LOADING_ANIMATION = "images/loading.gif";
     public static final String ONLINE_IMG = "images/online.png";

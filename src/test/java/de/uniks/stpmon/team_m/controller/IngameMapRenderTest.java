@@ -29,6 +29,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
+import static io.reactivex.rxjava3.core.Observable.empty;
 import static io.reactivex.rxjava3.core.Observable.just;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -46,6 +47,8 @@ public class IngameMapRenderTest extends ApplicationTest {
     RegionsService regionsService;
     @Mock
     Provider<UDPEventListener> udpEventListenerProvider;
+    @Mock
+    AuthenticationService authenticationService;
     @Mock
     Provider<MonstersListController> monstersListControllerProvider;
     @Mock
@@ -82,6 +85,7 @@ public class IngameMapRenderTest extends ApplicationTest {
 
         UDPEventListener udpEventListener = mock(UDPEventListener.class);
         Mockito.when(udpEventListenerProvider.get()).thenReturn(udpEventListener);
+        when(udpEventListener.ping()).thenReturn(empty());
         when(udpEventListener.listen(any(), any()))
                 .thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("6475e595ac3946b6a812d865", "6475e595ac3946b6a812d863", 4, 5, 0))));
         final TrainerStorage trainerStorage = mock(TrainerStorage.class);
@@ -185,6 +189,14 @@ public class IngameMapRenderTest extends ApplicationTest {
         ));
         EventListener eventListenerMock = mock(EventListener.class);
         when(eventListener.get()).thenReturn(eventListenerMock);
+        when(authenticationService.refresh()).thenReturn(Observable.just(new LoginResult(
+                "423f8d731c386bcd2204da39",
+                "1",
+                "online",
+                null,
+                null,
+                "a1a2",
+                "a3a4")));
         Message message = new Message("2023-05-30T12:01:57.510Z", "2023-05-30T12:01:57.510Z", "6475e595ac3946b6a812d863",
                 "6475e595ac3946b6a812d868", "Test1");
         when(eventListener.get().listen("regions.646bab5cecf584e1be02598a.messages.*.*", Message.class)).thenReturn(just(

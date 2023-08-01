@@ -104,6 +104,8 @@ public class IngameControllerTest extends ApplicationTest {
     @Mock
     TrainerItemsService trainerItemsService;
     @Mock
+    AuthenticationService authenticationService;
+    @Mock
     Provider<IngameSettingsController> ingameSettingsControllerProvider;
     @InjectMocks
     IngameSettingsController ingameSettingsController;
@@ -126,8 +128,17 @@ public class IngameControllerTest extends ApplicationTest {
         Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
         ingameController.setValues(bundle, preferences, null, ingameController, app);
 
+        when(authenticationService.refresh()).thenReturn(Observable.just(new LoginResult(
+                "423f8d731c386bcd2204da39",
+                "1",
+                "online",
+                null,
+                null,
+                "a1a2",
+                "a3a4")));
         UDPEventListener udpEventListener = mock(UDPEventListener.class);
         Mockito.when(udpEventListenerProvider.get()).thenReturn(udpEventListener);
+        when(udpEventListener.ping()).thenReturn(empty());
         when(udpEventListener.listen(any(), any())).thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("6475e595ac3946b6a812d865", "6475e595ac3946b6a812d863", 5, 4, 0))));
         final TrainerStorage trainerStorage = mock(TrainerStorage.class);
         Mockito.when(trainerStorageProvider.get()).thenReturn(trainerStorage);
