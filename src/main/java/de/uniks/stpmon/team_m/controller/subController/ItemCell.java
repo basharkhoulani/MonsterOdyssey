@@ -104,7 +104,6 @@ public class ItemCell extends ListCell<Item> {
                     itemImageView.setImage(itemStorage.getItemData(item._id()).getItemImage());
                     this.itemImage = itemStorage.getItemData(item._id()).getItemImage();
                 } else {
-                    System.out.println(itemTypeDto.image());
                     Image scaledImage = ImageProcessor.showScaledItemImage(itemTypeDto.image());
                     if (scaledImage == null) {
                         disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)
