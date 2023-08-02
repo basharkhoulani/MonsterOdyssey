@@ -1148,7 +1148,6 @@ public class IngameController extends Controller {
                 new UpdateItemDto(1, item.type(), monsterId)
         ).observeOn(FX_SCHEDULER).subscribe(
                 result -> {
-                    System.out.println("Item used. Result: " + result);
                     disposables.add(trainerItemsService.getItems(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), null)
                             .observeOn(FX_SCHEDULER).subscribe(
                                     items -> {
