@@ -1,7 +1,7 @@
 package de.uniks.stpmon.team_m.utils;
 
 import de.uniks.stpmon.team_m.Constants;
-import de.uniks.stpmon.team_m.Constants.ballType;
+import de.uniks.stpmon.team_m.Constants.BallType;
 import de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController;
 import javafx.animation.*;
 import javafx.scene.control.ProgressBar;
@@ -14,8 +14,8 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import static de.uniks.stpmon.team_m.Constants.BallType.*;
 import static de.uniks.stpmon.team_m.Constants.TRAINER_DIRECTION_DOWN;
-import static de.uniks.stpmon.team_m.Constants.ballType.*;
 
 public class AnimationBuilder {
     /**
@@ -109,7 +109,7 @@ public class AnimationBuilder {
         return trainerWalkAnimation;
     }
 
-    public static ImageView throwMonBall(ballType type, StackPane root, ImageView source, ImageView target, int ticks, Runnable onFinished) {
+    public static ImageView throwMonBall(BallType type, StackPane root, ImageView source, ImageView target, int ticks, Runnable onFinished) {
         String imageUrl = "ball_";
         if (type == NORMAL)        { imageUrl += "normal"; }
         else if (type == SUPER)    { imageUrl += "super";  }
@@ -122,7 +122,7 @@ public class AnimationBuilder {
 
         // Setup image and imageView for monball
         Image image = ImageProcessor.showScaledItemImage(imageUrl);
-        ImageView ballImageView = new ImageView(image); //new Image(Objects.requireNonNull(Main.class.getResource("item_images/" + imageUrl)).toExternalForm()));
+        ImageView ballImageView = new ImageView(image);
         ballImageView.setFitWidth(50);
         ballImageView.setFitHeight(50);
         ballImageView.setVisible(false);
