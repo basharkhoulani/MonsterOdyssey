@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes(value = {
         @JsonSubTypes.Type(value = AbilityMove.class, name = "ability"),
         @JsonSubTypes.Type(value = ChangeMonsterMove.class, name = "change-monster"),
-        @JsonSubTypes.Type(value = UseItemMove.class, name = "item")
+        @JsonSubTypes.Type(value = UseItemMove.class, name = "use-item")
 })
 public interface Move {
 }
