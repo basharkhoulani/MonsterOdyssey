@@ -124,15 +124,15 @@ public class LevelUpControllerTest extends ApplicationTest {
     @Test
     public void levelUpPopUpTest() {
         final Label level = lookup("#levelLabel").query();
-        assertEquals(level.getText(), "1 -> 2");
+        assertEquals("1 -> 2", level.getText());
         final Label health = lookup("#healthLabel").query();
-        assertEquals(health.getText(), "14.0 -> 16.0");
+        assertEquals( "14,0 -> 16,0", health.getText());
         final Label attack = lookup("#attackLabel").query();
-        assertEquals(attack.getText(), "8 -> 9");
+        assertEquals("8 -> 9", attack.getText());
         final Label defense = lookup("#defenseLabel").query();
-        assertEquals(defense.getText(), "8 -> 9");
+        assertEquals( "8 -> 9", defense.getText());
         final Label speed = lookup("#speedLabel").query();
-        assertEquals(speed.getText(), "5 -> 7");
+        assertEquals("5 -> 7", speed.getText());
         final Button okButton = lookup("#okButton").queryButton();
         clickOn(okButton);
     }
