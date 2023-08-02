@@ -170,13 +170,20 @@ import static java.util.Map.entry;
     public static final String smallHandyImage = &quot;images/SmallHandy.png&quot;;
     public static final String notificationBellImage = &quot;images/NotificationBell.png&quot;;
 
+    // Ingame MiniMap
+
+    public static final int descriptionBoxHeight = 40;
+    public static final int descriptionBoxWidth = 632;
+    public static final int descriptionBoxLayoutX = -60;
+    public static final int descriptionBoxLayoutY = -32;
+
     // Encounter
     public static final int fleePopupWidth = 300;
     public static final int fleePopupHeight = 200;
     public static final int fleeTextHeight = 150;
-<span class="fc" id="L177">    public static final Insets fleeTextInsets = new Insets(20, 10, 0, 10);</span>
+<span class="fc" id="L184">    public static final Insets fleeTextInsets = new Insets(20, 10, 0, 10);</span>
     public static final int fleeButtonsHBoxHeight = 50;
-<span class="fc" id="L179">    public static final Insets fleeButtonsHBoxInsets = new Insets(0, 10, 10, 10);</span>
+<span class="fc" id="L186">    public static final Insets fleeButtonsHBoxInsets = new Insets(0, 10, 10, 10);</span>
     public static final int fleeButtonWidth = 100;
     public static final int fleeButtonHeight = 40;
     public static final int pauseDuration = 1000;
@@ -212,7 +219,7 @@ import static java.util.Map.entry;
     public static final String HIGH_VOLUME_ICON = &quot;images/high-volume-icon.png&quot;;
 
     // Characters
-<span class="fc" id="L215">    public static final String[] PREMADE_CHARACTERS = {</span>
+<span class="fc" id="L222">    public static final String[] PREMADE_CHARACTERS = {</span>
             &quot;Premade_Character_01.png&quot;, &quot;Premade_Character_02.png&quot;, &quot;Premade_Character_03.png&quot;, &quot;Premade_Character_04.png&quot;,
             &quot;Premade_Character_05.png&quot;, &quot;Premade_Character_06.png&quot;, &quot;Premade_Character_07.png&quot;, &quot;Premade_Character_08.png&quot;,
             &quot;Premade_Character_09.png&quot;, &quot;Premade_Character_10.png&quot;, &quot;Premade_Character_11.png&quot;, &quot;Premade_Character_12.png&quot;,
@@ -229,50 +236,50 @@ import static java.util.Map.entry;
     public static final String FIGHT_SOUND = &quot;Nintendo_Style_Battle_Music_Loop_02.wav&quot;;
 
     // Colors
-<span class="fc" id="L232">    public static final HashMap&lt;String, String&gt; TYPESCOLORPALETTE = new HashMap&lt;&gt;(Map.ofEntries(</span>
-<span class="fc" id="L233">            entry(&quot;normal&quot;, &quot;#BBBBAA&quot;),</span>
-<span class="fc" id="L234">            entry(&quot;fire&quot;, &quot;#FF421C&quot;),</span>
-<span class="fc" id="L235">            entry(&quot;water&quot;, &quot;#2C9BE3&quot;),</span>
-<span class="fc" id="L236">            entry(&quot;electric&quot;, &quot;#FFDC00&quot;),</span>
-<span class="fc" id="L237">            entry(&quot;grass&quot;, &quot;#62BC5A&quot;),</span>
-<span class="fc" id="L238">            entry(&quot;flying&quot;, &quot;#96CAFF&quot;),</span>
-<span class="fc" id="L239">            entry(&quot;bug&quot;, &quot;#92C12A&quot;),</span>
-<span class="fc" id="L240">            entry(&quot;poison&quot;, &quot;#9553CD&quot;),</span>
-<span class="fc" id="L241">            entry(&quot;rock&quot;, &quot;#BBAA66&quot;),</span>
-<span class="fc" id="L242">            entry(&quot;ground&quot;, &quot;#A67439&quot;),</span>
-<span class="fc" id="L243">            entry(&quot;fighting&quot;, &quot;#BB5544&quot;),</span>
-<span class="fc" id="L244">            entry(&quot;ice&quot;, &quot;#74CFC0&quot;),</span>
-<span class="fc" id="L245">            entry(&quot;psychic&quot;, &quot;#FF6380&quot;),</span>
-<span class="fc" id="L246">            entry(&quot;ghost&quot;, &quot;#6E4370&quot;),</span>
-<span class="fc" id="L247">            entry(&quot;dragon&quot;, &quot;#5670BE&quot;),</span>
-<span class="fc" id="L248">            entry(&quot;dark&quot;, &quot;#353225&quot;),</span>
-<span class="fc" id="L249">            entry(&quot;steel&quot;, &quot;#97A8AA&quot;),</span>
-<span class="fc" id="L250">            entry(&quot;fairy&quot;, &quot;#D15F5F&quot;)</span>
+<span class="fc" id="L239">    public static final HashMap&lt;String, String&gt; TYPESCOLORPALETTE = new HashMap&lt;&gt;(Map.ofEntries(</span>
+<span class="fc" id="L240">            entry(&quot;normal&quot;, &quot;#BBBBAA&quot;),</span>
+<span class="fc" id="L241">            entry(&quot;fire&quot;, &quot;#FF421C&quot;),</span>
+<span class="fc" id="L242">            entry(&quot;water&quot;, &quot;#2C9BE3&quot;),</span>
+<span class="fc" id="L243">            entry(&quot;electric&quot;, &quot;#FFDC00&quot;),</span>
+<span class="fc" id="L244">            entry(&quot;grass&quot;, &quot;#62BC5A&quot;),</span>
+<span class="fc" id="L245">            entry(&quot;flying&quot;, &quot;#96CAFF&quot;),</span>
+<span class="fc" id="L246">            entry(&quot;bug&quot;, &quot;#92C12A&quot;),</span>
+<span class="fc" id="L247">            entry(&quot;poison&quot;, &quot;#9553CD&quot;),</span>
+<span class="fc" id="L248">            entry(&quot;rock&quot;, &quot;#BBAA66&quot;),</span>
+<span class="fc" id="L249">            entry(&quot;ground&quot;, &quot;#A67439&quot;),</span>
+<span class="fc" id="L250">            entry(&quot;fighting&quot;, &quot;#BB5544&quot;),</span>
+<span class="fc" id="L251">            entry(&quot;ice&quot;, &quot;#74CFC0&quot;),</span>
+<span class="fc" id="L252">            entry(&quot;psychic&quot;, &quot;#FF6380&quot;),</span>
+<span class="fc" id="L253">            entry(&quot;ghost&quot;, &quot;#6E4370&quot;),</span>
+<span class="fc" id="L254">            entry(&quot;dragon&quot;, &quot;#5670BE&quot;),</span>
+<span class="fc" id="L255">            entry(&quot;dark&quot;, &quot;#353225&quot;),</span>
+<span class="fc" id="L256">            entry(&quot;steel&quot;, &quot;#97A8AA&quot;),</span>
+<span class="fc" id="L257">            entry(&quot;fairy&quot;, &quot;#D15F5F&quot;)</span>
     ));
 
     // Abilities
-<span class="fc" id="L254">    public static final HashMap&lt;String, String&gt; ABILITYPALETTE = new HashMap&lt;&gt;(Map.ofEntries(</span>
-<span class="fc" id="L255">            entry(&quot;normal&quot;, &quot;ability-normal.png&quot;),</span>
-<span class="fc" id="L256">            entry(&quot;fire&quot;, &quot;ability-fire.png&quot;),</span>
-<span class="fc" id="L257">            entry(&quot;water&quot;, &quot;ability-water.png&quot;),</span>
-<span class="fc" id="L258">            entry(&quot;electric&quot;, &quot;ability-electic.png&quot;),</span>
-<span class="fc" id="L259">            entry(&quot;grass&quot;, &quot;ability-grass.png&quot;),</span>
-<span class="fc" id="L260">            entry(&quot;flying&quot;, &quot;ability-flying.png&quot;),</span>
-<span class="fc" id="L261">            entry(&quot;bug&quot;, &quot;ability-bug.png&quot;),</span>
-<span class="fc" id="L262">            entry(&quot;poison&quot;, &quot;ability-poison.png&quot;),</span>
-<span class="fc" id="L263">            entry(&quot;rock&quot;, &quot;ability-rock.png&quot;),</span>
-<span class="fc" id="L264">            entry(&quot;ground&quot;, &quot;ability-ground.png&quot;),</span>
-<span class="fc" id="L265">            entry(&quot;fighting&quot;, &quot;ability-fighting.png&quot;),</span>
-<span class="fc" id="L266">            entry(&quot;ice&quot;, &quot;ability-ice.png&quot;),</span>
-<span class="fc" id="L267">            entry(&quot;psychic&quot;, &quot;ability-psychic.png&quot;),</span>
-<span class="fc" id="L268">            entry(&quot;ghost&quot;, &quot;ability-ghost.png&quot;),</span>
-<span class="fc" id="L269">            entry(&quot;dragon&quot;, &quot;ability-dragon.png&quot;),</span>
-<span class="fc" id="L270">            entry(&quot;dark&quot;, &quot;ability-dragon.png&quot;),</span>
-<span class="fc" id="L271">            entry(&quot;steel&quot;, &quot;ability-steel.png&quot;),</span>
-<span class="fc" id="L272">            entry(&quot;fairy&quot;, &quot;ability-fairy.png&quot;)</span>
+<span class="fc" id="L261">    public static final HashMap&lt;String, String&gt; ABILITYPALETTE = new HashMap&lt;&gt;(Map.ofEntries(</span>
+<span class="fc" id="L262">            entry(&quot;normal&quot;, &quot;ability-normal.png&quot;),</span>
+<span class="fc" id="L263">            entry(&quot;fire&quot;, &quot;ability-fire.png&quot;),</span>
+<span class="fc" id="L264">            entry(&quot;water&quot;, &quot;ability-water.png&quot;),</span>
+<span class="fc" id="L265">            entry(&quot;electric&quot;, &quot;ability-electic.png&quot;),</span>
+<span class="fc" id="L266">            entry(&quot;grass&quot;, &quot;ability-grass.png&quot;),</span>
+<span class="fc" id="L267">            entry(&quot;flying&quot;, &quot;ability-flying.png&quot;),</span>
+<span class="fc" id="L268">            entry(&quot;bug&quot;, &quot;ability-bug.png&quot;),</span>
+<span class="fc" id="L269">            entry(&quot;poison&quot;, &quot;ability-poison.png&quot;),</span>
+<span class="fc" id="L270">            entry(&quot;rock&quot;, &quot;ability-rock.png&quot;),</span>
+<span class="fc" id="L271">            entry(&quot;ground&quot;, &quot;ability-ground.png&quot;),</span>
+<span class="fc" id="L272">            entry(&quot;fighting&quot;, &quot;ability-fighting.png&quot;),</span>
+<span class="fc" id="L273">            entry(&quot;ice&quot;, &quot;ability-ice.png&quot;),</span>
+<span class="fc" id="L274">            entry(&quot;psychic&quot;, &quot;ability-psychic.png&quot;),</span>
+<span class="fc" id="L275">            entry(&quot;ghost&quot;, &quot;ability-ghost.png&quot;),</span>
+<span class="fc" id="L276">            entry(&quot;dragon&quot;, &quot;ability-dragon.png&quot;),</span>
+<span class="fc" id="L277">            entry(&quot;dark&quot;, &quot;ability-dragon.png&quot;),</span>
+<span class="fc" id="L278">            entry(&quot;steel&quot;, &quot;ability-steel.png&quot;),</span>
+<span class="fc" id="L279">            entry(&quot;fairy&quot;, &quot;ability-fairy.png&quot;)</span>
     ));
 
-<span class="fc" id="L275">    public static final List&lt;String&gt; ATTRIBUTE_IMAGES = Arrays.asList(</span>
+<span class="fc" id="L282">    public static final List&lt;String&gt; ATTRIBUTE_IMAGES = Arrays.asList(</span>
             &quot;star.png&quot;,
             &quot;attack.png&quot;,
             &quot;heart.png&quot;,
@@ -287,30 +294,30 @@ import static java.util.Map.entry;
     public static final String FROZEN = &quot;frozen&quot;;
     public static final String CONFUSED = &quot;confused&quot;;
 
-<span class="fc" id="L290">    public static final List&lt;String&gt; STATUS_EFFECTS = Arrays.asList(PARALYSED, ASLEEP, POISONED, BURNED, FROZEN, CONFUSED);</span>
+<span class="fc" id="L297">    public static final List&lt;String&gt; STATUS_EFFECTS = Arrays.asList(PARALYSED, ASLEEP, POISONED, BURNED, FROZEN, CONFUSED);</span>
 
-<span class="fc" id="L292">    public static final HashMap&lt;String, String&gt; STATUS_EFFECTS_IMAGES = new HashMap&lt;&gt;(Map.ofEntries(</span>
-<span class="fc" id="L293">            entry(PARALYSED, &quot;images/paralysed.png&quot;),</span>
-<span class="fc" id="L294">            entry(ASLEEP, &quot;images/asleep.png&quot;),</span>
-<span class="fc" id="L295">            entry(POISONED, &quot;images/poisoned.png&quot;),</span>
-<span class="fc" id="L296">            entry(BURNED, &quot;images/burned.png&quot;),</span>
-<span class="fc" id="L297">            entry(FROZEN, &quot;images/frozen.png&quot;),</span>
-<span class="fc" id="L298">            entry(CONFUSED, &quot;images/confused.png&quot;)</span>
+<span class="fc" id="L299">    public static final HashMap&lt;String, String&gt; STATUS_EFFECTS_IMAGES = new HashMap&lt;&gt;(Map.ofEntries(</span>
+<span class="fc" id="L300">            entry(PARALYSED, &quot;images/paralysed.png&quot;),</span>
+<span class="fc" id="L301">            entry(ASLEEP, &quot;images/asleep.png&quot;),</span>
+<span class="fc" id="L302">            entry(POISONED, &quot;images/poisoned.png&quot;),</span>
+<span class="fc" id="L303">            entry(BURNED, &quot;images/burned.png&quot;),</span>
+<span class="fc" id="L304">            entry(FROZEN, &quot;images/frozen.png&quot;),</span>
+<span class="fc" id="L305">            entry(CONFUSED, &quot;images/confused.png&quot;)</span>
     ));
 
 
-<span class="nc" id="L302">    public enum itemType {</span>
-<span class="nc" id="L303">        ball,</span>
-<span class="nc" id="L304">        effect,</span>
-<span class="nc" id="L305">        monsterBox,</span>
-<span class="nc" id="L306">        itemBox</span>
+<span class="nc" id="L309">    public enum itemType {</span>
+<span class="nc" id="L310">        ball,</span>
+<span class="nc" id="L311">        effect,</span>
+<span class="nc" id="L312">        monsterBox,</span>
+<span class="nc" id="L313">        itemBox</span>
     }
 
     // enum to decide if the player wants to open his inv, sell or buy items
-<span class="fc" id="L310">    public enum inventoryType {</span>
-<span class="fc" id="L311">        showItems,</span>
-<span class="fc" id="L312">        buyItems,</span>
-<span class="fc" id="L313">        sellItems</span>
+<span class="fc" id="L317">    public enum inventoryType {</span>
+<span class="fc" id="L318">        showItems,</span>
+<span class="fc" id="L319">        buyItems,</span>
+<span class="fc" id="L320">        sellItems</span>
     }
 
     public static final String ITEM_ACTION_USE_ITEM = &quot;use&quot;;

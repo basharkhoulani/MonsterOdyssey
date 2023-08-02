@@ -3,6 +3,7 @@
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
@@ -50,13 +51,14 @@ public class ItemMenuController extends Controller {
     IngameController ingameController;
     private Constants.inventoryType inventoryType;
     private List&lt;Integer&gt; npcItemList;
-<span class="nc" id="L53">    public HashMap&lt;Integer, ItemTypeDto&gt; itemTypeHashMap = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L54">    public HashMap&lt;Integer, Image&gt; itemImageHashMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L54">    public HashMap&lt;Integer, ItemTypeDto&gt; itemTypeHashMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L55">    public HashMap&lt;Integer, Image&gt; itemImageHashMap = new HashMap&lt;&gt;();</span>
     private StackPane rootStackPane;
+    private EncounterController encounterController;
 
     @Inject
-<span class="nc" id="L58">    public ItemMenuController() {</span>
-<span class="nc" id="L59">    }</span>
+<span class="nc" id="L60">    public ItemMenuController() {</span>
+<span class="nc" id="L61">    }</span>
 
     public void init(IngameController ingameController,
                      TrainersService trainersService,
@@ -65,82 +67,99 @@ public class ItemMenuController extends Controller {
                      Constants.inventoryType inventoryType,
                      List&lt;Integer&gt; npcItemList,
                      StackPane rootStackPane) {
-<span class="nc" id="L68">        super.init();</span>
-<span class="nc" id="L69">        this.ingameController = ingameController;</span>
-<span class="nc" id="L70">        this.trainersService = trainersService;</span>
-<span class="nc" id="L71">        this.trainerStorageProvider = trainerStorageProvider;</span>
-<span class="nc" id="L72">        this.itemMenuBox = itemMenuBox;</span>
-<span class="nc" id="L73">        this.inventoryType = inventoryType;</span>
-<span class="nc" id="L74">        this.npcItemList = npcItemList;</span>
-<span class="nc" id="L75">        this.rootStackPane = rootStackPane;</span>
-<span class="nc" id="L76">    }</span>
+<span class="nc" id="L70">        super.init();</span>
+<span class="nc" id="L71">        this.ingameController = ingameController;</span>
+<span class="nc" id="L72">        this.trainersService = trainersService;</span>
+<span class="nc" id="L73">        this.trainerStorageProvider = trainerStorageProvider;</span>
+<span class="nc" id="L74">        this.itemMenuBox = itemMenuBox;</span>
+<span class="nc" id="L75">        this.inventoryType = inventoryType;</span>
+<span class="nc" id="L76">        this.npcItemList = npcItemList;</span>
+<span class="nc" id="L77">        this.rootStackPane = rootStackPane;</span>
+<span class="nc" id="L78">    }</span>
+
+    public void initFromEncounter(EncounterController encounterController,
+                                    TrainersService trainersService,
+                                    Provider&lt;TrainerStorage&gt; trainerStorageProvider,
+                                    VBox itemMenuBox,
+                                    Constants.inventoryType inventoryType,
+                                    List&lt;Integer&gt; npcItemList,
+                                    StackPane rootStackPane) {
+<span class="nc" id="L87">        super.init();</span>
+<span class="nc" id="L88">        this.encounterController = encounterController;</span>
+<span class="nc" id="L89">        this.trainersService = trainersService;</span>
+<span class="nc" id="L90">        this.trainerStorageProvider = trainerStorageProvider;</span>
+<span class="nc" id="L91">        this.itemMenuBox = itemMenuBox;</span>
+<span class="nc" id="L92">        this.inventoryType = inventoryType;</span>
+<span class="nc" id="L93">        this.npcItemList = npcItemList;</span>
+<span class="nc" id="L94">        this.rootStackPane = rootStackPane;</span>
+<span class="nc" id="L95">    }</span>
 
     @Override
     public Parent render() {
-<span class="nc" id="L80">        final Parent parent = super.render();</span>
-<span class="nc" id="L81">        loadItems();</span>
+<span class="nc" id="L99">        final Parent parent = super.render();</span>
+<span class="nc" id="L100">        loadItems();</span>
 
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L84">            closeInventoryIcon.setImage(new Image(Objects.requireNonNull(Main.class.getResource(&quot;images/close-x.png&quot;)).toExternalForm()));</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L103">            closeInventoryIcon.setImage(new Image(Objects.requireNonNull(Main.class.getResource(&quot;images/close-x.png&quot;)).toExternalForm()));</span>
         }
-<span class="nc" id="L86">        closeInventoryIcon.setOnMouseClicked(evt -&gt; closeItemMenu());</span>
-<span class="nc" id="L87">        return parent;</span>
+<span class="nc" id="L105">        closeInventoryIcon.setOnMouseClicked(evt -&gt; closeItemMenu());</span>
+<span class="nc" id="L106">        return parent;</span>
     }
 
     public void setItemNameLabel(String itemName) {
-<span class="nc" id="L91">        itemNameLabel.setText(itemName);</span>
-<span class="nc" id="L92">    }</span>
+<span class="nc" id="L110">        itemNameLabel.setText(itemName);</span>
+<span class="nc" id="L111">    }</span>
 
     public void initItems(List&lt;Item&gt; itemList) {
-<span class="nc bnc" id="L95" title="All 2 branches missed.">        for (Item item : itemList) {</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        for (Item item : itemList) {</span>
             // if inventoryType == sell  AND  the item cannot be used, then skip rendering item
-<span class="nc bnc" id="L97" title="All 4 branches missed.">            if (this.inventoryType == Constants.inventoryType.sellItems &amp;&amp; itemTypeHashMap.get(item.type()).use() == null) {</span>
-<span class="nc" id="L98">                continue;</span>
+<span class="nc bnc" id="L116" title="All 4 branches missed.">            if (this.inventoryType == Constants.inventoryType.sellItems &amp;&amp; itemTypeHashMap.get(item.type()).use() == null) {</span>
+<span class="nc" id="L117">                continue;</span>
             }
-<span class="nc" id="L100">            initItem(item);</span>
-<span class="nc" id="L101">        }</span>
-<span class="nc" id="L102">    }</span>
-
-    public void initNpcItems() {
-<span class="nc bnc" id="L105" title="All 2 branches missed.">        for (Integer itemTypeID : npcItemList) {</span>
-            // dummy item, so we don't have to refactor everything in the ItemCell controller for now
-<span class="nc" id="L107">            initItem(new Item(&quot;1231245&quot;, &quot;npc&quot;, itemTypeID, 69));</span>
-<span class="nc" id="L108">        }</span>
-<span class="nc" id="L109">    }</span>
-
-    public void initItem(Item item) {
-<span class="nc" id="L112">        itemListView.setCellFactory(param -&gt; new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController));</span>
-<span class="nc" id="L113">        itemListView.getItems().add(item);</span>
-<span class="nc" id="L114">        itemListView.setFocusModel(null);</span>
-<span class="nc" id="L115">        itemListView.setSelectionModel(null);</span>
-<span class="nc" id="L116">    }</span>
-
-    public void closeItemMenu() {
-<span class="nc" id="L119">        ingameController.root.getChildren().remove(itemMenuBox);</span>
-<span class="nc" id="L120">        ingameController.buttonsDisable(false);</span>
+<span class="nc" id="L119">            initItem(item);</span>
+<span class="nc" id="L120">        }</span>
 <span class="nc" id="L121">    }</span>
 
+    public void initNpcItems() {
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        for (Integer itemTypeID : npcItemList) {</span>
+            // dummy item, so we don't have to refactor everything in the ItemCell controller for now
+<span class="nc" id="L126">            initItem(new Item(&quot;1231245&quot;, &quot;npc&quot;, itemTypeID, 69));</span>
+<span class="nc" id="L127">        }</span>
+<span class="nc" id="L128">    }</span>
+
+    public void initItem(Item item) {
+<span class="nc" id="L131">        itemListView.setCellFactory(param -&gt; new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController));</span>
+<span class="nc" id="L132">        itemListView.getItems().add(item);</span>
+<span class="nc" id="L133">        itemListView.setFocusModel(null);</span>
+<span class="nc" id="L134">        itemListView.setSelectionModel(null);</span>
+<span class="nc" id="L135">    }</span>
+
+    public void closeItemMenu() {
+<span class="nc" id="L138">        ingameController.root.getChildren().remove(itemMenuBox);</span>
+<span class="nc" id="L139">        ingameController.buttonsDisable(false);</span>
+<span class="nc" id="L140">    }</span>
+
     public Constants.inventoryType getInventoryType() {
-<span class="nc" id="L124">        return this.inventoryType;</span>
+<span class="nc" id="L143">        return this.inventoryType;</span>
     }
 
     private void loadItems() {
-<span class="nc" id="L128">        disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER)</span>
-<span class="nc" id="L129">                .subscribe(itemTypes -&gt; {</span>
-<span class="nc bnc" id="L130" title="All 2 branches missed.">                    for (ItemTypeDto itemType : itemTypes) {</span>
-<span class="nc" id="L131">                        itemTypeHashMap.put(itemType.id(), itemType);</span>
-<span class="nc" id="L132">                    }</span>
+<span class="nc" id="L147">        disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER)</span>
+<span class="nc" id="L148">                .subscribe(itemTypes -&gt; {</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">                    for (ItemTypeDto itemType : itemTypes) {</span>
+<span class="nc" id="L150">                        itemTypeHashMap.put(itemType.id(), itemType);</span>
+<span class="nc" id="L151">                    }</span>
 
-<span class="nc bnc" id="L134" title="All 2 branches missed.">                    if (this.inventoryType == Constants.inventoryType.buyItems) {</span>
-<span class="nc" id="L135">                        initNpcItems();</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">                    if (this.inventoryType == Constants.inventoryType.buyItems) {</span>
+<span class="nc" id="L154">                        initNpcItems();</span>
                     } else {
                         // Items are now saved in trainerStorage
-<span class="nc" id="L138">                        initItems(trainerStorageProvider.get().getItems());</span>
+<span class="nc" id="L157">                        initItems(trainerStorageProvider.get().getItems());</span>
                     }
-<span class="nc" id="L140">                }, error -&gt; {</span>
-<span class="nc" id="L141">                    showError(error.getMessage());</span>
-<span class="nc" id="L142">                    error.printStackTrace();</span>
-<span class="nc" id="L143">                }));</span>
-<span class="nc" id="L144">    }</span>
+<span class="nc" id="L159">                }, error -&gt; {</span>
+<span class="nc" id="L160">                    showError(error.getMessage());</span>
+<span class="nc" id="L161">                    error.printStackTrace();</span>
+<span class="nc" id="L162">                }));</span>
+<span class="nc" id="L163">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
