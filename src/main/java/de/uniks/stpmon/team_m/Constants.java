@@ -180,6 +180,8 @@ public class Constants {
     public static final String STATUS_ADDED = "status-added";
     public static final String STATUS_REMOVED = "status-removed";
     public static final String CHANGE_MONSTER = "change-monster";
+    public static final String MONSTER_CAUGHT = "monster-caught";
+    public static final String ITEM_FAILED = "item-failed";
 
     // Encounter - images
     public static final String STAR_ICON = "images/star.png";
@@ -291,14 +293,7 @@ public class Constants {
     ));
 
 
-    public enum itemType {
-        ball,
-        effect,
-        monsterBox,
-        itemBox
-    }
-
-    public enum ballType {
+    public enum BallType {
         NORMAL,
         SUPER,
         HYPER,
@@ -309,7 +304,7 @@ public class Constants {
     }
 
     // enum to decide if the player wants to open his inv, sell or buy items
-    public enum inventoryType {
+    public enum InventoryType {
         showItems,
         buyItems,
         sellItems
@@ -321,6 +316,7 @@ public class Constants {
     public static final String ITEM_USAGE_ITEM_BOX = "itemBox";
     public static final String ITEM_USAGE_MONSTER_BOX = "monsterBox";
     public static final String ITEM_USAGE_BALL = "ball";
+
     public static final int useItemMonsterListVBoxWidth = 600;
     public static final int useItemMonsterListVBoxHeight = 410;
     public static final long FLIPPING_HORIZONTAL = 0x80000000L;

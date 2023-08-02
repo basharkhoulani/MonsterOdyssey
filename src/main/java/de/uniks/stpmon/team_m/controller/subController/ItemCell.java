@@ -133,7 +133,7 @@ public class ItemCell extends ListCell<Item> {
             setGraphic(itemHBox);
 
             // hide item count when buying items from clerk
-            if (itemMenuController.getInventoryType() == Constants.inventoryType.buyItems) {
+            if (itemMenuController.getInventoryType() == Constants.InventoryType.buyItems) {
                 itemNumber.setVisible(false);
             }
 

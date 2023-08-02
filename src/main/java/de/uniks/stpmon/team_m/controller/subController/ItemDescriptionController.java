@@ -6,7 +6,6 @@ import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -20,7 +19,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
 
@@ -45,7 +43,7 @@ public class ItemDescriptionController extends Controller {
     public ImageView coinImageView;
     @FXML
     public Button useButton;
-    private Constants.inventoryType inventoryType;
+    private InventoryType inventoryType;
     private int ownAmountOfItem;
 
     private Runnable closeItemMenu;
@@ -59,7 +57,7 @@ public class ItemDescriptionController extends Controller {
     public void init(ItemTypeDto itemTypeDto,
                      Image itemImage,
                      Item item,
-                     Constants.inventoryType inventoryType,
+                     InventoryType inventoryType,
                      int ownAmountOfITem,
                      Runnable closeItemMenu,
                      StackPane rootStackPane,

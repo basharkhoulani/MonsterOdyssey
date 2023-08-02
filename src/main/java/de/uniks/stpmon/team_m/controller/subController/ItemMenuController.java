@@ -25,8 +25,6 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class ItemMenuController extends Controller {
     @FXML
@@ -53,7 +51,7 @@ public class ItemMenuController extends Controller {
 
     public VBox itemMenuBox;
     IngameController ingameController;
-    private Constants.inventoryType inventoryType;
+    private Constants.InventoryType inventoryType;
     private List<Integer> npcItemList;
     public HashMap<Integer, ItemTypeDto> itemTypeHashMap = new HashMap<>();
     public HashMap<Integer, Image> itemImageHashMap = new HashMap<>();
@@ -67,7 +65,7 @@ public class ItemMenuController extends Controller {
                      TrainersService trainersService,
                      Provider<TrainerStorage> trainerStorageProvider,
                      VBox itemMenuBox,
-                     Constants.inventoryType inventoryType,
+                     Constants.InventoryType inventoryType,
                      List<Integer> npcItemList,
                      StackPane rootStackPane) {
         super.init();
@@ -99,7 +97,7 @@ public class ItemMenuController extends Controller {
     public void initItems(List<Item> itemList) {
         for (Item item : itemList) {
             // if inventoryType == sell  AND  the item cannot be used, then skip rendering item
-            if (this.inventoryType == Constants.inventoryType.sellItems && itemTypeHashMap.get(item.type()).use() == null) {
+            if (this.inventoryType == Constants.InventoryType.sellItems && itemTypeHashMap.get(item.type()).use() == null) {
                 continue;
             }
             initItem(item);
@@ -125,7 +123,7 @@ public class ItemMenuController extends Controller {
         ingameController.buttonsDisable(false);
     }
 
-    public Constants.inventoryType getInventoryType() {
+    public Constants.InventoryType getInventoryType() {
         return this.inventoryType;
     }
 
@@ -137,7 +135,7 @@ public class ItemMenuController extends Controller {
                         trainerStorageProvider.get().getItems().stream().filter(item -> item.type() == itemType.id()).findFirst().ifPresent(relatedItem -> itemStorageProvider.get().addItemData(relatedItem, itemType, null));
                     }
 
-                    if (this.inventoryType == Constants.inventoryType.buyItems) {
+                    if (this.inventoryType == Constants.InventoryType.buyItems) {
                         initNpcItems();
                     } else {
                         // Items are now saved in trainerStorage
