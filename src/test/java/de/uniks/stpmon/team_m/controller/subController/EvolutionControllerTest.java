@@ -47,7 +47,7 @@ public class EvolutionControllerTest extends ApplicationTest {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
         evolutionController.setValues(bundle, null, null, evolutionController, app);
 
-        when(presetsService.getMonsterImage(1)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
+        //when(presetsService.getMonsterImage(1)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
 
         LinkedHashMap<String, Integer> abilities = new LinkedHashMap<>();
         abilities.put("1", 35);

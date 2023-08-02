@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Area;
+import de.uniks.stpmon.team_m.dto.Layer;
 import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -23,6 +24,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.List;
+
+import static de.uniks.stpmon.team_m.Constants.*;
 
 
 public class IngameMiniMapController extends Controller {
@@ -82,7 +85,15 @@ public class IngameMiniMapController extends Controller {
             double xPinOffset = -pinWidth / 2;
             double yPinOffset = -pinHeight;
             final VBox[] descriptionVBox = new VBox[1];
-            miniMap.layers().get(2).objects().forEach(tileObject -> {
+
+            Layer layerMinimap = miniMap.layers().get(2);
+            for (Layer layer : miniMap.layers()) {
+                if (layer.type().equals("objectgroup")) {
+                    layerMinimap = layer;
+                    break;
+                }
+            }
+            layerMinimap.objects().forEach(tileObject -> {
                 boolean discovered;
                 discovered = discoveredLocations.contains(tileObject.name());
                 // create locations
@@ -91,12 +102,12 @@ public class IngameMiniMapController extends Controller {
                 if (tileObject.width() != 0) {
                     width = tileObject.width();
                 } else {
-                    width = 16;
+                    width = TILE_SIZE;
                 }
                 if (tileObject.height() != 0) {
                     height = tileObject.height();
                 } else {
-                    height = 16;
+                    height = TILE_SIZE;
                 }
                 VBox location = new VBox();
                 location.setMinSize(width, height);
@@ -113,10 +124,10 @@ public class IngameMiniMapController extends Controller {
                         description.getChildren().add(new Text("\n " + resources.getString("NOT.DISCOVERED") + " \n"));
                     }
                     descriptionVBox[0] = new VBox();
-                    descriptionVBox[0].setMaxSize(632, 40);
-                    descriptionVBox[0].setStyle("-fx-padding: 4 4 4 4px;-fx-background-color: #d3ebd3;-fx-border-color: black;-fx-border-style: solid;-fx-font-family: \"Comic Sans MS\";-fx-font-weight: bold;");
-                    descriptionVBox[0].setLayoutX(-60);
-                    descriptionVBox[0].setLayoutY(-32);
+                    descriptionVBox[0].setMaxSize(descriptionBoxWidth, descriptionBoxHeight);
+                    descriptionVBox[0].getStyleClass().add("miniMapDescriptionBox");
+                    descriptionVBox[0].setLayoutX(descriptionBoxLayoutX);
+                    descriptionVBox[0].setLayoutY(descriptionBoxLayoutY);
                     descriptionVBox[0].getChildren().add(description);
                     mapContainer.getChildren().add(descriptionVBox[0]);
                 });
