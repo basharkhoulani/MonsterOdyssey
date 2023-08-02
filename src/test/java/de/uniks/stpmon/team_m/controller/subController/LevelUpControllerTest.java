@@ -126,7 +126,7 @@ public class LevelUpControllerTest extends ApplicationTest {
         final Label level = lookup("#levelLabel").query();
         assertEquals(level.getText(), "1 -> 2");
         final Label health = lookup("#healthLabel").query();
-        assertEquals(health.getText(), "14,0 -> 16,0");
+        assertEquals(health.getText(), "14.0 -> 16.0");
         final Label attack = lookup("#attackLabel").query();
         assertEquals(attack.getText(), "8 -> 9");
         final Label defense = lookup("#defenseLabel").query();
