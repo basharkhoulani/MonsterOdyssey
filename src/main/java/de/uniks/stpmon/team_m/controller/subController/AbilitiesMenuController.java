@@ -39,18 +39,20 @@ public class AbilitiesMenuController extends Controller {
     private Monster monster;
     private EncounterController encounterController;
     private Opponent currentOpponent;
+    private List<AbilityDto> abilities;
 
 
     @Inject
     public AbilitiesMenuController() {
     }
 
-    public void init(Monster monster, PresetsService presetsService, EncounterController encounterController, Opponent currentOpponent) {
+    public void init(Monster monster, PresetsService presetsService, EncounterController encounterController, Opponent currentOpponent, List<AbilityDto> abilities) {
         super.init();
         this.monster = monster;
         this.presetsService = presetsService;
         this.encounterController = encounterController;
         this.currentOpponent = currentOpponent;
+        this.abilities = abilities;
     }
 
     @Override
@@ -64,32 +66,29 @@ public class AbilitiesMenuController extends Controller {
         // Abilities
         List<Button> abilityButtons = new ArrayList<>(Arrays.asList(abilityButton1, abilityButton2, abilityButton3, abilityButton4));
 
-        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(
-                abilities -> {
-                    int i = 0;
-                    if (monster != null) {
-                        for (Map.Entry<String, Integer> entry : monster.abilities().entrySet()) {
-                            AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey()) - 1);
-                            Button abilityButton = abilityButtons.get(i);
-                            abilityButton.setText(ability.name() + " " + entry.getValue() + "/" + ability.maxUses());
-                            // Disable Button if no uses left
-                            if (entry.getValue() == 0) {
-                                abilityButton.setDisable(true);
-                            }
-                            // Change Color
-                            if (TYPESCOLORPALETTE.containsKey(ability.type())) {
-                                abilityButton.setStyle("-fx-background-color: " + TYPESCOLORPALETTE.get(ability.type()) + ";-fx-border-color: black");
-                            }
-                            // setOnAction
-                            abilityButton.setOnAction(actionEvent -> useAbility(ability));
-                            i++;
-                        }
-                    }
-                    while (i < 4) {
-                        abilityButtons.get(i).setVisible(false);
-                        i++;
-                    }
-                }, Throwable::printStackTrace));
+        int i = 0;
+        if (monster != null) {
+            for (Map.Entry<String, Integer> entry : monster.abilities().entrySet()) {
+                AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey()) - 1);Button abilityButton = abilityButtons.get(i);
+                abilityButton.setText(ability.name() + " " + entry.getValue() + "/" + ability.maxUses());
+                // Disable Button if no uses left
+                if (entry.getValue() == 0) {
+                    abilityButton.setDisable(true);
+                }
+                // Change Color
+                if (TYPESCOLORPALETTE.containsKey(ability.type())) {
+                    abilityButton.setStyle("-fx-background-color: " + TYPESCOLORPALETTE.get(ability.type()) + ";-fx-border-color: black");
+                }
+                // setOnAction
+                abilityButton.setOnAction(actionEvent -> useAbility(ability));
+                i++;
+            }
+        }
+        while (i < 4) {
+            abilityButtons.get(i).setVisible(false);
+            i++;
+        }
+
     }
 
     private void useAbility(AbilityDto ability) {
