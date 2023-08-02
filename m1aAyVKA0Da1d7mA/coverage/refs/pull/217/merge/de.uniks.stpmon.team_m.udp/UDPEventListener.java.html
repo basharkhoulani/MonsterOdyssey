@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UDPEventListener.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.udp</a> &gt; <span class="el_source">UDPEventListener.java</span></div><h1>UDPEventListener.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.udp;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.uniks.stpmon.team_m.dto.Event;
+import de.uniks.stpmon.team_m.dto.MoveTrainerDto;
+import de.uniks.stpmon.team_m.dto.TalkTrainerDto;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.util.function.Consumer;
+import java.util.regex.Pattern;
+
+import static de.uniks.stpmon.team_m.Constants.SERVER_PORT;
+import static de.uniks.stpmon.team_m.Constants.UDP_URL;
+
+@Singleton
+public class UDPEventListener {
+    private final ObjectMapper mapper;
+    private UDPClient client;
+
+    @Inject
+<span class="nc" id="L27">    public UDPEventListener(ObjectMapper mapper) {</span>
+<span class="nc" id="L28">        this.mapper = mapper;</span>
+<span class="nc" id="L29">    }</span>
+
+    private void ensureOpen() {
+<span class="nc bnc" id="L32" title="All 4 branches missed.">        if (client != null &amp;&amp; client.isOpen()) {</span>
+<span class="nc" id="L33">            return;</span>
+        }
+        try {
+<span class="nc" id="L36">            InetAddress address = InetAddress.getByName(UDP_URL);</span>
+<span class="nc" id="L37">            client = new UDPClient(address, SERVER_PORT);</span>
+<span class="nc" id="L38">            client.open();</span>
+<span class="nc" id="L39">            client.startReceiving();</span>
+<span class="nc" id="L40">        } catch (IOException e) {</span>
+<span class="nc" id="L41">            throw new RuntimeException(e);</span>
+<span class="nc" id="L42">        }</span>
+<span class="nc" id="L43">    }</span>
+
+    public &lt;T&gt; Observable&lt;Event&lt;T&gt;&gt; listen(String pattern, Class&lt;T&gt; type) {
+<span class="nc" id="L46">        return Observable.create(emitter -&gt; {</span>
+<span class="nc" id="L47">            this.ensureOpen();</span>
+<span class="nc" id="L48">            send(new Event&lt;&gt;(&quot;subscribe&quot;, pattern));</span>
+<span class="nc" id="L49">            final Consumer&lt;String&gt; handler = createPatternHandler(mapper, pattern, type, emitter);</span>
+<span class="nc" id="L50">            client.addMessageHandler(handler);</span>
+<span class="nc" id="L51">            emitter.setCancellable(() -&gt; removeEventHandler(pattern, handler));</span>
+<span class="nc" id="L52">        });</span>
+    }
+
+    public void send(Object data) {
+        try {
+<span class="nc" id="L57">            String message = mapper.writeValueAsString(data);</span>
+<span class="nc" id="L58">            client.sendMessage(message);</span>
+<span class="nc" id="L59">        } catch (IOException e) {</span>
+<span class="nc" id="L60">            throw new RuntimeException(e);</span>
+<span class="nc" id="L61">        }</span>
+<span class="nc" id="L62">    }</span>
+
+    public static &lt;T&gt; Consumer&lt;String&gt; createPatternHandler(ObjectMapper mapper, String pattern, Class&lt;T&gt; type, ObservableEmitter&lt;Event&lt;T&gt;&gt; emitter) {
+<span class="nc" id="L65">        return eventStr -&gt; {</span>
+<span class="nc" id="L66">            final Pattern regex = Pattern.compile(pattern.replace(&quot;.&quot;, &quot;\\.&quot;).replace(&quot;*&quot;, &quot;[^.]*&quot;));</span>
+            try {
+<span class="nc" id="L68">                final JsonNode node = mapper.readTree(eventStr);</span>
+<span class="nc" id="L69">                final String event = node.get(&quot;event&quot;).asText();</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">                if (!regex.matcher(event).matches()) {</span>
+<span class="nc" id="L71">                    return;</span>
+                }
+
+<span class="nc" id="L74">                final T data = mapper.treeToValue(node.get(&quot;data&quot;), type);</span>
+<span class="nc" id="L75">                emitter.onNext(new Event&lt;&gt;(event, data));</span>
+<span class="nc" id="L76">            } catch (IOException e) {</span>
+<span class="nc" id="L77">                throw new RuntimeException(e);</span>
+<span class="nc" id="L78">            }</span>
+<span class="nc" id="L79">        };</span>
+    }
+
+    private void removeEventHandler(String pattern, Consumer&lt;String&gt; handler) {
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (client == null) {</span>
+<span class="nc" id="L84">            return;</span>
+        }
+
+<span class="nc" id="L87">        send(new Event&lt;&gt;(&quot;unsubscribe&quot;, pattern));</span>
+<span class="nc" id="L88">        client.removeMessageHandler(handler);</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        if (!client.hasMessageHandler()) {</span>
+<span class="nc" id="L90">            close();</span>
+        }
+<span class="nc" id="L92">    }</span>
+
+    private void close() {
+<span class="nc bnc" id="L95" title="All 2 branches missed.">        if (client != null) {</span>
+<span class="nc" id="L96">            client.close();</span>
+<span class="nc" id="L97">            client = null;</span>
+        }
+<span class="nc" id="L99">    }</span>
+
+
+    public &lt;T&gt; Observable&lt;Event&lt;T&gt;&gt; move(MoveTrainerDto moveTrainerDto) {
+<span class="nc" id="L103">        return Observable.create(emitter -&gt; {</span>
+<span class="nc" id="L104">            this.ensureOpen();</span>
+<span class="nc" id="L105">            send(new Event&lt;&gt;(&quot;areas.&quot; + moveTrainerDto.area() + &quot;.trainers.&quot; + moveTrainerDto._id() + &quot;.moved&quot;, moveTrainerDto));</span>
+<span class="nc" id="L106">        });</span>
+    }
+
+    public &lt;T&gt; Observable&lt;Event&lt;T&gt;&gt; talk(String areaId,TalkTrainerDto talkTrainerDto) {
+<span class="nc" id="L110">        return Observable.create(emitter -&gt; {</span>
+<span class="nc" id="L111">            this.ensureOpen();</span>
+<span class="nc" id="L112">            send(new Event&lt;&gt;(&quot;areas.&quot; + areaId + &quot;.trainers.&quot; + talkTrainerDto._id() + &quot;.talked&quot;, talkTrainerDto));</span>
+<span class="nc" id="L113">        });</span>
+    }
+
+    public &lt;T&gt; Observable&lt;Event&lt;T&gt;&gt; ping() {
+<span class="nc" id="L117">        return Observable.create(emitter -&gt; {</span>
+<span class="nc" id="L118">            this.ensureOpen();</span>
+<span class="nc" id="L119">            send(new Event&lt;&gt;(&quot;ping&quot;, null));</span>
+<span class="nc" id="L120">        });</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
