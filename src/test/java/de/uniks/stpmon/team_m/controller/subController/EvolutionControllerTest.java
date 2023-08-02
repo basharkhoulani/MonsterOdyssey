@@ -9,11 +9,13 @@ import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,12 +32,12 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class LevelUpControllerTest extends ApplicationTest {
+public class EvolutionControllerTest extends ApplicationTest {
     @Spy
     final
     App app = new App(null);
     @InjectMocks
-    LevelUpController levelUpController;
+    EvolutionController evolutionController;
     @Mock
     PresetsService presetsService;
 
@@ -43,18 +45,9 @@ public class LevelUpControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
-        levelUpController.setValues(bundle, null, null, levelUpController, app);
+        evolutionController.setValues(bundle, null, null, evolutionController, app);
 
-
-        when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(
-                new MonsterTypeDto(
-                        1,
-                        "Salamander",
-                        "salamander.png",
-                        List.of("fire"),
-                        "A fire lizard. It's hot."
-                )
-        ));
+        //when(presetsService.getMonsterImage(1)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
 
         LinkedHashMap<String, Integer> abilities = new LinkedHashMap<>();
         abilities.put("1", 35);
@@ -106,33 +99,24 @@ public class LevelUpControllerTest extends ApplicationTest {
                 1.0,
                 2
         ));
-        levelUpController.init(
+        evolutionController.init(
                 vBox,
                 stackPane,
                 newMonster,
                 monsterTypeDto,
                 oldMonster,
-                newAbilities,
-                abilityDtos,
-                false);
+                monsterTypeDto);
         app.start(stage);
-        app.show(levelUpController);
+        app.show(evolutionController);
         stage.requestFocus();
     }
 
 
     @Test
     public void levelUpPopUpTest() {
-        final Label level = lookup("#levelLabel").query();
-        assertEquals("1 -> 2", level.getText());
-        final Label health = lookup("#healthLabel").query();
-        assertEquals( "14.0 -> 16.0", health.getText());
-        final Label attack = lookup("#attackLabel").query();
-        assertEquals("8 -> 9", attack.getText());
-        final Label defense = lookup("#defenseLabel").query();
-        assertEquals( "8 -> 9", defense.getText());
-        final Label speed = lookup("#speedLabel").query();
-        assertEquals("5 -> 7", speed.getText());
+        final TextFlow textFlow = lookup("#evolutionTextFlow").query();
+        final Text text = (Text) textFlow.getChildren().get(1);
+        assertEquals("Incredible! Flamander evolves to Flamander!", text.getText());
         final Button okButton = lookup("#okButton").queryButton();
         clickOn(okButton);
     }
