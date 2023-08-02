@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller;
 
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
@@ -29,10 +30,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -94,6 +93,8 @@ public class EncounterController extends Controller {
     Provider<ChangeMonsterListController> changeMonsterListControllerProvider;
     @Inject
     Provider<LevelUpController> levelUpControllerProvider;
+    @Inject
+    Provider<ItemMenuController> itemMenuControllerProvider;
     private EncounterOpponentController enemy1Controller;
     private EncounterOpponentController enemy2Controller;
     private EncounterOpponentController ownTrainerController;
@@ -180,7 +181,11 @@ public class EncounterController extends Controller {
             resultEvolvedHashMap.put(encounterOpponentStorage.getCoopOpponent()._id(), false);
         }
 
-        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilityDtos::addAll));
+        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> {
+            abilityDtos.addAll(abilities);
+            Comparator<AbilityDto> abilityDtoComparator = Comparator.comparingInt(AbilityDto::id);
+            Collections.sort(abilityDtos, abilityDtoComparator);
+        }));
 
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId).observeOn(FX_SCHEDULER).subscribe(encounter -> {
             encounterOpponentStorage.setWild(encounter.isWild());
@@ -539,7 +544,9 @@ public class EncounterController extends Controller {
                     showResult();
                 }
             } else if (event.suffix().contains("created")) {
-                deleteOpponents--;
+                if(encounterOpponentStorage.getEncounterSize() == 4) {
+                    deleteOpponents--;
+                }
                 disposables.add(encounterOpponentsService.getEncounterOpponents(trainerStorageProvider.get().getRegion()._id(), encounterId).observeOn(FX_SCHEDULER).subscribe(opponents -> {
                     teamHBox.getChildren().clear();
                     ingameControllerProvider.get().initEncounterOpponentStorage(opponents);
@@ -822,7 +829,7 @@ public class EncounterController extends Controller {
             }
         }
 
-        abilitiesMenuController.init(monster, presetsService, this, opponent);
+        abilitiesMenuController.init(monster, presetsService, this, opponent, abilityDtos);
 
         battleMenuVBox.getChildren().add(abilitiesMenuController.render());
     }
@@ -969,7 +976,8 @@ public class EncounterController extends Controller {
         Monster oldMonster = oldMonsterHashMap.get(opponentId);
         ArrayList<Integer> newAbilities = newAbilitiesHashMap.get(opponentId);
 
-        levelUpController.init(popUpVBox, rootStackPane, encounterOpponentStorage.getCurrentMonsters(opponentId), encounterOpponentStorage.getCurrentMonsterType(opponentId), oldMonster, newAbilities, abilityDtos, resultEvolvedHashMap.get(opponentId));
+        levelUpController.init(popUpVBox, rootStackPane, encounterOpponentStorage.getCurrentMonsters(opponentId),
+                encounterOpponentStorage.getCurrentMonsterType(opponentId), oldMonster, newAbilities, abilityDtos, resultEvolvedHashMap.get(opponentId));
         popUpVBox.getChildren().add(levelUpController.render());
         rootStackPane.getChildren().add(popUpVBox);
         newAbilitiesHashMap.put(opponentId, new ArrayList<>());
@@ -1012,5 +1020,16 @@ public class EncounterController extends Controller {
         }));
     }
 
+    public void showItems() {
+        VBox itemMenuBox = new VBox();
+        itemMenuBox.setId("itemMenuBox");
+        itemMenuBox.setAlignment(Pos.CENTER);
+        ItemMenuController itemMenuController = itemMenuControllerProvider.get();
+        itemMenuController.initFromEncounter(this, trainersService, trainerStorageProvider, itemMenuBox, inventoryType.showItems, List.of(), rootStackPane);
+        itemMenuBox.getChildren().add(itemMenuController.render());
+        rootStackPane.getChildren().add(itemMenuBox);
+        itemMenuBox.requestFocus();
+        battleMenuController.buttonDisable(true);
+    }
 }
     

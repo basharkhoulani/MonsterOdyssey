@@ -62,14 +62,15 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
                 new MonsterAttributes(14, 8, 8, 5),
                 List.of());
         PresetsService presetsService = mock(PresetsService.class);
-        when(presetsService.getAbilities()).thenReturn(Observable.just(List.of(new AbilityDto(
+        List<AbilityDto> abilityDtos = List.of(new AbilityDto(
                 1,
                 "Tackle",
                 "A physical attack in which the user charges and slams into the target with its whole body.",
                 "normal",
                 35,
                 1.0,
-                2))));
+                2));
+
         Opponent currentOpponent = new Opponent(
                 "2023-07-11T18:07:49.590Z",
                 "2023-07-11T18:07:54.361Z",
@@ -83,7 +84,7 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
                 List.of(),
                 0
         );
-        abilitiesMenuController.init(monster, presetsService, encounterController, currentOpponent);
+        abilitiesMenuController.init(monster, presetsService, encounterController, currentOpponent, abilityDtos);
         app.start(stage);
         app.show(abilitiesMenuController);
         stage.requestFocus();
