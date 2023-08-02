@@ -49,6 +49,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -288,13 +290,39 @@ public class IngameController extends Controller {
         };
         this.npcTextManager = new NpcTextManager(resources);
 
-        // Load trainer items and save them to trainerStorage
+        // Load trainer items and save them to trainer- and itemStorage
         disposables.add(
                 trainerItemsService.getItems(
                         trainerStorageProvider.get().getRegion()._id(),
                         trainerStorageProvider.get().getTrainer()._id(),
                         null
-                ).observeOn(FX_SCHEDULER).subscribe(trainerStorageProvider.get()::setItems));
+                ).observeOn(FX_SCHEDULER).subscribe(items -> {
+                            trainerStorageProvider.get().setItems(items);
+                            this.items.setAll(items);
+                            items.forEach(item -> {
+                                itemStorageProvider.get().addItemData(item, null, null);
+                            });
+                            disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER).subscribe(itemTypeDtos -> {
+                                        itemTypeDtos.forEach(itemTypeDto -> {
+                                            List<ItemData> itemData = itemStorageProvider.get().getItemDataList().stream().filter(data -> data.getItem().type() == itemTypeDto.id()).collect(Collectors.toList());
+                                            itemData.forEach(data -> {
+                                                if (ImageProcessor.showScaledItemImage(itemTypeDto.image()) != null) {
+                                                    itemStorageProvider.get().updateItemData(data.getItem(), itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()));
+                                                } else {
+                                                    itemStorageProvider.get().updateItemData(data.getItem(), itemTypeDto, null);
+                                                }
+                                            });
+                                        });
+                                    },
+                                    error -> {
+                                        showError(error.getMessage());
+                                        error.printStackTrace();
+                                    }));
+                        },
+                        error -> {
+                            showError(error.getMessage());
+                            error.printStackTrace();
+                        }));
     }
 
     private void checkMovement(int x, int y, int direction) {
@@ -532,23 +560,44 @@ public class IngameController extends Controller {
     }
 
     private void createItemReceivedPopUp(Item item) {
+        VBox receiveObjectPopUp = new VBox();
+        receiveObjectPopUp.setAlignment(Pos.CENTER);
+        receiveObjectPopUp.setMaxWidth(popupWidth);
+        receiveObjectPopUp.setMaxHeight(popupWidth);
+        receiveObjectPopUp.setStyle("-fx-border-radius: 10; -fx-border-style: solid; -fx-border-width: 2; -fx-border-color: black;");
+        receiveObjectPopUp.getStyleClass().add("hBoxLightGreen");
         if (itemStorageProvider.get().getItemData(item._id()) != null) {
             final ItemData itemData = itemStorageProvider.get().getItemData(item._id());
-            receiveObjectController = new ReceiveObjectController(itemData.getItem(), itemData.getItemTypeDto(), itemData.getItemImage(), this::removeItemReceivedPopUp);
-            getRoot().getChildren().add(receiveObjectController.render());
-        }
-        else {
+
+            receiveObjectController = new ReceiveObjectController(itemData.getItem(), itemData.getItemTypeDto(), itemData.getItemImage(), this::removeItemReceivedPopUp, trainerStorageProvider);
+            receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
+            receiveObjectPopUp.getChildren().add(receiveObjectController.render());
+            getRoot().getChildren().add(receiveObjectPopUp);
+        } else {
             disposables.add(presetsService.getItem(item.type()).observeOn(FX_SCHEDULER).subscribe(
-                    itemTypeDto -> disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
-                            image -> {
-                                itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image));
-                                receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image), this::removeItemReceivedPopUp);
-                                getRoot().getChildren().add(receiveObjectController.render());
-                            },
-                            error -> {
-                                showError(error.getMessage());
-                                error.printStackTrace();
-                            })),
+                    itemTypeDto -> {
+                        if (ImageProcessor.showScaledItemImage(itemTypeDto.image()) != null) {
+                            itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()));
+                            receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()), this::removeItemReceivedPopUp, trainerStorageProvider);
+                            receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
+                            receiveObjectPopUp.getChildren().add(receiveObjectController.render());
+                            getRoot().getChildren().add(receiveObjectPopUp);
+                        }
+                        else {
+                            disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
+                                    image -> {
+                                        itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image));
+                                        receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image), this::removeItemReceivedPopUp, trainerStorageProvider);
+                                        receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
+                                        receiveObjectPopUp.getChildren().add(receiveObjectController.render());
+                                        getRoot().getChildren().add(receiveObjectPopUp);
+                                    },
+                                    error -> {
+                                        showError(error.getMessage());
+                                        error.printStackTrace();
+                                    }));
+                        }
+                    },
                     error -> {
                         showError(error.getMessage());
                         error.printStackTrace();
@@ -558,7 +607,7 @@ public class IngameController extends Controller {
     }
 
     private void removeItemReceivedPopUp() {
-        getRoot().getChildren().remove(receiveObjectController.receiveObjectRootVBox);
+        getRoot().getChildren().remove(receiveObjectController.receiveObjectRootVBox.getParent());
     }
 
     public void listenToMonsters(ObservableList<Monster> monsters, String trainerId) {
@@ -1092,14 +1141,14 @@ public class IngameController extends Controller {
                     System.out.println("Item used. Result: " + result);
                     disposables.add(trainerItemsService.getItems(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), null)
                             .observeOn(FX_SCHEDULER).subscribe(
-                            items -> {
-                                trainerStorageProvider.get().setItems(items);
-                                items.forEach(it -> itemStorageProvider.get().updateItemData(it, null, null));
-                            },
-                            error -> {
-                                showError(error.getMessage());
-                                error.printStackTrace();
-                            }));
+                                    items -> {
+                                        trainerStorageProvider.get().setItems(items);
+                                        items.forEach(it -> itemStorageProvider.get().updateItemData(it, null, null));
+                                    },
+                                    error -> {
+                                        showError(error.getMessage());
+                                        error.printStackTrace();
+                                    }));
                 },
                 error -> {
                     showError(error.getMessage());
