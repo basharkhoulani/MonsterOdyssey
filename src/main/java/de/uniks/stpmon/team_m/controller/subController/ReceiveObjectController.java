@@ -5,6 +5,7 @@ import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -64,6 +65,7 @@ public class ReceiveObjectController extends Controller {
     @Override
     public Parent render() {
         Parent parent = super.render();
+        receivedObjectImageView.setImage(this.objectImage);
         this.receivedObjectCongratulationLabel.setText(this.resources.getString("RECEIVE_OBJECT_CONGRATULATION"));
         if (this.monster != null && this.monsterTypeDto != null) {
             if (trainerStorageProvider.get().getTrainer().encounteredMonsterTypes().contains(monster.type())) {
@@ -85,9 +87,12 @@ public class ReceiveObjectController extends Controller {
                 receiveObjectTextLabel.setText(this.item.amount() + " x " + itemTypeDto.name() + " " + this.resources.getString("RECEIVE_OBJECT_TEXT"));
                 receivedObjectLevelLabel.setWrapText(true);
                 receivedObjectLevelLabel.setText(this.itemTypeDto.description());
+                if (ImageProcessor.showScaledItemImage(itemTypeDto.image()) != null) {
+                    receivedObjectImageView.setImage(ImageProcessor.showScaledItemImage(itemTypeDto.image()));
+                }
             }
         }
-        receivedObjectImageView.setImage(this.objectImage);
+
         this.receiveObjectOkButton.setOnAction(event -> onOkButtonClick.run());
         return parent;
     }
