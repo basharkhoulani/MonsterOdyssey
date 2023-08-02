@@ -63,22 +63,28 @@ public class ReceiveObjectController extends Controller {
 
     @Override
     public Parent render() {
-        Parent parent =  super.render();
+        Parent parent = super.render();
         this.receivedObjectCongratulationLabel.setText(this.resources.getString("RECEIVE_OBJECT_CONGRATULATION"));
         if (this.monster != null && this.monsterTypeDto != null) {
             if (trainerStorageProvider.get().getTrainer().encounteredMonsterTypes().contains(monster.type())) {
                 receivedObjectLabelVBox.getChildren().remove(receivedObjectNewLabel);
             }
             receiveObjectTextLabel.setText(monsterTypeDto.name() + " " + this.resources.getString("RECEIVE_OBJECT_TEXT"));
-            receivedObjectLevelLabel.setText(this.resources.getString("LEVEL") + " " + this.monster.level());
-        }
-        else {
+            receivedObjectLevelLabel.setText(
+                    this.resources.getString("LEVEL") + "\t" + this.monster.level() + "\n"
+                            + this.resources.getString("HEALTH") + "\t" + monster.currentAttributes().health() + " / " + monster.attributes().health() + "\n"
+                            + this.resources.getString("ATTACK") + "\t" + monster.attributes().attack() + "\n"
+                            + this.resources.getString("DEFENSE") + "\t" + monster.attributes().defense() + "\n"
+                            + this.resources.getString("SPEED") + "\t" + monster.attributes().speed() + "\n"
+            );
+        } else {
             if (itemTypeDto != null && item != null) {
                 if (trainerStorageProvider.get().getItems().contains(item)) {
                     receivedObjectLabelVBox.getChildren().remove(receivedObjectNewLabel);
                 }
-                receiveObjectTextLabel.setText(itemTypeDto.name() + " " + this.resources.getString("RECEIVE_OBJECT_TEXT"));
-                receivedObjectLevelLabel.setText(resources.getString("AMOUNT") + " " + this.item.amount());
+                receiveObjectTextLabel.setText(this.item.amount() + " x " + itemTypeDto.name() + " " + this.resources.getString("RECEIVE_OBJECT_TEXT"));
+                receivedObjectLevelLabel.setWrapText(true);
+                receivedObjectLevelLabel.setText(this.itemTypeDto.description());
             }
         }
         receivedObjectImageView.setImage(this.objectImage);
