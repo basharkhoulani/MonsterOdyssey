@@ -23,10 +23,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
 
 import static de.uniks.stpmon.team_m.Constants.ATTRIBUTE_IMAGES;
 
@@ -61,10 +59,6 @@ public class MonstersDetailController extends Controller {
     @FXML
     public ImageView monsterImageView;
     @FXML
-    public ImageView typeImageView;
-    @FXML
-    public VBox typeIcon;
-    @FXML
     public HBox levelBox;
     @FXML
     public HBox attackBox;
@@ -84,6 +78,7 @@ public class MonstersDetailController extends Controller {
     public EncounterController encounterController;
     public VBox monsterDetailVBox;
     public final List<AbilityDto> monsterAbilities = new ArrayList<>();
+    private List<AbilityDto> abilityDtos = new ArrayList<>();
     @Inject
     public Provider<PresetsService> presetsServiceProvider;
     private String monsterType;
@@ -189,8 +184,12 @@ public class MonstersDetailController extends Controller {
         monsterSpeed.setText(resources.getString("SPEED") + " " + monster.currentAttributes().speed() + "/" + monster.attributes().speed());
 
         disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> {
+            abilityDtos.addAll(abilities);
+            Comparator<AbilityDto> abilityDtoComparator = Comparator.comparingInt(AbilityDto::id);
+            Collections.sort(abilityDtos, abilityDtoComparator);
+
             for (Map.Entry<String, Integer> entry : monster.abilities().entrySet()) {
-                AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey()) - 1);
+                AbilityDto ability = abilityDtos.get(Integer.parseInt(entry.getKey()) - 1);
                 monsterAbilities.add(ability);
             }
             initMonsterAbilities(monsterAbilities, monster);

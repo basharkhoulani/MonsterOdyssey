@@ -181,11 +181,10 @@ public class EncounterController extends Controller {
             resultEvolvedHashMap.put(encounterOpponentStorage.getCoopOpponent()._id(), false);
         }
 
-        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abities -> {
-            abilityDtos.addAll(abities);
+        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> {
+            abilityDtos.addAll(abilities);
             Comparator<AbilityDto> abilityDtoComparator = Comparator.comparingInt(AbilityDto::id);
             Collections.sort(abilityDtos, abilityDtoComparator);
-            System.out.println("Abilities loaded" + abilityDtos);
         }));
 
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId).observeOn(FX_SCHEDULER).subscribe(encounter -> {
