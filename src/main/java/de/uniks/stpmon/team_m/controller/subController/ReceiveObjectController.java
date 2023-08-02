@@ -5,6 +5,7 @@ import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -13,6 +14,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
+import javax.inject.Provider;
+
 public class ReceiveObjectController extends Controller {
     private final Monster monster;
     private final MonsterTypeDto monsterTypeDto;
@@ -20,6 +23,7 @@ public class ReceiveObjectController extends Controller {
     private final Item item;
     private final ItemTypeDto itemTypeDto;
     private final Runnable onOkButtonClick;
+    private final Provider<TrainerStorage> trainerStorageProvider;
     @FXML
     public VBox receiveObjectRootVBox;
     @FXML
@@ -37,22 +41,24 @@ public class ReceiveObjectController extends Controller {
     @FXML
     public Button receiveObjectOkButton;
 
-    public ReceiveObjectController(Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, Runnable onOkButtonClick) {
+    public ReceiveObjectController(Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, Runnable onOkButtonClick, Provider<TrainerStorage> trainerStorageProvider) {
         this.monster = monster;
         this.monsterTypeDto = monsterTypeDto;
         this.objectImage = monsterImage;
         this.item = null;
         this.itemTypeDto = null;
         this.onOkButtonClick = onOkButtonClick;
+        this.trainerStorageProvider = trainerStorageProvider;
     }
 
-    public ReceiveObjectController(Item item, ItemTypeDto itemTypeDto, Image itemImage, Runnable onOkButtonClick) {
+    public ReceiveObjectController(Item item, ItemTypeDto itemTypeDto, Image itemImage, Runnable onOkButtonClick, Provider<TrainerStorage> trainerStorageProvider) {
         this.item = item;
         this.itemTypeDto = itemTypeDto;
         this.objectImage = itemImage;
         this.monster = null;
         this.monsterTypeDto = null;
         this.onOkButtonClick = onOkButtonClick;
+        this.trainerStorageProvider = trainerStorageProvider;
     }
 
     @Override
@@ -60,21 +66,19 @@ public class ReceiveObjectController extends Controller {
         Parent parent =  super.render();
         this.receivedObjectCongratulationLabel.setText(this.resources.getString("RECEIVE_OBJECT_CONGRATULATION"));
         if (this.monster != null && this.monsterTypeDto != null) {
-            // TODO: check if monster is NOT new
-            if (true) {
+            if (trainerStorageProvider.get().getTrainer().encounteredMonsterTypes().contains(monster.type())) {
                 receivedObjectLabelVBox.getChildren().remove(receivedObjectNewLabel);
             }
             receiveObjectTextLabel.setText(monsterTypeDto.name() + " " + this.resources.getString("RECEIVE_OBJECT_TEXT"));
             receivedObjectLevelLabel.setText(this.resources.getString("LEVEL") + " " + this.monster.level());
         }
         else {
-            // TODO: check if item is NOT new
             if (itemTypeDto != null && item != null) {
-                if (true) {
+                if (trainerStorageProvider.get().getItems().contains(item)) {
                     receivedObjectLabelVBox.getChildren().remove(receivedObjectNewLabel);
                 }
                 receiveObjectTextLabel.setText(itemTypeDto.name() + " " + this.resources.getString("RECEIVE_OBJECT_TEXT"));
-                receivedObjectLevelLabel.setText(" " + this.item.amount());
+                receivedObjectLevelLabel.setText(resources.getString("AMOUNT") + " " + this.item.amount());
             }
         }
         receivedObjectImageView.setImage(this.objectImage);
