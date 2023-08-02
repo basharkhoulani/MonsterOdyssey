@@ -2,7 +2,6 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.Region;
@@ -50,7 +49,6 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -299,21 +297,17 @@ public class IngameController extends Controller {
                 ).observeOn(FX_SCHEDULER).subscribe(items -> {
                             trainerStorageProvider.get().setItems(items);
                             this.items.setAll(items);
-                            items.forEach(item -> {
-                                itemStorageProvider.get().addItemData(item, null, null);
-                            });
-                            disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER).subscribe(itemTypeDtos -> {
-                                        itemTypeDtos.forEach(itemTypeDto -> {
-                                            List<ItemData> itemData = itemStorageProvider.get().getItemDataList().stream().filter(data -> data.getItem().type() == itemTypeDto.id()).collect(Collectors.toList());
-                                            itemData.forEach(data -> {
-                                                if (ImageProcessor.showScaledItemImage(itemTypeDto.image()) != null) {
-                                                    itemStorageProvider.get().updateItemData(data.getItem(), itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()));
-                                                } else {
-                                                    itemStorageProvider.get().updateItemData(data.getItem(), itemTypeDto, null);
-                                                }
-                                            });
-                                        });
-                                    },
+                            items.forEach(item -> itemStorageProvider.get().addItemData(item, null, null));
+                            disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER).subscribe(itemTypeDtos -> itemTypeDtos.forEach(itemTypeDto -> {
+                                List<ItemData> itemData = itemStorageProvider.get().getItemDataList().stream().filter(data -> data.getItem().type() == itemTypeDto.id()).collect(Collectors.toList());
+                                itemData.forEach(data -> {
+                                    if (ImageProcessor.showScaledItemImage(itemTypeDto.image()) != null) {
+                                        itemStorageProvider.get().updateItemData(data.getItem(), itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()));
+                                    } else {
+                                        itemStorageProvider.get().updateItemData(data.getItem(), itemTypeDto, null);
+                                    }
+                                });
+                            }),
                                     error -> {
                                         showError(error.getMessage());
                                         error.printStackTrace();
@@ -559,6 +553,22 @@ public class IngameController extends Controller {
         ));
     }
 
+    private void createMonsterReceivedPopUp(Monster monster) {
+        VBox receiveObjectPopUp = new VBox();
+        receiveObjectPopUp.setAlignment(Pos.CENTER);
+        receiveObjectPopUp.setMaxWidth(popupWidth);
+        receiveObjectPopUp.setMaxHeight(popupWidth);
+        receiveObjectPopUp.setStyle("-fx-border-radius: 10; -fx-border-style: solid; -fx-border-width: 2; -fx-border-color: black;");
+        receiveObjectPopUp.getStyleClass().add("hBoxLightGreen");
+        disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto ->
+                disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
+            receiveObjectController = new ReceiveObjectController(monster, monsterTypeDto, ImageProcessor.resonseBodyToJavaFXImage(responseBody), this::removeItemReceivedPopUp, trainerStorageProvider);
+            receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
+            receiveObjectPopUp.getChildren().add(receiveObjectController.render());
+            getRoot().getChildren().add(receiveObjectPopUp);
+        }))));
+    }
+
     private void createItemReceivedPopUp(Item item) {
         VBox receiveObjectPopUp = new VBox();
         receiveObjectPopUp.setAlignment(Pos.CENTER);
@@ -616,7 +626,7 @@ public class IngameController extends Controller {
                     Monster monster = event.data();
                     switch (event.suffix()) {
                         case "created" -> {
-                            System.out.println("Monster received: " + monster);
+                            createMonsterReceivedPopUp(monster);
                             monsters.add(monster);
                         }
                         case "updated" -> System.out.println("Monster updated: " + monster);
@@ -1302,9 +1312,13 @@ public class IngameController extends Controller {
                         }
                         case "deleted" -> {
                             trainers.removeIf(t -> t._id().equals(trainer._id()));
-                            trainerControllerHashMap.get(trainer).destroy();
-                            trainerControllerHashMap.remove(trainer);
-                            trainerPositionHashMap.remove(trainer);
+                            if (trainer != null) {
+                                if (trainerControllerHashMap.containsKey(trainer)) {
+                                    trainerControllerHashMap.get(trainer).destroy();
+                                    trainerControllerHashMap.remove(trainer);
+                                }
+                                trainerPositionHashMap.remove(trainer);
+                            }
                         }
                     }
                 }, error -> {
@@ -1476,10 +1490,10 @@ public class IngameController extends Controller {
     }
 
     public void showItems() {
-        openInventory(inventoryType.showItems, List.of());
+        openInventory(InventoryType.showItems, List.of());
     }
 
-    public void openInventory(Constants.inventoryType inventoryType, List<Integer> npcItemTypeIDs) {
+    public void openInventory(InventoryType inventoryType, List<Integer> npcItemTypeIDs) {
         itemMenuBox = new VBox();
         itemMenuBox.setId("itemMenuBox");
         itemMenuBox.setAlignment(Pos.CENTER);
@@ -1838,7 +1852,7 @@ public class IngameController extends Controller {
             inNpcPopup = false;
             this.root.getChildren().remove(clerkPopupVBox);
             buttonsDisable(false);
-            openInventory(inventoryType.buyItems, currentNpc.npc().sells());
+            openInventory(InventoryType.buyItems, currentNpc.npc().sells());
         });
 
         // sellButton
@@ -1853,7 +1867,7 @@ public class IngameController extends Controller {
             inNpcPopup = false;
             this.root.getChildren().remove(clerkPopupVBox);
             buttonsDisable(false);
-            openInventory(inventoryType.sellItems, List.of());
+            openInventory(InventoryType.sellItems, List.of());
         });
 
         // leaveButton
