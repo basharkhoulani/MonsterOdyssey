@@ -76,6 +76,6 @@ public class BattleMenuController extends Controller {
     }
 
     public void showItem() {
-        encounterController.showItems();
+        //encounterController.showItems();
     }
 }
