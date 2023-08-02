@@ -78,7 +78,7 @@ public class MonstersDetailController extends Controller {
     public EncounterController encounterController;
     public VBox monsterDetailVBox;
     public final List<AbilityDto> monsterAbilities = new ArrayList<>();
-    private List<AbilityDto> abilityDtos = new ArrayList<>();
+    private final List<AbilityDto> abilityDtos = new ArrayList<>();
     @Inject
     public Provider<PresetsService> presetsServiceProvider;
     private String monsterType;
@@ -186,7 +186,7 @@ public class MonstersDetailController extends Controller {
         disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> {
             abilityDtos.addAll(abilities);
             Comparator<AbilityDto> abilityDtoComparator = Comparator.comparingInt(AbilityDto::id);
-            Collections.sort(abilityDtos, abilityDtoComparator);
+            abilityDtos.sort(abilityDtoComparator);
 
             for (Map.Entry<String, Integer> entry : monster.abilities().entrySet()) {
                 AbilityDto ability = abilityDtos.get(Integer.parseInt(entry.getKey()) - 1);
