@@ -48,10 +48,16 @@ public class EncounterResultController extends Controller {
         encounterController.get().destroy();
         Trainer trainer = trainerStorageProvider.get().getTrainer();
         if (trainer.settings() != null && trainer.settings().permaDeath() != null && trainer.settings().permaDeath()) {
-            disposables.add(trainersService.deleteTrainer(trainer.region(), trainer._id()).observeOn(FX_SCHEDULER).subscribe(trainer1 -> {
-                destroy();
-                app.show(mainMenuControllerProvider.get());
-            }));
+            disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).
+                    observeOn(FX_SCHEDULER).subscribe(end -> {
+                        trainerStorageProvider.get().setTrainer(null);
+                        trainerStorageProvider.get().setTrainerSprite(null);
+                        trainerStorageProvider.get().setTrainerName(null);
+                        trainerStorageProvider.get().setRegion(null);
+                    }));
+            MainMenuController mainMenuController = mainMenuControllerProvider.get();
+            mainMenuController.setTrainerDeletion();
+            app.show(mainMenuController);
         } else {
             IngameController ingameController = ingameControllerProvider.get();
             ingameController.setCoinsAmount(getCoinsAmount());
