@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
@@ -53,6 +54,7 @@ public class ItemMenuController extends Controller {
     public HashMap<Integer, ItemTypeDto> itemTypeHashMap = new HashMap<>();
     public HashMap<Integer, Image> itemImageHashMap = new HashMap<>();
     private StackPane rootStackPane;
+    private EncounterController encounterController;
 
     @Inject
     public ItemMenuController() {
@@ -67,6 +69,23 @@ public class ItemMenuController extends Controller {
                      StackPane rootStackPane) {
         super.init();
         this.ingameController = ingameController;
+        this.trainersService = trainersService;
+        this.trainerStorageProvider = trainerStorageProvider;
+        this.itemMenuBox = itemMenuBox;
+        this.inventoryType = inventoryType;
+        this.npcItemList = npcItemList;
+        this.rootStackPane = rootStackPane;
+    }
+
+    public void initFromEncounter(EncounterController encounterController,
+                                    TrainersService trainersService,
+                                    Provider<TrainerStorage> trainerStorageProvider,
+                                    VBox itemMenuBox,
+                                    Constants.inventoryType inventoryType,
+                                    List<Integer> npcItemList,
+                                    StackPane rootStackPane) {
+        super.init();
+        this.encounterController = encounterController;
         this.trainersService = trainersService;
         this.trainerStorageProvider = trainerStorageProvider;
         this.itemMenuBox = itemMenuBox;
