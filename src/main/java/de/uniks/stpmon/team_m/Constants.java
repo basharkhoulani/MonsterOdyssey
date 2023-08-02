@@ -316,7 +316,7 @@ public class Constants {
     }
 
     public static final String ITEM_ACTION_USE_ITEM = "use";
-    public static final String ITEM_ACTION_USE_ITEM_MOVE = "use-item";
+    public static final String ITEM_ACTION_USE_ITEM_MOVE = "item";
     public static final String ITEM_USAGE_EFFECT = "effect";
     public static final String ITEM_USAGE_ITEM_BOX = "itemBox";
     public static final String ITEM_USAGE_MONSTER_BOX = "monsterBox";
