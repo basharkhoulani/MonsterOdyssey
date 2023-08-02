@@ -70,6 +70,7 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
                 35,
                 1.0,
                 2));
+
         Opponent currentOpponent = new Opponent(
                 "2023-07-11T18:07:49.590Z",
                 "2023-07-11T18:07:54.361Z",
