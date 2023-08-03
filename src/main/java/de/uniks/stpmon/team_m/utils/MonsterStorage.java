@@ -5,6 +5,7 @@ import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import io.reactivex.rxjava3.annotations.NonNull;
 import javafx.scene.image.Image;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 public class MonsterStorage {
     List<MonsterData> monsterDataList;
 
+    @Inject
     public MonsterStorage() {
         monsterDataList = new ArrayList<>();
     }

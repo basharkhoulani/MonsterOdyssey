@@ -9,6 +9,7 @@ import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.MonsterStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import io.reactivex.rxjava3.core.Scheduler;
@@ -40,6 +41,7 @@ public class MonsterCell extends ListCell<Monster> {
 
     private final boolean other;
     private final Item item;
+    private final Provider<MonsterStorage> monsterStorageProvider;
     @FXML
     public ImageView arrowUp;
     @FXML
@@ -97,7 +99,8 @@ public class MonsterCell extends ListCell<Monster> {
             EncounterController encounterController,
             IngameController ingameController,
             boolean other,
-            Item item
+            Item item,
+            Provider<MonsterStorage> monsterStorageProvider
     ) {
         this.resources = resources;
         this.presetsService = presetsService;
@@ -107,6 +110,7 @@ public class MonsterCell extends ListCell<Monster> {
         this.ingameController = ingameController;
         this.other = other;
         this.item = item;
+        this.monsterStorageProvider = monsterStorageProvider;
     }
 
     @Override
@@ -121,40 +125,38 @@ public class MonsterCell extends ListCell<Monster> {
             loadFXML();
             viewDetailsButton.prefWidthProperty().bind(removeFromTeamButton.widthProperty());
             monsterHealth.setText(monster.currentAttributes().health() + " / " + monster.attributes().health() + " HP");
-            disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER)
-                    .subscribe(monsterType -> {
-                        monsterTypeDto = monsterType;
-                        monsterNameLevel.setText(monsterTypeDto.name() + " (" + resources.getString("LEVEL").substring(0, resources.getString("LEVEL").length()-1) + " " + monster.level() + ")");
-                        for (String s : monsterTypeDto.type()) {
-                            type.append(s);
-                        }
+            monsterTypeDto = monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterTypeDto();
+            monsterNameLevel.setText(monsterTypeDto.name() + " (" + resources.getString("LEVEL").substring(0, resources.getString("LEVEL").length() - 1) + " " + monster.level() + ")");
+            for (String s : monsterTypeDto.type()) {
+                type.append(s);
+            }
 
-                        if (!GraphicsEnvironment.isHeadless()) {
-                            renderMonsterTypes(monsterTypeDto, monsterTypesHBox.getChildren());
-                            URL resourseArrowUp = Main.class.getResource("images/monster-arrange-up.png");
-                            assert resourseArrowUp != null;
-                            Image arrowUpImage = new Image(resourseArrowUp.toString());
-                            arrowUp.setImage(arrowUpImage);
-                            arrowDown.setImage(arrowUpImage);
-                        }
-                    }, error -> {
-                        monstersListController.showError(error.getMessage());
-                        error.printStackTrace();
-                    }));
-
-            disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
-                    .subscribe(monsterImage -> {
-                        if (!GraphicsEnvironment.isHeadless()) {
-                            this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
-                            monsterImageView.setImage(this.monsterImage);
-                        }
-                    }, error -> {
-                        monstersListController.showError(error.getMessage());
-                        error.printStackTrace();
-                    }));
+            if (!GraphicsEnvironment.isHeadless()) {
+                renderMonsterTypes(monsterTypeDto, monsterTypesHBox.getChildren());
+                URL resourseArrowUp = Main.class.getResource("images/monster-arrange-up.png");
+                assert resourseArrowUp != null;
+                Image arrowUpImage = new Image(resourseArrowUp.toString());
+                arrowUp.setImage(arrowUpImage);
+                arrowDown.setImage(arrowUpImage);
+            }
+        }
+        if (monster != null) {
+            if (monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage() != null) {
+                monsterImageView.setImage(monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage());
+                this.monsterImage = monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage();
+            } else {
+                disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
+                        .subscribe(monsterImage -> {
+                            if (!GraphicsEnvironment.isHeadless()) {
+                                this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
+                                monsterStorageProvider.get().updateMonsterData(monster, null, this.monsterImage);
+                                monsterImageView.setImage(this.monsterImage);
+                            }
+                        }, error -> {
+                        }));
+            }
             viewDetailsButton.setOnAction(event -> showDetails(monster, type.toString()));
-
-            if(encounterController == null) {
+            if (encounterController == null) {
                 arrowUp.setOnMouseClicked(event -> monstersListController.changeOrderUp(monster._id()));
                 arrowDown.setOnMouseClicked(event -> monstersListController.changeOrderDown(monster._id()));
                 removeFromTeamButton.setOnAction(event -> monstersListController.removeFromTeam(monster));
@@ -199,7 +201,7 @@ public class MonsterCell extends ListCell<Monster> {
                     }
                 });
             }
-
+            statusEffectsFlowPane.getChildren().clear();
             monster.status().forEach(statusEffect -> {
                 ImageView statusEffectImageView = new ImageView(String.valueOf(Main.class.getResource(STATUS_EFFECTS_IMAGES.get(statusEffect))));
                 statusEffectImageView.setFitHeight(24);
@@ -217,6 +219,7 @@ public class MonsterCell extends ListCell<Monster> {
     }
 
     static void renderMonsterTypes(MonsterTypeDto monsterTypeDto, ObservableList<Node> children) {
+        children.clear();
         monsterTypeDto.type().forEach(t -> {
             String typeColor = TYPESCOLORPALETTE.get(t);
             String style = "-fx-background-color: " + typeColor + "; -fx-border-color: black; -fx-border-width: 1px;";
