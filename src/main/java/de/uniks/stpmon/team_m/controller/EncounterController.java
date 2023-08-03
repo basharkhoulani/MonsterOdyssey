@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m.controller;
 
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
@@ -111,6 +110,7 @@ public class EncounterController extends Controller {
     private VBox receivedMonsterPopUp;
     private ImageView ballImageView;
     private BallType selectedBallType;
+    private boolean monsterCaught = false;
 
 
     @Inject
@@ -633,14 +633,30 @@ public class EncounterController extends Controller {
                 }
 
                 if (move instanceof UseItemMove) {
-                    if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                        updateDescription("You used an item" + ((UseItemMove) move).item() +  "\n", false);
-                    }
-                    else if (o.isAttacker() != encounterOpponentStorage.isAttacker()) {
-                        updateDescription("Enemy used an item\n", false);
-                    }
-                    else {
-                        updateDescription("Ally used an item\n", false);
+                    ItemData itemData = itemStorageProvider.get().getItemDataList().stream().filter(iD -> iD.getItem().type() == ((UseItemMove) move).item()).findFirst().orElse(null);
+                    if (itemData != null) {
+                        String prefix;
+                        if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                            prefix = resources.getString("YOU");
+                        } else if (o.isAttacker() != encounterOpponentStorage.isAttacker()) {
+                            prefix = resources.getString("ENEMY");
+                        } else {
+                            prefix = resources.getString("ALLY");
+                        }
+                        updateDescription(prefix + " " + resources.getString("USED.THE.ITEM") + " " + ((itemData.getItemTypeDto() != null) ? itemData.getItemTypeDto().name() : "") + ".\n", false);
+                    } else {
+                        disposables.add(presetsService.getItem(((UseItemMove) move).item()).subscribe(itemDto -> {
+                                    String prefix;
+                                    if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
+                                        prefix = resources.getString("YOU");
+                                    } else if (o.isAttacker() != encounterOpponentStorage.isAttacker()) {
+                                        prefix = resources.getString("ENEMY");
+                                    } else {
+                                        prefix = resources.getString("ALLY");
+                                    }
+                                    updateDescription(prefix + " " + resources.getString("USED.THE.ITEM") + " " + itemDto.name() + ".\n", false);
+                                },
+                                error -> {}));
                     }
                 }
             }
@@ -696,24 +712,11 @@ public class EncounterController extends Controller {
                                 encounterOpponentController.showStatus(r.status(), false);
                             }
                             case MONSTER_CAUGHT -> {
-                                System.out.println("Monster caught");
                                 throwSuccessfulMonBall();
+                                monsterCaught = true;
                             }
-                            case ITEM_FAILED -> {
-                                System.out.println("Item failed " + r.item());
-                                ItemData relatedItemData = itemStorageProvider.get().getItemDataList().stream().filter(itemData -> itemData.getItem().type() == r.item()).findFirst().orElse(null);
-                                if (relatedItemData != null) {
-                                    System.out.println(relatedItemData.getItem() + " " + relatedItemData.getItemTypeDto() + " " + relatedItemData.getItemImage());
-                                }
-                                throwFailedMonBall();
-                            }
-                            case "item-success" -> {
-                                System.out.println("Item success");
-                            }
-                            case "target-unknown" -> {
-
-                                System.out.println("Target unknown");
-                            }
+                            case ITEM_SUCCESS -> throwFailedMonBall();
+                            case ITEM_FAILED -> System.out.println("Item failed " + r.item());
                         }
                     }
                 }
@@ -777,7 +780,13 @@ public class EncounterController extends Controller {
         List<String> opponentsInStorage = encounterOpponentStorage.getOpponentsInStorage();
         for (String id : opponentsInStorage) {
             Opponent o = opponentsDelete.get(id);
-            if (o.monster() == null) {
+            if (monsterCaught) {
+                PauseTransition pause = new PauseTransition(Duration.seconds(5));
+                pause.setOnFinished(evt -> {
+                    showResultPopUp(resources.getString("MONSTER.CAUGHT"), true);
+                });
+                pause.play();
+            } else if (o.monster() == null) {
                 if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                     showResultPopUp(resources.getString("YOU.FAILED"), false);
                 } else {
@@ -1079,11 +1088,8 @@ public class EncounterController extends Controller {
                     encounterId,
                     encounterOpponentStorage.getSelfOpponent()._id(),
                     null,
-                    new UseItemMove(ITEM_ACTION_USE_ITEM_MOVE, item.type(), encounterOpponentStorage.getTargetOpponent()._id())
-            ).observeOn(FX_SCHEDULER).subscribe(opponent -> {
-                updateOpponent(opponent);
-                System.out.println("Used monball");
-            }));
+                    new UseItemMove(ITEM_ACTION_USE_ITEM_MOVE, item.type(), encounterOpponentStorage.getTargetOpponent().monster())
+            ).observeOn(FX_SCHEDULER).subscribe());
         }
     }
 
