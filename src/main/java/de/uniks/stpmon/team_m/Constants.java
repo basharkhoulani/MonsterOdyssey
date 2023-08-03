@@ -28,6 +28,8 @@ public class Constants {
     public static final String APP_ICON = "images/Monster-durchsichtig.png";
     public static final String TASKBAR_ICON = "images/Monster-durchsichtig.png";
     public static final String EMPTY_STRING = "";
+    public static final int STUNDE_IN_MILLIS = 3600000;
+    public static final int MINUTE_IN_MILLIS = 60000;
     public static final String FX_STYLE_BORDER_COLOR_BLACK = "-fx-border-color: black";
     public static final String LOADING_ANIMATION = "images/loading.gif";
     public static final String ONLINE_IMG = "images/online.png";
@@ -167,6 +169,13 @@ public class Constants {
     public static final int offsetToNotShowPhoneInScreen = 30;
     public static final String smallHandyImage = "images/SmallHandy.png";
     public static final String notificationBellImage = "images/NotificationBell.png";
+
+    // Ingame MiniMap
+
+    public static final int descriptionBoxHeight = 40;
+    public static final int descriptionBoxWidth = 632;
+    public static final int descriptionBoxLayoutX = -60;
+    public static final int descriptionBoxLayoutY = -32;
 
     // Encounter
     public static final int fleePopupWidth = 300;

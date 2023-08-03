@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.dto.User;
+import de.uniks.stpmon.team_m.service.AuthenticationService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.FriendListUtils;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
@@ -25,6 +26,8 @@ import javax.inject.Provider;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.prefs.Preferences;
 
 import static de.uniks.stpmon.team_m.Constants.*;
