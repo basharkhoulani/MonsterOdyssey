@@ -738,6 +738,13 @@ public class IngameController extends Controller {
         loadingScreen.setAlignment(Pos.CENTER);
         loadingScreen.setPrefWidth(map.width() * TILE_SIZE * SCALE_FACTOR);
         loadingScreen.setPrefHeight(map.height() * TILE_SIZE * SCALE_FACTOR);
+        //loadingScreen.setStyle("-fx-background-color: black");
+        loadingScreen.getStyleClass().add("Background");
+        LoadingScreenController loadingScreenController = new LoadingScreenController();
+        loadingScreenController.setValues(resources, preferences, resourceBundleProvider, loadingScreenController, app);
+        loadingScreen.getChildren().add(loadingScreenController.render());
+        getRoot().getChildren().add(loadingScreen);
+        /*
         loadingScreen.setSpacing(10);
         loadingScreen.setStyle("-fx-background-color: black");
         Label loadingLabel = new Label(resources.getString("LOADING.LABEL"));
@@ -752,6 +759,8 @@ public class IngameController extends Controller {
             loadingScreenAnimation = AnimationBuilder.buildTrainerWalkAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), trainerImageView, 150, Animation.INDEFINITE, TRAINER_DIRECTION_RIGHT);
             loadingScreenAnimation.play();
         }
+
+         */
     }
 
     /**
@@ -1983,9 +1992,6 @@ public class IngameController extends Controller {
                                     }
                                     loading = false;
                                     root.getChildren().remove(loadingScreen);
-                                    if (!GraphicsEnvironment.isHeadless()) {
-                                        loadingScreenAnimation.stop();
-                                    }
                                 }, error -> {
                                     TimeUnit.SECONDS.sleep(10);
                                     destroy();
