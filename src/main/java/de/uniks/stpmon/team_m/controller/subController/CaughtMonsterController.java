@@ -77,7 +77,6 @@ public class CaughtMonsterController extends Controller {
             }, Throwable::printStackTrace));
 
             monsterType = monster.type();
-            System.out.println(monsterType);
 
             monsterList = trainerStorageProvider.get().getTrainer().encounteredMonsterTypes();
             for (Integer i : monsterList) {

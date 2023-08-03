@@ -94,6 +94,8 @@ public class EncounterController extends Controller {
     Provider<ChangeMonsterListController> changeMonsterListControllerProvider;
     @Inject
     Provider<LevelUpController> levelUpControllerProvider;
+    @Inject
+    Provider<CaughtMonsterController> caughtMonsterControllerProvider;
     private EncounterOpponentController enemy1Controller;
     private EncounterOpponentController enemy2Controller;
     private EncounterOpponentController ownTrainerController;
@@ -972,6 +974,16 @@ public class EncounterController extends Controller {
         rootStackPane.getChildren().add(popUpVBox);
         newAbilitiesHashMap.put(opponentId, new ArrayList<>());
         resultEvolvedHashMap.put(opponentId, false);
+    }
+
+    public void showCaughtMonsterPopUp () {
+        CaughtMonsterController caughtMonsterController = caughtMonsterControllerProvider.get();
+        VBox caughtMonsterVbox = new VBox();
+        caughtMonsterVbox.setAlignment(Pos.CENTER);
+        Opponent opponent = encounterOpponentStorage.getEnemyOpponents().get(0);
+        caughtMonsterController.init(caughtMonsterVbox, rootStackPane, opponent, regionId);
+        caughtMonsterVbox.getChildren().add(caughtMonsterController.render());
+        rootStackPane.getChildren().add(caughtMonsterVbox);
     }
 
     public void changeMonster(Monster monster) {
