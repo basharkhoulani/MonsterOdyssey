@@ -2,8 +2,6 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.dto.*;
-import de.uniks.stpmon.team_m.service.MonstersService;
-import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -20,8 +18,6 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import java.util.*;
 import static org.mockito.Mockito.*;
-import io.reactivex.rxjava3.core.Observable;
-import okhttp3.ResponseBody;
 
 import javax.inject.Provider;
 
@@ -34,10 +30,6 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
     @InjectMocks
     CaughtMonsterController caughtMonsterController;
     @Mock
-    PresetsService presetsService;
-    @Mock
-    MonstersService monstersService;
-    @Mock
     Provider<TrainerStorage> trainerStorageProvider;
 
 
@@ -48,7 +40,6 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
         caughtMonsterController.setValues(bundle, null, null, caughtMonsterController, app);
         TrainerStorage trainerStorage = mock(TrainerStorage.class);
         when(trainerStorageProvider.get()).thenReturn(trainerStorage);
-        when(presetsService.getMonsterImage(1)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
 
         Trainer trainer = new Trainer("2023-05-30T12:02:57.510Z",
                 "2023-05-30T12:01:57.510Z",
@@ -67,7 +58,6 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
                 1,
                 null);
 
-        // Mock the function for ownTrainer
         when(trainerStorageProvider.get().getTrainer()).thenReturn(trainer);
 
         Opponent opponent = new Opponent(
@@ -104,17 +94,12 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
         String regionId = "646bab5cecf584e1be02598a";
 
 
-        when(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster())).thenReturn(Observable.just(monster));
-
-
         MonsterTypeDto monsterTypeDto = new MonsterTypeDto(
                 1,
                 "Flamander",
                 "Flamander_1.png",
                 List.of("fire"),
                 "Flamander is a small, agile monster that lives in the hot deserts of the world.");
-
-        when(presetsService.getMonster(monster.type())).thenReturn(Observable.just(monsterTypeDto));
 
         VBox vBox = new VBox();
         vBox.getChildren().addAll(new VBox(), new HBox());
@@ -126,7 +111,10 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
                 vBox,
                 stackPane,
                 opponent,
-                regionId);
+                regionId,
+                monster,
+                monsterTypeDto,
+                null);
         app.start(stage);
         app.show(caughtMonsterController);
         stage.requestFocus();

@@ -1,9 +1,10 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.dto.Monster;
+import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.service.MonstersService;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -45,17 +46,23 @@ public class CaughtMonsterController extends Controller {
     private Opponent opponent;
     public List<Integer> monsterList;
     public Integer monsterType;
+    public Monster caughtMonster;
+    public MonsterTypeDto caughtMonsterType;
+    public Image newMonsterImage;
     public boolean monsterEncountered = false;
 
     @Inject
     public CaughtMonsterController() {
     }
 
-    public void init(VBox container, StackPane root, Opponent opponent, String regionId) {
+    public void init(VBox container, StackPane root, Opponent opponent, String regionId, Monster caughtMonster, MonsterTypeDto caughtMonsterType, Image enemyMonsterImage) {
         this.container = container;
         this.root = root;
         this.opponent = opponent;
         this.regionId = regionId;
+        this.caughtMonster = caughtMonster;
+        this.caughtMonsterType = caughtMonsterType;
+        this.newMonsterImage = enemyMonsterImage;
     }
 
     public Parent render(){
@@ -64,31 +71,21 @@ public class CaughtMonsterController extends Controller {
         congratulationLabel.setText(resources.getString("CONGRATULATION"));
 
         //Set Labels and Image
-        disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
-            newMonsterLevelLabel.setText(resources.getString("LEVEL") + " " + monster.level());
+        newMonsterLevelLabel.setText(resources.getString("LEVEL") + " " + caughtMonster.level());
+        caughtMonsterLabel.setText(caughtMonsterType.name() + " " + resources.getString("WAS.CAUGHT"));
+        newMonsterImageView.setImage(newMonsterImage);
 
-            disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -> {
-                caughtMonsterLabel.setText(m.name() + " " + resources.getString("WAS.CAUGHT"));
-            }, Throwable::printStackTrace));
-
-            disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER).subscribe(mImage -> {
-                Image newMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
-                    newMonsterImageView.setImage(newMonsterImage);
-            }, Throwable::printStackTrace));
-
-            monsterType = monster.type();
-
-            monsterList = trainerStorageProvider.get().getTrainer().encounteredMonsterTypes();
-            for (Integer i : monsterList) {
-                if (i.equals(monsterType)){
-                    monsterEncountered = true;
-                    break;
-                }
+        monsterType = caughtMonster.type();
+        monsterList = trainerStorageProvider.get().getTrainer().encounteredMonsterTypes();
+        for (Integer i : monsterList) {
+            if (i.equals(monsterType)){
+                monsterEncountered = true;
+                break;
             }
-            if (!monsterEncountered){
-                newMonsterLabel.setText(resources.getString("NEW"));
-            }
-        }, Throwable::printStackTrace));
+        }
+        if (!monsterEncountered){
+            newMonsterLabel.setText(resources.getString("NEW"));
+        }
         return parent;
     }
 

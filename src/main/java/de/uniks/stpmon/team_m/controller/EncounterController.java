@@ -109,6 +109,9 @@ public class EncounterController extends Controller {
     private int repeatedTimes = 0;
     private int currentMonsterIndex = 0;
     private int deleteOpponents = 0;
+    public Monster caughtMonster;
+    public MonsterTypeDto caughtMonsterType;
+    public Image enemyMonsterImage;
 
 
     @Inject
@@ -403,6 +406,7 @@ public class EncounterController extends Controller {
         disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster()).observeOn(FX_SCHEDULER).subscribe(monster -> {
             encounterOpponentController.setLevelLabel("LVL " + monster.level()).setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());
             encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);
+            caughtMonster = monster;
 
             listenToMonster(opponent.trainer(), monster._id(), encounterOpponentController, opponent);
             for (String effect : STATUS_EFFECTS) {
@@ -413,6 +417,7 @@ public class EncounterController extends Controller {
             }
             //write monster name
             disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -> {
+                caughtMonsterType = m;
                 encounterOpponentController.setMonsterNameLabel(m.name());
                 encounterOpponentStorage.addCurrentMonsterType(opponent._id(), m);
                 // only show the description if it is at start
@@ -421,7 +426,7 @@ public class EncounterController extends Controller {
                 }
             }, Throwable::printStackTrace));
             disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER).subscribe(mImage -> {
-                Image enemyMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
+                enemyMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
                 encounterOpponentController.setMonsterImage(enemyMonsterImage);
             }, Throwable::printStackTrace));
         }, Throwable::printStackTrace));
@@ -990,7 +995,7 @@ public class EncounterController extends Controller {
         VBox caughtMonsterVbox = new VBox();
         caughtMonsterVbox.setAlignment(Pos.CENTER);
         Opponent opponent = encounterOpponentStorage.getEnemyOpponents().get(0);
-        caughtMonsterController.init(caughtMonsterVbox, rootStackPane, opponent, regionId);
+        caughtMonsterController.init(caughtMonsterVbox, rootStackPane, opponent, regionId, caughtMonster, caughtMonsterType, enemyMonsterImage);
         caughtMonsterVbox.getChildren().add(caughtMonsterController.render());
         rootStackPane.getChildren().add(caughtMonsterVbox);
     }
