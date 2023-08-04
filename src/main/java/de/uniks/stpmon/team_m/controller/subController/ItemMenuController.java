@@ -115,6 +115,18 @@ public class ItemMenuController extends Controller {
             // if inventoryType == sell  AND  the item cannot be used, then skip rendering item
             if (this.inventoryType == Constants.inventoryType.sellItems && itemTypeHashMap.get(item.type()).use() == null) {
                 continue;
+            } else if(this.encounterController != null){
+                String use = itemTypeHashMap.get(item.type()).use();
+                if(use == null ){
+                    continue;
+                } else {
+                    Constants.itemType itemType = Constants.itemType.valueOf(use);
+                    if(itemType == Constants.itemType.itemBox || itemType == Constants.itemType.monsterBox) {
+                        continue;
+                    } else if(itemType == Constants.itemType.ball && !encounterController.isWildEncounter()){
+                        continue;
+                    }
+                }
             }
             initItem(item);
         }

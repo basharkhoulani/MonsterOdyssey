@@ -1030,5 +1030,9 @@ public class EncounterController extends Controller {
         itemMenuBox.requestFocus();
         battleMenuController.buttonDisable(true);
     }
+
+    public boolean isWildEncounter() {
+        return encounterOpponentStorage.isWild();
+    }
 }
     
