@@ -183,6 +183,8 @@ public class MonsterCell extends ListCell<Monster> {
                     });
                 } else {
                     removeFromTeamButton.setText("Use item"); // TODO: With translation
+                    viewDetailsButton.setVisible(false);
+                    viewDetailsButton.setDisable(true);
 
                     removeFromTeamButton.setOnAction(event -> {
                         encounterController.useItem(item, monster);
