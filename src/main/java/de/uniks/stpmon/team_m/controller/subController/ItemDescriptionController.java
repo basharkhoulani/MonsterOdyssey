@@ -108,27 +108,27 @@ public class ItemDescriptionController extends Controller {
         if (itemTypeDto.use() == null) {
             useButton.setVisible(false);
             useButton.setDisable(true);
-        }
+        } else if (inventoryType == Constants.inventoryType.showItems) {
+            String use = itemTypeDto.use();
+            Constants.itemType itemType = Constants.itemType.valueOf(use);
 
-        String use = itemTypeDto.use();
-        Constants.itemType itemType = Constants.itemType.valueOf(use);
-
-        if (encounterController == null && itemType == Constants.itemType.ball) {
-            useButton.setVisible(false);
-            useButton.setDisable(true);
-        }
-
-        useButton.setOnAction(evt -> {
-            if (itemType == Constants.itemType.effect) {
-                showMonsterList(item);
-                closeItemMenu.run();
-            } else if (itemType == Constants.itemType.ball) {
-                if(encounterController != null) {
-                    encounterController.useItem(item, null);
-                    closeItemMenu.run();
-                }
+            if (encounterController == null && itemType == Constants.itemType.ball) {
+                useButton.setVisible(false);
+                useButton.setDisable(true);
             }
-        });
+
+            useButton.setOnAction(evt -> {
+                if (itemType == Constants.itemType.effect) {
+                    showMonsterList(item);
+                    closeItemMenu.run();
+                } else if (itemType == Constants.itemType.ball) {
+                    if(encounterController != null) {
+                        encounterController.useItem(item, null);
+                        closeItemMenu.run();
+                    }
+                }
+            });
+        }
 
         switch (this.inventoryType) {
             case buyItems -> {
