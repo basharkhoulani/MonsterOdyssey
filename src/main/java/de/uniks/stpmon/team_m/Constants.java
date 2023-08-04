@@ -195,6 +195,8 @@ public class Constants {
     public static final String STATUS_REMOVED = "status-removed";
     public static final String CHANGE_MONSTER = "change-monster";
     public static final String USE_ITEM = "use-item";
+    public static final String ITEM_FAILED = "item-failed";
+    public static final String ITEM_SUCCESS= "item-success";
 
     // Encounter - images
     public static final String STAR_ICON = "images/star.png";
