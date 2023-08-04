@@ -742,10 +742,10 @@ public class EncounterController extends Controller {
                                 encounterOpponentController.showStatus(r.status(), false);
                             }
                             case ITEM_FAILED -> {
-                                updateDescription(resources.getString("USE.OF") + " " + itemTypeDtos.get(r.item()).name() + resources.getString("IS")+ " " + resources.getString("FAILED") +".\n", false);
+                                updateDescription(resources.getString("USE.OF") + " " + itemTypeDtos.get(r.item()).name() + " " + resources.getString("IS")+ " " + resources.getString("FAILED") +".\n", false);
                             }
                             case ITEM_SUCCESS -> {
-                                updateDescription(resources.getString("USE.OF") + " " + itemTypeDtos.get(r.item()).name() + resources.getString("IS")+ " " + resources.getString("SUCCEED") +".\n", false);
+                                updateDescription(resources.getString("USE.OF") + " " + itemTypeDtos.get(r.item()).name() + " " + resources.getString("IS")+ " " + resources.getString("SUCCEED") +".\n", false);
                             }
                             // TODO: monster caught from @Fin
                         }
@@ -1032,35 +1032,11 @@ public class EncounterController extends Controller {
 
     public void changeMonster(Monster monster) {
         Move move = new ChangeMonsterMove(CHANGE_MONSTER, monster._id());
-        String opponentId = encounterOpponentStorage.getSelfOpponent()._id();
-
-        if (encounterOpponentStorage.isTwoMonster()) {
-            if (currentMonsterIndex % 2 == 0 && encounterOpponentStorage.getCoopOpponent().monster() != null) {
-                opponentId = encounterOpponentStorage.getCoopOpponent()._id();
-            } else if (currentMonsterIndex % 2 == 1 && encounterOpponentStorage.getSelfOpponent().monster() != null) {
-                opponentId = encounterOpponentStorage.getSelfOpponent()._id();
-            } else if (encounterOpponentStorage.getSelfOpponent().monster() == null) {
-                opponentId = encounterOpponentStorage.getCoopOpponent()._id();
-            } else if (encounterOpponentStorage.getCoopOpponent().monster() == null) {
-                opponentId = encounterOpponentStorage.getSelfOpponent()._id();
-            }
-        } else {
-            if (encounterOpponentStorage.getSelfOpponent().monster() != null) {
-                opponentId = encounterOpponentStorage.getSelfOpponent()._id();
-            }
-        }
+        String opponentId = getCorrectOpponentId();
 
         disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(opponent -> {
             resetRepeatedTimes();
-            if (encounterOpponentStorage.isTwoMonster()) {
-                if (Objects.equals(encounterOpponentStorage.getSelfOpponent()._id(), opponent._id())) {
-                    encounterOpponentStorage.setSelfOpponent(opponent);
-                } else if (Objects.equals(encounterOpponentStorage.getCoopOpponent()._id(), opponent._id())) {
-                    encounterOpponentStorage.setCoopOpponent(opponent);
-                }
-            } else {
-                encounterOpponentStorage.setSelfOpponent(opponent);
-            }
+            setCorrectOpponent(opponent);
             updateDescription(resources.getString("YOU.CHANGED.MONSTER") + ". ", true);
             increaseCurrentMonsterIndex();
         }));
@@ -1094,15 +1070,52 @@ public class EncounterController extends Controller {
             // use item
             // Fit for two monsters
             UseItemMove move = new UseItemMove(USE_ITEM, item.type(), monster._id());
-            disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, encounterOpponentStorage.getSelfOpponent()._id(), null, move).observeOn(FX_SCHEDULER).subscribe(opponent -> {
+
+            String opponentId = getCorrectOpponentId();
+
+            disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(opponent -> {
                 resetRepeatedTimes();
-                encounterOpponentStorage.setSelfOpponent(opponent);
+                setCorrectOpponent(opponent);
                 UseItemMove useItemMove = (UseItemMove) opponent.move();
                 updateDescription(resources.getString("YOU.USED") + " " + itemTypeDtos.get(useItemMove.item()).name() + ". ", true);
                 trainerStorageProvider.get().useItem(useItemMove.item());
                 increaseCurrentMonsterIndex();
             }));
         }
+    }
+
+    private void setCorrectOpponent(Opponent opponent) {
+        if (encounterOpponentStorage.isTwoMonster()) {
+            if (Objects.equals(encounterOpponentStorage.getSelfOpponent()._id(), opponent._id())) {
+                encounterOpponentStorage.setSelfOpponent(opponent);
+            } else if (Objects.equals(encounterOpponentStorage.getCoopOpponent()._id(), opponent._id())) {
+                encounterOpponentStorage.setCoopOpponent(opponent);
+            }
+        } else {
+            encounterOpponentStorage.setSelfOpponent(opponent);
+        }
+    }
+
+    private String getCorrectOpponentId(){
+        String opponentId = encounterOpponentStorage.getSelfOpponent()._id();
+        
+        if (encounterOpponentStorage.isTwoMonster()) {
+            if (currentMonsterIndex % 2 == 0 && encounterOpponentStorage.getCoopOpponent().monster() != null) {
+                opponentId = encounterOpponentStorage.getCoopOpponent()._id();
+            } else if (currentMonsterIndex % 2 == 1 && encounterOpponentStorage.getSelfOpponent().monster() != null) {
+                opponentId = encounterOpponentStorage.getSelfOpponent()._id();
+            } else if (encounterOpponentStorage.getSelfOpponent().monster() == null) {
+                opponentId = encounterOpponentStorage.getCoopOpponent()._id();
+            } else if (encounterOpponentStorage.getCoopOpponent().monster() == null) {
+                opponentId = encounterOpponentStorage.getSelfOpponent()._id();
+            }
+        } else {
+            if (encounterOpponentStorage.getSelfOpponent().monster() != null) {
+                opponentId = encounterOpponentStorage.getSelfOpponent()._id();
+            }
+        }
+        
+        return opponentId;
     }
 
     public IngameController getIngameController() {
