@@ -551,7 +551,11 @@ public class EncounterController extends Controller {
                 }
                 deleteOpponents++;
                 if (opponentsDelete.size() >= encounterOpponentStorage.getEncounterSize()) {
-                    showResult();
+                    PauseTransition pause = new PauseTransition(Duration.millis(pauseDuration));
+                    pause.setOnFinished(evt -> {
+                        showResult();
+                    });
+                    pause.play();
                 }
             } else if (event.suffix().contains("created")) {
                 if(encounterOpponentStorage.getEncounterSize() == 4) {

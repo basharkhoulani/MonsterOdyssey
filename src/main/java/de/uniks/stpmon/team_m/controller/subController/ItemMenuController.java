@@ -97,6 +97,7 @@ public class ItemMenuController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
+        refreshItemsInEncounter();
         loadItems();
 
         if (!GraphicsEnvironment.isHeadless()) {
@@ -182,5 +183,20 @@ public class ItemMenuController extends Controller {
                     showError(error.getMessage());
                     error.printStackTrace();
                 }));
+    }
+
+    public void refreshItemsInEncounter() {
+        if(encounterController != null){
+            String regionId = trainerStorageProvider.get().getTrainer().region();
+            String trainerId = trainerStorageProvider.get().getTrainer()._id();
+            disposables.add(trainerItemsService.get().getItems(regionId, trainerId, null)
+                    .observeOn(FX_SCHEDULER)
+                    .subscribe(items -> {
+                        trainerStorageProvider.get().setItems(items);
+                    }, error -> {
+                        showError(error.getMessage());
+                        error.printStackTrace();
+                    }));
+        }
     }
 }
