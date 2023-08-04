@@ -161,7 +161,7 @@ public class ChangeMonsterListControllerTest extends ApplicationTest {
                 0
         ));
 
-        changeMonsterListController.init(null, null, null);
+        changeMonsterListController.init(null, null, null,null);
         app.start(stage);
         app.show(changeMonsterListController);
     }

@@ -222,6 +222,25 @@ class EncounterBattleTest extends ApplicationTest {
                 )
         )));
 
+        when(presetsService.getItems()).thenReturn(Observable.just(List.of(
+                new ItemTypeDto(
+                        1,
+                        "mondex.png",
+                        "Mondex",
+                        0,
+                        "A Handheld Device for Trainers",
+                        null
+                ),
+                new ItemTypeDto(
+                        10,
+                        "ball_normal.png",
+                        "Monball",
+                        20,
+                        "A ball for catching monsters.",
+                        "ball"
+                )
+        )));
+
         when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(
                 new MonsterTypeDto(
                         696969,
