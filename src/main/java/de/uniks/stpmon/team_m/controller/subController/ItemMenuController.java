@@ -1,8 +1,10 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.Constants.InventoryType;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
@@ -51,11 +53,12 @@ public class ItemMenuController extends Controller {
 
     public VBox itemMenuBox;
     IngameController ingameController;
-    private Constants.InventoryType inventoryType;
+    private InventoryType inventoryType;
     private List<Integer> npcItemList;
     public HashMap<Integer, ItemTypeDto> itemTypeHashMap = new HashMap<>();
     public HashMap<Integer, Image> itemImageHashMap = new HashMap<>();
     private StackPane rootStackPane;
+    private EncounterController encounterController;
 
     @Inject
     public ItemMenuController() {
@@ -65,11 +68,28 @@ public class ItemMenuController extends Controller {
                      TrainersService trainersService,
                      Provider<TrainerStorage> trainerStorageProvider,
                      VBox itemMenuBox,
-                     Constants.InventoryType inventoryType,
+                     InventoryType inventoryType,
                      List<Integer> npcItemList,
                      StackPane rootStackPane) {
         super.init();
         this.ingameController = ingameController;
+        this.trainersService = trainersService;
+        this.trainerStorageProvider = trainerStorageProvider;
+        this.itemMenuBox = itemMenuBox;
+        this.inventoryType = inventoryType;
+        this.npcItemList = npcItemList;
+        this.rootStackPane = rootStackPane;
+    }
+
+    public void initFromEncounter(EncounterController encounterController,
+                                    TrainersService trainersService,
+                                    Provider<TrainerStorage> trainerStorageProvider,
+                                    VBox itemMenuBox,
+                                    InventoryType inventoryType,
+                                    List<Integer> npcItemList,
+                                    StackPane rootStackPane) {
+        super.init();
+        this.encounterController = encounterController;
         this.trainersService = trainersService;
         this.trainerStorageProvider = trainerStorageProvider;
         this.itemMenuBox = itemMenuBox;
@@ -97,7 +117,7 @@ public class ItemMenuController extends Controller {
     public void initItems(List<Item> itemList) {
         for (Item item : itemList) {
             // if inventoryType == sell  AND  the item cannot be used, then skip rendering item
-            if (this.inventoryType == Constants.InventoryType.sellItems && itemTypeHashMap.get(item.type()).use() == null) {
+            if (this.inventoryType == InventoryType.sellItems && itemTypeHashMap.get(item.type()).use() == null) {
                 continue;
             }
             initItem(item);
@@ -123,7 +143,7 @@ public class ItemMenuController extends Controller {
         ingameController.buttonsDisable(false);
     }
 
-    public Constants.InventoryType getInventoryType() {
+    public InventoryType getInventoryType() {
         return this.inventoryType;
     }
 
@@ -135,7 +155,7 @@ public class ItemMenuController extends Controller {
                         trainerStorageProvider.get().getItems().stream().filter(item -> item.type() == itemType.id()).findFirst().ifPresent(relatedItem -> itemStorageProvider.get().addItemData(relatedItem, itemType, null));
                     }
 
-                    if (this.inventoryType == Constants.InventoryType.buyItems) {
+                    if (this.inventoryType == InventoryType.buyItems) {
                         initNpcItems();
                     } else {
                         // Items are now saved in trainerStorage

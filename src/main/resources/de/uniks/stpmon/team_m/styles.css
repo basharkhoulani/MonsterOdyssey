@@ -443,6 +443,13 @@
     -fx-border-style: solid;
     -fx-border-width: 2px;
 }
+.miniMapDescriptionBox {
+    -fx-padding: 4 4 4 4px;
+    -fx-background-color: #d3ebd3;
+    -fx-border-color: black;-fx-border-style: solid;
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-weight: bold;
+}
 .dialogBackground {
     -fx-background-color: #CFE9DB;
 }

@@ -79,6 +79,7 @@ public class BattleMenuController extends Controller {
     }
 
     public void showItem() {
+        //encounterController.showItems();
         // TODO: replace later with item list
         if (onMonBallUse != null) {
             onMonBallUse.run();

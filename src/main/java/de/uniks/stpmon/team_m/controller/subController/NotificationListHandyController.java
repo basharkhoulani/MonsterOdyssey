@@ -28,7 +28,7 @@ public class NotificationListHandyController extends Controller {
 
     @Inject
     Provider<NotificationListHandyController> notificationListHandyControllerProvider;
-    ObservableList<String> handyMessages;
+    public ObservableList<String> handyMessages;
     private IngameController ingameController;
     private Trainer trainer;
     private Timeline shakeAnimation;
@@ -41,11 +41,12 @@ public class NotificationListHandyController extends Controller {
     public void init(IngameController ingameController, Trainer currentTrainer) {
         handyMessages = FXCollections.observableArrayList();
         this.ingameController = ingameController;
+        /*
         shakeAnimation = AnimationBuilder.buildShakeAnimation(ingameController.notificationBell, 500, 30, 2);
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> ingameController.notificationBell.setVisible(true)));
 
         timeline.play();
-
+*/
         this.trainer = currentTrainer;
     }
 
@@ -57,13 +58,6 @@ public class NotificationListHandyController extends Controller {
         ingameNotificationListView.setFocusModel(null);
         ingameNotificationListView.setCellFactory(param -> new IngameNotificationCell());
         ingameNotificationListView.setItems(handyMessages);
-
-        if (trainer.encounteredMonsterTypes().size() == 0) {
-            this.displayFirstTimeNotifications();
-        }
-        if (trainer.encounteredMonsterTypes().size() == 1) {
-            this.displayStarterMessages();
-        }
         ingameNotificationListView.setMouseTransparent(true);
 
         return parent;
@@ -89,33 +83,46 @@ public class NotificationListHandyController extends Controller {
         ingameController.smallHandyButton.setVisible(true);
     }
 
-    private void displayFirstTimeNotifications() {
+    public void displayFirstTimeNotifications(boolean first) {
         Timeline timeline = new Timeline();
         int duration = 1;
-
-        for (int i = 0; i < 4; i++) {
-            int iterator = i;
-            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.NEW." + iterator)));
-            timeline.getKeyFrames().add(keyFrame);
-            duration++;
+        if (first) {
+            for (int i = 0; i < 4; i++) {
+                int iterator = i;
+                KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.NEW." + iterator)));
+                timeline.getKeyFrames().add(keyFrame);
+                duration++;
+            }
+        } else {
+            for (int i = 0; i < 4; i++) {
+                handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.NEW." + i));
+            }
         }
-        shakeAnimation.play();
+
+        //shakeAnimation.play();
         timeline.play();
     }
 
-    public void displayStarterMessages() {
+    public void displayStarterMessages(boolean first) {
         handyMessages.clear();
         Timeline timeline = new Timeline();
         int duration = 1;
 
-        for (int i = 0; i < 2; i++) {
-            int iter = i;
-            KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.STARTER." + iter)));
-            timeline.getKeyFrames().add(keyFrame);
-            duration++;
+        if (first) {
+            for (int i = 0; i < 2; i++) {
+                int iter = i;
+                KeyFrame keyFrame = new KeyFrame(Duration.seconds(duration), event -> handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.STARTER." + iter)));
+                timeline.getKeyFrames().add(keyFrame);
+                duration++;
+            }
+        } else {
+            for (int i = 0; i < 2; i++) {
+                handyMessages.add(this.resources.getString("INGAME.NOTIFICATIONS.STARTER." + i));
+            }
         }
+
         timeline.play();
-        shakeAnimation.play();
+        //shakeAnimation.play();
     }
 
     public void displayLowHealthMessages() {
@@ -129,6 +136,6 @@ public class NotificationListHandyController extends Controller {
             duration++;
         }
         timeline.play();
-        shakeAnimation.play();
+        //shakeAnimation.play();
     }
 }

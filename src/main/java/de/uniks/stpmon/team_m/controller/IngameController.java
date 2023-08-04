@@ -2,8 +2,10 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
+import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
@@ -43,10 +45,9 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
-import java.util.HashMap;
+import java.time.Instant;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -146,6 +147,8 @@ public class IngameController extends Controller {
     @Inject
     RegionsService regionsService;
     @Inject
+    AuthenticationService authenticationService;
+    @Inject
     Provider<IngameController> ingameControllerProvider;
 
     private IngamePauseMenuController ingamePauseMenuController;
@@ -213,6 +216,7 @@ public class IngameController extends Controller {
     private ReceiveObjectController receiveObjectController;
     private ObservableList<Item> items = FXCollections.observableArrayList();
     private ObservableList<Monster> monsters = FXCollections.observableArrayList();
+    private boolean inJoinEncounterInfoBox = false;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -230,7 +234,7 @@ public class IngameController extends Controller {
         // Initialize key event listeners
         keyPressedHandler = event -> {
             if (event.getCode().toString().equals(preferences.get("interaction", "E"))) {
-                if (!inNpcPopup && !inEncounterInfoBox && !inCoinsEarnedInfoBox) {
+                if (!inNpcPopup && !inEncounterInfoBox && !inCoinsEarnedInfoBox && !inJoinEncounterInfoBox) {
                     interactWithTrainer();
                 } else if (inEncounterInfoBox) {
                     stackPane.getChildren().remove(dialogStackPane);
@@ -239,6 +243,9 @@ public class IngameController extends Controller {
                 } else if (inCoinsEarnedInfoBox) {
                     inCoinsEarnedInfoBox = false;
                     stackPane.getChildren().remove(dialogStackPane);
+                } else if (inJoinEncounterInfoBox){
+                    inJoinEncounterInfoBox = false;
+                    createJoinEncounterPopup();
                 }
             }
             if (event.getCode().toString().equals(preferences.get("pauseMenu", "ESCAPE"))) {
@@ -254,6 +261,9 @@ public class IngameController extends Controller {
             if (event.getCode().toString().equals(preferences.get("inventory", "I"))) {
                 if (!this.root.getChildren().contains(itemMenuBox)) {
                     showItems();
+                } else {
+                    root.getChildren().remove(itemMenuBox);
+                    buttonsDisable(false);
                 }
             }
             if (isChatting || loading || (lastKeyEventTimeStamp != null && System.currentTimeMillis() - lastKeyEventTimeStamp < TRANSITION_DURATION + 25)) {
@@ -288,35 +298,14 @@ public class IngameController extends Controller {
         };
         this.npcTextManager = new NpcTextManager(resources);
 
-        // Load trainer items and save them to trainer- and itemStorage
+        // Load trainer items and save them to trainerStorage
         disposables.add(
                 trainerItemsService.getItems(
                         trainerStorageProvider.get().getRegion()._id(),
                         trainerStorageProvider.get().getTrainer()._id(),
                         null
-                ).observeOn(FX_SCHEDULER).subscribe(items -> {
-                            trainerStorageProvider.get().setItems(items);
-                            this.items.setAll(items);
-                            items.forEach(item -> itemStorageProvider.get().addItemData(item, null, null));
-                            disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER).subscribe(itemTypeDtos -> itemTypeDtos.forEach(itemTypeDto -> {
-                                List<ItemData> itemData = itemStorageProvider.get().getItemDataList().stream().filter(data -> data.getItem().type() == itemTypeDto.id()).collect(Collectors.toList());
-                                itemData.forEach(data -> {
-                                    if (ImageProcessor.showScaledItemImage(itemTypeDto.image()) != null) {
-                                        itemStorageProvider.get().updateItemData(data.getItem(), itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()));
-                                    } else {
-                                        itemStorageProvider.get().updateItemData(data.getItem(), itemTypeDto, null);
-                                    }
-                                });
-                            }),
-                                    error -> {
-                                        showError(error.getMessage());
-                                        error.printStackTrace();
-                                    }));
-                        },
-                        error -> {
-                            showError(error.getMessage());
-                            error.printStackTrace();
-                        }));
+                ).observeOn(FX_SCHEDULER).subscribe(trainerStorageProvider.get()::setItems));
+
     }
 
     private void checkMovement(int x, int y, int direction) {
@@ -443,6 +432,7 @@ public class IngameController extends Controller {
             coinsImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(COIN)).toString()));
         }
 
+
         // Add event handlers
         app.getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
 
@@ -470,6 +460,8 @@ public class IngameController extends Controller {
                         divide(2).
                         add(offsetToNotShowPhoneInScreen)
         );
+
+        checkForFirstMessages();
 
         //Setup Encounter
         checkIfEncounterAlreadyExist();
@@ -502,7 +494,29 @@ public class IngameController extends Controller {
             preferences.put("inventory", KeyCode.I.getChar());
         }
         showCoins();
+
+        setupUdpPing();
+
         return parent;
+    }
+
+    private void checkForFirstMessages() {
+        Trainer trainer = trainerStorageProvider.get().getTrainer();
+
+        Instant now = Instant.now();
+        Instant createdTime = Instant.parse(trainer.createdAt());
+
+        long elapsedTime = java.time.Duration.between(createdTime, now).getSeconds();
+        if (elapsedTime < 20) {
+            preferences.putBoolean("firstEntry", true);
+            preferences.putBoolean("starterMessages", false);
+        }
+
+        if (preferences.getBoolean("firstEntry", true)) {
+            this.notificationListHandyController.displayFirstTimeNotifications(true);
+            notificationBell.setVisible(true);
+            preferences.putBoolean("firstEntry", false);
+        }
     }
 
     private void initMapShiftTransitions() {
@@ -562,11 +576,11 @@ public class IngameController extends Controller {
         receiveObjectPopUp.getStyleClass().add("hBoxLightGreen");
         disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto ->
                 disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
-            receiveObjectController = new ReceiveObjectController(monster, monsterTypeDto, ImageProcessor.resonseBodyToJavaFXImage(responseBody), this::removeItemReceivedPopUp, trainerStorageProvider);
-            receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
-            receiveObjectPopUp.getChildren().add(receiveObjectController.render());
-            getRoot().getChildren().add(receiveObjectPopUp);
-        }))));
+                    receiveObjectController = new ReceiveObjectController(monster, monsterTypeDto, ImageProcessor.resonseBodyToJavaFXImage(responseBody), this::removeItemReceivedPopUp, trainerStorageProvider);
+                    receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
+                    receiveObjectPopUp.getChildren().add(receiveObjectController.render());
+                    getRoot().getChildren().add(receiveObjectPopUp);
+                }))));
     }
 
     private void createItemReceivedPopUp(Item item) {
@@ -629,8 +643,11 @@ public class IngameController extends Controller {
                             createMonsterReceivedPopUp(monster);
                             monsters.add(monster);
                         }
-                        case "updated" -> System.out.println("Monster updated: " + monster);
-                        case "deleted" -> System.out.println("Monster deleted: " + monster);
+                        case "updated" -> {
+                        }
+                        case "deleted" -> {
+                            // Monster deleted
+                        }
                     }
                 }, error -> {
                     showError(error.getMessage());
@@ -648,15 +665,19 @@ public class IngameController extends Controller {
                             items.add(item);
                             createItemReceivedPopUp(item);
                         }
-                        case "updated" -> System.out.println("Item updated: " + item);
-                        case "deleted" -> System.out.println("Item deleted: " + item);
+                        case "updated" -> {
+                            // Item used
+                        }
+                        case "deleted" -> {
+                            // Item deleted
+                        }
                     }
-
                 }, error -> {
                     showError(error.getMessage());
                     error.printStackTrace();
                 }));
     }
+
 
     public void listenToMovement(ObservableList<MoveTrainerDto> moveTrainerDtos, String area) {
         disposables.add(udpEventListenerProvider.get().listen("areas." + area + ".trainers.*.*", MoveTrainerDto.class)
@@ -738,7 +759,6 @@ public class IngameController extends Controller {
         loadingScreen.setAlignment(Pos.CENTER);
         loadingScreen.setPrefWidth(map.width() * TILE_SIZE * SCALE_FACTOR);
         loadingScreen.setPrefHeight(map.height() * TILE_SIZE * SCALE_FACTOR);
-        //loadingScreen.setStyle("-fx-background-color: black");
         loadingScreen.getStyleClass().add("Background");
         LoadingScreenController loadingScreenController = new LoadingScreenController();
         loadingScreenController.setValues(resources, preferences, resourceBundleProvider, loadingScreenController, app);
@@ -746,7 +766,6 @@ public class IngameController extends Controller {
         getRoot().getChildren().add(loadingScreen);
         /*
         loadingScreen.setSpacing(10);
-        loadingScreen.setStyle("-fx-background-color: black");
         Label loadingLabel = new Label(resources.getString("LOADING.LABEL"));
         loadingLabel.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-font-family: 'Comic Sans MS'");
         ImageView trainerImageView = new ImageView();
@@ -786,9 +805,13 @@ public class IngameController extends Controller {
                     .doOnNext(image -> tileSetImages.put(mapName, image))
                     .observeOn(FX_SCHEDULER).subscribe(image -> afterAllTileSetsLoaded(map), error -> {
                         System.out.println("Error while loading tileset: " + error.getMessage());
-                        TimeUnit.SECONDS.sleep(10);
-                        destroy();
-                        app.show(ingameControllerProvider.get());
+                        PauseTransition pause = new PauseTransition(Duration.seconds(10));
+                        pause.setOnFinished(evt -> {
+                            System.err.println("Retrying to load map data");
+                            destroy();
+                            app.show(ingameControllerProvider.get());
+                        });
+                        pause.play();
                     }));
         }
 
@@ -1110,6 +1133,13 @@ public class IngameController extends Controller {
      */
 
     public void showHelp() {
+        if (!preferences.getBoolean("starterMessages", false)) {
+            this.notificationListHandyController.handyMessages.clear();
+            this.notificationListHandyController.displayFirstTimeNotifications(false);
+        } else if (preferences.getBoolean("starterMessages", true) && !preferences.getBoolean("lowHealth", false)) {
+            this.notificationListHandyController.handyMessages.clear();
+            this.notificationListHandyController.displayStarterMessages(false);
+        }
         smallHandyButton.setVisible(false);
         notificationBell.setVisible(false);
 
@@ -1149,33 +1179,18 @@ public class IngameController extends Controller {
         inSettings = false;
     }
 
-    public void useItem(Item item, String monsterId) {
+    public void useItem(Item item, Monster monster) {
         disposables.add(trainerItemsService.useOrTradeItem(
                 trainerStorageProvider.get().getRegion()._id(),
                 trainerStorageProvider.get().getTrainer()._id(),
                 ITEM_ACTION_USE_ITEM,
-                new UpdateItemDto(1, item.type(), monsterId)
+                new UpdateItemDto(1, item.type(), (monster != null) ? monster._id() : null)
         ).observeOn(FX_SCHEDULER).subscribe(
-                result -> {
-                    disposables.add(trainerItemsService.getItems(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), null)
-                            .observeOn(FX_SCHEDULER).subscribe(
-                                    items -> {
-                                        trainerStorageProvider.get().setItems(items);
-                                        items.forEach(it -> itemStorageProvider.get().updateItemData(it, null, null));
-                                    },
-                                    error -> {
-                                        showError(error.getMessage());
-                                        error.printStackTrace();
-                                    }));
-                },
+                result -> trainerStorageProvider.get().updateItem(result),
                 error -> {
                     showError(error.getMessage());
                     error.printStackTrace();
                 }));
-    }
-
-    public Trainer getTrainer() {
-        return trainerStorageProvider.get().getTrainer();
     }
 
     public void buttonsDisable(Boolean set) {
@@ -1194,6 +1209,7 @@ public class IngameController extends Controller {
             mapSymbol.setDisable(set);
             messageField.setDisable(set);
             sendMessageButton.setDisable(set);
+            coinsButton.setDisable(set);
         }
     }
 
@@ -1309,7 +1325,6 @@ public class IngameController extends Controller {
                         case "updated" -> {
                             updateTrainer(trainers, trainer);
                             if (trainerStorageProvider.get().getTrainer()._id().equals(trainer._id())) {
-                                System.out.println("Updated trainer: " + trainer);
                                 trainerStorageProvider.get().setTrainer(trainer);
                             }
                             // albert
@@ -1320,11 +1335,9 @@ public class IngameController extends Controller {
                         }
                         case "deleted" -> {
                             trainers.removeIf(t -> t._id().equals(trainer._id()));
-                            if (trainer != null) {
-                                if (trainerControllerHashMap.containsKey(trainer)) {
-                                    trainerControllerHashMap.get(trainer).destroy();
-                                    trainerControllerHashMap.remove(trainer);
-                                }
+                            if (trainer != null && trainerControllerHashMap.containsKey(trainer)) {
+                                trainerControllerHashMap.get(trainer).destroy();
+                                trainerControllerHashMap.remove(trainer);
                                 trainerPositionHashMap.remove(trainer);
                             }
                         }
@@ -1390,6 +1403,15 @@ public class IngameController extends Controller {
         movementDisabled = true;
     }
 
+    private void showOtherTrainerInEncounterInfo() {
+        TextFlow dialogTextFlow = createDialogVBox(true);
+        dialogTextFlow.getChildren().add(new Text(resources.getString("TRAINER.IN.ENCOUNTER")));
+        movementDisabled = true;
+        inDialog = false;
+        inEncounterInfoBox = false;
+        inJoinEncounterInfoBox = true;
+    }
+
     private void showCoinsEarnedWindow() {
         TextFlow dialogTextFlow = createDialogVBox(true);
         dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.WON") + "\n" +
@@ -1434,7 +1456,7 @@ public class IngameController extends Controller {
 
     }
 
-    private void initEncounterOpponentStorage(List<Opponent> opponents) {
+    public void initEncounterOpponentStorage(List<Opponent> opponents) {
         encounterOpponentStorage.setOpponentsInStorage(opponents);
         encounterOpponentStorage.resetEnemyOpponents();
         encounterOpponentStorage.setEncounterSize(opponents.size());
@@ -1573,10 +1595,24 @@ public class IngameController extends Controller {
                             this
                     );
                 } else {
-                    TextFlow textFlow = createDialogVBox(false);
-                    textFlow.getChildren().add(new Text(resources.getString("WANT.TO.FIGHT")));
+                    disposables.add(encounterOpponentsService.getTrainerOpponents(currentNpc.region(),currentNpc._id())
+                            .observeOn(FX_SCHEDULER).subscribe(opponents -> {
+                                if (opponents.size() == 2) {
+                                    for (Opponent opponent : opponents){
+                                        if (opponent.move() != null || opponent.results().size() != 0){
+                                            TextFlow textFlow = createDialogVBox(false);
+                                            textFlow.getChildren().add(new Text(resources.getString("WANT.TO.FIGHT")));
+                                            return;
+                                        }
+                                    }
+                                    showOtherTrainerInEncounterInfo();
+                                }
+                                else {
+                                    TextFlow textFlow = createDialogVBox(false);
+                                    textFlow.getChildren().add(new Text(resources.getString("WANT.TO.FIGHT")));
+                                }
+                            }));
                 }
-
             }
         }
     }
@@ -1711,19 +1747,21 @@ public class IngameController extends Controller {
             case dialogFinishedTalkToTrainer -> endDialog(0, true);
             case albertDialogFinished0 -> {
                 endDialog(0, true);
-                this.notificationListHandyController.displayStarterMessages();
+                this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
+                preferences.putBoolean("starterMessages", true);
             }
             case albertDialogFinished1 -> {
                 endDialog(1, true);
-                this.notificationListHandyController.displayStarterMessages();
+                this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
-
+                preferences.putBoolean("starterMessages", true);
             }
             case albertDialogFinished2 -> {
                 endDialog(2, true);
-                this.notificationListHandyController.displayStarterMessages();
+                this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
+                preferences.putBoolean("starterMessages", true);
             }
             case dialogFinishedNoTalkToTrainer -> endDialog(0, false);
             case spokenToNurse -> createNurseHealPopup();
@@ -1758,6 +1796,68 @@ public class IngameController extends Controller {
         if (encounterNpc) {
             encounterNPC(this.currentNpc, selectionValue);
         }
+    }
+    public void createJoinEncounterPopup() {
+        VBox joinEncounterVBox = new VBox();
+        joinEncounterVBox.setId("joinEncountervBox");
+        joinEncounterVBox.setMaxHeight(popupHeight);
+        joinEncounterVBox.setMaxWidth(popupWidth);
+        joinEncounterVBox.getStyleClass().add("dialogTextFlow");
+
+        TextFlow actions = new TextFlow(new Text(resources.getString("SELECT.ACTION")));
+        actions.setPrefWidth(popupWidth);
+        actions.setPrefHeight(textFieldHeight);
+        actions.setPadding(joinEncounterTextInsets);
+        actions.setTextAlignment(TextAlignment.CENTER);
+
+        VBox buttonsVBox = new VBox();
+        buttonsVBox.setMaxHeight(buttonsHBoxHeight);
+        buttonsVBox.setMaxWidth(popupWidth);
+        buttonsVBox.setAlignment(Pos.CENTER);
+        buttonsVBox.setSpacing(joinEncounterSpacing);
+        buttonsVBox.setPadding(joinEncountervBoxInsets);
+
+        //Join Encounter Button
+        Button joinEncounterButton = new Button(resources.getString("JOIN.ENCOUNTER"));
+        joinEncounterButton.getStyleClass().add("buttonsWhite");
+        joinEncounterButton.setPrefWidth(joinEncounterButtonWidth);
+        joinEncounterButton.setPrefHeight(joinEncounterButtonHeight);
+        joinEncounterButton.setOnAction(event -> {
+            this.root.getChildren().remove(joinEncounterVBox);
+            buttonsDisable(false);
+            stackPane.getChildren().remove(dialogStackPane);
+
+            String trainerID = trainerStorageProvider.get().getTrainer()._id();
+            disposables.add(udpEventListenerProvider.get().talk(
+                    this.currentNpc.area(),
+                    new TalkTrainerDto(
+                            trainerID,
+                            this.currentNpc._id(),
+                            0
+                    )
+            ).observeOn(FX_SCHEDULER).subscribe());
+        });
+
+        //Leave Button
+        Button leaveEncounterButton = new Button(resources.getString("LEAVE"));
+        leaveEncounterButton.getStyleClass().add("buttonsYellow");
+        leaveEncounterButton.setPrefWidth(joinEncounterButtonWidth);
+        leaveEncounterButton.setPrefHeight(joinEncounterButtonHeight);
+        leaveEncounterButton.setOnAction(event -> {
+            this.root.getChildren().remove(joinEncounterVBox);
+            buttonsDisable(false);
+            stackPane.getChildren().remove(dialogStackPane);
+        });
+
+        //Add Buttons to Vbox
+        buttonsVBox.getChildren().addAll(joinEncounterButton, leaveEncounterButton);
+
+        //Add Text and Vbox with Buttons to JoinEncounterVbox
+        joinEncounterVBox.getChildren().addAll(actions, buttonsVBox);
+
+        //Add Pop up to Ingame
+        root.getChildren().add(joinEncounterVBox);
+        buttonsDisable(true);
     }
 
     public void createNurseHealPopup() {
@@ -1913,7 +2013,7 @@ public class IngameController extends Controller {
         Label nameLabel = new Label();
         if (isEncounter) {
             nameLabel.setText(resources.getString("ANNOUNCEMENT"));
-        } else {
+        }else {
             nameLabel.setText(this.currentNpc.name());
         }
         nameLabel.setPadding(new Insets(5, 10, 5, 10));
@@ -1993,9 +2093,13 @@ public class IngameController extends Controller {
                                     loading = false;
                                     root.getChildren().remove(loadingScreen);
                                 }, error -> {
-                                    TimeUnit.SECONDS.sleep(10);
-                                    destroy();
-                                    app.show(ingameControllerProvider.get());
+                                    PauseTransition pause = new PauseTransition(Duration.seconds(10));
+                                    pause.setOnFinished(evt -> {
+                                        System.err.println("Error on loading the mini map");
+                                        destroy();
+                                        app.show(ingameControllerProvider.get());
+                                    });
+                                    pause.play();
                                 }));
                     }
                 },
@@ -2086,6 +2190,7 @@ public class IngameController extends Controller {
     public void showMonsterDetails(Monster monster, MonsterTypeDto monsterTypeDto,
                                    Image monsterImage, ResourceBundle resources, PresetsService presetsService, String type) {
         VBox monsterDetailVBox = new VBox();
+        monsterDetailVBox.setId("monsterDetailVBox");
         monsterDetailVBox.setAlignment(Pos.CENTER);
         MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();
         monstersDetailController.init(this, monsterDetailVBox, monster, monsterTypeDto, monsterImage, resources, presetsService, type);
@@ -2128,6 +2233,18 @@ public class IngameController extends Controller {
                         error.printStackTrace();
                     }));
         }
+    }
+
+    private void setupUdpPing() {
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                disposables.add(udpEventListenerProvider.get().ping().observeOn(FX_SCHEDULER).subscribe());
+                disposables.add(authenticationService.refresh().observeOn(FX_SCHEDULER).subscribe());
+            }
+        };
+        timer.schedule(task, 0, MINUTE_IN_MILLIS);
     }
 
     public int getUserTrainerY() {

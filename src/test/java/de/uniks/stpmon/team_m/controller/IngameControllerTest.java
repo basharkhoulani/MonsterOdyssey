@@ -100,11 +100,11 @@ public class IngameControllerTest extends ApplicationTest {
     @InjectMocks
     MonstersListController monstersListController;
     @InjectMocks
-    MonstersDetailController monstersDetailController;
-    @InjectMocks
     MainMenuController mainMenuController;
     @Mock
     TrainerItemsService trainerItemsService;
+    @Mock
+    AuthenticationService authenticationService;
     @Mock
     Provider<IngameSettingsController> ingameSettingsControllerProvider;
     @InjectMocks
@@ -128,8 +128,17 @@ public class IngameControllerTest extends ApplicationTest {
         Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
         ingameController.setValues(bundle, preferences, null, ingameController, app);
 
+        when(authenticationService.refresh()).thenReturn(Observable.just(new LoginResult(
+                "423f8d731c386bcd2204da39",
+                "1",
+                "online",
+                null,
+                null,
+                "a1a2",
+                "a3a4")));
         UDPEventListener udpEventListener = mock(UDPEventListener.class);
         Mockito.when(udpEventListenerProvider.get()).thenReturn(udpEventListener);
+        when(udpEventListener.ping()).thenReturn(empty());
         when(udpEventListener.listen(any(), any())).thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("6475e595ac3946b6a812d865", "6475e595ac3946b6a812d863", 5, 4, 0))));
         final TrainerStorage trainerStorage = mock(TrainerStorage.class);
         Mockito.when(trainerStorageProvider.get()).thenReturn(trainerStorage);
@@ -224,7 +233,24 @@ public class IngameControllerTest extends ApplicationTest {
                                 100,
                                 100,
                                 2,
-                                new NPCInfo(false, false, false, false, List.of(1, 2, 3), null, null))
+                                new NPCInfo(false, false, false, false, List.of(1, 2, 3), null, null)),
+                        new Trainer(
+                                "2023-05-30T12:02:57.510Z",
+                                "2023-05-30T12:01:57.510Z",
+                                "6475e595ac3946b6a812d867",
+                                "646bab5cecf584e1be02598a",
+                                "6475e595ac3946b6a812d868",
+                                "OtherEncounter",
+                                "Premade_Character_02.png",
+                                0,
+                                List.of(),
+                                List.of(),
+                                List.of("646bacc568933551792bf3d5"),
+                                "6475e595ac3946b6a812d863",
+                                200,
+                                200,
+                                2,
+                                null)
                 )
         ));
         EventListener eventListenerMock = mock(EventListener.class);
@@ -318,6 +344,32 @@ public class IngameControllerTest extends ApplicationTest {
         when(eventListenerMock.listen("trainers.6475e595ac3946b6a812d865.items.*.*", Item.class)).thenReturn(Observable.empty());
 
         when(encounterOpponentsService.getTrainerOpponents(anyString(), anyString())).thenReturn(Observable.just(List.of()));
+        lenient().when(encounterOpponentsService.getTrainerOpponents("646bab5cecf584e1be02598a", "6475e595ac3946b6a812d867")).thenReturn(Observable.just(List.of(
+                new Opponent(
+                        "2023-07-09T11:52:17.658Z",
+                        "2023-07-09T11:52:35.578Z",
+                        "64aa9f7132eb8b56aa9eb20f",
+                        "64aa9f7132eb8b56aa9eb208",
+                        "64abfde932eb8b56aac8efac",
+                        true,
+                        true,
+                        "64aa9f7132eb8b56aa9eb20c",
+                        null,
+                        List.of(),
+                        0),
+                new Opponent(
+                        "2023-07-09T11:52:17.658Z",
+                        "2023-07-09T11:52:35.578Z",
+                        "64aa9f7132eb8b56aa9eb20d",
+                        "64aa9f7132eb8b56aa9eb208",
+                        "64abfde932eb8b56aac8efad",
+                        true,
+                        true,
+                        "64aa9f7132eb8b56aa9eb20d",
+                        null,
+                        List.of(),
+                        0
+                ))));
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
