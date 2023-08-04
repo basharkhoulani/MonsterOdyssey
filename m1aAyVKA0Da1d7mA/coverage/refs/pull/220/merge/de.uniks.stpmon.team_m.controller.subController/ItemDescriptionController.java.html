@@ -108,27 +108,27 @@ import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxWidth;
 <span class="nc bnc" id="L108" title="All 2 branches missed.">        if (itemTypeDto.use() == null) {</span>
 <span class="nc" id="L109">            useButton.setVisible(false);</span>
 <span class="nc" id="L110">            useButton.setDisable(true);</span>
-        }
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        } else if (inventoryType == Constants.inventoryType.showItems) {</span>
+<span class="nc" id="L112">            String use = itemTypeDto.use();</span>
+<span class="nc" id="L113">            Constants.itemType itemType = Constants.itemType.valueOf(use);</span>
 
-<span class="nc" id="L113">        String use = itemTypeDto.use();</span>
-<span class="nc" id="L114">        Constants.itemType itemType = Constants.itemType.valueOf(use);</span>
-
-<span class="nc bnc" id="L116" title="All 4 branches missed.">        if (encounterController == null &amp;&amp; itemType == Constants.itemType.ball) {</span>
-<span class="nc" id="L117">            useButton.setVisible(false);</span>
-<span class="nc" id="L118">            useButton.setDisable(true);</span>
-        }
-
-<span class="nc" id="L121">        useButton.setOnAction(evt -&gt; {</span>
-<span class="nc bnc" id="L122" title="All 2 branches missed.">            if (itemType == Constants.itemType.effect) {</span>
-<span class="nc" id="L123">                showMonsterList(item);</span>
-<span class="nc" id="L124">                closeItemMenu.run();</span>
-<span class="nc bnc" id="L125" title="All 2 branches missed.">            } else if (itemType == Constants.itemType.ball) {</span>
-<span class="nc bnc" id="L126" title="All 2 branches missed.">                if(encounterController != null) {</span>
-<span class="nc" id="L127">                    encounterController.useItem(item, null);</span>
-<span class="nc" id="L128">                    closeItemMenu.run();</span>
-                }
+<span class="nc bnc" id="L115" title="All 4 branches missed.">            if (encounterController == null &amp;&amp; itemType == Constants.itemType.ball) {</span>
+<span class="nc" id="L116">                useButton.setVisible(false);</span>
+<span class="nc" id="L117">                useButton.setDisable(true);</span>
             }
-<span class="nc" id="L131">        });</span>
+
+<span class="nc" id="L120">            useButton.setOnAction(evt -&gt; {</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">                if (itemType == Constants.itemType.effect) {</span>
+<span class="nc" id="L122">                    showMonsterList(item);</span>
+<span class="nc" id="L123">                    closeItemMenu.run();</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">                } else if (itemType == Constants.itemType.ball) {</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">                    if(encounterController != null) {</span>
+<span class="nc" id="L126">                        encounterController.useItem(item, null);</span>
+<span class="nc" id="L127">                        closeItemMenu.run();</span>
+                    }
+                }
+<span class="nc" id="L130">            });</span>
+        }
 
 <span class="nc bnc" id="L133" title="All 3 branches missed.">        switch (this.inventoryType) {</span>
             case buyItems -&gt; {
