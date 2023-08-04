@@ -81,7 +81,7 @@ public class IngameMiniMapController extends Controller {
             regionName.setText(trainerStorage.getRegion().name());
             // set marker data
             Image pin = new Image(String.valueOf(App.class.getResource("images/pin.png")));
-            Image questionmark = new Image(String.valueOf(App.class.getResource("images/question-mark.png")));
+            Image questionMark = new Image(String.valueOf(App.class.getResource("images/question-mark.png")));
             double pinWidth = pin.getWidth() / 20;
             double pinHeight = pin.getHeight() / 20;
             double xPinOffset = -pinWidth / 2;
@@ -154,7 +154,7 @@ public class IngameMiniMapController extends Controller {
                         fastTravelPopUp.setPadding(new Insets(paddingAndSpacingValue));
                         fastTravelPopUp.setSpacing(paddingAndSpacingValue);
                         fastTravelPopUp.setAlignment(Pos.CENTER);
-                        Label label = new Label(resources.getString("DO.YOU.WANT.TO.FASTTRAVEL.TO") + " \n" + tileObject.name() + " ?");
+                        Label label = new Label(resources.getString("DO.YOU.WANT.TO.FAST-TRAVEL.TO") + " \n" + tileObject.name() + " ?");
                         label.setTextAlignment(TextAlignment.CENTER);
                         HBox hBox = new HBox();
                         hBox.setSpacing(paddingAndSpacingValue);
@@ -177,7 +177,7 @@ public class IngameMiniMapController extends Controller {
                 if (discovered) {
                     miniMapCanvas.getGraphicsContext2D().drawImage(pin, tileObject.x() + width / 2 + xPinOffset, tileObject.y() + height / 2 + yPinOffset, pinWidth, pinHeight);
                 } else {
-                    miniMapCanvas.getGraphicsContext2D().drawImage(questionmark, tileObject.x() + width / 2 + xPinOffset, tileObject.y() + height / 2 + yPinOffset, pinWidth, pinHeight);
+                    miniMapCanvas.getGraphicsContext2D().drawImage(questionMark, tileObject.x() + width / 2 + xPinOffset, tileObject.y() + height / 2 + yPinOffset, pinWidth, pinHeight);
                 }
                 mapContainer.getChildren().add(location);
             });
