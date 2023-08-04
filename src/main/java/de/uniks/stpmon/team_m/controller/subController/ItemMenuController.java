@@ -140,7 +140,11 @@ public class ItemMenuController extends Controller {
     }
 
     public void initItem(Item item) {
-        itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController));
+        if(ingameController != null){
+            itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController));
+        } else if (encounterController != null){
+            itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, encounterController));
+        }
         itemListView.getItems().add(item);
         itemListView.setFocusModel(null);
         itemListView.setSelectionModel(null);

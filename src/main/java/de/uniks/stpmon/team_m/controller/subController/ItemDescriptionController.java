@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
@@ -50,6 +51,7 @@ public class ItemDescriptionController extends Controller {
     private Runnable closeItemMenu;
     private StackPane rootStackPane;
     private IngameController ingameController;
+    private EncounterController encounterController;
 
     @Inject
     public ItemDescriptionController() {
@@ -74,6 +76,25 @@ public class ItemDescriptionController extends Controller {
         this.ingameController = ingameController;
     }
 
+    public void initFromEncounter(ItemTypeDto itemTypeDto,
+                                  Image itemImage,
+                                  Item item,
+                                  Constants.inventoryType inventoryType,
+                                  int ownAmountOfITem,
+                                  Runnable closeItemMenu,
+                                  StackPane rootStackPane,
+                                  EncounterController encounterController) {
+        super.init();
+        this.itemImage = itemImage;
+        this.itemTypeDto = itemTypeDto;
+        this.item = item;
+        this.inventoryType = inventoryType;
+        this.ownAmountOfItem = ownAmountOfITem;
+        this.closeItemMenu = closeItemMenu;
+        this.rootStackPane = rootStackPane;
+        this.encounterController = encounterController;
+    }
+
     @Override
     public Parent render() {
         final Parent parent = super.render();
@@ -89,8 +110,13 @@ public class ItemDescriptionController extends Controller {
             useButton.setDisable(true);
         }
         useButton.setOnAction(evt -> {
-            if (itemTypeDto.use().equals(Constants.ITEM_USAGE_EFFECT)) {
+            String use = itemTypeDto.use();
+            Constants.itemType itemType = Constants.itemType.valueOf(use);
+            if (itemType == Constants.itemType.effect) {
                 showMonsterList(item);
+                closeItemMenu.run();
+            } else if (itemType == Constants.itemType.ball) {
+                encounterController.useItem(item, null);
                 closeItemMenu.run();
             }
         });
@@ -134,13 +160,22 @@ public class ItemDescriptionController extends Controller {
         monsterListVBox.setMinWidth(useItemMonsterListVBoxWidth);
         monsterListVBox.setMinHeight(useItemMonsterListVBoxHeight);
         monsterListVBox.setAlignment(Pos.CENTER);
-        MonstersListController monstersListController = ingameController.getMonstersListController();
-        monstersListController.setValues(resources, preferences, resourceBundleProvider, this, app);
-        monstersListController.init(ingameController, monsterListVBox, rootStackPane, item);
-        monsterListVBox.getChildren().add(monstersListController.render());
-        rootStackPane.getChildren().add(monsterListVBox);
-        monsterListVBox.requestFocus();
-        monstersListController.monsterListViewOther.refresh();
-        monstersListController.monsterListViewActive.refresh();
+        if (ingameController != null) {
+            MonstersListController monstersListController = ingameController.getMonstersListController();
+            monstersListController.setValues(resources, preferences, resourceBundleProvider, this, app);
+            monstersListController.init(ingameController, monsterListVBox, rootStackPane, item);
+            monsterListVBox.getChildren().add(monstersListController.render());
+            rootStackPane.getChildren().add(monsterListVBox);
+            monsterListVBox.requestFocus();
+            monstersListController.monsterListViewOther.refresh();
+            monstersListController.monsterListViewActive.refresh();
+        } else if (encounterController != null) {
+            ChangeMonsterListController changeMonsterListController = encounterController.getChangeMonsterListController();
+            changeMonsterListController.setValues(resources, preferences, resourceBundleProvider, this, app);
+            changeMonsterListController.init(encounterController, monsterListVBox, encounterController.getIngameController(), item);
+            monsterListVBox.getChildren().add(changeMonsterListController.render());
+            rootStackPane.getChildren().add(monsterListVBox);
+            monsterListVBox.requestFocus();
+        }
     }
 }
