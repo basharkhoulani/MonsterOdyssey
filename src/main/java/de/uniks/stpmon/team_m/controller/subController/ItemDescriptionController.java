@@ -109,6 +109,10 @@ public class ItemDescriptionController extends Controller {
             useButton.setVisible(false);
             useButton.setDisable(true);
         }
+        if (encounterController == null){
+            useButton.setVisible(false);
+            useButton.setDisable(true);
+        }
         useButton.setOnAction(evt -> {
             String use = itemTypeDto.use();
             Constants.itemType itemType = Constants.itemType.valueOf(use);
@@ -116,8 +120,10 @@ public class ItemDescriptionController extends Controller {
                 showMonsterList(item);
                 closeItemMenu.run();
             } else if (itemType == Constants.itemType.ball) {
-                encounterController.useItem(item, null);
-                closeItemMenu.run();
+                if(encounterController != null) {
+                    encounterController.useItem(item, null);
+                    closeItemMenu.run();
+                }
             }
         });
 
