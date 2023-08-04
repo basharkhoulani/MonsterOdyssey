@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
@@ -37,7 +38,8 @@ public class ItemCell extends ListCell<Item> {
     private final App app;
     private final Runnable closeItemMenu;
     private final StackPane rootStackPane;
-    private final IngameController ingameController;
+    private IngameController ingameController;
+    private EncounterController encounterController;
     private FXMLLoader loader;
     protected final CompositeDisposable disposables = new CompositeDisposable();
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
@@ -52,10 +54,7 @@ public class ItemCell extends ListCell<Item> {
     public HBox itemHBox;
     private Image itemImage;
     VBox itemDescriptionBox;
-
     ItemTypeDto itemTypeDto;
-
-
 
     public ItemCell(PresetsService presetsService,
                     ItemMenuController itemMenuController,
@@ -77,6 +76,28 @@ public class ItemCell extends ListCell<Item> {
         this.closeItemMenu = closeItemMenu;
         this.rootStackPane = rootStackPane;
         this.ingameController = ingameController;
+    }
+
+    public ItemCell(PresetsService presetsService,
+                    ItemMenuController itemMenuController,
+                    ResourceBundle resources,
+                    VBox itemDescriptionBox,
+                    Preferences preferences,
+                    Provider<ResourceBundle> resourceBundleProvider,
+                    App app,
+                    Runnable closeItemMenu,
+                    StackPane rootStackPane,
+                    EncounterController encounterController) {
+        this.presetsService = presetsService;
+        this.itemDescriptionBox = itemDescriptionBox;
+        this.itemMenuController = itemMenuController;
+        this.resources = resources;
+        this.preferences = preferences;
+        this.resourceBundleProvider = resourceBundleProvider;
+        this.app = app;
+        this.closeItemMenu = closeItemMenu;
+        this.rootStackPane = rootStackPane;
+        this.encounterController = encounterController;
     }
 
     public void updateItem(Item item, boolean empty) {
@@ -147,7 +168,11 @@ public class ItemCell extends ListCell<Item> {
 
         ItemDescriptionController itemDescriptionController = new ItemDescriptionController();
         itemDescriptionController.setValues(resources, preferences, resourceBundleProvider, itemDescriptionController, app);
-        itemDescriptionController.init(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, ingameController);
+        if (ingameController != null) {
+            itemDescriptionController.init(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, ingameController);
+        } else if (encounterController != null) {
+            itemDescriptionController.initFromEncounter(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, encounterController);
+        }
         if (itemDescriptionBox.getChildren().size() != 0) {
             itemDescriptionBox.getChildren().clear();
         }
