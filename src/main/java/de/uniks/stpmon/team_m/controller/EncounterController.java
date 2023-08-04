@@ -39,7 +39,7 @@ import static de.uniks.stpmon.team_m.Constants.*;
 public class EncounterController extends Controller {
     private final List<Controller> subControllers = new ArrayList<>();
     private final List<AbilityDto> abilityDtos = new ArrayList<>();
-    private final List<ItemTypeDto> itemTypeDtos = new ArrayList<>();
+    public HashMap<Integer, ItemTypeDto> itemTypeDtos = new HashMap<>();
     private final HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
     private final HashMap<String, Opponent> opponentsDelete = new HashMap<>();
     private final HashMap<String, Boolean> monsterInEncounterHashMap = new HashMap<>();
@@ -189,9 +189,9 @@ public class EncounterController extends Controller {
         }));
 
         disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER).subscribe(items -> {
-            itemTypeDtos.addAll(items);
-            Comparator<ItemTypeDto> itemDtoComparator = Comparator.comparingInt(ItemTypeDto::id);
-            Collections.sort(itemTypeDtos, itemDtoComparator);
+            for (ItemTypeDto itemTypeDto: items) {
+                itemTypeDtos.put(itemTypeDto.id(), itemTypeDto);
+            }
         }));
 
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId).observeOn(FX_SCHEDULER).subscribe(encounter -> {
@@ -672,11 +672,11 @@ public class EncounterController extends Controller {
 
                 if (move instanceof UseItemMove useItemMove) {
                     if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
-                        updateDescription(resources.getString("YOU.USED") + " " + itemTypeDtos.get(useItemMove.item() - 1).name() + ". ", false);
+                        updateDescription(resources.getString("YOU.USED") + " " + itemTypeDtos.get(useItemMove.item()).name() + ". ", false);
                     } else if (o.isAttacker() == encounterOpponentStorage.isAttacker()) {
-                        updateDescription(resources.getString("COOP.USED") + " " + itemTypeDtos.get(useItemMove.item() - 1).name() + ". ", false);
+                        updateDescription(resources.getString("COOP.USED") + " " + itemTypeDtos.get(useItemMove.item()).name() + ". ", false);
                     } else {
-                        updateDescription(resources.getString("ENEMY.USED") + " " + itemTypeDtos.get(useItemMove.item() - 1).name() + ". ", false);
+                        updateDescription(resources.getString("ENEMY.USED") + " " + itemTypeDtos.get(useItemMove.item()).name() + ". ", false);
                     }
                 }
 
@@ -734,10 +734,10 @@ public class EncounterController extends Controller {
                                 encounterOpponentController.showStatus(r.status(), false);
                             }
                             case ITEM_FAILED -> {
-                                updateDescription(resources.getString("USE.OF") + " " + itemTypeDtos.get(r.item()-1).name() + resources.getString("IS")+ " " + resources.getString("FAILED") +".\n", false);
+                                updateDescription(resources.getString("USE.OF") + " " + itemTypeDtos.get(r.item()).name() + resources.getString("IS")+ " " + resources.getString("FAILED") +".\n", false);
                             }
                             case ITEM_SUCCESS -> {
-                                updateDescription(resources.getString("USE.OF") + " " + itemTypeDtos.get(r.item()-1).name() + resources.getString("IS")+ " " + resources.getString("SUCCEED") +".\n", false);
+                                updateDescription(resources.getString("USE.OF") + " " + itemTypeDtos.get(r.item()).name() + resources.getString("IS")+ " " + resources.getString("SUCCEED") +".\n", false);
                             }
                             // TODO: monster caught from @Fin
                         }
@@ -1075,13 +1075,13 @@ public class EncounterController extends Controller {
         } else {
             // use item
             // Fit for two monsters
-            System.out.println("use item" + item._id() + " on " + monster._id());
             UseItemMove move = new UseItemMove(USE_ITEM, item.type(), monster._id());
             disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, encounterOpponentStorage.getSelfOpponent()._id(), null, move).observeOn(FX_SCHEDULER).subscribe(opponent -> {
                 resetRepeatedTimes();
                 encounterOpponentStorage.setSelfOpponent(opponent);
                 UseItemMove useItemMove = (UseItemMove) opponent.move();
-                updateDescription(resources.getString("YOU.USED") + " " + itemTypeDtos.get(useItemMove.item() - 1).name() + ". ", false);
+                updateDescription(resources.getString("YOU.USED") + " " + itemTypeDtos.get(useItemMove.item()).name() + ". ", true);
+                trainerStorageProvider.get().useItem(useItemMove.item());
                 increaseCurrentMonsterIndex();
             }));
         }
