@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MonsterCell.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">MonsterCell.java</span></div><h1>MonsterCell.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.EncounterController;
+import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.Item;
+import de.uniks.stpmon.team_m.dto.Monster;
+import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import de.uniks.stpmon.team_m.service.PresetsService;
+import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.MonsterStorage;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import de.uniks.stpmon.team_m.utils.UserStorage;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import java.awt.*;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+
+public class MonsterCell extends ListCell&lt;Monster&gt; {
+
+    private final boolean other;
+    private final Item item;
+    private final Provider&lt;MonsterStorage&gt; monsterStorageProvider;
+    @FXML
+    public ImageView arrowUp;
+    @FXML
+    public ImageView arrowDown;
+    @FXML
+    public Button removeFromTeamButton;
+    @FXML
+    public Button viewDetailsButton;
+    @FXML
+    public VBox monsterVBox;
+    @FXML
+    Label monsterNameLevel;
+    @FXML
+    public FlowPane statusEffectsFlowPane;
+    @FXML
+    public HBox monsterTypesHBox;
+    @FXML
+    public VBox buttonsVBox;
+    @FXML
+    Label monsterHealth;
+    @FXML
+    ImageView monsterImageView;
+    @FXML
+    HBox rootmonsterHBox;
+
+    private final ResourceBundle resources;
+    @Inject
+    Provider&lt;TrainerStorage&gt; trainerStorageProvider;
+    @Inject
+    Provider&lt;UserStorage&gt; userStorageProvider;
+    @Inject
+    public TrainersService trainersService;
+    @Inject
+    public UserStorage usersStorage;
+    public PresetsService presetsService;
+    public IngameController ingameController;
+    public EncounterController encounterController;
+
+    @Inject
+    Provider&lt;TrainersService&gt; trainersServiceProvider;
+    MonstersListController monstersListController;
+    ChangeMonsterListController changeMonsterListController;
+    private FXMLLoader loader;
+
+<span class="fc" id="L89">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
+<span class="fc" id="L90">    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);</span>
+    private MonsterTypeDto monsterTypeDto;
+    private Image monsterImage;
+
+    public MonsterCell(
+            ResourceBundle resources,
+            PresetsService presetsService,
+            MonstersListController monstersListController,
+            ChangeMonsterListController changeMonsterListController,
+            EncounterController encounterController,
+            IngameController ingameController,
+            boolean other,
+            Item item,
+            Provider&lt;MonsterStorage&gt; monsterStorageProvider
+<span class="fc" id="L104">    ) {</span>
+<span class="fc" id="L105">        this.resources = resources;</span>
+<span class="fc" id="L106">        this.presetsService = presetsService;</span>
+<span class="fc" id="L107">        this.monstersListController = monstersListController;</span>
+<span class="fc" id="L108">        this.changeMonsterListController = changeMonsterListController;</span>
+<span class="fc" id="L109">        this.encounterController = encounterController;</span>
+<span class="fc" id="L110">        this.ingameController = ingameController;</span>
+<span class="fc" id="L111">        this.other = other;</span>
+<span class="fc" id="L112">        this.item = item;</span>
+<span class="fc" id="L113">        this.monsterStorageProvider = monsterStorageProvider;</span>
+<span class="fc" id="L114">    }</span>
+
+    @Override
+    protected void updateItem(Monster monster, boolean empty) {
+<span class="fc" id="L118">        super.updateItem(monster, empty);</span>
+<span class="fc" id="L119">        StringBuilder type = new StringBuilder();</span>
+<span class="pc bpc" id="L120" title="1 of 4 branches missed.">        if (monster == null || empty) {</span>
+<span class="fc" id="L121">            setText(null);</span>
+<span class="fc" id="L122">            setGraphic(null);</span>
+<span class="fc" id="L123">            setStyle(&quot;-fx-background-color: #CFE9DB;&quot;);</span>
+        } else {
+<span class="fc" id="L125">            loadFXML();</span>
+<span class="fc" id="L126">            viewDetailsButton.prefWidthProperty().bind(removeFromTeamButton.widthProperty());</span>
+<span class="fc" id="L127">            monsterHealth.setText(monster.currentAttributes().health() + &quot; / &quot; + monster.attributes().health() + &quot; HP&quot;);</span>
+<span class="fc" id="L128">            monsterTypeDto = monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterTypeDto();</span>
+<span class="fc" id="L129">            monsterNameLevel.setText(monsterTypeDto.name() + &quot; (&quot; + resources.getString(&quot;LEVEL&quot;).substring(0, resources.getString(&quot;LEVEL&quot;).length() - 1) + &quot; &quot; + monster.level() + &quot;)&quot;);</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">            for (String s : monsterTypeDto.type()) {</span>
+<span class="fc" id="L131">                type.append(s);</span>
+<span class="fc" id="L132">            }</span>
+
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">            if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L135">                renderMonsterTypes(monsterTypeDto, monsterTypesHBox.getChildren());</span>
+<span class="nc" id="L136">                URL resourseArrowUp = Main.class.getResource(&quot;images/monster-arrange-up.png&quot;);</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">                assert resourseArrowUp != null;</span>
+<span class="nc" id="L138">                Image arrowUpImage = new Image(resourseArrowUp.toString());</span>
+<span class="nc" id="L139">                arrowUp.setImage(arrowUpImage);</span>
+<span class="nc" id="L140">                arrowDown.setImage(arrowUpImage);</span>
+            }
+        }
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (monster != null) {</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">            if (monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage() != null) {</span>
+<span class="nc" id="L145">                monsterImageView.setImage(monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage());</span>
+<span class="nc" id="L146">                this.monsterImage = monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage();</span>
+            } else {
+<span class="fc" id="L148">                disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L149">                        .subscribe(monsterImage -&gt; {</span>
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">                            if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L151">                                this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);</span>
+<span class="nc" id="L152">                                monsterStorageProvider.get().updateMonsterData(monster, null, this.monsterImage);</span>
+<span class="nc" id="L153">                                monsterImageView.setImage(this.monsterImage);</span>
+                            }
+<span class="fc" id="L155">                        }, error -&gt; {</span>
+<span class="nc" id="L156">                        }));</span>
+            }
+<span class="fc" id="L158">            viewDetailsButton.setOnAction(event -&gt; showDetails(monster, type.toString()));</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">            if (encounterController == null) {</span>
+<span class="fc" id="L160">                arrowUp.setOnMouseClicked(event -&gt; monstersListController.changeOrderUp(monster._id()));</span>
+<span class="fc" id="L161">                arrowDown.setOnMouseClicked(event -&gt; monstersListController.changeOrderDown(monster._id()));</span>
+<span class="fc" id="L162">                removeFromTeamButton.setOnAction(event -&gt; monstersListController.removeFromTeam(monster));</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">                if (other) {</span>
+<span class="fc" id="L164">                    removeFromTeamButton.setStyle(&quot;-fx-background-color: #FFF2CC; -fx-border-width: 1px; -fx-border-color: gray;&quot;);</span>
+<span class="fc" id="L165">                    removeFromTeamButton.setText(resources.getString(&quot;ADD.MONSTER&quot;));</span>
+<span class="fc" id="L166">                    arrowUp.setVisible(false);</span>
+<span class="fc" id="L167">                    arrowDown.setVisible(false);</span>
+<span class="fc" id="L168">                    removeFromTeamButton.setOnAction(event -&gt; monstersListController.addToTeam(monster));</span>
+                }
+            }
+
+<span class="fc bfc" id="L172" title="All 2 branches covered.">            if (encounterController != null) {</span>
+<span class="fc" id="L173">                removeFromTeamButton.setStyle(&quot;-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7;&quot;);</span>
+<span class="fc" id="L174">                removeFromTeamButton.setText(resources.getString(&quot;CHANGE.MONSTER&quot;));</span>
+<span class="fc" id="L175">                arrowUp.setVisible(false);</span>
+<span class="fc" id="L176">                arrowUp.setDisable(true);</span>
+<span class="fc" id="L177">                arrowDown.setVisible(false);</span>
+<span class="fc" id="L178">                arrowDown.setDisable(true);</span>
+
+<span class="fc" id="L180">                removeFromTeamButton.setOnAction(event -&gt; {</span>
+<span class="nc" id="L181">                    encounterController.changeMonster(monster);</span>
+<span class="nc" id="L182">                    changeMonsterListController.onCloseMonsterList();</span>
+<span class="nc" id="L183">                });</span>
+            }
+
+<span class="fc bfc" id="L186" title="All 2 branches covered.">            if (item != null) {</span>
+<span class="fc" id="L187">                arrowUp.setVisible(false);</span>
+<span class="fc" id="L188">                arrowUp.setDisable(true);</span>
+<span class="fc" id="L189">                arrowDown.setVisible(false);</span>
+<span class="fc" id="L190">                arrowDown.setDisable(true);</span>
+<span class="fc" id="L191">                buttonsVBox.getChildren().remove(viewDetailsButton);</span>
+<span class="fc" id="L192">                removeFromTeamButton.setStyle(&quot;-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7; -fx-min-width: 150px; -fx-min-height: 50px;&quot;);</span>
+<span class="fc" id="L193">                removeFromTeamButton.setText(resources.getString(&quot;SELECT&quot;));</span>
+<span class="fc" id="L194">                removeFromTeamButton.setOnAction(event -&gt; {</span>
+<span class="nc" id="L195">                    ingameController.useItem(item, monster);</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">                    if (changeMonsterListController != null) {</span>
+<span class="nc" id="L197">                        changeMonsterListController.onCloseMonsterList();</span>
+                    }
+<span class="nc bnc" id="L199" title="All 2 branches missed.">                    if (monstersListController != null) {</span>
+<span class="nc" id="L200">                        monstersListController.onCloseMonsterList();</span>
+                    }
+<span class="nc" id="L202">                });</span>
+            }
+<span class="fc" id="L204">            statusEffectsFlowPane.getChildren().clear();</span>
+<span class="fc" id="L205">            monster.status().forEach(statusEffect -&gt; {</span>
+<span class="fc" id="L206">                ImageView statusEffectImageView = new ImageView(String.valueOf(Main.class.getResource(STATUS_EFFECTS_IMAGES.get(statusEffect))));</span>
+<span class="fc" id="L207">                statusEffectImageView.setFitHeight(24);</span>
+<span class="fc" id="L208">                statusEffectImageView.setFitWidth(24);</span>
+<span class="fc" id="L209">                statusEffectsFlowPane.getChildren().add(statusEffectImageView);</span>
+<span class="fc" id="L210">            });</span>
+<span class="fc" id="L211">            arrowDown.setId(&quot;arrowDown&quot; + monster._id());</span>
+<span class="fc" id="L212">            arrowUp.setId(&quot;arrowUp&quot; + monster._id());</span>
+<span class="fc" id="L213">            removeFromTeamButton.setId(&quot;removeFromTeamButton&quot; + monster._id());</span>
+<span class="fc" id="L214">            viewDetailsButton.setId(&quot;viewDetailsButton&quot; + monster._id());</span>
+<span class="fc" id="L215">            setGraphic(rootmonsterHBox);</span>
+<span class="fc" id="L216">            setText(null);</span>
+<span class="fc" id="L217">            setStyle(&quot;-fx-background-color: #CFE9DB;  -fx-border-color: #1C701C; -fx-border-width: 2px&quot;);</span>
+        }
+<span class="fc" id="L219">    }</span>
+
+    static void renderMonsterTypes(MonsterTypeDto monsterTypeDto, ObservableList&lt;Node&gt; children) {
+<span class="nc" id="L222">        children.clear();</span>
+<span class="nc" id="L223">        monsterTypeDto.type().forEach(t -&gt; {</span>
+<span class="nc" id="L224">            String typeColor = TYPESCOLORPALETTE.get(t);</span>
+<span class="nc" id="L225">            String style = &quot;-fx-background-color: &quot; + typeColor + &quot;; -fx-border-color: black; -fx-border-width: 1px;&quot;;</span>
+<span class="nc" id="L226">            VBox typeIcon = new VBox();</span>
+<span class="nc" id="L227">            typeIcon.setStyle(style);</span>
+<span class="nc" id="L228">            String typeImagePath = ABILITYPALETTE.get(t);</span>
+<span class="nc" id="L229">            URL resourceType = Main.class.getResource(&quot;images/&quot; + typeImagePath);</span>
+<span class="nc bnc" id="L230" title="All 2 branches missed.">            assert resourceType != null;</span>
+<span class="nc" id="L231">            Image typeImage = new Image(resourceType.toString());</span>
+<span class="nc" id="L232">            ImageView typeImageView = new ImageView();</span>
+<span class="nc" id="L233">            typeImageView.setImage(typeImage);</span>
+<span class="nc" id="L234">            typeImageView.setFitHeight(45);</span>
+<span class="nc" id="L235">            typeImageView.setFitWidth(45);</span>
+<span class="nc" id="L236">            typeIcon.getChildren().add(typeImageView);</span>
+<span class="nc" id="L237">            children.add(typeIcon);</span>
+<span class="nc" id="L238">        });</span>
+<span class="nc" id="L239">    }</span>
+
+
+    private void showDetails(Monster monster, String type) {
+<span class="pc bpc" id="L243" title="1 of 2 branches missed.">        if (encounterController != null) {</span>
+<span class="nc" id="L244">            this.encounterController.showMonsterDetails(monster, monsterTypeDto, monsterImage, type);</span>
+        } else {
+<span class="fc" id="L246">            this.ingameController.showMonsterDetails(monster, monsterTypeDto, monsterImage, resources, presetsService, type);</span>
+        }
+<span class="fc" id="L248">    }</span>
+
+    private void loadFXML() {
+<span class="fc bfc" id="L251" title="All 2 branches covered.">        if (loader == null) {</span>
+<span class="fc" id="L252">            loader = new FXMLLoader(Main.class.getResource(&quot;views/MonsterCell.fxml&quot;));</span>
+<span class="fc" id="L253">            loader.setResources(resources);</span>
+<span class="fc" id="L254">            loader.setControllerFactory(c -&gt; this);</span>
+            try {
+<span class="fc" id="L256">                loader.load();</span>
+<span class="nc" id="L257">            } catch (Exception e) {</span>
+<span class="nc" id="L258">                e.printStackTrace();</span>
+<span class="fc" id="L259">            }</span>
+        }
+<span class="fc" id="L261">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
