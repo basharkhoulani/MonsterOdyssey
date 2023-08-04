@@ -30,7 +30,6 @@ public class Constants {
     public static final String EMPTY_STRING = "";
     public static final int STUNDE_IN_MILLIS = 3600000;
     public static final int MINUTE_IN_MILLIS = 60000;
-    public static final String FX_STYLE_BORDER_COLOR_BLACK = "-fx-border-color: black";
     public static final String LOADING_ANIMATION = "images/loading.gif";
     public static final String ONLINE_IMG = "images/online.png";
     public static final String OFFLINE_IMG = "images/offline.png";
@@ -322,7 +321,6 @@ public class Constants {
     }
 
     public static final String ITEM_ACTION_USE_ITEM = "use";
-    public static final String ITEM_USAGE_EFFECT = "effect";
     public static final int useItemMonsterListVBoxWidth = 600;
     public static final int useItemMonsterListVBoxHeight = 410;
     public static final long FLIPPING_HORIZONTAL = 0x80000000L;
