@@ -420,6 +420,7 @@ public class MonstersListControllerTest extends ApplicationTest {
                         encounterController,
                         ingameController,
                         true,
+                        null,
                         null
                 ));
         monsterListController.monsterListViewActive.refresh();
@@ -439,7 +440,8 @@ public class MonstersListControllerTest extends ApplicationTest {
                         null,
                         ingameController,
                         false,
-                        item
+                        item,
+                        null
                 ));
         monsterListController.monsterListViewActive.refresh();
 
@@ -461,7 +463,8 @@ public class MonstersListControllerTest extends ApplicationTest {
                         encounterController,
                         ingameController,
                         true,
-                        item
+                        item,
+                        null
                 ));
         monsterListController.monsterListViewActive.refresh();
 
