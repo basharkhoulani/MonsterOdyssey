@@ -182,7 +182,7 @@ public class MonsterCell extends ListCell<Monster> {
                         changeMonsterListController.onCloseMonsterList();
                     });
                 } else {
-                    removeFromTeamButton.setText("Use item"); // TODO: With translation
+                    removeFromTeamButton.setText(resources.getString("USE"));
                     viewDetailsButton.setVisible(false);
                     viewDetailsButton.setDisable(true);
 
