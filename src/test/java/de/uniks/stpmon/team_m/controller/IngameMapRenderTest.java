@@ -402,6 +402,7 @@ public class IngameMapRenderTest extends ApplicationTest {
                         "646bc3c0a9ac1b375fb41d93",
                         "646bc436cfee07c0e408466f",
                         "Albertina",
+                        null,
                         map
 
                 )));

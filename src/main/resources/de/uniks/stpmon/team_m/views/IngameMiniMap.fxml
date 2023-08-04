@@ -6,18 +6,24 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="mapAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.IngameMiniMapController">
-    <Label fx:id="regionName" alignment="CENTER" layoutX="150.0" layoutY="-3.0" prefHeight="35.0" prefWidth="400.0" text="Region" textAlignment="CENTER" wrapText="true">
+<AnchorPane fx:id="mapAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="de.uniks.stpmon.team_m.controller.subController.IngameMiniMapController">
+    <Label fx:id="regionName" alignment="CENTER" layoutX="150.0" layoutY="-3.0" prefHeight="35.0" prefWidth="400.0"
+           text="Region" textAlignment="CENTER" wrapText="true">
         <font>
-            <Font name="Comic Sans MS" size="24.0" />
+            <Font name="Comic Sans MS" size="24.0"/>
         </font>
     </Label>
-    <AnchorPane fx:id="mapContainer" layoutX="95.0" layoutY="34.0" minHeight="512.0" minWidth="512.0" prefHeight="512.0" prefWidth="512.0" style="-fx-border-color: black; -fx-border-image-width: 2;">
-        <ImageView fx:id="miniMapImageView" fitHeight="512.0" fitWidth="512.0" pickOnBounds="true" preserveRatio="true" />
+    <AnchorPane fx:id="mapContainer" layoutX="95.0" layoutY="34.0" minHeight="512.0" minWidth="512.0" prefHeight="512.0"
+                prefWidth="512.0" style="-fx-border-color: black; -fx-border-image-width: 2;">
+        <ImageView fx:id="miniMapImageView" fitHeight="512.0" fitWidth="512.0" pickOnBounds="true"
+                   preserveRatio="true"/>
     </AnchorPane>
-    <Button fx:id="closeButton" layoutX="291.0" layoutY="554.0" mnemonicParsing="false" onAction="#closeMiniMap" prefHeight="40.0" prefWidth="120.0" styleClass="welcomeSceneButton" text="%CLOSE" wrapText="true">
+    <Button fx:id="closeButton" layoutX="291.0" layoutY="554.0" mnemonicParsing="false" onAction="#closeMiniMap"
+            prefHeight="40.0" prefWidth="120.0" styleClass="welcomeSceneButton" text="%CLOSE" wrapText="true">
         <font>
-            <Font size="17.0" />
+            <Font size="17.0"/>
         </font>
     </Button>
 </AnchorPane>

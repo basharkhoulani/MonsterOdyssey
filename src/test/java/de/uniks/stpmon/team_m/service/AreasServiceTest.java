@@ -33,6 +33,7 @@ public class AreasServiceTest {
                         "646bc3c0a9ac1b375fb41d93",
                         "646bc436cfee07c0e408466f",
                         "Albertina",
+                        null,
                         new Map(-1,
                                 true,
                                 1,
@@ -55,6 +56,7 @@ public class AreasServiceTest {
                         "646bc3c0a9ac1b375fb41d61",
                         "646bc436cfee07c0e408466f",
                         "Sanitaire",
+                        null,
                         new Map(
                                 -1,
                                 true,
@@ -89,6 +91,7 @@ public class AreasServiceTest {
                         "646bc3c0a9ac1b375fb41d93",
                         "646bc436cfee07c0e408466f",
                         "Albertina",
+                        null,
                         new Map(
                                 -1,
                                 true,

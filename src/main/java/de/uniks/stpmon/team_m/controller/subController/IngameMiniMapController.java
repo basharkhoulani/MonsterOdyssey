@@ -96,6 +96,7 @@ public class IngameMiniMapController extends Controller {
                 }
             }
             layerMinimap.objects().forEach(tileObject -> {
+                // get area
                 final Area[] newArea = new Area[1];
                 areasList.forEach(area -> {
                     if (trainerStorage.getTrainer().visitedAreas().contains(area._id())) {
@@ -150,13 +151,13 @@ public class IngameMiniMapController extends Controller {
                         fastTravelPopUp.getStyleClass().add("miniMapContainer");
                         fastTravelPopUp.setLayoutX(miniMapCanvas.getWidth() / 4);
                         fastTravelPopUp.setLayoutY(miniMapCanvas.getHeight() / 3);
-                        fastTravelPopUp.setPadding(new Insets(20));
-                        fastTravelPopUp.setSpacing(20);
+                        fastTravelPopUp.setPadding(new Insets(paddingAndSpacingValue));
+                        fastTravelPopUp.setSpacing(paddingAndSpacingValue);
                         fastTravelPopUp.setAlignment(Pos.CENTER);
-                        Label label = new Label("Do you want to fast-travel to \n" + tileObject.name() + " ?");
+                        Label label = new Label(resources.getString("DO.YOU.WANT.TO.FASTTRAVEL.TO") + " \n" + tileObject.name() + " ?");
                         label.setTextAlignment(TextAlignment.CENTER);
                         HBox hBox = new HBox();
-                        hBox.setSpacing(20);
+                        hBox.setSpacing(paddingAndSpacingValue);
                         Button yesButton = new Button(resources.getString("ENCOUNTER_FLEE_CONFIRM_BUTTON"));
                         yesButton.getStyleClass().add("welcomeSceneButton");
                         // fast-travel to location

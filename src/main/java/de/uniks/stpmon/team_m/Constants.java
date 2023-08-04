@@ -177,6 +177,7 @@ public class Constants {
     public static final int descriptionBoxWidth = 632;
     public static final int descriptionBoxLayoutX = -60;
     public static final int descriptionBoxLayoutY = -32;
+    public static final int paddingAndSpacingValue = 20;
 
     // Encounter
     public static final int fleePopupWidth = 300;
