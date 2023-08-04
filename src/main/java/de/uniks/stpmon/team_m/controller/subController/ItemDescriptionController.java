@@ -109,13 +109,16 @@ public class ItemDescriptionController extends Controller {
             useButton.setVisible(false);
             useButton.setDisable(true);
         }
-        if (encounterController == null){
+
+        String use = itemTypeDto.use();
+        Constants.itemType itemType = Constants.itemType.valueOf(use);
+
+        if (encounterController == null && itemType == Constants.itemType.ball) {
             useButton.setVisible(false);
             useButton.setDisable(true);
         }
+
         useButton.setOnAction(evt -> {
-            String use = itemTypeDto.use();
-            Constants.itemType itemType = Constants.itemType.valueOf(use);
             if (itemType == Constants.itemType.effect) {
                 showMonsterList(item);
                 closeItemMenu.run();
