@@ -160,7 +160,7 @@ public class MonstersListController extends Controller {
         for (Monster monster1 : activeMonstersList) {
             team.add(monster1._id());
         }
-        disposables.add(trainersService.updateTrainer(trainer.region(), trainer._id(), null, null, team)
+        disposables.add(trainersService.updateTrainer(trainer.region(), trainer._id(), null, null, team, null, null)
                 .observeOn(FX_SCHEDULER)
                 .subscribe(t -> trainerStorageProvider.get().setTrainer(t), throwable -> showError(throwable.getMessage())));
     }
@@ -243,7 +243,7 @@ public class MonstersListController extends Controller {
     }
 
     private void updateBothLists(ListView<Monster> listViewAdd, List<Monster> listAdd, ListView<Monster> listViewRemove, List<Monster> listRemove, Monster monster, List<String> team) {
-        disposables.add(trainersService.updateTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), null, null, team)
+        disposables.add(trainersService.updateTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), null, null, team, null, null)
                 .observeOn(FX_SCHEDULER)
                 .subscribe(t -> trainerStorageProvider.get().setTrainer(t), throwable -> showError(throwable.getMessage())));
         listRemove.removeIf(remove -> remove._id().equals(monster._id()));

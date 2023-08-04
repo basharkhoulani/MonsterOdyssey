@@ -7,8 +7,11 @@ import de.uniks.stpmon.team_m.dto.Area;
 import de.uniks.stpmon.team_m.dto.Layer;
 import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.service.AreasService;
+import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
@@ -16,14 +19,17 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
@@ -45,6 +51,8 @@ public class IngameMiniMapController extends Controller {
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
     AreasService areasService;
+    @Inject
+    TrainersService trainersService;
     private IngameController ingameController;
     private VBox miniMapVBox;
     private Canvas miniMapCanvas;
@@ -69,12 +77,6 @@ public class IngameMiniMapController extends Controller {
         TrainerStorage trainerStorage = trainerStorageProvider.get();
         disposables.add(areasService.getAreas(trainerStorage.getRegion()._id()).observeOn(FX_SCHEDULER).subscribe(areas -> {
             areasList = areas;
-            // compare visited areas
-            areasList.forEach(area -> {
-                if (trainerStorage.getTrainer().visitedAreas().contains(area._id())) {
-                    discoveredLocations.add(area.name());
-                }
-            });
             // set region name
             regionName.setText(trainerStorage.getRegion().name());
             // set marker data
@@ -88,12 +90,21 @@ public class IngameMiniMapController extends Controller {
 
             Layer layerMinimap = miniMap.layers().get(2);
             for (Layer layer : miniMap.layers()) {
-                if (layer.type().equals("objectgroup")) {
+                if (layer.type().equals(OBJECTGROUP)) {
                     layerMinimap = layer;
                     break;
                 }
             }
             layerMinimap.objects().forEach(tileObject -> {
+                final Area[] newArea = new Area[1];
+                areasList.forEach(area -> {
+                    if (trainerStorage.getTrainer().visitedAreas().contains(area._id())) {
+                        discoveredLocations.add(area.name());
+                    }
+                    if (area.name().equals(tileObject.name())) {
+                        newArea[0] = area;
+                    }
+                });
                 boolean discovered;
                 discovered = discoveredLocations.contains(tileObject.name());
                 // create locations
@@ -132,6 +143,35 @@ public class IngameMiniMapController extends Controller {
                     mapContainer.getChildren().add(descriptionVBox[0]);
                 });
                 location.setOnMouseExited(event -> mapContainer.getChildren().remove(descriptionVBox[0]));
+                // create fast travel popup
+                location.setOnMouseClicked(mouseEvent -> {
+                    if (discovered && newArea[0].spawn() != null && !Objects.equals(trainerStorage.getTrainer().area(), newArea[0]._id())) {
+                        VBox fastTravelPopUp = new VBox();
+                        fastTravelPopUp.getStyleClass().add("miniMapContainer");
+                        fastTravelPopUp.setLayoutX(miniMapCanvas.getWidth() / 4);
+                        fastTravelPopUp.setLayoutY(miniMapCanvas.getHeight() / 3);
+                        fastTravelPopUp.setPadding(new Insets(20));
+                        fastTravelPopUp.setSpacing(20);
+                        fastTravelPopUp.setAlignment(Pos.CENTER);
+                        Label label = new Label("Do you want to fast-travel to \n" + tileObject.name() + " ?");
+                        label.setTextAlignment(TextAlignment.CENTER);
+                        HBox hBox = new HBox();
+                        hBox.setSpacing(20);
+                        Button yesButton = new Button(resources.getString("ENCOUNTER_FLEE_CONFIRM_BUTTON"));
+                        yesButton.getStyleClass().add("welcomeSceneButton");
+                        // fast-travel to location
+                        yesButton.setOnAction(actionEvent ->
+                                disposables.add(trainersService.updateTrainer(trainerStorage.getRegion()._id(), trainerStorage.getTrainer()._id(), null, null, null, newArea[0]._id(), null)
+                                        .observeOn(FX_SCHEDULER).subscribe(trainerStorage::setTrainer, Throwable::printStackTrace)));
+                        Button noButton = new Button(resources.getString("ENCOUNTER_FLEE_CANCEL_BUTTON"));
+                        noButton.getStyleClass().add("welcomeSceneButton");
+                        // no fast-travel
+                        noButton.setOnAction(actionEvent -> mapContainer.getChildren().remove(fastTravelPopUp));
+                        hBox.getChildren().addAll(yesButton, noButton);
+                        fastTravelPopUp.getChildren().addAll(label, hBox);
+                        mapContainer.getChildren().add(fastTravelPopUp);
+                    }
+                });
                 // draw marker
                 if (discovered) {
                     miniMapCanvas.getGraphicsContext2D().drawImage(pin, tileObject.x() + width / 2 + xPinOffset, tileObject.y() + height / 2 + yPinOffset, pinWidth, pinHeight);

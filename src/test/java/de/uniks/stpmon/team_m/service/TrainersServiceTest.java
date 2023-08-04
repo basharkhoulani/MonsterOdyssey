@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -197,13 +198,15 @@ public class TrainersServiceTest {
                 new NPCInfo(false, false, false, false, null, null, null))
         ));
 
-        final Trainer trainer = trainersService.updateTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5", "Hallo", "Premade_Character_03.png", List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a")).blockingFirst();
+        ArrayList<String> settings = new ArrayList<>();
+        final Trainer trainer = trainersService.updateTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5", "Hallo", "Premade_Character_03.png",
+                List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"), "507f191e810c19729de860ea", settings).blockingFirst();
 
         assertNotNull(trainer);
         assertEquals("Hallo", trainer.name());
 
         verify(trainersApiService).updateTrainer("646bab5cecf584e1be02598a", "646baf531f097a36fc1b8bc5",
-                new UpdateTrainerDto("Hallo", "Premade_Character_03.png", List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a")));
+                new UpdateTrainerDto("Hallo", "Premade_Character_03.png", List.of("63va3w6d11sj2hq0nzpsa20w", "86m1imksu4jkrxuep2gtpi4a"), "507f191e810c19729de860ea", settings));
 
     }
 
