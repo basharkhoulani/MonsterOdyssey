@@ -78,12 +78,12 @@ public class ItemMenuController extends Controller {
     }
 
     public void initFromEncounter(EncounterController encounterController,
-                                    TrainersService trainersService,
-                                    Provider<TrainerStorage> trainerStorageProvider,
-                                    VBox itemMenuBox,
-                                    Constants.inventoryType inventoryType,
-                                    List<Integer> npcItemList,
-                                    StackPane rootStackPane) {
+                                  TrainersService trainersService,
+                                  Provider<TrainerStorage> trainerStorageProvider,
+                                  VBox itemMenuBox,
+                                  Constants.inventoryType inventoryType,
+                                  List<Integer> npcItemList,
+                                  StackPane rootStackPane) {
         super.init();
         this.encounterController = encounterController;
         this.trainersService = trainersService;
@@ -115,15 +115,15 @@ public class ItemMenuController extends Controller {
             // if inventoryType == sell  AND  the item cannot be used, then skip rendering item
             if (this.inventoryType == Constants.inventoryType.sellItems && itemTypeHashMap.get(item.type()).use() == null) {
                 continue;
-            } else if(this.encounterController != null){
+            } else if (this.encounterController != null) {
                 String use = itemTypeHashMap.get(item.type()).use();
-                if(use == null ){
+                if (use == null) {
                     continue;
                 } else {
                     Constants.itemType itemType = Constants.itemType.valueOf(use);
-                    if(itemType == Constants.itemType.itemBox || itemType == Constants.itemType.monsterBox) {
+                    if (itemType == Constants.itemType.itemBox || itemType == Constants.itemType.monsterBox) {
                         continue;
-                    } else if(itemType == Constants.itemType.ball && !encounterController.isWildEncounter()){
+                    } else if (itemType == Constants.itemType.ball && !encounterController.isWildEncounter()) {
                         continue;
                     }
                 }
@@ -143,9 +143,9 @@ public class ItemMenuController extends Controller {
     }
 
     public void initItem(Item item) {
-        if(ingameController != null){
+        if (ingameController != null) {
             itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController));
-        } else if (encounterController != null){
+        } else if (encounterController != null) {
             itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, encounterController));
         }
         itemListView.getItems().add(item);
@@ -154,11 +154,11 @@ public class ItemMenuController extends Controller {
     }
 
     public void closeItemMenu() {
-        if(ingameController != null){
+        if (ingameController != null) {
             ingameController.root.getChildren().remove(itemMenuBox);
             ingameController.buttonsDisable(false);
         }
-        if(encounterController != null){
+        if (encounterController != null) {
             encounterController.rootStackPane.getChildren().remove(itemMenuBox);
             encounterController.buttonsDisableEncounter(false);
         }
