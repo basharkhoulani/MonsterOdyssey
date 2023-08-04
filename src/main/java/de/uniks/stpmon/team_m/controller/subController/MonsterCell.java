@@ -168,20 +168,30 @@ public class MonsterCell extends ListCell<Monster> {
             }
 
             if (encounterController != null) {
-                removeFromTeamButton.setStyle("-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7;");
-                removeFromTeamButton.setText(resources.getString("CHANGE.MONSTER"));
                 arrowUp.setVisible(false);
                 arrowUp.setDisable(true);
                 arrowDown.setVisible(false);
                 arrowDown.setDisable(true);
+                removeFromTeamButton.setStyle("-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7;");
 
-                removeFromTeamButton.setOnAction(event -> {
-                    encounterController.changeMonster(monster);
-                    changeMonsterListController.onCloseMonsterList();
-                });
+                if(item == null){
+                    removeFromTeamButton.setText(resources.getString("CHANGE.MONSTER"));
+
+                    removeFromTeamButton.setOnAction(event -> {
+                        encounterController.changeMonster(monster);
+                        changeMonsterListController.onCloseMonsterList();
+                    });
+                } else {
+                    removeFromTeamButton.setText("Use item"); // TODO: With translation
+
+                    removeFromTeamButton.setOnAction(event -> {
+                        encounterController.useItem(item, monster);
+                        changeMonsterListController.onCloseMonsterList();
+                    });
+                }
             }
 
-            if (item != null) {
+            if (item != null && encounterController == null) {
                 arrowUp.setVisible(false);
                 arrowUp.setDisable(true);
                 arrowDown.setVisible(false);
@@ -191,9 +201,6 @@ public class MonsterCell extends ListCell<Monster> {
                 removeFromTeamButton.setText(resources.getString("SELECT"));
                 removeFromTeamButton.setOnAction(event -> {
                     ingameController.useItem(item, monster);
-                    if (changeMonsterListController != null) {
-                        changeMonsterListController.onCloseMonsterList();
-                    }
                     if (monstersListController != null) {
                         monstersListController.onCloseMonsterList();
                     }
