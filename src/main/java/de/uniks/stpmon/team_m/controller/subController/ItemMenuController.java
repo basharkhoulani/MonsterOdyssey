@@ -129,6 +129,9 @@ public class ItemMenuController extends Controller {
                     }
                 }
             }
+            if (item.amount() == 0) {
+                continue;
+            }
             initItem(item);
         }
     }
