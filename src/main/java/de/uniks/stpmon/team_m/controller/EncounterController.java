@@ -39,6 +39,7 @@ import static de.uniks.stpmon.team_m.Constants.*;
 public class EncounterController extends Controller {
     private final List<Controller> subControllers = new ArrayList<>();
     private final List<AbilityDto> abilityDtos = new ArrayList<>();
+    private final List<ItemTypeDto> itemTypeDtos = new ArrayList<>();
     private final HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
     private final HashMap<String, Opponent> opponentsDelete = new HashMap<>();
     private final HashMap<String, Boolean> monsterInEncounterHashMap = new HashMap<>();
@@ -185,6 +186,12 @@ public class EncounterController extends Controller {
             abilityDtos.addAll(abilities);
             Comparator<AbilityDto> abilityDtoComparator = Comparator.comparingInt(AbilityDto::id);
             Collections.sort(abilityDtos, abilityDtoComparator);
+        }));
+
+        disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER).subscribe(items -> {
+            itemTypeDtos.addAll(items);
+            Comparator<ItemTypeDto> itemDtoComparator = Comparator.comparingInt(ItemTypeDto::id);
+            Collections.sort(itemTypeDtos, itemDtoComparator);
         }));
 
         disposables.add(regionEncountersService.getEncounter(regionId, encounterId).observeOn(FX_SCHEDULER).subscribe(encounter -> {
@@ -512,7 +519,7 @@ public class EncounterController extends Controller {
         monsterListVBox.setMinHeight(410);
         monsterListVBox.setAlignment(Pos.CENTER);
         ChangeMonsterListController changeMonsterListController = changeMonsterListControllerProvider.get();
-        changeMonsterListController.init(this, monsterListVBox, ingameControllerProvider.get());
+        changeMonsterListController.init(this, monsterListVBox, ingameControllerProvider.get(), null);
         monsterListVBox.getChildren().add(changeMonsterListController.render());
         rootStackPane.getChildren().add(monsterListVBox);
         monsterListVBox.requestFocus();
@@ -535,6 +542,7 @@ public class EncounterController extends Controller {
     public void listenToOpponents(String encounterId) {
         disposables.add(eventListener.get().listen("encounters." + encounterId + ".trainers.*.opponents.*.*", Opponent.class).observeOn(FX_SCHEDULER).subscribe(event -> {
             final Opponent opponent = event.data();
+            System.out.println("Opponent "+ event.suffix() + ": " + opponent);
             if (event.suffix().contains("updated")) {
                 updateOpponent(opponent);
             } else if (event.suffix().contains("deleted")) {
@@ -710,6 +718,15 @@ public class EncounterController extends Controller {
                             case STATUS_REMOVED -> {
                                 EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(oResults._id());
                                 encounterOpponentController.showStatus(r.status(), false);
+                            }
+                            case "item-failed" -> {
+                                System.out.println("Item failed");
+                            }
+                            case "item-success" -> {
+                                System.out.println("Item success");
+                            }
+                            case "monster-caught" -> {
+                                System.out.println("Monster caught");
                             }
                         }
                     }
@@ -1033,6 +1050,32 @@ public class EncounterController extends Controller {
 
     public boolean isWildEncounter() {
         return encounterOpponentStorage.isWild();
+    }
+
+    public ChangeMonsterListController getChangeMonsterListController() {
+        return changeMonsterListControllerProvider.get();
+    }
+
+    public void useItem(Item item, Monster monster) {
+        if (monster == null) {
+            // use monball
+            System.out.println("use monball");
+        } else {
+            // use item
+            // Fit for two monsters
+            System.out.println("use item" + item._id() + " on " + monster._id());
+            UseItemMove move = new UseItemMove(USE_ITEM, item.type(), monster._id());
+            disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, encounterOpponentStorage.getSelfOpponent()._id(), null, move).observeOn(FX_SCHEDULER).subscribe(opponent -> {
+                resetRepeatedTimes();
+                encounterOpponentStorage.setSelfOpponent(opponent);
+                updateDescription("YOU.USED.ITEM" + " ", true);
+                increaseCurrentMonsterIndex();
+            }));
+        }
+    }
+
+    public IngameController getIngameController() {
+        return ingameControllerProvider.get();
     }
 }
     
