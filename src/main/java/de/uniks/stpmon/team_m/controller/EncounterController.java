@@ -707,8 +707,10 @@ public class EncounterController extends Controller {
 
             Opponent oResults = forDescription.get(opponentId + "Results");
             if (oResults != null) {
+                System.out.println("oResults: " + oResults);
                 if (oResults.results() != null) {
                     for (Result r : oResults.results()) {
+
                         switch (r.type()) {
                             case ABILITY_SUCCESS -> updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
                             case MONSTER_LEVELUP -> {
@@ -756,6 +758,7 @@ public class EncounterController extends Controller {
                                 encounterOpponentController.showStatus(r.status(), false);
                             }
                             case MONSTER_CAUGHT -> {
+                                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> Monster caught");
                                 throwSuccessfulMonBall();
                                 monsterCaught = true;
                                 updateDescription("3...\n", true);
@@ -778,12 +781,10 @@ public class EncounterController extends Controller {
                             }
                             case ITEM_SUCCESS -> {
                                 throwFailedMonBall();
-                                PauseTransition pause = new PauseTransition(Duration.seconds(3));
-                                pause.setOnFinished(evt -> {
-                                    updateDescription(resources.getString("MONSTER.BROKE.OUT") + "\n", false);
-                                });
+                                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> Monster escaped");
                             }
                             case ITEM_FAILED -> System.out.println("Item failed " + r.item());
+                            case "target-unknown" -> System.out.println("Target unknown");
                         }
                     }
                 }
@@ -849,9 +850,6 @@ public class EncounterController extends Controller {
             Opponent o = opponentsDelete.get(id);
             if (monsterCaught) {
                 PauseTransition pause = new PauseTransition(Duration.seconds(5));
-                pause.setOnFinished(evt -> {
-                    //showResultPopUp(resources.getString("MONSTER.CAUGHT"), true);
-                });
                 pause.play();
             } else if (o.monster() == null) {
                 if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
@@ -1145,8 +1143,48 @@ public class EncounterController extends Controller {
                     ticks,
                     () -> onMonsterBreakout(ballImageView)
             );
+            PauseTransition initialPause = new PauseTransition(Duration.seconds(1));
+            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+            PauseTransition pause2 = new PauseTransition(Duration.seconds(1));
+            PauseTransition pause3 = new PauseTransition(Duration.seconds(1));
+            PauseTransition pause4 = new PauseTransition(Duration.seconds(1));
+            initialPause.setOnFinished(event -> {
+                updateDescription("3...", true);
+                pause.play();
+            });
+
+            pause.setDelay(Duration.seconds(1));
+            pause.setOnFinished(event -> {
+                if (ticks > 1) {
+                    updateDescription("2...", true);
+                    pause2.play();
+                } else {
+                    updateDescriptionForMonsterBreakout();
+                }
+            });
+            pause2.setOnFinished(event -> {
+                if (ticks > 2) {
+                    updateDescription("2...", true);
+                    pause3.play();
+                } else {
+                    updateDescriptionForMonsterBreakout();
+                }
+            });
+            pause3.setOnFinished(event -> {
+                updateDescription("1...", true);
+                pause4.play();
+            });
+            pause4.setOnFinished(event -> {
+                updateDescription(resources.getString("MONSTER.BROKE.OUT"), true);
+            });
+
+            initialPause.play();
 
         }
+    }
+
+    private void updateDescriptionForMonsterBreakout() {
+        updateDescription(resources.getString("MONSTER.BROKE.OUT"), true);
     }
 
     public void useMonBall(Item item) {
@@ -1166,8 +1204,11 @@ public class EncounterController extends Controller {
                     encounterOpponentStorage.getSelfOpponent()._id(),
                     null,
                     new UseItemMove(ITEM_ACTION_USE_ITEM_MOVE, item.type(), encounterOpponentStorage.getTargetOpponent().monster())
-            ).observeOn(FX_SCHEDULER).subscribe(opponent -> {}, Throwable::printStackTrace));
-            System.out.println("Send servercall to use monball");
+            ).observeOn(FX_SCHEDULER).subscribe(opponent -> {
+                System.out.println("Send servercall to use monball");
+                System.out.println(opponent);
+                updateOpponent(opponent);
+            }, Throwable::printStackTrace));
         }
     }
 
