@@ -95,7 +95,7 @@ public class MonstersListController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
         disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
-                .subscribe(list -> disposables.add(presetsService.getMonsters().observeOn(FX_SCHEDULER).subscribe(monsterTypeDtos -> {
+                .subscribe(list -> disposables.add(presetsServiceProvider.get().getMonsters().observeOn(FX_SCHEDULER).subscribe(monsterTypeDtos -> {
                     for (Monster monster : list) {
                         for (MonsterTypeDto monsterTypeDto : monsterTypeDtos) {
                             if (monsterTypeDto.id() == monster.type()) {
