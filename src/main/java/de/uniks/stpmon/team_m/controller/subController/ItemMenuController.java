@@ -135,8 +135,14 @@ public class ItemMenuController extends Controller {
     }
 
     public void closeItemMenu() {
-        ingameController.root.getChildren().remove(itemMenuBox);
-        ingameController.buttonsDisable(false);
+        if(ingameController != null){
+            ingameController.root.getChildren().remove(itemMenuBox);
+            ingameController.buttonsDisable(false);
+        }
+        if(encounterController != null){
+            encounterController.rootStackPane.getChildren().remove(itemMenuBox);
+            encounterController.buttonsDisableEncounter(false);
+        }
     }
 
     public Constants.inventoryType getInventoryType() {
