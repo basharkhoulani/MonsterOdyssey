@@ -28,6 +28,7 @@ import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 import static de.uniks.stpmon.team_m.Constants.BallType.*;
@@ -151,11 +152,10 @@ public class EncounterController extends Controller {
         battleMenuController.init(this, encounterOpponentStorage, app);
         battleMenuVBox.getChildren().add(battleMenuController.render());
         battleMenuController.onFleeButtonClick = this::onFleeButtonClick;
-        battleMenuController.itemButton.setOnAction(event -> {
+        battleMenuController.onMonBallUse = () -> {
             // TODO: replace this later
             trainerStorageProvider.get().getItems().stream().filter(item -> item.type() == 10).findFirst().ifPresent(this::useMonBall);
-        });
-
+        };
         // Init opponent controller for own trainer
         ownTrainerController = new EncounterOpponentController();
         Opponent selfOpponent = encounterOpponentStorage.getSelfOpponent();
@@ -713,9 +713,29 @@ public class EncounterController extends Controller {
                             }
                             case MONSTER_CAUGHT -> {
                                 throwSuccessfulMonBall();
+                                updateDescription("3...\n", true);
                                 monsterCaught = true;
+                                AtomicInteger i= new AtomicInteger(2);
+                                PauseTransition pause = new PauseTransition(Duration.seconds(1));
+                                PauseTransition pause2 = new PauseTransition(Duration.seconds(1));
+                                PauseTransition pause3 = new PauseTransition(Duration.seconds(1));
+                                pause.setOnFinished(evt -> {
+                                    updateDescription("2...\n", true);
+                                });
+                                pause2.setOnFinished(evt -> {
+                                    updateDescription("1...\n", true);
+                                });
+                                pause3.setOnFinished(evt -> {
+                                    updateDescription(resources.getString("MONSTER.CAUGHT") + "\n", false);
+                                });
                             }
-                            case ITEM_SUCCESS -> throwFailedMonBall();
+                            case ITEM_SUCCESS -> {
+                                throwFailedMonBall();
+                                PauseTransition pause = new PauseTransition(Duration.seconds(3));
+                                pause.setOnFinished(evt -> {
+                                    updateDescription(resources.getString("MONSTER.BROKE.OUT") + "\n", false);
+                                });
+                            }
                             case ITEM_FAILED -> System.out.println("Item failed " + r.item());
                         }
                     }
@@ -1046,6 +1066,7 @@ public class EncounterController extends Controller {
     }
 
     private void throwSuccessfulMonBall() {
+        ballImageView = null;
         if (encounterOpponentStorage.isWild()) {
             ballImageView = AnimationBuilder.throwMonBall(
                     selectedBallType,
@@ -1059,6 +1080,7 @@ public class EncounterController extends Controller {
     }
 
     private void throwFailedMonBall() {
+        ballImageView = null;
         if (encounterOpponentStorage.isWild()) {
             Random random = new Random();
             ballImageView = AnimationBuilder.throwMonBall(
@@ -1089,7 +1111,8 @@ public class EncounterController extends Controller {
                     encounterOpponentStorage.getSelfOpponent()._id(),
                     null,
                     new UseItemMove(ITEM_ACTION_USE_ITEM_MOVE, item.type(), encounterOpponentStorage.getTargetOpponent().monster())
-            ).observeOn(FX_SCHEDULER).subscribe());
+            ).observeOn(FX_SCHEDULER).subscribe(opponent -> {}, Throwable::printStackTrace));
+            System.out.println("Send servercall to use monball");
         }
     }
 
@@ -1115,6 +1138,7 @@ public class EncounterController extends Controller {
 
     public void closeMonsterReceivedPopUp() {
         rootStackPane.getChildren().remove(receivedMonsterPopUp);
+        showIngameController();
     }
 
 }
