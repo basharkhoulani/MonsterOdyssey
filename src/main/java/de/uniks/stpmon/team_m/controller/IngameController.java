@@ -517,7 +517,7 @@ public class IngameController extends Controller {
             this.notificationListHandyController.displayFirstTimeNotifications(true);
             notificationBell.setVisible(true);
             if(!GraphicsEnvironment.isHeadless()) {
-                AudioService.getInstance().playEffect(NOTIFICATION, preferences);
+                AudioService.getInstance().playEffect(NOTIFICATION, this);
             }
             preferences.putBoolean("firstEntry", false);
         }
@@ -714,13 +714,13 @@ public class IngameController extends Controller {
                             }
                             if(!GraphicsEnvironment.isHeadless()) {
                                 AudioService.getInstance().stopEffect();
-                                AudioService.getInstance().playEffect(WALKING, preferences);
+                                AudioService.getInstance().playEffect(WALKING, this);
                             }
                         } else {
                             trainerController.turn(moveTrainerDto.direction());
                             if(!GraphicsEnvironment.isHeadless() && oldDirection != moveTrainerDto.direction()) {
                                 AudioService.getInstance().stopEffect();
-                                AudioService.getInstance().playEffect(WALKING, preferences);
+                                AudioService.getInstance().playEffect(WALKING, this);
                             }
                         }
                         trainerStorageProvider.get().setX(moveTrainerDto.x());
@@ -1413,7 +1413,7 @@ public class IngameController extends Controller {
 
     private void showCoinsEarnedWindow() {
         if (!GraphicsEnvironment.isHeadless()) {
-            AudioService.getInstance().playEffect(GOT_COINS, preferences);
+            AudioService.getInstance().playEffect(GOT_COINS, this);
         }
         TextFlow dialogTextFlow = createDialogVBox(true);
         dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.WON") + "\n" +
@@ -1752,7 +1752,7 @@ public class IngameController extends Controller {
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
                 if (!GraphicsEnvironment.isHeadless()) {
-                    AudioService.getInstance().playEffect(NOTIFICATION, preferences);
+                    AudioService.getInstance().playEffect(NOTIFICATION, this);
                 }
                 preferences.putBoolean("starterMessages", true);
             }
@@ -1761,7 +1761,7 @@ public class IngameController extends Controller {
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
                 if (!GraphicsEnvironment.isHeadless()) {
-                    AudioService.getInstance().playEffect(NOTIFICATION, preferences);
+                    AudioService.getInstance().playEffect(NOTIFICATION, this);
                 }
                 preferences.putBoolean("starterMessages", true);
             }
@@ -1770,7 +1770,7 @@ public class IngameController extends Controller {
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
                 if (!GraphicsEnvironment.isHeadless()) {
-                    AudioService.getInstance().playEffect(NOTIFICATION, preferences);
+                    AudioService.getInstance().playEffect(NOTIFICATION, this);
                 }
                 preferences.putBoolean("starterMessages", true);
             }
@@ -1908,7 +1908,7 @@ public class IngameController extends Controller {
             this.root.getChildren().remove(nursePopupVBox);
             buttonsDisable(false);
             if (!GraphicsEnvironment.isHeadless()) {
-                AudioService.getInstance().playEffect(HEALING, preferences);
+                AudioService.getInstance().playEffect(HEALING, this);
             }
         });
 
