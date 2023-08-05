@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ItemDescriptionController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">ItemDescriptionController.java</span></div><h1>ItemDescriptionController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
 
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
@@ -24,12 +23,12 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.net.URL;
 
+import static de.uniks.stpmon.team_m.Constants.*;
 import static de.uniks.stpmon.team_m.Constants.SoundEffect.BUY_SELL;
-import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxHeight;
-import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxWidth;
 
-<span class="nc" id="L31">public class ItemDescriptionController extends Controller {</span>
+<span class="nc" id="L29">public class ItemDescriptionController extends Controller {</span>
 
+    private final Runnable onItemUsed;
     ItemTypeDto itemTypeDto;
     Image itemImage;
     Item item;
@@ -47,7 +46,7 @@ import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxWidth;
     public ImageView coinImageView;
     @FXML
     public Button useButton;
-    private Constants.inventoryType inventoryType;
+    private InventoryType inventoryType;
     private int ownAmountOfItem;
 
     private Runnable closeItemMenu;
@@ -55,14 +54,15 @@ import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxWidth;
     private IngameController ingameController;
     private EncounterController encounterController;
 
-    @Inject
-<span class="nc" id="L59">    public ItemDescriptionController() {</span>
+
+<span class="nc" id="L58">    public ItemDescriptionController(Runnable onItemUsed) {</span>
+<span class="nc" id="L59">        this.onItemUsed = onItemUsed;</span>
 <span class="nc" id="L60">    }</span>
 
     public void init(ItemTypeDto itemTypeDto,
                      Image itemImage,
                      Item item,
-                     Constants.inventoryType inventoryType,
+                     InventoryType inventoryType,
                      int ownAmountOfITem,
                      Runnable closeItemMenu,
                      StackPane rootStackPane,
@@ -81,7 +81,7 @@ import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxWidth;
     public void initFromEncounter(ItemTypeDto itemTypeDto,
                                   Image itemImage,
                                   Item item,
-                                  Constants.inventoryType inventoryType,
+                                  InventoryType inventoryType,
                                   int ownAmountOfITem,
                                   Runnable closeItemMenu,
                                   StackPane rootStackPane,
@@ -110,88 +110,91 @@ import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxWidth;
 <span class="nc bnc" id="L110" title="All 2 branches missed.">        if (itemTypeDto.use() == null) {</span>
 <span class="nc" id="L111">            useButton.setVisible(false);</span>
 <span class="nc" id="L112">            useButton.setDisable(true);</span>
-<span class="nc bnc" id="L113" title="All 2 branches missed.">        } else if (inventoryType == Constants.inventoryType.showItems) {</span>
-<span class="nc" id="L114">            String use = itemTypeDto.use();</span>
-<span class="nc" id="L115">            Constants.itemType itemType = Constants.itemType.valueOf(use);</span>
-
-<span class="nc bnc" id="L117" title="All 4 branches missed.">            if (encounterController == null &amp;&amp; itemType == Constants.itemType.ball) {</span>
-<span class="nc" id="L118">                useButton.setVisible(false);</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        } else if (inventoryType == InventoryType.showItems) {</span>
+<span class="nc bnc" id="L114" title="All 4 branches missed.">            if (encounterController == null &amp;&amp; itemTypeDto.use().equals(ITEM_USAGE_BALL)) {</span>
+<span class="nc" id="L115">                useButton.setVisible(false);</span>
+<span class="nc" id="L116">                useButton.setDisable(true);</span>
+            }
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (item.amount() == 0) {</span>
 <span class="nc" id="L119">                useButton.setDisable(true);</span>
             }
-
-<span class="nc" id="L122">            useButton.setOnAction(evt -&gt; {</span>
-<span class="nc bnc" id="L123" title="All 2 branches missed.">                if (itemType == Constants.itemType.effect) {</span>
-<span class="nc" id="L124">                    showMonsterList(item);</span>
-<span class="nc" id="L125">                    closeItemMenu.run();</span>
-<span class="nc bnc" id="L126" title="All 2 branches missed.">                } else if (itemType == Constants.itemType.ball) {</span>
-<span class="nc bnc" id="L127" title="All 2 branches missed.">                    if(encounterController != null) {</span>
-<span class="nc" id="L128">                        encounterController.useItem(item, null);</span>
+<span class="nc" id="L121">            useButton.setOnAction(evt -&gt; {</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">                if (itemTypeDto.use().equals(ITEM_USAGE_EFFECT)) {</span>
+<span class="nc" id="L123">                    showMonsterList(item);</span>
+<span class="nc" id="L124">                    closeItemMenu.run();</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">                } else if (itemTypeDto.use().equals(ITEM_USAGE_BALL)) {</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">                    if(encounterController != null) {</span>
+<span class="nc" id="L127">                        encounterController.useItem(item, null);</span>
+<span class="nc" id="L128">                        onItemUsed.run();</span>
 <span class="nc" id="L129">                        closeItemMenu.run();</span>
                     }
+                } else {
+<span class="nc" id="L132">                    ingameController.useItem(item, null);</span>
+<span class="nc" id="L133">                    closeItemMenu.run();</span>
+<span class="nc" id="L134">                    onItemUsed.run();</span>
                 }
-<span class="nc" id="L132">            });</span>
+<span class="nc" id="L136">            });</span>
         }
-
-<span class="nc bnc" id="L135" title="All 3 branches missed.">        switch (this.inventoryType) {</span>
+<span class="nc bnc" id="L138" title="All 3 branches missed.">        switch (this.inventoryType) {</span>
             case buyItems -&gt; {
-<span class="nc" id="L137">                itemAmountTitleLabel.setText(resources.getString(&quot;CLERK.IN.BAG&quot;));</span>
-<span class="nc" id="L138">                this.itemAmountLabel.setText(String.valueOf(ownAmountOfItem));</span>
+<span class="nc" id="L140">                itemAmountTitleLabel.setText(resources.getString(&quot;CLERK.IN.BAG&quot;));</span>
+<span class="nc" id="L141">                this.itemAmountLabel.setText(String.valueOf(ownAmountOfItem));</span>
 
-<span class="nc" id="L140">                useButton.setText(resources.getString(&quot;CLERK.BUY&quot;));</span>
-<span class="nc" id="L141">                useButton.setOnAction(event -&gt; buyItem());</span>
-<span class="nc" id="L142">            }</span>
+<span class="nc" id="L143">                useButton.setText(resources.getString(&quot;CLERK.BUY&quot;));</span>
+<span class="nc" id="L144">                useButton.setOnAction(event -&gt; buyItem());</span>
+<span class="nc" id="L145">            }</span>
             case sellItems -&gt; {
-<span class="nc" id="L144">                useButton.setText(resources.getString(&quot;CLERK.SELL&quot;));</span>
-<span class="nc" id="L145">                useButton.setOnAction(event -&gt; sellItem());</span>
-<span class="nc" id="L146">            }</span>
+<span class="nc" id="L147">                useButton.setText(resources.getString(&quot;CLERK.SELL&quot;));</span>
+<span class="nc" id="L148">                useButton.setOnAction(event -&gt; sellItem());</span>
+<span class="nc" id="L149">            }</span>
             default -&gt; {
             }
         }
 
-<span class="nc bnc" id="L151" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L152">            URL resourceImage = Main.class.getResource(&quot;images/coin.png&quot;);</span>
-<span class="nc bnc" id="L153" title="All 2 branches missed.">            assert resourceImage != null;</span>
-<span class="nc" id="L154">            Image coinImage = new Image(resourceImage.toString());</span>
-<span class="nc" id="L155">            coinImageView.setImage(coinImage);</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L155">            URL resourceImage = Main.class.getResource(&quot;images/coin.png&quot;);</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">            assert resourceImage != null;</span>
+<span class="nc" id="L157">            Image coinImage = new Image(resourceImage.toString());</span>
+<span class="nc" id="L158">            coinImageView.setImage(coinImage);</span>
         }
 
-<span class="nc" id="L158">        return parent;</span>
+<span class="nc" id="L161">        return parent;</span>
     }
 
     public void buyItem() {
-<span class="nc bnc" id="L162" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L163">            AudioService.getInstance().playEffect(BUY_SELL);</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L166">            AudioService.getInstance().playEffect(BUY_SELL, ingameController);</span>
         }
-<span class="nc" id="L165">    }</span>
+<span class="nc" id="L168">    }</span>
 
     public void sellItem() {
-<span class="nc bnc" id="L168" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L169">            AudioService.getInstance().playEffect(BUY_SELL);</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L172">            AudioService.getInstance().playEffect(BUY_SELL, ingameController);</span>
         }
-<span class="nc" id="L171">    }</span>
+<span class="nc" id="L174">    }</span>
 
     private void showMonsterList(Item item) {
-<span class="nc" id="L174">        VBox monsterListVBox = new VBox();</span>
-<span class="nc" id="L175">        monsterListVBox.setMinWidth(useItemMonsterListVBoxWidth);</span>
-<span class="nc" id="L176">        monsterListVBox.setMinHeight(useItemMonsterListVBoxHeight);</span>
-<span class="nc" id="L177">        monsterListVBox.setAlignment(Pos.CENTER);</span>
-<span class="nc bnc" id="L178" title="All 2 branches missed.">        if (ingameController != null) {</span>
-<span class="nc" id="L179">            MonstersListController monstersListController = ingameController.getMonstersListController();</span>
-<span class="nc" id="L180">            monstersListController.setValues(resources, preferences, resourceBundleProvider, this, app);</span>
-<span class="nc" id="L181">            monstersListController.init(ingameController, monsterListVBox, rootStackPane, item);</span>
-<span class="nc" id="L182">            monsterListVBox.getChildren().add(monstersListController.render());</span>
-<span class="nc" id="L183">            rootStackPane.getChildren().add(monsterListVBox);</span>
-<span class="nc" id="L184">            monsterListVBox.requestFocus();</span>
-<span class="nc" id="L185">            monstersListController.monsterListViewOther.refresh();</span>
-<span class="nc" id="L186">            monstersListController.monsterListViewActive.refresh();</span>
-<span class="nc bnc" id="L187" title="All 2 branches missed.">        } else if (encounterController != null) {</span>
-<span class="nc" id="L188">            ChangeMonsterListController changeMonsterListController = encounterController.getChangeMonsterListController();</span>
-<span class="nc" id="L189">            changeMonsterListController.setValues(resources, preferences, resourceBundleProvider, this, app);</span>
-<span class="nc" id="L190">            changeMonsterListController.init(encounterController, monsterListVBox, encounterController.getIngameController(), item);</span>
-<span class="nc" id="L191">            monsterListVBox.getChildren().add(changeMonsterListController.render());</span>
-<span class="nc" id="L192">            rootStackPane.getChildren().add(monsterListVBox);</span>
-<span class="nc" id="L193">            monsterListVBox.requestFocus();</span>
+<span class="nc" id="L177">        VBox monsterListVBox = new VBox();</span>
+<span class="nc" id="L178">        monsterListVBox.setMinWidth(useItemMonsterListVBoxWidth);</span>
+<span class="nc" id="L179">        monsterListVBox.setMinHeight(useItemMonsterListVBoxHeight);</span>
+<span class="nc" id="L180">        monsterListVBox.setAlignment(Pos.CENTER);</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">        if (ingameController != null) {</span>
+<span class="nc" id="L182">            MonstersListController monstersListController = ingameController.getMonstersListController();</span>
+<span class="nc" id="L183">            monstersListController.setValues(resources, preferences, resourceBundleProvider, this, app);</span>
+<span class="nc" id="L184">            monstersListController.init(ingameController, monsterListVBox, rootStackPane, item, onItemUsed);</span>
+<span class="nc" id="L185">            monsterListVBox.getChildren().add(monstersListController.render());</span>
+<span class="nc" id="L186">            rootStackPane.getChildren().add(monsterListVBox);</span>
+<span class="nc" id="L187">            monsterListVBox.requestFocus();</span>
+<span class="nc" id="L188">            monstersListController.monsterListViewOther.refresh();</span>
+<span class="nc" id="L189">            monstersListController.monsterListViewActive.refresh();</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">        } else if (encounterController != null) {</span>
+<span class="nc" id="L191">            ChangeMonsterListController changeMonsterListController = encounterController.getChangeMonsterListController();</span>
+<span class="nc" id="L192">            changeMonsterListController.setValues(resources, preferences, resourceBundleProvider, this, app);</span>
+<span class="nc" id="L193">            changeMonsterListController.init(encounterController, monsterListVBox, encounterController.getIngameController(), item, onItemUsed);</span>
+<span class="nc" id="L194">            monsterListVBox.getChildren().add(changeMonsterListController.render());</span>
+<span class="nc" id="L195">            rootStackPane.getChildren().add(monsterListVBox);</span>
+<span class="nc" id="L196">            monsterListVBox.requestFocus();</span>
         }
-<span class="nc" id="L195">    }</span>
+<span class="nc" id="L198">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

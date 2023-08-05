@@ -46,7 +46,7 @@ public class DialogController extends Controller {
 <span class="fc" id="L46">        this.ingameController = ingameController;</span>
 
 <span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if(!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L49">            AudioService.getInstance().playEffect(TALKING);</span>
+<span class="nc" id="L49">            AudioService.getInstance().playEffect(TALKING, ingameController);</span>
         }
 
         try {
