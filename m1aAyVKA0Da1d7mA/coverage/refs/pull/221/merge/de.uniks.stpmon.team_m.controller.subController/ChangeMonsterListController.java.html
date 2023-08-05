@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.HttpModule_AreasFactory;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.service.MonstersService;
 import de.uniks.stpmon.team_m.service.PresetsService;
@@ -42,60 +43,65 @@ public class ChangeMonsterListController extends Controller {
     public List&lt;Monster&gt; activeMonstersList;
     @Inject
     public Provider&lt;MonsterStorage&gt; monsterStorageProvider;
+    private Item item;
+    public Runnable onItemUsed;
 
     @Inject
-<span class="fc" id="L47">    public ChangeMonsterListController() {</span>
-<span class="fc" id="L48">    }</span>
+<span class="fc" id="L50">    public ChangeMonsterListController() {</span>
+<span class="fc" id="L51">    }</span>
 
-    public void init(EncounterController encounterController, VBox monsterListVBox, IngameController ingameController) {
-<span class="fc" id="L51">        super.init();</span>
-<span class="fc" id="L52">        activeMonstersList = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L53">        this.encounterController = encounterController;</span>
-<span class="fc" id="L54">        this.monsterListVBox = monsterListVBox;</span>
-<span class="fc" id="L55">        this.ingameController = ingameController;</span>
-<span class="fc" id="L56">    }</span>
+    public void init(EncounterController encounterController, VBox monsterListVBox, IngameController ingameController, Item item, Runnable onItemUsed) {
+<span class="fc" id="L54">        super.init();</span>
+<span class="fc" id="L55">        activeMonstersList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L56">        this.encounterController = encounterController;</span>
+<span class="fc" id="L57">        this.monsterListVBox = monsterListVBox;</span>
+<span class="fc" id="L58">        this.ingameController = ingameController;</span>
+<span class="fc" id="L59">        this.item = item;</span>
+<span class="fc" id="L60">        this.onItemUsed = onItemUsed;</span>
+<span class="fc" id="L61">    }</span>
 
     @Override
     public String getTitle() {
-<span class="fc" id="L60">        return resources.getString(&quot;MONSTERS&quot;);</span>
+<span class="fc" id="L65">        return resources.getString(&quot;MONSTERS&quot;);</span>
     }
 
     @Override
     public Parent render() {
-<span class="fc" id="L65">        final Parent parent = super.render();</span>
-<span class="fc" id="L66">        disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)</span>
-<span class="fc" id="L67">                .subscribe(list -&gt; {</span>
-<span class="fc" id="L68">                    activeMonstersList = list.stream()</span>
-<span class="pc bpc" id="L69" title="1 of 4 branches missed.">                            .filter(monster -&gt; trainerStorageProvider.get().getTrainer().team().contains(monster._id()) &amp;&amp; !Objects.equals(monster</span>
-<span class="fc" id="L70">                                    ._id(), encounterOpponentStorageProvider.get().getSelfOpponent().monster())</span>
-<span class="pc bpc" id="L71" title="3 of 4 branches missed.">                                    &amp;&amp; !(encounterOpponentStorageProvider.get().isTwoMonster() &amp;&amp; Objects.equals(monster._id(), encounterOpponentStorageProvider.get().getCoopOpponent().monster()))</span>
-<span class="pc bpc" id="L72" title="1 of 2 branches missed.">                                    &amp;&amp; monster.currentAttributes().health() &gt; 0)</span>
-<span class="fc" id="L73">                            .collect(Collectors.toList());</span>
-<span class="fc" id="L74">                    initMonsterList(activeMonstersList);</span>
-<span class="pc" id="L75">                }, throwable -&gt; showError(throwable.getMessage())));</span>
-<span class="fc" id="L76">        return parent;</span>
+<span class="fc" id="L70">        final Parent parent = super.render();</span>
+<span class="fc" id="L71">        disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L72">                .subscribe(list -&gt; {</span>
+<span class="fc" id="L73">                    activeMonstersList = list.stream()</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">                            .filter(monster -&gt; trainerStorageProvider.get().getTrainer().team().contains(monster._id())</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">                                    &amp;&amp; (!Objects.equals(monster._id(), encounterOpponentStorageProvider.get().getSelfOpponent().monster())</span>
+<span class="pc bpc" id="L76" title="3 of 4 branches missed.">                                    &amp;&amp; !(encounterOpponentStorageProvider.get().isTwoMonster() &amp;&amp; Objects.equals(monster._id(), encounterOpponentStorageProvider.get().getCoopOpponent().monster()))</span>
+<span class="pc bpc" id="L77" title="3 of 4 branches missed.">                                    &amp;&amp; monster.currentAttributes().health() &gt; 0</span>
+                                    || item != null))
+<span class="fc" id="L79">                            .collect(Collectors.toList());</span>
+<span class="fc" id="L80">                    initMonsterList(activeMonstersList);</span>
+<span class="pc" id="L81">                }, throwable -&gt; showError(throwable.getMessage())));</span>
+<span class="fc" id="L82">        return parent;</span>
     }
 
     private void initMonsterList(List&lt;Monster&gt; monsters) {
-<span class="fc" id="L80">        changeMonsterListView.setCellFactory(param -&gt;</span>
-<span class="fc" id="L81">                new MonsterCell(</span>
+<span class="fc" id="L86">        changeMonsterListView.setCellFactory(param -&gt;</span>
+<span class="fc" id="L87">                new MonsterCell(</span>
                         resources,
-<span class="fc" id="L83">                        presetsServiceProvider.get(),</span>
+<span class="fc" id="L89">                        presetsServiceProvider.get(),</span>
                         null,
                         this,
                         this.encounterController,
                         this.ingameController,
                         false,
-                        null,
+                        item,
                         monsterStorageProvider
                 ));
-<span class="fc" id="L92">        changeMonsterListView.getItems().addAll(monsters);</span>
-<span class="fc" id="L93">        changeMonsterListView.setFocusModel(null);</span>
-<span class="fc" id="L94">        changeMonsterListView.setSelectionModel(null);</span>
-<span class="fc" id="L95">    }</span>
+<span class="fc" id="L98">        changeMonsterListView.getItems().addAll(monsters);</span>
+<span class="fc" id="L99">        changeMonsterListView.setFocusModel(null);</span>
+<span class="fc" id="L100">        changeMonsterListView.setSelectionModel(null);</span>
+<span class="fc" id="L101">    }</span>
 
     public void onCloseMonsterList() {
-<span class="nc" id="L98">        encounterController.rootStackPane.getChildren().remove(monsterListVBox);</span>
-<span class="nc" id="L99">    }</span>
+<span class="nc" id="L104">        encounterController.rootStackPane.getChildren().remove(monsterListVBox);</span>
+<span class="nc" id="L105">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

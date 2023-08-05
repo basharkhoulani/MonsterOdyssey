@@ -30,7 +30,6 @@ import static java.util.Map.entry;
     public static final String EMPTY_STRING = &quot;&quot;;
     public static final int STUNDE_IN_MILLIS = 3600000;
     public static final int MINUTE_IN_MILLIS = 60000;
-    public static final String FX_STYLE_BORDER_COLOR_BLACK = &quot;-fx-border-color: black&quot;;
     public static final String LOADING_ANIMATION = &quot;images/loading.gif&quot;;
     public static final String ONLINE_IMG = &quot;images/online.png&quot;;
     public static final String OFFLINE_IMG = &quot;images/offline.png&quot;;
@@ -111,32 +110,32 @@ import static java.util.Map.entry;
     public static final int dialogVBoxWidth = 700;
     public static final int getDialogVBoxHeight = 150;
     public static final int spacerToBottomOfScreen = 150;
-<span class="fc" id="L114">    public static final Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);</span>
-<span class="fc" id="L115">    public static final Insets helpLabelInsets = new Insets(0, 40, 20, 0);</span>
+<span class="fc" id="L113">    public static final Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);</span>
+<span class="fc" id="L114">    public static final Insets helpLabelInsets = new Insets(0, 40, 20, 0);</span>
     public static final int helpLabelFontSize = 12;
 
 
-<span class="fc" id="L119">    public enum DialogSpecialInteractions {</span>
-<span class="fc" id="L120">        nurseYes,</span>
-<span class="fc" id="L121">        nurseNo,</span>
-<span class="fc" id="L122">        nurseNoMons,</span>
-<span class="fc" id="L123">        starterSelection0,</span>
-<span class="fc" id="L124">        starterSelection1,</span>
-<span class="fc" id="L125">        starterSelection2,</span>
-<span class="fc" id="L126">        clerkOpenShop,</span>
-<span class="fc" id="L127">        clerkCancelShop</span>
+<span class="fc" id="L118">    public enum DialogSpecialInteractions {</span>
+<span class="fc" id="L119">        nurseYes,</span>
+<span class="fc" id="L120">        nurseNo,</span>
+<span class="fc" id="L121">        nurseNoMons,</span>
+<span class="fc" id="L122">        starterSelection0,</span>
+<span class="fc" id="L123">        starterSelection1,</span>
+<span class="fc" id="L124">        starterSelection2,</span>
+<span class="fc" id="L125">        clerkOpenShop,</span>
+<span class="fc" id="L126">        clerkCancelShop</span>
     }
 
-<span class="fc" id="L130">    public enum ContinueDialogReturnValues {</span>
-<span class="fc" id="L131">        dialogNotFinished,</span>
-<span class="fc" id="L132">        dialogFinishedTalkToTrainer,</span>
-<span class="fc" id="L133">        dialogFinishedNoTalkToTrainer,</span>
-<span class="fc" id="L134">        albertDialogFinished0,</span>
-<span class="fc" id="L135">        albertDialogFinished1,</span>
-<span class="fc" id="L136">        albertDialogFinished2,</span>
-<span class="fc" id="L137">        spokenToNurse,</span>
-<span class="fc" id="L138">        encounterOnTalk,</span>
-<span class="fc" id="L139">        spokenToClerk</span>
+<span class="fc" id="L129">    public enum ContinueDialogReturnValues {</span>
+<span class="fc" id="L130">        dialogNotFinished,</span>
+<span class="fc" id="L131">        dialogFinishedTalkToTrainer,</span>
+<span class="fc" id="L132">        dialogFinishedNoTalkToTrainer,</span>
+<span class="fc" id="L133">        albertDialogFinished0,</span>
+<span class="fc" id="L134">        albertDialogFinished1,</span>
+<span class="fc" id="L135">        albertDialogFinished2,</span>
+<span class="fc" id="L136">        spokenToNurse,</span>
+<span class="fc" id="L137">        encounterOnTalk,</span>
+<span class="fc" id="L138">        spokenToClerk</span>
 
     }
 
@@ -158,8 +157,8 @@ import static java.util.Map.entry;
     public static final int clerkButtonHeight = 40;
 
     // Join Encounter Popup
-<span class="fc" id="L161">    public static final Insets joinEncounterTextInsets = new Insets(20, 10, 0, 10);</span>
-<span class="fc" id="L162">    public static final Insets joinEncountervBoxInsets = new Insets(5, 0, 20, 0);</span>
+<span class="fc" id="L160">    public static final Insets joinEncounterTextInsets = new Insets(20, 10, 0, 10);</span>
+<span class="fc" id="L161">    public static final Insets joinEncountervBoxInsets = new Insets(5, 0, 20, 0);</span>
     public static final int joinEncounterSpacing = 15;
     public static final int joinEncounterButtonHeight = 200;
     public static final int joinEncounterButtonWidth = 250;
@@ -181,9 +180,9 @@ import static java.util.Map.entry;
     public static final int fleePopupWidth = 300;
     public static final int fleePopupHeight = 200;
     public static final int fleeTextHeight = 150;
-<span class="fc" id="L184">    public static final Insets fleeTextInsets = new Insets(20, 10, 0, 10);</span>
+<span class="fc" id="L183">    public static final Insets fleeTextInsets = new Insets(20, 10, 0, 10);</span>
     public static final int fleeButtonsHBoxHeight = 50;
-<span class="fc" id="L186">    public static final Insets fleeButtonsHBoxInsets = new Insets(0, 10, 10, 10);</span>
+<span class="fc" id="L185">    public static final Insets fleeButtonsHBoxInsets = new Insets(0, 10, 10, 10);</span>
     public static final int fleeButtonWidth = 100;
     public static final int fleeButtonHeight = 40;
     public static final int pauseDuration = 1000;
@@ -195,9 +194,10 @@ import static java.util.Map.entry;
     public static final String STATUS_ADDED = &quot;status-added&quot;;
     public static final String STATUS_REMOVED = &quot;status-removed&quot;;
     public static final String CHANGE_MONSTER = &quot;change-monster&quot;;
-    public static final String MONSTER_CAUGHT = &quot;monster-caught&quot;;
+    public static final String USE_ITEM = &quot;use-item&quot;;
     public static final String ITEM_FAILED = &quot;item-failed&quot;;
-    public static final String ITEM_SUCCESS = &quot;item-success&quot;;
+    public static final String ITEM_SUCCESS= &quot;item-success&quot;;
+    public static final String MONSTER_CAUGHT = &quot;monster-caught&quot;;
 
 
     // Encounter - images
