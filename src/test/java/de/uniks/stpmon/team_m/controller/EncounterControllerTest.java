@@ -3,7 +3,6 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.dto.*;
-import de.uniks.stpmon.team_m.dto.Event;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -16,7 +15,9 @@ import javafx.stage.Stage;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
@@ -30,7 +31,6 @@ import java.util.prefs.Preferences;
 import static io.reactivex.rxjava3.core.Observable.just;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
-import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 class EncounterControllerTest extends ApplicationTest {
@@ -67,7 +67,6 @@ class EncounterControllerTest extends ApplicationTest {
     Provider<IngameController> ingameControllerProvider;
     @InjectMocks
     EncounterController encounterController;
-
 
 
     public void start(Stage stage) {
@@ -214,6 +213,25 @@ class EncounterControllerTest extends ApplicationTest {
                 )
         )));
 
+        when(presetsService.getItems()).thenReturn(Observable.just(List.of(
+                new ItemTypeDto(
+                        1,
+                        "mondex.png",
+                        "Mondex",
+                        0,
+                        "A Handheld Device for Trainers",
+                        null
+                ),
+                new ItemTypeDto(
+                        10,
+                        "ball_normal.png",
+                        "Monball",
+                        20,
+                        "A ball for catching monsters.",
+                        "ball"
+                )
+        )));
+
         when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(
                 new MonsterTypeDto(
                         696969,
@@ -252,8 +270,8 @@ class EncounterControllerTest extends ApplicationTest {
         when(eventListener.get()).thenReturn(eventListenerMock);
         when(eventListener.get().listen(any(), any())).thenReturn(just(
                 new Event<>("encounters.*.trainers.*.opponents.*.nothappening", null)
-                )).thenReturn(just(new Event<>("trainers.*.monsters.*.nothappening", null)
-                ));
+        )).thenReturn(just(new Event<>("trainers.*.monsters.*.nothappening", null)
+        ));
 
         when(encounterOpponentStorage.isWild()).thenReturn(false);
 
@@ -483,7 +501,7 @@ class EncounterControllerTest extends ApplicationTest {
     }
 
     @Test
-    void render1vs2WithMonster(){
+    void render1vs2WithMonster() {
         when(encounterOpponentStorage.getEncounterSize()).thenReturn(4);
         when(encounterOpponentStorage.isTwoMonster()).thenReturn(true);
         when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
@@ -538,7 +556,7 @@ class EncounterControllerTest extends ApplicationTest {
     }
 
     @Test
-    void testRenderFor2vs1(){
+    void testRenderFor2vs1() {
         when(encounterOpponentStorage.getEncounterSize()).thenReturn(3);
         when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
                 List.of(
