@@ -1507,17 +1507,17 @@ public class IngameController extends Controller {
 <span class="fc" id="L1507">    }</span>
 
     public void showMonsters() {
-<span class="nc" id="L1510">        VBox monsterListVBox = new VBox();</span>
-<span class="nc" id="L1511">        monsterListVBox.setMinWidth(600);</span>
-<span class="nc" id="L1512">        monsterListVBox.setMinHeight(410);</span>
-<span class="nc" id="L1513">        monsterListVBox.setAlignment(Pos.CENTER);</span>
-<span class="nc" id="L1514">        MonstersListController monstersListController = monstersListControllerProvider.get();</span>
-<span class="nc" id="L1515">        monstersListController.init(this, monsterListVBox, root, null, null);</span>
-<span class="nc" id="L1516">        monsterListVBox.getChildren().add(monstersListController.render());</span>
-<span class="nc" id="L1517">        root.getChildren().add(monsterListVBox);</span>
-<span class="nc" id="L1518">        monsterListVBox.requestFocus();</span>
-<span class="nc" id="L1519">        buttonsDisable(true);</span>
-<span class="nc" id="L1520">    }</span>
+<span class="fc" id="L1510">        VBox monsterListVBox = new VBox();</span>
+<span class="fc" id="L1511">        monsterListVBox.setMinWidth(600);</span>
+<span class="fc" id="L1512">        monsterListVBox.setMinHeight(410);</span>
+<span class="fc" id="L1513">        monsterListVBox.setAlignment(Pos.CENTER);</span>
+<span class="fc" id="L1514">        MonstersListController monstersListController = monstersListControllerProvider.get();</span>
+<span class="fc" id="L1515">        monstersListController.init(this, monsterListVBox, root, null, null);</span>
+<span class="fc" id="L1516">        monsterListVBox.getChildren().add(monstersListController.render());</span>
+<span class="fc" id="L1517">        root.getChildren().add(monsterListVBox);</span>
+<span class="fc" id="L1518">        monsterListVBox.requestFocus();</span>
+<span class="fc" id="L1519">        buttonsDisable(true);</span>
+<span class="fc" id="L1520">    }</span>
 
     public void showItems() {
 <span class="fc" id="L1523">        openInventory(InventoryType.showItems, List.of());</span>

@@ -123,7 +123,7 @@ public class MonstersListController extends Controller {
     private void sortActiveMonstersList() {
 <span class="fc" id="L124">        List&lt;Monster&gt; sortedList = new ArrayList&lt;&gt;();</span>
 <span class="fc bfc" id="L125" title="All 2 branches covered.">        for (String id : trainerStorageProvider.get().getTrainer().team()) {</span>
-<span class="pc bpc" id="L126" title="1 of 2 branches missed.">            for (Monster monster : activeMonstersList) {</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">            for (Monster monster : activeMonstersList) {</span>
 <span class="fc bfc" id="L127" title="All 2 branches covered.">                if (monster._id().equals(id)) {</span>
 <span class="fc" id="L128">                    sortedList.add(monster);</span>
 <span class="fc" id="L129">                    break;</span>
