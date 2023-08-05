@@ -2131,167 +2131,170 @@ public class IngameController extends Controller {
 <span class="fc" id="L2131">            miniMapVBox = new VBox();</span>
 <span class="fc" id="L2132">            miniMapVBox.setId(&quot;miniMapVBox&quot;);</span>
 <span class="fc" id="L2133">            miniMapVBox.getStyleClass().add(&quot;miniMapContainer&quot;);</span>
-<span class="fc" id="L2134">            ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox, miniMap);</span>
-<span class="fc" id="L2135">            miniMapVBox.getChildren().add(ingameMiniMapController.render());</span>
+<span class="fc" id="L2134">            TrainerStorage trainerStorage = trainerStorageProvider.get();</span>
+<span class="fc" id="L2135">            disposables.add(areasService.getAreas(trainerStorage.getRegion()._id()).observeOn(FX_SCHEDULER).subscribe(areas -&gt; {</span>
+<span class="fc" id="L2136">                ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox, miniMap, areas);</span>
+<span class="fc" id="L2137">                miniMapVBox.getChildren().add(ingameMiniMapController.render());</span>
+<span class="fc" id="L2138">                }, Throwable::printStackTrace));</span>
         }
-<span class="fc" id="L2137">        root.getChildren().add(miniMapVBox);</span>
-<span class="fc" id="L2138">        miniMapVBox.requestFocus();</span>
-<span class="fc" id="L2139">        buttonsDisable(true);</span>
-<span class="fc" id="L2140">    }</span>
+<span class="fc" id="L2140">        root.getChildren().add(miniMapVBox);</span>
+<span class="fc" id="L2141">        miniMapVBox.requestFocus();</span>
+<span class="fc" id="L2142">        buttonsDisable(true);</span>
+<span class="fc" id="L2143">    }</span>
 
     public void showStarterSelection(List&lt;String&gt; starters) {
-<span class="fc" id="L2143">        final boolean[] isSelection = {true};</span>
-<span class="fc" id="L2144">        IngameStarterMonsterController ingameStarterMonsterController = ingameStarterMonsterControllerProvider.get();</span>
-<span class="fc" id="L2145">        starterSelectionVBox = new VBox();</span>
-<span class="fc" id="L2146">        starterSelectionVBox.getStyleClass().add(&quot;miniMapContainer&quot;);</span>
-<span class="fc" id="L2147">        starterSelectionVBox.setStyle(&quot;-fx-max-height: 350px; -fx-max-width: 550px&quot;);</span>
-<span class="fc" id="L2148">        starterSelectionVBox.setPadding(new Insets(0, 0, 8, 0));</span>
-<span class="fc" id="L2149">        ingameStarterMonsterController.init(this, app, starters);</span>
-<span class="fc" id="L2150">        starterSelectionVBox.getChildren().add(ingameStarterMonsterController.render());</span>
+<span class="fc" id="L2146">        final boolean[] isSelection = {true};</span>
+<span class="fc" id="L2147">        IngameStarterMonsterController ingameStarterMonsterController = ingameStarterMonsterControllerProvider.get();</span>
+<span class="fc" id="L2148">        starterSelectionVBox = new VBox();</span>
+<span class="fc" id="L2149">        starterSelectionVBox.getStyleClass().add(&quot;miniMapContainer&quot;);</span>
+<span class="fc" id="L2150">        starterSelectionVBox.setStyle(&quot;-fx-max-height: 350px; -fx-max-width: 550px&quot;);</span>
+<span class="fc" id="L2151">        starterSelectionVBox.setPadding(new Insets(0, 0, 8, 0));</span>
+<span class="fc" id="L2152">        ingameStarterMonsterController.init(this, app, starters);</span>
+<span class="fc" id="L2153">        starterSelectionVBox.getChildren().add(ingameStarterMonsterController.render());</span>
 
-<span class="fc" id="L2152">        Button okButton = new Button();</span>
-<span class="fc" id="L2153">        okButton.setId(&quot;starterSelectionOkButton&quot;);</span>
-<span class="fc" id="L2154">        okButton.setText(resources.getString(&quot;OK&quot;));</span>
-<span class="fc" id="L2155">        okButton.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
-<span class="fc" id="L2156">        okButton.setStyle(&quot;-fx-background-color: #e0ecfc&quot;);</span>
-<span class="fc" id="L2157">        okButton.setOnAction(event -&gt; {</span>
-<span class="fc bfc" id="L2158" title="All 2 branches covered.">            if (isSelection[0]) {</span>
-<span class="fc" id="L2159">                isSelection[0] = false;</span>
-<span class="fc" id="L2160">                AnchorPane starterAnchorPane = (AnchorPane) starterSelectionVBox.getChildren().get(0);</span>
-<span class="fc" id="L2161">                Label starterLabel = (Label) starterAnchorPane.getChildren().get(0);</span>
-<span class="fc" id="L2162">                starterLabel.setText(resources.getString(&quot;NEW.MONSTER.ADDED&quot;));</span>
-<span class="fc" id="L2163">                starterAnchorPane.getChildren().remove(3);</span>
-<span class="fc" id="L2164">                starterAnchorPane.getChildren().remove(2);</span>
-<span class="fc" id="L2165">            } else {</span>
-<span class="fc" id="L2166">                root.getChildren().remove(starterSelectionVBox);</span>
-<span class="fc" id="L2167">                buttonsDisable(false);</span>
-<span class="pc bpc" id="L2168" title="1 of 4 branches missed.">                switch (ingameStarterMonsterController.index - 1) {</span>
-<span class="fc" id="L2169">                    case 0 -&gt; continueTrainerDialog(DialogSpecialInteractions.starterSelection0);</span>
-<span class="fc" id="L2170">                    case 1 -&gt; continueTrainerDialog(DialogSpecialInteractions.starterSelection1);</span>
-<span class="fc" id="L2171">                    case 2 -&gt; continueTrainerDialog(DialogSpecialInteractions.starterSelection2);</span>
+<span class="fc" id="L2155">        Button okButton = new Button();</span>
+<span class="fc" id="L2156">        okButton.setId(&quot;starterSelectionOkButton&quot;);</span>
+<span class="fc" id="L2157">        okButton.setText(resources.getString(&quot;OK&quot;));</span>
+<span class="fc" id="L2158">        okButton.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
+<span class="fc" id="L2159">        okButton.setStyle(&quot;-fx-background-color: #e0ecfc&quot;);</span>
+<span class="fc" id="L2160">        okButton.setOnAction(event -&gt; {</span>
+<span class="fc bfc" id="L2161" title="All 2 branches covered.">            if (isSelection[0]) {</span>
+<span class="fc" id="L2162">                isSelection[0] = false;</span>
+<span class="fc" id="L2163">                AnchorPane starterAnchorPane = (AnchorPane) starterSelectionVBox.getChildren().get(0);</span>
+<span class="fc" id="L2164">                Label starterLabel = (Label) starterAnchorPane.getChildren().get(0);</span>
+<span class="fc" id="L2165">                starterLabel.setText(resources.getString(&quot;NEW.MONSTER.ADDED&quot;));</span>
+<span class="fc" id="L2166">                starterAnchorPane.getChildren().remove(3);</span>
+<span class="fc" id="L2167">                starterAnchorPane.getChildren().remove(2);</span>
+<span class="fc" id="L2168">            } else {</span>
+<span class="fc" id="L2169">                root.getChildren().remove(starterSelectionVBox);</span>
+<span class="fc" id="L2170">                buttonsDisable(false);</span>
+<span class="pc bpc" id="L2171" title="1 of 4 branches missed.">                switch (ingameStarterMonsterController.index - 1) {</span>
+<span class="fc" id="L2172">                    case 0 -&gt; continueTrainerDialog(DialogSpecialInteractions.starterSelection0);</span>
+<span class="fc" id="L2173">                    case 1 -&gt; continueTrainerDialog(DialogSpecialInteractions.starterSelection1);</span>
+<span class="fc" id="L2174">                    case 2 -&gt; continueTrainerDialog(DialogSpecialInteractions.starterSelection2);</span>
                 }
             }
-<span class="fc" id="L2174">        });</span>
-<span class="fc" id="L2175">        starterSelectionVBox.getChildren().add(okButton);</span>
-<span class="fc" id="L2176">        root.getChildren().add(starterSelectionVBox);</span>
-<span class="fc" id="L2177">        starterSelectionVBox.requestFocus();</span>
-<span class="fc" id="L2178">        buttonsDisable(true);</span>
-<span class="fc" id="L2179">    }</span>
+<span class="fc" id="L2177">        });</span>
+<span class="fc" id="L2178">        starterSelectionVBox.getChildren().add(okButton);</span>
+<span class="fc" id="L2179">        root.getChildren().add(starterSelectionVBox);</span>
+<span class="fc" id="L2180">        starterSelectionVBox.requestFocus();</span>
+<span class="fc" id="L2181">        buttonsDisable(true);</span>
+<span class="fc" id="L2182">    }</span>
 
 
     @Override
     public void destroy() {
-<span class="fc" id="L2184">        super.destroy();</span>
-<span class="fc" id="L2185">        app.getStage().getScene().removeEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);</span>
-<span class="fc bfc" id="L2186" title="All 2 branches covered.">        for (var trainerController : trainerControllerHashMap.values()) {</span>
-<span class="fc" id="L2187">            trainerController.destroy();</span>
-<span class="fc" id="L2188">        }</span>
-<span class="fc" id="L2189">        trainerControllerHashMap.clear();</span>
-<span class="fc" id="L2190">        trainerPositionHashMap.clear();</span>
-<span class="fc" id="L2191">        messageField.removeEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);</span>
-<span class="fc" id="L2192">    }</span>
+<span class="fc" id="L2187">        super.destroy();</span>
+<span class="fc" id="L2188">        app.getStage().getScene().removeEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);</span>
+<span class="fc bfc" id="L2189" title="All 2 branches covered.">        for (var trainerController : trainerControllerHashMap.values()) {</span>
+<span class="fc" id="L2190">            trainerController.destroy();</span>
+<span class="fc" id="L2191">        }</span>
+<span class="fc" id="L2192">        trainerControllerHashMap.clear();</span>
+<span class="fc" id="L2193">        trainerPositionHashMap.clear();</span>
+<span class="fc" id="L2194">        messageField.removeEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);</span>
+<span class="fc" id="L2195">    }</span>
 
     public void showChangeAudioSettings() {
-<span class="fc" id="L2195">        VBox changeAudioVBox = new VBox();</span>
-<span class="fc" id="L2196">        changeAudioVBox.setAlignment(Pos.CENTER);</span>
-<span class="fc" id="L2197">        ChangeAudioController changeAudioController = changeAudioControllerProvider.get();</span>
-<span class="fc" id="L2198">        changeAudioController.init(this, changeAudioVBox);</span>
-<span class="fc" id="L2199">        changeAudioVBox.getChildren().add(changeAudioController.render());</span>
-<span class="fc" id="L2200">        root.getChildren().add(changeAudioVBox);</span>
-<span class="fc" id="L2201">        changeAudioVBox.requestFocus();</span>
-<span class="fc" id="L2202">        buttonsDisable(true);</span>
-<span class="fc" id="L2203">    }</span>
+<span class="fc" id="L2198">        VBox changeAudioVBox = new VBox();</span>
+<span class="fc" id="L2199">        changeAudioVBox.setAlignment(Pos.CENTER);</span>
+<span class="fc" id="L2200">        ChangeAudioController changeAudioController = changeAudioControllerProvider.get();</span>
+<span class="fc" id="L2201">        changeAudioController.init(this, changeAudioVBox);</span>
+<span class="fc" id="L2202">        changeAudioVBox.getChildren().add(changeAudioController.render());</span>
+<span class="fc" id="L2203">        root.getChildren().add(changeAudioVBox);</span>
+<span class="fc" id="L2204">        changeAudioVBox.requestFocus();</span>
+<span class="fc" id="L2205">        buttonsDisable(true);</span>
+<span class="fc" id="L2206">    }</span>
 
     public void showMonsterDetails(Monster monster, MonsterTypeDto monsterTypeDto,
                                    Image monsterImage, ResourceBundle resources, PresetsService presetsService, String type) {
-<span class="nc" id="L2207">        VBox monsterDetailVBox = new VBox();</span>
-<span class="nc" id="L2208">        monsterDetailVBox.setId(&quot;monsterDetailVBox&quot;);</span>
-<span class="nc" id="L2209">        monsterDetailVBox.setAlignment(Pos.CENTER);</span>
-<span class="nc" id="L2210">        MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();</span>
-<span class="nc" id="L2211">        monstersDetailController.init(this, monsterDetailVBox, monster, monsterTypeDto, monsterImage, resources, presetsService, type);</span>
-<span class="nc" id="L2212">        monsterDetailVBox.getChildren().add(monstersDetailController.render());</span>
-<span class="nc" id="L2213">        root.getChildren().add(monsterDetailVBox);</span>
-<span class="nc" id="L2214">        monsterDetailVBox.requestFocus();</span>
-<span class="nc" id="L2215">        buttonsDisable(true);</span>
-<span class="nc" id="L2216">    }</span>
+<span class="nc" id="L2210">        VBox monsterDetailVBox = new VBox();</span>
+<span class="nc" id="L2211">        monsterDetailVBox.setId(&quot;monsterDetailVBox&quot;);</span>
+<span class="nc" id="L2212">        monsterDetailVBox.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L2213">        MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();</span>
+<span class="nc" id="L2214">        monstersDetailController.init(this, monsterDetailVBox, monster, monsterTypeDto, monsterImage, resources, presetsService, type);</span>
+<span class="nc" id="L2215">        monsterDetailVBox.getChildren().add(monstersDetailController.render());</span>
+<span class="nc" id="L2216">        root.getChildren().add(monsterDetailVBox);</span>
+<span class="nc" id="L2217">        monsterDetailVBox.requestFocus();</span>
+<span class="nc" id="L2218">        buttonsDisable(true);</span>
+<span class="nc" id="L2219">    }</span>
 
     public void showLowHealthNotification() {
-<span class="nc" id="L2219">        notificationBell.setVisible(true);</span>
-<span class="nc" id="L2220">        this.notificationListHandyController.displayLowHealthMessages();</span>
-<span class="nc" id="L2221">    }</span>
+<span class="nc" id="L2222">        notificationBell.setVisible(true);</span>
+<span class="nc" id="L2223">        this.notificationListHandyController.displayLowHealthMessages();</span>
+<span class="nc" id="L2224">    }</span>
 
     public void specificSounds() {
-<span class="pc bpc" id="L2224" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L2225">            disposables.add(areasService.getArea(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer().area()).</span>
-<span class="nc" id="L2226">                    observeOn(FX_SCHEDULER).subscribe(area -&gt; {</span>
-<span class="nc bnc" id="L2227" title="All 2 branches missed.">                        if (area.name().contains(&quot;Route&quot;)) {</span>
-<span class="nc" id="L2228">                            AudioService.getInstance().stopSound();</span>
-<span class="nc" id="L2229">                            AudioService.getInstance().playSound(ROUTE_SOUND);</span>
-<span class="nc" id="L2230">                            AudioService.getInstance().setCurrentSound(ROUTE_SOUND);</span>
-<span class="nc" id="L2231">                            AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()));</span>
-<span class="nc bnc" id="L2232" title="All 2 branches missed.">                        } else if (area.map().infinite()) {</span>
-<span class="nc" id="L2233">                            AudioService.getInstance().stopSound();</span>
-<span class="nc" id="L2234">                            AudioService.getInstance().playSound(CITY_SOUND);</span>
-<span class="nc" id="L2235">                            AudioService.getInstance().setCurrentSound(CITY_SOUND);</span>
-<span class="nc" id="L2236">                            AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()));</span>
+<span class="pc bpc" id="L2227" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L2228">            disposables.add(areasService.getArea(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer().area()).</span>
+<span class="nc" id="L2229">                    observeOn(FX_SCHEDULER).subscribe(area -&gt; {</span>
+<span class="nc bnc" id="L2230" title="All 2 branches missed.">                        if (area.name().contains(&quot;Route&quot;)) {</span>
+<span class="nc" id="L2231">                            AudioService.getInstance().stopSound();</span>
+<span class="nc" id="L2232">                            AudioService.getInstance().playSound(ROUTE_SOUND);</span>
+<span class="nc" id="L2233">                            AudioService.getInstance().setCurrentSound(ROUTE_SOUND);</span>
+<span class="nc" id="L2234">                            AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()));</span>
+<span class="nc bnc" id="L2235" title="All 2 branches missed.">                        } else if (area.map().infinite()) {</span>
+<span class="nc" id="L2236">                            AudioService.getInstance().stopSound();</span>
+<span class="nc" id="L2237">                            AudioService.getInstance().playSound(CITY_SOUND);</span>
+<span class="nc" id="L2238">                            AudioService.getInstance().setCurrentSound(CITY_SOUND);</span>
+<span class="nc" id="L2239">                            AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()));</span>
                         } else {
-<span class="nc" id="L2238">                            AudioService.getInstance().stopSound();</span>
-<span class="nc" id="L2239">                            AudioService.getInstance().playSound(ROOMS_SOUND);</span>
-<span class="nc" id="L2240">                            AudioService.getInstance().setCurrentSound(ROOMS_SOUND);</span>
-<span class="nc" id="L2241">                            AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()));</span>
+<span class="nc" id="L2241">                            AudioService.getInstance().stopSound();</span>
+<span class="nc" id="L2242">                            AudioService.getInstance().playSound(ROOMS_SOUND);</span>
+<span class="nc" id="L2243">                            AudioService.getInstance().setCurrentSound(ROOMS_SOUND);</span>
+<span class="nc" id="L2244">                            AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()));</span>
                         }
-<span class="nc bnc" id="L2243" title="All 2 branches missed.">                        if (preferences.getBoolean(&quot;mute&quot;, false)) {</span>
-<span class="nc" id="L2244">                            AudioService.getInstance().setVolume(0);</span>
+<span class="nc bnc" id="L2246" title="All 2 branches missed.">                        if (preferences.getBoolean(&quot;mute&quot;, false)) {</span>
+<span class="nc" id="L2247">                            AudioService.getInstance().setVolume(0);</span>
                         }
-<span class="nc" id="L2246">                    }, error -&gt; {</span>
-<span class="nc" id="L2247">                        this.showError(error.getMessage());</span>
-<span class="nc" id="L2248">                        error.printStackTrace();</span>
-<span class="nc" id="L2249">                    }));</span>
+<span class="nc" id="L2249">                    }, error -&gt; {</span>
+<span class="nc" id="L2250">                        this.showError(error.getMessage());</span>
+<span class="nc" id="L2251">                        error.printStackTrace();</span>
+<span class="nc" id="L2252">                    }));</span>
         }
-<span class="fc" id="L2251">    }</span>
+<span class="fc" id="L2254">    }</span>
 
     private void setupUdpPing() {
-<span class="fc" id="L2254">        Timer timer = new Timer();</span>
-<span class="fc" id="L2255">        TimerTask task = new TimerTask() {</span>
+<span class="fc" id="L2257">        Timer timer = new Timer();</span>
+<span class="fc" id="L2258">        TimerTask task = new TimerTask() {</span>
             @Override
             public void run() {
-<span class="fc" id="L2258">                disposables.add(udpEventListenerProvider.get().ping().observeOn(FX_SCHEDULER).subscribe());</span>
-<span class="fc" id="L2259">                disposables.add(authenticationService.stayOnline().observeOn(FX_SCHEDULER).subscribe());</span>
-<span class="fc" id="L2260">            }</span>
+<span class="fc" id="L2261">                disposables.add(udpEventListenerProvider.get().ping().observeOn(FX_SCHEDULER).subscribe());</span>
+<span class="fc" id="L2262">                disposables.add(authenticationService.stayOnline().observeOn(FX_SCHEDULER).subscribe());</span>
+<span class="fc" id="L2263">            }</span>
         };
-<span class="fc" id="L2262">        timer.schedule(task, 0, MINUTE_IN_MILLIS);</span>
-<span class="fc" id="L2263">    }</span>
+<span class="fc" id="L2265">        timer.schedule(task, 0, MINUTE_IN_MILLIS);</span>
+<span class="fc" id="L2266">    }</span>
 
     public int getUserTrainerY() {
-<span class="fc" id="L2266">        return trainerStorageProvider.get().getY();</span>
+<span class="fc" id="L2269">        return trainerStorageProvider.get().getY();</span>
     }
 
     public void setIsNewStart(boolean isNewStart) {
-<span class="fc" id="L2270">        this.isNewStart = isNewStart;</span>
-<span class="fc" id="L2271">    }</span>
+<span class="fc" id="L2273">        this.isNewStart = isNewStart;</span>
+<span class="fc" id="L2274">    }</span>
 
     public Boolean getCoinsEarned() {
-<span class="fc" id="L2274">        return coinsEarned;</span>
+<span class="fc" id="L2277">        return coinsEarned;</span>
     }
 
     public void setCoinsEarned(Boolean coinsEarned) {
-<span class="fc" id="L2278">        this.coinsEarned = coinsEarned;</span>
-<span class="fc" id="L2279">    }</span>
+<span class="fc" id="L2281">        this.coinsEarned = coinsEarned;</span>
+<span class="fc" id="L2282">    }</span>
 
     public Integer getCoinsAmount() {
-<span class="fc" id="L2282">        return coinsAmount;</span>
+<span class="fc" id="L2285">        return coinsAmount;</span>
     }
 
     public void setCoinsAmount(Integer coinsAmount) {
-<span class="fc" id="L2286">        this.coinsAmount = coinsAmount;</span>
-<span class="fc" id="L2287">    }</span>
+<span class="fc" id="L2289">        this.coinsAmount = coinsAmount;</span>
+<span class="fc" id="L2290">    }</span>
 
     public StackPane getRoot() {
-<span class="fc" id="L2290">        return root;</span>
+<span class="fc" id="L2293">        return root;</span>
     }
 
     public MonstersListController getMonstersListController() {
-<span class="nc" id="L2294">        return monstersListControllerProvider.get();</span>
+<span class="nc" id="L2297">        return monstersListControllerProvider.get();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

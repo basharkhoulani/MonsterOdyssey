@@ -204,43 +204,45 @@ public class IngameTrainerSettingsController extends Controller {
 <span class="fc" id="L204">                    trainerStorage.getTrainer()._id(),</span>
                     trainerName,
                     selectedCharacter,
+                    null,
+                    null,
                     null
-<span class="fc" id="L208">            ).observeOn(FX_SCHEDULER).subscribe(trainer -&gt; {</span>
-<span class="fc" id="L209">                trainerStorage.setTrainer(trainer);</span>
-<span class="fc" id="L210">                trainerStorage.setTrainerName(trainer.name());</span>
-<span class="fc" id="L211">                trainerStorage.setTrainerSprite(trainer.image());</span>
-<span class="fc" id="L212">                updatePopup();</span>
-<span class="fc" id="L213">            }, Throwable::printStackTrace));</span>
+<span class="fc" id="L210">            ).observeOn(FX_SCHEDULER).subscribe(trainer -&gt; {</span>
+<span class="fc" id="L211">                trainerStorage.setTrainer(trainer);</span>
+<span class="fc" id="L212">                trainerStorage.setTrainerName(trainer.name());</span>
+<span class="fc" id="L213">                trainerStorage.setTrainerSprite(trainer.image());</span>
+<span class="fc" id="L214">                updatePopup();</span>
+<span class="fc" id="L215">            }, Throwable::printStackTrace));</span>
         }
-<span class="fc" id="L215">    }</span>
+<span class="fc" id="L217">    }</span>
 
     private void updatePopup() {
-<span class="fc" id="L218">        buttonsDisableTrainer(true);</span>
-<span class="fc" id="L219">        VBox updatePopupVBox = new VBox();</span>
-<span class="fc" id="L220">        updatePopupVBox.getStyleClass().add(&quot;miniMapContainer&quot;);</span>
-<span class="fc" id="L221">        updatePopupVBox.setStyle(&quot;-fx-max-height: 150px; -fx-max-width: 550px&quot;);</span>
-<span class="fc" id="L222">        updatePopupVBox.setPadding(new Insets(10, 10, 10, 10));</span>
-<span class="fc" id="L223">        updatePopupVBox.setSpacing(12);</span>
+<span class="fc" id="L220">        buttonsDisableTrainer(true);</span>
+<span class="fc" id="L221">        VBox updatePopupVBox = new VBox();</span>
+<span class="fc" id="L222">        updatePopupVBox.getStyleClass().add(&quot;miniMapContainer&quot;);</span>
+<span class="fc" id="L223">        updatePopupVBox.setStyle(&quot;-fx-max-height: 150px; -fx-max-width: 550px&quot;);</span>
+<span class="fc" id="L224">        updatePopupVBox.setPadding(new Insets(10, 10, 10, 10));</span>
+<span class="fc" id="L225">        updatePopupVBox.setSpacing(12);</span>
 
-<span class="fc" id="L225">        Label notification = new Label(resources.getString(&quot;UPDATE.NOTIFICATION&quot;));</span>
-<span class="fc" id="L226">        notification.setWrapText(true);</span>
-<span class="fc" id="L227">        notification.setStyle(&quot;-fx-font-family: \&quot;Comic Sans MS\&quot;; -fx-font-weight: bold&quot;);</span>
+<span class="fc" id="L227">        Label notification = new Label(resources.getString(&quot;UPDATE.NOTIFICATION&quot;));</span>
+<span class="fc" id="L228">        notification.setWrapText(true);</span>
+<span class="fc" id="L229">        notification.setStyle(&quot;-fx-font-family: \&quot;Comic Sans MS\&quot;; -fx-font-weight: bold&quot;);</span>
 
-<span class="fc" id="L229">        Button okButton = new Button();</span>
-<span class="fc" id="L230">        okButton.setText(resources.getString(&quot;OK&quot;));</span>
-<span class="fc" id="L231">        okButton.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
-<span class="fc" id="L232">        okButton.setOnAction(event -&gt; restartGame());</span>
+<span class="fc" id="L231">        Button okButton = new Button();</span>
+<span class="fc" id="L232">        okButton.setText(resources.getString(&quot;OK&quot;));</span>
+<span class="fc" id="L233">        okButton.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
+<span class="fc" id="L234">        okButton.setOnAction(event -&gt; restartGame());</span>
 
-<span class="fc" id="L234">        updatePopupVBox.getChildren().add(notification);</span>
-<span class="fc" id="L235">        updatePopupVBox.getChildren().add(okButton);</span>
-<span class="fc" id="L236">        ingameController.root.getChildren().add(updatePopupVBox);</span>
-<span class="fc" id="L237">    }</span>
+<span class="fc" id="L236">        updatePopupVBox.getChildren().add(notification);</span>
+<span class="fc" id="L237">        updatePopupVBox.getChildren().add(okButton);</span>
+<span class="fc" id="L238">        ingameController.root.getChildren().add(updatePopupVBox);</span>
+<span class="fc" id="L239">    }</span>
 
     private void restartGame() {
-<span class="fc" id="L240">        MainMenuController mainMenuController = mainMenuControllerProvider.get();</span>
-<span class="fc" id="L241">        ingameController.destroy();</span>
-<span class="fc" id="L242">        app.show(mainMenuController);</span>
-<span class="fc" id="L243">    }</span>
+<span class="fc" id="L242">        MainMenuController mainMenuController = mainMenuControllerProvider.get();</span>
+<span class="fc" id="L243">        ingameController.destroy();</span>
+<span class="fc" id="L244">        app.show(mainMenuController);</span>
+<span class="fc" id="L245">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

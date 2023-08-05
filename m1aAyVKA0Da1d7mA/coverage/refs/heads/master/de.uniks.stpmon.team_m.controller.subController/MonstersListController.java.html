@@ -173,7 +173,7 @@ public class MonstersListController extends Controller {
 <span class="fc bfc" id="L173" title="All 2 branches covered.">        for (Monster monster1 : activeMonstersList) {</span>
 <span class="fc" id="L174">            team.add(monster1._id());</span>
 <span class="fc" id="L175">        }</span>
-<span class="fc" id="L176">        disposables.add(trainersService.updateTrainer(trainer.region(), trainer._id(), null, null, team)</span>
+<span class="fc" id="L176">        disposables.add(trainersService.updateTrainer(trainer.region(), trainer._id(), null, null, team, null, null)</span>
 <span class="fc" id="L177">                .observeOn(FX_SCHEDULER)</span>
 <span class="fc" id="L178">                .subscribe(t -&gt; trainerStorageProvider.get().setTrainer(t), Throwable::printStackTrace));</span>
 <span class="fc" id="L179">    }</span>
@@ -258,7 +258,7 @@ public class MonstersListController extends Controller {
 <span class="fc" id="L258">    }</span>
 
     private void updateBothLists(ListView&lt;Monster&gt; listViewAdd, List&lt;Monster&gt; listAdd, ListView&lt;Monster&gt; listViewRemove, List&lt;Monster&gt; listRemove, Monster monster, List&lt;String&gt; team) {
-<span class="fc" id="L261">        disposables.add(trainersService.updateTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), null, null, team)</span>
+<span class="fc" id="L261">        disposables.add(trainersService.updateTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), null, null, team, null, null)</span>
 <span class="fc" id="L262">                .observeOn(FX_SCHEDULER)</span>
 <span class="fc" id="L263">                .subscribe(t -&gt; trainerStorageProvider.get().setTrainer(t), Throwable::printStackTrace));</span>
 <span class="fc" id="L264">        listRemove.removeIf(remove -&gt; remove._id().equals(monster._id()));</span>

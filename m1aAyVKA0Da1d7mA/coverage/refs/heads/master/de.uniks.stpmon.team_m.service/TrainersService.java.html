@@ -69,8 +69,8 @@ public class TrainersService {
      * @return The trainer.
      */
 
-    public Observable&lt;Trainer&gt; updateTrainer(String regionId, String _id, String name, String image, List&lt;String&gt; team) {
-<span class="fc" id="L73">        UpdateTrainerDto updateTrainerDto = new UpdateTrainerDto(name, image, team);</span>
+    public Observable&lt;Trainer&gt; updateTrainer(String regionId, String _id, String name, String image, List&lt;String&gt; team, String area, List&lt;String&gt; settings) {
+<span class="fc" id="L73">        UpdateTrainerDto updateTrainerDto = new UpdateTrainerDto(name, image, team, area, settings);</span>
 <span class="fc" id="L74">        return trainersApiService.updateTrainer(regionId, _id, updateTrainerDto);</span>
     }
 
