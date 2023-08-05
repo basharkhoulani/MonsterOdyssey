@@ -1156,6 +1156,9 @@ public class EncounterController extends Controller {
     private void throwSuccessfulMonBall() {
         ballImageView = null;
         if (encounterOpponentStorage.isWild()) {
+            if (!GraphicsEnvironment.isHeadless()) {
+                AudioService.getInstance().playEffect(CATCH, ingameControllerProvider.get());
+            }
             ballImageView = AnimationBuilder.throwMonBall(
                     selectedBallType,
                     rootStackPane,
@@ -1170,6 +1173,9 @@ public class EncounterController extends Controller {
     private void throwFailedMonBall() {
         ballImageView = null;
         if (encounterOpponentStorage.isWild()) {
+            if (!GraphicsEnvironment.isHeadless()) {
+                AudioService.getInstance().playEffect(CATCH, ingameControllerProvider.get());
+            }
             Random random = new Random();
             int ticks = random.nextInt(3) + 1;
             ballImageView = AnimationBuilder.throwMonBall(
