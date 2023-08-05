@@ -37,7 +37,7 @@ public abstract class Controller {
     @Inject
     protected ResourceBundle resources;
     @Inject
-    protected Preferences preferences;
+    public Preferences preferences;
     @Inject
     protected Provider<ResourceBundle> resourceBundleProvider;
     @Inject

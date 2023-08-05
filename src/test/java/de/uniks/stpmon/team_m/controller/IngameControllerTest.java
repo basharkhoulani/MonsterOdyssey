@@ -132,7 +132,7 @@ public class IngameControllerTest extends ApplicationTest {
         Preferences preferences = Preferences.userNodeForPackage(IngameController.class);
         ingameController.setValues(bundle, preferences, null, ingameController, app);
 
-        when(authenticationService.refresh()).thenReturn(Observable.just(new LoginResult(
+        when(authenticationService.stayOnline()).thenReturn(Observable.just(new LoginResult(
                 "423f8d731c386bcd2204da39",
                 "1",
                 "online",

@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 import static de.uniks.stpmon.team_m.Constants.BallType.*;
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.*;
 
 
 public class EncounterController extends Controller {
@@ -728,7 +729,12 @@ public class EncounterController extends Controller {
                     for (Result r : oResults.results()) {
 
                         switch (r.type()) {
-                            case ABILITY_SUCCESS -> updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
+                            case ABILITY_SUCCESS -> {
+                                updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
+                                if (!GraphicsEnvironment.isHeadless()) {
+                                    AudioService.getInstance().playEffect(ATTACK, ingameControllerProvider.get());
+                                }
+                            }
                             case MONSTER_LEVELUP -> {
                                 if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                                     resultLevelUpHashMap.put(oResults._id(), true);
@@ -845,6 +851,13 @@ public class EncounterController extends Controller {
     private void listenToMonster(String trainerId, String monsterId, EncounterOpponentController encounterOpponentController, Opponent opponent) {
         disposables.add(eventListener.get().listen("trainers." + trainerId + ".monsters." + monsterId + ".*", Monster.class).observeOn(FX_SCHEDULER).subscribe(event -> {
             final Monster monster = event.data();
+            if (monster._id().equals(encounterOpponentStorage.getSelfOpponent().monster())) {
+                if (monster.currentAttributes().health() / monster.attributes().health() <= 0.2) {
+                    if (!GraphicsEnvironment.isHeadless()) {
+                        AudioService.getInstance().playEffect(LOW_HEALTH, ingameControllerProvider.get());
+                    }
+                }
+            }
             if (event.suffix().contains("updated")) {
                 double currentHealth = monster.currentAttributes().health();
                 double maxHealth = monster.attributes().health();
@@ -885,8 +898,14 @@ public class EncounterController extends Controller {
             } else if (o.monster() == null) {
                 if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                     showResultPopUp(resources.getString("YOU.FAILED"), false);
+                    if (!GraphicsEnvironment.isHeadless()) {
+                        AudioService.getInstance().playEffect(LOSE, ingameControllerProvider.get());
+                    }
                 } else {
                     showResultPopUp(resources.getString("YOU.WON"), true);
+                    if (!GraphicsEnvironment.isHeadless()) {
+                        AudioService.getInstance().playEffect(WIN, ingameControllerProvider.get());
+                    }
                 }
             }
         }
@@ -953,6 +972,9 @@ public class EncounterController extends Controller {
 
     public void enemyMonsterDefeated() {
         // pause to wait for possible level up result which comes after defeat result, else if is always false
+        if (!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playEffect(DEATH, ingameControllerProvider.get());
+        }
         PauseTransition pause = new PauseTransition(Duration.millis(pauseDuration));
         pause.setOnFinished(evt -> {
             if (resultLevelUpHashMap.get(encounterOpponentStorage.getSelfOpponent()._id())) {
@@ -968,6 +990,9 @@ public class EncounterController extends Controller {
     }
 
     public void yourMonsterDefeated(String opponentId) {
+        if (!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playEffect(DEATH, ingameControllerProvider.get());
+        }
         monsterInTeamHashMap.forEach((monsterId, isDied) -> {
             if (!isDied && !Objects.equals(monsterId, encounterOpponentStorage.getSelfOpponent().monster())) {
                 if (!encounterOpponentStorage.isTwoMonster() || !Objects.equals(monsterId, encounterOpponentStorage.getCoopOpponent().monster())) {
@@ -985,6 +1010,9 @@ public class EncounterController extends Controller {
         firstPause.setOnFinished(evt -> {
             ownTrainerController.monsterImageView.setVisible(false);
             fleeAnimation.play();
+            if (!GraphicsEnvironment.isHeadless()) {
+                AudioService.getInstance().playEffect(FLEE, ingameControllerProvider.get());
+            }
         });
         fleeAnimation.setOnFinished(evt -> disposables.add(encounterOpponentsService.deleteOpponent(encounterOpponentStorage.getRegionId(), encounterOpponentStorage.getEncounterId(), encounterOpponentStorage.getSelfOpponent()._id()).observeOn(FX_SCHEDULER).subscribe(result -> showIngameController(), error -> {
             showError(error.getMessage());
@@ -1073,6 +1101,9 @@ public class EncounterController extends Controller {
     }
 
     public void showLevelUpPopUp(String opponentId) {
+        if (!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playEffect(LEVEL_UP, ingameControllerProvider.get());
+        }
         resultLevelUpHashMap.put(opponentId, false);
         LevelUpController levelUpController = levelUpControllerProvider.get();
         VBox popUpVBox = new VBox();
@@ -1125,6 +1156,9 @@ public class EncounterController extends Controller {
     private void throwSuccessfulMonBall() {
         ballImageView = null;
         if (encounterOpponentStorage.isWild()) {
+            if (!GraphicsEnvironment.isHeadless()) {
+                AudioService.getInstance().playEffect(CATCH, ingameControllerProvider.get());
+            }
             ballImageView = AnimationBuilder.throwMonBall(
                     selectedBallType,
                     rootStackPane,
@@ -1139,6 +1173,9 @@ public class EncounterController extends Controller {
     private void throwFailedMonBall() {
         ballImageView = null;
         if (encounterOpponentStorage.isWild()) {
+            if (!GraphicsEnvironment.isHeadless()) {
+                AudioService.getInstance().playEffect(CATCH, ingameControllerProvider.get());
+            }
             Random random = new Random();
             int ticks = random.nextInt(3) + 1;
             ballImageView = AnimationBuilder.throwMonBall(

@@ -184,7 +184,7 @@ public class IngameMapRenderTest extends ApplicationTest {
         ));
         EventListener eventListenerMock = mock(EventListener.class);
         when(eventListener.get()).thenReturn(eventListenerMock);
-        when(authenticationService.refresh()).thenReturn(Observable.just(new LoginResult(
+        when(authenticationService.stayOnline()).thenReturn(Observable.just(new LoginResult(
                 "423f8d731c386bcd2204da39",
                 "1",
                 "online",

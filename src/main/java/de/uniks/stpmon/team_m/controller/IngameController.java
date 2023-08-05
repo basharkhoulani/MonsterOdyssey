@@ -52,6 +52,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.*;
 
 
 public class IngameController extends Controller {
@@ -515,6 +516,9 @@ public class IngameController extends Controller {
         if (preferences.getBoolean("firstEntry", true)) {
             this.notificationListHandyController.displayFirstTimeNotifications(true);
             notificationBell.setVisible(true);
+            if(!GraphicsEnvironment.isHeadless()) {
+                AudioService.getInstance().playEffect(NOTIFICATION, this);
+            }
             preferences.putBoolean("firstEntry", false);
         }
     }
@@ -695,6 +699,7 @@ public class IngameController extends Controller {
                         }
                         int oldXValue = trainerStorageProvider.get().getX();
                         int oldYValue = trainerStorageProvider.get().getY();
+                        int oldDirection = trainerStorageProvider.get().getDirection();
                         if (oldXValue != moveTrainerDto.x() || oldYValue != moveTrainerDto.y()) {
                             trainerController.setTrainerTargetPosition(moveTrainerDto.x(), moveTrainerDto.y());
                             trainerController.setTrainerDirection(moveTrainerDto.direction());
@@ -707,8 +712,16 @@ public class IngameController extends Controller {
                             } else {
                                 shiftMapDownTransition.play();
                             }
+                            if(!GraphicsEnvironment.isHeadless()) {
+                                AudioService.getInstance().stopEffect();
+                                AudioService.getInstance().playEffect(WALKING, this);
+                            }
                         } else {
                             trainerController.turn(moveTrainerDto.direction());
+                            if(!GraphicsEnvironment.isHeadless() && oldDirection != moveTrainerDto.direction()) {
+                                AudioService.getInstance().stopEffect();
+                                AudioService.getInstance().playEffect(WALKING, this);
+                            }
                         }
                         trainerStorageProvider.get().setX(moveTrainerDto.x());
                         trainerStorageProvider.get().setY(moveTrainerDto.y());
@@ -1399,6 +1412,9 @@ public class IngameController extends Controller {
     }
 
     private void showCoinsEarnedWindow() {
+        if (!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playEffect(GOT_COINS, this);
+        }
         TextFlow dialogTextFlow = createDialogVBox(true);
         dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.WON") + "\n" +
                 resources.getString("COINS.EARNED") + " " + getCoinsAmount() + " " +
@@ -1735,18 +1751,27 @@ public class IngameController extends Controller {
                 endDialog(0, true);
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
+                if (!GraphicsEnvironment.isHeadless()) {
+                    AudioService.getInstance().playEffect(NOTIFICATION, this);
+                }
                 preferences.putBoolean("starterMessages", true);
             }
             case albertDialogFinished1 -> {
                 endDialog(1, true);
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
+                if (!GraphicsEnvironment.isHeadless()) {
+                    AudioService.getInstance().playEffect(NOTIFICATION, this);
+                }
                 preferences.putBoolean("starterMessages", true);
             }
             case albertDialogFinished2 -> {
                 endDialog(2, true);
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
+                if (!GraphicsEnvironment.isHeadless()) {
+                    AudioService.getInstance().playEffect(NOTIFICATION, this);
+                }
                 preferences.putBoolean("starterMessages", true);
             }
             case dialogFinishedNoTalkToTrainer -> endDialog(0, false);
@@ -1782,6 +1807,7 @@ public class IngameController extends Controller {
         if (encounterNpc) {
             encounterNPC(this.currentNpc, selectionValue);
         }
+        AudioService.getInstance().stopEffect();
     }
     public void createJoinEncounterPopup() {
         VBox joinEncounterVBox = new VBox();
@@ -1881,6 +1907,9 @@ public class IngameController extends Controller {
             inNpcPopup = false;
             this.root.getChildren().remove(nursePopupVBox);
             buttonsDisable(false);
+            if (!GraphicsEnvironment.isHeadless()) {
+                AudioService.getInstance().playEffect(HEALING, this);
+            }
         });
 
         // no button
@@ -2227,7 +2256,7 @@ public class IngameController extends Controller {
             @Override
             public void run() {
                 disposables.add(udpEventListenerProvider.get().ping().observeOn(FX_SCHEDULER).subscribe());
-                disposables.add(authenticationService.refresh().observeOn(FX_SCHEDULER).subscribe());
+                disposables.add(authenticationService.stayOnline().observeOn(FX_SCHEDULER).subscribe());
             }
         };
         timer.schedule(task, 0, MINUTE_IN_MILLIS);

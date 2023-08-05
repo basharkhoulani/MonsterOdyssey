@@ -116,7 +116,7 @@ public class UDPEventListener {
     public <T> Observable<Event<T>> ping() {
         return Observable.create(emitter -> {
             this.ensureOpen();
-            send(new Event<>("ping", null));
+            send(new Event<>("ping", "ping"));
         });
     }
 }

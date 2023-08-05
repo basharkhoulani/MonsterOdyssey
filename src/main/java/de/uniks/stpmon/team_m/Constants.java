@@ -239,6 +239,23 @@ public class Constants {
     public static final String ROUTE_SOUND = "Nintendo_Style_Upbeat_Music_Loop_05.wav";
     public static final String FIGHT_SOUND = "Nintendo_Style_Battle_Music_Loop_02.wav";
 
+    public enum SoundEffect {
+        ATTACK,
+        BUY_SELL,
+        DEATH,
+        FLEE,
+        GOT_COINS,
+        HEALING,
+        LOW_HEALTH,
+        NOTIFICATION,
+        TALKING,
+        WALKING,
+        WIN,
+        LOSE,
+        LEVEL_UP,
+        CATCH
+    }
+
     // Colors
     public static final HashMap<String, String> TYPESCOLORPALETTE = new HashMap<>(Map.ofEntries(
             entry("normal", "#BBBBAA"),
