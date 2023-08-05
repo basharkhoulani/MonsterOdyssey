@@ -823,6 +823,13 @@ public class EncounterController extends Controller {
         if (selfOpponent.coins() != 0 && isWin) {
             encounterResultController.setCoinsAmount(selfOpponent.coins());
             encounterResultController.setCoinsEarned(true);
+            if (!GraphicsEnvironment.isHeadless()) {
+                AudioService.getInstance().playEffect(WIN);
+            }
+        } else {
+            if (!GraphicsEnvironment.isHeadless()) {
+                AudioService.getInstance().playEffect(LOSE);
+            }
         }
         VBox resultBox = new VBox();
         resultBox.setAlignment(Pos.CENTER);
