@@ -53,8 +53,6 @@ public class IngameMiniMapController extends Controller {
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
-    AreasService areasService;
-    @Inject
     TrainersService trainersService;
     private IngameController ingameController;
     private VBox miniMapVBox;

@@ -163,6 +163,16 @@ public class IngameControllerTest extends ApplicationTest {
                         null,
                         null
                 )));
+        lenient().when(areasService.getAreas(any())).thenReturn(Observable.just(
+                List.of(new Area(
+                        "2023-05-22T17:51:46.772Z",
+                        "2023-05-22T17:51:46.772Z",
+                        "646bc3c0a9ac1b375fb41d93",
+                        "646bc436cfee07c0e408466f",
+                        "Albertina",
+                        null,
+                        null
+                ))));
         doNothing().when(trainerStorage).setMonsters(any());
         lenient().when(presetsService.getCharacter(any())).thenReturn(Observable.empty());
         when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(
@@ -424,7 +434,7 @@ public class IngameControllerTest extends ApplicationTest {
     void testMiniMap() {
         IngameMiniMapController ingameMini = mock(IngameMiniMapController.class);
         when(ingameMiniMapControllerProvider.get()).thenReturn(ingameMini);
-        doNothing().when(ingameMini).init(any(), any(), any(), any(), any(), areas);
+        doNothing().when(ingameMini).init(any(), any(), any(), any(), any(), any());
 
         Button close = new Button("Close");
         close.setOnAction(event -> {
