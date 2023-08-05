@@ -312,6 +312,10 @@ public class IngameController extends Controller {
     }
 
     public void sendMoveRequest(int x, int y, int direction) {
+        if(!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().stopEffect();
+            AudioService.getInstance().playEffect(WALKING);
+        }
         disposables.add(udpEventListenerProvider.get().move(new MoveTrainerDto(trainerStorageProvider.get().getTrainer()._id(),
                 trainerStorageProvider.get().getTrainer().area(),
                 trainerStorageProvider.get().getX() + x, trainerStorageProvider.get().getY() + y, direction)).subscribe());

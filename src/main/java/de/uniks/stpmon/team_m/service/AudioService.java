@@ -15,6 +15,7 @@ public class AudioService {
     private boolean isMuted = false;
     private String currentSound;
     private double soundVolume;
+    private MediaPlayer effectPlayer;
 
     @Inject
     public AudioService() {}
@@ -37,8 +38,14 @@ public class AudioService {
 
     public void playEffect(Constants.SoundEffect effect) {
         final Media sound = new Media((Objects.requireNonNull(Main.class.getResource("sounds/" + effect + ".mp3"))).toString());
-        MediaPlayer effectPlayer = new MediaPlayer(sound);
+        effectPlayer = new MediaPlayer(sound);
         effectPlayer.play();
+    }
+
+    public void stopEffect() {
+        if (effectPlayer != null) {
+            effectPlayer.stop();
+        }
     }
 
     public void stopSound() {
