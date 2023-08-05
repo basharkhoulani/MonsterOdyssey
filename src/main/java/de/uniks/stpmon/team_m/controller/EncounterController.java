@@ -34,6 +34,7 @@ import java.util.*;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 import static de.uniks.stpmon.team_m.Constants.SoundEffect.DEATH;
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.FLEE;
 
 
 public class EncounterController extends Controller {
@@ -915,6 +916,7 @@ public class EncounterController extends Controller {
         firstPause.setOnFinished(evt -> {
             ownTrainerController.monsterImageView.setVisible(false);
             fleeAnimation.play();
+            AudioService.getInstance().playEffect(FLEE);
         });
         fleeAnimation.setOnFinished(evt -> disposables.add(encounterOpponentsService.deleteOpponent(encounterOpponentStorage.getRegionId(), encounterOpponentStorage.getEncounterId(), encounterOpponentStorage.getSelfOpponent()._id()).observeOn(FX_SCHEDULER).subscribe(result -> showIngameController(), error -> {
             showError(error.getMessage());
