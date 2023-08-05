@@ -9,6 +9,8 @@ import javax.inject.Inject;
 import java.util.Objects;
 import java.util.prefs.Preferences;
 
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.WALKING;
+
 public class AudioService {
     private static AudioService instance;
     private MediaPlayer mediaPlayer;
@@ -36,9 +38,15 @@ public class AudioService {
 
     }
 
-    public void playEffect(Constants.SoundEffect effect) {
+    public void playEffect(Constants.SoundEffect effect, Preferences preferences) {
         final Media sound = new Media((Objects.requireNonNull(Main.class.getResource("sounds/" + effect + ".mp3"))).toString());
         effectPlayer = new MediaPlayer(sound);
+        if(effect == WALKING) {
+            effectPlayer.setRate(1.5);
+        } else {
+            effectPlayer.setRate(1);
+        }
+        effectPlayer.setVolume(preferences.getDouble("volume", 0.5));
         effectPlayer.play();
     }
 

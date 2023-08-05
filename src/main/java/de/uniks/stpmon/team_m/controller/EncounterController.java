@@ -694,7 +694,7 @@ public class EncounterController extends Controller {
                             case ABILITY_SUCCESS -> {
                                 updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
                                 if (!GraphicsEnvironment.isHeadless()) {
-                                    AudioService.getInstance().playEffect(ATTACK);
+                                    AudioService.getInstance().playEffect(ATTACK, preferences);
                                 }
                             }
                             case MONSTER_LEVELUP -> {
@@ -781,7 +781,7 @@ public class EncounterController extends Controller {
             if (monster._id().equals(encounterOpponentStorage.getSelfOpponent().monster())) {
                 if (monster.currentAttributes().health() / monster.attributes().health() <= 0.2) {
                     if (!GraphicsEnvironment.isHeadless()) {
-                        AudioService.getInstance().playEffect(LOW_HEALTH);
+                        AudioService.getInstance().playEffect(LOW_HEALTH, preferences);
                     }
                 }
             }
@@ -823,12 +823,12 @@ public class EncounterController extends Controller {
                 if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                     showResultPopUp(resources.getString("YOU.FAILED"), false);
                     if (!GraphicsEnvironment.isHeadless()) {
-                        AudioService.getInstance().playEffect(LOSE);
+                        AudioService.getInstance().playEffect(LOSE, preferences);
                     }
                 } else {
                     showResultPopUp(resources.getString("YOU.WON"), true);
                     if (!GraphicsEnvironment.isHeadless()) {
-                        AudioService.getInstance().playEffect(WIN);
+                        AudioService.getInstance().playEffect(WIN, preferences);
                     }
                 }
             }
@@ -897,7 +897,7 @@ public class EncounterController extends Controller {
     public void enemyMonsterDefeated() {
         // pause to wait for possible level up result which comes after defeat result, else if is always false
         if (!GraphicsEnvironment.isHeadless()) {
-            AudioService.getInstance().playEffect(DEATH);
+            AudioService.getInstance().playEffect(DEATH, preferences);
         }
         PauseTransition pause = new PauseTransition(Duration.millis(pauseDuration));
         pause.setOnFinished(evt -> {
@@ -915,7 +915,7 @@ public class EncounterController extends Controller {
 
     public void yourMonsterDefeated(String opponentId) {
         if (!GraphicsEnvironment.isHeadless()) {
-            AudioService.getInstance().playEffect(DEATH);
+            AudioService.getInstance().playEffect(DEATH, preferences);
         }
         monsterInTeamHashMap.forEach((monsterId, isDied) -> {
             if (!isDied && !Objects.equals(monsterId, encounterOpponentStorage.getSelfOpponent().monster())) {
@@ -937,7 +937,7 @@ public class EncounterController extends Controller {
             ownTrainerController.monsterImageView.setVisible(false);
             fleeAnimation.play();
             if (!GraphicsEnvironment.isHeadless()) {
-                AudioService.getInstance().playEffect(FLEE);
+                AudioService.getInstance().playEffect(FLEE, preferences);
             }
         });
         fleeAnimation.setOnFinished(evt -> disposables.add(encounterOpponentsService.deleteOpponent(encounterOpponentStorage.getRegionId(), encounterOpponentStorage.getEncounterId(), encounterOpponentStorage.getSelfOpponent()._id()).observeOn(FX_SCHEDULER).subscribe(result -> showIngameController(), error -> {
@@ -1028,7 +1028,7 @@ public class EncounterController extends Controller {
 
     public void showLevelUpPopUp(String opponentId) {
         if (!GraphicsEnvironment.isHeadless()) {
-            AudioService.getInstance().playEffect(LEVEL_UP);
+            AudioService.getInstance().playEffect(LEVEL_UP, preferences);
         }
         resultLevelUpHashMap.put(opponentId, false);
         LevelUpController levelUpController = levelUpControllerProvider.get();

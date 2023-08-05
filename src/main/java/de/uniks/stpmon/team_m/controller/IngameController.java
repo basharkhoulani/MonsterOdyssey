@@ -508,7 +508,7 @@ public class IngameController extends Controller {
         if (preferences.getBoolean("firstEntry", true)) {
             this.notificationListHandyController.displayFirstTimeNotifications(true);
             if(!GraphicsEnvironment.isHeadless()) {
-                AudioService.getInstance().playEffect(NOTIFICATION);
+                AudioService.getInstance().playEffect(NOTIFICATION, preferences);
             }
             preferences.putBoolean("firstEntry", false);
         }
@@ -588,13 +588,13 @@ public class IngameController extends Controller {
                             }
                             if(!GraphicsEnvironment.isHeadless()) {
                                 AudioService.getInstance().stopEffect();
-                                AudioService.getInstance().playEffect(WALKING);
+                                AudioService.getInstance().playEffect(WALKING, preferences);
                             }
                         } else {
                             trainerController.turn(moveTrainerDto.direction());
                             if(!GraphicsEnvironment.isHeadless() && oldDirection != moveTrainerDto.direction()) {
                                 AudioService.getInstance().stopEffect();
-                                AudioService.getInstance().playEffect(WALKING);
+                                AudioService.getInstance().playEffect(WALKING, preferences);
                             }
                         }
                         trainerStorageProvider.get().setX(moveTrainerDto.x());
@@ -1293,7 +1293,7 @@ public class IngameController extends Controller {
 
     private void showCoinsEarnedWindow() {
         if (!GraphicsEnvironment.isHeadless()) {
-            AudioService.getInstance().playEffect(GOT_COINS);
+            AudioService.getInstance().playEffect(GOT_COINS, preferences);
         }
         TextFlow dialogTextFlow = createDialogVBox(true);
         dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.WON") + "\n" +
@@ -1632,7 +1632,7 @@ public class IngameController extends Controller {
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
                 if (!GraphicsEnvironment.isHeadless()) {
-                    AudioService.getInstance().playEffect(NOTIFICATION);
+                    AudioService.getInstance().playEffect(NOTIFICATION, preferences);
                 }
                 preferences.putBoolean("starterMessages", true);
             }
@@ -1641,7 +1641,7 @@ public class IngameController extends Controller {
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
                 if (!GraphicsEnvironment.isHeadless()) {
-                    AudioService.getInstance().playEffect(NOTIFICATION);
+                    AudioService.getInstance().playEffect(NOTIFICATION, preferences);
                 }
                 preferences.putBoolean("starterMessages", true);
             }
@@ -1650,7 +1650,7 @@ public class IngameController extends Controller {
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
                 if (!GraphicsEnvironment.isHeadless()) {
-                    AudioService.getInstance().playEffect(NOTIFICATION);
+                    AudioService.getInstance().playEffect(NOTIFICATION, preferences);
                 }
                 preferences.putBoolean("starterMessages", true);
             }
@@ -1788,7 +1788,7 @@ public class IngameController extends Controller {
             this.root.getChildren().remove(nursePopupVBox);
             buttonsDisable(false);
             if (!GraphicsEnvironment.isHeadless()) {
-                AudioService.getInstance().playEffect(HEALING);
+                AudioService.getInstance().playEffect(HEALING, preferences);
             }
         });
 
@@ -1990,7 +1990,7 @@ public class IngameController extends Controller {
                                     if (!GraphicsEnvironment.isHeadless()) {
                                         loadingScreenAnimation.stop();
                                         if(notificationBell.isVisible()) {
-                                            AudioService.getInstance().playEffect(NOTIFICATION);
+                                            AudioService.getInstance().playEffect(NOTIFICATION, preferences);
                                         }
                                     }
                                 }, error -> {

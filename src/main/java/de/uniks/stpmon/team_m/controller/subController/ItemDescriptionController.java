@@ -160,13 +160,13 @@ public class ItemDescriptionController extends Controller {
 
     public void buyItem() {
         if (!GraphicsEnvironment.isHeadless()) {
-            AudioService.getInstance().playEffect(BUY_SELL);
+            AudioService.getInstance().playEffect(BUY_SELL, preferences);
         }
     }
 
     public void sellItem() {
         if (!GraphicsEnvironment.isHeadless()) {
-            AudioService.getInstance().playEffect(BUY_SELL);
+            AudioService.getInstance().playEffect(BUY_SELL, preferences);
         }
     }
 

@@ -46,7 +46,7 @@ public class DialogController extends Controller {
         this.ingameController = ingameController;
 
         if(!GraphicsEnvironment.isHeadless()) {
-            AudioService.getInstance().playEffect(TALKING);
+            AudioService.getInstance().playEffect(TALKING, preferences);
         }
 
         try {
