@@ -84,5 +84,6 @@ public class BattleMenuController extends Controller {
         if (onMonBallUse != null) {
             onMonBallUse.run();
         }
+        encounterController.showItems();
     }
 }

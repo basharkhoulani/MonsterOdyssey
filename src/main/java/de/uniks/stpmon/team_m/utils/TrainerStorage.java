@@ -47,6 +47,14 @@ public class TrainerStorage {
         this.items.stream().filter(i -> i._id().equals(item._id())).findFirst().ifPresent(i -> this.items.set(this.items.indexOf(i), item));
     }
 
+    public void useItem(int itemType) {
+        this.items.stream().filter(i -> i.type()==itemType).findFirst().ifPresent(i -> {
+            int amount = i.amount()-1;
+            Item item = new Item(i._id(), i.trainer(), i.type(), amount);
+            this.items.set(this.items.indexOf(i), item);
+        });
+    }
+
     public void setItems(List<Item> items) {
         this.items = items;
     }

@@ -30,7 +30,6 @@ public class Constants {
     public static final String EMPTY_STRING = "";
     public static final int STUNDE_IN_MILLIS = 3600000;
     public static final int MINUTE_IN_MILLIS = 60000;
-    public static final String FX_STYLE_BORDER_COLOR_BLACK = "-fx-border-color: black";
     public static final String LOADING_ANIMATION = "images/loading.gif";
     public static final String ONLINE_IMG = "images/online.png";
     public static final String OFFLINE_IMG = "images/offline.png";
@@ -195,9 +194,10 @@ public class Constants {
     public static final String STATUS_ADDED = "status-added";
     public static final String STATUS_REMOVED = "status-removed";
     public static final String CHANGE_MONSTER = "change-monster";
-    public static final String MONSTER_CAUGHT = "monster-caught";
+    public static final String USE_ITEM = "use-item";
     public static final String ITEM_FAILED = "item-failed";
-    public static final String ITEM_SUCCESS = "item-success";
+    public static final String ITEM_SUCCESS= "item-success";
+    public static final String MONSTER_CAUGHT = "monster-caught";
 
 
     // Encounter - images

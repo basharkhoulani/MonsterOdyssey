@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.HttpModule_AreasFactory;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.service.MonstersService;
 import de.uniks.stpmon.team_m.service.PresetsService;
@@ -42,17 +43,19 @@ public class ChangeMonsterListController extends Controller {
     public List<Monster> activeMonstersList;
     @Inject
     public Provider<MonsterStorage> monsterStorageProvider;
+    private Item item;
 
     @Inject
     public ChangeMonsterListController() {
     }
 
-    public void init(EncounterController encounterController, VBox monsterListVBox, IngameController ingameController) {
+    public void init(EncounterController encounterController, VBox monsterListVBox, IngameController ingameController, Item item) {
         super.init();
         activeMonstersList = new ArrayList<>();
         this.encounterController = encounterController;
         this.monsterListVBox = monsterListVBox;
         this.ingameController = ingameController;
+        this.item = item;
     }
 
     @Override
@@ -66,10 +69,11 @@ public class ChangeMonsterListController extends Controller {
         disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
                 .subscribe(list -> {
                     activeMonstersList = list.stream()
-                            .filter(monster -> trainerStorageProvider.get().getTrainer().team().contains(monster._id()) && !Objects.equals(monster
-                                    ._id(), encounterOpponentStorageProvider.get().getSelfOpponent().monster())
+                            .filter(monster -> trainerStorageProvider.get().getTrainer().team().contains(monster._id())
+                                    && (!Objects.equals(monster._id(), encounterOpponentStorageProvider.get().getSelfOpponent().monster())
                                     && !(encounterOpponentStorageProvider.get().isTwoMonster() && Objects.equals(monster._id(), encounterOpponentStorageProvider.get().getCoopOpponent().monster()))
-                                    && monster.currentAttributes().health() > 0)
+                                    && monster.currentAttributes().health() > 0
+                                    || item != null))
                             .collect(Collectors.toList());
                     initMonsterList(activeMonstersList);
                 }, throwable -> showError(throwable.getMessage())));
@@ -86,7 +90,7 @@ public class ChangeMonsterListController extends Controller {
                         this.encounterController,
                         this.ingameController,
                         false,
-                        null,
+                        item,
                         monsterStorageProvider
                 ));
         changeMonsterListView.getItems().addAll(monsters);

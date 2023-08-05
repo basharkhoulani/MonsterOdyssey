@@ -82,6 +82,12 @@ public class ItemMenuController extends Controller {
     }
 
     public void initFromEncounter(EncounterController encounterController,
+                                  TrainersService trainersService,
+                                  Provider<TrainerStorage> trainerStorageProvider,
+                                  VBox itemMenuBox,
+                                  Constants.inventoryType inventoryType,
+                                  List<Integer> npcItemList,
+                                  StackPane rootStackPane) {
                                     TrainersService trainersService,
                                     Provider<TrainerStorage> trainerStorageProvider,
                                     VBox itemMenuBox,
@@ -119,6 +125,21 @@ public class ItemMenuController extends Controller {
             // if inventoryType == sell  AND  the item cannot be used, then skip rendering item
             if (this.inventoryType == InventoryType.sellItems && itemTypeHashMap.get(item.type()).use() == null) {
                 continue;
+            } else if (this.encounterController != null) {
+                String use = itemTypeHashMap.get(item.type()).use();
+                if (use == null) {
+                    continue;
+                } else {
+                    Constants.itemType itemType = Constants.itemType.valueOf(use);
+                    if (itemType == Constants.itemType.itemBox || itemType == Constants.itemType.monsterBox) {
+                        continue;
+                    } else if (itemType == Constants.itemType.ball && !encounterController.isWildEncounter()) {
+                        continue;
+                    }
+                }
+            }
+            if (item.amount() == 0) {
+                continue;
             }
             initItem(item);
         }
@@ -133,14 +154,25 @@ public class ItemMenuController extends Controller {
 
     public void initItem(Item item) {
         itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider.get()));
+        if (ingameController != null) {
+            itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController));
+        } else if (encounterController != null) {
+            itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, encounterController));
+        }
         itemListView.getItems().add(item);
         itemListView.setFocusModel(null);
         itemListView.setSelectionModel(null);
     }
 
     public void closeItemMenu() {
-        ingameController.root.getChildren().remove(itemMenuBox);
-        ingameController.buttonsDisable(false);
+        if (ingameController != null) {
+            ingameController.root.getChildren().remove(itemMenuBox);
+            ingameController.buttonsDisable(false);
+        }
+        if (encounterController != null) {
+            encounterController.rootStackPane.getChildren().remove(itemMenuBox);
+            encounterController.buttonsDisableEncounter(false);
+        }
     }
 
     public InventoryType getInventoryType() {
@@ -166,4 +198,5 @@ public class ItemMenuController extends Controller {
                     error.printStackTrace();
                 }));
     }
+
 }
