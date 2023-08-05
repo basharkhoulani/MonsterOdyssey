@@ -1279,45 +1279,46 @@ public class EncounterController extends Controller {
 <span class="nc" id="L1279">                trainerStorageProvider.get().useItem(useItemMove.item());</span>
 <span class="nc" id="L1280">                increaseCurrentMonsterIndex();</span>
 <span class="nc" id="L1281">            }));</span>
+<span class="nc" id="L1282">            repeatedTimes++;</span>
         }
-<span class="nc" id="L1283">    }</span>
+<span class="nc" id="L1284">    }</span>
 
     private void setCorrectOpponent(Opponent opponent) {
-<span class="nc bnc" id="L1286" title="All 2 branches missed.">        if (encounterOpponentStorage.isTwoMonster()) {</span>
-<span class="nc bnc" id="L1287" title="All 2 branches missed.">            if (Objects.equals(encounterOpponentStorage.getSelfOpponent()._id(), opponent._id())) {</span>
-<span class="nc" id="L1288">                encounterOpponentStorage.setSelfOpponent(opponent);</span>
-<span class="nc bnc" id="L1289" title="All 2 branches missed.">            } else if (Objects.equals(encounterOpponentStorage.getCoopOpponent()._id(), opponent._id())) {</span>
-<span class="nc" id="L1290">                encounterOpponentStorage.setCoopOpponent(opponent);</span>
+<span class="nc bnc" id="L1287" title="All 2 branches missed.">        if (encounterOpponentStorage.isTwoMonster()) {</span>
+<span class="nc bnc" id="L1288" title="All 2 branches missed.">            if (Objects.equals(encounterOpponentStorage.getSelfOpponent()._id(), opponent._id())) {</span>
+<span class="nc" id="L1289">                encounterOpponentStorage.setSelfOpponent(opponent);</span>
+<span class="nc bnc" id="L1290" title="All 2 branches missed.">            } else if (Objects.equals(encounterOpponentStorage.getCoopOpponent()._id(), opponent._id())) {</span>
+<span class="nc" id="L1291">                encounterOpponentStorage.setCoopOpponent(opponent);</span>
             }
         } else {
-<span class="nc" id="L1293">            encounterOpponentStorage.setSelfOpponent(opponent);</span>
+<span class="nc" id="L1294">            encounterOpponentStorage.setSelfOpponent(opponent);</span>
         }
-<span class="nc" id="L1295">    }</span>
+<span class="nc" id="L1296">    }</span>
 
     private String getCorrectOpponentId() {
-<span class="nc" id="L1298">        String opponentId = encounterOpponentStorage.getSelfOpponent()._id();</span>
+<span class="nc" id="L1299">        String opponentId = encounterOpponentStorage.getSelfOpponent()._id();</span>
 
-<span class="nc bnc" id="L1300" title="All 2 branches missed.">        if (encounterOpponentStorage.isTwoMonster()) {</span>
-<span class="nc bnc" id="L1301" title="All 4 branches missed.">            if (currentMonsterIndex % 2 == 0 &amp;&amp; encounterOpponentStorage.getCoopOpponent().monster() != null) {</span>
-<span class="nc" id="L1302">                opponentId = encounterOpponentStorage.getCoopOpponent()._id();</span>
-<span class="nc bnc" id="L1303" title="All 4 branches missed.">            } else if (currentMonsterIndex % 2 == 1 &amp;&amp; encounterOpponentStorage.getSelfOpponent().monster() != null) {</span>
-<span class="nc" id="L1304">                opponentId = encounterOpponentStorage.getSelfOpponent()._id();</span>
-<span class="nc bnc" id="L1305" title="All 2 branches missed.">            } else if (encounterOpponentStorage.getSelfOpponent().monster() == null) {</span>
-<span class="nc" id="L1306">                opponentId = encounterOpponentStorage.getCoopOpponent()._id();</span>
-<span class="nc bnc" id="L1307" title="All 2 branches missed.">            } else if (encounterOpponentStorage.getCoopOpponent().monster() == null) {</span>
-<span class="nc" id="L1308">                opponentId = encounterOpponentStorage.getSelfOpponent()._id();</span>
+<span class="nc bnc" id="L1301" title="All 2 branches missed.">        if (encounterOpponentStorage.isTwoMonster()) {</span>
+<span class="nc bnc" id="L1302" title="All 4 branches missed.">            if (currentMonsterIndex % 2 == 0 &amp;&amp; encounterOpponentStorage.getCoopOpponent().monster() != null) {</span>
+<span class="nc" id="L1303">                opponentId = encounterOpponentStorage.getCoopOpponent()._id();</span>
+<span class="nc bnc" id="L1304" title="All 4 branches missed.">            } else if (currentMonsterIndex % 2 == 1 &amp;&amp; encounterOpponentStorage.getSelfOpponent().monster() != null) {</span>
+<span class="nc" id="L1305">                opponentId = encounterOpponentStorage.getSelfOpponent()._id();</span>
+<span class="nc bnc" id="L1306" title="All 2 branches missed.">            } else if (encounterOpponentStorage.getSelfOpponent().monster() == null) {</span>
+<span class="nc" id="L1307">                opponentId = encounterOpponentStorage.getCoopOpponent()._id();</span>
+<span class="nc bnc" id="L1308" title="All 2 branches missed.">            } else if (encounterOpponentStorage.getCoopOpponent().monster() == null) {</span>
+<span class="nc" id="L1309">                opponentId = encounterOpponentStorage.getSelfOpponent()._id();</span>
             }
         } else {
-<span class="nc bnc" id="L1311" title="All 2 branches missed.">            if (encounterOpponentStorage.getSelfOpponent().monster() != null) {</span>
-<span class="nc" id="L1312">                opponentId = encounterOpponentStorage.getSelfOpponent()._id();</span>
+<span class="nc bnc" id="L1312" title="All 2 branches missed.">            if (encounterOpponentStorage.getSelfOpponent().monster() != null) {</span>
+<span class="nc" id="L1313">                opponentId = encounterOpponentStorage.getSelfOpponent()._id();</span>
             }
         }
 
-<span class="nc" id="L1316">        return opponentId;</span>
+<span class="nc" id="L1317">        return opponentId;</span>
     }
 
     public IngameController getIngameController() {
-<span class="nc" id="L1320">        return ingameControllerProvider.get();</span>
+<span class="nc" id="L1321">        return ingameControllerProvider.get();</span>
     }
 }
     
