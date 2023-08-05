@@ -37,8 +37,8 @@ public class AudioService {
 
     public void playEffect(Constants.SoundEffect effect) {
         final Media sound = new Media((Objects.requireNonNull(Main.class.getResource("sounds/" + effect + ".mp3"))).toString());
-        mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.play();
+        MediaPlayer effectPlayer = new MediaPlayer(sound);
+        effectPlayer.play();
     }
 
     public void stopSound() {
