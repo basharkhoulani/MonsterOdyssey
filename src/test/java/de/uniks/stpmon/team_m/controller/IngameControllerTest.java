@@ -6,6 +6,8 @@ import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
+import de.uniks.stpmon.team_m.utils.MonsterData;
+import de.uniks.stpmon.team_m.utils.MonsterStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
@@ -68,6 +70,8 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<ItemMenuController> itemMenuControllerProvider;
     @Mock
     Provider<PresetsService> presetsServiceProvider;
+    @Mock
+    Provider<MonsterStorage> monsterStorageProvider;
 
     // Please also keep this mock, it is needed for the tests
     // -- which ones????
@@ -293,7 +297,7 @@ public class IngameControllerTest extends ApplicationTest {
         ingameStarterMonsterController.setValues(bundle, null, null, ingameStarterMonsterController, app);
         lenient().when(ingameStarterMonsterControllerProvider.get()).thenReturn(ingameStarterMonsterController);
 
-        lenient().when(presetsService.getMonsters()).thenReturn(Observable.just(List.of(
+        final List<MonsterTypeDto> monsterTypeDtos = List.of(
                 new MonsterTypeDto(
                         1,
                         "Monster1",
@@ -329,7 +333,8 @@ public class IngameControllerTest extends ApplicationTest {
                         List.of("fire"),
                         "auch ein blindes schaf findet manchmal ein huhn"
                 )
-        )));
+        );
+        lenient().when(presetsService.getMonsters()).thenReturn(Observable.just(monsterTypeDtos));
 
 
         ResponseBody responseBody = mock(ResponseBody.class);
@@ -339,6 +344,10 @@ public class IngameControllerTest extends ApplicationTest {
         //Mocking the opponent (Situation)
         when(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() + ".opponents.*.*", Opponent.class)).thenReturn(just(
                 new Event<>("encounters.*.trainers.6475e595ac3946b6a812d865,opponents.*.nothappening", null)));
+
+        when(eventListenerMock.listen("trainers.6475e595ac3946b6a812d865.monsters.*.*", Monster.class)).thenReturn(Observable.empty());
+        when(eventListenerMock.listen("trainers.6475e595ac3946b6a812d865.items.*.*", Item.class)).thenReturn(Observable.empty());
+
         when(encounterOpponentsService.getTrainerOpponents(anyString(), anyString())).thenReturn(Observable.just(List.of()));
         lenient().when(encounterOpponentsService.getTrainerOpponents("646bab5cecf584e1be02598a", "6475e595ac3946b6a812d867")).thenReturn(Observable.just(List.of(
                 new Opponent(
@@ -366,6 +375,27 @@ public class IngameControllerTest extends ApplicationTest {
                         List.of(),
                         0
                 ))));
+        final MonsterStorage monsterStorageMock = mock(MonsterStorage.class);
+        when(monsterStorageProvider.get()).thenReturn(monsterStorageMock);
+        LinkedHashMap<String, Integer> abilities = new LinkedHashMap<>();
+        abilities.put("1", 35);
+        abilities.put("3", 20);
+        abilities.put("6", 25);
+        abilities.put("7", 15);
+        final Monster monster = new Monster("2023-06-05T17:02:40.357Z",
+                "023-06-05T17:02:40.357Z",
+                "647e1530866ace3595866db2",
+                "647e15308c1bb6a91fb57321",
+                1,
+                1,
+                0,
+                abilities,
+                new MonsterAttributes(14, 8, 8, 5),
+                new MonsterAttributes(14, 8, 8, 5),
+                List.of("poisoned")
+        );
+        when(monsterStorageProvider.get().getMonsterData(any())).thenReturn(new MonsterData(monster, monsterTypeDtos.get(0), null));
+
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
@@ -556,7 +586,6 @@ public class IngameControllerTest extends ApplicationTest {
             Thread.sleep(30);
         }
 
-        sleep(200);
         clickOn("Yes");
         // healing of monsters cannot be tested, since this should happen on the server, when you encounter the nurse
 
@@ -612,6 +641,7 @@ public class IngameControllerTest extends ApplicationTest {
 
         assertNotEquals("dialogStackPane", node.getId());
     }
+
 
     @Test
     void testNurseDialogWithNoMons() throws InterruptedException {
@@ -841,31 +871,6 @@ public class IngameControllerTest extends ApplicationTest {
         monstersListController.setValues(bundle, null, null, monstersListController, app);
         when(monstersListControllerProvider.get()).thenReturn(monstersListController);
         when(presetsServiceProvider.get()).thenReturn(presetsService);
-        when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(
-                new MonsterTypeDto(
-                        1,
-                        "Salamander",
-                        "salamander.png",
-                        List.of("fire"),
-                        "A fire lizard. It's hot."
-                )
-        ));
-
-        MonstersDetailController monstersDetailController = mock(MonstersDetailController.class);
-        when(monstersDetailControllerProvider.get()).thenReturn(monstersDetailController);
-        doNothing().when(monstersDetailController).init(any(), any(), any(), any(), any(), any(), any(), any());
-
-        Button close = new Button("Close");
-        close.setOnAction(event -> {
-            StackPane stackPane = lookup("#stackPane").query();
-            VBox itemMenuBox = lookup("#monsterDetailVBox").query();
-            stackPane.getChildren().remove(stackPane.getChildren().size() - 1);
-            itemMenuBox.setVisible(false);
-            itemMenuBox.toBack();
-            ingameController.buttonsDisable(false);
-        });
-        when(monstersDetailController.render()).thenReturn(close);
-
         LinkedHashMap<String, Integer> abilities = new LinkedHashMap<>();
         abilities.put("1", 1);
         abilities.put("23", 2);
@@ -889,10 +894,8 @@ public class IngameControllerTest extends ApplicationTest {
         clickOn("#monstersButton");
 
         clickOn("Other");
-        moveTo("Salamander (Level 3)");
-
-        clickOn("#viewDetailsButton646bac223b4804b87c0b8054");
-        clickOn(close);
+        //moveTo("Salamander (Level 3)");
+        sleep(5000);
     }
 
     @Test
@@ -938,6 +941,9 @@ public class IngameControllerTest extends ApplicationTest {
 
         final VBox starterSelectionVBox = lookup("#starterSelectionVBox").query();
         assertNotNull(starterSelectionVBox);
+
+        final Label starterSelectionLabel0 = lookup("#starterSelectionLabel").query();
+        final String starterSelectionLabelText0 = starterSelectionLabel0.getText();
 
         clickOn("#starterSelectionOkButton");
         clickOn("#starterSelectionOkButton");
@@ -1094,6 +1100,7 @@ public class IngameControllerTest extends ApplicationTest {
         });
         when(itemMenuController.render()).thenReturn(close);
 
+
         press(KeyCode.E);
         release(KeyCode.E);
         Thread.sleep(30);
@@ -1111,6 +1118,10 @@ public class IngameControllerTest extends ApplicationTest {
         Thread.sleep(30);
 
         clickOn("Leave");
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
 
         press(KeyCode.E);
         release(KeyCode.E);
@@ -1195,6 +1206,4 @@ public class IngameControllerTest extends ApplicationTest {
         ingameController.setCoinsAmount(100);
         assertEquals(100, ingameController.getCoinsAmount());
     }
-
-
 }

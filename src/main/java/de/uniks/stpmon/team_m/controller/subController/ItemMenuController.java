@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.Constants.InventoryType;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
@@ -9,6 +10,7 @@ import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import de.uniks.stpmon.team_m.service.TrainerItemsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.utils.ItemStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -45,14 +47,13 @@ public class ItemMenuController extends Controller {
     @Inject
     TrainersService trainersService;
     @Inject
-    Provider<ItemDescriptionController> itemDescriptionControllerProvider;
+    Provider<ItemStorage> itemStorageProvider;
 
     public VBox itemMenuBox;
     IngameController ingameController;
-    private Constants.inventoryType inventoryType;
+    private InventoryType inventoryType;
     private List<Integer> npcItemList;
     public HashMap<Integer, ItemTypeDto> itemTypeHashMap = new HashMap<>();
-    public HashMap<Integer, Image> itemImageHashMap = new HashMap<>();
     private StackPane rootStackPane;
     private EncounterController encounterController;
 
@@ -60,13 +61,15 @@ public class ItemMenuController extends Controller {
     public ItemMenuController() {
     }
 
-    public void init(IngameController ingameController,
-                     TrainersService trainersService,
-                     Provider<TrainerStorage> trainerStorageProvider,
-                     VBox itemMenuBox,
-                     Constants.inventoryType inventoryType,
-                     List<Integer> npcItemList,
-                     StackPane rootStackPane) {
+    public void init(
+            IngameController ingameController,
+            TrainersService trainersService,
+            Provider<TrainerStorage> trainerStorageProvider,
+            VBox itemMenuBox,
+            InventoryType inventoryType,
+            List<Integer> npcItemList,
+            StackPane rootStackPane
+    ) {
         super.init();
         this.ingameController = ingameController;
         this.trainersService = trainersService;
@@ -77,13 +80,15 @@ public class ItemMenuController extends Controller {
         this.rootStackPane = rootStackPane;
     }
 
-    public void initFromEncounter(EncounterController encounterController,
-                                  TrainersService trainersService,
-                                  Provider<TrainerStorage> trainerStorageProvider,
-                                  VBox itemMenuBox,
-                                  Constants.inventoryType inventoryType,
-                                  List<Integer> npcItemList,
-                                  StackPane rootStackPane) {
+    public void initFromEncounter(
+            EncounterController encounterController,
+            TrainersService trainersService,
+            Provider<TrainerStorage> trainerStorageProvider,
+            VBox itemMenuBox,
+            InventoryType inventoryType,
+            List<Integer> npcItemList,
+            StackPane rootStackPane
+    ) {
         super.init();
         this.encounterController = encounterController;
         this.trainersService = trainersService;
@@ -113,17 +118,16 @@ public class ItemMenuController extends Controller {
     public void initItems(List<Item> itemList) {
         for (Item item : itemList) {
             // if inventoryType == sell  AND  the item cannot be used, then skip rendering item
-            if (this.inventoryType == Constants.inventoryType.sellItems && itemTypeHashMap.get(item.type()).use() == null) {
+            if (this.inventoryType == InventoryType.sellItems && itemTypeHashMap.get(item.type()).use() == null) {
                 continue;
             } else if (this.encounterController != null) {
                 String use = itemTypeHashMap.get(item.type()).use();
                 if (use == null) {
                     continue;
                 } else {
-                    Constants.itemType itemType = Constants.itemType.valueOf(use);
-                    if (itemType == Constants.itemType.itemBox || itemType == Constants.itemType.monsterBox) {
+                    if (use.equals(Constants.ITEM_USAGE_MONSTER_BOX) || use.equals(Constants.ITEM_USAGE_ITEM_BOX)) {
                         continue;
-                    } else if (itemType == Constants.itemType.ball && !encounterController.isWildEncounter()) {
+                    } else if (use.equals(Constants.ITEM_USAGE_BALL) && !encounterController.isWildEncounter()) {
                         continue;
                     }
                 }
@@ -143,14 +147,34 @@ public class ItemMenuController extends Controller {
     }
 
     public void initItem(Item item) {
+        itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider));
         if (ingameController != null) {
-            itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController));
+            ingameController.listenToItems(itemListView.getItems(), trainerStorageProvider.get().getTrainer()._id());
+            itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider));
         } else if (encounterController != null) {
-            itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, encounterController));
+            encounterController.getIngameController().listenToItems(itemListView.getItems(), trainerStorageProvider.get().getTrainer()._id());
+            itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, encounterController, itemStorageProvider));
         }
         itemListView.getItems().add(item);
         itemListView.setFocusModel(null);
         itemListView.setSelectionModel(null);
+    }
+
+    public void onItemUsed(Item item) {
+        if (item.amount() == 0) {
+            itemListView.getItems().remove(item);
+            return;
+        }
+        Item itemCopy = new Item(
+                item._id(),
+                item.trainer(),
+                item.type(),
+                item.amount() - 1
+        );
+        itemListView.getItems().set(itemListView.getItems().indexOf(item), itemCopy);
+        itemStorageProvider.get().updateItemData(itemCopy, null, null);
+        itemListView.refresh();
+
     }
 
     public void closeItemMenu() {
@@ -164,7 +188,7 @@ public class ItemMenuController extends Controller {
         }
     }
 
-    public Constants.inventoryType getInventoryType() {
+    public InventoryType getInventoryType() {
         return this.inventoryType;
     }
 
@@ -173,9 +197,10 @@ public class ItemMenuController extends Controller {
                 .subscribe(itemTypes -> {
                     for (ItemTypeDto itemType : itemTypes) {
                         itemTypeHashMap.put(itemType.id(), itemType);
+                        trainerStorageProvider.get().getItems().stream().filter(item -> item.type() == itemType.id()).findFirst().ifPresent(relatedItem -> itemStorageProvider.get().addItemData(relatedItem, itemType, null));
                     }
 
-                    if (this.inventoryType == Constants.inventoryType.buyItems) {
+                    if (this.inventoryType == InventoryType.buyItems) {
                         initNpcItems();
                     } else {
                         // Items are now saved in trainerStorage

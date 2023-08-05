@@ -4,8 +4,10 @@ import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.Monster;
+import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.utils.MonsterStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.fxml.FXML;
@@ -52,6 +54,8 @@ public class MonstersListController extends Controller {
     @Inject
     Provider<UserStorage> userStorageProvider;
     @Inject
+    Provider<MonsterStorage> monsterStorageProvider;
+    @Inject
     public UserStorage usersStorage;
     @Inject
     public Provider<PresetsService> presetsServiceProvider;
@@ -67,12 +71,13 @@ public class MonstersListController extends Controller {
     public List<Monster> otherMonstersList;
     private StackPane rootStackPane;
     private Item item;
+    public Runnable onItemUsed;
 
     @Inject
     public MonstersListController() {
     }
 
-    public void init(IngameController ingameController, VBox monsterListVBox, StackPane rootStackPane, Item item) {
+    public void init(IngameController ingameController, VBox monsterListVBox, StackPane rootStackPane, Item item, Runnable onItemUsed) {
         super.init();
         activeMonstersList = new ArrayList<>();
         otherMonstersList = new ArrayList<>();
@@ -80,6 +85,7 @@ public class MonstersListController extends Controller {
         this.monsterListVBox = monsterListVBox;
         this.rootStackPane = rootStackPane;
         this.item = item;
+        this.onItemUsed = onItemUsed;
     }
 
     @Override
@@ -91,7 +97,15 @@ public class MonstersListController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
         disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
-                .subscribe(list -> {
+                .subscribe(list -> disposables.add(presetsServiceProvider.get().getMonsters().observeOn(FX_SCHEDULER).subscribe(monsterTypeDtos -> {
+                    for (Monster monster : list) {
+                        for (MonsterTypeDto monsterTypeDto : monsterTypeDtos) {
+                            if (monsterTypeDto.id() == monster.type()) {
+                                monsterStorageProvider.get().addMonsterData(monster, monsterTypeDto, null);
+                                break;
+                            }
+                        }
+                    }
                     activeMonstersList = list.stream()
                             .filter(monster -> trainerStorageProvider.get().getTrainer().team().contains(monster._id()))
                             .collect(Collectors.toList());
@@ -102,8 +116,7 @@ public class MonstersListController extends Controller {
                             .collect(Collectors.toList());
                     initOtherMonsterList(otherMonstersList);
                     initMonsterList(activeMonstersList);
-                }, throwable -> showError(throwable.getMessage())));
-
+                }, Throwable::printStackTrace))));
         return parent;
     }
 
@@ -162,7 +175,7 @@ public class MonstersListController extends Controller {
         }
         disposables.add(trainersService.updateTrainer(trainer.region(), trainer._id(), null, null, team)
                 .observeOn(FX_SCHEDULER)
-                .subscribe(t -> trainerStorageProvider.get().setTrainer(t), throwable -> showError(throwable.getMessage())));
+                .subscribe(t -> trainerStorageProvider.get().setTrainer(t), Throwable::printStackTrace));
     }
 
     private void initMonsterList(List<Monster> monsters) {
@@ -174,7 +187,8 @@ public class MonstersListController extends Controller {
                 null,
                 this.ingameController,
                 false,
-                item
+                item,
+                monsterStorageProvider
         ));
         monsterListViewActive.getItems().addAll(monsters);
         monsterListViewActive.setFocusModel(null);
@@ -190,7 +204,8 @@ public class MonstersListController extends Controller {
                 null,
                 this.ingameController,
                 true,
-                item
+                item,
+                monsterStorageProvider
         ));
         monsterListViewOther.getItems().addAll(monsters);
         monsterListViewOther.setFocusModel(null);
@@ -245,7 +260,7 @@ public class MonstersListController extends Controller {
     private void updateBothLists(ListView<Monster> listViewAdd, List<Monster> listAdd, ListView<Monster> listViewRemove, List<Monster> listRemove, Monster monster, List<String> team) {
         disposables.add(trainersService.updateTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), null, null, team)
                 .observeOn(FX_SCHEDULER)
-                .subscribe(t -> trainerStorageProvider.get().setTrainer(t), throwable -> showError(throwable.getMessage())));
+                .subscribe(t -> trainerStorageProvider.get().setTrainer(t), Throwable::printStackTrace));
         listRemove.removeIf(remove -> remove._id().equals(monster._id()));
         listViewRemove.getItems().clear();
         listViewRemove.getItems().addAll(listRemove);
