@@ -46,8 +46,6 @@ public class ItemMenuController extends Controller {
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
     TrainersService trainersService;
-    //@Inject
-    //Provider<ItemDescriptionController> itemDescriptionControllerProvider;
     @Inject
     Provider<ItemStorage> itemStorageProvider;
 
@@ -56,7 +54,6 @@ public class ItemMenuController extends Controller {
     private InventoryType inventoryType;
     private List<Integer> npcItemList;
     public HashMap<Integer, ItemTypeDto> itemTypeHashMap = new HashMap<>();
-    public HashMap<Integer, Image> itemImageHashMap = new HashMap<>();
     private StackPane rootStackPane;
     private EncounterController encounterController;
 
@@ -152,8 +149,10 @@ public class ItemMenuController extends Controller {
     public void initItem(Item item) {
         itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider));
         if (ingameController != null) {
+            ingameController.listenToItems(itemListView.getItems(), trainerStorageProvider.get().getTrainer()._id());
             itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider));
         } else if (encounterController != null) {
+            encounterController.getIngameController().listenToItems(itemListView.getItems(), trainerStorageProvider.get().getTrainer()._id());
             itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, encounterController, itemStorageProvider));
         }
         itemListView.getItems().add(item);

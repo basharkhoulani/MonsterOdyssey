@@ -595,7 +595,6 @@ public class IngameControllerTest extends ApplicationTest {
         Thread.sleep(30);
     }
 
-
     @Test
     void testTalkToNPC2TilesAway() {
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
@@ -610,6 +609,39 @@ public class IngameControllerTest extends ApplicationTest {
 
         assertNotEquals("dialogStackPane", node.getId());
     }
+
+    @Test
+    void testTalkDirection2() {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(19);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(2);
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("dialogStackPane", node.getId());
+    }
+
+    @Test
+    void testTalkDirection3() {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(33);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(19);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(3);
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+
+        final StackPane stackPane = lookup("#stackPane").query();
+        final Node node = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+
+        assertNotEquals("dialogStackPane", node.getId());
+    }
+
 
     @Test
     void testNurseDialogWithNoMons() throws InterruptedException {
@@ -1053,6 +1085,22 @@ public class IngameControllerTest extends ApplicationTest {
         Mockito.when(trainerStorageProvider.get().getY()).thenReturn(102);
         Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
 
+        ItemMenuController itemMenuController = mock(ItemMenuController.class);
+        when(itemMenuControllerProvider.get()).thenReturn(itemMenuController);
+        doNothing().when(itemMenuController).init(any(), any(), any(), any(), any(), any(), any());
+
+        Button close = new Button("Close");
+        close.setOnAction(event -> {
+            StackPane stackPane = lookup("#stackPane").query();
+            VBox itemMenuBox = lookup("#itemMenuBox").query();
+            stackPane.getChildren().remove(stackPane.getChildren().size() - 1);
+            itemMenuBox.setVisible(false);
+            itemMenuBox.toBack();
+            ingameController.buttonsDisable(false);
+        });
+        when(itemMenuController.render()).thenReturn(close);
+
+
         press(KeyCode.E);
         release(KeyCode.E);
         Thread.sleep(30);
@@ -1074,5 +1122,88 @@ public class IngameControllerTest extends ApplicationTest {
         press(KeyCode.E);
         release(KeyCode.E);
         Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        clickOn("Buy");
+        clickOn(close);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        type(KeyCode.E);
+        Thread.sleep(30);
+
+        clickOn("Sell");
+        clickOn(close);
+
+    }
+
+    @Test
+    void testOtherTrainerInEncounter() {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(200);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(201);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+
+        when(udpEventListenerProvider.get().talk(any(), any())).thenReturn(empty());
+
+        type(KeyCode.E);
+        sleep(30);
+
+        type(KeyCode.E);
+        sleep(30);
+
+        clickOn("Leave");
+
+        type(KeyCode.E);
+        sleep(30);
+
+        type(KeyCode.E);
+        sleep(30);
+
+        clickOn("Join encounter");
+
+    }
+
+    @Test
+    void testgetUserTrainerY() {
+        when(ingameController.getUserTrainerY()).thenReturn(13);
+
+        int y = ingameController.getUserTrainerY();
+        assertEquals(13, y);
+
+    }
+
+    @Test
+    void testCoinsEarned() {
+        ingameController.setCoinsEarned(true);
+        assertTrue(ingameController.getCoinsEarned());
+
+    }
+
+    @Test
+    void CoinsAmount() {
+        ingameController.setCoinsAmount(100);
+        assertEquals(100, ingameController.getCoinsAmount());
     }
 }

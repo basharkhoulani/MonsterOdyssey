@@ -210,13 +210,13 @@ public class IngameController extends Controller {
     private ParallelTransition shiftMapDownTransition;
     private boolean loading;
     private VBox loadingScreen;
-    private Timeline loadingScreenAnimation;
     private VBox itemMenuBox;
     private boolean inCoinsEarnedInfoBox = false;
     private ReceiveObjectController receiveObjectController;
     private ObservableList<Item> items = FXCollections.observableArrayList();
     private ObservableList<Monster> monsters = FXCollections.observableArrayList();
     private boolean inJoinEncounterInfoBox = false;
+    private VBox receiveObjectPopUp;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -568,7 +568,7 @@ public class IngameController extends Controller {
     }
 
     private void createMonsterReceivedPopUp(Monster monster) {
-        VBox receiveObjectPopUp = new VBox();
+        receiveObjectPopUp = new VBox();
         receiveObjectPopUp.setAlignment(Pos.CENTER);
         receiveObjectPopUp.setMaxWidth(popupWidth);
         receiveObjectPopUp.setMaxHeight(popupWidth);
@@ -584,7 +584,7 @@ public class IngameController extends Controller {
     }
 
     private void createItemReceivedPopUp(Item item) {
-        VBox receiveObjectPopUp = new VBox();
+        receiveObjectPopUp = new VBox();
         receiveObjectPopUp.setAlignment(Pos.CENTER);
         receiveObjectPopUp.setMaxWidth(popupWidth);
         receiveObjectPopUp.setMaxHeight(popupWidth);
@@ -640,6 +640,9 @@ public class IngameController extends Controller {
                     Monster monster = event.data();
                     switch (event.suffix()) {
                         case "created" -> {
+                            if (root.getChildren().contains(receiveObjectPopUp)) {
+                                return;
+                            }
                             createMonsterReceivedPopUp(monster);
                             monsters.add(monster);
                         }
@@ -661,7 +664,9 @@ public class IngameController extends Controller {
                     Item item = event.data();
                     switch (event.suffix()) {
                         case "created" -> {
-                            System.out.println("Item received: " + item);
+                            if (root.getChildren().contains(receiveObjectPopUp)) {
+                                return;
+                            }
                             items.add(item);
                             createItemReceivedPopUp(item);
                         }
@@ -764,22 +769,6 @@ public class IngameController extends Controller {
         loadingScreenController.setValues(resources, preferences, resourceBundleProvider, loadingScreenController, app);
         loadingScreen.getChildren().add(loadingScreenController.render());
         getRoot().getChildren().add(loadingScreen);
-        /*
-        loadingScreen.setSpacing(10);
-        Label loadingLabel = new Label(resources.getString("LOADING.LABEL"));
-        loadingLabel.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-font-family: 'Comic Sans MS'");
-        ImageView trainerImageView = new ImageView();
-        trainerImageView.setFitWidth(40);
-        trainerImageView.setFitHeight(40);
-        loadingScreen.getChildren().add(loadingLabel);
-        loadingScreen.getChildren().add(trainerImageView);
-        root.getChildren().add(loadingScreen);
-        if (!GraphicsEnvironment.isHeadless()) {
-            loadingScreenAnimation = AnimationBuilder.buildTrainerWalkAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), trainerImageView, 150, Animation.INDEFINITE, TRAINER_DIRECTION_RIGHT);
-            loadingScreenAnimation.play();
-        }
-
-         */
     }
 
     /**
@@ -1187,10 +1176,7 @@ public class IngameController extends Controller {
                 new UpdateItemDto(1, item.type(), (monster != null) ? monster._id() : null)
         ).observeOn(FX_SCHEDULER).subscribe(
                 result -> trainerStorageProvider.get().updateItem(result),
-                error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }));
+                error -> {}));
     }
 
     public void buttonsDisable(Boolean set) {
@@ -2047,7 +2033,7 @@ public class IngameController extends Controller {
         textVBox.maxHeightProperty().bind(textPane.heightProperty());
         textVBox.getStyleClass().add("dialogTextFlow");
 
-        Label dialogHelpLabel = new Label(resources.getString("NPC.DIALOG.HELP"));
+        Label dialogHelpLabel = new Label(resources.getString("NPC.DIALOG.HELP") + " " + preferences.get("interaction", null) + " " + resources.getString("NPC.DIALOG.HELP2"));
         dialogHelpLabel.prefWidthProperty().bind(textVBox.widthProperty());
         dialogHelpLabel.setFont(new Font(helpLabelFontSize));
         dialogHelpLabel.setPadding(helpLabelInsets);

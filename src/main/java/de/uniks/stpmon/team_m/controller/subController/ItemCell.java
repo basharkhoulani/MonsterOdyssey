@@ -124,14 +124,15 @@ public class ItemCell extends ListCell<Item> {
             itemLabel.setText(itemTypeDto.name());
             itemNumber.setText("(" + item.amount() + ")");
 
-            if (itemMenuController.itemImageHashMap.containsKey(item.type())) {
-                this.itemImage = itemMenuController.itemImageHashMap.get(item.type());
+            if (itemStorageProvider.get().getItemData(item._id()) != null && itemStorageProvider.get().getItemData(item._id()).getItemImage() != null) {
+                this.itemImage = itemStorageProvider.get().getItemData(item._id()).getItemImage();
                 itemImageView.setImage(this.itemImage);
             } else {
                 disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)
                         .subscribe(itemImageResBody -> {
                             Image itemImage = ImageProcessor.resonseBodyToJavaFXImage(itemImageResBody);
-                            itemMenuController.itemImageHashMap.put(item.type(), itemImage);
+                            //itemMenuController.itemImageHashMap.put(item.type(), itemImage);
+                            itemStorageProvider.get().updateItemData(item, null, itemImage);
                             this.itemImage = itemImage;
                             itemImageView.setImage(this.itemImage);
                         }, error -> {

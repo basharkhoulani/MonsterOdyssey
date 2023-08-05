@@ -56,7 +56,7 @@ public class LoadingScreenController extends Controller {
 
             }
         };
-        timer.scheduleAtFixedRate(timerTask, 0, 5000);
+        timer.scheduleAtFixedRate(timerTask, 0, 7000);
         return parent;
     }
 

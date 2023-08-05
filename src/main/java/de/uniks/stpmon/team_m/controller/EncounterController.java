@@ -1211,19 +1211,13 @@ public class EncounterController extends Controller {
                     item.amount() - 1
             );
             itemStorageProvider.get().updateItemData(itemCopy, null, null);
-            System.out.println(itemCopy);
             disposables.add(encounterOpponentsService.updateOpponent(
                     regionId,
                     encounterId,
                     encounterOpponentStorage.getSelfOpponent()._id(),
                     null,
                     new UseItemMove(ITEM_ACTION_USE_ITEM_MOVE, item.type(), encounterOpponentStorage.getTargetOpponent().monster())
-            ).observeOn(FX_SCHEDULER).subscribe(opponent -> {
-                System.out.println("Send servercall to use monball");
-                System.out.println(opponent);
-                updateOpponent(opponent);
-
-            }, Throwable::printStackTrace));
+            ).observeOn(FX_SCHEDULER).subscribe(this::updateOpponent, Throwable::printStackTrace));
         }
     }
 
