@@ -811,8 +811,14 @@ public class EncounterController extends Controller {
             if (o.monster() == null) {
                 if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                     showResultPopUp(resources.getString("YOU.FAILED"), false);
+                    if (!GraphicsEnvironment.isHeadless()) {
+                        AudioService.getInstance().playEffect(LOSE);
+                    }
                 } else {
                     showResultPopUp(resources.getString("YOU.WON"), true);
+                    if (!GraphicsEnvironment.isHeadless()) {
+                        AudioService.getInstance().playEffect(WIN);
+                    }
                 }
             }
         }
@@ -823,13 +829,6 @@ public class EncounterController extends Controller {
         if (selfOpponent.coins() != 0 && isWin) {
             encounterResultController.setCoinsAmount(selfOpponent.coins());
             encounterResultController.setCoinsEarned(true);
-            if (!GraphicsEnvironment.isHeadless()) {
-                AudioService.getInstance().playEffect(WIN);
-            }
-        } else {
-            if (!GraphicsEnvironment.isHeadless()) {
-                AudioService.getInstance().playEffect(LOSE);
-            }
         }
         VBox resultBox = new VBox();
         resultBox.setAlignment(Pos.CENTER);
