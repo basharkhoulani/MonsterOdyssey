@@ -30,7 +30,6 @@ import static java.util.Map.entry;
     public static final String EMPTY_STRING = &quot;&quot;;
     public static final int STUNDE_IN_MILLIS = 3600000;
     public static final int MINUTE_IN_MILLIS = 60000;
-    public static final String FX_STYLE_BORDER_COLOR_BLACK = &quot;-fx-border-color: black&quot;;
     public static final String LOADING_ANIMATION = &quot;images/loading.gif&quot;;
     public static final String ONLINE_IMG = &quot;images/online.png&quot;;
     public static final String OFFLINE_IMG = &quot;images/offline.png&quot;;
@@ -111,32 +110,32 @@ import static java.util.Map.entry;
     public static final int dialogVBoxWidth = 700;
     public static final int getDialogVBoxHeight = 150;
     public static final int spacerToBottomOfScreen = 150;
-<span class="fc" id="L114">    public static final Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);</span>
-<span class="fc" id="L115">    public static final Insets helpLabelInsets = new Insets(0, 40, 20, 0);</span>
+<span class="fc" id="L113">    public static final Insets dialogTextFlowInsets = new Insets(20, 40, 20, 40);</span>
+<span class="fc" id="L114">    public static final Insets helpLabelInsets = new Insets(0, 40, 20, 0);</span>
     public static final int helpLabelFontSize = 12;
 
 
-<span class="fc" id="L119">    public enum DialogSpecialInteractions {</span>
-<span class="fc" id="L120">        nurseYes,</span>
-<span class="fc" id="L121">        nurseNo,</span>
-<span class="fc" id="L122">        nurseNoMons,</span>
-<span class="fc" id="L123">        starterSelection0,</span>
-<span class="fc" id="L124">        starterSelection1,</span>
-<span class="fc" id="L125">        starterSelection2,</span>
-<span class="fc" id="L126">        clerkOpenShop,</span>
-<span class="fc" id="L127">        clerkCancelShop</span>
+<span class="fc" id="L118">    public enum DialogSpecialInteractions {</span>
+<span class="fc" id="L119">        nurseYes,</span>
+<span class="fc" id="L120">        nurseNo,</span>
+<span class="fc" id="L121">        nurseNoMons,</span>
+<span class="fc" id="L122">        starterSelection0,</span>
+<span class="fc" id="L123">        starterSelection1,</span>
+<span class="fc" id="L124">        starterSelection2,</span>
+<span class="fc" id="L125">        clerkOpenShop,</span>
+<span class="fc" id="L126">        clerkCancelShop</span>
     }
 
-<span class="fc" id="L130">    public enum ContinueDialogReturnValues {</span>
-<span class="fc" id="L131">        dialogNotFinished,</span>
-<span class="fc" id="L132">        dialogFinishedTalkToTrainer,</span>
-<span class="fc" id="L133">        dialogFinishedNoTalkToTrainer,</span>
-<span class="fc" id="L134">        albertDialogFinished0,</span>
-<span class="fc" id="L135">        albertDialogFinished1,</span>
-<span class="fc" id="L136">        albertDialogFinished2,</span>
-<span class="fc" id="L137">        spokenToNurse,</span>
-<span class="fc" id="L138">        encounterOnTalk,</span>
-<span class="fc" id="L139">        spokenToClerk</span>
+<span class="fc" id="L129">    public enum ContinueDialogReturnValues {</span>
+<span class="fc" id="L130">        dialogNotFinished,</span>
+<span class="fc" id="L131">        dialogFinishedTalkToTrainer,</span>
+<span class="fc" id="L132">        dialogFinishedNoTalkToTrainer,</span>
+<span class="fc" id="L133">        albertDialogFinished0,</span>
+<span class="fc" id="L134">        albertDialogFinished1,</span>
+<span class="fc" id="L135">        albertDialogFinished2,</span>
+<span class="fc" id="L136">        spokenToNurse,</span>
+<span class="fc" id="L137">        encounterOnTalk,</span>
+<span class="fc" id="L138">        spokenToClerk</span>
 
     }
 
@@ -158,8 +157,8 @@ import static java.util.Map.entry;
     public static final int clerkButtonHeight = 40;
 
     // Join Encounter Popup
-<span class="fc" id="L161">    public static final Insets joinEncounterTextInsets = new Insets(20, 10, 0, 10);</span>
-<span class="fc" id="L162">    public static final Insets joinEncountervBoxInsets = new Insets(5, 0, 20, 0);</span>
+<span class="fc" id="L160">    public static final Insets joinEncounterTextInsets = new Insets(20, 10, 0, 10);</span>
+<span class="fc" id="L161">    public static final Insets joinEncountervBoxInsets = new Insets(5, 0, 20, 0);</span>
     public static final int joinEncounterSpacing = 15;
     public static final int joinEncounterButtonHeight = 200;
     public static final int joinEncounterButtonWidth = 250;
@@ -181,9 +180,9 @@ import static java.util.Map.entry;
     public static final int fleePopupWidth = 300;
     public static final int fleePopupHeight = 200;
     public static final int fleeTextHeight = 150;
-<span class="fc" id="L184">    public static final Insets fleeTextInsets = new Insets(20, 10, 0, 10);</span>
+<span class="fc" id="L183">    public static final Insets fleeTextInsets = new Insets(20, 10, 0, 10);</span>
     public static final int fleeButtonsHBoxHeight = 50;
-<span class="fc" id="L186">    public static final Insets fleeButtonsHBoxInsets = new Insets(0, 10, 10, 10);</span>
+<span class="fc" id="L185">    public static final Insets fleeButtonsHBoxInsets = new Insets(0, 10, 10, 10);</span>
     public static final int fleeButtonWidth = 100;
     public static final int fleeButtonHeight = 40;
     public static final int pauseDuration = 1000;
@@ -195,6 +194,11 @@ import static java.util.Map.entry;
     public static final String STATUS_ADDED = &quot;status-added&quot;;
     public static final String STATUS_REMOVED = &quot;status-removed&quot;;
     public static final String CHANGE_MONSTER = &quot;change-monster&quot;;
+    public static final String USE_ITEM = &quot;use-item&quot;;
+    public static final String ITEM_FAILED = &quot;item-failed&quot;;
+    public static final String ITEM_SUCCESS= &quot;item-success&quot;;
+    public static final String MONSTER_CAUGHT = &quot;monster-caught&quot;;
+
 
     // Encounter - images
     public static final String STAR_ICON = &quot;images/star.png&quot;;
@@ -219,7 +223,7 @@ import static java.util.Map.entry;
     public static final String HIGH_VOLUME_ICON = &quot;images/high-volume-icon.png&quot;;
 
     // Characters
-<span class="fc" id="L222">    public static final String[] PREMADE_CHARACTERS = {</span>
+<span class="fc" id="L226">    public static final String[] PREMADE_CHARACTERS = {</span>
             &quot;Premade_Character_01.png&quot;, &quot;Premade_Character_02.png&quot;, &quot;Premade_Character_03.png&quot;, &quot;Premade_Character_04.png&quot;,
             &quot;Premade_Character_05.png&quot;, &quot;Premade_Character_06.png&quot;, &quot;Premade_Character_07.png&quot;, &quot;Premade_Character_08.png&quot;,
             &quot;Premade_Character_09.png&quot;, &quot;Premade_Character_10.png&quot;, &quot;Premade_Character_11.png&quot;, &quot;Premade_Character_12.png&quot;,
@@ -235,51 +239,68 @@ import static java.util.Map.entry;
     public static final String ROUTE_SOUND = &quot;Nintendo_Style_Upbeat_Music_Loop_05.wav&quot;;
     public static final String FIGHT_SOUND = &quot;Nintendo_Style_Battle_Music_Loop_02.wav&quot;;
 
+<span class="nc" id="L242">    public enum SoundEffect {</span>
+<span class="nc" id="L243">        ATTACK,</span>
+<span class="nc" id="L244">        BUY_SELL,</span>
+<span class="nc" id="L245">        DEATH,</span>
+<span class="nc" id="L246">        FLEE,</span>
+<span class="nc" id="L247">        GOT_COINS,</span>
+<span class="nc" id="L248">        HEALING,</span>
+<span class="nc" id="L249">        LOW_HEALTH,</span>
+<span class="nc" id="L250">        NOTIFICATION,</span>
+<span class="nc" id="L251">        TALKING,</span>
+<span class="nc" id="L252">        WALKING,</span>
+<span class="nc" id="L253">        WIN,</span>
+<span class="nc" id="L254">        LOSE,</span>
+<span class="nc" id="L255">        LEVEL_UP,</span>
+<span class="nc" id="L256">        CATCH</span>
+    }
+
     // Colors
-<span class="fc" id="L239">    public static final HashMap&lt;String, String&gt; TYPESCOLORPALETTE = new HashMap&lt;&gt;(Map.ofEntries(</span>
-<span class="fc" id="L240">            entry(&quot;normal&quot;, &quot;#BBBBAA&quot;),</span>
-<span class="fc" id="L241">            entry(&quot;fire&quot;, &quot;#FF421C&quot;),</span>
-<span class="fc" id="L242">            entry(&quot;water&quot;, &quot;#2C9BE3&quot;),</span>
-<span class="fc" id="L243">            entry(&quot;electric&quot;, &quot;#FFDC00&quot;),</span>
-<span class="fc" id="L244">            entry(&quot;grass&quot;, &quot;#62BC5A&quot;),</span>
-<span class="fc" id="L245">            entry(&quot;flying&quot;, &quot;#96CAFF&quot;),</span>
-<span class="fc" id="L246">            entry(&quot;bug&quot;, &quot;#92C12A&quot;),</span>
-<span class="fc" id="L247">            entry(&quot;poison&quot;, &quot;#9553CD&quot;),</span>
-<span class="fc" id="L248">            entry(&quot;rock&quot;, &quot;#BBAA66&quot;),</span>
-<span class="fc" id="L249">            entry(&quot;ground&quot;, &quot;#A67439&quot;),</span>
-<span class="fc" id="L250">            entry(&quot;fighting&quot;, &quot;#BB5544&quot;),</span>
-<span class="fc" id="L251">            entry(&quot;ice&quot;, &quot;#74CFC0&quot;),</span>
-<span class="fc" id="L252">            entry(&quot;psychic&quot;, &quot;#FF6380&quot;),</span>
-<span class="fc" id="L253">            entry(&quot;ghost&quot;, &quot;#6E4370&quot;),</span>
-<span class="fc" id="L254">            entry(&quot;dragon&quot;, &quot;#5670BE&quot;),</span>
-<span class="fc" id="L255">            entry(&quot;dark&quot;, &quot;#353225&quot;),</span>
-<span class="fc" id="L256">            entry(&quot;steel&quot;, &quot;#97A8AA&quot;),</span>
-<span class="fc" id="L257">            entry(&quot;fairy&quot;, &quot;#D15F5F&quot;)</span>
+<span class="fc" id="L260">    public static final HashMap&lt;String, String&gt; TYPESCOLORPALETTE = new HashMap&lt;&gt;(Map.ofEntries(</span>
+<span class="fc" id="L261">            entry(&quot;normal&quot;, &quot;#BBBBAA&quot;),</span>
+<span class="fc" id="L262">            entry(&quot;fire&quot;, &quot;#FF421C&quot;),</span>
+<span class="fc" id="L263">            entry(&quot;water&quot;, &quot;#2C9BE3&quot;),</span>
+<span class="fc" id="L264">            entry(&quot;electric&quot;, &quot;#FFDC00&quot;),</span>
+<span class="fc" id="L265">            entry(&quot;grass&quot;, &quot;#62BC5A&quot;),</span>
+<span class="fc" id="L266">            entry(&quot;flying&quot;, &quot;#96CAFF&quot;),</span>
+<span class="fc" id="L267">            entry(&quot;bug&quot;, &quot;#92C12A&quot;),</span>
+<span class="fc" id="L268">            entry(&quot;poison&quot;, &quot;#9553CD&quot;),</span>
+<span class="fc" id="L269">            entry(&quot;rock&quot;, &quot;#BBAA66&quot;),</span>
+<span class="fc" id="L270">            entry(&quot;ground&quot;, &quot;#A67439&quot;),</span>
+<span class="fc" id="L271">            entry(&quot;fighting&quot;, &quot;#BB5544&quot;),</span>
+<span class="fc" id="L272">            entry(&quot;ice&quot;, &quot;#74CFC0&quot;),</span>
+<span class="fc" id="L273">            entry(&quot;psychic&quot;, &quot;#FF6380&quot;),</span>
+<span class="fc" id="L274">            entry(&quot;ghost&quot;, &quot;#6E4370&quot;),</span>
+<span class="fc" id="L275">            entry(&quot;dragon&quot;, &quot;#5670BE&quot;),</span>
+<span class="fc" id="L276">            entry(&quot;dark&quot;, &quot;#353225&quot;),</span>
+<span class="fc" id="L277">            entry(&quot;steel&quot;, &quot;#97A8AA&quot;),</span>
+<span class="fc" id="L278">            entry(&quot;fairy&quot;, &quot;#D15F5F&quot;)</span>
     ));
 
     // Abilities
-<span class="fc" id="L261">    public static final HashMap&lt;String, String&gt; ABILITYPALETTE = new HashMap&lt;&gt;(Map.ofEntries(</span>
-<span class="fc" id="L262">            entry(&quot;normal&quot;, &quot;ability-normal.png&quot;),</span>
-<span class="fc" id="L263">            entry(&quot;fire&quot;, &quot;ability-fire.png&quot;),</span>
-<span class="fc" id="L264">            entry(&quot;water&quot;, &quot;ability-water.png&quot;),</span>
-<span class="fc" id="L265">            entry(&quot;electric&quot;, &quot;ability-electic.png&quot;),</span>
-<span class="fc" id="L266">            entry(&quot;grass&quot;, &quot;ability-grass.png&quot;),</span>
-<span class="fc" id="L267">            entry(&quot;flying&quot;, &quot;ability-flying.png&quot;),</span>
-<span class="fc" id="L268">            entry(&quot;bug&quot;, &quot;ability-bug.png&quot;),</span>
-<span class="fc" id="L269">            entry(&quot;poison&quot;, &quot;ability-poison.png&quot;),</span>
-<span class="fc" id="L270">            entry(&quot;rock&quot;, &quot;ability-rock.png&quot;),</span>
-<span class="fc" id="L271">            entry(&quot;ground&quot;, &quot;ability-ground.png&quot;),</span>
-<span class="fc" id="L272">            entry(&quot;fighting&quot;, &quot;ability-fighting.png&quot;),</span>
-<span class="fc" id="L273">            entry(&quot;ice&quot;, &quot;ability-ice.png&quot;),</span>
-<span class="fc" id="L274">            entry(&quot;psychic&quot;, &quot;ability-psychic.png&quot;),</span>
-<span class="fc" id="L275">            entry(&quot;ghost&quot;, &quot;ability-ghost.png&quot;),</span>
-<span class="fc" id="L276">            entry(&quot;dragon&quot;, &quot;ability-dragon.png&quot;),</span>
-<span class="fc" id="L277">            entry(&quot;dark&quot;, &quot;ability-dragon.png&quot;),</span>
-<span class="fc" id="L278">            entry(&quot;steel&quot;, &quot;ability-steel.png&quot;),</span>
-<span class="fc" id="L279">            entry(&quot;fairy&quot;, &quot;ability-fairy.png&quot;)</span>
+<span class="fc" id="L282">    public static final HashMap&lt;String, String&gt; ABILITYPALETTE = new HashMap&lt;&gt;(Map.ofEntries(</span>
+<span class="fc" id="L283">            entry(&quot;normal&quot;, &quot;ability-normal.png&quot;),</span>
+<span class="fc" id="L284">            entry(&quot;fire&quot;, &quot;ability-fire.png&quot;),</span>
+<span class="fc" id="L285">            entry(&quot;water&quot;, &quot;ability-water.png&quot;),</span>
+<span class="fc" id="L286">            entry(&quot;electric&quot;, &quot;ability-electic.png&quot;),</span>
+<span class="fc" id="L287">            entry(&quot;grass&quot;, &quot;ability-grass.png&quot;),</span>
+<span class="fc" id="L288">            entry(&quot;flying&quot;, &quot;ability-flying.png&quot;),</span>
+<span class="fc" id="L289">            entry(&quot;bug&quot;, &quot;ability-bug.png&quot;),</span>
+<span class="fc" id="L290">            entry(&quot;poison&quot;, &quot;ability-poison.png&quot;),</span>
+<span class="fc" id="L291">            entry(&quot;rock&quot;, &quot;ability-rock.png&quot;),</span>
+<span class="fc" id="L292">            entry(&quot;ground&quot;, &quot;ability-ground.png&quot;),</span>
+<span class="fc" id="L293">            entry(&quot;fighting&quot;, &quot;ability-fighting.png&quot;),</span>
+<span class="fc" id="L294">            entry(&quot;ice&quot;, &quot;ability-ice.png&quot;),</span>
+<span class="fc" id="L295">            entry(&quot;psychic&quot;, &quot;ability-psychic.png&quot;),</span>
+<span class="fc" id="L296">            entry(&quot;ghost&quot;, &quot;ability-ghost.png&quot;),</span>
+<span class="fc" id="L297">            entry(&quot;dragon&quot;, &quot;ability-dragon.png&quot;),</span>
+<span class="fc" id="L298">            entry(&quot;dark&quot;, &quot;ability-dragon.png&quot;),</span>
+<span class="fc" id="L299">            entry(&quot;steel&quot;, &quot;ability-steel.png&quot;),</span>
+<span class="fc" id="L300">            entry(&quot;fairy&quot;, &quot;ability-fairy.png&quot;)</span>
     ));
 
-<span class="fc" id="L282">    public static final List&lt;String&gt; ATTRIBUTE_IMAGES = Arrays.asList(</span>
+<span class="fc" id="L303">    public static final List&lt;String&gt; ATTRIBUTE_IMAGES = Arrays.asList(</span>
             &quot;star.png&quot;,
             &quot;attack.png&quot;,
             &quot;heart.png&quot;,
@@ -294,34 +315,42 @@ import static java.util.Map.entry;
     public static final String FROZEN = &quot;frozen&quot;;
     public static final String CONFUSED = &quot;confused&quot;;
 
-<span class="fc" id="L297">    public static final List&lt;String&gt; STATUS_EFFECTS = Arrays.asList(PARALYSED, ASLEEP, POISONED, BURNED, FROZEN, CONFUSED);</span>
+<span class="fc" id="L318">    public static final List&lt;String&gt; STATUS_EFFECTS = Arrays.asList(PARALYSED, ASLEEP, POISONED, BURNED, FROZEN, CONFUSED);</span>
 
-<span class="fc" id="L299">    public static final HashMap&lt;String, String&gt; STATUS_EFFECTS_IMAGES = new HashMap&lt;&gt;(Map.ofEntries(</span>
-<span class="fc" id="L300">            entry(PARALYSED, &quot;images/paralysed.png&quot;),</span>
-<span class="fc" id="L301">            entry(ASLEEP, &quot;images/asleep.png&quot;),</span>
-<span class="fc" id="L302">            entry(POISONED, &quot;images/poisoned.png&quot;),</span>
-<span class="fc" id="L303">            entry(BURNED, &quot;images/burned.png&quot;),</span>
-<span class="fc" id="L304">            entry(FROZEN, &quot;images/frozen.png&quot;),</span>
-<span class="fc" id="L305">            entry(CONFUSED, &quot;images/confused.png&quot;)</span>
+<span class="fc" id="L320">    public static final HashMap&lt;String, String&gt; STATUS_EFFECTS_IMAGES = new HashMap&lt;&gt;(Map.ofEntries(</span>
+<span class="fc" id="L321">            entry(PARALYSED, &quot;images/paralysed.png&quot;),</span>
+<span class="fc" id="L322">            entry(ASLEEP, &quot;images/asleep.png&quot;),</span>
+<span class="fc" id="L323">            entry(POISONED, &quot;images/poisoned.png&quot;),</span>
+<span class="fc" id="L324">            entry(BURNED, &quot;images/burned.png&quot;),</span>
+<span class="fc" id="L325">            entry(FROZEN, &quot;images/frozen.png&quot;),</span>
+<span class="fc" id="L326">            entry(CONFUSED, &quot;images/confused.png&quot;)</span>
     ));
 
 
-<span class="nc" id="L309">    public enum itemType {</span>
-<span class="nc" id="L310">        ball,</span>
-<span class="nc" id="L311">        effect,</span>
-<span class="nc" id="L312">        monsterBox,</span>
-<span class="nc" id="L313">        itemBox</span>
+<span class="nc" id="L330">    public enum BallType {</span>
+<span class="nc" id="L331">        NORMAL,</span>
+<span class="nc" id="L332">        SUPER,</span>
+<span class="nc" id="L333">        HYPER,</span>
+<span class="nc" id="L334">        MASTER,</span>
+<span class="nc" id="L335">        NET,</span>
+<span class="nc" id="L336">        WATER,</span>
+<span class="nc" id="L337">        HEAL</span>
     }
 
     // enum to decide if the player wants to open his inv, sell or buy items
-<span class="fc" id="L317">    public enum inventoryType {</span>
-<span class="fc" id="L318">        showItems,</span>
-<span class="fc" id="L319">        buyItems,</span>
-<span class="fc" id="L320">        sellItems</span>
+<span class="fc" id="L341">    public enum InventoryType {</span>
+<span class="fc" id="L342">        showItems,</span>
+<span class="fc" id="L343">        buyItems,</span>
+<span class="fc" id="L344">        sellItems</span>
     }
 
     public static final String ITEM_ACTION_USE_ITEM = &quot;use&quot;;
+    public static final String ITEM_ACTION_USE_ITEM_MOVE = &quot;use-item&quot;;
     public static final String ITEM_USAGE_EFFECT = &quot;effect&quot;;
+    public static final String ITEM_USAGE_ITEM_BOX = &quot;itemBox&quot;;
+    public static final String ITEM_USAGE_MONSTER_BOX = &quot;monsterBox&quot;;
+    public static final String ITEM_USAGE_BALL = &quot;ball&quot;;
+
     public static final int useItemMonsterListVBoxWidth = 600;
     public static final int useItemMonsterListVBoxHeight = 410;
     public static final long FLIPPING_HORIZONTAL = 0x80000000L;

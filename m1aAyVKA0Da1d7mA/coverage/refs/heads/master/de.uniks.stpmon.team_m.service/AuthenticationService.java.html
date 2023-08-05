@@ -79,6 +79,14 @@ public class AuthenticationService {
         });
     }
 
+    public Observable&lt;LoginResult&gt; stayOnline() {
+<span class="nc" id="L83">        return authApiService.refresh(new RefreshDto(userStorage.getRefreshToken())).map(lr -&gt; {</span>
+<span class="nc" id="L84">            userStorage.setUser(lr);</span>
+<span class="nc" id="L85">            tokenStorage.setToken(lr.accessToken());</span>
+<span class="nc" id="L86">            return lr;</span>
+        });
+    }
+
     /**
      * logout logs out a user.
      *
@@ -86,7 +94,7 @@ public class AuthenticationService {
      */
 
     public Observable&lt;String&gt; logout() {
-<span class="fc" id="L89">        return authApiService.logout().map(lr -&gt; &quot;LogoutSuccess&quot;);</span>
+<span class="fc" id="L97">        return authApiService.logout().map(lr -&gt; &quot;LogoutSuccess&quot;);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

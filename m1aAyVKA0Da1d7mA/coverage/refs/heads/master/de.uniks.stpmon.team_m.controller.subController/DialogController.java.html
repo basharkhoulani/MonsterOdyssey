@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.service.AudioService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -11,7 +12,10 @@ import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import java.awt.*;
+
 import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.TALKING;
 
 public class DialogController extends Controller {
     @Inject
@@ -27,60 +31,64 @@ public class DialogController extends Controller {
     private final Text currentText;
     private final int amountOfTexts;
     private int starterSelection;
-<span class="fc" id="L30">    private boolean alreadySeenNurseDialog = false;</span>
-<span class="fc" id="L31">    private boolean alreadySeenClerkDialog = false;</span>
+<span class="fc" id="L34">    private boolean alreadySeenNurseDialog = false;</span>
+<span class="fc" id="L35">    private boolean alreadySeenClerkDialog = false;</span>
     private boolean wantsHeal;
     private boolean wantsToShop;
     private boolean noMons;
-<span class="fc" id="L35">    private boolean starterSelected = false;</span>
+<span class="fc" id="L39">    private boolean starterSelected = false;</span>
 
     @Inject
-<span class="fc" id="L38">    public DialogController(Trainer npc, TextFlow dialogTextFlow, boolean alreadyEncountered, NpcTextManager npcTextManager, Trainer player, IngameController ingameController) {</span>
-<span class="fc" id="L39">        this.npc = npc;</span>
-<span class="fc" id="L40">        this.alreadyEncountered = alreadyEncountered;</span>
-<span class="fc" id="L41">        this.npcTextManager = npcTextManager;</span>
-<span class="fc" id="L42">        this.ingameController = ingameController;</span>
+<span class="fc" id="L42">    public DialogController(Trainer npc, TextFlow dialogTextFlow, boolean alreadyEncountered, NpcTextManager npcTextManager, Trainer player, IngameController ingameController) {</span>
+<span class="fc" id="L43">        this.npc = npc;</span>
+<span class="fc" id="L44">        this.alreadyEncountered = alreadyEncountered;</span>
+<span class="fc" id="L45">        this.npcTextManager = npcTextManager;</span>
+<span class="fc" id="L46">        this.ingameController = ingameController;</span>
+
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if(!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L49">            AudioService.getInstance().playEffect(TALKING, ingameController);</span>
+        }
 
         try {
             // check if npc can heal
-<span class="fc bfc" id="L46" title="All 2 branches covered.">            if (npc.npc().canHeal()) {</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">            if (npc.npc().canHeal()) {</span>
                 // check if player has monsters
-<span class="pc bpc" id="L48" title="1 of 2 branches missed.">                if (player.team().size() == 0) {</span>
-<span class="nc" id="L49">                    this.npcTexts = npcTextManager.getNpcTexts(&quot;NurseNoMons&quot;);</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">                if (player.team().size() == 0) {</span>
+<span class="nc" id="L57">                    this.npcTexts = npcTextManager.getNpcTexts(&quot;NurseNoMons&quot;);</span>
                 } else {
-<span class="fc" id="L51">                    this.npcTexts = npcTextManager.getNpcTexts(&quot;Nurse&quot;);</span>
+<span class="fc" id="L59">                    this.npcTexts = npcTextManager.getNpcTexts(&quot;Nurse&quot;);</span>
                 }
             } else {
                 // check if player already encountered albert
-<span class="pc bpc" id="L55" title="1 of 4 branches missed.">                if (npc.npc().starters() != null &amp;&amp; alreadyEncountered) {</span>
-<span class="nc" id="L56">                    this.npcTexts = npcTextManager.getNpcTexts(npc._id() + &quot;alreadyEncountered&quot;);</span>
+<span class="pc bpc" id="L63" title="1 of 4 branches missed.">                if (npc.npc().starters() != null &amp;&amp; alreadyEncountered) {</span>
+<span class="nc" id="L64">                    this.npcTexts = npcTextManager.getNpcTexts(npc._id() + &quot;alreadyEncountered&quot;);</span>
                 }
             }
 
-<span class="nc" id="L60">        } catch (Error e) {</span>
-<span class="nc" id="L61">            System.err.println(&quot;NPC does not have canHeal() attribute..&quot;);</span>
-<span class="fc" id="L62">        }</span>
+<span class="nc" id="L68">        } catch (Error e) {</span>
+<span class="nc" id="L69">            System.err.println(&quot;NPC does not have canHeal() attribute..&quot;);</span>
+<span class="fc" id="L70">        }</span>
 
         // same problem here like in the IngameController
         try {
-<span class="fc bfc" id="L66" title="All 2 branches covered.">            if (npc.npc().sells() != null) {</span>
-<span class="pc bpc" id="L67" title="1 of 2 branches missed.">                if (!npc.npc().sells().isEmpty()) {</span>
-<span class="fc" id="L68">                    this.npcTexts = npcTextManager.getNpcTexts(&quot;Clerk&quot;);</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">            if (npc.npc().sells() != null) {</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">                if (!npc.npc().sells().isEmpty()) {</span>
+<span class="fc" id="L76">                    this.npcTexts = npcTextManager.getNpcTexts(&quot;Clerk&quot;);</span>
                 }
             }
-<span class="nc" id="L71">         } catch (Error e) {</span>
-<span class="nc" id="L72">            System.err.println(&quot;NPC does not have sells() attribute..&quot;);</span>
-<span class="fc" id="L73">        }</span>
+<span class="nc" id="L79">         } catch (Error e) {</span>
+<span class="nc" id="L80">            System.err.println(&quot;NPC does not have sells() attribute..&quot;);</span>
+<span class="fc" id="L81">        }</span>
 
-<span class="pc bpc" id="L75" title="1 of 4 branches missed.">        if (this.npcTexts == null || this.npcTexts.length == 0) {</span>
-<span class="fc" id="L76">            this.npcTexts = npcTextManager.getNpcTexts(npc._id());</span>
+<span class="pc bpc" id="L83" title="1 of 4 branches missed.">        if (this.npcTexts == null || this.npcTexts.length == 0) {</span>
+<span class="fc" id="L84">            this.npcTexts = npcTextManager.getNpcTexts(npc._id());</span>
         }
-<span class="fc" id="L78">        this.currentTextIndex = 0;</span>
-<span class="fc" id="L79">        this.currentText = new Text(this.npcTexts[currentTextIndex]);</span>
-<span class="fc" id="L80">        this.amountOfTexts = npcTexts.length;</span>
+<span class="fc" id="L86">        this.currentTextIndex = 0;</span>
+<span class="fc" id="L87">        this.currentText = new Text(this.npcTexts[currentTextIndex]);</span>
+<span class="fc" id="L88">        this.amountOfTexts = npcTexts.length;</span>
 
-<span class="fc" id="L82">        dialogTextFlow.getChildren().add(currentText);</span>
-<span class="fc" id="L83">    }</span>
+<span class="fc" id="L90">        dialogTextFlow.getChildren().add(currentText);</span>
+<span class="fc" id="L91">    }</span>
 
     /**
      * Method to continue the dialog.
@@ -90,114 +98,114 @@ public class DialogController extends Controller {
      */
     public Constants.ContinueDialogReturnValues continueDialog(Constants.DialogSpecialInteractions specialInteraction) {
         // check if a special interaction has been triggered
-<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (specialInteraction != null) {</span>
-<span class="pc bpc" id="L94" title="3 of 9 branches missed.">            switch (specialInteraction) {</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (specialInteraction != null) {</span>
+<span class="pc bpc" id="L102" title="3 of 9 branches missed.">            switch (specialInteraction) {</span>
                 case nurseYes -&gt; {
-<span class="fc" id="L96">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.NURSE.YES.DIALOG&quot;));</span>
-<span class="fc" id="L97">                    this.wantsHeal = true;</span>
-<span class="fc" id="L98">                    this.alreadySeenNurseDialog = true;</span>
-<span class="fc" id="L99">                }</span>
+<span class="fc" id="L104">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.NURSE.YES.DIALOG&quot;));</span>
+<span class="fc" id="L105">                    this.wantsHeal = true;</span>
+<span class="fc" id="L106">                    this.alreadySeenNurseDialog = true;</span>
+<span class="fc" id="L107">                }</span>
                 case nurseNo -&gt; {
-<span class="fc" id="L101">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.NURSE.NO.DIALOG&quot;));</span>
-<span class="fc" id="L102">                    this.wantsHeal = false;</span>
-<span class="fc" id="L103">                    this.alreadySeenNurseDialog = true;</span>
-<span class="fc" id="L104">                }</span>
+<span class="fc" id="L109">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.NURSE.NO.DIALOG&quot;));</span>
+<span class="fc" id="L110">                    this.wantsHeal = false;</span>
+<span class="fc" id="L111">                    this.alreadySeenNurseDialog = true;</span>
+<span class="fc" id="L112">                }</span>
                 case nurseNoMons -&gt; {
-<span class="nc bnc" id="L106" title="All 2 branches missed.">                    if (!this.noMons) {</span>
-<span class="nc" id="L107">                        this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.NURSE.NO.MONS1&quot;));</span>
-<span class="nc" id="L108">                        this.wantsHeal = false;</span>
-<span class="nc" id="L109">                        this.alreadySeenNurseDialog = true;</span>
-<span class="nc" id="L110">                        this.noMons = true;</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">                    if (!this.noMons) {</span>
+<span class="nc" id="L115">                        this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.NURSE.NO.MONS1&quot;));</span>
+<span class="nc" id="L116">                        this.wantsHeal = false;</span>
+<span class="nc" id="L117">                        this.alreadySeenNurseDialog = true;</span>
+<span class="nc" id="L118">                        this.noMons = true;</span>
                     } else {
-<span class="nc" id="L112">                        return dialogFinishedNoTalkToTrainer;</span>
+<span class="nc" id="L120">                        return dialogFinishedNoTalkToTrainer;</span>
                     }
                 }
                 case starterSelection0 -&gt; {
-<span class="fc" id="L116">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
-<span class="fc" id="L117">                    this.starterSelection = 0;</span>
-<span class="fc" id="L118">                    this.starterSelected = true;</span>
-<span class="fc" id="L119">                }</span>
+<span class="fc" id="L124">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
+<span class="fc" id="L125">                    this.starterSelection = 0;</span>
+<span class="fc" id="L126">                    this.starterSelected = true;</span>
+<span class="fc" id="L127">                }</span>
                 case starterSelection1 -&gt; {
-<span class="fc" id="L121">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
-<span class="fc" id="L122">                    this.starterSelection = 1;</span>
-<span class="fc" id="L123">                    this.starterSelected = true;</span>
-<span class="fc" id="L124">                }</span>
+<span class="fc" id="L129">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
+<span class="fc" id="L130">                    this.starterSelection = 1;</span>
+<span class="fc" id="L131">                    this.starterSelected = true;</span>
+<span class="fc" id="L132">                }</span>
                 case starterSelection2 -&gt; {
-<span class="fc" id="L126">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
-<span class="fc" id="L127">                    this.starterSelection = 2;</span>
-<span class="fc" id="L128">                    this.starterSelected = true;</span>
-<span class="fc" id="L129">                }</span>
+<span class="fc" id="L134">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;NPC.ALBERT.CHOSE.MONSTER&quot;));</span>
+<span class="fc" id="L135">                    this.starterSelection = 2;</span>
+<span class="fc" id="L136">                    this.starterSelected = true;</span>
+<span class="fc" id="L137">                }</span>
                 case clerkOpenShop -&gt; {
-<span class="nc" id="L131">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;TODO&quot;));</span>
-<span class="nc" id="L132">                    this.alreadySeenClerkDialog = true;</span>
-<span class="nc" id="L133">                    this.wantsToShop = true;</span>
-<span class="nc" id="L134">                }</span>
+<span class="nc" id="L139">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;TODO&quot;));</span>
+<span class="nc" id="L140">                    this.alreadySeenClerkDialog = true;</span>
+<span class="nc" id="L141">                    this.wantsToShop = true;</span>
+<span class="nc" id="L142">                }</span>
                 case clerkCancelShop -&gt; {
-<span class="fc" id="L136">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;CLERK.ABANDON.SHOP&quot;));</span>
-<span class="fc" id="L137">                    this.alreadySeenClerkDialog = true;</span>
-<span class="fc" id="L138">                    this.wantsToShop = false;</span>
+<span class="fc" id="L144">                    this.currentText.setText(npcTextManager.getSingleNpcText(&quot;CLERK.ABANDON.SHOP&quot;));</span>
+<span class="fc" id="L145">                    this.alreadySeenClerkDialog = true;</span>
+<span class="fc" id="L146">                    this.wantsToShop = false;</span>
                 }
             }
-<span class="fc" id="L141">            return dialogNotFinished;</span>
+<span class="fc" id="L149">            return dialogNotFinished;</span>
         }
 
         // check if at the end of dialog
-<span class="fc bfc" id="L145" title="All 2 branches covered.">        if (++currentTextIndex &gt;= amountOfTexts) {</span>
-<span class="fc bfc" id="L146" title="All 2 branches covered.">            if (alreadySeenNurseDialog) {</span>
-<span class="fc bfc" id="L147" title="All 2 branches covered.">                if (wantsHeal) {</span>
-<span class="fc" id="L148">                    return dialogFinishedTalkToTrainer;</span>
-                } else {
-<span class="fc" id="L150">                    return dialogFinishedNoTalkToTrainer;</span>
-                }
-            }
-
-<span class="fc bfc" id="L154" title="All 2 branches covered.">            if (alreadySeenClerkDialog) {</span>
-<span class="pc bpc" id="L155" title="1 of 2 branches missed.">                if (wantsToShop) {</span>
-<span class="nc" id="L156">                    return dialogFinishedTalkToTrainer;</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">        if (++currentTextIndex &gt;= amountOfTexts) {</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">            if (alreadySeenNurseDialog) {</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">                if (wantsHeal) {</span>
+<span class="fc" id="L156">                    return dialogFinishedTalkToTrainer;</span>
                 } else {
 <span class="fc" id="L158">                    return dialogFinishedNoTalkToTrainer;</span>
                 }
             }
 
-<span class="fc bfc" id="L162" title="All 2 branches covered.">            if (starterSelected) {</span>
-<span class="pc bpc" id="L163" title="1 of 4 branches missed.">                switch (starterSelection) {</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">            if (alreadySeenClerkDialog) {</span>
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">                if (wantsToShop) {</span>
+<span class="nc" id="L164">                    return dialogFinishedTalkToTrainer;</span>
+                } else {
+<span class="fc" id="L166">                    return dialogFinishedNoTalkToTrainer;</span>
+                }
+            }
+
+<span class="fc bfc" id="L170" title="All 2 branches covered.">            if (starterSelected) {</span>
+<span class="pc bpc" id="L171" title="1 of 4 branches missed.">                switch (starterSelection) {</span>
                     case 0 -&gt; {
-<span class="fc" id="L165">                        return albertDialogFinished0;</span>
+<span class="fc" id="L173">                        return albertDialogFinished0;</span>
                     }
                     case 1 -&gt; {
-<span class="fc" id="L168">                        return albertDialogFinished1;</span>
+<span class="fc" id="L176">                        return albertDialogFinished1;</span>
                     }
                     case 2 -&gt; {
-<span class="fc" id="L171">                        return albertDialogFinished2;</span>
+<span class="fc" id="L179">                        return albertDialogFinished2;</span>
                     }
                 }
             }
 
-<span class="fc bfc" id="L176" title="All 2 branches covered.">            if (npc.npc().canHeal()) {</span>
-<span class="fc" id="L177">                return spokenToNurse;</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">            if (npc.npc().canHeal()) {</span>
+<span class="fc" id="L185">                return spokenToNurse;</span>
             }
 
-<span class="pc bpc" id="L180" title="1 of 2 branches missed.">            if (npc.npc().encounterOnTalk()) {</span>
-<span class="nc" id="L181">                return encounterOnTalk;</span>
+<span class="pc bpc" id="L188" title="1 of 2 branches missed.">            if (npc.npc().encounterOnTalk()) {</span>
+<span class="nc" id="L189">                return encounterOnTalk;</span>
             }
 
             try {
-<span class="fc bfc" id="L185" title="All 2 branches covered.">                if (npc.npc().sells() != null) {</span>
-<span class="pc bpc" id="L186" title="1 of 2 branches missed.">                    if (!npc.npc().sells().isEmpty()) {</span>
-<span class="fc" id="L187">                        return spokenToClerk;</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">                if (npc.npc().sells() != null) {</span>
+<span class="pc bpc" id="L194" title="1 of 2 branches missed.">                    if (!npc.npc().sells().isEmpty()) {</span>
+<span class="fc" id="L195">                        return spokenToClerk;</span>
                     }
                 }
-<span class="pc" id="L190">            } catch (Error ignored) {}</span>
+<span class="pc" id="L198">            } catch (Error ignored) {}</span>
 
-<span class="pc bpc" id="L192" title="1 of 4 branches missed.">            if (npc.npc().starters() != null &amp;&amp; !this.alreadyEncountered) {</span>
-<span class="fc" id="L193">                ingameController.showStarterSelection(this.npc.npc().starters());</span>
-<span class="fc" id="L194">                return dialogNotFinished;</span>
+<span class="pc bpc" id="L200" title="1 of 4 branches missed.">            if (npc.npc().starters() != null &amp;&amp; !this.alreadyEncountered) {</span>
+<span class="fc" id="L201">                ingameController.showStarterSelection(this.npc.npc().starters());</span>
+<span class="fc" id="L202">                return dialogNotFinished;</span>
             } else {
-<span class="fc" id="L196">                return dialogFinishedTalkToTrainer;</span>
+<span class="fc" id="L204">                return dialogFinishedTalkToTrainer;</span>
             }
         } else {
-<span class="fc" id="L199">            this.currentText.setText(npcTexts[currentTextIndex]);</span>
-<span class="fc" id="L200">            return dialogNotFinished;</span>
+<span class="fc" id="L207">            this.currentText.setText(npcTexts[currentTextIndex]);</span>
+<span class="fc" id="L208">            return dialogNotFinished;</span>
         }
     }
 }
