@@ -776,7 +776,9 @@ public class EncounterController extends Controller {
             final Monster monster = event.data();
             if (monster._id().equals(encounterOpponentStorage.getSelfOpponent().monster())) {
                 if (monster.currentAttributes().health()/monster.attributes().health() <= 0.2) {
-                    AudioService.getInstance().playEffect(LOW_HEALTH);
+                    if(!GraphicsEnvironment.isHeadless()) {
+                        AudioService.getInstance().playEffect(LOW_HEALTH);
+                    }
                 }
             }
             if (event.suffix().contains("updated")) {
