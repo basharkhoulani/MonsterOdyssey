@@ -4,8 +4,6 @@ import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterAttributes;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Spy;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,7 +39,6 @@ public class MonsterStorageTest {
                 List.of("fire"),
                 "Flamander is a small, agile monster that lives in the hot deserts of the world."
         );
-        monsterStorage.addMonsterData(monster, monsterTypeDto, null);
         MonsterTypeDto monsterTypeDto2 = new MonsterTypeDto(
                 2,
                 "Flamander",
@@ -49,9 +46,20 @@ public class MonsterStorageTest {
                 List.of("fire"),
                 "Flamander is a small, agile monster that lives in the hot deserts of the world."
         );
+        assertEquals(monsterStorage.getMonsterDataList().size(), 0);
+        monsterStorage.updateMonsterData(monster, monsterTypeDto, null);
+        assertEquals(monsterStorage.getMonsterDataList().size(), 0);
+
+        monsterStorage.addMonsterData(monster, monsterTypeDto, null);
         assertEquals(monsterTypeDto, monsterStorage.getMonsterData(monster._id()).getMonsterTypeDto());
         assertNull(monsterStorage.getMonsterData(monster._id()).getMonsterImage());
+
+        monsterStorage.addMonsterData(monster, monsterTypeDto, null);
+        assertEquals(monsterStorage.getMonsterDataList().size(), 1);
+
         monsterStorage.updateMonsterData(monster, monsterTypeDto2, null);
+        assertEquals(monsterStorage.getMonsterDataList().stream().filter(monsterData -> monsterData.getMonster().equals(monster)).toList().get(0).getMonsterTypeDto(), monsterTypeDto2);
+        monsterStorage.updateMonsterData(monster, null, null);
         assertEquals(monsterStorage.getMonsterDataList().stream().filter(monsterData -> monsterData.getMonster().equals(monster)).toList().get(0).getMonsterTypeDto(), monsterTypeDto2);
     }
 }
