@@ -2,15 +2,15 @@ package de.uniks.stpmon.team_m.utils;
 
 
 import de.uniks.stpmon.team_m.App;
+import javafx.scene.image.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
 import okhttp3.ResponseBody;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.util.Base64;
 import java.util.Objects;
 
@@ -119,15 +119,6 @@ public class ImageProcessor {
         return new int[] {x, y, w, h};
     }
 
-    /**
-     * This method is used to crop the
-     *
-     * @param charactermodel   character chunk, for instance "Premade_Character_01.png"
-     * @param x                coordinate of upper right corner of image
-     * @param y                coordinate of upper right corner of image
-     * @param w                width of image
-     * @param h                height of image
-     */
     public static WritableImage showScaledCharacter(String charactermodel, int direction, Boolean isWalking) {
         int[] params = getParams(direction, isWalking);
         try {
@@ -147,6 +138,25 @@ public class ImageProcessor {
         }
     }
 
+    public static Image showScaledItemImage(String itemImage) {
+        try {
+            BufferedImage bufferedImage = ImageIO.read(Objects.requireNonNull(App.class.getResource("item_images/" + itemImage)));
+            BufferedImage scaledBufferedImage = ImageProcessor.scaleImage(bufferedImage, 10);
+            WritableImage writableImage = new WritableImage(scaledBufferedImage.getWidth(), scaledBufferedImage.getHeight());
+            PixelWriter pixelWriter = writableImage.getPixelWriter();
+            for (int y1 = 0; y1 < scaledBufferedImage.getHeight(); y1++) {
+                for (int x1 = 0; x1 < scaledBufferedImage.getWidth(); x1++) {
+                    pixelWriter.setArgb(x1, y1, scaledBufferedImage.getRGB(x1, y1));
+                }
+            }
+            return writableImage;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private static String convertToBase64(BufferedImage image) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(image, "png", baos);
@@ -156,6 +166,7 @@ public class ImageProcessor {
 
         return Base64.getEncoder().encodeToString(imageBytes);
     }
+
 
     public static Image resonseBodyToJavaFXImage(ResponseBody responseBody) throws IOException {
         responseBody.source();

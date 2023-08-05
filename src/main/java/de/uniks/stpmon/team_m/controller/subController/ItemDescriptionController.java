@@ -1,6 +1,5 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
@@ -23,11 +22,11 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.net.URL;
 
-import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxHeight;
-import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxWidth;
+import static de.uniks.stpmon.team_m.Constants.*;
 
 public class ItemDescriptionController extends Controller {
 
+    private final Runnable onItemUsed;
     ItemTypeDto itemTypeDto;
     Image itemImage;
     Item item;
@@ -45,7 +44,7 @@ public class ItemDescriptionController extends Controller {
     public ImageView coinImageView;
     @FXML
     public Button useButton;
-    private Constants.inventoryType inventoryType;
+    private InventoryType inventoryType;
     private int ownAmountOfItem;
 
     private Runnable closeItemMenu;
@@ -53,14 +52,15 @@ public class ItemDescriptionController extends Controller {
     private IngameController ingameController;
     private EncounterController encounterController;
 
-    @Inject
-    public ItemDescriptionController() {
+
+    public ItemDescriptionController(Runnable onItemUsed) {
+        this.onItemUsed = onItemUsed;
     }
 
     public void init(ItemTypeDto itemTypeDto,
                      Image itemImage,
                      Item item,
-                     Constants.inventoryType inventoryType,
+                     InventoryType inventoryType,
                      int ownAmountOfITem,
                      Runnable closeItemMenu,
                      StackPane rootStackPane,
@@ -79,7 +79,7 @@ public class ItemDescriptionController extends Controller {
     public void initFromEncounter(ItemTypeDto itemTypeDto,
                                   Image itemImage,
                                   Item item,
-                                  Constants.inventoryType inventoryType,
+                                  InventoryType inventoryType,
                                   int ownAmountOfITem,
                                   Runnable closeItemMenu,
                                   StackPane rootStackPane,
@@ -108,28 +108,31 @@ public class ItemDescriptionController extends Controller {
         if (itemTypeDto.use() == null) {
             useButton.setVisible(false);
             useButton.setDisable(true);
-        } else if (inventoryType == Constants.inventoryType.showItems) {
-            String use = itemTypeDto.use();
-            Constants.itemType itemType = Constants.itemType.valueOf(use);
-
-            if (encounterController == null && itemType == Constants.itemType.ball) {
+        } else if (inventoryType == InventoryType.showItems) {
+            if (encounterController == null && itemTypeDto.use().equals(ITEM_USAGE_BALL)) {
                 useButton.setVisible(false);
                 useButton.setDisable(true);
             }
-
+            if (item.amount() == 0) {
+                useButton.setDisable(true);
+            }
             useButton.setOnAction(evt -> {
-                if (itemType == Constants.itemType.effect) {
+                if (itemTypeDto.use().equals(ITEM_USAGE_EFFECT)) {
                     showMonsterList(item);
                     closeItemMenu.run();
-                } else if (itemType == Constants.itemType.ball) {
+                } else if (itemTypeDto.use().equals(ITEM_USAGE_BALL)) {
                     if(encounterController != null) {
                         encounterController.useItem(item, null);
+                        onItemUsed.run();
                         closeItemMenu.run();
                     }
+                } else {
+                    ingameController.useItem(item, null);
+                    closeItemMenu.run();
+                    onItemUsed.run();
                 }
             });
         }
-
         switch (this.inventoryType) {
             case buyItems -> {
                 itemAmountTitleLabel.setText(resources.getString("CLERK.IN.BAG"));
@@ -172,7 +175,7 @@ public class ItemDescriptionController extends Controller {
         if (ingameController != null) {
             MonstersListController monstersListController = ingameController.getMonstersListController();
             monstersListController.setValues(resources, preferences, resourceBundleProvider, this, app);
-            monstersListController.init(ingameController, monsterListVBox, rootStackPane, item);
+            monstersListController.init(ingameController, monsterListVBox, rootStackPane, item, onItemUsed);
             monsterListVBox.getChildren().add(monstersListController.render());
             rootStackPane.getChildren().add(monsterListVBox);
             monsterListVBox.requestFocus();
@@ -181,7 +184,7 @@ public class ItemDescriptionController extends Controller {
         } else if (encounterController != null) {
             ChangeMonsterListController changeMonsterListController = encounterController.getChangeMonsterListController();
             changeMonsterListController.setValues(resources, preferences, resourceBundleProvider, this, app);
-            changeMonsterListController.init(encounterController, monsterListVBox, encounterController.getIngameController(), item);
+            changeMonsterListController.init(encounterController, monsterListVBox, encounterController.getIngameController(), item, onItemUsed);
             monsterListVBox.getChildren().add(changeMonsterListController.render());
             rootStackPane.getChildren().add(monsterListVBox);
             monsterListVBox.requestFocus();

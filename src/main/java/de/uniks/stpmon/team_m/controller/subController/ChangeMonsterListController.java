@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.HttpModule_AreasFactory;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
@@ -8,6 +9,7 @@ import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.service.MonstersService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
+import de.uniks.stpmon.team_m.utils.MonsterStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -39,19 +41,23 @@ public class ChangeMonsterListController extends Controller {
     public ListView<Monster> changeMonsterListView;
     public VBox monsterListVBox;
     public List<Monster> activeMonstersList;
+    @Inject
+    public Provider<MonsterStorage> monsterStorageProvider;
     private Item item;
+    public Runnable onItemUsed;
 
     @Inject
     public ChangeMonsterListController() {
     }
 
-    public void init(EncounterController encounterController, VBox monsterListVBox, IngameController ingameController, Item item) {
+    public void init(EncounterController encounterController, VBox monsterListVBox, IngameController ingameController, Item item, Runnable onItemUsed) {
         super.init();
         activeMonstersList = new ArrayList<>();
         this.encounterController = encounterController;
         this.monsterListVBox = monsterListVBox;
         this.ingameController = ingameController;
         this.item = item;
+        this.onItemUsed = onItemUsed;
     }
 
     @Override
@@ -86,7 +92,8 @@ public class ChangeMonsterListController extends Controller {
                         this.encounterController,
                         this.ingameController,
                         false,
-                        item
+                        item,
+                        monsterStorageProvider
                 ));
         changeMonsterListView.getItems().addAll(monsters);
         changeMonsterListView.setFocusModel(null);

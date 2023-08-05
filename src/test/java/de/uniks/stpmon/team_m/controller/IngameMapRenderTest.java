@@ -473,6 +473,10 @@ public class IngameMapRenderTest extends ApplicationTest {
                 null,
                 List.of(),
                 0)));
+
+        when(eventListenerMock.listen("trainers.6475e595ac3946b6a812d865.monsters.*.*", Monster.class)).thenReturn(Observable.empty());
+        when(eventListenerMock.listen("trainers.6475e595ac3946b6a812d865.items.*.*", Item.class)).thenReturn(Observable.empty());
+
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();

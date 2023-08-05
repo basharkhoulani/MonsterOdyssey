@@ -6,6 +6,8 @@ import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.MonstersService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
+import de.uniks.stpmon.team_m.utils.MonsterData;
+import de.uniks.stpmon.team_m.utils.MonsterStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.stage.Stage;
@@ -38,6 +40,8 @@ public class ChangeMonsterListControllerTest extends ApplicationTest {
     Provider<EncounterOpponentStorage> encounterOpponentStorageProvider;
     @Mock
     Provider<PresetsService> presetsServiceProvider;
+    @Mock
+    Provider<MonsterStorage> monsterStorageProvider;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -46,13 +50,16 @@ public class ChangeMonsterListControllerTest extends ApplicationTest {
         stage.requestFocus();
         PresetsService presetsService = mock(PresetsService.class);
         when(presetsServiceProvider.get()).thenReturn(presetsService);
-        when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(new MonsterTypeDto(
+        final MonsterStorage monsterStorageMock = mock(MonsterStorage.class);
+        when(monsterStorageProvider.get()).thenReturn(monsterStorageMock);
+        final MonsterTypeDto monsterTypeDto = new MonsterTypeDto(
                 696969,
                 "BattleCat",
                 "images/monster1_without",
                 List.of("fire"),
                 "Jooooo das vieh ballert"
-        )));
+        );
+        when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(monsterTypeDto));
         when(presetsService.getMonsterImage(anyInt())).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
         LinkedHashMap<String, Integer> abilities = new LinkedHashMap<>();
         abilities.put("1", 35);
@@ -93,6 +100,7 @@ public class ChangeMonsterListControllerTest extends ApplicationTest {
                         new MonsterAttributes(14, 8, 8, 5),
                         new MonsterAttributes(14, 8, 8, 5),
                         List.of()));
+        when(monsterStorageProvider.get().getMonsterData(any())).thenReturn(new MonsterData(monsters.get(0), monsterTypeDto, null));
         when(monstersService.getMonsters(any(), any())).thenReturn(Observable.just(monsters));
         TrainerStorage trainerStorage = mock(TrainerStorage.class);
         when(trainerStorageProvider.get()).thenReturn(trainerStorage);
@@ -161,7 +169,7 @@ public class ChangeMonsterListControllerTest extends ApplicationTest {
                 0
         ));
 
-        changeMonsterListController.init(null, null, null,null);
+        changeMonsterListController.init(null, null, null,null, null);
         app.start(stage);
         app.show(changeMonsterListController);
     }
