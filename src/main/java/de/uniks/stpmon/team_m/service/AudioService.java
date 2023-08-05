@@ -46,7 +46,7 @@ public class AudioService {
         } else {
             effectPlayer.setRate(1);
         }
-        effectPlayer.setVolume(preferences.getDouble("volume", 0.5));
+        effectPlayer.setVolume(preferences.getDouble("volume", 0.5) * 1.5);
         effectPlayer.play();
     }
 
