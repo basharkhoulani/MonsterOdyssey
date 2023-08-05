@@ -34,6 +34,10 @@ public class AudioService {
 
     }
 
+    public void playEffect() {
+
+    }
+
     public void stopSound() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
