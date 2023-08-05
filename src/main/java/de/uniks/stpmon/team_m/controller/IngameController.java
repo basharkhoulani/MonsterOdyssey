@@ -573,6 +573,7 @@ public class IngameController extends Controller {
                         }
                         int oldXValue = trainerStorageProvider.get().getX();
                         int oldYValue = trainerStorageProvider.get().getY();
+                        int oldDirection = trainerStorageProvider.get().getDirection();
                         if (oldXValue != moveTrainerDto.x() || oldYValue != moveTrainerDto.y()) {
                             trainerController.setTrainerTargetPosition(moveTrainerDto.x(), moveTrainerDto.y());
                             trainerController.setTrainerDirection(moveTrainerDto.direction());
@@ -585,12 +586,16 @@ public class IngameController extends Controller {
                             } else {
                                 shiftMapDownTransition.play();
                             }
+                            if(!GraphicsEnvironment.isHeadless()) {
+                                AudioService.getInstance().stopEffect();
+                                AudioService.getInstance().playEffect(WALKING);
+                            }
                         } else {
                             trainerController.turn(moveTrainerDto.direction());
-                        }
-                        if(!GraphicsEnvironment.isHeadless()) {
-                            AudioService.getInstance().stopEffect();
-                            AudioService.getInstance().playEffect(WALKING);
+                            if(!GraphicsEnvironment.isHeadless() && oldDirection != moveTrainerDto.direction()) {
+                                AudioService.getInstance().stopEffect();
+                                AudioService.getInstance().playEffect(WALKING);
+                            }
                         }
                         trainerStorageProvider.get().setX(moveTrainerDto.x());
                         trainerStorageProvider.get().setY(moveTrainerDto.y());
