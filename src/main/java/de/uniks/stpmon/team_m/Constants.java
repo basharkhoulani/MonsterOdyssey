@@ -90,6 +90,7 @@ public class Constants {
     public static final int TRAINER_DIRECTION_UP = 1;
     public static final int TRAINER_DIRECTION_LEFT = 2;
     public static final int TRAINER_DIRECTION_DOWN = 3;
+    public static final String OBJECTGROUP = "objectgroup";
 
 
     public static final String SETTINGSYMBOL2 = "images/SettingSymbol2.png";
@@ -170,11 +171,7 @@ public class Constants {
     public static final String notificationBellImage = "images/NotificationBell.png";
 
     // Ingame MiniMap
-
-    public static final int descriptionBoxHeight = 40;
-    public static final int descriptionBoxWidth = 632;
-    public static final int descriptionBoxLayoutX = -60;
-    public static final int descriptionBoxLayoutY = -32;
+    public static final int paddingAndSpacingValue = 20;
 
     // Encounter
     public static final int fleePopupWidth = 300;

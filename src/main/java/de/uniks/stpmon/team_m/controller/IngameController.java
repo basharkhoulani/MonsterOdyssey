@@ -2131,8 +2131,11 @@ public class IngameController extends Controller {
             miniMapVBox = new VBox();
             miniMapVBox.setId("miniMapVBox");
             miniMapVBox.getStyleClass().add("miniMapContainer");
-            ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox, miniMap);
-            miniMapVBox.getChildren().add(ingameMiniMapController.render());
+            TrainerStorage trainerStorage = trainerStorageProvider.get();
+            disposables.add(areasService.getAreas(trainerStorage.getRegion()._id()).observeOn(FX_SCHEDULER).subscribe(areas -> {
+                ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox, miniMap, areas);
+                miniMapVBox.getChildren().add(ingameMiniMapController.render());
+                }, Throwable::printStackTrace));
         }
         root.getChildren().add(miniMapVBox);
         miniMapVBox.requestFocus();
