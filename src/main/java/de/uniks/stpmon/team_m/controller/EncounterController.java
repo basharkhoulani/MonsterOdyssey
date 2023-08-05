@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.*;
 
 import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.DEATH;
 
 
 public class EncounterController extends Controller {
@@ -878,6 +879,7 @@ public class EncounterController extends Controller {
 
     public void enemyMonsterDefeated() {
         // pause to wait for possible level up result which comes after defeat result, else if is always false
+        AudioService.getInstance().playEffect(DEATH);
         PauseTransition pause = new PauseTransition(Duration.millis(pauseDuration));
         pause.setOnFinished(evt -> {
             if (resultLevelUpHashMap.get(encounterOpponentStorage.getSelfOpponent()._id())) {
@@ -893,10 +895,13 @@ public class EncounterController extends Controller {
     }
 
     public void yourMonsterDefeated(String opponentId) {
+        AudioService.getInstance().playEffect(DEATH);
         monsterInTeamHashMap.forEach((monsterId, isDied) -> {
             if (!isDied && !Objects.equals(monsterId, encounterOpponentStorage.getSelfOpponent().monster())) {
                 if (!encounterOpponentStorage.isTwoMonster() || !Objects.equals(monsterId, encounterOpponentStorage.getCoopOpponent().monster())) {
-                    disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, monsterId, null).observeOn(FX_SCHEDULER).subscribe(opponent -> resetRepeatedTimes(), Throwable::printStackTrace));
+                    disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, monsterId, null).observeOn(FX_SCHEDULER).subscribe(opponent -> {
+                        resetRepeatedTimes();
+                    }, Throwable::printStackTrace));
                 }
             }
         });
