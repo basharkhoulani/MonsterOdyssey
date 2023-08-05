@@ -159,11 +159,15 @@ public class ItemDescriptionController extends Controller {
     }
 
     public void buyItem() {
-        AudioService.getInstance().playEffect(BUY_SELL);
+        if (!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playEffect(BUY_SELL);
+        }
     }
 
     public void sellItem() {
-        AudioService.getInstance().playEffect(BUY_SELL);
+        if (!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playEffect(BUY_SELL);
+        }
     }
 
     private void showMonsterList(Item item) {
