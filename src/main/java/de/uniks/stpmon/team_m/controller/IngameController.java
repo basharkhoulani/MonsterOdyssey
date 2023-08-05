@@ -2107,7 +2107,7 @@ public class IngameController extends Controller {
             @Override
             public void run() {
                 disposables.add(udpEventListenerProvider.get().ping().observeOn(FX_SCHEDULER).subscribe());
-                disposables.add(authenticationService.refresh().observeOn(FX_SCHEDULER).subscribe());
+                disposables.add(authenticationService.stayOnline().observeOn(FX_SCHEDULER).subscribe());
             }
         };
         timer.schedule(task, 0, MINUTE_IN_MILLIS);
