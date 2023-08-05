@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.NOTIFICATION;
 
 
 public class IngameController extends Controller {
@@ -506,7 +507,7 @@ public class IngameController extends Controller {
 
         if (preferences.getBoolean("firstEntry", true)) {
             this.notificationListHandyController.displayFirstTimeNotifications(true);
-            notificationBell.setVisible(true);
+            AudioService.getInstance().playEffect(NOTIFICATION);
             preferences.putBoolean("firstEntry", false);
         }
     }
@@ -1616,18 +1617,21 @@ public class IngameController extends Controller {
                 endDialog(0, true);
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
+                AudioService.getInstance().playEffect(NOTIFICATION);
                 preferences.putBoolean("starterMessages", true);
             }
             case albertDialogFinished1 -> {
                 endDialog(1, true);
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
+                AudioService.getInstance().playEffect(NOTIFICATION);
                 preferences.putBoolean("starterMessages", true);
             }
             case albertDialogFinished2 -> {
                 endDialog(2, true);
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
+                AudioService.getInstance().playEffect(NOTIFICATION);
                 preferences.putBoolean("starterMessages", true);
             }
             case dialogFinishedNoTalkToTrainer -> endDialog(0, false);
@@ -1961,6 +1965,9 @@ public class IngameController extends Controller {
                                     root.getChildren().remove(loadingScreen);
                                     if (!GraphicsEnvironment.isHeadless()) {
                                         loadingScreenAnimation.stop();
+                                        if(notificationBell.isVisible()) {
+                                            AudioService.getInstance().playEffect(NOTIFICATION);
+                                        }
                                     }
                                 }, error -> {
                                     TimeUnit.SECONDS.sleep(10);

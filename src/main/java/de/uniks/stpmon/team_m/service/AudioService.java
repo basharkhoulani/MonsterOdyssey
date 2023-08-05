@@ -1,4 +1,5 @@
 package de.uniks.stpmon.team_m.service;
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import javafx.scene.control.Button;
 import javafx.scene.media.Media;
@@ -34,8 +35,10 @@ public class AudioService {
 
     }
 
-    public void playEffect() {
-
+    public void playEffect(Constants.SoundEffect effect) {
+        final Media sound = new Media((Objects.requireNonNull(Main.class.getResource("sounds/" + effect + ".mp3"))).toString());
+        mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
     }
 
     public void stopSound() {
