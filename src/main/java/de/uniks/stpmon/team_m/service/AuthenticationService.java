@@ -79,6 +79,14 @@ public class AuthenticationService {
         });
     }
 
+    public Observable<LoginResult> stayOnline() {
+        return authApiService.refresh(new RefreshDto(userStorage.getRefreshToken())).map(lr -> {
+            userStorage.setUser(lr);
+            tokenStorage.setToken(lr.accessToken());
+            return lr;
+        });
+    }
+
     /**
      * logout logs out a user.
      *

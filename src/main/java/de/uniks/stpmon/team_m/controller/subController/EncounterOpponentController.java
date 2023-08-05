@@ -211,8 +211,10 @@ public class EncounterOpponentController extends Controller {
 
     public EncounterOpponentController onTarget() {
         monsterNameHBox.getStyleClass().clear();
+        if (isMultipleEnemyEncounter) {
+            monsterImageViewVBox.setStyle("-fx-padding: 16px; -fx-border-color: red; -fx-border-radius: 100;");
+        }
         monsterNameHBox.getStyleClass().add("hBoxRed");
-        monsterImageViewVBox.setStyle("-fx-padding: 16px; -fx-border-color: red; -fx-border-radius: 100;");
         isTargeted = true;
         if (onTargetChange != null) {
             onTargetChange.run();
