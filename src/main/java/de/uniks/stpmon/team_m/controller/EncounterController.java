@@ -149,6 +149,7 @@ public class EncounterController extends Controller {
 
     public Parent render() {
         Parent parent = super.render();
+        AudioService.getInstance().stopEffect();
         // init battle menu
         battleMenuController.init(this, encounterOpponentStorage, app);
         battleMenuVBox.getChildren().add(battleMenuController.render());
@@ -691,8 +692,12 @@ public class EncounterController extends Controller {
                 if (oResults.results() != null) {
                     for (Result r : oResults.results()) {
                         switch (r.type()) {
-                            case ABILITY_SUCCESS ->
-                                    updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
+                            case ABILITY_SUCCESS -> {
+                                updateDescription(abilityDtos.get(r.ability() - 1).name() + " " + resources.getString("IS") + " " + r.effectiveness() + ".\n", false);
+                                if (!GraphicsEnvironment.isHeadless()) {
+                                    AudioService.getInstance().playEffect(ATTACK);
+                                }
+                            }
                             case MONSTER_LEVELUP -> {
                                 if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {
                                     resultLevelUpHashMap.put(oResults._id(), true);
@@ -775,8 +780,8 @@ public class EncounterController extends Controller {
         disposables.add(eventListener.get().listen("trainers." + trainerId + ".monsters." + monsterId + ".*", Monster.class).observeOn(FX_SCHEDULER).subscribe(event -> {
             final Monster monster = event.data();
             if (monster._id().equals(encounterOpponentStorage.getSelfOpponent().monster())) {
-                if (monster.currentAttributes().health()/monster.attributes().health() <= 0.2) {
-                    if(!GraphicsEnvironment.isHeadless()) {
+                if (monster.currentAttributes().health() / monster.attributes().health() <= 0.2) {
+                    if (!GraphicsEnvironment.isHeadless()) {
                         AudioService.getInstance().playEffect(LOW_HEALTH);
                     }
                 }
@@ -892,7 +897,7 @@ public class EncounterController extends Controller {
 
     public void enemyMonsterDefeated() {
         // pause to wait for possible level up result which comes after defeat result, else if is always false
-        if(!GraphicsEnvironment.isHeadless()) {
+        if (!GraphicsEnvironment.isHeadless()) {
             AudioService.getInstance().playEffect(DEATH);
         }
         PauseTransition pause = new PauseTransition(Duration.millis(pauseDuration));
@@ -910,7 +915,7 @@ public class EncounterController extends Controller {
     }
 
     public void yourMonsterDefeated(String opponentId) {
-        if(!GraphicsEnvironment.isHeadless()) {
+        if (!GraphicsEnvironment.isHeadless()) {
             AudioService.getInstance().playEffect(DEATH);
         }
         monsterInTeamHashMap.forEach((monsterId, isDied) -> {
@@ -932,7 +937,7 @@ public class EncounterController extends Controller {
         firstPause.setOnFinished(evt -> {
             ownTrainerController.monsterImageView.setVisible(false);
             fleeAnimation.play();
-            if(!GraphicsEnvironment.isHeadless()) {
+            if (!GraphicsEnvironment.isHeadless()) {
                 AudioService.getInstance().playEffect(FLEE);
             }
         });
@@ -1023,7 +1028,7 @@ public class EncounterController extends Controller {
     }
 
     public void showLevelUpPopUp(String opponentId) {
-        if(!GraphicsEnvironment.isHeadless()) {
+        if (!GraphicsEnvironment.isHeadless()) {
             AudioService.getInstance().playEffect(LEVEL_UP);
         }
         resultLevelUpHashMap.put(opponentId, false);

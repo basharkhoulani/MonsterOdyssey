@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -108,7 +109,6 @@ public class AbilitiesMenuController extends Controller {
                     encounterController.resetRepeatedTimes();
                     encounterController.increaseCurrentMonsterIndex();
                     encounterController.goBackToBattleMenu();
-                    AudioService.getInstance().playEffect(ATTACK);
                 }, Throwable::printStackTrace));
     }
 
