@@ -51,8 +51,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static de.uniks.stpmon.team_m.Constants.*;
-import static de.uniks.stpmon.team_m.Constants.SoundEffect.GOT_COINS;
-import static de.uniks.stpmon.team_m.Constants.SoundEffect.NOTIFICATION;
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.*;
 
 
 public class IngameController extends Controller {
@@ -1768,6 +1767,7 @@ public class IngameController extends Controller {
             inNpcPopup = false;
             this.root.getChildren().remove(nursePopupVBox);
             buttonsDisable(false);
+            AudioService.getInstance().playEffect(HEALING);
         });
 
         // no button
