@@ -1279,6 +1279,7 @@ public class EncounterController extends Controller {
                 trainerStorageProvider.get().useItem(useItemMove.item());
                 increaseCurrentMonsterIndex();
             }));
+            repeatedTimes++;
         }
     }
 
