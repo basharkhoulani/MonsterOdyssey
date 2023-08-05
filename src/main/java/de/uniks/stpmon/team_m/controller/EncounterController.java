@@ -562,7 +562,7 @@ public class EncounterController extends Controller {
                 }
                 deleteOpponents++;
                 if (opponentsDelete.size() >= encounterOpponentStorage.getEncounterSize()) {
-                    PauseTransition pause = new PauseTransition(Duration.millis(pauseDuration));
+                    PauseTransition pause = new PauseTransition(Duration.millis(pauseDuration/2));
                     pause.setOnFinished(evt -> {
                         showResult();
                     });
