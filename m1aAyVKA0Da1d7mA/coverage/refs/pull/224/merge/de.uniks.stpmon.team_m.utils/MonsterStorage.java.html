@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MonsterStorage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.utils</a> &gt; <span class="el_source">MonsterStorage.java</span></div><h1>MonsterStorage.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.utils;
+
+import de.uniks.stpmon.team_m.dto.Monster;
+import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import io.reactivex.rxjava3.annotations.NonNull;
+import javafx.scene.image.Image;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.ArrayList;
+import java.util.List;
+
+@Singleton
+public class MonsterStorage {
+    List&lt;MonsterData&gt; monsterDataList;
+
+    @Inject
+<span class="fc" id="L18">    public MonsterStorage() {</span>
+<span class="fc" id="L19">        monsterDataList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L20">    }</span>
+
+    public List&lt;MonsterData&gt; getMonsterDataList() {
+<span class="fc" id="L23">        return monsterDataList;</span>
+    }
+
+    public void addMonsterData(Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage) {
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (monsterDataList.stream().anyMatch(m -&gt; m.getMonster()._id().equals(monster._id()))) {</span>
+<span class="fc" id="L28">            return;</span>
+        }
+<span class="fc" id="L30">        monsterDataList.add(new MonsterData(monster, monsterTypeDto, monsterImage));</span>
+<span class="fc" id="L31">    }</span>
+
+    // null as param means that the value should not be updated
+    public void updateMonsterData(@NonNull Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage) {
+<span class="fc" id="L35">        MonsterData oldMonsterData = monsterDataList.stream().filter(m -&gt; m.getMonster()._id().equals(monster._id())).findFirst().orElse(null);</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (oldMonsterData == null) {</span>
+<span class="fc" id="L37">            return;</span>
+        }
+<span class="fc" id="L39">        monsterDataList.set(monsterDataList.indexOf(oldMonsterData), new MonsterData(</span>
+                monster,
+<span class="fc bfc" id="L41" title="All 2 branches covered.">                monsterTypeDto == null ? oldMonsterData.getMonsterTypeDto() : monsterTypeDto,</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">                monsterImage == null ? oldMonsterData.getMonsterImage() : monsterImage</span>
+        ));
+<span class="fc" id="L44">    }</span>
+
+    public MonsterData getMonsterData(String monsterId) {
+<span class="fc" id="L47">        return monsterDataList.stream().filter(m -&gt; m.getMonster()._id().equals(monsterId)).findFirst().orElse(null);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
