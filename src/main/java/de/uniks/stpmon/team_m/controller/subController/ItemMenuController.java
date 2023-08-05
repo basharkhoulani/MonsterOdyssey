@@ -46,8 +46,8 @@ public class ItemMenuController extends Controller {
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
     TrainersService trainersService;
-    @Inject
-    Provider<ItemDescriptionController> itemDescriptionControllerProvider;
+    //@Inject
+    //Provider<ItemDescriptionController> itemDescriptionControllerProvider;
     @Inject
     Provider<ItemStorage> itemStorageProvider;
 
@@ -64,13 +64,15 @@ public class ItemMenuController extends Controller {
     public ItemMenuController() {
     }
 
-    public void init(IngameController ingameController,
-                     TrainersService trainersService,
-                     Provider<TrainerStorage> trainerStorageProvider,
-                     VBox itemMenuBox,
-                     InventoryType inventoryType,
-                     List<Integer> npcItemList,
-                     StackPane rootStackPane) {
+    public void init(
+            IngameController ingameController,
+            TrainersService trainersService,
+            Provider<TrainerStorage> trainerStorageProvider,
+            VBox itemMenuBox,
+            InventoryType inventoryType,
+            List<Integer> npcItemList,
+            StackPane rootStackPane
+    ) {
         super.init();
         this.ingameController = ingameController;
         this.trainersService = trainersService;
@@ -81,19 +83,15 @@ public class ItemMenuController extends Controller {
         this.rootStackPane = rootStackPane;
     }
 
-    public void initFromEncounter(EncounterController encounterController,
-                                  TrainersService trainersService,
-                                  Provider<TrainerStorage> trainerStorageProvider,
-                                  VBox itemMenuBox,
-                                  Constants.inventoryType inventoryType,
-                                  List<Integer> npcItemList,
-                                  StackPane rootStackPane) {
-                                    TrainersService trainersService,
-                                    Provider<TrainerStorage> trainerStorageProvider,
-                                    VBox itemMenuBox,
-                                    InventoryType inventoryType,
-                                    List<Integer> npcItemList,
-                                    StackPane rootStackPane) {
+    public void initFromEncounter(
+            EncounterController encounterController,
+            TrainersService trainersService,
+            Provider<TrainerStorage> trainerStorageProvider,
+            VBox itemMenuBox,
+            InventoryType inventoryType,
+            List<Integer> npcItemList,
+            StackPane rootStackPane
+    ) {
         super.init();
         this.encounterController = encounterController;
         this.trainersService = trainersService;
@@ -130,10 +128,9 @@ public class ItemMenuController extends Controller {
                 if (use == null) {
                     continue;
                 } else {
-                    Constants.itemType itemType = Constants.itemType.valueOf(use);
-                    if (itemType == Constants.itemType.itemBox || itemType == Constants.itemType.monsterBox) {
+                    if (use.equals(Constants.ITEM_USAGE_MONSTER_BOX) || use.equals(Constants.ITEM_USAGE_ITEM_BOX)) {
                         continue;
-                    } else if (itemType == Constants.itemType.ball && !encounterController.isWildEncounter()) {
+                    } else if (use.equals(Constants.ITEM_USAGE_BALL) && !encounterController.isWildEncounter()) {
                         continue;
                     }
                 }
@@ -153,15 +150,32 @@ public class ItemMenuController extends Controller {
     }
 
     public void initItem(Item item) {
-        itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider.get()));
+        itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider));
         if (ingameController != null) {
-            itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController));
+            itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider));
         } else if (encounterController != null) {
-            itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, encounterController));
+            itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, encounterController, itemStorageProvider));
         }
         itemListView.getItems().add(item);
         itemListView.setFocusModel(null);
         itemListView.setSelectionModel(null);
+    }
+
+    public void onItemUsed(Item item) {
+        if (item.amount() == 0) {
+            itemListView.getItems().remove(item);
+            return;
+        }
+        Item itemCopy = new Item(
+                item._id(),
+                item.trainer(),
+                item.type(),
+                item.amount() - 1
+        );
+        itemListView.getItems().set(itemListView.getItems().indexOf(item), itemCopy);
+        itemStorageProvider.get().updateItemData(itemCopy, null, null);
+        itemListView.refresh();
+
     }
 
     public void closeItemMenu() {

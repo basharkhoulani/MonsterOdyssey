@@ -530,7 +530,7 @@ public class EncounterController extends Controller {
         monsterListVBox.setMinHeight(410);
         monsterListVBox.setAlignment(Pos.CENTER);
         ChangeMonsterListController changeMonsterListController = changeMonsterListControllerProvider.get();
-        changeMonsterListController.init(this, monsterListVBox, ingameControllerProvider.get(), null);
+        changeMonsterListController.init(this, monsterListVBox, ingameControllerProvider.get(), null, null);
         monsterListVBox.getChildren().add(changeMonsterListController.render());
         rootStackPane.getChildren().add(monsterListVBox);
         monsterListVBox.requestFocus();
@@ -689,7 +689,7 @@ public class EncounterController extends Controller {
                         updateDescription(resources.getString("ENEMY.USED") + " " + itemTypeDtos.get(useItemMove.item()).name() + ". ", false);
                     }
                 }
-
+                /*
                 if (move instanceof UseItemMove) {
                     ItemData itemData = itemStorageProvider.get().getItemDataList().stream().filter(iD -> iD.getItem().type() == ((UseItemMove) move).item()).findFirst().orElse(null);
                     if (itemData != null) {
@@ -717,6 +717,8 @@ public class EncounterController extends Controller {
                                 error -> {}));
                     }
                 }
+
+                 */
             }
 
             Opponent oResults = forDescription.get(opponentId + "Results");
@@ -771,15 +773,17 @@ public class EncounterController extends Controller {
                                 EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(oResults._id());
                                 encounterOpponentController.showStatus(r.status(), false);
                             }
+                            /*
                             case ITEM_FAILED -> {
                                 updateDescription(resources.getString("USE.OF") + " " + itemTypeDtos.get(r.item()).name() + " " + resources.getString("IS") + " " + resources.getString("FAILED") + ".\n", false);
                             }
                             case ITEM_SUCCESS -> {
                                 updateDescription(resources.getString("USE.OF") + " " + itemTypeDtos.get(r.item()).name() + " " + resources.getString("IS") + " " + resources.getString("SUCCEED") + ".\n", false);
                             }
+
+                             */
                             // TODO: monster caught from @Fin
                             case MONSTER_CAUGHT -> {
-                                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> Monster caught");
                                 throwSuccessfulMonBall();
                                 monsterCaught = true;
                                 updateDescription("3...\n", true);
@@ -801,8 +805,13 @@ public class EncounterController extends Controller {
                                 pause.play();
                             }
                             case ITEM_SUCCESS -> {
-                                throwFailedMonBall();
-                                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> Monster escaped");
+                                List<Integer> ballIds = new ArrayList<>(List.of(10, 11, 12, 13, 14, 15, 16, 17));
+                                if (ballIds.contains(r.item())) {
+                                    throwFailedMonBall();
+                                }
+                                else {
+                                    updateDescription(resources.getString("USE.OF") + " " + itemTypeDtos.get(r.item()).name() + " " + resources.getString("IS") + " " + resources.getString("SUCCEED") + ".\n", false);
+                                }
                             }
                             case ITEM_FAILED -> System.out.println("Item failed " + r.item());
                             case "target-unknown" -> System.out.println("Target unknown");
@@ -1195,6 +1204,14 @@ public class EncounterController extends Controller {
                 case 15 -> selectedBallType = WATER;
                 default -> selectedBallType = HEAL;
             }
+            Item itemCopy = new Item(
+                    item._id(),
+                    item.trainer(),
+                    item.type(),
+                    item.amount() - 1
+            );
+            itemStorageProvider.get().updateItemData(itemCopy, null, null);
+            System.out.println(itemCopy);
             disposables.add(encounterOpponentsService.updateOpponent(
                     regionId,
                     encounterId,
@@ -1205,6 +1222,7 @@ public class EncounterController extends Controller {
                 System.out.println("Send servercall to use monball");
                 System.out.println(opponent);
                 updateOpponent(opponent);
+
             }, Throwable::printStackTrace));
         }
     }
@@ -1245,8 +1263,7 @@ public class EncounterController extends Controller {
 
     public void useItem(Item item, Monster monster) {
         if (monster == null) {
-            // use monball
-            System.out.println("use monball");
+            useMonBall(item);
         } else {
             // use item
             // Fit for two monsters

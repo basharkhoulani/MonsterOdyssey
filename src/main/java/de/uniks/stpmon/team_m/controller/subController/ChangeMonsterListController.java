@@ -44,18 +44,20 @@ public class ChangeMonsterListController extends Controller {
     @Inject
     public Provider<MonsterStorage> monsterStorageProvider;
     private Item item;
+    public Runnable onItemUsed;
 
     @Inject
     public ChangeMonsterListController() {
     }
 
-    public void init(EncounterController encounterController, VBox monsterListVBox, IngameController ingameController, Item item) {
+    public void init(EncounterController encounterController, VBox monsterListVBox, IngameController ingameController, Item item, Runnable onItemUsed) {
         super.init();
         activeMonstersList = new ArrayList<>();
         this.encounterController = encounterController;
         this.monsterListVBox = monsterListVBox;
         this.ingameController = ingameController;
         this.item = item;
+        this.onItemUsed = onItemUsed;
     }
 
     @Override

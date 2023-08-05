@@ -8,10 +8,7 @@ import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
-import de.uniks.stpmon.team_m.utils.ImageProcessor;
-import de.uniks.stpmon.team_m.utils.MonsterStorage;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
-import de.uniks.stpmon.team_m.utils.UserStorage;
+import de.uniks.stpmon.team_m.utils.*;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -125,22 +122,39 @@ public class MonsterCell extends ListCell<Monster> {
             loadFXML();
             viewDetailsButton.prefWidthProperty().bind(removeFromTeamButton.widthProperty());
             monsterHealth.setText(monster.currentAttributes().health() + " / " + monster.attributes().health() + " HP");
-            monsterTypeDto = monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterTypeDto();
-            monsterNameLevel.setText(monsterTypeDto.name() + " (" + resources.getString("LEVEL").substring(0, resources.getString("LEVEL").length() - 1) + " " + monster.level() + ")");
-            for (String s : monsterTypeDto.type()) {
-                type.append(s);
+            MonsterData monsterData = monsterStorageProvider.get().getMonsterData(monster._id());
+            if (monsterData == null) {
+                monsterStorageProvider.get().addMonsterData(monster, null, null);
             }
-
+            monsterTypeDto = monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterTypeDto();
+            if (monsterTypeDto != null) {
+                monsterNameLevel.setText(monsterTypeDto.name() + " (" + resources.getString("LEVEL").substring(0, resources.getString("LEVEL").length() - 1) + " " + monster.level() + ")");
+                for (String s : monsterTypeDto.type()) {
+                    type.append(s);
+                }
+                if (!GraphicsEnvironment.isHeadless()) {
+                    renderMonsterTypes(monsterTypeDto, monsterTypesHBox.getChildren());
+                }
+            } else {
+                disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER)
+                        .subscribe(monsterTypeDto -> {
+                            monsterNameLevel.setText(monsterTypeDto.name() + " (" + resources.getString("LEVEL").substring(0, resources.getString("LEVEL").length() - 1) + " " + monster.level() + ")");
+                            for (String s : monsterTypeDto.type()) {
+                                type.append(s);
+                            }
+                            monsterStorageProvider.get().addMonsterData(monster, monsterTypeDto, null);
+                            if (!GraphicsEnvironment.isHeadless()) {
+                                renderMonsterTypes(monsterTypeDto, monsterTypesHBox.getChildren());
+                            }
+                        }));
+            }
             if (!GraphicsEnvironment.isHeadless()) {
-                renderMonsterTypes(monsterTypeDto, monsterTypesHBox.getChildren());
                 URL resourseArrowUp = Main.class.getResource("images/monster-arrange-up.png");
                 assert resourseArrowUp != null;
                 Image arrowUpImage = new Image(resourseArrowUp.toString());
                 arrowUp.setImage(arrowUpImage);
                 arrowDown.setImage(arrowUpImage);
             }
-        }
-        if (monster != null) {
             if (monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage() != null) {
                 monsterImageView.setImage(monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage());
                 this.monsterImage = monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage();
@@ -190,6 +204,7 @@ public class MonsterCell extends ListCell<Monster> {
 
                     removeFromTeamButton.setOnAction(event -> {
                         encounterController.useItem(item, monster);
+                        changeMonsterListController.onItemUsed.run();
                         changeMonsterListController.onCloseMonsterList();
                     });
                 }
@@ -206,6 +221,7 @@ public class MonsterCell extends ListCell<Monster> {
                 removeFromTeamButton.setOnAction(event -> {
                     ingameController.useItem(item, monster);
                     if (monstersListController != null) {
+                        monstersListController.onItemUsed.run();
                         monstersListController.onCloseMonsterList();
                     }
                 });

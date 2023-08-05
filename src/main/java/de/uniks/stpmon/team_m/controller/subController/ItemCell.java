@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.Constants.InventoryType;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
@@ -40,8 +41,7 @@ public class ItemCell extends ListCell<Item> {
     private final Runnable closeItemMenu;
     private final StackPane rootStackPane;
     private final IngameController ingameController;
-    private final ItemStorage itemStorage;
-    private IngameController ingameController;
+    private final Provider<ItemStorage> itemStorageProvider;
     private EncounterController encounterController;
     private FXMLLoader loader;
     protected final CompositeDisposable disposables = new CompositeDisposable();
@@ -69,7 +69,7 @@ public class ItemCell extends ListCell<Item> {
                     Runnable closeItemMenu,
                     StackPane rootStackPane,
                     IngameController ingameController,
-                    ItemStorage itemStorage
+                    Provider<ItemStorage> itemStorageProvider
     ) {
         this.presetsService = presetsService;
         this.itemDescriptionBox = itemDescriptionBox;
@@ -81,7 +81,8 @@ public class ItemCell extends ListCell<Item> {
         this.closeItemMenu = closeItemMenu;
         this.rootStackPane = rootStackPane;
         this.ingameController = ingameController;
-        this.itemStorage = itemStorage;
+        this.itemStorageProvider = itemStorageProvider;
+        this.encounterController = null;
     }
 
     public ItemCell(PresetsService presetsService,
@@ -93,7 +94,9 @@ public class ItemCell extends ListCell<Item> {
                     App app,
                     Runnable closeItemMenu,
                     StackPane rootStackPane,
-                    EncounterController encounterController) {
+                    EncounterController encounterController,
+                    Provider<ItemStorage> itemStorageProvider
+    ) {
         this.presetsService = presetsService;
         this.itemDescriptionBox = itemDescriptionBox;
         this.itemMenuController = itemMenuController;
@@ -104,6 +107,8 @@ public class ItemCell extends ListCell<Item> {
         this.closeItemMenu = closeItemMenu;
         this.rootStackPane = rootStackPane;
         this.encounterController = encounterController;
+        this.itemStorageProvider = itemStorageProvider;
+        this.ingameController = null;
     }
 
     public void updateItem(Item item, boolean empty) {
@@ -113,7 +118,8 @@ public class ItemCell extends ListCell<Item> {
             setGraphic(null);
             setStyle("-fx-background-color: #FFFFFF;");
         } else {
-            this.itemTypeDto = itemMenuController.itemTypeHashMap.get(item.type());
+            //this.itemTypeDto = itemMenuController.itemTypeHashMap.get(item.type());
+            this.itemTypeDto = itemStorageProvider.get().getItemData(item._id()).getItemTypeDto();
             loadFXML();
             itemLabel.setText(itemTypeDto.name());
             itemNumber.setText("(" + item.amount() + ")");
@@ -135,13 +141,13 @@ public class ItemCell extends ListCell<Item> {
             }
 
             itemHBox.setOnMouseClicked(event -> {
-                openItemDescription(itemTypeDto, this.itemImage, item);
+                openItemDescription(itemTypeDto, this.itemImage, item, () -> itemMenuController.onItemUsed(item));
                 itemMenuController.setItemNameLabel(itemTypeDto.name());
             });
             setGraphic(itemHBox);
 
             // hide item count when buying items from clerk
-            if (itemMenuController.getInventoryType() == Constants.inventoryType.buyItems) {
+            if (itemMenuController.getInventoryType() == InventoryType.buyItems) {
                 itemNumber.setVisible(false);
             }
 
@@ -162,7 +168,7 @@ public class ItemCell extends ListCell<Item> {
         }
     }
 
-    public void openItemDescription(ItemTypeDto itemTypeDto, Image itemImage, Item item) {
+    public void openItemDescription(ItemTypeDto itemTypeDto, Image itemImage, Item item, Runnable onItemUsed) {
         int ownAmountOfItem = 0;
         List<Item> trainerItems = itemMenuController.trainerStorageProvider.get().getItems();
         for (Item trainerItem : trainerItems) {
@@ -172,7 +178,7 @@ public class ItemCell extends ListCell<Item> {
             }
         }
 
-        ItemDescriptionController itemDescriptionController = new ItemDescriptionController();
+        ItemDescriptionController itemDescriptionController = new ItemDescriptionController(onItemUsed);
         itemDescriptionController.setValues(resources, preferences, resourceBundleProvider, itemDescriptionController, app);
         if (ingameController != null) {
             itemDescriptionController.init(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, ingameController);

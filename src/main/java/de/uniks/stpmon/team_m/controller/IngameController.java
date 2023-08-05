@@ -1512,7 +1512,7 @@ public class IngameController extends Controller {
         monsterListVBox.setMinHeight(410);
         monsterListVBox.setAlignment(Pos.CENTER);
         MonstersListController monstersListController = monstersListControllerProvider.get();
-        monstersListController.init(this, monsterListVBox, root, null);
+        monstersListController.init(this, monsterListVBox, root, null, null);
         monsterListVBox.getChildren().add(monstersListController.render());
         root.getChildren().add(monsterListVBox);
         monsterListVBox.requestFocus();

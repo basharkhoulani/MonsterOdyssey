@@ -71,12 +71,13 @@ public class MonstersListController extends Controller {
     public List<Monster> otherMonstersList;
     private StackPane rootStackPane;
     private Item item;
+    public Runnable onItemUsed;
 
     @Inject
     public MonstersListController() {
     }
 
-    public void init(IngameController ingameController, VBox monsterListVBox, StackPane rootStackPane, Item item) {
+    public void init(IngameController ingameController, VBox monsterListVBox, StackPane rootStackPane, Item item, Runnable onItemUsed) {
         super.init();
         activeMonstersList = new ArrayList<>();
         otherMonstersList = new ArrayList<>();
@@ -84,6 +85,7 @@ public class MonstersListController extends Controller {
         this.monsterListVBox = monsterListVBox;
         this.rootStackPane = rootStackPane;
         this.item = item;
+        this.onItemUsed = onItemUsed;
     }
 
     @Override
