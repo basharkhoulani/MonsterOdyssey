@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.GOT_COINS;
 import static de.uniks.stpmon.team_m.Constants.SoundEffect.NOTIFICATION;
 
 
@@ -1281,6 +1282,7 @@ public class IngameController extends Controller {
     }
 
     private void showCoinsEarnedWindow() {
+        AudioService.getInstance().playEffect(GOT_COINS);
         TextFlow dialogTextFlow = createDialogVBox(true);
         dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.WON") + "\n" +
                 resources.getString("COINS.EARNED") + " " + getCoinsAmount() + " " +
