@@ -1682,6 +1682,7 @@ public class IngameController extends Controller {
         if (encounterNpc) {
             encounterNPC(this.currentNpc, selectionValue);
         }
+        AudioService.getInstance().stopEffect();
     }
     public void createJoinEncounterPopup() {
         VBox joinEncounterVBox = new VBox();

@@ -149,7 +149,6 @@ public class EncounterController extends Controller {
 
     public Parent render() {
         Parent parent = super.render();
-        AudioService.getInstance().stopEffect();
         // init battle menu
         battleMenuController.init(this, encounterOpponentStorage, app);
         battleMenuVBox.getChildren().add(battleMenuController.render());
