@@ -774,6 +774,11 @@ public class EncounterController extends Controller {
     private void listenToMonster(String trainerId, String monsterId, EncounterOpponentController encounterOpponentController, Opponent opponent) {
         disposables.add(eventListener.get().listen("trainers." + trainerId + ".monsters." + monsterId + ".*", Monster.class).observeOn(FX_SCHEDULER).subscribe(event -> {
             final Monster monster = event.data();
+            if (monster._id().equals(encounterOpponentStorage.getSelfOpponent().monster())) {
+                if (monster.currentAttributes().health()/monster.attributes().health() <= 0.2) {
+                    AudioService.getInstance().playEffect(LOW_HEALTH);
+                }
+            }
             if (event.suffix().contains("updated")) {
                 double currentHealth = monster.currentAttributes().health();
                 double maxHealth = monster.attributes().health();
