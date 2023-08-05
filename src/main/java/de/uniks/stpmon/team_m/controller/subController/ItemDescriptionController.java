@@ -7,6 +7,7 @@ import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
+import de.uniks.stpmon.team_m.service.AudioService;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -23,6 +24,7 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.net.URL;
 
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.BUY_SELL;
 import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxHeight;
 import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxWidth;
 
@@ -157,11 +159,11 @@ public class ItemDescriptionController extends Controller {
     }
 
     public void buyItem() {
-
+        AudioService.getInstance().playEffect(BUY_SELL);
     }
 
     public void sellItem() {
-
+        AudioService.getInstance().playEffect(BUY_SELL);
     }
 
     private void showMonsterList(Item item) {
