@@ -187,7 +187,7 @@ public class MonstersListControllerTest extends ApplicationTest {
         //doNothing().when(monsterStorageProvider.get()).addMonsterData(any(), any(), any());
         app.start(stage);
         app.show(monsterListController);
-        monsterListController.init(ingameController, monsterListController.monsterListVBox, rootStackPane, null);
+        monsterListController.init(ingameController, monsterListController.monsterListVBox, rootStackPane, null, null);
     }
 
     @Test
