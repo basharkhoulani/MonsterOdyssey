@@ -24,6 +24,7 @@ import java.awt.*;
 import java.net.URL;
 
 import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.BUY_SELL;
 
 public class ItemDescriptionController extends Controller {
 
