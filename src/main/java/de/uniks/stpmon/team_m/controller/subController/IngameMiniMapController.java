@@ -81,6 +81,7 @@ public class IngameMiniMapController extends Controller {
             regionName.setText(trainerStorage.getRegion().name());
             // set marker data
             Image pin = new Image(String.valueOf(App.class.getResource("images/pin.png")));
+            Image stop = new Image(String.valueOf(App.class.getResource("images/bus-stop.png")));
             Image questionMark = new Image(String.valueOf(App.class.getResource("images/question-mark.png")));
             double pinWidth = pin.getWidth() / 20;
             double pinHeight = pin.getHeight() / 20;
@@ -128,6 +129,7 @@ public class IngameMiniMapController extends Controller {
                 location.setLayoutX(tileObject.x());
                 location.setLayoutY(tileObject.y());
                 location.setOnMouseEntered(event -> {
+                    location.setStyle("-fx-border-color: red; -fx-border-width: 2px");
                     // create description depending on discovered
                     TextFlow description = new TextFlow();
                     if (discovered) {
@@ -143,7 +145,10 @@ public class IngameMiniMapController extends Controller {
                     descriptionVBox[0].getChildren().add(description);
                     mapContainer.getChildren().add(descriptionVBox[0]);
                 });
-                location.setOnMouseExited(event -> mapContainer.getChildren().remove(descriptionVBox[0]));
+                location.setOnMouseExited(event -> {
+                    mapContainer.getChildren().remove(descriptionVBox[0]);
+                    location.setStyle("");
+                });
                 // create fast travel popup
                 location.setOnMouseClicked(mouseEvent -> {
                     if (discovered && newArea[0].spawn() != null && !Objects.equals(trainerStorage.getTrainer().area(), newArea[0]._id())) {
@@ -163,7 +168,11 @@ public class IngameMiniMapController extends Controller {
                         // fast-travel to location
                         yesButton.setOnAction(actionEvent ->
                                 disposables.add(trainersService.updateTrainer(trainerStorage.getRegion()._id(), trainerStorage.getTrainer()._id(), null, null, null, newArea[0]._id(), null)
-                                        .observeOn(FX_SCHEDULER).subscribe(trainerStorage::setTrainer, Throwable::printStackTrace)));
+                                        .observeOn(FX_SCHEDULER).subscribe(trainer -> {
+                                            trainerStorage.setTrainer(trainer);
+                                            ingameController.destroy();
+                                            app.show(ingameControllerProvider.get());
+                                        }, Throwable::printStackTrace)));
                         Button noButton = new Button(resources.getString("ENCOUNTER_FLEE_CANCEL_BUTTON"));
                         noButton.getStyleClass().add("welcomeSceneButton");
                         // no fast-travel
@@ -175,7 +184,11 @@ public class IngameMiniMapController extends Controller {
                 });
                 // draw marker
                 if (discovered) {
-                    miniMapCanvas.getGraphicsContext2D().drawImage(pin, tileObject.x() + width / 2 + xPinOffset, tileObject.y() + height / 2 + yPinOffset, pinWidth, pinHeight);
+                    if (newArea[0].spawn() != null) {
+                        miniMapCanvas.getGraphicsContext2D().drawImage(stop, tileObject.x() + width / 2 + xPinOffset, tileObject.y() + height / 2 + yPinOffset, pinWidth, pinHeight);
+                    } else {
+                        miniMapCanvas.getGraphicsContext2D().drawImage(pin, tileObject.x() + width / 2 + xPinOffset, tileObject.y() + height / 2 + yPinOffset, pinWidth, pinHeight);
+                    }
                 } else {
                     miniMapCanvas.getGraphicsContext2D().drawImage(questionMark, tileObject.x() + width / 2 + xPinOffset, tileObject.y() + height / 2 + yPinOffset, pinWidth, pinHeight);
                 }
