@@ -835,20 +835,10 @@ public class IngameControllerTest extends ApplicationTest {
 
     @Test
     void showMonsterTest() {
-        /*
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
         monstersListController.setValues(bundle, null, null, monstersListController, app);
         when(monstersListControllerProvider.get()).thenReturn(monstersListController);
         when(presetsServiceProvider.get()).thenReturn(presetsService);
-        when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(
-                new MonsterTypeDto(
-                        1,
-                        "Salamander",
-                        "salamander.png",
-                        List.of("fire"),
-                        "A fire lizard. It's hot."
-                )
-        ));
         LinkedHashMap<String, Integer> abilities = new LinkedHashMap<>();
         abilities.put("1", 1);
         abilities.put("23", 2);
@@ -872,10 +862,8 @@ public class IngameControllerTest extends ApplicationTest {
         clickOn("#monstersButton");
 
         clickOn("Other");
-        moveTo("Salamander (Level 3)");
+        //moveTo("Salamander (Level 3)");
         sleep(5000);
-
-         */
     }
 
     @Test
@@ -1087,6 +1075,4 @@ public class IngameControllerTest extends ApplicationTest {
         release(KeyCode.E);
         Thread.sleep(30);
     }
-
-
 }
