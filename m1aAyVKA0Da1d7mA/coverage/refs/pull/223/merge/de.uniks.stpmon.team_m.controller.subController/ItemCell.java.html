@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ItemCell.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">ItemCell.java</span></div><h1>ItemCell.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.Constants.InventoryType;
+import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.EncounterController;
+import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.Item;
+import de.uniks.stpmon.team_m.dto.ItemTypeDto;
+import de.uniks.stpmon.team_m.service.PresetsService;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.ItemStorage;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+
+import javax.inject.Provider;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
+
+
+public class ItemCell extends ListCell&lt;Item&gt; {
+    public final PresetsService presetsService;
+    public final ItemMenuController itemMenuController;
+    private final ResourceBundle resources;
+    private final Preferences preferences;
+    private final Provider&lt;ResourceBundle&gt; resourceBundleProvider;
+    private final App app;
+    private final Runnable closeItemMenu;
+    private final StackPane rootStackPane;
+    private final IngameController ingameController;
+    private final Provider&lt;ItemStorage&gt; itemStorageProvider;
+    private EncounterController encounterController;
+    private FXMLLoader loader;
+<span class="nc" id="L47">    protected final CompositeDisposable disposables = new CompositeDisposable();</span>
+<span class="nc" id="L48">    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);</span>
+
+    @FXML
+    public ImageView itemImageView;
+    @FXML
+    public Label itemLabel;
+    @FXML
+    public Label itemNumber;
+    @FXML
+    public HBox itemHBox;
+    private Image itemImage;
+    VBox itemDescriptionBox;
+    ItemTypeDto itemTypeDto;
+
+    public ItemCell(PresetsService presetsService,
+                    ItemMenuController itemMenuController,
+                    ResourceBundle resources,
+                    VBox itemDescriptionBox,
+                    Preferences preferences,
+                    Provider&lt;ResourceBundle&gt; resourceBundleProvider,
+                    App app,
+                    Runnable closeItemMenu,
+                    StackPane rootStackPane,
+                    IngameController ingameController,
+                    Provider&lt;ItemStorage&gt; itemStorageProvider
+<span class="nc" id="L73">    ) {</span>
+<span class="nc" id="L74">        this.presetsService = presetsService;</span>
+<span class="nc" id="L75">        this.itemDescriptionBox = itemDescriptionBox;</span>
+<span class="nc" id="L76">        this.itemMenuController = itemMenuController;</span>
+<span class="nc" id="L77">        this.resources = resources;</span>
+<span class="nc" id="L78">        this.preferences = preferences;</span>
+<span class="nc" id="L79">        this.resourceBundleProvider = resourceBundleProvider;</span>
+<span class="nc" id="L80">        this.app = app;</span>
+<span class="nc" id="L81">        this.closeItemMenu = closeItemMenu;</span>
+<span class="nc" id="L82">        this.rootStackPane = rootStackPane;</span>
+<span class="nc" id="L83">        this.ingameController = ingameController;</span>
+<span class="nc" id="L84">        this.itemStorageProvider = itemStorageProvider;</span>
+<span class="nc" id="L85">        this.encounterController = null;</span>
+<span class="nc" id="L86">    }</span>
+
+    public ItemCell(PresetsService presetsService,
+                    ItemMenuController itemMenuController,
+                    ResourceBundle resources,
+                    VBox itemDescriptionBox,
+                    Preferences preferences,
+                    Provider&lt;ResourceBundle&gt; resourceBundleProvider,
+                    App app,
+                    Runnable closeItemMenu,
+                    StackPane rootStackPane,
+                    EncounterController encounterController,
+                    Provider&lt;ItemStorage&gt; itemStorageProvider
+<span class="nc" id="L99">    ) {</span>
+<span class="nc" id="L100">        this.presetsService = presetsService;</span>
+<span class="nc" id="L101">        this.itemDescriptionBox = itemDescriptionBox;</span>
+<span class="nc" id="L102">        this.itemMenuController = itemMenuController;</span>
+<span class="nc" id="L103">        this.resources = resources;</span>
+<span class="nc" id="L104">        this.preferences = preferences;</span>
+<span class="nc" id="L105">        this.resourceBundleProvider = resourceBundleProvider;</span>
+<span class="nc" id="L106">        this.app = app;</span>
+<span class="nc" id="L107">        this.closeItemMenu = closeItemMenu;</span>
+<span class="nc" id="L108">        this.rootStackPane = rootStackPane;</span>
+<span class="nc" id="L109">        this.encounterController = encounterController;</span>
+<span class="nc" id="L110">        this.itemStorageProvider = itemStorageProvider;</span>
+<span class="nc" id="L111">        this.ingameController = null;</span>
+<span class="nc" id="L112">    }</span>
+
+    public void updateItem(Item item, boolean empty) {
+<span class="nc" id="L115">        super.updateItem(item, empty);</span>
+<span class="nc bnc" id="L116" title="All 4 branches missed.">        if (item == null || empty) {</span>
+<span class="nc" id="L117">            setText(null);</span>
+<span class="nc" id="L118">            setGraphic(null);</span>
+<span class="nc" id="L119">            setStyle(&quot;-fx-background-color: #FFFFFF;&quot;);</span>
+        } else {
+            //this.itemTypeDto = itemMenuController.itemTypeHashMap.get(item.type());
+<span class="nc" id="L122">            this.itemTypeDto = itemStorageProvider.get().getItemData(item._id()).getItemTypeDto();</span>
+<span class="nc" id="L123">            loadFXML();</span>
+<span class="nc" id="L124">            itemLabel.setText(itemTypeDto.name());</span>
+<span class="nc" id="L125">            itemNumber.setText(&quot;(&quot; + item.amount() + &quot;)&quot;);</span>
+
+<span class="nc bnc" id="L127" title="All 4 branches missed.">            if (itemStorageProvider.get().getItemData(item._id()) != null &amp;&amp; itemStorageProvider.get().getItemData(item._id()).getItemImage() != null) {</span>
+<span class="nc" id="L128">                this.itemImage = itemStorageProvider.get().getItemData(item._id()).getItemImage();</span>
+<span class="nc" id="L129">                itemImageView.setImage(this.itemImage);</span>
+            } else {
+<span class="nc" id="L131">                disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)</span>
+<span class="nc" id="L132">                        .subscribe(itemImageResBody -&gt; {</span>
+<span class="nc" id="L133">                            Image itemImage = ImageProcessor.resonseBodyToJavaFXImage(itemImageResBody);</span>
+                            //itemMenuController.itemImageHashMap.put(item.type(), itemImage);
+<span class="nc" id="L135">                            itemStorageProvider.get().updateItemData(item, null, itemImage);</span>
+<span class="nc" id="L136">                            this.itemImage = itemImage;</span>
+<span class="nc" id="L137">                            itemImageView.setImage(this.itemImage);</span>
+<span class="nc" id="L138">                        }, error -&gt; {</span>
+<span class="nc" id="L139">                            itemMenuController.showError(error.getMessage());</span>
+<span class="nc" id="L140">                            error.printStackTrace();</span>
+<span class="nc" id="L141">                        }));</span>
+            }
+
+<span class="nc" id="L144">            itemHBox.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L145">                openItemDescription(itemTypeDto, this.itemImage, item, () -&gt; itemMenuController.onItemUsed(item));</span>
+<span class="nc" id="L146">                itemMenuController.setItemNameLabel(itemTypeDto.name());</span>
+<span class="nc" id="L147">            });</span>
+<span class="nc" id="L148">            setGraphic(itemHBox);</span>
+
+            // hide item count when buying items from clerk
+<span class="nc bnc" id="L151" title="All 2 branches missed.">            if (itemMenuController.getInventoryType() == InventoryType.buyItems) {</span>
+<span class="nc" id="L152">                itemNumber.setVisible(false);</span>
+            }
+
+<span class="nc" id="L155">            setStyle(&quot;-fx-border-width: 1px; -fx-border-color: #000000&quot;);</span>
+        }
+<span class="nc" id="L157">    }</span>
+
+    private void loadFXML() {
+<span class="nc bnc" id="L160" title="All 2 branches missed.">        if (loader == null) {</span>
+<span class="nc" id="L161">            loader = new FXMLLoader(Main.class.getResource(&quot;views/ItemCell.fxml&quot;));</span>
+<span class="nc" id="L162">            loader.setResources(resources);</span>
+<span class="nc" id="L163">            loader.setControllerFactory(c -&gt; this);</span>
+            try {
+<span class="nc" id="L165">                loader.load();</span>
+<span class="nc" id="L166">            } catch (Exception e) {</span>
+<span class="nc" id="L167">                e.printStackTrace();</span>
+<span class="nc" id="L168">            }</span>
+        }
+<span class="nc" id="L170">    }</span>
+
+    public void openItemDescription(ItemTypeDto itemTypeDto, Image itemImage, Item item, Runnable onItemUsed) {
+<span class="nc" id="L173">        int ownAmountOfItem = 0;</span>
+<span class="nc" id="L174">        List&lt;Item&gt; trainerItems = itemMenuController.trainerStorageProvider.get().getItems();</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">        for (Item trainerItem : trainerItems) {</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">            if (trainerItem.type() == item.type()) {</span>
+<span class="nc" id="L177">                ownAmountOfItem = trainerItem.amount();</span>
+<span class="nc" id="L178">                break;</span>
+            }
+<span class="nc" id="L180">        }</span>
+
+<span class="nc" id="L182">        ItemDescriptionController itemDescriptionController = new ItemDescriptionController(onItemUsed);</span>
+<span class="nc" id="L183">        itemDescriptionController.setValues(resources, preferences, resourceBundleProvider, itemDescriptionController, app);</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">        if (ingameController != null) {</span>
+<span class="nc" id="L185">            itemDescriptionController.init(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, ingameController);</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">        } else if (encounterController != null) {</span>
+<span class="nc" id="L187">            itemDescriptionController.initFromEncounter(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, encounterController);</span>
+        }
+<span class="nc bnc" id="L189" title="All 2 branches missed.">        if (itemDescriptionBox.getChildren().size() != 0) {</span>
+<span class="nc" id="L190">            itemDescriptionBox.getChildren().clear();</span>
+        }
+<span class="nc" id="L192">        itemDescriptionBox.getChildren().add(itemDescriptionController.render());</span>
+<span class="nc" id="L193">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
