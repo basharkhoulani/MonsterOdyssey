@@ -33,8 +33,7 @@ import java.util.List;
 import java.util.*;
 
 import static de.uniks.stpmon.team_m.Constants.*;
-import static de.uniks.stpmon.team_m.Constants.SoundEffect.DEATH;
-import static de.uniks.stpmon.team_m.Constants.SoundEffect.FLEE;
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.*;
 
 
 public class EncounterController extends Controller {
@@ -880,7 +879,9 @@ public class EncounterController extends Controller {
 
     public void enemyMonsterDefeated() {
         // pause to wait for possible level up result which comes after defeat result, else if is always false
-        AudioService.getInstance().playEffect(DEATH);
+        if(!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playEffect(DEATH);
+        }
         PauseTransition pause = new PauseTransition(Duration.millis(pauseDuration));
         pause.setOnFinished(evt -> {
             if (resultLevelUpHashMap.get(encounterOpponentStorage.getSelfOpponent()._id())) {
@@ -896,7 +897,9 @@ public class EncounterController extends Controller {
     }
 
     public void yourMonsterDefeated(String opponentId) {
-        AudioService.getInstance().playEffect(DEATH);
+        if(!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playEffect(DEATH);
+        }
         monsterInTeamHashMap.forEach((monsterId, isDied) -> {
             if (!isDied && !Objects.equals(monsterId, encounterOpponentStorage.getSelfOpponent().monster())) {
                 if (!encounterOpponentStorage.isTwoMonster() || !Objects.equals(monsterId, encounterOpponentStorage.getCoopOpponent().monster())) {
@@ -916,7 +919,9 @@ public class EncounterController extends Controller {
         firstPause.setOnFinished(evt -> {
             ownTrainerController.monsterImageView.setVisible(false);
             fleeAnimation.play();
-            AudioService.getInstance().playEffect(FLEE);
+            if(!GraphicsEnvironment.isHeadless()) {
+                AudioService.getInstance().playEffect(FLEE);
+            }
         });
         fleeAnimation.setOnFinished(evt -> disposables.add(encounterOpponentsService.deleteOpponent(encounterOpponentStorage.getRegionId(), encounterOpponentStorage.getEncounterId(), encounterOpponentStorage.getSelfOpponent()._id()).observeOn(FX_SCHEDULER).subscribe(result -> showIngameController(), error -> {
             showError(error.getMessage());
@@ -1005,6 +1010,9 @@ public class EncounterController extends Controller {
     }
 
     public void showLevelUpPopUp(String opponentId) {
+        if(!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playEffect(LEVEL_UP);
+        }
         resultLevelUpHashMap.put(opponentId, false);
         LevelUpController levelUpController = levelUpControllerProvider.get();
         VBox popUpVBox = new VBox();

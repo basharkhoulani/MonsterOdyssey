@@ -507,7 +507,9 @@ public class IngameController extends Controller {
 
         if (preferences.getBoolean("firstEntry", true)) {
             this.notificationListHandyController.displayFirstTimeNotifications(true);
-            AudioService.getInstance().playEffect(NOTIFICATION);
+            if(!GraphicsEnvironment.isHeadless()) {
+                AudioService.getInstance().playEffect(NOTIFICATION);
+            }
             preferences.putBoolean("firstEntry", false);
         }
     }
@@ -1281,7 +1283,9 @@ public class IngameController extends Controller {
     }
 
     private void showCoinsEarnedWindow() {
-        AudioService.getInstance().playEffect(GOT_COINS);
+        if (!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playEffect(GOT_COINS);
+        }
         TextFlow dialogTextFlow = createDialogVBox(true);
         dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.WON") + "\n" +
                 resources.getString("COINS.EARNED") + " " + getCoinsAmount() + " " +
@@ -1618,21 +1622,27 @@ public class IngameController extends Controller {
                 endDialog(0, true);
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
-                AudioService.getInstance().playEffect(NOTIFICATION);
+                if (!GraphicsEnvironment.isHeadless()) {
+                    AudioService.getInstance().playEffect(NOTIFICATION);
+                }
                 preferences.putBoolean("starterMessages", true);
             }
             case albertDialogFinished1 -> {
                 endDialog(1, true);
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
-                AudioService.getInstance().playEffect(NOTIFICATION);
+                if (!GraphicsEnvironment.isHeadless()) {
+                    AudioService.getInstance().playEffect(NOTIFICATION);
+                }
                 preferences.putBoolean("starterMessages", true);
             }
             case albertDialogFinished2 -> {
                 endDialog(2, true);
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
-                AudioService.getInstance().playEffect(NOTIFICATION);
+                if (!GraphicsEnvironment.isHeadless()) {
+                    AudioService.getInstance().playEffect(NOTIFICATION);
+                }
                 preferences.putBoolean("starterMessages", true);
             }
             case dialogFinishedNoTalkToTrainer -> endDialog(0, false);
@@ -1767,7 +1777,9 @@ public class IngameController extends Controller {
             inNpcPopup = false;
             this.root.getChildren().remove(nursePopupVBox);
             buttonsDisable(false);
-            AudioService.getInstance().playEffect(HEALING);
+            if (!GraphicsEnvironment.isHeadless()) {
+                AudioService.getInstance().playEffect(HEALING);
+            }
         });
 
         // no button
