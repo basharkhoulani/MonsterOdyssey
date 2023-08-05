@@ -424,7 +424,7 @@ public class IngameControllerTest extends ApplicationTest {
     void testMiniMap() {
         IngameMiniMapController ingameMini = mock(IngameMiniMapController.class);
         when(ingameMiniMapControllerProvider.get()).thenReturn(ingameMini);
-        doNothing().when(ingameMini).init(any(), any(), any(), any(), any());
+        doNothing().when(ingameMini).init(any(), any(), any(), any(), any(), areas);
 
         Button close = new Button("Close");
         close.setOnAction(event -> {
