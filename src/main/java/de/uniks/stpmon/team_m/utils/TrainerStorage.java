@@ -6,6 +6,8 @@ import javafx.scene.image.Image;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Singleton
@@ -40,16 +42,24 @@ public class TrainerStorage {
     }
 
     public void addItem(Item item) {
+        for (Item item1 : this.items) {
+            if (Objects.equals(item1.type(), item.type())) {
+                return;
+            }
+        }
+
         this.items.add(item);
     }
 
     public void updateItem(Item item) {
         this.items.stream().filter(i -> i._id().equals(item._id())).findFirst().ifPresent(i -> this.items.set(this.items.indexOf(i), item));
+
+        this.items = this.items.stream().filter(i -> i.amount() > 0).collect(Collectors.toList());
     }
 
     public void useItem(int itemType) {
-        this.items.stream().filter(i -> i.type()==itemType).findFirst().ifPresent(i -> {
-            int amount = i.amount()-1;
+        this.items.stream().filter(i -> i.type() == itemType).findFirst().ifPresent(i -> {
+            int amount = i.amount() - 1;
             Item item = new Item(i._id(), i.trainer(), i.type(), amount);
             this.items.set(this.items.indexOf(i), item);
         });
@@ -60,7 +70,7 @@ public class TrainerStorage {
     }
 
     public List<Item> getItems() {
-        return items;
+        return items.stream().filter(i -> i.amount() > 0).collect(Collectors.toList());
     }
 
     public Trainer getTrainer() {

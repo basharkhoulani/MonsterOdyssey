@@ -212,4 +212,8 @@ public class ItemMenuController extends Controller {
                 }));
     }
 
+    public void updateListView() {
+        this.itemListView.getItems().clear();
+        initItems(trainerStorageProvider.get().getItems());
+    }
 }

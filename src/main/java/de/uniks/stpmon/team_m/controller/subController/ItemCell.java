@@ -118,8 +118,8 @@ public class ItemCell extends ListCell<Item> {
             setGraphic(null);
             setStyle("-fx-background-color: #FFFFFF;");
         } else {
-            //this.itemTypeDto = itemMenuController.itemTypeHashMap.get(item.type());
-            this.itemTypeDto = itemStorageProvider.get().getItemData(item._id()).getItemTypeDto();
+            this.itemTypeDto = itemMenuController.itemTypeHashMap.get(item.type());
+//            this.itemTypeDto = itemStorageProvider.get().getItemData(item._id()).getItemTypeDto();
             loadFXML();
             itemLabel.setText(itemTypeDto.name());
             itemNumber.setText("(" + item.amount() + ")");
@@ -182,7 +182,7 @@ public class ItemCell extends ListCell<Item> {
         ItemDescriptionController itemDescriptionController = new ItemDescriptionController(onItemUsed);
         itemDescriptionController.setValues(resources, preferences, resourceBundleProvider, itemDescriptionController, app);
         if (ingameController != null) {
-            itemDescriptionController.init(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, ingameController);
+            itemDescriptionController.init(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, ingameController, itemMenuController);
         } else if (encounterController != null) {
             itemDescriptionController.initFromEncounter(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, encounterController);
         }

@@ -2,8 +2,6 @@ package de.uniks.stpmon.team_m.utils;
 
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
-import de.uniks.stpmon.team_m.dto.Monster;
-import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import io.reactivex.rxjava3.annotations.NonNull;
 import javafx.scene.image.Image;
 
