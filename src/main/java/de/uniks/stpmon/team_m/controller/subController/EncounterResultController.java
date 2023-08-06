@@ -47,7 +47,8 @@ public class EncounterResultController extends Controller {
     public void clickOK() {
         encounterController.get().destroy();
         Trainer trainer = trainerStorageProvider.get().getTrainer();
-        if (trainer.settings() != null && trainer.settings().permaDeath() != null && trainer.settings().permaDeath()) {
+        if (trainer.settings() != null && trainer.settings().permaDeath() != null && trainer.settings().permaDeath()
+                && informationText.getText().equals(resources.getString("YOU.FAILED"))) {
             disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).
                     observeOn(FX_SCHEDULER).subscribe(end -> {
                         trainerStorageProvider.get().setTrainer(null);
