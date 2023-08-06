@@ -41,7 +41,9 @@ public class TrainerStorage {
     }
 
     public void addItem(Item item) {
-        this.items.add(item);
+        if (!this.items.contains(item)) {
+            this.items.add(item);
+        }
     }
 
     public void updateItem(Item item) {
