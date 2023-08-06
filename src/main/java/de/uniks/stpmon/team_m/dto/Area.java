@@ -6,6 +6,7 @@ public record Area(
         String _id,
         String region,
         String name,
+        Spawn spawn,
         Map map
 ) {
 }

@@ -5,6 +5,7 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
+import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.dto.Region;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
@@ -45,13 +46,13 @@ import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
 import java.time.Instant;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.*;
 
 
 public class IngameController extends Controller {
@@ -123,6 +124,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<ItemMenuController> itemMenuControllerProvider;
     @Inject
+    Provider<ItemStorage> itemStorageProvider;
+    @Inject
     AreasService areasService;
     @Inject
     PresetsService presetsService;
@@ -144,6 +147,8 @@ public class IngameController extends Controller {
     Provider<MonstersDetailController> monstersDetailControllerProvider;
     @Inject
     RegionsService regionsService;
+    @Inject
+    AuthenticationService authenticationService;
     @Inject
     Provider<IngameController> ingameControllerProvider;
 
@@ -206,10 +211,13 @@ public class IngameController extends Controller {
     private ParallelTransition shiftMapDownTransition;
     private boolean loading;
     private VBox loadingScreen;
-    private Timeline loadingScreenAnimation;
     private VBox itemMenuBox;
     private boolean inCoinsEarnedInfoBox = false;
+    private ReceiveObjectController receiveObjectController;
+    private ObservableList<Item> items = FXCollections.observableArrayList();
+    private ObservableList<Monster> monsters = FXCollections.observableArrayList();
     private boolean inJoinEncounterInfoBox = false;
+    private VBox receiveObjectPopUp;
 
     /**
      * IngameController is used to show the In-Game screen and to pause the game.
@@ -350,6 +358,8 @@ public class IngameController extends Controller {
         trainerStorageProvider.get().setY(trainerStorageProvider.get().getTrainer().y());
         trainerStorageProvider.get().setDirection(trainerStorageProvider.get().getTrainer().direction());
         listenToMovement(moveTrainerDtos, trainerStorageProvider.get().getTrainer().area());
+        listenToMonsters(monsters, trainerStorageProvider.get().getTrainer()._id());
+        listenToItems(items, trainerStorageProvider.get().getTrainer()._id());
         app.getStage().widthProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.doubleValue() < MINIMUM_WIDTH) {
                 anchorPane.setMinWidth(MINIMUM_WIDTH - OFFSET_WIDTH_HEIGHT);
@@ -485,6 +495,9 @@ public class IngameController extends Controller {
             preferences.put("inventory", KeyCode.I.getChar());
         }
         showCoins();
+
+        setupUdpPing();
+
         return parent;
     }
 
@@ -503,6 +516,9 @@ public class IngameController extends Controller {
         if (preferences.getBoolean("firstEntry", true)) {
             this.notificationListHandyController.displayFirstTimeNotifications(true);
             notificationBell.setVisible(true);
+            if(!GraphicsEnvironment.isHeadless()) {
+                AudioService.getInstance().playEffect(NOTIFICATION, this);
+            }
             preferences.putBoolean("firstEntry", false);
         }
     }
@@ -555,6 +571,123 @@ public class IngameController extends Controller {
         ));
     }
 
+    private void createMonsterReceivedPopUp(Monster monster) {
+        receiveObjectPopUp = new VBox();
+        receiveObjectPopUp.setAlignment(Pos.CENTER);
+        receiveObjectPopUp.setMaxWidth(popupWidth);
+        receiveObjectPopUp.setMaxHeight(popupWidth);
+        receiveObjectPopUp.setStyle("-fx-border-radius: 10; -fx-border-style: solid; -fx-border-width: 2; -fx-border-color: black;");
+        receiveObjectPopUp.getStyleClass().add("hBoxLightGreen");
+        disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto ->
+                disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
+                    receiveObjectController = new ReceiveObjectController(monster, monsterTypeDto, ImageProcessor.resonseBodyToJavaFXImage(responseBody), this::removeItemReceivedPopUp, trainerStorageProvider);
+                    receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
+                    receiveObjectPopUp.getChildren().add(receiveObjectController.render());
+                    getRoot().getChildren().add(receiveObjectPopUp);
+                }))));
+    }
+
+    private void createItemReceivedPopUp(Item item) {
+        receiveObjectPopUp = new VBox();
+        receiveObjectPopUp.setAlignment(Pos.CENTER);
+        receiveObjectPopUp.setMaxWidth(popupWidth);
+        receiveObjectPopUp.setMaxHeight(popupWidth);
+        receiveObjectPopUp.setStyle("-fx-border-radius: 10; -fx-border-style: solid; -fx-border-width: 2; -fx-border-color: black;");
+        receiveObjectPopUp.getStyleClass().add("hBoxLightGreen");
+        if (itemStorageProvider.get().getItemData(item._id()) != null) {
+            final ItemData itemData = itemStorageProvider.get().getItemData(item._id());
+
+            receiveObjectController = new ReceiveObjectController(itemData.getItem(), itemData.getItemTypeDto(), itemData.getItemImage(), this::removeItemReceivedPopUp, trainerStorageProvider);
+            receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
+            receiveObjectPopUp.getChildren().add(receiveObjectController.render());
+            getRoot().getChildren().add(receiveObjectPopUp);
+        } else {
+            disposables.add(presetsService.getItem(item.type()).observeOn(FX_SCHEDULER).subscribe(
+                    itemTypeDto -> {
+                        if (ImageProcessor.showScaledItemImage(itemTypeDto.image()) != null) {
+                            itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()));
+                            receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()), this::removeItemReceivedPopUp, trainerStorageProvider);
+                            receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
+                            receiveObjectPopUp.getChildren().add(receiveObjectController.render());
+                            getRoot().getChildren().add(receiveObjectPopUp);
+                        }
+                        else {
+                            disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
+                                    image -> {
+                                        itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image));
+                                        receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image), this::removeItemReceivedPopUp, trainerStorageProvider);
+                                        receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
+                                        receiveObjectPopUp.getChildren().add(receiveObjectController.render());
+                                        getRoot().getChildren().add(receiveObjectPopUp);
+                                    },
+                                    error -> {
+                                        showError(error.getMessage());
+                                        error.printStackTrace();
+                                    }));
+                        }
+                    },
+                    error -> {
+                        showError(error.getMessage());
+                        error.printStackTrace();
+                    }));
+        }
+
+    }
+
+    private void removeItemReceivedPopUp() {
+        getRoot().getChildren().remove(receiveObjectController.receiveObjectRootVBox.getParent());
+    }
+
+    public void listenToMonsters(ObservableList<Monster> monsters, String trainerId) {
+        disposables.add(eventListenerProvider.get().listen("trainers." + trainerId + ".monsters.*.*", Monster.class)
+                .observeOn(FX_SCHEDULER).subscribe(event -> {
+                    Monster monster = event.data();
+                    switch (event.suffix()) {
+                        case "created" -> {
+                            if (root.getChildren().contains(receiveObjectPopUp)) {
+                                return;
+                            }
+                            createMonsterReceivedPopUp(monster);
+                            monsters.add(monster);
+                        }
+                        case "updated" -> {
+                        }
+                        case "deleted" -> {
+                            // Monster deleted
+                        }
+                    }
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
+    }
+
+    public void listenToItems(ObservableList<Item> items, String trainerId) {
+        disposables.add(eventListenerProvider.get().listen("trainers." + trainerId + ".items.*.*", Item.class)
+                .observeOn(FX_SCHEDULER).subscribe(event -> {
+                    Item item = event.data();
+                    switch (event.suffix()) {
+                        case "created" -> {
+                            if (root.getChildren().contains(receiveObjectPopUp)) {
+                                return;
+                            }
+                            items.add(item);
+                            createItemReceivedPopUp(item);
+                        }
+                        case "updated" -> {
+                            // Item used
+                        }
+                        case "deleted" -> {
+                            // Item deleted
+                        }
+                    }
+                }, error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
+    }
+
+
     public void listenToMovement(ObservableList<MoveTrainerDto> moveTrainerDtos, String area) {
         disposables.add(udpEventListenerProvider.get().listen("areas." + area + ".trainers.*.*", MoveTrainerDto.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
@@ -566,6 +699,7 @@ public class IngameController extends Controller {
                         }
                         int oldXValue = trainerStorageProvider.get().getX();
                         int oldYValue = trainerStorageProvider.get().getY();
+                        int oldDirection = trainerStorageProvider.get().getDirection();
                         if (oldXValue != moveTrainerDto.x() || oldYValue != moveTrainerDto.y()) {
                             trainerController.setTrainerTargetPosition(moveTrainerDto.x(), moveTrainerDto.y());
                             trainerController.setTrainerDirection(moveTrainerDto.direction());
@@ -578,8 +712,16 @@ public class IngameController extends Controller {
                             } else {
                                 shiftMapDownTransition.play();
                             }
+                            if(!GraphicsEnvironment.isHeadless()) {
+                                AudioService.getInstance().stopEffect();
+                                AudioService.getInstance().playEffect(WALKING, this);
+                            }
                         } else {
                             trainerController.turn(moveTrainerDto.direction());
+                            if(!GraphicsEnvironment.isHeadless() && oldDirection != moveTrainerDto.direction()) {
+                                AudioService.getInstance().stopEffect();
+                                AudioService.getInstance().playEffect(WALKING, this);
+                            }
                         }
                         trainerStorageProvider.get().setX(moveTrainerDto.x());
                         trainerStorageProvider.get().setY(moveTrainerDto.y());
@@ -635,20 +777,11 @@ public class IngameController extends Controller {
         loadingScreen.setAlignment(Pos.CENTER);
         loadingScreen.setPrefWidth(map.width() * TILE_SIZE * SCALE_FACTOR);
         loadingScreen.setPrefHeight(map.height() * TILE_SIZE * SCALE_FACTOR);
-        loadingScreen.setSpacing(10);
-        loadingScreen.setStyle("-fx-background-color: black");
-        Label loadingLabel = new Label(resources.getString("LOADING.LABEL"));
-        loadingLabel.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-font-family: 'Comic Sans MS'");
-        ImageView trainerImageView = new ImageView();
-        trainerImageView.setFitWidth(40);
-        trainerImageView.setFitHeight(40);
-        loadingScreen.getChildren().add(loadingLabel);
-        loadingScreen.getChildren().add(trainerImageView);
-        root.getChildren().add(loadingScreen);
-        if (!GraphicsEnvironment.isHeadless()) {
-            loadingScreenAnimation = AnimationBuilder.buildTrainerWalkAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), trainerImageView, 150, Animation.INDEFINITE, TRAINER_DIRECTION_RIGHT);
-            loadingScreenAnimation.play();
-        }
+        loadingScreen.getStyleClass().add("Background");
+        LoadingScreenController loadingScreenController = new LoadingScreenController();
+        loadingScreenController.setValues(resources, preferences, resourceBundleProvider, loadingScreenController, app);
+        loadingScreen.getChildren().add(loadingScreenController.render());
+        getRoot().getChildren().add(loadingScreen);
     }
 
     /**
@@ -674,9 +807,13 @@ public class IngameController extends Controller {
                     .doOnNext(image -> tileSetImages.put(mapName, image))
                     .observeOn(FX_SCHEDULER).subscribe(image -> afterAllTileSetsLoaded(map), error -> {
                         System.out.println("Error while loading tileset: " + error.getMessage());
-                        TimeUnit.SECONDS.sleep(10);
-                        destroy();
-                        app.show(ingameControllerProvider.get());
+                        PauseTransition pause = new PauseTransition(Duration.seconds(10));
+                        pause.setOnFinished(evt -> {
+                            System.err.println("Retrying to load map data");
+                            destroy();
+                            app.show(ingameControllerProvider.get());
+                        });
+                        pause.play();
                     }));
         }
 
@@ -1049,13 +1186,10 @@ public class IngameController extends Controller {
                 trainerStorageProvider.get().getRegion()._id(),
                 trainerStorageProvider.get().getTrainer()._id(),
                 ITEM_ACTION_USE_ITEM,
-                new UpdateItemDto(1, item.type(), monster._id())
+                new UpdateItemDto(1, item.type(), (monster != null) ? monster._id() : null)
         ).observeOn(FX_SCHEDULER).subscribe(
                 result -> trainerStorageProvider.get().updateItem(result),
-                error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }));
+                error -> {}));
     }
 
     public void buttonsDisable(Boolean set) {
@@ -1200,9 +1334,11 @@ public class IngameController extends Controller {
                         }
                         case "deleted" -> {
                             trainers.removeIf(t -> t._id().equals(trainer._id()));
-                            trainerControllerHashMap.get(trainer).destroy();
-                            trainerControllerHashMap.remove(trainer);
-                            trainerPositionHashMap.remove(trainer);
+                            if (trainer != null && trainerControllerHashMap.containsKey(trainer)) {
+                                trainerControllerHashMap.get(trainer).destroy();
+                                trainerControllerHashMap.remove(trainer);
+                                trainerPositionHashMap.remove(trainer);
+                            }
                         }
                     }
                 }, error -> {
@@ -1276,6 +1412,9 @@ public class IngameController extends Controller {
     }
 
     private void showCoinsEarnedWindow() {
+        if (!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playEffect(GOT_COINS, this);
+        }
         TextFlow dialogTextFlow = createDialogVBox(true);
         dialogTextFlow.getChildren().add(new Text(resources.getString("ENCOUNTER.WON") + "\n" +
                 resources.getString("COINS.EARNED") + " " + getCoinsAmount() + " " +
@@ -1375,7 +1514,7 @@ public class IngameController extends Controller {
         monsterListVBox.setMinHeight(410);
         monsterListVBox.setAlignment(Pos.CENTER);
         MonstersListController monstersListController = monstersListControllerProvider.get();
-        monstersListController.init(this, monsterListVBox, root, null);
+        monstersListController.init(this, monsterListVBox, root, null, null);
         monsterListVBox.getChildren().add(monstersListController.render());
         root.getChildren().add(monsterListVBox);
         monsterListVBox.requestFocus();
@@ -1383,10 +1522,10 @@ public class IngameController extends Controller {
     }
 
     public void showItems() {
-        openInventory(inventoryType.showItems, List.of());
+        openInventory(InventoryType.showItems, List.of());
     }
 
-    public void openInventory(Constants.inventoryType inventoryType, List<Integer> npcItemTypeIDs) {
+    public void openInventory(InventoryType inventoryType, List<Integer> npcItemTypeIDs) {
         itemMenuBox = new VBox();
         itemMenuBox.setId("itemMenuBox");
         itemMenuBox.setAlignment(Pos.CENTER);
@@ -1612,18 +1751,27 @@ public class IngameController extends Controller {
                 endDialog(0, true);
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
+                if (!GraphicsEnvironment.isHeadless()) {
+                    AudioService.getInstance().playEffect(NOTIFICATION, this);
+                }
                 preferences.putBoolean("starterMessages", true);
             }
             case albertDialogFinished1 -> {
                 endDialog(1, true);
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
+                if (!GraphicsEnvironment.isHeadless()) {
+                    AudioService.getInstance().playEffect(NOTIFICATION, this);
+                }
                 preferences.putBoolean("starterMessages", true);
             }
             case albertDialogFinished2 -> {
                 endDialog(2, true);
                 this.notificationListHandyController.displayStarterMessages(true);
                 notificationBell.setVisible(true);
+                if (!GraphicsEnvironment.isHeadless()) {
+                    AudioService.getInstance().playEffect(NOTIFICATION, this);
+                }
                 preferences.putBoolean("starterMessages", true);
             }
             case dialogFinishedNoTalkToTrainer -> endDialog(0, false);
@@ -1659,6 +1807,7 @@ public class IngameController extends Controller {
         if (encounterNpc) {
             encounterNPC(this.currentNpc, selectionValue);
         }
+        AudioService.getInstance().stopEffect();
     }
     public void createJoinEncounterPopup() {
         VBox joinEncounterVBox = new VBox();
@@ -1758,6 +1907,9 @@ public class IngameController extends Controller {
             inNpcPopup = false;
             this.root.getChildren().remove(nursePopupVBox);
             buttonsDisable(false);
+            if (!GraphicsEnvironment.isHeadless()) {
+                AudioService.getInstance().playEffect(HEALING, this);
+            }
         });
 
         // no button
@@ -1823,7 +1975,7 @@ public class IngameController extends Controller {
             inNpcPopup = false;
             this.root.getChildren().remove(clerkPopupVBox);
             buttonsDisable(false);
-            openInventory(inventoryType.buyItems, currentNpc.npc().sells());
+            openInventory(InventoryType.buyItems, currentNpc.npc().sells());
         });
 
         // sellButton
@@ -1838,7 +1990,7 @@ public class IngameController extends Controller {
             inNpcPopup = false;
             this.root.getChildren().remove(clerkPopupVBox);
             buttonsDisable(false);
-            openInventory(inventoryType.sellItems, List.of());
+            openInventory(InventoryType.sellItems, List.of());
         });
 
         // leaveButton
@@ -1910,7 +2062,7 @@ public class IngameController extends Controller {
         textVBox.maxHeightProperty().bind(textPane.heightProperty());
         textVBox.getStyleClass().add("dialogTextFlow");
 
-        Label dialogHelpLabel = new Label(resources.getString("NPC.DIALOG.HELP"));
+        Label dialogHelpLabel = new Label(resources.getString("NPC.DIALOG.HELP") + " " + preferences.get("interaction", null) + " " + resources.getString("NPC.DIALOG.HELP2"));
         dialogHelpLabel.prefWidthProperty().bind(textVBox.widthProperty());
         dialogHelpLabel.setFont(new Font(helpLabelFontSize));
         dialogHelpLabel.setPadding(helpLabelInsets);
@@ -1955,13 +2107,14 @@ public class IngameController extends Controller {
                                     }
                                     loading = false;
                                     root.getChildren().remove(loadingScreen);
-                                    if (!GraphicsEnvironment.isHeadless()) {
-                                        loadingScreenAnimation.stop();
-                                    }
                                 }, error -> {
-                                    TimeUnit.SECONDS.sleep(10);
-                                    destroy();
-                                    app.show(ingameControllerProvider.get());
+                                    PauseTransition pause = new PauseTransition(Duration.seconds(10));
+                                    pause.setOnFinished(evt -> {
+                                        System.err.println("Error on loading the mini map");
+                                        destroy();
+                                        app.show(ingameControllerProvider.get());
+                                    });
+                                    pause.play();
                                 }));
                     }
                 },
@@ -1978,8 +2131,11 @@ public class IngameController extends Controller {
             miniMapVBox = new VBox();
             miniMapVBox.setId("miniMapVBox");
             miniMapVBox.getStyleClass().add("miniMapContainer");
-            ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox, miniMap);
-            miniMapVBox.getChildren().add(ingameMiniMapController.render());
+            TrainerStorage trainerStorage = trainerStorageProvider.get();
+            disposables.add(areasService.getAreas(trainerStorage.getRegion()._id()).observeOn(FX_SCHEDULER).subscribe(areas -> {
+                ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox, miniMap, areas);
+                miniMapVBox.getChildren().add(ingameMiniMapController.render());
+                }, Throwable::printStackTrace));
         }
         root.getChildren().add(miniMapVBox);
         miniMapVBox.requestFocus();
@@ -2095,6 +2251,18 @@ public class IngameController extends Controller {
                         error.printStackTrace();
                     }));
         }
+    }
+
+    private void setupUdpPing() {
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                disposables.add(udpEventListenerProvider.get().ping().observeOn(FX_SCHEDULER).subscribe());
+                disposables.add(authenticationService.stayOnline().observeOn(FX_SCHEDULER).subscribe());
+            }
+        };
+        timer.schedule(task, 0, MINUTE_IN_MILLIS);
     }
 
     public int getUserTrainerY() {

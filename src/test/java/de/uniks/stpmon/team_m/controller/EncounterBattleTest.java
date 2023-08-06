@@ -3,7 +3,10 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.dto.*;
-import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.service.MonstersService;
+import de.uniks.stpmon.team_m.service.PresetsService;
+import de.uniks.stpmon.team_m.service.RegionEncountersService;
+import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
@@ -29,7 +32,7 @@ import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 import static io.reactivex.rxjava3.core.Observable.just;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
@@ -222,6 +225,25 @@ class EncounterBattleTest extends ApplicationTest {
                 )
         )));
 
+        when(presetsService.getItems()).thenReturn(Observable.just(List.of(
+                new ItemTypeDto(
+                        1,
+                        "mondex.png",
+                        "Mondex",
+                        0,
+                        "A Handheld Device for Trainers",
+                        null
+                ),
+                new ItemTypeDto(
+                        10,
+                        "ball_normal.png",
+                        "Monball",
+                        20,
+                        "A ball for catching monsters.",
+                        "ball"
+                )
+        )));
+
         when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(
                 new MonsterTypeDto(
                         696969,
@@ -379,9 +401,9 @@ class EncounterBattleTest extends ApplicationTest {
     }
 
     @Test
-    void updateDescriptionTest () {
+    void updateDescriptionTest() {
         String encounterId = "64aa9f7132eb8b56aa9eb208";
-        for(int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             encounterController.listenToOpponents(encounterId);
         }
 
@@ -390,7 +412,7 @@ class EncounterBattleTest extends ApplicationTest {
         Text description = lookup("#battleDialogText").query();
         assertNotEquals("The Battle was begun! you are fight against Peter", description.getText());
 
-        for(int i = 0; i < 2; i++) {
+        for (int i = 0; i < 2; i++) {
             encounterController.listenToOpponents(encounterId);
         }
 

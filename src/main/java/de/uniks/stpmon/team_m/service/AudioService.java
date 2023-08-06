@@ -1,5 +1,7 @@
 package de.uniks.stpmon.team_m.service;
+import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.IngameController;
 import javafx.scene.control.Button;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -8,12 +10,15 @@ import javax.inject.Inject;
 import java.util.Objects;
 import java.util.prefs.Preferences;
 
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.WALKING;
+
 public class AudioService {
     private static AudioService instance;
     private MediaPlayer mediaPlayer;
     private boolean isMuted = false;
     private String currentSound;
     private double soundVolume;
+    private MediaPlayer effectPlayer;
 
     @Inject
     public AudioService() {}
@@ -32,6 +37,24 @@ public class AudioService {
         mediaPlayer.play();
         this.currentSound = soundPath;
 
+    }
+
+    public void playEffect(Constants.SoundEffect effect, IngameController ingameController) {
+        final Media sound = new Media((Objects.requireNonNull(Main.class.getResource("sounds/" + effect + ".mp3"))).toString());
+        effectPlayer = new MediaPlayer(sound);
+        if(effect == WALKING) {
+            effectPlayer.setRate(1.5);
+        } else {
+            effectPlayer.setRate(1);
+        }
+        effectPlayer.setVolume(ingameController.preferences.getDouble("volume", 0.5) * 1.5);
+        effectPlayer.play();
+    }
+
+    public void stopEffect() {
+        if (effectPlayer != null) {
+            effectPlayer.stop();
+        }
     }
 
     public void stopSound() {
