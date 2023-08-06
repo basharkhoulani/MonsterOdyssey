@@ -28,7 +28,6 @@ import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 import static de.uniks.stpmon.team_m.Constants.BallType.*;
@@ -955,6 +954,16 @@ public class EncounterController extends Controller {
             if (!isDied && !Objects.equals(monsterId, encounterOpponentStorage.getSelfOpponent().monster())) {
                 if (!encounterOpponentStorage.isTwoMonster() || !Objects.equals(monsterId, encounterOpponentStorage.getCoopOpponent().monster())) {
                     disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, monsterId, null).observeOn(FX_SCHEDULER).subscribe(opponent -> resetRepeatedTimes(), Throwable::printStackTrace));
+                }
+            } else if (isDied) {
+                Trainer trainer = trainerStorageProvider.get().getTrainer();
+                if (trainer.settings() != null && trainer.settings().monsterPermaDeath() != null && trainer.settings().monsterPermaDeath()) {
+                    disposables.add(monstersService.deleteMonster(trainer.region(), trainer._id(), monsterId).observeOn(FX_SCHEDULER).subscribe(result -> {
+                        disposables.add(trainersService.getTrainer(trainer.region(), trainer._id()).observeOn(FX_SCHEDULER).subscribe(trainer1 -> {
+                            trainerStorageProvider.get().setTrainer(trainer1);
+                            resetRepeatedTimes();
+                        }, Throwable::printStackTrace));
+                    }, Throwable::printStackTrace));
                 }
             }
         });
