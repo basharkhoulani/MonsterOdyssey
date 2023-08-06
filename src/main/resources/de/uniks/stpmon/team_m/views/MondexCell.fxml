@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0"
+      prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="de.uniks.stpmon.team_m.controller.subController.MondexCell">
+   <Label fx:id="monsterNumberLabel" alignment="CENTER" prefHeight="50.0" prefWidth="69.0">
+      <font>
+         <Font size="23.0"/>
+      </font>
+   </Label>
+   <ImageView fx:id="monsterImageView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true"/>
+   <Label fx:id="monsterNameLabel" prefHeight="50.0" prefWidth="174.0">
+      <opaqueInsets>
+         <Insets/>
+      </opaqueInsets>
+      <HBox.margin>
+         <Insets left="10.0"/>
+      </HBox.margin>
+      <font>
+         <Font size="23.0"/>
+      </font>
+   </Label>
+</HBox>
