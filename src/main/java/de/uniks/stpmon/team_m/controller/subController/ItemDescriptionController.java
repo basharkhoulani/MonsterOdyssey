@@ -6,7 +6,10 @@ import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
+import de.uniks.stpmon.team_m.dto.UpdateItemDto;
 import de.uniks.stpmon.team_m.service.AudioService;
+import de.uniks.stpmon.team_m.service.TrainerItemsService;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -19,7 +22,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import javax.inject.Inject;
 import java.awt.*;
 import java.net.URL;
 
@@ -32,6 +34,8 @@ public class ItemDescriptionController extends Controller {
     ItemTypeDto itemTypeDto;
     Image itemImage;
     Item item;
+    @FXML
+    public Label descriptionLabel;
     @FXML
     public Label itemAmountTitleLabel;
     @FXML
@@ -53,6 +57,9 @@ public class ItemDescriptionController extends Controller {
     private StackPane rootStackPane;
     private IngameController ingameController;
     private EncounterController encounterController;
+    private ItemMenuController itemMenuController;
+    private TrainerItemsService trainerItemsService;
+    private TrainerStorage trainerStorage;
 
 
     public ItemDescriptionController(Runnable onItemUsed) {
@@ -66,7 +73,8 @@ public class ItemDescriptionController extends Controller {
                      int ownAmountOfITem,
                      Runnable closeItemMenu,
                      StackPane rootStackPane,
-                     IngameController ingameController) {
+                     IngameController ingameController,
+                     ItemMenuController itemMenuController) {
         super.init();
         this.itemImage = itemImage;
         this.itemTypeDto = itemTypeDto;
@@ -76,6 +84,10 @@ public class ItemDescriptionController extends Controller {
         this.closeItemMenu = closeItemMenu;
         this.rootStackPane = rootStackPane;
         this.ingameController = ingameController;
+        this.itemMenuController = itemMenuController;
+
+        this.trainerItemsService = ingameController.getTrainerItemsService();
+        this.trainerStorage = ingameController.getTrainerStorage();
     }
 
     public void initFromEncounter(ItemTypeDto itemTypeDto,
@@ -123,7 +135,7 @@ public class ItemDescriptionController extends Controller {
                     showMonsterList(item);
                     closeItemMenu.run();
                 } else if (itemTypeDto.use().equals(ITEM_USAGE_BALL)) {
-                    if(encounterController != null) {
+                    if (encounterController != null) {
                         encounterController.useItem(item, null);
                         onItemUsed.run();
                         closeItemMenu.run();
@@ -162,12 +174,59 @@ public class ItemDescriptionController extends Controller {
     }
 
     public void buyItem() {
+        if (Integer.parseInt(ingameController.coinsLabel.getText()) < itemTypeDto.price()) {
+            descriptionLabel.setText(resources.getString("NOT.ENOUGH.COINS"));
+            descriptionLabel.setStyle("-fx-text-fill: red");
+            return;
+        }
+
+        disposables.add(trainerItemsService.useOrTradeItem(
+                trainerStorage.getRegion()._id(),
+                trainerStorage.getTrainer()._id(),
+                ITEM_ACTION_TRADE_ITEM,
+                new UpdateItemDto(1, item.type(), null)
+        ).observeOn(FX_SCHEDULER).subscribe(
+                result -> {
+                    trainerStorage.addItem(result);
+                    trainerStorage.updateItem(result);
+                    ownAmountOfItem++;
+                    this.itemAmountLabel.setText(String.valueOf(ownAmountOfItem));
+
+                    ingameController.coinsLabel.setText(String.valueOf(Integer.parseInt(ingameController.coinsLabel.getText()) - itemTypeDto.price()));
+                },
+                error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
         if (!GraphicsEnvironment.isHeadless()) {
             AudioService.getInstance().playEffect(BUY_SELL, ingameController);
         }
     }
 
     public void sellItem() {
+        disposables.add(trainerItemsService.useOrTradeItem(
+                trainerStorage.getRegion()._id(),
+                trainerStorage.getTrainer()._id(),
+                ITEM_ACTION_TRADE_ITEM,
+                new UpdateItemDto(-1, item.type(), null)
+        ).observeOn(FX_SCHEDULER).subscribe(
+                result -> {
+                    trainerStorage.updateItem(result);
+                    this.itemMenuController.updateListView();
+                    ownAmountOfItem--;
+                    this.itemAmountLabel.setText(String.valueOf(ownAmountOfItem));
+
+                    ingameController.coinsLabel.setText(String.valueOf(Integer.parseInt(ingameController.coinsLabel.getText()) + itemTypeDto.price() / 2));
+
+                    if (ownAmountOfItem == 0) {
+                        itemMenuController.itemDescriptionBox.getChildren().clear();
+                        itemMenuController.setItemNameLabel("");
+                    }
+                },
+                error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
         if (!GraphicsEnvironment.isHeadless()) {
             AudioService.getInstance().playEffect(BUY_SELL, ingameController);
         }
