@@ -2,7 +2,6 @@ package de.uniks.stpmon.team_m.controller;
 
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.*;
 import de.uniks.stpmon.team_m.dto.Map;
@@ -46,10 +45,8 @@ import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
 import java.time.Instant;
-import java.util.*;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 import static de.uniks.stpmon.team_m.Constants.SoundEffect.*;
@@ -244,7 +241,7 @@ public class IngameController extends Controller {
                 } else if (inCoinsEarnedInfoBox) {
                     inCoinsEarnedInfoBox = false;
                     stackPane.getChildren().remove(dialogStackPane);
-                } else if (inJoinEncounterInfoBox){
+                } else if (inJoinEncounterInfoBox) {
                     inJoinEncounterInfoBox = false;
                     createJoinEncounterPopup();
                 }
@@ -516,7 +513,7 @@ public class IngameController extends Controller {
         if (preferences.getBoolean("firstEntry", true)) {
             this.notificationListHandyController.displayFirstTimeNotifications(true);
             notificationBell.setVisible(true);
-            if(!GraphicsEnvironment.isHeadless()) {
+            if (!GraphicsEnvironment.isHeadless()) {
                 AudioService.getInstance().playEffect(NOTIFICATION, this);
             }
             preferences.putBoolean("firstEntry", false);
@@ -610,8 +607,7 @@ public class IngameController extends Controller {
                             receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
                             receiveObjectPopUp.getChildren().add(receiveObjectController.render());
                             getRoot().getChildren().add(receiveObjectPopUp);
-                        }
-                        else {
+                        } else {
                             disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
                                     image -> {
                                         itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image));
@@ -712,13 +708,13 @@ public class IngameController extends Controller {
                             } else {
                                 shiftMapDownTransition.play();
                             }
-                            if(!GraphicsEnvironment.isHeadless()) {
+                            if (!GraphicsEnvironment.isHeadless()) {
                                 AudioService.getInstance().stopEffect();
                                 AudioService.getInstance().playEffect(WALKING, this);
                             }
                         } else {
                             trainerController.turn(moveTrainerDto.direction());
-                            if(!GraphicsEnvironment.isHeadless() && oldDirection != moveTrainerDto.direction()) {
+                            if (!GraphicsEnvironment.isHeadless() && oldDirection != moveTrainerDto.direction()) {
                                 AudioService.getInstance().stopEffect();
                                 AudioService.getInstance().playEffect(WALKING, this);
                             }
@@ -1189,7 +1185,8 @@ public class IngameController extends Controller {
                 new UpdateItemDto(1, item.type(), (monster != null) ? monster._id() : null)
         ).observeOn(FX_SCHEDULER).subscribe(
                 result -> trainerStorageProvider.get().updateItem(result),
-                error -> {}));
+                error -> {
+                }));
     }
 
     public void buttonsDisable(Boolean set) {
@@ -1530,6 +1527,7 @@ public class IngameController extends Controller {
         itemMenuBox.setId("itemMenuBox");
         itemMenuBox.setAlignment(Pos.CENTER);
         ItemMenuController itemMenuController = itemMenuControllerProvider.get();
+        System.out.println(itemMenuController);
         itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox, inventoryType, npcItemTypeIDs, root);
         itemMenuBox.getChildren().add(itemMenuController.render());
         root.getChildren().add(itemMenuBox);
@@ -1597,19 +1595,18 @@ public class IngameController extends Controller {
                             this
                     );
                 } else {
-                    disposables.add(encounterOpponentsService.getTrainerOpponents(currentNpc.region(),currentNpc._id())
+                    disposables.add(encounterOpponentsService.getTrainerOpponents(currentNpc.region(), currentNpc._id())
                             .observeOn(FX_SCHEDULER).subscribe(opponents -> {
                                 if (opponents.size() == 2) {
-                                    for (Opponent opponent : opponents){
-                                        if (opponent.move() != null || opponent.results().size() != 0){
+                                    for (Opponent opponent : opponents) {
+                                        if (opponent.move() != null || opponent.results().size() != 0) {
                                             TextFlow textFlow = createDialogVBox(false);
                                             textFlow.getChildren().add(new Text(resources.getString("WANT.TO.FIGHT")));
                                             return;
                                         }
                                     }
                                     showOtherTrainerInEncounterInfo();
-                                }
-                                else {
+                                } else {
                                     TextFlow textFlow = createDialogVBox(false);
                                     textFlow.getChildren().add(new Text(resources.getString("WANT.TO.FIGHT")));
                                 }
@@ -1809,6 +1806,7 @@ public class IngameController extends Controller {
         }
         AudioService.getInstance().stopEffect();
     }
+
     public void createJoinEncounterPopup() {
         VBox joinEncounterVBox = new VBox();
         joinEncounterVBox.setId("joinEncountervBox");
@@ -2028,7 +2026,7 @@ public class IngameController extends Controller {
         Label nameLabel = new Label();
         if (isEncounter) {
             nameLabel.setText(resources.getString("ANNOUNCEMENT"));
-        }else {
+        } else {
             nameLabel.setText(this.currentNpc.name());
         }
         nameLabel.setPadding(new Insets(5, 10, 5, 10));
@@ -2135,7 +2133,7 @@ public class IngameController extends Controller {
             disposables.add(areasService.getAreas(trainerStorage.getRegion()._id()).observeOn(FX_SCHEDULER).subscribe(areas -> {
                 ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox, miniMap, areas);
                 miniMapVBox.getChildren().add(ingameMiniMapController.render());
-                }, Throwable::printStackTrace));
+            }, Throwable::printStackTrace));
         }
         root.getChildren().add(miniMapVBox);
         miniMapVBox.requestFocus();
@@ -2232,11 +2230,6 @@ public class IngameController extends Controller {
                             AudioService.getInstance().playSound(ROUTE_SOUND);
                             AudioService.getInstance().setCurrentSound(ROUTE_SOUND);
                             AudioService.getInstance().setVolume(preferences.getDouble("volume", AudioService.getInstance().getVolume()));
-                        } else if (area.map().infinite()) {
-                            AudioService.getInstance().stopSound();
-                            AudioService.getInstance().playSound(CITY_SOUND);
-                            AudioService.getInstance().setCurrentSound(CITY_SOUND);
-                            AudioService.getInstance().setVolume(preferences.getDouble("volume", AudioService.getInstance().getVolume()));
                         } else {
                             AudioService.getInstance().stopSound();
                             AudioService.getInstance().playSound(ROOMS_SOUND);
@@ -2304,6 +2297,7 @@ public class IngameController extends Controller {
     public TrainerStorage getTrainerStorage() {
         return trainerStorageProvider.get();
     }
+
     public TrainerItemsService getTrainerItemsService() {
         return this.trainerItemsService;
     }
