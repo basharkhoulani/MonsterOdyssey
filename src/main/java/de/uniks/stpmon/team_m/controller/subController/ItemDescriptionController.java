@@ -115,13 +115,13 @@ public class ItemDescriptionController extends Controller {
         final Parent parent = super.render();
         itemImageView.setImage(itemImage);
         itemAmountLabel.setText(String.valueOf(item.amount()));
-        Trainer trainer = trainerStorage.getTrainer();
-        if (trainer.settings() != null && trainer.settings().itemPriceMultiplier() != null) {
-            itemPriceLabel.setText(String.valueOf((int) (itemTypeDto.price() * trainer.settings().itemPriceMultiplier())));
-        } else {
-            itemPriceLabel.setText(String.valueOf(itemTypeDto.price()));
+        itemPriceLabel.setText(String.valueOf(itemTypeDto.price()));
+        if (trainerStorage != null) {
+            Trainer trainer = trainerStorage.getTrainer();
+            if (trainer.settings() != null && trainer.settings().itemPriceMultiplier() != null) {
+                itemPriceLabel.setText(String.valueOf((int) (itemTypeDto.price() * trainer.settings().itemPriceMultiplier())));
+            }
         }
-
         Text description = new Text(itemTypeDto.description());
         itemDescription.getChildren().add(description);
 
