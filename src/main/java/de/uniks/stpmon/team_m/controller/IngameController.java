@@ -2217,6 +2217,9 @@ public class IngameController extends Controller {
 
     public void showLowHealthNotification() {
         notificationBell.setVisible(true);
+        if (!GraphicsEnvironment.isHeadless()){
+            AudioService.getInstance().playEffect(NOTIFICATION, this);
+        }
         this.notificationListHandyController.displayLowHealthMessages();
     }
 
