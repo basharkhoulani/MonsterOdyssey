@@ -7,15 +7,14 @@ import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.*;
-import de.uniks.stpmon.team_m.utils.MonsterStorage;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
-import de.uniks.stpmon.team_m.utils.UserStorage;
+import de.uniks.stpmon.team_m.utils.*;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -26,6 +25,8 @@ import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,6 +75,8 @@ public class MonstersListController extends Controller {
     @Inject
     Provider<MonsterStorage> monsterStorageProvider;
     @Inject
+    Provider<MonsterTypeDtoStorage> monsterTypeDtoStorageProvider;
+    @Inject
     public UserStorage usersStorage;
     @Inject
     public Provider<PresetsService> presetsServiceProvider;
@@ -87,6 +90,7 @@ public class MonstersListController extends Controller {
 
     public List<Monster> activeMonstersList;
     public List<Monster> otherMonstersList;
+    public List<MonsterTypeDto> mondexList;
     private StackPane rootStackPane;
     private Item item;
     public Runnable onItemUsed;
@@ -114,8 +118,21 @@ public class MonstersListController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
+
         disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
                 .subscribe(list -> disposables.add(presetsServiceProvider.get().getMonsters().observeOn(FX_SCHEDULER).subscribe(monsterTypeDtos -> {
+
+                    MonsterStorage monsterStorage = monsterStorageProvider.get();
+                    monsterStorage.addMonsterTypeDtoLists(monsterTypeDtos);
+                    for (MonsterTypeDto monsterTypeDto : monsterTypeDtos) {
+                        disposables.add(presetsService.getMonsterImage(monsterTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
+                                responseBody -> {
+                                    Image monsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
+                                    monsterStorage.addMonsterImageToHashMap(monsterTypeDto.id(), monsterImage);
+                                }
+                        ));
+                    }
+
                     for (Monster monster : list) {
                         for (MonsterTypeDto monsterTypeDto : monsterTypeDtos) {
                             if (monsterTypeDto.id() == monster.type()) {
@@ -132,9 +149,11 @@ public class MonstersListController extends Controller {
                     otherMonstersList = list.stream()
                             .filter(monster -> !trainerStorageProvider.get().getTrainer().team().contains(monster._id()))
                             .collect(Collectors.toList());
+                    loadMondex(monsterStorageProvider.get().getMonsterTypeDtoList());
                     initOtherMonsterList(otherMonstersList);
                     initMonsterList(activeMonstersList);
                 }, Throwable::printStackTrace))));
+
         return parent;
     }
 
@@ -285,5 +304,14 @@ public class MonstersListController extends Controller {
         listAdd.add(monster);
         listViewAdd.getItems().clear();
         listViewAdd.getItems().addAll(listAdd);
+    }
+
+    private void loadMondex(List<MonsterTypeDto> monsterTypeDtoList) {
+        for (MonsterTypeDto monsterTypeDto : monsterTypeDtoList) {
+            monsterListViewMondex.setCellFactory(param -> new MondexCell(this, resources));
+            monsterListViewMondex.getItems().add(monsterTypeDto);
+            monsterListViewMondex.setFocusModel(null);
+            monsterListViewMondex.setSelectionModel(null);
+        }
     }
 }
