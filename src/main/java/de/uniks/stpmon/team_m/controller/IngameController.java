@@ -1527,7 +1527,6 @@ public class IngameController extends Controller {
         itemMenuBox.setId("itemMenuBox");
         itemMenuBox.setAlignment(Pos.CENTER);
         ItemMenuController itemMenuController = itemMenuControllerProvider.get();
-        System.out.println(itemMenuController);
         itemMenuController.init(this, trainersService, trainerStorageProvider, itemMenuBox, inventoryType, npcItemTypeIDs, root);
         itemMenuBox.getChildren().add(itemMenuController.render());
         root.getChildren().add(itemMenuBox);
@@ -2229,6 +2228,11 @@ public class IngameController extends Controller {
                             AudioService.getInstance().stopSound();
                             AudioService.getInstance().playSound(ROUTE_SOUND);
                             AudioService.getInstance().setCurrentSound(ROUTE_SOUND);
+                            AudioService.getInstance().setVolume(preferences.getDouble("volume", AudioService.getInstance().getVolume()));
+                        } else if (area.map().infinite()){
+                            AudioService.getInstance().stopSound();
+                            AudioService.getInstance().playSound(CITY_SOUND);
+                            AudioService.getInstance().setCurrentSound(CITY_SOUND);
                             AudioService.getInstance().setVolume(preferences.getDouble("volume", AudioService.getInstance().getVolume()));
                         } else {
                             AudioService.getInstance().stopSound();
