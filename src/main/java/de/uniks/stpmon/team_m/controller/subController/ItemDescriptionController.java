@@ -98,7 +98,8 @@ public class ItemDescriptionController extends Controller {
                                   int ownAmountOfITem,
                                   Runnable closeItemMenu,
                                   StackPane rootStackPane,
-                                  EncounterController encounterController) {
+                                  EncounterController encounterController,
+                                  TrainerStorage trainerStorage) {
         super.init();
         this.itemImage = itemImage;
         this.itemTypeDto = itemTypeDto;
@@ -108,6 +109,7 @@ public class ItemDescriptionController extends Controller {
         this.closeItemMenu = closeItemMenu;
         this.rootStackPane = rootStackPane;
         this.encounterController = encounterController;
+        this.trainerStorage = trainerStorage;
     }
 
     @Override
@@ -115,13 +117,13 @@ public class ItemDescriptionController extends Controller {
         final Parent parent = super.render();
         itemImageView.setImage(itemImage);
         itemAmountLabel.setText(String.valueOf(item.amount()));
-        itemPriceLabel.setText(String.valueOf(itemTypeDto.price()));
-        if (trainerStorage != null) {
-            Trainer trainer = trainerStorage.getTrainer();
-            if (trainer.settings() != null && trainer.settings().itemPriceMultiplier() != null) {
-                itemPriceLabel.setText(String.valueOf((int) (itemTypeDto.price() * trainer.settings().itemPriceMultiplier())));
-            }
+        Trainer trainer = trainerStorage.getTrainer();
+        if (trainer.settings() != null && trainer.settings().itemPriceMultiplier() != null) {
+            itemPriceLabel.setText(String.valueOf((int) (itemTypeDto.price() * trainer.settings().itemPriceMultiplier())));
+        } else {
+            itemPriceLabel.setText(String.valueOf(itemTypeDto.price()));
         }
+
         Text description = new Text(itemTypeDto.description());
         itemDescription.getChildren().add(description);
 
@@ -164,6 +166,7 @@ public class ItemDescriptionController extends Controller {
             case sellItems -> {
                 useButton.setText(resources.getString("CLERK.SELL"));
                 useButton.setOnAction(event -> sellItem());
+                itemPriceLabel.setText(String.valueOf((itemTypeDto.price())));
             }
             default -> {
             }
