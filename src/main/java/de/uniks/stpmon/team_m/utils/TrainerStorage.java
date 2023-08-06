@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -41,9 +42,13 @@ public class TrainerStorage {
     }
 
     public void addItem(Item item) {
-        if (!this.items.contains(item)) {
-            this.items.add(item);
+        for (Item item1 : this.items) {
+            if (Objects.equals(item1.type(), item.type())) {
+                return;
+            }
         }
+
+        this.items.add(item);
     }
 
     public void updateItem(Item item) {

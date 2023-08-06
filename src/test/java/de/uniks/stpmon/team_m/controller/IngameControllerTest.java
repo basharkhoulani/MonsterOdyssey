@@ -1169,6 +1169,43 @@ public class IngameControllerTest extends ApplicationTest {
 
     }
 
+    /*          no idea how to make the inventory testing work. I think if the inventory itself would be tested,
+                I could get *inspiration* there, but the inventory test is a requirement before these tests I'd say
+    @Test
+    void testBuyItem() throws InterruptedException {
+        Mockito.when(trainerStorageProvider.get().getX()).thenReturn(100);
+        Mockito.when(trainerStorageProvider.get().getY()).thenReturn(102);
+        Mockito.when(trainerStorageProvider.get().getDirection()).thenReturn(1);
+
+        ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
+        Preferences preferences = Preferences.userNodeForPackage(ItemMenuController.class);
+        ItemMenuController itemMenuController = new ItemMenuController();
+        itemMenuController.setValues(bundle, preferences, null, ingameController, app);
+
+        when(itemMenuControllerProvider.get()).thenReturn(itemMenuController);
+        when(presetsService.getItems()).thenReturn(Observable.just(
+                List.of()
+        ));
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        press(KeyCode.E);
+        release(KeyCode.E);
+        Thread.sleep(30);
+
+        Thread.sleep(100000000);
+    }
+*/
     @Test
     void testOtherTrainerInEncounter() {
         Mockito.when(trainerStorageProvider.get().getX()).thenReturn(200);

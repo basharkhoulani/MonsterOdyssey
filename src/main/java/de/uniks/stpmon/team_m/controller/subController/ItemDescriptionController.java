@@ -6,8 +6,8 @@ import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
-import de.uniks.stpmon.team_m.service.AudioService;
 import de.uniks.stpmon.team_m.dto.UpdateItemDto;
+import de.uniks.stpmon.team_m.service.AudioService;
 import de.uniks.stpmon.team_m.service.TrainerItemsService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
@@ -22,7 +22,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import javax.inject.Inject;
 import java.awt.*;
 import java.net.URL;
 
@@ -58,6 +57,9 @@ public class ItemDescriptionController extends Controller {
     private StackPane rootStackPane;
     private IngameController ingameController;
     private EncounterController encounterController;
+    private ItemMenuController itemMenuController;
+    private TrainerItemsService trainerItemsService;
+    private TrainerStorage trainerStorage;
 
 
     public ItemDescriptionController(Runnable onItemUsed) {
@@ -133,7 +135,7 @@ public class ItemDescriptionController extends Controller {
                     showMonsterList(item);
                     closeItemMenu.run();
                 } else if (itemTypeDto.use().equals(ITEM_USAGE_BALL)) {
-                    if(encounterController != null) {
+                    if (encounterController != null) {
                         encounterController.useItem(item, null);
                         onItemUsed.run();
                         closeItemMenu.run();
