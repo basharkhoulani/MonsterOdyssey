@@ -13,8 +13,10 @@ import de.uniks.stpmon.team_m.utils.UserStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -37,6 +39,22 @@ public class MonstersListController extends Controller {
     public Tab activeTeamTab;
     @FXML
     public Button closeButton;
+    @FXML
+    public Tab mondexTab;
+    @FXML
+    public ListView monsterListViewMondex;
+    @FXML
+    public ImageView mapImageView;
+    @FXML
+    public ImageView monsterImageView;
+    @FXML
+    public Label monsterNameLabel;
+    @FXML
+    public ImageView firstTypeImageView;
+    @FXML
+    public ImageView secondTypeImageView;
+    @FXML
+    public TextFlow monsterDescriptionTextFlow;
     @Inject
     Provider<TrainersService> trainersServiceProvider;
     @Inject
