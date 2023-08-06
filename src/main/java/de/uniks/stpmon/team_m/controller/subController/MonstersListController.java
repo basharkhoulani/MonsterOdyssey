@@ -42,7 +42,7 @@ public class MonstersListController extends Controller {
     @FXML
     public Tab mondexTab;
     @FXML
-    public ListView monsterListViewMondex;
+    public ListView<MonsterTypeDto> monsterListViewMondex;
     @FXML
     public ImageView mapImageView;
     @FXML
