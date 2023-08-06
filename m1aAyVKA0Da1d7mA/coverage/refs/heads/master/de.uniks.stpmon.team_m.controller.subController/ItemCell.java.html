@@ -118,8 +118,8 @@ public class ItemCell extends ListCell&lt;Item&gt; {
 <span class="nc" id="L118">            setGraphic(null);</span>
 <span class="nc" id="L119">            setStyle(&quot;-fx-background-color: #FFFFFF;&quot;);</span>
         } else {
-            //this.itemTypeDto = itemMenuController.itemTypeHashMap.get(item.type());
-<span class="nc" id="L122">            this.itemTypeDto = itemStorageProvider.get().getItemData(item._id()).getItemTypeDto();</span>
+<span class="nc" id="L121">            this.itemTypeDto = itemMenuController.itemTypeHashMap.get(item.type());</span>
+//            this.itemTypeDto = itemStorageProvider.get().getItemData(item._id()).getItemTypeDto();
 <span class="nc" id="L123">            loadFXML();</span>
 <span class="nc" id="L124">            itemLabel.setText(itemTypeDto.name());</span>
 <span class="nc" id="L125">            itemNumber.setText(&quot;(&quot; + item.amount() + &quot;)&quot;);</span>
@@ -182,7 +182,7 @@ public class ItemCell extends ListCell&lt;Item&gt; {
 <span class="nc" id="L182">        ItemDescriptionController itemDescriptionController = new ItemDescriptionController(onItemUsed);</span>
 <span class="nc" id="L183">        itemDescriptionController.setValues(resources, preferences, resourceBundleProvider, itemDescriptionController, app);</span>
 <span class="nc bnc" id="L184" title="All 2 branches missed.">        if (ingameController != null) {</span>
-<span class="nc" id="L185">            itemDescriptionController.init(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, ingameController);</span>
+<span class="nc" id="L185">            itemDescriptionController.init(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, ingameController, itemMenuController);</span>
 <span class="nc bnc" id="L186" title="All 2 branches missed.">        } else if (encounterController != null) {</span>
 <span class="nc" id="L187">            itemDescriptionController.initFromEncounter(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, encounterController);</span>
         }

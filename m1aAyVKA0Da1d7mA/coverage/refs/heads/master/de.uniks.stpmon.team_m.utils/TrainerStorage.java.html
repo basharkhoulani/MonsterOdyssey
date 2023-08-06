@@ -6,6 +6,8 @@ import javafx.scene.image.Image;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Singleton
@@ -24,104 +26,112 @@ public class TrainerStorage {
     private List&lt;Item&gt; items;
 
     @Inject
-<span class="fc" id="L27">    public TrainerStorage() {</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L29">    public TrainerStorage() {</span>
+<span class="fc" id="L30">    }</span>
 
     public void setTrainer(Trainer trainer) {
-<span class="fc" id="L31">        this.trainer = trainer;</span>
-<span class="fc" id="L32">    }</span>
+<span class="fc" id="L33">        this.trainer = trainer;</span>
+<span class="fc" id="L34">    }</span>
 
     public void setTrainerName(String trainerName) {
-<span class="fc" id="L35">        this.trainerName = trainerName;</span>
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L37">        this.trainerName = trainerName;</span>
+<span class="fc" id="L38">    }</span>
 
     public void setTrainerSprite(String url) {
-<span class="fc" id="L39">        this.trainerImageUrl = url;</span>
-<span class="fc" id="L40">    }</span>
+<span class="fc" id="L41">        this.trainerImageUrl = url;</span>
+<span class="fc" id="L42">    }</span>
 
     public void addItem(Item item) {
-<span class="nc" id="L43">        this.items.add(item);</span>
-<span class="nc" id="L44">    }</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        for (Item item1 : this.items) {</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">            if (Objects.equals(item1.type(), item.type())) {</span>
+<span class="nc" id="L47">                return;</span>
+            }
+<span class="nc" id="L49">        }</span>
+
+<span class="nc" id="L51">        this.items.add(item);</span>
+<span class="nc" id="L52">    }</span>
 
     public void updateItem(Item item) {
-<span class="nc" id="L47">        this.items.stream().filter(i -&gt; i._id().equals(item._id())).findFirst().ifPresent(i -&gt; this.items.set(this.items.indexOf(i), item));</span>
-<span class="nc" id="L48">    }</span>
+<span class="nc" id="L55">        this.items.stream().filter(i -&gt; i._id().equals(item._id())).findFirst().ifPresent(i -&gt; this.items.set(this.items.indexOf(i), item));</span>
+
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        this.items = this.items.stream().filter(i -&gt; i.amount() &gt; 0).collect(Collectors.toList());</span>
+<span class="nc" id="L58">    }</span>
 
     public void useItem(int itemType) {
-<span class="nc bnc" id="L51" title="All 2 branches missed.">        this.items.stream().filter(i -&gt; i.type()==itemType).findFirst().ifPresent(i -&gt; {</span>
-<span class="nc" id="L52">            int amount = i.amount()-1;</span>
-<span class="nc" id="L53">            Item item = new Item(i._id(), i.trainer(), i.type(), amount);</span>
-<span class="nc" id="L54">            this.items.set(this.items.indexOf(i), item);</span>
-<span class="nc" id="L55">        });</span>
-<span class="nc" id="L56">    }</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        this.items.stream().filter(i -&gt; i.type() == itemType).findFirst().ifPresent(i -&gt; {</span>
+<span class="nc" id="L62">            int amount = i.amount() - 1;</span>
+<span class="nc" id="L63">            Item item = new Item(i._id(), i.trainer(), i.type(), amount);</span>
+<span class="nc" id="L64">            this.items.set(this.items.indexOf(i), item);</span>
+<span class="nc" id="L65">        });</span>
+<span class="nc" id="L66">    }</span>
 
     public void setItems(List&lt;Item&gt; items) {
-<span class="nc" id="L59">        this.items = items;</span>
-<span class="nc" id="L60">    }</span>
+<span class="nc" id="L69">        this.items = items;</span>
+<span class="nc" id="L70">    }</span>
 
     public List&lt;Item&gt; getItems() {
-<span class="nc" id="L63">        return items;</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        return items.stream().filter(i -&gt; i.amount() &gt; 0).collect(Collectors.toList());</span>
     }
 
     public Trainer getTrainer() {
-<span class="nc" id="L67">        return trainer;</span>
+<span class="nc" id="L77">        return trainer;</span>
     }
 
     public Region getRegion() {
-<span class="fc" id="L71">        return region;</span>
+<span class="fc" id="L81">        return region;</span>
     }
 
     public void setRegion(Region region) {
-<span class="nc" id="L75">        this.region = region;</span>
-<span class="nc" id="L76">    }</span>
+<span class="nc" id="L85">        this.region = region;</span>
+<span class="nc" id="L86">    }</span>
 
     public String getTrainerName() {
-<span class="fc" id="L79">        return this.trainerName;</span>
+<span class="fc" id="L89">        return this.trainerName;</span>
     }
 
     public String getTrainerSprite() {
-<span class="fc" id="L83">        return this.trainerImageUrl;</span>
+<span class="fc" id="L93">        return this.trainerImageUrl;</span>
     }
 
     public Image getTrainerSpriteChunk() {
-<span class="nc" id="L87">        return trainerSpriteChunk;</span>
+<span class="nc" id="L97">        return trainerSpriteChunk;</span>
     }
 
     public void setTrainerSpriteChunk(Image trainerSpriteChunk) {
-<span class="fc" id="L91">        this.trainerSpriteChunk = trainerSpriteChunk;</span>
-<span class="fc" id="L92">    }</span>
+<span class="fc" id="L101">        this.trainerSpriteChunk = trainerSpriteChunk;</span>
+<span class="fc" id="L102">    }</span>
 
     public int getX() {
-<span class="nc" id="L95">        return x;</span>
+<span class="nc" id="L105">        return x;</span>
     }
 
     public void setX(int x) {
-<span class="nc" id="L99">        this.x = x;</span>
-<span class="nc" id="L100">    }</span>
+<span class="nc" id="L109">        this.x = x;</span>
+<span class="nc" id="L110">    }</span>
 
     public int getY() {
-<span class="nc" id="L103">        return y;</span>
+<span class="nc" id="L113">        return y;</span>
     }
 
     public void setY(int y) {
-<span class="nc" id="L107">        this.y = y;</span>
-<span class="nc" id="L108">    }</span>
+<span class="nc" id="L117">        this.y = y;</span>
+<span class="nc" id="L118">    }</span>
 
     public int getDirection() {
-<span class="nc" id="L111">        return direction;</span>
+<span class="nc" id="L121">        return direction;</span>
     }
 
     public void setDirection(int direction) {
-<span class="nc" id="L115">        this.direction = direction;</span>
-<span class="nc" id="L116">    }</span>
+<span class="nc" id="L125">        this.direction = direction;</span>
+<span class="nc" id="L126">    }</span>
 
     public List&lt;Monster&gt; getMonsters() {
-<span class="nc" id="L119">        return monsters;</span>
+<span class="nc" id="L129">        return monsters;</span>
     }
 
     public void setMonsters(List&lt;Monster&gt; monsters) {
-<span class="nc" id="L123">        this.monsters = monsters;</span>
-<span class="nc" id="L124">    }</span>
+<span class="nc" id="L133">        this.monsters = monsters;</span>
+<span class="nc" id="L134">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
