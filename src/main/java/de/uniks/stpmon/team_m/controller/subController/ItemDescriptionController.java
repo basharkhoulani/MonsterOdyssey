@@ -22,7 +22,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
 
@@ -33,6 +32,8 @@ public class ItemDescriptionController extends Controller {
     ItemTypeDto itemTypeDto;
     Image itemImage;
     Item item;
+    @FXML
+    public Label descriptionLabel;
     @FXML
     public Label itemAmountTitleLabel;
     @FXML
@@ -134,6 +135,12 @@ public class ItemDescriptionController extends Controller {
     }
 
     public void buyItem() {
+        if (Integer.parseInt(ingameController.coinsLabel.getText()) < itemTypeDto.price()) {
+            descriptionLabel.setText(resources.getString("NOT.ENOUGH.COINS"));
+            descriptionLabel.setStyle("-fx-text-fill: red");
+            return;
+        }
+
         disposables.add(trainerItemsService.useOrTradeItem(
                 trainerStorage.getRegion()._id(),
                 trainerStorage.getTrainer()._id(),
@@ -141,12 +148,12 @@ public class ItemDescriptionController extends Controller {
                 new UpdateItemDto(1, item.type(), null)
         ).observeOn(FX_SCHEDULER).subscribe(
                 result -> {
-                    System.out.println(result);
+                    trainerStorage.addItem(result);
                     trainerStorage.updateItem(result);
                     ownAmountOfItem++;
                     this.itemAmountLabel.setText(String.valueOf(ownAmountOfItem));
 
-                    ingameController.setCoinsAmount((ingameController.getCoinsAmount() - itemTypeDto.price()));
+                    ingameController.coinsLabel.setText(String.valueOf(Integer.parseInt(ingameController.coinsLabel.getText()) - itemTypeDto.price()));
                 },
                 error -> {
                     showError(error.getMessage());
@@ -162,20 +169,19 @@ public class ItemDescriptionController extends Controller {
                 new UpdateItemDto(-1, item.type(), null)
         ).observeOn(FX_SCHEDULER).subscribe(
                 result -> {
-                    System.out.println(result);
                     trainerStorage.updateItem(result);
                     this.itemMenuController.updateListView();
                     ownAmountOfItem--;
                     this.itemAmountLabel.setText(String.valueOf(ownAmountOfItem));
 
-                    ingameController.setCoinsAmount((ingameController.getCoinsAmount() + itemTypeDto.price() / 2));
-                    System.out.println(trainerStorage.getItems());
+                    ingameController.coinsLabel.setText(String.valueOf(Integer.parseInt(ingameController.coinsLabel.getText()) + itemTypeDto.price() / 2));
+
+                    if (ownAmountOfItem == 0) {
+                        itemMenuController.itemDescriptionBox.getChildren().clear();
+                        itemMenuController.setItemNameLabel("");
+                    }
                 },
                 error -> {
-                    System.out.println(trainerStorage.getRegion()._id());
-                    System.out.println(trainerStorage.getTrainer()._id());
-                    System.out.println(ITEM_ACTION_TRADE_ITEM);
-                    System.out.println(item.type());
                     showError(error.getMessage());
                     error.printStackTrace();
                 }));
