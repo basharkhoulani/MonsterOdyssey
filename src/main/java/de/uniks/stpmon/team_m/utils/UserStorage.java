@@ -13,6 +13,7 @@ public class UserStorage {
     private String status;
     private String avatar;
     private List<String> friends;
+    private String refreshToken;
 
     /**
      * UserStorage handles the storage of the user that needs to be used as the currently logged in user.
@@ -68,12 +69,17 @@ public class UserStorage {
         this.friends = friends;
     }
 
+    public String getRefreshToken() {
+        return this.refreshToken;
+    }
+
     public void setUser(LoginResult loginResult) {
         this._id = loginResult._id();
         this.name = loginResult.name();
         this.status = loginResult.status();
         this.avatar = loginResult.avatar();
         this.friends = loginResult.friends();
+        this.refreshToken = loginResult.refreshToken();
     }
 
     public void removeUser() {

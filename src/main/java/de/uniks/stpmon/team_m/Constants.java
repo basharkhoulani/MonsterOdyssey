@@ -30,7 +30,6 @@ public class Constants {
     public static final String EMPTY_STRING = "";
     public static final int STUNDE_IN_MILLIS = 3600000;
     public static final int MINUTE_IN_MILLIS = 60000;
-    public static final String FX_STYLE_BORDER_COLOR_BLACK = "-fx-border-color: black";
     public static final String LOADING_ANIMATION = "images/loading.gif";
     public static final String ONLINE_IMG = "images/online.png";
     public static final String OFFLINE_IMG = "images/offline.png";
@@ -91,6 +90,7 @@ public class Constants {
     public static final int TRAINER_DIRECTION_UP = 1;
     public static final int TRAINER_DIRECTION_LEFT = 2;
     public static final int TRAINER_DIRECTION_DOWN = 3;
+    public static final String OBJECTGROUP = "objectgroup";
 
 
     public static final String SETTINGSYMBOL2 = "images/SettingSymbol2.png";
@@ -171,11 +171,7 @@ public class Constants {
     public static final String notificationBellImage = "images/NotificationBell.png";
 
     // Ingame MiniMap
-
-    public static final int descriptionBoxHeight = 40;
-    public static final int descriptionBoxWidth = 632;
-    public static final int descriptionBoxLayoutX = -60;
-    public static final int descriptionBoxLayoutY = -32;
+    public static final int paddingAndSpacingValue = 20;
 
     // Encounter
     public static final int fleePopupWidth = 300;
@@ -195,6 +191,11 @@ public class Constants {
     public static final String STATUS_ADDED = "status-added";
     public static final String STATUS_REMOVED = "status-removed";
     public static final String CHANGE_MONSTER = "change-monster";
+    public static final String USE_ITEM = "use-item";
+    public static final String ITEM_FAILED = "item-failed";
+    public static final String ITEM_SUCCESS= "item-success";
+    public static final String MONSTER_CAUGHT = "monster-caught";
+
 
     // Encounter - images
     public static final String STAR_ICON = "images/star.png";
@@ -234,6 +235,23 @@ public class Constants {
     public static final String ROOMS_SOUND = "Nintendo_Style_Funny_Music_Loop_02.wav";
     public static final String ROUTE_SOUND = "Nintendo_Style_Upbeat_Music_Loop_05.wav";
     public static final String FIGHT_SOUND = "Nintendo_Style_Battle_Music_Loop_02.wav";
+
+    public enum SoundEffect {
+        ATTACK,
+        BUY_SELL,
+        DEATH,
+        FLEE,
+        GOT_COINS,
+        HEALING,
+        LOW_HEALTH,
+        NOTIFICATION,
+        TALKING,
+        WALKING,
+        WIN,
+        LOSE,
+        LEVEL_UP,
+        CATCH
+    }
 
     // Colors
     public static final HashMap<String, String> TYPESCOLORPALETTE = new HashMap<>(Map.ofEntries(
@@ -308,22 +326,30 @@ public class Constants {
     ));
 
 
-    public enum itemType {
-        ball,
-        effect,
-        monsterBox,
-        itemBox
+    public enum BallType {
+        NORMAL,
+        SUPER,
+        HYPER,
+        MASTER,
+        NET,
+        WATER,
+        HEAL
     }
 
     // enum to decide if the player wants to open his inv, sell or buy items
-    public enum inventoryType {
+    public enum InventoryType {
         showItems,
         buyItems,
         sellItems
     }
 
     public static final String ITEM_ACTION_USE_ITEM = "use";
+    public static final String ITEM_ACTION_USE_ITEM_MOVE = "use-item";
     public static final String ITEM_USAGE_EFFECT = "effect";
+    public static final String ITEM_USAGE_ITEM_BOX = "itemBox";
+    public static final String ITEM_USAGE_MONSTER_BOX = "monsterBox";
+    public static final String ITEM_USAGE_BALL = "ball";
+
     public static final int useItemMonsterListVBoxWidth = 600;
     public static final int useItemMonsterListVBoxHeight = 410;
     public static final long FLIPPING_HORIZONTAL = 0x80000000L;

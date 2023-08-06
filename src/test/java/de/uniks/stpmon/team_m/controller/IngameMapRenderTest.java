@@ -189,7 +189,7 @@ public class IngameMapRenderTest extends ApplicationTest {
         ));
         EventListener eventListenerMock = mock(EventListener.class);
         when(eventListener.get()).thenReturn(eventListenerMock);
-        when(authenticationService.refresh()).thenReturn(Observable.just(new LoginResult(
+        when(authenticationService.stayOnline()).thenReturn(Observable.just(new LoginResult(
                 "423f8d731c386bcd2204da39",
                 "1",
                 "online",
@@ -408,6 +408,7 @@ public class IngameMapRenderTest extends ApplicationTest {
                         "646bc3c0a9ac1b375fb41d93",
                         "646bc436cfee07c0e408466f",
                         "Albertina",
+                        null,
                         map
 
                 )));
@@ -479,6 +480,10 @@ public class IngameMapRenderTest extends ApplicationTest {
                 null,
                 List.of(),
                 0)));
+
+        when(eventListenerMock.listen("trainers.6475e595ac3946b6a812d865.monsters.*.*", Monster.class)).thenReturn(Observable.empty());
+        when(eventListenerMock.listen("trainers.6475e595ac3946b6a812d865.items.*.*", Item.class)).thenReturn(Observable.empty());
+
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();

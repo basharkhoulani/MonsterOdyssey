@@ -69,7 +69,6 @@ class EncounterControllerTest extends ApplicationTest {
     EncounterController encounterController;
 
 
-
     public void start(Stage stage) {
         ResourceBundle bundle = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
         encounterController.setValues(bundle, preferences, null, encounterController, app);
@@ -215,6 +214,25 @@ class EncounterControllerTest extends ApplicationTest {
                 )
         )));
 
+        when(presetsService.getItems()).thenReturn(Observable.just(List.of(
+                new ItemTypeDto(
+                        1,
+                        "mondex.png",
+                        "Mondex",
+                        0,
+                        "A Handheld Device for Trainers",
+                        null
+                ),
+                new ItemTypeDto(
+                        10,
+                        "ball_normal.png",
+                        "Monball",
+                        20,
+                        "A ball for catching monsters.",
+                        "ball"
+                )
+        )));
+
         when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(
                 new MonsterTypeDto(
                         696969,
@@ -254,8 +272,8 @@ class EncounterControllerTest extends ApplicationTest {
         when(eventListener.get()).thenReturn(eventListenerMock);
         when(eventListener.get().listen(any(), any())).thenReturn(just(
                 new Event<>("encounters.*.trainers.*.opponents.*.nothappening", null)
-                )).thenReturn(just(new Event<>("trainers.*.monsters.*.nothappening", null)
-                ));
+        )).thenReturn(just(new Event<>("trainers.*.monsters.*.nothappening", null)
+        ));
 
         when(encounterOpponentStorage.isWild()).thenReturn(false);
 
@@ -485,7 +503,7 @@ class EncounterControllerTest extends ApplicationTest {
     }
 
     @Test
-    void render1vs2WithMonster(){
+    void render1vs2WithMonster() {
         when(encounterOpponentStorage.getEncounterSize()).thenReturn(4);
         when(encounterOpponentStorage.isTwoMonster()).thenReturn(true);
         when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
@@ -540,7 +558,7 @@ class EncounterControllerTest extends ApplicationTest {
     }
 
     @Test
-    void testRenderFor2vs1(){
+    void testRenderFor2vs1() {
         when(encounterOpponentStorage.getEncounterSize()).thenReturn(3);
         when(encounterOpponentStorage.getEnemyOpponents()).thenReturn(
                 List.of(

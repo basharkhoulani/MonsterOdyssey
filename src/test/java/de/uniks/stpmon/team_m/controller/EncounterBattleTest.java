@@ -226,6 +226,25 @@ class EncounterBattleTest extends ApplicationTest {
                 )
         )));
 
+        when(presetsService.getItems()).thenReturn(Observable.just(List.of(
+                new ItemTypeDto(
+                        1,
+                        "mondex.png",
+                        "Mondex",
+                        0,
+                        "A Handheld Device for Trainers",
+                        null
+                ),
+                new ItemTypeDto(
+                        10,
+                        "ball_normal.png",
+                        "Monball",
+                        20,
+                        "A ball for catching monsters.",
+                        "ball"
+                )
+        )));
+
         when(presetsService.getMonster(anyInt())).thenReturn(Observable.just(
                 new MonsterTypeDto(
                         696969,
@@ -384,9 +403,9 @@ class EncounterBattleTest extends ApplicationTest {
     }
 
     @Test
-    void updateDescriptionTest () {
+    void updateDescriptionTest() {
         String encounterId = "64aa9f7132eb8b56aa9eb208";
-        for(int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             encounterController.listenToOpponents(encounterId);
         }
 
@@ -395,7 +414,7 @@ class EncounterBattleTest extends ApplicationTest {
         Text description = lookup("#battleDialogText").query();
         assertNotEquals("The Battle was begun! you are fight against Peter", description.getText());
 
-        for(int i = 0; i < 2; i++) {
+        for (int i = 0; i < 2; i++) {
             encounterController.listenToOpponents(encounterId);
         }
 
