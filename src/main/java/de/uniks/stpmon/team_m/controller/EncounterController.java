@@ -962,6 +962,9 @@ public class EncounterController extends Controller {
                         disposables.add(trainersService.getTrainer(trainer.region(), trainer._id()).observeOn(FX_SCHEDULER).subscribe(trainer1 -> {
                             trainerStorageProvider.get().setTrainer(trainer1);
                             resetRepeatedTimes();
+                            monsterInTeamHashMap.remove(monsterId);
+                            monsterInEncounterHashMap.remove(monsterId);
+                            oldMonsterHashMap.remove(monsterId);
                         }, Throwable::printStackTrace));
                     }, Throwable::printStackTrace));
                 }
