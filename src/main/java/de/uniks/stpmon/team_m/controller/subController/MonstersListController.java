@@ -56,6 +56,12 @@ public class MonstersListController extends Controller {
     public ImageView secondTypeImageView;
     @FXML
     public TextFlow monsterDescriptionTextFlow;
+    @FXML
+    public Label locationsLabel;
+    @FXML
+    public Label typeLabel;
+    @FXML
+    public Label descriptionLabel;
     @Inject
     Provider<TrainersService> trainersServiceProvider;
     @Inject
@@ -317,5 +323,17 @@ public class MonstersListController extends Controller {
 
     public boolean checkIfPlayerEncounteredMonster (MonsterTypeDto monsterTypeDto) {
         return trainerStorageProvider.get().getTrainer().encounteredMonsterTypes().contains(monsterTypeDto.id());
+    }
+
+    public void showMondexDetails (boolean visible) {
+        mapImageView.setVisible(visible);
+        monsterImageView.setVisible(visible);
+        monsterNameLabel.setVisible(visible);
+        locationsLabel.setVisible(visible);
+        typeLabel.setVisible(visible);
+        firstTypeImageView.setVisible(visible);
+        secondTypeImageView.setVisible(visible);
+        descriptionLabel.setVisible(visible);
+        monsterDescriptionTextFlow.setVisible(visible);
     }
 }

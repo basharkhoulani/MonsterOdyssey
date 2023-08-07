@@ -41,13 +41,13 @@
                                 <Font size="20.0"/>
                             </font>
                         </Label>
-                        <Label alignment="CENTER" layoutX="197.0" layoutY="85.0" prefHeight="19.0"
+                        <Label fx:id="locationsLabel" alignment="CENTER" layoutX="197.0" layoutY="85.0" prefHeight="19.0"
                                prefWidth="79.0" text="%LOCATIONS">
                             <font>
                                 <Font size="13.0"/>
                             </font>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" layoutX="59.0" layoutY="188.0" prefHeight="20.0"
+                        <Label fx:id="typeLabel" alignment="CENTER_RIGHT" layoutX="59.0" layoutY="188.0" prefHeight="20.0"
                                prefWidth="42.0" text="%TYPE">
                             <font>
                                 <Font size="14.0"/>
@@ -57,7 +57,7 @@
                                    layoutY="182.0" pickOnBounds="true" preserveRatio="true"/>
                         <ImageView fx:id="secondTypeImageView" fitHeight="31.0" fitWidth="31.0" layoutX="145.0"
                                    layoutY="183.0" pickOnBounds="true" preserveRatio="true"/>
-                        <Label layoutX="21.0" layoutY="214.0" prefHeight="30.0" prefWidth="139.0"
+                        <Label fx:id="descriptionLabel" layoutX="21.0" layoutY="214.0" prefHeight="30.0" prefWidth="139.0"
                                text="%DESCRIPTION">
                             <font>
                                 <Font size="20.0"/>
