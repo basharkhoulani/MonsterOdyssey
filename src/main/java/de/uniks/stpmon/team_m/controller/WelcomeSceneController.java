@@ -289,93 +289,97 @@ public class WelcomeSceneController extends Controller {
     }
 
     private void showHardcoreSettings() {
-        hardcoreSettingsBox = new VBox();
-        hardcoreSettingsBox.setPrefWidth(GAMEMODEBOX_HEIGHT);
-        hardcoreSettingsBox.setPrefHeight(HARDCORESETTINGBOX_HEIGHT);
-        hardcoreSettingsBox.setStyle("-fx-background-color: #ffe6cc");
+        if (hardcoreSettingsBox != null) {
+            messagePane.getChildren().add(hardcoreSettingsBox);
+        } else {
+            hardcoreSettingsBox = new VBox();
+            hardcoreSettingsBox.setPrefWidth(GAMEMODEBOX_WIDTH);
+            hardcoreSettingsBox.setPrefHeight(HARDCORESETTINGBOX_HEIGHT);
+            hardcoreSettingsBox.setStyle("-fx-background-color: #ffe6cc");
 
-        HBox warningBox = new HBox();
-        HBox permanentBox = new HBox();
-        HBox deleteTrainerBox = new HBox();
-        HBox itemExpensiveBox = new HBox();
-        HBox sliderBox = new HBox();
+            HBox warningBox = new HBox();
+            HBox permanentBox = new HBox();
+            HBox deleteTrainerBox = new HBox();
+            HBox itemExpensiveBox = new HBox();
+            HBox sliderBox = new HBox();
 
 
-        URL resourceImage = Main.class.getResource("images/warning.png");
-        assert resourceImage != null;
-        Image warningImage = new Image(resourceImage.toString());
-        ImageView warningImageView1 = new ImageView(warningImage);
-        warningImageView1.setFitWidth(IMAGEVIEW_SIZE);
-        warningImageView1.setFitHeight(IMAGEVIEW_SIZE);
+            URL resourceImage = Main.class.getResource("images/warning.png");
+            assert resourceImage != null;
+            Image warningImage = new Image(resourceImage.toString());
+            ImageView warningImageView1 = new ImageView(warningImage);
+            warningImageView1.setFitWidth(IMAGEVIEW_SIZE);
+            warningImageView1.setFitHeight(IMAGEVIEW_SIZE);
 
-        ImageView warningImageView2 = new ImageView(warningImage);
-        warningImageView2.setFitWidth(IMAGEVIEW_SIZE);
-        warningImageView2.setFitHeight(IMAGEVIEW_SIZE);
+            ImageView warningImageView2 = new ImageView(warningImage);
+            warningImageView2.setFitWidth(IMAGEVIEW_SIZE);
+            warningImageView2.setFitHeight(IMAGEVIEW_SIZE);
 
-        Label warningLabel = new Label(resources.getString("WARNING"));
-        warningLabel.setStyle("-fx-font-weight: bold");
-        warningLabel.setPadding(new Insets(WARNING_PADDING_TOP, WARNING_PADDING_RIGHT_LEFT, 0, WARNING_PADDING_RIGHT_LEFT));
+            Label warningLabel = new Label(resources.getString("WARNING"));
+            warningLabel.setStyle("-fx-font-weight: bold");
+            warningLabel.setPadding(new Insets(WARNING_PADDING_TOP, WARNING_PADDING_RIGHT_LEFT, 0, WARNING_PADDING_RIGHT_LEFT));
 
-        warningBox.getChildren().addAll(warningImageView1, warningLabel, warningImageView2);
+            warningBox.getChildren().addAll(warningImageView1, warningLabel, warningImageView2);
 
-        CheckBox permanentCheckBox = new CheckBox();
-        permanentCheckBox.setText(resources.getString("PERMANENT.TEXT"));
-        permanentCheckBox.setPadding(new Insets(TEN, 0, 0, FIVE));
-        permanentBox.getChildren().add(permanentCheckBox);
+            CheckBox permanentCheckBox = new CheckBox();
+            permanentCheckBox.setText(resources.getString("PERMANENT.TEXT"));
+            permanentCheckBox.setPadding(new Insets(TEN, 0, 0, FIVE));
+            permanentBox.getChildren().add(permanentCheckBox);
 
-        CheckBox deleteTrainerCheckBox = new CheckBox();
-        deleteTrainerCheckBox.setText(resources.getString("DELETE.TRAINER.CHECK"));
-        deleteTrainerCheckBox.getStyleClass().add("wrappedButton");
-        deleteTrainerCheckBox.setPadding(new Insets(EIGHT, 0, 0, FIVE));
-        deleteTrainerBox.getChildren().add(deleteTrainerCheckBox);
+            CheckBox deleteTrainerCheckBox = new CheckBox();
+            deleteTrainerCheckBox.setText(resources.getString("DELETE.TRAINER.CHECK"));
+            deleteTrainerCheckBox.getStyleClass().add("wrappedButton");
+            deleteTrainerCheckBox.setPadding(new Insets(EIGHT, 0, 0, FIVE));
+            deleteTrainerBox.getChildren().add(deleteTrainerCheckBox);
 
-        CheckBox itemExpensiveCheckBox = new CheckBox();
-        itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString("ITEM.EXPENSIVE"), 1));
-        itemExpensiveCheckBox.getStyleClass().add("wrappedButton");
-        itemExpensiveCheckBox.setPadding(new Insets(EIGHT, 0, 0, FIVE));
-        itemExpensiveBox.getChildren().add(itemExpensiveCheckBox);
-        hardcoreSettingsBox.getChildren().addAll(warningBox, permanentBox, deleteTrainerBox, itemExpensiveBox);
+            CheckBox itemExpensiveCheckBox = new CheckBox();
+            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString("ITEM.EXPENSIVE"), 1));
+            itemExpensiveCheckBox.getStyleClass().add("wrappedButton");
+            itemExpensiveCheckBox.setPadding(new Insets(EIGHT, 0, 0, FIVE));
+            itemExpensiveBox.getChildren().add(itemExpensiveCheckBox);
+            hardcoreSettingsBox.getChildren().addAll(warningBox, permanentBox, deleteTrainerBox, itemExpensiveBox);
 
-        itemExpensiveCheckBox.setOnAction(event -> {
-            if (!hardcoreSettingsBox.getChildren().contains(sliderBox)) {
-                Slider slider = new Slider(1, 3, 1);
-                slider.setPrefWidth(SLIDER_WIDTH);
-                slider.setPadding(new Insets(20, 0, 0, 20));
-                Label startLabel = new Label("x1");
-                startLabel.setPadding(new Insets(20, 0, 0, 5));
-                Label endLabel = new Label("x3");
-                endLabel.setPadding(new Insets(20, 0, 0, 5));
-                sliderBox.getChildren().addAll(startLabel, slider, endLabel);
+            itemExpensiveCheckBox.setOnAction(event -> {
+                if (!hardcoreSettingsBox.getChildren().contains(sliderBox)) {
+                    Slider slider = new Slider(1, 3, 1);
+                    slider.setPrefWidth(SLIDER_WIDTH);
+                    slider.setPadding(new Insets(20, 0, 0, 20));
+                    Label startLabel = new Label("x1");
+                    startLabel.setPadding(new Insets(20, 0, 0, 5));
+                    Label endLabel = new Label("x3");
+                    endLabel.setPadding(new Insets(20, 0, 0, 5));
+                    sliderBox.getChildren().addAll(startLabel, slider, endLabel);
 
-                slider.valueProperty().addListener((observable, oldValue, newValue) -> {
-                    if ((newValue.doubleValue() <= 1.5) && (newValue.doubleValue() > 1.0)) {
-                        slider.setValue(1.5);
-                        itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString("ITEM.EXPENSIVE"), 1.5));
-                    } else if (newValue.doubleValue() > 1.5 && newValue.doubleValue() <= 2.0) {
-                        slider.setValue(2.0);
-                        itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString("ITEM.EXPENSIVE"), 2.0));
-                    } else if (newValue.doubleValue() > 2.0 && newValue.doubleValue() <= 2.5) {
-                        slider.setValue(2.5);
-                        itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString("ITEM.EXPENSIVE"), 2.5));
-                    } else if (newValue.doubleValue() > 2.5 && newValue.doubleValue() <= 3.0) {
-                        slider.setValue(3.0);
-                        itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString("ITEM.EXPENSIVE"), 3.0));
-                    } else if (newValue.doubleValue() < 1.2) {
-                        slider.setValue(1.0);
-                        itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString("ITEM.EXPENSIVE"), 1.0));
-                    }
-                });
+                    slider.valueProperty().addListener((observable, oldValue, newValue) -> {
+                        if ((newValue.doubleValue() <= 1.5) && (newValue.doubleValue() > 1.0)) {
+                            slider.setValue(1.5);
+                            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString("ITEM.EXPENSIVE"), 1.5));
+                        } else if (newValue.doubleValue() > 1.5 && newValue.doubleValue() <= 2.0) {
+                            slider.setValue(2.0);
+                            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString("ITEM.EXPENSIVE"), 2.0));
+                        } else if (newValue.doubleValue() > 2.0 && newValue.doubleValue() <= 2.5) {
+                            slider.setValue(2.5);
+                            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString("ITEM.EXPENSIVE"), 2.5));
+                        } else if (newValue.doubleValue() > 2.5 && newValue.doubleValue() <= 3.0) {
+                            slider.setValue(3.0);
+                            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString("ITEM.EXPENSIVE"), 3.0));
+                        } else if (newValue.doubleValue() < 1.2) {
+                            slider.setValue(1.0);
+                            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString("ITEM.EXPENSIVE"), 1.0));
+                        }
+                    });
 
-                hardcoreSettingsBox.getChildren().add(sliderBox);
-            } else {
-                sliderBox.getChildren().clear();
-                hardcoreSettingsBox.getChildren().remove(sliderBox);
-            }
-        });
+                    hardcoreSettingsBox.getChildren().add(sliderBox);
+                } else {
+                    sliderBox.getChildren().clear();
+                    hardcoreSettingsBox.getChildren().remove(sliderBox);
+                }
+            });
 
-        AnchorPane.setTopAnchor(hardcoreSettingsBox, HARDCORE_TOP);
-        AnchorPane.setLeftAnchor(hardcoreSettingsBox, HARDCORE_LEFT);
-        messagePane.getChildren().add(hardcoreSettingsBox);
+            AnchorPane.setTopAnchor(hardcoreSettingsBox, HARDCORE_TOP);
+            AnchorPane.setLeftAnchor(hardcoreSettingsBox, HARDCORE_LEFT);
+            messagePane.getChildren().add(hardcoreSettingsBox);
+        }
     }
 
 
