@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.dto.Opponent;
@@ -40,6 +41,9 @@ public class CaughtMonsterController extends Controller {
     MonstersService monstersService;
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
+    @Inject
+    Provider<IngameController> ingameControllerProvider;
+
     private String regionId;
     private VBox container;
     private StackPane root;
@@ -65,7 +69,7 @@ public class CaughtMonsterController extends Controller {
         this.newMonsterImage = enemyMonsterImage;
     }
 
-    public Parent render(){
+    public Parent render() {
         final Parent parent = super.render();
 
         congratulationLabel.setText(resources.getString("CONGRATULATION"));
@@ -78,12 +82,12 @@ public class CaughtMonsterController extends Controller {
         monsterType = caughtMonster.type();
         monsterList = trainerStorageProvider.get().getTrainer().encounteredMonsterTypes();
         for (Integer i : monsterList) {
-            if (i.equals(monsterType)){
+            if (i.equals(monsterType)) {
                 monsterEncountered = true;
                 break;
             }
         }
-        if (!monsterEncountered){
+        if (!monsterEncountered) {
             newMonsterLabel.setText(resources.getString("NEW"));
         }
         return parent;
@@ -91,6 +95,7 @@ public class CaughtMonsterController extends Controller {
 
     public void okButtonPressed() {
         root.getChildren().remove(container);
+        app.show(ingameControllerProvider.get());
     }
 
 }
