@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.subController.ChangeLanguageController;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.PresetsService;
@@ -14,8 +15,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -39,6 +43,8 @@ public abstract class Controller {
     protected Provider<ResourceBundle> resourceBundleProvider;
     @Inject
     protected PresetsService presetsService;
+    @Inject
+    protected Provider<ChangeLanguageController> changeLanguageControllerProvider;
     protected Controller toReload;
     protected App app;
     @Inject
@@ -202,5 +208,21 @@ public abstract class Controller {
             Image character = ImageProcessor.showScaledCharacter(trainer.image(), direction, false);
             imageView.setImage(character);
         }
+    }
+
+    /**
+     * This method is used to open the Change Language Pop up
+     */
+    public void changeLanguage() {
+        javafx.scene.control.Dialog<?> dialog = new Dialog<>();
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+        closeButton.managedProperty().bind(closeButton.visibleProperty());
+        closeButton.setVisible(false);
+        dialog.setTitle(resources.getString("CHOOSE.LANGUAGE"));
+        ChangeLanguageController changeLanguageController = changeLanguageControllerProvider.get();
+        changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);
+        dialog.getDialogPane().setContent(changeLanguageController.render());
+        dialog.showAndWait();
     }
 }

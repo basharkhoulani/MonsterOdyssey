@@ -66,9 +66,6 @@
 }
 /*********************************************************************************/
 /******************************** Scroll bar *************************************/
-.scroll-bar:vertical {
-    -fx-font-size: 12px;
-}
 .scroll-bar:vertical .track{
     -fx-background-color :transparent;
     -fx-border-color :transparent;

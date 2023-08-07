@@ -234,16 +234,4 @@ public class LoginController extends Controller {
     public void muteOrUnmuteSound() {
         AudioService.getInstance().muteOrUnmuteSound(muteButton, preferences);
     }
-
-    public void changeLanguage() {
-        javafx.scene.control.Dialog<?> dialog = new Dialog<>();
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
-        closeButton.managedProperty().bind(closeButton.visibleProperty());
-        closeButton.setVisible(false);
-        dialog.setTitle(resources.getString("CHOOSE.LANGUAGE"));
-        changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);
-        dialog.getDialogPane().setContent(changeLanguageController.render());
-        dialog.showAndWait();
-    }
 }

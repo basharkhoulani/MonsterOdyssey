@@ -367,19 +367,4 @@ public class AccountSettingController extends Controller {
             return resources.getString("CUSTOM.ERROR");
         }
     }
-
-    /**
-     * This method is used to open the Change Language Pop up
-     */
-    public void changeLanguage() {
-        javafx.scene.control.Dialog<?> dialog = new Dialog<>();
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
-        closeButton.managedProperty().bind(closeButton.visibleProperty());
-        closeButton.setVisible(false);
-        dialog.setTitle(resources.getString("CHOOSE.LANGUAGE"));
-        changeLanguageController.setValues(resources, preferences, resourceBundleProvider, this, app);
-        dialog.getDialogPane().setContent(changeLanguageController.render());
-        dialog.showAndWait();
-    }
 }
