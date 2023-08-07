@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.scene.control.Button;
@@ -31,6 +32,8 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
     CaughtMonsterController caughtMonsterController;
     @Mock
     Provider<TrainerStorage> trainerStorageProvider;
+    @Mock
+    Provider<IngameController> ingameControllerProvider;
 
 
 
@@ -40,6 +43,8 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
         caughtMonsterController.setValues(bundle, null, null, caughtMonsterController, app);
         TrainerStorage trainerStorage = mock(TrainerStorage.class);
         when(trainerStorageProvider.get()).thenReturn(trainerStorage);
+        IngameController ingameControllerMock = mock(IngameController.class);
+        when(ingameControllerProvider.get()).thenReturn(ingameControllerMock);
 
         Trainer trainer = new Trainer("2023-05-30T12:02:57.510Z",
                 "2023-05-30T12:01:57.510Z",
@@ -123,6 +128,7 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
 
     @Test
     public void caughtMonsterPopUpTest() {
+        doNothing().when(app).show(any());
         lookup("#congratulationLabel").query();
         final Button okButton = lookup("#okButton").queryButton();
         clickOn(okButton);
