@@ -68,7 +68,7 @@
       <VBox.margin>
          <Insets top="13.0"/>
       </VBox.margin>
-      <Label prefHeight="31.0" prefWidth="210.0" styleClass="boldFont" text="%DESCRIPTION">
+      <Label fx:id="descriptionLabel" prefHeight="31.0" prefWidth="210.0" styleClass="boldFont" text="%DESCRIPTION">
          <HBox.margin>
             <Insets left="6.0"/>
          </HBox.margin>

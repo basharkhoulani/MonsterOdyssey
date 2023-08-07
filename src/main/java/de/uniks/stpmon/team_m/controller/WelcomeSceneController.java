@@ -101,6 +101,9 @@ public class WelcomeSceneController extends Controller {
                 if (preferences.getBoolean("mute", false)) {
                     AudioService.getInstance().setVolume(0);
                 }
+                else {
+                    AudioService.getInstance().setVolume(preferences.getDouble("volume", AudioService.getInstance().getVolume()));
+                }
             }
         }
     }

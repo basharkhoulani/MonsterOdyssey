@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.service.AudioService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -11,7 +12,10 @@ import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import java.awt.*;
+
 import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.TALKING;
 
 public class DialogController extends Controller {
     @Inject
@@ -40,6 +44,10 @@ public class DialogController extends Controller {
         this.alreadyEncountered = alreadyEncountered;
         this.npcTextManager = npcTextManager;
         this.ingameController = ingameController;
+
+        if(!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playEffect(TALKING, ingameController);
+        }
 
         try {
             // check if npc can heal

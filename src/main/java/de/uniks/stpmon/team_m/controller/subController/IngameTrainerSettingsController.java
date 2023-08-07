@@ -204,6 +204,8 @@ public class IngameTrainerSettingsController extends Controller {
                     trainerStorage.getTrainer()._id(),
                     trainerName,
                     selectedCharacter,
+                    null,
+                    null,
                     null
             ).observeOn(FX_SCHEDULER).subscribe(trainer -> {
                 trainerStorage.setTrainer(trainer);

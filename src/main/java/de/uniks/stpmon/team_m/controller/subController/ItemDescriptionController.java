@@ -1,11 +1,15 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
+import de.uniks.stpmon.team_m.dto.UpdateItemDto;
+import de.uniks.stpmon.team_m.service.AudioService;
+import de.uniks.stpmon.team_m.service.TrainerItemsService;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -18,18 +22,20 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import javax.inject.Inject;
 import java.awt.*;
 import java.net.URL;
 
-import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxHeight;
-import static de.uniks.stpmon.team_m.Constants.useItemMonsterListVBoxWidth;
+import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.BUY_SELL;
 
 public class ItemDescriptionController extends Controller {
 
+    private final Runnable onItemUsed;
     ItemTypeDto itemTypeDto;
     Image itemImage;
     Item item;
+    @FXML
+    public Label descriptionLabel;
     @FXML
     public Label itemAmountTitleLabel;
     @FXML
@@ -44,25 +50,31 @@ public class ItemDescriptionController extends Controller {
     public ImageView coinImageView;
     @FXML
     public Button useButton;
-    private Constants.inventoryType inventoryType;
+    private InventoryType inventoryType;
     private int ownAmountOfItem;
 
     private Runnable closeItemMenu;
     private StackPane rootStackPane;
     private IngameController ingameController;
+    private EncounterController encounterController;
+    private ItemMenuController itemMenuController;
+    private TrainerItemsService trainerItemsService;
+    private TrainerStorage trainerStorage;
 
-    @Inject
-    public ItemDescriptionController() {
+
+    public ItemDescriptionController(Runnable onItemUsed) {
+        this.onItemUsed = onItemUsed;
     }
 
     public void init(ItemTypeDto itemTypeDto,
                      Image itemImage,
                      Item item,
-                     Constants.inventoryType inventoryType,
+                     InventoryType inventoryType,
                      int ownAmountOfITem,
                      Runnable closeItemMenu,
                      StackPane rootStackPane,
-                     IngameController ingameController) {
+                     IngameController ingameController,
+                     ItemMenuController itemMenuController) {
         super.init();
         this.itemImage = itemImage;
         this.itemTypeDto = itemTypeDto;
@@ -72,6 +84,29 @@ public class ItemDescriptionController extends Controller {
         this.closeItemMenu = closeItemMenu;
         this.rootStackPane = rootStackPane;
         this.ingameController = ingameController;
+        this.itemMenuController = itemMenuController;
+
+        this.trainerItemsService = ingameController.getTrainerItemsService();
+        this.trainerStorage = ingameController.getTrainerStorage();
+    }
+
+    public void initFromEncounter(ItemTypeDto itemTypeDto,
+                                  Image itemImage,
+                                  Item item,
+                                  InventoryType inventoryType,
+                                  int ownAmountOfITem,
+                                  Runnable closeItemMenu,
+                                  StackPane rootStackPane,
+                                  EncounterController encounterController) {
+        super.init();
+        this.itemImage = itemImage;
+        this.itemTypeDto = itemTypeDto;
+        this.item = item;
+        this.inventoryType = inventoryType;
+        this.ownAmountOfItem = ownAmountOfITem;
+        this.closeItemMenu = closeItemMenu;
+        this.rootStackPane = rootStackPane;
+        this.encounterController = encounterController;
     }
 
     @Override
@@ -87,14 +122,31 @@ public class ItemDescriptionController extends Controller {
         if (itemTypeDto.use() == null) {
             useButton.setVisible(false);
             useButton.setDisable(true);
-        }
-        useButton.setOnAction(evt -> {
-            if (itemTypeDto.use().equals(Constants.ITEM_USAGE_EFFECT)) {
-                showMonsterList(item);
-                closeItemMenu.run();
+        } else if (inventoryType == InventoryType.showItems) {
+            if (encounterController == null && itemTypeDto.use().equals(ITEM_USAGE_BALL)) {
+                useButton.setVisible(false);
+                useButton.setDisable(true);
             }
-        });
-
+            if (item.amount() == 0) {
+                useButton.setDisable(true);
+            }
+            useButton.setOnAction(evt -> {
+                if (itemTypeDto.use().equals(ITEM_USAGE_EFFECT)) {
+                    showMonsterList(item);
+                    closeItemMenu.run();
+                } else if (itemTypeDto.use().equals(ITEM_USAGE_BALL)) {
+                    if (encounterController != null) {
+                        encounterController.useItem(item, null);
+                        onItemUsed.run();
+                        closeItemMenu.run();
+                    }
+                } else {
+                    ingameController.useItem(item, null);
+                    closeItemMenu.run();
+                    onItemUsed.run();
+                }
+            });
+        }
         switch (this.inventoryType) {
             case buyItems -> {
                 itemAmountTitleLabel.setText(resources.getString("CLERK.IN.BAG"));
@@ -122,11 +174,62 @@ public class ItemDescriptionController extends Controller {
     }
 
     public void buyItem() {
+        if (Integer.parseInt(ingameController.coinsLabel.getText()) < itemTypeDto.price()) {
+            descriptionLabel.setText(resources.getString("NOT.ENOUGH.COINS"));
+            descriptionLabel.setStyle("-fx-text-fill: red");
+            return;
+        }
 
+        disposables.add(trainerItemsService.useOrTradeItem(
+                trainerStorage.getRegion()._id(),
+                trainerStorage.getTrainer()._id(),
+                ITEM_ACTION_TRADE_ITEM,
+                new UpdateItemDto(1, item.type(), null)
+        ).observeOn(FX_SCHEDULER).subscribe(
+                result -> {
+                    trainerStorage.addItem(result);
+                    trainerStorage.updateItem(result);
+                    ownAmountOfItem++;
+                    this.itemAmountLabel.setText(String.valueOf(ownAmountOfItem));
+
+                    ingameController.coinsLabel.setText(String.valueOf(Integer.parseInt(ingameController.coinsLabel.getText()) - itemTypeDto.price()));
+                },
+                error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
+        if (!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playEffect(BUY_SELL, ingameController);
+        }
     }
 
     public void sellItem() {
+        disposables.add(trainerItemsService.useOrTradeItem(
+                trainerStorage.getRegion()._id(),
+                trainerStorage.getTrainer()._id(),
+                ITEM_ACTION_TRADE_ITEM,
+                new UpdateItemDto(-1, item.type(), null)
+        ).observeOn(FX_SCHEDULER).subscribe(
+                result -> {
+                    trainerStorage.updateItem(result);
+                    this.itemMenuController.updateListView();
+                    ownAmountOfItem--;
+                    this.itemAmountLabel.setText(String.valueOf(ownAmountOfItem));
 
+                    ingameController.coinsLabel.setText(String.valueOf(Integer.parseInt(ingameController.coinsLabel.getText()) + itemTypeDto.price() / 2));
+
+                    if (ownAmountOfItem == 0) {
+                        itemMenuController.itemDescriptionBox.getChildren().clear();
+                        itemMenuController.setItemNameLabel("");
+                    }
+                },
+                error -> {
+                    showError(error.getMessage());
+                    error.printStackTrace();
+                }));
+        if (!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playEffect(BUY_SELL, ingameController);
+        }
     }
 
     private void showMonsterList(Item item) {
@@ -134,13 +237,22 @@ public class ItemDescriptionController extends Controller {
         monsterListVBox.setMinWidth(useItemMonsterListVBoxWidth);
         monsterListVBox.setMinHeight(useItemMonsterListVBoxHeight);
         monsterListVBox.setAlignment(Pos.CENTER);
-        MonstersListController monstersListController = ingameController.getMonstersListController();
-        monstersListController.setValues(resources, preferences, resourceBundleProvider, this, app);
-        monstersListController.init(ingameController, monsterListVBox, rootStackPane, item);
-        monsterListVBox.getChildren().add(monstersListController.render());
-        rootStackPane.getChildren().add(monsterListVBox);
-        monsterListVBox.requestFocus();
-        monstersListController.monsterListViewOther.refresh();
-        monstersListController.monsterListViewActive.refresh();
+        if (ingameController != null) {
+            MonstersListController monstersListController = ingameController.getMonstersListController();
+            monstersListController.setValues(resources, preferences, resourceBundleProvider, this, app);
+            monstersListController.init(ingameController, monsterListVBox, rootStackPane, item, onItemUsed);
+            monsterListVBox.getChildren().add(monstersListController.render());
+            rootStackPane.getChildren().add(monsterListVBox);
+            monsterListVBox.requestFocus();
+            monstersListController.monsterListViewOther.refresh();
+            monstersListController.monsterListViewActive.refresh();
+        } else if (encounterController != null) {
+            ChangeMonsterListController changeMonsterListController = encounterController.getChangeMonsterListController();
+            changeMonsterListController.setValues(resources, preferences, resourceBundleProvider, this, app);
+            changeMonsterListController.init(encounterController, monsterListVBox, encounterController.getIngameController(), item, onItemUsed);
+            monsterListVBox.getChildren().add(changeMonsterListController.render());
+            rootStackPane.getChildren().add(monsterListVBox);
+            monsterListVBox.requestFocus();
+        }
     }
 }

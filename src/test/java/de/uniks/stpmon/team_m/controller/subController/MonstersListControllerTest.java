@@ -8,6 +8,8 @@ import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.MonstersService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.utils.MonsterData;
+import de.uniks.stpmon.team_m.utils.MonsterStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.FXCollections;
@@ -46,18 +48,20 @@ public class MonstersListControllerTest extends ApplicationTest {
     Provider<PresetsService> presetsServiceProvider;
     @Mock
     IngameController ingameController;
+    @Mock
+    Provider<MonsterStorage> monsterStorageProvider;
 
     private List<Monster> monsters;
     private ResourceBundle resources;
     private StackPane rootStackPane;
+    private List<MonsterTypeDto> monsterTypeDtos;
 
     @Override
     public void start(Stage stage) {
         resources = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
         monsterListController.setValues(resources, null, null, monsterListController, app);
         stage.requestFocus();
-        PresetsService presetsService = mock(PresetsService.class);
-        when(presetsServiceProvider.get()).thenReturn(presetsService);
+        PresetsService presetsServiceMock = mock(PresetsService.class);
         LinkedHashMap<String, Integer> abilities = new LinkedHashMap<>();
         abilities.put("1", 35);
         abilities.put("3", 20);
@@ -97,38 +101,40 @@ public class MonstersListControllerTest extends ApplicationTest {
                         new MonsterAttributes(14, 8, 8, 5),
                         new MonsterAttributes(14, 8, 8, 5),
                         List.of()));
-        when(monstersService.getMonsters(any(), any())).thenReturn(Observable.just(monsters));
-        TrainerStorage trainerStorage = mock(TrainerStorage.class);
-        when(trainerStorageProvider.get()).thenReturn(trainerStorage);
-        doNothing().when(trainerStorage).setMonsters(any());
-        when(trainerStorage.getMonsters()).thenReturn(monsters);
-        when(presetsService.getMonster(1)).thenReturn(Observable.just(
+
+        monsterTypeDtos = List.of(
                 new MonsterTypeDto(
                         1,
                         "Flamander",
                         "Flamander_1.png",
                         List.of("fire"),
-                        "Flamander is a small, agile monster that lives in the hot deserts of the world.")
-        ));
-        when(presetsService.getMonster(2)).thenReturn(Observable.just(
+                        "Flamander is a small, agile monster that lives in the hot deserts of the world."),
                 new MonsterTypeDto(
                         2,
                         "Flamander_2",
                         "Flamander_1.png",
                         List.of("fire"),
-                        "Flamander is a small, agile monster that lives in the hot deserts of the world.")
-        ));
-        when(presetsService.getMonster(3)).thenReturn(Observable.just(
+                        "Flamander is a small, agile monster that lives in the hot deserts of the world."),
                 new MonsterTypeDto(
                         3,
                         "Flamander_3",
                         "Flamander_1.png",
                         List.of("fire"),
                         "Flamander is a small, agile monster that lives in the hot deserts of the world.")
-        ));
-        when(presetsService.getMonsterImage(1)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
-        when(presetsService.getMonsterImage(2)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
-        when(presetsService.getMonsterImage(3)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
+        );
+        when(presetsServiceProvider.get()).thenReturn(presetsServiceMock);
+        when(monstersService.getMonsters(any(), any())).thenReturn(Observable.just(monsters));
+        TrainerStorage trainerStorage = mock(TrainerStorage.class);
+        when(trainerStorageProvider.get()).thenReturn(trainerStorage);
+        doNothing().when(trainerStorage).setMonsters(any());
+        when(trainerStorage.getMonsters()).thenReturn(monsters);
+        when(presetsServiceMock.getMonsters()).thenReturn(Observable.just(monsterTypeDtos));
+        //when(presetsServiceMock.getMonster(1)).thenReturn(Observable.just(monsterTypeDtos.get(0)));
+        //when(presetsServiceMock.getMonster(2)).thenReturn(Observable.just(monsterTypeDtos.get(1)));
+        //when(presetsServiceMock.getMonster(3)).thenReturn(Observable.just(monsterTypeDtos.get(2)));
+        when(presetsServiceMock.getMonsterImage(1)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
+        when(presetsServiceMock.getMonsterImage(2)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
+        when(presetsServiceMock.getMonsterImage(3)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
 
         when(trainerStorageProvider.get().getRegion()).thenReturn(new Region(
                 "2023-05-22T17:51:46.772Z",
@@ -172,12 +178,16 @@ public class MonstersListControllerTest extends ApplicationTest {
                 0,
                 null
         );
+        final MonsterData monsterData = new MonsterData(monsters.get(0), monsterTypeDtos.get(0), null);
         when(trainerStorage.getTrainer()).thenReturn(trainer);
         when(trainerStorageProvider.get().getTrainer()).thenReturn(trainer);
-
+        final MonsterStorage monsterStorageMock = mock(MonsterStorage.class);
+        when(monsterStorageProvider.get()).thenReturn(monsterStorageMock);
+        when(monsterStorageProvider.get().getMonsterData(any())).thenReturn(monsterData);
+        //doNothing().when(monsterStorageProvider.get()).addMonsterData(any(), any(), any());
         app.start(stage);
         app.show(monsterListController);
-        monsterListController.init(ingameController, monsterListController.monsterListVBox, rootStackPane, null);
+        monsterListController.init(ingameController, monsterListController.monsterListVBox, rootStackPane, null, null);
     }
 
     @Test
@@ -187,7 +197,7 @@ public class MonstersListControllerTest extends ApplicationTest {
 
     @Test
     void changeOrderDown() {
-        when(trainersService.updateTrainer(any(), any(), any(), any(), any()))
+        when(trainersService.updateTrainer(any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(Observable.just(
                         new Trainer(
                                 "2023-06-05T17:02:40.332Z",
@@ -227,7 +237,7 @@ public class MonstersListControllerTest extends ApplicationTest {
 
     @Test
     void changeOrderUp() {
-        when(trainersService.updateTrainer(any(), any(), any(), any(), any()))
+        when(trainersService.updateTrainer(any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(Observable.just(
                         new Trainer(
                                 "2023-06-05T17:02:40.332Z",
@@ -287,7 +297,7 @@ public class MonstersListControllerTest extends ApplicationTest {
 
         when(trainerStorageProvider.get().getTrainer()).thenReturn(trainer);
         when(team.remove(anyString())).thenReturn(true);
-        when(trainersService.updateTrainer(any(), any(), any(), any(), any()))
+        when(trainersService.updateTrainer(any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(Observable.just(
                         new Trainer(
                                 "2023-06-05T17:02:40.332Z",
@@ -339,7 +349,7 @@ public class MonstersListControllerTest extends ApplicationTest {
         );
         when(trainerStorageProvider.get().getTrainer()).thenReturn(trainer);
         when(team.add(anyString())).thenReturn(true);
-        when(trainersService.updateTrainer(any(), any(), any(), any(), any()))
+        when(trainersService.updateTrainer(any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(Observable.just(
                         new Trainer(
                                 "2023-06-05T17:02:40.332Z",
@@ -420,7 +430,8 @@ public class MonstersListControllerTest extends ApplicationTest {
                         encounterController,
                         ingameController,
                         true,
-                        null
+                        null,
+                        monsterStorageProvider
                 ));
         monsterListController.monsterListViewActive.refresh();
 
@@ -439,7 +450,8 @@ public class MonstersListControllerTest extends ApplicationTest {
                         null,
                         ingameController,
                         false,
-                        item
+                        item,
+                        monsterStorageProvider
                 ));
         monsterListController.monsterListViewActive.refresh();
 
@@ -461,7 +473,8 @@ public class MonstersListControllerTest extends ApplicationTest {
                         encounterController,
                         ingameController,
                         true,
-                        item
+                        item,
+                        monsterStorageProvider
                 ));
         monsterListController.monsterListViewActive.refresh();
 

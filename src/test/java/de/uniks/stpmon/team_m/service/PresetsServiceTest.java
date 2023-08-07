@@ -1,9 +1,12 @@
 package de.uniks.stpmon.team_m.service;
 
 import de.uniks.stpmon.team_m.dto.AbilityDto;
+import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import de.uniks.stpmon.team_m.dto.TileSet;
 import de.uniks.stpmon.team_m.rest.PresetsApiService;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.image.Image;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,12 +14,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PresetsServiceTest {
@@ -155,5 +158,82 @@ public class PresetsServiceTest {
         assertEquals(1, ability.accuracy());
         assertEquals(10, ability.power());
         verify(presetsApiService).getAbility(1);
+    }
+
+    @Test
+    void getTileSetImageTest() {
+        when(presetsApiService.getTileset("tileset.png")).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
+
+        Image image = presetsService.getTilesetImage("tileset.png").blockingFirst();
+        assertNotNull(image);
+        verify(presetsApiService).getTileset("tileset.png");
+    }
+
+    @Test
+    void getTileSetTest() throws IOException {
+        ResponseBody mockResponseBody = mock(ResponseBody.class);
+        when(mockResponseBody.string()).thenReturn("{\"name\": \"TileSet A\", \"size\": 64}");
+
+        when(presetsApiService.getTileset("tileset.json")).thenReturn(Observable.just(mockResponseBody));
+
+        TileSet tileSet = presetsService.getTileset("tileset").blockingFirst();
+        assertNotNull(tileSet);
+        verify(presetsApiService).getTileset("tileset.json");
+    }
+
+    @Test
+    void getItemsTest() {
+        when(presetsApiService.getItems()).thenReturn(Observable.just(List.of(
+                new ItemTypeDto(
+                        1,
+                        "Potion.png",
+                        "Potion",
+                        10,
+                        "A potion. It's red.",
+                        "effect"
+
+                ), new ItemTypeDto(
+                        2,
+                        "Elixir.png",
+                        "Elixir",
+                        20,
+                        "An elixir. It's blue.",
+                        "effect"
+                ))));
+        final List<ItemTypeDto> items = presetsService.getItems().blockingFirst();
+        assertNotNull(items);
+        assertEquals(2, items.size());
+        verify(presetsApiService).getItems();
+    }
+
+    @Test
+    void getItemTest() {
+        when(presetsApiService.getItem(1)).thenReturn(Observable.just(
+                new ItemTypeDto(
+                        1,
+                        "Potion.png",
+                        "Potion",
+                        10,
+                        "A potion. It's red.",
+                        "effect"
+                )
+        ));
+        final ItemTypeDto item = presetsService.getItem(1).blockingFirst();
+        assertNotNull(item);
+        assertEquals(1, item.id());
+        assertEquals("Potion.png", item.image());
+        assertEquals("Potion", item.name());
+        assertEquals(10, item.price());
+        assertEquals("A potion. It's red.", item.description());
+        assertEquals("effect", item.use());
+        verify(presetsApiService).getItem(1);
+    }
+
+    @Test
+    void getItemImageTest() {
+        when(presetsApiService.getItemImage(2)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
+        final ResponseBody responseBody = presetsService.getItemImage(2).blockingFirst();
+        assertNotNull(responseBody);
+        verify(presetsApiService).getItemImage(2);
     }
 }
