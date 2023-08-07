@@ -316,8 +316,8 @@ public class WelcomeSceneController extends Controller {
         warningBox.getChildren().addAll(warningImageView1, warningLabel, warningImageView2);
 
         CheckBox permanentCheckBox = new CheckBox();
-        Label permanentLabel = new Label(resources.getString("PERMANENT.TEXT"));
-        permanentCheckBox.setGraphic(permanentLabel);
+        //Label permanentLabel = new Label(resources.getString("PERMANENT.TEXT"));
+        permanentCheckBox.setText(resources.getString("PERMANENT.TEXT"));
         permanentCheckBox.setPadding(new Insets(10, 0, 0, 5));
         permanentBox.getChildren().add(permanentCheckBox);
 
@@ -328,7 +328,7 @@ public class WelcomeSceneController extends Controller {
         deleteTrainerBox.getChildren().add(deleteTrainerCheckBox);
 
         CheckBox itemExpensiveCheckBox = new CheckBox();
-        itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString("ITEM.EXPENSIVE"), 2));
+        itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString("ITEM.EXPENSIVE"), 1));
         itemExpensiveCheckBox.getStyleClass().add("wrappedButton");
         itemExpensiveCheckBox.setPadding(new Insets(8, 0, 0, 5));
         itemExpensiveBox.getChildren().add(itemExpensiveCheckBox);
