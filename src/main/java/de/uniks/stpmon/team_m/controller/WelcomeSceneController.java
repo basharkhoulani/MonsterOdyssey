@@ -211,12 +211,12 @@ public class WelcomeSceneController extends Controller {
                 secondMessageBox.setVisible(false);
 
                 VBox gameModeBox = new VBox();
-                gameModeBox.setPrefWidth(260);
-                gameModeBox.setPrefHeight(110);
+                gameModeBox.setPrefWidth(GAMEMODEBOX_WIDTH);
+                gameModeBox.setPrefHeight(GAMEMODEBOX_HEIGHT);
                 gameModeBox.setStyle("-fx-background-color: #FFFFFF");
 
                 HBox titleModeBox = new HBox();
-                titleModeBox.setPrefHeight(36);
+                titleModeBox.setPrefHeight(TITLEMODEBOX_HEIGHT);
                 titleModeBox.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-width: 1");
                 titleModeBox.setAlignment(Pos.CENTER);
                 Label titleLabel = new Label(resources.getString("CHOOSE.MODE"));
@@ -227,14 +227,14 @@ public class WelcomeSceneController extends Controller {
 
                 HBox normalBox = new HBox();
                 RadioButton normalButton = new RadioButton();
-                normalButton.setPadding(new Insets(8, 0, 0, 10));
+                normalButton.setPadding(new Insets(EIGHT, 0, 0, TEN));
                 normalButton.setText(resources.getString("NORMAL"));
                 normalButton.setToggleGroup(toggleGroup);
                 normalBox.getChildren().add(normalButton);
 
                 HBox hardcoreBox = new HBox();
                 RadioButton hardcoreButton = new RadioButton();
-                hardcoreButton.setPadding(new Insets(8, 0, 0, 10));
+                hardcoreButton.setPadding(new Insets(EIGHT, 0, 0, TEN));
                 hardcoreButton.setText(resources.getString("HARDCORE"));
                 hardcoreButton.setToggleGroup(toggleGroup);
                 hardcoreBox.getChildren().add(hardcoreButton);
@@ -290,8 +290,8 @@ public class WelcomeSceneController extends Controller {
 
     private void showHardcoreSettings() {
         hardcoreSettingsBox = new VBox();
-        hardcoreSettingsBox.setPrefWidth(260);
-        hardcoreSettingsBox.setPrefHeight(230);
+        hardcoreSettingsBox.setPrefWidth(GAMEMODEBOX_HEIGHT);
+        hardcoreSettingsBox.setPrefHeight(HARDCORESETTINGBOX_HEIGHT);
         hardcoreSettingsBox.setStyle("-fx-background-color: #ffe6cc");
 
         HBox warningBox = new HBox();
@@ -305,42 +305,41 @@ public class WelcomeSceneController extends Controller {
         assert resourceImage != null;
         Image warningImage = new Image(resourceImage.toString());
         ImageView warningImageView1 = new ImageView(warningImage);
-        warningImageView1.setFitWidth(35);
-        warningImageView1.setFitHeight(35);
+        warningImageView1.setFitWidth(IMAGEVIEW_SIZE);
+        warningImageView1.setFitHeight(IMAGEVIEW_SIZE);
 
         ImageView warningImageView2 = new ImageView(warningImage);
-        warningImageView2.setFitWidth(35);
-        warningImageView2.setFitHeight(35);
+        warningImageView2.setFitWidth(IMAGEVIEW_SIZE);
+        warningImageView2.setFitHeight(IMAGEVIEW_SIZE);
 
         Label warningLabel = new Label(resources.getString("WARNING"));
         warningLabel.setStyle("-fx-font-weight: bold");
-        warningLabel.setPadding(new Insets(5, 55, 0, 55));
+        warningLabel.setPadding(new Insets(WARNING_PADDING_TOP, WARNING_PADDING_RIGHT_LEFT, 0, WARNING_PADDING_RIGHT_LEFT));
 
         warningBox.getChildren().addAll(warningImageView1, warningLabel, warningImageView2);
 
         CheckBox permanentCheckBox = new CheckBox();
-        //Label permanentLabel = new Label(resources.getString("PERMANENT.TEXT"));
         permanentCheckBox.setText(resources.getString("PERMANENT.TEXT"));
-        permanentCheckBox.setPadding(new Insets(10, 0, 0, 5));
+        permanentCheckBox.setPadding(new Insets(TEN, 0, 0, FIVE));
         permanentBox.getChildren().add(permanentCheckBox);
 
         CheckBox deleteTrainerCheckBox = new CheckBox();
         deleteTrainerCheckBox.setText(resources.getString("DELETE.TRAINER.CHECK"));
         deleteTrainerCheckBox.getStyleClass().add("wrappedButton");
-        deleteTrainerCheckBox.setPadding(new Insets(8, 0, 0, 5));
+        deleteTrainerCheckBox.setPadding(new Insets(EIGHT, 0, 0, FIVE));
         deleteTrainerBox.getChildren().add(deleteTrainerCheckBox);
 
         CheckBox itemExpensiveCheckBox = new CheckBox();
         itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString("ITEM.EXPENSIVE"), 1));
         itemExpensiveCheckBox.getStyleClass().add("wrappedButton");
-        itemExpensiveCheckBox.setPadding(new Insets(8, 0, 0, 5));
+        itemExpensiveCheckBox.setPadding(new Insets(EIGHT, 0, 0, FIVE));
         itemExpensiveBox.getChildren().add(itemExpensiveCheckBox);
         hardcoreSettingsBox.getChildren().addAll(warningBox, permanentBox, deleteTrainerBox, itemExpensiveBox);
 
         itemExpensiveCheckBox.setOnAction(event -> {
             if (!hardcoreSettingsBox.getChildren().contains(sliderBox)) {
                 Slider slider = new Slider(1, 3, 1);
-                slider.setPrefWidth(200);
+                slider.setPrefWidth(SLIDER_WIDTH);
                 slider.setPadding(new Insets(20, 0, 0, 20));
                 Label startLabel = new Label("x1");
                 startLabel.setPadding(new Insets(20, 0, 0, 5));
@@ -374,8 +373,8 @@ public class WelcomeSceneController extends Controller {
             }
         });
 
-        AnchorPane.setTopAnchor(hardcoreSettingsBox, 289.5);
-        AnchorPane.setLeftAnchor(hardcoreSettingsBox, 77.0);
+        AnchorPane.setTopAnchor(hardcoreSettingsBox, HARDCORE_TOP);
+        AnchorPane.setLeftAnchor(hardcoreSettingsBox, HARDCORE_LEFT);
         messagePane.getChildren().add(hardcoreSettingsBox);
     }
 
