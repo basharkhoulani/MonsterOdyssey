@@ -564,3 +564,6 @@
 .boldFont {
     -fx-font-weight: bold;
 }
+.wrappedButton {
+    -fx-wrap-text: true;
+}
