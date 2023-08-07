@@ -1081,7 +1081,7 @@ public class EncounterController extends Controller {
 <span class="nc" id="L1081">        caughtMonsterVbox.setAlignment(Pos.CENTER);</span>
 <span class="nc" id="L1082">        Opponent opponent = encounterOpponentStorage.getEnemyOpponents().get(0);</span>
 <span class="nc" id="L1083">        caughtMonsterController.setValues(resources, preferences, resourceBundleProvider, caughtMonsterController, app);</span>
-<span class="nc" id="L1084">        caughtMonsterController.init(caughtMonsterVbox, rootStackPane, opponent, regionId, caughtMonster, caughtMonsterType, enemyMonsterImage);</span>
+<span class="nc" id="L1084">        caughtMonsterController.init(caughtMonsterVbox, rootStackPane, opponent, regionId, caughtMonster, caughtMonsterType, enemyMonsterImage, this);</span>
 <span class="nc" id="L1085">        caughtMonsterVbox.getChildren().add(caughtMonsterController.render());</span>
 <span class="nc" id="L1086">        rootStackPane.getChildren().add(caughtMonsterVbox);</span>
 <span class="nc" id="L1087">    }</span>
