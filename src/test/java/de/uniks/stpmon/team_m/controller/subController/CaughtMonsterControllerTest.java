@@ -1,6 +1,8 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.controller.EncounterController;
+import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.scene.control.Button;
@@ -31,6 +33,7 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
     CaughtMonsterController caughtMonsterController;
     @Mock
     Provider<TrainerStorage> trainerStorageProvider;
+
 
 
 
@@ -105,6 +108,7 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
         vBox.getChildren().addAll(new VBox(), new HBox());
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(vBox);
+        EncounterController encounterControllerMock = mock(EncounterController.class);
 
 
         caughtMonsterController.init(
@@ -114,7 +118,8 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
                 regionId,
                 monster,
                 monsterTypeDto,
-                null);
+                null,
+                encounterControllerMock);
         app.start(stage);
         app.show(caughtMonsterController);
         stage.requestFocus();
