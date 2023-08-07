@@ -3,6 +3,7 @@ package de.uniks.stpmon.team_m.controller;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.CharacterSelectionController;
 import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.dto.Settings;
 import de.uniks.stpmon.team_m.service.AudioService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
@@ -201,7 +202,8 @@ public class WelcomeSceneController extends Controller {
                 disposables.add(trainersServiceProvider.get().createTrainer(
                         region._id(),
                         trainerStorage.getTrainerName(),
-                        trainerStorage.getTrainerSprite(), null, null ,null
+                        trainerStorage.getTrainerSprite(),
+                        new Settings(null, null, null)
                 ).observeOn(FX_SCHEDULER).subscribe(result -> {
                             trainerStorage.setTrainer(result);
                             disposables.add(presetsServiceProvider.get().getCharacter(result.image()).observeOn(FX_SCHEDULER).subscribe(

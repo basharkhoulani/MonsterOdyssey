@@ -52,7 +52,7 @@ public class TrainersServiceTest {
                         null
                 )));
 
-        final Trainer trainer = trainersService.createTrainer("646bab5cecf584e1be02598a", "Hans", "Premade_Character_01.png", null, null, null).blockingFirst();
+        final Trainer trainer = trainersService.createTrainer("646bab5cecf584e1be02598a", "Hans", "Premade_Character_01.png", null).blockingFirst();
 
         assertEquals("2023-05-22T17:51:46.772Z", trainer.createdAt());
         assertEquals("2023-05-22T17:51:46.772Z", trainer.updatedAt());
