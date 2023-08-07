@@ -28,7 +28,6 @@ import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 import static de.uniks.stpmon.team_m.Constants.BallType.*;
@@ -562,7 +561,7 @@ public class EncounterController extends Controller {
                 }
                 deleteOpponents++;
                 if (opponentsDelete.size() >= encounterOpponentStorage.getEncounterSize()) {
-                    PauseTransition pause = new PauseTransition(Duration.millis(pauseDuration/2));
+                    PauseTransition pause = new PauseTransition(Duration.millis(pauseDuration / 2));
                     pause.setOnFinished(evt -> {
                         showResult();
                     });
@@ -772,13 +771,11 @@ public class EncounterController extends Controller {
                                 List<Integer> ballIds = new ArrayList<>(List.of(10, 11, 12, 13, 14, 15, 16, 17));
                                 if (ballIds.contains(r.item())) {
                                     throwFailedMonBall();
-                                }
-                                else {
+                                } else {
                                     updateDescription(resources.getString("USE.OF") + " " + itemTypeDtos.get(r.item()).name() + " " + resources.getString("IS") + " " + resources.getString("SUCCEED") + ".\n", false);
                                 }
                             }
                             case ITEM_FAILED -> updateDescription(resources.getString("USE.OF") + " " + itemTypeDtos.get(r.item()).name() + " " + resources.getString("IS") + " " + resources.getString("FAILED") + ".\n", false);
-                            case "target-unknown" -> System.out.println("Target unknown");
                         }
                     }
                 }
@@ -1112,6 +1109,7 @@ public class EncounterController extends Controller {
         itemMenuBox.requestFocus();
         battleMenuController.buttonDisable(true);
     }
+
     private void throwSuccessfulMonBall() {
         ballImageView = null;
         if (encounterOpponentStorage.isWild()) {

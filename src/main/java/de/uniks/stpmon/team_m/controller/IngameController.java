@@ -641,7 +641,6 @@ public class IngameController extends Controller {
     }
 
     private void removeObjectReceivedPopUp() {
-        System.out.println(receiveObjectController.receiveObjectRootVBox.getParent());
         getRoot().getChildren().remove(receiveObjectController.receiveObjectRootVBox.getParent());
     }
 
