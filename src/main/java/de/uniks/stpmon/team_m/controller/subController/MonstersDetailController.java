@@ -23,8 +23,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 import static de.uniks.stpmon.team_m.Constants.ATTRIBUTE_IMAGES;
 

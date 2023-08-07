@@ -1,11 +1,8 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Trainer;
-import de.uniks.stpmon.team_m.service.AudioService;
-import de.uniks.stpmon.team_m.utils.AnimationBuilder;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -20,7 +17,6 @@ import javafx.util.Duration;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import static de.uniks.stpmon.team_m.Constants.SoundEffect.NOTIFICATION;
 import static de.uniks.stpmon.team_m.Constants.spaceBetweenPhoneAndWindowEdge;
 
 public class NotificationListHandyController extends Controller {

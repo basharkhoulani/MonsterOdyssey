@@ -6,7 +6,6 @@ import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Area;
 import de.uniks.stpmon.team_m.dto.Layer;
 import de.uniks.stpmon.team_m.dto.Map;
-import de.uniks.stpmon.team_m.service.AreasService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;

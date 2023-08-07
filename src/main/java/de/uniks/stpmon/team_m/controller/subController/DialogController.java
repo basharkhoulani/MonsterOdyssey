@@ -11,7 +11,6 @@ import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
 import java.awt.*;
 
 import static de.uniks.stpmon.team_m.Constants.ContinueDialogReturnValues.*;

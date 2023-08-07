@@ -28,7 +28,6 @@ import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 import static de.uniks.stpmon.team_m.Constants.BallType.*;
