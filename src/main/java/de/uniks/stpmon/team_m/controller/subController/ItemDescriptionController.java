@@ -211,28 +211,24 @@ public class ItemDescriptionController extends Controller {
                         trainer._id(),
                         ITEM_ACTION_TRADE_ITEM,
                         new UpdateItemDto(canBuy, item.type(), null)
-                ).observeOn(FX_SCHEDULER).subscribe(result -> {
-                    disposables.add(trainerItemsService.useOrTradeItem(
-                            trainer.region(),
-                            trainer._id(),
-                            ITEM_ACTION_TRADE_ITEM,
-                            new UpdateItemDto(-canBuy, item.type(), null)
-                    ).observeOn(FX_SCHEDULER).subscribe(result1 -> {
-                        disposables.add(trainerItemsService.useOrTradeItem(
-                                trainer.region(),
-                                trainer._id(),
-                                ITEM_ACTION_TRADE_ITEM,
-                                new UpdateItemDto(buy, item.type(), null)
-                        ).observeOn(FX_SCHEDULER).subscribe(result2 -> {
-                            trainerStorage.addItem(result2);
-                            trainerStorage.updateItem(result2);
-                            ownAmountOfItem += buy;
-                            this.itemAmountLabel.setText(String.valueOf(ownAmountOfItem));
+                ).observeOn(FX_SCHEDULER).subscribe(result -> disposables.add(trainerItemsService.useOrTradeItem(
+                        trainer.region(),
+                        trainer._id(),
+                        ITEM_ACTION_TRADE_ITEM,
+                        new UpdateItemDto(-canBuy, item.type(), null)
+                ).observeOn(FX_SCHEDULER).subscribe(result1 -> disposables.add(trainerItemsService.useOrTradeItem(
+                        trainer.region(),
+                        trainer._id(),
+                        ITEM_ACTION_TRADE_ITEM,
+                        new UpdateItemDto(buy, item.type(), null)
+                ).observeOn(FX_SCHEDULER).subscribe(result2 -> {
+                    trainerStorage.addItem(result2);
+                    trainerStorage.updateItem(result2);
+                    ownAmountOfItem += buy;
+                    this.itemAmountLabel.setText(String.valueOf(ownAmountOfItem));
 
-                            ingameController.coinsLabel.setText(String.valueOf(Integer.parseInt(ingameController.coinsLabel.getText()) - (int) (itemTypeDto.price() * trainer.settings().itemPriceMultiplier())));
-                        }));
-                    }));
-                }));
+                    ingameController.coinsLabel.setText(String.valueOf(Integer.parseInt(ingameController.coinsLabel.getText()) - (int) (itemTypeDto.price() * trainer.settings().itemPriceMultiplier())));
+                }))))));
             } else {
                 disposables.add(trainerItemsService.useOrTradeItem(
                         trainerStorage.getRegion()._id(),
@@ -253,10 +249,6 @@ public class ItemDescriptionController extends Controller {
                                     ITEM_ACTION_TRADE_ITEM,
                                     new UpdateItemDto(-(finalI - 1), item.type(), null)
                             ).observeOn(FX_SCHEDULER).subscribe());
-                        },
-                        error -> {
-                            showError(error.getMessage());
-                            error.printStackTrace();
                         }));
             }
         } else {
