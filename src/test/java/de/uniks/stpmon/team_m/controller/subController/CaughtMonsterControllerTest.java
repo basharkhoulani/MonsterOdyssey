@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -32,8 +33,7 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
     CaughtMonsterController caughtMonsterController;
     @Mock
     Provider<TrainerStorage> trainerStorageProvider;
-    @Mock
-    Provider<IngameController> ingameControllerProvider;
+
 
 
 
@@ -43,8 +43,6 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
         caughtMonsterController.setValues(bundle, null, null, caughtMonsterController, app);
         TrainerStorage trainerStorage = mock(TrainerStorage.class);
         when(trainerStorageProvider.get()).thenReturn(trainerStorage);
-        IngameController ingameControllerMock = mock(IngameController.class);
-        when(ingameControllerProvider.get()).thenReturn(ingameControllerMock);
 
         Trainer trainer = new Trainer("2023-05-30T12:02:57.510Z",
                 "2023-05-30T12:01:57.510Z",
@@ -110,6 +108,7 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
         vBox.getChildren().addAll(new VBox(), new HBox());
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(vBox);
+        EncounterController encounterControllerMock = mock(EncounterController.class);
 
 
         caughtMonsterController.init(
@@ -119,7 +118,8 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
                 regionId,
                 monster,
                 monsterTypeDto,
-                null);
+                null,
+                encounterControllerMock);
         app.start(stage);
         app.show(caughtMonsterController);
         stage.requestFocus();
@@ -128,7 +128,6 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
 
     @Test
     public void caughtMonsterPopUpTest() {
-        doNothing().when(app).show(any());
         lookup("#congratulationLabel").query();
         final Button okButton = lookup("#okButton").queryButton();
         clickOn(okButton);
