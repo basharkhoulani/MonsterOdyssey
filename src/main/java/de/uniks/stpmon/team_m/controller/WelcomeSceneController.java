@@ -201,7 +201,7 @@ public class WelcomeSceneController extends Controller {
                 disposables.add(trainersServiceProvider.get().createTrainer(
                         region._id(),
                         trainerStorage.getTrainerName(),
-                        trainerStorage.getTrainerSprite()
+                        trainerStorage.getTrainerSprite(), null, null ,null
                 ).observeOn(FX_SCHEDULER).subscribe(result -> {
                             trainerStorage.setTrainer(result);
                             disposables.add(presetsServiceProvider.get().getCharacter(result.image()).observeOn(FX_SCHEDULER).subscribe(

@@ -76,7 +76,7 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
                         List.of())));
         final TrainersService trainersService = mock(TrainersService.class);
         when(trainersServiceProvider.get()).thenReturn(trainersService);
-        when(trainersService.createTrainer(any(), any(), any())).thenReturn(Observable.just(new Trainer(
+        when(trainersService.createTrainer(any(), any(), any(), any(), any(), any())).thenReturn(Observable.just(new Trainer(
                 "2023-05-22T17:51:46.772Z",
                 "2023-05-22T17:51:46.772Z",
                 "646bac223b4804b87c0b8054",

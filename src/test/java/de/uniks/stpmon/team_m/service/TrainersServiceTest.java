@@ -31,7 +31,7 @@ public class TrainersServiceTest {
     void createTrainerTest() {
         when(trainersApiService.createTrainer(
                 "646bab5cecf584e1be02598a",
-                new CreateTrainerDto("Hans", "Premade_Character_01.png")))
+                new CreateTrainerDto("Hans", "Premade_Character_01.png", null)))
                 .thenReturn(Observable.just(new Trainer(
                         "2023-05-22T17:51:46.772Z",
                         "2023-05-22T17:51:46.772Z",
@@ -52,7 +52,7 @@ public class TrainersServiceTest {
                         null
                 )));
 
-        final Trainer trainer = trainersService.createTrainer("646bab5cecf584e1be02598a", "Hans", "Premade_Character_01.png").blockingFirst();
+        final Trainer trainer = trainersService.createTrainer("646bab5cecf584e1be02598a", "Hans", "Premade_Character_01.png", null, null, null).blockingFirst();
 
         assertEquals("2023-05-22T17:51:46.772Z", trainer.createdAt());
         assertEquals("2023-05-22T17:51:46.772Z", trainer.updatedAt());
@@ -68,7 +68,7 @@ public class TrainersServiceTest {
         assertEquals(0, trainer.direction());
         assertFalse(trainer.npc().walkRandomly());
 
-        verify(trainersApiService).createTrainer("646bab5cecf584e1be02598a", new CreateTrainerDto("Hans", "Premade_Character_01.png"));
+        verify(trainersApiService).createTrainer("646bab5cecf584e1be02598a", new CreateTrainerDto("Hans", "Premade_Character_01.png", null));
     }
 
     @Test

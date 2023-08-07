@@ -31,8 +31,9 @@ public class TrainersService {
      * @return The created trainer.
      */
 
-    public Observable<Trainer> createTrainer(String regionId, String name, String image) {
-        return trainersApiService.createTrainer(regionId, new CreateTrainerDto(name, image));
+    public Observable<Trainer> createTrainer(String regionId, String name, String image,
+                                             Boolean permaDeath, Boolean monsterPermaDeath, Double itemPriceMultiplier) {
+        return trainersApiService.createTrainer(regionId, new CreateTrainerDto(name, image, new Settings(permaDeath, monsterPermaDeath, itemPriceMultiplier)));
     }
 
     /**
