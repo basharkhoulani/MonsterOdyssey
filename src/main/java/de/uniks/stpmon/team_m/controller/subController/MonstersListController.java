@@ -314,4 +314,8 @@ public class MonstersListController extends Controller {
             monsterListViewMondex.setSelectionModel(null);
         }
     }
+
+    public boolean checkIfPlayerEncounteredMonster (MonsterTypeDto monsterTypeDto) {
+        return trainerStorageProvider.get().getTrainer().encounteredMonsterTypes().contains(monsterTypeDto.id());
+    }
 }

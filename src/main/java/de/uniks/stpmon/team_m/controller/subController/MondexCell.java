@@ -41,10 +41,20 @@ public class MondexCell extends ListCell<MonsterTypeDto> {
         } else {
             loadFXML();
             monsterNumberLabel.setText(String.valueOf(monsterTypeDto.id()));
-            if (!GraphicsEnvironment.isHeadless()) {
-                monsterImageView.setImage(monstersListController.monsterStorageProvider.get().getMonsterImage(monsterTypeDto.id()));
+            if (monstersListController.checkIfPlayerEncounteredMonster(monsterTypeDto)) {
+                if (!GraphicsEnvironment.isHeadless()) {
+                    monsterImageView.setOpacity(1);
+                    monsterImageView.setImage(monstersListController.monsterStorageProvider.get().getMonsterImage(monsterTypeDto.id()));
+                }
+                monsterNameLabel.setText(monsterTypeDto.name());
+            } else {
+                if (!GraphicsEnvironment.isHeadless()) {
+                    monsterImageView.setOpacity(0.2);
+                    monsterImageView.setImage(monstersListController.monsterStorageProvider.get().getMonsterImage(monsterTypeDto.id()));
+                }
+                monsterNameLabel.setText("???");
             }
-            monsterNameLabel.setText(monsterTypeDto.name());
+
             setGraphic(rootHBox);
         }
     }
