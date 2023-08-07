@@ -1083,6 +1083,7 @@ public class EncounterController extends Controller {
         VBox caughtMonsterVbox = new VBox();
         caughtMonsterVbox.setAlignment(Pos.CENTER);
         Opponent opponent = encounterOpponentStorage.getEnemyOpponents().get(0);
+        caughtMonsterController.setValues(resources, preferences, resourceBundleProvider, caughtMonsterController, app);
         caughtMonsterController.init(caughtMonsterVbox, rootStackPane, opponent, regionId, caughtMonster, caughtMonsterType, enemyMonsterImage);
         caughtMonsterVbox.getChildren().add(caughtMonsterController.render());
         rootStackPane.getChildren().add(caughtMonsterVbox);
@@ -1123,7 +1124,7 @@ public class EncounterController extends Controller {
                     ownTrainerController.trainerImageView,
                     enemy1Controller.monsterImageView,
                     3,
-                    this::showMonsterReceivedPopUp
+                    this::showCaughtMonsterPopUp
             );
         }
     }
@@ -1131,9 +1132,6 @@ public class EncounterController extends Controller {
     private void throwFailedMonBall() {
         ballImageView = null;
         if (encounterOpponentStorage.isWild()) {
-            if (!GraphicsEnvironment.isHeadless()) {
-                AudioService.getInstance().playEffect(CATCH, ingameControllerProvider.get());
-            }
             Random random = new Random();
             int ticks = random.nextInt(3) + 1;
             ballImageView = AnimationBuilder.throwMonBall(
@@ -1205,6 +1203,7 @@ public class EncounterController extends Controller {
                     item.type(),
                     item.amount() - 1
             );
+            itemStorageProvider.get().updateItemData(itemCopy, null, null);
             disposables.add(encounterOpponentsService.updateOpponent(
                     regionId,
                     encounterId,
@@ -1225,7 +1224,7 @@ public class EncounterController extends Controller {
         ballImageView.setVisible(false);
         enemy1Controller.monsterImageView.setVisible(true);
     }
-
+    /*
     public void showMonsterReceivedPopUp() {
         receivedMonsterPopUp = new VBox();
         receivedMonsterPopUp.setMaxWidth(popupWidth);
@@ -1240,6 +1239,7 @@ public class EncounterController extends Controller {
         receivedMonsterPopUp.getChildren().add(receivedMonsterController.render());
         rootStackPane.getChildren().add(receivedMonsterPopUp);
     }
+     */
 
     public void closeMonsterReceivedPopUp() {
         rootStackPane.getChildren().remove(receivedMonsterPopUp);

@@ -577,7 +577,7 @@ public class IngameController extends Controller {
         receiveObjectPopUp.getStyleClass().add("hBoxLightGreen");
         disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto ->
                 disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
-                    receiveObjectController = new ReceiveObjectController(monster, monsterTypeDto, ImageProcessor.resonseBodyToJavaFXImage(responseBody), this::removeItemReceivedPopUp, trainerStorageProvider);
+                    receiveObjectController = new ReceiveObjectController(monster, monsterTypeDto, ImageProcessor.resonseBodyToJavaFXImage(responseBody), this::removeObjectReceivedPopUp, trainerStorageProvider);
                     receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
                     receiveObjectPopUp.getChildren().add(receiveObjectController.render());
                     getRoot().getChildren().add(receiveObjectPopUp);
@@ -594,45 +594,57 @@ public class IngameController extends Controller {
         if (itemStorageProvider.get().getItemData(item._id()) != null) {
             final ItemData itemData = itemStorageProvider.get().getItemData(item._id());
 
-            receiveObjectController = new ReceiveObjectController(itemData.getItem(), itemData.getItemTypeDto(), itemData.getItemImage(), this::removeItemReceivedPopUp, trainerStorageProvider);
+            receiveObjectController = new ReceiveObjectController(itemData.getItem(), itemData.getItemTypeDto(), itemData.getItemImage(), this::removeObjectReceivedPopUp, trainerStorageProvider);
             receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
+            if (receiveObjectPopUp.getChildren().size() > 0){
+                receiveObjectPopUp.getChildren().clear();
+            }
             receiveObjectPopUp.getChildren().add(receiveObjectController.render());
-            getRoot().getChildren().add(receiveObjectPopUp);
+            if (!getRoot().getChildren().contains(receiveObjectPopUp)) {
+                getRoot().getChildren().add(receiveObjectPopUp);
+            }
         } else {
             disposables.add(presetsService.getItem(item.type()).observeOn(FX_SCHEDULER).subscribe(
                     itemTypeDto -> {
                         if (ImageProcessor.showScaledItemImage(itemTypeDto.image()) != null) {
                             itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()));
-                            receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()), this::removeItemReceivedPopUp, trainerStorageProvider);
+                            receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()), this::removeObjectReceivedPopUp, trainerStorageProvider);
                             receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
+                            if (receiveObjectPopUp.getChildren().size() > 0){
+                                receiveObjectPopUp.getChildren().clear();
+                            }
                             receiveObjectPopUp.getChildren().add(receiveObjectController.render());
-                            getRoot().getChildren().add(receiveObjectPopUp);
-                        } else {
+                            if (!getRoot().getChildren().contains(receiveObjectPopUp)) {
+                                getRoot().getChildren().add(receiveObjectPopUp);
+                            }
+                        }
+                        else {
                             disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
                                     image -> {
                                         itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image));
-                                        receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image), this::removeItemReceivedPopUp, trainerStorageProvider);
+                                        receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image), this::removeObjectReceivedPopUp, trainerStorageProvider);
                                         receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
+                                        if (receiveObjectPopUp.getChildren().size() > 0){
+                                            receiveObjectPopUp.getChildren().clear();
+                                        }
                                         receiveObjectPopUp.getChildren().add(receiveObjectController.render());
-                                        getRoot().getChildren().add(receiveObjectPopUp);
+                                        if (!getRoot().getChildren().contains(receiveObjectPopUp)) {
+                                            getRoot().getChildren().add(receiveObjectPopUp);
+                                        }
                                     },
-                                    error -> {
-                                        showError(error.getMessage());
-                                        error.printStackTrace();
-                                    }));
+                                    error -> {}));
                         }
                     },
-                    error -> {
-                        showError(error.getMessage());
-                        error.printStackTrace();
-                    }));
+                    error -> {}));
         }
 
     }
 
-    private void removeItemReceivedPopUp() {
+    private void removeObjectReceivedPopUp() {
+        System.out.println(receiveObjectController.receiveObjectRootVBox.getParent());
         getRoot().getChildren().remove(receiveObjectController.receiveObjectRootVBox.getParent());
     }
+
 
     public void listenToMonsters(ObservableList<Monster> monsters, String trainerId) {
         disposables.add(eventListenerProvider.get().listen("trainers." + trainerId + ".monsters.*.*", Monster.class)
@@ -640,11 +652,10 @@ public class IngameController extends Controller {
                     Monster monster = event.data();
                     switch (event.suffix()) {
                         case "created" -> {
-                            if (root.getChildren().contains(receiveObjectPopUp)) {
-                                return;
+                            if (!root.getChildren().contains(receiveObjectPopUp)) {
+                                createMonsterReceivedPopUp(monster);
+                                monsters.add(monster);
                             }
-                            createMonsterReceivedPopUp(monster);
-                            monsters.add(monster);
                         }
                         case "updated" -> {
                         }
@@ -664,11 +675,10 @@ public class IngameController extends Controller {
                     Item item = event.data();
                     switch (event.suffix()) {
                         case "created" -> {
-                            if (root.getChildren().contains(receiveObjectPopUp)) {
-                                return;
+                            if (!root.getChildren().contains(receiveObjectPopUp)) {
+                                items.add(item);
+                                createItemReceivedPopUp(item);
                             }
-                            items.add(item);
-                            createItemReceivedPopUp(item);
                         }
                         case "updated" -> {
                             // Item used
