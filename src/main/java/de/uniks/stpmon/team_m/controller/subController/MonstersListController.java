@@ -1,5 +1,6 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
@@ -24,6 +25,8 @@ import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -338,5 +341,42 @@ public class MonstersListController extends Controller {
         secondTypeImageView.setVisible(visible);
         descriptionLabel.setVisible(visible);
         monsterDescriptionTextFlow.setVisible(visible);
+    }
+
+    public void showMondexDetails (MonsterTypeDto monsterTypeDto) {
+        if (trainerStorageProvider.get().getTrainer().encounteredMonsterTypes().contains(monsterTypeDto.id())) {
+            monsterImageView.setOpacity(1.0);
+        } else {
+            monsterImageView.setOpacity(0.2);
+        }
+
+        // setting basic label texts
+        monsterNameLabel.setText(monsterTypeDto.name());
+        monsterDescriptionTextFlow.getChildren().clear();
+        monsterDescriptionTextFlow.getChildren().add(new Text(monsterTypeDto.description()));
+
+        if (!GraphicsEnvironment.isHeadless()) {
+            // setting monster image
+            monsterImageView.setImage(monsterStorageProvider.get().getMonsterImage(monsterTypeDto.id()));
+
+            // setting type images
+            String typeImagePath1 = ABILITYPALETTE.get(monsterTypeDto.type().get(0));
+            URL resourceType1 = Main.class.getResource("images/" + typeImagePath1);
+            assert resourceType1 != null;
+            Image typeImage1 = new Image(resourceType1.toString());
+            firstTypeImageView.setImage(typeImage1);
+
+            if (monsterTypeDto.type().size() > 1) {
+                String typeImagePath2 = ABILITYPALETTE.get(monsterTypeDto.type().get(1));
+                URL resourceType2 = Main.class.getResource("images/" + typeImagePath2);
+                assert resourceType2 != null;
+                Image typeImage2 = new Image(resourceType2.toString());
+                secondTypeImageView.setImage(typeImage2);
+            } else {
+                secondTypeImageView.setImage(null);
+            }
+        }
+
+        showMondexDetails(true);
     }
 }

@@ -2,6 +2,8 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import de.uniks.stpmon.team_m.utils.MonsterStorage;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -24,11 +26,13 @@ public class MondexCell extends ListCell<MonsterTypeDto> {
     private MonstersListController monstersListController;
     private ResourceBundle resources;
     private FXMLLoader loader;
+    private final MonsterStorage monsterStorage;
 
 
     public MondexCell(MonstersListController monstersListController, ResourceBundle resources) {
         this.monstersListController = monstersListController;
         this.resources = resources;
+        this.monsterStorage = monstersListController.monsterStorageProvider.get();
     }
 
     @Override
@@ -44,16 +48,18 @@ public class MondexCell extends ListCell<MonsterTypeDto> {
             if (monstersListController.checkIfPlayerEncounteredMonster(monsterTypeDto)) {
                 if (!GraphicsEnvironment.isHeadless()) {
                     monsterImageView.setOpacity(1);
-                    monsterImageView.setImage(monstersListController.monsterStorageProvider.get().getMonsterImage(monsterTypeDto.id()));
+                    Platform.runLater(() -> monsterImageView.setImage(monsterStorage.getMonsterImage(monsterTypeDto.id())));
                 }
                 monsterNameLabel.setText(monsterTypeDto.name());
             } else {
                 if (!GraphicsEnvironment.isHeadless()) {
                     monsterImageView.setOpacity(0.2);
-                    monsterImageView.setImage(monstersListController.monsterStorageProvider.get().getMonsterImage(monsterTypeDto.id()));
+                    Platform.runLater(() -> monsterImageView.setImage(monsterStorage.getMonsterImage(monsterTypeDto.id())));
                 }
                 monsterNameLabel.setText("???");
             }
+
+            rootHBox.setOnMouseClicked(mouseEvent -> monstersListController.showMondexDetails(monsterTypeDto));
 
             setGraphic(rootHBox);
         }
