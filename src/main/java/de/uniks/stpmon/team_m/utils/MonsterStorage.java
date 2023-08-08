@@ -16,8 +16,8 @@ import java.util.List;
 public class MonsterStorage {
     List<MonsterData> monsterDataList;
     private List<MonsterTypeDto> monsterTypeDtoList;
-    private HashMap<Integer, MonsterTypeDto> monsterTypeDtoHashMap;
-    private HashMap<Integer, Image> monsterImageHashMap;
+    private final HashMap<Integer, MonsterTypeDto> monsterTypeDtoHashMap;
+    private final HashMap<Integer, Image> monsterImageHashMap;
 
     @Inject
     public MonsterStorage() {
@@ -79,5 +79,9 @@ public class MonsterStorage {
 
     public List<MonsterTypeDto> getMonsterTypeDtoList () {
         return monsterTypeDtoList;
+    }
+
+    public boolean imagesAlreadyFetched() {
+        return monsterImageHashMap.size() > 0;
     }
 }

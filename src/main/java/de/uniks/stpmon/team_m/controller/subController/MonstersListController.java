@@ -102,7 +102,6 @@ public class MonstersListController extends Controller {
 
     public List<Monster> activeMonstersList;
     public List<Monster> otherMonstersList;
-    public List<MonsterTypeDto> mondexList;
     private StackPane rootStackPane;
     private Item item;
     public Runnable onItemUsed;
@@ -136,13 +135,15 @@ public class MonstersListController extends Controller {
 
                     MonsterStorage monsterStorage = monsterStorageProvider.get();
                     monsterStorage.addMonsterTypeDtoLists(monsterTypeDtos);
-                    for (MonsterTypeDto monsterTypeDto : monsterTypeDtos) {
-                        disposables.add(presetsService.getMonsterImage(monsterTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
-                                responseBody -> {
-                                    Image monsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
-                                    monsterStorage.addMonsterImageToHashMap(monsterTypeDto.id(), monsterImage);
-                                }
-                        ));
+                    if (!monsterStorage.imagesAlreadyFetched()) {
+                        for (MonsterTypeDto monsterTypeDto : monsterTypeDtos) {
+                            disposables.add(presetsService.getMonsterImage(monsterTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
+                                    responseBody -> {
+                                        Image monsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
+                                        monsterStorage.addMonsterImageToHashMap(monsterTypeDto.id(), monsterImage);
+                                    }
+                            ));
+                        }
                     }
 
                     for (Monster monster : list) {
@@ -167,6 +168,24 @@ public class MonstersListController extends Controller {
 
                     loadMondex(monsterStorageProvider.get().getMonsterTypeDtoList());
                     showMondexDetails(false);
+
+
+                    // need this timer, because of the asynchronous fetching of image data. Otherwise, after opening
+                    // monsterList for the first time, there will be no images loaded into the listCells.
+                    // Another, better way, to handle this would be load all data in the loading screen, but that would
+                    // take some time
+                    Timer timer = new Timer();
+
+                    TimerTask task = new TimerTask() {
+                        @Override
+                        public void run() {
+                            monsterListViewMondex.refresh();
+                            monsterListViewOther.refresh();
+                            monsterListViewActive.refresh();
+                        }
+                    };
+
+                    timer.schedule(task, 1000);
                 }, Throwable::printStackTrace))));
 
         if (!GraphicsEnvironment.isHeadless()) {
