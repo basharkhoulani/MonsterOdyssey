@@ -38,19 +38,19 @@
                         <Label fx:id="monsterNameLabel" alignment="CENTER" layoutX="35.0" layoutY="152.0"
                                prefHeight="17.0" prefWidth="132.0" text="Monster" textAlignment="CENTER">
                             <font>
-                                <Font size="20.0"/>
+                                <Font name="Comic Sans MS Bold" size="20.0"/>
                             </font>
                         </Label>
                         <Label fx:id="locationsLabel" alignment="CENTER" layoutX="197.0" layoutY="85.0" prefHeight="19.0"
                                prefWidth="79.0" text="%LOCATIONS">
                             <font>
-                                <Font size="13.0"/>
+                                <Font name="Comic Sans MS Bold" size="13.0"/>
                             </font>
                         </Label>
                         <Label fx:id="typeLabel" alignment="CENTER_RIGHT" layoutX="59.0" layoutY="188.0" prefHeight="20.0"
                                prefWidth="42.0" text="%TYPE">
                             <font>
-                                <Font size="14.0"/>
+                                <Font name="Comic Sans MS Bold" size="14.0"/>
                             </font>
                         </Label>
                         <ImageView fx:id="firstTypeImageView" fitHeight="31.0" fitWidth="31.0" layoutX="106.0"
@@ -60,7 +60,7 @@
                         <Label fx:id="descriptionLabel" layoutX="21.0" layoutY="214.0" prefHeight="30.0" prefWidth="139.0"
                                text="%DESCRIPTION">
                             <font>
-                                <Font size="20.0"/>
+                                <Font name="Comic Sans MS Bold" size="20.0"/>
                             </font>
                         </Label>
                         <TextFlow fx:id="monsterDescriptionTextFlow" layoutX="1.0" layoutY="245.0"
