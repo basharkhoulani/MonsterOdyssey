@@ -155,9 +155,12 @@ public class MonstersListController extends Controller {
                     otherMonstersList = list.stream()
                             .filter(monster -> !trainerStorageProvider.get().getTrainer().team().contains(monster._id()))
                             .collect(Collectors.toList());
-                    loadMondex(monsterStorageProvider.get().getMonsterTypeDtoList());
+
                     initOtherMonsterList(otherMonstersList);
                     initMonsterList(activeMonstersList);
+
+                    loadMondex(monsterStorageProvider.get().getMonsterTypeDtoList());
+                    showMondexDetails(false);
                 }, Throwable::printStackTrace))));
 
         return parent;
