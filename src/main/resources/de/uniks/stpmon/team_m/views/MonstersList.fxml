@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
@@ -28,43 +29,34 @@
         <Tab fx:id="mondexTab" text="%MONSTERSLIST.MONDEX">
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                 <HBox prefHeight="333.0" prefWidth="600.0">
-                    <ListView fx:id="monsterListViewMondex" prefHeight="369.0" prefWidth="311.0"
-                              style="-fx-background-color: #CFE9DB;"/>
+                    <ListView fx:id="monsterListViewMondex" prefHeight="369.0" prefWidth="311.0" style="-fx-background-color: #CFE9DB;" />
                     <AnchorPane prefHeight="333.0" prefWidth="290.0">
-                        <ImageView fx:id="mapImageView" fitHeight="61.0" fitWidth="61.0" layoutX="206.0"
-                                   layoutY="14.0" pickOnBounds="true" preserveRatio="true"/>
-                        <ImageView fx:id="monsterImageView" fitHeight="140.0" fitWidth="140.0" layoutX="31.0"
-                                   layoutY="15.0" pickOnBounds="true" preserveRatio="true"/>
-                        <Label fx:id="monsterNameLabel" alignment="CENTER" layoutX="35.0" layoutY="152.0"
-                               prefHeight="17.0" prefWidth="132.0" text="Monster" textAlignment="CENTER">
+                        <ImageView fx:id="mapImageView" fitHeight="61.0" fitWidth="61.0" layoutX="206.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="monsterImageView" fitHeight="140.0" fitWidth="140.0" layoutX="7.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label fx:id="monsterNameLabel" alignment="CENTER" layoutX="11.0" layoutY="146.0" prefHeight="17.0" prefWidth="132.0" text="Monster" textAlignment="CENTER">
                             <font>
-                                <Font name="Comic Sans MS Bold" size="20.0"/>
+                                <Font name="Comic Sans MS Bold" size="20.0" />
                             </font>
                         </Label>
-                        <Label fx:id="locationsLabel" alignment="CENTER" layoutX="197.0" layoutY="85.0" prefHeight="19.0"
-                               prefWidth="79.0" text="%LOCATIONS">
+                        <Label fx:id="locationsLabel" alignment="CENTER" layoutX="197.0" layoutY="66.0" prefHeight="19.0" prefWidth="79.0" text="%LOCATIONS">
                             <font>
-                                <Font name="Comic Sans MS Bold" size="13.0"/>
+                                <Font name="Comic Sans MS Bold" size="13.0" />
                             </font>
                         </Label>
-                        <Label fx:id="typeLabel" alignment="CENTER_RIGHT" layoutX="59.0" layoutY="188.0" prefHeight="20.0"
-                               prefWidth="42.0" text="%TYPE">
+                        <Label fx:id="typeLabel" alignment="CENTER_RIGHT" layoutX="35.0" layoutY="182.0" prefHeight="20.0" prefWidth="42.0" text="%TYPE">
                             <font>
-                                <Font name="Comic Sans MS Bold" size="14.0"/>
+                                <Font name="Comic Sans MS Bold" size="14.0" />
                             </font>
                         </Label>
-                        <ImageView fx:id="firstTypeImageView" fitHeight="31.0" fitWidth="31.0" layoutX="106.0"
-                                   layoutY="182.0" pickOnBounds="true" preserveRatio="true"/>
-                        <ImageView fx:id="secondTypeImageView" fitHeight="31.0" fitWidth="31.0" layoutX="145.0"
-                                   layoutY="183.0" pickOnBounds="true" preserveRatio="true"/>
-                        <Label fx:id="descriptionLabel" layoutX="21.0" layoutY="214.0" prefHeight="30.0" prefWidth="139.0"
-                               text="%DESCRIPTION">
+                        <ImageView fx:id="firstTypeImageView" fitHeight="31.0" fitWidth="31.0" layoutX="91.0" layoutY="177.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="secondTypeImageView" fitHeight="31.0" fitWidth="31.0" layoutX="135.0" layoutY="177.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label fx:id="descriptionLabel" layoutX="14.0" layoutY="208.0" prefHeight="30.0" prefWidth="139.0" text="%DESCRIPTION">
                             <font>
-                                <Font name="Comic Sans MS Bold" size="20.0"/>
+                                <Font name="Comic Sans MS Bold" size="20.0" />
                             </font>
                         </Label>
-                        <TextFlow fx:id="monsterDescriptionTextFlow" layoutX="1.0" layoutY="245.0"
-                                  prefHeight="91.0" prefWidth="288.0"/>
+                        <TextFlow fx:id="monsterDescriptionTextFlow" layoutX="9.0" layoutY="238.0" prefHeight="79.0" prefWidth="266.0" />
+                  <Line fx:id="seperationLine" endX="285.0" layoutX="9.0" layoutY="208.0" startX="-9.0" />
                     </AnchorPane>
                 </HBox>
             </AnchorPane>
