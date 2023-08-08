@@ -160,10 +160,10 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
         // Scene 7
         verify(app).show(welcomeSceneController);
         Label tenthMessage = lookup("#firstMessage").query();
-        assertEquals("Now it's time to start your Journey", tenthMessage.getText());
+        assertEquals("If you are one of the tough ones, try the Hardcore mode.", tenthMessage.getText());
 
         Label eleventhMessage = lookup("#secondMessage").query();
-        assertEquals("See you next time!", eleventhMessage.getText());
+        assertEquals("Or you can try it in normal mode for now, as you like!", eleventhMessage.getText());
 
         clickOn("Next");
     }
