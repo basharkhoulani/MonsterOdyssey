@@ -75,7 +75,6 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
                         List.of(),
                         List.of())));
         final TrainersService trainersService = mock(TrainersService.class);
-        when(trainersServiceProvider.get()).thenReturn(trainersService);
         when(trainersService.createTrainer(any(), any(), any())).thenReturn(Observable.just(new Trainer(
                 "2023-05-22T17:51:46.772Z",
                 "2023-05-22T17:51:46.772Z",
@@ -153,7 +152,6 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
         // Scene 6 CharacterSelection
         verify(app).show(characterSelectionControllerProvider.get());
 
-        when(trainerStorage.getRegion()).thenReturn(new Region("123", "456", "789", "test", new Spawn("adsad", 0, 0), null));
 
         clickOn("Next");
 
