@@ -43,7 +43,7 @@ public class ItemCell extends ListCell<Item> {
     private final IngameController ingameController;
     private final Provider<ItemStorage> itemStorageProvider;
     private final TrainerStorage trainerStorage;
-    private EncounterController encounterController;
+    private final EncounterController encounterController;
     private FXMLLoader loader;
     protected final CompositeDisposable disposables = new CompositeDisposable();
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);

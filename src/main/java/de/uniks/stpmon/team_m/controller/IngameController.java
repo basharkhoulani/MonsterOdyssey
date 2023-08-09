@@ -216,8 +216,8 @@ public class IngameController extends Controller {
     private VBox itemMenuBox;
     private boolean inCoinsEarnedInfoBox = false;
     private ReceiveObjectController receiveObjectController;
-    private ObservableList<Item> items = FXCollections.observableArrayList();
-    private ObservableList<Monster> monsters = FXCollections.observableArrayList();
+    private final ObservableList<Item> items = FXCollections.observableArrayList();
+    private final ObservableList<Monster> monsters = FXCollections.observableArrayList();
     private boolean inJoinEncounterInfoBox = false;
     private VBox receiveObjectPopUp;
 
