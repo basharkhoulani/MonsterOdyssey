@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TrainerStorage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.utils</a> &gt; <span class="el_source">TrainerStorage.java</span></div><h1>TrainerStorage.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.utils;
+
+import de.uniks.stpmon.team_m.dto.*;
+import javafx.scene.image.Image;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+
+@Singleton
+public class TrainerStorage {
+
+    private Region region;
+    private String trainerName;
+    private int x;
+    private int y;
+    private int direction;
+    private Trainer trainer;
+    private String trainerImageUrl;
+    private Image trainerSpriteChunk;
+    private List&lt;Monster&gt; monsters;
+    private List&lt;Item&gt; items;
+
+    @Inject
+<span class="fc" id="L28">    public TrainerStorage() {</span>
+<span class="fc" id="L29">    }</span>
+
+    public void setTrainer(Trainer trainer) {
+<span class="fc" id="L32">        this.trainer = trainer;</span>
+<span class="fc" id="L33">    }</span>
+
+    public void setTrainerName(String trainerName) {
+<span class="fc" id="L36">        this.trainerName = trainerName;</span>
+<span class="fc" id="L37">    }</span>
+
+    public void setTrainerSprite(String url) {
+<span class="fc" id="L40">        this.trainerImageUrl = url;</span>
+<span class="fc" id="L41">    }</span>
+
+    public void addItem(Item item) {
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        for (Item item1 : this.items) {</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">            if (Objects.equals(item1.type(), item.type())) {</span>
+<span class="nc" id="L46">                return;</span>
+            }
+<span class="nc" id="L48">        }</span>
+
+<span class="nc" id="L50">        this.items.add(item);</span>
+<span class="nc" id="L51">    }</span>
+
+    public void updateItem(Item item) {
+<span class="nc" id="L54">        this.items.stream().filter(i -&gt; i._id().equals(item._id())).findFirst().ifPresent(i -&gt; this.items.set(this.items.indexOf(i), item));</span>
+
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        this.items = this.items.stream().filter(i -&gt; i.amount() &gt; 0).collect(Collectors.toList());</span>
+<span class="nc" id="L57">    }</span>
+
+    public void useItem(int itemType) {
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        this.items.stream().filter(i -&gt; i.type() == itemType).findFirst().ifPresent(i -&gt; {</span>
+<span class="nc" id="L61">            int amount = i.amount() - 1;</span>
+<span class="nc" id="L62">            Item item = new Item(i._id(), i.trainer(), i.type(), amount);</span>
+<span class="nc" id="L63">            this.items.set(this.items.indexOf(i), item);</span>
+<span class="nc" id="L64">        });</span>
+<span class="nc" id="L65">    }</span>
+
+    public void setItems(List&lt;Item&gt; items) {
+<span class="nc" id="L68">        this.items = items;</span>
+<span class="nc" id="L69">    }</span>
+
+    public List&lt;Item&gt; getItems() {
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        return items.stream().filter(i -&gt; i.amount() &gt; 0).collect(Collectors.toList());</span>
+    }
+
+    public Trainer getTrainer() {
+<span class="nc" id="L76">        return trainer;</span>
+    }
+
+    public Region getRegion() {
+<span class="nc" id="L80">        return region;</span>
+    }
+
+    public void setRegion(Region region) {
+<span class="nc" id="L84">        this.region = region;</span>
+<span class="nc" id="L85">    }</span>
+
+    public String getTrainerName() {
+<span class="nc" id="L88">        return this.trainerName;</span>
+    }
+
+    public String getTrainerSprite() {
+<span class="nc" id="L92">        return this.trainerImageUrl;</span>
+    }
+
+    public Image getTrainerSpriteChunk() {
+<span class="nc" id="L96">        return trainerSpriteChunk;</span>
+    }
+
+    public void setTrainerSpriteChunk(Image trainerSpriteChunk) {
+<span class="fc" id="L100">        this.trainerSpriteChunk = trainerSpriteChunk;</span>
+<span class="fc" id="L101">    }</span>
+
+    public int getX() {
+<span class="nc" id="L104">        return x;</span>
+    }
+
+    public void setX(int x) {
+<span class="nc" id="L108">        this.x = x;</span>
+<span class="nc" id="L109">    }</span>
+
+    public int getY() {
+<span class="nc" id="L112">        return y;</span>
+    }
+
+    public void setY(int y) {
+<span class="nc" id="L116">        this.y = y;</span>
+<span class="nc" id="L117">    }</span>
+
+    public int getDirection() {
+<span class="nc" id="L120">        return direction;</span>
+    }
+
+    public void setDirection(int direction) {
+<span class="nc" id="L124">        this.direction = direction;</span>
+<span class="nc" id="L125">    }</span>
+
+    public List&lt;Monster&gt; getMonsters() {
+<span class="nc" id="L128">        return monsters;</span>
+    }
+
+    public void setMonsters(List&lt;Monster&gt; monsters) {
+<span class="nc" id="L132">        this.monsters = monsters;</span>
+<span class="nc" id="L133">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

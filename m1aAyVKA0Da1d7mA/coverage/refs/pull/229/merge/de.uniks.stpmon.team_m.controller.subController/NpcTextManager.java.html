@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NpcTextManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">NpcTextManager.java</span></div><h1>NpcTextManager.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
+
+public class NpcTextManager {
+    private final Map&lt;String, String[]&gt; npcTexts;
+    private final ResourceBundle resources;
+
+<span class="fc" id="L11">    public NpcTextManager(ResourceBundle resources) {</span>
+<span class="fc" id="L12">        this.resources = resources;</span>
+<span class="fc" id="L13">        npcTexts = new HashMap&lt;&gt;();</span>
+
+<span class="fc" id="L15">        this.putAllNpcTextsInHashMap();</span>
+<span class="fc" id="L16">    }</span>
+
+    public String[] getNpcTexts(String npcID) {
+<span class="fc" id="L19">        String[] returnTexts = npcTexts.get(npcID);</span>
+
+<span class="fc bfc" id="L21" title="All 2 branches covered.">        if (returnTexts == null) {</span>
+<span class="fc" id="L22">            return npcTexts.get(&quot;Default&quot;);</span>
+        } else {
+<span class="fc" id="L24">            return returnTexts;</span>
+        }
+    }
+
+    public String getSingleNpcText(String resourceIdentifier) {
+<span class="fc" id="L29">        return resources.getString(resourceIdentifier);</span>
+    }
+
+    private void putAllNpcTextsInHashMap() {
+<span class="fc" id="L33">        String[] defaultTexts = {</span>
+<span class="fc" id="L34">                resources.getString(&quot;NPC.DEFAULT0&quot;),</span>
+<span class="fc" id="L35">                resources.getString(&quot;NPC.DEFAULT1&quot;),</span>
+<span class="fc" id="L36">                resources.getString(&quot;NPC.DEFAULT2&quot;)};</span>
+
+<span class="fc" id="L38">        String[] ProfAlbert = {</span>
+<span class="fc" id="L39">                resources.getString(&quot;NPC.ALBERT0&quot;),</span>
+<span class="fc" id="L40">                resources.getString(&quot;NPC.ALBERT1&quot;),</span>
+<span class="fc" id="L41">                resources.getString(&quot;NPC.ALBERT2&quot;)};</span>
+<span class="fc" id="L42">        String[] ProfAlbertAlreadyEncountered = {resources.getString(&quot;NPC.ALBERT.ALREADY.ENCOUNTERED&quot;)};</span>
+
+<span class="fc" id="L44">        String[] Nurse = {</span>
+<span class="fc" id="L45">                resources.getString(&quot;NPC.NURSE0&quot;),</span>
+<span class="fc" id="L46">                resources.getString(&quot;NPC.NURSE1&quot;),</span>
+<span class="fc" id="L47">                resources.getString(&quot;NPC.NURSE2&quot;)};</span>
+<span class="fc" id="L48">        String[] NurseNoMons = {</span>
+<span class="fc" id="L49">                resources.getString(&quot;NPC.NURSE.NO.MONS0&quot;)};</span>
+
+<span class="fc" id="L51">        String[] Clerk = {</span>
+<span class="fc" id="L52">                resources.getString(&quot;NPC.Clerk0&quot;),</span>
+<span class="fc" id="L53">                resources.getString(&quot;NPC.Clerk1&quot;)</span>
+        };
+
+<span class="fc" id="L56">        String[] Bob = {</span>
+<span class="fc" id="L57">                resources.getString(&quot;NPC.Bob0&quot;),</span>
+<span class="fc" id="L58">                resources.getString(&quot;NPC.Bob1&quot;)</span>
+        };
+
+<span class="fc" id="L61">        String[] Adam = {</span>
+<span class="fc" id="L62">                resources.getString(&quot;NPC.Adam0&quot;),</span>
+<span class="fc" id="L63">                resources.getString(&quot;NPC.Adam1&quot;)</span>
+        };
+
+<span class="fc" id="L66">        String[] Amelia = {</span>
+<span class="fc" id="L67">                resources.getString(&quot;NPC.Amelia0&quot;),</span>
+<span class="fc" id="L68">                resources.getString(&quot;NPC.Amelia1&quot;)</span>
+        };
+
+<span class="fc" id="L71">        String[] Kid_Tim = {</span>
+<span class="fc" id="L72">                resources.getString(&quot;NPC.Kid_Tim0&quot;),</span>
+<span class="fc" id="L73">                resources.getString(&quot;NPC.Kid_Tim1&quot;)</span>
+        };
+
+<span class="fc" id="L76">        String[] Dan = {</span>
+<span class="fc" id="L77">                resources.getString(&quot;NPC.Dan0&quot;),</span>
+<span class="fc" id="L78">                resources.getString(&quot;NPC.Dan1&quot;)</span>
+        };
+
+<span class="fc" id="L81">        String[] Lucy = {</span>
+<span class="fc" id="L82">                resources.getString(&quot;NPC.Lucy0&quot;),</span>
+<span class="fc" id="L83">                resources.getString(&quot;NPC.Lucy1&quot;)</span>
+        };
+
+<span class="fc" id="L86">        String[] Alex = {</span>
+<span class="fc" id="L87">                resources.getString(&quot;NPC.Alex0&quot;),</span>
+<span class="fc" id="L88">                resources.getString(&quot;NPC.Alex1&quot;)</span>
+        };
+
+<span class="fc" id="L91">        String[] Kid_Oscar = {</span>
+<span class="fc" id="L92">                resources.getString(&quot;NPC.Kid_Oscar0&quot;),</span>
+<span class="fc" id="L93">                resources.getString(&quot;NPC.Kid_Oscar1&quot;)</span>
+        };
+
+<span class="fc" id="L96">        String[] Fred = {</span>
+<span class="fc" id="L97">                resources.getString(&quot;NPC.Fred0&quot;),</span>
+<span class="fc" id="L98">                resources.getString(&quot;NPC.Fred1&quot;)</span>
+        };
+
+<span class="fc" id="L101">        String[] Duke = {</span>
+<span class="fc" id="L102">                resources.getString(&quot;NPC.Duke0&quot;),</span>
+<span class="fc" id="L103">                resources.getString(&quot;NPC.Duke1&quot;)</span>
+        };
+
+<span class="fc" id="L106">        String[] Mr_Donald = {</span>
+<span class="fc" id="L107">                resources.getString(&quot;NPC.Mr._Donald0&quot;),</span>
+<span class="fc" id="L108">                resources.getString(&quot;NPC.Mr._Donald1&quot;)</span>
+        };
+
+<span class="fc" id="L111">        String[] Harold = {</span>
+<span class="fc" id="L112">                resources.getString(&quot;NPC.Harold0&quot;),</span>
+<span class="fc" id="L113">                resources.getString(&quot;NPC.Harold1&quot;),</span>
+<span class="fc" id="L114">                resources.getString(&quot;NPC.Harold2&quot;),</span>
+<span class="fc" id="L115">                resources.getString(&quot;NPC.Harold3&quot;)</span>
+        };
+
+<span class="fc" id="L118">        String[] Timmy = {</span>
+<span class="fc" id="L119">                resources.getString(&quot;NPC.Timmy0&quot;),</span>
+<span class="fc" id="L120">                resources.getString(&quot;NPC.Timmy1&quot;)</span>
+        };
+
+<span class="fc" id="L123">        String[] Coupee = {</span>
+<span class="fc" id="L124">                resources.getString(&quot;NPC.Coupee0&quot;),</span>
+<span class="fc" id="L125">                resources.getString(&quot;NPC.Coupee1&quot;)</span>
+        };
+
+<span class="fc" id="L128">        String[] Clime = {</span>
+<span class="fc" id="L129">                resources.getString(&quot;NPC.Clime0&quot;),</span>
+<span class="fc" id="L130">                resources.getString(&quot;NPC.Clime1&quot;)</span>
+        };
+
+<span class="fc" id="L133">        String[] Sondra = {</span>
+<span class="fc" id="L134">                resources.getString(&quot;NPC.Sondra0&quot;),</span>
+<span class="fc" id="L135">                resources.getString(&quot;NPC.Sondra1&quot;)</span>
+        };
+
+<span class="fc" id="L138">        String[] Hinrek = {</span>
+<span class="fc" id="L139">                resources.getString(&quot;NPC.Hinrek0&quot;),</span>
+<span class="fc" id="L140">                resources.getString(&quot;NPC.Hinrek1&quot;)</span>
+        };
+
+<span class="fc" id="L143">        String[] Somin = {</span>
+<span class="fc" id="L144">                resources.getString(&quot;NPC.Somin0&quot;),</span>
+<span class="fc" id="L145">                resources.getString(&quot;NPC.Somin1&quot;)</span>
+        };
+
+<span class="fc" id="L148">        String[] Child = {</span>
+<span class="fc" id="L149">                resources.getString(&quot;NPC.Child0&quot;),</span>
+<span class="fc" id="L150">                resources.getString(&quot;NPC.Child1&quot;)</span>
+        };
+
+<span class="fc" id="L153">        String[] Mother = {</span>
+<span class="fc" id="L154">                resources.getString(&quot;NPC.Mother0&quot;),</span>
+<span class="fc" id="L155">                resources.getString(&quot;NPC.Mother1&quot;)</span>
+        };
+
+<span class="fc" id="L158">        String[] Karli = {</span>
+<span class="fc" id="L159">                resources.getString(&quot;NPC.Karli0&quot;),</span>
+<span class="fc" id="L160">                resources.getString(&quot;NPC.Karli1&quot;)</span>
+        };
+
+<span class="fc" id="L163">        String[] Alberto_Brandolini = {</span>
+<span class="fc" id="L164">                resources.getString(&quot;NPC.Alberto_Brandolini0&quot;),</span>
+<span class="fc" id="L165">                resources.getString(&quot;NPC.Alberto_Brandolini1&quot;)</span>
+        };
+
+<span class="fc" id="L168">        String[] Andria = {</span>
+<span class="fc" id="L169">                resources.getString(&quot;NPC.Andria0&quot;),</span>
+<span class="fc" id="L170">                resources.getString(&quot;NPC.Andria1&quot;)</span>
+        };
+
+<span class="fc" id="L173">        String[] Clementine = {</span>
+<span class="fc" id="L174">                resources.getString(&quot;NPC.Clementine0&quot;),</span>
+<span class="fc" id="L175">                resources.getString(&quot;NPC.Clementine1&quot;)</span>
+        };
+
+<span class="fc" id="L178">        String[] Max_Mustermann = {</span>
+<span class="fc" id="L179">                resources.getString(&quot;NPC.Max_Mustermann0&quot;),</span>
+<span class="fc" id="L180">                resources.getString(&quot;NPC.Max_Mustermann1&quot;)</span>
+        };
+
+<span class="fc" id="L183">        String[] Harald_Toepfer = {</span>
+<span class="fc" id="L184">                resources.getString(&quot;NPC.Harald_Toepfer0&quot;),</span>
+<span class="fc" id="L185">                resources.getString(&quot;NPC.Harald_Toepfer1&quot;)</span>
+        };
+
+<span class="fc" id="L188">        String[] Herr_Saelzer = {</span>
+<span class="fc" id="L189">                resources.getString(&quot;NPC.Herr_Saelzer0&quot;),</span>
+<span class="fc" id="L190">                resources.getString(&quot;NPC.Herr_Saelzer1&quot;)</span>
+        };
+
+<span class="fc" id="L193">        String[] Gio = {</span>
+<span class="fc" id="L194">                resources.getString(&quot;NPC.Gio0&quot;),</span>
+<span class="fc" id="L195">                resources.getString(&quot;NPC.Gio1&quot;)</span>
+        };
+
+<span class="fc" id="L198">        String[] Herik = {</span>
+<span class="fc" id="L199">                resources.getString(&quot;NPC.Herik0&quot;),</span>
+<span class="fc" id="L200">                resources.getString(&quot;NPC.Herik1&quot;)</span>
+        };
+
+<span class="fc" id="L203">        String[] Woerner = {</span>
+<span class="fc" id="L204">                resources.getString(&quot;NPC.Woerner0&quot;),</span>
+<span class="fc" id="L205">                resources.getString(&quot;NPC.Woerner1&quot;)</span>
+        };
+
+<span class="fc" id="L208">        String[] Worker = {</span>
+<span class="fc" id="L209">                resources.getString(&quot;NPC.Worker0&quot;),</span>
+<span class="fc" id="L210">                resources.getString(&quot;NPC.Worker1&quot;)</span>
+        };
+
+<span class="fc" id="L213">        String[] Fisherman = {</span>
+<span class="fc" id="L214">                resources.getString(&quot;NPC.Fisherman0&quot;),</span>
+<span class="fc" id="L215">                resources.getString(&quot;NPC.Fisherman1&quot;)</span>
+        };
+
+<span class="fc" id="L218">        String[] Fisherwomen = {</span>
+<span class="fc" id="L219">                resources.getString(&quot;NPC.Fisherwomen0&quot;),</span>
+<span class="fc" id="L220">                resources.getString(&quot;NPC.Fisherwomen1&quot;)</span>
+        };
+
+<span class="fc" id="L223">        String[] Klara = {</span>
+<span class="fc" id="L224">                resources.getString(&quot;NPC.Klara0&quot;),</span>
+<span class="fc" id="L225">                resources.getString(&quot;NPC.Klara1&quot;)</span>
+        };
+
+<span class="fc" id="L228">        String[] Santa = {</span>
+<span class="fc" id="L229">                resources.getString(&quot;NPC.Santa0&quot;),</span>
+<span class="fc" id="L230">                resources.getString(&quot;NPC.Santa1&quot;)</span>
+        };
+
+<span class="fc" id="L233">        String[] Mr_Nice_Guy = {</span>
+<span class="fc" id="L234">                resources.getString(&quot;NPC.Mr._Nice_Guy0&quot;),</span>
+<span class="fc" id="L235">                resources.getString(&quot;NPC.Mr._Nice_Guy1&quot;)</span>
+        };
+
+<span class="fc" id="L238">        String[] Average_Soap_Enjoyer = {</span>
+<span class="fc" id="L239">                resources.getString(&quot;NPC.Average_Soap_Enjoyer0&quot;),</span>
+<span class="fc" id="L240">                resources.getString(&quot;NPC.Average_Soap_Enjoyer1&quot;)</span>
+        };
+
+<span class="fc" id="L243">        String[] Local_Crackhead = {</span>
+<span class="fc" id="L244">                resources.getString(&quot;NPC.Local_Crackhead0&quot;)</span>
+        };
+
+<span class="fc" id="L247">        String[] Benny_Bouncer = {</span>
+<span class="fc" id="L248">                resources.getString(&quot;NPC.Benny_Bouncer0&quot;),</span>
+<span class="fc" id="L249">                resources.getString(&quot;NPC.Benny_Bouncer1&quot;)</span>
+        };
+
+<span class="fc" id="L252">        String[] Dead_Hitchhiker = {</span>
+<span class="fc" id="L253">                resources.getString(&quot;NPC.Dead_Hitchhiker0&quot;),</span>
+<span class="fc" id="L254">                resources.getString(&quot;NPC.Dead_Hitchhiker1&quot;)</span>
+        };
+
+<span class="fc" id="L257">        String[] Hans = {</span>
+<span class="fc" id="L258">                resources.getString(&quot;NPC.Hans0&quot;),</span>
+<span class="fc" id="L259">                resources.getString(&quot;NPC.Hans1&quot;)</span>
+        };
+
+<span class="fc" id="L262">        String[] Hannelore = {</span>
+<span class="fc" id="L263">                resources.getString(&quot;NPC.Hannelore0&quot;),</span>
+<span class="fc" id="L264">                resources.getString(&quot;NPC.Hannelore1&quot;)</span>
+        };
+
+<span class="fc" id="L267">        String[] Herman = {</span>
+<span class="fc" id="L268">                resources.getString(&quot;NPC.Herman0&quot;),</span>
+<span class="fc" id="L269">                resources.getString(&quot;NPC.Herman1&quot;)</span>
+        };
+
+<span class="fc" id="L272">        String[] Officer_Gordon = {</span>
+<span class="fc" id="L273">                resources.getString(&quot;NPC.Officer_Gordon0&quot;),</span>
+<span class="fc" id="L274">                resources.getString(&quot;NPC.Officer_Gordon1&quot;)</span>
+        };
+
+<span class="fc" id="L277">        String[] Inspector_Barnaby = {</span>
+<span class="fc" id="L278">                resources.getString(&quot;NPC.Inspector_Barnaby0&quot;),</span>
+<span class="fc" id="L279">                resources.getString(&quot;NPC.Inspector_Barnaby1&quot;)</span>
+        };
+
+<span class="fc" id="L282">        String[] Officer_Simmons = {</span>
+<span class="fc" id="L283">                resources.getString(&quot;NPC.Officer_Simmons0&quot;),</span>
+<span class="fc" id="L284">                resources.getString(&quot;NPC.Officer_Simmons1&quot;)</span>
+        };
+
+<span class="fc" id="L287">        String[] Officer_Duckins = {</span>
+<span class="fc" id="L288">                resources.getString(&quot;NPC.Officer_Duckins0&quot;),</span>
+<span class="fc" id="L289">                resources.getString(&quot;NPC.Officer_Duckins1&quot;)</span>
+        };
+
+<span class="fc" id="L292">        String[] Officer_Steven = {</span>
+<span class="fc" id="L293">                resources.getString(&quot;NPC.Officer_Steven0&quot;),</span>
+<span class="fc" id="L294">                resources.getString(&quot;NPC.Officer_Steven1&quot;)</span>
+        };
+
+<span class="fc" id="L297">        String[] Prisoner_1 = {</span>
+<span class="fc" id="L298">                resources.getString(&quot;NPC.Prisoner_10&quot;),</span>
+<span class="fc" id="L299">                resources.getString(&quot;NPC.Prisoner_11&quot;)</span>
+        };
+
+<span class="fc" id="L302">        String[] Prisoner_2 = {</span>
+<span class="fc" id="L303">                resources.getString(&quot;NPC.Prisoner_20&quot;),</span>
+<span class="fc" id="L304">                resources.getString(&quot;NPC.Prisoner_21&quot;)</span>
+        };
+
+<span class="fc" id="L307">        String[] Prisoner_3 = {</span>
+<span class="fc" id="L308">                resources.getString(&quot;NPC.Prisoner_30&quot;),</span>
+<span class="fc" id="L309">                resources.getString(&quot;NPC.Prisoner_31&quot;)</span>
+        };
+
+<span class="fc" id="L312">        String[] Kuenssi = {</span>
+<span class="fc" id="L313">                resources.getString(&quot;NPC.Kuenssi0&quot;),</span>
+<span class="fc" id="L314">                resources.getString(&quot;NPC.Kuenssi1&quot;)</span>
+        };
+
+<span class="fc" id="L317">        String[] Angry_Gardener = {</span>
+<span class="fc" id="L318">                resources.getString(&quot;NPC.Angry_Gardener0&quot;),</span>
+<span class="fc" id="L319">                resources.getString(&quot;NPC.Angry_Gardener1&quot;)</span>
+        };
+
+<span class="fc" id="L322">        String[] Felix = {</span>
+<span class="fc" id="L323">                resources.getString(&quot;NPC.Felix0&quot;),</span>
+<span class="fc" id="L324">                resources.getString(&quot;NPC.Felix1&quot;)</span>
+        };
+
+<span class="fc" id="L327">        String[] Lady_Lemonade = {</span>
+<span class="fc" id="L328">                resources.getString(&quot;NPC.Lady_Lemonade0&quot;),</span>
+<span class="fc" id="L329">                resources.getString(&quot;NPC.Lady_Lemonade1&quot;)</span>
+        };
+
+<span class="fc" id="L332">        String[] Der_Bewacher_des_heiligen_Eises = {</span>
+<span class="fc" id="L333">                resources.getString(&quot;NPC.Der_Bewacher_des_heiligen_Eises0&quot;),</span>
+<span class="fc" id="L334">                resources.getString(&quot;NPC.Der_Bewacher_des_heiligen_Eises1&quot;)</span>
+        };
+
+<span class="fc" id="L337">        String[] Karla = {</span>
+<span class="fc" id="L338">                resources.getString(&quot;NPC.Karla0&quot;),</span>
+<span class="fc" id="L339">                resources.getString(&quot;NPC.Karla1&quot;)</span>
+        };
+
+<span class="fc" id="L342">        String[] Woody = {</span>
+<span class="fc" id="L343">                resources.getString(&quot;NPC.Woody0&quot;),</span>
+<span class="fc" id="L344">                resources.getString(&quot;NPC.Woody1&quot;)</span>
+        };
+
+<span class="fc" id="L347">        String[] Mysterious_Presence = {</span>
+<span class="fc" id="L348">                resources.getString(&quot;NPC.Mysterious_Presence0&quot;),</span>
+<span class="fc" id="L349">                resources.getString(&quot;NPC.Mysterious_Presence1&quot;)</span>
+        };
+
+<span class="fc" id="L352">        String[] Angler_Joey = {</span>
+<span class="fc" id="L353">                resources.getString(&quot;NPC.Angler_Joey0&quot;),</span>
+<span class="fc" id="L354">                resources.getString(&quot;NPC.Angler_Joey1&quot;)</span>
+        };
+
+<span class="fc" id="L357">        String[] Angler_Joe = {</span>
+<span class="fc" id="L358">                resources.getString(&quot;NPC.Angler_Joe0&quot;),</span>
+<span class="fc" id="L359">                resources.getString(&quot;NPC.Angler_Joe1&quot;)</span>
+        };
+
+<span class="fc" id="L362">        String[] Rusrik = {</span>
+<span class="fc" id="L363">                resources.getString(&quot;NPC.Rusrik0&quot;),</span>
+<span class="fc" id="L364">                resources.getString(&quot;NPC.Rusrik1&quot;)</span>
+        };
+
+<span class="fc" id="L367">        String[] Kenny = {</span>
+<span class="fc" id="L368">                resources.getString(&quot;NPC.Kenny0&quot;),</span>
+<span class="fc" id="L369">                resources.getString(&quot;NPC.Kenny1&quot;)</span>
+        };
+
+<span class="fc" id="L372">        String[] Groschen = {</span>
+<span class="fc" id="L373">                resources.getString(&quot;NPC.Groschen0&quot;),</span>
+<span class="fc" id="L374">                resources.getString(&quot;NPC.Groschen1&quot;)</span>
+        };
+
+<span class="fc" id="L377">        String[] Fred_2 = {</span>
+<span class="fc" id="L378">                resources.getString(&quot;NPC.Fred_2_0&quot;),</span>
+<span class="fc" id="L379">                resources.getString(&quot;NPC.Fred_2_1&quot;)</span>
+        };
+
+<span class="fc" id="L382">        String[] Wulian = {</span>
+<span class="fc" id="L383">                resources.getString(&quot;NPC.Wulian0&quot;),</span>
+<span class="fc" id="L384">                resources.getString(&quot;NPC.Wulian1&quot;)</span>
+        };
+
+<span class="fc" id="L387">        String[] Nessava = {</span>
+<span class="fc" id="L388">                resources.getString(&quot;NPC.Nessava0&quot;),</span>
+<span class="fc" id="L389">                resources.getString(&quot;NPC.Nessava1&quot;)</span>
+        };
+
+<span class="fc" id="L392">        String[] General_Gom = {</span>
+<span class="fc" id="L393">                resources.getString(&quot;NPC.General_Gom0&quot;),</span>
+<span class="fc" id="L394">                resources.getString(&quot;NPC.General_Gom1&quot;)</span>
+        };
+
+<span class="fc" id="L397">        String[] Pixelbauer_Plemens = {</span>
+<span class="fc" id="L398">                resources.getString(&quot;NPC.Pixelbauer_Plemens0&quot;),</span>
+<span class="fc" id="L399">                resources.getString(&quot;NPC.Pixelbauer_Plemens1&quot;)</span>
+        };
+
+<span class="fc" id="L402">        String[] Badeboy_Bimon = {</span>
+<span class="fc" id="L403">                resources.getString(&quot;NPC.Badeboy_Bimon0&quot;),</span>
+<span class="fc" id="L404">                resources.getString(&quot;NPC.Badeboy_Bimon1&quot;)</span>
+        };
+
+<span class="fc" id="L407">        String[] Gio_Vanni = {</span>
+<span class="fc" id="L408">                resources.getString(&quot;NPC.Gio_Vanni0&quot;),</span>
+<span class="fc" id="L409">                resources.getString(&quot;NPC.Gio_Vanni1&quot;)</span>
+        };
+
+<span class="fc" id="L412">        String[] Saltrian = {</span>
+<span class="fc" id="L413">                resources.getString(&quot;NPC.Saltrian0&quot;),</span>
+<span class="fc" id="L414">                resources.getString(&quot;NPC.Saltrian1&quot;)</span>
+        };
+
+<span class="fc" id="L417">        String[] Kraehenfluesterin_Katasch = {</span>
+<span class="fc" id="L418">                resources.getString(&quot;NPC.Kraehenfluesterin_Katasch0&quot;),</span>
+<span class="fc" id="L419">                resources.getString(&quot;NPC.Kraehenfluesterin_Katasch1&quot;)</span>
+        };
+
+<span class="fc" id="L422">        String[] Blip = {</span>
+<span class="fc" id="L423">                resources.getString(&quot;NPC.Blip0&quot;),</span>
+<span class="fc" id="L424">                resources.getString(&quot;NPC.Blip1&quot;)</span>
+        };
+
+<span class="fc" id="L427">        String[] Nascha = {</span>
+<span class="fc" id="L428">                resources.getString(&quot;NPC.Nascha0&quot;),</span>
+<span class="fc" id="L429">                resources.getString(&quot;NPC.Nascha1&quot;)</span>
+        };
+
+<span class="fc" id="L432">        String[] Bernd = {</span>
+<span class="fc" id="L433">                resources.getString(&quot;NPC.Bernd0&quot;),</span>
+<span class="fc" id="L434">                resources.getString(&quot;NPC.Bernd1&quot;)</span>
+        };
+
+<span class="fc" id="L437">        String[] Rob = {</span>
+<span class="fc" id="L438">                resources.getString(&quot;NPC.Rob0&quot;),</span>
+<span class="fc" id="L439">                resources.getString(&quot;NPC.Rob1&quot;)</span>
+        };
+
+<span class="fc" id="L442">        String[] Clair = {</span>
+<span class="fc" id="L443">                resources.getString(&quot;NPC.Clair0&quot;),</span>
+<span class="fc" id="L444">                resources.getString(&quot;NPC.Clair1&quot;)</span>
+        };
+
+<span class="fc" id="L447">        String[] Stan = {</span>
+<span class="fc" id="L448">                resources.getString(&quot;NPC.Stan0&quot;),</span>
+<span class="fc" id="L449">                resources.getString(&quot;NPC.Stan1&quot;)</span>
+        };
+
+<span class="fc" id="L452">        String[] Reek = {</span>
+<span class="fc" id="L453">                resources.getString(&quot;NPC.Reek0&quot;),</span>
+<span class="fc" id="L454">                resources.getString(&quot;NPC.Reek1&quot;)</span>
+        };
+
+<span class="fc" id="L457">        String[] Golkian_Talmann = {</span>
+<span class="fc" id="L458">                resources.getString(&quot;NPC.Golkian_Talmann0&quot;),</span>
+<span class="fc" id="L459">                resources.getString(&quot;NPC.Golkian_Talmann1&quot;)</span>
+        };
+
+<span class="fc" id="L462">        String[] Herink = {</span>
+<span class="fc" id="L463">                resources.getString(&quot;NPC.Herink0&quot;),</span>
+<span class="fc" id="L464">                resources.getString(&quot;NPC.Herink1&quot;)</span>
+        };
+
+<span class="fc" id="L467">        String[] Wonas = {</span>
+<span class="fc" id="L468">                resources.getString(&quot;NPC.Wonas0&quot;),</span>
+<span class="fc" id="L469">                resources.getString(&quot;NPC.Wonas1&quot;)</span>
+        };
+
+<span class="fc" id="L472">        String[] Dan_the_Man = {</span>
+<span class="fc" id="L473">                resources.getString(&quot;NPC.Dan_the_Man0&quot;),</span>
+<span class="fc" id="L474">                resources.getString(&quot;NPC.Dan_the_Man1&quot;)</span>
+        };
+
+<span class="fc" id="L477">        String[] Corpo = {</span>
+<span class="fc" id="L478">                resources.getString(&quot;NPC.Corpo0&quot;),</span>
+<span class="fc" id="L479">                resources.getString(&quot;NPC.Corpo1&quot;)</span>
+        };
+
+<span class="fc" id="L482">        String[] Corpa = {</span>
+<span class="fc" id="L483">                resources.getString(&quot;NPC.Corpa0&quot;),</span>
+<span class="fc" id="L484">                resources.getString(&quot;NPC.Corpa1&quot;)</span>
+        };
+
+<span class="fc" id="L487">        String[] Lil_CaLa = {</span>
+<span class="fc" id="L488">                resources.getString(&quot;NPC.Lil_CaLa0&quot;),</span>
+<span class="fc" id="L489">                resources.getString(&quot;NPC.Lil_CaLa1&quot;)</span>
+        };
+
+<span class="fc" id="L492">        String[] Timon = {</span>
+<span class="fc" id="L493">                resources.getString(&quot;NPC.Timon0&quot;),</span>
+<span class="fc" id="L494">                resources.getString(&quot;NPC.Timon1&quot;)</span>
+        };
+
+
+<span class="fc" id="L498">        npcTexts.put(&quot;Default&quot;, defaultTexts);</span>
+
+<span class="fc" id="L500">        npcTexts.put(&quot;645e32c6866ace359554a802&quot;, ProfAlbert);</span>
+<span class="fc" id="L501">        npcTexts.put(&quot;645e32c6866ace359554a802alreadyEncountered&quot;, ProfAlbertAlreadyEncountered);</span>
+
+<span class="fc" id="L503">        npcTexts.put(&quot;Nurse&quot;, Nurse);</span>
+<span class="fc" id="L504">        npcTexts.put(&quot;NurseNoMons&quot;, NurseNoMons);</span>
+<span class="fc" id="L505">        npcTexts.put(&quot;Clerk&quot;, Clerk);</span>
+
+<span class="fc" id="L507">        npcTexts.put(&quot;645e32c6866ace359554a7f8&quot;, Clerk);</span>
+
+<span class="fc" id="L509">        npcTexts.put(&quot;645e32c6866ace359554a7fc&quot;, Bob);</span>
+
+<span class="fc" id="L511">        npcTexts.put(&quot;645e32c6866ace359554a7fe&quot;, Adam);</span>
+
+<span class="fc" id="L513">        npcTexts.put(&quot;645e32c6866ace359554a800&quot;, Amelia);</span>
+
+<span class="fc" id="L515">        npcTexts.put(&quot;645e32c6866ace359554a80a&quot;, Clerk);</span>
+
+<span class="fc" id="L517">        npcTexts.put(&quot;645e32c7866ace359554a80f&quot;, Kid_Tim);</span>
+
+<span class="fc" id="L519">        npcTexts.put(&quot;645e32c7866ace359554a811&quot;, Dan);</span>
+
+<span class="fc" id="L521">        npcTexts.put(&quot;645e32c7866ace359554a813&quot;, Lucy);</span>
+
+<span class="fc" id="L523">        npcTexts.put(&quot;645e32c7866ace359554a815&quot;, Alex);</span>
+
+<span class="fc" id="L525">        npcTexts.put(&quot;645e32c7866ace359554a817&quot;, Kid_Oscar);</span>
+
+<span class="fc" id="L527">        npcTexts.put(&quot;648c7a25866ace3595acbdf8&quot;, Clerk);</span>
+
+<span class="fc" id="L529">        npcTexts.put(&quot;648c7a26866ace3595acbe00&quot;, Fred);</span>
+
+<span class="fc" id="L531">        npcTexts.put(&quot;648c7a26866ace3595acbe03&quot;, Duke);</span>
+
+<span class="fc" id="L533">        npcTexts.put(&quot;648c7a26866ace3595acbe06&quot;, Mr_Donald);</span>
+
+<span class="fc" id="L535">        npcTexts.put(&quot;648c7a26866ace3595acbe09&quot;, Harold);</span>
+
+<span class="fc" id="L537">        npcTexts.put(&quot;648c7a26866ace3595acbe0c&quot;, Timmy);</span>
+
+<span class="fc" id="L539">        npcTexts.put(&quot;648c7a26866ace3595acbe2b&quot;, Coupee);</span>
+
+<span class="fc" id="L541">        npcTexts.put(&quot;648c7a26866ace3595acbe32&quot;, Clime);</span>
+
+<span class="fc" id="L543">        npcTexts.put(&quot;648c7a26866ace3595acbe37&quot;, Sondra);</span>
+
+<span class="fc" id="L545">        npcTexts.put(&quot;648c7a26866ace3595acbe3c&quot;, Hinrek);</span>
+
+<span class="fc" id="L547">        npcTexts.put(&quot;648c7a26866ace3595acbe43&quot;, Somin);</span>
+
+<span class="fc" id="L549">        npcTexts.put(&quot;648c7a27866ace3595acbe4e&quot;, Child);</span>
+
+<span class="fc" id="L551">        npcTexts.put(&quot;648c7a27866ace3595acbe56&quot;, Mother);</span>
+
+<span class="fc" id="L553">        npcTexts.put(&quot;648c7a27866ace3595acbe5f&quot;, Karli);</span>
+
+<span class="fc" id="L555">        npcTexts.put(&quot;648c7a27866ace3595acbe66&quot;, Alberto_Brandolini);</span>
+
+<span class="fc" id="L557">        npcTexts.put(&quot;648c7a27866ace3595acbe6d&quot;, Andria);</span>
+
+<span class="fc" id="L559">        npcTexts.put(&quot;648c7a28866ace3595acbe79&quot;, Clementine);</span>
+
+<span class="fc" id="L561">        npcTexts.put(&quot;648c7a28866ace3595acbe83&quot;, Max_Mustermann);</span>
+
+<span class="fc" id="L563">        npcTexts.put(&quot;648c7a28866ace3595acbe8c&quot;, Harald_Toepfer);</span>
+
+<span class="fc" id="L565">        npcTexts.put(&quot;648c7a28866ace3595acbe95&quot;, Herr_Saelzer);</span>
+
+<span class="fc" id="L567">        npcTexts.put(&quot;648c7a28866ace3595acbe9e&quot;, Gio);</span>
+
+<span class="fc" id="L569">        npcTexts.put(&quot;648c7a28866ace3595acbea7&quot;, Herik);</span>
+
+<span class="fc" id="L571">        npcTexts.put(&quot;648c7a28866ace3595acbeb0&quot;, Woerner);</span>
+
+<span class="fc" id="L573">        npcTexts.put(&quot;648c7a28866ace3595acbebb&quot;, Worker);</span>
+
+<span class="fc" id="L575">        npcTexts.put(&quot;648c7a28866ace3595acbec0&quot;, Fisherman);</span>
+
+<span class="fc" id="L577">        npcTexts.put(&quot;648c7a28866ace3595acbec6&quot;, Fisherwomen);</span>
+
+<span class="fc" id="L579">        npcTexts.put(&quot;648c7a29866ace3595acbed5&quot;, Klara);</span>
+
+<span class="fc" id="L581">        npcTexts.put(&quot;648c7a29866ace3595acbed8&quot;, Santa);</span>
+
+<span class="fc" id="L583">        npcTexts.put(&quot;648c7a29866ace3595acbedf&quot;, Mr_Nice_Guy);</span>
+
+<span class="fc" id="L585">        npcTexts.put(&quot;648c7a29866ace3595acbee6&quot;, Average_Soap_Enjoyer);</span>
+
+<span class="fc" id="L587">        npcTexts.put(&quot;648c7a29866ace3595acbeed&quot;, Local_Crackhead);</span>
+
+<span class="fc" id="L589">        npcTexts.put(&quot;648c7a29866ace3595acbef4&quot;, Benny_Bouncer);</span>
+
+<span class="fc" id="L591">        npcTexts.put(&quot;648c7a29866ace3595acbefb&quot;, Dead_Hitchhiker);</span>
+
+<span class="fc" id="L593">        npcTexts.put(&quot;649ee2086cec1b8f0f8fea2d&quot;, Hans);</span>
+
+<span class="fc" id="L595">        npcTexts.put(&quot;649ee2086cec1b8f0f8fea32&quot;, Hannelore);</span>
+
+<span class="fc" id="L597">        npcTexts.put(&quot;649ee2086cec1b8f0f8fea37&quot;, Herman);</span>
+
+<span class="fc" id="L599">        npcTexts.put(&quot;649ee2096cec1b8f0f8fea7f&quot;, Officer_Gordon);</span>
+
+<span class="fc" id="L601">        npcTexts.put(&quot;649ee2096cec1b8f0f8fea8c&quot;, Inspector_Barnaby);</span>
+
+<span class="fc" id="L603">        npcTexts.put(&quot;649ee2096cec1b8f0f8fea96&quot;, Officer_Simmons);</span>
+
+<span class="fc" id="L605">        npcTexts.put(&quot;649ee2096cec1b8f0f8feaa3&quot;, Officer_Duckins);</span>
+
+<span class="fc" id="L607">        npcTexts.put(&quot;649ee2096cec1b8f0f8feab0&quot;, Officer_Steven);</span>
+
+<span class="fc" id="L609">        npcTexts.put(&quot;649ee2096cec1b8f0f8feabb&quot;, Prisoner_1);</span>
+
+<span class="fc" id="L611">        npcTexts.put(&quot;649ee2096cec1b8f0f8feac8&quot;, Prisoner_2);</span>
+
+<span class="fc" id="L613">        npcTexts.put(&quot;649ee2096cec1b8f0f8fead7&quot;, Prisoner_3);</span>
+
+<span class="fc" id="L615">        npcTexts.put(&quot;649ee20a6cec1b8f0f8febff&quot;, Kuenssi);</span>
+
+<span class="fc" id="L617">        npcTexts.put(&quot;649ee20a6cec1b8f0f8fec08&quot;, Angry_Gardener);</span>
+
+<span class="fc" id="L619">        npcTexts.put(&quot;649ee20a6cec1b8f0f8fec13&quot;, Felix);</span>
+
+<span class="fc" id="L621">        npcTexts.put(&quot;649ee20a6cec1b8f0f8fec1a&quot;, Lady_Lemonade);</span>
+
+<span class="fc" id="L623">        npcTexts.put(&quot;649ee20a6cec1b8f0f8fec23&quot;, Der_Bewacher_des_heiligen_Eises);</span>
+
+<span class="fc" id="L625">        npcTexts.put(&quot;649ee20a6cec1b8f0f8fec34&quot;, Karla);</span>
+
+<span class="fc" id="L627">        npcTexts.put(&quot;649ee20a6cec1b8f0f8fec3d&quot;, Woody);</span>
+
+<span class="fc" id="L629">        npcTexts.put(&quot;649ee20b6cec1b8f0f8fec47&quot;, Mysterious_Presence);</span>
+
+<span class="fc" id="L631">        npcTexts.put(&quot;649ee20b6cec1b8f0f8fecc4&quot;, Angler_Joey);</span>
+
+<span class="fc" id="L633">        npcTexts.put(&quot;649ee20b6cec1b8f0f8feccb&quot;, Angler_Joe);</span>
+
+<span class="fc" id="L635">        npcTexts.put(&quot;649ee20b6cec1b8f0f8fecd2&quot;, Rusrik);</span>
+
+<span class="fc" id="L637">        npcTexts.put(&quot;649ee20b6cec1b8f0f8fecd9&quot;, Kenny);</span>
+
+<span class="fc" id="L639">        npcTexts.put(&quot;649ee20b6cec1b8f0f8fece0&quot;, Groschen);</span>
+
+<span class="fc" id="L641">        npcTexts.put(&quot;649ee20b6cec1b8f0f8fece7&quot;, Fred_2);</span>
+
+<span class="fc" id="L643">        npcTexts.put(&quot;649ee20b6cec1b8f0f8fecf1&quot;, Wulian);</span>
+
+<span class="fc" id="L645">        npcTexts.put(&quot;649ee20b6cec1b8f0f8fecfa&quot;, Nessava);</span>
+
+<span class="fc" id="L647">        npcTexts.put(&quot;649ee20b6cec1b8f0f8fed0f&quot;, General_Gom);</span>
+
+<span class="fc" id="L649">        npcTexts.put(&quot;649ee20b6cec1b8f0f8fed16&quot;, Pixelbauer_Plemens);</span>
+
+<span class="fc" id="L651">        npcTexts.put(&quot;649ee20b6cec1b8f0f8fed1d&quot;, Badeboy_Bimon);</span>
+
+<span class="fc" id="L653">        npcTexts.put(&quot;649ee20b6cec1b8f0f8fed24&quot;, Gio_Vanni);</span>
+
+<span class="fc" id="L655">        npcTexts.put(&quot;649ee20b6cec1b8f0f8fed2b&quot;, Saltrian);</span>
+
+<span class="fc" id="L657">        npcTexts.put(&quot;649ee20b6cec1b8f0f8fed32&quot;, Kraehenfluesterin_Katasch);</span>
+
+<span class="fc" id="L659">        npcTexts.put(&quot;649ee20b6cec1b8f0f8fed3a&quot;, Blip);</span>
+
+<span class="fc" id="L661">        npcTexts.put(&quot;649ee20c6cec1b8f0f8fedd0&quot;, Nascha);</span>
+
+<span class="fc" id="L663">        npcTexts.put(&quot;649ee20c6cec1b8f0f8fedd3&quot;, Bernd);</span>
+
+<span class="fc" id="L665">        npcTexts.put(&quot;649ee20c6cec1b8f0f8fedd6&quot;, Rob);</span>
+
+<span class="fc" id="L667">        npcTexts.put(&quot;649ee20c6cec1b8f0f8fedd9&quot;, Clair);</span>
+
+<span class="fc" id="L669">        npcTexts.put(&quot;649ee20c6cec1b8f0f8feddc&quot;, Stan);</span>
+
+<span class="fc" id="L671">        npcTexts.put(&quot;649ee20c6cec1b8f0f8fede1&quot;, Reek);</span>
+
+<span class="fc" id="L673">        npcTexts.put(&quot;649ee20c6cec1b8f0f8fedea&quot;, Golkian_Talmann);</span>
+
+<span class="fc" id="L675">        npcTexts.put(&quot;649ee20c6cec1b8f0f8fedf3&quot;, Herink);</span>
+
+<span class="fc" id="L677">        npcTexts.put(&quot;649ee20c6cec1b8f0f8fedfc&quot;, Wonas);</span>
+
+<span class="fc" id="L679">        npcTexts.put(&quot;649ee20c6cec1b8f0f8fee0a&quot;, Dan_the_Man);</span>
+
+<span class="fc" id="L681">        npcTexts.put(&quot;649ee20c6cec1b8f0f8fee0f&quot;, Corpo);</span>
+
+<span class="fc" id="L683">        npcTexts.put(&quot;649ee20c6cec1b8f0f8fee12&quot;, Corpa);</span>
+
+<span class="fc" id="L685">        npcTexts.put(&quot;649ee20c6cec1b8f0f8fee1a&quot;, Lil_CaLa);</span>
+
+<span class="fc" id="L687">        npcTexts.put(&quot;649ee20c6cec1b8f0f8fee20&quot;, Timon);</span>
+<span class="fc" id="L688">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MonsterLocationsController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">MonsterLocationsController.java</span></div><h1>MonsterLocationsController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.Layer;
+import de.uniks.stpmon.team_m.dto.Map;
+import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+
+import javax.inject.Inject;
+import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+
+public class MonsterLocationsController extends Controller {
+    @FXML
+    public BorderPane miniMapBorderPane;
+    @FXML
+    public Label header;
+    @FXML
+    public Button closeButton;
+    @FXML
+    public AnchorPane mapContainer;
+    @FXML
+    public ImageView miniMapImageView;
+    @FXML
+    public TextFlow mapTextFlow;
+    private IngameController ingameController;
+    private VBox container;
+    private Canvas miniMapCanvas;
+    private Map miniMap;
+    private MonsterTypeDto monsterTypeDto;
+
+    @Inject
+<span class="nc" id="L47">    public MonsterLocationsController() {</span>
+
+<span class="nc" id="L49">    }</span>
+
+    public void init(IngameController ingameController, VBox container, Canvas miniMapCanvas, Map miniMap, MonsterTypeDto monsterTypeDto) {
+<span class="nc" id="L52">        this.ingameController = ingameController;</span>
+<span class="nc" id="L53">        this.container = container;</span>
+<span class="nc" id="L54">        this.miniMapCanvas = miniMapCanvas;</span>
+<span class="nc" id="L55">        this.miniMap = miniMap;</span>
+<span class="nc" id="L56">        this.monsterTypeDto = monsterTypeDto;</span>
+<span class="nc" id="L57">    }</span>
+
+    public Parent render() {
+<span class="nc" id="L60">        final Parent parent = super.render();</span>
+
+<span class="nc" id="L62">        header.setText(resources.getString(&quot;MONSTER.LOCATIONS&quot;));</span>
+
+<span class="nc" id="L64">        Text monsterLocations = new Text(resources.getString(&quot;THERE.ARE.NO.KNOWN.LOCATIONS.FOR&quot;) + &quot; &quot; + monsterTypeDto.name());</span>
+<span class="nc" id="L65">        mapTextFlow.getChildren().add(monsterLocations);</span>
+<span class="nc" id="L66">        final boolean[] knownLocations = {false};</span>
+
+<span class="nc" id="L68">        Text description = new Text();</span>
+<span class="nc" id="L69">        mapTextFlow.getChildren().add(description);</span>
+<span class="nc" id="L70">        Layer layerMinimap = miniMap.layers().get(2);</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        for (Layer layer : miniMap.layers()) {</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">            if (layer.type().equals(OBJECTGROUP)) {</span>
+<span class="nc" id="L73">                layerMinimap = layer;</span>
+<span class="nc" id="L74">                break;</span>
+            }
+<span class="nc" id="L76">        }</span>
+<span class="nc" id="L77">        layerMinimap.objects().forEach(tileObject -&gt; {</span>
+            // filter for monster
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            if (tileObject.properties().size() &gt; 1) {</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">                if (tileObject.properties().get(1).name().equals(MONSTERS)) {</span>
+<span class="nc" id="L81">                    String string = tileObject.properties().get(1).value();</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">                    if (string.startsWith(&quot;[&quot;)) {</span>
+<span class="nc" id="L83">                        string = string.substring(1, string.length() - 1);</span>
+                    }
+<span class="nc" id="L85">                    String[] split = string.split(&quot;,&quot;);</span>
+<span class="nc" id="L86">                    List&lt;String&gt; monsters = Arrays.stream(split).toList();</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">                    if (monsters.contains((String.valueOf(monsterTypeDto.id())))) {</span>
+<span class="nc" id="L88">                        knownLocations[0] = true;</span>
+                        double width;
+                        double height;
+<span class="nc bnc" id="L91" title="All 2 branches missed.">                        if (tileObject.width() != 0) {</span>
+<span class="nc" id="L92">                            width = tileObject.width();</span>
+                        } else {
+<span class="nc" id="L94">                            width = TILE_SIZE;</span>
+                        }
+<span class="nc bnc" id="L96" title="All 2 branches missed.">                        if (tileObject.height() != 0) {</span>
+<span class="nc" id="L97">                            height = tileObject.height();</span>
+                        } else {
+<span class="nc" id="L99">                            height = TILE_SIZE;</span>
+                        }
+<span class="nc" id="L101">                        VBox location = new VBox();</span>
+<span class="nc" id="L102">                        location.setMinSize(width, height);</span>
+<span class="nc" id="L103">                        location.setPrefSize(width, height);</span>
+<span class="nc" id="L104">                        location.setMaxSize(width, height);</span>
+<span class="nc" id="L105">                        location.setLayoutX(tileObject.x());</span>
+<span class="nc" id="L106">                        location.setLayoutY(tileObject.y());</span>
+<span class="nc" id="L107">                        location.setStyle(&quot;-fx-border-color: red; -fx-border-width: 2px&quot;);</span>
+<span class="nc" id="L108">                        location.setOnMouseEntered(event -&gt; description.setText(tileObject.name() + &quot;\n\n&quot; + tileObject.properties().get(0).value()));</span>
+<span class="nc" id="L109">                        location.setOnMouseExited(event -&gt; description.setText(&quot;&quot;));</span>
+<span class="nc" id="L110">                        mapContainer.getChildren().add(location);</span>
+                    }
+                }
+            }
+<span class="nc" id="L114">        });</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        if (knownLocations[0]) {</span>
+<span class="nc" id="L116">            monsterLocations.setText(monsterTypeDto.name() + &quot; &quot; + resources.getString(&quot;CAN.BE.FOUND.IN.THE.HIGHLIGHTED.LOCATIONS&quot;) + &quot;\n\n\n&quot;);</span>
+        }
+<span class="nc" id="L118">        miniMapImageView.setFitHeight(miniMapCanvas.getHeight());</span>
+<span class="nc" id="L119">        miniMapImageView.setFitWidth(miniMapCanvas.getWidth());</span>
+<span class="nc" id="L120">        mapContainer.setMaxHeight(miniMapCanvas.getHeight());</span>
+<span class="nc" id="L121">        mapContainer.setMinHeight(miniMapCanvas.getHeight());</span>
+<span class="nc" id="L122">        mapContainer.setMaxWidth(miniMapCanvas.getWidth());</span>
+<span class="nc" id="L123">        mapContainer.setMinWidth(miniMapCanvas.getWidth());</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L125">            miniMapImageView.setImage(miniMapCanvas.snapshot(null, null));</span>
+        }
+<span class="nc" id="L127">        return parent;</span>
+    }
+
+    public void closeMiniMap() {
+<span class="nc" id="L131">        ingameController.root.getChildren().remove(container);</span>
+<span class="nc" id="L132">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
