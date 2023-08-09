@@ -114,7 +114,6 @@ public class EncounterController extends Controller {
     private int repeatedTimes = 0;
     private int currentMonsterIndex = 0;
     private int deleteOpponents = 0;
-    private VBox receivedMonsterPopUp;
     private ImageView ballImageView;
     private BallType selectedBallType;
     private boolean monsterCaught = false;
@@ -777,7 +776,8 @@ public class EncounterController extends Controller {
                                     updateDescription(resources.getString("USE.OF") + " " + itemTypeDtos.get(r.item()).name() + " " + resources.getString("IS") + " " + resources.getString("SUCCEED") + ".\n", false);
                                 }
                             }
-                            case ITEM_FAILED -> updateDescription(resources.getString("USE.OF") + " " + itemTypeDtos.get(r.item()).name() + " " + resources.getString("IS") + " " + resources.getString("FAILED") + ".\n", false);
+                            case ITEM_FAILED ->
+                                    updateDescription(resources.getString("USE.OF") + " " + itemTypeDtos.get(r.item()).name() + " " + resources.getString("IS") + " " + resources.getString("FAILED") + ".\n", false);
                         }
                     }
                 }
@@ -1096,7 +1096,6 @@ public class EncounterController extends Controller {
         CaughtMonsterController caughtMonsterController = caughtMonsterControllerProvider.get();
         VBox caughtMonsterVbox = new VBox();
         caughtMonsterVbox.setAlignment(Pos.CENTER);
-        Opponent opponent = encounterOpponentStorage.getEnemyOpponents().get(0);
         caughtMonsterController.setValues(resources, preferences, resourceBundleProvider, caughtMonsterController, app);
         caughtMonsterController.init(caughtMonsterVbox, rootStackPane, caughtMonster, caughtMonsterType, enemyMonsterImage, this);
         caughtMonsterVbox.getChildren().add(caughtMonsterController.render());
@@ -1255,11 +1254,6 @@ public class EncounterController extends Controller {
         rootStackPane.getChildren().add(receivedMonsterPopUp);
     }
      */
-
-    public void closeMonsterReceivedPopUp() {
-        rootStackPane.getChildren().remove(receivedMonsterPopUp);
-        showIngameController();
-    }
 
 
     public boolean isWildEncounter() {

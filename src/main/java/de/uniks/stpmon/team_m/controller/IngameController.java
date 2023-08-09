@@ -525,8 +525,8 @@ public class IngameController extends Controller {
         }
         showCoins();
 
-        setupUdpPing();
-
+        setupUDPPing();
+        setupRESTPing();
         return parent;
     }
 
@@ -2304,16 +2304,26 @@ public class IngameController extends Controller {
         }
     }
 
-    private void setupUdpPing() {
+    private void setupUDPPing() {
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
                 disposables.add(udpEventListenerProvider.get().ping().observeOn(FX_SCHEDULER).subscribe());
-                disposables.add(authenticationService.stayOnline().observeOn(FX_SCHEDULER).subscribe());
             }
         };
         timer.schedule(task, 0, MINUTE_IN_MILLIS);
+    }
+
+    private void setupRESTPing() {
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                disposables.add(authenticationService.stayOnline().observeOn(FX_SCHEDULER).subscribe());
+            }
+        };
+        timer.schedule(task, 0, STUNDE_IN_MILLIS);
     }
 
     public int getUserTrainerY() {

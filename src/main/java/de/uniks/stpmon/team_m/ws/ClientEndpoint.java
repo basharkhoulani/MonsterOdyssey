@@ -43,7 +43,7 @@ public class ClientEndpoint {
     }
 
     @OnClose
-    public void onClose(Session userSession, CloseReason reason) {
+    public void onClose() {
         this.userSession = null;
     }
 
@@ -52,11 +52,6 @@ public class ClientEndpoint {
         for (final Consumer<String> handler : this.messageHandlers) {
             handler.accept(message);
         }
-    }
-
-    @OnError
-    public void onError(Throwable error) {
-        error.printStackTrace();
     }
 
     public void addMessageHandler(Consumer<String> msgHandler) {
