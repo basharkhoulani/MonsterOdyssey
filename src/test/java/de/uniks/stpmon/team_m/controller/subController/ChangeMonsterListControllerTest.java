@@ -48,7 +48,6 @@ public class ChangeMonsterListControllerTest extends ApplicationTest {
         changeMonsterListController.setValues(resources, null, null, changeMonsterListController, app);
         stage.requestFocus();
         PresetsService presetsService = mock(PresetsService.class);
-        when(presetsServiceProvider.get()).thenReturn(presetsService);
         final MonsterStorage monsterStorageMock = mock(MonsterStorage.class);
         when(monsterStorageProvider.get()).thenReturn(monsterStorageMock);
         final MonsterTypeDto monsterTypeDto = new MonsterTypeDto(
