@@ -34,9 +34,6 @@ public class AbilityCell extends ListCell<AbilityDto> {
     private FXMLLoader loader;
     protected final CompositeDisposable disposables = new CompositeDisposable();
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
-    private String typeColor;
-    private String typeImagePath;
-    private Image typeImage;
 
     @FXML
     public VBox typeIcon;
@@ -76,15 +73,15 @@ public class AbilityCell extends ListCell<AbilityDto> {
             setStyle("-fx-background-color: #D6E8FE;");
         } else {
             loadFXML();
-            typeColor = TYPESCOLORPALETTE.get(abilityDto.type());
+            String typeColor = TYPESCOLORPALETTE.get(abilityDto.type());
             String style = "-fx-background-color: " + typeColor + ";";
             typeIcon.setStyle(style);
 
             if (!GraphicsEnvironment.isHeadless()) {
-                typeImagePath = ABILITYPALETTE.get(abilityDto.type());
+                String typeImagePath = ABILITYPALETTE.get(abilityDto.type());
                 URL resourceType = Main.class.getResource("images/" + typeImagePath);
                 assert resourceType != null;
-                typeImage = new Image(resourceType.toString());
+                Image typeImage = new Image(resourceType.toString());
                 typeImageView.setImage(typeImage);
                 typeImageView.setFitHeight(45);
                 typeImageView.setFitWidth(45);

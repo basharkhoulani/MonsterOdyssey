@@ -81,7 +81,6 @@ public class AccountSettingController extends Controller {
     @Inject
     Provider<AvatarSelectionController> avatarSelectionControllerProvider;
     private PasswordFieldSkin skin;
-    private ChangeLanguageController changeLanguageController;
     private final SimpleStringProperty username = new SimpleStringProperty();
     private final SimpleStringProperty password = new SimpleStringProperty();
     private String selectedFilePath;
@@ -97,7 +96,7 @@ public class AccountSettingController extends Controller {
     @Override
     public void init() {
         super.init();
-        this.changeLanguageController = new ChangeLanguageController();
+        ChangeLanguageController changeLanguageController = new ChangeLanguageController();
         changeLanguageController.init();
     }
 

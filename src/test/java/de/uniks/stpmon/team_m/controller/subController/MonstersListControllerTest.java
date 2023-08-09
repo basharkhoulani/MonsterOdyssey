@@ -53,8 +53,6 @@ public class MonstersListControllerTest extends ApplicationTest {
 
     private List<Monster> monsters;
     private ResourceBundle resources;
-    private StackPane rootStackPane;
-    private List<MonsterTypeDto> monsterTypeDtos;
 
     @Override
     public void start(Stage stage) {
@@ -102,7 +100,7 @@ public class MonstersListControllerTest extends ApplicationTest {
                         new MonsterAttributes(14, 8, 8, 5),
                         List.of()));
 
-        monsterTypeDtos = List.of(
+        List<MonsterTypeDto> monsterTypeDtos = List.of(
                 new MonsterTypeDto(
                         1,
                         "Flamander",
@@ -188,6 +186,7 @@ public class MonstersListControllerTest extends ApplicationTest {
         //doNothing().when(monsterStorageProvider.get()).addMonsterData(any(), any(), any());
         app.start(stage);
         app.show(monsterListController);
+        StackPane rootStackPane = new StackPane();
         monsterListController.init(ingameController, monsterListController.monsterListVBox, rootStackPane, null, null);
     }
 

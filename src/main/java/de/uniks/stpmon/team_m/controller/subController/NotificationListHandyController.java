@@ -29,9 +29,6 @@ public class NotificationListHandyController extends Controller {
     Provider<NotificationListHandyController> notificationListHandyControllerProvider;
     public ObservableList<String> handyMessages;
     private IngameController ingameController;
-    private Trainer trainer;
-    private Timeline shakeAnimation;
-
 
     @Inject
     public NotificationListHandyController() {
@@ -46,7 +43,6 @@ public class NotificationListHandyController extends Controller {
 
         timeline.play();
 */
-        this.trainer = currentTrainer;
     }
 
     @Override

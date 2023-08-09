@@ -75,7 +75,6 @@ public class LoginController extends Controller {
     private final SimpleStringProperty password = new SimpleStringProperty();
     private final SimpleBooleanProperty rememberMe = new SimpleBooleanProperty();
     private String information;
-    private ChangeLanguageController changeLanguageController;
 
 
     /**
@@ -97,7 +96,7 @@ public class LoginController extends Controller {
     @Override
     public void init() {
         super.init();
-        this.changeLanguageController = new ChangeLanguageController();
+        ChangeLanguageController changeLanguageController = new ChangeLanguageController();
         changeLanguageController.init();
         if (!GraphicsEnvironment.isHeadless()) {
             if (AudioService.getInstance() != null && (AudioService.getInstance().getCurrentSound() == null)) {

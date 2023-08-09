@@ -2,7 +2,6 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.EncounterController;
-import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.scene.control.Button;
@@ -114,8 +113,6 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
         caughtMonsterController.init(
                 vBox,
                 stackPane,
-                opponent,
-                regionId,
                 monster,
                 monsterTypeDto,
                 null,
