@@ -34,7 +34,7 @@ public class NotificationListHandyController extends Controller {
     public NotificationListHandyController() {
     }
 
-    public void init(IngameController ingameController, Trainer currentTrainer) {
+    public void init(IngameController ingameController) {
         handyMessages = FXCollections.observableArrayList();
         this.ingameController = ingameController;
         /*

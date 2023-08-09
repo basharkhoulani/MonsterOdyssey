@@ -508,7 +508,7 @@ public class EncounterController extends Controller {
         for (String s : monsterTypeDto.type()) {
             type.append(s);
         }
-        monstersDetailController.initFromBattleMenu(this, monsterDetailVBox, monster, monsterTypeDto, encounterOpponentController.getMonsterImage(), resources, presetsService, type.toString());
+        monstersDetailController.initFromBattleMenu(this, monsterDetailVBox, monster, monsterTypeDto, encounterOpponentController.getMonsterImage(), resources, presetsService);
         monsterDetailVBox.getChildren().add(monstersDetailController.render());
         rootStackPane.getChildren().add(monsterDetailVBox);
         monsterDetailVBox.requestFocus();
@@ -519,7 +519,7 @@ public class EncounterController extends Controller {
         monsterDetailVBox.setAlignment(Pos.CENTER);
         MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();
 
-        monstersDetailController.initFromBattleMenu(this, monsterDetailVBox, monster, monsterTypeDto, monsterImage, resources, presetsService, type);
+        monstersDetailController.initFromBattleMenu(this, monsterDetailVBox, monster, monsterTypeDto, monsterImage, resources, presetsService);
         monsterDetailVBox.getChildren().add(monstersDetailController.render());
         rootStackPane.getChildren().add(monsterDetailVBox);
         monsterDetailVBox.requestFocus();

@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface RegionEncountersApiService {
     @GET("regions/{regionId}/encounters")
-    Observable<List<Encounter>> getEncounters(@Path("regionId") String regionId);
+    Observable<List<Encounter>> getEncounters(@Path("regionId") String ignoredRegionId);
 
     @GET("regions/{regionId}/encounters/{encounterId}")
-    Observable<Encounter> getEncounter(@Path("regionId") String regionId, @Path("encounterId") String encounterId);
+    Observable<Encounter> getEncounter(@Path("regionId") String ignoredRegionId, @Path("encounterId") String ignoredEncounterId);
 }

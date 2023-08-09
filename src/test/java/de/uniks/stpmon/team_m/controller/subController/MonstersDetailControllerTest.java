@@ -74,7 +74,7 @@ public class MonstersDetailControllerTest extends ApplicationTest {
                 35,
                 1.0,
                 2)));
-        monstersDetailController.init(ingameController, monsterDetailVBox, monster, monsterTypeDto, null, bundle, presetsService, "fire");
+        monstersDetailController.init(ingameController, monsterDetailVBox, monster, monsterTypeDto, null, bundle, presetsService);
                 when(presetsService.getAbilities()).thenReturn(Observable.just(List.of(
                 new AbilityDto(
                         1,

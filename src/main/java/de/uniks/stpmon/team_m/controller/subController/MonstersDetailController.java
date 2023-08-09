@@ -81,7 +81,6 @@ public class MonstersDetailController extends Controller {
     private final List<AbilityDto> abilityDtos = new ArrayList<>();
     @Inject
     public Provider<PresetsService> presetsServiceProvider;
-    private String monsterType;
     @FXML
     public Label monsterName;
     @FXML
@@ -103,10 +102,8 @@ public class MonstersDetailController extends Controller {
     }
 
     public void init(IngameController ingameController, VBox monsterDetailVBox,
-                     Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources, PresetsService presetsService,
-                     String type) {
+                     Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources, PresetsService presetsService) {
         super.init();
-        this.monsterType = type;
         this.ingameController = ingameController;
         this.monsterDetailVBox = monsterDetailVBox;
         this.monster = monster;
@@ -117,9 +114,8 @@ public class MonstersDetailController extends Controller {
     }
 
     public void initFromBattleMenu(EncounterController encounterController, VBox monsterDetailVBox, Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage,
-                                   ResourceBundle resources, PresetsService presetsService, String type) {
+                                   ResourceBundle resources, PresetsService presetsService) {
         super.init();
-        this.monsterType = type;
         this.encounterController = encounterController;
         this.monsterDetailVBox = monsterDetailVBox;
         this.monster = monster;

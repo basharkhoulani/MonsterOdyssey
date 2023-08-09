@@ -10,13 +10,13 @@ import java.util.List;
 
 public interface TrainersApiService {
     @POST("regions/{regionId}/trainers")
-    Observable<Trainer> createTrainer(@Path("regionId") String regionId, @Body CreateTrainerDto createTrainerDto);
+    Observable<Trainer> createTrainer(@Path("regionId") String ignoredRegionId, @Body CreateTrainerDto ignoredCreateTrainerDto);
     @GET("regions/{regionId}/trainers")
-    Observable<List<Trainer>> getTrainers(@Path("regionId") String regionId, @Query("area") String area, @Query("user") String id);
+    Observable<List<Trainer>> getTrainers(@Path("regionId") String ignoredRegionId, @Query("area") String ignoredArea, @Query("user") String ignoredId);
     @GET("regions/{regionId}/trainers/{id}")
-    Observable<Trainer> getTrainer(@Path("regionId") String regionId, @Path("id") String _id);
+    Observable<Trainer> getTrainer(@Path("regionId") String ignoredRegionId, @Path("id") String ignored_id);
     @PATCH("regions/{regionId}/trainers/{id}")
-    Observable<Trainer> updateTrainer(@Path("regionId") String regionId, @Path("id") String _id, @Body UpdateTrainerDto dto);
+    Observable<Trainer> updateTrainer(@Path("regionId") String ignoredRegionId, @Path("id") String ignored_id, @Body UpdateTrainerDto ignoredDto);
     @DELETE("regions/{regionId}/trainers/{id}")
-    Observable<Trainer> deleteTrainer(@Path("regionId") String regionId, @Path("id") String _id);
+    Observable<Trainer> deleteTrainer(@Path("regionId") String ignoredRegionId, @Path("id") String ignored_id);
 }
