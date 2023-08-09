@@ -137,12 +137,14 @@ public class MonstersListController extends Controller {
                     monsterStorage.addMonsterTypeDtoLists(monsterTypeDtos);
                     if (!monsterStorage.imagesAlreadyFetched()) {
                         for (MonsterTypeDto monsterTypeDto : monsterTypeDtos) {
-                            disposables.add(presetsService.getMonsterImage(monsterTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
-                                    responseBody -> {
-                                        Image monsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
-                                        monsterStorage.addMonsterImageToHashMap(monsterTypeDto.id(), monsterImage);
-                                    }
-                            ));
+                            if (!GraphicsEnvironment.isHeadless()) {
+                                disposables.add(presetsService.getMonsterImage(monsterTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
+                                        responseBody -> {
+                                            Image monsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
+                                            monsterStorage.addMonsterImageToHashMap(monsterTypeDto.id(), monsterImage);
+                                        }
+                                ));
+                            }
                         }
                     }
 
