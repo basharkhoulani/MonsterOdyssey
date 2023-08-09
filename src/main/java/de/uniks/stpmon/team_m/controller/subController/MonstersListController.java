@@ -1,5 +1,7 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
+import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
@@ -7,23 +9,28 @@ import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.*;
-import de.uniks.stpmon.team_m.utils.MonsterStorage;
-import de.uniks.stpmon.team_m.utils.TrainerStorage;
-import de.uniks.stpmon.team_m.utils.UserStorage;
+import de.uniks.stpmon.team_m.utils.*;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.ArrayList;
+import java.awt.*;
+import java.net.URL;
+import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +44,30 @@ public class MonstersListController extends Controller {
     public Tab activeTeamTab;
     @FXML
     public Button closeButton;
+    @FXML
+    public Tab mondexTab;
+    @FXML
+    public ListView<MonsterTypeDto> monsterListViewMondex;
+    @FXML
+    public ImageView mapImageView;
+    @FXML
+    public ImageView monsterImageView;
+    @FXML
+    public Label monsterNameLabel;
+    @FXML
+    public ImageView firstTypeImageView;
+    @FXML
+    public ImageView secondTypeImageView;
+    @FXML
+    public TextFlow monsterDescriptionTextFlow;
+    @FXML
+    public Label locationsLabel;
+    @FXML
+    public Label typeLabel;
+    @FXML
+    public Label descriptionLabel;
+    @FXML
+    public Line seperationLine;
     @Inject
     Provider<TrainersService> trainersServiceProvider;
     @Inject
@@ -96,8 +127,25 @@ public class MonstersListController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
+
         disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)
                 .subscribe(list -> disposables.add(presetsServiceProvider.get().getMonsters().observeOn(FX_SCHEDULER).subscribe(monsterTypeDtos -> {
+
+                    MonsterStorage monsterStorage = monsterStorageProvider.get();
+                    monsterStorage.addMonsterTypeDtoLists(monsterTypeDtos);
+                    if (!monsterStorage.imagesAlreadyFetched()) {
+                        for (MonsterTypeDto monsterTypeDto : monsterTypeDtos) {
+                            if (!GraphicsEnvironment.isHeadless()) {
+                                disposables.add(presetsService.getMonsterImage(monsterTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
+                                        responseBody -> {
+                                            Image monsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
+                                            monsterStorage.addMonsterImageToHashMap(monsterTypeDto.id(), monsterImage);
+                                        }
+                                ));
+                            }
+                        }
+                    }
+
                     for (Monster monster : list) {
                         for (MonsterTypeDto monsterTypeDto : monsterTypeDtos) {
                             if (monsterTypeDto.id() == monster.type()) {
@@ -114,9 +162,36 @@ public class MonstersListController extends Controller {
                     otherMonstersList = list.stream()
                             .filter(monster -> !trainerStorageProvider.get().getTrainer().team().contains(monster._id()))
                             .collect(Collectors.toList());
+
                     initOtherMonsterList(otherMonstersList);
                     initMonsterList(activeMonstersList);
+
+                    loadMondex(monsterStorageProvider.get().getMonsterTypeDtoList());
+                    showMondexDetails(false);
+
+
+                    // need this timer, because of the asynchronous fetching of image data. Otherwise, after opening
+                    // monsterList for the first time, there will be no images loaded into the listCells.
+                    // Another, better way, to handle this would be load all data in the loading screen, but that would
+                    // take some time
+                    Timer timer = new Timer();
+
+                    TimerTask task = new TimerTask() {
+                        @Override
+                        public void run() {
+                            monsterListViewMondex.refresh();
+                            monsterListViewOther.refresh();
+                            monsterListViewActive.refresh();
+                        }
+                    };
+
+                    timer.schedule(task, 1000);
                 }, Throwable::printStackTrace))));
+
+        if (!GraphicsEnvironment.isHeadless()) {
+            mapImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(MAPSYMBOL)).toString()));
+        }
+
         return parent;
     }
 
@@ -267,5 +342,80 @@ public class MonstersListController extends Controller {
         listAdd.add(monster);
         listViewAdd.getItems().clear();
         listViewAdd.getItems().addAll(listAdd);
+    }
+
+    private void loadMondex(List<MonsterTypeDto> monsterTypeDtoList) {
+        for (MonsterTypeDto monsterTypeDto : monsterTypeDtoList) {
+            monsterListViewMondex.setCellFactory(param -> new MondexCell(this, resources));
+            monsterListViewMondex.getItems().add(monsterTypeDto);
+            monsterListViewMondex.setFocusModel(null);
+            monsterListViewMondex.setSelectionModel(null);
+        }
+    }
+
+    public boolean checkIfPlayerEncounteredMonster (MonsterTypeDto monsterTypeDto) {
+        return trainerStorageProvider.get().getTrainer().encounteredMonsterTypes().contains(monsterTypeDto.id());
+    }
+
+    public void showMondexDetails (boolean visible) {
+        mapImageView.setVisible(visible);
+        monsterImageView.setVisible(visible);
+        monsterNameLabel.setVisible(visible);
+        locationsLabel.setVisible(visible);
+        typeLabel.setVisible(visible);
+        firstTypeImageView.setVisible(visible);
+        secondTypeImageView.setVisible(visible);
+        descriptionLabel.setVisible(visible);
+        monsterDescriptionTextFlow.setVisible(visible);
+        seperationLine.setVisible(visible);
+    }
+
+    public void showMondexDetails (MonsterTypeDto monsterTypeDto) {
+
+
+        // setting description text
+        monsterDescriptionTextFlow.getChildren().clear();
+        TextArea monsterDescriptionTextArea = new TextArea(monsterTypeDto.description());
+        monsterDescriptionTextArea.setMaxWidth(monsterDescriptionTextFlow.getWidth());
+        monsterDescriptionTextArea.setMaxHeight(monsterDescriptionTextFlow.getHeight());
+        monsterDescriptionTextArea.setEditable(false);
+        monsterDescriptionTextArea.setWrapText(true);
+        monsterDescriptionTextArea.setFocusTraversable(false);
+        monsterDescriptionTextArea.getStyleClass().add("monsterListBackground");
+
+        if (trainerStorageProvider.get().getTrainer().encounteredMonsterTypes().contains(monsterTypeDto.id())) {
+            monsterImageView.setOpacity(1.0);
+            monsterNameLabel.setText(monsterTypeDto.name());
+        } else {
+            monsterImageView.setOpacity(0.2);
+            monsterNameLabel.setText("???");
+            monsterDescriptionTextArea.setText("???");
+        }
+
+        monsterDescriptionTextFlow.getChildren().add(monsterDescriptionTextArea);
+
+        if (!GraphicsEnvironment.isHeadless()) {
+            // setting monster image
+            monsterImageView.setImage(monsterStorageProvider.get().getMonsterImage(monsterTypeDto.id()));
+
+            // setting type images
+            String typeImagePath1 = ABILITYPALETTE.get(monsterTypeDto.type().get(0));
+            URL resourceType1 = Main.class.getResource("images/" + typeImagePath1);
+            assert resourceType1 != null;
+            Image typeImage1 = new Image(resourceType1.toString());
+            firstTypeImageView.setImage(typeImage1);
+
+            if (monsterTypeDto.type().size() > 1) {
+                String typeImagePath2 = ABILITYPALETTE.get(monsterTypeDto.type().get(1));
+                URL resourceType2 = Main.class.getResource("images/" + typeImagePath2);
+                assert resourceType2 != null;
+                Image typeImage2 = new Image(resourceType2.toString());
+                secondTypeImageView.setImage(typeImage2);
+            } else {
+                secondTypeImageView.setImage(null);
+            }
+        }
+
+        showMondexDetails(true);
     }
 }

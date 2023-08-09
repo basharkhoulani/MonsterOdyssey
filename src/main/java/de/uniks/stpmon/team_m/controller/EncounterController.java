@@ -91,6 +91,8 @@ public class EncounterController extends Controller {
     @Inject
     Provider<ItemStorage> itemStorageProvider;
     @Inject
+    Provider<MonsterStorage> monsterStorageProvider;
+    @Inject
     Provider<MonstersDetailController> monstersDetailControllerProvider;
     @Inject
     Provider<ChangeMonsterListController> changeMonsterListControllerProvider;
@@ -435,10 +437,10 @@ public class EncounterController extends Controller {
                     battleDialogText.setText(resources.getString("ENCOUNTER_DESCRIPTION_BEGIN") + " " + m.name());
                 }
             }, Throwable::printStackTrace));
-            disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER).subscribe(mImage -> {
-                enemyMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
+            if (monsterStorageProvider.get().imagesAlreadyFetched()) {
+                enemyMonsterImage = monsterStorageProvider.get().getMonsterImage(monster.type());
                 encounterOpponentController.setMonsterImage(enemyMonsterImage);
-            }, Throwable::printStackTrace));
+            }
         }, Throwable::printStackTrace));
     }
 
@@ -478,10 +480,10 @@ public class EncounterController extends Controller {
                 encounterOpponentController.setMonsterNameLabel(m.name());
                 encounterOpponentStorage.addCurrentMonsterType(opponent._id(), m);
             }, Throwable::printStackTrace));
-            disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER).subscribe(mImage -> {
-                Image myMonsterImage = ImageProcessor.resonseBodyToJavaFXImage(mImage);
+            if (monsterStorageProvider.get().imagesAlreadyFetched()) {
+                Image myMonsterImage = monsterStorageProvider.get().getMonsterImage(monster.type());
                 encounterOpponentController.setMonsterImage(myMonsterImage);
-            }, Throwable::printStackTrace));
+            }
         }, Throwable::printStackTrace));
     }
 
@@ -806,37 +808,39 @@ public class EncounterController extends Controller {
     private void listenToMonster(String trainerId, String monsterId, EncounterOpponentController encounterOpponentController, Opponent opponent) {
         disposables.add(eventListener.get().listen("trainers." + trainerId + ".monsters." + monsterId + ".*", Monster.class).observeOn(FX_SCHEDULER).subscribe(event -> {
             final Monster monster = event.data();
-            if (monster._id().equals(encounterOpponentStorage.getSelfOpponent().monster())) {
-                if (monster.currentAttributes().health() / monster.attributes().health() <= 0.2) {
-                    if (!GraphicsEnvironment.isHeadless()) {
-                        AudioService.getInstance().playEffect(LOW_HEALTH, ingameControllerProvider.get());
+            if (monster != null) {
+                if (monster._id().equals(encounterOpponentStorage.getSelfOpponent().monster())) {
+                    if (monster.currentAttributes().health() / monster.attributes().health() <= 0.2) {
+                        if (!GraphicsEnvironment.isHeadless()) {
+                            AudioService.getInstance().playEffect(LOW_HEALTH, ingameControllerProvider.get());
+                        }
                     }
                 }
-            }
-            if (event.suffix().contains("updated")) {
-                double currentHealth = monster.currentAttributes().health();
-                double maxHealth = monster.attributes().health();
-                if (!GraphicsEnvironment.isHeadless()) {
-                    AnimationBuilder.buildShakeAnimation(encounterOpponentController.monsterImageView, 50, 3, 1).play();
-                    if (currentHealth > 0) {
-                        AnimationBuilder.buildProgressBarAnimation(encounterOpponentController.HealthBar, 1500, monster.currentAttributes().health() / monster.attributes().health()).play();
+                if (event.suffix().contains("updated")) {
+                    double currentHealth = monster.currentAttributes().health();
+                    double maxHealth = monster.attributes().health();
+                    if (!GraphicsEnvironment.isHeadless()) {
+                        AnimationBuilder.buildShakeAnimation(encounterOpponentController.monsterImageView, 50, 3, 1).play();
+                        if (currentHealth > 0) {
+                            AnimationBuilder.buildProgressBarAnimation(encounterOpponentController.HealthBar, 1500, monster.currentAttributes().health() / monster.attributes().health()).play();
+                        } else {
+                            encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());
+                        }
                     } else {
                         encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());
                     }
-                } else {
-                    encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());
-                }
-                encounterOpponentController
-                        .setHealthLabel(formatter.format(currentHealth) + "/" + formatter.format(maxHealth) + " HP")
-                        .setLevelLabel("LVL " + monster.level())
-                        .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
-                // TODO： add for refreshing the status im team
-                if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
-                    encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);
-                    // if health is 0, then add to the team the information that the monster is died.
-                    // if the type of the monster changed, then make a server call and update in the opponent storage
-                    if (currentHealth == 0) {
-                        monsterInTeamHashMap.put(monster._id(), true);
+                    encounterOpponentController
+                            .setHealthLabel(formatter.format(currentHealth) + "/" + formatter.format(maxHealth) + " HP")
+                            .setLevelLabel("LVL " + monster.level())
+                            .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
+                    // TODO： add for refreshing the status im team
+                    if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
+                        encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);
+                        // if health is 0, then add to the team the information that the monster is died.
+                        // if the type of the monster changed, then make a server call and update in the opponent storage
+                        if (currentHealth == 0) {
+                            monsterInTeamHashMap.put(monster._id(), true);
+                        }
                     }
                 }
             }

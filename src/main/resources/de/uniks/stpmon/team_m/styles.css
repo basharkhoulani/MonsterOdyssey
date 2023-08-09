@@ -577,6 +577,11 @@
 .boldFont {
     -fx-font-weight: bold;
 }
+
+.monsterListBackground {
+    -fx-background-color: #CFE9DB;
+    -fx-control-inner-background: #b8d0c0;
+}
 .wrappedButton {
     -fx-wrap-text: true;
 }
