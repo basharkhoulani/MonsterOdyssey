@@ -15,9 +15,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
-import okhttp3.MediaType;
 import okhttp3.ResponseBody;
-import okio.BufferedSource;
 
 import java.util.List;
 import java.util.Locale;
