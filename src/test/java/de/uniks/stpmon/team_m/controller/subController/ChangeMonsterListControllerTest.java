@@ -38,8 +38,6 @@ public class ChangeMonsterListControllerTest extends ApplicationTest {
     @Mock
     Provider<EncounterOpponentStorage> encounterOpponentStorageProvider;
     @Mock
-    Provider<PresetsService> presetsServiceProvider;
-    @Mock
     Provider<MonsterStorage> monsterStorageProvider;
 
     @Override
