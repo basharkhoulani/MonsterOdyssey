@@ -76,9 +76,9 @@ public class MonsterLocationsController extends Controller {
 <span class="nc" id="L76">        }</span>
 <span class="nc" id="L77">        layerMinimap.objects().forEach(tileObject -&gt; {</span>
             // filter for monster
-<span class="nc bnc" id="L79" title="All 2 branches missed.">            if (tileObject.properties().size() &gt; 1) {</span>
-<span class="nc bnc" id="L80" title="All 2 branches missed.">                if (tileObject.properties().get(1).name().equals(MONSTERS)) {</span>
-<span class="nc" id="L81">                    String string = tileObject.properties().get(1).value();</span>
+<span class="nc" id="L79">            tileObject.properties().forEach(tileProperty -&gt; {</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">                if (tileProperty.name().equals(MONSTERS)) {</span>
+<span class="nc" id="L81">                    String string = tileProperty.value();</span>
 <span class="nc bnc" id="L82" title="All 2 branches missed.">                    if (string.startsWith(&quot;[&quot;)) {</span>
 <span class="nc" id="L83">                        string = string.substring(1, string.length() - 1);</span>
                     }
@@ -110,7 +110,7 @@ public class MonsterLocationsController extends Controller {
 <span class="nc" id="L110">                        mapContainer.getChildren().add(location);</span>
                     }
                 }
-            }
+<span class="nc" id="L113">            });</span>
 <span class="nc" id="L114">        });</span>
 <span class="nc bnc" id="L115" title="All 2 branches missed.">        if (knownLocations[0]) {</span>
 <span class="nc" id="L116">            monsterLocations.setText(monsterTypeDto.name() + &quot; &quot; + resources.getString(&quot;CAN.BE.FOUND.IN.THE.HIGHLIGHTED.LOCATIONS&quot;) + &quot;\n\n\n&quot;);</span>
