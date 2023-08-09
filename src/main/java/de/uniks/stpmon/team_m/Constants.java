@@ -91,7 +91,7 @@ public class Constants {
     public static final int TRAINER_DIRECTION_LEFT = 2;
     public static final int TRAINER_DIRECTION_DOWN = 3;
     public static final String OBJECTGROUP = "objectgroup";
-
+    public static final String MONSTERS = "Monsters";
 
     public static final String SETTINGSYMBOL2 = "images/SettingSymbol2.png";
     public static final String GOBACKSYMBOL = "images/GoBackSymbol.png";

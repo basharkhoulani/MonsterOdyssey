@@ -6,7 +6,6 @@ import de.uniks.stpmon.team_m.dto.Layer;
 import de.uniks.stpmon.team_m.dto.Map;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
@@ -20,7 +19,6 @@ import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -61,10 +59,9 @@ public class MonsterLocationsController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
 
-        header.setText("Monster Locations");
+        header.setText(resources.getString("MONSTER.LOCATIONS"));
 
-        //Text monsterLocations = new Text(monsterTypeDto.name() + " can be found in the highlighted locations\n\n\n");
-        Text monsterLocations = new Text("There are no known locations for " + monsterTypeDto.name() + "\n\n\n");
+        Text monsterLocations = new Text(resources.getString("THERE.ARE.NO.KNOWN.LOCATIONS.FOR") + " " + monsterTypeDto.name());
         mapTextFlow.getChildren().add(monsterLocations);
         final boolean[] knownLocations = {false};
 
@@ -80,7 +77,7 @@ public class MonsterLocationsController extends Controller {
         layerMinimap.objects().forEach(tileObject -> {
             // filter for monster
             if (tileObject.properties().size() > 1) {
-                if (tileObject.properties().get(1).name().equals("Monsters")) {
+                if (tileObject.properties().get(1).name().equals(MONSTERS)) {
                     String string = tileObject.properties().get(1).value();
                     if (string.startsWith("[")) {
                         string = string.substring(1, string.length() - 1);
@@ -116,7 +113,7 @@ public class MonsterLocationsController extends Controller {
             }
         });
         if (knownLocations[0]) {
-            monsterLocations.setText(monsterTypeDto.name() + " can be found in the highlighted locations\n\n\n");
+            monsterLocations.setText(monsterTypeDto.name() + " " + resources.getString("CAN.BE.FOUND.IN.THE.HIGHLIGHTED.LOCATIONS") + "\n\n\n");
         }
         miniMapImageView.setFitHeight(miniMapCanvas.getHeight());
         miniMapImageView.setFitWidth(miniMapCanvas.getWidth());
