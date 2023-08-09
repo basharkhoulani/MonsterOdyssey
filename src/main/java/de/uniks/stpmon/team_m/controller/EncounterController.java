@@ -37,7 +37,7 @@ import static de.uniks.stpmon.team_m.Constants.SoundEffect.*;
 public class EncounterController extends Controller {
     private final List<Controller> subControllers = new ArrayList<>();
     private final List<AbilityDto> abilityDtos = new ArrayList<>();
-    public HashMap<Integer, ItemTypeDto> itemTypeDtos = new HashMap<>();
+    public final HashMap<Integer, ItemTypeDto> itemTypeDtos = new HashMap<>();
     private final HashMap<String, Opponent> opponentsUpdate = new HashMap<>();
     private final HashMap<String, Opponent> opponentsDelete = new HashMap<>();
     private final HashMap<String, Boolean> monsterInEncounterHashMap = new HashMap<>();

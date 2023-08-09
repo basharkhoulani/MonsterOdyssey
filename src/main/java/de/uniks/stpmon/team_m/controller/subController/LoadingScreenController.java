@@ -29,11 +29,6 @@ public class LoadingScreenController extends Controller {
     }
 
     @Override
-    public void init() {
-        super.init();
-    }
-
-    @Override
     public Parent render() {
         Parent parent = super.render();
         //loadingScreenRootBorderPane.setStyle("-fx-background-color: lightgray; -fx-background-radius: 10;" );

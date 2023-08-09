@@ -12,7 +12,7 @@ import java.util.List;
 
 @Singleton
 public class ItemStorage {
-    List<ItemData> itemDataList;
+    final List<ItemData> itemDataList;
 
     @Inject
     public ItemStorage() {

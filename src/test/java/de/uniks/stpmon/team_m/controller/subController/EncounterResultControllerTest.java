@@ -28,6 +28,7 @@ import static org.mockito.Mockito.*;
 class EncounterResultControllerTest extends ApplicationTest {
 
     @Spy
+    final
     App app = new App(null);
 
     @InjectMocks

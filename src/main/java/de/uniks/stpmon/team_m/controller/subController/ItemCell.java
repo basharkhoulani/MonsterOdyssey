@@ -57,7 +57,7 @@ public class ItemCell extends ListCell<Item> {
     @FXML
     public HBox itemHBox;
     private Image itemImage;
-    VBox itemDescriptionBox;
+    final VBox itemDescriptionBox;
     ItemTypeDto itemTypeDto;
 
     public ItemCell(PresetsService presetsService,

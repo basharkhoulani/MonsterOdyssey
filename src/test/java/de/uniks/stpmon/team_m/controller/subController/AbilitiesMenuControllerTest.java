@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AbilitiesMenuControllerTest extends ApplicationTest {
     @Spy
-    App app = new App(null);
+    final App app = new App(null);
 
     @InjectMocks
     AbilitiesMenuController abilitiesMenuController;

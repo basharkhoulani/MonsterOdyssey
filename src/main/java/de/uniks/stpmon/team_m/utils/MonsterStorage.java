@@ -14,7 +14,7 @@ import java.util.List;
 
 @Singleton
 public class MonsterStorage {
-    List<MonsterData> monsterDataList;
+    final List<MonsterData> monsterDataList;
     private List<MonsterTypeDto> monsterTypeDtoList;
     private final HashMap<Integer, Image> monsterImageHashMap;
 

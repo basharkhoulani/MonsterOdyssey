@@ -53,7 +53,7 @@ public class ItemMenuController extends Controller {
     IngameController ingameController;
     private InventoryType inventoryType;
     private List<Integer> npcItemList;
-    public HashMap<Integer, ItemTypeDto> itemTypeHashMap = new HashMap<>();
+    public final HashMap<Integer, ItemTypeDto> itemTypeHashMap = new HashMap<>();
     private StackPane rootStackPane;
     private EncounterController encounterController;
 
