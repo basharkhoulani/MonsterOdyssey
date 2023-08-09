@@ -87,8 +87,6 @@ public class MonstersListController extends Controller {
     @Inject
     Provider<MonsterStorage> monsterStorageProvider;
     @Inject
-    Provider<MonsterTypeDtoStorage> monsterTypeDtoStorageProvider;
-    @Inject
     public UserStorage usersStorage;
     @Inject
     public Provider<PresetsService> presetsServiceProvider;

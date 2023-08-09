@@ -53,7 +53,6 @@ public class MondexCell extends ListCell<MonsterTypeDto> {
                 monsterNameLabel.setText(monsterTypeDto.name());
             } else {
                 if (!GraphicsEnvironment.isHeadless()) {
-                    System.out.println(monsterStorage.getMonsterImage(monsterTypeDto.id()));
                     monsterImageView.setOpacity(0.2);
                     Platform.runLater(() -> monsterImageView.setImage(monsterStorage.getMonsterImage(monsterTypeDto.id())));
                 }

@@ -196,7 +196,7 @@ class EncounterControllerTest extends ApplicationTest {
                 List.of()
         );
         when(monstersService.getMonster(anyString(), any(), anyString())).thenReturn(Observable.just(monster));
-        
+
         lenient().doNothing().when(battleMenuController).setTrainerSpriteImageView(any(), any(), anyInt());
 
         lenient().when(presetsService.getCharacter(any())).thenReturn(new Observable<>() {
