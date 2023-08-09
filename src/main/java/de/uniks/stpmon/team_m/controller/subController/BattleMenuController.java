@@ -4,7 +4,6 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -43,7 +42,7 @@ public class BattleMenuController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
         fleeButton.setVisible(encounterOpponentStorage.isWild());
-        fleeButton.setOnAction(this::changeToIngame);
+        fleeButton.setOnAction(event -> changeToIngame());
         return parent;
     }
 
@@ -58,7 +57,7 @@ public class BattleMenuController extends Controller {
 
 
 
-    public void changeToIngame(ActionEvent event) {
+    public void changeToIngame() {
         if (onFleeButtonClick != null) {
             onFleeButtonClick.run();
         }
@@ -66,7 +65,7 @@ public class BattleMenuController extends Controller {
 
     public void showFleeButton(boolean isWild) {
         fleeButton.setVisible(isWild);
-        fleeButton.setOnAction(this::changeToIngame);
+        fleeButton.setOnAction(event -> changeToIngame());
     }
 
     public void buttonDisable(boolean isDisable) {
