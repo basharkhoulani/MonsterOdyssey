@@ -4,6 +4,7 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.controller.subController.CharacterSelectionController;
 import de.uniks.stpmon.team_m.dto.Region;
+import de.uniks.stpmon.team_m.dto.Settings;
 import de.uniks.stpmon.team_m.service.AudioService;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
@@ -81,6 +82,12 @@ public class WelcomeSceneController extends Controller {
 
     @Inject
     AudioService audioService;
+    RadioButton hardcoreButton;
+    CheckBox permanentCheckBox;
+    CheckBox deleteTrainerCheckBox;
+    CheckBox itemExpensiveCheckBox;
+    Slider slider;
+    RadioButton normalButton;
 
     @Inject
     public WelcomeSceneController() {
@@ -117,7 +124,15 @@ public class WelcomeSceneController extends Controller {
             welcomeSceneMonster2ImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(MONSTER_2_COLOR)).toString()));
         }
 
-        nextButton.setOnAction(event -> changeCount(true));
+        nextButton.setOnAction(event -> {
+            if (normalButton != null && hardcoreButton != null) {
+                if (normalButton.isSelected() || hardcoreButton.isSelected()) {
+                    changeCount(true);
+                }
+            } else {
+                changeCount(true);
+            }
+        });
         previousButton.setOnAction(event -> changeCount(false));
         return parent;
     }
@@ -226,14 +241,14 @@ public class WelcomeSceneController extends Controller {
                 ToggleGroup toggleGroup = new ToggleGroup();
 
                 HBox normalBox = new HBox();
-                RadioButton normalButton = new RadioButton();
+                normalButton = new RadioButton();
                 normalButton.setPadding(new Insets(EIGHT, 0, 0, TEN));
                 normalButton.setText(resources.getString("NORMAL"));
                 normalButton.setToggleGroup(toggleGroup);
                 normalBox.getChildren().add(normalButton);
 
                 HBox hardcoreBox = new HBox();
-                RadioButton hardcoreButton = new RadioButton();
+                hardcoreButton = new RadioButton();
                 hardcoreButton.setPadding(new Insets(EIGHT, 0, 0, TEN));
                 hardcoreButton.setText(resources.getString("HARDCORE"));
                 hardcoreButton.setToggleGroup(toggleGroup);
@@ -251,34 +266,68 @@ public class WelcomeSceneController extends Controller {
                 normalButton.setOnAction(event -> removeHardcoreSettings());
             }
             case 9 -> {
-                firstMessage.setText(resources.getString("TENTH.MESSAGE"));
-                secondMessage.setText(resources.getString("ELEVENTH.MESSAGE"));
-                secondMessage.setWrapText(true);
-                secondMessage.setPrefWidth(200);
-            }
-            case 10 -> {
                 Region region = trainerStorage.getRegion();
-                disposables.add(trainersServiceProvider.get().createTrainer(
-                        region._id(),
-                        trainerStorage.getTrainerName(),
-                        trainerStorage.getTrainerSprite()
-                ).observeOn(FX_SCHEDULER).subscribe(result -> {
-                            trainerStorage.setTrainer(result);
-                            disposables.add(presetsServiceProvider.get().getCharacter(result.image()).observeOn(FX_SCHEDULER).subscribe(
-                                    response -> {
-                                        if (!GraphicsEnvironment.isHeadless()) {
-                                            trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
+                if (hardcoreButton != null && hardcoreButton.isSelected()) {
+                    boolean permaDeath = false;
+                    boolean monsterPermaDeath = false;
+                    Double itemPriceMultiplier;
+                    if (permanentCheckBox != null) {
+                        monsterPermaDeath = permanentCheckBox.isSelected();
+                    }
+                    if (deleteTrainerCheckBox != null) {
+                        permaDeath = deleteTrainerCheckBox.isSelected();
+                    }
+                    if (slider != null) {
+                        itemPriceMultiplier = slider.getValue();
+                    } else {
+                        itemPriceMultiplier = null;
+                    }
+                    disposables.add(trainersServiceProvider.get().createTrainer(
+                            region._id(),
+                            trainerStorage.getTrainerName(),
+                            trainerStorage.getTrainerSprite(),
+                            new Settings(permaDeath, monsterPermaDeath, itemPriceMultiplier)
+                    ).observeOn(FX_SCHEDULER).subscribe(result -> {
+                                trainerStorage.setTrainer(result);
+                                disposables.add(presetsServiceProvider.get().getCharacter(result.image()).observeOn(FX_SCHEDULER).subscribe(
+                                        response -> {
+                                            if (!GraphicsEnvironment.isHeadless()) {
+                                                trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
+                                            }
+                                            ingameControllerProvider.get().setIsNewStart(true);
+                                            app.show(ingameControllerProvider.get());
+                                        },
+                                        error -> {
+                                            showError(error.getMessage());
+                                            error.printStackTrace();
                                         }
-                                        ingameControllerProvider.get().setIsNewStart(true);
-                                        app.show(ingameControllerProvider.get());
-                                    },
-                                    error -> {
-                                        showError(error.getMessage());
-                                        error.printStackTrace();
-                                    }
-                            ));
-                        }, error -> showError(error.getMessage())
-                ));
+                                ));
+                            }, error -> showError(error.getMessage())
+                    ));
+                } else {
+                    disposables.add(trainersServiceProvider.get().createTrainer(
+                            region._id(),
+                            trainerStorage.getTrainerName(),
+                            trainerStorage.getTrainerSprite(),
+                            null
+                    ).observeOn(FX_SCHEDULER).subscribe(result -> {
+                                trainerStorage.setTrainer(result);
+                                disposables.add(presetsServiceProvider.get().getCharacter(result.image()).observeOn(FX_SCHEDULER).subscribe(
+                                        response -> {
+                                            if (!GraphicsEnvironment.isHeadless()) {
+                                                trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));
+                                            }
+                                            ingameControllerProvider.get().setIsNewStart(true);
+                                            app.show(ingameControllerProvider.get());
+                                        },
+                                        error -> {
+                                            showError(error.getMessage());
+                                            error.printStackTrace();
+                                        }
+                                ));
+                            }, error -> showError(error.getMessage())
+                    ));
+                }
             }
         }
 
@@ -321,18 +370,18 @@ public class WelcomeSceneController extends Controller {
 
             warningBox.getChildren().addAll(warningImageView1, warningLabel, warningImageView2);
 
-            CheckBox permanentCheckBox = new CheckBox();
+            permanentCheckBox = new CheckBox();
             permanentCheckBox.setText(resources.getString("PERMANENT.TEXT"));
             permanentCheckBox.setPadding(new Insets(TEN, 0, 0, FIVE));
             permanentBox.getChildren().add(permanentCheckBox);
 
-            CheckBox deleteTrainerCheckBox = new CheckBox();
+            deleteTrainerCheckBox = new CheckBox();
             deleteTrainerCheckBox.setText(resources.getString("DELETE.TRAINER.CHECK"));
             deleteTrainerCheckBox.getStyleClass().add("wrappedButton");
             deleteTrainerCheckBox.setPadding(new Insets(EIGHT, 0, 0, FIVE));
             deleteTrainerBox.getChildren().add(deleteTrainerCheckBox);
 
-            CheckBox itemExpensiveCheckBox = new CheckBox();
+            itemExpensiveCheckBox = new CheckBox();
             itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString("ITEM.EXPENSIVE"), 1));
             itemExpensiveCheckBox.getStyleClass().add("wrappedButton");
             itemExpensiveCheckBox.setPadding(new Insets(EIGHT, 0, 0, FIVE));
@@ -341,7 +390,7 @@ public class WelcomeSceneController extends Controller {
 
             itemExpensiveCheckBox.setOnAction(event -> {
                 if (!hardcoreSettingsBox.getChildren().contains(sliderBox)) {
-                    Slider slider = new Slider(1, 3, 1);
+                    slider = new Slider(1, 3, 1);
                     slider.setPrefWidth(SLIDER_WIDTH);
                     slider.setPadding(new Insets(20, 0, 0, 20));
                     Label startLabel = new Label("x1");

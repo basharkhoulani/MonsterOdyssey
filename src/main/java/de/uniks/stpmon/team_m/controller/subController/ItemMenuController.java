@@ -147,13 +147,13 @@ public class ItemMenuController extends Controller {
     }
 
     public void initItem(Item item) {
-        itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider));
+        itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider, trainerStorageProvider.get()));
         if (ingameController != null) {
             ingameController.listenToItems(itemListView.getItems(), trainerStorageProvider.get().getTrainer()._id());
-            itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider));
+            itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider, trainerStorageProvider.get()));
         } else if (encounterController != null) {
             encounterController.getIngameController().listenToItems(itemListView.getItems(), trainerStorageProvider.get().getTrainer()._id());
-            itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, encounterController, itemStorageProvider));
+            itemListView.setCellFactory(param -> new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, encounterController, itemStorageProvider, trainerStorageProvider.get()));
         }
         itemListView.getItems().add(item);
         itemListView.setFocusModel(null);

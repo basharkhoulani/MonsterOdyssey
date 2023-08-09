@@ -69,7 +69,8 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
                 0,
                 0,
                 0,
-                new NPCInfo(false, false, false, false, null, null, null)));
+                new NPCInfo(false, false, false, false, null, null, null),
+                null));
         app.start(stage);
         app.show(trainerSettingsController);
         stage.requestFocus();
@@ -108,7 +109,8 @@ public class IngameTrainerSettingsControllerTest extends ApplicationTest {
                 0,
                 0,
                 0,
-                new NPCInfo(false, false, false, false, null, null, null))));
+                new NPCInfo(false, false, false, false, null, null, null),
+                null)));
 
         doNothing().when(app).show(mainMenuController);
         clickOn("#deleteTrainerButton");

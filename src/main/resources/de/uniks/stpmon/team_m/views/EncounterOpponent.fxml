@@ -1,45 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="650.0" minHeight="-Infinity" minWidth="-Infinity"
-      xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController">
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="650.0" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController">
    <HBox fx:id="opponentHBox" alignment="CENTER" VBox.vgrow="ALWAYS">
       <VBox fx:id="monsterInfoBox" alignment="CENTER" HBox.hgrow="ALWAYS">
          <padding>
-            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
          </padding>
-         <HBox prefWidth="320.0">
+         <HBox alignment="CENTER" prefHeight="40.0" prefWidth="301.0">
             <VBox.margin>
-               <Insets top="8.0"/>
+               <Insets top="8.0" />
             </VBox.margin>
-            <ImageView fx:id="paralysedImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"
-                       visible="false"/>
-            <ImageView fx:id="asleepImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"
-                       visible="false"/>
-            <ImageView fx:id="poisonedImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"
-                       visible="false"/>
-            <ImageView fx:id="burnedImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"
-                       visible="false"/>
-            <ImageView fx:id="frozenImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"
-                       visible="false"/>
-            <ImageView fx:id="confusedImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true"
-                       visible="false"/>
+            <ImageView fx:id="paralysedImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+            <ImageView fx:id="asleepImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+            <ImageView fx:id="poisonedImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+            <ImageView fx:id="burnedImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+            <ImageView fx:id="frozenImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+            <ImageView fx:id="confusedImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+            <ImageView fx:id="stunnedImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />
          </HBox>
          <HBox alignment="CENTER_LEFT">
             <ImageView fx:id="starImageView" fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
-                  <Insets/>
+                  <Insets />
                </HBox.margin>
             </ImageView>
-            <ProgressBar fx:id="experienceBar" maxWidth="300.0" minWidth="175.0" prefHeight="20.0" progress="0.88"
-                         styleClass="levelprogress-bar" HBox.hgrow="ALWAYS">
+            <ProgressBar fx:id="experienceBar" maxWidth="300.0" minWidth="175.0" prefHeight="20.0" progress="0.88" styleClass="levelprogress-bar" HBox.hgrow="ALWAYS">
                <HBox.margin>
-                  <Insets left="8.0" right="8.0"/>
+                  <Insets left="8.0" right="8.0" />
                </HBox.margin>
             </ProgressBar>
             <HBox alignment="CENTER" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="97.0" styleClass="hBoxRed">
@@ -86,12 +82,12 @@
                </HBox.margin>
                <Label fx:id="monsterNameLabel">
                   <font>
-                     <Font name="Comic Sans MS Bold" size="14.0"/>
+                     <Font name="Comic Sans MS Bold" size="14.0" />
                   </font>
                </Label>
             </HBox>
             <VBox.margin>
-               <Insets top="8.0"/>
+               <Insets top="8.0" />
             </VBox.margin>
          </HBox>
       </VBox>

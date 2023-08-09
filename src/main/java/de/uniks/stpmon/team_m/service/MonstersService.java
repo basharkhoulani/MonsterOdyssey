@@ -44,4 +44,17 @@ public class MonstersService {
     public Observable<Monster> getMonster(String regionId, String trainerId, String monsterId) {
         return monstersApiService.getMonster(regionId, trainerId, monsterId);
     }
+
+    /**
+     * deleteMonster deletes a specific monster of a region.
+     *
+     * @param regionId  The region of the monster.
+     * @param trainerId The trainer of the monster.
+     * @param monsterId The id of the monster.
+     * @return The monster.
+     */
+
+    public Observable<Monster> deleteMonster(String regionId, String trainerId, String monsterId) {
+        return monstersApiService.deleteMonster(regionId, trainerId, monsterId);
+    }
 }

@@ -59,7 +59,7 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
                 33,
                 18,
                 1,
-                null);
+                null, null);
 
         when(trainerStorageProvider.get().getTrainer()).thenReturn(trainer);
 

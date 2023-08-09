@@ -137,6 +137,7 @@ class EncounterBattleTest extends ApplicationTest {
                         33,
                         18,
                         1,
+                        null,
                         null
                 )
         );
@@ -278,6 +279,7 @@ class EncounterBattleTest extends ApplicationTest {
                         33,
                         18,
                         1,
+                        null,
                         null
                 )
         ));

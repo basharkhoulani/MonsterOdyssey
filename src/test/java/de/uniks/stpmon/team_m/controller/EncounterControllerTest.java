@@ -142,6 +142,7 @@ class EncounterControllerTest extends ApplicationTest {
                         33,
                         18,
                         1,
+                        null,
                         null
                 )
         );
@@ -266,6 +267,7 @@ class EncounterControllerTest extends ApplicationTest {
                         33,
                         18,
                         1,
+                        null,
                         null
                 )
         ));
