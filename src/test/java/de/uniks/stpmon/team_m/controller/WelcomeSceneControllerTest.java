@@ -52,28 +52,6 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
         final CharacterSelectionController characterSelectionController = mock(CharacterSelectionController.class);
         when(characterSelectionControllerProvider.get()).thenReturn(characterSelectionController);
         doNothing().when(app).show(characterSelectionController);
-        when(trainerStorage.getRegion()).thenReturn(new Region(
-                "2023-05-22T17:51:46.772Z",
-                "2023-05-22T17:51:46.772Z",
-                "646bc436cfee07c0e408466f",
-                "Albertina",
-                new Spawn("646bc3c0a9ac1b375fb41d93", 1, 1),
-                new Map(-1,
-                        true,
-                        1,
-                        1,
-                        "orthogonal",
-                        "right-down",
-                        "1.6.1",
-                        "map",
-                        "1.6",
-                        32,
-                        32,
-                        List.of(),
-                        16,
-                        16,
-                        List.of(),
-                        List.of())));
         final TrainersService trainersService = mock(TrainersService.class);
         when(trainersService.createTrainer(any(), any(), any())).thenReturn(Observable.just(new Trainer(
                 "2023-05-22T17:51:46.772Z",
