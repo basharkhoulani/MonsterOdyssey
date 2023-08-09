@@ -5,7 +5,8 @@ import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Area;
 import de.uniks.stpmon.team_m.dto.Layer;
-import de.uniks.stpmon.team_m.dto.Map;import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.dto.Map;
+import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -26,7 +27,6 @@ import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -135,7 +135,7 @@ public class IngameMiniMapController extends Controller {
                     newArea[0] = area;
                 }
             });
-            boolean discovered= discoveredLocations.contains(tileObject.name());
+            boolean discovered = discoveredLocations.contains(tileObject.name());
             // create locations
             double width;
             double height;
