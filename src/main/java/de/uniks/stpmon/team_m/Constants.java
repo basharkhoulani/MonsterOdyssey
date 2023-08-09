@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m;
 
 import javafx.geometry.Insets;
 
+import java.security.PublicKey;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -91,7 +92,7 @@ public class Constants {
     public static final int TRAINER_DIRECTION_LEFT = 2;
     public static final int TRAINER_DIRECTION_DOWN = 3;
     public static final String OBJECTGROUP = "objectgroup";
-
+    public static final String MONSTERS = "Monsters";
 
     public static final String SETTINGSYMBOL2 = "images/SettingSymbol2.png";
     public static final String GOBACKSYMBOL = "images/GoBackSymbol.png";
@@ -193,7 +194,7 @@ public class Constants {
     public static final String CHANGE_MONSTER = "change-monster";
     public static final String USE_ITEM = "use-item";
     public static final String ITEM_FAILED = "item-failed";
-    public static final String ITEM_SUCCESS= "item-success";
+    public static final String ITEM_SUCCESS = "item-success";
     public static final String MONSTER_CAUGHT = "monster-caught";
 
 
@@ -311,8 +312,9 @@ public class Constants {
     public static final String BURNED = "burned";
     public static final String FROZEN = "frozen";
     public static final String CONFUSED = "confused";
+    public static final String STUNNED = "stunned";
 
-    public static final List<String> STATUS_EFFECTS = Arrays.asList(PARALYSED, ASLEEP, POISONED, BURNED, FROZEN, CONFUSED);
+    public static final List<String> STATUS_EFFECTS = Arrays.asList(PARALYSED, ASLEEP, POISONED, BURNED, FROZEN, CONFUSED, STUNNED);
 
     public static final HashMap<String, String> STATUS_EFFECTS_IMAGES = new HashMap<>(Map.ofEntries(
             entry(PARALYSED, "images/paralysed.png"),
@@ -320,7 +322,8 @@ public class Constants {
             entry(POISONED, "images/poisoned.png"),
             entry(BURNED, "images/burned.png"),
             entry(FROZEN, "images/frozen.png"),
-            entry(CONFUSED, "images/confused.png")
+            entry(CONFUSED, "images/confused.png"),
+            entry(STUNNED, "images/stunned.png")
     ));
 
 
@@ -357,4 +360,19 @@ public class Constants {
     public static final long CLEAR_FLIPPING = 0x0FFFFFFFL;
     public static final int ROTATE_90 = 90;
     public static final int FLIP_HORIZONTAL_OR_VERTICAL = -1;
+
+    public static final int GAMEMODEBOX_WIDTH = 260;
+    public static final int GAMEMODEBOX_HEIGHT = 110;
+    public static final int TITLEMODEBOX_HEIGHT = 36;
+    public static final int EIGHT = 8;
+    public static final int TEN = 10;
+    public static final int HARDCORESETTINGBOX_HEIGHT = 230;
+    public static final int IMAGEVIEW_SIZE = 35;
+    public static final int WARNING_PADDING_TOP = 5;
+    public static final int FIVE = 5;
+    public static final int WARNING_PADDING_RIGHT_LEFT = 55;
+    public static final int SLIDER_WIDTH = 200;
+
+    public static final double HARDCORE_TOP = 289.5;
+    public static final double HARDCORE_LEFT = 77.0;
 }

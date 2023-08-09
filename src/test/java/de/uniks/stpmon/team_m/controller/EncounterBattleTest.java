@@ -8,6 +8,7 @@ import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.service.RegionEncountersService;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
+import de.uniks.stpmon.team_m.utils.MonsterStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -58,6 +59,8 @@ class EncounterBattleTest extends ApplicationTest {
     EncounterOpponentStorage encounterOpponentStorage;
     @Mock
     Provider<TrainerStorage> trainerStorageProvider;
+    @Mock
+    Provider<MonsterStorage> monsterStorageProvider;
     // Controller
     @Spy
     BattleMenuController battleMenuController;
@@ -72,6 +75,10 @@ class EncounterBattleTest extends ApplicationTest {
 
         // Mock the situation for 1 vs 1
         when(encounterOpponentStorage.getEncounterSize()).thenReturn(2);
+
+        MonsterStorage monsterStorage = mock(MonsterStorage.class);
+        when(monsterStorageProvider.get()).thenReturn(monsterStorage);
+        when(monsterStorage.getMonsterImage(anyInt())).thenReturn(null);
 
         TrainerStorage trainerStorage = mock(TrainerStorage.class);
         when(trainerStorageProvider.get()).thenReturn(trainerStorage);
@@ -130,6 +137,7 @@ class EncounterBattleTest extends ApplicationTest {
                         33,
                         18,
                         1,
+                        null,
                         null
                 )
         );
@@ -202,8 +210,6 @@ class EncounterBattleTest extends ApplicationTest {
                 .thenReturn(Observable.just(selfMonster))
                 .thenReturn(Observable.just(enemyMonster));
 
-        when(presetsService.getMonsterImage(1)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
-
         lenient().doNothing().when(battleMenuController).setTrainerSpriteImageView(any(), any(), anyInt());
 
         lenient().when(presetsService.getCharacter(any())).thenReturn(new Observable<>() {
@@ -273,6 +279,7 @@ class EncounterBattleTest extends ApplicationTest {
                         33,
                         18,
                         1,
+                        null,
                         null
                 )
         ));

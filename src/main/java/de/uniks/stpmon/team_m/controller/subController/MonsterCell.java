@@ -159,15 +159,11 @@ public class MonsterCell extends ListCell<Monster> {
                 monsterImageView.setImage(monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage());
                 this.monsterImage = monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage();
             } else {
-                disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER)
-                        .subscribe(monsterImage -> {
-                            if (!GraphicsEnvironment.isHeadless()) {
-                                this.monsterImage = ImageProcessor.resonseBodyToJavaFXImage(monsterImage);
-                                monsterStorageProvider.get().updateMonsterData(monster, null, this.monsterImage);
-                                monsterImageView.setImage(this.monsterImage);
-                            }
-                        }, error -> {
-                        }));
+                if (!GraphicsEnvironment.isHeadless()) {
+                    this.monsterImage = monsterStorageProvider.get().getMonsterImage(monster.type());
+                    monsterStorageProvider.get().updateMonsterData(monster, null, this.monsterImage);
+                    monsterImageView.setImage(this.monsterImage);
+                }
             }
             viewDetailsButton.setOnAction(event -> showDetails(monster, type.toString()));
             if (encounterController == null) {
@@ -190,7 +186,7 @@ public class MonsterCell extends ListCell<Monster> {
                 arrowDown.setDisable(true);
                 removeFromTeamButton.setStyle("-fx-background-color: #D6E8FE; -fx-border-color: #7EA5C7;");
 
-                if(item == null){
+                if (item == null) {
                     removeFromTeamButton.setText(resources.getString("CHANGE.MONSTER"));
 
                     removeFromTeamButton.setOnAction(event -> {

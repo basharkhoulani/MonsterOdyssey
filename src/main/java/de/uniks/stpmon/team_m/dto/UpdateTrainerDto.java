@@ -7,6 +7,6 @@ public record UpdateTrainerDto(
         String image,
         List<String> team,
         String area,
-        List<String> settings
+        Settings settings
 ) {
 }

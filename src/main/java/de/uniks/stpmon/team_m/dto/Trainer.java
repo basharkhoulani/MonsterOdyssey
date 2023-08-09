@@ -18,6 +18,7 @@ public record Trainer(
         int x,
         int y,
         int direction,
-        NPCInfo npc
+        NPCInfo npc,
+        Settings settings
 ) {
 }

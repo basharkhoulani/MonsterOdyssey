@@ -21,7 +21,6 @@ public class TrainerStorage {
     private String trainerImageUrl;
     private Image trainerSpriteChunk;
     private List<Monster> monsters;
-    private List<MonsterTypeDto> monsterTypes;
     private List<Item> items;
 
     @Inject

@@ -10,6 +10,7 @@ import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.ItemStorage;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -41,6 +42,7 @@ public class ItemCell extends ListCell<Item> {
     private final StackPane rootStackPane;
     private final IngameController ingameController;
     private final Provider<ItemStorage> itemStorageProvider;
+    private final TrainerStorage trainerStorage;
     private EncounterController encounterController;
     private FXMLLoader loader;
     protected final CompositeDisposable disposables = new CompositeDisposable();
@@ -68,7 +70,8 @@ public class ItemCell extends ListCell<Item> {
                     Runnable closeItemMenu,
                     StackPane rootStackPane,
                     IngameController ingameController,
-                    Provider<ItemStorage> itemStorageProvider
+                    Provider<ItemStorage> itemStorageProvider,
+                    TrainerStorage trainerStorage
     ) {
         this.presetsService = presetsService;
         this.itemDescriptionBox = itemDescriptionBox;
@@ -82,6 +85,7 @@ public class ItemCell extends ListCell<Item> {
         this.ingameController = ingameController;
         this.itemStorageProvider = itemStorageProvider;
         this.encounterController = null;
+        this.trainerStorage = trainerStorage;
     }
 
     public ItemCell(PresetsService presetsService,
@@ -94,7 +98,8 @@ public class ItemCell extends ListCell<Item> {
                     Runnable closeItemMenu,
                     StackPane rootStackPane,
                     EncounterController encounterController,
-                    Provider<ItemStorage> itemStorageProvider
+                    Provider<ItemStorage> itemStorageProvider,
+                    TrainerStorage trainerStorage
     ) {
         this.presetsService = presetsService;
         this.itemDescriptionBox = itemDescriptionBox;
@@ -108,6 +113,7 @@ public class ItemCell extends ListCell<Item> {
         this.encounterController = encounterController;
         this.itemStorageProvider = itemStorageProvider;
         this.ingameController = null;
+        this.trainerStorage = trainerStorage;
     }
 
     public void updateItem(Item item, boolean empty) {
@@ -183,7 +189,7 @@ public class ItemCell extends ListCell<Item> {
         if (ingameController != null) {
             itemDescriptionController.init(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, ingameController, itemMenuController);
         } else if (encounterController != null) {
-            itemDescriptionController.initFromEncounter(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, encounterController);
+            itemDescriptionController.initFromEncounter(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, encounterController, trainerStorage);
         }
         if (itemDescriptionBox.getChildren().size() != 0) {
             itemDescriptionBox.getChildren().clear();

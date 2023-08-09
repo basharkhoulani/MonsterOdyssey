@@ -6,6 +6,7 @@ import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
+import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.dto.UpdateItemDto;
 import de.uniks.stpmon.team_m.service.AudioService;
 import de.uniks.stpmon.team_m.service.TrainerItemsService;
@@ -97,7 +98,8 @@ public class ItemDescriptionController extends Controller {
                                   int ownAmountOfITem,
                                   Runnable closeItemMenu,
                                   StackPane rootStackPane,
-                                  EncounterController encounterController) {
+                                  EncounterController encounterController,
+                                  TrainerStorage trainerStorage) {
         super.init();
         this.itemImage = itemImage;
         this.itemTypeDto = itemTypeDto;
@@ -107,6 +109,7 @@ public class ItemDescriptionController extends Controller {
         this.closeItemMenu = closeItemMenu;
         this.rootStackPane = rootStackPane;
         this.encounterController = encounterController;
+        this.trainerStorage = trainerStorage;
     }
 
     @Override
@@ -114,7 +117,12 @@ public class ItemDescriptionController extends Controller {
         final Parent parent = super.render();
         itemImageView.setImage(itemImage);
         itemAmountLabel.setText(String.valueOf(item.amount()));
-        itemPriceLabel.setText(String.valueOf(itemTypeDto.price()));
+        Trainer trainer = trainerStorage.getTrainer();
+        if (trainer.settings() != null && trainer.settings().itemPriceMultiplier() != null) {
+            itemPriceLabel.setText(String.valueOf((int) (itemTypeDto.price() * trainer.settings().itemPriceMultiplier())));
+        } else {
+            itemPriceLabel.setText(String.valueOf(itemTypeDto.price()));
+        }
 
         Text description = new Text(itemTypeDto.description());
         itemDescription.getChildren().add(description);
@@ -158,6 +166,7 @@ public class ItemDescriptionController extends Controller {
             case sellItems -> {
                 useButton.setText(resources.getString("CLERK.SELL"));
                 useButton.setOnAction(event -> sellItem());
+                itemPriceLabel.setText(String.valueOf((itemTypeDto.price() / 2)));
             }
             default -> {
             }
@@ -174,30 +183,94 @@ public class ItemDescriptionController extends Controller {
     }
 
     public void buyItem() {
-        if (Integer.parseInt(ingameController.coinsLabel.getText()) < itemTypeDto.price()) {
+        Trainer trainer = trainerStorage.getTrainer();
+        int trainerCoins = Integer.parseInt(ingameController.coinsLabel.getText());
+        if (trainer.settings() != null && trainer.settings().itemPriceMultiplier() != null) {
+            if (trainerCoins < (int) (itemTypeDto.price() * trainer.settings().itemPriceMultiplier())) {
+                descriptionLabel.setText(resources.getString("NOT.ENOUGH.COINS"));
+                descriptionLabel.setStyle("-fx-text-fill: red");
+                return;
+            }
+        } else if (trainerCoins < itemTypeDto.price()) {
             descriptionLabel.setText(resources.getString("NOT.ENOUGH.COINS"));
             descriptionLabel.setStyle("-fx-text-fill: red");
             return;
         }
-
-        disposables.add(trainerItemsService.useOrTradeItem(
-                trainerStorage.getRegion()._id(),
-                trainerStorage.getTrainer()._id(),
-                ITEM_ACTION_TRADE_ITEM,
-                new UpdateItemDto(1, item.type(), null)
-        ).observeOn(FX_SCHEDULER).subscribe(
-                result -> {
-                    trainerStorage.addItem(result);
-                    trainerStorage.updateItem(result);
-                    ownAmountOfItem++;
+        if (trainer.settings() != null && trainer.settings().itemPriceMultiplier() != null) {
+            int i;
+            double itemPriceMultiplier = trainer.settings().itemPriceMultiplier();
+            for (i = 1; itemPriceMultiplier > 1.0; i++) {
+                itemPriceMultiplier = itemPriceMultiplier - 0.5;
+            }
+            int finalI = i;
+            if (finalI * itemTypeDto.price() > Integer.parseInt(ingameController.coinsLabel.getText())) {
+                int canBuy = trainerCoins / itemTypeDto.price();
+                int buy = finalI - canBuy;
+                disposables.add(trainerItemsService.useOrTradeItem(
+                        trainer.region(),
+                        trainer._id(),
+                        ITEM_ACTION_TRADE_ITEM,
+                        new UpdateItemDto(canBuy, item.type(), null)
+                ).observeOn(FX_SCHEDULER).subscribe(result -> disposables.add(trainerItemsService.useOrTradeItem(
+                        trainer.region(),
+                        trainer._id(),
+                        ITEM_ACTION_TRADE_ITEM,
+                        new UpdateItemDto(-canBuy, item.type(), null)
+                ).observeOn(FX_SCHEDULER).subscribe(result1 -> disposables.add(trainerItemsService.useOrTradeItem(
+                        trainer.region(),
+                        trainer._id(),
+                        ITEM_ACTION_TRADE_ITEM,
+                        new UpdateItemDto(buy, item.type(), null)
+                ).observeOn(FX_SCHEDULER).subscribe(result2 -> {
+                    trainerStorage.addItem(result2);
+                    trainerStorage.updateItem(result2);
+                    ownAmountOfItem += buy;
                     this.itemAmountLabel.setText(String.valueOf(ownAmountOfItem));
 
-                    ingameController.coinsLabel.setText(String.valueOf(Integer.parseInt(ingameController.coinsLabel.getText()) - itemTypeDto.price()));
-                },
-                error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }));
+                    ingameController.coinsLabel.setText(String.valueOf(Integer.parseInt(ingameController.coinsLabel.getText()) - (int) (itemTypeDto.price() * trainer.settings().itemPriceMultiplier())));
+                }))))));
+            } else {
+                disposables.add(trainerItemsService.useOrTradeItem(
+                        trainerStorage.getRegion()._id(),
+                        trainerStorage.getTrainer()._id(),
+                        ITEM_ACTION_TRADE_ITEM,
+                        new UpdateItemDto(i, item.type(), null)
+                ).observeOn(FX_SCHEDULER).subscribe(
+                        result -> {
+                            trainerStorage.addItem(result);
+                            trainerStorage.updateItem(result);
+                            ownAmountOfItem++;
+                            this.itemAmountLabel.setText(String.valueOf(ownAmountOfItem));
+
+                            ingameController.coinsLabel.setText(String.valueOf(Integer.parseInt(ingameController.coinsLabel.getText()) - (int) (itemTypeDto.price() * trainer.settings().itemPriceMultiplier())));
+                            disposables.add(trainerItemsService.useOrTradeItem(
+                                    trainerStorage.getRegion()._id(),
+                                    trainerStorage.getTrainer()._id(),
+                                    ITEM_ACTION_TRADE_ITEM,
+                                    new UpdateItemDto(-(finalI - 1), item.type(), null)
+                            ).observeOn(FX_SCHEDULER).subscribe());
+                        }));
+            }
+        } else {
+            disposables.add(trainerItemsService.useOrTradeItem(
+                    trainerStorage.getRegion()._id(),
+                    trainerStorage.getTrainer()._id(),
+                    ITEM_ACTION_TRADE_ITEM,
+                    new UpdateItemDto(1, item.type(), null)
+            ).observeOn(FX_SCHEDULER).subscribe(
+                    result -> {
+                        trainerStorage.addItem(result);
+                        trainerStorage.updateItem(result);
+                        ownAmountOfItem++;
+                        this.itemAmountLabel.setText(String.valueOf(ownAmountOfItem));
+
+                        ingameController.coinsLabel.setText(String.valueOf(Integer.parseInt(ingameController.coinsLabel.getText()) - itemTypeDto.price()));
+                    },
+                    error -> {
+                        showError(error.getMessage());
+                        error.printStackTrace();
+                    }));
+        }
         if (!GraphicsEnvironment.isHeadless()) {
             AudioService.getInstance().playEffect(BUY_SELL, ingameController);
         }

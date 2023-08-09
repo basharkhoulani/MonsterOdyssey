@@ -52,31 +52,8 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
         final CharacterSelectionController characterSelectionController = mock(CharacterSelectionController.class);
         when(characterSelectionControllerProvider.get()).thenReturn(characterSelectionController);
         doNothing().when(app).show(characterSelectionController);
-        when(trainerStorage.getRegion()).thenReturn(new Region(
-                "2023-05-22T17:51:46.772Z",
-                "2023-05-22T17:51:46.772Z",
-                "646bc436cfee07c0e408466f",
-                "Albertina",
-                new Spawn("646bc3c0a9ac1b375fb41d93", 1, 1),
-                new Map(-1,
-                        true,
-                        1,
-                        1,
-                        "orthogonal",
-                        "right-down",
-                        "1.6.1",
-                        "map",
-                        "1.6",
-                        32,
-                        32,
-                        List.of(),
-                        16,
-                        16,
-                        List.of(),
-                        List.of())));
         final TrainersService trainersService = mock(TrainersService.class);
-        when(trainersServiceProvider.get()).thenReturn(trainersService);
-        when(trainersService.createTrainer(any(), any(), any())).thenReturn(Observable.just(new Trainer(
+        when(trainersService.createTrainer(any(), any(), any(), any())).thenReturn(Observable.just(new Trainer(
                 "2023-05-22T17:51:46.772Z",
                 "2023-05-22T17:51:46.772Z",
                 "646bac223b4804b87c0b8054",
@@ -92,7 +69,7 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
                 0,
                 0,
                 0,
-                new NPCInfo(false, false, false, false, null, null, null))));
+                new NPCInfo(false, false, false, false, null, null, null), null)));
 
 
         app.start(stage);
@@ -153,17 +130,16 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
         // Scene 6 CharacterSelection
         verify(app).show(characterSelectionControllerProvider.get());
 
-        when(trainerStorage.getRegion()).thenReturn(new Region("123", "456", "789", "test", new Spawn("adsad", 0, 0), null));
 
         clickOn("Next");
 
         // Scene 7
         verify(app).show(welcomeSceneController);
         Label tenthMessage = lookup("#firstMessage").query();
-        assertEquals("Now it's time to start your Journey", tenthMessage.getText());
+        assertEquals("If you are one of the tough ones, try the Hardcore mode.", tenthMessage.getText());
 
         Label eleventhMessage = lookup("#secondMessage").query();
-        assertEquals("See you next time!", eleventhMessage.getText());
+        assertEquals("Or you can try it in normal mode for now, as you like!", eleventhMessage.getText());
 
         clickOn("Next");
     }

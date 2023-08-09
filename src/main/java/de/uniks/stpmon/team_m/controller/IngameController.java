@@ -117,6 +117,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
+    Provider<MonsterStorage> monsterStorageProvider;
+    @Inject
     Provider<EncounterController> encounterControllerProvider;
     @Inject
     Provider<ItemMenuController> itemMenuControllerProvider;
@@ -148,6 +150,8 @@ public class IngameController extends Controller {
     AuthenticationService authenticationService;
     @Inject
     Provider<IngameController> ingameControllerProvider;
+    @Inject
+    Provider<MonsterLocationsController> monsterLocationsControllerProvider;
 
     private IngamePauseMenuController ingamePauseMenuController;
     private boolean isChatting = false;
@@ -197,6 +201,7 @@ public class IngameController extends Controller {
     private boolean movementDisabled;
     private final Canvas miniMapCanvas = new Canvas();
     private Map miniMap;
+    private List<Area> areasList = new ArrayList<>();
     private TrainerController trainerController;
 
 
@@ -304,6 +309,33 @@ public class IngameController extends Controller {
                         null
                 ).observeOn(FX_SCHEDULER).subscribe(trainerStorageProvider.get()::setItems));
 
+        if (!monsterStorageProvider.get().imagesAlreadyFetched()) {
+            disposables.add(
+                    presetsService.getMonsters().observeOn(FX_SCHEDULER).subscribe(
+                            monsterTypeDtoList -> {
+                                if (!GraphicsEnvironment.isHeadless()) {
+                                    for (MonsterTypeDto monsterTypeDto : monsterTypeDtoList) {
+                                        disposables.add(presetsService.getMonsterImage(monsterTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
+                                                responseBody -> {
+                                                    Image monsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
+                                                    monsterStorageProvider.get().addMonsterImageToHashMap(monsterTypeDto.id(), monsterImage);
+                                                }, Throwable::printStackTrace
+                                        ));
+                                    }
+                                }
+                            }, Throwable::printStackTrace
+                    )
+            );
+        }
+
+        Trainer currentTrainer = trainerStorageProvider.get().getTrainer();
+        disposables.add(
+                trainersService.getTrainer(currentTrainer.region(), currentTrainer._id()).observeOn(FX_SCHEDULER).subscribe(
+                   trainer -> trainerStorageProvider.get().setTrainer(trainer), Throwable::printStackTrace
+                ));
+        // Load areas
+        disposables.add(areasService.getAreas(trainerStorageProvider.get().getRegion()._id()).observeOn(FX_SCHEDULER).subscribe(areas ->
+                areasList = areas, Throwable::printStackTrace));
     }
 
     private void checkMovement(int x, int y, int direction) {
@@ -575,13 +607,15 @@ public class IngameController extends Controller {
         receiveObjectPopUp.setMaxHeight(popupWidth);
         receiveObjectPopUp.setStyle("-fx-border-radius: 10; -fx-border-style: solid; -fx-border-width: 2; -fx-border-color: black;");
         receiveObjectPopUp.getStyleClass().add("hBoxLightGreen");
-        disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto ->
-                disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
-                    receiveObjectController = new ReceiveObjectController(monster, monsterTypeDto, ImageProcessor.resonseBodyToJavaFXImage(responseBody), this::removeObjectReceivedPopUp, trainerStorageProvider);
-                    receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
-                    receiveObjectPopUp.getChildren().add(receiveObjectController.render());
-                    getRoot().getChildren().add(receiveObjectPopUp);
-                }))));
+        disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto -> {
+            if (monsterStorageProvider.get().imagesAlreadyFetched()) {
+                Image monsterImage = monsterStorageProvider.get().getMonsterImage(monster.type());
+                receiveObjectController = new ReceiveObjectController(monster, monsterTypeDto, monsterImage, this::removeObjectReceivedPopUp, trainerStorageProvider);
+                receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
+                receiveObjectPopUp.getChildren().add(receiveObjectController.render());
+                getRoot().getChildren().add(receiveObjectPopUp);
+            }
+        }));
     }
 
     private void createItemReceivedPopUp(Item item) {
@@ -2137,15 +2171,23 @@ public class IngameController extends Controller {
             miniMapVBox = new VBox();
             miniMapVBox.setId("miniMapVBox");
             miniMapVBox.getStyleClass().add("miniMapContainer");
-            TrainerStorage trainerStorage = trainerStorageProvider.get();
-            disposables.add(areasService.getAreas(trainerStorage.getRegion()._id()).observeOn(FX_SCHEDULER).subscribe(areas -> {
-                ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox, miniMap, areas);
-                miniMapVBox.getChildren().add(ingameMiniMapController.render());
-            }, Throwable::printStackTrace));
+            ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox, miniMap, areasList);
+            miniMapVBox.getChildren().add(ingameMiniMapController.render());
         }
         root.getChildren().add(miniMapVBox);
         miniMapVBox.requestFocus();
         buttonsDisable(true);
+    }
+
+    public void showMonsterLocaions(MonsterTypeDto monsterTypeDto) {
+        MonsterLocationsController monsterLocationsController = monsterLocationsControllerProvider.get();
+        VBox monsterLocationsVBox = new VBox();
+        monsterLocationsVBox.setId("miniMapVBox");
+        monsterLocationsVBox.getStyleClass().add("miniMapContainer");
+        monsterLocationsController.init(this, monsterLocationsVBox, miniMapCanvas, miniMap, monsterTypeDto);
+        monsterLocationsVBox.getChildren().add(monsterLocationsController.render());
+        root.getChildren().add(monsterLocationsVBox);
+        monsterLocationsVBox.requestFocus();
     }
 
     public void showStarterSelection(List<String> starters) {
