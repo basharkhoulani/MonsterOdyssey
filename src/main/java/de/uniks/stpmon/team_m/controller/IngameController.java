@@ -117,6 +117,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
+    Provider<MonsterStorage> monsterStorageProvider;
+    @Inject
     Provider<EncounterController> encounterControllerProvider;
     @Inject
     Provider<ItemMenuController> itemMenuControllerProvider;
@@ -304,6 +306,30 @@ public class IngameController extends Controller {
                         null
                 ).observeOn(FX_SCHEDULER).subscribe(trainerStorageProvider.get()::setItems));
 
+        if (!monsterStorageProvider.get().imagesAlreadyFetched()) {
+            disposables.add(
+                    presetsService.getMonsters().observeOn(FX_SCHEDULER).subscribe(
+                            monsterTypeDtoList -> {
+                                if (!GraphicsEnvironment.isHeadless()) {
+                                    for (MonsterTypeDto monsterTypeDto : monsterTypeDtoList) {
+                                        disposables.add(presetsService.getMonsterImage(monsterTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
+                                                responseBody -> {
+                                                    Image monsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
+                                                    monsterStorageProvider.get().addMonsterImageToHashMap(monsterTypeDto.id(), monsterImage);
+                                                }, Throwable::printStackTrace
+                                        ));
+                                    }
+                                }
+                            }, Throwable::printStackTrace
+                    )
+            );
+        }
+
+        Trainer currentTrainer = trainerStorageProvider.get().getTrainer();
+        disposables.add(
+                trainersService.getTrainer(currentTrainer.region(), currentTrainer._id()).observeOn(FX_SCHEDULER).subscribe(
+                   trainer -> trainerStorageProvider.get().setTrainer(trainer), Throwable::printStackTrace
+                ));
     }
 
     private void checkMovement(int x, int y, int direction) {
@@ -575,13 +601,15 @@ public class IngameController extends Controller {
         receiveObjectPopUp.setMaxHeight(popupWidth);
         receiveObjectPopUp.setStyle("-fx-border-radius: 10; -fx-border-style: solid; -fx-border-width: 2; -fx-border-color: black;");
         receiveObjectPopUp.getStyleClass().add("hBoxLightGreen");
-        disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto ->
-                disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
-                    receiveObjectController = new ReceiveObjectController(monster, monsterTypeDto, ImageProcessor.resonseBodyToJavaFXImage(responseBody), this::removeObjectReceivedPopUp, trainerStorageProvider);
-                    receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
-                    receiveObjectPopUp.getChildren().add(receiveObjectController.render());
-                    getRoot().getChildren().add(receiveObjectPopUp);
-                }))));
+        disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto -> {
+            if (monsterStorageProvider.get().imagesAlreadyFetched()) {
+                Image monsterImage = monsterStorageProvider.get().getMonsterImage(monster.type());
+                receiveObjectController = new ReceiveObjectController(monster, monsterTypeDto, monsterImage, this::removeObjectReceivedPopUp, trainerStorageProvider);
+                receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
+                receiveObjectPopUp.getChildren().add(receiveObjectController.render());
+                getRoot().getChildren().add(receiveObjectPopUp);
+            }
+        }));
     }
 
     private void createItemReceivedPopUp(Item item) {

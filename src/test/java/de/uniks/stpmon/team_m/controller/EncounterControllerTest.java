@@ -5,6 +5,7 @@ import de.uniks.stpmon.team_m.controller.subController.BattleMenuController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
+import de.uniks.stpmon.team_m.utils.MonsterStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -58,6 +59,8 @@ class EncounterControllerTest extends ApplicationTest {
     EncounterOpponentStorage encounterOpponentStorage;
     @Mock
     Provider<TrainerStorage> trainerStorageProvider;
+    @Mock
+    Provider<MonsterStorage> monsterStorageProvider;
     // Controller
     @Spy
     BattleMenuController battleMenuController;
@@ -77,6 +80,10 @@ class EncounterControllerTest extends ApplicationTest {
 
         // Mock the situation for 1 vs 1
         when(encounterOpponentStorage.getEncounterSize()).thenReturn(2);
+
+        MonsterStorage monsterStorage = mock(MonsterStorage.class);
+        when(monsterStorageProvider.get()).thenReturn(monsterStorage);
+        when(monsterStorage.getMonsterImage(anyInt())).thenReturn(null);
 
         TrainerStorage trainerStorage = mock(TrainerStorage.class);
         when(trainerStorageProvider.get()).thenReturn(trainerStorage);
@@ -190,8 +197,6 @@ class EncounterControllerTest extends ApplicationTest {
                 List.of()
         );
         when(monstersService.getMonster(anyString(), any(), anyString())).thenReturn(Observable.just(monster));
-
-        when(presetsService.getMonsterImage(1)).thenReturn(Observable.just(ResponseBody.create(null, new byte[0])));
 
         lenient().doNothing().when(battleMenuController).setTrainerSpriteImageView(any(), any(), anyInt());
 

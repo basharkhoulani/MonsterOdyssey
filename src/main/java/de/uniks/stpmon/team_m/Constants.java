@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m;
 
 import javafx.geometry.Insets;
 
+import java.security.PublicKey;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -193,7 +194,7 @@ public class Constants {
     public static final String CHANGE_MONSTER = "change-monster";
     public static final String USE_ITEM = "use-item";
     public static final String ITEM_FAILED = "item-failed";
-    public static final String ITEM_SUCCESS= "item-success";
+    public static final String ITEM_SUCCESS = "item-success";
     public static final String MONSTER_CAUGHT = "monster-caught";
 
 
@@ -359,4 +360,19 @@ public class Constants {
     public static final long CLEAR_FLIPPING = 0x0FFFFFFFL;
     public static final int ROTATE_90 = 90;
     public static final int FLIP_HORIZONTAL_OR_VERTICAL = -1;
+
+    public static final int GAMEMODEBOX_WIDTH = 260;
+    public static final int GAMEMODEBOX_HEIGHT = 110;
+    public static final int TITLEMODEBOX_HEIGHT = 36;
+    public static final int EIGHT = 8;
+    public static final int TEN = 10;
+    public static final int HARDCORESETTINGBOX_HEIGHT = 230;
+    public static final int IMAGEVIEW_SIZE = 35;
+    public static final int WARNING_PADDING_TOP = 5;
+    public static final int FIVE = 5;
+    public static final int WARNING_PADDING_RIGHT_LEFT = 55;
+    public static final int SLIDER_WIDTH = 200;
+
+    public static final double HARDCORE_TOP = 289.5;
+    public static final double HARDCORE_LEFT = 77.0;
 }
