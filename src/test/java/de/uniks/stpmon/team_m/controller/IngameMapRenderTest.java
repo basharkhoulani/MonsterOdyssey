@@ -485,6 +485,17 @@ public class IngameMapRenderTest extends ApplicationTest {
         when(eventListenerMock.listen("trainers.6475e595ac3946b6a812d865.monsters.*.*", Monster.class)).thenReturn(Observable.empty());
         when(eventListenerMock.listen("trainers.6475e595ac3946b6a812d865.items.*.*", Item.class)).thenReturn(Observable.empty());
 
+        lenient().when(areasService.getAreas(any())).thenReturn(Observable.just(
+                List.of(new Area(
+                        "2023-05-22T17:51:46.772Z",
+                        "2023-05-22T17:51:46.772Z",
+                        "646bc3c0a9ac1b375fb41d93",
+                        "646bc436cfee07c0e408466f",
+                        "Albertina",
+                        null,
+                        null
+                ))));
+
         app.start(stage);
         app.show(ingameController);
         stage.requestFocus();
