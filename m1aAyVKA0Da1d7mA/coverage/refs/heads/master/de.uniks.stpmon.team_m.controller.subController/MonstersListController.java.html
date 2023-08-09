@@ -353,11 +353,11 @@ import static de.uniks.stpmon.team_m.Constants.*;
 <span class="nc" id="L353">        }</span>
 <span class="fc" id="L354">    }</span>
 
-    public boolean checkIfPlayerEncounteredMonster (MonsterTypeDto monsterTypeDto) {
+    public boolean checkIfPlayerEncounteredMonster(MonsterTypeDto monsterTypeDto) {
 <span class="nc" id="L357">        return trainerStorageProvider.get().getTrainer().encounteredMonsterTypes().contains(monsterTypeDto.id());</span>
     }
 
-    public void showMondexDetails (boolean visible) {
+    public void showMondexDetails(boolean visible) {
 <span class="fc" id="L361">        mapImageView.setVisible(visible);</span>
 <span class="fc" id="L362">        monsterImageView.setVisible(visible);</span>
 <span class="fc" id="L363">        monsterNameLabel.setVisible(visible);</span>
@@ -370,7 +370,7 @@ import static de.uniks.stpmon.team_m.Constants.*;
 <span class="fc" id="L370">        seperationLine.setVisible(visible);</span>
 <span class="fc" id="L371">    }</span>
 
-    public void showMondexDetails (MonsterTypeDto monsterTypeDto) {
+    public void showMondexDetails(MonsterTypeDto monsterTypeDto) {
 
 
         // setting description text
@@ -415,8 +415,11 @@ import static de.uniks.stpmon.team_m.Constants.*;
 <span class="nc" id="L415">                secondTypeImageView.setImage(null);</span>
             }
         }
+<span class="nc" id="L418">        mapImageView.setOnMouseClicked(mouseEvent -&gt; {</span>
+<span class="nc" id="L419">            ingameController.showMonsterLocaions(monsterTypeDto);</span>
+<span class="nc" id="L420">        });</span>
 
-<span class="nc" id="L419">        showMondexDetails(true);</span>
-<span class="nc" id="L420">    }</span>
+<span class="nc" id="L422">        showMondexDetails(true);</span>
+<span class="nc" id="L423">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
