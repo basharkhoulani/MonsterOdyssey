@@ -1,6 +1,7 @@
 package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.controller.subController.ChangeLanguageController;
 import de.uniks.stpmon.team_m.dto.LoginResult;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.AuthenticationService;
@@ -16,6 +17,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import javax.inject.Provider;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
@@ -30,6 +32,8 @@ class LoginControllerTest extends ApplicationTest {
     AuthenticationService authenticationService;
     @Mock
     UsersService usersService;
+    @Mock
+    Provider<ChangeLanguageController> changeLanguageControllerProvider;
     @Spy
     final
     App app = new App(null);
@@ -179,6 +183,8 @@ class LoginControllerTest extends ApplicationTest {
 
     @Test
     void changeLanguage() {
+        ChangeLanguageController changeLanguageController = new ChangeLanguageController();
+        when(changeLanguageControllerProvider.get()).thenReturn(changeLanguageController);
         final Button languageSettings = lookup("#languageSettings").query();
         clickOn(languageSettings);
 
