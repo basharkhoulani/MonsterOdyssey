@@ -1,0 +1,1320 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EncounterController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller</a> &gt; <span class="el_source">EncounterController.java</span></div><h1>EncounterController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller;
+
+import de.uniks.stpmon.team_m.controller.subController.*;
+import de.uniks.stpmon.team_m.dto.*;
+import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.utils.*;
+import de.uniks.stpmon.team_m.ws.EventListener;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
+import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
+import javafx.util.Duration;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import java.awt.*;
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.*;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+import static de.uniks.stpmon.team_m.Constants.BallType.*;
+import static de.uniks.stpmon.team_m.Constants.SoundEffect.*;
+
+
+public class EncounterController extends Controller {
+<span class="fc" id="L38">    private final List&lt;Controller&gt; subControllers = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L39">    private final List&lt;AbilityDto&gt; abilityDtos = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L40">    public HashMap&lt;Integer, ItemTypeDto&gt; itemTypeDtos = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L41">    private final HashMap&lt;String, Opponent&gt; opponentsUpdate = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L42">    private final HashMap&lt;String, Opponent&gt; opponentsDelete = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L43">    private final HashMap&lt;String, Boolean&gt; monsterInEncounterHashMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L44">    private final HashMap&lt;String, Boolean&gt; resultLevelUpHashMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L45">    private final HashMap&lt;String, Boolean&gt; resultEvolvedHashMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L46">    private final HashMap&lt;String, Monster&gt; oldMonsterHashMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L47">    private final HashMap&lt;String, ArrayList&lt;Integer&gt;&gt; newAbilitiesHashMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L48">    private final HashMap&lt;String, EncounterOpponentController&gt; encounterOpponentControllerHashMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L49">    private final HashMap&lt;String, Boolean&gt; monsterInTeamHashMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L50">    private final DecimalFormat formatter = new DecimalFormat(&quot;#,###.0&quot;);</span>
+    @FXML
+    public StackPane rootStackPane;
+    @FXML
+    public Text battleDialogText;
+    @FXML
+    public TextFlow battleDialogTextFlow;
+    @FXML
+    public VBox battleMenuVBox;
+    @FXML
+    public VBox battleBackgroundVBox;
+    @FXML
+    public HBox enemyHBox;
+    @FXML
+    public HBox teamHBox;
+    @Inject
+    EncounterOpponentsService encounterOpponentsService;
+    @Inject
+    RegionEncountersService regionEncountersService;
+    @Inject
+    TrainersService trainersService;
+    @Inject
+    MonstersService monstersService;
+    @Inject
+    PresetsService presetsService;
+    @Inject
+    TrainerItemsService trainerItemsService;
+    @Inject
+    Provider&lt;IngameController&gt; ingameControllerProvider;
+    @Inject
+    Provider&lt;EventListener&gt; eventListener;
+    @Inject
+    EncounterOpponentStorage encounterOpponentStorage;
+    @Inject
+    BattleMenuController battleMenuController;
+    @Inject
+    EncounterResultController encounterResultController;
+    @Inject
+    AbilitiesMenuController abilitiesMenuController;
+    @Inject
+    Provider&lt;TrainerStorage&gt; trainerStorageProvider;
+    @Inject
+    Provider&lt;ItemStorage&gt; itemStorageProvider;
+    @Inject
+    Provider&lt;MonsterStorage&gt; monsterStorageProvider;
+    @Inject
+    Provider&lt;MonstersDetailController&gt; monstersDetailControllerProvider;
+    @Inject
+    Provider&lt;ChangeMonsterListController&gt; changeMonsterListControllerProvider;
+    @Inject
+    Provider&lt;LevelUpController&gt; levelUpControllerProvider;
+    @Inject
+    Provider&lt;CaughtMonsterController&gt; caughtMonsterControllerProvider;
+    @Inject
+    Provider&lt;ItemMenuController&gt; itemMenuControllerProvider;
+
+    private EncounterOpponentController enemy1Controller;
+    private EncounterOpponentController enemy2Controller;
+    private EncounterOpponentController ownTrainerController;
+    private EncounterOpponentController coopTrainerController;
+    private int opponentsSize;
+    private String regionId;
+    private String encounterId;
+    private String trainerId;
+<span class="fc" id="L114">    private int repeatedTimes = 0;</span>
+<span class="fc" id="L115">    private int currentMonsterIndex = 0;</span>
+<span class="fc" id="L116">    private int deleteOpponents = 0;</span>
+    private VBox receivedMonsterPopUp;
+    private ImageView ballImageView;
+    private BallType selectedBallType;
+<span class="fc" id="L120">    private boolean monsterCaught = false;</span>
+    public Monster caughtMonster;
+    public MonsterTypeDto caughtMonsterType;
+    public Image enemyMonsterImage;
+
+
+    @Inject
+<span class="fc" id="L127">    public EncounterController() {</span>
+<span class="fc" id="L128">    }</span>
+
+    public void init() {
+<span class="fc" id="L131">        super.init();</span>
+<span class="fc" id="L132">        opponentsSize = encounterOpponentStorage.getEncounterSize();</span>
+<span class="fc" id="L133">        regionId = trainerStorageProvider.get().getRegion()._id();</span>
+<span class="fc" id="L134">        encounterId = encounterOpponentStorage.getEncounterId();</span>
+<span class="fc" id="L135">        trainerId = trainerStorageProvider.get().getTrainer()._id();</span>
+<span class="fc" id="L136">        listenToOpponents(encounterId);</span>
+<span class="fc" id="L137">        battleMenuController.setValues(resources, preferences, resourceBundleProvider, battleMenuController, app);</span>
+<span class="fc" id="L138">        battleMenuController.init();</span>
+<span class="fc" id="L139">        subControllers.add(battleMenuController);</span>
+
+<span class="fc" id="L141">        List&lt;String&gt; monsterInTeam = trainerStorageProvider.get().getTrainer().team();</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">        for (String monsterId : monsterInTeam) {</span>
+<span class="fc" id="L143">            monsterInTeamHashMap.put(monsterId, false);</span>
+<span class="fc" id="L144">        }</span>
+
+<span class="pc bpc" id="L146" title="3 of 4 branches missed.">        if (!GraphicsEnvironment.isHeadless() &amp;&amp; !AudioService.getInstance().checkMuted()) {</span>
+<span class="nc" id="L147">            AudioService.getInstance().stopSound();</span>
+<span class="nc" id="L148">            AudioService.getInstance().playSound(FIGHT_SOUND);</span>
+<span class="nc" id="L149">            AudioService.getInstance().setCurrentSound(FIGHT_SOUND);</span>
+<span class="nc" id="L150">            AudioService.getInstance().setVolume(preferences.getDouble(&quot;volume&quot;, AudioService.getInstance().getVolume()));</span>
+        }
+<span class="fc" id="L152">    }</span>
+
+    public String getTitle() {
+<span class="fc" id="L155">        return resources.getString(&quot;ENCOUNTER&quot;);</span>
+    }
+
+    public Parent render() {
+<span class="fc" id="L159">        Parent parent = super.render();</span>
+        // init battle menu
+<span class="fc" id="L161">        battleMenuController.init(this, encounterOpponentStorage, app);</span>
+<span class="fc" id="L162">        battleMenuVBox.getChildren().add(battleMenuController.render());</span>
+<span class="fc" id="L163">        battleMenuController.onFleeButtonClick = this::onFleeButtonClick;</span>
+
+        // Init opponent controller for own trainer
+<span class="fc" id="L166">        ownTrainerController = new EncounterOpponentController();</span>
+<span class="fc" id="L167">        Opponent selfOpponent = encounterOpponentStorage.getSelfOpponent();</span>
+<span class="fc" id="L168">        checkMoveAlreadyUsed(selfOpponent); // für Encounter wiederherstellen</span>
+<span class="fc" id="L169">        ownTrainerController.init(selfOpponent, false, false, true, false, true, this);</span>
+<span class="fc" id="L170">        encounterOpponentControllerHashMap.put(selfOpponent._id(), ownTrainerController);</span>
+<span class="fc" id="L171">        Parent ownTrainerParent = ownTrainerController.render();</span>
+        //HBox.setHgrow(ownTrainerParent, javafx.scene.layout.Priority.ALWAYS);
+
+        //showMyMonster
+<span class="fc" id="L175">        showTeamMonster(ownTrainerController, encounterOpponentStorage.getSelfOpponent());</span>
+<span class="fc" id="L176">        monsterInEncounterHashMap.put(selfOpponent._id(), false);</span>
+        // showMySprite
+<span class="fc" id="L178">        ImageView sprite = ownTrainerController.getTrainerImageView();</span>
+<span class="fc" id="L179">        setTrainerSpriteImageView(trainerStorageProvider.get().getTrainer(), sprite, TRAINER_DIRECTION_UP);</span>
+
+<span class="fc" id="L181">        disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getSelfOpponent().monster()).observeOn(FX_SCHEDULER).subscribe(monster -&gt; {</span>
+<span class="fc" id="L182">            oldMonsterHashMap.put(encounterOpponentStorage.getSelfOpponent()._id(), monster);</span>
+<span class="fc" id="L183">            encounterOpponentStorage.addCurrentMonsters(encounterOpponentStorage.getSelfOpponent()._id(), monster);</span>
+<span class="fc" id="L184">        }));</span>
+<span class="fc" id="L185">        newAbilitiesHashMap.put(encounterOpponentStorage.getSelfOpponent()._id(), new ArrayList&lt;&gt;());</span>
+<span class="fc" id="L186">        resultLevelUpHashMap.put(encounterOpponentStorage.getSelfOpponent()._id(), false);</span>
+<span class="fc" id="L187">        resultEvolvedHashMap.put(encounterOpponentStorage.getSelfOpponent()._id(), false);</span>
+
+<span class="fc bfc" id="L189" title="All 2 branches covered.">        if (encounterOpponentStorage.isTwoMonster()) {</span>
+<span class="fc" id="L190">            disposables.add(monstersService.getMonster(regionId, trainerId, encounterOpponentStorage.getCoopOpponent().monster()).observeOn(FX_SCHEDULER).subscribe(monster -&gt; {</span>
+<span class="fc" id="L191">                oldMonsterHashMap.put(encounterOpponentStorage.getCoopOpponent()._id(), monster);</span>
+<span class="fc" id="L192">                encounterOpponentStorage.addCurrentMonsters(encounterOpponentStorage.getCoopOpponent()._id(), monster);</span>
+<span class="fc" id="L193">            }));</span>
+<span class="fc" id="L194">            newAbilitiesHashMap.put(encounterOpponentStorage.getCoopOpponent()._id(), new ArrayList&lt;&gt;());</span>
+<span class="fc" id="L195">            resultLevelUpHashMap.put(encounterOpponentStorage.getCoopOpponent()._id(), false);</span>
+<span class="fc" id="L196">            resultEvolvedHashMap.put(encounterOpponentStorage.getCoopOpponent()._id(), false);</span>
+        }
+
+<span class="fc" id="L199">        disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -&gt; {</span>
+<span class="fc" id="L200">            abilityDtos.addAll(abilities);</span>
+<span class="fc" id="L201">            Comparator&lt;AbilityDto&gt; abilityDtoComparator = Comparator.comparingInt(AbilityDto::id);</span>
+<span class="fc" id="L202">            Collections.sort(abilityDtos, abilityDtoComparator);</span>
+<span class="fc" id="L203">        }));</span>
+
+<span class="fc" id="L205">        disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER).subscribe(items -&gt; {</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">            for (ItemTypeDto itemTypeDto : items) {</span>
+<span class="fc" id="L207">                itemTypeDtos.put(itemTypeDto.id(), itemTypeDto);</span>
+<span class="fc" id="L208">            }</span>
+<span class="fc" id="L209">        }));</span>
+
+<span class="fc" id="L211">        disposables.add(regionEncountersService.getEncounter(regionId, encounterId).observeOn(FX_SCHEDULER).subscribe(encounter -&gt; {</span>
+<span class="fc" id="L212">            encounterOpponentStorage.setWild(encounter.isWild());</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">            if (encounter.isWild()) {</span>
+<span class="fc" id="L214">                renderForWild(ownTrainerParent);</span>
+<span class="fc" id="L215">                battleMenuController.showFleeButton(true);</span>
+            } else {
+<span class="fc bfc" id="L217" title="All 2 branches covered.">                if (opponentsSize == 2) {</span>
+<span class="fc" id="L218">                    renderFor1vs1(ownTrainerParent);</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">                } else if (opponentsSize == 3) {</span>
+<span class="fc bfc" id="L220" title="All 2 branches covered.">                    if (encounterOpponentStorage.getEnemyOpponents().size() == 2) {</span>
+<span class="fc" id="L221">                        renderFor1vs2(ownTrainerParent);</span>
+                    } else {
+<span class="fc" id="L223">                        renderFor2vs1(ownTrainerParent);</span>
+                    }
+
+                } else {
+<span class="fc" id="L227">                    renderFor2vs2(ownTrainerParent);</span>
+                }
+<span class="fc" id="L229">                battleMenuController.showFleeButton(false);</span>
+            }
+<span class="fc" id="L231">        }, Throwable::printStackTrace));</span>
+<span class="fc" id="L232">        return parent;</span>
+    }
+
+    public void onFleeButtonClick() {
+<span class="nc" id="L236">        rootStackPane.getChildren().add(this.buildFleePopup());</span>
+<span class="nc" id="L237">    }</span>
+
+    private void renderForWild(Parent ownTrainerParent) {
+        // Wild situation
+
+        // Wild monster (init opponent controller for enemy)
+<span class="fc" id="L243">        Opponent enemyOpponent = encounterOpponentStorage.getEnemyOpponents().get(0);</span>
+<span class="fc" id="L244">        checkMoveAlreadyUsed(enemyOpponent); // für Encounter wiederherstellen</span>
+<span class="fc" id="L245">        enemy1Controller = new EncounterOpponentController();</span>
+<span class="fc" id="L246">        enemy1Controller.init(enemyOpponent, true, true, false, false, false, this);</span>
+<span class="fc" id="L247">        encounterOpponentControllerHashMap.put(enemyOpponent._id(), enemy1Controller);</span>
+<span class="fc" id="L248">        enemyHBox.setPadding(new Insets(0, 360, 0, 0));</span>
+<span class="fc" id="L249">        Parent enemy1Parent = enemy1Controller.render();</span>
+<span class="fc" id="L250">        enemyHBox.getChildren().add(enemy1Parent);</span>
+<span class="fc" id="L251">        targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));</span>
+<span class="fc" id="L252">        showEnemyMonster(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0), true);</span>
+<span class="fc" id="L253">        monsterInEncounterHashMap.put(enemyOpponent._id(), false);</span>
+
+        // Own trainer
+<span class="fc" id="L256">        teamHBox.setPadding(new Insets(0, 0, 0, 360));</span>
+<span class="fc" id="L257">        teamHBox.getChildren().add(ownTrainerParent);</span>
+<span class="fc" id="L258">    }</span>
+
+    private void renderFor1vs1(Parent ownTrainerParent) {
+        // 1 vs 1 situation
+
+        // Enemy as a trainer (init opponent controller for the enemy)
+<span class="fc" id="L264">        Opponent enemyOpponent = encounterOpponentStorage.getEnemyOpponents().get(0);</span>
+<span class="fc" id="L265">        checkMoveAlreadyUsed(enemyOpponent); // für Encounter wiederherstellen</span>
+<span class="fc" id="L266">        enemy1Controller = new EncounterOpponentController();</span>
+<span class="fc" id="L267">        enemy1Controller.init(enemyOpponent, true, false, false, false, false, this);</span>
+<span class="fc" id="L268">        encounterOpponentControllerHashMap.put(enemyOpponent._id(), enemy1Controller);</span>
+<span class="fc" id="L269">        Parent enemy1Parent = enemy1Controller.render();</span>
+<span class="fc" id="L270">        enemyHBox.setPadding(new Insets(0, 360, 0, 0));</span>
+<span class="fc" id="L271">        enemyHBox.getChildren().add(enemy1Parent);</span>
+<span class="fc" id="L272">        targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));</span>
+<span class="fc" id="L273">        showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));</span>
+<span class="fc" id="L274">        monsterInEncounterHashMap.put(enemyOpponent._id(), false);</span>
+
+        // Own trainer
+<span class="fc" id="L277">        teamHBox.setPadding(new Insets(0, 0, 0, 360));</span>
+<span class="fc" id="L278">        teamHBox.getChildren().add(ownTrainerParent);</span>
+<span class="fc" id="L279">    }</span>
+
+    private void renderFor1vs2(Parent ownTrainerParent) {
+        // 1 vs 2 situation
+
+        // 1st enemy as a trainer
+<span class="fc" id="L285">        Opponent enemy1Opponent = encounterOpponentStorage.getEnemyOpponents().get(0);</span>
+<span class="fc" id="L286">        checkMoveAlreadyUsed(enemy1Opponent); // für Encounter wiederherstellen</span>
+<span class="fc" id="L287">        enemy1Controller = new EncounterOpponentController();</span>
+<span class="fc" id="L288">        enemy1Controller.init(enemy1Opponent, true, false, false, true, false, this);</span>
+<span class="fc" id="L289">        encounterOpponentControllerHashMap.put(enemy1Opponent._id(), enemy1Controller);</span>
+<span class="fc" id="L290">        VBox enemy1Parent = (VBox) enemy1Controller.render();</span>
+<span class="fc" id="L291">        HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);</span>
+<span class="fc" id="L292">        enemyHBox.getChildren().add(enemy1Parent);</span>
+<span class="fc" id="L293">        targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));</span>
+<span class="fc" id="L294">        showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));</span>
+<span class="fc" id="L295">        monsterInEncounterHashMap.put(enemy1Opponent._id(), false);</span>
+
+        // 2nd enemy as a trainer
+<span class="fc" id="L298">        Opponent enemy2Opponent = encounterOpponentStorage.getEnemyOpponents().get(1);</span>
+<span class="fc" id="L299">        checkMoveAlreadyUsed(enemy2Opponent); // für Encounter wiederherstellen</span>
+<span class="fc" id="L300">        enemy2Controller = new EncounterOpponentController();</span>
+<span class="fc" id="L301">        enemy2Controller.init(enemy2Opponent, true, false, true, true, false, this);</span>
+<span class="fc" id="L302">        encounterOpponentControllerHashMap.put(enemy2Opponent._id(), enemy2Controller);</span>
+<span class="fc" id="L303">        VBox enemy2Parent = (VBox) enemy2Controller.render();</span>
+<span class="fc" id="L304">        enemyHBox.getChildren().add(enemy2Parent);</span>
+<span class="fc" id="L305">        showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(1));</span>
+<span class="fc" id="L306">        monsterInEncounterHashMap.put(enemy2Opponent._id(), false);</span>
+
+        // Own trainer
+<span class="fc" id="L309">        teamHBox.setPadding(new Insets(0, 0, 0, 360));</span>
+<span class="fc" id="L310">        teamHBox.getChildren().add(ownTrainerParent);</span>
+<span class="fc" id="L311">    }</span>
+
+    private void renderFor2vs1(Parent ownTrainerParent) {
+        // 2 vs 1 Situation
+
+        // 1st enemy as a trainer
+<span class="fc" id="L317">        Opponent enemy1Opponent = encounterOpponentStorage.getEnemyOpponents().get(0);</span>
+<span class="fc" id="L318">        checkMoveAlreadyUsed(enemy1Opponent); // für Encounter wiederherstellen</span>
+<span class="fc" id="L319">        enemy1Controller = new EncounterOpponentController();</span>
+<span class="fc" id="L320">        enemy1Controller.init(enemy1Opponent, true, false, false, false, false, this);</span>
+<span class="fc" id="L321">        encounterOpponentControllerHashMap.put(enemy1Opponent._id(), enemy1Controller);</span>
+<span class="fc" id="L322">        VBox enemy1Parent = (VBox) enemy1Controller.render();</span>
+<span class="fc" id="L323">        HBox.setHgrow(enemy1Parent, javafx.scene.layout.Priority.ALWAYS);</span>
+<span class="fc" id="L324">        enemyHBox.getChildren().add(enemy1Parent);</span>
+<span class="fc" id="L325">        targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));</span>
+<span class="fc" id="L326">        showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));</span>
+<span class="fc" id="L327">        monsterInEncounterHashMap.put(enemy1Opponent._id(), false);</span>
+
+        // Coop Trainer
+<span class="fc" id="L330">        Opponent coopOpponent = encounterOpponentStorage.getCoopOpponent();</span>
+<span class="fc" id="L331">        checkMoveAlreadyUsed(coopOpponent); // für Encounter wiederherstellen</span>
+<span class="fc" id="L332">        coopTrainerController = new EncounterOpponentController();</span>
+<span class="fc" id="L333">        coopTrainerController.init(coopOpponent, false, false, false, false, encounterOpponentStorage.isTwoMonster(), this);</span>
+<span class="fc" id="L334">        encounterOpponentControllerHashMap.put(coopOpponent._id(), coopTrainerController);</span>
+<span class="fc" id="L335">        Parent coopTrainerParent = coopTrainerController.render();</span>
+<span class="fc" id="L336">        HBox.setHgrow(coopTrainerParent, javafx.scene.layout.Priority.ALWAYS);</span>
+<span class="fc" id="L337">        teamHBox.getChildren().add(coopTrainerParent);</span>
+<span class="pc bpc" id="L338" title="1 of 2 branches missed.">        if (!encounterOpponentStorage.isTwoMonster()) {</span>
+<span class="fc" id="L339">            showCoopImage(coopTrainerController, encounterOpponentStorage.getCoopOpponent());</span>
+        }
+<span class="fc" id="L341">        showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent());</span>
+<span class="fc" id="L342">        monsterInEncounterHashMap.put(coopOpponent._id(), false);</span>
+
+
+        // Own trainer
+<span class="fc" id="L346">        teamHBox.getChildren().add(ownTrainerParent);</span>
+<span class="fc" id="L347">    }</span>
+
+    private void renderFor2vs2(Parent ownTrainerParent) {
+        // 2 vs 2 situation
+
+        // 1st enemy as a trainer
+<span class="fc" id="L353">        Opponent enemy1Opponent = encounterOpponentStorage.getEnemyOpponents().get(0);</span>
+<span class="fc" id="L354">        checkMoveAlreadyUsed(enemy1Opponent); // für Encounter wiederherstellen</span>
+<span class="fc" id="L355">        enemy1Controller = new EncounterOpponentController();</span>
+<span class="fc" id="L356">        enemy1Controller.init(enemy1Opponent, true, false, false, true, false, this);</span>
+<span class="fc" id="L357">        encounterOpponentControllerHashMap.put(enemy1Opponent._id(), enemy1Controller);</span>
+<span class="fc" id="L358">        VBox enemy1Parent = (VBox) enemy1Controller.render();</span>
+<span class="fc" id="L359">        enemyHBox.getChildren().add(enemy1Parent);</span>
+<span class="fc" id="L360">        targetOpponent(encounterOpponentStorage.getEnemyOpponents().get(0));</span>
+<span class="fc" id="L361">        showEnemyInfo(enemy1Controller, encounterOpponentStorage.getEnemyOpponents().get(0));</span>
+<span class="fc" id="L362">        monsterInEncounterHashMap.put(enemy1Opponent._id(), false);</span>
+
+        // 2nd enemy as a trainer
+<span class="fc" id="L365">        Opponent enemy2Opponent = encounterOpponentStorage.getEnemyOpponents().get(1);</span>
+<span class="fc" id="L366">        checkMoveAlreadyUsed(enemy2Opponent); // für Encounter wiederherstellen</span>
+<span class="fc" id="L367">        enemy2Controller = new EncounterOpponentController();</span>
+<span class="fc" id="L368">        enemy2Controller.init(enemy2Opponent, true, false, true, true, false, this);</span>
+<span class="fc" id="L369">        encounterOpponentControllerHashMap.put(enemy2Opponent._id(), enemy2Controller);</span>
+<span class="fc" id="L370">        VBox enemy2Parent = (VBox) enemy2Controller.render();</span>
+<span class="fc" id="L371">        enemyHBox.getChildren().add(enemy2Parent);</span>
+<span class="fc" id="L372">        showEnemyInfo(enemy2Controller, encounterOpponentStorage.getEnemyOpponents().get(1));</span>
+<span class="fc" id="L373">        monsterInEncounterHashMap.put(enemy2Opponent._id(), false);</span>
+
+        // Coop Trainer
+<span class="fc" id="L376">        Opponent coopOpponent = encounterOpponentStorage.getCoopOpponent();</span>
+<span class="fc" id="L377">        checkMoveAlreadyUsed(coopOpponent); // für Encounter wiederherstellen</span>
+<span class="fc" id="L378">        coopTrainerController = new EncounterOpponentController();</span>
+<span class="fc" id="L379">        coopTrainerController.init(coopOpponent, false, false, false, false, encounterOpponentStorage.isTwoMonster(), this);</span>
+<span class="fc" id="L380">        encounterOpponentControllerHashMap.put(coopOpponent._id(), coopTrainerController);</span>
+<span class="fc" id="L381">        Parent coopTrainerParent = coopTrainerController.render();</span>
+<span class="fc" id="L382">        teamHBox.getChildren().add(coopTrainerParent);</span>
+<span class="fc bfc" id="L383" title="All 2 branches covered.">        if (!encounterOpponentStorage.isTwoMonster()) {</span>
+<span class="fc" id="L384">            showCoopImage(coopTrainerController, encounterOpponentStorage.getCoopOpponent());</span>
+        }
+<span class="fc" id="L386">        showTeamMonster(coopTrainerController, encounterOpponentStorage.getCoopOpponent());</span>
+<span class="fc" id="L387">        monsterInEncounterHashMap.put(coopOpponent._id(), false);</span>
+
+        // Own trainer
+<span class="fc" id="L390">        teamHBox.getChildren().add(ownTrainerParent);</span>
+<span class="fc" id="L391">    }</span>
+
+    private void onTargetChange() {
+<span class="pc bpc" id="L394" title="2 of 4 branches missed.">        if (encounterOpponentStorage.getLeastTargetOpponent() != null &amp;&amp; encounterOpponentControllerHashMap.containsKey(encounterOpponentStorage.getLeastTargetOpponent()._id())) {</span>
+<span class="fc" id="L395">            encounterOpponentControllerHashMap.get(encounterOpponentStorage.getLeastTargetOpponent()._id()).unTarget();</span>
+        }
+<span class="pc bpc" id="L397" title="1 of 2 branches missed.">        if (encounterOpponentControllerHashMap.containsKey(encounterOpponentStorage.getTargetOpponent()._id())) {</span>
+<span class="fc" id="L398">            encounterOpponentControllerHashMap.get(encounterOpponentStorage.getTargetOpponent()._id()).onTarget();</span>
+        }
+<span class="fc" id="L400">    }</span>
+
+    public void targetOpponent(Opponent opponent) {
+<span class="fc" id="L403">        encounterOpponentStorage.setTargetOpponent(opponent);</span>
+<span class="fc bfc" id="L404" title="All 2 branches covered.">        if (encounterOpponentStorage.getLeastTargetOpponent() == null) {</span>
+<span class="pc bpc" id="L405" title="1 of 2 branches missed.">            if (encounterOpponentControllerHashMap.containsKey(opponent._id())) {</span>
+<span class="fc" id="L406">                encounterOpponentControllerHashMap.get(opponent._id()).onTarget();</span>
+            }
+        } else {
+<span class="pc bpc" id="L409" title="2 of 6 branches missed.">            if (encounterOpponentStorage.getLeastTargetOpponent() != opponent &amp;&amp; encounterOpponentControllerHashMap.containsKey(opponent._id()) &amp;&amp; encounterOpponentControllerHashMap.get(opponent._id()).isMultipleEnemyEncounter) {</span>
+<span class="fc" id="L410">                onTargetChange();</span>
+            }
+        }
+
+<span class="fc" id="L414">    }</span>
+
+    // Hier soll allen Serveranfragen kommen
+    private void showEnemyMonster(EncounterOpponentController encounterOpponentController, Opponent opponent, boolean isInit) {
+<span class="fc" id="L418">        disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster()).observeOn(FX_SCHEDULER).subscribe(monster -&gt; {</span>
+<span class="fc" id="L419">            encounterOpponentController.setLevelLabel(&quot;LVL &quot; + monster.level()).setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health());</span>
+<span class="fc" id="L420">            encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);</span>
+<span class="fc" id="L421">            caughtMonster = monster;</span>
+
+<span class="fc" id="L423">            listenToMonster(opponent.trainer(), monster._id(), encounterOpponentController, opponent);</span>
+<span class="fc bfc" id="L424" title="All 2 branches covered.">            for (String effect : STATUS_EFFECTS) {</span>
+<span class="fc" id="L425">                encounterOpponentController.showStatus(effect, false);</span>
+<span class="fc" id="L426">            }</span>
+<span class="pc bpc" id="L427" title="1 of 2 branches missed.">            for (String effect : monster.status()) {</span>
+<span class="nc" id="L428">                encounterOpponentController.showStatus(effect, true);</span>
+<span class="nc" id="L429">            }</span>
+            //write monster name
+<span class="fc" id="L431">            disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -&gt; {</span>
+<span class="fc" id="L432">                caughtMonsterType = m;</span>
+<span class="fc" id="L433">                encounterOpponentController.setMonsterNameLabel(m.name());</span>
+<span class="fc" id="L434">                encounterOpponentStorage.addCurrentMonsterType(opponent._id(), m);</span>
+                // only show the description if it is at start
+<span class="pc bpc" id="L436" title="1 of 4 branches missed.">                if (encounterOpponentStorage.isWild() &amp;&amp; isInit) {</span>
+<span class="fc" id="L437">                    battleDialogText.setText(resources.getString(&quot;ENCOUNTER_DESCRIPTION_BEGIN&quot;) + &quot; &quot; + m.name());</span>
+                }
+<span class="fc" id="L439">            }, Throwable::printStackTrace));</span>
+<span class="pc bpc" id="L440" title="1 of 2 branches missed.">            if (monsterStorageProvider.get().imagesAlreadyFetched()) {</span>
+<span class="nc" id="L441">                enemyMonsterImage = monsterStorageProvider.get().getMonsterImage(monster.type());</span>
+<span class="nc" id="L442">                encounterOpponentController.setMonsterImage(enemyMonsterImage);</span>
+            }
+<span class="fc" id="L444">        }, Throwable::printStackTrace));</span>
+<span class="fc" id="L445">    }</span>
+
+    private void showEnemyInfo(EncounterOpponentController encounterOpponentController, Opponent opponent) {
+<span class="pc bpc" id="L448" title="1 of 2 branches missed.">        if (opponent != null) {</span>
+            // Monster
+<span class="fc" id="L450">            showEnemyMonster(encounterOpponentController, opponent, true);</span>
+
+            // Trainer Sprite
+<span class="fc" id="L453">            disposables.add(trainersService.getTrainer(regionId, opponent.trainer()).observeOn(FX_SCHEDULER).subscribe(trainer -&gt; {</span>
+<span class="fc" id="L454">                battleDialogText.setText(resources.getString(&quot;ENCOUNTER_DESCRIPTION_BEGIN&quot;) + &quot; &quot; + trainer.name());</span>
+<span class="fc" id="L455">                ImageView opponentTrainer = encounterOpponentController.getTrainerImageView();</span>
+<span class="fc" id="L456">                setTrainerSpriteImageView(trainer, opponentTrainer, TRAINER_DIRECTION_DOWN);</span>
+<span class="fc" id="L457">            }, Throwable::printStackTrace));</span>
+        }
+<span class="fc" id="L459">    }</span>
+
+    private void showTeamMonster(EncounterOpponentController encounterOpponentController, Opponent opponent) {
+        // Monster
+<span class="fc" id="L463">        disposables.add(monstersService.getMonster(regionId, opponent.trainer(), opponent.monster()).observeOn(FX_SCHEDULER).subscribe(monster -&gt; {</span>
+<span class="fc" id="L464">            encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);</span>
+<span class="fc" id="L465">            listenToMonster(opponent.trainer(), opponent.monster(), encounterOpponentController, opponent);</span>
+<span class="fc" id="L466">            double currentHealth = monster.currentAttributes().health();</span>
+<span class="fc" id="L467">            double maxHealth = monster.attributes().health();</span>
+<span class="fc" id="L468">            encounterOpponentController.setLevelLabel(&quot;LVL &quot; + monster.level())</span>
+<span class="fc" id="L469">                    .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level() + 1))</span>
+<span class="fc" id="L470">                    .setHealthBarValue((double) monster.currentAttributes().health() / monster.attributes().health())</span>
+<span class="fc" id="L471">                    .setHealthLabel(formatter.format(currentHealth) + &quot;/&quot; + formatter.format(maxHealth) + &quot; HP&quot;);</span>
+<span class="fc bfc" id="L472" title="All 2 branches covered.">            for (String effect : STATUS_EFFECTS) {</span>
+<span class="fc" id="L473">                encounterOpponentController.showStatus(effect, false);</span>
+<span class="fc" id="L474">            }</span>
+<span class="pc bpc" id="L475" title="1 of 2 branches missed.">            for (String effect : monster.status()) {</span>
+<span class="nc" id="L476">                encounterOpponentController.showStatus(effect, true);</span>
+<span class="nc" id="L477">            }</span>
+            //write monster name
+<span class="fc" id="L479">            disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(m -&gt; {</span>
+<span class="fc" id="L480">                encounterOpponentController.setMonsterNameLabel(m.name());</span>
+<span class="fc" id="L481">                encounterOpponentStorage.addCurrentMonsterType(opponent._id(), m);</span>
+<span class="fc" id="L482">            }, Throwable::printStackTrace));</span>
+<span class="pc bpc" id="L483" title="1 of 2 branches missed.">            if (monsterStorageProvider.get().imagesAlreadyFetched()) {</span>
+<span class="nc" id="L484">                Image myMonsterImage = monsterStorageProvider.get().getMonsterImage(monster.type());</span>
+<span class="nc" id="L485">                encounterOpponentController.setMonsterImage(myMonsterImage);</span>
+            }
+<span class="fc" id="L487">        }, Throwable::printStackTrace));</span>
+<span class="fc" id="L488">    }</span>
+
+    private void showCoopImage(EncounterOpponentController encounterOpponentController, Opponent opponent) {
+<span class="fc" id="L491">        disposables.add(trainersService.getTrainer(regionId, opponent.trainer()).observeOn(FX_SCHEDULER).subscribe(trainer -&gt; {</span>
+<span class="fc" id="L492">            ImageView opponentTrainer = encounterOpponentController.getTrainerImageView();</span>
+<span class="fc" id="L493">            setTrainerSpriteImageView(trainer, opponentTrainer, TRAINER_DIRECTION_UP);</span>
+<span class="fc" id="L494">        }, Throwable::printStackTrace));</span>
+<span class="fc" id="L495">    }</span>
+
+    public int requiredExperience(int currentLevel) {
+<span class="fc" id="L498">        return (int) (Math.pow(currentLevel, 3) - Math.pow(currentLevel - 1, 3));</span>
+    }
+
+    public void showMonsterDetailsInEncounter(Opponent currentOpponent, EncounterOpponentController encounterOpponentController) {
+<span class="nc" id="L502">        VBox monsterDetailVBox = new VBox();</span>
+<span class="nc" id="L503">        monsterDetailVBox.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L504">        MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();</span>
+<span class="nc" id="L505">        Monster monster = encounterOpponentStorage.getCurrentMonsters(currentOpponent._id());</span>
+<span class="nc" id="L506">        MonsterTypeDto monsterTypeDto = encounterOpponentStorage.getCurrentMonsterType(currentOpponent._id());</span>
+
+<span class="nc" id="L508">        StringBuilder type = new StringBuilder();</span>
+<span class="nc bnc" id="L509" title="All 2 branches missed.">        for (String s : monsterTypeDto.type()) {</span>
+<span class="nc" id="L510">            type.append(s);</span>
+<span class="nc" id="L511">        }</span>
+<span class="nc" id="L512">        monstersDetailController.initFromBattleMenu(this, monsterDetailVBox, monster, monsterTypeDto, encounterOpponentController.getMonsterImage(), resources, presetsService, type.toString());</span>
+<span class="nc" id="L513">        monsterDetailVBox.getChildren().add(monstersDetailController.render());</span>
+<span class="nc" id="L514">        rootStackPane.getChildren().add(monsterDetailVBox);</span>
+<span class="nc" id="L515">        monsterDetailVBox.requestFocus();</span>
+<span class="nc" id="L516">    }</span>
+
+    public void showMonsterDetails(Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, String type) {
+<span class="nc" id="L519">        VBox monsterDetailVBox = new VBox();</span>
+<span class="nc" id="L520">        monsterDetailVBox.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L521">        MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();</span>
+
+<span class="nc" id="L523">        monstersDetailController.initFromBattleMenu(this, monsterDetailVBox, monster, monsterTypeDto, monsterImage, resources, presetsService, type);</span>
+<span class="nc" id="L524">        monsterDetailVBox.getChildren().add(monstersDetailController.render());</span>
+<span class="nc" id="L525">        rootStackPane.getChildren().add(monsterDetailVBox);</span>
+<span class="nc" id="L526">        monsterDetailVBox.requestFocus();</span>
+<span class="nc" id="L527">    }</span>
+
+    public void showChangeMonsterList() {
+<span class="nc" id="L530">        VBox monsterListVBox = new VBox();</span>
+<span class="nc" id="L531">        monsterListVBox.setMinWidth(600);</span>
+<span class="nc" id="L532">        monsterListVBox.setMinHeight(410);</span>
+<span class="nc" id="L533">        monsterListVBox.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L534">        ChangeMonsterListController changeMonsterListController = changeMonsterListControllerProvider.get();</span>
+<span class="nc" id="L535">        changeMonsterListController.init(this, monsterListVBox, ingameControllerProvider.get(), null, null);</span>
+<span class="nc" id="L536">        monsterListVBox.getChildren().add(changeMonsterListController.render());</span>
+<span class="nc" id="L537">        rootStackPane.getChildren().add(monsterListVBox);</span>
+<span class="nc" id="L538">        monsterListVBox.requestFocus();</span>
+<span class="nc" id="L539">    }</span>
+
+    @Override
+    public void destroy() {
+<span class="nc" id="L543">        super.destroy();</span>
+<span class="nc bnc" id="L544" title="All 2 branches missed.">        for (var controller : subControllers) {</span>
+<span class="nc bnc" id="L545" title="All 2 branches missed.">            if (controller != null) {</span>
+<span class="nc" id="L546">                controller.destroy();</span>
+            }
+<span class="nc" id="L548">        }</span>
+<span class="nc bnc" id="L549" title="All 2 branches missed.">        if (encounterOpponentControllerHashMap != null) {</span>
+<span class="nc" id="L550">            encounterOpponentControllerHashMap.values().forEach(Controller::destroy);</span>
+        }
+
+<span class="nc" id="L553">    }</span>
+
+    public void listenToOpponents(String encounterId) {
+<span class="fc" id="L556">        disposables.add(eventListener.get().listen(&quot;encounters.&quot; + encounterId + &quot;.trainers.*.opponents.*.*&quot;, Opponent.class).observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
+<span class="fc" id="L557">            final Opponent opponent = event.data();</span>
+<span class="fc bfc" id="L558" title="All 2 branches covered.">            if (event.suffix().contains(&quot;updated&quot;)) {</span>
+<span class="fc" id="L559">                updateOpponent(opponent);</span>
+<span class="fc bfc" id="L560" title="All 2 branches covered.">            } else if (event.suffix().contains(&quot;deleted&quot;)) {</span>
+<span class="pc bpc" id="L561" title="1 of 2 branches missed.">                if (deleteOpponents &gt;= 0) {</span>
+<span class="fc" id="L562">                    opponentsDelete.put(opponent._id(), opponent);</span>
+                }
+<span class="fc" id="L564">                deleteOpponents++;</span>
+<span class="pc bpc" id="L565" title="1 of 2 branches missed.">                if (opponentsDelete.size() &gt;= encounterOpponentStorage.getEncounterSize()) {</span>
+<span class="nc" id="L566">                    PauseTransition pause = new PauseTransition(Duration.millis(pauseDuration / 2));</span>
+<span class="nc" id="L567">                    pause.setOnFinished(evt -&gt; {</span>
+<span class="nc" id="L568">                        showResult();</span>
+<span class="nc" id="L569">                    });</span>
+<span class="nc" id="L570">                    pause.play();</span>
+<span class="nc" id="L571">                }</span>
+<span class="pc bpc" id="L572" title="1 of 2 branches missed.">            } else if (event.suffix().contains(&quot;created&quot;)) {</span>
+<span class="nc bnc" id="L573" title="All 2 branches missed.">                if (encounterOpponentStorage.getEncounterSize() == 4) {</span>
+<span class="nc" id="L574">                    deleteOpponents--;</span>
+                }
+<span class="nc" id="L576">                disposables.add(encounterOpponentsService.getEncounterOpponents(trainerStorageProvider.get().getRegion()._id(), encounterId).observeOn(FX_SCHEDULER).subscribe(opponents -&gt; {</span>
+<span class="nc" id="L577">                    teamHBox.getChildren().clear();</span>
+<span class="nc" id="L578">                    ingameControllerProvider.get().initEncounterOpponentStorage(opponents);</span>
+<span class="nc bnc" id="L579" title="All 2 branches missed.">                    for (Opponent o : opponents) {</span>
+<span class="nc bnc" id="L580" title="All 2 branches missed.">                        if (o.isAttacker() == encounterOpponentStorage.isAttacker()) {</span>
+<span class="nc bnc" id="L581" title="All 2 branches missed.">                            if (o.trainer().equals(trainerId)) {</span>
+<span class="nc" id="L582">                                encounterOpponentStorage.setSelfOpponent(o);</span>
+<span class="nc" id="L583">                                ownTrainerController = new EncounterOpponentController();</span>
+<span class="nc" id="L584">                                ownTrainerController.init(o, false, false, true, false, encounterOpponentStorage.isTwoMonster(), this);</span>
+<span class="nc" id="L585">                                encounterOpponentControllerHashMap.put(o._id(), ownTrainerController);</span>
+                            } else {
+<span class="nc" id="L587">                                encounterOpponentStorage.setCoopOpponent(o);</span>
+<span class="nc" id="L588">                                coopTrainerController = new EncounterOpponentController();</span>
+<span class="nc" id="L589">                                coopTrainerController.init(o, false, false, false, false, encounterOpponentStorage.isTwoMonster(), this);</span>
+<span class="nc" id="L590">                                encounterOpponentControllerHashMap.put(o._id(), coopTrainerController);</span>
+                            }
+<span class="nc" id="L592">                            showTeamMonster(encounterOpponentControllerHashMap.get(o._id()), o);</span>
+<span class="nc" id="L593">                            showCoopImage(encounterOpponentControllerHashMap.get(o._id()), o);</span>
+<span class="nc" id="L594">                            monsterInEncounterHashMap.put(o._id(), false);</span>
+                        }
+<span class="nc" id="L596">                    }</span>
+<span class="nc" id="L597">                    teamHBox.getChildren().add(coopTrainerController.render());</span>
+<span class="nc" id="L598">                    teamHBox.getChildren().add(ownTrainerController.render());</span>
+<span class="nc" id="L599">                }, Throwable::printStackTrace));</span>
+            }
+<span class="fc" id="L601">        }, Throwable::printStackTrace));</span>
+<span class="fc" id="L602">    }</span>
+
+    // manage the response of all the opponents (include the move and all results after the move, there are 2 Updates per opponent)
+    private void updateOpponent(Opponent opponent) {
+<span class="fc bfc" id="L606" title="All 2 branches covered.">        if (opponent.move() != null) {</span>
+<span class="fc" id="L607">            opponentsUpdate.put(opponent._id() + &quot;Move&quot;, opponent);</span>
+        } else {
+<span class="pc bpc" id="L609" title="1 of 2 branches missed.">            if (opponent._id().equals(encounterOpponentStorage.getSelfOpponent()._id())) {</span>
+<span class="fc" id="L610">                encounterOpponentStorage.setSelfOpponent(opponent);</span>
+<span class="nc bnc" id="L611" title="All 2 branches missed.">            } else if (opponent.isAttacker() != encounterOpponentStorage.isAttacker()) {</span>
+<span class="nc" id="L612">                encounterOpponentStorage.getEnemyOpponents().removeIf(o -&gt; o._id().equals(opponent._id()));</span>
+<span class="nc" id="L613">                encounterOpponentStorage.addEnemyOpponent(opponent);</span>
+
+            } else {
+<span class="nc" id="L616">                encounterOpponentStorage.setCoopOpponent(opponent);</span>
+            }
+<span class="fc" id="L618">            opponentsUpdate.put(opponent._id() + &quot;Results&quot;, opponent);</span>
+<span class="fc bfc" id="L619" title="All 2 branches covered.">            if (opponent.monster() == null) {</span>
+<span class="fc" id="L620">                monsterInEncounterHashMap.put(opponent._id(), true);</span>
+<span class="pc bpc" id="L621" title="1 of 2 branches missed.">                if (opponent.trainer().equals(trainerId)) {</span>
+<span class="nc" id="L622">                    yourMonsterDefeated(opponent._id());</span>
+                }
+<span class="pc bpc" id="L624" title="1 of 2 branches missed.">            } else if (monsterInEncounterHashMap.get(opponent._id()) != null) {</span>
+<span class="pc bpc" id="L625" title="1 of 2 branches missed.">                if (monsterInEncounterHashMap.get(opponent._id())) {</span>
+<span class="nc bnc" id="L626" title="All 2 branches missed.">                    if (opponent.monster() != null) {</span>
+<span class="nc bnc" id="L627" title="All 2 branches missed.">                        if (opponent.isAttacker() != encounterOpponentStorage.isAttacker()) {</span>
+<span class="nc" id="L628">                            showEnemyMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent, false);</span>
+<span class="nc" id="L629">                            updateDescription(resources.getString(&quot;ENEMY.CHANGED.MONSTER&quot;) + &quot;\n&quot;, false);</span>
+                        } else {
+<span class="nc" id="L631">                            showTeamMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent);</span>
+<span class="nc bnc" id="L632" title="All 2 branches missed.">                            if (opponent.trainer().equals(trainerId)) {</span>
+<span class="nc" id="L633">                                updateDescription(resources.getString(&quot;YOU.CHANGED.MONSTER&quot;) + &quot;\n&quot;, false);</span>
+                            } else {
+<span class="nc" id="L635">                                updateDescription(resources.getString(&quot;ALLY.CHANGED.MONSTER&quot;) + &quot;\n&quot;, false);</span>
+                            }
+                        }
+<span class="nc" id="L638">                        monsterInEncounterHashMap.put(opponent._id(), false);</span>
+<span class="nc" id="L639">                        opponentsUpdate.remove(opponent._id() + &quot;Results&quot;);</span>
+                    }
+                }
+            }
+        }
+
+        // this magic number is two time the size of oppenents in this encounter
+<span class="pc bpc" id="L646" title="1 of 2 branches missed.">        if (opponentsUpdate.size() &gt;= (encounterOpponentStorage.getEncounterSize() - deleteOpponents) * 2) {</span>
+<span class="nc bnc" id="L647" title="All 2 branches missed.">            if (repeatedTimes == 0) {</span>
+<span class="nc" id="L648">                writeBattleDescription(opponentsUpdate);</span>
+            }
+<span class="nc" id="L650">            repeatedTimes++;</span>
+        }
+<span class="fc" id="L652">    }</span>
+
+    public void writeBattleDescription(HashMap&lt;String, Opponent&gt; forDescription) {
+<span class="nc" id="L655">        updateDescription(EMPTY_STRING, true);</span>
+<span class="nc" id="L656">        List&lt;String&gt; opponentsInStorage = encounterOpponentStorage.getOpponentsInStorage();</span>
+<span class="nc bnc" id="L657" title="All 2 branches missed.">        for (String opponentId : opponentsInStorage) {</span>
+<span class="nc" id="L658">            Opponent o = forDescription.get(opponentId + &quot;Move&quot;);</span>
+<span class="nc bnc" id="L659" title="All 2 branches missed.">            if (o != null) {</span>
+<span class="nc" id="L660">                Move move = o.move();</span>
+<span class="nc bnc" id="L661" title="All 2 branches missed.">                if (move instanceof AbilityMove abilityMove) {</span>
+<span class="nc bnc" id="L662" title="All 2 branches missed.">                    if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {</span>
+<span class="nc" id="L663">                        updateDescription(resources.getString(&quot;YOU.USED&quot;) + &quot; &quot; + abilityDtos.get(abilityMove.ability() - 1).name() + &quot;. &quot;, false);</span>
+<span class="nc bnc" id="L664" title="All 2 branches missed.">                    } else if (o.isAttacker() == encounterOpponentStorage.isAttacker()) {</span>
+<span class="nc" id="L665">                        updateDescription(resources.getString(&quot;COOP.USED&quot;) + &quot; &quot; + abilityDtos.get(abilityMove.ability() - 1).name() + &quot;. &quot;, false);</span>
+                    } else {
+<span class="nc" id="L667">                        updateDescription(resources.getString(&quot;ENEMY.USED&quot;) + &quot; &quot; + abilityDtos.get(abilityMove.ability() - 1).name() + &quot;. &quot;, false);</span>
+                    }
+                }
+
+<span class="nc bnc" id="L671" title="All 2 branches missed.">                if (move instanceof ChangeMonsterMove) {</span>
+<span class="nc bnc" id="L672" title="All 2 branches missed.">                    if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {</span>
+<span class="nc" id="L673">                        updateDescription(resources.getString(&quot;YOU.CHANGED.MONSTER&quot;) + &quot;\n&quot;, false);</span>
+<span class="nc" id="L674">                        showTeamMonster(encounterOpponentControllerHashMap.get(o._id()), o);</span>
+<span class="nc bnc" id="L675" title="All 2 branches missed.">                    } else if (o.isAttacker() != encounterOpponentStorage.isAttacker()) {</span>
+<span class="nc" id="L676">                        updateDescription(resources.getString(&quot;ENEMY.CHANGED.MONSTER&quot;) + &quot;\n&quot;, false);</span>
+<span class="nc" id="L677">                        showEnemyMonster(encounterOpponentControllerHashMap.get(o._id()), o, false);</span>
+                    } else {
+<span class="nc" id="L679">                        updateDescription(resources.getString(&quot;ALLY.CHANGED.MONSTER&quot;) + &quot;\n&quot;, false);</span>
+<span class="nc" id="L680">                        showTeamMonster(encounterOpponentControllerHashMap.get(o._id()), o);</span>
+                    }
+<span class="nc" id="L682">                    listenToMonster(o.trainer(), o.monster(), encounterOpponentControllerHashMap.get(o._id()), o);</span>
+                }
+
+<span class="nc bnc" id="L685" title="All 2 branches missed.">                if (move instanceof UseItemMove useItemMove) {</span>
+<span class="nc bnc" id="L686" title="All 2 branches missed.">                    if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {</span>
+<span class="nc" id="L687">                        updateDescription(resources.getString(&quot;YOU.USED&quot;) + &quot; &quot; + itemTypeDtos.get(useItemMove.item()).name() + &quot;. &quot;, false);</span>
+<span class="nc bnc" id="L688" title="All 2 branches missed.">                    } else if (o.isAttacker() == encounterOpponentStorage.isAttacker()) {</span>
+<span class="nc" id="L689">                        updateDescription(resources.getString(&quot;COOP.USED&quot;) + &quot; &quot; + itemTypeDtos.get(useItemMove.item()).name() + &quot;. &quot;, false);</span>
+                    } else {
+<span class="nc" id="L691">                        updateDescription(resources.getString(&quot;ENEMY.USED&quot;) + &quot; &quot; + itemTypeDtos.get(useItemMove.item()).name() + &quot;. &quot;, false);</span>
+                    }
+                }
+            }
+
+<span class="nc" id="L696">            Opponent oResults = forDescription.get(opponentId + &quot;Results&quot;);</span>
+<span class="nc bnc" id="L697" title="All 2 branches missed.">            if (oResults != null) {</span>
+<span class="nc bnc" id="L698" title="All 2 branches missed.">                if (oResults.results() != null) {</span>
+<span class="nc bnc" id="L699" title="All 2 branches missed.">                    for (Result r : oResults.results()) {</span>
+
+<span class="nc bnc" id="L701" title="All 11 branches missed.">                        switch (r.type()) {</span>
+                            case ABILITY_SUCCESS -&gt; {
+<span class="nc" id="L703">                                updateDescription(abilityDtos.get(r.ability() - 1).name() + &quot; &quot; + resources.getString(&quot;IS&quot;) + &quot; &quot; + r.effectiveness() + &quot;.\n&quot;, false);</span>
+<span class="nc bnc" id="L704" title="All 2 branches missed.">                                if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L705">                                    AudioService.getInstance().playEffect(ATTACK, ingameControllerProvider.get());</span>
+                                }
+                            }
+                            case MONSTER_LEVELUP -&gt; {
+<span class="nc bnc" id="L709" title="All 2 branches missed.">                                if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {</span>
+<span class="nc" id="L710">                                    resultLevelUpHashMap.put(oResults._id(), true);</span>
+                                }
+                            }
+                            case MONSTER_LEARNED -&gt; {
+<span class="nc bnc" id="L714" title="All 2 branches missed.">                                if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {</span>
+<span class="nc bnc" id="L715" title="All 2 branches missed.">                                    if (newAbilitiesHashMap.get(oResults._id()) == null) {</span>
+<span class="nc" id="L716">                                        newAbilitiesHashMap.put(oResults._id(), new ArrayList&lt;&gt;(List.of(r.ability())));</span>
+                                    } else {
+<span class="nc" id="L718">                                        newAbilitiesHashMap.get(oResults._id()).add(r.ability());</span>
+                                    }
+<span class="nc" id="L720">                                    updateDescription(resources.getString(&quot;YOUR.MONSTER.LEARNED&quot;) + &quot; &quot; + abilityDtos.get(r.ability() - 1).name() + &quot;.\n&quot;, false);</span>
+                                }
+                            }
+                            case MONSTER_EVOLVED -&gt; {
+<span class="nc bnc" id="L724" title="All 2 branches missed.">                                if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {</span>
+<span class="nc" id="L725">                                    resultEvolvedHashMap.put(oResults._id(), true);</span>
+                                }
+                            }
+                            case TARGET_DEFEATED -&gt; {
+<span class="nc bnc" id="L729" title="All 2 branches missed.">                                if (oResults.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {</span>
+
+<span class="nc" id="L731">                                    enemyMonsterDefeated();</span>
+<span class="nc" id="L732">                                    updateDescription(resources.getString(&quot;ENEMY.DEFEATED&quot;) + &quot;\n&quot;, false);</span>
+<span class="nc bnc" id="L733" title="All 2 branches missed.">                                } else if (oResults.isAttacker() == encounterOpponentStorage.isAttacker()) {</span>
+
+<span class="nc" id="L735">                                    updateDescription(resources.getString(&quot;ENEMY.DEFEATED&quot;) + &quot;\n&quot;, false);</span>
+                                } else {
+
+<span class="nc" id="L738">                                    updateDescription(resources.getString(&quot;TEAM.DEFEATED&quot;) + &quot;\n&quot;, false);</span>
+                                }
+<span class="nc" id="L740">                            }</span>
+                            case STATUS_ADDED -&gt; {
+<span class="nc" id="L742">                                EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(oResults._id());</span>
+<span class="nc" id="L743">                                encounterOpponentController.showStatus(r.status(), true);</span>
+
+<span class="nc" id="L745">                            }</span>
+                            case STATUS_REMOVED -&gt; {
+<span class="nc" id="L747">                                EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(oResults._id());</span>
+<span class="nc" id="L748">                                encounterOpponentController.showStatus(r.status(), false);</span>
+<span class="nc" id="L749">                            }</span>
+                            // TODO: monster caught from @Fin
+                            case MONSTER_CAUGHT -&gt; {
+<span class="nc" id="L752">                                throwSuccessfulMonBall();</span>
+<span class="nc" id="L753">                                monsterCaught = true;</span>
+<span class="nc" id="L754">                                updateDescription(&quot;3...\n&quot;, true);</span>
+<span class="nc" id="L755">                                PauseTransition pause = new PauseTransition(Duration.seconds(1));</span>
+<span class="nc" id="L756">                                PauseTransition pause2 = new PauseTransition(Duration.seconds(1));</span>
+<span class="nc" id="L757">                                PauseTransition pause3 = new PauseTransition(Duration.seconds(1));</span>
+<span class="nc" id="L758">                                pause.setOnFinished(evt -&gt; {</span>
+<span class="nc" id="L759">                                    updateDescription(&quot;2...\n&quot;, true);</span>
+<span class="nc" id="L760">                                    pause2.play();</span>
+<span class="nc" id="L761">                                });</span>
+<span class="nc" id="L762">                                pause2.setOnFinished(evt -&gt; {</span>
+<span class="nc" id="L763">                                    updateDescription(&quot;1...\n&quot;, true);</span>
+<span class="nc" id="L764">                                    pause3.play();</span>
+<span class="nc" id="L765">                                });</span>
+<span class="nc" id="L766">                                pause3.setOnFinished(evt -&gt; {</span>
+<span class="nc" id="L767">                                    updateDescription(resources.getString(&quot;MONSTER.CAUGHT&quot;) + &quot;\n&quot;, false);</span>
+<span class="nc" id="L768">                                });</span>
+
+<span class="nc" id="L770">                                pause.play();</span>
+<span class="nc" id="L771">                            }</span>
+                            case ITEM_SUCCESS -&gt; {
+<span class="nc" id="L773">                                List&lt;Integer&gt; ballIds = new ArrayList&lt;&gt;(List.of(10, 11, 12, 13, 14, 15, 16, 17));</span>
+<span class="nc bnc" id="L774" title="All 2 branches missed.">                                if (ballIds.contains(r.item())) {</span>
+<span class="nc" id="L775">                                    throwFailedMonBall();</span>
+                                } else {
+<span class="nc" id="L777">                                    updateDescription(resources.getString(&quot;USE.OF&quot;) + &quot; &quot; + itemTypeDtos.get(r.item()).name() + &quot; &quot; + resources.getString(&quot;IS&quot;) + &quot; &quot; + resources.getString(&quot;SUCCEED&quot;) + &quot;.\n&quot;, false);</span>
+                                }
+<span class="nc" id="L779">                            }</span>
+<span class="nc" id="L780">                            case ITEM_FAILED -&gt; updateDescription(resources.getString(&quot;USE.OF&quot;) + &quot; &quot; + itemTypeDtos.get(r.item()).name() + &quot; &quot; + resources.getString(&quot;IS&quot;) + &quot; &quot; + resources.getString(&quot;FAILED&quot;) + &quot;.\n&quot;, false);</span>
+                        }
+<span class="nc" id="L782">                    }</span>
+                }
+            }
+
+<span class="nc" id="L786">        }</span>
+<span class="nc" id="L787">        opponentsUpdate.clear();</span>
+<span class="nc" id="L788">        currentMonsterIndex = 0;</span>
+<span class="nc" id="L789">    }</span>
+
+    private void checkMoveAlreadyUsed(Opponent opponent) {
+<span class="pc bpc" id="L792" title="1 of 2 branches missed.">        if (opponent.move() != null) {</span>
+<span class="nc" id="L793">            updateOpponent(opponent);</span>
+        }
+<span class="fc" id="L795">    }</span>
+
+    public void updateDescription(String information, boolean isUpdated) {
+<span class="nc bnc" id="L798" title="All 2 branches missed.">        if (isUpdated) {</span>
+<span class="nc" id="L799">            battleDialogText.setText(information);</span>
+        } else {
+<span class="nc bnc" id="L801" title="All 2 branches missed.">            if (battleDialogText.getText().contains(information)) {</span>
+<span class="nc" id="L802">                return;</span>
+            }
+<span class="nc" id="L804">            battleDialogText.setText(battleDialogText.getText() + information);</span>
+        }
+<span class="nc" id="L806">    }</span>
+
+    private void listenToMonster(String trainerId, String monsterId, EncounterOpponentController encounterOpponentController, Opponent opponent) {
+<span class="fc" id="L809">        disposables.add(eventListener.get().listen(&quot;trainers.&quot; + trainerId + &quot;.monsters.&quot; + monsterId + &quot;.*&quot;, Monster.class).observeOn(FX_SCHEDULER).subscribe(event -&gt; {</span>
+<span class="fc" id="L810">            final Monster monster = event.data();</span>
+<span class="fc bfc" id="L811" title="All 2 branches covered.">            if (monster != null) {</span>
+<span class="fc bfc" id="L812" title="All 2 branches covered.">                if (monster._id().equals(encounterOpponentStorage.getSelfOpponent().monster())) {</span>
+<span class="pc bpc" id="L813" title="1 of 2 branches missed.">                    if (monster.currentAttributes().health() / monster.attributes().health() &lt;= 0.2) {</span>
+<span class="nc bnc" id="L814" title="All 2 branches missed.">                        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L815">                            AudioService.getInstance().playEffect(LOW_HEALTH, ingameControllerProvider.get());</span>
+                        }
+                    }
+                }
+<span class="pc bpc" id="L819" title="1 of 2 branches missed.">                if (event.suffix().contains(&quot;updated&quot;)) {</span>
+<span class="fc" id="L820">                    double currentHealth = monster.currentAttributes().health();</span>
+<span class="fc" id="L821">                    double maxHealth = monster.attributes().health();</span>
+<span class="pc bpc" id="L822" title="1 of 2 branches missed.">                    if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L823">                        AnimationBuilder.buildShakeAnimation(encounterOpponentController.monsterImageView, 50, 3, 1).play();</span>
+<span class="nc bnc" id="L824" title="All 2 branches missed.">                        if (currentHealth &gt; 0) {</span>
+<span class="nc" id="L825">                            AnimationBuilder.buildProgressBarAnimation(encounterOpponentController.HealthBar, 1500, monster.currentAttributes().health() / monster.attributes().health()).play();</span>
+                        } else {
+<span class="nc" id="L827">                            encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());</span>
+                        }
+                    } else {
+<span class="fc" id="L830">                        encounterOpponentController.setHealthBarValue(monster.currentAttributes().health() / monster.attributes().health());</span>
+                    }
+<span class="fc" id="L832">                    encounterOpponentController</span>
+<span class="fc" id="L833">                            .setHealthLabel(formatter.format(currentHealth) + &quot;/&quot; + formatter.format(maxHealth) + &quot; HP&quot;)</span>
+<span class="fc" id="L834">                            .setLevelLabel(&quot;LVL &quot; + monster.level())</span>
+<span class="fc" id="L835">                            .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));</span>
+                    // TODO： add for refreshing the status im team
+<span class="fc bfc" id="L837" title="All 2 branches covered.">                    if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {</span>
+<span class="fc" id="L838">                        encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);</span>
+                        // if health is 0, then add to the team the information that the monster is died.
+                        // if the type of the monster changed, then make a server call and update in the opponent storage
+<span class="pc bpc" id="L841" title="1 of 2 branches missed.">                        if (currentHealth == 0) {</span>
+<span class="nc" id="L842">                            monsterInTeamHashMap.put(monster._id(), true);</span>
+                        }
+                    }
+                }
+            }
+<span class="fc" id="L847">        }, Throwable::printStackTrace));</span>
+<span class="fc" id="L848">    }</span>
+
+    private void showResult() {
+<span class="nc" id="L851">        List&lt;String&gt; opponentsInStorage = encounterOpponentStorage.getOpponentsInStorage();</span>
+<span class="nc bnc" id="L852" title="All 2 branches missed.">        for (String id : opponentsInStorage) {</span>
+<span class="nc" id="L853">            Opponent o = opponentsDelete.get(id);</span>
+<span class="nc bnc" id="L854" title="All 2 branches missed.">            if (monsterCaught) {</span>
+<span class="nc" id="L855">                PauseTransition pause = new PauseTransition(Duration.seconds(5));</span>
+<span class="nc" id="L856">                pause.play();</span>
+<span class="nc bnc" id="L857" title="All 2 branches missed.">            } else if (o.monster() == null) {</span>
+<span class="nc bnc" id="L858" title="All 2 branches missed.">                if (o.trainer().equals(trainerStorageProvider.get().getTrainer()._id())) {</span>
+<span class="nc" id="L859">                    showResultPopUp(resources.getString(&quot;YOU.FAILED&quot;), false);</span>
+<span class="nc bnc" id="L860" title="All 2 branches missed.">                    if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L861">                        AudioService.getInstance().playEffect(LOSE, ingameControllerProvider.get());</span>
+                    }
+                } else {
+<span class="nc" id="L864">                    showResultPopUp(resources.getString(&quot;YOU.WON&quot;), true);</span>
+<span class="nc bnc" id="L865" title="All 2 branches missed.">                    if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L866">                        AudioService.getInstance().playEffect(WIN, ingameControllerProvider.get());</span>
+                    }
+                }
+            }
+<span class="nc" id="L870">        }</span>
+<span class="nc" id="L871">    }</span>
+
+    private void showResultPopUp(String string, boolean isWin) {
+<span class="nc" id="L874">        Opponent selfOpponent = encounterOpponentStorage.getSelfOpponent();</span>
+<span class="nc bnc" id="L875" title="All 4 branches missed.">        if (selfOpponent.coins() != 0 &amp;&amp; isWin) {</span>
+<span class="nc" id="L876">            encounterResultController.setCoinsAmount(selfOpponent.coins());</span>
+<span class="nc" id="L877">            encounterResultController.setCoinsEarned(true);</span>
+        }
+<span class="nc" id="L879">        VBox resultBox = new VBox();</span>
+<span class="nc" id="L880">        resultBox.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L881">        encounterResultController.init(app);</span>
+<span class="nc" id="L882">        resultBox.getChildren().add(encounterResultController.render());</span>
+<span class="nc" id="L883">        rootStackPane.getChildren().add(resultBox);</span>
+<span class="nc" id="L884">        resultBox.requestFocus();</span>
+<span class="nc" id="L885">        buttonsDisableEncounter(true);</span>
+<span class="nc" id="L886">        encounterResultController.setInformationText(string);</span>
+<span class="nc" id="L887">    }</span>
+
+    public void showIngameController() {
+<span class="nc" id="L890">        destroy();</span>
+<span class="nc bnc" id="L891" title="All 2 branches missed.">        if (trainerStorageProvider.get().getMonsters() != null) {</span>
+<span class="nc bnc" id="L892" title="All 2 branches missed.">            trainerStorageProvider.get().getTrainer().team().stream().flatMap(teamMonsterId -&gt; trainerStorageProvider.get().getMonsters().stream().filter(trainerMonster -&gt; teamMonsterId.equals(trainerMonster._id())).filter(trainerMonster -&gt; (double) trainerMonster.currentAttributes().health() / trainerMonster.attributes().health() &lt;= 0.2)).forEach(trainerMonster -&gt; this.ingameControllerProvider.get().showLowHealthNotification());</span>
+        }
+<span class="nc" id="L894">        app.show(ingameControllerProvider.get());</span>
+<span class="nc" id="L895">    }</span>
+
+    public void showAbilities() {
+<span class="nc" id="L898">        battleMenuVBox.getChildren().clear();</span>
+<span class="nc" id="L899">        Monster monster = null;</span>
+<span class="nc" id="L900">        Opponent opponent = encounterOpponentStorage.getSelfOpponent();</span>
+<span class="nc" id="L901">        subControllers.add(abilitiesMenuController);</span>
+
+<span class="nc bnc" id="L903" title="All 2 branches missed.">        if (encounterOpponentStorage.isTwoMonster()) {</span>
+<span class="nc bnc" id="L904" title="All 4 branches missed.">            if (currentMonsterIndex % 2 == 0 &amp;&amp; encounterOpponentStorage.getCoopOpponent().monster() != null) {</span>
+<span class="nc" id="L905">                opponent = encounterOpponentStorage.getCoopOpponent();</span>
+<span class="nc bnc" id="L906" title="All 4 branches missed.">            } else if (currentMonsterIndex % 2 == 1 &amp;&amp; encounterOpponentStorage.getSelfOpponent().monster() != null) {</span>
+<span class="nc" id="L907">                opponent = encounterOpponentStorage.getSelfOpponent();</span>
+<span class="nc bnc" id="L908" title="All 2 branches missed.">            } else if (encounterOpponentStorage.getSelfOpponent().monster() == null) {</span>
+<span class="nc" id="L909">                opponent = encounterOpponentStorage.getCoopOpponent();</span>
+<span class="nc bnc" id="L910" title="All 2 branches missed.">            } else if (encounterOpponentStorage.getCoopOpponent().monster() == null) {</span>
+<span class="nc" id="L911">                opponent = encounterOpponentStorage.getSelfOpponent();</span>
+            }
+<span class="nc" id="L913">            monster = encounterOpponentStorage.getCurrentMonsters(opponent._id());</span>
+        } else {
+<span class="nc bnc" id="L915" title="All 2 branches missed.">            if (encounterOpponentStorage.getSelfOpponent().monster() != null) {</span>
+<span class="nc" id="L916">                opponent = encounterOpponentStorage.getSelfOpponent();</span>
+<span class="nc" id="L917">                monster = encounterOpponentStorage.getCurrentMonsters(opponent._id());</span>
+            }
+        }
+
+<span class="nc" id="L921">        abilitiesMenuController.init(monster, presetsService, this, opponent, abilityDtos);</span>
+
+<span class="nc" id="L923">        battleMenuVBox.getChildren().add(abilitiesMenuController.render());</span>
+<span class="nc" id="L924">    }</span>
+
+    public void goBackToBattleMenu() {
+<span class="nc" id="L927">        battleMenuVBox.getChildren().clear();</span>
+<span class="nc" id="L928">        battleMenuController.init(this, encounterOpponentStorage, app);</span>
+<span class="nc" id="L929">        battleMenuVBox.getChildren().add(battleMenuController.render());</span>
+<span class="nc" id="L930">    }</span>
+
+    public void enemyMonsterDefeated() {
+        // pause to wait for possible level up result which comes after defeat result, else if is always false
+<span class="nc bnc" id="L934" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L935">            AudioService.getInstance().playEffect(DEATH, ingameControllerProvider.get());</span>
+        }
+<span class="nc" id="L937">        PauseTransition pause = new PauseTransition(Duration.millis(pauseDuration));</span>
+<span class="nc" id="L938">        pause.setOnFinished(evt -&gt; {</span>
+<span class="nc bnc" id="L939" title="All 2 branches missed.">            if (resultLevelUpHashMap.get(encounterOpponentStorage.getSelfOpponent()._id())) {</span>
+<span class="nc" id="L940">                showLevelUpPopUp(encounterOpponentStorage.getSelfOpponent()._id());</span>
+            }
+<span class="nc bnc" id="L942" title="All 2 branches missed.">            if (encounterOpponentStorage.isTwoMonster()) {</span>
+<span class="nc bnc" id="L943" title="All 2 branches missed.">                if (resultLevelUpHashMap.get(encounterOpponentStorage.getCoopOpponent()._id())) {</span>
+<span class="nc" id="L944">                    showLevelUpPopUp(encounterOpponentStorage.getCoopOpponent()._id());</span>
+                }
+            }
+<span class="nc" id="L947">        });</span>
+<span class="nc" id="L948">        pause.play();</span>
+<span class="nc" id="L949">    }</span>
+
+    public void yourMonsterDefeated(String opponentId) {
+<span class="nc bnc" id="L952" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L953">            AudioService.getInstance().playEffect(DEATH, ingameControllerProvider.get());</span>
+        }
+<span class="nc" id="L955">        monsterInTeamHashMap.forEach((monsterId, isDied) -&gt; {</span>
+<span class="nc bnc" id="L956" title="All 4 branches missed.">            if (!isDied &amp;&amp; !Objects.equals(monsterId, encounterOpponentStorage.getSelfOpponent().monster())) {</span>
+<span class="nc bnc" id="L957" title="All 4 branches missed.">                if (!encounterOpponentStorage.isTwoMonster() || !Objects.equals(monsterId, encounterOpponentStorage.getCoopOpponent().monster())) {</span>
+<span class="nc" id="L958">                    disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, monsterId, null).observeOn(FX_SCHEDULER).subscribe(opponent -&gt; resetRepeatedTimes(), Throwable::printStackTrace));</span>
+                }
+            }
+<span class="nc" id="L961">        });</span>
+<span class="nc" id="L962">    }</span>
+
+
+    public void fleeFromBattle() {
+<span class="nc" id="L966">        SequentialTransition fleeAnimation = AnimationBuilder.buildFleeAnimation(trainerStorageProvider.get().getTrainerSpriteChunk(), ownTrainerController);</span>
+<span class="nc" id="L967">        PauseTransition firstPause = new PauseTransition(Duration.millis(500));</span>
+<span class="nc" id="L968">        battleDialogText.setText(resources.getString(&quot;ENCOUNTER_DESCRIPTION_FLEE&quot;));</span>
+<span class="nc" id="L969">        firstPause.setOnFinished(evt -&gt; {</span>
+<span class="nc" id="L970">            ownTrainerController.monsterImageView.setVisible(false);</span>
+<span class="nc" id="L971">            fleeAnimation.play();</span>
+<span class="nc bnc" id="L972" title="All 2 branches missed.">            if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L973">                AudioService.getInstance().playEffect(FLEE, ingameControllerProvider.get());</span>
+            }
+<span class="nc" id="L975">        });</span>
+<span class="nc" id="L976">        fleeAnimation.setOnFinished(evt -&gt; disposables.add(encounterOpponentsService.deleteOpponent(encounterOpponentStorage.getRegionId(), encounterOpponentStorage.getEncounterId(), encounterOpponentStorage.getSelfOpponent()._id()).observeOn(FX_SCHEDULER).subscribe(result -&gt; showIngameController(), error -&gt; {</span>
+<span class="nc" id="L977">            showError(error.getMessage());</span>
+<span class="nc" id="L978">            error.printStackTrace();</span>
+<span class="nc" id="L979">        })));</span>
+<span class="nc" id="L980">        firstPause.play();</span>
+<span class="nc" id="L981">    }</span>
+
+    private VBox buildFleePopup() {
+        // base VBox
+<span class="nc" id="L985">        VBox fleeVBox = new VBox();</span>
+<span class="nc" id="L986">        fleeVBox.setId(&quot;fleePopup&quot;);</span>
+<span class="nc" id="L987">        fleeVBox.setMaxWidth(fleePopupWidth);</span>
+<span class="nc" id="L988">        fleeVBox.setMaxHeight(fleePopupHeight);</span>
+<span class="nc" id="L989">        fleeVBox.getStyleClass().add(&quot;dialogTextFlow&quot;);</span>
+<span class="nc" id="L990">        fleeVBox.setAlignment(Pos.CENTER);</span>
+
+        // flee TextFlow
+<span class="nc" id="L993">        TextFlow fleeTextFlow = new TextFlow();</span>
+<span class="nc" id="L994">        fleeTextFlow.setMaxWidth(fleePopupWidth);</span>
+<span class="nc" id="L995">        fleeTextFlow.setMaxHeight(fleeTextHeight);</span>
+<span class="nc" id="L996">        fleeTextFlow.setPrefWidth(fleePopupWidth);</span>
+<span class="nc" id="L997">        fleeTextFlow.setPrefHeight(fleeTextHeight);</span>
+<span class="nc" id="L998">        fleeTextFlow.setPadding(fleeTextInsets);</span>
+<span class="nc" id="L999">        fleeTextFlow.setTextAlignment(TextAlignment.CENTER);</span>
+
+        // flee Text
+<span class="nc" id="L1002">        Text fleeText = new Text(this.resources.getString(&quot;ENCOUNTER_FLEE_TEXT&quot;));</span>
+<span class="nc" id="L1003">        fleeTextFlow.getChildren().add(fleeText);</span>
+
+        // buttons HBox
+<span class="nc" id="L1006">        HBox buttonHBox = new HBox();</span>
+<span class="nc" id="L1007">        buttonHBox.setMaxWidth(fleePopupWidth);</span>
+<span class="nc" id="L1008">        buttonHBox.setMaxHeight(fleeButtonsHBoxHeight);</span>
+<span class="nc" id="L1009">        buttonHBox.setPrefWidth(fleePopupWidth);</span>
+<span class="nc" id="L1010">        buttonHBox.setPrefHeight(fleeButtonsHBoxHeight);</span>
+<span class="nc" id="L1011">        buttonHBox.setPadding(fleeButtonsHBoxInsets);</span>
+<span class="nc" id="L1012">        buttonHBox.setAlignment(Pos.TOP_CENTER);</span>
+<span class="nc" id="L1013">        buttonHBox.setSpacing(buttonsHBoxSpacing);</span>
+
+        // yes Button
+<span class="nc" id="L1016">        Button yesButton = new Button(this.resources.getString(&quot;ENCOUNTER_FLEE_CONFIRM_BUTTON&quot;));</span>
+<span class="nc" id="L1017">        yesButton.setId(&quot;fleePopupYesButton&quot;);</span>
+<span class="nc" id="L1018">        yesButton.setMaxWidth(fleeButtonWidth);</span>
+<span class="nc" id="L1019">        yesButton.setMinHeight(fleeButtonHeight);</span>
+<span class="nc" id="L1020">        yesButton.setPrefWidth(fleeButtonWidth);</span>
+<span class="nc" id="L1021">        yesButton.setPrefHeight(fleeButtonHeight);</span>
+<span class="nc" id="L1022">        yesButton.getStyleClass().add(&quot;hBoxRed&quot;);</span>
+<span class="nc" id="L1023">        yesButton.setOnAction(event -&gt; {</span>
+<span class="nc" id="L1024">            rootStackPane.getChildren().remove(fleeVBox);</span>
+<span class="nc" id="L1025">            this.fleeFromBattle();</span>
+<span class="nc" id="L1026">        });</span>
+
+        // no Button
+<span class="nc" id="L1029">        Button noButton = new Button(this.resources.getString(&quot;ENCOUNTER_FLEE_CANCEL_BUTTON&quot;));</span>
+<span class="nc" id="L1030">        noButton.setId(&quot;fleePopupNoButton&quot;);</span>
+<span class="nc" id="L1031">        noButton.setMaxWidth(fleeButtonWidth);</span>
+<span class="nc" id="L1032">        noButton.setMinHeight(fleeButtonHeight);</span>
+<span class="nc" id="L1033">        noButton.setPrefWidth(fleeButtonWidth);</span>
+<span class="nc" id="L1034">        noButton.setPrefHeight(fleeButtonHeight);</span>
+<span class="nc" id="L1035">        noButton.getStyleClass().add(&quot;hBoxYellow&quot;);</span>
+<span class="nc" id="L1036">        noButton.setOnAction(event -&gt; rootStackPane.getChildren().remove(fleeVBox));</span>
+
+        // add buttons to hbox
+<span class="nc" id="L1039">        buttonHBox.getChildren().addAll(yesButton, noButton);</span>
+
+        // add textFlow and buttonHBox to VBox
+<span class="nc" id="L1042">        fleeVBox.getChildren().addAll(fleeTextFlow, buttonHBox);</span>
+
+<span class="nc" id="L1044">        return fleeVBox;</span>
+    }
+
+    public void resetRepeatedTimes() {
+<span class="nc" id="L1048">        this.repeatedTimes = 0;</span>
+<span class="nc" id="L1049">    }</span>
+
+    public void increaseCurrentMonsterIndex() {
+<span class="nc" id="L1052">        this.currentMonsterIndex++;</span>
+<span class="nc" id="L1053">    }</span>
+
+    /*
+     * Disable the buttons in the encounter when a Popup is shown
+     */
+    public void buttonsDisableEncounter(boolean isDisable) {
+<span class="nc" id="L1059">        battleMenuController.buttonDisable(isDisable);</span>
+<span class="nc" id="L1060">    }</span>
+
+    public void showLevelUpPopUp(String opponentId) {
+<span class="nc bnc" id="L1063" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L1064">            AudioService.getInstance().playEffect(LEVEL_UP, ingameControllerProvider.get());</span>
+        }
+<span class="nc" id="L1066">        resultLevelUpHashMap.put(opponentId, false);</span>
+<span class="nc" id="L1067">        LevelUpController levelUpController = levelUpControllerProvider.get();</span>
+<span class="nc" id="L1068">        VBox popUpVBox = new VBox();</span>
+<span class="nc" id="L1069">        popUpVBox.getStyleClass().add(&quot;miniMapContainer&quot;);</span>
+
+<span class="nc" id="L1071">        Monster oldMonster = oldMonsterHashMap.get(opponentId);</span>
+<span class="nc" id="L1072">        ArrayList&lt;Integer&gt; newAbilities = newAbilitiesHashMap.get(opponentId);</span>
+
+<span class="nc" id="L1074">        levelUpController.init(popUpVBox, rootStackPane, encounterOpponentStorage.getCurrentMonsters(opponentId),</span>
+<span class="nc" id="L1075">                encounterOpponentStorage.getCurrentMonsterType(opponentId), oldMonster, newAbilities, abilityDtos, resultEvolvedHashMap.get(opponentId));</span>
+<span class="nc" id="L1076">        popUpVBox.getChildren().add(levelUpController.render());</span>
+<span class="nc" id="L1077">        rootStackPane.getChildren().add(popUpVBox);</span>
+<span class="nc" id="L1078">        newAbilitiesHashMap.put(opponentId, new ArrayList&lt;&gt;());</span>
+<span class="nc" id="L1079">        resultEvolvedHashMap.put(opponentId, false);</span>
+<span class="nc" id="L1080">    }</span>
+
+    public void showCaughtMonsterPopUp() {
+<span class="nc" id="L1083">        CaughtMonsterController caughtMonsterController = caughtMonsterControllerProvider.get();</span>
+<span class="nc" id="L1084">        VBox caughtMonsterVbox = new VBox();</span>
+<span class="nc" id="L1085">        caughtMonsterVbox.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L1086">        Opponent opponent = encounterOpponentStorage.getEnemyOpponents().get(0);</span>
+<span class="nc" id="L1087">        caughtMonsterController.setValues(resources, preferences, resourceBundleProvider, caughtMonsterController, app);</span>
+<span class="nc" id="L1088">        caughtMonsterController.init(caughtMonsterVbox, rootStackPane, opponent, regionId, caughtMonster, caughtMonsterType, enemyMonsterImage, this);</span>
+<span class="nc" id="L1089">        caughtMonsterVbox.getChildren().add(caughtMonsterController.render());</span>
+<span class="nc" id="L1090">        rootStackPane.getChildren().add(caughtMonsterVbox);</span>
+<span class="nc" id="L1091">    }</span>
+
+    public void changeMonster(Monster monster) {
+<span class="nc" id="L1094">        Move move = new ChangeMonsterMove(CHANGE_MONSTER, monster._id());</span>
+<span class="nc" id="L1095">        String opponentId = getCorrectOpponentId();</span>
+
+<span class="nc" id="L1097">        disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(opponent -&gt; {</span>
+<span class="nc" id="L1098">            resetRepeatedTimes();</span>
+<span class="nc" id="L1099">            setCorrectOpponent(opponent);</span>
+<span class="nc" id="L1100">            updateDescription(resources.getString(&quot;YOU.CHANGED.MONSTER&quot;) + &quot;. &quot;, true);</span>
+<span class="nc" id="L1101">            increaseCurrentMonsterIndex();</span>
+<span class="nc" id="L1102">        }));</span>
+<span class="nc" id="L1103">    }</span>
+
+    public void showItems() {
+<span class="nc" id="L1106">        VBox itemMenuBox = new VBox();</span>
+<span class="nc" id="L1107">        itemMenuBox.setId(&quot;itemMenuBox&quot;);</span>
+<span class="nc" id="L1108">        itemMenuBox.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L1109">        ItemMenuController itemMenuController = itemMenuControllerProvider.get();</span>
+<span class="nc" id="L1110">        itemMenuController.initFromEncounter(this, trainersService, trainerStorageProvider, itemMenuBox, InventoryType.showItems, List.of(), rootStackPane);</span>
+<span class="nc" id="L1111">        itemMenuBox.getChildren().add(itemMenuController.render());</span>
+<span class="nc" id="L1112">        rootStackPane.getChildren().add(itemMenuBox);</span>
+<span class="nc" id="L1113">        itemMenuBox.requestFocus();</span>
+<span class="nc" id="L1114">        battleMenuController.buttonDisable(true);</span>
+<span class="nc" id="L1115">    }</span>
+
+    private void throwSuccessfulMonBall() {
+<span class="nc" id="L1118">        ballImageView = null;</span>
+<span class="nc bnc" id="L1119" title="All 2 branches missed.">        if (encounterOpponentStorage.isWild()) {</span>
+<span class="nc bnc" id="L1120" title="All 2 branches missed.">            if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L1121">                AudioService.getInstance().playEffect(CATCH, ingameControllerProvider.get());</span>
+            }
+<span class="nc" id="L1123">            ballImageView = AnimationBuilder.throwMonBall(</span>
+                    selectedBallType,
+                    rootStackPane,
+                    ownTrainerController.trainerImageView,
+                    enemy1Controller.monsterImageView,
+                    3,
+                    this::showCaughtMonsterPopUp
+            );
+        }
+<span class="nc" id="L1132">    }</span>
+
+    private void throwFailedMonBall() {
+<span class="nc" id="L1135">        ballImageView = null;</span>
+<span class="nc bnc" id="L1136" title="All 2 branches missed.">        if (encounterOpponentStorage.isWild()) {</span>
+<span class="nc" id="L1137">            Random random = new Random();</span>
+<span class="nc" id="L1138">            int ticks = random.nextInt(3) + 1;</span>
+<span class="nc" id="L1139">            ballImageView = AnimationBuilder.throwMonBall(</span>
+                    selectedBallType,
+                    rootStackPane,
+                    ownTrainerController.trainerImageView,
+                    enemy1Controller.monsterImageView,
+                    ticks,
+<span class="nc" id="L1145">                    () -&gt; onMonsterBreakout(ballImageView)</span>
+            );
+<span class="nc" id="L1147">            PauseTransition initialPause = new PauseTransition(Duration.seconds(1));</span>
+<span class="nc" id="L1148">            PauseTransition pause = new PauseTransition(Duration.seconds(1));</span>
+<span class="nc" id="L1149">            PauseTransition pause2 = new PauseTransition(Duration.seconds(1));</span>
+<span class="nc" id="L1150">            PauseTransition pause3 = new PauseTransition(Duration.seconds(1));</span>
+<span class="nc" id="L1151">            PauseTransition pause4 = new PauseTransition(Duration.seconds(1));</span>
+<span class="nc" id="L1152">            initialPause.setOnFinished(event -&gt; {</span>
+<span class="nc" id="L1153">                updateDescription(&quot;3...&quot;, true);</span>
+<span class="nc" id="L1154">                pause.play();</span>
+<span class="nc" id="L1155">            });</span>
+
+<span class="nc" id="L1157">            pause.setDelay(Duration.seconds(1));</span>
+<span class="nc" id="L1158">            pause.setOnFinished(event -&gt; {</span>
+<span class="nc bnc" id="L1159" title="All 2 branches missed.">                if (ticks &gt; 1) {</span>
+<span class="nc" id="L1160">                    updateDescription(&quot;2...&quot;, true);</span>
+<span class="nc" id="L1161">                    pause2.play();</span>
+                } else {
+<span class="nc" id="L1163">                    updateDescriptionForMonsterBreakout();</span>
+                }
+<span class="nc" id="L1165">            });</span>
+<span class="nc" id="L1166">            pause2.setOnFinished(event -&gt; {</span>
+<span class="nc bnc" id="L1167" title="All 2 branches missed.">                if (ticks &gt; 2) {</span>
+<span class="nc" id="L1168">                    updateDescription(&quot;2...&quot;, true);</span>
+<span class="nc" id="L1169">                    pause3.play();</span>
+                } else {
+<span class="nc" id="L1171">                    updateDescriptionForMonsterBreakout();</span>
+                }
+<span class="nc" id="L1173">            });</span>
+<span class="nc" id="L1174">            pause3.setOnFinished(event -&gt; {</span>
+<span class="nc" id="L1175">                updateDescription(&quot;1...&quot;, true);</span>
+<span class="nc" id="L1176">                pause4.play();</span>
+<span class="nc" id="L1177">            });</span>
+<span class="nc" id="L1178">            pause4.setOnFinished(event -&gt; {</span>
+<span class="nc" id="L1179">                updateDescription(resources.getString(&quot;MONSTER.BROKE.OUT&quot;), true);</span>
+<span class="nc" id="L1180">            });</span>
+
+<span class="nc" id="L1182">            initialPause.play();</span>
+
+        }
+<span class="nc" id="L1185">    }</span>
+
+    private void updateDescriptionForMonsterBreakout() {
+<span class="nc" id="L1188">        updateDescription(resources.getString(&quot;MONSTER.BROKE.OUT&quot;), true);</span>
+<span class="nc" id="L1189">    }</span>
+
+    public void useMonBall(Item item) {
+<span class="nc bnc" id="L1192" title="All 2 branches missed.">        if (encounterOpponentStorage.isWild()) {</span>
+<span class="nc bnc" id="L1193" title="All 7 branches missed.">            switch (item.type()) {</span>
+<span class="nc" id="L1194">                case 10 -&gt; selectedBallType = NORMAL;</span>
+<span class="nc" id="L1195">                case 11 -&gt; selectedBallType = SUPER;</span>
+<span class="nc" id="L1196">                case 12 -&gt; selectedBallType = HYPER;</span>
+<span class="nc" id="L1197">                case 13 -&gt; selectedBallType = MASTER;</span>
+<span class="nc" id="L1198">                case 14 -&gt; selectedBallType = NET;</span>
+<span class="nc" id="L1199">                case 15 -&gt; selectedBallType = WATER;</span>
+<span class="nc" id="L1200">                default -&gt; selectedBallType = HEAL;</span>
+            }
+<span class="nc" id="L1202">            Item itemCopy = new Item(</span>
+<span class="nc" id="L1203">                    item._id(),</span>
+<span class="nc" id="L1204">                    item.trainer(),</span>
+<span class="nc" id="L1205">                    item.type(),</span>
+<span class="nc" id="L1206">                    item.amount() - 1</span>
+            );
+<span class="nc" id="L1208">            itemStorageProvider.get().updateItemData(itemCopy, null, null);</span>
+<span class="nc" id="L1209">            disposables.add(encounterOpponentsService.updateOpponent(</span>
+                    regionId,
+                    encounterId,
+<span class="nc" id="L1212">                    encounterOpponentStorage.getSelfOpponent()._id(),</span>
+                    null,
+<span class="nc" id="L1214">                    new UseItemMove(ITEM_ACTION_USE_ITEM_MOVE, item.type(), encounterOpponentStorage.getTargetOpponent().monster())</span>
+<span class="nc" id="L1215">            ).observeOn(FX_SCHEDULER).subscribe(result -&gt; {</span>
+<span class="nc" id="L1216">                resetRepeatedTimes();</span>
+<span class="nc" id="L1217">                setCorrectOpponent(result);</span>
+<span class="nc" id="L1218">                itemStorageProvider.get().updateItemData(itemCopy, null, null);</span>
+<span class="nc" id="L1219">                UseItemMove useItemMove = (UseItemMove) result.move();</span>
+<span class="nc" id="L1220">                trainerStorageProvider.get().useItem(useItemMove.item());</span>
+<span class="nc" id="L1221">            }, Throwable::printStackTrace));</span>
+        }
+<span class="nc" id="L1223">    }</span>
+
+    private void onMonsterBreakout(ImageView ballImageView) {
+<span class="nc" id="L1226">        ballImageView.setVisible(false);</span>
+<span class="nc" id="L1227">        enemy1Controller.monsterImageView.setVisible(true);</span>
+<span class="nc" id="L1228">    }</span>
+    /*
+    public void showMonsterReceivedPopUp() {
+        receivedMonsterPopUp = new VBox();
+        receivedMonsterPopUp.setMaxWidth(popupWidth);
+        receivedMonsterPopUp.setMaxHeight(popupWidth);
+        receivedMonsterPopUp.setAlignment(Pos.CENTER);
+        receivedMonsterPopUp.setStyle(&quot;-fx-border-color: black; -fx-border-width: 1px; -fx-border-style: solid; -fx-border-radius: 10px;&quot;);
+        receivedMonsterPopUp.getStyleClass().add(&quot;hBoxLightGreen&quot;);
+        String opponentId = encounterOpponentStorage.getTargetOpponent()._id();
+        ReceiveObjectController receivedMonsterController = new ReceiveObjectController(encounterOpponentStorage.getCurrentMonsters(opponentId), encounterOpponentStorage.getCurrentMonsterType(opponentId), enemy1Controller.monsterImageView.getImage(), this::closeMonsterReceivedPopUp, trainerStorageProvider);
+        receivedMonsterController.setValues(resources, preferences, resourceBundleProvider, this, app);
+        receivedMonsterController.init();
+        receivedMonsterPopUp.getChildren().add(receivedMonsterController.render());
+        rootStackPane.getChildren().add(receivedMonsterPopUp);
+    }
+     */
+
+    public void closeMonsterReceivedPopUp() {
+<span class="nc" id="L1247">        rootStackPane.getChildren().remove(receivedMonsterPopUp);</span>
+<span class="nc" id="L1248">        showIngameController();</span>
+<span class="nc" id="L1249">    }</span>
+
+
+    public boolean isWildEncounter() {
+<span class="nc" id="L1253">        return encounterOpponentStorage.isWild();</span>
+    }
+
+    public ChangeMonsterListController getChangeMonsterListController() {
+<span class="nc" id="L1257">        return changeMonsterListControllerProvider.get();</span>
+    }
+
+    public void useItem(Item item, Monster monster) {
+<span class="nc bnc" id="L1261" title="All 2 branches missed.">        if (monster == null) {</span>
+<span class="nc" id="L1262">            useMonBall(item);</span>
+        } else {
+            // use item
+            // Fit for two monsters
+<span class="nc" id="L1266">            UseItemMove move = new UseItemMove(USE_ITEM, item.type(), monster._id());</span>
+
+<span class="nc" id="L1268">            String opponentId = getCorrectOpponentId();</span>
+
+<span class="nc" id="L1270">            disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(opponent -&gt; {</span>
+<span class="nc" id="L1271">                resetRepeatedTimes();</span>
+<span class="nc" id="L1272">                setCorrectOpponent(opponent);</span>
+<span class="nc" id="L1273">                UseItemMove useItemMove = (UseItemMove) opponent.move();</span>
+<span class="nc" id="L1274">                updateDescription(resources.getString(&quot;YOU.USED&quot;) + &quot; &quot; + itemTypeDtos.get(useItemMove.item()).name() + &quot;. &quot;, true);</span>
+<span class="nc" id="L1275">                trainerStorageProvider.get().useItem(useItemMove.item());</span>
+<span class="nc" id="L1276">                increaseCurrentMonsterIndex();</span>
+<span class="nc" id="L1277">            }));</span>
+        }
+<span class="nc" id="L1279">    }</span>
+
+    private void setCorrectOpponent(Opponent opponent) {
+<span class="nc bnc" id="L1282" title="All 2 branches missed.">        if (encounterOpponentStorage.isTwoMonster()) {</span>
+<span class="nc bnc" id="L1283" title="All 2 branches missed.">            if (Objects.equals(encounterOpponentStorage.getSelfOpponent()._id(), opponent._id())) {</span>
+<span class="nc" id="L1284">                encounterOpponentStorage.setSelfOpponent(opponent);</span>
+<span class="nc bnc" id="L1285" title="All 2 branches missed.">            } else if (Objects.equals(encounterOpponentStorage.getCoopOpponent()._id(), opponent._id())) {</span>
+<span class="nc" id="L1286">                encounterOpponentStorage.setCoopOpponent(opponent);</span>
+            }
+        } else {
+<span class="nc" id="L1289">            encounterOpponentStorage.setSelfOpponent(opponent);</span>
+        }
+<span class="nc" id="L1291">    }</span>
+
+    private String getCorrectOpponentId() {
+<span class="nc" id="L1294">        String opponentId = encounterOpponentStorage.getSelfOpponent()._id();</span>
+
+<span class="nc bnc" id="L1296" title="All 2 branches missed.">        if (encounterOpponentStorage.isTwoMonster()) {</span>
+<span class="nc bnc" id="L1297" title="All 4 branches missed.">            if (currentMonsterIndex % 2 == 0 &amp;&amp; encounterOpponentStorage.getCoopOpponent().monster() != null) {</span>
+<span class="nc" id="L1298">                opponentId = encounterOpponentStorage.getCoopOpponent()._id();</span>
+<span class="nc bnc" id="L1299" title="All 4 branches missed.">            } else if (currentMonsterIndex % 2 == 1 &amp;&amp; encounterOpponentStorage.getSelfOpponent().monster() != null) {</span>
+<span class="nc" id="L1300">                opponentId = encounterOpponentStorage.getSelfOpponent()._id();</span>
+<span class="nc bnc" id="L1301" title="All 2 branches missed.">            } else if (encounterOpponentStorage.getSelfOpponent().monster() == null) {</span>
+<span class="nc" id="L1302">                opponentId = encounterOpponentStorage.getCoopOpponent()._id();</span>
+<span class="nc bnc" id="L1303" title="All 2 branches missed.">            } else if (encounterOpponentStorage.getCoopOpponent().monster() == null) {</span>
+<span class="nc" id="L1304">                opponentId = encounterOpponentStorage.getSelfOpponent()._id();</span>
+            }
+        } else {
+<span class="nc bnc" id="L1307" title="All 2 branches missed.">            if (encounterOpponentStorage.getSelfOpponent().monster() != null) {</span>
+<span class="nc" id="L1308">                opponentId = encounterOpponentStorage.getSelfOpponent()._id();</span>
+            }
+        }
+
+<span class="nc" id="L1312">        return opponentId;</span>
+    }
+
+    public IngameController getIngameController() {
+<span class="nc" id="L1316">        return ingameControllerProvider.get();</span>
+    }
+}
+    
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
