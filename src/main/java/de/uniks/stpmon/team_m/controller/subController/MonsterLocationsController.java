@@ -76,9 +76,9 @@ public class MonsterLocationsController extends Controller {
         }
         layerMinimap.objects().forEach(tileObject -> {
             // filter for monster
-            if (tileObject.properties().size() > 1) {
-                if (tileObject.properties().get(1).name().equals(MONSTERS)) {
-                    String string = tileObject.properties().get(1).value();
+            tileObject.properties().forEach(tileProperty -> {
+                if (tileProperty.name().equals(MONSTERS)) {
+                    String string = tileProperty.value();
                     if (string.startsWith("[")) {
                         string = string.substring(1, string.length() - 1);
                     }
@@ -110,7 +110,7 @@ public class MonsterLocationsController extends Controller {
                         mapContainer.getChildren().add(location);
                     }
                 }
-            }
+            });
         });
         if (knownLocations[0]) {
             monsterLocations.setText(monsterTypeDto.name() + " " + resources.getString("CAN.BE.FOUND.IN.THE.HIGHLIGHTED.LOCATIONS") + "\n\n\n");
