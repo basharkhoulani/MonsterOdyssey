@@ -38,8 +38,6 @@ public class EvolutionControllerTest extends ApplicationTest {
     App app = new App(null);
     @InjectMocks
     EvolutionController evolutionController;
-    @Mock
-    PresetsService presetsService;
 
 
     @Override

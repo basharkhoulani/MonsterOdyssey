@@ -10,18 +10,18 @@ import java.util.List;
 
 public interface GroupsApiService {
     @POST("groups")
-    Observable<Group> create(@Body CreateGroupDto dto);
+    Observable<Group> create(@Body CreateGroupDto ignoredDto);
 
     // For all groups the current user is member of, pass null as the parameter.
     @GET("groups")
-    Observable<List<Group>> getGroups(@Query("members") String members);
+    Observable<List<Group>> getGroups(@Query("members") String ignoredMembers);
 
     @GET("groups/{id}")
-    Observable<Group> getGroup(@Path("id") String id);
+    Observable<Group> getGroup(@Path("id") String ignoredId);
 
     @PATCH("groups/{id}")
-    Observable<Group> update(@Path("id") String _id, @Body UpdateGroupDto dto);
+    Observable<Group> update(@Path("id") String ignored_id, @Body UpdateGroupDto ignoredDto);
 
     @DELETE("groups/{id}")
-    Observable<Group> delete(@Path("id") String _id);
+    Observable<Group> delete(@Path("id") String ignored_id);
 }
