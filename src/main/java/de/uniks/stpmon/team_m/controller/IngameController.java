@@ -324,6 +324,12 @@ public class IngameController extends Controller {
                     )
             );
         }
+
+        Trainer currentTrainer = trainerStorageProvider.get().getTrainer();
+        disposables.add(
+                trainersService.getTrainer(currentTrainer.region(), currentTrainer._id()).observeOn(FX_SCHEDULER).subscribe(
+                   trainer -> trainerStorageProvider.get().setTrainer(trainer), Throwable::printStackTrace
+                ));
     }
 
     private void checkMovement(int x, int y, int direction) {
