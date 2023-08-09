@@ -514,7 +514,7 @@ public class EncounterController extends Controller {
         monsterDetailVBox.requestFocus();
     }
 
-    public void showMonsterDetails(Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, String type) {
+    public void showMonsterDetails(Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage) {
         VBox monsterDetailVBox = new VBox();
         monsterDetailVBox.setAlignment(Pos.CENTER);
         MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();

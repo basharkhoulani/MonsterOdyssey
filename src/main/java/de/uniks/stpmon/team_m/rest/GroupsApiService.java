@@ -20,8 +20,8 @@ public interface GroupsApiService {
     Observable<Group> getGroup(@Path("id") String ignoredId);
 
     @PATCH("groups/{id}")
-    Observable<Group> update(@Path("id") String ignoredIgnored_id, @Body UpdateGroupDto ignoredDto);
+    Observable<Group> update(@Path("id") String ignoredIgnoredIgnored_id, @Body UpdateGroupDto ignoredDto);
 
     @DELETE("groups/{id}")
-    Observable<Group> delete(@Path("id") String ignoredIgnored_id);
+    Observable<Group> delete(@Path("id") String ignoredIgnoredIgnored_id);
 }

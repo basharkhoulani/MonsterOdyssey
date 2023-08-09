@@ -420,7 +420,7 @@ public class MonstersListControllerTest extends ApplicationTest {
 
     @Test
     void showMonsterDetails() {
-        doNothing().when(ingameController).showMonsterDetails(any(), any(), any(), any(), any(), any());
+        doNothing().when(ingameController).showMonsterDetails(any(), any(), any(), any(), any());
         clickOn("#viewDetailsButton647e1530866ace3595866500");
     }
 

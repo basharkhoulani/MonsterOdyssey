@@ -37,8 +37,6 @@ public class MonstersDetailControllerTest extends ApplicationTest {
     MonstersDetailController monstersDetailController;
     @InjectMocks
     IngameController ingameController;
-    @Mock
-    Provider<PresetsService> presetsServiceProvider;
 
     @Override
     public void start(Stage stage) {
@@ -65,7 +63,6 @@ public class MonstersDetailControllerTest extends ApplicationTest {
                 List.of("fire"),
                 "Flamander is a small, agile monster that lives in the hot deserts of the world.");
         PresetsService presetsService = mock(PresetsService.class);
-        when(presetsServiceProvider.get()).thenReturn(presetsService);
         when(presetsService.getAbility(anyInt())).thenReturn(Observable.just(new AbilityDto(
                 1,
                 "Tackle",

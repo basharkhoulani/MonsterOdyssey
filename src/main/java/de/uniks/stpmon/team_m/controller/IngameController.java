@@ -2255,7 +2255,7 @@ public class IngameController extends Controller {
     }
 
     public void showMonsterDetails(Monster monster, MonsterTypeDto monsterTypeDto,
-                                   Image monsterImage, ResourceBundle resources, PresetsService presetsService, String type) {
+                                   Image monsterImage, ResourceBundle resources, PresetsService presetsService) {
         VBox monsterDetailVBox = new VBox();
         monsterDetailVBox.setId("monsterDetailVBox");
         monsterDetailVBox.setAlignment(Pos.CENTER);
