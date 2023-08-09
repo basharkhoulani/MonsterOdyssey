@@ -150,6 +150,8 @@ public class IngameController extends Controller {
     AuthenticationService authenticationService;
     @Inject
     Provider<IngameController> ingameControllerProvider;
+    @Inject
+    Provider<MonsterLocationsController> monsterLocationsControllerProvider;
 
     private IngamePauseMenuController ingamePauseMenuController;
     private boolean isChatting = false;
@@ -2175,6 +2177,17 @@ public class IngameController extends Controller {
         root.getChildren().add(miniMapVBox);
         miniMapVBox.requestFocus();
         buttonsDisable(true);
+    }
+
+    public void showMonsterLocaions(MonsterTypeDto monsterTypeDto) {
+        MonsterLocationsController monsterLocationsController = monsterLocationsControllerProvider.get();
+        VBox monsterLocationsVBox = new VBox();
+        monsterLocationsVBox.setId("miniMapVBox");
+        monsterLocationsVBox.getStyleClass().add("miniMapContainer");
+        monsterLocationsController.init(this, monsterLocationsVBox, miniMapCanvas, miniMap, monsterTypeDto);
+        monsterLocationsVBox.getChildren().add(monsterLocationsController.render());
+        root.getChildren().add(monsterLocationsVBox);
+        monsterLocationsVBox.requestFocus();
     }
 
     public void showStarterSelection(List<String> starters) {

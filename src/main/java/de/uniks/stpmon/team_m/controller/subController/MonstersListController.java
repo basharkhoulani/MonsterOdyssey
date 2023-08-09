@@ -353,11 +353,11 @@ public class MonstersListController extends Controller {
         }
     }
 
-    public boolean checkIfPlayerEncounteredMonster (MonsterTypeDto monsterTypeDto) {
+    public boolean checkIfPlayerEncounteredMonster(MonsterTypeDto monsterTypeDto) {
         return trainerStorageProvider.get().getTrainer().encounteredMonsterTypes().contains(monsterTypeDto.id());
     }
 
-    public void showMondexDetails (boolean visible) {
+    public void showMondexDetails(boolean visible) {
         mapImageView.setVisible(visible);
         monsterImageView.setVisible(visible);
         monsterNameLabel.setVisible(visible);
@@ -370,7 +370,7 @@ public class MonstersListController extends Controller {
         seperationLine.setVisible(visible);
     }
 
-    public void showMondexDetails (MonsterTypeDto monsterTypeDto) {
+    public void showMondexDetails(MonsterTypeDto monsterTypeDto) {
 
 
         // setting description text
@@ -415,6 +415,9 @@ public class MonstersListController extends Controller {
                 secondTypeImageView.setImage(null);
             }
         }
+        mapImageView.setOnMouseClicked(mouseEvent -> {
+            ingameController.showMonsterLocaions(monsterTypeDto);
+        });
 
         showMondexDetails(true);
     }
