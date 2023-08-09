@@ -312,34 +312,36 @@ import static java.util.Map.entry;
     public static final String BURNED = &quot;burned&quot;;
     public static final String FROZEN = &quot;frozen&quot;;
     public static final String CONFUSED = &quot;confused&quot;;
+    public static final String STUNNED = &quot;stunned&quot;;
 
-<span class="fc" id="L316">    public static final List&lt;String&gt; STATUS_EFFECTS = Arrays.asList(PARALYSED, ASLEEP, POISONED, BURNED, FROZEN, CONFUSED);</span>
+<span class="fc" id="L317">    public static final List&lt;String&gt; STATUS_EFFECTS = Arrays.asList(PARALYSED, ASLEEP, POISONED, BURNED, FROZEN, CONFUSED, STUNNED);</span>
 
-<span class="fc" id="L318">    public static final HashMap&lt;String, String&gt; STATUS_EFFECTS_IMAGES = new HashMap&lt;&gt;(Map.ofEntries(</span>
-<span class="fc" id="L319">            entry(PARALYSED, &quot;images/paralysed.png&quot;),</span>
-<span class="fc" id="L320">            entry(ASLEEP, &quot;images/asleep.png&quot;),</span>
-<span class="fc" id="L321">            entry(POISONED, &quot;images/poisoned.png&quot;),</span>
-<span class="fc" id="L322">            entry(BURNED, &quot;images/burned.png&quot;),</span>
-<span class="fc" id="L323">            entry(FROZEN, &quot;images/frozen.png&quot;),</span>
-<span class="fc" id="L324">            entry(CONFUSED, &quot;images/confused.png&quot;)</span>
+<span class="fc" id="L319">    public static final HashMap&lt;String, String&gt; STATUS_EFFECTS_IMAGES = new HashMap&lt;&gt;(Map.ofEntries(</span>
+<span class="fc" id="L320">            entry(PARALYSED, &quot;images/paralysed.png&quot;),</span>
+<span class="fc" id="L321">            entry(ASLEEP, &quot;images/asleep.png&quot;),</span>
+<span class="fc" id="L322">            entry(POISONED, &quot;images/poisoned.png&quot;),</span>
+<span class="fc" id="L323">            entry(BURNED, &quot;images/burned.png&quot;),</span>
+<span class="fc" id="L324">            entry(FROZEN, &quot;images/frozen.png&quot;),</span>
+<span class="fc" id="L325">            entry(CONFUSED, &quot;images/confused.png&quot;),</span>
+<span class="fc" id="L326">            entry(STUNNED, &quot;images/stunned.png&quot;)</span>
     ));
 
 
-<span class="nc" id="L328">    public enum BallType {</span>
-<span class="nc" id="L329">        NORMAL,</span>
-<span class="nc" id="L330">        SUPER,</span>
-<span class="nc" id="L331">        HYPER,</span>
-<span class="nc" id="L332">        MASTER,</span>
-<span class="nc" id="L333">        NET,</span>
-<span class="nc" id="L334">        WATER,</span>
-<span class="nc" id="L335">        HEAL</span>
+<span class="nc" id="L330">    public enum BallType {</span>
+<span class="nc" id="L331">        NORMAL,</span>
+<span class="nc" id="L332">        SUPER,</span>
+<span class="nc" id="L333">        HYPER,</span>
+<span class="nc" id="L334">        MASTER,</span>
+<span class="nc" id="L335">        NET,</span>
+<span class="nc" id="L336">        WATER,</span>
+<span class="nc" id="L337">        HEAL</span>
     }
 
     // enum to decide if the player wants to open his inv, sell or buy items
-<span class="fc" id="L339">    public enum InventoryType {</span>
-<span class="fc" id="L340">        showItems,</span>
-<span class="fc" id="L341">        buyItems,</span>
-<span class="fc" id="L342">        sellItems</span>
+<span class="fc" id="L341">    public enum InventoryType {</span>
+<span class="fc" id="L342">        showItems,</span>
+<span class="fc" id="L343">        buyItems,</span>
+<span class="fc" id="L344">        sellItems</span>
     }
 
     public static final String ITEM_ACTION_USE_ITEM = &quot;use&quot;;
