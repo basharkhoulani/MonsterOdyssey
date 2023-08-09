@@ -410,6 +410,7 @@ public class IngameControllerTest extends ApplicationTest {
                 List.of("poisoned")
         );
         when(monsterStorageProvider.get().getMonsterData(any())).thenReturn(new MonsterData(monster, monsterTypeDtos.get(0), null));
+        when(trainersService.getTrainer(anyString(), anyString())).thenReturn(Observable.just(trainer));
 
         app.start(stage);
         app.show(ingameController);
