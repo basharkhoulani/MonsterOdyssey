@@ -306,22 +306,24 @@ public class IngameController extends Controller {
                         null
                 ).observeOn(FX_SCHEDULER).subscribe(trainerStorageProvider.get()::setItems));
 
-        disposables.add(
-                presetsService.getMonsters().observeOn(FX_SCHEDULER).subscribe(
-                        monsterTypeDtoList -> {
-                            for (MonsterTypeDto monsterTypeDto : monsterTypeDtoList) {
-                                if (!GraphicsEnvironment.isHeadless()) {
-                                    disposables.add(presetsService.getMonsterImage(monsterTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
-                                            responseBody -> {
-                                                Image monsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
-                                                monsterStorageProvider.get().addMonsterImageToHashMap(monsterTypeDto.id(), monsterImage);
-                                            }, Throwable::printStackTrace
-                                    ));
+        if (!monsterStorageProvider.get().imagesAlreadyFetched()) {
+            disposables.add(
+                    presetsService.getMonsters().observeOn(FX_SCHEDULER).subscribe(
+                            monsterTypeDtoList -> {
+                                for (MonsterTypeDto monsterTypeDto : monsterTypeDtoList) {
+                                    if (!GraphicsEnvironment.isHeadless()) {
+                                        disposables.add(presetsService.getMonsterImage(monsterTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
+                                                responseBody -> {
+                                                    Image monsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
+                                                    monsterStorageProvider.get().addMonsterImageToHashMap(monsterTypeDto.id(), monsterImage);
+                                                }, Throwable::printStackTrace
+                                        ));
+                                    }
                                 }
-                            }
-                        }, Throwable::printStackTrace
-                )
-        );
+                            }, Throwable::printStackTrace
+                    )
+            );
+        }
     }
 
     private void checkMovement(int x, int y, int direction) {
