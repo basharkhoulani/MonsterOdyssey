@@ -8,6 +8,7 @@ import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.*;
 import de.uniks.stpmon.team_m.udp.UDPEventListener;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
+import de.uniks.stpmon.team_m.utils.MonsterStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import de.uniks.stpmon.team_m.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
@@ -63,6 +64,8 @@ public class IngameMapRenderTest extends ApplicationTest {
     @Mock
     TrainersService trainersService;
     @Mock
+    Provider<MonsterStorage> monsterStorageProvider;
+    @Mock
     EncounterOpponentsService encounterOpponentsService;
     @Mock
     PresetsService presetsService;
@@ -110,6 +113,10 @@ public class IngameMapRenderTest extends ApplicationTest {
         when(trainerStorageProvider.get().getY()).thenReturn(5);
         when(trainerStorageProvider.get().getX()).thenReturn(5);
         doNothing().when(trainerStorage).setMonsters(any());
+
+        MonsterStorage monsterStorage = mock(MonsterStorage.class);
+        when(monsterStorageProvider.get()).thenReturn(monsterStorage);
+
         lenient().when(presetsService.getCharacter(any())).thenReturn(Observable.empty());
         when(trainersService.getTrainers(any(), any(), any())).thenReturn(Observable.just(List.of(
                         new Trainer(

@@ -117,6 +117,8 @@ public class IngameController extends Controller {
     @Inject
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
+    Provider<MonsterStorage> monsterStorageProvider;
+    @Inject
     Provider<EncounterController> encounterControllerProvider;
     @Inject
     Provider<ItemMenuController> itemMenuControllerProvider;
@@ -305,6 +307,30 @@ public class IngameController extends Controller {
                         null
                 ).observeOn(FX_SCHEDULER).subscribe(trainerStorageProvider.get()::setItems));
 
+        if (!monsterStorageProvider.get().imagesAlreadyFetched()) {
+            disposables.add(
+                    presetsService.getMonsters().observeOn(FX_SCHEDULER).subscribe(
+                            monsterTypeDtoList -> {
+                                if (!GraphicsEnvironment.isHeadless()) {
+                                    for (MonsterTypeDto monsterTypeDto : monsterTypeDtoList) {
+                                        disposables.add(presetsService.getMonsterImage(monsterTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
+                                                responseBody -> {
+                                                    Image monsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
+                                                    monsterStorageProvider.get().addMonsterImageToHashMap(monsterTypeDto.id(), monsterImage);
+                                                }, Throwable::printStackTrace
+                                        ));
+                                    }
+                                }
+                            }, Throwable::printStackTrace
+                    )
+            );
+        }
+
+        Trainer currentTrainer = trainerStorageProvider.get().getTrainer();
+        disposables.add(
+                trainersService.getTrainer(currentTrainer.region(), currentTrainer._id()).observeOn(FX_SCHEDULER).subscribe(
+                   trainer -> trainerStorageProvider.get().setTrainer(trainer), Throwable::printStackTrace
+                ));
         // Load areas
         disposables.add(areasService.getAreas(trainerStorageProvider.get().getRegion()._id()).observeOn(FX_SCHEDULER).subscribe(areas ->
                 areasList = areas, Throwable::printStackTrace));
@@ -579,13 +605,15 @@ public class IngameController extends Controller {
         receiveObjectPopUp.setMaxHeight(popupWidth);
         receiveObjectPopUp.setStyle("-fx-border-radius: 10; -fx-border-style: solid; -fx-border-width: 2; -fx-border-color: black;");
         receiveObjectPopUp.getStyleClass().add("hBoxLightGreen");
-        disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto ->
-                disposables.add(presetsService.getMonsterImage(monster.type()).observeOn(FX_SCHEDULER).subscribe(responseBody -> {
-                    receiveObjectController = new ReceiveObjectController(monster, monsterTypeDto, ImageProcessor.resonseBodyToJavaFXImage(responseBody), this::removeObjectReceivedPopUp, trainerStorageProvider);
-                    receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
-                    receiveObjectPopUp.getChildren().add(receiveObjectController.render());
-                    getRoot().getChildren().add(receiveObjectPopUp);
-                }))));
+        disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER).subscribe(monsterTypeDto -> {
+            if (monsterStorageProvider.get().imagesAlreadyFetched()) {
+                Image monsterImage = monsterStorageProvider.get().getMonsterImage(monster.type());
+                receiveObjectController = new ReceiveObjectController(monster, monsterTypeDto, monsterImage, this::removeObjectReceivedPopUp, trainerStorageProvider);
+                receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
+                receiveObjectPopUp.getChildren().add(receiveObjectController.render());
+                getRoot().getChildren().add(receiveObjectPopUp);
+            }
+        }));
     }
 
     private void createItemReceivedPopUp(Item item) {
@@ -600,7 +628,7 @@ public class IngameController extends Controller {
 
             receiveObjectController = new ReceiveObjectController(itemData.getItem(), itemData.getItemTypeDto(), itemData.getItemImage(), this::removeObjectReceivedPopUp, trainerStorageProvider);
             receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
-            if (receiveObjectPopUp.getChildren().size() > 0) {
+            if (receiveObjectPopUp.getChildren().size() > 0){
                 receiveObjectPopUp.getChildren().clear();
             }
             receiveObjectPopUp.getChildren().add(receiveObjectController.render());
@@ -614,20 +642,21 @@ public class IngameController extends Controller {
                             itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()));
                             receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()), this::removeObjectReceivedPopUp, trainerStorageProvider);
                             receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
-                            if (receiveObjectPopUp.getChildren().size() > 0) {
+                            if (receiveObjectPopUp.getChildren().size() > 0){
                                 receiveObjectPopUp.getChildren().clear();
                             }
                             receiveObjectPopUp.getChildren().add(receiveObjectController.render());
                             if (!getRoot().getChildren().contains(receiveObjectPopUp)) {
                                 getRoot().getChildren().add(receiveObjectPopUp);
                             }
-                        } else {
+                        }
+                        else {
                             disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
                                     image -> {
                                         itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image));
                                         receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image), this::removeObjectReceivedPopUp, trainerStorageProvider);
                                         receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
-                                        if (receiveObjectPopUp.getChildren().size() > 0) {
+                                        if (receiveObjectPopUp.getChildren().size() > 0){
                                             receiveObjectPopUp.getChildren().clear();
                                         }
                                         receiveObjectPopUp.getChildren().add(receiveObjectController.render());
@@ -635,12 +664,10 @@ public class IngameController extends Controller {
                                             getRoot().getChildren().add(receiveObjectPopUp);
                                         }
                                     },
-                                    error -> {
-                                    }));
+                                    error -> {}));
                         }
                     },
-                    error -> {
-                    }));
+                    error -> {}));
         }
 
     }
@@ -2240,7 +2267,7 @@ public class IngameController extends Controller {
                             AudioService.getInstance().playSound(ROUTE_SOUND);
                             AudioService.getInstance().setCurrentSound(ROUTE_SOUND);
                             AudioService.getInstance().setVolume(preferences.getDouble("volume", AudioService.getInstance().getVolume()));
-                        } else if (area.map().infinite()) {
+                        } else if (area.map().infinite()){
                             AudioService.getInstance().stopSound();
                             AudioService.getInstance().playSound(CITY_SOUND);
                             AudioService.getInstance().setCurrentSound(CITY_SOUND);
