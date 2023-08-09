@@ -55,6 +55,8 @@ public class IngameControllerTest extends ApplicationTest {
     @Mock
     Provider<TrainerStorage> trainerStorageProvider;
     @Mock
+    Provider<MonsterStorage> monsterStorageProvider;
+    @Mock
     AreasService areasService;
     @Mock
     Provider<UDPEventListener> udpEventListenerProvider;
@@ -70,8 +72,6 @@ public class IngameControllerTest extends ApplicationTest {
     Provider<ItemMenuController> itemMenuControllerProvider;
     @Mock
     Provider<PresetsService> presetsServiceProvider;
-    @Mock
-    Provider<MonsterStorage> monsterStorageProvider;
 
     // Please also keep this mock, it is needed for the tests
     // -- which ones????
@@ -144,6 +144,11 @@ public class IngameControllerTest extends ApplicationTest {
         Mockito.when(udpEventListenerProvider.get()).thenReturn(udpEventListener);
         when(udpEventListener.ping()).thenReturn(empty());
         when(udpEventListener.listen(any(), any())).thenReturn(Observable.just(new Event<>("areas.*.trainers.*.moved", new MoveTrainerDto("6475e595ac3946b6a812d865", "6475e595ac3946b6a812d863", 5, 4, 0))));
+
+        MonsterStorage monsterStorage = mock(MonsterStorage.class);
+        when(monsterStorageProvider.get()).thenReturn(monsterStorage);
+        when(monsterStorage.getMonsterImage(anyInt())).thenReturn(null);
+
         final TrainerStorage trainerStorage = mock(TrainerStorage.class);
         Mockito.when(trainerStorageProvider.get()).thenReturn(trainerStorage);
         when(trainerItemsService.getItems(any(), any(), any())).thenReturn(

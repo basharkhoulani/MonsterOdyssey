@@ -16,14 +16,12 @@ import java.util.List;
 public class MonsterStorage {
     List<MonsterData> monsterDataList;
     private List<MonsterTypeDto> monsterTypeDtoList;
-    private final HashMap<Integer, MonsterTypeDto> monsterTypeDtoHashMap;
     private final HashMap<Integer, Image> monsterImageHashMap;
 
     @Inject
     public MonsterStorage() {
         monsterDataList = new ArrayList<>();
         monsterTypeDtoList = new ArrayList<>();
-        monsterTypeDtoHashMap = new HashMap<>();
         monsterImageHashMap = new HashMap<>();
     }
 
@@ -41,10 +39,6 @@ public class MonsterStorage {
     public void addMonsterTypeDtoLists(List<MonsterTypeDto> monsterTypeDtoList) {
         monsterTypeDtoList.sort(Comparator.comparingInt(MonsterTypeDto::id));
         this.monsterTypeDtoList = monsterTypeDtoList;
-
-        for (MonsterTypeDto monsterTypeDto : monsterTypeDtoList) {
-            monsterTypeDtoHashMap.put(monsterTypeDto.id(), monsterTypeDto);
-        }
     }
 
     public void addMonsterImageToHashMap(int id, Image monsterImage) {
@@ -67,10 +61,6 @@ public class MonsterStorage {
 
     public MonsterData getMonsterData(String monsterId) {
         return monsterDataList.stream().filter(m -> m.getMonster()._id().equals(monsterId)).findFirst().orElse(null);
-    }
-
-    public MonsterTypeDto getMonsterTypeDto (int id) {
-        return monsterTypeDtoHashMap.get(id);
     }
 
     public Image getMonsterImage (int id) {

@@ -23,8 +23,8 @@ public class MondexCell extends ListCell<MonsterTypeDto> {
     public Label monsterNameLabel;
     @FXML
     public HBox rootHBox;
-    private MonstersListController monstersListController;
-    private ResourceBundle resources;
+    private final MonstersListController monstersListController;
+    private final ResourceBundle resources;
     private FXMLLoader loader;
     private final MonsterStorage monsterStorage;
 

@@ -373,13 +373,7 @@ public class MonstersListController extends Controller {
     }
 
     public void showMondexDetails (MonsterTypeDto monsterTypeDto) {
-        if (trainerStorageProvider.get().getTrainer().encounteredMonsterTypes().contains(monsterTypeDto.id())) {
-            monsterImageView.setOpacity(1.0);
-            monsterNameLabel.setText(monsterTypeDto.name());
-        } else {
-            monsterImageView.setOpacity(0.2);
-            monsterNameLabel.setText("???");
-        }
+
 
         // setting description text
         monsterDescriptionTextFlow.getChildren().clear();
@@ -390,6 +384,16 @@ public class MonstersListController extends Controller {
         monsterDescriptionTextArea.setWrapText(true);
         monsterDescriptionTextArea.setFocusTraversable(false);
         monsterDescriptionTextArea.getStyleClass().add("monsterListBackground");
+
+        if (trainerStorageProvider.get().getTrainer().encounteredMonsterTypes().contains(monsterTypeDto.id())) {
+            monsterImageView.setOpacity(1.0);
+            monsterNameLabel.setText(monsterTypeDto.name());
+        } else {
+            monsterImageView.setOpacity(0.2);
+            monsterNameLabel.setText("???");
+            monsterDescriptionTextArea.setText("???");
+        }
+
         monsterDescriptionTextFlow.getChildren().add(monsterDescriptionTextArea);
 
         if (!GraphicsEnvironment.isHeadless()) {
