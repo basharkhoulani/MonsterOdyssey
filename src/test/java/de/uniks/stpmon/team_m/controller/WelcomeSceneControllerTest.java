@@ -53,7 +53,7 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
         when(characterSelectionControllerProvider.get()).thenReturn(characterSelectionController);
         doNothing().when(app).show(characterSelectionController);
         final TrainersService trainersService = mock(TrainersService.class);
-        when(trainersService.createTrainer(any(), any(), any())).thenReturn(Observable.just(new Trainer(
+        when(trainersService.createTrainer(any(), any(), any(), any())).thenReturn(Observable.just(new Trainer(
                 "2023-05-22T17:51:46.772Z",
                 "2023-05-22T17:51:46.772Z",
                 "646bac223b4804b87c0b8054",
@@ -69,7 +69,7 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
                 0,
                 0,
                 0,
-                new NPCInfo(false, false, false, false, null, null, null))));
+                new NPCInfo(false, false, false, false, null, null, null), null)));
 
 
         app.start(stage);
