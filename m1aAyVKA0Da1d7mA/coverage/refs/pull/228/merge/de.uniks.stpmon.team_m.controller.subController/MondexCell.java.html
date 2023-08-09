@@ -53,30 +53,29 @@ public class MondexCell extends ListCell&lt;MonsterTypeDto&gt; {
 <span class="nc" id="L53">                monsterNameLabel.setText(monsterTypeDto.name());</span>
             } else {
 <span class="nc bnc" id="L55" title="All 2 branches missed.">                if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L56">                    System.out.println(monsterStorage.getMonsterImage(monsterTypeDto.id()));</span>
-<span class="nc" id="L57">                    monsterImageView.setOpacity(0.2);</span>
-<span class="nc" id="L58">                    Platform.runLater(() -&gt; monsterImageView.setImage(monsterStorage.getMonsterImage(monsterTypeDto.id())));</span>
+<span class="nc" id="L56">                    monsterImageView.setOpacity(0.2);</span>
+<span class="nc" id="L57">                    Platform.runLater(() -&gt; monsterImageView.setImage(monsterStorage.getMonsterImage(monsterTypeDto.id())));</span>
                 }
-<span class="nc" id="L60">                monsterNameLabel.setText(&quot;???&quot;);</span>
+<span class="nc" id="L59">                monsterNameLabel.setText(&quot;???&quot;);</span>
             }
 
-<span class="nc" id="L63">            rootHBox.setOnMouseClicked(mouseEvent -&gt; monstersListController.showMondexDetails(monsterTypeDto));</span>
+<span class="nc" id="L62">            rootHBox.setOnMouseClicked(mouseEvent -&gt; monstersListController.showMondexDetails(monsterTypeDto));</span>
 
-<span class="nc" id="L65">            setGraphic(rootHBox);</span>
+<span class="nc" id="L64">            setGraphic(rootHBox);</span>
         }
-<span class="nc" id="L67">    }</span>
+<span class="nc" id="L66">    }</span>
 
     private void loadFXML() {
-<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (loader == null) {</span>
-<span class="nc" id="L71">            loader = new FXMLLoader(Main.class.getResource(&quot;views/MondexCell.fxml&quot;));</span>
-<span class="nc" id="L72">            loader.setResources(resources);</span>
-<span class="nc" id="L73">            loader.setControllerFactory(c -&gt; this);</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (loader == null) {</span>
+<span class="nc" id="L70">            loader = new FXMLLoader(Main.class.getResource(&quot;views/MondexCell.fxml&quot;));</span>
+<span class="nc" id="L71">            loader.setResources(resources);</span>
+<span class="nc" id="L72">            loader.setControllerFactory(c -&gt; this);</span>
             try {
-<span class="nc" id="L75">                loader.load();</span>
-<span class="nc" id="L76">            } catch (Exception e) {</span>
-<span class="nc" id="L77">                e.printStackTrace();</span>
-<span class="nc" id="L78">            }</span>
+<span class="nc" id="L74">                loader.load();</span>
+<span class="nc" id="L75">            } catch (Exception e) {</span>
+<span class="nc" id="L76">                e.printStackTrace();</span>
+<span class="nc" id="L77">            }</span>
         }
-<span class="nc" id="L80">    }</span>
+<span class="nc" id="L79">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

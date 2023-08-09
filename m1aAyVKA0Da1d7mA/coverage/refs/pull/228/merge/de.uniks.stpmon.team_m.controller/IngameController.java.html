@@ -528,13 +528,13 @@ public class IngameController extends Controller {
 <span class="nc" id="L528">            preferences.putBoolean(&quot;starterMessages&quot;, false);</span>
         }
 
-<span class="fc bfc" id="L531" title="All 2 branches covered.">        if (preferences.getBoolean(&quot;firstEntry&quot;, true)) {</span>
-<span class="fc" id="L532">            this.notificationListHandyController.displayFirstTimeNotifications(true);</span>
-<span class="fc" id="L533">            notificationBell.setVisible(true);</span>
-<span class="pc bpc" id="L534" title="1 of 2 branches missed.">            if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="pc bpc" id="L531" title="1 of 2 branches missed.">        if (preferences.getBoolean(&quot;firstEntry&quot;, true)) {</span>
+<span class="nc" id="L532">            this.notificationListHandyController.displayFirstTimeNotifications(true);</span>
+<span class="nc" id="L533">            notificationBell.setVisible(true);</span>
+<span class="nc bnc" id="L534" title="All 2 branches missed.">            if (!GraphicsEnvironment.isHeadless()) {</span>
 <span class="nc" id="L535">                AudioService.getInstance().playEffect(NOTIFICATION, this);</span>
             }
-<span class="fc" id="L537">            preferences.putBoolean(&quot;firstEntry&quot;, false);</span>
+<span class="nc" id="L537">            preferences.putBoolean(&quot;firstEntry&quot;, false);</span>
         }
 <span class="fc" id="L539">    }</span>
 
