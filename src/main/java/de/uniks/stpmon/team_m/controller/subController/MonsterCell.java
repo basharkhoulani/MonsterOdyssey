@@ -113,7 +113,6 @@ public class MonsterCell extends ListCell<Monster> {
     @Override
     protected void updateItem(Monster monster, boolean empty) {
         super.updateItem(monster, empty);
-        StringBuilder type = new StringBuilder();
         if (monster == null || empty) {
             setText(null);
             setGraphic(null);
@@ -129,9 +128,6 @@ public class MonsterCell extends ListCell<Monster> {
             monsterTypeDto = monsterStorageProvider.get().getMonsterData(monster._id()).monsterTypeDto();
             if (monsterTypeDto != null) {
                 monsterNameLevel.setText(monsterTypeDto.name() + " (" + resources.getString("LEVEL").substring(0, resources.getString("LEVEL").length() - 1) + " " + monster.level() + ")");
-                for (String s : monsterTypeDto.type()) {
-                    type.append(s);
-                }
                 if (!GraphicsEnvironment.isHeadless()) {
                     renderMonsterTypes(monsterTypeDto, monsterTypesHBox.getChildren());
                 }
@@ -139,9 +135,6 @@ public class MonsterCell extends ListCell<Monster> {
                 disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER)
                         .subscribe(monsterTypeDto -> {
                             monsterNameLevel.setText(monsterTypeDto.name() + " (" + resources.getString("LEVEL").substring(0, resources.getString("LEVEL").length() - 1) + " " + monster.level() + ")");
-                            for (String s : monsterTypeDto.type()) {
-                                type.append(s);
-                            }
                             monsterStorageProvider.get().addMonsterData(monster, monsterTypeDto, null);
                             if (!GraphicsEnvironment.isHeadless()) {
                                 renderMonsterTypes(monsterTypeDto, monsterTypesHBox.getChildren());

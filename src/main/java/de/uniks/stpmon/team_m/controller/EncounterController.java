@@ -504,10 +504,6 @@ public class EncounterController extends Controller {
         Monster monster = encounterOpponentStorage.getCurrentMonsters(currentOpponent._id());
         MonsterTypeDto monsterTypeDto = encounterOpponentStorage.getCurrentMonsterType(currentOpponent._id());
 
-        StringBuilder type = new StringBuilder();
-        for (String s : monsterTypeDto.type()) {
-            type.append(s);
-        }
         monstersDetailController.initFromBattleMenu(this, monsterDetailVBox, monster, monsterTypeDto, encounterOpponentController.getMonsterImage(), resources, presetsService);
         monsterDetailVBox.getChildren().add(monstersDetailController.render());
         rootStackPane.getChildren().add(monsterDetailVBox);

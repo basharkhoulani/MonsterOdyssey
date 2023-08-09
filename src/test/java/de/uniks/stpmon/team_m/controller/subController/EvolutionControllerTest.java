@@ -79,18 +79,6 @@ public class EvolutionControllerTest extends ApplicationTest {
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(vBox);
 
-        ArrayList<Integer> newAbilities = new ArrayList<>();
-        newAbilities.add(1);
-        ArrayList<AbilityDto> abilityDtos = new ArrayList<>();
-        abilityDtos.add(new AbilityDto(
-                1,
-                "Tackle",
-                "A physical attack in which the user charges and slams into the target with its whole body.",
-                "normal",
-                35,
-                1.0,
-                2
-        ));
         evolutionController.init(
                 vBox,
                 stackPane,
