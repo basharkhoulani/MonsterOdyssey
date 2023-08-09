@@ -299,24 +299,10 @@ public class TestModule {
                 return Observable.just(List.of());
             }
 
+            final ResponseBody responseBody = mock(ResponseBody.class);
             @Override
             public Observable<ResponseBody> getCharacter(String filename) {
-                return Observable.just(new ResponseBody() {
-                    @Override
-                    public MediaType contentType() {
-                        return null;
-                    }
-
-                    @Override
-                    public long contentLength() {
-                        return 0;
-                    }
-
-                    @Override
-                    public BufferedSource source() {
-                        return null;
-                    }
-                });
+                return Observable.just(responseBody);
             }
 
             @Override
@@ -331,22 +317,7 @@ public class TestModule {
 
             @Override
             public Observable<ResponseBody> getItemImage(int id) {
-                return Observable.just(new ResponseBody() {
-                    @Override
-                    public MediaType contentType() {
-                        return null;
-                    }
-
-                    @Override
-                    public long contentLength() {
-                        return 0;
-                    }
-
-                    @Override
-                    public BufferedSource source() {
-                        return null;
-                    }
-                });
+                return Observable.just(responseBody);
             }
 
             @Override

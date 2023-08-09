@@ -22,9 +22,9 @@ public class ItemStorageTest {
         assertEquals(itemStorage.getItemDataList().size(), 1);
         itemStorage.addItemData(item, itemTypeDto2, null);
         assertEquals(itemStorage.getItemDataList().size(), 1);
-        assertEquals(itemTypeDto, itemStorage.getItemData(item._id()).getItemTypeDto());
-        assertNull(itemStorage.getItemData(item._id()).getItemImage());
+        assertEquals(itemTypeDto, itemStorage.getItemData(item._id()).itemTypeDto());
+        assertNull(itemStorage.getItemData(item._id()).itemImage());
         itemStorage.updateItemData(item, itemTypeDto2, null);
-        assertEquals(itemStorage.getItemDataList().stream().filter(itemData -> itemData.getItem().equals(item)).toList().get(0).getItemTypeDto(), itemTypeDto2);
+        assertEquals(itemStorage.getItemDataList().stream().filter(itemData -> itemData.item().equals(item)).toList().get(0).itemTypeDto(), itemTypeDto2);
     }
 }

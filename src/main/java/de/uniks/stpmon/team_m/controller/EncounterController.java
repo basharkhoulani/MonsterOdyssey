@@ -198,7 +198,7 @@ public class EncounterController extends Controller {
         disposables.add(presetsService.getAbilities().observeOn(FX_SCHEDULER).subscribe(abilities -> {
             abilityDtos.addAll(abilities);
             Comparator<AbilityDto> abilityDtoComparator = Comparator.comparingInt(AbilityDto::id);
-            Collections.sort(abilityDtos, abilityDtoComparator);
+            abilityDtos.sort(abilityDtoComparator);
         }));
 
         disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER).subscribe(items -> {
@@ -545,9 +545,7 @@ public class EncounterController extends Controller {
                 controller.destroy();
             }
         }
-        if (encounterOpponentControllerHashMap != null) {
-            encounterOpponentControllerHashMap.values().forEach(Controller::destroy);
-        }
+        encounterOpponentControllerHashMap.values().forEach(Controller::destroy);
 
     }
 
@@ -562,10 +560,8 @@ public class EncounterController extends Controller {
                 }
                 deleteOpponents++;
                 if (opponentsDelete.size() >= encounterOpponentStorage.getEncounterSize()) {
-                    PauseTransition pause = new PauseTransition(Duration.millis(pauseDuration / 2));
-                    pause.setOnFinished(evt -> {
-                        showResult();
-                    });
+                    PauseTransition pause = new PauseTransition(Duration.millis((double) pauseDuration / 2));
+                    pause.setOnFinished(evt -> showResult());
                     pause.play();
                 }
             } else if (event.suffix().contains("created")) {
@@ -622,21 +618,19 @@ public class EncounterController extends Controller {
                 }
             } else if (monsterInEncounterHashMap.get(opponent._id()) != null) {
                 if (monsterInEncounterHashMap.get(opponent._id())) {
-                    if (opponent.monster() != null) {
-                        if (opponent.isAttacker() != encounterOpponentStorage.isAttacker()) {
-                            showEnemyMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent, false);
-                            updateDescription(resources.getString("ENEMY.CHANGED.MONSTER") + "\n", false);
+                    if (opponent.isAttacker() != encounterOpponentStorage.isAttacker()) {
+                        showEnemyMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent, false);
+                        updateDescription(resources.getString("ENEMY.CHANGED.MONSTER") + "\n", false);
+                    } else {
+                        showTeamMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent);
+                        if (opponent.trainer().equals(trainerId)) {
+                            updateDescription(resources.getString("YOU.CHANGED.MONSTER") + "\n", false);
                         } else {
-                            showTeamMonster(encounterOpponentControllerHashMap.get(opponent._id()), opponent);
-                            if (opponent.trainer().equals(trainerId)) {
-                                updateDescription(resources.getString("YOU.CHANGED.MONSTER") + "\n", false);
-                            } else {
-                                updateDescription(resources.getString("ALLY.CHANGED.MONSTER") + "\n", false);
-                            }
+                            updateDescription(resources.getString("ALLY.CHANGED.MONSTER") + "\n", false);
                         }
-                        monsterInEncounterHashMap.put(opponent._id(), false);
-                        opponentsUpdate.remove(opponent._id() + "Results");
                     }
+                    monsterInEncounterHashMap.put(opponent._id(), false);
+                    opponentsUpdate.remove(opponent._id() + "Results");
                 }
             }
         }
@@ -762,9 +756,7 @@ public class EncounterController extends Controller {
                                     updateDescription("1...\n", true);
                                     pause3.play();
                                 });
-                                pause3.setOnFinished(evt -> {
-                                    updateDescription(resources.getString("MONSTER.CAUGHT") + "\n", false);
-                                });
+                                pause3.setOnFinished(evt -> updateDescription(resources.getString("MONSTER.CAUGHT") + "\n", false));
 
                                 pause.play();
                             }
@@ -960,15 +952,13 @@ public class EncounterController extends Controller {
             } else if (isDied) {
                 Trainer trainer = trainerStorageProvider.get().getTrainer();
                 if (trainer.settings() != null && trainer.settings().monsterPermaDeath() != null && trainer.settings().monsterPermaDeath()) {
-                    disposables.add(monstersService.deleteMonster(trainer.region(), trainer._id(), monsterId).observeOn(FX_SCHEDULER).subscribe(result -> {
-                        disposables.add(trainersService.getTrainer(trainer.region(), trainer._id()).observeOn(FX_SCHEDULER).subscribe(trainer1 -> {
-                            trainerStorageProvider.get().setTrainer(trainer1);
-                            resetRepeatedTimes();
-                            monsterInTeamHashMap.remove(monsterId);
-                            monsterInEncounterHashMap.remove(monsterId);
-                            oldMonsterHashMap.remove(monsterId);
-                        }, Throwable::printStackTrace));
-                    }, Throwable::printStackTrace));
+                    disposables.add(monstersService.deleteMonster(trainer.region(), trainer._id(), monsterId).observeOn(FX_SCHEDULER).subscribe(result -> disposables.add(trainersService.getTrainer(trainer.region(), trainer._id()).observeOn(FX_SCHEDULER).subscribe(trainer1 -> {
+                        trainerStorageProvider.get().setTrainer(trainer1);
+                        resetRepeatedTimes();
+                        monsterInTeamHashMap.remove(monsterId);
+                        monsterInEncounterHashMap.remove(monsterId);
+                        oldMonsterHashMap.remove(monsterId);
+                    }, Throwable::printStackTrace)), Throwable::printStackTrace));
                 }
             }
         });
@@ -1187,9 +1177,7 @@ public class EncounterController extends Controller {
                 updateDescription("1...", true);
                 pause4.play();
             });
-            pause4.setOnFinished(event -> {
-                updateDescription(resources.getString("MONSTER.BROKE.OUT"), true);
-            });
+            pause4.setOnFinished(event -> updateDescription(resources.getString("MONSTER.BROKE.OUT"), true));
 
             initialPause.play();
 

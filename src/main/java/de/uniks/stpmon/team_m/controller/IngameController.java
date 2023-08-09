@@ -628,7 +628,7 @@ public class IngameController extends Controller {
         if (itemStorageProvider.get().getItemData(item._id()) != null) {
             final ItemData itemData = itemStorageProvider.get().getItemData(item._id());
 
-            receiveObjectController = new ReceiveObjectController(itemData.getItem(), itemData.getItemTypeDto(), itemData.getItemImage(), this::removeObjectReceivedPopUp, trainerStorageProvider);
+            receiveObjectController = new ReceiveObjectController(itemData.item(), itemData.itemTypeDto(), itemData.itemImage(), this::removeObjectReceivedPopUp, trainerStorageProvider);
             receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
             if (receiveObjectPopUp.getChildren().size() > 0) {
                 receiveObjectPopUp.getChildren().clear();
@@ -778,7 +778,7 @@ public class IngameController extends Controller {
                             Position oldPosition = trainerPositionHashMap.get(trainer);
                             TrainerController trainerController = trainerControllerHashMap.get(trainer);
                             if (oldPosition != null && trainerController != null) {
-                                if (oldPosition.getX() != moveTrainerDto.x() || oldPosition.getY() != moveTrainerDto.y()) {
+                                if (oldPosition.x() != moveTrainerDto.x() || oldPosition.y() != moveTrainerDto.y()) {
                                     trainerController.setTrainerTargetPosition(moveTrainerDto.x(), moveTrainerDto.y());
                                 }
                                 trainerPositionHashMap.put(trainer, new Position(moveTrainerDto.x(), moveTrainerDto.y()));
@@ -1742,7 +1742,7 @@ public class IngameController extends Controller {
     // This Methode returns all kind of trainer (npcs and normal trainers) that are standing on a specific tile
     public Trainer searchHashedMapForTrainer(int checkX, int checkY) {
         for (java.util.Map.Entry<Trainer, Position> set : trainerPositionHashMap.entrySet()) {
-            if (set.getValue().getX() == checkX && set.getValue().getY() == checkY) {
+            if (set.getValue().x() == checkX && set.getValue().y() == checkY) {
                 return set.getKey();
             }
         }

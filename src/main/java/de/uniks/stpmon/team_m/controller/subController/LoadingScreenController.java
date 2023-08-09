@@ -39,9 +39,7 @@ public class LoadingScreenController extends Controller {
             @Override
             public void run() {
                 int i = random.nextInt(16) + 1;
-                Platform.runLater(() -> {
-                    loadingScreenTippLabel.setText(resources.getString("LOADING.SCREEN.TEXT" + i));
-                });
+                Platform.runLater(() -> loadingScreenTippLabel.setText(resources.getString("LOADING.SCREEN.TEXT" + i)));
 
             }
         };

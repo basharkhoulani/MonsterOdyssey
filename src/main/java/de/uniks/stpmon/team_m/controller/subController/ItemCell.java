@@ -129,8 +129,8 @@ public class ItemCell extends ListCell<Item> {
             itemLabel.setText(itemTypeDto.name());
             itemNumber.setText("(" + item.amount() + ")");
 
-            if (itemStorageProvider.get().getItemData(item._id()) != null && itemStorageProvider.get().getItemData(item._id()).getItemImage() != null) {
-                this.itemImage = itemStorageProvider.get().getItemData(item._id()).getItemImage();
+            if (itemStorageProvider.get().getItemData(item._id()) != null && itemStorageProvider.get().getItemData(item._id()).itemImage() != null) {
+                this.itemImage = itemStorageProvider.get().getItemData(item._id()).itemImage();
                 itemImageView.setImage(this.itemImage);
             } else {
                 disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)

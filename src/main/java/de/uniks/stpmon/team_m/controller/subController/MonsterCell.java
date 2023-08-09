@@ -126,7 +126,7 @@ public class MonsterCell extends ListCell<Monster> {
             if (monsterData == null) {
                 monsterStorageProvider.get().addMonsterData(monster, null, null);
             }
-            monsterTypeDto = monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterTypeDto();
+            monsterTypeDto = monsterStorageProvider.get().getMonsterData(monster._id()).monsterTypeDto();
             if (monsterTypeDto != null) {
                 monsterNameLevel.setText(monsterTypeDto.name() + " (" + resources.getString("LEVEL").substring(0, resources.getString("LEVEL").length() - 1) + " " + monster.level() + ")");
                 for (String s : monsterTypeDto.type()) {
@@ -155,9 +155,9 @@ public class MonsterCell extends ListCell<Monster> {
                 arrowUp.setImage(arrowUpImage);
                 arrowDown.setImage(arrowUpImage);
             }
-            if (monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage() != null) {
-                monsterImageView.setImage(monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage());
-                this.monsterImage = monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage();
+            if (monsterStorageProvider.get().getMonsterData(monster._id()).monsterImage() != null) {
+                monsterImageView.setImage(monsterStorageProvider.get().getMonsterData(monster._id()).monsterImage());
+                this.monsterImage = monsterStorageProvider.get().getMonsterData(monster._id()).monsterImage();
             } else {
                 if (!GraphicsEnvironment.isHeadless()) {
                     this.monsterImage = monsterStorageProvider.get().getMonsterImage(monster.type());

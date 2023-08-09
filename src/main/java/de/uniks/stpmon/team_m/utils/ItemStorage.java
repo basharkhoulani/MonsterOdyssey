@@ -24,7 +24,7 @@ public class ItemStorage {
     }
 
     public void addItemData(@NonNull Item item, ItemTypeDto itemTypeDto, Image itemImage) {
-        if (itemDataList.stream().anyMatch(m -> m.getItem()._id().equals(item._id()))) {
+        if (itemDataList.stream().anyMatch(m -> m.item()._id().equals(item._id()))) {
             return;
         }
         itemDataList.add(new ItemData(item, itemTypeDto, itemImage));
@@ -32,18 +32,18 @@ public class ItemStorage {
 
     // null as param means that the value should not be updated
     public void updateItemData(@NonNull Item item, ItemTypeDto itemTypeDto, Image itemImage) {
-        ItemData oldItemData = itemDataList.stream().filter(m -> m.getItem()._id().equals(item._id())).findFirst().orElse(null);
+        ItemData oldItemData = itemDataList.stream().filter(m -> m.item()._id().equals(item._id())).findFirst().orElse(null);
         if (oldItemData == null) {
             return;
         }
         itemDataList.set(itemDataList.indexOf(oldItemData), new ItemData(
                 item,
-                itemTypeDto == null ? oldItemData.getItemTypeDto() : itemTypeDto,
-                itemImage == null ? oldItemData.getItemImage() : itemImage
+                itemTypeDto == null ? oldItemData.itemTypeDto() : itemTypeDto,
+                itemImage == null ? oldItemData.itemImage() : itemImage
         ));
     }
 
     public ItemData getItemData(String itemId) {
-        return itemDataList.stream().filter(m -> m.getItem()._id().equals(itemId)).findFirst().orElse(null);
+        return itemDataList.stream().filter(m -> m.item()._id().equals(itemId)).findFirst().orElse(null);
     }
 }
