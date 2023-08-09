@@ -310,8 +310,8 @@ public class IngameController extends Controller {
             disposables.add(
                     presetsService.getMonsters().observeOn(FX_SCHEDULER).subscribe(
                             monsterTypeDtoList -> {
-                                for (MonsterTypeDto monsterTypeDto : monsterTypeDtoList) {
-                                    if (!GraphicsEnvironment.isHeadless()) {
+                                if (!GraphicsEnvironment.isHeadless()) {
+                                    for (MonsterTypeDto monsterTypeDto : monsterTypeDtoList) {
                                         disposables.add(presetsService.getMonsterImage(monsterTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
                                                 responseBody -> {
                                                     Image monsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
