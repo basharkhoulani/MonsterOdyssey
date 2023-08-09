@@ -291,7 +291,7 @@ public class TestModule {
         return new PresetsApiService() {
             @Override
             public Observable<ResponseBody> getTileset(String filename) {
-                return null;
+                return Observable.empty();
             }
 
             @Override
@@ -326,7 +326,7 @@ public class TestModule {
 
             @Override
             public Observable<ItemTypeDto> getItem(int id) {
-                return null;
+                return Observable.empty();
             }
 
             @Override
@@ -351,27 +351,27 @@ public class TestModule {
 
             @Override
             public Observable<List<MonsterTypeDto>> getMonsters() {
-                return null;
+                return Observable.just(List.of());
             }
 
             @Override
             public Observable<MonsterTypeDto> getMonster(int id) {
-                return null;
+                return Observable.empty();
             }
 
             @Override
             public Observable<ResponseBody> getMonsterImage(int id) {
-                return null;
+                return Observable.empty();
             }
 
             @Override
             public Observable<List<AbilityDto>> getAbilities() {
-                return null;
+                return Observable.empty();
             }
 
             @Override
             public Observable<AbilityDto> getAbility(int id) {
-                return null;
+                return Observable.empty();
             }
         };
     }
@@ -497,12 +497,12 @@ public class TestModule {
 
             @Override
             public Observable<Trainer> updateTrainer(String regionId, String _id, UpdateTrainerDto dto) {
-                return null;
+                return Observable.empty();
             }
 
             @Override
             public Observable<Trainer> deleteTrainer(String regionId, String _id) {
-                return null;
+                return Observable.empty();
             }
         };
     }
@@ -610,17 +610,17 @@ public class TestModule {
 
             @Override
             public Observable<Opponent> getOpponent(String regionId, String encounterId, String opponentId) {
-                return null;
+                return Observable.empty();
             }
 
             @Override
             public Observable<Opponent> updateOpponent(String regionId, String encounterId, String opponentId, UpdateOpponentDto dto) {
-                return null;
+                return Observable.empty();
             }
 
             @Override
             public Observable<Opponent> deleteOpponent(String regionId, String encounterId, String opponentId) {
-                return null;
+                return Observable.empty();
             }
         };
     }
@@ -630,12 +630,12 @@ public class TestModule {
         return new RegionEncountersApiService() {
             @Override
             public Observable<List<Encounter>> getEncounters(String regionId) {
-                return null;
+                return Observable.empty();
             }
 
             @Override
             public Observable<Encounter> getEncounter(String regionId, String encounterId) {
-                return null;
+                return Observable.empty();
             }
         };
     }
@@ -646,17 +646,17 @@ public class TestModule {
 
             @Override
             public Observable<Item> useOrTradeItem(String regionId, String trainerId, String action, UpdateItemDto dto) {
-                return null;
+                return Observable.empty();
             }
 
             @Override
             public Observable<List<Item>> getItems(String regionId, String trainerId, String types) {
-                return null;
+                return Observable.empty();
             }
 
             @Override
             public Observable<Item> getItem(String regionId, String trainerId, String id) {
-                return null;
+                return Observable.empty();
             }
         };
     }
