@@ -187,32 +187,29 @@ public class EncounterOpponentController extends Controller {
         return this;
     }
 
-    public EncounterOpponentController setMonsterNameLabel(String value) {
+    public void setMonsterNameLabel(String value) {
         monsterNameLabel.setText(value);
-        return this;
     }
 
-    public EncounterOpponentController setMonsterImage(Image image) {
+    public void setMonsterImage(Image image) {
         if (!GraphicsEnvironment.isHeadless()) {
             monsterImageView.setImage(image);
         }
-        return this;
     }
 
     public Image getMonsterImage() {
         return monsterImageView.getImage();
     }
 
-    public EncounterOpponentController setTrainerImage(Image image) {
+    public void setTrainerImage(Image image) {
         if (!GraphicsEnvironment.isHeadless()) {
             if (!trainerImageView.isDisabled()) {
                 trainerImageView.setImage(image);
             }
         }
-        return this;
     }
 
-    public EncounterOpponentController onTarget() {
+    public void onTarget() {
         monsterNameHBox.getStyleClass().clear();
         if (isMultipleEnemyEncounter) {
             monsterImageViewVBox.setStyle("-fx-padding: 16px; -fx-border-color: red; -fx-border-radius: 100;");
@@ -222,10 +219,9 @@ public class EncounterOpponentController extends Controller {
         if (onTargetChange != null) {
             onTargetChange.run();
         }
-        return this;
     }
 
-    public EncounterOpponentController unTarget() {
+    public void unTarget() {
         monsterNameHBox.getStyleClass().clear();
         if (isEnemy) {
             monsterNameHBox.getStyleClass().add("hBoxRed");
@@ -234,7 +230,6 @@ public class EncounterOpponentController extends Controller {
         }
         monsterImageViewVBox.setStyle("-fx-padding: 0px; -fx-border-color: transparent; -fx-border-radius: 0;");
         isTargeted = false;
-        return this;
     }
 
     public ImageView getTrainerImageView() {
