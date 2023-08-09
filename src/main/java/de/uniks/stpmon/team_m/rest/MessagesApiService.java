@@ -10,18 +10,18 @@ import java.util.List;
 
 public interface MessagesApiService {
     @POST("{namespace}/{parent}/messages")
-    Observable<Message> create(@Path("namespace") String namespace, @Path("parent") String parent, @Body CreateMessageDto dto);
+    Observable<Message> create(@Path("namespace") String ignoredNamespace, @Path("parent") String ignoredParent, @Body CreateMessageDto ignoredDto);
 
     // For all groups the current user is member of, pass null as the parameter.
     @GET("{namespace}/{parent}/messages")
-    Observable<List<Message>> getMessages(@Path("namespace") String namespace, @Path("parent") String parent);
+    Observable<List<Message>> getMessages(@Path("namespace") String ignoredNamespace, @Path("parent") String ignoredParent);
 
     @GET("{namespace}/{parent}/messages/{id}")
-    Observable<Message> getMessage(@Path("namespace") String namespace, @Path("parent") String parent, @Path("id") String id);
+    Observable<Message> getMessage(@Path("namespace") String ignoredNamespace, @Path("parent") String ignoredParent, @Path("id") String ignoredId);
 
     @PATCH("{namespace}/{parent}/messages/{id}")
-    Observable<Message> update(@Path("namespace") String namespace, @Path("parent") String parent, @Path("id") String id, @Body UpdateMessageDto dto);
+    Observable<Message> update(@Path("namespace") String ignoredNamespace, @Path("parent") String ignoredParent, @Path("id") String ignoredId, @Body UpdateMessageDto ignoredDto);
 
     @DELETE("{namespace}/{parent}/messages/{id}")
-    Observable<Message> delete(@Path("namespace") String namespace, @Path("parent") String parent, @Path("id") String id);
+    Observable<Message> delete(@Path("namespace") String ignoredNamespace, @Path("parent") String ignoredParent, @Path("id") String ignoredId);
 }

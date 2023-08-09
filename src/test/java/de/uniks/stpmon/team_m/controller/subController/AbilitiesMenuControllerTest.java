@@ -61,7 +61,6 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
                 new MonsterAttributes(14, 8, 8, 5),
                 new MonsterAttributes(14, 8, 8, 5),
                 List.of());
-        PresetsService presetsService = mock(PresetsService.class);
         List<AbilityDto> abilityDtos = List.of(new AbilityDto(
                 1,
                 "Tackle",

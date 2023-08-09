@@ -37,16 +37,6 @@ public class ClientEndpoint {
         }
     }
 
-    @OnOpen
-    public void onOpen(Session userSession) {
-        this.userSession = userSession;
-    }
-
-    @OnClose
-    public void onClose() {
-        this.userSession = null;
-    }
-
     @OnMessage
     public void onMessage(String message) {
         for (final Consumer<String> handler : this.messageHandlers) {

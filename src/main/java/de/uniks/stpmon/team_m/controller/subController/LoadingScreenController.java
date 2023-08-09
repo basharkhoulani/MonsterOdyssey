@@ -21,8 +21,6 @@ public class LoadingScreenController extends Controller {
     public Label loadingScreenDidYouKnowLabel;
     @FXML
     public Label loadingScreenTippLabel;
-    @FXML
-    public ImageView loadingScreenTrainerImageView;
     private Timer timer;
 
     public LoadingScreenController() {
