@@ -150,6 +150,8 @@ public class IngameController extends Controller {
     AuthenticationService authenticationService;
     @Inject
     Provider<IngameController> ingameControllerProvider;
+    @Inject
+    Provider<MonsterLocationsController> monsterLocationsControllerProvider;
 
     private IngamePauseMenuController ingamePauseMenuController;
     private boolean isChatting = false;
@@ -199,6 +201,7 @@ public class IngameController extends Controller {
     private boolean movementDisabled;
     private final Canvas miniMapCanvas = new Canvas();
     private Map miniMap;
+    private List<Area> areasList = new ArrayList<>();
     private TrainerController trainerController;
 
 
@@ -330,6 +333,9 @@ public class IngameController extends Controller {
                 trainersService.getTrainer(currentTrainer.region(), currentTrainer._id()).observeOn(FX_SCHEDULER).subscribe(
                    trainer -> trainerStorageProvider.get().setTrainer(trainer), Throwable::printStackTrace
                 ));
+        // Load areas
+        disposables.add(areasService.getAreas(trainerStorageProvider.get().getRegion()._id()).observeOn(FX_SCHEDULER).subscribe(areas ->
+                areasList = areas, Throwable::printStackTrace));
     }
 
     private void checkMovement(int x, int y, int direction) {
@@ -2165,15 +2171,23 @@ public class IngameController extends Controller {
             miniMapVBox = new VBox();
             miniMapVBox.setId("miniMapVBox");
             miniMapVBox.getStyleClass().add("miniMapContainer");
-            TrainerStorage trainerStorage = trainerStorageProvider.get();
-            disposables.add(areasService.getAreas(trainerStorage.getRegion()._id()).observeOn(FX_SCHEDULER).subscribe(areas -> {
-                ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox, miniMap, areas);
-                miniMapVBox.getChildren().add(ingameMiniMapController.render());
-            }, Throwable::printStackTrace));
+            ingameMiniMapController.init(this, app, miniMapCanvas, miniMapVBox, miniMap, areasList);
+            miniMapVBox.getChildren().add(ingameMiniMapController.render());
         }
         root.getChildren().add(miniMapVBox);
         miniMapVBox.requestFocus();
         buttonsDisable(true);
+    }
+
+    public void showMonsterLocaions(MonsterTypeDto monsterTypeDto) {
+        MonsterLocationsController monsterLocationsController = monsterLocationsControllerProvider.get();
+        VBox monsterLocationsVBox = new VBox();
+        monsterLocationsVBox.setId("miniMapVBox");
+        monsterLocationsVBox.getStyleClass().add("miniMapContainer");
+        monsterLocationsController.init(this, monsterLocationsVBox, miniMapCanvas, miniMap, monsterTypeDto);
+        monsterLocationsVBox.getChildren().add(monsterLocationsController.render());
+        root.getChildren().add(monsterLocationsVBox);
+        monsterLocationsVBox.requestFocus();
     }
 
     public void showStarterSelection(List<String> starters) {
