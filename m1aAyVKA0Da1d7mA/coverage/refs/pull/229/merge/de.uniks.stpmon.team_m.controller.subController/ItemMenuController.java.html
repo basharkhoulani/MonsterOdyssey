@@ -147,13 +147,13 @@ public class ItemMenuController extends Controller {
 <span class="nc" id="L147">    }</span>
 
     public void initItem(Item item) {
-<span class="nc" id="L150">        itemListView.setCellFactory(param -&gt; new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider));</span>
+<span class="nc" id="L150">        itemListView.setCellFactory(param -&gt; new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider, trainerStorageProvider.get()));</span>
 <span class="nc bnc" id="L151" title="All 2 branches missed.">        if (ingameController != null) {</span>
 <span class="nc" id="L152">            ingameController.listenToItems(itemListView.getItems(), trainerStorageProvider.get().getTrainer()._id());</span>
-<span class="nc" id="L153">            itemListView.setCellFactory(param -&gt; new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider));</span>
+<span class="nc" id="L153">            itemListView.setCellFactory(param -&gt; new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider, trainerStorageProvider.get()));</span>
 <span class="nc bnc" id="L154" title="All 2 branches missed.">        } else if (encounterController != null) {</span>
 <span class="nc" id="L155">            encounterController.getIngameController().listenToItems(itemListView.getItems(), trainerStorageProvider.get().getTrainer()._id());</span>
-<span class="nc" id="L156">            itemListView.setCellFactory(param -&gt; new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, encounterController, itemStorageProvider));</span>
+<span class="nc" id="L156">            itemListView.setCellFactory(param -&gt; new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, encounterController, itemStorageProvider, trainerStorageProvider.get()));</span>
         }
 <span class="nc" id="L158">        itemListView.getItems().add(item);</span>
 <span class="nc" id="L159">        itemListView.setFocusModel(null);</span>
