@@ -146,6 +146,7 @@ public class ChangeMonsterListControllerTest extends ApplicationTest {
                 45,
                 23,
                 0,
+                null,
                 null
         );
         when(trainerStorage.getTrainer()).thenReturn(trainer);

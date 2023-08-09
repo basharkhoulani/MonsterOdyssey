@@ -176,6 +176,7 @@ public class MonstersListControllerTest extends ApplicationTest {
                 45,
                 23,
                 0,
+                null,
                 null
         );
         final MonsterData monsterData = new MonsterData(monsters.get(0), monsterTypeDtos.get(0), null);
@@ -215,6 +216,7 @@ public class MonstersListControllerTest extends ApplicationTest {
                                 45,
                                 23,
                                 0,
+                                null,
                                 null
                         )
                 ));
@@ -255,6 +257,7 @@ public class MonstersListControllerTest extends ApplicationTest {
                                 45,
                                 23,
                                 0,
+                                null,
                                 null
                         )
                 ));
@@ -292,6 +295,7 @@ public class MonstersListControllerTest extends ApplicationTest {
                 45,
                 23,
                 0,
+                null,
                 null
         );
 
@@ -315,6 +319,7 @@ public class MonstersListControllerTest extends ApplicationTest {
                                 45,
                                 23,
                                 0,
+                                null,
                                 null
                         )
                 ));
@@ -345,6 +350,7 @@ public class MonstersListControllerTest extends ApplicationTest {
                 45,
                 23,
                 0,
+                null,
                 null
         );
         when(trainerStorageProvider.get().getTrainer()).thenReturn(trainer);
@@ -367,6 +373,7 @@ public class MonstersListControllerTest extends ApplicationTest {
                                 45,
                                 23,
                                 0,
+                                null,
                                 null
                         )
                 ));
@@ -404,6 +411,7 @@ public class MonstersListControllerTest extends ApplicationTest {
                         45,
                         23,
                         0,
+                        null,
                         null
                 )
         );
