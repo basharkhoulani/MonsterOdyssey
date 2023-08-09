@@ -165,7 +165,7 @@ public class MonsterCell extends ListCell<Monster> {
                     monsterImageView.setImage(this.monsterImage);
                 }
             }
-            viewDetailsButton.setOnAction(event -> showDetails(monster, type.toString()));
+            viewDetailsButton.setOnAction(event -> showDetails(monster));
             if (encounterController == null) {
                 arrowUp.setOnMouseClicked(event -> monstersListController.changeOrderUp(monster._id()));
                 arrowDown.setOnMouseClicked(event -> monstersListController.changeOrderDown(monster._id()));
@@ -260,7 +260,7 @@ public class MonsterCell extends ListCell<Monster> {
     }
 
 
-    private void showDetails(Monster monster, String type) {
+    private void showDetails(Monster monster) {
         if (encounterController != null) {
             this.encounterController.showMonsterDetails(monster, monsterTypeDto, monsterImage);
         } else {

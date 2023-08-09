@@ -3,7 +3,6 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.Monster;
-import de.uniks.stpmon.team_m.service.PresetsService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;

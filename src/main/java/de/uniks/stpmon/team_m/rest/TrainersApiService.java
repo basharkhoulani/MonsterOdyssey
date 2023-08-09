@@ -14,9 +14,9 @@ public interface TrainersApiService {
     @GET("regions/{regionId}/trainers")
     Observable<List<Trainer>> getTrainers(@Path("regionId") String ignoredRegionId, @Query("area") String ignoredArea, @Query("user") String ignoredId);
     @GET("regions/{regionId}/trainers/{id}")
-    Observable<Trainer> getTrainer(@Path("regionId") String ignoredRegionId, @Path("id") String ignored_id);
+    Observable<Trainer> getTrainer(@Path("regionId") String ignoredRegionId, @Path("id") String ignoredIgnoredIgnored_id);
     @PATCH("regions/{regionId}/trainers/{id}")
-    Observable<Trainer> updateTrainer(@Path("regionId") String ignoredRegionId, @Path("id") String ignored_id, @Body UpdateTrainerDto ignoredDto);
+    Observable<Trainer> updateTrainer(@Path("regionId") String ignoredRegionId, @Path("id") String ignoredIgnoredIgnored_id, @Body UpdateTrainerDto ignoredDto);
     @DELETE("regions/{regionId}/trainers/{id}")
-    Observable<Trainer> deleteTrainer(@Path("regionId") String ignoredRegionId, @Path("id") String ignored_id);
+    Observable<Trainer> deleteTrainer(@Path("regionId") String ignoredRegionId, @Path("id") String ignoredIgnoredIgnored_id);
 }

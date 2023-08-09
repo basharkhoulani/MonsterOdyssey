@@ -12,5 +12,5 @@ public interface AreasApiService {
     Observable<List<Area>> getAreas(@Path("region") String ignoredRegion);
 
     @GET("regions/{region}/areas/{id}")
-    Observable<Area> getArea(@Path("region") String ignoredRegion, @Path("id") String ignoredIgnoredIgnored_id);
+    Observable<Area> getArea(@Path("region") String ignoredRegion, @Path("id") String ignoredIgnoredIgnoredIgnored_id);
 }
