@@ -44,7 +44,7 @@ public class ChangeMonsterListControllerTest extends ApplicationTest {
     Provider<MonsterStorage> monsterStorageProvider;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         ResourceBundle resources = ResourceBundle.getBundle("de/uniks/stpmon/team_m/lang/lang", Locale.forLanguageTag("en"));
         changeMonsterListController.setValues(resources, null, null, changeMonsterListController, app);
         stage.requestFocus();

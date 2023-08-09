@@ -199,7 +199,7 @@ public class MonstersDetailController extends Controller {
 
 
     private void initMonsterAbilities(List<AbilityDto> abilities, Monster monster) {
-        abilityListView.setCellFactory(param -> new AbilityCell(monster, resources, presetsServiceProvider.get(), this));
+        abilityListView.setCellFactory(param -> new AbilityCell(monster, resources));
         abilityListView.getItems().addAll(abilities);
         abilityListView.setFocusModel(null);
         abilityListView.setSelectionModel(null);

@@ -35,7 +35,6 @@ public class AbilitiesMenuController extends Controller {
     Provider<EncounterOpponentStorage> encounterOpponentStorageProvider;
     @Inject
     EncounterOpponentsService encounterOpponentsService;
-    PresetsService presetsService;
     private Monster monster;
     private EncounterController encounterController;
     private Opponent currentOpponent;
@@ -46,10 +45,9 @@ public class AbilitiesMenuController extends Controller {
     public AbilitiesMenuController() {
     }
 
-    public void init(Monster monster, PresetsService presetsService, EncounterController encounterController, Opponent currentOpponent, List<AbilityDto> abilities) {
+    public void init(Monster monster, EncounterController encounterController, Opponent currentOpponent, List<AbilityDto> abilities) {
         super.init();
         this.monster = monster;
-        this.presetsService = presetsService;
         this.encounterController = encounterController;
         this.currentOpponent = currentOpponent;
         this.abilities = abilities;

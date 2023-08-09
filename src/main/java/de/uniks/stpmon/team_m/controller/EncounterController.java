@@ -918,7 +918,7 @@ public class EncounterController extends Controller {
             }
         }
 
-        abilitiesMenuController.init(monster, presetsService, this, opponent, abilityDtos);
+        abilitiesMenuController.init(monster, this, opponent, abilityDtos);
 
         battleMenuVBox.getChildren().add(abilitiesMenuController.render());
     }

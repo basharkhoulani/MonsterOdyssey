@@ -4,10 +4,6 @@ import de.uniks.stpmon.team_m.Main;
 import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.service.PresetsService;
-import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -28,12 +24,8 @@ import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
 public class AbilityCell extends ListCell<AbilityDto> {
 
-    public final PresetsService presetsService;
-    public final MonstersDetailController monstersDetailController;
     private final ResourceBundle resources;
     private FXMLLoader loader;
-    protected final CompositeDisposable disposables = new CompositeDisposable();
-    public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
 
     @FXML
     public VBox typeIcon;
@@ -56,11 +48,9 @@ public class AbilityCell extends ListCell<AbilityDto> {
     @FXML
     public ImageView accuracyImageView;
     final Monster monster;
-    public AbilityCell(Monster monster, ResourceBundle resources, PresetsService presetsService, MonstersDetailController monstersDetailController) {
+    public AbilityCell(Monster monster, ResourceBundle resources) {
         this.monster = monster;
         this.resources = resources;
-        this.presetsService = presetsService;
-        this.monstersDetailController = monstersDetailController;
 
     }
 
