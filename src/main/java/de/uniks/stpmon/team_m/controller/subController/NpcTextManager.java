@@ -494,6 +494,491 @@ public class NpcTextManager {
                 resources.getString("NPC.Timon1")
         };
 
+        String[] K_Reuzband = {
+                resources.getString("NPC.K_Reuzband0"),
+                resources.getString("NPC.K_Reuzband1")
+        };
+
+        String[] Noers = {
+                resources.getString("NPC.Noers0"),
+                resources.getString("NPC.Noers1")
+        };
+
+        String[] Nook = {
+                resources.getString("NPC.Nook0"),
+                resources.getString("NPC.Nook1")
+        };
+
+        String[] Snej = {
+                resources.getString("NPC.Snej0"),
+                resources.getString("NPC.Snej1")
+        };
+
+        String[] Museumswaerter_Hinz = {
+                resources.getString("NPC.Museumswaerter_Hinz0"),
+                resources.getString("NPC.Museumswaerter_Hinz1")
+        };
+
+        String[] Museumswaerter_Kunz = {
+                resources.getString("NPC.Museumswaerter_Kunz0"),
+                resources.getString("NPC.Museumswaerter_Kunz1")
+        };
+
+        String[] Museumswaerter_Gogh = {
+                resources.getString("NPC.Museumswaerter_Gogh0"),
+                resources.getString("NPC.Museumswaerter_Gogh1")
+        };
+
+        String[] Snej2 = {
+                resources.getString("NPC.Snej20"),
+                resources.getString("NPC.Snej21")
+        };
+
+        String[] Waerter_S_Original = {
+                resources.getString("NPC.Waerter_S_Original0"),
+                resources.getString("NPC.Waerter_S_Original1")
+        };
+
+        String[] Dr_Loisok = {
+                resources.getString("NPC.Dr_Loisok0"),
+                resources.getString("NPC.Dr_Loisok1")
+        };
+
+        String[] Rob2 = {
+                resources.getString("NPC.Rob20"),
+                resources.getString("NPC.Rob21")
+        };
+
+        String[] Melvin = {
+                resources.getString("NPC.Melvin0"),
+                resources.getString("NPC.Melvin1")
+        };
+
+        String[] Luzius = {
+                resources.getString("NPC.Luzius0"),
+                resources.getString("NPC.Luzius1")
+        };
+
+        String[] Heimke = {
+                resources.getString("NPC.Heimke0"),
+                resources.getString("NPC.Heimke1")
+        };
+
+        String[] Maurizio = {
+                resources.getString("NPC.Maurizio0"),
+                resources.getString("NPC.Maurizio1")
+        };
+
+        String[] Janno = {
+                resources.getString("NPC.Janno0"),
+                resources.getString("NPC.Janno1")
+        };
+
+        String[] Gisbert = {
+                resources.getString("NPC.Gisbert0"),
+                resources.getString("NPC.Gisbert1")
+        };
+
+        String[] Pascal = {
+                resources.getString("NPC.Pascal0"),
+                resources.getString("NPC.Pascal1")
+        };
+
+        String[] Pam = {
+                resources.getString("NPC.Pam0"),
+                resources.getString("NPC.Pam1")
+        };
+
+        String[] Leon = {
+                resources.getString("NPC.Leon0"),
+                resources.getString("NPC.Leon1")
+        };
+
+        String[] Dan2 = {
+                resources.getString("NPC.Dan20"),
+                resources.getString("NPC.Dan21")
+        };
+
+        String[] Mike = {
+                resources.getString("NPC.Mike0"),
+                resources.getString("NPC.Mike1")
+        };
+
+        String[] Old_Witch = {
+                resources.getString("NPC.Old_Witch0"),
+                resources.getString("NPC.Old_Witch1")
+        };
+
+        String[] Ol_McDonald = {
+                resources.getString("NPC.Ol_McDonald0"),
+                resources.getString("NPC.Ol_McDonald1")
+        };
+
+        String[] Getof_Milawn = {
+                resources.getString("NPC.Getof_Milawn0"),
+                resources.getString("NPC.Getof_Milawn1")
+        };
+
+        String[] Huckleberry_Finn = {
+                resources.getString("NPC.Huckleberry_Finn0"),
+                resources.getString("NPC.Huckleberry_Finn1")
+        };
+
+        String[] Owen_Lars = {
+                resources.getString("NPC.Owen_Lars0"),
+                resources.getString("NPC.Owen_Lars1")
+        };
+
+        String[] Kaefersammler_Schmaldrian = {
+                resources.getString("NPC.Kaefersammler_Schmaldrian0"),
+                resources.getString("NPC.Kaefersammler_Schmaldrian1")
+        };
+
+        String[] Schleimsammler_Baldrian = {
+                resources.getString("NPC.Schleimsammler_Baldrian0"),
+                resources.getString("NPC.Schleimsammler_Baldrian1")
+        };
+
+        String[] Steinsammler_Saltrian = {
+                resources.getString("NPC.Steinsammler_Saltrian0"),
+                resources.getString("NPC.Steinsammler_Saltrian1")
+        };
+
+        String[] Paco = {
+                resources.getString("NPC.Paco0"),
+                resources.getString("NPC.Paco1")
+        };
+
+        String[] Clemme = {
+                resources.getString("NPC.Clemme0"),
+                resources.getString("NPC.Clemme1")
+        };
+
+        String[] Jercy_Packson = {
+                resources.getString("NPC.Jercy_Packson0"),
+                resources.getString("NPC.Jercy_Packson1")
+        };
+
+        String[] Charon = {
+                resources.getString("NPC.Charon0"),
+                resources.getString("NPC.Charon1")
+        };
+
+        String[] Fishing_Femens = {
+                resources.getString("NPC.Fishing_Femens0"),
+                resources.getString("NPC.Fishing_Femens1")
+        };
+
+        String[] Mayormon = {
+                resources.getString("NPC.Mayormon0"),
+                resources.getString("NPC.Mayormon1")
+        };
+
+        String[] Elderly_Enrik = {
+                resources.getString("NPC.Elderly_Enrik0"),
+                resources.getString("NPC.Elderly_Enrik1")
+        };
+
+        String[] Camping_Cio = {
+                resources.getString("NPC.Camping_Cio0"),
+                resources.getString("NPC.Camping_Cio1")
+        };
+
+        String[] Grilling_Grulian = {
+                resources.getString("NPC.Grilling_Grulian0"),
+                resources.getString("NPC.Grilling_Grulian1")
+        };
+
+        String[] Picnic_Paesch = {
+                resources.getString("NPC.Picnic_Paesch0"),
+                resources.getString("NPC.Picnic_Paesch1")
+        };
+
+        String[] Lil_Lom = {
+                resources.getString("NPC.Lil_Lom0"),
+                resources.getString("NPC.Lil_Lom1")
+        };
+
+        String[] Hungry_Haterian = {
+                resources.getString("NPC.Hungry_Haterian0"),
+                resources.getString("NPC.Hungry_Haterian1")
+        };
+
+        String[] Jealous_Jandro = {
+                resources.getString("NPC.Jealous_Jandro0"),
+                resources.getString("NPC.Jealous_Jandro1")
+        };
+
+        String[] Keb = {
+                resources.getString("NPC.Keb0"),
+                resources.getString("NPC.Keb1")
+        };
+
+        String[] Balbert = {
+                resources.getString("NPC.Balbert0"),
+                resources.getString("NPC.Balbert1")
+        };
+
+        String[] Zens = {
+                resources.getString("NPC.Zens0"),
+                resources.getString("NPC.Zens1")
+        };
+
+        String[] Nax = {
+                resources.getString("NPC.Nax0"),
+                resources.getString("NPC.Nax1")
+        };
+
+        String[] Timon2 = {
+                resources.getString("NPC.Timon20"),
+                resources.getString("NPC.Timon21")
+        };
+
+        String[] Empfangsdame_Giulia = {
+                resources.getString("NPC.Empfangsdame_Giulia0"),
+                resources.getString("NPC.Empfangsdame_Giulia1")
+        };
+
+        String[] CTO = {
+                resources.getString("NPC.CTO0"),
+                resources.getString("NPC.CTO1")
+        };
+
+        String[] CEO = {
+                resources.getString("NPC.CEO0"),
+                resources.getString("NPC.CEO1")
+        };
+
+        String[] Pom = {
+                resources.getString("NPC.Pom0"),
+                resources.getString("NPC.Pom1")
+        };
+
+        String[] Hiwi = {
+                resources.getString("NPC.Hiwi0"),
+                resources.getString("NPC.Hiwi1")
+        };
+
+        String[] Perik = {
+                resources.getString("NPC.Perik0"),
+                resources.getString("NPC.Perik1")
+        };
+
+        String[] Pandro_Pluschi = {
+                resources.getString("NPC.Pandro_Pluschi0"),
+                resources.getString("NPC.Pandro_Pluschi1")
+        };
+
+        String[] Pio_Pasta = {
+                resources.getString("NPC.Pio_Pasta0"),
+                resources.getString("NPC.Pio_Pasta1")
+        };
+
+        String[] Clemoms = {
+                resources.getString("NPC.Clemoms0"),
+                resources.getString("NPC.Clemoms1")
+        };
+
+        String[] Christian_Love = {
+                resources.getString("NPC.Christian_Love0"),
+                resources.getString("NPC.Christian_Love1")
+        };
+
+        String[] Woerni_von_der_Tanke = {
+                resources.getString("NPC.Woerni_von_der_Tanke0"),
+                resources.getString("NPC.Woerni_von_der_Tanke1")
+        };
+
+        String[] Eis_Eis_Werni = {
+                resources.getString("NPC.Eis_Eis_Werni0"),
+                resources.getString("NPC.Eis_Eis_Werni1")
+        };
+
+        String[] Woerni_Woerstchen = {
+                resources.getString("NPC.Woerni_Woerstchen0"),
+                resources.getString("NPC.Woerni_Woerstchen1")
+        };
+
+        String[] Rockrick = {
+                resources.getString("NPC.Rockrick0"),
+                resources.getString("NPC.Rockrick1")
+        };
+
+        String[] Vernon = {
+                resources.getString("NPC.Vernon0"),
+                resources.getString("NPC.Vernon1")
+        };
+
+        String[] Tony = {
+                resources.getString("NPC.Tony0"),
+                resources.getString("NPC.Tony1")
+        };
+
+        String[] Jakta = {
+                resources.getString("NPC.Jakta0"),
+                resources.getString("NPC.Jakta1")
+        };
+
+        String[] Giovanni = {
+                resources.getString("NPC.Giovanni0"),
+                resources.getString("NPC.Giovanni1")
+        };
+
+        String[] Giorgo = {
+                resources.getString("NPC.Giorgo0"),
+                resources.getString("NPC.Giorgo1")
+        };
+
+        String[] Giolito = {
+                resources.getString("NPC.Giolito0"),
+                resources.getString("NPC.Giolito1")
+        };
+
+        String[] Gioberto = {
+                resources.getString("NPC.Gioberto0"),
+                resources.getString("NPC.Gioberto1")
+        };
+
+        String[] Giordano = {
+                resources.getString("NPC.Giordano0"),
+                resources.getString("NPC.Giordano1")
+        };
+
+        String[] Giovenco = {
+                resources.getString("NPC.Giovenco0"),
+                resources.getString("NPC.Giovenco1")
+        };
+
+        String[] Gioseppe = {
+                resources.getString("NPC.Gioseppe0"),
+                resources.getString("NPC.Gioseppe1")
+        };
+
+        String[] Simone = {
+                resources.getString("NPC.Simone0"),
+                resources.getString("NPC.Simone1")
+        };
+
+        String[] Clemente = {
+                resources.getString("NPC.Clemente0"),
+                resources.getString("NPC.Clemente1")
+        };
+
+        String[] Nataschetta = {
+                resources.getString("NPC.Nataschetta0"),
+                resources.getString("NPC.Nataschetta1")
+        };
+
+        String[] Tommaso = {
+                resources.getString("NPC.Tommaso0"),
+                resources.getString("NPC.Tommaso1")
+        };
+
+        String[] Sandressio = {
+                resources.getString("NPC.Sandressio0"),
+                resources.getString("NPC.Sandressio1")
+        };
+
+        String[] Mr_Worldwide = {
+                resources.getString("NPC.Mr_Worldwide0"),
+                resources.getString("NPC.Mr_Worldwide1")
+        };
+
+        String[] Adriano = {
+                resources.getString("NPC.Adriano0"),
+                resources.getString("NPC.Adriano1")
+        };
+
+        String[] Enrico = {
+                resources.getString("NPC.Enrico0"),
+                resources.getString("NPC.Enrico1")
+        };
+
+        String[] Massimiliano_di_Medici = {
+                resources.getString("NPC.Massimiliano_di_Medici0"),
+                resources.getString("NPC.Massimiliano_di_Medici1")
+        };
+
+        String[] Giuliano = {
+                resources.getString("NPC.Giuliano0"),
+                resources.getString("NPC.Giuliano1")
+        };
+
+        String[] Sebastiano = {
+                resources.getString("NPC.Sebastiano0"),
+                resources.getString("NPC.Sebastiano1")
+        };
+
+        String[] Fisherwoman = {
+                resources.getString("NPC.Fisherwoman0"),
+                resources.getString("NPC.Fisherwoman1")
+        };
+
+        String[] Sleepy_Timon = {
+                resources.getString("NPC.Sleepy_Timon0"),
+                resources.getString("NPC.Sleepy_Timon1")
+        };
+
+        String[] Josh = {
+                resources.getString("NPC.Josh0"),
+                resources.getString("NPC.Josh1")
+        };
+
+        String[] Tyler = {
+                resources.getString("NPC.Tyler0"),
+                resources.getString("NPC.Tyler1")
+        };
+
+        String[] Ferryman_Ferik = {
+                resources.getString("NPC.Ferryman_Ferik0"),
+                resources.getString("NPC.Ferryman_Ferik1")
+        };
+
+        String[] Drifting_Impossible = {
+                resources.getString("NPC.Drifting_Impossible0"),
+                resources.getString("NPC.Drifting_Impossible1")
+        };
+
+        String[] Schmimon = {
+                resources.getString("NPC.Schmimon0"),
+                resources.getString("NPC.Schmimon1")
+        };
+
+        String[] Mlemens = {
+                resources.getString("NPC.Mlemens0"),
+                resources.getString("NPC.Mlemens1")
+        };
+
+        String[] Carie = {
+                resources.getString("NPC.Carie0"),
+                resources.getString("NPC.Carie1")
+        };
+
+        String[] Gio_Chips = {
+                resources.getString("NPC.Gio_Chips0"),
+                resources.getString("NPC.Gio_Chips1")
+        };
+
+        String[] Gio_Tto = {
+                resources.getString("NPC.Gio_Tto0"),
+                resources.getString("NPC.Gio_Tto1")
+        };
+
+        String[] Anonymous = {
+                resources.getString("NPC.Anonymous0"),
+                resources.getString("NPC.Anonymous1")
+        };
+
+        String[] Officer_Dunot = {
+                resources.getString("NPC.Officer_Dunot0"),
+                resources.getString("NPC.Officer_Dunot1")
+        };
+
+        String[] Tax_Office_Agent = {
+                resources.getString("NPC.Tax_Office_Agent0"),
+                resources.getString("NPC.Tax_Office_Agent1")
+        };
+
 
         npcTexts.put("Default", defaultTexts);
 
@@ -685,5 +1170,200 @@ public class NpcTextManager {
         npcTexts.put("649ee20c6cec1b8f0f8fee1a", Lil_CaLa);
 
         npcTexts.put("649ee20c6cec1b8f0f8fee20", Timon);
+
+        npcTexts.put("64a428af6cec1b8f0f0fef93", K_Reuzband);
+
+        npcTexts.put("64a428af6cec1b8f0f0fef98", Noers);
+
+        npcTexts.put("64a428af6cec1b8f0f0fef9d", Nook);
+
+        npcTexts.put("64a820186cec1b8f0f6f9088", Snej);
+
+        npcTexts.put("64a820186cec1b8f0f6f9091", Museumswaerter_Hinz);
+
+        npcTexts.put("64a820186cec1b8f0f6f9098", Museumswaerter_Kunz);
+
+        npcTexts.put("64a820186cec1b8f0f6f90a0", Museumswaerter_Gogh);
+
+        npcTexts.put("64a820186cec1b8f0f6f90ad", Snej2);
+
+        npcTexts.put("64a820186cec1b8f0f6f90bc", Waerter_S_Original);
+
+        npcTexts.put("64a820186cec1b8f0f6f90c3", Dr_Loisok);
+
+        npcTexts.put("64b10f7c6cec1b8f0f5435aa", Rob2);
+
+        npcTexts.put("64b514726cec1b8f0fc27ea3", Melvin);
+
+        npcTexts.put("64b514726cec1b8f0fc27ea8", Luzius);
+
+        npcTexts.put("64b514726cec1b8f0fc27ead", Heimke);
+
+        npcTexts.put("64b514726cec1b8f0fc27eb4", Maurizio);
+
+        npcTexts.put("64b514726cec1b8f0fc27eb9", Janno);
+
+        npcTexts.put("64b514726cec1b8f0fc27ebe", Gisbert);
+
+        npcTexts.put("64b514726cec1b8f0fc27ec5", Pascal);
+
+        npcTexts.put("64b514736cec1b8f0fc27ed3", Pam);
+
+        npcTexts.put("64b514736cec1b8f0fc27ee1", Leon);
+
+        npcTexts.put("64b514736cec1b8f0fc27ee8", Dan2);
+
+        npcTexts.put("64b514736cec1b8f0fc27eef", Mike);
+
+        npcTexts.put("64b514736cec1b8f0fc27ef6", Old_Witch);
+
+        npcTexts.put("64b514756cec1b8f0fc27ffb", Ol_McDonald);
+
+        npcTexts.put("64b514756cec1b8f0fc28002", Getof_Milawn);
+
+        npcTexts.put("64b514756cec1b8f0fc28009", Huckleberry_Finn);
+
+        npcTexts.put("64b514756cec1b8f0fc28010", Owen_Lars);
+
+        npcTexts.put("64b514756cec1b8f0fc28019", Kaefersammler_Schmaldrian);
+
+        npcTexts.put("64b514756cec1b8f0fc28023", Schleimsammler_Baldrian);
+
+        npcTexts.put("64b514756cec1b8f0fc2802c", Steinsammler_Saltrian);
+
+        npcTexts.put("64b514756cec1b8f0fc28034", Paco);
+
+        npcTexts.put("64b514766cec1b8f0fc2803b", Clemme);
+
+        npcTexts.put("64b514766cec1b8f0fc28050", Jercy_Packson);
+
+        npcTexts.put("64b514766cec1b8f0fc28059", Charon);
+
+        npcTexts.put("64b514776cec1b8f0fc280a6", Fishing_Femens);
+
+        npcTexts.put("64b514776cec1b8f0fc280ab", Mayormon);
+
+        npcTexts.put("64b514776cec1b8f0fc280b0", Elderly_Enrik);
+
+        npcTexts.put("64b514776cec1b8f0fc280b5", Camping_Cio);
+
+        npcTexts.put("64b514776cec1b8f0fc280ba", Grilling_Grulian);
+
+        npcTexts.put("64b514776cec1b8f0fc280bf", Picnic_Paesch);
+
+        npcTexts.put("64b514776cec1b8f0fc280c4", Lil_Lom);
+
+        npcTexts.put("64b514776cec1b8f0fc280c9", Hungry_Haterian);
+
+        npcTexts.put("64b514776cec1b8f0fc280d0", Jealous_Jandro);
+
+        npcTexts.put("64b514776cec1b8f0fc280d5", Keb);
+
+        npcTexts.put("64b514776cec1b8f0fc280da", Balbert);
+
+        npcTexts.put("64b514776cec1b8f0fc280df", Zens);
+
+        npcTexts.put("64b514776cec1b8f0fc280e4", Nax);
+
+        npcTexts.put("64b514786cec1b8f0fc2811b", Timon2);
+
+        npcTexts.put("64b514786cec1b8f0fc28128", Empfangsdame_Giulia);
+
+        npcTexts.put("64b514786cec1b8f0fc28131", CTO);
+
+        npcTexts.put("64b514786cec1b8f0fc2813e", CEO);
+
+        npcTexts.put("64b514786cec1b8f0fc2814d", Pom);
+
+        npcTexts.put("64b514786cec1b8f0fc2815a", Hiwi);
+
+        npcTexts.put("64b514786cec1b8f0fc28165", Perik);
+
+        npcTexts.put("64b514786cec1b8f0fc28170", Pandro_Pluschi);
+
+        npcTexts.put("64b514786cec1b8f0fc2817b", Pio_Pasta);
+
+        npcTexts.put("64b514786cec1b8f0fc2818d", Clemoms);
+
+        npcTexts.put("64b514786cec1b8f0fc28190", Christian_Love);
+
+        npcTexts.put("64b514786cec1b8f0fc28195", Woerni_von_der_Tanke);
+
+        npcTexts.put("64b514786cec1b8f0fc28198", Eis_Eis_Werni);
+
+        npcTexts.put("64b514786cec1b8f0fc2819b", Woerni_Woerstchen);
+
+        npcTexts.put("64c41b60fcc75bfbe987c47f", Rockrick);
+
+        npcTexts.put("64c41b60fcc75bfbe987c48c", Vernon);
+
+        npcTexts.put("64c41b60fcc75bfbe987c497", Tony);
+
+        npcTexts.put("64c41b60fcc75bfbe987c4a3", Jakta);
+
+        npcTexts.put("64c41b61fcc75bfbe987c512", Giovanni);
+
+        npcTexts.put("64c41b61fcc75bfbe987c517", Giorgo);
+
+        npcTexts.put("64c41b61fcc75bfbe987c51c", Giolito);
+
+        npcTexts.put("64c41b61fcc75bfbe987c522", Gioberto);
+
+        npcTexts.put("64c41b61fcc75bfbe987c529", Giordano);
+
+        npcTexts.put("64c41b61fcc75bfbe987c52e", Giovenco);
+
+        npcTexts.put("64c41b61fcc75bfbe987c533", Gioseppe);
+
+        npcTexts.put("64c41b61fcc75bfbe987c53a", Simone);
+
+        npcTexts.put("64c41b61fcc75bfbe987c53f", Clemente);
+
+        npcTexts.put("64c41b61fcc75bfbe987c544", Nataschetta);
+
+        npcTexts.put("64c41b61fcc75bfbe987c549", Tommaso);
+
+        npcTexts.put("64c41b61fcc75bfbe987c54c", Sandressio);
+
+        npcTexts.put("64c41b61fcc75bfbe987c551", Mr_Worldwide);
+
+        npcTexts.put("64c41b61fcc75bfbe987c556", Adriano);
+
+        npcTexts.put("64c41b61fcc75bfbe987c561", Enrico);
+
+        npcTexts.put("64c41b61fcc75bfbe987c566", Massimiliano_di_Medici);
+
+        npcTexts.put("64c41b61fcc75bfbe987c56b", Giuliano);
+
+        npcTexts.put("64c41b61fcc75bfbe987c570", Sebastiano);
+
+        npcTexts.put("64c41b65fcc75bfbe987c73a", Fisherwoman);
+
+        npcTexts.put("64c41b66fcc75bfbe987c7d1", Sleepy_Timon);
+
+        npcTexts.put("64c41b67fcc75bfbe987c81f", Josh);
+
+        npcTexts.put("64c41b68fcc75bfbe987c837", Tyler);
+
+        npcTexts.put("64c41b68fcc75bfbe987c84c", Ferryman_Ferik);
+
+        npcTexts.put("64c41b68fcc75bfbe987c84f", Drifting_Impossible);
+
+        npcTexts.put("64c8e9bbfcc75bfbe9409803", Schmimon);
+
+        npcTexts.put("64c8e9bcfcc75bfbe9409867", Mlemens);
+
+        npcTexts.put("64c8e9bcfcc75bfbe9409870", Carie);
+
+        npcTexts.put("64c8e9bdfcc75bfbe94098e0", Gio_Chips);
+
+        npcTexts.put("64c8e9bdfcc75bfbe94098e7", Gio_Tto);
+
+        npcTexts.put("64c8e9bdfcc75bfbe94098ee", Anonymous);
+
+        npcTexts.put("64c8e9c0fcc75bfbe9409a54", Officer_Dunot);
+
+        npcTexts.put("64c8e9c0fcc75bfbe9409a57", Tax_Office_Agent);
+
     }
 }
