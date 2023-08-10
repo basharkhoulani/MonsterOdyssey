@@ -173,7 +173,7 @@ public class IngameKeybindingsController extends Controller {
 <span class="fc" id="L173">                button.setText(&quot;&quot;);</span>
 <span class="fc" id="L174">                button.setText(&quot;ESCAPE&quot;);</span>
             } else {
-<span class="pc bpc" id="L176" title="1 of 4 branches missed.">                if (event.getText().length() != 0 &amp;&amp; Character.isLetterOrDigit(event.getText().charAt(0))) {</span>
+<span class="pc bpc" id="L176" title="1 of 4 branches missed.">                if (!event.getText().isEmpty() &amp;&amp; Character.isLetterOrDigit(event.getText().charAt(0))) {</span>
 <span class="fc" id="L177">                    informationLabel.setText(resources.getString(&quot;CLICK.CHECK&quot;));</span>
 <span class="fc" id="L178">                    button.setText(&quot;&quot;);</span>
 <span class="fc" id="L179">                    button.setText(event.getText().toUpperCase());</span>

@@ -4,27 +4,6 @@ import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import javafx.scene.image.Image;
 
-public class ItemData {
-    private final Item item;
-    private final ItemTypeDto itemTypeDto;
-    private final Image itemImage;
-
-<span class="fc" id="L12">    public ItemData(Item item, ItemTypeDto itemTypeDto, Image itemImage) {</span>
-<span class="fc" id="L13">        this.item = item;</span>
-<span class="fc" id="L14">        this.itemTypeDto = itemTypeDto;</span>
-<span class="fc" id="L15">        this.itemImage = itemImage;</span>
-<span class="fc" id="L16">    }</span>
-
-    public Item getItem() {
-<span class="fc" id="L19">        return item;</span>
-    }
-
-    public ItemTypeDto getItemTypeDto() {
-<span class="fc" id="L23">        return itemTypeDto;</span>
-    }
-
-    public Image getItemImage() {
-<span class="fc" id="L27">        return itemImage;</span>
-    }
+<span class="fc" id="L7">public record ItemData(Item item, ItemTypeDto itemTypeDto, Image itemImage) {</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

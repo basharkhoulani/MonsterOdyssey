@@ -9,7 +9,6 @@ import java.awt.*;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
-
 public class SpriteAnimation extends AnimationTimer {
     private final TrainerController trainerController;
     private final GraphicsContext alternativeGraphicsContext;
@@ -19,7 +18,7 @@ public class SpriteAnimation extends AnimationTimer {
     private Image[] images;
     private long duration;
     private Long lastPlayedTimeStamp;
-<span class="fc" id="L22">    private int currentIndex = 0;</span>
+<span class="fc" id="L21">    private int currentIndex = 0;</span>
 
     private Image[] trainerStandingUp;
     private Image[] trainerStandingDown;
@@ -30,84 +29,84 @@ public class SpriteAnimation extends AnimationTimer {
     private Image[] trainerWalkingLeft;
     private Image[] trainerWalkingRight;
     public SpriteAnimation(TrainerController trainerController, Image spriteChunk, long duration, GraphicsContext graphicsContext, GraphicsContext alternativeGraphicsContext) {
-<span class="fc" id="L33">        super();</span>
-<span class="fc" id="L34">        this.trainerController = trainerController;</span>
-<span class="fc" id="L35">        this.spriteChunk = spriteChunk;</span>
-<span class="fc" id="L36">        this.duration = duration;</span>
-<span class="fc" id="L37">        this.graphicsContext = graphicsContext;</span>
-<span class="fc" id="L38">        this.alternativeGraphicsContext = alternativeGraphicsContext;</span>
-<span class="fc" id="L39">        init();</span>
-<span class="fc" id="L40">    }</span>
+<span class="fc" id="L32">        super();</span>
+<span class="fc" id="L33">        this.trainerController = trainerController;</span>
+<span class="fc" id="L34">        this.spriteChunk = spriteChunk;</span>
+<span class="fc" id="L35">        this.duration = duration;</span>
+<span class="fc" id="L36">        this.graphicsContext = graphicsContext;</span>
+<span class="fc" id="L37">        this.alternativeGraphicsContext = alternativeGraphicsContext;</span>
+<span class="fc" id="L38">        init();</span>
+<span class="fc" id="L39">    }</span>
 
     private void init() {
-<span class="fc" id="L43">        trainerStandingRight = ImageProcessor.cropTrainerImages(spriteChunk, 0, false);</span>
-<span class="fc" id="L44">        trainerWalkingRight = ImageProcessor.cropTrainerImages(spriteChunk, 0, true);</span>
-<span class="fc" id="L45">        trainerStandingUp = ImageProcessor.cropTrainerImages(spriteChunk, 1, false);</span>
-<span class="fc" id="L46">        trainerWalkingUp = ImageProcessor.cropTrainerImages(spriteChunk, 1, true);</span>
-<span class="fc" id="L47">        trainerStandingLeft = ImageProcessor.cropTrainerImages(spriteChunk, 2, false);</span>
-<span class="fc" id="L48">        trainerWalkingLeft = ImageProcessor.cropTrainerImages(spriteChunk, 2, true);</span>
-<span class="fc" id="L49">        trainerStandingDown = ImageProcessor.cropTrainerImages(spriteChunk, 3, false);</span>
-<span class="fc" id="L50">        trainerWalkingDown = ImageProcessor.cropTrainerImages(spriteChunk, 3, true);</span>
-<span class="fc" id="L51">        images = trainerWalkingDown;</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L42">        trainerStandingRight = ImageProcessor.cropTrainerImages(spriteChunk, 0, false);</span>
+<span class="fc" id="L43">        trainerWalkingRight = ImageProcessor.cropTrainerImages(spriteChunk, 0, true);</span>
+<span class="fc" id="L44">        trainerStandingUp = ImageProcessor.cropTrainerImages(spriteChunk, 1, false);</span>
+<span class="fc" id="L45">        trainerWalkingUp = ImageProcessor.cropTrainerImages(spriteChunk, 1, true);</span>
+<span class="fc" id="L46">        trainerStandingLeft = ImageProcessor.cropTrainerImages(spriteChunk, 2, false);</span>
+<span class="fc" id="L47">        trainerWalkingLeft = ImageProcessor.cropTrainerImages(spriteChunk, 2, true);</span>
+<span class="fc" id="L48">        trainerStandingDown = ImageProcessor.cropTrainerImages(spriteChunk, 3, false);</span>
+<span class="fc" id="L49">        trainerWalkingDown = ImageProcessor.cropTrainerImages(spriteChunk, 3, true);</span>
+<span class="fc" id="L50">        images = trainerWalkingDown;</span>
+<span class="fc" id="L51">    }</span>
 
     @Override
     public void handle(long now) {
-<span class="nc bnc" id="L56" title="All 2 branches missed.">        if (lastPlayedTimeStamp == null) {</span>
-<span class="nc" id="L57">            lastPlayedTimeStamp = System.currentTimeMillis();</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        if (lastPlayedTimeStamp == null) {</span>
+<span class="nc" id="L56">            lastPlayedTimeStamp = System.currentTimeMillis();</span>
         }
-<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (trainerController != null) {</span>
-<span class="nc" id="L60">            int y = trainerController.getUserTrainerY();</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (trainerController != null) {</span>
+<span class="nc" id="L59">            int y = trainerController.getUserTrainerY();</span>
             GraphicsContext drawingContext;
-<span class="nc bnc" id="L62" title="All 4 branches missed.">            if (trainerController.getTrainerY() / TILE_SIZE &gt; y &amp;&amp; alternativeGraphicsContext != null) {</span>
-<span class="nc" id="L63">                graphicsContext.clearRect(trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  27);</span>
-<span class="nc" id="L64">                drawingContext = alternativeGraphicsContext;</span>
+<span class="nc bnc" id="L61" title="All 4 branches missed.">            if (trainerController.getTrainerY() / TILE_SIZE &gt; y &amp;&amp; alternativeGraphicsContext != null) {</span>
+<span class="nc" id="L62">                graphicsContext.clearRect(trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  27);</span>
+<span class="nc" id="L63">                drawingContext = alternativeGraphicsContext;</span>
             }
             else {
-<span class="nc bnc" id="L67" title="All 2 branches missed.">                if (alternativeGraphicsContext != null) {</span>
-<span class="nc" id="L68">                    alternativeGraphicsContext.clearRect(trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  27);</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">                if (alternativeGraphicsContext != null) {</span>
+<span class="nc" id="L67">                    alternativeGraphicsContext.clearRect(trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  27);</span>
                 }
-<span class="nc" id="L70">                drawingContext = graphicsContext;</span>
+<span class="nc" id="L69">                drawingContext = graphicsContext;</span>
             }
-<span class="nc" id="L72">            drawingContext.clearRect(trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  27);</span>
-<span class="nc" id="L73">            trainerController.walk();</span>
-<span class="nc" id="L74">            drawingContext.drawImage(images[currentIndex], trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  27);</span>
+<span class="nc" id="L71">            drawingContext.clearRect(trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  27);</span>
+<span class="nc" id="L72">            trainerController.walk();</span>
+<span class="nc" id="L73">            drawingContext.drawImage(images[currentIndex], trainerController.getTrainerX(), trainerController.getTrainerY(), 16,  27);</span>
         }
 
-<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (System.currentTimeMillis() - lastPlayedTimeStamp &lt; duration + 50) {</span>
-<span class="nc" id="L78">            return;</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (System.currentTimeMillis() - lastPlayedTimeStamp &lt; duration + 50) {</span>
+<span class="nc" id="L77">            return;</span>
         }
-<span class="nc" id="L80">        lastPlayedTimeStamp = System.currentTimeMillis();</span>
-<span class="nc" id="L81">        currentIndex = (currentIndex + 1) % 6;</span>
-<span class="nc" id="L82">    }</span>
+<span class="nc" id="L79">        lastPlayedTimeStamp = System.currentTimeMillis();</span>
+<span class="nc" id="L80">        currentIndex = (currentIndex + 1) % 6;</span>
+<span class="nc" id="L81">    }</span>
 
     private void setImages(Image[] images) {
-<span class="nc" id="L85">        this.images = images;</span>
-<span class="nc" id="L86">    }</span>
+<span class="nc" id="L84">        this.images = images;</span>
+<span class="nc" id="L85">    }</span>
 
     private void setDuration(long duration) {
-<span class="nc" id="L89">        this.duration = duration;</span>
-<span class="nc" id="L90">    }</span>
+<span class="nc" id="L88">        this.duration = duration;</span>
+<span class="nc" id="L89">    }</span>
 
     public void walk(int direction) {
-<span class="nc" id="L93">        setupAnimation(direction, DELAY, trainerWalkingUp, trainerWalkingRight, trainerWalkingDown, trainerWalkingLeft);</span>
-<span class="nc" id="L94">    }</span>
+<span class="nc" id="L92">        setupAnimation(direction, DELAY, trainerWalkingUp, trainerWalkingRight, trainerWalkingDown, trainerWalkingLeft);</span>
+<span class="nc" id="L93">    }</span>
 
     private void setupAnimation(int direction, int delay, Image[] trainerWalkingUp, Image[] trainerWalkingRight, Image[] trainerWalkingDown, Image[] trainerWalkingLeft) {
-<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L98">            setDuration(delay);</span>
-<span class="nc bnc" id="L99" title="All 5 branches missed.">            switch (direction) {</span>
-<span class="nc" id="L100">                case 1 -&gt; setImages(trainerWalkingUp);</span>
-<span class="nc" id="L101">                case 0 -&gt; setImages(trainerWalkingRight);</span>
-<span class="nc" id="L102">                case 2 -&gt; setImages(trainerWalkingLeft);</span>
-<span class="nc" id="L103">                case 3 -&gt; setImages(trainerWalkingDown);</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L97">            setDuration(delay);</span>
+<span class="nc bnc" id="L98" title="All 5 branches missed.">            switch (direction) {</span>
+<span class="nc" id="L99">                case 1 -&gt; setImages(trainerWalkingUp);</span>
+<span class="nc" id="L100">                case 0 -&gt; setImages(trainerWalkingRight);</span>
+<span class="nc" id="L101">                case 2 -&gt; setImages(trainerWalkingLeft);</span>
+<span class="nc" id="L102">                case 3 -&gt; setImages(trainerWalkingDown);</span>
                 default -&gt; {}
             }
         }
-<span class="fc" id="L107">    }</span>
+<span class="fc" id="L106">    }</span>
 
     public void stay(int direction) {
-<span class="fc" id="L110">        setupAnimation(direction, DELAY_LONG, trainerStandingUp, trainerStandingRight, trainerStandingDown, trainerStandingLeft);</span>
-<span class="fc" id="L111">    }</span>
+<span class="fc" id="L109">        setupAnimation(direction, DELAY_LONG, trainerStandingUp, trainerStandingRight, trainerStandingDown, trainerStandingLeft);</span>
+<span class="fc" id="L110">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

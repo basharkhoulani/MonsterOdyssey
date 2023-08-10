@@ -17,12 +17,12 @@ public class EncounterOpponentStorage {
 <span class="fc" id="L17">    private final List&lt;String&gt; opponentsInStorage = new ArrayList&lt;&gt;();</span>
     private Opponent selfOpponent;
     // Die Opponent mit selben trainerId
-<span class="fc" id="L20">    private List&lt;Opponent&gt; enemyOpponents = FXCollections.observableArrayList();</span>
+<span class="fc" id="L20">    private final List&lt;Opponent&gt; enemyOpponents = FXCollections.observableArrayList();</span>
     // Die Opponent mit Id der Gegner
     private Opponent coopOpponent;
     // Die Opponent mit Id des Coop-Partners
-<span class="fc" id="L24">    private HashMap&lt;String, Monster&gt; currentMonsters = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L25">    private HashMap&lt;String, MonsterTypeDto&gt; currentMonsterTypes = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L24">    private final HashMap&lt;String, Monster&gt; currentMonsters = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L25">    private final HashMap&lt;String, MonsterTypeDto&gt; currentMonsterTypes = new HashMap&lt;&gt;();</span>
     private String regionId;
     private boolean isWild;
     private int encounterSize;

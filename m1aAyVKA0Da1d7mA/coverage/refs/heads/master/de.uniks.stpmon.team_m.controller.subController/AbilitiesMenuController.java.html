@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbilitiesMenuController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">AbilitiesMenuController.java</span></div><h1>AbilitiesMenuController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
 
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.dto.*;
-import de.uniks.stpmon.team_m.service.AudioService;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
-import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -14,13 +11,11 @@ import javafx.scene.control.Button;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static de.uniks.stpmon.team_m.Constants.SoundEffect.ATTACK;
 import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
 public class AbilitiesMenuController extends Controller {
@@ -39,7 +34,6 @@ public class AbilitiesMenuController extends Controller {
     Provider&lt;EncounterOpponentStorage&gt; encounterOpponentStorageProvider;
     @Inject
     EncounterOpponentsService encounterOpponentsService;
-    PresetsService presetsService;
     private Monster monster;
     private EncounterController encounterController;
     private Opponent currentOpponent;
@@ -47,73 +41,72 @@ public class AbilitiesMenuController extends Controller {
 
 
     @Inject
-<span class="fc" id="L50">    public AbilitiesMenuController() {</span>
-<span class="fc" id="L51">    }</span>
+<span class="fc" id="L44">    public AbilitiesMenuController() {</span>
+<span class="fc" id="L45">    }</span>
 
-    public void init(Monster monster, PresetsService presetsService, EncounterController encounterController, Opponent currentOpponent, List&lt;AbilityDto&gt; abilities) {
-<span class="fc" id="L54">        super.init();</span>
-<span class="fc" id="L55">        this.monster = monster;</span>
-<span class="fc" id="L56">        this.presetsService = presetsService;</span>
-<span class="fc" id="L57">        this.encounterController = encounterController;</span>
-<span class="fc" id="L58">        this.currentOpponent = currentOpponent;</span>
-<span class="fc" id="L59">        this.abilities = abilities;</span>
-<span class="fc" id="L60">    }</span>
+    public void init(Monster monster, EncounterController encounterController, Opponent currentOpponent, List&lt;AbilityDto&gt; abilities) {
+<span class="fc" id="L48">        super.init();</span>
+<span class="fc" id="L49">        this.monster = monster;</span>
+<span class="fc" id="L50">        this.encounterController = encounterController;</span>
+<span class="fc" id="L51">        this.currentOpponent = currentOpponent;</span>
+<span class="fc" id="L52">        this.abilities = abilities;</span>
+<span class="fc" id="L53">    }</span>
 
     @Override
     public Parent render() {
-<span class="fc" id="L64">        Parent parent = super.render();</span>
-<span class="fc" id="L65">        initButtons();</span>
-<span class="fc" id="L66">        return parent;</span>
+<span class="fc" id="L57">        Parent parent = super.render();</span>
+<span class="fc" id="L58">        initButtons();</span>
+<span class="fc" id="L59">        return parent;</span>
     }
 
     private void initButtons() {
         // Abilities
-<span class="fc" id="L71">        List&lt;Button&gt; abilityButtons = new ArrayList&lt;&gt;(Arrays.asList(abilityButton1, abilityButton2, abilityButton3, abilityButton4));</span>
+<span class="fc" id="L64">        List&lt;Button&gt; abilityButtons = new ArrayList&lt;&gt;(Arrays.asList(abilityButton1, abilityButton2, abilityButton3, abilityButton4));</span>
 
-<span class="fc" id="L73">        int i = 0;</span>
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if (monster != null) {</span>
-<span class="fc bfc" id="L75" title="All 2 branches covered.">            for (Map.Entry&lt;String, Integer&gt; entry : monster.abilities().entrySet()) {</span>
-<span class="fc" id="L76">                AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey()) - 1);Button abilityButton = abilityButtons.get(i);</span>
-<span class="fc" id="L77">                abilityButton.setText(ability.name() + &quot; &quot; + entry.getValue() + &quot;/&quot; + ability.maxUses());</span>
+<span class="fc" id="L66">        int i = 0;</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (monster != null) {</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">            for (Map.Entry&lt;String, Integer&gt; entry : monster.abilities().entrySet()) {</span>
+<span class="fc" id="L69">                AbilityDto ability = abilities.get(Integer.parseInt(entry.getKey()) - 1);Button abilityButton = abilityButtons.get(i);</span>
+<span class="fc" id="L70">                abilityButton.setText(ability.name() + &quot; &quot; + entry.getValue() + &quot;/&quot; + ability.maxUses());</span>
                 // Disable Button if no uses left
-<span class="pc bpc" id="L79" title="1 of 2 branches missed.">                if (entry.getValue() == 0) {</span>
-<span class="nc" id="L80">                    abilityButton.setDisable(true);</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">                if (entry.getValue() == 0) {</span>
+<span class="nc" id="L73">                    abilityButton.setDisable(true);</span>
                 }
                 // Change Color
-<span class="pc bpc" id="L83" title="1 of 2 branches missed.">                if (TYPESCOLORPALETTE.containsKey(ability.type())) {</span>
-<span class="fc" id="L84">                    abilityButton.setStyle(&quot;-fx-background-color: &quot; + TYPESCOLORPALETTE.get(ability.type()) + &quot;;-fx-border-color: black&quot;);</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">                if (TYPESCOLORPALETTE.containsKey(ability.type())) {</span>
+<span class="fc" id="L77">                    abilityButton.setStyle(&quot;-fx-background-color: &quot; + TYPESCOLORPALETTE.get(ability.type()) + &quot;;-fx-border-color: black&quot;);</span>
                 }
                 // setOnAction
-<span class="fc" id="L87">                abilityButton.setOnAction(actionEvent -&gt; useAbility(ability));</span>
-<span class="fc" id="L88">                i++;</span>
-<span class="fc" id="L89">            }</span>
+<span class="fc" id="L80">                abilityButton.setOnAction(actionEvent -&gt; useAbility(ability));</span>
+<span class="fc" id="L81">                i++;</span>
+<span class="fc" id="L82">            }</span>
         }
-<span class="fc bfc" id="L91" title="All 2 branches covered.">        while (i &lt; 4) {</span>
-<span class="fc" id="L92">            abilityButtons.get(i).setVisible(false);</span>
-<span class="fc" id="L93">            i++;</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        while (i &lt; 4) {</span>
+<span class="fc" id="L85">            abilityButtons.get(i).setVisible(false);</span>
+<span class="fc" id="L86">            i++;</span>
         }
 
-<span class="fc" id="L96">    }</span>
+<span class="fc" id="L89">    }</span>
 
     private void useAbility(AbilityDto ability) {
-<span class="fc" id="L99">        String regionId = encounterOpponentStorageProvider.get().getRegionId();</span>
-<span class="fc" id="L100">        String encounterId = encounterOpponentStorageProvider.get().getEncounterId();</span>
-<span class="fc" id="L101">        String opponentId = currentOpponent._id();</span>
+<span class="fc" id="L92">        String regionId = encounterOpponentStorageProvider.get().getRegionId();</span>
+<span class="fc" id="L93">        String encounterId = encounterOpponentStorageProvider.get().getEncounterId();</span>
+<span class="fc" id="L94">        String opponentId = currentOpponent._id();</span>
         // here to put the selected target
-<span class="fc" id="L103">        String targetId = encounterOpponentStorageProvider.get().getTargetOpponent().trainer();</span>
-<span class="fc" id="L104">        Move move = new AbilityMove(&quot;ability&quot;, ability.id(), targetId);</span>
+<span class="fc" id="L96">        String targetId = encounterOpponentStorageProvider.get().getTargetOpponent().trainer();</span>
+<span class="fc" id="L97">        Move move = new AbilityMove(&quot;ability&quot;, ability.id(), targetId);</span>
 
-<span class="fc" id="L106">        disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(</span>
+<span class="fc" id="L99">        disposables.add(encounterOpponentsService.updateOpponent(regionId, encounterId, opponentId, null, move).observeOn(FX_SCHEDULER).subscribe(</span>
                 opponent -&gt; {
-<span class="fc" id="L108">                    encounterController.updateDescription(resources.getString(&quot;YOU.USED&quot;) + &quot; &quot; + ability.name() + &quot;. \n&quot;, true);</span>
-<span class="fc" id="L109">                    encounterController.resetRepeatedTimes();</span>
-<span class="fc" id="L110">                    encounterController.increaseCurrentMonsterIndex();</span>
-<span class="fc" id="L111">                    encounterController.goBackToBattleMenu();</span>
-<span class="fc" id="L112">                }, Throwable::printStackTrace));</span>
-<span class="fc" id="L113">    }</span>
+<span class="fc" id="L101">                    encounterController.updateDescription(resources.getString(&quot;YOU.USED&quot;) + &quot; &quot; + ability.name() + &quot;. \n&quot;, true);</span>
+<span class="fc" id="L102">                    encounterController.resetRepeatedTimes();</span>
+<span class="fc" id="L103">                    encounterController.increaseCurrentMonsterIndex();</span>
+<span class="fc" id="L104">                    encounterController.goBackToBattleMenu();</span>
+<span class="fc" id="L105">                }, Throwable::printStackTrace));</span>
+<span class="fc" id="L106">    }</span>
 
     public void goBack() {
-<span class="fc" id="L116">        encounterController.goBackToBattleMenu();</span>
-<span class="fc" id="L117">    }</span>
+<span class="fc" id="L109">        encounterController.goBackToBattleMenu();</span>
+<span class="fc" id="L110">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

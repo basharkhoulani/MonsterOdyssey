@@ -12,7 +12,7 @@ import java.util.List;
 
 @Singleton
 public class ItemStorage {
-    List&lt;ItemData&gt; itemDataList;
+    final List&lt;ItemData&gt; itemDataList;
 
     @Inject
 <span class="fc" id="L18">    public ItemStorage() {</span>
@@ -24,7 +24,7 @@ public class ItemStorage {
     }
 
     public void addItemData(@NonNull Item item, ItemTypeDto itemTypeDto, Image itemImage) {
-<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (itemDataList.stream().anyMatch(m -&gt; m.getItem()._id().equals(item._id()))) {</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (itemDataList.stream().anyMatch(m -&gt; m.item()._id().equals(item._id()))) {</span>
 <span class="fc" id="L28">            return;</span>
         }
 <span class="fc" id="L30">        itemDataList.add(new ItemData(item, itemTypeDto, itemImage));</span>
@@ -32,19 +32,19 @@ public class ItemStorage {
 
     // null as param means that the value should not be updated
     public void updateItemData(@NonNull Item item, ItemTypeDto itemTypeDto, Image itemImage) {
-<span class="fc" id="L35">        ItemData oldItemData = itemDataList.stream().filter(m -&gt; m.getItem()._id().equals(item._id())).findFirst().orElse(null);</span>
+<span class="fc" id="L35">        ItemData oldItemData = itemDataList.stream().filter(m -&gt; m.item()._id().equals(item._id())).findFirst().orElse(null);</span>
 <span class="fc bfc" id="L36" title="All 2 branches covered.">        if (oldItemData == null) {</span>
 <span class="fc" id="L37">            return;</span>
         }
 <span class="fc" id="L39">        itemDataList.set(itemDataList.indexOf(oldItemData), new ItemData(</span>
                 item,
-<span class="pc bpc" id="L41" title="1 of 2 branches missed.">                itemTypeDto == null ? oldItemData.getItemTypeDto() : itemTypeDto,</span>
-<span class="pc bpc" id="L42" title="1 of 2 branches missed.">                itemImage == null ? oldItemData.getItemImage() : itemImage</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">                itemTypeDto == null ? oldItemData.itemTypeDto() : itemTypeDto,</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">                itemImage == null ? oldItemData.itemImage() : itemImage</span>
         ));
 <span class="fc" id="L44">    }</span>
 
     public ItemData getItemData(String itemId) {
-<span class="fc" id="L47">        return itemDataList.stream().filter(m -&gt; m.getItem()._id().equals(itemId)).findFirst().orElse(null);</span>
+<span class="fc" id="L47">        return itemDataList.stream().filter(m -&gt; m.item()._id().equals(itemId)).findFirst().orElse(null);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

@@ -289,7 +289,7 @@ import static de.uniks.stpmon.team_m.Constants.*;
 
     public void onCloseMonsterList() {
 <span class="pc bpc" id="L291" title="1 of 2 branches missed.">        if (rootStackPane != null) {</span>
-<span class="nc" id="L292">            rootStackPane.getChildren().remove(monsterListVBox);</span>
+<span class="fc" id="L292">            rootStackPane.getChildren().remove(monsterListVBox);</span>
         }
 <span class="fc" id="L294">        ingameController.buttonsDisable(false);</span>
 <span class="fc" id="L295">    }</span>
@@ -415,11 +415,9 @@ import static de.uniks.stpmon.team_m.Constants.*;
 <span class="nc" id="L415">                secondTypeImageView.setImage(null);</span>
             }
         }
-<span class="nc" id="L418">        mapImageView.setOnMouseClicked(mouseEvent -&gt; {</span>
-<span class="nc" id="L419">            ingameController.showMonsterLocaions(monsterTypeDto);</span>
-<span class="nc" id="L420">        });</span>
+<span class="nc" id="L418">        mapImageView.setOnMouseClicked(mouseEvent -&gt; ingameController.showMonsterLocaions(monsterTypeDto));</span>
 
-<span class="nc" id="L422">        showMondexDetails(true);</span>
-<span class="nc" id="L423">    }</span>
+<span class="nc" id="L420">        showMondexDetails(true);</span>
+<span class="nc" id="L421">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

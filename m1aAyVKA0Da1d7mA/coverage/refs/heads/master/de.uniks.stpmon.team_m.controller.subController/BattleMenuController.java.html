@@ -3,15 +3,12 @@
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
-import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 
 import javax.inject.Inject;
-import java.util.function.Consumer;
 
 public class BattleMenuController extends Controller {
 
@@ -24,67 +21,61 @@ public class BattleMenuController extends Controller {
     @FXML
     public Button itemButton;
     public Runnable onFleeButtonClick;
-    public Runnable onMonBallUse;
 
     private EncounterController encounterController;
     EncounterOpponentStorage encounterOpponentStorage;
 
 
     @Inject
-<span class="fc" id="L34">    public BattleMenuController() {</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L30">    public BattleMenuController() {</span>
+<span class="fc" id="L31">    }</span>
 
     public void init(EncounterController encounterController, EncounterOpponentStorage encounterOpponentStorage, App app) {
-<span class="fc" id="L38">        super.init();</span>
-<span class="fc" id="L39">        this.encounterController = encounterController;</span>
-<span class="fc" id="L40">        this.encounterOpponentStorage = encounterOpponentStorage;</span>
-<span class="fc" id="L41">        this.app = app;</span>
-<span class="fc" id="L42">    }</span>
+<span class="fc" id="L34">        super.init();</span>
+<span class="fc" id="L35">        this.encounterController = encounterController;</span>
+<span class="fc" id="L36">        this.encounterOpponentStorage = encounterOpponentStorage;</span>
+<span class="fc" id="L37">        this.app = app;</span>
+<span class="fc" id="L38">    }</span>
 
     @Override
     public Parent render() {
-<span class="fc" id="L46">        final Parent parent = super.render();</span>
-<span class="fc" id="L47">        fleeButton.setVisible(encounterOpponentStorage.isWild());</span>
-<span class="fc" id="L48">        fleeButton.setOnAction(this::changeToIngame);</span>
-<span class="fc" id="L49">        return parent;</span>
+<span class="fc" id="L42">        final Parent parent = super.render();</span>
+<span class="fc" id="L43">        fleeButton.setVisible(encounterOpponentStorage.isWild());</span>
+<span class="pc" id="L44">        fleeButton.setOnAction(event -&gt; changeToIngame());</span>
+<span class="fc" id="L45">        return parent;</span>
     }
 
 
     public void showAbilities() {
-<span class="fc" id="L54">        encounterController.showAbilities();</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L50">        encounterController.showAbilities();</span>
+<span class="fc" id="L51">    }</span>
 
     public void changeMonster() {
-<span class="fc" id="L58">        this.encounterController.showChangeMonsterList();</span>
-<span class="fc" id="L59">    }</span>
+<span class="fc" id="L54">        this.encounterController.showChangeMonsterList();</span>
+<span class="fc" id="L55">    }</span>
 
 
 
-    public void changeToIngame(ActionEvent event) {
-<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (onFleeButtonClick != null) {</span>
-<span class="nc" id="L65">            onFleeButtonClick.run();</span>
+    public void changeToIngame() {
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (onFleeButtonClick != null) {</span>
+<span class="nc" id="L61">            onFleeButtonClick.run();</span>
         }
-<span class="nc" id="L67">    }</span>
+<span class="nc" id="L63">    }</span>
 
     public void showFleeButton(boolean isWild) {
-<span class="fc" id="L70">        fleeButton.setVisible(isWild);</span>
-<span class="fc" id="L71">        fleeButton.setOnAction(this::changeToIngame);</span>
-<span class="fc" id="L72">    }</span>
+<span class="fc" id="L66">        fleeButton.setVisible(isWild);</span>
+<span class="pc" id="L67">        fleeButton.setOnAction(event -&gt; changeToIngame());</span>
+<span class="fc" id="L68">    }</span>
 
     public void buttonDisable(boolean isDisable) {
-<span class="nc" id="L75">        abilitiesButton.setDisable(isDisable);</span>
-<span class="nc" id="L76">        changeMonsterButton.setDisable(isDisable);</span>
-<span class="nc" id="L77">        itemButton.setDisable(isDisable);</span>
-<span class="nc" id="L78">        fleeButton.setDisable(isDisable);</span>
-<span class="nc" id="L79">    }</span>
+<span class="nc" id="L71">        abilitiesButton.setDisable(isDisable);</span>
+<span class="nc" id="L72">        changeMonsterButton.setDisable(isDisable);</span>
+<span class="nc" id="L73">        itemButton.setDisable(isDisable);</span>
+<span class="nc" id="L74">        fleeButton.setDisable(isDisable);</span>
+<span class="nc" id="L75">    }</span>
 
     public void showItem() {
-        //encounterController.showItems();
-        // TODO: replace later with item list
-<span class="nc bnc" id="L84" title="All 2 branches missed.">        if (onMonBallUse != null) {</span>
-<span class="nc" id="L85">            onMonBallUse.run();</span>
-        }
-<span class="nc" id="L87">        encounterController.showItems();</span>
-<span class="nc" id="L88">    }</span>
+<span class="nc" id="L78">        encounterController.showItems();</span>
+<span class="nc" id="L79">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
