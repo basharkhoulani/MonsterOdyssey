@@ -140,61 +140,58 @@ public class ItemCell extends ListCell&lt;Item&gt; {
 <span class="nc" id="L140">                            itemStorageProvider.get().updateItemData(item, null, itemImage);</span>
 <span class="nc" id="L141">                            this.itemImage = itemImage;</span>
 <span class="nc" id="L142">                            itemImageView.setImage(this.itemImage);</span>
-<span class="nc" id="L143">                        }, error -&gt; {</span>
-<span class="nc" id="L144">                            itemMenuController.showError(error.getMessage());</span>
-<span class="nc" id="L145">                            error.printStackTrace();</span>
-<span class="nc" id="L146">                        }));</span>
+<span class="nc" id="L143">                        }, error -&gt; itemMenuController.showError(error.getMessage())));</span>
             }
 
-<span class="nc" id="L149">            itemHBox.setOnMouseClicked(event -&gt; {</span>
-<span class="nc" id="L150">                openItemDescription(itemTypeDto, this.itemImage, item, () -&gt; itemMenuController.onItemUsed(item));</span>
-<span class="nc" id="L151">                itemMenuController.setItemNameLabel(itemTypeDto.name());</span>
-<span class="nc" id="L152">            });</span>
-<span class="nc" id="L153">            setGraphic(itemHBox);</span>
+<span class="nc" id="L146">            itemHBox.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L147">                openItemDescription(itemTypeDto, this.itemImage, item, () -&gt; itemMenuController.onItemUsed(item));</span>
+<span class="nc" id="L148">                itemMenuController.setItemNameLabel(itemTypeDto.name());</span>
+<span class="nc" id="L149">            });</span>
+<span class="nc" id="L150">            setGraphic(itemHBox);</span>
 
             // hide item count when buying items from clerk
-<span class="nc bnc" id="L156" title="All 2 branches missed.">            if (itemMenuController.getInventoryType() == InventoryType.buyItems) {</span>
-<span class="nc" id="L157">                itemNumber.setVisible(false);</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">            if (itemMenuController.getInventoryType() == InventoryType.buyItems) {</span>
+<span class="nc" id="L154">                itemNumber.setVisible(false);</span>
             }
 
-<span class="nc" id="L160">            setStyle(&quot;-fx-border-width: 1px; -fx-border-color: #000000&quot;);</span>
+<span class="nc" id="L157">            setStyle(&quot;-fx-border-width: 1px; -fx-border-color: #000000&quot;);</span>
         }
-<span class="nc" id="L162">    }</span>
+<span class="nc" id="L159">    }</span>
 
     private void loadFXML() {
-<span class="nc bnc" id="L165" title="All 2 branches missed.">        if (loader == null) {</span>
-<span class="nc" id="L166">            loader = new FXMLLoader(Main.class.getResource(&quot;views/ItemCell.fxml&quot;));</span>
-<span class="nc" id="L167">            loader.setResources(resources);</span>
-<span class="nc" id="L168">            loader.setControllerFactory(c -&gt; this);</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">        if (loader == null) {</span>
+<span class="nc" id="L163">            loader = new FXMLLoader(Main.class.getResource(&quot;views/ItemCell.fxml&quot;));</span>
+<span class="nc" id="L164">            loader.setResources(resources);</span>
+<span class="nc" id="L165">            loader.setControllerFactory(c -&gt; this);</span>
             try {
-<span class="nc" id="L170">                loader.load();</span>
-<span class="nc" id="L171">            } catch (Exception e) {</span>
-<span class="nc" id="L172">                e.printStackTrace();</span>
-<span class="nc" id="L173">            }</span>
+<span class="nc" id="L167">                loader.load();</span>
+<span class="nc" id="L168">            } catch (Exception e) {</span>
+<span class="nc" id="L169">                System.out.println(&quot;Error loading ItemCell.fxml&quot;);</span>
+<span class="nc" id="L170">            }</span>
         }
-<span class="nc" id="L175">    }</span>
+<span class="nc" id="L172">    }</span>
 
     public void openItemDescription(ItemTypeDto itemTypeDto, Image itemImage, Item item, Runnable onItemUsed) {
-<span class="nc" id="L178">        int ownAmountOfItem = 0;</span>
-<span class="nc" id="L179">        List&lt;Item&gt; trainerItems = itemMenuController.trainerStorageProvider.get().getItems();</span>
-<span class="nc bnc" id="L180" title="All 2 branches missed.">        for (Item trainerItem : trainerItems) {</span>
-<span class="nc bnc" id="L181" title="All 2 branches missed.">            if (trainerItem.type() == item.type()) {</span>
-<span class="nc" id="L182">                ownAmountOfItem = trainerItem.amount();</span>
-<span class="nc" id="L183">                break;</span>
+<span class="nc" id="L175">        int ownAmountOfItem = 0;</span>
+<span class="nc" id="L176">        List&lt;Item&gt; trainerItems = itemMenuController.trainerStorageProvider.get().getItems();</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">        for (Item trainerItem : trainerItems) {</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">            if (trainerItem.type() == item.type()) {</span>
+<span class="nc" id="L179">                ownAmountOfItem = trainerItem.amount();</span>
+<span class="nc" id="L180">                break;</span>
             }
-<span class="nc" id="L185">        }</span>
+<span class="nc" id="L182">        }</span>
 
-<span class="nc" id="L187">        ItemDescriptionController itemDescriptionController = new ItemDescriptionController(onItemUsed);</span>
-<span class="nc" id="L188">        itemDescriptionController.setValues(resources, preferences, resourceBundleProvider, itemDescriptionController, app);</span>
-<span class="nc bnc" id="L189" title="All 2 branches missed.">        if (ingameController != null) {</span>
-<span class="nc" id="L190">            itemDescriptionController.init(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, ingameController, itemMenuController);</span>
-<span class="nc bnc" id="L191" title="All 2 branches missed.">        } else if (encounterController != null) {</span>
-<span class="nc" id="L192">            itemDescriptionController.initFromEncounter(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, encounterController, trainerStorage);</span>
+<span class="nc" id="L184">        ItemDescriptionController itemDescriptionController = new ItemDescriptionController(onItemUsed);</span>
+<span class="nc" id="L185">        itemDescriptionController.setValues(resources, preferences, resourceBundleProvider, itemDescriptionController, app);</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">        if (ingameController != null) {</span>
+<span class="nc" id="L187">            itemDescriptionController.init(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, ingameController, itemMenuController);</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">        } else if (encounterController != null) {</span>
+<span class="nc" id="L189">            itemDescriptionController.initFromEncounter(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, encounterController, trainerStorage);</span>
         }
-<span class="nc bnc" id="L194" title="All 2 branches missed.">        if (itemDescriptionBox.getChildren().size() != 0) {</span>
-<span class="nc" id="L195">            itemDescriptionBox.getChildren().clear();</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">        if (!itemDescriptionBox.getChildren().isEmpty()) {</span>
+<span class="nc" id="L192">            itemDescriptionBox.getChildren().clear();</span>
         }
-<span class="nc" id="L197">        itemDescriptionBox.getChildren().add(itemDescriptionController.render());</span>
-<span class="nc" id="L198">    }</span>
+<span class="nc" id="L194">        itemDescriptionBox.getChildren().add(itemDescriptionController.render());</span>
+<span class="nc" id="L195">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

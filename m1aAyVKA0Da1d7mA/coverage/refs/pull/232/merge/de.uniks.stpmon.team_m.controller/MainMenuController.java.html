@@ -275,26 +275,23 @@ public class MainMenuController extends Controller {
 <span class="fc" id="L275">                                    ingameControllerProvider.get().setIsNewStart(true);</span>
 <span class="fc" id="L276">                                    app.show(ingameControllerProvider.get());</span>
 <span class="fc" id="L277">                                },</span>
-                                error -&gt; {
-<span class="nc" id="L279">                                    showError(error.getMessage());</span>
-<span class="nc" id="L280">                                    error.printStackTrace();</span>
-<span class="nc" id="L281">                                }</span>
+<span class="nc" id="L278">                                error -&gt; showError(error.getMessage())</span>
                         ));
                     }
-<span class="pc" id="L284">                }, error -&gt; showError(error.getMessage())</span>
+<span class="pc" id="L281">                }, error -&gt; showError(error.getMessage())</span>
         ));
-<span class="fc" id="L286">    }</span>
+<span class="fc" id="L283">    }</span>
 
     public void showTrainerDeletion() {
-<span class="fc" id="L289">        trainerDeletedSuccessfully.setText(this.information);</span>
-<span class="fc" id="L290">    }</span>
+<span class="fc" id="L286">        trainerDeletedSuccessfully.setText(this.information);</span>
+<span class="fc" id="L287">    }</span>
 
     public void setTrainerDeletion() {
-<span class="nc" id="L293">        this.information = resources.getString(&quot;DELETE.TRAINER.SUCCESS&quot;);</span>
-<span class="nc" id="L294">    }</span>
+<span class="nc" id="L290">        this.information = resources.getString(&quot;DELETE.TRAINER.SUCCESS&quot;);</span>
+<span class="nc" id="L291">    }</span>
 
     public void muteOrUnmuteSound() {
-<span class="nc" id="L297">        AudioService.getInstance().muteOrUnmuteSound(muteButton, preferences);</span>
-<span class="nc" id="L298">    }</span>
+<span class="nc" id="L294">        AudioService.getInstance().muteOrUnmuteSound(muteButton, preferences);</span>
+<span class="nc" id="L295">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

@@ -294,154 +294,148 @@ import static de.uniks.stpmon.team_m.Constants.*;
 <span class="nc" id="L294">                                            ingameControllerProvider.get().setIsNewStart(true);</span>
 <span class="nc" id="L295">                                            app.show(ingameControllerProvider.get());</span>
 <span class="nc" id="L296">                                        },</span>
-                                        error -&gt; {
-<span class="nc" id="L298">                                            showError(error.getMessage());</span>
-<span class="nc" id="L299">                                            error.printStackTrace();</span>
-<span class="nc" id="L300">                                        }</span>
+<span class="nc" id="L297">                                        error -&gt; showError(error.getMessage())</span>
                                 ));
-<span class="nc" id="L302">                            }, error -&gt; showError(error.getMessage())</span>
+<span class="nc" id="L299">                            }, error -&gt; showError(error.getMessage())</span>
                     ));
-<span class="nc" id="L304">                } else {</span>
-<span class="nc" id="L305">                    disposables.add(trainersServiceProvider.get().createTrainer(</span>
-<span class="nc" id="L306">                            region._id(),</span>
-<span class="nc" id="L307">                            trainerStorage.getTrainerName(),</span>
-<span class="nc" id="L308">                            trainerStorage.getTrainerSprite(),</span>
+<span class="nc" id="L301">                } else {</span>
+<span class="nc" id="L302">                    disposables.add(trainersServiceProvider.get().createTrainer(</span>
+<span class="nc" id="L303">                            region._id(),</span>
+<span class="nc" id="L304">                            trainerStorage.getTrainerName(),</span>
+<span class="nc" id="L305">                            trainerStorage.getTrainerSprite(),</span>
                             null
-<span class="nc" id="L310">                    ).observeOn(FX_SCHEDULER).subscribe(result -&gt; {</span>
-<span class="nc" id="L311">                                trainerStorage.setTrainer(result);</span>
-<span class="nc" id="L312">                                disposables.add(presetsServiceProvider.get().getCharacter(result.image()).observeOn(FX_SCHEDULER).subscribe(</span>
+<span class="nc" id="L307">                    ).observeOn(FX_SCHEDULER).subscribe(result -&gt; {</span>
+<span class="nc" id="L308">                                trainerStorage.setTrainer(result);</span>
+<span class="nc" id="L309">                                disposables.add(presetsServiceProvider.get().getCharacter(result.image()).observeOn(FX_SCHEDULER).subscribe(</span>
                                         response -&gt; {
-<span class="nc bnc" id="L314" title="All 2 branches missed.">                                            if (!GraphicsEnvironment.isHeadless()) {</span>
-<span class="nc" id="L315">                                                trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));</span>
+<span class="nc bnc" id="L311" title="All 2 branches missed.">                                            if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L312">                                                trainerStorage.setTrainerSpriteChunk(ImageProcessor.resonseBodyToJavaFXImage(response));</span>
                                             }
-<span class="nc" id="L317">                                            ingameControllerProvider.get().setIsNewStart(true);</span>
-<span class="nc" id="L318">                                            app.show(ingameControllerProvider.get());</span>
-<span class="nc" id="L319">                                        },</span>
-                                        error -&gt; {
-<span class="nc" id="L321">                                            showError(error.getMessage());</span>
-<span class="nc" id="L322">                                            error.printStackTrace();</span>
-<span class="nc" id="L323">                                        }</span>
+<span class="nc" id="L314">                                            ingameControllerProvider.get().setIsNewStart(true);</span>
+<span class="nc" id="L315">                                            app.show(ingameControllerProvider.get());</span>
+<span class="nc" id="L316">                                        },</span>
+<span class="nc" id="L317">                                        error -&gt; showError(error.getMessage())</span>
                                 ));
-<span class="nc" id="L325">                            }, error -&gt; showError(error.getMessage())</span>
+<span class="nc" id="L319">                            }, error -&gt; showError(error.getMessage())</span>
                     ));
                 }
             }
         }
 
-<span class="fc" id="L331">    }</span>
+<span class="fc" id="L325">    }</span>
 
     private void removeHardcoreSettings() {
-<span class="nc" id="L334">        messagePane.getChildren().remove(hardcoreSettingsBox);</span>
-<span class="nc" id="L335">    }</span>
+<span class="nc" id="L328">        messagePane.getChildren().remove(hardcoreSettingsBox);</span>
+<span class="nc" id="L329">    }</span>
 
     private void showHardcoreSettings() {
-<span class="nc bnc" id="L338" title="All 2 branches missed.">        if (hardcoreSettingsBox != null) {</span>
-<span class="nc" id="L339">            messagePane.getChildren().add(hardcoreSettingsBox);</span>
+<span class="nc bnc" id="L332" title="All 2 branches missed.">        if (hardcoreSettingsBox != null) {</span>
+<span class="nc" id="L333">            messagePane.getChildren().add(hardcoreSettingsBox);</span>
         } else {
-<span class="nc" id="L341">            hardcoreSettingsBox = new VBox();</span>
-<span class="nc" id="L342">            hardcoreSettingsBox.setPrefWidth(GAMEMODEBOX_WIDTH);</span>
-<span class="nc" id="L343">            hardcoreSettingsBox.setPrefHeight(HARDCORESETTINGBOX_HEIGHT);</span>
-<span class="nc" id="L344">            hardcoreSettingsBox.setStyle(&quot;-fx-background-color: #ffe6cc&quot;);</span>
+<span class="nc" id="L335">            hardcoreSettingsBox = new VBox();</span>
+<span class="nc" id="L336">            hardcoreSettingsBox.setPrefWidth(GAMEMODEBOX_WIDTH);</span>
+<span class="nc" id="L337">            hardcoreSettingsBox.setPrefHeight(HARDCORESETTINGBOX_HEIGHT);</span>
+<span class="nc" id="L338">            hardcoreSettingsBox.setStyle(&quot;-fx-background-color: #ffe6cc&quot;);</span>
 
-<span class="nc" id="L346">            HBox warningBox = new HBox();</span>
-<span class="nc" id="L347">            HBox permanentBox = new HBox();</span>
-<span class="nc" id="L348">            HBox deleteTrainerBox = new HBox();</span>
-<span class="nc" id="L349">            HBox itemExpensiveBox = new HBox();</span>
-<span class="nc" id="L350">            HBox sliderBox = new HBox();</span>
+<span class="nc" id="L340">            HBox warningBox = new HBox();</span>
+<span class="nc" id="L341">            HBox permanentBox = new HBox();</span>
+<span class="nc" id="L342">            HBox deleteTrainerBox = new HBox();</span>
+<span class="nc" id="L343">            HBox itemExpensiveBox = new HBox();</span>
+<span class="nc" id="L344">            HBox sliderBox = new HBox();</span>
 
 
-<span class="nc" id="L353">            URL resourceImage = Main.class.getResource(&quot;images/warning.png&quot;);</span>
-<span class="nc bnc" id="L354" title="All 2 branches missed.">            assert resourceImage != null;</span>
-<span class="nc" id="L355">            Image warningImage = new Image(resourceImage.toString());</span>
-<span class="nc" id="L356">            ImageView warningImageView1 = new ImageView(warningImage);</span>
-<span class="nc" id="L357">            warningImageView1.setFitWidth(IMAGEVIEW_SIZE);</span>
-<span class="nc" id="L358">            warningImageView1.setFitHeight(IMAGEVIEW_SIZE);</span>
+<span class="nc" id="L347">            URL resourceImage = Main.class.getResource(&quot;images/warning.png&quot;);</span>
+<span class="nc bnc" id="L348" title="All 2 branches missed.">            assert resourceImage != null;</span>
+<span class="nc" id="L349">            Image warningImage = new Image(resourceImage.toString());</span>
+<span class="nc" id="L350">            ImageView warningImageView1 = new ImageView(warningImage);</span>
+<span class="nc" id="L351">            warningImageView1.setFitWidth(IMAGEVIEW_SIZE);</span>
+<span class="nc" id="L352">            warningImageView1.setFitHeight(IMAGEVIEW_SIZE);</span>
 
-<span class="nc" id="L360">            ImageView warningImageView2 = new ImageView(warningImage);</span>
-<span class="nc" id="L361">            warningImageView2.setFitWidth(IMAGEVIEW_SIZE);</span>
-<span class="nc" id="L362">            warningImageView2.setFitHeight(IMAGEVIEW_SIZE);</span>
+<span class="nc" id="L354">            ImageView warningImageView2 = new ImageView(warningImage);</span>
+<span class="nc" id="L355">            warningImageView2.setFitWidth(IMAGEVIEW_SIZE);</span>
+<span class="nc" id="L356">            warningImageView2.setFitHeight(IMAGEVIEW_SIZE);</span>
 
-<span class="nc" id="L364">            Label warningLabel = new Label(resources.getString(&quot;WARNING&quot;));</span>
-<span class="nc" id="L365">            warningLabel.setStyle(&quot;-fx-font-weight: bold&quot;);</span>
-<span class="nc" id="L366">            warningLabel.setPadding(new Insets(WARNING_PADDING_TOP, WARNING_PADDING_RIGHT_LEFT, 0, WARNING_PADDING_RIGHT_LEFT));</span>
+<span class="nc" id="L358">            Label warningLabel = new Label(resources.getString(&quot;WARNING&quot;));</span>
+<span class="nc" id="L359">            warningLabel.setStyle(&quot;-fx-font-weight: bold&quot;);</span>
+<span class="nc" id="L360">            warningLabel.setPadding(new Insets(WARNING_PADDING_TOP, WARNING_PADDING_RIGHT_LEFT, 0, WARNING_PADDING_RIGHT_LEFT));</span>
 
-<span class="nc" id="L368">            warningBox.getChildren().addAll(warningImageView1, warningLabel, warningImageView2);</span>
+<span class="nc" id="L362">            warningBox.getChildren().addAll(warningImageView1, warningLabel, warningImageView2);</span>
 
-<span class="nc" id="L370">            permanentCheckBox = new CheckBox();</span>
-<span class="nc" id="L371">            permanentCheckBox.setText(resources.getString(&quot;PERMANENT.TEXT&quot;));</span>
-<span class="nc" id="L372">            permanentCheckBox.setPadding(new Insets(TEN, 0, 0, FIVE));</span>
-<span class="nc" id="L373">            permanentBox.getChildren().add(permanentCheckBox);</span>
+<span class="nc" id="L364">            permanentCheckBox = new CheckBox();</span>
+<span class="nc" id="L365">            permanentCheckBox.setText(resources.getString(&quot;PERMANENT.TEXT&quot;));</span>
+<span class="nc" id="L366">            permanentCheckBox.setPadding(new Insets(TEN, 0, 0, FIVE));</span>
+<span class="nc" id="L367">            permanentBox.getChildren().add(permanentCheckBox);</span>
 
-<span class="nc" id="L375">            deleteTrainerCheckBox = new CheckBox();</span>
-<span class="nc" id="L376">            deleteTrainerCheckBox.setText(resources.getString(&quot;DELETE.TRAINER.CHECK&quot;));</span>
-<span class="nc" id="L377">            deleteTrainerCheckBox.getStyleClass().add(&quot;wrappedButton&quot;);</span>
-<span class="nc" id="L378">            deleteTrainerCheckBox.setPadding(new Insets(EIGHT, 0, 0, FIVE));</span>
-<span class="nc" id="L379">            deleteTrainerBox.getChildren().add(deleteTrainerCheckBox);</span>
+<span class="nc" id="L369">            deleteTrainerCheckBox = new CheckBox();</span>
+<span class="nc" id="L370">            deleteTrainerCheckBox.setText(resources.getString(&quot;DELETE.TRAINER.CHECK&quot;));</span>
+<span class="nc" id="L371">            deleteTrainerCheckBox.getStyleClass().add(&quot;wrappedButton&quot;);</span>
+<span class="nc" id="L372">            deleteTrainerCheckBox.setPadding(new Insets(EIGHT, 0, 0, FIVE));</span>
+<span class="nc" id="L373">            deleteTrainerBox.getChildren().add(deleteTrainerCheckBox);</span>
 
-<span class="nc" id="L381">            itemExpensiveCheckBox = new CheckBox();</span>
-<span class="nc" id="L382">            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString(&quot;ITEM.EXPENSIVE&quot;), 1));</span>
-<span class="nc" id="L383">            itemExpensiveCheckBox.getStyleClass().add(&quot;wrappedButton&quot;);</span>
-<span class="nc" id="L384">            itemExpensiveCheckBox.setPadding(new Insets(EIGHT, 0, 0, FIVE));</span>
-<span class="nc" id="L385">            itemExpensiveBox.getChildren().add(itemExpensiveCheckBox);</span>
-<span class="nc" id="L386">            hardcoreSettingsBox.getChildren().addAll(warningBox, permanentBox, deleteTrainerBox, itemExpensiveBox);</span>
+<span class="nc" id="L375">            itemExpensiveCheckBox = new CheckBox();</span>
+<span class="nc" id="L376">            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString(&quot;ITEM.EXPENSIVE&quot;), 1));</span>
+<span class="nc" id="L377">            itemExpensiveCheckBox.getStyleClass().add(&quot;wrappedButton&quot;);</span>
+<span class="nc" id="L378">            itemExpensiveCheckBox.setPadding(new Insets(EIGHT, 0, 0, FIVE));</span>
+<span class="nc" id="L379">            itemExpensiveBox.getChildren().add(itemExpensiveCheckBox);</span>
+<span class="nc" id="L380">            hardcoreSettingsBox.getChildren().addAll(warningBox, permanentBox, deleteTrainerBox, itemExpensiveBox);</span>
 
-<span class="nc" id="L388">            itemExpensiveCheckBox.setOnAction(event -&gt; {</span>
-<span class="nc bnc" id="L389" title="All 2 branches missed.">                if (!hardcoreSettingsBox.getChildren().contains(sliderBox)) {</span>
-<span class="nc" id="L390">                    slider = new Slider(1, 3, 1);</span>
-<span class="nc" id="L391">                    slider.setPrefWidth(SLIDER_WIDTH);</span>
-<span class="nc" id="L392">                    slider.setPadding(new Insets(20, 0, 0, 20));</span>
-<span class="nc" id="L393">                    Label startLabel = new Label(&quot;x1&quot;);</span>
-<span class="nc" id="L394">                    startLabel.setPadding(new Insets(20, 0, 0, 5));</span>
-<span class="nc" id="L395">                    Label endLabel = new Label(&quot;x3&quot;);</span>
-<span class="nc" id="L396">                    endLabel.setPadding(new Insets(20, 0, 0, 5));</span>
-<span class="nc" id="L397">                    sliderBox.getChildren().addAll(startLabel, slider, endLabel);</span>
+<span class="nc" id="L382">            itemExpensiveCheckBox.setOnAction(event -&gt; {</span>
+<span class="nc bnc" id="L383" title="All 2 branches missed.">                if (!hardcoreSettingsBox.getChildren().contains(sliderBox)) {</span>
+<span class="nc" id="L384">                    slider = new Slider(1, 3, 1);</span>
+<span class="nc" id="L385">                    slider.setPrefWidth(SLIDER_WIDTH);</span>
+<span class="nc" id="L386">                    slider.setPadding(new Insets(20, 0, 0, 20));</span>
+<span class="nc" id="L387">                    Label startLabel = new Label(&quot;x1&quot;);</span>
+<span class="nc" id="L388">                    startLabel.setPadding(new Insets(20, 0, 0, 5));</span>
+<span class="nc" id="L389">                    Label endLabel = new Label(&quot;x3&quot;);</span>
+<span class="nc" id="L390">                    endLabel.setPadding(new Insets(20, 0, 0, 5));</span>
+<span class="nc" id="L391">                    sliderBox.getChildren().addAll(startLabel, slider, endLabel);</span>
 
-<span class="nc" id="L399">                    slider.valueProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
-<span class="nc bnc" id="L400" title="All 4 branches missed.">                        if ((newValue.doubleValue() &lt;= 1.5) &amp;&amp; (newValue.doubleValue() &gt; 1.0)) {</span>
-<span class="nc" id="L401">                            slider.setValue(1.5);</span>
-<span class="nc" id="L402">                            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString(&quot;ITEM.EXPENSIVE&quot;), 1.5));</span>
-<span class="nc bnc" id="L403" title="All 4 branches missed.">                        } else if (newValue.doubleValue() &gt; 1.5 &amp;&amp; newValue.doubleValue() &lt;= 2.0) {</span>
-<span class="nc" id="L404">                            slider.setValue(2.0);</span>
-<span class="nc" id="L405">                            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString(&quot;ITEM.EXPENSIVE&quot;), 2.0));</span>
-<span class="nc bnc" id="L406" title="All 4 branches missed.">                        } else if (newValue.doubleValue() &gt; 2.0 &amp;&amp; newValue.doubleValue() &lt;= 2.5) {</span>
-<span class="nc" id="L407">                            slider.setValue(2.5);</span>
-<span class="nc" id="L408">                            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString(&quot;ITEM.EXPENSIVE&quot;), 2.5));</span>
-<span class="nc bnc" id="L409" title="All 4 branches missed.">                        } else if (newValue.doubleValue() &gt; 2.5 &amp;&amp; newValue.doubleValue() &lt;= 3.0) {</span>
-<span class="nc" id="L410">                            slider.setValue(3.0);</span>
-<span class="nc" id="L411">                            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString(&quot;ITEM.EXPENSIVE&quot;), 3.0));</span>
-<span class="nc bnc" id="L412" title="All 2 branches missed.">                        } else if (newValue.doubleValue() &lt; 1.2) {</span>
-<span class="nc" id="L413">                            slider.setValue(1.0);</span>
-<span class="nc" id="L414">                            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString(&quot;ITEM.EXPENSIVE&quot;), 1.0));</span>
+<span class="nc" id="L393">                    slider.valueProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
+<span class="nc bnc" id="L394" title="All 4 branches missed.">                        if ((newValue.doubleValue() &lt;= 1.5) &amp;&amp; (newValue.doubleValue() &gt; 1.0)) {</span>
+<span class="nc" id="L395">                            slider.setValue(1.5);</span>
+<span class="nc" id="L396">                            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString(&quot;ITEM.EXPENSIVE&quot;), 1.5));</span>
+<span class="nc bnc" id="L397" title="All 4 branches missed.">                        } else if (newValue.doubleValue() &gt; 1.5 &amp;&amp; newValue.doubleValue() &lt;= 2.0) {</span>
+<span class="nc" id="L398">                            slider.setValue(2.0);</span>
+<span class="nc" id="L399">                            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString(&quot;ITEM.EXPENSIVE&quot;), 2.0));</span>
+<span class="nc bnc" id="L400" title="All 4 branches missed.">                        } else if (newValue.doubleValue() &gt; 2.0 &amp;&amp; newValue.doubleValue() &lt;= 2.5) {</span>
+<span class="nc" id="L401">                            slider.setValue(2.5);</span>
+<span class="nc" id="L402">                            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString(&quot;ITEM.EXPENSIVE&quot;), 2.5));</span>
+<span class="nc bnc" id="L403" title="All 4 branches missed.">                        } else if (newValue.doubleValue() &gt; 2.5 &amp;&amp; newValue.doubleValue() &lt;= 3.0) {</span>
+<span class="nc" id="L404">                            slider.setValue(3.0);</span>
+<span class="nc" id="L405">                            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString(&quot;ITEM.EXPENSIVE&quot;), 3.0));</span>
+<span class="nc bnc" id="L406" title="All 2 branches missed.">                        } else if (newValue.doubleValue() &lt; 1.2) {</span>
+<span class="nc" id="L407">                            slider.setValue(1.0);</span>
+<span class="nc" id="L408">                            itemExpensiveCheckBox.setText(MessageFormat.format(resources.getString(&quot;ITEM.EXPENSIVE&quot;), 1.0));</span>
                         }
-<span class="nc" id="L416">                    });</span>
+<span class="nc" id="L410">                    });</span>
 
-<span class="nc" id="L418">                    hardcoreSettingsBox.getChildren().add(sliderBox);</span>
-<span class="nc" id="L419">                } else {</span>
-<span class="nc" id="L420">                    sliderBox.getChildren().clear();</span>
-<span class="nc" id="L421">                    hardcoreSettingsBox.getChildren().remove(sliderBox);</span>
+<span class="nc" id="L412">                    hardcoreSettingsBox.getChildren().add(sliderBox);</span>
+<span class="nc" id="L413">                } else {</span>
+<span class="nc" id="L414">                    sliderBox.getChildren().clear();</span>
+<span class="nc" id="L415">                    hardcoreSettingsBox.getChildren().remove(sliderBox);</span>
                 }
-<span class="nc" id="L423">            });</span>
+<span class="nc" id="L417">            });</span>
 
-<span class="nc" id="L425">            AnchorPane.setTopAnchor(hardcoreSettingsBox, HARDCORE_TOP);</span>
-<span class="nc" id="L426">            AnchorPane.setLeftAnchor(hardcoreSettingsBox, HARDCORE_LEFT);</span>
-<span class="nc" id="L427">            messagePane.getChildren().add(hardcoreSettingsBox);</span>
+<span class="nc" id="L419">            AnchorPane.setTopAnchor(hardcoreSettingsBox, HARDCORE_TOP);</span>
+<span class="nc" id="L420">            AnchorPane.setLeftAnchor(hardcoreSettingsBox, HARDCORE_LEFT);</span>
+<span class="nc" id="L421">            messagePane.getChildren().add(hardcoreSettingsBox);</span>
         }
-<span class="nc" id="L429">    }</span>
+<span class="nc" id="L423">    }</span>
 
 
     public void enterButtonTrainerInput(KeyEvent event, Alert alert, TextField textFieldName, ButtonType okButton) {
-<span class="nc bnc" id="L433" title="All 2 branches missed.">        if (event.getCode() == KeyCode.ENTER) {</span>
-<span class="nc" id="L434">            event.consume();</span>
-<span class="nc" id="L435">            alert.setResult(okButton);</span>
-<span class="nc" id="L436">            textFieldName.removeEventHandler(KeyEvent.KEY_PRESSED, event1 -&gt; enterButtonTrainerInput(event, alert, textFieldName, okButton));</span>
+<span class="nc bnc" id="L427" title="All 2 branches missed.">        if (event.getCode() == KeyCode.ENTER) {</span>
+<span class="nc" id="L428">            event.consume();</span>
+<span class="nc" id="L429">            alert.setResult(okButton);</span>
+<span class="nc" id="L430">            textFieldName.removeEventHandler(KeyEvent.KEY_PRESSED, event1 -&gt; enterButtonTrainerInput(event, alert, textFieldName, okButton));</span>
         }
-<span class="nc" id="L438">    }</span>
+<span class="nc" id="L432">    }</span>
 
     public int sceneCounter(int sceneNumber, boolean next) {
-<span class="fc bfc" id="L441" title="All 2 branches covered.">        if (next) {</span>
-<span class="fc" id="L442">            return sceneNumber + 1;</span>
+<span class="fc bfc" id="L435" title="All 2 branches covered.">        if (next) {</span>
+<span class="fc" id="L436">            return sceneNumber + 1;</span>
         } else {
-<span class="fc" id="L444">            return sceneNumber - 1;</span>
+<span class="fc" id="L438">            return sceneNumber - 1;</span>
         }
     }
 }

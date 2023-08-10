@@ -134,7 +134,7 @@ public class MessageCell extends ListCell&lt;Message&gt; {
             try {
 <span class="fc" id="L135">                loader.load();</span>
 <span class="nc" id="L136">            } catch (Exception e) {</span>
-<span class="nc" id="L137">                e.printStackTrace();</span>
+<span class="nc" id="L137">                System.err.println(&quot;Error while loading MessageCell.FXML file: &quot; + e);</span>
 <span class="fc" id="L138">            }</span>
         }
 <span class="fc" id="L140">    }</span>

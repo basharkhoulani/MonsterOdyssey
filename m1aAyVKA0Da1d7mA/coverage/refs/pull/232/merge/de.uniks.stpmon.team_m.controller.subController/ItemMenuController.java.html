@@ -206,15 +206,12 @@ public class ItemMenuController extends Controller {
                         // Items are now saved in trainerStorage
 <span class="nc" id="L207">                        initItems(trainerStorageProvider.get().getItems());</span>
                     }
-<span class="nc" id="L209">                }, error -&gt; {</span>
-<span class="nc" id="L210">                    showError(error.getMessage());</span>
-<span class="nc" id="L211">                    error.printStackTrace();</span>
-<span class="nc" id="L212">                }));</span>
-<span class="nc" id="L213">    }</span>
+<span class="nc" id="L209">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="nc" id="L210">    }</span>
 
     public void updateListView() {
-<span class="nc" id="L216">        this.itemListView.getItems().clear();</span>
-<span class="nc" id="L217">        initItems(trainerStorageProvider.get().getItems());</span>
-<span class="nc" id="L218">    }</span>
+<span class="nc" id="L213">        this.itemListView.getItems().clear();</span>
+<span class="nc" id="L214">        initItems(trainerStorageProvider.get().getItems());</span>
+<span class="nc" id="L215">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

@@ -52,7 +52,7 @@ public class DialogController extends Controller {
             // check if npc can heal
 <span class="fc bfc" id="L53" title="All 2 branches covered.">            if (npc.npc().canHeal()) {</span>
                 // check if player has monsters
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">                if (player.team().size() == 0) {</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">                if (player.team().isEmpty()) {</span>
 <span class="nc" id="L56">                    this.npcTexts = npcTextManager.getNpcTexts(&quot;NurseNoMons&quot;);</span>
                 } else {
 <span class="fc" id="L58">                    this.npcTexts = npcTextManager.getNpcTexts(&quot;Nurse&quot;);</span>

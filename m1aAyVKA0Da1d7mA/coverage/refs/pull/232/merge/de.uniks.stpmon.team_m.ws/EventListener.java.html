@@ -68,7 +68,7 @@ public class EventListener {
 <span class="nc" id="L68">                final T data = mapper.treeToValue(node.get(&quot;data&quot;), type);</span>
 <span class="nc" id="L69">                emitter.onNext(new Event&lt;&gt;(event, data));</span>
 <span class="nc" id="L70">            } catch (JsonProcessingException e) {</span>
-<span class="nc" id="L71">                e.printStackTrace();</span>
+<span class="nc" id="L71">                System.out.println(&quot;Error: &quot; + e.getMessage());</span>
 <span class="nc" id="L72">            }</span>
 <span class="nc" id="L73">        };</span>
     }
@@ -91,7 +91,7 @@ public class EventListener {
 <span class="nc" id="L91">            final String msg = mapper.writeValueAsString(data);</span>
 <span class="nc" id="L92">            endpoint.sendMessage(msg);</span>
 <span class="nc" id="L93">        } catch (JsonProcessingException e) {</span>
-<span class="nc" id="L94">            e.printStackTrace();</span>
+<span class="nc" id="L94">            System.out.println(&quot;Error: &quot; + e.getMessage());</span>
 <span class="nc" id="L95">        }</span>
 <span class="nc" id="L96">    }</span>
 
