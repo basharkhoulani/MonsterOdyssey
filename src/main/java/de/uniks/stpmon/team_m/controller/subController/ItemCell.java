@@ -140,9 +140,7 @@ public class ItemCell extends ListCell<Item> {
                             itemStorageProvider.get().updateItemData(item, null, itemImage);
                             this.itemImage = itemImage;
                             itemImageView.setImage(this.itemImage);
-                        }, error -> {
-                            itemMenuController.showError(error.getMessage());
-                        }));
+                        }, error -> itemMenuController.showError(error.getMessage())));
             }
 
             itemHBox.setOnMouseClicked(event -> {

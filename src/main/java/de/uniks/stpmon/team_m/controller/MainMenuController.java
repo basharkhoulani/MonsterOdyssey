@@ -275,9 +275,7 @@ public class MainMenuController extends Controller {
                                     ingameControllerProvider.get().setIsNewStart(true);
                                     app.show(ingameControllerProvider.get());
                                 },
-                                error -> {
-                                    showError(error.getMessage());
-                                }
+                                error -> showError(error.getMessage())
                         ));
                     }
                 }, error -> showError(error.getMessage())

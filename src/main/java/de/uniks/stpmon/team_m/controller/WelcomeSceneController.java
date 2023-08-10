@@ -294,9 +294,7 @@ public class WelcomeSceneController extends Controller {
                                             ingameControllerProvider.get().setIsNewStart(true);
                                             app.show(ingameControllerProvider.get());
                                         },
-                                        error -> {
-                                            showError(error.getMessage());
-                                        }
+                                        error -> showError(error.getMessage())
                                 ));
                             }, error -> showError(error.getMessage())
                     ));
@@ -316,9 +314,7 @@ public class WelcomeSceneController extends Controller {
                                             ingameControllerProvider.get().setIsNewStart(true);
                                             app.show(ingameControllerProvider.get());
                                         },
-                                        error -> {
-                                            showError(error.getMessage());
-                                        }
+                                        error -> showError(error.getMessage())
                                 ));
                             }, error -> showError(error.getMessage())
                     ));

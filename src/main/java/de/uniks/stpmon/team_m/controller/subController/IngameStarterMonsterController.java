@@ -102,9 +102,7 @@ public class IngameStarterMonsterController extends Controller {
                 showMonster(1);
             }
 
-        }, error -> {
-            showError(error.getMessage());
-        }));
+        }, error -> showError(error.getMessage())));
         return parent;
     }
 

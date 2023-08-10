@@ -206,9 +206,7 @@ public class ItemMenuController extends Controller {
                         // Items are now saved in trainerStorage
                         initItems(trainerStorageProvider.get().getItems());
                     }
-                }, error -> {
-                    showError(error.getMessage());
-                }));
+                }, error -> showError(error.getMessage())));
     }
 
     public void updateListView() {

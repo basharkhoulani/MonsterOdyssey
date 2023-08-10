@@ -427,9 +427,7 @@ public class IngameController extends Controller {
                     for (Trainer trainer : trainers) {
                         trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y()));
                     }
-                }, error -> {
-                    showError(error.getMessage());
-                }));
+                }, error -> showError(error.getMessage())));
 
         // Setup chat
         messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
@@ -467,9 +465,7 @@ public class IngameController extends Controller {
 
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(
-                area -> loadMap(area.map()), error -> {
-                    showError(error.getMessage());
-                }
+                area -> loadMap(area.map()), error -> showError(error.getMessage())
         ));
         monstersListControllerProvider.get().init();
 
@@ -591,9 +587,7 @@ public class IngameController extends Controller {
                     destroy();
                     app.show(ingameControllerProvider.get());
                 },
-                error -> {
-                    showError(error.getMessage());
-                }
+                error -> showError(error.getMessage())
         ));
     }
 
@@ -694,9 +688,7 @@ public class IngameController extends Controller {
                             // Monster deleted
                         }
                     }
-                }, error -> {
-                    showError(error.getMessage());
-                }));
+                }, error -> showError(error.getMessage())));
     }
 
     public void listenToItems(ObservableList<Item> items, String trainerId) {
@@ -717,9 +709,7 @@ public class IngameController extends Controller {
                             // Item deleted
                         }
                     }
-                }, error -> {
-                    showError(error.getMessage());
-                }));
+                }, error -> showError(error.getMessage())));
     }
 
 
@@ -780,9 +770,7 @@ public class IngameController extends Controller {
                             }
                         }
                     }
-                }, error -> {
-                    showError(error.getMessage());
-                }));
+                }, error -> showError(error.getMessage())));
     }
 
     /**
@@ -961,9 +949,7 @@ public class IngameController extends Controller {
                         trainerControllerHashMap.put(trainer, trainerController);
                         trainerController.init();
                     },
-                    error -> {
-                        showError(error.getMessage());
-                    }
+                    error -> showError(error.getMessage())
             ));
         }
         trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y()));
@@ -1300,9 +1286,7 @@ public class IngameController extends Controller {
                 messageField.setText(EMPTY_STRING);
                 isChatting = false;
                 groundCanvas.requestFocus();
-            }, error -> {
-                showError(error.getMessage());
-            }));
+            }, error -> showError(error.getMessage())));
         }
     }
 
@@ -1374,9 +1358,7 @@ public class IngameController extends Controller {
                             }
                         }
                     }
-                }, error -> {
-                    showError(error.getMessage());
-                })
+                }, error -> showError(error.getMessage()))
         );
     }
 
@@ -1394,9 +1376,7 @@ public class IngameController extends Controller {
                         case "updated" -> updateMessage(messages, message);
                         case "deleted" -> messages.removeIf(m -> m._id().equals(message._id()));
                     }
-                }, error -> {
-                    showError(error.getMessage());
-                }));
+                }, error -> showError(error.getMessage())));
     }
 
     public void listenToOpponents() {
@@ -1418,9 +1398,7 @@ public class IngameController extends Controller {
                                     }
                                 }));
                     }
-                }, error -> {
-                    showError(error.getMessage());
-                })
+                }, error -> showError(error.getMessage()))
         );
     }
 
@@ -1454,9 +1432,7 @@ public class IngameController extends Controller {
         inCoinsEarnedInfoBox = true;
         movementDisabled = false;
         disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id())
-                .observeOn(FX_SCHEDULER).subscribe(trainer -> coinsLabel.setText(String.valueOf(trainer.coins())), error -> {
-                    showError(error.getMessage());
-                }));
+                .observeOn(FX_SCHEDULER).subscribe(trainer -> coinsLabel.setText(String.valueOf(trainer.coins())), error -> showError(error.getMessage())));
     }
 
     private void showEncounterScene() {
@@ -1529,9 +1505,7 @@ public class IngameController extends Controller {
                         Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
                         Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, direction, false);
                         imageView.setImage(character[0]);
-                    }, error -> {
-                        showError(error.getMessage());
-                    }
+                    }, error -> showError(error.getMessage())
             ));
         }
     }
@@ -2144,9 +2118,7 @@ public class IngameController extends Controller {
                                 }));
                     }
                 },
-                error -> {
-                    showError(error.getMessage());
-                }
+                error -> showError(error.getMessage())
         ));
     }
 
@@ -2282,9 +2254,7 @@ public class IngameController extends Controller {
                         if (preferences.getBoolean("mute", false)) {
                             AudioService.getInstance().setVolume(0);
                         }
-                    }, error -> {
-                        this.showError(error.getMessage());
-                    }));
+                    }, error -> this.showError(error.getMessage())));
         }
     }
 
