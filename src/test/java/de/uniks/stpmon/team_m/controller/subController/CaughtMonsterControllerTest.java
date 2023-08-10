@@ -2,7 +2,6 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.EncounterController;
-import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.scene.control.Button;
@@ -63,19 +62,6 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
 
         when(trainerStorageProvider.get().getTrainer()).thenReturn(trainer);
 
-        Opponent opponent = new Opponent(
-                "2023-07-09T11:52:17.658Z",
-                "2023-07-09T11:52:35.578Z",
-                "64aa9f7132eb8b56aa9eb20f",
-                "64aa9f7132eb8b56aa9eb208",
-                "64abfde932eb8b56aac8efac",
-                true,
-                true,
-                "64aa9f7132eb8b56aa9eb20c",
-                null,
-                List.of(),
-                0);
-
         LinkedHashMap<String, Integer> abilities = new LinkedHashMap<>();
         abilities.put("1", 35);
         abilities.put("3", 20);
@@ -93,8 +79,6 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
                 new MonsterAttributes(16, 9, 9, 7),
                 new MonsterAttributes(14, 8, 8, 5),
                 List.of());
-
-        String regionId = "646bab5cecf584e1be02598a";
 
 
         MonsterTypeDto monsterTypeDto = new MonsterTypeDto(
@@ -114,8 +98,6 @@ public class CaughtMonsterControllerTest extends ApplicationTest{
         caughtMonsterController.init(
                 vBox,
                 stackPane,
-                opponent,
-                regionId,
                 monster,
                 monsterTypeDto,
                 null,

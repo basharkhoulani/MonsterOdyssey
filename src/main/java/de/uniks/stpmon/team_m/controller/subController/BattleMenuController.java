@@ -3,15 +3,12 @@ package de.uniks.stpmon.team_m.controller.subController;
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
-import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 
 import javax.inject.Inject;
-import java.util.function.Consumer;
 
 public class BattleMenuController extends Controller {
 
@@ -24,7 +21,6 @@ public class BattleMenuController extends Controller {
     @FXML
     public Button itemButton;
     public Runnable onFleeButtonClick;
-    public Runnable onMonBallUse;
 
     private EncounterController encounterController;
     EncounterOpponentStorage encounterOpponentStorage;
@@ -45,7 +41,7 @@ public class BattleMenuController extends Controller {
     public Parent render() {
         final Parent parent = super.render();
         fleeButton.setVisible(encounterOpponentStorage.isWild());
-        fleeButton.setOnAction(this::changeToIngame);
+        fleeButton.setOnAction(event -> changeToIngame());
         return parent;
     }
 
@@ -60,7 +56,7 @@ public class BattleMenuController extends Controller {
 
 
 
-    public void changeToIngame(ActionEvent event) {
+    public void changeToIngame() {
         if (onFleeButtonClick != null) {
             onFleeButtonClick.run();
         }
@@ -68,7 +64,7 @@ public class BattleMenuController extends Controller {
 
     public void showFleeButton(boolean isWild) {
         fleeButton.setVisible(isWild);
-        fleeButton.setOnAction(this::changeToIngame);
+        fleeButton.setOnAction(event -> changeToIngame());
     }
 
     public void buttonDisable(boolean isDisable) {
@@ -79,11 +75,6 @@ public class BattleMenuController extends Controller {
     }
 
     public void showItem() {
-        //encounterController.showItems();
-        // TODO: replace later with item list
-        if (onMonBallUse != null) {
-            onMonBallUse.run();
-        }
         encounterController.showItems();
     }
 }

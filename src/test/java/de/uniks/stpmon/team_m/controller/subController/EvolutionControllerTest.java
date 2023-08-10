@@ -2,12 +2,9 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.dto.AbilityDto;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterAttributes;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
-import de.uniks.stpmon.team_m.service.PresetsService;
-import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -15,11 +12,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -27,8 +22,6 @@ import org.testfx.framework.junit5.ApplicationTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
-
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -38,8 +31,6 @@ public class EvolutionControllerTest extends ApplicationTest {
     App app = new App(null);
     @InjectMocks
     EvolutionController evolutionController;
-    @Mock
-    PresetsService presetsService;
 
 
     @Override
@@ -87,18 +78,6 @@ public class EvolutionControllerTest extends ApplicationTest {
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(vBox);
 
-        ArrayList<Integer> newAbilities = new ArrayList<>();
-        newAbilities.add(1);
-        ArrayList<AbilityDto> abilityDtos = new ArrayList<>();
-        abilityDtos.add(new AbilityDto(
-                1,
-                "Tackle",
-                "A physical attack in which the user charges and slams into the target with its whole body.",
-                "normal",
-                35,
-                1.0,
-                2
-        ));
         evolutionController.init(
                 vBox,
                 stackPane,

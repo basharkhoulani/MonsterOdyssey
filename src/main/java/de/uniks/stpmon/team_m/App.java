@@ -7,9 +7,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -71,7 +73,17 @@ public class App extends Application {
                 show(component.loginController());
             }
         });
+        EventHandler<KeyEvent> keyEventEventHandler = event -> {
+            if (event.getCode().toString().equals("F11")) {
+                stage.setFullScreen(!stage.isFullScreen());
+            }
+            if (event.getCode().toString().equals("SPACE")) {
+                pause.jumpTo(Duration.seconds(DURATION_OF_LOADING_SCREEN));
+            }
+        };
+        this.stage.addEventHandler(KeyEvent.KEY_PRESSED, keyEventEventHandler);
         pause.play();
+
         stage.show();
     }
 

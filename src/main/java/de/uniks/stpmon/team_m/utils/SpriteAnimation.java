@@ -9,7 +9,6 @@ import java.awt.*;
 
 import static de.uniks.stpmon.team_m.Constants.*;
 
-
 public class SpriteAnimation extends AnimationTimer {
     private final TrainerController trainerController;
     private final GraphicsContext alternativeGraphicsContext;

@@ -25,7 +25,6 @@ public class EncounterOpponentController extends Controller {
     private Boolean isWild;
     private Boolean invertX;
     public Boolean isMultipleEnemyEncounter;
-    public Boolean isTargeted = false;
     private Boolean isSelf;
     private Opponent currentOpponent;
 
@@ -79,10 +78,9 @@ public class EncounterOpponentController extends Controller {
     public ImageView burnedImage;
     @FXML
     public ImageView stunnedImage;
-    public Runnable onTargetChange;
     EncounterController encounterController;
 
-    public EncounterOpponentController(){
+    public EncounterOpponentController() {
     }
 
     public void init(Opponent currentOpponent, Boolean isEnemy, Boolean isWild, Boolean invertX, Boolean isMultipleEnemyEncounter, Boolean isSelf, EncounterController encounterController) {
@@ -146,12 +144,12 @@ public class EncounterOpponentController extends Controller {
             }
         });
 
-        if(!isSelf){
+        if (!isSelf) {
             currentMonsterButton.setVisible(false);
             currentMonsterButton.setDisable(true);
         } else {
             currentMonsterButton.setOnAction(event -> showMonsterInformation(currentOpponent, this));
-            if (!invertX){
+            if (!invertX) {
                 trainerImageView.setDisable(true);
                 trainerImageView.setVisible(false);
             }
@@ -187,45 +185,37 @@ public class EncounterOpponentController extends Controller {
         return this;
     }
 
-    public EncounterOpponentController setMonsterNameLabel(String value) {
+    public void setMonsterNameLabel(String value) {
         monsterNameLabel.setText(value);
-        return this;
     }
 
-    public EncounterOpponentController setMonsterImage(Image image) {
+    public void setMonsterImage(Image image) {
         if (!GraphicsEnvironment.isHeadless()) {
             monsterImageView.setImage(image);
         }
-        return this;
     }
 
     public Image getMonsterImage() {
         return monsterImageView.getImage();
     }
 
-    public EncounterOpponentController setTrainerImage(Image image) {
+    public void setTrainerImage(Image image) {
         if (!GraphicsEnvironment.isHeadless()) {
             if (!trainerImageView.isDisabled()) {
                 trainerImageView.setImage(image);
             }
         }
-        return this;
     }
 
-    public EncounterOpponentController onTarget() {
+    public void onTarget() {
         monsterNameHBox.getStyleClass().clear();
         if (isMultipleEnemyEncounter) {
             monsterImageViewVBox.setStyle("-fx-padding: 16px; -fx-border-color: red; -fx-border-radius: 100;");
         }
         monsterNameHBox.getStyleClass().add("hBoxRed");
-        isTargeted = true;
-        if (onTargetChange != null) {
-            onTargetChange.run();
-        }
-        return this;
     }
 
-    public EncounterOpponentController unTarget() {
+    public void unTarget() {
         monsterNameHBox.getStyleClass().clear();
         if (isEnemy) {
             monsterNameHBox.getStyleClass().add("hBoxRed");
@@ -233,8 +223,6 @@ public class EncounterOpponentController extends Controller {
             monsterNameHBox.getStyleClass().add("hBoxYellow");
         }
         monsterImageViewVBox.setStyle("-fx-padding: 0px; -fx-border-color: transparent; -fx-border-radius: 0;");
-        isTargeted = false;
-        return this;
     }
 
     public ImageView getTrainerImageView() {

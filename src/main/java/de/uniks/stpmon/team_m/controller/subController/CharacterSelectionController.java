@@ -14,7 +14,6 @@ import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
 import java.awt.*;
 import java.util.Objects;
 

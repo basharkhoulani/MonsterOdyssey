@@ -25,10 +25,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.StageStyle;
 
 import javax.inject.Inject;
@@ -297,10 +294,7 @@ public class WelcomeSceneController extends Controller {
                                             ingameControllerProvider.get().setIsNewStart(true);
                                             app.show(ingameControllerProvider.get());
                                         },
-                                        error -> {
-                                            showError(error.getMessage());
-                                            error.printStackTrace();
-                                        }
+                                        error -> showError(error.getMessage())
                                 ));
                             }, error -> showError(error.getMessage())
                     ));
@@ -320,10 +314,7 @@ public class WelcomeSceneController extends Controller {
                                             ingameControllerProvider.get().setIsNewStart(true);
                                             app.show(ingameControllerProvider.get());
                                         },
-                                        error -> {
-                                            showError(error.getMessage());
-                                            error.printStackTrace();
-                                        }
+                                        error -> showError(error.getMessage())
                                 ));
                             }, error -> showError(error.getMessage())
                     ));

@@ -1,12 +1,9 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
-import de.uniks.stpmon.team_m.Constants;
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.dto.*;
-import de.uniks.stpmon.team_m.service.AudioService;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
-import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -14,13 +11,11 @@ import javafx.scene.control.Button;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static de.uniks.stpmon.team_m.Constants.SoundEffect.ATTACK;
 import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
 
 public class AbilitiesMenuController extends Controller {
@@ -39,7 +34,6 @@ public class AbilitiesMenuController extends Controller {
     Provider<EncounterOpponentStorage> encounterOpponentStorageProvider;
     @Inject
     EncounterOpponentsService encounterOpponentsService;
-    PresetsService presetsService;
     private Monster monster;
     private EncounterController encounterController;
     private Opponent currentOpponent;
@@ -50,10 +44,9 @@ public class AbilitiesMenuController extends Controller {
     public AbilitiesMenuController() {
     }
 
-    public void init(Monster monster, PresetsService presetsService, EncounterController encounterController, Opponent currentOpponent, List<AbilityDto> abilities) {
+    public void init(Monster monster, EncounterController encounterController, Opponent currentOpponent, List<AbilityDto> abilities) {
         super.init();
         this.monster = monster;
-        this.presetsService = presetsService;
         this.encounterController = encounterController;
         this.currentOpponent = currentOpponent;
         this.abilities = abilities;

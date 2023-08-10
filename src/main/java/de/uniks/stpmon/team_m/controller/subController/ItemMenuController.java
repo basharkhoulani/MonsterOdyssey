@@ -53,7 +53,7 @@ public class ItemMenuController extends Controller {
     IngameController ingameController;
     private InventoryType inventoryType;
     private List<Integer> npcItemList;
-    public HashMap<Integer, ItemTypeDto> itemTypeHashMap = new HashMap<>();
+    public final HashMap<Integer, ItemTypeDto> itemTypeHashMap = new HashMap<>();
     private StackPane rootStackPane;
     private EncounterController encounterController;
 
@@ -206,10 +206,7 @@ public class ItemMenuController extends Controller {
                         // Items are now saved in trainerStorage
                         initItems(trainerStorageProvider.get().getItems());
                     }
-                }, error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }));
+                }, error -> showError(error.getMessage())));
     }
 
     public void updateListView() {

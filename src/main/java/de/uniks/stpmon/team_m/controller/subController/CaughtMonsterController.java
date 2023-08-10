@@ -5,7 +5,6 @@ import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.controller.IngameController;
 import de.uniks.stpmon.team_m.dto.Monster;
 import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
-import de.uniks.stpmon.team_m.dto.Opponent;
 import de.uniks.stpmon.team_m.service.MonstersService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
@@ -45,10 +44,8 @@ public class CaughtMonsterController extends Controller {
     @Inject
     Provider<IngameController> ingameControllerProvider;
 
-    private String regionId;
     private VBox container;
     private StackPane root;
-    private Opponent opponent;
     public List<Integer> monsterList;
     public Integer monsterType;
     public Monster caughtMonster;
@@ -61,11 +58,9 @@ public class CaughtMonsterController extends Controller {
     public CaughtMonsterController() {
     }
 
-    public void init(VBox container, StackPane root, Opponent opponent, String regionId, Monster caughtMonster, MonsterTypeDto caughtMonsterType, Image enemyMonsterImage, EncounterController encounterController) {
+    public void init(VBox container, StackPane root, Monster caughtMonster, MonsterTypeDto caughtMonsterType, Image enemyMonsterImage, EncounterController encounterController) {
         this.container = container;
         this.root = root;
-        this.opponent = opponent;
-        this.regionId = regionId;
         this.caughtMonster = caughtMonster;
         this.caughtMonsterType = caughtMonsterType;
         this.newMonsterImage = enemyMonsterImage;

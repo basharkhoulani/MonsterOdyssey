@@ -13,12 +13,10 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import javax.inject.Provider;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -37,8 +35,6 @@ public class MonstersDetailControllerTest extends ApplicationTest {
     MonstersDetailController monstersDetailController;
     @InjectMocks
     IngameController ingameController;
-    @Mock
-    Provider<PresetsService> presetsServiceProvider;
 
     @Override
     public void start(Stage stage) {
@@ -65,7 +61,6 @@ public class MonstersDetailControllerTest extends ApplicationTest {
                 List.of("fire"),
                 "Flamander is a small, agile monster that lives in the hot deserts of the world.");
         PresetsService presetsService = mock(PresetsService.class);
-        when(presetsServiceProvider.get()).thenReturn(presetsService);
         when(presetsService.getAbility(anyInt())).thenReturn(Observable.just(new AbilityDto(
                 1,
                 "Tackle",
@@ -74,7 +69,7 @@ public class MonstersDetailControllerTest extends ApplicationTest {
                 35,
                 1.0,
                 2)));
-        monstersDetailController.init(ingameController, monsterDetailVBox, monster, monsterTypeDto, null, bundle, presetsService, "fire");
+        monstersDetailController.init(ingameController, monsterDetailVBox, monster, monsterTypeDto, null, bundle, presetsService);
                 when(presetsService.getAbilities()).thenReturn(Observable.just(List.of(
                 new AbilityDto(
                         1,

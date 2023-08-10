@@ -56,7 +56,7 @@ public class ClientEndpoint {
 
     @OnError
     public void onError(Throwable error) {
-        error.printStackTrace();
+        System.out.println("Error: " + error.getMessage());
     }
 
     public void addMessageHandler(Consumer<String> msgHandler) {
@@ -81,7 +81,7 @@ public class ClientEndpoint {
         try {
             this.userSession.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error closing session: " + e.getMessage());
         }
     }
 

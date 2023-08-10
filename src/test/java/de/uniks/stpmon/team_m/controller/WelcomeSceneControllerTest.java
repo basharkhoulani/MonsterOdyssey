@@ -38,10 +38,9 @@ public class WelcomeSceneControllerTest extends ApplicationTest {
     WelcomeSceneController welcomeSceneController;
     @Mock
     Provider<CharacterSelectionController> characterSelectionControllerProvider;
+    // Spy of TrainerStorage is needed
     @Spy
     TrainerStorage trainerStorage;
-    @Mock
-    Provider<TrainersService> trainersServiceProvider;
 
 
     @Override

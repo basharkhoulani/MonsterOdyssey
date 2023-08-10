@@ -23,8 +23,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.awt.*;
 import java.net.URL;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 import static de.uniks.stpmon.team_m.Constants.ATTRIBUTE_IMAGES;
 
@@ -81,7 +81,6 @@ public class MonstersDetailController extends Controller {
     private final List<AbilityDto> abilityDtos = new ArrayList<>();
     @Inject
     public Provider<PresetsService> presetsServiceProvider;
-    private String monsterType;
     @FXML
     public Label monsterName;
     @FXML
@@ -103,10 +102,8 @@ public class MonstersDetailController extends Controller {
     }
 
     public void init(IngameController ingameController, VBox monsterDetailVBox,
-                     Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources, PresetsService presetsService,
-                     String type) {
+                     Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage, ResourceBundle resources, PresetsService presetsService) {
         super.init();
-        this.monsterType = type;
         this.ingameController = ingameController;
         this.monsterDetailVBox = monsterDetailVBox;
         this.monster = monster;
@@ -117,9 +114,8 @@ public class MonstersDetailController extends Controller {
     }
 
     public void initFromBattleMenu(EncounterController encounterController, VBox monsterDetailVBox, Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage,
-                                   ResourceBundle resources, PresetsService presetsService, String type) {
+                                   ResourceBundle resources, PresetsService presetsService) {
         super.init();
-        this.monsterType = type;
         this.encounterController = encounterController;
         this.monsterDetailVBox = monsterDetailVBox;
         this.monster = monster;
@@ -199,7 +195,7 @@ public class MonstersDetailController extends Controller {
 
 
     private void initMonsterAbilities(List<AbilityDto> abilities, Monster monster) {
-        abilityListView.setCellFactory(param -> new AbilityCell(monster, resources, presetsServiceProvider.get(), this));
+        abilityListView.setCellFactory(param -> new AbilityCell(monster, resources));
         abilityListView.getItems().addAll(abilities);
         abilityListView.setFocusModel(null);
         abilityListView.setSelectionModel(null);

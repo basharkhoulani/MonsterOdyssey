@@ -439,7 +439,7 @@ class EncounterControllerTest extends ApplicationTest {
     }
 
     @Test
-    void testFleeButton() throws InterruptedException {
+    void testFleeButton() {
         when(encounterOpponentStorage.getEncounterSize()).thenReturn(2);
         lenient().when(encounterOpponentStorage.isWild()).thenReturn(true);
 

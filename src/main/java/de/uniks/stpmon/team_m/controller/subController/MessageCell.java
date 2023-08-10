@@ -134,7 +134,7 @@ public class MessageCell extends ListCell<Message> {
             try {
                 loader.load();
             } catch (Exception e) {
-                e.printStackTrace();
+                System.err.println("Error while loading MessageCell.FXML file: " + e);
             }
         }
     }

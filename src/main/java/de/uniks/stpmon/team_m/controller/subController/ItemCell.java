@@ -43,7 +43,7 @@ public class ItemCell extends ListCell<Item> {
     private final IngameController ingameController;
     private final Provider<ItemStorage> itemStorageProvider;
     private final TrainerStorage trainerStorage;
-    private EncounterController encounterController;
+    private final EncounterController encounterController;
     private FXMLLoader loader;
     protected final CompositeDisposable disposables = new CompositeDisposable();
     public static final Scheduler FX_SCHEDULER = Schedulers.from(Platform::runLater);
@@ -57,7 +57,7 @@ public class ItemCell extends ListCell<Item> {
     @FXML
     public HBox itemHBox;
     private Image itemImage;
-    VBox itemDescriptionBox;
+    final VBox itemDescriptionBox;
     ItemTypeDto itemTypeDto;
 
     public ItemCell(PresetsService presetsService,
@@ -129,8 +129,8 @@ public class ItemCell extends ListCell<Item> {
             itemLabel.setText(itemTypeDto.name());
             itemNumber.setText("(" + item.amount() + ")");
 
-            if (itemStorageProvider.get().getItemData(item._id()) != null && itemStorageProvider.get().getItemData(item._id()).getItemImage() != null) {
-                this.itemImage = itemStorageProvider.get().getItemData(item._id()).getItemImage();
+            if (itemStorageProvider.get().getItemData(item._id()) != null && itemStorageProvider.get().getItemData(item._id()).itemImage() != null) {
+                this.itemImage = itemStorageProvider.get().getItemData(item._id()).itemImage();
                 itemImageView.setImage(this.itemImage);
             } else {
                 disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)
@@ -140,10 +140,7 @@ public class ItemCell extends ListCell<Item> {
                             itemStorageProvider.get().updateItemData(item, null, itemImage);
                             this.itemImage = itemImage;
                             itemImageView.setImage(this.itemImage);
-                        }, error -> {
-                            itemMenuController.showError(error.getMessage());
-                            error.printStackTrace();
-                        }));
+                        }, error -> itemMenuController.showError(error.getMessage())));
             }
 
             itemHBox.setOnMouseClicked(event -> {
@@ -169,7 +166,7 @@ public class ItemCell extends ListCell<Item> {
             try {
                 loader.load();
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Error loading ItemCell.fxml");
             }
         }
     }
@@ -191,7 +188,7 @@ public class ItemCell extends ListCell<Item> {
         } else if (encounterController != null) {
             itemDescriptionController.initFromEncounter(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, encounterController, trainerStorage);
         }
-        if (itemDescriptionBox.getChildren().size() != 0) {
+        if (!itemDescriptionBox.getChildren().isEmpty()) {
             itemDescriptionBox.getChildren().clear();
         }
         itemDescriptionBox.getChildren().add(itemDescriptionController.render());

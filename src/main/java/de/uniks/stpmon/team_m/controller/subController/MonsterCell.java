@@ -73,14 +73,14 @@ public class MonsterCell extends ListCell<Monster> {
     public TrainersService trainersService;
     @Inject
     public UserStorage usersStorage;
-    public PresetsService presetsService;
-    public IngameController ingameController;
-    public EncounterController encounterController;
+    public final PresetsService presetsService;
+    public final IngameController ingameController;
+    public final EncounterController encounterController;
 
     @Inject
     Provider<TrainersService> trainersServiceProvider;
-    MonstersListController monstersListController;
-    ChangeMonsterListController changeMonsterListController;
+    final MonstersListController monstersListController;
+    final ChangeMonsterListController changeMonsterListController;
     private FXMLLoader loader;
 
     protected final CompositeDisposable disposables = new CompositeDisposable();
@@ -113,7 +113,6 @@ public class MonsterCell extends ListCell<Monster> {
     @Override
     protected void updateItem(Monster monster, boolean empty) {
         super.updateItem(monster, empty);
-        StringBuilder type = new StringBuilder();
         if (monster == null || empty) {
             setText(null);
             setGraphic(null);
@@ -126,12 +125,9 @@ public class MonsterCell extends ListCell<Monster> {
             if (monsterData == null) {
                 monsterStorageProvider.get().addMonsterData(monster, null, null);
             }
-            monsterTypeDto = monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterTypeDto();
+            monsterTypeDto = monsterStorageProvider.get().getMonsterData(monster._id()).monsterTypeDto();
             if (monsterTypeDto != null) {
                 monsterNameLevel.setText(monsterTypeDto.name() + " (" + resources.getString("LEVEL").substring(0, resources.getString("LEVEL").length() - 1) + " " + monster.level() + ")");
-                for (String s : monsterTypeDto.type()) {
-                    type.append(s);
-                }
                 if (!GraphicsEnvironment.isHeadless()) {
                     renderMonsterTypes(monsterTypeDto, monsterTypesHBox.getChildren());
                 }
@@ -139,9 +135,6 @@ public class MonsterCell extends ListCell<Monster> {
                 disposables.add(presetsService.getMonster(monster.type()).observeOn(FX_SCHEDULER)
                         .subscribe(monsterTypeDto -> {
                             monsterNameLevel.setText(monsterTypeDto.name() + " (" + resources.getString("LEVEL").substring(0, resources.getString("LEVEL").length() - 1) + " " + monster.level() + ")");
-                            for (String s : monsterTypeDto.type()) {
-                                type.append(s);
-                            }
                             monsterStorageProvider.get().addMonsterData(monster, monsterTypeDto, null);
                             if (!GraphicsEnvironment.isHeadless()) {
                                 renderMonsterTypes(monsterTypeDto, monsterTypesHBox.getChildren());
@@ -155,9 +148,9 @@ public class MonsterCell extends ListCell<Monster> {
                 arrowUp.setImage(arrowUpImage);
                 arrowDown.setImage(arrowUpImage);
             }
-            if (monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage() != null) {
-                monsterImageView.setImage(monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage());
-                this.monsterImage = monsterStorageProvider.get().getMonsterData(monster._id()).getMonsterImage();
+            if (monsterStorageProvider.get().getMonsterData(monster._id()).monsterImage() != null) {
+                monsterImageView.setImage(monsterStorageProvider.get().getMonsterData(monster._id()).monsterImage());
+                this.monsterImage = monsterStorageProvider.get().getMonsterData(monster._id()).monsterImage();
             } else {
                 if (!GraphicsEnvironment.isHeadless()) {
                     this.monsterImage = monsterStorageProvider.get().getMonsterImage(monster.type());
@@ -165,7 +158,7 @@ public class MonsterCell extends ListCell<Monster> {
                     monsterImageView.setImage(this.monsterImage);
                 }
             }
-            viewDetailsButton.setOnAction(event -> showDetails(monster, type.toString()));
+            viewDetailsButton.setOnAction(event -> showDetails(monster));
             if (encounterController == null) {
                 arrowUp.setOnMouseClicked(event -> monstersListController.changeOrderUp(monster._id()));
                 arrowDown.setOnMouseClicked(event -> monstersListController.changeOrderDown(monster._id()));
@@ -260,11 +253,11 @@ public class MonsterCell extends ListCell<Monster> {
     }
 
 
-    private void showDetails(Monster monster, String type) {
+    private void showDetails(Monster monster) {
         if (encounterController != null) {
-            this.encounterController.showMonsterDetails(monster, monsterTypeDto, monsterImage, type);
+            this.encounterController.showMonsterDetails(monster, monsterTypeDto, monsterImage);
         } else {
-            this.ingameController.showMonsterDetails(monster, monsterTypeDto, monsterImage, resources, presetsService, type);
+            this.ingameController.showMonsterDetails(monster, monsterTypeDto, monsterImage, resources, presetsService);
         }
     }
 
@@ -276,7 +269,7 @@ public class MonsterCell extends ListCell<Monster> {
             try {
                 loader.load();
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Error loading MonsterCell");
             }
         }
     }

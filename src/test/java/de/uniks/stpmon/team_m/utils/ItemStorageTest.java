@@ -3,9 +3,6 @@ package de.uniks.stpmon.team_m.utils;
 import de.uniks.stpmon.team_m.dto.*;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -25,9 +22,9 @@ public class ItemStorageTest {
         assertEquals(itemStorage.getItemDataList().size(), 1);
         itemStorage.addItemData(item, itemTypeDto2, null);
         assertEquals(itemStorage.getItemDataList().size(), 1);
-        assertEquals(itemTypeDto, itemStorage.getItemData(item._id()).getItemTypeDto());
-        assertNull(itemStorage.getItemData(item._id()).getItemImage());
+        assertEquals(itemTypeDto, itemStorage.getItemData(item._id()).itemTypeDto());
+        assertNull(itemStorage.getItemData(item._id()).itemImage());
         itemStorage.updateItemData(item, itemTypeDto2, null);
-        assertEquals(itemStorage.getItemDataList().stream().filter(itemData -> itemData.getItem().equals(item)).toList().get(0).getItemTypeDto(), itemTypeDto2);
+        assertEquals(itemStorage.getItemDataList().stream().filter(itemData -> itemData.item().equals(item)).toList().get(0).itemTypeDto(), itemTypeDto2);
     }
 }

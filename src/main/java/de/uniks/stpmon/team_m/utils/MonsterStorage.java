@@ -14,7 +14,7 @@ import java.util.List;
 
 @Singleton
 public class MonsterStorage {
-    List<MonsterData> monsterDataList;
+    final List<MonsterData> monsterDataList;
     private List<MonsterTypeDto> monsterTypeDtoList;
     private final HashMap<Integer, Image> monsterImageHashMap;
 
@@ -30,7 +30,7 @@ public class MonsterStorage {
     }
 
     public void addMonsterData(Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage) {
-        if (monsterDataList.stream().anyMatch(m -> m.getMonster()._id().equals(monster._id()))) {
+        if (monsterDataList.stream().anyMatch(m -> m.monster()._id().equals(monster._id()))) {
             return;
         }
         monsterDataList.add(new MonsterData(monster, monsterTypeDto, monsterImage));
@@ -48,19 +48,19 @@ public class MonsterStorage {
 
     // null as param means that the value should not be updated
     public void updateMonsterData(@NonNull Monster monster, MonsterTypeDto monsterTypeDto, Image monsterImage) {
-        MonsterData oldMonsterData = monsterDataList.stream().filter(m -> m.getMonster()._id().equals(monster._id())).findFirst().orElse(null);
+        MonsterData oldMonsterData = monsterDataList.stream().filter(m -> m.monster()._id().equals(monster._id())).findFirst().orElse(null);
         if (oldMonsterData == null) {
             return;
         }
         monsterDataList.set(monsterDataList.indexOf(oldMonsterData), new MonsterData(
                 monster,
-                monsterTypeDto == null ? oldMonsterData.getMonsterTypeDto() : monsterTypeDto,
-                monsterImage == null ? oldMonsterData.getMonsterImage() : monsterImage
+                monsterTypeDto == null ? oldMonsterData.monsterTypeDto() : monsterTypeDto,
+                monsterImage == null ? oldMonsterData.monsterImage() : monsterImage
         ));
     }
 
     public MonsterData getMonsterData(String monsterId) {
-        return monsterDataList.stream().filter(m -> m.getMonster()._id().equals(monsterId)).findFirst().orElse(null);
+        return monsterDataList.stream().filter(m -> m.monster()._id().equals(monsterId)).findFirst().orElse(null);
     }
 
     public Image getMonsterImage (int id) {
@@ -72,6 +72,6 @@ public class MonsterStorage {
     }
 
     public boolean imagesAlreadyFetched() {
-        return monsterImageHashMap.size() > 0;
+        return !monsterImageHashMap.isEmpty();
     }
 }

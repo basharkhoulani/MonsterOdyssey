@@ -10,7 +10,6 @@ import java.util.List;
 public class UserStorage {
     private String _id;
     private String name;
-    private String status;
     private String avatar;
     private List<String> friends;
     private String refreshToken;
@@ -37,10 +36,6 @@ public class UserStorage {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getAvatar() {
@@ -76,7 +71,6 @@ public class UserStorage {
     public void setUser(LoginResult loginResult) {
         this._id = loginResult._id();
         this.name = loginResult.name();
-        this.status = loginResult.status();
         this.avatar = loginResult.avatar();
         this.friends = loginResult.friends();
         this.refreshToken = loginResult.refreshToken();
@@ -85,7 +79,6 @@ public class UserStorage {
     public void removeUser() {
         this._id = null;
         this.name = null;
-        this.status = null;
         this.avatar = null;
         this.friends = null;
     }

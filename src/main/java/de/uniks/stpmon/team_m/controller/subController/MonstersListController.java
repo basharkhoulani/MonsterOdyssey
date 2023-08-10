@@ -415,9 +415,7 @@ public class MonstersListController extends Controller {
                 secondTypeImageView.setImage(null);
             }
         }
-        mapImageView.setOnMouseClicked(mouseEvent -> {
-            ingameController.showMonsterLocaions(monsterTypeDto);
-        });
+        mapImageView.setOnMouseClicked(mouseEvent -> ingameController.showMonsterLocaions(monsterTypeDto));
 
         showMondexDetails(true);
     }

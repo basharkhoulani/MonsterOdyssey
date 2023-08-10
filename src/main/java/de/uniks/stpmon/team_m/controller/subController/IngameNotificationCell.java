@@ -74,7 +74,7 @@ public class IngameNotificationCell extends ListCell<String> {
                 notificationTextFlow.getChildren().add(notificationText);
                 notificationTextFlow.setPadding(new Insets(10));
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Error loading IngameNotificationCell.fxml");
             }
         }
     }
