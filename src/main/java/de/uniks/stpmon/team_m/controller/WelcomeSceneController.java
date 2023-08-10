@@ -296,7 +296,6 @@ public class WelcomeSceneController extends Controller {
                                         },
                                         error -> {
                                             showError(error.getMessage());
-                                            error.printStackTrace();
                                         }
                                 ));
                             }, error -> showError(error.getMessage())
@@ -319,7 +318,6 @@ public class WelcomeSceneController extends Controller {
                                         },
                                         error -> {
                                             showError(error.getMessage());
-                                            error.printStackTrace();
                                         }
                                 ));
                             }, error -> showError(error.getMessage())

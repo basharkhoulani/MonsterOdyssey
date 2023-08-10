@@ -208,7 +208,6 @@ public class ItemMenuController extends Controller {
                     }
                 }, error -> {
                     showError(error.getMessage());
-                    error.printStackTrace();
                 }));
     }
 

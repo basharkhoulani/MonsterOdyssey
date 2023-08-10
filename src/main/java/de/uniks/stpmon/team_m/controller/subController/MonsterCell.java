@@ -269,7 +269,7 @@ public class MonsterCell extends ListCell<Monster> {
             try {
                 loader.load();
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Error loading MonsterCell");
             }
         }
     }

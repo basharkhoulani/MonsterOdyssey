@@ -59,7 +59,7 @@ public class UDPClient {
 
     @OnError
     public void onError(Throwable error) {
-        error.printStackTrace();
+        System.out.println("Error: " + error.getMessage());
     }
 
     public void addMessageHandler(Consumer<String> msgHandler) {

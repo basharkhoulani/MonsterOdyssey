@@ -64,7 +64,7 @@ public class IngameMessageCell extends ListCell<Message> {
             try {
                 loader.load();
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Error loading IngameMessageCell.fxml");
             }
         }
     }

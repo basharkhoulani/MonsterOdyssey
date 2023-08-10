@@ -429,7 +429,6 @@ public class IngameController extends Controller {
                     }
                 }, error -> {
                     showError(error.getMessage());
-                    error.printStackTrace();
                 }));
 
         // Setup chat
@@ -470,7 +469,6 @@ public class IngameController extends Controller {
         disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(
                 area -> loadMap(area.map()), error -> {
                     showError(error.getMessage());
-                    error.printStackTrace();
                 }
         ));
         monstersListControllerProvider.get().init();
@@ -595,7 +593,6 @@ public class IngameController extends Controller {
                 },
                 error -> {
                     showError(error.getMessage());
-                    error.printStackTrace();
                 }
         ));
     }
@@ -699,7 +696,6 @@ public class IngameController extends Controller {
                     }
                 }, error -> {
                     showError(error.getMessage());
-                    error.printStackTrace();
                 }));
     }
 
@@ -723,7 +719,6 @@ public class IngameController extends Controller {
                     }
                 }, error -> {
                     showError(error.getMessage());
-                    error.printStackTrace();
                 }));
     }
 
@@ -787,7 +782,6 @@ public class IngameController extends Controller {
                     }
                 }, error -> {
                     showError(error.getMessage());
-                    error.printStackTrace();
                 }));
     }
 
@@ -969,7 +963,6 @@ public class IngameController extends Controller {
                     },
                     error -> {
                         showError(error.getMessage());
-                        error.printStackTrace();
                     }
             ));
         }
@@ -1309,7 +1302,6 @@ public class IngameController extends Controller {
                 groundCanvas.requestFocus();
             }, error -> {
                 showError(error.getMessage());
-                error.printStackTrace();
             }));
         }
     }
@@ -1384,7 +1376,6 @@ public class IngameController extends Controller {
                     }
                 }, error -> {
                     showError(error.getMessage());
-                    error.printStackTrace();
                 })
         );
     }
@@ -1405,7 +1396,6 @@ public class IngameController extends Controller {
                     }
                 }, error -> {
                     showError(error.getMessage());
-                    error.printStackTrace();
                 }));
     }
 
@@ -1430,7 +1420,6 @@ public class IngameController extends Controller {
                     }
                 }, error -> {
                     showError(error.getMessage());
-                    error.printStackTrace();
                 })
         );
     }
@@ -1467,7 +1456,6 @@ public class IngameController extends Controller {
         disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id())
                 .observeOn(FX_SCHEDULER).subscribe(trainer -> coinsLabel.setText(String.valueOf(trainer.coins())), error -> {
                     showError(error.getMessage());
-                    error.printStackTrace();
                 }));
     }
 
@@ -1482,7 +1470,7 @@ public class IngameController extends Controller {
 
         disposables.add(encounterOpponentsService.getTrainerOpponents(regionId, trainerId)
                 .observeOn(FX_SCHEDULER).subscribe(opt -> {
-                    if (opt.size() > 0) {
+                    if (!opt.isEmpty()) {
                         Opponent opponent = opt.get(0);
                         encounterOpponentStorage.setSelfOpponent(opponent);
                         encounterOpponentStorage.setEncounterId(opponent.encounter());
@@ -1495,7 +1483,7 @@ public class IngameController extends Controller {
                                     }
                                 }));
                     }
-                }, Throwable::printStackTrace));
+                }));
 
     }
 
@@ -1543,7 +1531,6 @@ public class IngameController extends Controller {
                         imageView.setImage(character[0]);
                     }, error -> {
                         showError(error.getMessage());
-                        error.printStackTrace();
                     }
             ));
         }
@@ -1721,7 +1708,6 @@ public class IngameController extends Controller {
                 }
             } catch (Error e) {
                 System.err.println("NPC does not have the canHeal() attribute");
-                e.printStackTrace();
             }
 
             try {
@@ -1732,7 +1718,6 @@ public class IngameController extends Controller {
                 }
             } catch (Error e) {
                 System.err.println("NPC does not have the sells() attribute");
-                e.printStackTrace();
             }
 
             return null;
@@ -2161,7 +2146,6 @@ public class IngameController extends Controller {
                 },
                 error -> {
                     showError(error.getMessage());
-                    error.printStackTrace();
                 }
         ));
     }
@@ -2300,7 +2284,6 @@ public class IngameController extends Controller {
                         }
                     }, error -> {
                         this.showError(error.getMessage());
-                        error.printStackTrace();
                     }));
         }
     }

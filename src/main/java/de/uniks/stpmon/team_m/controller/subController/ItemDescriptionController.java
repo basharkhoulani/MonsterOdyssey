@@ -268,7 +268,6 @@ public class ItemDescriptionController extends Controller {
                     },
                     error -> {
                         showError(error.getMessage());
-                        error.printStackTrace();
                     }));
         }
         if (!GraphicsEnvironment.isHeadless()) {
@@ -298,7 +297,6 @@ public class ItemDescriptionController extends Controller {
                 },
                 error -> {
                     showError(error.getMessage());
-                    error.printStackTrace();
                 }));
         if (!GraphicsEnvironment.isHeadless()) {
             AudioService.getInstance().playEffect(BUY_SELL, ingameController);

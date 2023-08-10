@@ -974,7 +974,7 @@ public class EncounterController extends Controller {
         });
         fleeAnimation.setOnFinished(evt -> disposables.add(encounterOpponentsService.deleteOpponent(encounterOpponentStorage.getRegionId(), encounterOpponentStorage.getEncounterId(), encounterOpponentStorage.getSelfOpponent()._id()).observeOn(FX_SCHEDULER).subscribe(result -> showIngameController(), error -> {
             showError(error.getMessage());
-            error.printStackTrace();
+            System.out.println(error.getMessage());
         })));
         firstPause.play();
     }

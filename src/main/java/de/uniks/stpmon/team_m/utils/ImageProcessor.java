@@ -153,7 +153,7 @@ public class ImageProcessor {
             return writableImage;
         }
         catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Image not found");
             return null;
         }
     }

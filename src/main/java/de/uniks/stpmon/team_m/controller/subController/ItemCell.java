@@ -142,7 +142,6 @@ public class ItemCell extends ListCell<Item> {
                             itemImageView.setImage(this.itemImage);
                         }, error -> {
                             itemMenuController.showError(error.getMessage());
-                            error.printStackTrace();
                         }));
             }
 
@@ -169,7 +168,7 @@ public class ItemCell extends ListCell<Item> {
             try {
                 loader.load();
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Error loading ItemCell.fxml");
             }
         }
     }

@@ -105,7 +105,7 @@ public class AbilityCell extends ListCell<AbilityDto> {
             try {
                 loader.load();
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Error loading AbilityCell.fxml");
             }
         }
     }
