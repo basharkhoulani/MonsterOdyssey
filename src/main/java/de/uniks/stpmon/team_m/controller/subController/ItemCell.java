@@ -190,7 +190,7 @@ public class ItemCell extends ListCell<Item> {
         } else if (encounterController != null) {
             itemDescriptionController.initFromEncounter(itemTypeDto, itemImage, item, itemMenuController.getInventoryType(), ownAmountOfItem, closeItemMenu, rootStackPane, encounterController, trainerStorage);
         }
-        if (itemDescriptionBox.getChildren().size() != 0) {
+        if (!itemDescriptionBox.getChildren().isEmpty()) {
             itemDescriptionBox.getChildren().clear();
         }
         itemDescriptionBox.getChildren().add(itemDescriptionController.render());

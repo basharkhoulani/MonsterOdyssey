@@ -72,6 +72,6 @@ public class MonsterStorage {
     }
 
     public boolean imagesAlreadyFetched() {
-        return monsterImageHashMap.size() > 0;
+        return !monsterImageHashMap.isEmpty();
     }
 }

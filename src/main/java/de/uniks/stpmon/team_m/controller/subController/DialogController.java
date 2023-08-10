@@ -52,7 +52,7 @@ public class DialogController extends Controller {
             // check if npc can heal
             if (npc.npc().canHeal()) {
                 // check if player has monsters
-                if (player.team().size() == 0) {
+                if (player.team().isEmpty()) {
                     this.npcTexts = npcTextManager.getNpcTexts("NurseNoMons");
                 } else {
                     this.npcTexts = npcTextManager.getNpcTexts("Nurse");

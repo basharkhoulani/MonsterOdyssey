@@ -627,7 +627,7 @@ public class IngameController extends Controller {
 
             receiveObjectController = new ReceiveObjectController(itemData.item(), itemData.itemTypeDto(), itemData.itemImage(), this::removeObjectReceivedPopUp, trainerStorageProvider);
             receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
-            if (receiveObjectPopUp.getChildren().size() > 0) {
+            if (!receiveObjectPopUp.getChildren().isEmpty()) {
                 receiveObjectPopUp.getChildren().clear();
             }
             receiveObjectPopUp.getChildren().add(receiveObjectController.render());
@@ -641,7 +641,7 @@ public class IngameController extends Controller {
                             itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()));
                             receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()), this::removeObjectReceivedPopUp, trainerStorageProvider);
                             receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
-                            if (receiveObjectPopUp.getChildren().size() > 0) {
+                            if (!receiveObjectPopUp.getChildren().isEmpty()) {
                                 receiveObjectPopUp.getChildren().clear();
                             }
                             receiveObjectPopUp.getChildren().add(receiveObjectController.render());
@@ -654,7 +654,7 @@ public class IngameController extends Controller {
                                         itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image));
                                         receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image), this::removeObjectReceivedPopUp, trainerStorageProvider);
                                         receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
-                                        if (receiveObjectPopUp.getChildren().size() > 0) {
+                                        if (!receiveObjectPopUp.getChildren().isEmpty()) {
                                             receiveObjectPopUp.getChildren().clear();
                                         }
                                         receiveObjectPopUp.getChildren().add(receiveObjectController.render());
@@ -1412,7 +1412,7 @@ public class IngameController extends Controller {
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
                                     initEncounterOpponentStorage(opts);
-                                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponents().size() != 0) {
+                                    if (encounterOpponentStorage.getSelfOpponent() != null && !encounterOpponentStorage.getEnemyOpponents().isEmpty()) {
                                         showEncounterInfoWindow();
                                         this.isNewStart = false;
                                     }
@@ -1478,7 +1478,7 @@ public class IngameController extends Controller {
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
                                     initEncounterOpponentStorage(opts);
-                                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponents().size() != 0 && isNewStart) {
+                                    if (encounterOpponentStorage.getSelfOpponent() != null && !encounterOpponentStorage.getEnemyOpponents().isEmpty() && isNewStart) {
                                         showEncounterScene();
                                     }
                                 }));
@@ -1577,7 +1577,7 @@ public class IngameController extends Controller {
         if (inDialog) {
             try {
                 if (this.currentNpc.npc() != null) {
-                    if (this.currentNpc.npc().canHeal() && trainerStorageProvider.get().getTrainer().team().size() == 0) {
+                    if (this.currentNpc.npc().canHeal() && trainerStorageProvider.get().getTrainer().team().isEmpty()) {
                         continueTrainerDialog(DialogSpecialInteractions.nurseNoMons);
                     } else {
                         continueTrainerDialog(null);
@@ -1629,7 +1629,7 @@ public class IngameController extends Controller {
                             .observeOn(FX_SCHEDULER).subscribe(opponents -> {
                                 if (opponents.size() == 2) {
                                     for (Opponent opponent : opponents) {
-                                        if (opponent.move() != null || opponent.results().size() != 0) {
+                                        if (opponent.move() != null || !opponent.results().isEmpty()) {
                                             TextFlow textFlow = createDialogVBox(false);
                                             textFlow.getChildren().add(new Text(resources.getString("WANT.TO.FIGHT")));
                                             return;
