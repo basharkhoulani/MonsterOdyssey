@@ -1,10 +1,7 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.App;
-import de.uniks.stpmon.team_m.controller.Controller;
-import de.uniks.stpmon.team_m.controller.EncounterController;
-import de.uniks.stpmon.team_m.controller.IngameController;
-import de.uniks.stpmon.team_m.controller.MainMenuController;
+import de.uniks.stpmon.team_m.controller.*;
 import de.uniks.stpmon.team_m.dto.Trainer;
 import de.uniks.stpmon.team_m.service.TrainersService;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
@@ -33,8 +30,12 @@ public class EncounterResultController extends Controller {
     Provider<TrainerStorage> trainerStorageProvider;
     @Inject
     TrainersService trainersService;
+    @Inject
+    Provider<HardcoreDeathScreenController> hardcoreDeathScreenControllerProvider;
+
     private Boolean coinsEarned;
     private Integer coinsAmount;
+    private HardcoreDeathScreenController hardcoreDeathScreenController;
 
     @Inject
     public EncounterResultController() {
@@ -55,6 +56,10 @@ public class EncounterResultController extends Controller {
                         trainerStorageProvider.get().setTrainerSprite(null);
                         trainerStorageProvider.get().setTrainerName(null);
                         trainerStorageProvider.get().setRegion(null);
+                        hardcoreDeathScreenController = hardcoreDeathScreenControllerProvider.get();
+                        hardcoreDeathScreenController.setValues(resources, preferences, resourceBundleProvider, hardcoreDeathScreenController, app);
+                        destroy();
+                        app.show(hardcoreDeathScreenController);
                     }));
             MainMenuController mainMenuController = mainMenuControllerProvider.get();
             mainMenuController.setTrainerDeletion();

@@ -485,7 +485,7 @@ public class IngameController extends Controller {
                         add(offsetToNotShowPhoneInScreen)
         );
 
-        checkForFirstMessages();
+        //checkForFirstMessages();
 
         //Setup Encounter
         checkIfEncounterAlreadyExist();
@@ -2107,6 +2107,10 @@ public class IngameController extends Controller {
                                     }
                                     loading = false;
                                     root.getChildren().remove(loadingScreen);
+                                    checkForFirstMessages();
+                                    if (!GraphicsEnvironment.isHeadless()) {
+                                        AnimationBuilder.buildShakeAnimation(notificationBell, 500, 20, 2).play();
+                                    }
                                 }, error -> {
                                     PauseTransition pause = new PauseTransition(Duration.seconds(10));
                                     pause.setOnFinished(evt -> {

@@ -165,10 +165,14 @@ public class MonstersListController extends Controller {
 
                     initOtherMonsterList(otherMonstersList);
                     initMonsterList(activeMonstersList);
-
-                    loadMondex(monsterStorageProvider.get().getMonsterTypeDtoList());
-                    showMondexDetails(false);
-
+                    if (item != null) {
+                        mondexTab.setDisable(true);
+                    }
+                    else {
+                        mondexTab.setDisable(false);
+                        loadMondex(monsterStorageProvider.get().getMonsterTypeDtoList());
+                        showMondexDetails(false);
+                    }
 
                     // need this timer, because of the asynchronous fetching of image data. Otherwise, after opening
                     // monsterList for the first time, there will be no images loaded into the listCells.
