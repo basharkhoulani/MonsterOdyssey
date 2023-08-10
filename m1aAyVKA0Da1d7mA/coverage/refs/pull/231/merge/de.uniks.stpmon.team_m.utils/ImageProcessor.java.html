@@ -188,20 +188,20 @@ import static de.uniks.stpmon.team_m.Constants.*;
 
     public static Image showScaledMonsterImage(int id) {
         try {
-<span class="fc" id="L191">            BufferedImage bufferedImage = ImageIO.read(Objects.requireNonNull(App.class.getResource(&quot;monster_images/monster_&quot; + id + &quot;.png&quot;)));</span>
-<span class="fc" id="L192">            BufferedImage scaledBufferedImage = ImageProcessor.scaleImage(bufferedImage, 10);</span>
-<span class="fc" id="L193">            WritableImage writableImage = new WritableImage(scaledBufferedImage.getWidth(), scaledBufferedImage.getHeight());</span>
-<span class="fc" id="L194">            PixelWriter pixelWriter = writableImage.getPixelWriter();</span>
-<span class="fc bfc" id="L195" title="All 2 branches covered.">            for (int y1 = 0; y1 &lt; scaledBufferedImage.getHeight(); y1++) {</span>
-<span class="fc bfc" id="L196" title="All 2 branches covered.">                for (int x1 = 0; x1 &lt; scaledBufferedImage.getWidth(); x1++) {</span>
-<span class="fc" id="L197">                    pixelWriter.setArgb(x1, y1, scaledBufferedImage.getRGB(x1, y1));</span>
+<span class="nc" id="L191">            BufferedImage bufferedImage = ImageIO.read(Objects.requireNonNull(App.class.getResource(&quot;monster_images/monster_&quot; + id + &quot;.png&quot;)));</span>
+<span class="nc" id="L192">            BufferedImage scaledBufferedImage = ImageProcessor.scaleImage(bufferedImage, 10);</span>
+<span class="nc" id="L193">            WritableImage writableImage = new WritableImage(scaledBufferedImage.getWidth(), scaledBufferedImage.getHeight());</span>
+<span class="nc" id="L194">            PixelWriter pixelWriter = writableImage.getPixelWriter();</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">            for (int y1 = 0; y1 &lt; scaledBufferedImage.getHeight(); y1++) {</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">                for (int x1 = 0; x1 &lt; scaledBufferedImage.getWidth(); x1++) {</span>
+<span class="nc" id="L197">                    pixelWriter.setArgb(x1, y1, scaledBufferedImage.getRGB(x1, y1));</span>
                 }
             }
-<span class="fc" id="L200">            return writableImage;</span>
+<span class="nc" id="L200">            return writableImage;</span>
         }
-<span class="fc" id="L202">        catch (Exception e) {</span>
-<span class="fc" id="L203">            e.printStackTrace();</span>
-<span class="fc" id="L204">            return null;</span>
+<span class="nc" id="L202">        catch (Exception e) {</span>
+<span class="nc" id="L203">            e.printStackTrace();</span>
+<span class="nc" id="L204">            return null;</span>
         }
     }
 }
