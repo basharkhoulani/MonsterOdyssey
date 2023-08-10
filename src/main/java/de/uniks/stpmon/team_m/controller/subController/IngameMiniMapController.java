@@ -27,6 +27,7 @@ import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -222,7 +223,9 @@ public class IngameMiniMapController extends Controller {
         mapContainer.setMinHeight(miniMapCanvas.getHeight());
         mapContainer.setMaxWidth(miniMapCanvas.getWidth());
         mapContainer.setMinWidth(miniMapCanvas.getWidth());
-        miniMapImageView.setImage(miniMapCanvas.snapshot(null, null));
+        if (!GraphicsEnvironment.isHeadless()) {
+            miniMapImageView.setImage(miniMapCanvas.snapshot(null, null));
+        }
         return parent;
     }
 
