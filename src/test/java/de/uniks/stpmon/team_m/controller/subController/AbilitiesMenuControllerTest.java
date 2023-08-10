@@ -4,7 +4,6 @@ import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.EncounterController;
 import de.uniks.stpmon.team_m.dto.*;
 import de.uniks.stpmon.team_m.service.EncounterOpponentsService;
-import de.uniks.stpmon.team_m.service.PresetsService;
 import de.uniks.stpmon.team_m.utils.EncounterOpponentStorage;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
@@ -30,7 +29,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AbilitiesMenuControllerTest extends ApplicationTest {
     @Spy
-    App app = new App(null);
+    final App app = new App(null);
 
     @InjectMocks
     AbilitiesMenuController abilitiesMenuController;
@@ -61,7 +60,6 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
                 new MonsterAttributes(14, 8, 8, 5),
                 new MonsterAttributes(14, 8, 8, 5),
                 List.of());
-        PresetsService presetsService = mock(PresetsService.class);
         List<AbilityDto> abilityDtos = List.of(new AbilityDto(
                 1,
                 "Tackle",
@@ -84,7 +82,7 @@ class AbilitiesMenuControllerTest extends ApplicationTest {
                 List.of(),
                 0
         );
-        abilitiesMenuController.init(monster, presetsService, encounterController, currentOpponent, abilityDtos);
+        abilitiesMenuController.init(monster, encounterController, currentOpponent, abilityDtos);
         app.start(stage);
         app.show(abilitiesMenuController);
         stage.requestFocus();

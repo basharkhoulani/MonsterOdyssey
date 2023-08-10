@@ -1,15 +1,11 @@
 package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
-import de.uniks.stpmon.team_m.utils.AnimationBuilder;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 
 import java.util.Random;
 import java.util.Timer;
@@ -24,16 +20,9 @@ public class LoadingScreenController extends Controller {
     public Label loadingScreenDidYouKnowLabel;
     @FXML
     public Label loadingScreenTippLabel;
-    @FXML
-    public ImageView loadingScreenTrainerImageView;
     private Timer timer;
 
     public LoadingScreenController() {
-    }
-
-    @Override
-    public void init() {
-        super.init();
     }
 
     @Override
@@ -50,9 +39,7 @@ public class LoadingScreenController extends Controller {
             @Override
             public void run() {
                 int i = random.nextInt(16) + 1;
-                Platform.runLater(() -> {
-                    loadingScreenTippLabel.setText(resources.getString("LOADING.SCREEN.TEXT" + i));
-                });
+                Platform.runLater(() -> loadingScreenTippLabel.setText(resources.getString("LOADING.SCREEN.TEXT" + i)));
 
             }
         };

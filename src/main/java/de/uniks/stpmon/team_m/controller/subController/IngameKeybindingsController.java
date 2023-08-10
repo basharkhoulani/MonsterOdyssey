@@ -173,7 +173,7 @@ public class IngameKeybindingsController extends Controller {
                 button.setText("");
                 button.setText("ESCAPE");
             } else {
-                if (event.getText().length() != 0 && Character.isLetterOrDigit(event.getText().charAt(0))) {
+                if (!event.getText().isEmpty() && Character.isLetterOrDigit(event.getText().charAt(0))) {
                     informationLabel.setText(resources.getString("CLICK.CHECK"));
                     button.setText("");
                     button.setText(event.getText().toUpperCase());

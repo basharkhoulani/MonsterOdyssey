@@ -266,10 +266,7 @@ public class ItemDescriptionController extends Controller {
 
                         ingameController.coinsLabel.setText(String.valueOf(Integer.parseInt(ingameController.coinsLabel.getText()) - itemTypeDto.price()));
                     },
-                    error -> {
-                        showError(error.getMessage());
-                        error.printStackTrace();
-                    }));
+                    error -> showError(error.getMessage())));
         }
         if (!GraphicsEnvironment.isHeadless()) {
             AudioService.getInstance().playEffect(BUY_SELL, ingameController);
@@ -296,10 +293,7 @@ public class ItemDescriptionController extends Controller {
                         itemMenuController.setItemNameLabel("");
                     }
                 },
-                error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }));
+                error -> showError(error.getMessage())));
         if (!GraphicsEnvironment.isHeadless()) {
             AudioService.getInstance().playEffect(BUY_SELL, ingameController);
         }

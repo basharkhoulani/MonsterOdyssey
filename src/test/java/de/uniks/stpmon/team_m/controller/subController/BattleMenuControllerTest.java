@@ -16,13 +16,16 @@ import org.testfx.framework.junit5.ApplicationTest;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class BattleMenuControllerTest extends ApplicationTest {
 
     @Spy
+    final
     App app = new App(null);
 
     @InjectMocks

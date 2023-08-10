@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller;
 
 import de.uniks.stpmon.team_m.App;
 import de.uniks.stpmon.team_m.controller.subController.AvatarSelectionController;
+import de.uniks.stpmon.team_m.controller.subController.ChangeLanguageController;
 import de.uniks.stpmon.team_m.dto.User;
 import de.uniks.stpmon.team_m.service.UsersService;
 import de.uniks.stpmon.team_m.utils.UserStorage;
@@ -34,6 +35,8 @@ class AccountSettingControllerTest extends ApplicationTest {
     Provider<LoginController> loginControllerProvider;
     @Mock
     Provider<AvatarSelectionController> avatarSelectionControllerProvider;
+    @Mock
+    Provider<ChangeLanguageController> changeLanguageControllerProvider;
     @Mock
     UsersService usersService;
     @InjectMocks
@@ -272,6 +275,8 @@ class AccountSettingControllerTest extends ApplicationTest {
 
     @Test
     void changeLanguage() {
+        ChangeLanguageController changeLanguageController = new ChangeLanguageController();
+        when(changeLanguageControllerProvider.get()).thenReturn(changeLanguageController);
         final Button changeLanguageButton = lookup("#changeLanguageButton").query();
         clickOn(changeLanguageButton);
 

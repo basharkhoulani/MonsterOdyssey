@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface TrainerItemsApiService {
     @POST("regions/{regionId}/trainers/{trainerId}/items")
-    Observable<Item> useOrTradeItem(@Path("regionId") String regionId, @Path("trainerId") String trainerId, @Query("action") String action, @Body UpdateItemDto dto);
+    Observable<Item> useOrTradeItem(@Path("regionId") String ignoredRegionId, @Path("trainerId") String ignoredTrainerId, @Query("action") String ignoredAction, @Body UpdateItemDto ignoredDto);
 
     @GET("regions/{regionId}/trainers/{trainerId}/items")
-    Observable<List<Item>> getItems(@Path("regionId") String regionId, @Path("trainerId") String trainerId, @Query("types") String types);
+    Observable<List<Item>> getItems(@Path("regionId") String ignoredRegionId, @Path("trainerId") String ignoredTrainerId, @Query("types") String ignoredTypes);
 
     @GET("regions/{regionId}/trainers/{trainerId}/items/{id}")
-    Observable<Item> getItem(@Path("regionId") String regionId, @Path("trainerId") String trainerId, @Path("id") String id);
+    Observable<Item> getItem(@Path("regionId") String ignoredRegionId, @Path("trainerId") String ignoredTrainerId, @Path("id") String ignoredId);
 }

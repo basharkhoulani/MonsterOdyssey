@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface AreasApiService {
     @GET("regions/{region}/areas")
-    Observable<List<Area>> getAreas(@Path("region") String region);
+    Observable<List<Area>> getAreas(@Path("region") String ignoredRegion);
 
     @GET("regions/{region}/areas/{id}")
-    Observable<Area> getArea(@Path("region") String region, @Path("id") String _id);
+    Observable<Area> getArea(@Path("region") String ignoredRegion, @Path("id") String ignoredIgnoredIgnoredIgnored_id);
 }

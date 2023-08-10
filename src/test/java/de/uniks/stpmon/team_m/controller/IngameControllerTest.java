@@ -73,14 +73,11 @@ public class IngameControllerTest extends ApplicationTest {
     @Mock
     Provider<PresetsService> presetsServiceProvider;
 
-    // Please also keep this mock, it is needed for the tests
-    // -- which ones????
+    // Please also keep the EncounterOpponentStorage Spy, it is needed for the tests
     @Spy
     EncounterOpponentStorage encounterOpponentStorage;
     @Mock
     Provider<IngamePauseMenuController> pauseMenuControllerProvider;
-    @Mock
-    Provider<MonstersDetailController> monstersDetailControllerProvider;
     @Mock
     TrainersService trainersService;
     @Mock
@@ -897,9 +894,6 @@ public class IngameControllerTest extends ApplicationTest {
 
         final VBox starterSelectionVBox = lookup("#starterSelectionVBox").query();
         assertNotNull(starterSelectionVBox);
-
-        final Label starterSelectionLabel0 = lookup("#starterSelectionLabel").query();
-        final String starterSelectionLabelText0 = starterSelectionLabel0.getText();
 
         clickOn("#starterSelectionOkButton");
         clickOn("#starterSelectionOkButton");

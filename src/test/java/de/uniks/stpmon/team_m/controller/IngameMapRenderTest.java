@@ -32,7 +32,6 @@ import java.util.prefs.Preferences;
 
 import static io.reactivex.rxjava3.core.Observable.empty;
 import static io.reactivex.rxjava3.core.Observable.just;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

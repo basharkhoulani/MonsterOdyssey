@@ -51,15 +51,15 @@ public class MonsterStorageTest {
         assertEquals(monsterStorage.getMonsterDataList().size(), 0);
 
         monsterStorage.addMonsterData(monster, monsterTypeDto, null);
-        assertEquals(monsterTypeDto, monsterStorage.getMonsterData(monster._id()).getMonsterTypeDto());
-        assertNull(monsterStorage.getMonsterData(monster._id()).getMonsterImage());
+        assertEquals(monsterTypeDto, monsterStorage.getMonsterData(monster._id()).monsterTypeDto());
+        assertNull(monsterStorage.getMonsterData(monster._id()).monsterImage());
 
         monsterStorage.addMonsterData(monster, monsterTypeDto, null);
         assertEquals(monsterStorage.getMonsterDataList().size(), 1);
 
         monsterStorage.updateMonsterData(monster, monsterTypeDto2, null);
-        assertEquals(monsterStorage.getMonsterDataList().stream().filter(monsterData -> monsterData.getMonster().equals(monster)).toList().get(0).getMonsterTypeDto(), monsterTypeDto2);
+        assertEquals(monsterStorage.getMonsterDataList().stream().filter(monsterData -> monsterData.monster().equals(monster)).toList().get(0).monsterTypeDto(), monsterTypeDto2);
         monsterStorage.updateMonsterData(monster, null, null);
-        assertEquals(monsterStorage.getMonsterDataList().stream().filter(monsterData -> monsterData.getMonster().equals(monster)).toList().get(0).getMonsterTypeDto(), monsterTypeDto2);
+        assertEquals(monsterStorage.getMonsterDataList().stream().filter(monsterData -> monsterData.monster().equals(monster)).toList().get(0).monsterTypeDto(), monsterTypeDto2);
     }
 }

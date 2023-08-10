@@ -216,8 +216,8 @@ public class IngameController extends Controller {
     private VBox itemMenuBox;
     private boolean inCoinsEarnedInfoBox = false;
     private ReceiveObjectController receiveObjectController;
-    private ObservableList<Item> items = FXCollections.observableArrayList();
-    private ObservableList<Monster> monsters = FXCollections.observableArrayList();
+    private final ObservableList<Item> items = FXCollections.observableArrayList();
+    private final ObservableList<Monster> monsters = FXCollections.observableArrayList();
     private boolean inJoinEncounterInfoBox = false;
     private VBox receiveObjectPopUp;
 
@@ -331,7 +331,7 @@ public class IngameController extends Controller {
         Trainer currentTrainer = trainerStorageProvider.get().getTrainer();
         disposables.add(
                 trainersService.getTrainer(currentTrainer.region(), currentTrainer._id()).observeOn(FX_SCHEDULER).subscribe(
-                   trainer -> trainerStorageProvider.get().setTrainer(trainer), Throwable::printStackTrace
+                        trainer -> trainerStorageProvider.get().setTrainer(trainer), Throwable::printStackTrace
                 ));
         // Load areas
         disposables.add(areasService.getAreas(trainerStorageProvider.get().getRegion()._id()).observeOn(FX_SCHEDULER).subscribe(areas ->
@@ -427,10 +427,7 @@ public class IngameController extends Controller {
                     for (Trainer trainer : trainers) {
                         trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y()));
                     }
-                }, error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }));
+                }, error -> showError(error.getMessage())));
 
         // Setup chat
         messageField.addEventHandler(KeyEvent.KEY_PRESSED, this::enterButtonPressedToSend);
@@ -468,10 +465,7 @@ public class IngameController extends Controller {
 
         Region region = trainerStorageProvider.get().getRegion();
         disposables.add(areasService.getArea(region._id(), trainerStorageProvider.get().getTrainer().area()).observeOn(FX_SCHEDULER).subscribe(
-                area -> loadMap(area.map()), error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }
+                area -> loadMap(area.map()), error -> showError(error.getMessage())
         ));
         monstersListControllerProvider.get().init();
 
@@ -479,7 +473,7 @@ public class IngameController extends Controller {
         popupStage.initOwner(app.getStage());
 
         this.notificationListHandyController = notificationListHandyControllerProvider.get();
-        notificationListHandyController.init(this, trainerStorageProvider.get().getTrainer());
+        notificationListHandyController.init(this);
         stackPane.getChildren().add(notificationListHandyController.render());
         this.notificationHandyStackPane = (StackPane) stackPane.getChildren().get(stackPane.getChildren().size() - 1);
 
@@ -525,8 +519,8 @@ public class IngameController extends Controller {
         }
         showCoins();
 
-        setupUdpPing();
-
+        setupUDPPing();
+        setupRESTPing();
         return parent;
     }
 
@@ -554,35 +548,35 @@ public class IngameController extends Controller {
 
     private void initMapShiftTransitions() {
         shiftMapUpTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas, 0, -SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, 0, -SCALE_FACTOR * TILE_SIZE),
+                getMapMovementTransition(behindUserTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE),
+                getMapMovementTransition(userTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE),
+                getMapMovementTransition(overUserTrainerCanvas, 0, -SCALE_FACTOR * TILE_SIZE),
+                getMapMovementTransition(roofCanvas, 0, -SCALE_FACTOR * TILE_SIZE)
         );
 
 
         shiftMapLeftTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas, -SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, -SCALE_FACTOR * TILE_SIZE, 0),
+                getMapMovementTransition(behindUserTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0),
+                getMapMovementTransition(userTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0),
+                getMapMovementTransition(overUserTrainerCanvas, -SCALE_FACTOR * TILE_SIZE, 0),
+                getMapMovementTransition(roofCanvas, -SCALE_FACTOR * TILE_SIZE, 0)
         );
         shiftMapRightTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas, SCALE_FACTOR * TILE_SIZE, 0, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, SCALE_FACTOR * TILE_SIZE, 0),
+                getMapMovementTransition(behindUserTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0),
+                getMapMovementTransition(userTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0),
+                getMapMovementTransition(overUserTrainerCanvas, SCALE_FACTOR * TILE_SIZE, 0),
+                getMapMovementTransition(roofCanvas, SCALE_FACTOR * TILE_SIZE, 0)
         );
 
         shiftMapDownTransition = new ParallelTransition(
-                getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(behindUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(userTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(overUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION),
-                getMapMovementTransition(roofCanvas, 0, SCALE_FACTOR * TILE_SIZE, TRANSITION_DURATION)
+                getMapMovementTransition(groundCanvas, 0, SCALE_FACTOR * TILE_SIZE),
+                getMapMovementTransition(behindUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE),
+                getMapMovementTransition(userTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE),
+                getMapMovementTransition(overUserTrainerCanvas, 0, SCALE_FACTOR * TILE_SIZE),
+                getMapMovementTransition(roofCanvas, 0, SCALE_FACTOR * TILE_SIZE)
         );
     }
 
@@ -593,10 +587,7 @@ public class IngameController extends Controller {
                     destroy();
                     app.show(ingameControllerProvider.get());
                 },
-                error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }
+                error -> showError(error.getMessage())
         ));
     }
 
@@ -628,9 +619,9 @@ public class IngameController extends Controller {
         if (itemStorageProvider.get().getItemData(item._id()) != null) {
             final ItemData itemData = itemStorageProvider.get().getItemData(item._id());
 
-            receiveObjectController = new ReceiveObjectController(itemData.getItem(), itemData.getItemTypeDto(), itemData.getItemImage(), this::removeObjectReceivedPopUp, trainerStorageProvider);
+            receiveObjectController = new ReceiveObjectController(itemData.item(), itemData.itemTypeDto(), itemData.itemImage(), this::removeObjectReceivedPopUp, trainerStorageProvider);
             receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
-            if (receiveObjectPopUp.getChildren().size() > 0){
+            if (!receiveObjectPopUp.getChildren().isEmpty()) {
                 receiveObjectPopUp.getChildren().clear();
             }
             receiveObjectPopUp.getChildren().add(receiveObjectController.render());
@@ -644,21 +635,20 @@ public class IngameController extends Controller {
                             itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()));
                             receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.showScaledItemImage(itemTypeDto.image()), this::removeObjectReceivedPopUp, trainerStorageProvider);
                             receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
-                            if (receiveObjectPopUp.getChildren().size() > 0){
+                            if (!receiveObjectPopUp.getChildren().isEmpty()) {
                                 receiveObjectPopUp.getChildren().clear();
                             }
                             receiveObjectPopUp.getChildren().add(receiveObjectController.render());
                             if (!getRoot().getChildren().contains(receiveObjectPopUp)) {
                                 getRoot().getChildren().add(receiveObjectPopUp);
                             }
-                        }
-                        else {
+                        } else {
                             disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(
                                     image -> {
                                         itemStorageProvider.get().addItemData(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image));
                                         receiveObjectController = new ReceiveObjectController(item, itemTypeDto, ImageProcessor.resonseBodyToJavaFXImage(image), this::removeObjectReceivedPopUp, trainerStorageProvider);
                                         receiveObjectController.setValues(resources, preferences, resourceBundleProvider, receiveObjectController, app);
-                                        if (receiveObjectPopUp.getChildren().size() > 0){
+                                        if (!receiveObjectPopUp.getChildren().isEmpty()) {
                                             receiveObjectPopUp.getChildren().clear();
                                         }
                                         receiveObjectPopUp.getChildren().add(receiveObjectController.render());
@@ -666,10 +656,12 @@ public class IngameController extends Controller {
                                             getRoot().getChildren().add(receiveObjectPopUp);
                                         }
                                     },
-                                    error -> {}));
+                                    error -> {
+                                    }));
                         }
                     },
-                    error -> {}));
+                    error -> {
+                    }));
         }
 
     }
@@ -696,10 +688,7 @@ public class IngameController extends Controller {
                             // Monster deleted
                         }
                     }
-                }, error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }));
+                }, error -> showError(error.getMessage())));
     }
 
     public void listenToItems(ObservableList<Item> items, String trainerId) {
@@ -720,10 +709,7 @@ public class IngameController extends Controller {
                             // Item deleted
                         }
                     }
-                }, error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }));
+                }, error -> showError(error.getMessage())));
     }
 
 
@@ -777,17 +763,14 @@ public class IngameController extends Controller {
                             Position oldPosition = trainerPositionHashMap.get(trainer);
                             TrainerController trainerController = trainerControllerHashMap.get(trainer);
                             if (oldPosition != null && trainerController != null) {
-                                if (oldPosition.getX() != moveTrainerDto.x() || oldPosition.getY() != moveTrainerDto.y()) {
+                                if (oldPosition.x() != moveTrainerDto.x() || oldPosition.y() != moveTrainerDto.y()) {
                                     trainerController.setTrainerTargetPosition(moveTrainerDto.x(), moveTrainerDto.y());
                                 }
                                 trainerPositionHashMap.put(trainer, new Position(moveTrainerDto.x(), moveTrainerDto.y()));
                             }
                         }
                     }
-                }, error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }));
+                }, error -> showError(error.getMessage())));
     }
 
     /**
@@ -798,11 +781,11 @@ public class IngameController extends Controller {
      * @param y   : y value of the movement (in pixels)
      * @return : new Timeline of the transition with the specified values.
      */
-    private Timeline getMapMovementTransition(Canvas map, int x, int y, int durationMillis) {
+    private Timeline getMapMovementTransition(Canvas map, int x, int y) {
         return new Timeline(
-                new KeyFrame(Duration.millis(durationMillis), e -> {
+                new KeyFrame(Duration.millis(de.uniks.stpmon.team_m.Constants.TRANSITION_DURATION), e -> {
                     TranslateTransition translateTransition = new TranslateTransition();
-                    translateTransition.setDuration(Duration.millis(durationMillis));
+                    translateTransition.setDuration(Duration.millis(de.uniks.stpmon.team_m.Constants.TRANSITION_DURATION));
                     translateTransition.setNode(map);
                     translateTransition.setByX(x);
                     translateTransition.setByY(y);
@@ -882,11 +865,11 @@ public class IngameController extends Controller {
         int shiftX = (int) calculateInitialCameraXOffset(mapWidth, tilePosX);
         int shiftY = (int) calculateInitialCameraYOffset(mapHeight, tilePosY);
         int additionalShiftY = TILE_SIZE * SCALE_FACTOR;
-        getMapMovementTransition(groundCanvas, shiftX, shiftY + additionalShiftY, TRANSITION_DURATION).play();
-        getMapMovementTransition(behindUserTrainerCanvas, shiftX, shiftY, TRANSITION_DURATION).play();
-        getMapMovementTransition(userTrainerCanvas, shiftX, shiftY, TRANSITION_DURATION).play();
-        getMapMovementTransition(overUserTrainerCanvas, shiftX, shiftY, TRANSITION_DURATION).play();
-        getMapMovementTransition(roofCanvas, shiftX, shiftY + additionalShiftY + 1, TRANSITION_DURATION).play();
+        getMapMovementTransition(groundCanvas, shiftX, shiftY + additionalShiftY).play();
+        getMapMovementTransition(behindUserTrainerCanvas, shiftX, shiftY).play();
+        getMapMovementTransition(userTrainerCanvas, shiftX, shiftY).play();
+        getMapMovementTransition(overUserTrainerCanvas, shiftX, shiftY).play();
+        getMapMovementTransition(roofCanvas, shiftX, shiftY + additionalShiftY + 1).play();
     }
 
     /**
@@ -966,10 +949,7 @@ public class IngameController extends Controller {
                         trainerControllerHashMap.put(trainer, trainerController);
                         trainerController.init();
                     },
-                    error -> {
-                        showError(error.getMessage());
-                        error.printStackTrace();
-                    }
+                    error -> showError(error.getMessage())
             ));
         }
         trainerPositionHashMap.put(trainer, new Position(trainer.x(), trainer.y()));
@@ -1306,10 +1286,7 @@ public class IngameController extends Controller {
                 messageField.setText(EMPTY_STRING);
                 isChatting = false;
                 groundCanvas.requestFocus();
-            }, error -> {
-                showError(error.getMessage());
-                error.printStackTrace();
-            }));
+            }, error -> showError(error.getMessage())));
         }
     }
 
@@ -1381,10 +1358,7 @@ public class IngameController extends Controller {
                             }
                         }
                     }
-                }, error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                })
+                }, error -> showError(error.getMessage()))
         );
     }
 
@@ -1402,10 +1376,7 @@ public class IngameController extends Controller {
                         case "updated" -> updateMessage(messages, message);
                         case "deleted" -> messages.removeIf(m -> m._id().equals(message._id()));
                     }
-                }, error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }));
+                }, error -> showError(error.getMessage())));
     }
 
     public void listenToOpponents() {
@@ -1421,16 +1392,13 @@ public class IngameController extends Controller {
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
                                     initEncounterOpponentStorage(opts);
-                                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponents().size() != 0) {
+                                    if (encounterOpponentStorage.getSelfOpponent() != null && !encounterOpponentStorage.getEnemyOpponents().isEmpty()) {
                                         showEncounterInfoWindow();
                                         this.isNewStart = false;
                                     }
                                 }));
                     }
-                }, error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                })
+                }, error -> showError(error.getMessage()))
         );
     }
 
@@ -1464,10 +1432,7 @@ public class IngameController extends Controller {
         inCoinsEarnedInfoBox = true;
         movementDisabled = false;
         disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id())
-                .observeOn(FX_SCHEDULER).subscribe(trainer -> coinsLabel.setText(String.valueOf(trainer.coins())), error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }));
+                .observeOn(FX_SCHEDULER).subscribe(trainer -> coinsLabel.setText(String.valueOf(trainer.coins())), error -> showError(error.getMessage())));
     }
 
     private void showEncounterScene() {
@@ -1481,7 +1446,7 @@ public class IngameController extends Controller {
 
         disposables.add(encounterOpponentsService.getTrainerOpponents(regionId, trainerId)
                 .observeOn(FX_SCHEDULER).subscribe(opt -> {
-                    if (opt.size() > 0) {
+                    if (!opt.isEmpty()) {
                         Opponent opponent = opt.get(0);
                         encounterOpponentStorage.setSelfOpponent(opponent);
                         encounterOpponentStorage.setEncounterId(opponent.encounter());
@@ -1489,12 +1454,12 @@ public class IngameController extends Controller {
                         disposables.add(encounterOpponentsService.getEncounterOpponents(regionId, opponent.encounter())
                                 .observeOn(FX_SCHEDULER).subscribe(opts -> {
                                     initEncounterOpponentStorage(opts);
-                                    if (encounterOpponentStorage.getSelfOpponent() != null && encounterOpponentStorage.getEnemyOpponents().size() != 0 && isNewStart) {
+                                    if (encounterOpponentStorage.getSelfOpponent() != null && !encounterOpponentStorage.getEnemyOpponents().isEmpty() && isNewStart) {
                                         showEncounterScene();
                                     }
                                 }));
                     }
-                }, Throwable::printStackTrace));
+                }));
 
     }
 
@@ -1540,10 +1505,7 @@ public class IngameController extends Controller {
                         Image trainerSprite = ImageProcessor.resonseBodyToJavaFXImage(responseBody);
                         Image[] character = ImageProcessor.cropTrainerImages(trainerSprite, direction, false);
                         imageView.setImage(character[0]);
-                    }, error -> {
-                        showError(error.getMessage());
-                        error.printStackTrace();
-                    }
+                    }, error -> showError(error.getMessage())
             ));
         }
     }
@@ -1589,7 +1551,7 @@ public class IngameController extends Controller {
         if (inDialog) {
             try {
                 if (this.currentNpc.npc() != null) {
-                    if (this.currentNpc.npc().canHeal() && trainerStorageProvider.get().getTrainer().team().size() == 0) {
+                    if (this.currentNpc.npc().canHeal() && trainerStorageProvider.get().getTrainer().team().isEmpty()) {
                         continueTrainerDialog(DialogSpecialInteractions.nurseNoMons);
                     } else {
                         continueTrainerDialog(null);
@@ -1641,7 +1603,7 @@ public class IngameController extends Controller {
                             .observeOn(FX_SCHEDULER).subscribe(opponents -> {
                                 if (opponents.size() == 2) {
                                     for (Opponent opponent : opponents) {
-                                        if (opponent.move() != null || opponent.results().size() != 0) {
+                                        if (opponent.move() != null || !opponent.results().isEmpty()) {
                                             TextFlow textFlow = createDialogVBox(false);
                                             textFlow.getChildren().add(new Text(resources.getString("WANT.TO.FIGHT")));
                                             return;
@@ -1720,7 +1682,6 @@ public class IngameController extends Controller {
                 }
             } catch (Error e) {
                 System.err.println("NPC does not have the canHeal() attribute");
-                e.printStackTrace();
             }
 
             try {
@@ -1731,7 +1692,6 @@ public class IngameController extends Controller {
                 }
             } catch (Error e) {
                 System.err.println("NPC does not have the sells() attribute");
-                e.printStackTrace();
             }
 
             return null;
@@ -1741,7 +1701,7 @@ public class IngameController extends Controller {
     // This Methode returns all kind of trainer (npcs and normal trainers) that are standing on a specific tile
     public Trainer searchHashedMapForTrainer(int checkX, int checkY) {
         for (java.util.Map.Entry<Trainer, Position> set : trainerPositionHashMap.entrySet()) {
-            if (set.getValue().getX() == checkX && set.getValue().getY() == checkY) {
+            if (set.getValue().x() == checkX && set.getValue().y() == checkY) {
                 return set.getKey();
             }
         }
@@ -2158,10 +2118,7 @@ public class IngameController extends Controller {
                                 }));
                     }
                 },
-                error -> {
-                    showError(error.getMessage());
-                    error.printStackTrace();
-                }
+                error -> showError(error.getMessage())
         ));
     }
 
@@ -2254,12 +2211,12 @@ public class IngameController extends Controller {
     }
 
     public void showMonsterDetails(Monster monster, MonsterTypeDto monsterTypeDto,
-                                   Image monsterImage, ResourceBundle resources, PresetsService presetsService, String type) {
+                                   Image monsterImage, ResourceBundle resources, PresetsService presetsService) {
         VBox monsterDetailVBox = new VBox();
         monsterDetailVBox.setId("monsterDetailVBox");
         monsterDetailVBox.setAlignment(Pos.CENTER);
         MonstersDetailController monstersDetailController = monstersDetailControllerProvider.get();
-        monstersDetailController.init(this, monsterDetailVBox, monster, monsterTypeDto, monsterImage, resources, presetsService, type);
+        monstersDetailController.init(this, monsterDetailVBox, monster, monsterTypeDto, monsterImage, resources, presetsService);
         monsterDetailVBox.getChildren().add(monstersDetailController.render());
         root.getChildren().add(monsterDetailVBox);
         monsterDetailVBox.requestFocus();
@@ -2268,6 +2225,9 @@ public class IngameController extends Controller {
 
     public void showLowHealthNotification() {
         notificationBell.setVisible(true);
+        if (!GraphicsEnvironment.isHeadless()) {
+            AudioService.getInstance().playEffect(NOTIFICATION, this);
+        }
         this.notificationListHandyController.displayLowHealthMessages();
     }
 
@@ -2280,7 +2240,7 @@ public class IngameController extends Controller {
                             AudioService.getInstance().playSound(ROUTE_SOUND);
                             AudioService.getInstance().setCurrentSound(ROUTE_SOUND);
                             AudioService.getInstance().setVolume(preferences.getDouble("volume", AudioService.getInstance().getVolume()));
-                        } else if (area.map().infinite()){
+                        } else if (area.map().infinite()) {
                             AudioService.getInstance().stopSound();
                             AudioService.getInstance().playSound(CITY_SOUND);
                             AudioService.getInstance().setCurrentSound(CITY_SOUND);
@@ -2294,23 +2254,30 @@ public class IngameController extends Controller {
                         if (preferences.getBoolean("mute", false)) {
                             AudioService.getInstance().setVolume(0);
                         }
-                    }, error -> {
-                        this.showError(error.getMessage());
-                        error.printStackTrace();
-                    }));
+                    }, error -> this.showError(error.getMessage())));
         }
     }
 
-    private void setupUdpPing() {
+    private void setupUDPPing() {
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
                 disposables.add(udpEventListenerProvider.get().ping().observeOn(FX_SCHEDULER).subscribe());
-                disposables.add(authenticationService.stayOnline().observeOn(FX_SCHEDULER).subscribe());
             }
         };
         timer.schedule(task, 0, MINUTE_IN_MILLIS);
+    }
+
+    private void setupRESTPing() {
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                disposables.add(authenticationService.stayOnline().observeOn(FX_SCHEDULER).subscribe());
+            }
+        };
+        timer.schedule(task, 0, STUNDE_IN_MILLIS);
     }
 
     public int getUserTrainerY() {
@@ -2343,10 +2310,6 @@ public class IngameController extends Controller {
 
     public MonstersListController getMonstersListController() {
         return monstersListControllerProvider.get();
-    }
-
-    public String getCurrentNpcID() {
-        return this.currentNpc._id();
     }
 
     public TrainerStorage getTrainerStorage() {
