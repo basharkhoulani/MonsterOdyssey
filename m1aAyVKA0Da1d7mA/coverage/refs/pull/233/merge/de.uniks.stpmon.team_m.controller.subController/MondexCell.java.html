@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MondexCell.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">MondexCell.java</span></div><h1>MondexCell.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import de.uniks.stpmon.team_m.utils.MonsterStorage;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+
+import java.awt.*;
+import java.util.ResourceBundle;
+
+public class MondexCell extends ListCell&lt;MonsterTypeDto&gt; {
+    @FXML
+    public Label monsterNumberLabel;
+    @FXML
+    public ImageView monsterImageView;
+    @FXML
+    public Label monsterNameLabel;
+    @FXML
+    public HBox rootHBox;
+    private final MonstersListController monstersListController;
+    private final ResourceBundle resources;
+    private FXMLLoader loader;
+    private final MonsterStorage monsterStorage;
+
+
+<span class="nc" id="L32">    public MondexCell(MonstersListController monstersListController, ResourceBundle resources) {</span>
+<span class="nc" id="L33">        this.monstersListController = monstersListController;</span>
+<span class="nc" id="L34">        this.resources = resources;</span>
+<span class="nc" id="L35">        this.monsterStorage = monstersListController.monsterStorageProvider.get();</span>
+<span class="nc" id="L36">    }</span>
+
+    @Override
+    protected void updateItem(MonsterTypeDto monsterTypeDto, boolean empty) {
+<span class="nc" id="L40">        super.updateItem(monsterTypeDto, empty);</span>
+<span class="nc bnc" id="L41" title="All 4 branches missed.">        if (monsterTypeDto == null || empty) {</span>
+<span class="nc" id="L42">            setText(null);</span>
+<span class="nc" id="L43">            setGraphic(null);</span>
+<span class="nc" id="L44">            setStyle(&quot;-fx-background-color: #CFE9DB;&quot;);</span>
+        } else {
+<span class="nc" id="L46">            loadFXML();</span>
+<span class="nc" id="L47">            monsterNumberLabel.setText(String.valueOf(monsterTypeDto.id()));</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">            if (monstersListController.checkIfPlayerEncounteredMonster(monsterTypeDto)) {</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">                if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L50">                    monsterImageView.setOpacity(1);</span>
+<span class="nc" id="L51">                    Platform.runLater(() -&gt; monsterImageView.setImage(monsterStorage.getMonsterImage(monsterTypeDto.id())));</span>
+                }
+<span class="nc" id="L53">                monsterNameLabel.setText(monsterTypeDto.name());</span>
+            } else {
+<span class="nc bnc" id="L55" title="All 2 branches missed.">                if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L56">                    monsterImageView.setOpacity(0.2);</span>
+<span class="nc" id="L57">                    Platform.runLater(() -&gt; monsterImageView.setImage(monsterStorage.getMonsterImage(monsterTypeDto.id())));</span>
+                }
+<span class="nc" id="L59">                monsterNameLabel.setText(&quot;???&quot;);</span>
+            }
+
+<span class="nc" id="L62">            rootHBox.setOnMouseClicked(mouseEvent -&gt; monstersListController.showMondexDetails(monsterTypeDto));</span>
+
+<span class="nc" id="L64">            setGraphic(rootHBox);</span>
+        }
+<span class="nc" id="L66">    }</span>
+
+    private void loadFXML() {
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (loader == null) {</span>
+<span class="nc" id="L70">            loader = new FXMLLoader(Main.class.getResource(&quot;views/MondexCell.fxml&quot;));</span>
+<span class="nc" id="L71">            loader.setResources(resources);</span>
+<span class="nc" id="L72">            loader.setControllerFactory(c -&gt; this);</span>
+            try {
+<span class="nc" id="L74">                loader.load();</span>
+<span class="nc" id="L75">            } catch (Exception e) {</span>
+<span class="nc" id="L76">                System.out.println(&quot;Error loading MondexCell.fxml&quot;);</span>
+<span class="nc" id="L77">            }</span>
+        }
+<span class="nc" id="L79">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
