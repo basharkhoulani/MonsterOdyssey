@@ -27,6 +27,7 @@ import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -57,179 +58,181 @@ public class IngameMiniMapController extends Controller {
     private VBox miniMapVBox;
     private Canvas miniMapCanvas;
     private Map miniMap;
-<span class="nc" id="L60">    private List&lt;Area&gt; areasList = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L61">    private final List&lt;String&gt; discoveredLocations = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L61">    private List&lt;Area&gt; areasList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L62">    private final List&lt;String&gt; discoveredLocations = new ArrayList&lt;&gt;();</span>
 
     @Inject
-<span class="nc" id="L64">    public IngameMiniMapController() {</span>
-<span class="nc" id="L65">    }</span>
+<span class="nc" id="L65">    public IngameMiniMapController() {</span>
+<span class="nc" id="L66">    }</span>
 
     public void init(IngameController ingameController, App app, Canvas miniMapCanvas, VBox miniMapVBox, Map miniMap, List&lt;Area&gt; areas) {
-<span class="nc" id="L68">        this.ingameController = ingameController;</span>
-<span class="nc" id="L69">        this.app = app;</span>
-<span class="nc" id="L70">        this.miniMapCanvas = miniMapCanvas;</span>
-<span class="nc" id="L71">        this.miniMapVBox = miniMapVBox;</span>
-<span class="nc" id="L72">        this.miniMap = miniMap;</span>
-<span class="nc" id="L73">        this.areasList = areas;</span>
-<span class="nc" id="L74">    }</span>
+<span class="nc" id="L69">        this.ingameController = ingameController;</span>
+<span class="nc" id="L70">        this.app = app;</span>
+<span class="nc" id="L71">        this.miniMapCanvas = miniMapCanvas;</span>
+<span class="nc" id="L72">        this.miniMapVBox = miniMapVBox;</span>
+<span class="nc" id="L73">        this.miniMap = miniMap;</span>
+<span class="nc" id="L74">        this.areasList = areas;</span>
+<span class="nc" id="L75">    }</span>
 
     public Parent render() {
-<span class="nc" id="L77">        final Parent parent = super.render();</span>
-<span class="nc" id="L78">        TrainerStorage trainerStorage = trainerStorageProvider.get();</span>
+<span class="nc" id="L78">        final Parent parent = super.render();</span>
+<span class="nc" id="L79">        TrainerStorage trainerStorage = trainerStorageProvider.get();</span>
 
         // set region name
-<span class="nc" id="L81">        regionName.setText(trainerStorage.getRegion().name());</span>
+<span class="nc" id="L82">        regionName.setText(trainerStorage.getRegion().name());</span>
         // set marker data
-<span class="nc" id="L83">        Image pin = new Image(String.valueOf(App.class.getResource(&quot;images/pin.png&quot;)));</span>
-<span class="nc" id="L84">        Image stop = new Image(String.valueOf(App.class.getResource(&quot;images/bus-stop.png&quot;)));</span>
-<span class="nc" id="L85">        Image questionMark = new Image(String.valueOf(App.class.getResource(&quot;images/question-mark.png&quot;)));</span>
-<span class="nc" id="L86">        double pinWidth = pin.getWidth() / 20;</span>
-<span class="nc" id="L87">        double pinHeight = pin.getHeight() / 20;</span>
-<span class="nc" id="L88">        double xPinOffset = -pinWidth / 2;</span>
-<span class="nc" id="L89">        double yPinOffset = -pinHeight;</span>
+<span class="nc" id="L84">        Image pin = new Image(String.valueOf(App.class.getResource(&quot;images/pin.png&quot;)));</span>
+<span class="nc" id="L85">        Image stop = new Image(String.valueOf(App.class.getResource(&quot;images/bus-stop.png&quot;)));</span>
+<span class="nc" id="L86">        Image questionMark = new Image(String.valueOf(App.class.getResource(&quot;images/question-mark.png&quot;)));</span>
+<span class="nc" id="L87">        double pinWidth = pin.getWidth() / 20;</span>
+<span class="nc" id="L88">        double pinHeight = pin.getHeight() / 20;</span>
+<span class="nc" id="L89">        double xPinOffset = -pinWidth / 2;</span>
+<span class="nc" id="L90">        double yPinOffset = -pinHeight;</span>
 
         // show current location
-<span class="nc" id="L92">        final String[] currentLocation = new String[1];</span>
-<span class="nc" id="L93">        areasList.forEach(area -&gt; {</span>
-<span class="nc bnc" id="L94" title="All 2 branches missed.">            if (Objects.equals(area._id(), trainerStorage.getTrainer().area())) {</span>
-<span class="nc" id="L95">                currentLocation[0] = area.name();</span>
+<span class="nc" id="L93">        final String[] currentLocation = new String[1];</span>
+<span class="nc" id="L94">        areasList.forEach(area -&gt; {</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            if (Objects.equals(area._id(), trainerStorage.getTrainer().area())) {</span>
+<span class="nc" id="L96">                currentLocation[0] = area.name();</span>
             }
-<span class="nc" id="L97">        });</span>
-<span class="nc" id="L98">        Text currentLocationText = new Text(resources.getString(&quot;YOU.ARE.IN&quot;) + &quot; &quot; + currentLocation[0] + &quot;\n\n&quot;);</span>
-<span class="nc" id="L99">        mapTextFlow.getChildren().add(currentLocationText);</span>
+<span class="nc" id="L98">        });</span>
+<span class="nc" id="L99">        Text currentLocationText = new Text(resources.getString(&quot;YOU.ARE.IN&quot;) + &quot; &quot; + currentLocation[0] + &quot;\n\n&quot;);</span>
+<span class="nc" id="L100">        mapTextFlow.getChildren().add(currentLocationText);</span>
 
         // show map legend
-<span class="nc" id="L102">        Text legend = new Text(resources.getString(&quot;LEGEND&quot;) + &quot;:\n&quot;);</span>
-<span class="nc" id="L103">        ImageView pinImageView = new ImageView(pin);</span>
-<span class="nc" id="L104">        pinImageView.setFitWidth(pinWidth);</span>
-<span class="nc" id="L105">        pinImageView.setFitHeight(pinHeight);</span>
-<span class="nc" id="L106">        ImageView stopImageView = new ImageView(stop);</span>
-<span class="nc" id="L107">        stopImageView.setFitWidth(pinWidth);</span>
-<span class="nc" id="L108">        stopImageView.setFitHeight(pinHeight);</span>
-<span class="nc" id="L109">        ImageView questionMarkImageView = new ImageView(questionMark);</span>
-<span class="nc" id="L110">        questionMarkImageView.setFitWidth(pinWidth);</span>
-<span class="nc" id="L111">        questionMarkImageView.setFitHeight(pinHeight);</span>
-<span class="nc" id="L112">        mapTextFlow.getChildren().add(legend);</span>
-<span class="nc" id="L113">        mapTextFlow.getChildren().addAll(pinImageView, new Text(&quot; &quot; + resources.getString(&quot;DISCOVERED.LOCATION&quot;) + &quot;\n&quot;));</span>
-<span class="nc" id="L114">        mapTextFlow.getChildren().addAll(stopImageView, new Text(&quot; &quot; + resources.getString(&quot;FAST-TRAVEL.LOCATION&quot;) + &quot;\n&quot;));</span>
-<span class="nc" id="L115">        mapTextFlow.getChildren().addAll(questionMarkImageView, new Text(&quot; &quot; + resources.getString(&quot;UNDISCOVERED.LOCATION&quot;) + &quot;\n\n\n&quot;));</span>
+<span class="nc" id="L103">        Text legend = new Text(resources.getString(&quot;LEGEND&quot;) + &quot;:\n&quot;);</span>
+<span class="nc" id="L104">        ImageView pinImageView = new ImageView(pin);</span>
+<span class="nc" id="L105">        pinImageView.setFitWidth(pinWidth);</span>
+<span class="nc" id="L106">        pinImageView.setFitHeight(pinHeight);</span>
+<span class="nc" id="L107">        ImageView stopImageView = new ImageView(stop);</span>
+<span class="nc" id="L108">        stopImageView.setFitWidth(pinWidth);</span>
+<span class="nc" id="L109">        stopImageView.setFitHeight(pinHeight);</span>
+<span class="nc" id="L110">        ImageView questionMarkImageView = new ImageView(questionMark);</span>
+<span class="nc" id="L111">        questionMarkImageView.setFitWidth(pinWidth);</span>
+<span class="nc" id="L112">        questionMarkImageView.setFitHeight(pinHeight);</span>
+<span class="nc" id="L113">        mapTextFlow.getChildren().add(legend);</span>
+<span class="nc" id="L114">        mapTextFlow.getChildren().addAll(pinImageView, new Text(&quot; &quot; + resources.getString(&quot;DISCOVERED.LOCATION&quot;) + &quot;\n&quot;));</span>
+<span class="nc" id="L115">        mapTextFlow.getChildren().addAll(stopImageView, new Text(&quot; &quot; + resources.getString(&quot;FAST-TRAVEL.LOCATION&quot;) + &quot;\n&quot;));</span>
+<span class="nc" id="L116">        mapTextFlow.getChildren().addAll(questionMarkImageView, new Text(&quot; &quot; + resources.getString(&quot;UNDISCOVERED.LOCATION&quot;) + &quot;\n\n\n&quot;));</span>
 
-<span class="nc" id="L117">        Text description = new Text();</span>
-<span class="nc" id="L118">        mapTextFlow.getChildren().add(description);</span>
+<span class="nc" id="L118">        Text description = new Text();</span>
+<span class="nc" id="L119">        mapTextFlow.getChildren().add(description);</span>
 
-<span class="nc" id="L120">        Layer layerMinimap = miniMap.layers().get(2);</span>
-<span class="nc bnc" id="L121" title="All 2 branches missed.">        for (Layer layer : miniMap.layers()) {</span>
-<span class="nc bnc" id="L122" title="All 2 branches missed.">            if (layer.type().equals(OBJECTGROUP)) {</span>
-<span class="nc" id="L123">                layerMinimap = layer;</span>
-<span class="nc" id="L124">                break;</span>
+<span class="nc" id="L121">        Layer layerMinimap = miniMap.layers().get(2);</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        for (Layer layer : miniMap.layers()) {</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">            if (layer.type().equals(OBJECTGROUP)) {</span>
+<span class="nc" id="L124">                layerMinimap = layer;</span>
+<span class="nc" id="L125">                break;</span>
             }
-<span class="nc" id="L126">        }</span>
-<span class="nc" id="L127">        layerMinimap.objects().forEach(tileObject -&gt; {</span>
+<span class="nc" id="L127">        }</span>
+<span class="nc" id="L128">        layerMinimap.objects().forEach(tileObject -&gt; {</span>
             // get area
-<span class="nc" id="L129">            final Area[] newArea = new Area[1];</span>
-<span class="nc" id="L130">            areasList.forEach(area -&gt; {</span>
-<span class="nc bnc" id="L131" title="All 2 branches missed.">                if (trainerStorage.getTrainer().visitedAreas().contains(area._id())) {</span>
-<span class="nc" id="L132">                    discoveredLocations.add(area.name());</span>
+<span class="nc" id="L130">            final Area[] newArea = new Area[1];</span>
+<span class="nc" id="L131">            areasList.forEach(area -&gt; {</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">                if (trainerStorage.getTrainer().visitedAreas().contains(area._id())) {</span>
+<span class="nc" id="L133">                    discoveredLocations.add(area.name());</span>
                 }
-<span class="nc bnc" id="L134" title="All 2 branches missed.">                if (area.name().equals(tileObject.name())) {</span>
-<span class="nc" id="L135">                    newArea[0] = area;</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">                if (area.name().equals(tileObject.name())) {</span>
+<span class="nc" id="L136">                    newArea[0] = area;</span>
                 }
-<span class="nc" id="L137">            });</span>
-<span class="nc" id="L138">            boolean discovered = discoveredLocations.contains(tileObject.name());</span>
+<span class="nc" id="L138">            });</span>
+<span class="nc" id="L139">            boolean discovered = discoveredLocations.contains(tileObject.name());</span>
             // create locations
             double width;
             double height;
-<span class="nc bnc" id="L142" title="All 2 branches missed.">            if (tileObject.width() != 0) {</span>
-<span class="nc" id="L143">                width = tileObject.width();</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">            if (tileObject.width() != 0) {</span>
+<span class="nc" id="L144">                width = tileObject.width();</span>
             } else {
-<span class="nc" id="L145">                width = TILE_SIZE;</span>
+<span class="nc" id="L146">                width = TILE_SIZE;</span>
             }
-<span class="nc bnc" id="L147" title="All 2 branches missed.">            if (tileObject.height() != 0) {</span>
-<span class="nc" id="L148">                height = tileObject.height();</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">            if (tileObject.height() != 0) {</span>
+<span class="nc" id="L149">                height = tileObject.height();</span>
             } else {
-<span class="nc" id="L150">                height = TILE_SIZE;</span>
+<span class="nc" id="L151">                height = TILE_SIZE;</span>
             }
-<span class="nc" id="L152">            VBox location = new VBox();</span>
-<span class="nc" id="L153">            location.setMinSize(width, height);</span>
-<span class="nc" id="L154">            location.setPrefSize(width, height);</span>
-<span class="nc" id="L155">            location.setMaxSize(width, height);</span>
-<span class="nc" id="L156">            location.setLayoutX(tileObject.x());</span>
-<span class="nc" id="L157">            location.setLayoutY(tileObject.y());</span>
+<span class="nc" id="L153">            VBox location = new VBox();</span>
+<span class="nc" id="L154">            location.setMinSize(width, height);</span>
+<span class="nc" id="L155">            location.setPrefSize(width, height);</span>
+<span class="nc" id="L156">            location.setMaxSize(width, height);</span>
+<span class="nc" id="L157">            location.setLayoutX(tileObject.x());</span>
+<span class="nc" id="L158">            location.setLayoutY(tileObject.y());</span>
 
-<span class="nc" id="L159">            location.setOnMouseEntered(event -&gt; {</span>
+<span class="nc" id="L160">            location.setOnMouseEntered(event -&gt; {</span>
                 // highlight hovered location
-<span class="nc" id="L161">                location.setStyle(&quot;-fx-border-color: red; -fx-border-width: 2px&quot;);</span>
+<span class="nc" id="L162">                location.setStyle(&quot;-fx-border-color: red; -fx-border-width: 2px&quot;);</span>
                 // create description depending on discovered
-<span class="nc bnc" id="L163" title="All 2 branches missed.">                if (discovered) {</span>
-<span class="nc" id="L164">                    description.setText(tileObject.name() + &quot;\n\n&quot; + tileObject.properties().get(0).value());</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">                if (discovered) {</span>
+<span class="nc" id="L165">                    description.setText(tileObject.name() + &quot;\n\n&quot; + tileObject.properties().get(0).value());</span>
                 } else {
-<span class="nc" id="L166">                    description.setText(&quot;\n &quot; + resources.getString(&quot;NOT.DISCOVERED&quot;) + &quot; \n&quot;);</span>
+<span class="nc" id="L167">                    description.setText(&quot;\n &quot; + resources.getString(&quot;NOT.DISCOVERED&quot;) + &quot; \n&quot;);</span>
                 }
 
-<span class="nc" id="L169">            });</span>
-<span class="nc" id="L170">            location.setOnMouseExited(event -&gt; {</span>
-<span class="nc" id="L171">                description.setText(&quot;&quot;);</span>
-<span class="nc" id="L172">                location.setStyle(&quot;&quot;);</span>
-<span class="nc" id="L173">            });</span>
+<span class="nc" id="L170">            });</span>
+<span class="nc" id="L171">            location.setOnMouseExited(event -&gt; {</span>
+<span class="nc" id="L172">                description.setText(&quot;&quot;);</span>
+<span class="nc" id="L173">                location.setStyle(&quot;&quot;);</span>
+<span class="nc" id="L174">            });</span>
             // create fast travel popup
-<span class="nc" id="L175">            location.setOnMouseClicked(mouseEvent -&gt; {</span>
-<span class="nc bnc" id="L176" title="All 6 branches missed.">                if (discovered &amp;&amp; newArea[0].spawn() != null &amp;&amp; !Objects.equals(trainerStorage.getTrainer().area(), newArea[0]._id())) {</span>
-<span class="nc" id="L177">                    VBox fastTravelPopUp = new VBox();</span>
-<span class="nc" id="L178">                    fastTravelPopUp.getStyleClass().add(&quot;miniMapContainer&quot;);</span>
-<span class="nc" id="L179">                    fastTravelPopUp.setLayoutX(miniMapCanvas.getWidth() / 4);</span>
-<span class="nc" id="L180">                    fastTravelPopUp.setLayoutY(miniMapCanvas.getHeight() / 3);</span>
-<span class="nc" id="L181">                    fastTravelPopUp.setPadding(new Insets(paddingAndSpacingValue));</span>
-<span class="nc" id="L182">                    fastTravelPopUp.setSpacing(paddingAndSpacingValue);</span>
-<span class="nc" id="L183">                    fastTravelPopUp.setAlignment(Pos.CENTER);</span>
-<span class="nc" id="L184">                    Label label = new Label(resources.getString(&quot;DO.YOU.WANT.TO.FAST-TRAVEL.TO&quot;) + &quot; \n&quot; + tileObject.name() + &quot; ?&quot;);</span>
-<span class="nc" id="L185">                    label.setTextAlignment(TextAlignment.CENTER);</span>
-<span class="nc" id="L186">                    HBox hBox = new HBox();</span>
-<span class="nc" id="L187">                    hBox.setSpacing(paddingAndSpacingValue);</span>
-<span class="nc" id="L188">                    Button yesButton = new Button(resources.getString(&quot;ENCOUNTER_FLEE_CONFIRM_BUTTON&quot;));</span>
-<span class="nc" id="L189">                    yesButton.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
+<span class="nc" id="L176">            location.setOnMouseClicked(mouseEvent -&gt; {</span>
+<span class="nc bnc" id="L177" title="All 6 branches missed.">                if (discovered &amp;&amp; newArea[0].spawn() != null &amp;&amp; !Objects.equals(trainerStorage.getTrainer().area(), newArea[0]._id())) {</span>
+<span class="nc" id="L178">                    VBox fastTravelPopUp = new VBox();</span>
+<span class="nc" id="L179">                    fastTravelPopUp.getStyleClass().add(&quot;miniMapContainer&quot;);</span>
+<span class="nc" id="L180">                    fastTravelPopUp.setLayoutX(miniMapCanvas.getWidth() / 4);</span>
+<span class="nc" id="L181">                    fastTravelPopUp.setLayoutY(miniMapCanvas.getHeight() / 3);</span>
+<span class="nc" id="L182">                    fastTravelPopUp.setPadding(new Insets(paddingAndSpacingValue));</span>
+<span class="nc" id="L183">                    fastTravelPopUp.setSpacing(paddingAndSpacingValue);</span>
+<span class="nc" id="L184">                    fastTravelPopUp.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L185">                    Label label = new Label(resources.getString(&quot;DO.YOU.WANT.TO.FAST-TRAVEL.TO&quot;) + &quot; \n&quot; + tileObject.name() + &quot; ?&quot;);</span>
+<span class="nc" id="L186">                    label.setTextAlignment(TextAlignment.CENTER);</span>
+<span class="nc" id="L187">                    HBox hBox = new HBox();</span>
+<span class="nc" id="L188">                    hBox.setSpacing(paddingAndSpacingValue);</span>
+<span class="nc" id="L189">                    Button yesButton = new Button(resources.getString(&quot;ENCOUNTER_FLEE_CONFIRM_BUTTON&quot;));</span>
+<span class="nc" id="L190">                    yesButton.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
                     // fast-travel to location
-<span class="nc" id="L191">                    yesButton.setOnAction(actionEvent -&gt;</span>
-<span class="nc" id="L192">                            disposables.add(trainersService.updateTrainer(trainerStorage.getRegion()._id(), trainerStorage.getTrainer()._id(), null, null, null, newArea[0]._id(), null)</span>
-<span class="nc" id="L193">                                    .observeOn(FX_SCHEDULER).subscribe(trainer -&gt; {</span>
-<span class="nc" id="L194">                                        trainerStorage.setTrainer(trainer);</span>
-<span class="nc" id="L195">                                        ingameController.destroy();</span>
-<span class="nc" id="L196">                                        app.show(ingameControllerProvider.get());</span>
-<span class="nc" id="L197">                                    }, Throwable::printStackTrace)));</span>
-<span class="nc" id="L198">                    Button noButton = new Button(resources.getString(&quot;ENCOUNTER_FLEE_CANCEL_BUTTON&quot;));</span>
-<span class="nc" id="L199">                    noButton.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
+<span class="nc" id="L192">                    yesButton.setOnAction(actionEvent -&gt;</span>
+<span class="nc" id="L193">                            disposables.add(trainersService.updateTrainer(trainerStorage.getRegion()._id(), trainerStorage.getTrainer()._id(), null, null, null, newArea[0]._id(), null)</span>
+<span class="nc" id="L194">                                    .observeOn(FX_SCHEDULER).subscribe(trainer -&gt; {</span>
+<span class="nc" id="L195">                                        trainerStorage.setTrainer(trainer);</span>
+<span class="nc" id="L196">                                        ingameController.destroy();</span>
+<span class="nc" id="L197">                                        app.show(ingameControllerProvider.get());</span>
+<span class="nc" id="L198">                                    }, Throwable::printStackTrace)));</span>
+<span class="nc" id="L199">                    Button noButton = new Button(resources.getString(&quot;ENCOUNTER_FLEE_CANCEL_BUTTON&quot;));</span>
+<span class="nc" id="L200">                    noButton.getStyleClass().add(&quot;welcomeSceneButton&quot;);</span>
                     // no fast-travel
-<span class="nc" id="L201">                    noButton.setOnAction(actionEvent -&gt; mapContainer.getChildren().remove(fastTravelPopUp));</span>
-<span class="nc" id="L202">                    hBox.getChildren().addAll(yesButton, noButton);</span>
-<span class="nc" id="L203">                    fastTravelPopUp.getChildren().addAll(label, hBox);</span>
-<span class="nc" id="L204">                    mapContainer.getChildren().add(fastTravelPopUp);</span>
+<span class="nc" id="L202">                    noButton.setOnAction(actionEvent -&gt; mapContainer.getChildren().remove(fastTravelPopUp));</span>
+<span class="nc" id="L203">                    hBox.getChildren().addAll(yesButton, noButton);</span>
+<span class="nc" id="L204">                    fastTravelPopUp.getChildren().addAll(label, hBox);</span>
+<span class="nc" id="L205">                    mapContainer.getChildren().add(fastTravelPopUp);</span>
                 }
-<span class="nc" id="L206">            });</span>
-<span class="nc" id="L207">            mapContainer.getChildren().add(location);</span>
+<span class="nc" id="L207">            });</span>
+<span class="nc" id="L208">            mapContainer.getChildren().add(location);</span>
             // draw marker
-<span class="nc bnc" id="L209" title="All 2 branches missed.">            if (discovered) {</span>
-<span class="nc bnc" id="L210" title="All 2 branches missed.">                if (newArea[0].spawn() != null) {</span>
-<span class="nc" id="L211">                    miniMapCanvas.getGraphicsContext2D().drawImage(stop, tileObject.x() + width / 2 + xPinOffset, tileObject.y() + height / 2 + yPinOffset, pinWidth, pinHeight);</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">            if (discovered) {</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">                if (newArea[0].spawn() != null) {</span>
+<span class="nc" id="L212">                    miniMapCanvas.getGraphicsContext2D().drawImage(stop, tileObject.x() + width / 2 + xPinOffset, tileObject.y() + height / 2 + yPinOffset, pinWidth, pinHeight);</span>
                 } else {
-<span class="nc" id="L213">                    miniMapCanvas.getGraphicsContext2D().drawImage(pin, tileObject.x() + width / 2 + xPinOffset, tileObject.y() + height / 2 + yPinOffset, pinWidth, pinHeight);</span>
+<span class="nc" id="L214">                    miniMapCanvas.getGraphicsContext2D().drawImage(pin, tileObject.x() + width / 2 + xPinOffset, tileObject.y() + height / 2 + yPinOffset, pinWidth, pinHeight);</span>
                 }
             } else {
-<span class="nc" id="L216">                miniMapCanvas.getGraphicsContext2D().drawImage(questionMark, tileObject.x() + width / 2 + xPinOffset, tileObject.y() + height / 2 + yPinOffset, pinWidth, pinHeight);</span>
+<span class="nc" id="L217">                miniMapCanvas.getGraphicsContext2D().drawImage(questionMark, tileObject.x() + width / 2 + xPinOffset, tileObject.y() + height / 2 + yPinOffset, pinWidth, pinHeight);</span>
             }
-<span class="nc" id="L218">        });</span>
-<span class="nc" id="L219">        miniMapImageView.setFitHeight(miniMapCanvas.getHeight());</span>
-<span class="nc" id="L220">        miniMapImageView.setFitWidth(miniMapCanvas.getWidth());</span>
-<span class="nc" id="L221">        mapContainer.setMaxHeight(miniMapCanvas.getHeight());</span>
-<span class="nc" id="L222">        mapContainer.setMinHeight(miniMapCanvas.getHeight());</span>
-<span class="nc" id="L223">        mapContainer.setMaxWidth(miniMapCanvas.getWidth());</span>
-<span class="nc" id="L224">        mapContainer.setMinWidth(miniMapCanvas.getWidth());</span>
-<span class="nc" id="L225">        miniMapImageView.setImage(miniMapCanvas.snapshot(null, null));</span>
-<span class="nc" id="L226">        return parent;</span>
+<span class="nc" id="L219">        });</span>
+<span class="nc" id="L220">        miniMapImageView.setFitHeight(miniMapCanvas.getHeight());</span>
+<span class="nc" id="L221">        miniMapImageView.setFitWidth(miniMapCanvas.getWidth());</span>
+<span class="nc" id="L222">        mapContainer.setMaxHeight(miniMapCanvas.getHeight());</span>
+<span class="nc" id="L223">        mapContainer.setMinHeight(miniMapCanvas.getHeight());</span>
+<span class="nc" id="L224">        mapContainer.setMaxWidth(miniMapCanvas.getWidth());</span>
+<span class="nc" id="L225">        mapContainer.setMinWidth(miniMapCanvas.getWidth());</span>
+<span class="nc bnc" id="L226" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L227">            miniMapImageView.setImage(miniMapCanvas.snapshot(null, null));</span>
+        }
+<span class="nc" id="L229">        return parent;</span>
     }
 
     public void closeMiniMap() {
-<span class="nc" id="L230">        ingameController.root.getChildren().remove(miniMapVBox);</span>
-<span class="nc" id="L231">        ingameController.buttonsDisable(false);</span>
-<span class="nc" id="L232">    }</span>
+<span class="nc" id="L233">        ingameController.root.getChildren().remove(miniMapVBox);</span>
+<span class="nc" id="L234">        ingameController.buttonsDisable(false);</span>
+<span class="nc" id="L235">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
