@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IngameStarterMonsterController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">IngameStarterMonsterController.java</span></div><h1>IngameStarterMonsterController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import de.uniks.stpmon.team_m.service.PresetsService;
+import de.uniks.stpmon.team_m.utils.MonsterStorage;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import java.awt.*;
+import java.net.URL;
+import java.util.List;
+import java.util.Objects;
+
+import static de.uniks.stpmon.team_m.Constants.ABILITYPALETTE;
+import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
+
+public class IngameStarterMonsterController extends Controller {
+    @FXML
+    public AnchorPane starterSelectionAnchorPane;
+    @FXML
+    public Label starterSelectionLabel;
+    @FXML
+    public VBox starterSelectionVBox;
+    @FXML
+    public HBox starterSelectionHBox;
+    @FXML
+    public ImageView starterImageView;
+    @FXML
+    public TextFlow starterDescription;
+    @FXML
+    public ImageView arrowLeft;
+    @FXML
+    public ImageView arrowRight;
+    @FXML
+    public VBox typesVBox;
+    @Inject
+    IngameController ingameController;
+    @Inject
+    Provider&lt;TrainerStorage&gt; trainerStorageProvider;
+    @Inject
+    Provider&lt;MonsterStorage&gt; monsterStorageProvider;
+    @Inject
+    PresetsService presetsService;
+    private List&lt;String&gt; starters;
+    public MonsterTypeDto monster1;
+    public MonsterTypeDto monster2;
+    public MonsterTypeDto monster3;
+    public Image monster1Image;
+    public Image monster2Image;
+    public Image monster3Image;
+<span class="fc" id="L66">    public Integer index = 1;</span>
+
+
+    @Inject
+<span class="fc" id="L70">    public IngameStarterMonsterController() {</span>
+
+<span class="fc" id="L72">    }</span>
+
+    public void init(IngameController ingameController, App app, List&lt;String&gt; starters) {
+<span class="fc" id="L75">        this.ingameController = ingameController;</span>
+<span class="fc" id="L76">        this.app = app;</span>
+<span class="fc" id="L77">        this.starters = starters;</span>
+<span class="fc" id="L78">    }</span>
+
+    public Parent render() {
+<span class="fc" id="L81">        final Parent parent = super.render();</span>
+        // Load and display arrows
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L84">            Image arrowLeft = new Image(Objects.requireNonNull(Main.class.getResource(&quot;images/arrowLeft.png&quot;)).toExternalForm());</span>
+<span class="nc" id="L85">            Image arrowRight = new Image(Objects.requireNonNull(Main.class.getResource(&quot;images/arrowRight.png&quot;)).toExternalForm());</span>
+<span class="nc" id="L86">            this.arrowLeft.setImage(arrowLeft);</span>
+<span class="nc" id="L87">            this.arrowRight.setImage(arrowRight);</span>
+        }
+
+        // get monsters
+<span class="fc" id="L91">        disposables.add(presetsService.getMonsters().observeOn(FX_SCHEDULER).subscribe(monsterType -&gt; {</span>
+<span class="fc" id="L92">            monster1 = monsterType.get(Integer.parseInt(starters.get(0)) - 1);</span>
+<span class="fc" id="L93">            monster2 = monsterType.get(Integer.parseInt(starters.get(1)) - 1);</span>
+<span class="fc" id="L94">            monster3 = monsterType.get(Integer.parseInt(starters.get(2)) - 1);</span>
+            // get Images
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">            if (monsterStorageProvider.get().imagesAlreadyFetched()) {</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">                if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L98">                    monster1Image = monsterStorageProvider.get().getMonsterImage(Integer.parseInt(starters.get(0)));</span>
+<span class="nc" id="L99">                    monster2Image = monsterStorageProvider.get().getMonsterImage(Integer.parseInt(starters.get(1)));</span>
+<span class="nc" id="L100">                    monster3Image = monsterStorageProvider.get().getMonsterImage(Integer.parseInt(starters.get(2)));</span>
+                }
+<span class="nc" id="L102">                showMonster(1);</span>
+            }
+
+<span class="pc" id="L105">        }, error -&gt; showError(error.getMessage())));</span>
+<span class="fc" id="L106">        return parent;</span>
+    }
+
+    public VBox createTypeVBox(String type, String image) {
+<span class="fc" id="L110">        VBox typeVBox = new VBox();</span>
+<span class="fc" id="L111">        typeVBox.setMaxSize(32, 32);</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        if (TYPESCOLORPALETTE.containsKey(type)) {</span>
+<span class="fc" id="L113">            String color = TYPESCOLORPALETTE.get(type);</span>
+<span class="fc" id="L114">            typeVBox.setStyle(&quot;-fx-background-color: &quot; + color + &quot;;-fx-border-color: black&quot;);</span>
+        }
+<span class="fc" id="L116">        ImageView typeImageView = new ImageView(image);</span>
+<span class="fc" id="L117">        typeImageView.setFitHeight(32);</span>
+<span class="fc" id="L118">        typeImageView.setFitWidth(32);</span>
+<span class="fc" id="L119">        typeVBox.getChildren().add(typeImageView);</span>
+<span class="fc" id="L120">        return typeVBox;</span>
+    }
+
+    public void showMonster(int index) {
+<span class="fc" id="L124">        typesVBox.getChildren().clear();</span>
+<span class="fc" id="L125">        starterDescription.getChildren().clear();</span>
+        MonsterTypeDto monster;
+        Image monsterImage;
+<span class="pc bpc" id="L128" title="1 of 3 branches missed.">        switch (index) {</span>
+            default -&gt; {
+<span class="nc" id="L130">                monster = monster1;</span>
+<span class="nc" id="L131">                monsterImage = monster1Image;</span>
+<span class="nc" id="L132">                starterSelectionLabel.setText(resources.getString(&quot;FIRST.SELECTION&quot;));</span>
+<span class="nc" id="L133">            }</span>
+            case 2 -&gt; {
+<span class="fc" id="L135">                monster = monster2;</span>
+<span class="fc" id="L136">                monsterImage = monster2Image;</span>
+<span class="fc" id="L137">                starterSelectionLabel.setText(resources.getString(&quot;SECOND.SELECTION&quot;));</span>
+<span class="fc" id="L138">            }</span>
+            case 3 -&gt; {
+<span class="fc" id="L140">                monster = monster3;</span>
+<span class="fc" id="L141">                monsterImage = monster3Image;</span>
+<span class="fc" id="L142">                starterSelectionLabel.setText(resources.getString(&quot;THIRD.SELECTION&quot;));</span>
+            }
+        }
+
+        // add description
+<span class="fc" id="L147">        starterDescription.getChildren().add(new Text(resources.getString(&quot;NAME&quot;)));</span>
+<span class="fc" id="L148">        starterDescription.getChildren().add(new Text(&quot; &quot; + monster.name() + &quot;\n\n&quot;));</span>
+<span class="fc" id="L149">        starterDescription.getChildren().add(new Text(monster.description()));</span>
+
+        // add type
+<span class="fc" id="L152">        monster.type().forEach(type -&gt; {</span>
+<span class="fc" id="L153">            String typeImagePath = ABILITYPALETTE.get(type);</span>
+<span class="fc" id="L154">            URL resource = Main.class.getResource(&quot;images/&quot; + typeImagePath);</span>
+<span class="fc" id="L155">            VBox typeVBox = createTypeVBox(type, Objects.requireNonNull(resource).toString());</span>
+<span class="fc" id="L156">            typesVBox.getChildren().add(typeVBox);</span>
+<span class="fc" id="L157">        });</span>
+
+        // set image
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">        if (monsterImage == null) {</span>
+<span class="fc" id="L161">            return;</span>
+        }
+<span class="nc" id="L163">        starterImageView.setImage(monsterImage);</span>
+<span class="nc" id="L164">    }</span>
+
+    public void rotateLeft() {
+<span class="fc" id="L167">        index--;</span>
+<span class="pc bpc" id="L168" title="1 of 2 branches missed.">        if (index &lt; 1) {</span>
+<span class="fc" id="L169">            index = 3;</span>
+        }
+<span class="fc" id="L171">        showMonster(index);</span>
+<span class="fc" id="L172">    }</span>
+
+    public void rotateRight() {
+<span class="fc" id="L175">        index++;</span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">        if (index &gt; 3) {</span>
+<span class="nc" id="L177">            index = 1;</span>
+        }
+<span class="fc" id="L179">        showMonster(index);</span>
+<span class="fc" id="L180">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

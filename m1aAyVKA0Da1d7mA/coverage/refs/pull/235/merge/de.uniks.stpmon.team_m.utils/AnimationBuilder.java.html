@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AnimationBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.utils</a> &gt; <span class="el_source">AnimationBuilder.java</span></div><h1>AnimationBuilder.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.utils;
+
+import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.Constants.BallType;
+import de.uniks.stpmon.team_m.controller.subController.EncounterOpponentController;
+import javafx.animation.*;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.Glow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static de.uniks.stpmon.team_m.Constants.BallType.*;
+import static de.uniks.stpmon.team_m.Constants.TRAINER_DIRECTION_DOWN;
+
+<span class="nc" id="L20">public class AnimationBuilder {</span>
+    /**
+     * Builds a sequential transition for the trainer to walk to the opponent
+     *
+     * @param trainerChunk         : The imageChunk of the trainer
+     * @param ownTrainerController : The controller of the trainer
+     * @return : The sequential transition
+     */
+    public static SequentialTransition buildFleeAnimation(Image trainerChunk, EncounterOpponentController ownTrainerController) {
+<span class="nc" id="L29">        SequentialTransition transition = new SequentialTransition();</span>
+<span class="nc" id="L30">        var ref = new Object() {</span>
+<span class="nc" id="L31">            int currentImageIndex = 0;</span>
+        };
+
+<span class="nc" id="L34">        Image[] images = ImageProcessor.cropTrainerImages(trainerChunk, TRAINER_DIRECTION_DOWN, true);</span>
+
+<span class="nc" id="L36">        KeyFrame animationFrame = new KeyFrame(Duration.millis(Constants.DELAY), event -&gt; {</span>
+<span class="nc" id="L37">            ownTrainerController.setTrainerImage(images[ref.currentImageIndex]);</span>
+<span class="nc" id="L38">            ref.currentImageIndex = (ref.currentImageIndex + 1) % 6;</span>
+<span class="nc" id="L39">        });</span>
+
+<span class="nc" id="L41">        KeyFrame movementFrame = new KeyFrame(Duration.millis(Constants.DELAY), evt -&gt; {</span>
+<span class="nc" id="L42">            TranslateTransition translateTransition = new TranslateTransition();</span>
+<span class="nc" id="L43">            translateTransition.setNode(ownTrainerController.trainerMonsterVBox);</span>
+<span class="nc" id="L44">            translateTransition.setByY(16);</span>
+<span class="nc" id="L45">            translateTransition.setDuration(Duration.millis(Constants.DELAY));</span>
+<span class="nc" id="L46">            translateTransition.setCycleCount(1);</span>
+<span class="nc" id="L47">            translateTransition.play();</span>
+<span class="nc" id="L48">        });</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">        for (int i = 0; i &lt; 12; i++) {</span>
+<span class="nc" id="L50">            Timeline fleeAnimation = new Timeline(animationFrame);</span>
+<span class="nc" id="L51">            Timeline trainerMovement = new Timeline(movementFrame);</span>
+<span class="nc" id="L52">            ParallelTransition parallelTransition = new ParallelTransition(fleeAnimation, trainerMovement);</span>
+<span class="nc" id="L53">            transition.getChildren().add(parallelTransition);</span>
+        }
+<span class="nc" id="L55">        return transition;</span>
+    }
+
+    /**
+     * Builds a transition for a progressbar value to a targeted value
+     *
+     * @param progressBar    : The progressbar to be animated
+     * @param durationMillis : The duration of the animation in milliseconds
+     * @param targetValue    : The target value of the progressbar
+     * @return : The timeline of the animation
+     */
+    public static Timeline buildProgressBarAnimation(ProgressBar progressBar, double durationMillis, double targetValue) {
+<span class="nc" id="L67">        return new Timeline(</span>
+                new KeyFrame(
+<span class="nc" id="L69">                        Duration.millis(durationMillis),</span>
+<span class="nc" id="L70">                        new KeyValue(progressBar.progressProperty(), targetValue)</span>
+                )
+        );
+    }
+
+    /**
+     * Builds a shake animation for a given imageView
+     *
+     * @param imageView      : The imageView to be animated
+     * @param durationMillis : The duration of the animation in milliseconds
+     * @param shakeAngle     : The angle of the shake
+     * @param cycleCount     : The number of repetitions
+     * @return : The timeline of the animation
+     */
+    public static Timeline buildShakeAnimation(ImageView imageView, int durationMillis, int shakeAngle, int cycleCount) {
+<span class="fc" id="L85">        Timeline timeline = new Timeline();</span>
+<span class="fc" id="L86">        KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, new KeyValue(imageView.rotateProperty(), 0));</span>
+<span class="fc" id="L87">        KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), new KeyValue(imageView.rotateProperty(), shakeAngle));</span>
+<span class="fc" id="L88">        KeyFrame keyFrame3 = new KeyFrame(Duration.millis(durationMillis).multiply(2), new KeyValue(imageView.rotateProperty(), -shakeAngle));</span>
+<span class="fc" id="L89">        KeyFrame keyFrame4 = new KeyFrame(Duration.millis(durationMillis).multiply(3), new KeyValue(imageView.rotateProperty(), shakeAngle));</span>
+<span class="fc" id="L90">        KeyFrame keyFrame5 = new KeyFrame(Duration.millis(durationMillis).multiply(4), new KeyValue(imageView.rotateProperty(), 0));</span>
+
+<span class="fc" id="L92">        timeline.getKeyFrames().addAll(keyFrame1, keyFrame2, keyFrame3, keyFrame4, keyFrame5);</span>
+<span class="fc" id="L93">        timeline.setCycleCount(cycleCount);</span>
+<span class="fc" id="L94">        return timeline;</span>
+    }
+
+    public static ImageView throwMonBall(BallType type, StackPane root, ImageView source, ImageView target, int ticks, Runnable onFinished) {
+<span class="nc" id="L98">        String imageUrl = &quot;ball_&quot;;</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        if (type == NORMAL)        { imageUrl += &quot;normal&quot;; }</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        else if (type == SUPER)    { imageUrl += &quot;super&quot;;  }</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        else if (type == HYPER)    { imageUrl += &quot;hyper&quot;;  }</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        else if (type == MASTER)   { imageUrl += &quot;master&quot;; }</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        else if (type == WATER)    { imageUrl += &quot;water&quot;;  }</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        else if (type == NET)      { imageUrl += &quot;net&quot;;    }</span>
+<span class="nc" id="L105">        else                       { imageUrl += &quot;heal&quot;;   }</span>
+<span class="nc" id="L106">        imageUrl += &quot;.png&quot;;</span>
+
+        // Setup image and imageView for monball
+<span class="nc" id="L109">        Image image = ImageProcessor.showScaledItemImage(imageUrl);</span>
+<span class="nc" id="L110">        ImageView ballImageView = new ImageView(image);</span>
+<span class="nc" id="L111">        ballImageView.setFitWidth(50);</span>
+<span class="nc" id="L112">        ballImageView.setFitHeight(50);</span>
+<span class="nc" id="L113">        ballImageView.setVisible(false);</span>
+
+        // Init transitions
+<span class="nc" id="L116">        TranslateTransition initialTransition = new TranslateTransition(Duration.millis(10), ballImageView);</span>
+<span class="nc" id="L117">        TranslateTransition throwTransition = new TranslateTransition(Duration.millis(300), ballImageView);</span>
+<span class="nc" id="L118">        ScaleTransition growthTransition = new ScaleTransition(Duration.millis(200), ballImageView);</span>
+<span class="nc" id="L119">        ScaleTransition shrinkTransition = new ScaleTransition(Duration.millis(200), ballImageView);</span>
+<span class="nc" id="L120">        SequentialTransition sequentialScaleTransition = new SequentialTransition(growthTransition, shrinkTransition);</span>
+<span class="nc" id="L121">        RotateTransition rotateTransition = new RotateTransition(Duration.millis(400), ballImageView);</span>
+<span class="nc" id="L122">        ParallelTransition parallelTransition = new ParallelTransition(sequentialScaleTransition, rotateTransition);</span>
+<span class="nc" id="L123">        PauseTransition pauseTransition = new PauseTransition(Duration.millis(50));</span>
+<span class="nc" id="L124">        TranslateTransition monballFallTransition = new TranslateTransition(Duration.millis(100), ballImageView);</span>
+
+<span class="nc" id="L126">        List&lt;PauseTransition&gt; pauseTransitions = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L127">        List&lt;Timeline&gt; shakeTransitions = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        for (int i = 0; i &lt; ticks; i++) {</span>
+<span class="nc" id="L129">            PauseTransition pause = new PauseTransition(Duration.millis(1000));</span>
+<span class="nc" id="L130">            Timeline shakeTransition = buildShakeAnimation(ballImageView, 100, 5, 1);</span>
+<span class="nc" id="L131">            pause.setOnFinished(evt -&gt; shakeTransition.play());</span>
+<span class="nc" id="L132">            pauseTransitions.add(pause);</span>
+<span class="nc" id="L133">            shakeTransitions.add(shakeTransition);</span>
+        }
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        for (int i = 0; i &lt; ticks; i++) {</span>
+<span class="nc" id="L136">            int finalI = i;</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">            if (finalI + 1 == ticks) {</span>
+<span class="nc" id="L138">                shakeTransitions.get(i).setOnFinished(evt -&gt; onFinished.run());</span>
+            }
+            else {
+<span class="nc" id="L141">                shakeTransitions.get(i).setOnFinished(evt -&gt; pauseTransitions.get(finalI +1).play());</span>
+            }
+        }
+        // Move monball imageView to own trainer, then start throw ball animation
+<span class="nc" id="L145">        initialTransition.setToY(source.layoutYProperty().intValue());</span>
+<span class="nc" id="L146">        initialTransition.setToX(source.layoutXProperty().intValue() - 50);</span>
+<span class="nc" id="L147">        root.getChildren().add(ballImageView);</span>
+
+        // Setup other animations
+<span class="nc" id="L150">        ballImageView.setVisible(true);</span>
+<span class="nc" id="L151">        ballImageView.setEffect(new Glow(0.8));</span>
+<span class="nc" id="L152">        throwTransition.setToX(target.layoutXProperty().get() + target.layoutXProperty().intValue() - source.layoutXProperty().intValue() + 50);</span>
+<span class="nc" id="L153">        throwTransition.setToY(target.layoutYProperty().get() + target.layoutYProperty().intValue() - source.layoutYProperty().intValue() - 50);</span>
+
+<span class="nc" id="L155">        growthTransition.setByX(1.5);</span>
+<span class="nc" id="L156">        growthTransition.setByY(1.5);</span>
+
+<span class="nc" id="L158">        shrinkTransition.setToX(1.0);</span>
+<span class="nc" id="L159">        shrinkTransition.setToY(1.0);</span>
+
+<span class="nc" id="L161">        rotateTransition.setByAngle(360);</span>
+
+<span class="nc" id="L163">        monballFallTransition.setByY(50);</span>
+
+
+        // Set callbacks on finished
+<span class="nc" id="L167">        initialTransition.setOnFinished(evt     -&gt; throwTransition.play());</span>
+<span class="nc" id="L168">        throwTransition.setOnFinished(evt       -&gt; parallelTransition.play());</span>
+<span class="nc" id="L169">        growthTransition.setOnFinished(evt      -&gt; target.setVisible(false));</span>
+<span class="nc" id="L170">        shrinkTransition.setOnFinished(evt      -&gt; ballImageView.setEffect(null));</span>
+<span class="nc" id="L171">        parallelTransition.setOnFinished(evt    -&gt; pauseTransition.play());</span>
+<span class="nc" id="L172">        pauseTransition.setOnFinished(evt       -&gt; monballFallTransition.play());</span>
+<span class="nc" id="L173">        monballFallTransition.setOnFinished(evt -&gt; pauseTransitions.get(0).play());</span>
+
+        // Start callback chain
+<span class="nc" id="L176">        initialTransition.play();</span>
+
+<span class="nc" id="L178">        return ballImageView;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
