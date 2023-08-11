@@ -736,7 +736,6 @@ public class EncounterController extends Controller {
                                 EncounterOpponentController encounterOpponentController = encounterOpponentControllerHashMap.get(oResults._id());
                                 encounterOpponentController.showStatus(r.status(), false);
                             }
-                            // TODO: monster caught from @Fin
                             case MONSTER_CAUGHT -> {
                                 throwSuccessfulMonBall();
                                 monsterCaught = true;
@@ -821,7 +820,6 @@ public class EncounterController extends Controller {
                             .setHealthLabel(formatter.format(currentHealth) + "/" + formatter.format(maxHealth) + " HP")
                             .setLevelLabel("LVL " + monster.level())
                             .setExperienceBarValue((double) monster.experience() / requiredExperience(monster.level()));
-                    // TODO： add for refreshing the status im team
                     if (trainerId.equals(trainerStorageProvider.get().getTrainer()._id())) {
                         encounterOpponentStorage.addCurrentMonsters(opponent._id(), monster);
                         // if health is 0, then add to the team the information that the monster is died.
