@@ -485,7 +485,7 @@ public class IngameController extends Controller {
                         add(offsetToNotShowPhoneInScreen)
         );
 
-        checkForFirstMessages();
+        //checkForFirstMessages();
 
         //Setup Encounter
         checkIfEncounterAlreadyExist();
@@ -580,7 +580,7 @@ public class IngameController extends Controller {
         );
     }
 
-    private void changeRegion() {
+    private void changeArea() {
         disposables.add(trainersService.getTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER).subscribe(
                 trainer -> {
                     trainerStorageProvider.get().setTrainer(trainer);
@@ -672,42 +672,23 @@ public class IngameController extends Controller {
 
 
     public void listenToMonsters(ObservableList<Monster> monsters, String trainerId) {
-        disposables.add(eventListenerProvider.get().listen("trainers." + trainerId + ".monsters.*.*", Monster.class)
+        disposables.add(eventListenerProvider.get().listen("trainers." + trainerId + ".monsters.*.created", Monster.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     Monster monster = event.data();
-                    switch (event.suffix()) {
-                        case "created" -> {
-                            if (!root.getChildren().contains(receiveObjectPopUp)) {
-                                createMonsterReceivedPopUp(monster);
-                                monsters.add(monster);
-                            }
-                        }
-                        case "updated" -> {
-                        }
-                        case "deleted" -> {
-                            // Monster deleted
-                        }
+                    if (!root.getChildren().contains(receiveObjectPopUp)) {
+                        createMonsterReceivedPopUp(monster);
+                        monsters.add(monster);
                     }
                 }, error -> showError(error.getMessage())));
     }
 
     public void listenToItems(ObservableList<Item> items, String trainerId) {
-        disposables.add(eventListenerProvider.get().listen("trainers." + trainerId + ".items.*.*", Item.class)
+        disposables.add(eventListenerProvider.get().listen("trainers." + trainerId + ".items.*.created", Item.class)
                 .observeOn(FX_SCHEDULER).subscribe(event -> {
                     Item item = event.data();
-                    switch (event.suffix()) {
-                        case "created" -> {
-                            if (!root.getChildren().contains(receiveObjectPopUp)) {
-                                items.add(item);
-                                createItemReceivedPopUp(item);
-                            }
-                        }
-                        case "updated" -> {
-                            // Item used
-                        }
-                        case "deleted" -> {
-                            // Item deleted
-                        }
+                    if (!root.getChildren().contains(receiveObjectPopUp)) {
+                        items.add(item);
+                        createItemReceivedPopUp(item);
                     }
                 }, error -> showError(error.getMessage())));
     }
@@ -720,7 +701,7 @@ public class IngameController extends Controller {
                     moveTrainerDtos.add(moveTrainerDto);
                     if (moveTrainerDto._id().equals(trainerStorageProvider.get().getTrainer()._id())) {
                         if (!Objects.equals(moveTrainerDto.area(), trainerStorageProvider.get().getTrainer().area())) {
-                            changeRegion();
+                            changeArea();
                         }
                         int oldXValue = trainerStorageProvider.get().getX();
                         int oldYValue = trainerStorageProvider.get().getY();
@@ -2107,6 +2088,10 @@ public class IngameController extends Controller {
                                     }
                                     loading = false;
                                     root.getChildren().remove(loadingScreen);
+                                    checkForFirstMessages();
+                                    if (!GraphicsEnvironment.isHeadless()) {
+                                        AnimationBuilder.buildShakeAnimation(notificationBell, 500, 20, 2).play();
+                                    }
                                 }, error -> {
                                     PauseTransition pause = new PauseTransition(Duration.seconds(10));
                                     pause.setOnFinished(evt -> {

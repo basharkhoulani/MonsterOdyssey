@@ -2,6 +2,7 @@ package de.uniks.stpmon.team_m.controller.subController;
 
 import de.uniks.stpmon.team_m.controller.Controller;
 import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.utils.AnimationBuilder;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -36,12 +37,6 @@ public class NotificationListHandyController extends Controller {
     public void init(IngameController ingameController) {
         handyMessages = FXCollections.observableArrayList();
         this.ingameController = ingameController;
-        /*
-        shakeAnimation = AnimationBuilder.buildShakeAnimation(ingameController.notificationBell, 500, 30, 2);
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> ingameController.notificationBell.setVisible(true)));
-
-        timeline.play();
-*/
     }
 
     @Override
@@ -116,7 +111,7 @@ public class NotificationListHandyController extends Controller {
         }
 
         timeline.play();
-        //shakeAnimation.play();
+        AnimationBuilder.buildShakeAnimation(ingameController.notificationBell, 500, 20, 2).play();
     }
 
     public void displayLowHealthMessages() {
@@ -130,6 +125,6 @@ public class NotificationListHandyController extends Controller {
             duration++;
         }
         timeline.play();
-        //shakeAnimation.play();
+        AnimationBuilder.buildShakeAnimation(ingameController.notificationBell, 500, 20, 2).play();
     }
 }
