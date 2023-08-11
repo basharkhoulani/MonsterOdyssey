@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MonstersListController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">MonstersListController.java</span></div><h1>MonstersListController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.Item;
+import de.uniks.stpmon.team_m.dto.Monster;
+import de.uniks.stpmon.team_m.dto.MonsterTypeDto;
+import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.service.*;
+import de.uniks.stpmon.team_m.utils.*;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import java.awt.*;
+import java.net.URL;
+import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static de.uniks.stpmon.team_m.Constants.*;
+
+
+<span class="fc" id="L40">public class MonstersListController extends Controller {</span>
+    @FXML
+    public Tab othersTab;
+    @FXML
+    public Tab activeTeamTab;
+    @FXML
+    public Button closeButton;
+    @FXML
+    public Tab mondexTab;
+    @FXML
+    public ListView&lt;MonsterTypeDto&gt; monsterListViewMondex;
+    @FXML
+    public ImageView mapImageView;
+    @FXML
+    public ImageView monsterImageView;
+    @FXML
+    public Label monsterNameLabel;
+    @FXML
+    public ImageView firstTypeImageView;
+    @FXML
+    public ImageView secondTypeImageView;
+    @FXML
+    public TextFlow monsterDescriptionTextFlow;
+    @FXML
+    public Label locationsLabel;
+    @FXML
+    public Label typeLabel;
+    @FXML
+    public Label descriptionLabel;
+    @FXML
+    public Line seperationLine;
+    @Inject
+    Provider&lt;TrainersService&gt; trainersServiceProvider;
+    @Inject
+    Provider&lt;MonstersDetailController&gt; monstersDetailControllerProvider;
+    @Inject
+    UsersService usersService;
+    @Inject
+    RegionsService regionsService;
+    @Inject
+    TrainersService trainersService;
+    @Inject
+    MonstersService monstersService;
+    @Inject
+    Provider&lt;TrainerStorage&gt; trainerStorageProvider;
+    @Inject
+    Provider&lt;UserStorage&gt; userStorageProvider;
+    @Inject
+    Provider&lt;MonsterStorage&gt; monsterStorageProvider;
+    @Inject
+    public UserStorage usersStorage;
+    @Inject
+    public Provider&lt;PresetsService&gt; presetsServiceProvider;
+    @Inject
+    IngameController ingameController;
+    @FXML
+    public ListView&lt;Monster&gt; monsterListViewActive;
+    @FXML
+    public ListView&lt;Monster&gt; monsterListViewOther;
+    public VBox monsterListVBox;
+
+    public List&lt;Monster&gt; activeMonstersList;
+    public List&lt;Monster&gt; otherMonstersList;
+    private StackPane rootStackPane;
+    private Item item;
+    public Runnable onItemUsed;
+
+    @Inject
+<span class="fc" id="L108">    public MonstersListController() {</span>
+<span class="fc" id="L109">    }</span>
+
+    public void init(IngameController ingameController, VBox monsterListVBox, StackPane rootStackPane, Item item, Runnable onItemUsed) {
+<span class="fc" id="L112">        super.init();</span>
+<span class="fc" id="L113">        activeMonstersList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L114">        otherMonstersList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L115">        this.ingameController = ingameController;</span>
+<span class="fc" id="L116">        this.monsterListVBox = monsterListVBox;</span>
+<span class="fc" id="L117">        this.rootStackPane = rootStackPane;</span>
+<span class="fc" id="L118">        this.item = item;</span>
+<span class="fc" id="L119">        this.onItemUsed = onItemUsed;</span>
+<span class="fc" id="L120">    }</span>
+
+    @Override
+    public String getTitle() {
+<span class="fc" id="L124">        return resources.getString(&quot;MONSTERS&quot;);</span>
+    }
+
+    @Override
+    public Parent render() {
+<span class="fc" id="L129">        final Parent parent = super.render();</span>
+
+<span class="fc" id="L131">        disposables.add(monstersService.getMonsters(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L132">                .subscribe(list -&gt; disposables.add(presetsServiceProvider.get().getMonsters().observeOn(FX_SCHEDULER).subscribe(monsterTypeDtos -&gt; {</span>
+
+<span class="fc" id="L134">                    MonsterStorage monsterStorage = monsterStorageProvider.get();</span>
+<span class="fc" id="L135">                    monsterStorage.addMonsterTypeDtoLists(monsterTypeDtos);</span>
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">                    if (!monsterStorage.imagesAlreadyFetched()) {</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">                        for (MonsterTypeDto monsterTypeDto : monsterTypeDtos) {</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">                            if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L139">                                disposables.add(presetsService.getMonsterImage(monsterTypeDto.id()).observeOn(FX_SCHEDULER).subscribe(</span>
+                                        responseBody -&gt; {
+<span class="nc" id="L141">                                            Image monsterImage = ImageProcessor.resonseBodyToJavaFXImage(responseBody);</span>
+<span class="nc" id="L142">                                            monsterStorage.addMonsterImageToHashMap(monsterTypeDto.id(), monsterImage);</span>
+<span class="nc" id="L143">                                        }</span>
+                                ));
+                            }
+<span class="fc" id="L146">                        }</span>
+                    }
+
+<span class="fc bfc" id="L149" title="All 2 branches covered.">                    for (Monster monster : list) {</span>
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">                        for (MonsterTypeDto monsterTypeDto : monsterTypeDtos) {</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">                            if (monsterTypeDto.id() == monster.type()) {</span>
+<span class="fc" id="L152">                                monsterStorageProvider.get().addMonsterData(monster, monsterTypeDto, null);</span>
+<span class="fc" id="L153">                                break;</span>
+                            }
+<span class="fc" id="L155">                        }</span>
+<span class="fc" id="L156">                    }</span>
+<span class="fc" id="L157">                    activeMonstersList = list.stream()</span>
+<span class="fc" id="L158">                            .filter(monster -&gt; trainerStorageProvider.get().getTrainer().team().contains(monster._id()))</span>
+<span class="fc" id="L159">                            .collect(Collectors.toList());</span>
+<span class="fc" id="L160">                    sortActiveMonstersList();</span>
+
+<span class="fc" id="L162">                    otherMonstersList = list.stream()</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">                            .filter(monster -&gt; !trainerStorageProvider.get().getTrainer().team().contains(monster._id()))</span>
+<span class="fc" id="L164">                            .collect(Collectors.toList());</span>
+
+<span class="fc" id="L166">                    initOtherMonsterList(otherMonstersList);</span>
+<span class="fc" id="L167">                    initMonsterList(activeMonstersList);</span>
+<span class="pc bpc" id="L168" title="1 of 2 branches missed.">                    if (item != null) {</span>
+<span class="nc" id="L169">                        mondexTab.setDisable(true);</span>
+                    }
+                    else {
+<span class="fc" id="L172">                        mondexTab.setDisable(false);</span>
+<span class="fc" id="L173">                        loadMondex(monsterStorageProvider.get().getMonsterTypeDtoList());</span>
+<span class="fc" id="L174">                        showMondexDetails(false);</span>
+                    }
+
+                    // need this timer, because of the asynchronous fetching of image data. Otherwise, after opening
+                    // monsterList for the first time, there will be no images loaded into the listCells.
+                    // Another, better way, to handle this would be load all data in the loading screen, but that would
+                    // take some time
+<span class="fc" id="L181">                    Timer timer = new Timer();</span>
+
+<span class="fc" id="L183">                    TimerTask task = new TimerTask() {</span>
+                        @Override
+                        public void run() {
+<span class="fc" id="L186">                            monsterListViewMondex.refresh();</span>
+<span class="fc" id="L187">                            monsterListViewOther.refresh();</span>
+<span class="fc" id="L188">                            monsterListViewActive.refresh();</span>
+<span class="fc" id="L189">                        }</span>
+                    };
+
+<span class="fc" id="L192">                    timer.schedule(task, 1000);</span>
+<span class="fc" id="L193">                }, Throwable::printStackTrace))));</span>
+
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L196">            mapImageView.setImage(new Image(Objects.requireNonNull(App.class.getResource(MAPSYMBOL)).toString()));</span>
+        }
+
+<span class="fc" id="L199">        return parent;</span>
+    }
+
+    private void sortActiveMonstersList() {
+<span class="fc" id="L203">        List&lt;Monster&gt; sortedList = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        for (String id : trainerStorageProvider.get().getTrainer().team()) {</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">            for (Monster monster : activeMonstersList) {</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">                if (monster._id().equals(id)) {</span>
+<span class="fc" id="L207">                    sortedList.add(monster);</span>
+<span class="fc" id="L208">                    break;</span>
+                }
+<span class="fc" id="L210">            }</span>
+<span class="fc" id="L211">        }</span>
+<span class="fc" id="L212">        activeMonstersList = sortedList;</span>
+<span class="fc" id="L213">    }</span>
+
+    public void changeOrderUp(String id) {
+<span class="fc" id="L216">        int index = 0;</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        for (Monster monster : activeMonstersList) {</span>
+<span class="pc bpc" id="L218" title="1 of 2 branches missed.">            if (monster._id().equals(id)) {</span>
+<span class="fc" id="L219">                break;</span>
+            }
+<span class="nc" id="L221">            index++;</span>
+<span class="nc" id="L222">        }</span>
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">        if (index &gt; 0) {</span>
+<span class="nc" id="L224">            Monster monster = activeMonstersList.get(index);</span>
+<span class="nc" id="L225">            activeMonstersList.set(index, activeMonstersList.get(index - 1));</span>
+<span class="nc" id="L226">            activeMonstersList.set(index - 1, monster);</span>
+<span class="nc" id="L227">            updateTeam();</span>
+        }
+<span class="fc" id="L229">    }</span>
+
+    public void changeOrderDown(String id) {
+<span class="fc" id="L232">        int index = 0;</span>
+<span class="pc bpc" id="L233" title="1 of 2 branches missed.">        for (Monster monster : activeMonstersList) {</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">            if (monster._id().equals(id)) {</span>
+<span class="fc" id="L235">                break;</span>
+            }
+<span class="fc" id="L237">            index++;</span>
+<span class="fc" id="L238">        }</span>
+<span class="pc bpc" id="L239" title="1 of 2 branches missed.">        if (index &lt; activeMonstersList.size() - 1) {</span>
+<span class="nc" id="L240">            Monster monster = activeMonstersList.get(index);</span>
+<span class="nc" id="L241">            activeMonstersList.set(index, activeMonstersList.get(index + 1));</span>
+<span class="nc" id="L242">            activeMonstersList.set(index + 1, monster);</span>
+<span class="nc" id="L243">            updateTeam();</span>
+        }
+<span class="fc" id="L245">    }</span>
+
+    public void updateTeam() {
+<span class="nc" id="L248">        Trainer trainer = trainerStorageProvider.get().getTrainer();</span>
+<span class="nc" id="L249">        monsterListViewActive.getItems().clear();</span>
+<span class="nc" id="L250">        monsterListViewActive.getItems().addAll(activeMonstersList);</span>
+<span class="nc" id="L251">        List&lt;String&gt; team = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">        for (Monster monster1 : activeMonstersList) {</span>
+<span class="nc" id="L253">            team.add(monster1._id());</span>
+<span class="nc" id="L254">        }</span>
+<span class="nc" id="L255">        disposables.add(trainersService.updateTrainer(trainer.region(), trainer._id(), null, null, team, null, null)</span>
+<span class="nc" id="L256">                .observeOn(FX_SCHEDULER)</span>
+<span class="nc" id="L257">                .subscribe(t -&gt; trainerStorageProvider.get().setTrainer(t), Throwable::printStackTrace));</span>
+<span class="nc" id="L258">    }</span>
+
+    private void initMonsterList(List&lt;Monster&gt; monsters) {
+<span class="fc" id="L261">        monsterListViewActive.setCellFactory(param -&gt; new MonsterCell(</span>
+                resources,
+<span class="fc" id="L263">                presetsServiceProvider.get(),</span>
+                this,
+                null,
+                null,
+                this.ingameController,
+                false,
+                item,
+                monsterStorageProvider
+        ));
+<span class="fc" id="L272">        monsterListViewActive.getItems().addAll(monsters);</span>
+<span class="fc" id="L273">        monsterListViewActive.setFocusModel(null);</span>
+<span class="fc" id="L274">        monsterListViewActive.setSelectionModel(null);</span>
+<span class="fc" id="L275">    }</span>
+
+    private void initOtherMonsterList(List&lt;Monster&gt; monsters) {
+<span class="fc" id="L278">        monsterListViewOther.setCellFactory(param -&gt; new MonsterCell(</span>
+                resources,
+<span class="fc" id="L280">                presetsServiceProvider.get(),</span>
+                this,
+                null,
+                null,
+                this.ingameController,
+                true,
+                item,
+                monsterStorageProvider
+        ));
+<span class="fc" id="L289">        monsterListViewOther.getItems().addAll(monsters);</span>
+<span class="fc" id="L290">        monsterListViewOther.setFocusModel(null);</span>
+<span class="fc" id="L291">        monsterListViewOther.setSelectionModel(null);</span>
+<span class="fc" id="L292">    }</span>
+
+    public void onCloseMonsterList() {
+<span class="pc bpc" id="L295" title="1 of 2 branches missed.">        if (rootStackPane != null) {</span>
+<span class="fc" id="L296">            rootStackPane.getChildren().remove(monsterListVBox);</span>
+        }
+<span class="fc" id="L298">        ingameController.buttonsDisable(false);</span>
+<span class="fc" id="L299">    }</span>
+
+    public void removeFromTeam(Monster monster) {
+<span class="fc" id="L302">        List&lt;String&gt; team = trainerStorageProvider.get().getTrainer().team();</span>
+<span class="fc" id="L303">        team.remove(monster._id());</span>
+<span class="fc" id="L304">        updateBothLists(monsterListViewOther, otherMonstersList, monsterListViewActive, activeMonstersList, monster, team);</span>
+<span class="fc" id="L305">    }</span>
+
+    public void addToTeam(Monster monster) {
+<span class="nc bnc" id="L308" title="All 2 branches missed.">        if (trainerStorageProvider.get().getTrainer().team().size() &gt;= 6) {</span>
+<span class="nc" id="L309">            createLimitPopUp();</span>
+<span class="nc" id="L310">            return;</span>
+        }
+<span class="nc" id="L312">        List&lt;String&gt; team = trainerStorageProvider.get().getTrainer().team();</span>
+<span class="nc" id="L313">        team.add(monster._id());</span>
+<span class="nc" id="L314">        updateBothLists(monsterListViewActive, activeMonstersList, monsterListViewOther, otherMonstersList, monster, team);</span>
+<span class="nc" id="L315">    }</span>
+
+    private void createLimitPopUp() {
+<span class="nc" id="L318">        VBox limitVBox = new VBox();</span>
+<span class="nc" id="L319">        limitVBox.setId(&quot;limitVBox&quot;);</span>
+<span class="nc" id="L320">        limitVBox.setMaxHeight(popupHeight);</span>
+<span class="nc" id="L321">        limitVBox.setMaxWidth(popupWidth);</span>
+<span class="nc" id="L322">        limitVBox.getStyleClass().add(&quot;dialogTextFlow&quot;);</span>
+
+        // text field
+<span class="nc" id="L325">        TextFlow message = new TextFlow(new Text(resources.getString(&quot;LIMIT.MESSAGE&quot;)));</span>
+<span class="nc" id="L326">        message.setPrefWidth(popupWidth);</span>
+<span class="nc" id="L327">        message.setPrefHeight(textFieldHeight);</span>
+<span class="nc" id="L328">        message.setPadding(dialogTextFlowInsets);</span>
+<span class="nc" id="L329">        message.setTextAlignment(TextAlignment.CENTER);</span>
+
+<span class="nc" id="L331">        Button ok = new Button(resources.getString(&quot;OK&quot;));</span>
+<span class="nc" id="L332">        ok.getStyleClass().add(&quot;buttonsYellow&quot;);</span>
+<span class="nc" id="L333">        ok.setOnAction(event -&gt; ingameController.getRoot().getChildren().remove(limitVBox));</span>
+
+<span class="nc" id="L335">        limitVBox.getChildren().addAll(message, ok);</span>
+<span class="nc" id="L336">        ingameController.getRoot().getChildren().add(limitVBox);</span>
+<span class="nc" id="L337">    }</span>
+
+    private void updateBothLists(ListView&lt;Monster&gt; listViewAdd, List&lt;Monster&gt; listAdd, ListView&lt;Monster&gt; listViewRemove, List&lt;Monster&gt; listRemove, Monster monster, List&lt;String&gt; team) {
+<span class="fc" id="L340">        disposables.add(trainersService.updateTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id(), null, null, team, null, null)</span>
+<span class="fc" id="L341">                .observeOn(FX_SCHEDULER)</span>
+<span class="fc" id="L342">                .subscribe(t -&gt; trainerStorageProvider.get().setTrainer(t), Throwable::printStackTrace));</span>
+<span class="fc" id="L343">        listRemove.removeIf(remove -&gt; remove._id().equals(monster._id()));</span>
+<span class="fc" id="L344">        listViewRemove.getItems().clear();</span>
+<span class="fc" id="L345">        listViewRemove.getItems().addAll(listRemove);</span>
+<span class="fc" id="L346">        listAdd.add(monster);</span>
+<span class="fc" id="L347">        listViewAdd.getItems().clear();</span>
+<span class="fc" id="L348">        listViewAdd.getItems().addAll(listAdd);</span>
+<span class="fc" id="L349">    }</span>
+
+    private void loadMondex(List&lt;MonsterTypeDto&gt; monsterTypeDtoList) {
+<span class="pc bpc" id="L352" title="1 of 2 branches missed.">        for (MonsterTypeDto monsterTypeDto : monsterTypeDtoList) {</span>
+<span class="nc" id="L353">            monsterListViewMondex.setCellFactory(param -&gt; new MondexCell(this, resources));</span>
+<span class="nc" id="L354">            monsterListViewMondex.getItems().add(monsterTypeDto);</span>
+<span class="nc" id="L355">            monsterListViewMondex.setFocusModel(null);</span>
+<span class="nc" id="L356">            monsterListViewMondex.setSelectionModel(null);</span>
+<span class="nc" id="L357">        }</span>
+<span class="fc" id="L358">    }</span>
+
+    public boolean checkIfPlayerEncounteredMonster(MonsterTypeDto monsterTypeDto) {
+<span class="nc" id="L361">        return trainerStorageProvider.get().getTrainer().encounteredMonsterTypes().contains(monsterTypeDto.id());</span>
+    }
+
+    public void showMondexDetails(boolean visible) {
+<span class="fc" id="L365">        mapImageView.setVisible(visible);</span>
+<span class="fc" id="L366">        monsterImageView.setVisible(visible);</span>
+<span class="fc" id="L367">        monsterNameLabel.setVisible(visible);</span>
+<span class="fc" id="L368">        locationsLabel.setVisible(visible);</span>
+<span class="fc" id="L369">        typeLabel.setVisible(visible);</span>
+<span class="fc" id="L370">        firstTypeImageView.setVisible(visible);</span>
+<span class="fc" id="L371">        secondTypeImageView.setVisible(visible);</span>
+<span class="fc" id="L372">        descriptionLabel.setVisible(visible);</span>
+<span class="fc" id="L373">        monsterDescriptionTextFlow.setVisible(visible);</span>
+<span class="fc" id="L374">        seperationLine.setVisible(visible);</span>
+<span class="fc" id="L375">    }</span>
+
+    public void showMondexDetails(MonsterTypeDto monsterTypeDto) {
+
+
+        // setting description text
+<span class="nc" id="L381">        monsterDescriptionTextFlow.getChildren().clear();</span>
+<span class="nc" id="L382">        TextArea monsterDescriptionTextArea = new TextArea(monsterTypeDto.description());</span>
+<span class="nc" id="L383">        monsterDescriptionTextArea.setMaxWidth(monsterDescriptionTextFlow.getWidth());</span>
+<span class="nc" id="L384">        monsterDescriptionTextArea.setMaxHeight(monsterDescriptionTextFlow.getHeight());</span>
+<span class="nc" id="L385">        monsterDescriptionTextArea.setEditable(false);</span>
+<span class="nc" id="L386">        monsterDescriptionTextArea.setWrapText(true);</span>
+<span class="nc" id="L387">        monsterDescriptionTextArea.setFocusTraversable(false);</span>
+<span class="nc" id="L388">        monsterDescriptionTextArea.getStyleClass().add(&quot;monsterListBackground&quot;);</span>
+
+<span class="nc bnc" id="L390" title="All 2 branches missed.">        if (trainerStorageProvider.get().getTrainer().encounteredMonsterTypes().contains(monsterTypeDto.id())) {</span>
+<span class="nc" id="L391">            monsterImageView.setOpacity(1.0);</span>
+<span class="nc" id="L392">            monsterNameLabel.setText(monsterTypeDto.name());</span>
+        } else {
+<span class="nc" id="L394">            monsterImageView.setOpacity(0.2);</span>
+<span class="nc" id="L395">            monsterNameLabel.setText(&quot;???&quot;);</span>
+<span class="nc" id="L396">            monsterDescriptionTextArea.setText(&quot;???&quot;);</span>
+        }
+
+<span class="nc" id="L399">        monsterDescriptionTextFlow.getChildren().add(monsterDescriptionTextArea);</span>
+
+<span class="nc bnc" id="L401" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+            // setting monster image
+<span class="nc" id="L403">            monsterImageView.setImage(monsterStorageProvider.get().getMonsterImage(monsterTypeDto.id()));</span>
+
+            // setting type images
+<span class="nc" id="L406">            String typeImagePath1 = ABILITYPALETTE.get(monsterTypeDto.type().get(0));</span>
+<span class="nc" id="L407">            URL resourceType1 = Main.class.getResource(&quot;images/&quot; + typeImagePath1);</span>
+<span class="nc bnc" id="L408" title="All 2 branches missed.">            assert resourceType1 != null;</span>
+<span class="nc" id="L409">            Image typeImage1 = new Image(resourceType1.toString());</span>
+<span class="nc" id="L410">            firstTypeImageView.setImage(typeImage1);</span>
+
+<span class="nc bnc" id="L412" title="All 2 branches missed.">            if (monsterTypeDto.type().size() &gt; 1) {</span>
+<span class="nc" id="L413">                String typeImagePath2 = ABILITYPALETTE.get(monsterTypeDto.type().get(1));</span>
+<span class="nc" id="L414">                URL resourceType2 = Main.class.getResource(&quot;images/&quot; + typeImagePath2);</span>
+<span class="nc bnc" id="L415" title="All 2 branches missed.">                assert resourceType2 != null;</span>
+<span class="nc" id="L416">                Image typeImage2 = new Image(resourceType2.toString());</span>
+<span class="nc" id="L417">                secondTypeImageView.setImage(typeImage2);</span>
+<span class="nc" id="L418">            } else {</span>
+<span class="nc" id="L419">                secondTypeImageView.setImage(null);</span>
+            }
+        }
+<span class="nc" id="L422">        mapImageView.setOnMouseClicked(mouseEvent -&gt; ingameController.showMonsterLocaions(monsterTypeDto));</span>
+
+<span class="nc" id="L424">        showMondexDetails(true);</span>
+<span class="nc" id="L425">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

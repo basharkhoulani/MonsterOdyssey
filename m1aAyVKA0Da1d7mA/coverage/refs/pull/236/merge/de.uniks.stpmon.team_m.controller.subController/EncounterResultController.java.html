@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EncounterResultController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">EncounterResultController.java</span></div><h1>EncounterResultController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.App;
+import de.uniks.stpmon.team_m.controller.*;
+import de.uniks.stpmon.team_m.dto.Trainer;
+import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+
+public class EncounterResultController extends Controller {
+    @FXML
+    public VBox resultVBox;
+    @FXML
+    public Text informationText;
+    @FXML
+    public Button okButton;
+    @Inject
+    Provider&lt;EncounterController&gt; encounterController;
+    @Inject
+    Provider&lt;IngameController&gt; ingameControllerProvider;
+    @Inject
+    Provider&lt;MainMenuController&gt; mainMenuControllerProvider;
+    @Inject
+    Provider&lt;TrainerStorage&gt; trainerStorageProvider;
+    @Inject
+    TrainersService trainersService;
+    @Inject
+    Provider&lt;HardcoreDeathScreenController&gt; hardcoreDeathScreenControllerProvider;
+
+    private Boolean coinsEarned;
+    private Integer coinsAmount;
+    private HardcoreDeathScreenController hardcoreDeathScreenController;
+
+    @Inject
+<span class="fc" id="L41">    public EncounterResultController() {</span>
+<span class="fc" id="L42">    }</span>
+
+    public void init(App app) {
+<span class="fc" id="L45">        this.app = app;</span>
+<span class="fc" id="L46">    }</span>
+
+    public void clickOK() {
+<span class="fc" id="L49">        encounterController.get().destroy();</span>
+<span class="fc" id="L50">        Trainer trainer = trainerStorageProvider.get().getTrainer();</span>
+<span class="pc bpc" id="L51" title="5 of 6 branches missed.">        if (trainer.settings() != null &amp;&amp; trainer.settings().permaDeath() != null &amp;&amp; trainer.settings().permaDeath()</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">                &amp;&amp; informationText.getText().equals(resources.getString(&quot;YOU.FAILED&quot;))) {</span>
+<span class="nc" id="L53">            disposables.add(trainersService.deleteTrainer(trainerStorageProvider.get().getRegion()._id(), trainerStorageProvider.get().getTrainer()._id()).</span>
+<span class="nc" id="L54">                    observeOn(FX_SCHEDULER).subscribe(end -&gt; {</span>
+<span class="nc" id="L55">                        trainerStorageProvider.get().setTrainer(null);</span>
+<span class="nc" id="L56">                        trainerStorageProvider.get().setTrainerSprite(null);</span>
+<span class="nc" id="L57">                        trainerStorageProvider.get().setTrainerName(null);</span>
+<span class="nc" id="L58">                        trainerStorageProvider.get().setRegion(null);</span>
+<span class="nc" id="L59">                        hardcoreDeathScreenController = hardcoreDeathScreenControllerProvider.get();</span>
+<span class="nc" id="L60">                        hardcoreDeathScreenController.setValues(resources, preferences, resourceBundleProvider, hardcoreDeathScreenController, app);</span>
+<span class="nc" id="L61">                        destroy();</span>
+<span class="nc" id="L62">                        app.show(hardcoreDeathScreenController);</span>
+<span class="nc" id="L63">                    }));</span>
+<span class="nc" id="L64">            MainMenuController mainMenuController = mainMenuControllerProvider.get();</span>
+<span class="nc" id="L65">            mainMenuController.setTrainerDeletion();</span>
+<span class="nc" id="L66">            app.show(mainMenuController);</span>
+<span class="nc" id="L67">        } else {</span>
+<span class="fc" id="L68">            IngameController ingameController = ingameControllerProvider.get();</span>
+<span class="fc" id="L69">            ingameController.setCoinsAmount(getCoinsAmount());</span>
+<span class="fc" id="L70">            ingameController.setCoinsEarned(getCoinsEarned());</span>
+<span class="fc" id="L71">            ingameController.setIsNewStart(false);</span>
+<span class="fc" id="L72">            app.show(ingameController);</span>
+        }
+<span class="fc" id="L74">    }</span>
+
+    public void setInformationText(String text) {
+<span class="nc" id="L77">        informationText.setText(text);</span>
+<span class="nc" id="L78">    }</span>
+
+    public Boolean getCoinsEarned() {
+<span class="fc" id="L81">        return coinsEarned;</span>
+    }
+
+    public void setCoinsEarned(Boolean coinsEarned) {
+<span class="nc" id="L85">        this.coinsEarned = coinsEarned;</span>
+<span class="nc" id="L86">    }</span>
+
+    public Integer getCoinsAmount() {
+<span class="fc" id="L89">        return coinsAmount;</span>
+    }
+
+    public void setCoinsAmount(Integer coinsAmount) {
+<span class="nc" id="L93">        this.coinsAmount = coinsAmount;</span>
+<span class="nc" id="L94">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
