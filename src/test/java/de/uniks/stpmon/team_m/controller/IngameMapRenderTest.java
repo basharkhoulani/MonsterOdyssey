@@ -487,8 +487,8 @@ public class IngameMapRenderTest extends ApplicationTest {
                 List.of(),
                 0)));
 
-        when(eventListenerMock.listen("trainers.6475e595ac3946b6a812d865.monsters.*.*", Monster.class)).thenReturn(Observable.empty());
-        when(eventListenerMock.listen("trainers.6475e595ac3946b6a812d865.items.*.*", Item.class)).thenReturn(Observable.empty());
+        when(eventListenerMock.listen("trainers." + trainer._id() + ".monsters.*.created", Monster.class)).thenReturn(Observable.empty());
+        when(eventListenerMock.listen("trainers." + trainer._id() + ".items.*.created", Item.class)).thenReturn(Observable.empty());
 
         lenient().when(areasService.getAreas(any())).thenReturn(Observable.just(
                 List.of(new Area(
