@@ -363,8 +363,8 @@ public class IngameControllerTest extends ApplicationTest {
         when(eventListener.get().listen("encounters.*.trainers." + trainerStorageProvider.get().getTrainer()._id() + ".opponents.*.*", Opponent.class)).thenReturn(just(
                 new Event<>("encounters.*.trainers.6475e595ac3946b6a812d865,opponents.*.nothappening", null)));
 
-        when(eventListenerMock.listen("trainers.6475e595ac3946b6a812d865.monsters.*.*", Monster.class)).thenReturn(Observable.empty());
-        when(eventListenerMock.listen("trainers.6475e595ac3946b6a812d865.items.*.*", Item.class)).thenReturn(Observable.empty());
+        when(eventListenerMock.listen("trainers." + trainer._id() + ".monsters.*.created", Monster.class)).thenReturn(Observable.empty());
+        when(eventListenerMock.listen("trainers." + trainer._id() + ".items.*.created", Item.class)).thenReturn(Observable.empty());
 
         when(encounterOpponentsService.getTrainerOpponents(anyString(), anyString())).thenReturn(Observable.just(List.of()));
         lenient().when(encounterOpponentsService.getTrainerOpponents("646bab5cecf584e1be02598a", "6475e595ac3946b6a812d867")).thenReturn(Observable.just(List.of(
