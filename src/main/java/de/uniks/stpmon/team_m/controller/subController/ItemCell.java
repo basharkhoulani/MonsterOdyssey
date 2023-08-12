@@ -124,25 +124,12 @@ public class ItemCell extends ListCell<Item> {
             setStyle("-fx-background-color: #FFFFFF;");
         } else {
             this.itemTypeDto = itemMenuController.itemTypeHashMap.get(item.type());
-//            this.itemTypeDto = itemStorageProvider.get().getItemData(item._id()).getItemTypeDto();
             loadFXML();
             itemLabel.setText(itemTypeDto.name());
             itemNumber.setText("(" + item.amount() + ")");
 
-            if (itemStorageProvider.get().getItemData(item._id()) != null && itemStorageProvider.get().getItemData(item._id()).itemImage() != null) {
-                this.itemImage = itemStorageProvider.get().getItemData(item._id()).itemImage();
-                itemImageView.setImage(this.itemImage);
-            } else {
-                disposables.add(presetsService.getItemImage(itemTypeDto.id()).observeOn(FX_SCHEDULER)
-                        .subscribe(itemImageResBody -> {
-                            Image itemImage = ImageProcessor.resonseBodyToJavaFXImage(itemImageResBody);
-                            //itemMenuController.itemImageHashMap.put(item.type(), itemImage);
-                            itemStorageProvider.get().updateItemData(item, null, itemImage);
-                            this.itemImage = itemImage;
-                            itemImageView.setImage(this.itemImage);
-                        }, error -> itemMenuController.showError(error.getMessage())));
-            }
-
+            this.itemImage = itemStorageProvider.get().getItemImage(item.type());
+            itemImageView.setImage(this.itemImage);
             itemHBox.setOnMouseClicked(event -> {
                 openItemDescription(itemTypeDto, this.itemImage, item, () -> itemMenuController.onItemUsed(item));
                 itemMenuController.setItemNameLabel(itemTypeDto.name());

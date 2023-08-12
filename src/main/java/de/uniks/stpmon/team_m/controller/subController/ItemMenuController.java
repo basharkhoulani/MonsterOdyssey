@@ -10,6 +10,7 @@ import de.uniks.stpmon.team_m.dto.Item;
 import de.uniks.stpmon.team_m.dto.ItemTypeDto;
 import de.uniks.stpmon.team_m.service.TrainerItemsService;
 import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
 import de.uniks.stpmon.team_m.utils.ItemStorage;
 import de.uniks.stpmon.team_m.utils.TrainerStorage;
 import javafx.fxml.FXML;
@@ -102,7 +103,27 @@ public class ItemMenuController extends Controller {
     @Override
     public Parent render() {
         final Parent parent = super.render();
-        loadItems();
+
+        disposables.add(trainerItemsService.get().getItems(
+                trainerStorageProvider.get().getTrainer().region(),
+                trainerStorageProvider.get().getTrainer()._id(),
+                null
+        ).observeOn(FX_SCHEDULER).subscribe(items -> disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER).subscribe(itemTypes -> {
+            ItemStorage itemStorage = itemStorageProvider.get();
+            itemStorage.addItemTypeDtoLists(itemTypes);
+            if (!itemStorage.imagesAlreadyFetched()) {
+                for (ItemTypeDto itemType : itemTypes) {
+                    if (!GraphicsEnvironment.isHeadless()) {
+                        disposables.add(presetsService.getItemImage(itemType.id()).observeOn(FX_SCHEDULER).subscribe(image -> {
+                            Image itemImage = ImageProcessor.resonseBodyToJavaFXImage(image);
+                            itemStorage.addItemImageToHashMap(itemType.id(), itemImage);
+                        }, Throwable::printStackTrace));
+                    }
+                }
+            }
+            loadItems();
+
+        }, Throwable::printStackTrace))));
 
         if (!GraphicsEnvironment.isHeadless()) {
             closeInventoryIcon.setImage(new Image(Objects.requireNonNull(Main.class.getResource("images/close-x.png")).toExternalForm()));
