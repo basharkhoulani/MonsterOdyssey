@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbilityCell.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">AbilityCell.java</span></div><h1>AbilityCell.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.dto.AbilityDto;
+import de.uniks.stpmon.team_m.dto.Monster;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+
+import java.awt.*;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import static de.uniks.stpmon.team_m.Constants.ABILITYPALETTE;
+import static de.uniks.stpmon.team_m.Constants.TYPESCOLORPALETTE;
+
+
+<span class="fc" id="L24">public class AbilityCell extends ListCell&lt;AbilityDto&gt; {</span>
+
+    private final ResourceBundle resources;
+    private FXMLLoader loader;
+
+    @FXML
+    public VBox typeIcon;
+    @FXML
+    public ImageView typeImageView;
+    @FXML
+    public Label abilityName;
+    @FXML
+    public Text abilityDescription;
+    @FXML
+    public HBox rootAbilityBox;
+    @FXML
+    public Label damageLabel;
+    @FXML
+    public Label accuracyLabel;
+    @FXML
+    public Label usesLabel;
+    @FXML
+    public ImageView damageImageView;
+    @FXML
+    public ImageView accuracyImageView;
+    final Monster monster;
+<span class="fc" id="L50">    public AbilityCell(Monster monster, ResourceBundle resources) {</span>
+<span class="fc" id="L51">        this.monster = monster;</span>
+<span class="fc" id="L52">        this.resources = resources;</span>
+
+<span class="fc" id="L54">    }</span>
+
+    @Override
+    protected void updateItem(AbilityDto abilityDto, boolean empty) {
+<span class="fc" id="L58">        super.updateItem(abilityDto, empty);</span>
+<span class="pc bpc" id="L59" title="1 of 4 branches missed.">        if (abilityDto == null || empty) {</span>
+<span class="fc" id="L60">            setText(null);</span>
+<span class="fc" id="L61">            setGraphic(null);</span>
+<span class="fc" id="L62">            setStyle(&quot;-fx-background-color: #D6E8FE;&quot;);</span>
+        } else {
+<span class="fc" id="L64">            loadFXML();</span>
+<span class="fc" id="L65">            String typeColor = TYPESCOLORPALETTE.get(abilityDto.type());</span>
+<span class="fc" id="L66">            String style = &quot;-fx-background-color: &quot; + typeColor + &quot;;&quot;;</span>
+<span class="fc" id="L67">            typeIcon.setStyle(style);</span>
+
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">            if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L70">                String typeImagePath = ABILITYPALETTE.get(abilityDto.type());</span>
+<span class="nc" id="L71">                URL resourceType = Main.class.getResource(&quot;images/&quot; + typeImagePath);</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                assert resourceType != null;</span>
+<span class="nc" id="L73">                Image typeImage = new Image(resourceType.toString());</span>
+<span class="nc" id="L74">                typeImageView.setImage(typeImage);</span>
+<span class="nc" id="L75">                typeImageView.setFitHeight(45);</span>
+<span class="nc" id="L76">                typeImageView.setFitWidth(45);</span>
+
+<span class="nc" id="L78">                URL resourceDamage = Main.class.getResource(&quot;images/ability-electic.png&quot;);</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">                assert resourceDamage != null;</span>
+<span class="nc" id="L80">                Image damageImage = new Image(resourceDamage.toString());</span>
+<span class="nc" id="L81">                damageImageView.setImage(damageImage);</span>
+
+<span class="nc" id="L83">                URL resourceAccuracy = Main.class.getResource(&quot;images/accuracy.png&quot;);</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">                assert resourceAccuracy != null;</span>
+<span class="nc" id="L85">                Image accuracyImage = new Image(resourceAccuracy.toString());</span>
+<span class="nc" id="L86">                accuracyImageView.setImage(accuracyImage);</span>
+            }
+<span class="fc" id="L88">            abilityName.setText(abilityDto.name());</span>
+<span class="fc" id="L89">            abilityDescription.setText(abilityDto.description());</span>
+
+<span class="fc" id="L91">            damageLabel.setText(abilityDto.power() + &quot; DMG&quot;);</span>
+<span class="fc" id="L92">            accuracyLabel.setText((abilityDto.accuracy() * 100) + &quot; %&quot;);</span>
+<span class="fc" id="L93">            Integer uses = monster.abilities().get(String.valueOf(abilityDto.id()));</span>
+<span class="fc" id="L94">            usesLabel.setText(resources.getString(&quot;USES&quot;) + &quot;: &quot; + uses + &quot;/&quot;+ abilityDto.maxUses());</span>
+<span class="fc" id="L95">            setGraphic(rootAbilityBox);</span>
+<span class="fc" id="L96">            setText(null);</span>
+        }
+<span class="fc" id="L98">    }</span>
+
+    private void loadFXML() {
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        if (loader == null) {</span>
+<span class="fc" id="L102">            loader = new FXMLLoader(Main.class.getResource(&quot;views/AbilityCell.fxml&quot;));</span>
+<span class="fc" id="L103">            loader.setResources(resources);</span>
+<span class="fc" id="L104">            loader.setControllerFactory(c -&gt; this);</span>
+            try {
+<span class="fc" id="L106">                loader.load();</span>
+<span class="nc" id="L107">            } catch (Exception e) {</span>
+<span class="nc" id="L108">                System.out.println(&quot;Error loading AbilityCell.fxml&quot;);</span>
+<span class="fc" id="L109">            }</span>
+        }
+<span class="fc" id="L111">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

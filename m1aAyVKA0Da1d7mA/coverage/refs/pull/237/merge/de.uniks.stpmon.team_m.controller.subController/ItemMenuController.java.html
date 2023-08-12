@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ItemMenuController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stp-23-team-m</a> &gt; <a href="index.source.html" class="el_package">de.uniks.stpmon.team_m.controller.subController</a> &gt; <span class="el_source">ItemMenuController.java</span></div><h1>ItemMenuController.java</h1><pre class="source lang-java linenums">package de.uniks.stpmon.team_m.controller.subController;
+
+import de.uniks.stpmon.team_m.Constants;
+import de.uniks.stpmon.team_m.Constants.InventoryType;
+import de.uniks.stpmon.team_m.Main;
+import de.uniks.stpmon.team_m.controller.Controller;
+import de.uniks.stpmon.team_m.controller.EncounterController;
+import de.uniks.stpmon.team_m.controller.IngameController;
+import de.uniks.stpmon.team_m.dto.Item;
+import de.uniks.stpmon.team_m.dto.ItemTypeDto;
+import de.uniks.stpmon.team_m.service.TrainerItemsService;
+import de.uniks.stpmon.team_m.service.TrainersService;
+import de.uniks.stpmon.team_m.utils.ImageProcessor;
+import de.uniks.stpmon.team_m.utils.ItemStorage;
+import de.uniks.stpmon.team_m.utils.TrainerStorage;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+
+public class ItemMenuController extends Controller {
+    @FXML
+    public VBox inventoryRoot;
+    @FXML
+    public Label itemNameLabel;
+    @FXML
+    public ImageView closeInventoryIcon;
+    @FXML
+    public ListView&lt;Item&gt; itemListView;
+    @FXML
+    public VBox itemDescriptionBox;
+
+    @Inject
+    Provider&lt;TrainerItemsService&gt; trainerItemsService;
+    @Inject
+    Provider&lt;TrainerStorage&gt; trainerStorageProvider;
+    @Inject
+    TrainersService trainersService;
+    @Inject
+    Provider&lt;ItemStorage&gt; itemStorageProvider;
+
+    public VBox itemMenuBox;
+    IngameController ingameController;
+    private InventoryType inventoryType;
+    private List&lt;Integer&gt; npcItemList;
+<span class="nc" id="L57">    public final HashMap&lt;Integer, ItemTypeDto&gt; itemTypeHashMap = new HashMap&lt;&gt;();</span>
+    private StackPane rootStackPane;
+    private EncounterController encounterController;
+
+    @Inject
+<span class="nc" id="L62">    public ItemMenuController() {</span>
+<span class="nc" id="L63">    }</span>
+
+    public void init(
+            IngameController ingameController,
+            TrainersService trainersService,
+            Provider&lt;TrainerStorage&gt; trainerStorageProvider,
+            VBox itemMenuBox,
+            InventoryType inventoryType,
+            List&lt;Integer&gt; npcItemList,
+            StackPane rootStackPane
+    ) {
+<span class="nc" id="L74">        super.init();</span>
+<span class="nc" id="L75">        this.ingameController = ingameController;</span>
+<span class="nc" id="L76">        this.trainersService = trainersService;</span>
+<span class="nc" id="L77">        this.trainerStorageProvider = trainerStorageProvider;</span>
+<span class="nc" id="L78">        this.itemMenuBox = itemMenuBox;</span>
+<span class="nc" id="L79">        this.inventoryType = inventoryType;</span>
+<span class="nc" id="L80">        this.npcItemList = npcItemList;</span>
+<span class="nc" id="L81">        this.rootStackPane = rootStackPane;</span>
+<span class="nc" id="L82">    }</span>
+
+    public void initFromEncounter(
+            EncounterController encounterController,
+            TrainersService trainersService,
+            Provider&lt;TrainerStorage&gt; trainerStorageProvider,
+            VBox itemMenuBox,
+            InventoryType inventoryType,
+            List&lt;Integer&gt; npcItemList,
+            StackPane rootStackPane
+    ) {
+<span class="nc" id="L93">        super.init();</span>
+<span class="nc" id="L94">        this.encounterController = encounterController;</span>
+<span class="nc" id="L95">        this.trainersService = trainersService;</span>
+<span class="nc" id="L96">        this.trainerStorageProvider = trainerStorageProvider;</span>
+<span class="nc" id="L97">        this.itemMenuBox = itemMenuBox;</span>
+<span class="nc" id="L98">        this.inventoryType = inventoryType;</span>
+<span class="nc" id="L99">        this.npcItemList = npcItemList;</span>
+<span class="nc" id="L100">        this.rootStackPane = rootStackPane;</span>
+<span class="nc" id="L101">    }</span>
+
+    @Override
+    public Parent render() {
+<span class="nc" id="L105">        final Parent parent = super.render();</span>
+
+<span class="nc" id="L107">        disposables.add(trainerItemsService.get().getItems(</span>
+<span class="nc" id="L108">                trainerStorageProvider.get().getTrainer().region(),</span>
+<span class="nc" id="L109">                trainerStorageProvider.get().getTrainer()._id(),</span>
+                null
+<span class="nc" id="L111">        ).observeOn(FX_SCHEDULER).subscribe(items -&gt; disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER).subscribe(itemTypes -&gt; {</span>
+<span class="nc" id="L112">            ItemStorage itemStorage = itemStorageProvider.get();</span>
+<span class="nc" id="L113">            itemStorage.addItemTypeDtoLists(itemTypes);</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">            if (!itemStorage.imagesAlreadyFetched()) {</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">                for (ItemTypeDto itemType : itemTypes) {</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">                    if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L117">                        disposables.add(presetsService.getItemImage(itemType.id()).observeOn(FX_SCHEDULER).subscribe(image -&gt; {</span>
+<span class="nc" id="L118">                            Image itemImage = ImageProcessor.resonseBodyToJavaFXImage(image);</span>
+<span class="nc" id="L119">                            itemStorage.addItemImageToHashMap(itemType.id(), itemImage);</span>
+<span class="nc" id="L120">                        }, Throwable::printStackTrace));</span>
+                    }
+<span class="nc" id="L122">                }</span>
+            }
+<span class="nc" id="L124">            loadItems();</span>
+
+<span class="nc" id="L126">        }, Throwable::printStackTrace))));</span>
+
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
+<span class="nc" id="L129">            closeInventoryIcon.setImage(new Image(Objects.requireNonNull(Main.class.getResource(&quot;images/close-x.png&quot;)).toExternalForm()));</span>
+        }
+<span class="nc" id="L131">        closeInventoryIcon.setOnMouseClicked(evt -&gt; closeItemMenu());</span>
+<span class="nc" id="L132">        return parent;</span>
+    }
+
+    public void setItemNameLabel(String itemName) {
+<span class="nc" id="L136">        itemNameLabel.setText(itemName);</span>
+<span class="nc" id="L137">    }</span>
+
+    public void initItems(List&lt;Item&gt; itemList) {
+<span class="nc bnc" id="L140" title="All 2 branches missed.">        for (Item item : itemList) {</span>
+            // if inventoryType == sell  AND  the item cannot be used, then skip rendering item
+<span class="nc bnc" id="L142" title="All 4 branches missed.">            if (this.inventoryType == InventoryType.sellItems &amp;&amp; itemTypeHashMap.get(item.type()).use() == null) {</span>
+<span class="nc" id="L143">                continue;</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">            } else if (this.encounterController != null) {</span>
+<span class="nc" id="L145">                String use = itemTypeHashMap.get(item.type()).use();</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">                if (use == null) {</span>
+<span class="nc" id="L147">                    continue;</span>
+                } else {
+<span class="nc bnc" id="L149" title="All 4 branches missed.">                    if (use.equals(Constants.ITEM_USAGE_MONSTER_BOX) || use.equals(Constants.ITEM_USAGE_ITEM_BOX)) {</span>
+<span class="nc" id="L150">                        continue;</span>
+<span class="nc bnc" id="L151" title="All 4 branches missed.">                    } else if (use.equals(Constants.ITEM_USAGE_BALL) &amp;&amp; !encounterController.isWildEncounter()) {</span>
+<span class="nc" id="L152">                        continue;</span>
+                    }
+                }
+            }
+<span class="nc bnc" id="L156" title="All 2 branches missed.">            if (item.amount() == 0) {</span>
+<span class="nc" id="L157">                continue;</span>
+            }
+<span class="nc" id="L159">            initItem(item);</span>
+<span class="nc" id="L160">        }</span>
+<span class="nc" id="L161">    }</span>
+
+    public void initNpcItems() {
+<span class="nc bnc" id="L164" title="All 2 branches missed.">        for (Integer itemTypeID : npcItemList) {</span>
+            // dummy item, so we don't have to refactor everything in the ItemCell controller for now
+<span class="nc" id="L166">            initItem(new Item(&quot;1231245&quot;, &quot;npc&quot;, itemTypeID, 69));</span>
+<span class="nc" id="L167">        }</span>
+<span class="nc" id="L168">    }</span>
+
+    public void initItem(Item item) {
+<span class="nc" id="L171">        itemListView.setCellFactory(param -&gt; new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider, trainerStorageProvider.get()));</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">        if (ingameController != null) {</span>
+<span class="nc" id="L173">            ingameController.listenToItems(itemListView.getItems(), trainerStorageProvider.get().getTrainer()._id());</span>
+<span class="nc" id="L174">            itemListView.setCellFactory(param -&gt; new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, ingameController, itemStorageProvider, trainerStorageProvider.get()));</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">        } else if (encounterController != null) {</span>
+<span class="nc" id="L176">            encounterController.getIngameController().listenToItems(itemListView.getItems(), trainerStorageProvider.get().getTrainer()._id());</span>
+<span class="nc" id="L177">            itemListView.setCellFactory(param -&gt; new ItemCell(presetsService, this, resources, itemDescriptionBox, preferences, resourceBundleProvider, app, this::closeItemMenu, rootStackPane, encounterController, itemStorageProvider, trainerStorageProvider.get()));</span>
+        }
+<span class="nc" id="L179">        itemListView.getItems().add(item);</span>
+<span class="nc" id="L180">        itemListView.setFocusModel(null);</span>
+<span class="nc" id="L181">        itemListView.setSelectionModel(null);</span>
+<span class="nc" id="L182">    }</span>
+
+    public void onItemUsed(Item item) {
+<span class="nc bnc" id="L185" title="All 2 branches missed.">        if (item.amount() == 0) {</span>
+<span class="nc" id="L186">            itemListView.getItems().remove(item);</span>
+<span class="nc" id="L187">            return;</span>
+        }
+<span class="nc" id="L189">        Item itemCopy = new Item(</span>
+<span class="nc" id="L190">                item._id(),</span>
+<span class="nc" id="L191">                item.trainer(),</span>
+<span class="nc" id="L192">                item.type(),</span>
+<span class="nc" id="L193">                item.amount() - 1</span>
+        );
+<span class="nc" id="L195">        itemListView.getItems().set(itemListView.getItems().indexOf(item), itemCopy);</span>
+<span class="nc" id="L196">        itemStorageProvider.get().updateItemData(itemCopy, null, null);</span>
+<span class="nc" id="L197">        itemListView.refresh();</span>
+
+<span class="nc" id="L199">    }</span>
+
+    public void closeItemMenu() {
+<span class="nc bnc" id="L202" title="All 2 branches missed.">        if (ingameController != null) {</span>
+<span class="nc" id="L203">            ingameController.root.getChildren().remove(itemMenuBox);</span>
+<span class="nc" id="L204">            ingameController.buttonsDisable(false);</span>
+        }
+<span class="nc bnc" id="L206" title="All 2 branches missed.">        if (encounterController != null) {</span>
+<span class="nc" id="L207">            encounterController.rootStackPane.getChildren().remove(itemMenuBox);</span>
+<span class="nc" id="L208">            encounterController.buttonsDisableEncounter(false);</span>
+        }
+<span class="nc" id="L210">    }</span>
+
+    public InventoryType getInventoryType() {
+<span class="nc" id="L213">        return this.inventoryType;</span>
+    }
+
+    private void loadItems() {
+<span class="nc" id="L217">        disposables.add(presetsService.getItems().observeOn(FX_SCHEDULER)</span>
+<span class="nc" id="L218">                .subscribe(itemTypes -&gt; {</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">                    for (ItemTypeDto itemType : itemTypes) {</span>
+<span class="nc" id="L220">                        itemTypeHashMap.put(itemType.id(), itemType);</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">                        trainerStorageProvider.get().getItems().stream().filter(item -&gt; item.type() == itemType.id()).findFirst().ifPresent(relatedItem -&gt; itemStorageProvider.get().addItemData(relatedItem, itemType, null));</span>
+<span class="nc" id="L222">                    }</span>
+
+<span class="nc bnc" id="L224" title="All 2 branches missed.">                    if (this.inventoryType == InventoryType.buyItems) {</span>
+<span class="nc" id="L225">                        initNpcItems();</span>
+                    } else {
+                        // Items are now saved in trainerStorage
+<span class="nc" id="L228">                        initItems(trainerStorageProvider.get().getItems());</span>
+                    }
+<span class="nc" id="L230">                }, error -&gt; showError(error.getMessage())));</span>
+<span class="nc" id="L231">    }</span>
+
+    public void updateListView() {
+<span class="nc" id="L234">        this.itemListView.getItems().clear();</span>
+<span class="nc" id="L235">        initItems(trainerStorageProvider.get().getItems());</span>
+<span class="nc" id="L236">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
