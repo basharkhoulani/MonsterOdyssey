@@ -1,0 +1,216 @@
+\subsection{User Storys}
+Die User Storys stellen eine vom Nutzer mögliche Aktion mit einer Ausgangssituation, der jeweiligen Aktion für die User Story und einer Endsituation dar. Im Folgenden werden die User Storys des ersten Sprints des dritten Releases beschrieben und es wird gegebenfalls bei einer starken Abweichung zwischen der benötigten Zeit und der geschätzten Zeit der jeweiligen Story begründet, warum die geschätzte Zeit nicht für die Umsetzung der User Story ausreichend war. Eine Auflistung aller User Storys mit der jeweiligen benötigten Zeit und der jeweiligen geschätzten Zeit ist in der Tabelle~\ref{tab:story} zu finden. 
+\subsubsection{Beschreibung der Storys}
+
+Im Folgenden werden die Storys beschrieben. Dabei wird es auf die erzielte beziehungsweise gewünschte Funktionalität eingegangen, die durch eine Aktion des Nutzers erfolgt.
+
+\textbf{\hyperlink{T216}{\hypertarget{S216}{STP23M-216}}: Start a dialog with NPC}
+
+Durch diese Story wird die Funktionalität des Dialogsystems übergangsweise implementiert. Somit kann der Nutzer mit einem beliebigen NPC-Trainer mittels der Interaktionstaste einen Dialog starten. Die Dialogstexte werden von dem Team Magical Studios bereitgestellt und entsprechend in die angebotenen Sprachen übersetzt.
+
+\textbf{\hyperlink{T217}{\hypertarget{S217}{STP23M-217}}: Close Dialog with NPC}
+
+Der laufende Dialog mit dem NPC-Trainer soll mit dieser Story beendet werden können, um das Spiel fortzusetzen. Dabei muss das Ende des Dialogs erreicht werden, um den Dialog beenden zu können. 
+
+\textbf{\hyperlink{T218}{\hypertarget{S218}{STP23M-218}}: Next Dialog with NPC}
+
+Diese Story ermöglicht es dem Nutzer, mit dem nächsten Dialogabschnitt mit dem NPC-Trainer fortzufahren. Es werden dabei möglicherweise Dialogoptionen beziehungsweise Fragen seitens des NPC-Trainers angezeigt, auf die der Nutzer beim Fortfahren reagieren soll.
+
+\textbf{\hyperlink{T219}{\hypertarget{S219}{STP23M-219}}: Starter Monsters Popup}
+
+Der Nutzer interagiert mit dem NPC-Trainer für Starter-Monster in einem geöffneten Dialogfenster. Nach Drücken der Interaktionstaste öffnet sich ein Popup, das Starter-Monster in einer Karussellansicht mit kurzen Beschreibungen und Attributen zeigt.
+
+\textbf{\hyperlink{T220}{\hypertarget{S220}{STP23M-220}}: Choose Starter Monster}
+
+Das Popup für die Auswahl der Starter-Monster wird angezeigt. Der Nutzer wählt ein beliebiges Monster aus und das Popup schließt sich daraufhin. Es öffnet sich ein neues Popup, in dem das gewählte Monster dargestellt wird.
+
+\textbf{\hyperlink{T221}{\hypertarget{S221}{STP23M-221}}: Close Monster Received Popup}
+
+Durch diese Story kann der Nutzer einen weiteren Dialogabschnitt von dem NPC-Trainer für Starter-Monster sehen, wenn der Nutzer das Popup des Erhalts des Starter-Monsters schließt. 
+
+\textbf{\hyperlink{T222}{\hypertarget{S222}{STP23M-222}}: Starter Monster already Received}
+
+Mit dieser Story erhält der Nutzer einen Dialogabschnitt von dem NPC-Trainer für Starter-Monster, dass der Nutzer bereits Starter-Monster erhalten hat. Dies erfolgt, sobald der Nutzer mit dem NPC-Trainer für Starter-Monster interagiert und bereits Starter-Monster besitzt.
+
+\textbf{\hyperlink{T223}{\hypertarget{S223}{STP23M-223}}: Start an Encounter with a Trainer}
+
+Ziel dieser Story ist es, einen Kampf mit einem (NPC-)Trainer zu starten. Dabei wird ein Dialog mit dem Trainer gestartet, um die Kampfszene einzuleiten. Es erfolgt beim Abschließen des Dialogs eine Ankündigung für den Nutzer, dass der Kampf in Kürze gestartet wird.
+
+\textbf{\hyperlink{T224}{\hypertarget{S224}{STP23M-224}}: Switch to Encounter Scene Trainer}
+
+Der Nutzer sieht die Ankündigung, dass der Kampf in Kürze gestartet wird. Der Nutzer bestätigt die Ankündigung mit der Interaktionstaste und die Szene wechselt daraufhin zum Kampfbildschirm. In diesem Fall ist der Kampf ein Kampf gegen einen (NPC-)Trainer.
+
+\textbf{\hyperlink{T227}{\hypertarget{S227}{STP23M-227}}: Heal Monsters Popup}
+
+Nachdem der Nutzer mit der Krankenschwester durch einen Dialog interagiert hat, öffnet sich ein Bestätigungsfenster für das Heilen der Monster. Der Nutzer kann sich entscheiden, mit dem Heilen der Monster fortzufahren oder das Heilen zu verweigern.
+
+\textbf{\hyperlink{T228}{\hypertarget{S228}{STP23M-228}}: Heal Monsters}
+
+Durch diese Story kann der Nutzer seine Monster heilen. Der Nutzer sieht das Bestätigungsfenster und bestätigt die Aktion. Daraufhin wird der Dialog mit der Krankenschwester fortgesetzt.
+
+\textbf{\hyperlink{T229}{\hypertarget{S229}{STP23M-229}}: Refuse Heal Monsters}
+
+Der Nutzer sieht das Bestätigungsfenster für die Aktion des Heilens. Dabei kann der Nutzer das Heilen der Monster verweigern. Die Krankenschwester antwortet in dem Dialog entsprechend. 
+
+\textbf{\hyperlink{T230}{\hypertarget{S230}{STP23M-230}}: Start a dialog with Nurse}
+
+Das Dialogsystem wird mit dieser Story erweitert, sodass der Nutzer spezielle Interaktionsdialoge beim Sprechen mit einer Krankenschwester erhält. Der Nutzer kann somit mit einer Krankenschwester beim Drücken der Interaktionstaste einen Dialog starten, wenn sie voreinander stehen.
+
+\textbf{\hyperlink{T231}{\hypertarget{S231}{STP23M-231}}: Start a dialog with NPC Encounter}
+
+Durch diese Story wird es dem Nutzer ermöglicht, mit anderen Trainern zu kämpfen. Der Kampf kann dann begonnen werden, sobald der Nutzer mit einem Trainer einen Dialog gestartet hat. Dabei werden bei NPC-Trainern Beispielsdialoge vor dem Kampf eingeblendet.
+
+\textbf{\hyperlink{T232}{\hypertarget{S232}{STP23M-232}}: Start a dialog with NPC Starter Monster}
+
+Der Erhalt des Starter-Monsters erfolgt mit dieser Story. Der Nutzer beginnt einen Dialog mit dem NPC-Trainer für Starter-Monster, der dem Nutzer eine Auswahl an Starter-Monstern anbietet.
+
+\textbf{\hyperlink{T234}{\hypertarget{S234}{STP23M-234}}: Show Abilities}
+
+Der Nutzer befindet sich in der Kampfszene. Beim Drücken des 'Fähigkeiten'-Knopfs sieht der Nutzer die möglichen Fähigkeiten, die sein jetziges Monster anwenden kann.
+
+\textbf{\hyperlink{T235}{\hypertarget{S235}{STP23M-235}}: Use an Ability}
+
+Das Ziel dieser Story ist es, eine Fähigkeit des jetzigen Monsters anzuwenden. Dabei sieht der Nutzer die Leiste mit den vorhandenen Fähigkeiten des jetzigen Monster und drückt auf den Knopf eine Fähigkeit auf der Leiste. Es wird der Zug gesetzt und die Fähigkeit angewandt.
+
+\textbf{\hyperlink{T251}{\hypertarget{S251}{STP23M-251}}: Show Pause Menu}
+
+Der Nutzer befindet sich im Spielbildschirm und möchte beispielsweise das Spiel verlassen. Er drückt auf den Knopf des Pausemenüs, dann erscheint das Pausemenü, mit dem der Nutzer das Spiel verlassen kann.
+
+\textbf{\hyperlink{T252}{\hypertarget{S252}{STP23M-252}}: Show Settings Menu}
+
+Der Nutzer sieht das Pausemenü, mit welchem er auf das Einstellungsmenü navigieren kann. Der Nutzer drückt auf den Knopf 'Einstellungen', wodurch das Einstellungsmenü erscheint.
+
+\textbf{\hyperlink{T253}{\hypertarget{S253}{STP23M-253}}: Show Audio Settings}
+
+Durch diese Story kann der Nutzer auf die Toneinstellungen navigieren. Der Nutzer sieht das Einstellungsmenü und drückt auf die Toneinstellungen. Dann erscheint das Einstellungsfenster für den Ton.
+
+\textbf{\hyperlink{T254}{\hypertarget{S254}{STP23M-254}}: Change Audio Volume}
+
+Ziel dieser Story ist es, die Lautstärke des Tons zu verwalten. Der Nutzer sieht die Toneinstellungen inklusive des Schiebereglers. Er zieht den Regler nach rechts und reduziert dadurch die Lautstärke des Tons.
+
+\textbf{\hyperlink{T255}{\hypertarget{S255}{STP23M-255}}: Close Audio Settings}
+
+Durch diese Story kann der Nutzer das Einstellungsfenster für den Ton schließen. Dabei drückt der Nutzer auf Pfeilknopf und das Einstellungsmenü wird angezeigt.
+
+\textbf{\hyperlink{T261}{\hypertarget{S261}{STP23M-261}}: Go Back from Settings}
+
+Der Nutzer sieht das Einstellungsmenü und drückt dabei auf den Pfeilknopf. Es wird infolgedessen das Pausemenü angezeigt.
+
+\textbf{\hyperlink{T262}{\hypertarget{S262}{STP23M-262}}: Show Trainer Settings}
+
+Der aktuelle Bildschirm zeigt das Einstellungsmenü. Der Nutzer drückt dabei den Knopf für die Trainereinstellungen und das Fenster dafür wird entsprechend dargestellt.
+
+\textbf{\hyperlink{T263}{\hypertarget{S263}{STP23M-263}}: Change Trainer Character}
+
+Die Trainereinstellungen werden auf dem Bildschirm angezeigt. Der Nutzer aktualisiert den Charakter seines Trainers und drückt dabei den Aktualisierungsknopf. Hierdurch wird der Trainer aktualisiert.
+
+\textbf{\hyperlink{T264}{\hypertarget{S264}{STP23M-264}}: Delete Trainer Popup}
+
+Der Nutzer sieht die Trainereinstellungen und drückt darin auf den Knopf 'Löschen'. Es erscheint dann ein Popup, in dem der Prozess des Löschens vom Nutzer bestätigt werden soll.
+
+\textbf{\hyperlink{T265}{\hypertarget{S265}{STP23M-265}}: Delete Trainer}
+
+Das Popup für das Löschen des Trainers wird angezeigt. Der Nutzer bestätigt das Löschen und der Bildschirm wechselt zum Mainmenü mit einem Bestätigungstext.
+
+\textbf{\hyperlink{T267}{\hypertarget{S267}{STP23M-267}}: New Ingame}
+
+Der Nutzer erstellt einen neuen Trainer und steigt in das Spiel ein. Es erscheinen nach ein paar Sekunden neue Nachrichten auf dem futuristischen Handy, die für den Nutzer eine Hilfestellung darstellen. 
+
+\textbf{\hyperlink{T268}{\hypertarget{S268}{STP23M-268}}: Show Notification Messages}
+
+Der Spielbildschirm wird mit ungelesenen Nachrichten auf dem futuristischen Handy dargestellt. Der Nutzer drückt auf das Handy und die ungelesenen Nachrichten werden angezeigt.
+
+\textbf{\hyperlink{T269}{\hypertarget{S269}{STP23M-269}}: Close Phone}
+
+Durch diese Story kann der Nutzer das futuristische Handy schließen. Er drückt dabei auf den Knopf 'Schließen' und das Handy wird zur ursprünglichen Größe verwandelt. 
+
+\textbf{\hyperlink{T270}{\hypertarget{S270}{STP23M-270}}: Notification After Starter Monster}
+
+Diese Story ermöglicht es dem Nutzer eine Hilfestellung nach dem Erhalt des Starter-Monsters zu erhalten. Der Nutzer erhält das Starter-Monster und als Folge daraus werden neue Nachrichten an das futuristische Handy mit einer Hilfestellung verschickt.
+
+\textbf{\hyperlink{T271}{\hypertarget{S271}{STP23M-271}}: Notification After Low Health Monsters}
+
+Der Nutzer hat einen Kampf verlassen, nach dem seine Monster niedrige Lebenspunkte haben. Der Nutzer erhält auf dem futuristischen Handy neue Nachrichten, die den Nutzer auf die Krankenschwester in 'Moncenter' hinweisen.
+
+\textbf{\hyperlink{T278}{\hypertarget{S278}{STP23M-278}}: Close Trainer Settings}
+
+Mit dieser Story kann der Nutzer die geöffneten Trainereinstellungen schließen. Dabei drückt der Nutzer auf den Pfeilknopf und es wird das Einstellungsmenü angezeigt.
+\subsubsection{Bewertung der Storys}
+
+Im Folgenden werden die Storys bewertet, welche eine starke Abweichung zwischen der benötigten Zeit und der geschätzten Zeit aufweisen.
+
+\textbf{\hyperlink{T216}{\hypertarget{S216}{STP23M-216}}: Start a dialog with NPC}
+
+Diese Story wurde mit fünf Story Points geschätzt und beträgt somit fünf Stunden als geschätzte Zeit. Der Entwickler benötigte dafür allerdings sechs Stunden und 40 Minuten. Der Grundaufbau des Dialogs und die entsprechende Übersetzung in die angebotenen Sprachen haben länger als erwartet benötigt. Dafür sind die anderen Storys \hyperlink{T217}{\hypertarget{S217}{STP23M-217}} und \hyperlink{T218}{\hypertarget{S218}{STP23M-218}} besser ausgefallen, da die Grundstruktur bereits etabliert ist.
+
+\textbf{\hyperlink{T220}{\hypertarget{S220}{STP23M-220}}: Choose Starter Monster}
+
+Die Funktionalität des Erhalts des Starter-Monsters beträgt als Story drei Story Points und somit drei Stunden als geschätzte Zeit. Der Entwickler benötigte aber vier Stunden insgesamt für den Abschluss der Story. Dies hängt damit zusammen, dass die Serverkommunikation, das Verbinden zwischen dem Client und dem Server sowie das Fortsetzen des Dialogs sich schwieriger als erwartet dargestellt hat.
+
+\textbf{\hyperlink{T223}{\hypertarget{S223}{STP23M-223}}: Start an Encounter with a Trainer}
+
+Die Story hat einen Story Point und somit beträgt die geschätzte Zeit eine Stunde. Allerdings konnte diese Story während des ersten Sprints nicht erledigt werden, da die Recherche über benötigte Informationen aus der Serverdokumentation erforderlich war und der Sprintzeitraum bis dahin nicht ausgereicht hatte.
+
+\textbf{\hyperlink{T224}{\hypertarget{S224}{STP23M-224}}: Switch to Encounter Scene Trainer}
+
+Diese Story beträgt fünf Story Points und somit hat fünf Stunden als geschätzte Zeit. Die Story konnte nicht innerhalb der geschätzten Zeit erledigt werden, da der Entwickler Verständisprobleme mit dem Erhalt der Ereignisse aus dem Server für den Kampfstart hatte. Dadurch hat sich der Abschluss dieser Story wesentlich verzögert.
+
+\textbf{\hyperlink{T228}{\hypertarget{S228}{STP23M-228}}: Heal Monsters}
+
+Die Funktionalität der Heilung der Monsters wurde mit zwei Story Points und somit mit zwei Stunden geschätzt. Sie wurde aber innerhalb von fünf Minuten von dem Entwickler implementiert, da der Entwickler bereits Erfahrung mit dem Dialogsystem und den Serverabfragen hat.
+
+\textbf{\hyperlink{T229}{\hypertarget{S229}{STP23M-229}}: Refuse Heal Monsters}
+
+Das Verweigern der Heilung der Monsters wurde mit einem Story Point und mit einer Stunde geschätzt. Es wurde aber innerhalb von fünf Minuten von dem Entwickler implementiert, da der Entwickler bereits Erfahrung mit der Heilungsfunktionalität hat.
+
+\textbf{\hyperlink{T231}{\hypertarget{S231}{STP23M-231}}: Start a dialog with NPC Encounter}
+
+Diese Story wurde mit einem Story Point und einer Stunde geschätzt. Der Entwickler benötigte aber fünf Minuten zum Erledigen der Story, da er sich mit dem Dialogsystem auskennt und somit die Story schneller erledigen konnte.
+
+\textbf{\hyperlink{T234}{\hypertarget{S234}{STP23M-234}}: Show Abilities}
+
+Das Anzeigen der Fähigkeiten des eigenen Monsters hat als Story drei Story Points und wurde mit drei Stunden geschätzt. Aufgrund von fehlender Zeit in dem ersten Sprint und fehlender Struktur der Kampfszene konnte die Story nicht erledigt werden und wurde in den zweiten Sprint verschoben.
+
+\textbf{\hyperlink{T235}{\hypertarget{S235}{STP23M-235}}: Use an Ability}
+
+Diese Story wurde mit vier Story Points und somit mit vier Stunden geschätzt. Da das Anzeigen der Fähigkeiten nicht implementiert worden ist, konnte diese Aufgabe auch nicht erledigt werden. Die Story wurde deshalb in den zweiten Sprint verschoben. 
+
+\textbf{\hyperlink{T251}{\hypertarget{S251}{STP23M-251}}: Show Pause Menu}
+
+Die Story wurde mit einem Story Point und somit mit einer Stunde geschätzt. Der Entwickler hat aber für das Erledigen der Story sechs Stunden und 30 Minuten gebraucht. Da das Pausemenü neu entworfen wurde, hat der Entwickler mehr Zeit als erwartet benötigt, um das neue Design zu implementieren. 
+
+\textbf{\hyperlink{T252}{\hypertarget{S252}{STP23M-252}}: Show Settings Menu}
+
+Das Anzeigen des Einstellungsmenüs hat als Story zwei Story Points und beträgt als geschätzte Zeit zwei Stunden. Die Story wurde von dem Entwickler innerhalb von vier Stunden erledigt und somit mehr als geschätzt, da der Entwickler Verbesserungsvorschläge seitens des Scrum-Masters umgesetzt hatte.
+
+\textbf{\hyperlink{T254}{\hypertarget{S254}{STP23M-254}}: Change Audio Volume}
+
+Die Funktionalität des Schiebereglers in den Toneinstellungen hat als Story drei Story Points und wurde somit mit drei Stunden geschätzt. Der Entwickler hat für die Story eine Stunde verbraucht, da der Entwickler bereits Erfahrung mit den Toneinstellungen in Kombination mit dem Task \hyperlink{T357}{\hypertarget{S357}{STP23M-357}} hatte.
+
+\textbf{\hyperlink{T263}{\hypertarget{S263}{STP23M-263}}: Change Trainer Character}
+
+Diese Story wurde mit vier Story Points und somit mit vier Stunden geschätzt. Der Entwickler hat dafür zwei Stunden und 20 Minuten benötigt. Aufgrund von bereits bestehenden Erfahrungen mit den Charakteren und Trainereinstellungen hat der Entwickler die Story schneller als erwartet erledigt.
+
+\textbf{\hyperlink{T264}{\hypertarget{S264}{STP23M-264}}: Delete Trainer Popup}
+
+Die Story wurde mit einem Story Point und somit mit einer Stunde geschätzt. Der Entwickler hat für die Story dennoch zwei Stunden und 30 Minuten benötigt. Da in dieser Story auch ein neues Design für das Popup hinzugekommen ist, erfolgte das Erledigen der Story mit mehr Aufwand.
+
+\textbf{\hyperlink{T267}{\hypertarget{S267}{STP23M-267}}: New Ingame}
+
+Das Anzeigen des futuristischen Handys und der Glocke beim neuen Einstieg in das Spiel wurde als Story mit zwei Story Points und somit mit zwei Stunden geschätzt. Der Entwickler benötigte für die Story allerdings 40 Minuten, da er sich mit entwurfstechnischen Implementierungen gut auskennt.
+
+\textbf{\hyperlink{T268}{\hypertarget{S268}{STP23M-268}}: Show Notification Messages}
+
+Diese Story wurde mit fünf Story Points und mit fünf Stunden geschätzt. Der Entwickler konnte die Story in drei Stunden und 30 Minuten erledigen, da er die Grundstruktur des Handys in der Story \hyperlink{T267}{\hypertarget{S267}{STP23M-267}} etabliert hatte und sie in dieser Story mit der Funktionalität erweitert hat.
+
+\textbf{\hyperlink{T269}{\hypertarget{S269}{STP23M-269}}: Close Phone}
+
+Die Story wurde mit einem Story Point und mit einer Stunde geschätzt. Der Entwickler hat für das Erledigen der Story lediglich fünf Minuten benötigt, da er sich mit der Funktionalität des futuristischen Handys bereits auskennt.
+
+\textbf{\hyperlink{T271}{\hypertarget{S271}{STP23M-271}}: Notification After Low Health Monsters}
+
+Das Anzeigen von Hilfestellung nach dem Verlust eines Kampfs hat als Story zwei Story Points und wurde somit mit zwei Stunden geschätzt. Da der Kampf in diesem Sprint nicht vollständig implementiert werden konnte, wurde die Story in den zweiten Sprint verschoben.
+
+\textbf{\hyperlink{T278}{\hypertarget{S278}{STP23M-278}}: Close Trainer Settings}
+
+Diese Story wurde mit einem Story Point und mit einer Stunde geschätzt. Der Entwickler hat für die Story fünf Minuten benötigt, da er die betroffenen Ansichten selbst implementiert hat, da er darin bereits Erfahrungen hatte.

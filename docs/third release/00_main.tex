@@ -1,0 +1,57 @@
+\documentclass[
+    %draft, % Mit % kommentieren, um Bilder sichtbar zu machen und Links zu aktivieren
+    pdftex,
+    a4paper,
+    oneside,
+    parskip,
+    numbers=noenddot,
+    listof=totoc,
+    bibliography=totoc,
+    hyperfootnotes=false
+]{scrreprt}
+\setuptoc{toc}{totoc}
+
+\include{01_header}
+
+% ------------------------------------------------------------------------------
+\include{Glossar}
+
+\begin{document}
+
+\pagenumbering{Roman}
+
+\include{02_title}
+
+\tableofcontents
+
+\listoffigures\addcontentsline{toc}{section}{Abbildungsverzeichnis}
+
+\listoftables\addcontentsline{toc}{section}{Tabellenverzeichnis}
+
+\printglossary
+
+% ------------------------------------------------------------------------------
+
+\include{03_introduction}
+
+\include{04_Mockups/04_mockups}
+
+\include{05_Technik/05_technic}
+
+\include{06_Sprints/06_sprints}
+
+\addcontentsline{toc}{chapter}{Anhang}\include{Anhang}
+
+\renewcommand{\cleardoublepage}{\clearpage}
+
+% ------------------------------------------------------------------------------
+% Reference and Cited Works
+% ------------------------------------------------------------------------------~\nocite{*}
+\bibliographystyle{IEEEtran}
+\bibliography{stp}
+
+% ------------------------------------------------------------------------------
+
+
+
+\end{document}

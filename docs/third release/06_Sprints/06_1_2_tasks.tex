@@ -1,0 +1,38 @@
+\subsection{Aufgaben und Bugs}
+Der erste Sprint hat zusätzlich zu den Storys vier Aufgaben und einen Bug. Dabei werden teilweise technische Grundlagen geschaffen, die die gesamte Anwendung betreffen oder Teile der Anwendung verbessern sollen. Im Vergleich zur zweiten Veröffentlichung fällt die Anzahl der Aufgaben und die geschätzte Zeit dieser allerdings geringer aus. Eine Auflistung aller Aufgaben ist in der Tabelle \ref{tab:task1} zu finden.
+
+\subsubsection{Beschreibung der Aufgaben und Bugs}
+Im Folgenden werden sämtliche Aufgaben und Bugs des ersten Sprints beschrieben. Es wird dabei auf ihre Einzelheiten eingegangen.
+
+\textbf{\hyperlink{T282}{\hypertarget{S282}{STP23M-282}}: Hinzugekommene Services erstellen und alte erweitern}
+\newline
+\newline
+In dieser Aufgabe geht es um das Erweitern der Services. Dabei müssen neue Api-Services und Services entsprechend der Serverdokumentation angelegt werden. Des Weiteren müssen sämtliche neue \Gls{DTO} hinzugefügt werden. Zusätzlich müssen alle bereits vorhanden Services und DTOs auf Veränderungen überprüft werden und gegebenenfalls verändert werden.
+\newline
+\newline
+\textbf{\hyperlink{T297}{\hypertarget{S297}{STP23M-297}}: Minimap Gebietsdetails}
+\newline
+\newline
+In der zweiten Veröffentlichung gab es die Anforderung, eine Regionskarte in Form eine Minimap zu implementieren. Dabei sollte die Minimap auch Details wie den Regionsnamen, Gebäudedetails und Beschreibungen beinhalten. Die Details sind aus Zeitmangel nicht mehr hinzugefügt worden. Diese Aufgabe soll die fehlende Anforderung aus dem zweiten Release nachholen.
+\newline
+\newline
+\textbf{\hyperlink{T357}{\hypertarget{S357}{STP23M-357}}: Audio hinzufügen}
+\newline
+\newline
+Eines der Bonusfeatures, welches mit dem Kunden vereinbart worden ist, ist es, die Anwendung mit Musik auszustatten. In der Aufgabe STP23M-357 sollen die technischen Möglichkeiten für dieses Bonusfeature gelegt werden. Zusätzlich sollen auch schon Audiodateien in bestimmten Bildschirmen abgespielt werden. So soll es eine Musik für die Menüs vor dem Spiel selbst geben. Eine andere  Musik soll in der Willkommensequenz abgespielt werden. Im Spiel soll, je nach Situation, ebenfalls verschiedene Lieder abgespielt werden. So sollen die Städte, Räume, Routen und Kämpfe jeweils eine eigene Musik erhalten.
+\newline
+\newline
+\textbf{\hyperlink{T418}{\hypertarget{S418}{STP23M-418}}: Maprendering und Spriteanimation überarbeiten}
+\newline
+\newline
+Diese Aufgabe soll die Darstellung der Spielwelt und die Animation der Figuren überarbeiten. Diese ist nach dem zweiten Release noch suboptimal und macht Probleme. Demnach gibt es Verschiebungen zwischen dem Dargestellten und der tatsächlichen Lage der Figur, sodass begehbare Tiles nicht begehbar sind und umgekehrt. Diese Probleme sollen mit dieser Aufgabe behoben werden.
+\newline
+\newline
+\textbf{\hyperlink{T433}{\hypertarget{S433}{STP23M-433}}: Interagieren funktioniert nicht}
+\newline
+\newline
+Hierbei handelt es sich um ein Bugticket. Dieser Bug ist aufgetaucht, nachdem die Richtung, in der die NPCs schauen, korrigiert wurde. Nach der Korrektur ist es nicht mehr möglich, andere Trainer anzusprechen. Das Ziel dieses Bugtickets ist es nun dafür zu sorgen, dass das Ansprechen wieder möglich ist.
+
+\subsubsection{Bewertung der Aufgaben und Bugs}
+Nur eine der vier Aufgaben ist innerhalb der geschätzten Zeit abgeschlossen worden. Die Aufgabe \hyperlink{S357}{STP23M-357} hat dabei nur etwas mehr als die Hälfte der geschätzten Zeit benötigt. Dies ist darauf zurückzuführen, dass die Implementierung des Audioservices durch die vorhandene \textit{JavaFX-Media} Bibliothek einfacher als gedacht ist. Die anderen drei Aufgaben haben die geschätzte Zeit überschritten. Die Aufgabe \hyperlink{S282}{STP23M-282} hat dabei die geringste Abweichung. Die Abweichung ist darauf zurückzuführen, dass diese Aufgabe in der Veröffentlichung von einer anderen Person übernommen worden ist als in den beiden anderen Veröffentlichungen. Etwas mehr als das Doppelte der geschätzten Zeit hat die Aufgabe \hyperlink{S297}{STP23M-297} gedauert. Dabei hat das dynamische Rendern der Minimap und das Anzeigen der Orte länger als erwartet gedauert. Ungefähr das 2,5-fache der geschätzten Zeit, hat die Erledigung derAufgabe \hyperlink{S418}{STP23M-418} benötigt. Hier wurde zunächst ein \textit{\Gls{PoC}} Projekt erstellt, um eine neue Implementierung für die Spriteanimation und Kamerabewegung zu testen. Dies allein hat einen Tag und zwei Stunden gedauert, womit die geschätzte Zeit bereits aufgebraucht war. Die eigentliche Implementierung beziehungsweise Änderung hat dann nochmal zwei Tage gedauert. Zusätzlich zu den vier Aufgaben ist während des Sprints ein Bug dazugekommen, welches auch direkt bearbeitet wurde. Hier hat die geschätzte Zeit mit der benötigten Zeit übereingestimmt.\\
+Zur Bewertung kann abschließend gesagt werden, dass die Aufgaben deutlich länger gedauert haben, als im Vorhinein geschätzt. Dies ist auf die oben beschriebenen Begründungen zurückzuführen. Trotz der Abweichungen sind die Aufgaben und Bugs zufriedenstellend abgeschlossen worden, da keine Aufgaben mit in den zweiten Sprint übernommen werden müssen.

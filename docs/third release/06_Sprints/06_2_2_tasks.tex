@@ -1,0 +1,92 @@
+\subsection{Aufgaben und Bugs}
+Im zweiten Sprint enthälz erneut neben den Storys Aufgaben und Bugs. Dabei gibt es fünf Aufgaben und sechs Bugs. Bei den Bugs handelt es sich zum größten Teil um Fehler, die im ersten Sprint dazugekommen sind. Die Aufgaben sollen technische Anforderungen und die Internationalisierung sicherstellen.
+Eine Auflistung aller Aufgaben und Bugs ist in der Tabelle \ref{tab:task1} zu finden.
+
+\subsubsection{Beschreibung der Aufgaben und Bugs}
+Im Folgenden werden sämtliche Aufgaben und Bugs des zweiten Sprints beschrieben. Es wird dabei auf ihre Einzelheiten eingegangen.
+
+\textbf{\hyperlink{T425}{\hypertarget{S425}{STP23M-425}}: Test Coverage sicherstellen}
+\newline
+\newline
+Durch diese Aufgabe soll sichergestellt werden, dass die geforderten 70 \% Testcoverage erreicht werden. Zusätzlich soll ein Test \textit{Critical Path V3} erstellt werden, der die Anforderungen der dritten Veröffentlichung in einem Test hintereinander testet, um die Funktionalität der Anwendung sicherzustellen.
+\newline
+\newline
+\textbf{\hyperlink{T427}{\hypertarget{S427}{STP23M-427}}: Kampf wiederherstellen}
+\newline
+\newline
+Eine Anforderung des Kunden für das dritte Release lautet, dass es problemlos möglich sein soll, die Anwendung in einem Kampf oder Ähnlichem zu verlassen und wiederzubetreten. Diese Aufgabe soll diese Anforderung sicherstellen, sodass sich beim erneuten Starten der Anwendung der Nutzer wieder im Kampf befindet.
+\newline
+\newline
+\textbf{\hyperlink{T430}{\hypertarget{S430}{STP23M-430}}: Chinesische Übersetzung}
+\newline
+\newline
+Seit dem zweiten Release ist die Anwendung in verschiedenen Sprachen spielbar. Da im Team eine Person vertraut mit der chinesischen Sprache ist, dient diese Aufgabe dazu, dieser Person die Zeit zu geben, alle Texte in das Chinesische zu übersetzen.
+\newline
+\newline
+\textbf{\hyperlink{T431}{\hypertarget{S431}{STP23M-431}}: Refactor vor dem Release}
+\newline
+\newline
+Diese Aufgabe soll gegen Ende des zweiten Sprints bearbeitet werden. Dabei soll der Code auf unnötige Imports und Variablen, Felder oder Ähnliches überprüft werden. Diese sollen dann entfernt werden. Zusätzlich soll versucht werden, alle Warnungen zu entfernen. Ein weiteres Ziel der Aufgabe ist es sicherzustellen, dass der gesamte Code korrekt eingerückt ist, um eine gute Lesbarkeit zu garantieren.
+\newline
+\newline
+\textbf{\hyperlink{T432}{\hypertarget{S432}{STP23M-432}}: Benachrichtigung auf dem Handy nach jedem Gebietswechsel}
+\newline
+\newline
+Bei dieser Aufgabe handelt es sich um ein Bugticket. Dieser Bug existiert, seitdem das Benachrichtigungs- bzw. Hilfesystem implementiert wurde. Durch diesen Task soll der Fehler behoben werden, dass die Hilfenachrichten vor dem Erhalt des ersten Monsters immer wieder angezeigt werden. Diese werden erneut angezeigt, obwohl die Benachrichtigung bereits gelesen wurde. Dies geschieht, sobald das Areal gewechselt wird oder das Spiel erneut gestartet wird.
+\newline
+\newline
+\textbf{\hyperlink{T434}{\hypertarget{S434}{STP23M-434}}: Audioeinstellung wird nicht nach Szenenwechsel gesetzt}
+\newline
+\newline
+Für das Bonusfeature Musik wurde zusätzlich die Möglichkeit geschaffen, die Musik stumm zu stellen beziehungsweise die Lautstärke einzustellen. Beim Wechseln der Szene wird allerdings die Musik wieder auf die Standardlautstärke zurückgesetzt. Zum Beispiel wird beim Übergang vom Hauptmenü zur Trainererstellung die Musik wieder laut, nachdem sie im Hauptmenü stumm geschaltet wurde. Bei dieser Aufgabe handelt es sich also um einen Bug.
+\newline
+\newline
+\textbf{\hyperlink{T435}{\hypertarget{S435}{STP23M-435}}: Audioeinstellungsschieber zeigt die aktuelle Lautstärke nicht an}
+\newline
+\newline
+Hier handelt es sich ebenfalls um einen Bug. So wird beim Öffnen der Audioeinstellung nicht die aktuelle Lautstärke angezeigt, sondern der Schieber steht zu Beginn komplett links auf Stumm. Diese Aufgabe soll den Fehler beheben, sodass beim Öffnen die aktuelle Lautstärke angezeigt wird.
+\newline
+\newline
+\textbf{\hyperlink{T436}{\hypertarget{S436}{STP23M-436}}: Neue Dialoge}
+\newline
+\newline
+Nach einem Server Patch sind weitere Bereiche mit neuen NPCs hinzugekommen. Nachdem im ersten Sprint alle vorhandenen NPCs mit eigenen Dialogen versehen worden sind, müssen die neuen NPCs mit eigenen Texten versehen werden. Das soll in dieser Aufgabe geschehen.
+\newline
+\newline
+\textbf{\hyperlink{T437}{\hypertarget{S437}{STP23M-437}}: Die Region Encounter Test ist nicht betretbar}
+\newline
+\newline
+Seit dem Server Update 3.0.0 gibt es neben der Region 'Albertania' die weitere Region 'Encounter Test'. Diese Region dient dem Testen der 'Encounter'. Bei dem Versuch die Region zu betreten, kommt es in der Anwendung zu einem Fehler und der Bildschirm bleibt schwarz. Dieses Bugticket soll den Fehler beheben und die 'Encounter Test' Region betretbar machen.
+\newline
+\newline
+\textbf{\hyperlink{T438}{\hypertarget{S438}{STP23M-438}}: Es werden nicht alle Areale korrekt geladen}
+\newline
+\newline
+Dies ist noch ein Bug, welcher seit dem Implementieren des Renderns der Gebiete besteht. In einigen Gebieten gibt es schwarze Flächen, die nicht richtig geladen werden. Nach dem Bearbeiten dieses Bugtickets sollen alle Gebiete korrekt angezeigt werden.
+\newline
+\newline
+\textbf{\hyperlink{T439}{\hypertarget{S439}{STP23M-439}}: Fliehen funktioniert nicht nach dem Klicken auf die Fähigkeiten}
+\newline
+\newline
+Bei diesem Vorgang handelt es sich um einen Bug. Beim Testen der Funktionalität Fähigkeiten auszuführen ist aufgefallen, dass danach der 'Fliehenknopf' nicht mehr funktioniert. Dieses Problem soll mit diesem Bugvorgang behoben werden.
+\newline
+\newline
+\textbf{\hyperlink{T478}{\hypertarget{S478}{STP23M-478}}: General bug fixes}
+\newline
+\newline
+Dieser Bug ist nach der Veröffentlichung dazugekommen. Hier sollen verschiedene Fehler behoben werden, die nach dem letzten Merge hinzugekommen sind. Dieser konnte aufgrund von Zeitmangel nicht ausgiebig getestet werden.
+\newline
+\newline
+\textbf{\hyperlink{T479}{\hypertarget{S479}{STP23M-479}}: Lebenswert in der Encounter aktualisieren}
+\newline
+\newline
+Hierbei handelt es sich ebenfalls um einen Bug, welcher nach der Veröffentlichung dazugekommen ist. Dieses Bugticket soll speziell den Fehler beheben, dass die Lebensanzeige nicht korrekt aktualisiert wird.
+\newline
+\newline
+\textbf{\hyperlink{T480}{\hypertarget{480}{STP23M-480}}: Problem beim Encounter verlassen}
+\newline
+\newline
+Auch dieser Bug ist nach der Veröffentlichung hinzugefügt worden. Seit dem letzten Merge gibt es Probleme beim Verlassen eines Kampfes. Dieser Vorgang soll dieses Problem beheben.
+\subsubsection{Bewertung der Aufgaben und Bugs}
+Die meisten Aufgaben und Bugs wurden innerhalb der geschätzten Zeit bearbeitet. Lediglich die Aufgaben \hyperlink{S425}{STP23M-425} und \hyperlink{S436}{STP23M-436} haben eine längere Zeit als geschätzt in Anspruch genommen. Mit einer Stunde beziehungsweise zwei Stunden und 30 Minuten hält sich der Mehraufwand dabei in Grenzen. Einige Aufgaben wie zum Beispiel \hyperlink{S430}{STP23M-430} wurden sogar schneller bearbeitet als geschätzt. Die meisten Aufgaben und Bugs wurden allerdings genau in der geschätzten Zeit bearbeitet. Leider gibt es mit dem Bug \hyperlink{S432}{STP23M-432} auch einen Vorgang unter den Aufgaben und Bugs, der nicht bearbeitet wurde. Der zuständige Entwickler hat keinen Lösungsansatz für den Fehler gefunden. \\
+Abschließend kann positiv erwähnt werden, dass die geschätzte Zeit nahezu identisch mit der tatsächlich gebrauchten Zeit ist. Lediglich der nicht bearbeitete Bug stellt ein negativer Punkt in der Bewertung der Aufgaben und Bugs dar.

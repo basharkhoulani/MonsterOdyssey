@@ -1,0 +1,176 @@
+\subsection{User Storys}
+Im Folgenden werden die User Storys des zweiten Sprints des dritten Releases beschrieben und es wird anschließend auf starke Abweichungen zwischen benötigter Zeit und geschätzter Zeit eingegangen. Eine Auflistung aller User Storys mit der jeweiligen benötigten Zeit und der jeweiligen geschätzten Zeit ist in der Tabelle~\ref{tab:story} zu finden. 
+\subsubsection{Beschreibung der Storys}
+
+Im Folgenden werden die Storys beschrieben. Dabei wird auf die erzielte beziehungsweise gewünschte Funktionalität eingegangen, die durch eine Aktion des Nutzers erfolgt.
+
+\textbf{\hyperlink{T225}{\hypertarget{S225}{STP23M-225}}: Start an Encounter with a Wild Monster}
+
+Der Nutzer begegnet einem wilden Monster in hohem Gras. Es wird dabei eine Ankündigung als Einleitung zum Kampf angezeigt, dass der Kampf in Kürze gestartet wird.
+
+\textbf{\hyperlink{T226}{\hypertarget{S226}{STP23M-226}}: Switch to Encounter Scene Wild Monster}
+
+Ziel dieser Story ist der Übergang zwischen dem Spielbildschirm und der Kampfszene beim Begegnen eines wilden Monsters zu implementieren. Die Ankündigung der Begegnung des wilden Monsters wird angezeigt. Der Nutzer drückt auf die Interaktionstaste und es wird zur Kampfszene gewechselt.
+
+\textbf{\hyperlink{T233}{\hypertarget{S233}{STP23M-233}}: Current Monster Info Encounter}
+
+Der Nutzer befindet sich in der Kampfszene und drückt auf den Knopf für die Monsterdetails des jetzigen Monsters. Es öffnet sich ein neues Fenster, in dem alle wichtigen Attribute und Details aufgezeigt werden.
+
+\textbf{\hyperlink{T236}{\hypertarget{S236}{STP23M-236}}: Defeat opposing current monster}
+
+Der Nutzer sieht die aktuellen Fähigkeiten von seinem jetzigen Monster und das gegnerische Monster hat aktuell niedrige Lebenspunkte. Der Nutzer setzt seinen Zug mit einer beliebigen Fähigkeit und besiegt dabei das gegnerische Monster. Dabei werden seine Lebenspunkte infolgedessen auf null gesetzt. Es erscheint daraufhin eine Benachrichtigung in dem Ereignisprotokoll. 
+
+\textbf{\hyperlink{T237}{\hypertarget{S237}{STP23M-237}}: Level up Monster}
+
+Diese Story ermöglicht dem Nutzer, den Levelaufstieg des eigenen Monsters zu betrachten und dabei die verbesserten Attribute zu sehen. Der Nutzer besiegt das gegnerische Monster und das jetzige Monster erhält Erfahrungspunkte, mit denen er im Level aufsteigen kann. Somit ist das Level hochinkrementiert und es öffnet sich ein Popup, in welchem die verbesserten Attribute dargestellt werden.
+
+\textbf{\hyperlink{T238}{\hypertarget{S238}{STP23M-238}}: Win Encounter}
+
+Als Folgerung dieser Story kann der Nutzer mithilfe seiner Monster einen Kampf gewinnen. Dabei wendet der Nutzer eine Fähigkeit seines jetzigen Monsters auf das gegnerische Monster an und besiegt es dabei. Der gegnerische Trainer hat keine anderen Monster mehr am Leben und somit gewinnt der Nutzer den Kampf. Es erscheint dabei ein Popup mit der Ankündigung über den Gewinn und das Textfeld wird dementsprechend aktualisiert. 
+
+\textbf{\hyperlink{T239}{\hypertarget{S239}{STP23M-239}}: Switch to Ingame}
+
+Der Nutzer hat die Ankündigung über den Gewinn oder den Verlust eines Kampfs erhalten. Die Ankündigung wird vom Nutzer durch Drücken des Knopfs 'OK' wahrgenommen und es wird in den Spielbildschirm gewechselt. 
+
+\textbf{\hyperlink{T240}{\hypertarget{S240}{STP23M-240}}: Flee Popup Wild Monster}
+
+Der Nutzer befindet sich in einem Kampf gegen ein wildes Monster und drückt den Knopf 'Fliehen'. Es erscheint ein Popup, in dem der Nutzer die Aktion bestätigen soll.
+
+\textbf{\hyperlink{T241}{\hypertarget{S241}{STP23M-241}}: Flee Wild Monster}
+
+Es wird ein Popup über die Bestätigung der 'Fliehen-Aktion' dargestellt. Der Nutzer nimmt die Flucht auf und der Kampf wird beendet. Der Nutzer gelangt nach wenigen Sekunden in den Spielbildschirm.
+
+\textbf{\hyperlink{T243}{\hypertarget{S243}{STP23M-243}}: Show Active Team}
+
+Der Spielbildschirm wird aktuell dargestellt. Der Nutzer drückt auf den Knopf 'Monster' und es öffnet sich ein neues Fenster, in dem das aktive Team an Monstern angezeigt wird.
+
+\textbf{\hyperlink{T244}{\hypertarget{S244}{STP23M-244}}: Change Monster Order}
+
+Der Nutzer sieht das Fenster des aktiven Teams an Monstern, das mindestens zwei Monster enthält. Der Nutzer drückt auf einen der Pfeilknöpfe. Dadurch ändert sich die Reihenfolge der Monster. 
+
+\textbf{\hyperlink{T245}{\hypertarget{S245}{STP23M-245}}: Remove Monster Active Team}
+
+Das Fenster des aktiven Teams an Monster wird dargestellt. Der Nutzer entfernt eines der Monster aus der Liste mit dem Knopf 'Aus dem Team entfernen'. Das gewählte Monster verschwindet aus der Liste und ein Popup öffnet sich, in dem die Aktion bestätigt wird. 
+
+\textbf{\hyperlink{T246}{\hypertarget{S246}{STP23M-246}}: Show Other Monsters}
+
+Der Nutzer sieht das Fenster des aktiven Teams. Dabei drückt er auf die Registerkarte 'Andere' und infolgedessen werden die anderen Monster des Nutzers angezeigt, die nicht zum aktiven Team gehören.
+
+\textbf{\hyperlink{T247}{\hypertarget{S247}{STP23M-247}}: Monster Info}
+
+Durch diese Story kann der Nutzer die Details eines gewünschten Monsters sehen. Der Nutzer sieht das aktive Team an Monstern und drückt auf den Knopf der Monsterdetails für ein beliebiges Monster. Es öffnet sich ein neues Fenster mit allen Attributen beziehungsweise Fähigkeiten, die das Monster besitzt.
+
+\textbf{\hyperlink{T248}{\hypertarget{S248}{STP23M-248}}: Go Back from Details}
+
+Die Monsterdetails werden in einem Fenster angezeigt. Der Nutzer kehrt zu der Monsterliste durch Drücken des Pfeilknopfs zurück. Somit wird die Monsterliste wieder dargestellt.
+
+\textbf{\hyperlink{T249}{\hypertarget{S249}{STP23M-249}}: Add Monster to Active Team}
+
+Der Nutzer sieht den Inhalt der Registerkarte 'Andere', also die im aktiven Team nicht anwesenden Monster. Der Nutzer drückt bei einem beliebigen Monster auf den Knopf 'Zum aktiven Team hinzufügen'. Das gewählte Monster verschwindet auf dieser Registerkarte und es öffnet sich ein Popup, in dem die Aktion bestätigt wird.
+
+\textbf{\hyperlink{T250}{\hypertarget{S250}{STP23M-250}}: Limited Num of Monsters Active Team}
+
+Der Inhalt der Registerkarte 'Andere' wird dargestellt. Das aktive Team an Monstern hat bereits eine Anzahl von sechs Monstern. Der Nutzer versucht ein beliebiges Monster zum aktiven Team hinzuzufügen. Es erscheint die Fehlermeldung, dass die gewünschte Aktion aufgrund der vollen Kapazität des aktiven Teams nicht erfolgt ist.
+
+\textbf{\hyperlink{T256}{\hypertarget{S256}{STP23M-256}}: Show Keybindings}
+
+Das Einstellungsmenü wird auf dem Bildschirm angezeigt. Der Nutzer drückt auf den Knopf 'Tastenkürzel' und damit werden die Einstellungen für die Tastenkürzel dargestellt.
+
+\textbf{\hyperlink{T257}{\hypertarget{S257}{STP23M-257}}: Start Change Keybinding}
+
+Der Nutzer drückt auf eine beliebige Taste, für die er das Kürzel ändern möchte. Es wird auf eine Eingabe vom Nutzer gewartet.
+
+\textbf{\hyperlink{T258}{\hypertarget{S258}{STP23M-258}}: Finish Change Keybinding}
+
+Es wird vom Nutzer eine Eingabe erwartet und der Nutzer drückt eine beliebige Taste auf seiner Tastatur. Die gedrückte Taste hat ein neues Kürzel und die Konfiguration wird gespeichert.
+
+\textbf{\hyperlink{T259}{\hypertarget{S259}{STP23M-259}}: Change to Default Keybindings}
+
+Der Nutzer sieht das Einstellungsfenster für die Tastenkürzel. Der Nutzer drückt auf den Knopf 'Standard' und dadurch werden alle Tastenkürzel zu den Standard-Tastenkürzeln zurückgesetzt.
+
+\textbf{\hyperlink{T260}{\hypertarget{S260}{STP23M-260}}: Go Back from Keybindings}
+
+Das Einstellungsfenster für die Tastenkürzel wird auf dem Bildschirm dargestellt. Der Nutzer drückt auf den Pfeilknopf und das aktuelle Fenster wird durch das Einstellungsmenü ersetzt.
+
+\textbf{\hyperlink{T272}{\hypertarget{S272}{STP23M-272}}: 1v2 Battleground Situation}
+
+Der Nutzer startet einen Kampf gegen zwei Trainer gleichzeitig. Es wird in die Kampfszene gewechselt und gegen den Nutzer spielen zwei Trainer mit ihren jeweiligen aktuellen Monstern. 
+
+\textbf{\hyperlink{T273}{\hypertarget{S273}{STP23M-273}}: Opponent attack}
+
+Die Kampfszene wird dargestellt und alle Spieler haben ihre Züge festgesetzt. Es wird die Fähigkeit des gegnerischen Monsters auf das aktuelle Monster des Nutzers angewandt und verliert somit Lebenspunkte. Das Ereignisprotokoll wird entsprechend aktualisiert.
+
+\textbf{\hyperlink{T274}{\hypertarget{S274}{STP23M-274}}: Encounter lost}
+
+Der Nutzer sieht die Kampfszene und sein aktuelles Monster weist sehr niedrige Lebenspunkte auf. Es wird die Fähigkeit des gegnerischen Monsters angewandt und der Nutzer verliert infolgedessen den Kampf. Ein Popup mit der Ankündigung, dass der Kampf verloren ist, erscheint.
+
+\textbf{\hyperlink{T275}{\hypertarget{S275}{STP23M-275}}: 2v2 Battleground Situation}
+
+Der Nutzer startet einen Kampf gegen zwei Trainer mit Unterstützung eines weiteren Trainers. Es wird in die Kampfszene gewechselt, welche eine Zwei-gegen-Zwei-Kampfszenario darstellt.
+
+\textbf{\hyperlink{T276}{\hypertarget{S276}{STP23M-276}}: Show Change Monster Window}
+
+Der Nutzer sieht die Kampfszene und hat seinen Zug noch nicht festgesetzt. Der Nutzer drückt auf den Knopf 'Monster auswechseln' und es öffnet sich ein Fenster für den Monsterwechsel.
+
+\textbf{\hyperlink{T277}{\hypertarget{S277}{STP23M-277}}: Change Current Monster}
+
+Das Fenster für den Monsterwechsel wird dargestellt. Der Nutzer wechselt das jetzige Monster durch ein beliebiges Monster aus der Liste aus, indem er 'Zu diesem Monster wechseln' drückt. Das jetzige Monster wird durch das gewählte Monster ausgewechselt.
+
+\textbf{\hyperlink{T279}{\hypertarget{S279}{STP23M-279}}: Level up Monster New Ability}
+
+Die Kampfszene wird dargestellt. Der Nutzer besiegt hierbei das gegnerische Monster und das jetzige Monster erhält Erfahrungspunkte, mit denen es im Level aufsteigen kann. Somit ist das Level hochinkrementiert und es öffnet sich ein Popup, in dem die verbesserten Attribute und eine neu erlernte Fähigkeit für das jetzige Monster angezeigt werden.
+\subsubsection{Bewertung der Storys}
+
+Im Folgenden werden die Storys bewertet, die eine starke Abweichung zwischen der benötigten Zeit und der geschätzten Zeit aufweisen.
+
+\textbf{\hyperlink{T225}{\hypertarget{S225}{STP23M-225}}: Start an Encounter with a Wild Monster}
+
+Das Starten eines Kampfes gegen ein wildes Monster beträgt als Story einen Story Point und somit wurde sie mit einer Stunde geschätzt. Da die Funktionalität des Kampfstarts bereits in \hyperlink{T223}{\hypertarget{S223}{STP23M-223}} implementiert wurde, konnte diese Story innerhalb von fünf Minuten abgeschlossen werden.
+
+\textbf{\hyperlink{T226}{\hypertarget{S226}{STP23M-226}}: Switch to Encounter Scene Wild Monster}
+
+Diese Story hat drei Story Points und beträgt somit geschätzt drei Stunden. Allerdings konnte die Story innerhalb von 30 Minuten erledigt werden, da die meisten Funktionen bereits in der implementierten Story \hyperlink{T224}{\hypertarget{S224}{STP23M-224}} vorhanden waren.
+
+\textbf{\hyperlink{T243}{\hypertarget{S243}{STP23M-243}}: Show Active Team}
+
+Das Anzeigen des aktiven Teams wurde als Story mit zwei Story Points geschätzt und beträgt somit geschätzt zwei Stunden. Dennoch wurde die Story aufgrund des schwierigen Designs innerhalb von drei Stunden und 30 Minuten erledigt werden, sodass das Fenster mit den Mockups nahezu übereinstimmend ist. 
+
+\textbf{\hyperlink{T244}{\hypertarget{S244}{STP23M-244}}: Change Monster Order}
+
+Diese Story hat zwei Story Points und beträgt also geschätzt zwei Stunden. Der Entwickler konnte die Story in 15 Minuten erledigen, da die Grundfunktionalität bereits bestehend war und nur die Serverabfrage implementiert werden musste.
+
+\textbf{\hyperlink{T245}{\hypertarget{S245}{STP23M-245}}: Remove Monster Active Team}
+
+Die Story hat zwei Story Points und beträgt somit geschätzt zwei Stunden. Dennoch konnte die Story analog zu der Story \hyperlink{T244}{\hypertarget{S244}{STP23M-244}} implementiert werden, sodass die Story in nur 15 Minuten erledigt werden konnte. 
+
+\textbf{\hyperlink{T256}{\hypertarget{S256}{STP23M-256}}: Show Keybindings}
+
+Das Anzeigen der Tastenkürzel wurde als Story mit zwei Story Points geschätzt und beträgt somit geschätzt zwei Stunden. Das genaue Design der Einstellungen war allerdings schwierig umzusetzen, sodass die Story drei Stunden und 20 Minuten an Arbeitsaufwand benötigte.
+
+\textbf{\hyperlink{T257}{\hypertarget{S257}{STP23M-257}}: Start Change Keybinding}
+
+Diese Story hat einen Story Point und beträgt somit geschätzt eine Stunde. Dennoch konnte sie der Entwickler in sieben Stunden und 50 Minuten erledigen. Der Grund beruht darauf, dass am Anfang des Implementierens ein falscher Ansatz verfolgt worden ist, der im Nachhinein von dem Entwickler verbessert und vervollständigt wurde. 
+
+\textbf{\hyperlink{T272}{\hypertarget{S272}{STP23M-272}}: 1v2 Battleground Situation}
+
+Die Story hat fünf Story Points und beträgt somit geschätzt fünf Stunden. Allerdings konnte die Story innerhalb von sieben Stunden erledigt werden. Das liegt daran, dass das Sicherstellen der erzielten Funktionalität mehr Zeit in Anspruch genommen hat.
+
+\textbf{\hyperlink{T273}{\hypertarget{S273}{STP23M-273}}: Opponent attack}
+
+Das Anzeigen der Angriffe der Gegner wurde als Story mit zwei Story Points geschätzt und beträgt somit geschätzt zwei Stunden. Dennoch konnte die Story innerhalb von 15 Minuten erledigt werden, da die Grundfunktionalität für das Anzeigen bereits in der Story \hyperlink{T235}{\hypertarget{S235}{STP23M-235}} implementiert wurde.
+
+\textbf{\hyperlink{T223}{\hypertarget{S223}{STP23M-223}}: Start an Encounter with a Trainer}
+
+Diese Story wurde aus dem ersten Sprint in den zweiten Sprint aufgrund von Zeitproblemen verschoben. Sie wurde mit einem Story Point und somit mit einer Stunde geschätzt. Allerdings konnte die Story innerhalb von einem Arbeitstag und zwei Stunden erledigt werden, da das Finden eines optimalen Ansatzes mehr Zeit als erwartet benötigt hat. Auf diese Weise konnte die Funktionalität sichergestellt werden.  
+
+\textbf{\hyperlink{T235}{\hypertarget{S235}{STP23M-235}}: Use an Ability}
+
+Die Story ist auch aus dem ersten Sprint übertragen worden. Sie wurde mit vier Story Points und mit vier Stunden geschätzt. Der Entwickler konnte die Story allerdings in sechs Stunden und 30 Minuten abschließen. Das ist darauf zurückzuführen, dass die Recherche und das Implementieren des Ansatzes mehr Zeit in Anspruch genommen hatte. 
+
+\textbf{\hyperlink{T236}{\hypertarget{S236}{STP23M-236}}: Defeat opposing current monster}
+
+Das Besiegen des gegnerischen jetzigen Monsters wurde als Story mit zwei Story Points und zwei Stunden geschätzt. Die Story konnte allerdings nicht in dem zweiten Sprint abgeschlossen werden, da viele Zeitprobleme und Abhängigkeiten zwischen den Storys vor dem Releaseende bestanden haben, sodass sie in das nächste Release übernommen werden mussten.
+
+\textbf{\hyperlink{T277}{\hypertarget{S277}{STP23M-277}}: Change Current Monster}
+
+Diese Story hat zwei Story Points und beträgt somit geschätzt zwei Stunden. Es herrschte aber vor dem Releaseende Zeitdruck und Abhängigkeiten zwischen den einzelnen Storys, sodass sie nicht innerhalb des Zeitraums des Releases erledigt werden konnte. Die Story wird dementsprechend in das nächste Release übernommen.

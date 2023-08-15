@@ -1,0 +1,9 @@
+\section{Neue Bibliotheken und Tools}
+In dem folgenden Unterkapitel wird auf die neu hinzugekommenen Bibliotheken und Tools der dritten Veröffentlichung eingegangen. In dieser Veröffentlichung ist nur eine neue Technologie hinzugefügt worden.
+
+\subsection{Videospielmusik}
+Musik in Videospielen kann eine Vielzahl von Funktionen aufweisen. Dementsprechend kann die Musik beispielsweise einen Einfluss auf die Atmosphäre haben, eine bestimmte Stimmung erzeugen oder auch eine narrative Funktion erfüllen.\cite{Stingel} Aufgrund der Relevanz von Musik in Videospielen wurde als eines der Bonusfeatures des dritten Releases das Hinzufügen von Musik gewählt. Aufgrund der Optik des Spiels wird eine \Gls{8-Bit-Musik} gewählt, die unter der \textit{Creative Commons Attribution license} frei nutzbar ist. Die einzige Bedingung ist dabei, dass der Autor bei einer Veröffentlichung erwähnt wird. \\
+
+Für die Umsetzung in der Anwendung wird dabei auf die \textit{JavaFX Media}-Bibliothek zurückgegriffen. Diese ermöglicht eine einfache Einbindung von Audiodateien mithilfe der \textit{MediaPlayer}-Klasse. Um eine möglichst einfache Handhabung in der gesamten Anwendung zu gewährleisten, übernimmt die Klasse \textit{AudioService} die \textit{MediaPlayer} Erstellung und Methodenaufrufe. Hierdurch müssen in den unterschiedlichen Controllern nur noch einzelne Methodenaufrufe des \textit{AudioService} getätigt werden. \\
+
+Aktuell werden in der Anwendung sechs verschiedene Musikstücke wiedergegeben. Dabei handelt es sich um Titel, die im Loop abspielbar sind. Das bedeutet, dass eine lückenlose Wiederholung der Musikstücke möglich ist. Eine Auflistung aller Musiktitel inklusive Ort der Wiedergabe, Künstler und Lizenz findet sich in der Tabelle \ref{tab:audio} wieder.
