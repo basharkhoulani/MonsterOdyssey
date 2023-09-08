@@ -4,10 +4,19 @@ It is a product of an agile environment in Software-Technik-Praktikum.
 
 The server for Monster Odyssey can be found at https://github.com/sekassel-research/stp-23-server
 
-# Trailer of the game
-![Trailer](https://lh3.googleusercontent.com/drive-viewer/AITFw-yBlTnabUs1lOew1iLYRf15sAcv5ZgHMkc0tRUg20qUq2dQL8UBHPRGwMG0T-ujBH3jWWUVMzInIt9yUIrWRf0nkVbM=s1600)
+## Trailer of the game
+![Trailer](https://github.com/beshoo963/MonsterOdyssey/blob/master/docs/Trailer.gif)
 
-# Features
+## Features
 * Messaging system
 * Friends system
 * Open World and Battle system
+
+## Start and build the game
+Make sure the server is running in Constants.java, or run an instance using the repository above.
+
+To build the game, run:
+```gradle
+$ gradle fatJar
+```
+Then run the generated .jar file with JDK 17+!
